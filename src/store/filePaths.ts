@@ -58,7 +58,7 @@ export default class FilePathsModule extends VuexModule {
 		SchulrechnerInDieSC2017: "",
 		SCKonzeptPilotierung2017: "",
 	};
-	error: {} = {};
+	error: object = {};
 
 	@Mutation
 	setDocumentBaseDir(payload: { baseDir: string; theme: string }) {
@@ -90,7 +90,7 @@ export default class FilePathsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(payload: {}): void {
+	setError(payload: object): void {
 		this.error = payload;
 	}
 

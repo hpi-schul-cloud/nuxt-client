@@ -1,7 +1,6 @@
 import SchoolsModule from "./schools";
-import ImportUsersModule from "@/store/import-users";
 import { initializeAxios } from "@/utils/api";
-import { AxiosInstance, AxiosRequestConfig } from "axios";
+import { AxiosInstance } from "axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
@@ -69,7 +68,10 @@ describe("schools module", () => {
 					receivedRequests.push({ path });
 					return getRequestReturn;
 				},
-				post: async (path: string) => {},
+				post: async (path?: string) => {
+					receivedRequests.push({ path });
+					return getRequestReturn;
+				},
 			} as AxiosInstance);
 			setupStores({ authModule: AuthModule });
 		});
@@ -97,7 +99,7 @@ describe("schools module", () => {
 					"/v1/schools/sampleSchoolId "
 				);
 
-				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy).toHaveBeenCalledTimes(4);
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSchoolSpy).toHaveBeenCalled();
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
@@ -109,13 +111,13 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				expect(setLoadingSpy.mock.calls[3][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -191,7 +193,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -245,7 +247,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -304,7 +306,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -376,7 +378,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					patch: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -461,7 +463,7 @@ describe("schools module", () => {
 				const systemId = "id_1";
 				initializeAxios({
 					delete: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return "";
 					},
 				} as AxiosInstance);
@@ -492,7 +494,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() => {}),
+					importUserControllerEndSchoolInMaintenance: jest.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -544,10 +546,12 @@ describe("schools module", () => {
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				const error = { statusCode: "500", message: "foo" };
+				const error = new Error(
+					JSON.stringify({ statusCode: "500", message: "foo" })
+				);
 				mockApi = {
 					importUserControllerEndSchoolInMaintenance: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(error)
 					),
 				};
 				spy.mockReturnValue(
@@ -583,7 +587,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() => {}),
+					importUserControllerStartSchoolInUserMigration: jest.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface

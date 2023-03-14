@@ -3,7 +3,7 @@ export type Year = {
 	name: string;
 	endDate: string;
 	startDate: string;
-	years: {};
+	years: unknown;
 	isTeamCreationByStudentsEnabled: boolean;
 	__v: number;
 };
@@ -44,14 +44,14 @@ export type School = {
 		ldapUniventionMigrationSchool: boolean;
 	};
 	enableStudentTeamCreation: boolean;
-	permissions: {};
+	permissions: unknown;
 	inMaintenance: boolean;
 	inUserMigration?: boolean;
 	documentBaseDir: string;
 	isExternal: boolean;
 	id: string;
 	officialSchoolNumber?: string;
-	years: {};
+	years: unknown;
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
 };

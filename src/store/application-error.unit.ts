@@ -3,7 +3,6 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const errorModule = new ApplicationErrorModule({});
 describe("ApplicationErrorModule store", () => {
-	beforeEach(() => {});
 	describe("actions", () => {
 		describe("setError", () => {
 			it("should set the state", () => {

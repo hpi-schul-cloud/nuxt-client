@@ -97,23 +97,33 @@ export default class EnvConfigModule extends VuexModule {
 	get getTeacherStudentVisibilityIsConfigurable() {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
+
 	get getVideoConferenceEnabled() {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
 	}
+
 	get getSchoolPolicyEnabled() {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
 	}
+
 	get getLoginLinkEnabled() {
 		return this.env.FEATURE_LOGIN_LINK_ENABLED;
 	}
+
 	get getRocketChatEnabled() {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
+
 	get getAvailableLanguages() {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
+
 	get getGhostBaseUrl() {
 		return this.env.GHOST_BASE_URL;
+	}
+
+	get getAccessibilityReportEmail(): string | undefined {
+		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
 	get getEnv(): Envs {

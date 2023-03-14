@@ -24,7 +24,7 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
-import ShareCourseModule from "@/store/share-course";
+import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TaskCardModule from "@/store/task-card";
@@ -32,7 +32,6 @@ import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import ShareLessonModule from "@/store/share-lesson";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -56,13 +55,12 @@ export let notifierModule: NotifierModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
-export let shareCourseModule: ShareCourseModule;
+export let shareModule: ShareModule;
 export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
 export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
-export let shareLessonModule: ShareLessonModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -85,13 +83,12 @@ export function initializeStores(store: Store<any>): void {
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
-	shareCourseModule = getModule(ShareCourseModule, store);
+	shareModule = getModule(ShareModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
-	shareLessonModule = getModule(ShareLessonModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -117,11 +114,10 @@ export const modules = {
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,
-	shareCourseModule: ShareCourseModule,
+	shareModule: ShareModule,
 	statusAlertsModule: StatusAlertsModule,
 	systemsModule: SystemsModule,
 	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
-	shareLessonModule: ShareLessonModule,
 };

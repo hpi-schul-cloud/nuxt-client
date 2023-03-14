@@ -50,6 +50,18 @@
 					</v-list-item-title>
 				</v-list-item>
 				<v-list-item
+					v-if="isTeacher && shareTaskEnabled"
+					id="task-action-share"
+					class="task-action"
+					data-testId="task-share"
+					@click.stop.prevent="onShareTask"
+				>
+					<v-list-item-title>
+						<v-icon class="task-action-icon"> {{ mdiShareVariant }} </v-icon>
+						{{ $t("pages.room.taskCard.label.shareTask") }}
+					</v-list-item-title>
+				</v-list-item>
+				<v-list-item
 					v-if="isTeacher && taskIsPublished"
 					id="task-action-revert"
 					class="task-action"
@@ -126,6 +138,7 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
+	mdiShareVariant,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
@@ -177,6 +190,7 @@ export default defineComponent({
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
+			mdiShareVariant,
 		};
 	},
 	computed: {
@@ -191,6 +205,9 @@ export default defineComponent({
 		},
 		copyServiceEnabled() {
 			return envConfigModule?.getEnv.FEATURE_COPY_SERVICE_ENABLED;
+		},
+		shareTaskEnabled() {
+			return envConfigModule?.getEnv.FEATURE_TASK_SHARE;
 		},
 	},
 	methods: {
@@ -226,6 +243,11 @@ export default defineComponent({
 			};
 
 			this.$emit("copy-task", payload);
+		},
+		onShareTask() {
+			if (this.shareTaskEnabled) {
+				this.$emit("share-task", this.taskId);
+			}
 		},
 	},
 });

@@ -1,6 +1,5 @@
 import Vuex from "vuex";
 import NotificationModal from "@/components/molecules/NotificationModal";
-import { isValidComponent } from "@@/tests/unit/commonTests";
 import { createLocalVue } from "@vue/test-utils";
 
 const localVue = createLocalVue();

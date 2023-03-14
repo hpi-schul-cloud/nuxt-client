@@ -57,6 +57,7 @@ const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 				console.error("Update remaining session time failed!");
 			}
 		} catch (error) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			if (error.response && error.response.status === 405) {
 				console.warn(
@@ -97,8 +98,10 @@ const extendSession = async (
 		setRemainingTimeInSeconds(defaultRemainingTimeInSeconds);
 	} catch (err) {
 		setToastValue(toast.error);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		if (err.response && err.response.status !== 405) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			if (err.response && err.response.status !== 401) {
 				// retry 4 times before showing error

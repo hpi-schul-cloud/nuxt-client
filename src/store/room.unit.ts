@@ -8,19 +8,23 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosInstance } from "axios";
 import { authModule, applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "./types/http-status-code.enum";
+import { User } from "./types/auth";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
-		get: async (path: string, params: {}) => {
+		get: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
-		patch: async (path: string, params: {}) => {
+		post: async (path: string) => {
+			receivedRequests.push({ path });
+			return getRequestReturn;
+		},
+		patch: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
@@ -134,16 +138,13 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if server couldn't find any lesson", async () => {
-				const received: any[] = [];
-				let returned: any = {};
-
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: { data: [] } });
+								return { data: { data: [] } };
 							}
 						},
 					} as AxiosInstance);
@@ -161,23 +162,20 @@ describe("room module", () => {
 			});
 
 			it("should set businessError if the server sends nothing after creating lesson ", async () => {
-				const received: any[] = [];
-				let returned: any = {};
-
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = { data: { data: ["123", "465"] } });
+								return { data: { data: ["123", "465"] } };
 							}
 						},
-						post: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						post: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons/copy") {
-								return (returned = undefined);
+								return undefined;
 							}
 						},
 					} as AxiosInstance);
@@ -195,21 +193,18 @@ describe("room module", () => {
 			});
 
 			it("should trigger fetchContent method after copying lesson", async () => {
-				const received: any[] = [];
-				const returned: any = {};
-
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
 								return { data: { data: ["123", "465"] } };
 							}
 						},
-						post: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						post: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons/copy") {
 								return { data: { _id: "123456" } };
 							}
@@ -225,17 +220,15 @@ describe("room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const received: any[] = [];
-				let returned: any = {};
 				const error = { statusCode: 404, message: "friendly error" };
 
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							if (path === "/v1/lessons") {
-								return (returned = Promise.reject({ ...error }));
+								return Promise.reject({ ...error });
 							}
 						},
 					} as AxiosInstance);
@@ -301,11 +294,11 @@ describe("room module", () => {
 			});
 
 			it("should call the backend", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 						},
 					} as AxiosInstance);
 				})();
@@ -320,7 +313,9 @@ describe("room module", () => {
 				);
 				await roomModule.createCourseShareToken("123456");
 
-				expect(received[0].path).toStrictEqual("/v1/courses-share/123456");
+				expect(receivedRequests[0].path).toStrictEqual(
+					"/v1/courses-share/123456"
+				);
 				expect(createCourseShareTokenSpy.mock.calls[0][0]).toStrictEqual(
 					"123456"
 				);
@@ -431,20 +426,16 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
-				// @ts-ignore
-				authModule.setUser({ id: "testUser" });
+				receivedRequests = [];
+				authModule.setUser({ id: "testUser" } as User);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the 'homework' data", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
-							return { data: { _id: "returnId" } };
-						},
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["testUserId"],
@@ -453,8 +444,14 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
 				const roomModule = new RoomModule({});
-				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
 					roomModule,
@@ -464,23 +461,15 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
-				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
-				expect(finishTaskSpy.mock.calls[0][0]).toStrictEqual({
-					itemId: "finishId",
-					action: "finish",
-				});
+				expect(receivedRequests[0].path).toStrictEqual("/v1/homework/finishId");
 			});
 
 			it("should set the 'BusinessError' when 'GET' call returns nothing", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
-							return { data: { _id: "returnId" } };
-						},
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									incorrectResponse: [],
@@ -507,16 +496,12 @@ describe("room module", () => {
 				);
 			});
 
-			it("should make a 'PATCH' call to the backend with archived list", async () => {
-				const received: any[] = [];
+			it("should make a 'PATCH' call to the backend", async () => {
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
-							return { data: { _id: "returnId" } };
-						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["firstId"],
@@ -525,6 +510,13 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: jest.fn(),
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
 				const roomModule = new RoomModule({});
 				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
@@ -535,61 +527,15 @@ describe("room module", () => {
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
-				expect(received[0].path).toStrictEqual("/v1/homework/finishId");
-				expect(received[1].params).toStrictEqual({
-					archived: ["firstId", "testUser"],
-				});
-			});
-
-			it("should set the 'BusinessError' when 'PATCH' call returns nothing", async () => {
-				const received: any[] = [];
-				(() => {
-					initializeAxios({
-						patch: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
-							return { data: { someValue: "some value for error case" } };
-						},
-						get: async (path: string, params: {}) => {
-							return {
-								data: {
-									archived: ["firstId"],
-								},
-							};
-						},
-					} as AxiosInstance);
-				})();
-				const roomModule = new RoomModule({});
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
-				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
-					"resetBusinessError"
-				);
-				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
-
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
-					"400"
-				);
-				expect(setBusinessErrorSpy.mock.calls[0][0].message).toStrictEqual(
-					"archived-not-patched"
-				);
+				expect(mockApi.taskControllerFinish).toBeCalledWith("finishId");
 			});
 
 			it("should catch error in catch block", async () => {
-				const received: any[] = [];
-				const returned: any = {};
-				const error = { statusCode: 404, message: "friendly error" };
-
 				(() => {
 					initializeAxios({
-						patch: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
-							return Promise.reject({ ...error });
-						},
-						get: async (path: string, params: {}) => {
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									archived: ["firstId"],
@@ -598,6 +544,16 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
+				const mockApi = {
+					taskControllerFinish: () => {
+						throw {
+							response: { status: 404, statusText: "friendly error" },
+						};
+					},
+				};
+				jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 				const roomModule = new RoomModule({});
 				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
@@ -620,17 +576,16 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
-				// @ts-ignore
-				authModule.setUser({ id: "testUser" });
+				receivedRequests = [];
+				authModule.setUser({ id: "testUser" } as User);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
-				const received: any[] = [];
 				(() => {
 					initializeAxios({
-						get: async (path: string, params: {}) => {
-							received.push({ path });
-							received.push({ params });
+						get: async (path: string, params: object) => {
+							receivedRequests.push({ path });
+							receivedRequests.push({ params });
 							return {
 								data: {
 									userId: ["testScopedPermission"],
@@ -649,7 +604,7 @@ describe("room module", () => {
 					userId: "userId",
 				});
 
-				expect(received[0].path).toStrictEqual(
+				expect(receivedRequests[0].path).toStrictEqual(
 					"/v1/courses/courseId/userPermissions?userId=userId"
 				);
 				expect(fetchScopePermissionSpy.mock.calls[0][0]).toStrictEqual({

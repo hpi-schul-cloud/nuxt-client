@@ -27,8 +27,6 @@ const searchStrings = {
 };
 
 describe("PrivacySettings", () => {
-	beforeAll(() => {});
-
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,

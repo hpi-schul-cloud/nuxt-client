@@ -134,7 +134,7 @@ const mockStore = {
 				return [{ _id: "123", type: "itslearning" }];
 			},
 			getCurrentYear: () => {
-				return currentYear;
+				return year;
 			},
 		},
 		actions: {

@@ -52,7 +52,6 @@ describe("@/components/molecules/RoomModal", () => {
 			}),
 			propsData: testProps,
 		});
-		const dialog = wrapper.find(".room-dialog");
 		const customDialog = wrapper.vm.$refs.customDialog as any;
 		customDialog.$emit("dialog-closed");
 

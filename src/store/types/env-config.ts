@@ -1,4 +1,5 @@
 export type Envs = {
+	ACCESSIBILITY_REPORT_EMAIL?: string;
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
 	ALERT_STATUS_URL?: string;
 	DOCUMENT_BASE_DIR: string;
