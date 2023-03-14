@@ -69,7 +69,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(0);
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
 		});
-		it("should display non matrix features", () => {
+		it("should display non videoconference and rocketchat feature", () => {
 			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				ROCKETCHAT_SERVICE_ENABLED: true,
@@ -85,7 +85,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(1);
 			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(1);
 		});
-		it("should hide non matrix features", () => {
+		it("should hide videoconference and rocketchat feature", () => {
 			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: false,
 				ROCKETCHAT_SERVICE_ENABLED: false,
