@@ -19,12 +19,15 @@ describe("@/components/molecules/LernStorePlayer", () => {
 	});
 
 	it("Renders spinner", () => {
-		expect(wrapper.find(".d-flex, .justify-center, .align-center, .min-height-screen").exists()).toBe(true);
+		expect(
+			wrapper
+				.find(".d-flex, .justify-center, .align-center, .min-height-screen")
+				.exists()
+		).toBe(true);
 	});
 
 	it("Renders not the h5p Iframe", () => {
 		LernStorePlayer.getPlayer;
 		expect(wrapper.find(".player-iframe").exists()).toBe(false);
 	});
-
 });
