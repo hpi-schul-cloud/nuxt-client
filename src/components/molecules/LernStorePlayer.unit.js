@@ -1,7 +1,7 @@
 import LernStorePlayer from "./LernStorePlayer";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 
-const testProps = {
+const testPropsResource = {
 	resource: Resource,
 };
 
@@ -15,11 +15,16 @@ describe("@/components/molecules/LernStorePlayer", () => {
 				},
 			},
 		}),
-		propsData: { ...testProps },
+		propsData: { ...testPropsResource },
 	});
 
-	it("Renders h5p Iframe", () => {
-		expect(wrapper.find(".player-iframe").exists()).toBe(true);
+	it("Renders spinner", () => {
+		expect(wrapper.find(".d-flex, .justify-center, .align-center, .min-height-screen").exists()).toBe(true);
+	});
+
+	it("Renders not the h5p Iframe", () => {
+		LernStorePlayer.getPlayer;
+		expect(wrapper.find(".player-iframe").exists()).toBe(false);
 	});
 
 });
