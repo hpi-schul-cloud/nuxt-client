@@ -69,7 +69,7 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(0);
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
 		});
-		it("should display non videoconference and rocketchat feature", () => {
+		it("should display videoconference and rocketchat feature", () => {
 			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				ROCKETCHAT_SERVICE_ENABLED: true,
