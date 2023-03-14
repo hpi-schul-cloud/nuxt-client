@@ -151,7 +151,7 @@ describe("@/components/molecules/ContextMenu", () => {
 			}).toThrow(new Error("anchor is not defined"));
 			expect(consoleError).toHaveBeenCalledWith(
 				expect.stringMatching(
-					/^\[Vue warn\]\: Invalid prop\: custom validator check failed for prop \"anchor\"\./
+					/^\[Vue warn\]: Invalid prop: custom validator check failed for prop "anchor"\./
 				)
 			);
 		});

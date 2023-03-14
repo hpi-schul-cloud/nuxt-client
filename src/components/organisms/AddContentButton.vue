@@ -80,7 +80,7 @@ export default {
 		btnLabel: { type: String, default: "" },
 		btnClass: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
-		resource: { type: Object, default: () => {} },
+		resource: { type: Object, default: () => ({}) },
 		disabled: { type: Boolean },
 		multiple: { type: Boolean },
 	},

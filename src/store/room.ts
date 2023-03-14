@@ -1,4 +1,4 @@
-import { applicationErrorModule, authModule } from "@/store";
+import { applicationErrorModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
@@ -10,6 +10,8 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	TaskApiFactory,
+	TaskApiInterface,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -29,7 +31,7 @@ export default class RoomModule extends VuexModule {
 	};
 	scopePermissions: string[] = [];
 	loading = false;
-	error: null | {} = null;
+	error: null | object = null;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -193,14 +195,12 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
-			// @ts-ignore
 			if (!data.shareToken) {
 				this.setBusinessError({
 					statusCode: "400",
 					message: "not-generated",
 				});
 			}
-			// @ts-ignore
 			this.setCourseShareToken(data.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -214,12 +214,10 @@ export default class RoomModule extends VuexModule {
 	@Action
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
-		const userId = authModule.getUser?.id;
 		try {
 			const requestUrl = `/v1/homework/${payload.itemId}`;
 			const response = await $axios.get(requestUrl);
 			const homework = response?.data;
-			// @ts-ignore
 			if (!homework.archived) {
 				this.setBusinessError({
 					statusCode: "400",
@@ -227,31 +225,11 @@ export default class RoomModule extends VuexModule {
 				});
 				return;
 			}
-			let archived = [];
 			if (payload.action === "finish") {
-				// @ts-ignore
-				archived = homework?.archived;
-				archived.push(userId);
+				await this.taskApi.taskControllerFinish(payload.itemId);
+			} else if (payload.action === "restore") {
+				await this.taskApi.taskControllerRestore(payload.itemId);
 			}
-			if (payload.action === "restore") {
-				// @ts-ignore
-				archived = homework?.archived.filter((item: string) => item !== userId);
-			}
-
-			const patchedData = (
-				await $axios.patch(`/v1/homework/${payload.itemId}`, {
-					archived,
-				})
-			).data;
-			// @ts-ignore
-			if (!patchedData._id) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "archived-not-patched",
-				});
-				return;
-			}
-
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -269,7 +247,6 @@ export default class RoomModule extends VuexModule {
 	}): Promise<void> {
 		const requestUrl = `/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`;
 		const ret_val = (await $axios.get(requestUrl)).data;
-		// @ts-ignore
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
@@ -289,7 +266,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {}): void {
+	setError(error: object | null): void {
 		this.error = error;
 		const handledApplicationErrors: Array<HttpStatusCode> = [
 			HttpStatusCode.BadRequest,
@@ -299,7 +276,12 @@ export default class RoomModule extends VuexModule {
 			HttpStatusCode.RequestTimeout,
 			HttpStatusCode.InternalServerError,
 		];
-		// NUXT_REMOVAL: This error handling should be centralized later to manage business errors better.
+		if (error === null) {
+			applicationErrorModule.resetError();
+			return;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const errorCode = error.response?.data.code;
 		if (errorCode && handledApplicationErrors.includes(errorCode))
@@ -329,7 +311,7 @@ export default class RoomModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 
@@ -359,5 +341,9 @@ export default class RoomModule extends VuexModule {
 
 	private get finishedLoading(): boolean {
 		return this.getLoading === false;
+	}
+
+	private get taskApi(): TaskApiInterface {
+		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 }

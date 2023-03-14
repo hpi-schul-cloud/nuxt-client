@@ -96,7 +96,7 @@ describe("task store", () => {
 						}),
 				};
 
-				const spy = jest
+				jest
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 				const tasksModule = new TasksModule({});

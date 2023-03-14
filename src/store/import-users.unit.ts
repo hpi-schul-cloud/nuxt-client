@@ -5,8 +5,6 @@ import {
 	UserMatchResponseMatchedByEnum,
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
-import { importUsersModule } from ".";
-import { getAllJSDocTagsOfKind } from "typescript";
 
 const mockResponse = {
 	data: {
@@ -587,7 +585,6 @@ describe("import-users store actions", () => {
 
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: false });
-				const temp = importUserModule.getImportUserList;
 
 				let changedUser = importUserModule.getImportUserList.data.find(
 					(importUser) => {
@@ -730,9 +727,6 @@ describe("import-users store actions", () => {
 			});
 
 			it("should not do anything if user ID does not exist", () => {
-				const expected = {
-					...importUserModule.getImportUserList.data[0],
-				};
 				const oldList = importUserModule.getImportUserList;
 
 				importUserModule.setUserFlagged({

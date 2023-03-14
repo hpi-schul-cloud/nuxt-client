@@ -34,7 +34,7 @@ export type RoomData = {
 	elements: [
 		{
 			type: string;
-			content: Task | Lesson | {};
+			content: Task | Lesson | object;
 		}
 	];
 };

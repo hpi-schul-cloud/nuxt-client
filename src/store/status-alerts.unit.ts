@@ -37,7 +37,7 @@ describe("status alerts module", () => {
 			it("should handle exception", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error("");
+						throw new Error(path);
 						return;
 					},
 				} as AxiosInstance);

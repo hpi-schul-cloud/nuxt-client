@@ -1,7 +1,6 @@
 import mergeDeep from "@/utils/merge-deep";
 import serviceTemplate from "@/utils/service-template";
 import { $axios } from "@/utils/api";
-import { notifierModule } from "@/store";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
