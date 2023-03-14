@@ -5,8 +5,7 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import ShareCourseModule from "@/store/share-course";
-import ShareLessonModule from "@/store/share-lesson";
+import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -16,6 +15,8 @@ import { mount } from "@vue/test-utils";
 import Room from "./RoomDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
+import { Envs } from "@/store/types/env-config";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 const mockData = {
 	roomId: "123",
@@ -88,7 +89,13 @@ const mockAuthStoreDataTeacher = {
 	lastName: "Parker",
 	email: "peter.parker@hitchhiker.org",
 	roles: [{ name: "teacher" }],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
+	permissions: [
+		"COURSE_CREATE",
+		"COURSE_EDIT",
+		"TOPIC_CREATE",
+		"TASK_CARD_EDIT",
+		"HOMEWORK_CREATE",
+	],
 };
 
 const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
@@ -110,8 +117,7 @@ const $route = {
 let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
-let shareCourseModuleMock: ShareCourseModule;
-let shareLessonModuleMock: ShareLessonModule;
+let shareModuleMock: ShareModule;
 
 const $router = { push: jest.fn(), resolve: jest.fn() };
 
@@ -130,8 +136,7 @@ const getWrapper: any = () => {
 			provide("loadingStateModule", loadingStateModuleMock);
 			provide("notifierModule", notifierModuleMock);
 			provide("i18n", { t: (key: string) => key });
-			provide("shareCourseModule", shareCourseModuleMock);
-			provide("shareLessonModule", shareLessonModuleMock);
+			provide("shareModule", shareModuleMock);
 		},
 	});
 };
@@ -156,12 +161,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsOpen: false,
 		});
 		notifierModuleMock = createModuleMocks(NotifierModule);
-		shareCourseModuleMock = createModuleMocks(ShareCourseModule, {
+		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			startShareFlow: jest.fn(),
-		});
-		shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
-			getIsShareModalOpen: true,
 		});
 
 		initializeAxios({
@@ -234,8 +237,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	describe("new task-card button", () => {
 		const mockRoute = "/rooms/123/create-task-card";
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
 			$router.resolve.mockReturnValue({ href: mockRoute });
 		});
 		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
@@ -244,8 +246,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			expect(fabComponent.vm.actions.length).toBe(3);
 		});
 		it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false });
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.find(".wireframe-fab");
 			expect(fabComponent.vm.actions.length).toBe(2);
@@ -291,11 +292,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have the headline menu items", () => {
-			// @ts-ignore
 			envConfigModule.setEnvs({
 				FEATURE_COPY_SERVICE_ENABLED: true,
 				FEATURE_COURSE_SHARE: true,
-			});
+			} as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -320,8 +320,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -349,8 +348,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
-				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 				const wrapper = getWrapper();
 				const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -360,10 +358,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
-				// @ts-ignore
 				envConfigModule.setEnvs({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				});
+				} as Envs);
 				const onCopyRoom = jest.fn();
 				const wrapper = getWrapper();
 				wrapper.vm.onCopyRoom = onCopyRoom;
@@ -378,8 +375,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -393,10 +389,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true });
-			// const createCourseShareTokenSpy = jest.fn();
-			// shareCourseModule.createCourseShareToken = createCourseShareTokenSpy;
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -404,8 +397,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
 			await moreActionButton.trigger("click");
 
-			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalled();
-			expect(shareCourseModuleMock.startShareFlow).toHaveBeenCalledWith("123");
+			expect(shareModuleMock.startShareFlow).toHaveBeenCalled();
+			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
+				id: "123",
+				type: ShareTokenBodyParamsParentTypeEnum.Courses,
+			});
 		});
 
 		describe("modal views", () => {

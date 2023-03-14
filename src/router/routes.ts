@@ -1,7 +1,7 @@
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { createQueryParameterGuard } from "./guards/query-parameter.guard";
+import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
 import {
 	isMongoId,
 	REGEX_ACTIVATION_CODE,
@@ -217,10 +217,10 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: createQueryParameterGuard({
+		beforeEnter: validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
-			origin: (val, to: Route) =>
+			origin: (val: unknown, to: Route) =>
 				isMongoId(val) &&
 				(val === to.query.sourceSystem || val === to.query.targetSystem),
 		}),
@@ -240,7 +240,25 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
-		beforeEnter: createQueryParameterGuard({
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration/error",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
+		name: "user-login-migration-error",
+		beforeEnter: validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		}),

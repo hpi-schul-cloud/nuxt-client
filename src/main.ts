@@ -18,13 +18,12 @@ import {
 	roomModule,
 	roomsModule,
 	schoolsModule,
-	shareCourseModule,
+	shareModule,
 	statusAlertsModule,
 	systemsModule,
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
-	shareLessonModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -42,6 +41,7 @@ import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueMq from "vue-mq";
 Vue.use(VueMq, {
@@ -55,8 +55,6 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
-// NUXT_REMOVAL try to solve without vuelidate dependency
-// @ts-ignore
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 
@@ -134,8 +132,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			roomModule,
 			roomsModule,
 			schoolsModule,
-			shareCourseModule,
-			shareLessonModule,
+			shareModule,
 			statusAlertsModule,
 			systemsModule,
 			taskCardModule,

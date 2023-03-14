@@ -17,15 +17,21 @@ export interface SharePayload extends ShareOptions {
 	id: string;
 }
 
+export interface StartFlow {
+	id: string;
+	type: ShareTokenBodyParamsParentTypeEnum;
+}
+
 @Module({
-	name: "shareCourseModule",
+	name: "shareModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class ShareCourseModule extends VuexModule {
+export default class ShareModule extends VuexModule {
 	private isShareModalOpen = false;
-	private courseId = "";
+	private parentId = "";
 	private shareUrl: string | undefined = undefined;
+	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
@@ -36,8 +42,8 @@ export default class ShareCourseModule extends VuexModule {
 		payload: SharePayload
 	): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
-			parentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-			parentId: this.courseId,
+			parentType: this.parentType,
+			parentId: this.parentId,
 			expiresInDays: payload.hasExpiryDate ? 21 : null,
 			schoolExclusive: payload.isSchoolInternal,
 		};
@@ -56,21 +62,27 @@ export default class ShareCourseModule extends VuexModule {
 	}
 
 	@Action
-	startShareFlow(id: string): void {
-		this.setCourseId(id);
+	startShareFlow({ id, type }: StartFlow): void {
+		this.setParentId(id);
+		this.setParentType(type);
 		this.setShareModalOpen(true);
 	}
 
 	@Action
 	resetShareFlow(): void {
-		this.setCourseId("");
+		this.setParentId("");
 		this.setShareModalOpen(false);
 		this.setShareUrl(undefined);
 	}
 
 	@Mutation
-	setCourseId(id: string): void {
-		this.courseId = id;
+	setParentId(id: string): void {
+		this.parentId = id;
+	}
+
+	@Mutation
+	setParentType(type: ShareTokenBodyParamsParentTypeEnum): void {
+		this.parentType = type;
 	}
 
 	@Mutation
@@ -81,6 +93,10 @@ export default class ShareCourseModule extends VuexModule {
 	@Mutation
 	setShareUrl(url: string | undefined): void {
 		this.shareUrl = url;
+	}
+
+	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
+		return this.parentType;
 	}
 
 	get getIsShareModalOpen(): boolean {

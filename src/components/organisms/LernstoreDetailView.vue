@@ -113,7 +113,6 @@
 						</p>
 					</div>
 				</div>
-				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
@@ -215,7 +214,7 @@ export default {
 	props: {
 		resource: {
 			type: Object,
-			default: () => {},
+			default: () => ({}),
 		},
 		id: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
@@ -248,7 +247,7 @@ export default {
 				"ccm:hpi_lom_relation"
 			);
 			if (relation) {
-				relation = JSON.parse(relation.replace(/\'/g, '"'));
+				relation = JSON.parse(relation.replace(/'/g, '"'));
 				if (relation.kind === "ispartof") {
 					return {
 						name: "content-id",

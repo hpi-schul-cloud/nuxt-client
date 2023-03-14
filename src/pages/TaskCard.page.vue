@@ -1,9 +1,11 @@
 <template>
-	<default-wireframe
-		:full-width="false"
-		:breadcrumbs="breadcrumbs"
-		headline="Task Card"
-	>
+	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
+		<div slot="header" class="d-flex flex-row align-end">
+			<v-icon size="20" class="mr-2 mb-4 pb-1">$tasks</v-icon>
+			<h1 class="h6 mt-10">
+				{{ t("pages.rooms.fab.add.betatask") }}
+			</h1>
+		</div>
 		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
 				v-model="course"
@@ -13,6 +15,17 @@
 				filled
 				disabled
 				:label="$t('common.labels.course')"
+			/>
+			<date-time-picker
+				class="mb-4"
+				required
+				:date-time="dueDate"
+				:date-input-label="t('pages.taskCard.labels.dateInput')"
+				:minDate="minDate"
+				:maxDate="maxDate"
+				:time-input-label="t('components.organisms.FormNews.label.time')"
+				@input="handleDateTimeInput"
+				@error="onError"
 			/>
 			<card-element-wrapper
 				v-model="title.model"
@@ -53,9 +66,12 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref, onMounted, computed } from "vue";
+import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, roomModule } from "@/store";
+import { taskCardModule, roomModule, schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
@@ -69,7 +85,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -78,6 +94,7 @@ export default defineComponent({
 		DefaultWireframe,
 		CardElementWrapper,
 		CardElementList,
+		DateTimePicker,
 	},
 	setup() {
 		const router = useRouter();
@@ -87,6 +104,20 @@ export default defineComponent({
 		if (!i18n || !authModule) {
 			throw new Error("Injection of dependencies failed");
 		}
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
+		useTitle(
+			`${i18n.t("pages.rooms.fab.add.betatask").toString()} - ${
+				Theme.short_name
+			}`
+		);
+
 		const breadcrumbs = ref([
 			{
 				text: i18n.t("pages.courses.index.title"),
@@ -103,10 +134,18 @@ export default defineComponent({
 			type: CardElementResponseCardElementTypeEnum.Title,
 			model: "",
 		});
+		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
 
+		const minDate = new Date().toISOString();
+		const maxDate = ref("");
+
 		onMounted(async () => {
+			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+			endOfSchoolYear.setHours(12);
+			maxDate.value = endOfSchoolYear.toISOString();
+
 			if (route.name === "rooms-task-card-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
@@ -118,7 +157,9 @@ export default defineComponent({
 					},
 				];
 				const taskCardData = taskCardModule.getTaskCardData;
+
 				taskCardModule.setCourseId(course.value);
+				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push({
@@ -132,8 +173,8 @@ export default defineComponent({
 			if (route.name === "task-card-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
-
 				const taskCardData = taskCardModule.getTaskCardData;
+
 				course.value = taskCardData.courseId || "";
 				courses.value = [
 					{
@@ -141,6 +182,7 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push({
@@ -191,7 +233,7 @@ export default defineComponent({
 			});
 		};
 
-		const createTaskCard = () => {
+		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				content: {
@@ -211,13 +253,14 @@ export default defineComponent({
 				}
 			});
 
-			taskCardModule.createTaskCard({
+			await taskCardModule.createTaskCard({
 				courseId: course.value,
 				cardElements: cardElements,
+				dueDate: dueDate.value,
 			});
 		};
 
-		const updateTaskCard = () => {
+		const updateTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			cardElements.push({
 				id: title.value.id,
@@ -240,26 +283,40 @@ export default defineComponent({
 				cardElements.push(cardElement);
 			});
 
-			taskCardModule.updateTaskCard({
+			await taskCardModule.updateTaskCard({
+				dueDate: dueDate.value,
 				courseId: course.value,
 				cardElements: cardElements,
 			});
 		};
 
-		const save = () => {
+		const save = async () => {
+			if (hasErrors.value) {
+				return;
+			}
+
 			if (route.name === "rooms-task-card-new") {
-				createTaskCard();
+				await createTaskCard();
 			} else {
-				updateTaskCard();
+				await updateTaskCard();
 			}
 
 			router.go(-1);
+		};
+
+		const hasErrors = ref(false);
+		const onError = () => {
+			hasErrors.value = true;
 		};
 
 		const cancel = () => {
 			router.go(-1);
 		};
 
+		const handleDateTimeInput = (dateTime: string) => {
+			hasErrors.value = false;
+			dueDate.value = dateTime;
+		};
 		const getUserPermissions = ref(authModule.getUserPermissions);
 
 		const isEditMode = computed(() => {
@@ -269,16 +326,19 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			title,
+			dueDate,
 			elements,
 			save,
 			cancel,
+			t,
+			handleDateTimeInput,
 			isEditMode,
 			course,
 			courses,
+			onError,
+			minDate,
+			maxDate,
 		};
-	},
-	mounted() {
-		document.title = this.$t("common.words.tasks") as string;
 	},
 });
 </script>

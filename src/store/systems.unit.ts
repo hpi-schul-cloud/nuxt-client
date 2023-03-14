@@ -2,14 +2,6 @@ import * as serverApi from "../serverApi/v3/api";
 import SystemsModule from "./systems";
 import { System } from "./types/system";
 
-// const createAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
-// 	data,
-// 	status: 200,
-// 	statusText: "OK",
-// 	headers: {},
-// 	config: {},
-// });
-
 describe("SystemsModule", () => {
 	let module: SystemsModule;
 
@@ -20,16 +12,6 @@ describe("SystemsModule", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
-
-	// const mockApi = () => {
-	// 	const apiMock: jest.Mocked<SystemApiInterface> = {
-	// 		systemControllerFind: jest.fn(),
-	// 	};
-
-	// 	jest.spyOn(serverApi, "SystemApiFactory").mockReturnValue(apiMock);
-
-	// 	return { apiMock };
-	// };
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
@@ -69,13 +51,13 @@ describe("SystemsModule", () => {
 
 		describe("Error", () => {
 			it("should return the default state", () => {
-				const error: {} | null = module.getError;
+				const error: object | null = module.getError;
 
 				expect(error).toEqual(null);
 			});
 
 			it("should return the changed state", () => {
-				const error: {} | null = new Error();
+				const error: object | null = new Error();
 
 				module.setError(error);
 

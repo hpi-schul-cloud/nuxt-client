@@ -119,6 +119,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
+	mdiShareVariant,
 } from "@mdi/js";
 import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -137,7 +138,7 @@ export default {
 		},
 		room: {
 			type: Object,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, required: true },
 		ariaLabel: {
@@ -157,6 +158,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 				mdiTextBoxCheckOutline,
+				mdiShareVariant,
 			},
 			roles: Roles,
 			canShowDescription: false,
@@ -330,6 +332,15 @@ export default {
 					});
 				}
 
+				if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+					roleBasedMoreActions[Roles.Teacher].push({
+						icon: this.icons.mdiShareVariant,
+						action: () => this.$emit("share-task", this.task.id),
+						name: this.$t("pages.room.taskCard.label.shareTask"),
+						dataTestId: "content-card-task-menu-share",
+					});
+				}
+
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
@@ -450,7 +461,7 @@ export default {
 			let classes = "";
 
 			if (this.isBetaTask) {
-				classes = classes + " beta-task";
+				classes = classes + " beta-task-bg";
 			}
 			if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 				classes = classes + " task-hidden";
@@ -520,7 +531,7 @@ export default {
 	}
 }
 
-.beta-task {
+.beta-task-bg {
 	// based on beta-task color #196c9e
 	background-color: rgba(25, 108, 158, 0.05) !important;
 }

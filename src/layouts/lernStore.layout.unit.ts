@@ -6,6 +6,7 @@ import lernStoreLayout from "./lernStore.layout.vue";
 import { envConfigModule, contentModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
+import { Envs } from "@/store/types/env-config";
 
 describe("lernStoreLayout", () => {
 	const params = {
@@ -36,8 +37,7 @@ describe("lernStoreLayout", () => {
 			isCollection: "true",
 		};
 		it("should render 'legacy-logged-in' layout if feature flag set true", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true } as Envs);
 			contentModule.init();
 			const mocks = {
 				$route: {
@@ -51,8 +51,9 @@ describe("lernStoreLayout", () => {
 		});
 
 		it("should not render 'legacy-logged-in' layout if feature flag set false", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: false });
+			envConfigModule.setEnvs({
+				FEATURE_ES_COLLECTIONS_ENABLED: false,
+			} as Envs);
 			contentModule.init();
 			const mocks = {
 				$route: {
@@ -68,8 +69,7 @@ describe("lernStoreLayout", () => {
 
 	describe("when 'isCollection' queryString is set", () => {
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true } as Envs);
 		});
 		it("should render any layout if 'isCollection' queryString is set true", async () => {
 			contentModule.init();
