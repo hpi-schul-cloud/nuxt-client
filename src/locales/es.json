@@ -885,7 +885,7 @@
 	"pages.room.copy.task.message.BigFile": "Puede ser que el proceso de copia tarde más tiempo porque se incluyen archivos más grandes. En ese caso, el elemento copiado ya debería existir y los archivos deberían estar disponibles más tarde.",
 	"pages.taskCard.labels.dateInput": "Fecha de vencimiento",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
-	"pages.userMigration.title": "Migración del sistema de inicio de sesión",
+	"pages.userMigration.title": "Reubicación del sistema de registro",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
 	"pages.userMigration.button.skip": "No ahora",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
