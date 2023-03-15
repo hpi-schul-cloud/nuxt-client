@@ -156,7 +156,6 @@ export function useExternalToolMappings() {
 		schoolId: string
 	): SchoolExternalToolPostParams => {
 		return {
-			id: template.configId,
 			toolId: template.id,
 			version: template.version,
 			schoolId,
