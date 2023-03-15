@@ -84,7 +84,7 @@ describe("schools module", () => {
 				getRequestReturn = {
 					data: {
 						id: "id_123",
-						features: ["rocketChat", "messengerSchoolRoom"],
+						features: ["rocketChat"],
 					},
 				};
 				const schoolsModule = new SchoolsModule({});
@@ -105,9 +105,6 @@ describe("schools module", () => {
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
 					id: "id_123",
 					features: {
-						messenger: false,
-						messengerSchoolRoom: true,
-						messengerStudentRoomCreate: false,
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
@@ -343,9 +340,6 @@ describe("schools module", () => {
 					id: "id_123",
 					data: "some data to be updated",
 					features: {
-						messenger: false,
-						messengerSchoolRoom: true,
-						messengerStudentRoomCreate: false,
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
@@ -359,7 +353,7 @@ describe("schools module", () => {
 							data: {
 								id: "id_123",
 								data: "some data to be updated",
-								features: ["rocketChat", "messengerSchoolRoom"],
+								features: ["rocketChat"],
 							},
 						};
 					},
@@ -393,9 +387,6 @@ describe("schools module", () => {
 					id: "id_123",
 					data: "some data to be updated",
 					features: {
-						messenger: false,
-						messengerSchoolRoom: true,
-						messengerStudentRoomCreate: false,
 						rocketChat: true,
 						studentVisibility: false,
 						videoconference: false,
