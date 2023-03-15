@@ -742,8 +742,6 @@
 	"pages.courses.index.courses.archived": "Cursos archivados",
 	"pages.courses.index.courses.all": "Todos los cursos",
 	"pages.courses.index.courses.arrangeCourses": "Organizar cursos",
-	"pages.courses.index.courses.cannotArrangeSubstitute": "No se pueden organizar cursos de sustitución",
-	"pages.courses.index.courses.substituteCourses": "Cursos de sustitución",
 	"pages.courses.index.title": "Cursos",
 	"pages.courses.new.btn_new": "Crear",
 	"pages.courses.new.title": "Crear nuevo curso",
