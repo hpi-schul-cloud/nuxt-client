@@ -27,9 +27,9 @@
 				>
 					{{
 						$t(
-							logoutMandatory
-								? "common.actions.logout"
-								: "pages.userMigration.button.skip"
+							canSkipMigration
+								? "pages.userMigration.button.skip"
+								: "common.actions.logout"
 						)
 					}}
 				</v-btn>
@@ -105,7 +105,7 @@ export default defineComponent({
 
 		let pageType: MigrationPageOrigin;
 		let migrationDescription: string;
-		let logoutMandatory = false;
+		let canSkipMigration = false;
 		if (props.origin === props.sourceSystem) {
 			pageType = props.mandatory
 				? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY
@@ -113,7 +113,7 @@ export default defineComponent({
 			migrationDescription = props.mandatory
 				? "pages.userMigration.description.fromSourceMandatory"
 				: "pages.userMigration.description.fromSource";
-			logoutMandatory = !!props.mandatory;
+			canSkipMigration = !props.mandatory;
 		} else {
 			pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
 			migrationDescription = "pages.userMigration.description.fromTarget";
@@ -134,7 +134,7 @@ export default defineComponent({
 		return {
 			isLoading,
 			migrationDescription,
-			logoutMandatory,
+			canSkipMigration,
 			proceedLink,
 			cancelLink,
 			getSystemName,

@@ -887,7 +887,7 @@
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.userMigration.title": "Reubicación del sistema de registro",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
-	"pages.userMigration.button.skip": "No ahora",
+	"pages.userMigration.button.skip": "Realizar más tarde",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.description.fromTarget": "¡Hola!<br>Esta escuela está cambiando su sistema de inscripción y el proceso de inscripción debe pasar de {sourceSystem} a {targetSystem}.<br>Ya se puede iniciar la mudanza. Al comienzo del movimiento, se realiza un último inicio de sesión con {sourceSystem}.<br>Después de eso, el registro solo es posible a través de {targetSystem}.",
 	"pages.userMigration.description.fromSource": "¡Hola!<br>Esta escuela está cambiando el sistema de inscripción de {sourceSystem} a {targetSystem} y el proceso de inscripción puede pasar de {sourceSystem} a {targetSystem}.<br>Ya se puede iniciar la mudanza. Al comienzo del movimiento, inicia sesión con {targetSystem}.<br>Después de eso, el registro solo es posible a través de {targetSystem}.",

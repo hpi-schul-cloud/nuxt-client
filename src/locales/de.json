@@ -896,7 +896,7 @@
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.userMigration.button.startMigration": "Umzug starten",
-	"pages.userMigration.button.skip": "Nicht jetzt",
+	"pages.userMigration.button.skip": "Später durchführen",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.description.fromTarget": "Hallo!<br>Diese Schule wechselt gerade das Anmeldesystem und das Anmeldeverfahren muss von {sourceSystem} zu {targetSystem} umziehen.<br>Der Umzug kann jetzt gestartet werden. Zu Beginn des Umzugs erfolgt ein letztes Mal eine Anmeldung mit {sourceSystem}.<br>Danach ist eine Anmeldung nur noch über {targetSystem} möglich.",
 	"pages.userMigration.description.fromSource": "Hallo!<br>Diese Schule wechselt gerade das Anmeldesystem von {sourceSystem} zu {targetSystem} und das Anmeldeverfahren kann von {sourceSystem} zu {targetSystem} umziehen.<br>Der Umzug kann jetzt gestartet werden. Zu Beginn des Umzugs erfolgt eine Anmeldung mit {targetSystem}.<br>Danach ist eine Anmeldung nur noch über {targetSystem} möglich.",
