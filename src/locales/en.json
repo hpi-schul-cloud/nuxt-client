@@ -892,7 +892,7 @@
 	"pages.room.copy.task.message.BigFile": "It could be that the copying process takes longer because larger files are included. In that case, the copied item should already exist and the files should become available later.",
 	"pages.taskCard.labels.dateInput": "Due Date",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
-	"pages.userMigration.title": "Migration of the login system",
+	"pages.userMigration.title": "Relocation of the login system",
 	"pages.userMigration.button.startMigration": "Start",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.backToLogin": "Return to login page",

@@ -892,7 +892,7 @@
 	"pages.room.copy.task.message.copied": "Die Aufgabe wurde erfolgreich kopiert.",
 	"pages.taskCard.labels.dateInput": "Fälligkeitsdatum",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
-	"pages.userMigration.title": "Migration des Anmeldesystems",
+	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.userMigration.button.startMigration": "Umzug starten",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
