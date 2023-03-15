@@ -108,6 +108,7 @@ describe("Board", () => {
 		it("should call 'useBoardState' composable", () => {
 			setup();
 			expect(mockedUseBoardState).toHaveBeenCalled();
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			expect(wrapper.vm.board).toStrictEqual(MOCK_BOARD_ONE_COLUMN);
 		});

@@ -6,6 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import Vue from "vue";
 
 const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {
@@ -105,6 +106,7 @@ describe("@/pages/room-list.vue", () => {
 			// "Property 'items' does not exist on type 'Vue'" error
 			// TODO: better solution should be found
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 		});
@@ -119,17 +121,22 @@ describe("@/pages/room-list.vue", () => {
 				});
 				await wrapper.vm.$nextTick();
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
 				wrapper.vm.$data.searchText = "math";
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
 				wrapper.vm.$data.searchText = "";
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
 				wrapper.vm.$data.searchText = "15";
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms[0]).toEqual({
 					id: "234",

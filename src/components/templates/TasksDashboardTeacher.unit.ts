@@ -12,6 +12,7 @@ import TasksList from "@/components/organisms/TasksList.vue";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import Vue from "vue";
+import ShareModule from "@/store/share";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -24,6 +25,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
+	let shareModuleMock: ShareModule;
 
 	let wrapper: Wrapper<Vue>;
 
@@ -38,6 +40,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
+				shareModule: shareModuleMock,
 				i18n: { t: (key: string) => key },
 			},
 			...attrs,
@@ -75,6 +78,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
+		shareModuleMock = createModuleMocks(ShareModule);
 	});
 
 	it("Should render tasks list component, with second panel expanded per default", () => {

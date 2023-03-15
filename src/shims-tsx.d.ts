@@ -8,4 +8,11 @@ declare global {
 			[elem: string]: any;
 		}
 	}
+
+	/**
+	 * See: https://stackoverflow.com/questions/69485778/new-typescript-version-does-not-include-window-navigator-mssaveblob?noredirect=1&lq=1
+	 */
+	interface Navigator {
+		msSaveBlob: (blob: Blob, fileName: string) => boolean;
+	}
 }

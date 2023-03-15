@@ -12,13 +12,8 @@ export const requiredVars = {
 };
 
 export const configsFromEnvironmentVars = {
-	FEATURE_MATRIX_MESSENGER_ENABLED:
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
-	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
-	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 };
 
 const retryLimit = 10;
@@ -88,15 +83,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin"; // TODO rely on server provided default
 	}
 
-	get getMatrixConfig() {
-		return {
-			enabled: this.env.FEATURE_MATRIX_MESSENGER_ENABLED,
-			schoolSettingsVisible: this.env.MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
-			studentRoomCreation: this.env.MATRIX_MESSENGER__STUDENT_ROOM_CREATION,
-			schoolRoomEnabled: this.env.MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED,
-		};
-	}
-
 	get getAdminToggleStudentLernstoreViewEnabled() {
 		return (
 			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
@@ -111,23 +97,33 @@ export default class EnvConfigModule extends VuexModule {
 	get getTeacherStudentVisibilityIsConfigurable() {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
+
 	get getVideoConferenceEnabled() {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
 	}
+
 	get getSchoolPolicyEnabled() {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
 	}
+
 	get getLoginLinkEnabled() {
 		return this.env.FEATURE_LOGIN_LINK_ENABLED;
 	}
+
 	get getRocketChatEnabled() {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
+
 	get getAvailableLanguages() {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
+
 	get getGhostBaseUrl() {
 		return this.env.GHOST_BASE_URL;
+	}
+
+	get getAccessibilityReportEmail(): string | undefined {
+		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
 	get getEnv(): Envs {

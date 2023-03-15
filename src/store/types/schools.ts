@@ -3,7 +3,7 @@ export type Year = {
 	name: string;
 	endDate: string;
 	startDate: string;
-	years: {};
+	years: unknown;
 	isTeamCreationByStudentsEnabled: boolean;
 	__v: number;
 };
@@ -40,21 +40,18 @@ export type School = {
 	features: {
 		rocketChat: boolean;
 		videoconference: boolean;
-		messenger: boolean;
 		studentVisibility: boolean;
-		messengerSchoolRoom: boolean;
-		messengerStudentRoomCreate: boolean;
 		ldapUniventionMigrationSchool: boolean;
 	};
 	enableStudentTeamCreation: boolean;
-	permissions: {};
+	permissions: unknown;
 	inMaintenance: boolean;
 	inUserMigration?: boolean;
 	documentBaseDir: string;
 	isExternal: boolean;
 	id: string;
 	officialSchoolNumber?: string;
-	years: {};
+	years: unknown;
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
 };

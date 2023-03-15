@@ -1,5 +1,5 @@
 <template>
-	<div v-show="hasData" class="text-center mx-auto container-max-width">
+	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_successful.svg"
 			:alt="$t('pages.userMigration.success.img.alt')"
@@ -54,15 +54,15 @@ export default defineComponent({
 			);
 		};
 
-		const hasData: Ref<boolean> = ref(false);
+		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
-			hasData.value = true;
+			isLoading.value = false;
 		});
 
 		return {
-			hasData,
+			isLoading,
 			getSystemName,
 		};
 	},
