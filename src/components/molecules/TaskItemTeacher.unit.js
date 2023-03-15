@@ -12,6 +12,7 @@ const {
 	plannedTask,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
+	betaTask,
 } = mocks;
 
 const defineWindowWidth = (width) => {
@@ -63,7 +64,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 	});
 
-	it("should compute correct href value", () => {
+	it("should compute regular href value for old tasks", () => {
 		const wrapper = getWrapper({
 			task: tasksTeacher[0],
 		});
@@ -368,6 +369,29 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			expect(menuBtn.isVisible()).toBe(true);
+		});
+	});
+
+	describe("when task is a beta task", () => {
+		const wrapper = getWrapper({
+			task: betaTask,
+		});
+
+		it("should have correct combined label for beta task", () => {
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.element.textContent).toStrictEqual(
+				"Mathe - Beta-Aufgabe - Erstellt 28.09.17"
+			);
+		});
+
+		it("should redirect to task-cards page", () => {
+			expect(wrapper.vm.href).toStrictEqual(
+				`/task-cards/${betaTask.taskCardId}`
+			);
+			expect(wrapper.attributes("href")).toStrictEqual(
+				`/task-cards/${betaTask.taskCardId}`
+			);
 		});
 	});
 });
