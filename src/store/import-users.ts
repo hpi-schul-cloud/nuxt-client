@@ -16,7 +16,6 @@ export enum MatchedBy {
 	None = "none",
 }
 
-// @ts-ignore
 @Module({
 	name: "importUsersModule",
 	namespaced: true,

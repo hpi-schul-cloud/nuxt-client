@@ -48,6 +48,7 @@ describe("@/components/templates/LanguageMenu", () => {
 		});
 
 		it("should provide available language items", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.availableItems).toStrictEqual([
 				{
@@ -60,6 +61,7 @@ describe("@/components/templates/LanguageMenu", () => {
 		});
 
 		it("should provide selected language item", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.selectedItem).toStrictEqual({
 				language: "de",

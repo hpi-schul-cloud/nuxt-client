@@ -5,7 +5,6 @@
 		:title="$t('pages.content.empty_state.error.title')"
 	>
 		<template #description>
-			<!-- eslint-disable vue/no-v-html -->
 			<span v-html="$t('pages.content.empty_state.error.message')" />
 		</template>
 	</empty-state>

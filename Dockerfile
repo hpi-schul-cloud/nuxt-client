@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY babel.config.js .eslintrc.js LICENSE.md tsconfig.json tsconfig.build.json vue.config.js ./
+COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json vue.config.js ./
 COPY public ./public
 COPY src ./src
 COPY webpack-config ./webpack-config

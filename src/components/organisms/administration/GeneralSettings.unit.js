@@ -70,9 +70,6 @@ const generateMockStore = {
 			getAdminToggleStudentLernstoreViewEnabled: () => {
 				return true;
 			},
-			getMatrixConfig: () => {
-				return true;
-			},
 			getRocketChatEnabled: () => {
 				return true;
 			},
@@ -100,9 +97,6 @@ const mockData = {
 		features: {
 			rocketChat: true,
 			videoconference: true,
-			messenger: true,
-			messengerSchoolRoom: true,
-			messengerStudentRoomCreate: true,
 			studentVisibility: true,
 		},
 		permissions: {

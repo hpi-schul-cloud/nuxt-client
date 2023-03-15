@@ -146,7 +146,7 @@ export default {
 			minDate: inputRangeDate(-100, "y"),
 			maxDate: inputRangeDate(-4, "y"),
 			birthDateValidationPattern:
-				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
+				"(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)d{2})",
 		};
 	},
 	computed: {

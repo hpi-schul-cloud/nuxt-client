@@ -14,8 +14,11 @@ const axiosInitializer = () => {
 			receivedRequests.push({ data });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
-		patch: async (path: string, params: {}) => {
+		post: async (path: string) => {
+			receivedRequests.push({ path });
+			return getRequestReturn;
+		},
+		patch: async (path: string, params: object) => {
 			receivedRequests.push({ path });
 			receivedRequests.push({ params });
 			return getRequestReturn;
@@ -101,7 +104,6 @@ describe("rooms module", () => {
 					.fetch({
 						indicateLoading: true,
 						device: "mobile",
-						showSubstitute: true,
 					})
 					.then(() => {
 						expect(roomsModule.getLoading).toBe(false);

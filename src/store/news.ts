@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
+import { NewsApiFactory } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
@@ -165,7 +165,7 @@ export default class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await this.newsApi.newsControllerDelete(id);
+			await this.newsApi.newsControllerDelete(id);
 			this.setCurrent(null);
 			this.setStatus("completed");
 		} catch (error) {

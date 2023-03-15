@@ -8,7 +8,6 @@
 					role="presentation"
 					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<!-- eslint-disable vue/no-v-html -->
 				<p class="sloth-text" v-html="getText" />
 			</div>
 		</template>

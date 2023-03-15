@@ -82,7 +82,7 @@ export default {
 	},
 	mixins: [contentMeta],
 	props: {
-		resource: { type: Object, default: () => {} },
+		resource: { type: Object, default: () => ({}) },
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
 		selectable: { type: Boolean },
