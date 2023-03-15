@@ -27,6 +27,12 @@
 				@input="handleDateTimeInput"
 				@error="onError"
 			/>
+			<user-selector
+				label="Studenten"
+				aria-label="Studenten"
+				v-model="selectedUsers"
+				:users="allUsers"
+			/>
 			<card-element-wrapper
 				v-model="title.model"
 				v-bind="title.props"
@@ -86,6 +92,7 @@ import {
 	CardElementParams,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import UserSelector from "@/components/user-selector/UserSelector.vue";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -95,6 +102,7 @@ export default defineComponent({
 		CardElementWrapper,
 		CardElementList,
 		DateTimePicker,
+		UserSelector,
 	},
 	setup() {
 		const router = useRouter();
@@ -291,7 +299,8 @@ export default defineComponent({
 		};
 
 		const save = async () => {
-			if (hasErrors.value) {
+			console.log(selectedUsers.value);
+			/*if (hasErrors.value) {
 				return;
 			}
 
@@ -301,7 +310,7 @@ export default defineComponent({
 				await updateTaskCard();
 			}
 
-			router.go(-1);
+			router.go(-1);*/
 		};
 
 		const hasErrors = ref(false);
@@ -323,6 +332,25 @@ export default defineComponent({
 			return getUserPermissions.value.includes("task_card_edit");
 		});
 
+		const allUsers = [
+			{
+				id: "userId1",
+				firstName: "User",
+				lastName: "1",
+			},
+			{
+				id: "userId2",
+				firstName: "User",
+				lastName: "2",
+			},
+			{
+				id: "userId3",
+				firstName: "User",
+				lastName: "3",
+			},
+		];
+		const selectedUsers = ref(["userId2"]);
+
 		return {
 			breadcrumbs,
 			title,
@@ -338,6 +366,8 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			allUsers,
+			selectedUsers,
 		};
 	},
 });
