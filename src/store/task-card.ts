@@ -8,7 +8,7 @@ import {
 	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
-import { BusinessError } from "./types/commons";
+import { BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "taskCardModule",
@@ -58,7 +58,7 @@ export default class TaskCardModule extends VuexModule {
 		dueDate: "",
 		visibleAtDate: "",
 	};
-	loading = false;
+	status: Status = "";
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -72,7 +72,7 @@ export default class TaskCardModule extends VuexModule {
 	@Action
 	async findTaskCard(taskCardId: string): Promise<void> {
 		this.resetBusinessError();
-		this.setLoading(true);
+		this.setStatus("pending");
 
 		try {
 			const { data } = await this.cardsApi.taskCardControllerFindOne(
@@ -80,9 +80,9 @@ export default class TaskCardModule extends VuexModule {
 			);
 
 			this.setTaskCardData(data);
-			this.setLoading(false);
+			this.setStatus("completed");
 		} catch (error: any) {
-			this.setLoading(false);
+			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
 				statusCode: error?.response?.status,
@@ -94,15 +94,15 @@ export default class TaskCardModule extends VuexModule {
 	@Action
 	async createTaskCard(params: TaskCardParams): Promise<void> {
 		this.resetBusinessError();
-		this.setLoading(true);
+		this.setStatus("pending");
 
 		try {
 			const { data } = await this.cardsApi.taskCardControllerCreate(params);
 
 			this.setTaskCardData(data);
-			this.setLoading(false);
+			this.setStatus("completed");
 		} catch (error: any) {
-			this.setLoading(false);
+			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
 				statusCode: error?.response?.status,
@@ -114,7 +114,7 @@ export default class TaskCardModule extends VuexModule {
 	@Action
 	async updateTaskCard(params: TaskCardParams): Promise<void> {
 		this.resetBusinessError();
-		this.setLoading(true);
+		this.setStatus("pending");
 
 		try {
 			const { data } = await this.cardsApi.taskCardControllerUpdate(
@@ -122,9 +122,9 @@ export default class TaskCardModule extends VuexModule {
 				params
 			);
 			this.setTaskCardData(data);
-			this.setLoading(false);
+			this.setStatus("completed");
 		} catch (error: any) {
-			this.setLoading(false);
+			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
 				statusCode: error?.response?.status,
@@ -134,7 +134,7 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Mutation
-	setTaskCardData(payload: any): void {
+	setTaskCardData(payload: TaskCardResponse): void {
 		this.taskCardData = payload;
 	}
 
@@ -144,8 +144,8 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
+	setStatus(status: Status): void {
+		this.status = status;
 	}
 
 	@Mutation
@@ -162,15 +162,15 @@ export default class TaskCardModule extends VuexModule {
 		};
 	}
 
-	get getLoading(): boolean {
-		return this.loading;
+	get getStatus(): Status {
+		return this.status;
 	}
 
 	get getTaskCardData(): TaskCardResponse {
 		return this.taskCardData;
 	}
 
-	get getBusinessError() {
+	get getBusinessError(): BusinessError {
 		return this.businessError;
 	}
 }
