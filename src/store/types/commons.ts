@@ -1,7 +1,7 @@
 export type BusinessError = {
 	statusCode: string | number;
 	message: string;
-	error?: object;
+	error?: object | any; // TODO - adjust this properly
 };
 
 export type Status = "pending" | "completed" | "error" | "";

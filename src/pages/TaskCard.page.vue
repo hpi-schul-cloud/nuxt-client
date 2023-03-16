@@ -51,6 +51,9 @@
 				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
+				<div class="error--text text-caption text-right mt-2">
+					{{ errorMessage }}
+				</div>
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
@@ -301,10 +304,18 @@ export default defineComponent({
 				await updateTaskCard();
 			}
 
-			router.go(-1);
+			if (taskCardModule.getStatus === "error") {
+				const businessError = taskCardModule.getBusinessError;
+				console.log(taskCardModule.getBusinessError);
+				errorMessage.value =
+					businessError?.error?.validationErrors[0].errors[0];
+			} else {
+				router.go(-1);
+			}
 		};
 
 		const hasErrors = ref(false);
+		const errorMessage = ref("");
 		const onError = () => {
 			hasErrors.value = true;
 		};
@@ -338,6 +349,7 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			errorMessage,
 		};
 	},
 });
