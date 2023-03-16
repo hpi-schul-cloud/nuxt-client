@@ -83,7 +83,11 @@ export default class TaskCardModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
-			this.setBusinessError(error);
+			this.setBusinessError({
+				error: error?.response?.data,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.title,
+			});
 		}
 	}
 
@@ -99,7 +103,11 @@ export default class TaskCardModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
-			this.setBusinessError(error);
+			this.setBusinessError({
+				error: error?.response?.data,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.title,
+			});
 		}
 	}
 
@@ -117,7 +125,11 @@ export default class TaskCardModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);
-			this.setBusinessError(error);
+			this.setBusinessError({
+				error: error?.response?.data,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.title,
+			});
 		}
 	}
 
