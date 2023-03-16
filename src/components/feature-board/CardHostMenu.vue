@@ -3,9 +3,10 @@
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				color="black"
-				x-small
+				small
 				text
 				dark
+				icon
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"

@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex" @keydown.up.down.left.right.space.prevent="onKeyDown">
+	<div class="d-flex" @keydown.up.down.left.right.prevent="onKeyDown">
 		<VCard
 			:height="height"
 			class="w-100"
@@ -12,20 +12,18 @@
 				<CardSkeleton :height="height" />
 			</template>
 			<template v-if="!isLoading && card">
-				<!-- <VCardTitle>{{ card.title }}</VCardTitle> -->
-
 				<CardHeader>
 					<template v-slot:title>
-						<v-text-field
-							label="Main input"
-							hide-details="auto"
+						<CardHeaderTitleInput
 							:value="card.title"
-							@input="onUpdateTitle"
-						></v-text-field>
+							@change="onUpdateCardTitle"
+						></CardHeaderTitleInput>
 					</template>
 					<template v-slot:menu>
 						<CardHostMenu>
-							<CardHostMenuAction @click="onDelete">Delete</CardHostMenuAction>
+							<CardHostMenuAction @click="onDelete"
+								>Delete Card</CardHostMenuAction
+							>
 						</CardHostMenu>
 					</template>
 				</CardHeader>
@@ -53,6 +51,7 @@ import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
 import CardHeader from "./CardHeader.vue";
 import CardHostMenu from "./CardHostMenu.vue";
 import CardHostMenuAction from "./CardHostMenuAction.vue";
+import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
 import { BoardCardType } from "./types/Card";
 
 export default defineComponent({
@@ -64,6 +63,7 @@ export default defineComponent({
 		CardHeader,
 		CardHostMenu,
 		CardHostMenuAction,
+		CardHeaderTitleInput,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -76,7 +76,7 @@ export default defineComponent({
 			emit("move-card-keyboard", key.code);
 		};
 
-		const onUpdateTitle = updateTitle;
+		const onUpdateCardTitle = updateTitle;
 		const onDelete = deleteCard;
 
 		return {
@@ -84,7 +84,7 @@ export default defineComponent({
 			card,
 			BoardCardType,
 			onKeyDown,
-			onUpdateTitle,
+			onUpdateCardTitle,
 			onDelete,
 		};
 	},
