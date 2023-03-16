@@ -4,48 +4,63 @@
 			:key="task.id"
 			v-click-outside="() => handleFocus(false)"
 			:href="href"
-			class="mx-n4 mx-sm-0"
+			:class="getStyleClasses"
 			v-bind="$attrs"
-			:aria-label="`${$t('common.words.task')} ${task.name}`"
+			:aria-label="ariaLabel"
 			role="article"
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<v-list-item-avatar>
-				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content>
-				<v-list-item-subtitle data-testid="taskSubtitle">
-					{{ task.courseName }}
-				</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskTitle" v-text="task.name" />
-				<v-list-item-subtitle>
-					{{ topic }}
-				</v-list-item-subtitle>
-			</v-list-item-content>
-			<v-list-item-action>
-				<v-list-item-action-text
-					class="subtitle-2"
-					data-test-id="dueDateLabel"
-					v-text="dueDateLabel"
-				/>
-				<v-spacer />
-				<v-custom-chip-time-remaining
-					v-if="taskState === 'warning'"
-					:type="taskState"
-					:due-date="task.duedate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
-				/>
-			</v-list-item-action>
-			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					user-role="student"
-					@toggled-menu="toggleMenu"
-					@focus-changed="handleFocus"
-				/>
-			</v-list-item-action>
+			<template v-if="isBetaTask">
+				<v-list-item-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-list-item-avatar>
+				<v-list-item-content>
+					<v-list-item-subtitle data-testid="taskSubtitle">{{
+						taskLabel
+					}}</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+				</v-list-item-content>
+			</template>
+			<template v-else>
+				<v-list-item-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-list-item-avatar>
+				<v-list-item-content>
+					<v-list-item-subtitle data-testid="taskSubtitle">{{
+						taskLabel
+					}}</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+				</v-list-item-content>
+				<v-list-item-action>
+					<v-list-item-action-text
+						class="subtitle-2"
+						data-test-id="dueDateLabel"
+						v-text="dueDateLabel"
+					/>
+					<v-spacer />
+					<v-custom-chip-time-remaining
+						v-if="taskState === 'warning'"
+						:type="taskState"
+						:due-date="task.duedate"
+						:shorten-unit="$vuetify.breakpoint.xsOnly"
+					/>
+				</v-list-item-action>
+				<v-list-item-action
+					:id="`task-menu-${task.id}`"
+					class="context-menu-btn"
+				>
+					<task-item-menu
+						:task-id="task.id"
+						:task-is-finished="task.status.isFinished"
+						user-role="student"
+						@toggled-menu="toggleMenu"
+						@focus-changed="handleFocus"
+					/>
+				</v-list-item-action>
+			</template>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -79,9 +94,14 @@ export default {
 	},
 	computed: {
 		href() {
-			return `/homework/${this.task.id}`;
+			return this.isBetaTask
+				? `/task-cards/${this.task.taskCardId}`
+				: `/homework/${this.task.id}`;
 		},
 		iconColor() {
+			if (this.isBetaTask) {
+				return "beta-task";
+			}
 			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
 		},
@@ -99,6 +119,9 @@ export default {
 			const { status } = this.task;
 			return this.isOverDue && !status.submitted && status.graded;
 		},
+		isBetaTask() {
+			return !!this.task.taskCardId;
+		},
 		taskState() {
 			const { status } = this.task;
 
@@ -110,6 +133,9 @@ export default {
 			return undefined;
 		},
 		taskIcon() {
+			if (this.isBetaTask) {
+				return "$taskDoneFilled";
+			}
 			const stateIcons = {
 				warning: "$taskOpenFilled",
 				overdue: "$taskMissed",
@@ -135,6 +161,26 @@ export default {
 				? undefined
 				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
+		taskLabel() {
+			const labelText = this.isBetaTask
+				? `${this.task.courseName} - ${this.$t(
+						"pages.room.taskCard.label.betaTask"
+				  )}`
+				: `${this.task.courseName}`;
+			return labelText;
+		},
+		ariaLabel() {
+			return this.isBetaTask
+				? `${this.$t("pages.room.taskCard.label.betaTask")} ${this.task.name}`
+				: `${this.$t("common.words.task")} ${this.task.name}`;
+		},
+		getStyleClasses() {
+			let classes = "mx-n4 mx-sm-0";
+			if (this.isBetaTask) {
+				classes = classes + " beta-task-background";
+			}
+			return classes;
+		},
 	},
 	methods: {
 		toggleMenu(stateValue) {
@@ -156,5 +202,10 @@ export default {
 // stylelint-disable sh-waqar/declaration-use-variable
 .context-menu-btn {
 	min-width: 45px;
+}
+
+.beta-task-background {
+	// based on beta-task color #196c9e
+	background-color: rgba(25, 108, 158, 0.05);
 }
 </style>

@@ -167,7 +167,7 @@ const betaTask = {
 	createdAt: "2017-09-28T12:02:11.432Z",
 	updatedAt: "2017-09-28T12:02:11.432Z",
 	status: {
-		isDraft: true,
+		isDraft: false,
 	},
 	taskCardId: "789",
 };

@@ -10,8 +10,13 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
 
-const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
-	mocks;
+const {
+	tasks,
+	openTasksWithoutDueDate,
+	openTasksWithDueDate,
+	invalidTasks,
+	betaTask,
+} = mocks;
 
 describe("@/components/molecules/TaskItemStudent", () => {
 	let vuetify;
@@ -44,13 +49,13 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		});
 	};
 
-	it("Should link list item links to task/<id> page", () => {
+	it("Should link regularly to page for old tasks", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const firstLink = wrapper.find("a");
-
-		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(`/homework/${tasks[0]._id}`);
+		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasks[0].id}`);
+		expect(wrapper.attributes("href")).toStrictEqual(
+			`/homework/${tasks[0].id}`
+		);
 	});
 
 	it("Should display no due date label if task has no duedate", () => {
@@ -160,5 +165,31 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
 		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
+	});
+
+	describe("when task is a beta task", () => {
+		it("should have correct combined label for beta task", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
+			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
+			expect(taskLabel.element.textContent).toStrictEqual(
+				"Mathe - Beta-Aufgabe"
+			);
+		});
+
+		it("should redirect to task-cards page", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
+			expect(wrapper.vm.href).toStrictEqual(
+				`/task-cards/${betaTask.taskCardId}`
+			);
+			expect(wrapper.attributes("href")).toStrictEqual(
+				`/task-cards/${betaTask.taskCardId}`
+			);
+		});
 	});
 });

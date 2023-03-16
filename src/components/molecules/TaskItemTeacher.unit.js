@@ -381,7 +381,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.element.textContent).toStrictEqual(
-				"Mathe - Beta-Aufgabe - Erstellt 28.09.17"
+				"Mathe - Beta-Aufgabe"
 			);
 		});
 
