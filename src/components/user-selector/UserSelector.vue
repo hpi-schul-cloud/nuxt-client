@@ -9,11 +9,26 @@
 		clearable
 		@change="onChange"
 		v-model="model"
-	></v-autocomplete>
+	>
+		<template v-slot:prepend-item>
+			<div v-if="selectAll">
+				<v-list-item ripple @mousedown.prevent @click="toggle">
+					<v-list-item-action>
+						<v-icon class="fa fa-square-o" color="indigo-darken-4"> </v-icon>
+					</v-list-item-action>
+					<v-list-item-content>
+						<v-list-item-title>Select All</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
+				<v-divider class="mt-2"></v-divider>
+			</div>
+		</template>
+	</v-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch, computed } from "vue";
+import { mdiCheckboxBlankOutline } from "@mdi/js";
 
 interface User {
 	id: string;
@@ -27,6 +42,7 @@ export default defineComponent({
 		value: { type: Array as PropType<string[]>, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
+		selectAll: { type: Boolean },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
@@ -52,10 +68,16 @@ export default defineComponent({
 			emit("input", selectedUsers);
 		};
 
+		const toggle = () => {
+			console.log("toggle");
+		};
+
 		return {
 			model,
 			items,
 			onChange,
+			toggle,
+			mdiCheckboxBlankOutline,
 		};
 	},
 });

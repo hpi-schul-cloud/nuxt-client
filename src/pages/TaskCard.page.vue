@@ -28,10 +28,11 @@
 				@error="onError"
 			/>
 			<user-selector
-				label="Studenten"
-				aria-label="Studenten"
 				v-model="selectedUsers"
 				:users="allUsers"
+				label="Studenten"
+				aria-label="Studenten"
+				selectAll
 			/>
 			<card-element-wrapper
 				v-model="title.model"
