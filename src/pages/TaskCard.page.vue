@@ -16,12 +16,6 @@
 				disabled
 				:label="$t('common.labels.course')"
 			/>
-
-			<title-card-element
-				v-model="title"
-				:placeholder="t('components.cardElement.titleElement.placeholder')"
-				:editable="true"
-      />
 			<date-time-picker
 				class="mb-4"
 				required
@@ -32,6 +26,11 @@
 				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
 				@error="onError"
+			/>
+			<title-card-element
+				v-model="title"
+				:placeholder="t('components.cardElement.titleElement.placeholder')"
+				:editable="true"
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
 			<div>
@@ -55,7 +54,7 @@
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
-			<title-card-element v-model="title" editable="false" />
+			<title-card-element v-model="title" :editMode="false" />
 			<card-element-list v-model="elements" :editMode="false" />
 		</article>
 	</default-wireframe>
@@ -128,7 +127,7 @@ export default defineComponent({
 		const courses = ref<object[]>([]);
 
 		const title = ref("");
-    const dueDate = ref("");
+		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
 
@@ -207,7 +206,6 @@ export default defineComponent({
 				});
 			});
 		};
-
 
 		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
 		const validate = (content: string) => {
