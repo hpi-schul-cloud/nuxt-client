@@ -54,7 +54,7 @@
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
-			<title-card-element v-model="title" :editMode="false" />
+			<title-card-element v-model="title" :editable="false" />
 			<card-element-list v-model="elements" :editMode="false" />
 		</article>
 	</default-wireframe>
