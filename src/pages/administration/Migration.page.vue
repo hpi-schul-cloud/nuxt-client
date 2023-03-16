@@ -183,7 +183,6 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
-										<!-- eslint-disable vue/no-v-html -->
 										<div
 											v-html="
 												$t('pages.administration.migration.summary', {

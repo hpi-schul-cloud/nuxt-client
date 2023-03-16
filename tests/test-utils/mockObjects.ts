@@ -72,10 +72,7 @@ export const mockSchool: School = {
 	features: {
 		rocketChat: false,
 		videoconference: false,
-		messenger: false,
 		studentVisibility: false,
-		messengerSchoolRoom: false,
-		messengerStudentRoomCreate: false,
 		ldapUniventionMigrationSchool: false,
 	},
 	enableStudentTeamCreation: false,

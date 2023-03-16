@@ -7,6 +7,7 @@ import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import Vue from "vue";
+import { Envs } from "@/store/types/env-config";
 
 const getWrapper = (
 	options: any = {
@@ -167,11 +168,11 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		it("should open the import-modal", async () => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true });
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 
 			const importModalComponent = wrapper.find(".import-modal");
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(importModalComponent.vm.isOpen).toBe(false);
 
@@ -183,6 +184,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			);
 			await importBtn.trigger("click");
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(importModalComponent.vm.isOpen).toBe(true);
 		});
@@ -190,6 +192,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
 			const updateRoomsMock = jest.fn();
 			const wrapper = getWrapper();
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			wrapper.vm.updateRooms = updateRoomsMock;
 			await wrapper.setData({ importDialog: { isOpen: true } });

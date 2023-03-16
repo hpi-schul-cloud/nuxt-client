@@ -54,13 +54,13 @@ describe("ExternalToolSection", () => {
 							externalToolsModule,
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
+				} catch (e) {
+					expect(consoleErrorSpy).toHaveBeenCalledWith(
+						expect.stringMatching(
+							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
+						)
+					);
+				}
 
 				consoleErrorSpy.mockRestore();
 			});
@@ -78,13 +78,13 @@ describe("ExternalToolSection", () => {
 							i18n: { t: (key: string) => key },
 						},
 					});
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
+				} catch (e) {
+					expect(consoleErrorSpy).toHaveBeenCalledWith(
+						expect.stringMatching(
+							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
+						)
+					);
+				}
 
 				consoleErrorSpy.mockRestore();
 			});
@@ -106,6 +106,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 				const testKey = "testKey";
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
@@ -118,6 +119,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 				const testKey = 123;
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				const result: string = wrapper.vm.t(testKey);
 
@@ -154,12 +156,16 @@ describe("ExternalToolSection", () => {
 				getSchoolExternalTools: [
 					{
 						id: "testId",
+						toolId: "toolId",
+						parameters: [],
 						name: firstToolName,
 						status: SchoolExternalToolStatus.Latest,
 						version: 1,
 					},
 					{
 						id: "testId2",
+						toolId: "toolId",
+						parameters: [],
 						name: secondToolName,
 						status: SchoolExternalToolStatus.Outdated,
 						version: 1,
@@ -226,6 +232,7 @@ describe("ExternalToolSection", () => {
 					await deleteButton.trigger("click");
 
 					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					//@ts-ignore
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
@@ -250,6 +257,8 @@ describe("ExternalToolSection", () => {
 							getSchoolExternalTools: [
 								{
 									id: "testId",
+									toolId: "toolId",
+									parameters: [],
 									name: "firstToolName",
 									status: SchoolExternalToolStatus.Latest,
 									version: 1,
@@ -312,6 +321,7 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const expectedName = "Name";
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
@@ -319,6 +329,7 @@ describe("ExternalToolSection", () => {
 					outdated: false,
 				};
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
@@ -330,9 +341,11 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = setup();
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 

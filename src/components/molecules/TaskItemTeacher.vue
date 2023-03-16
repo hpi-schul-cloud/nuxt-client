@@ -102,6 +102,7 @@
 					@toggled-menu="toggleMenu"
 					@focus-changed="handleFocus"
 					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 			</v-list-item-action>
 		</v-list-item>
@@ -228,6 +229,9 @@ export default {
 		},
 		onCopyTask(payload) {
 			this.$emit("copy-task", payload);
+		},
+		onShareTask(taskId) {
+			this.$emit("share-task", taskId);
 		},
 	},
 };

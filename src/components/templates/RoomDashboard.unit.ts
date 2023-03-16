@@ -4,14 +4,15 @@ import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import ShareLessonModule from "@/store/share-lesson";
 import TasksModule from "@/store/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
-import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { Envs } from "@/store/types/env-config";
+import ShareModule from "@/store/share";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 const mockData = {
 	roomId: "123",
@@ -94,19 +95,19 @@ const emptyMockData = {
 	elements: [],
 };
 
-const shareLessonModuleMock = createModuleMocks(ShareLessonModule, {
+const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (props: object, options?: object) => {
-	return mount<any>(RoomDashboard as MountOptions<Vue>, {
+	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
 		}),
 		provide: {
 			notifierModule: notifierModuleMock,
-			shareLessonModule: shareLessonModuleMock,
+			shareModule: shareModuleMock,
 		},
 		propsData: props,
 		...options,
@@ -123,8 +124,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
-		// @ts-ignore
-		envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true });
+		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
+		envConfigModule.setEnvs(env as unknown as Envs);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -172,12 +173,12 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "teacher",
 			});
-			const emptyStateComponent: any = wrapper.find(
+			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(
+			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
+			expect(emptyStateComponent.props("title")).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.room.teacher.emptyState")
 			);
 		});
@@ -187,12 +188,12 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "student",
 			});
-			const emptyStateComponent: any = wrapper.find(
+			const emptyStateComponent = wrapper.find(
 				`[data-testid="empty-state-item"]`
 			);
 			expect(emptyStateComponent.exists()).toBe(true);
-			expect(emptyStateComponent.vm.imgHeight).toStrictEqual("200px");
-			expect(emptyStateComponent.vm.title).toStrictEqual(
+			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
+			expect(emptyStateComponent.props("title")).toStrictEqual(
 				wrapper.vm.$i18n.t("pages.room.student.emptyState")
 			);
 		});
@@ -263,7 +264,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should be sorted the elements by keyboard'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -281,7 +282,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should NOT be sorted the elements by keyboard for students'", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "student" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -299,7 +300,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		});
 
 		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
-			const moveByKeyboardMock = jest.fn().mockImplementation(() => {});
+			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
@@ -315,54 +316,38 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("Sharing Lesson", () => {
-		describe("old flow", () => {
-			it("should set 'lessonShare.isOpen' value to true when more menu item clicked", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const lessonCard = wrapper.find(".lesson-card");
-
-				expect(wrapper.vm.lessonShare.isOpen).toBe(false);
-				lessonCard.vm.$emit("open-modal", "12345");
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				expect(wrapper.vm.lessonShare.isOpen).toBe(true);
+		it("should call startShareFlow when share lesson item clicked", async () => {
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
 			});
-
-			it("lesson share modal should be visible if 'lessonShare.isOpen' is set true", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const shareModal: any = wrapper.find(".room-dialog");
-
-				expect(shareModal.vm.isOpen).toBe(false);
-				wrapper.vm.lessonShare.isOpen = true;
-				await wrapper.vm.$nextTick();
-				expect(shareModal.vm.isOpen).toBe(true);
+			const lessonCard = wrapper.find(".lesson-card");
+			lessonCard.vm.$emit("open-modal", "12345");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "12345",
+				type: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			});
 		});
+	});
 
-		describe("new flow", () => {
-			beforeEach(() => {
-				// @ts-ignore
-				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE_NEW: true });
+	describe("Sharing Task", () => {
+		it("should call startShareFlow when share task item clicked", async () => {
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
 			});
+			const taskCard = wrapper.find(".task-card");
 
-			it("should call startShareFlow when share lesson item clicked", async () => {
-				const wrapper = getWrapper({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
-				const lessonCard = wrapper.find(".lesson-card");
-
-				lessonCard.vm.$emit("open-modal", "12345");
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				expect(shareLessonModuleMock.startShareFlow).toBeCalledWith("12345");
+			taskCard.vm.$emit("share-task", "1234");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+				id: "1234",
+				type: ShareTokenBodyParamsParentTypeEnum.Tasks,
 			});
 		});
 	});
@@ -532,8 +517,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
@@ -569,8 +553,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			// @ts-ignore
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {

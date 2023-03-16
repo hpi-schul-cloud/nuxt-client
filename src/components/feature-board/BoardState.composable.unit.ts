@@ -1,5 +1,5 @@
-import { nextTick } from "vue";
 import { shallowMount, Wrapper } from "@vue/test-utils";
+import Vue, { nextTick } from "vue";
 import * as serverApi from "../../serverApi/v3/api";
 import { useBoardState } from "./BoardState.composable";
 
@@ -16,8 +16,8 @@ const mountComposable = <R>(composable: () => R): R => {
 			return { result };
 		},
 	});
-
-	//@ts-ignore
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	return wrapper.vm.result;
 };
 
@@ -29,6 +29,7 @@ describe("BoardState composable", () => {
 			.mockResolvedValue({ data: {} });
 		mockApi = { boardControllerGetBoardSkeleton };
 
+		jest.useFakeTimers();
 		jest.spyOn(serverApi, "BoardsApiFactory").mockReturnValue(mockApi);
 	});
 
@@ -36,25 +37,41 @@ describe("BoardState composable", () => {
 		const boardId = "123124";
 		mountComposable(() => useBoardState(boardId));
 
+		jest.runAllTimers();
+		await nextTick();
+
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
 			boardId
 		);
 	});
 
-	it("should return fetch function that updates board and loading state", async () => {
+	it("should return fetch function that updates board", async () => {
 		const boardId1 = "123124";
 		const boardId2 = "a1b1c1";
-		const { fetchBoard, board, isLoading } = mountComposable(() =>
+		const { fetchBoard, board } = mountComposable(() =>
 			useBoardState(boardId1)
 		);
 
-		await fetchBoard(boardId2);
+		const fetchPromise = fetchBoard(boardId2);
+		jest.runAllTimers();
+		await fetchPromise;
+		await nextTick();
 		await nextTick();
 
-		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenLastCalledWith(
-			boardId2
-		);
+		expect(board.value).toBeDefined();
 		expect(board.value?.id).toBe(boardId2);
-		expect(isLoading.value).toBe(false);
+	});
+
+	it("should return isLoading which reflects pending api calls", async () => {
+		const boardId1 = "123124";
+		const { isLoading } = mountComposable(() => useBoardState(boardId1));
+
+		expect(isLoading.value).toStrictEqual(true);
+
+		jest.runAllTimers();
+		await nextTick();
+		await nextTick();
+
+		expect(isLoading.value).toStrictEqual(false);
 	});
 });

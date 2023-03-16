@@ -17,7 +17,7 @@ import {
 export default class SystemsModule extends VuexModule {
 	private systems: System[] = [];
 	private loading = false;
-	private error: {} | null = null;
+	private error: object | null = null;
 
 	private get systemApi(): SystemsApiInterface {
 		return SystemsApiFactory(undefined, "v3", $axios);
@@ -34,7 +34,7 @@ export default class SystemsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {} | null): void {
+	setError(error: object | null): void {
 		this.error = error;
 	}
 
@@ -46,7 +46,7 @@ export default class SystemsModule extends VuexModule {
 		return this.systems;
 	}
 
-	get getError(): {} | null {
+	get getError(): object | null {
 		return this.error;
 	}
 

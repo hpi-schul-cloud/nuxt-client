@@ -6,13 +6,6 @@ export const toBase64 = (file: File) =>
 		reader.onerror = (error) => reject(error);
 	});
 
-/* export const urlToFile = (url, filename, mimeType) => {
-  return (fetch(url)
-      .then(function(res){return res.arrayBuffer();})
-      .then(function(buf){return new File([buf], filename,{ type:mimeType });})
-  );
-} */
-
 export async function dataUrlToFile(
 	dataUrl: string,
 	fileName: string
@@ -32,9 +25,7 @@ export function downloadFile(
 	const blobData = typeof bom !== "undefined" ? [bom, data] : [data];
 	const blob = new Blob(blobData, { type: mime || "application/octet-stream" });
 
-	// @ts-ignore
 	if (typeof window.navigator.msSaveBlob !== "undefined") {
-		// @ts-ignore
 		window.navigator.msSaveBlob(blob, filename);
 	} else {
 		const blobURL =

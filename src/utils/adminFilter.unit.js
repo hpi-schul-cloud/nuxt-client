@@ -122,4 +122,144 @@ describe("@/utils/adminFilter", () => {
 			expect(createdAt.$lte).toBe(expected_lte_date);
 		});
 	});
+
+	describe("getFilterDateOutdatedSinceFromTo", () => {
+		it("returns UTC date values for input values", () => {
+			const expected_gte_date = dayjs.tz("2021-04-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-05-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.dateValues
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter default value if no input", () => {
+			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2099-12-31")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.emptyDates
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter second date value is empty", () => {
+			const expected_gte_date = dayjs.tz("2021-02-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2099-12-31")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.secondDateEmpty
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter first date value is empty", () => {
+			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-03-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.firstDateEmpty
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+	});
+
+	describe("getFilterDateLastMigrationSinceFromTo", () => {
+		it("returns UTC date values for input values", () => {
+			const expected_gte_date = dayjs.tz("2021-04-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-05-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.dateValues
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter default value if no input", () => {
+			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2099-12-31")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.emptyDates
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter second date value is empty", () => {
+			const expected_gte_date = dayjs.tz("2021-02-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2099-12-31")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.secondDateEmpty
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter first date value is empty", () => {
+			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-03-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.firstDateEmpty
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+	});
 });

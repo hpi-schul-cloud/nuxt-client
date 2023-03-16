@@ -38,6 +38,7 @@
 						@finish-task="finishTask(item.content.id)"
 						@restore-task="restoreTask(item.content.id)"
 						@copy-task="copyTask(item.content.id)"
+						@share-task="getSharedTask(item.content.id)"
 					/>
 					<room-lesson-card
 						v-if="item.type === cardTypes.Lesson"
@@ -115,31 +116,8 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
-		<share-modal type="lesson"></share-modal>
-		<vCustomDialog
-			ref="customDialog"
-			:is-open="lessonShare.isOpen"
-			class="room-dialog"
-			has-buttons
-			:buttons="['close']"
-			@dialog-closed="lessonShare.isOpen = false"
-		>
-			<div slot="title" class="room-title">
-				<h4>{{ $t("pages.room.lessonShare.confirm") }}</h4>
-			</div>
-			<template slot="content">
-				<v-divider class="mb-4"></v-divider>
-				<div class="share-info-text">
-					<p>
-						{{ $t("pages.room.lessonShare.modal.info") }}
-					</p>
-				</div>
-				<div>
-					<v-text-field :value="lessonShare.token" outlined></v-text-field>
-				</div>
-				<v-divider></v-divider>
-			</template>
-		</vCustomDialog>
+		<share-modal type="lessons" />
+		<share-modal type="tasks" />
 		<v-custom-dialog
 			v-model="itemDelete.isOpen"
 			data-testid="delete-dialog-item"
@@ -178,6 +156,7 @@ import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
@@ -192,17 +171,16 @@ export default {
 		roomDataObject: {
 			type: Object,
 			required: true,
-			default: () => {},
+			default: () => ({}),
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareLessonModule"],
+	inject: ["shareModule"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
-			lessonShare: { isOpen: false, token: "", lessonData: {} },
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
@@ -287,16 +265,19 @@ export default {
 			this.$refs[`item_${position}`][0].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
-			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE_NEW) {
-				this.shareLessonModule.startShareFlow(lessonId);
-			} else if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-				await roomModule.fetchSharedLesson(lessonId);
-				const sharedLesson = roomModule.getSharedLessonData;
-				this.lessonShare.token = sharedLesson.code;
-				this.lessonShare.lessonName = sharedLesson.lessonName;
-				this.lessonShare.status = sharedLesson.status;
-				this.lessonShare.messageTranslationKey = sharedLesson.message;
-				this.lessonShare.isOpen = true;
+			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+				this.shareModule.startShareFlow({
+					id: lessonId,
+					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				});
+			}
+		},
+		async getSharedTask(taskId) {
+			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+				this.shareModule.startShareFlow({
+					id: taskId,
+					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				});
 			}
 		},
 		endDragging() {

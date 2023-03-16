@@ -188,7 +188,7 @@ describe("UseFileTableUtils", () => {
 		});
 
 		it("should return error when currentCategory not exists", async () => {
-			const { getFilesPageForRoute, tMock } = setup();
+			const { getFilesPageForRoute } = setup();
 			const route: Route = {
 				path: "/cfiles/unknown/anything",
 				params: {},
