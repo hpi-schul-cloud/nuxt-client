@@ -239,7 +239,6 @@ describe("useExternalToolUtils", () => {
 
 			expect(schoolExternalToolPostParams).toEqual(
 				expect.objectContaining<SchoolExternalToolPostParams>({
-					id: template.configId,
 					toolId: template.id,
 					version: template.version,
 					schoolId: "schoolId",
