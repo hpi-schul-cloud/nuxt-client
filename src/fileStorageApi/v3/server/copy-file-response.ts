@@ -22,10 +22,10 @@
 export interface CopyFileResponse {
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof CopyFileResponse
      */
-    id: object;
+    id?: string;
     /**
      * 
      * @type {string}

@@ -67,7 +67,7 @@ export interface FileRecordResponse {
      * @type {string}
      * @memberof FileRecordResponse
      */
-    parentType: string;
+    parentType: ParentType;
     /**
      * 
      * @type {string}
@@ -85,6 +85,18 @@ export enum SecurityCheckStatus {
     VERIFIED = 'verified',
     BLOCKED = 'blocked',
     ERROR = 'error'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ParentType {
+    USERS = 'users',
+    SCHOOLS = 'schools',
+    COURSES = 'courses',
+    TASKS = 'tasks',
+    LESSONS = 'lessons',
+    SUBMISSIONS = 'submissions'
 }
 
 
