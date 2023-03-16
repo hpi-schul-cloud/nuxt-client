@@ -11,7 +11,6 @@ describe("notifier store", () => {
 					text: "hello world",
 					status: "success",
 					autoClose: true,
-					position: "top",
 					timeout: 5000,
 				};
 				notifierModule.show(payload);
@@ -25,14 +24,12 @@ describe("notifier store", () => {
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
-					position: "top",
 					autoClose: true,
 				};
 				notifierModule.show(payload);
 
 				const payloadWithDefaults: AlertPayload = {
 					text: "hello world",
-					position: "top",
 					status: "success",
 					autoClose: true,
 					timeout: 5000,
@@ -48,7 +45,6 @@ describe("notifier store", () => {
 					text: "hello world",
 					status: "success",
 					autoClose: false,
-					position: "top",
 					timeout: 10000,
 				};
 				notifierModule.show(payload);
@@ -65,7 +61,6 @@ describe("notifier store", () => {
 					status: "success",
 					autoClose: true,
 					timeout: 1000,
-					position: "top",
 				};
 				notifierModule.show(payload);
 

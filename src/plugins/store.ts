@@ -10,15 +10,9 @@ import { bulkConsent } from "@/store/bulkConsent";
 import calendar from "@/store/calendar";
 import classes from "@/store/classes";
 import consentVersions from "@/store/consent-versions";
-// import contentSearch from "@/store/content-search"; // NUXT_REMOVAL unused
-// import courseGroups from "@/store/courseGroups"; // NUXT_REMOVAL unused
 import courses from "@/store/courses";
-// import ghost from "@/store/ghost"; // NUXT_REMOVAL unused
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
-import { messenger } from "@/store/messenger";
-// import publicTeachers from "@/store/public-teachers";  // NUXT_REMOVAL unused
-// import teams from "@/store/teams"; // NUXT_REMOVAL unused
 import termsAndConditions from "@/store/terms-and-conditions";
 import uiState from "@/store/uiState";
 import users from "@/store/users";
@@ -43,15 +37,9 @@ export default new Store({
 		calendar,
 		classes,
 		"consent-versions": consentVersions,
-		// "content-search": contentSearch, // NUXT_REMOVAL unused
-		// courseGroups, // NUXT_REMOVAL unused
 		courses,
-		// ghost, // NUXT_REMOVAL unused
 		"ldap-config": ldapConfig,
 		lessons,
-		messenger,
-		// publicTeachers, // NUXT_REMOVAL unused
-		// teams, // NUXT_REMOVAL unused
 		"terms-and-conditions": termsAndConditions,
 		uiState,
 		users,
