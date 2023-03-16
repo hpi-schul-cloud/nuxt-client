@@ -85,7 +85,7 @@ export default class TaskCardModule extends VuexModule {
 			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
-				statusCode: error?.response?.status,
+				statusCode: error?.response?.data.code,
 				message: error?.response?.data.title,
 			});
 		}
@@ -105,7 +105,7 @@ export default class TaskCardModule extends VuexModule {
 			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
-				statusCode: error?.response?.status,
+				statusCode: error?.response?.data.code,
 				message: error?.response?.data.title,
 			});
 		}
@@ -127,7 +127,7 @@ export default class TaskCardModule extends VuexModule {
 			this.setStatus("error");
 			this.setBusinessError({
 				error: error?.response?.data,
-				statusCode: error?.response?.status,
+				statusCode: error?.response?.data.code,
 				message: error?.response?.data.title,
 			});
 		}

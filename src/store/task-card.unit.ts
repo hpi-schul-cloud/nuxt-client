@@ -50,6 +50,8 @@ const mockTaskCardData: TaskCardResponse = {
 	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
+const APIError = { response: { data: { code: 418, title: "I'm a teapot" } } };
+
 describe("task-card store", () => {
 	describe("actions", () => {
 		describe("findTaskCard", () => {
@@ -88,12 +90,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerFindOne: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
+					taskCardControllerFindOne: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -160,10 +164,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerCreate: jest.fn(() => Promise.reject({ ...error })),
+					taskCardControllerCreate: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -218,10 +226,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerUpdate: jest.fn(() => Promise.reject({ ...error })),
+					taskCardControllerUpdate: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -241,13 +253,13 @@ describe("task-card store", () => {
 	});
 
 	describe("getters", () => {
-		describe("getLoading", () => {
-			it("should return loading state", () => {
+		describe("getStatus", () => {
+			it("should return status", () => {
 				const taskCardModule = new TaskCardModule({});
 
-				expect(taskCardModule.getLoading).toStrictEqual(false);
-				taskCardModule.setLoading(true);
-				expect(taskCardModule.getLoading).toStrictEqual(true);
+				expect(taskCardModule.getStatus).toStrictEqual("");
+				taskCardModule.setStatus("pending");
+				expect(taskCardModule.getStatus).toStrictEqual("pending");
 			});
 		});
 
