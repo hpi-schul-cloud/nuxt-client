@@ -3,3 +3,15 @@ base.ts
 common.ts
 configuration.ts
 index.ts
+server/api-validation-error.ts
+server/copy-file-list-response.ts
+server/copy-file-params.ts
+server/copy-file-response.ts
+server/copy-files-of-parent-params.ts
+server/file-api.ts
+server/file-record-list-response.ts
+server/file-record-params.ts
+server/file-record-response.ts
+server/file-url-params.ts
+server/index.ts
+server/rename-file-params.ts

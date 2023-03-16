@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./server";
+
+/**
+ * 
+ * @export
+ * @interface RenameFileParams
+ */
+export interface RenameFileParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof RenameFileParams
+     */
+    fileName: string;
+}
+
+
