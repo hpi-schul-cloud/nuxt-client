@@ -23,7 +23,7 @@ jobs:
         id: docker_meta_img
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/${{ github.repository }}-${{ matrix.tennens }}
+          images: ghcr.io/${{ github.repository }}-${{ matrix.tenants }}
           tags: |
             type=ref,event=branch,enable=false,priority=600
             type=sha,enable=true,priority=600,prefix=
@@ -32,7 +32,7 @@ jobs:
         id: docker_meta_img_hub
         uses: docker/metadata-action@v3
         with:
-          images: schulcloud/schulcloud-nuxt-client-${{ matrix.tennens }}
+          images: schulcloud/schulcloud-nuxt-client-${{ matrix.tenants }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            SC_THEME=${{ matrix.tennens }}
+            SC_THEME=${{ matrix.tenants }}
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
