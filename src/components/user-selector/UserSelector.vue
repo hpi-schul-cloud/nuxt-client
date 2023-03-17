@@ -7,14 +7,14 @@
 		deletable-chips
 		multiple
 		clearable
-		@change="onChange"
+		@change="selectionChanged"
 		v-model="model"
 	>
 		<template v-slot:prepend-item>
 			<div v-if="selectAll">
 				<v-list-item ripple @mousedown.prevent @click="toggle">
 					<v-list-item-action>
-						<v-icon class="fa fa-square-o" color="indigo-darken-4"> </v-icon>
+						<v-icon :class="icon" class="fa"> </v-icon>
 					</v-list-item-action>
 					<v-list-item-content>
 						<v-list-item-title>Select All</v-list-item-title>
@@ -27,8 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch, computed } from "vue";
-import { mdiCheckboxBlankOutline } from "@mdi/js";
+import { defineComponent, PropType, ref, computed, nextTick } from "vue";
 
 interface User {
 	id: string;
@@ -48,13 +47,6 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const model = ref(props.value);
 
-		watch(
-			() => props.value,
-			(newValue) => {
-				model.value = newValue;
-			}
-		);
-
 		const items = computed(() => {
 			return props.users.map((user: User) => {
 				return {
@@ -64,20 +56,43 @@ export default defineComponent({
 			});
 		});
 
-		const onChange = (selectedUsers: string[]) => {
-			emit("input", selectedUsers);
+		const userIds = computed(() => {
+			return props.users.map((user: User) => {
+				return user.id;
+			});
+		});
+
+		const selectionChanged = () => {
+			emit("input", model.value);
 		};
 
+		const allUsersSelected = computed(() => {
+			return model.value.length === userIds.value.length;
+		});
+
+		const icon = computed(() => {
+			if (allUsersSelected.value) return "fa-check-square";
+			return "fa-square-o";
+		});
+
 		const toggle = () => {
-			console.log("toggle");
+			nextTick(() => {
+				if (allUsersSelected.value) {
+					model.value = [];
+					selectionChanged();
+				} else {
+					model.value = userIds.value;
+					selectionChanged();
+				}
+			});
 		};
 
 		return {
 			model,
 			items,
-			onChange,
+			selectionChanged,
 			toggle,
-			mdiCheckboxBlankOutline,
+			icon,
 		};
 	},
 });
