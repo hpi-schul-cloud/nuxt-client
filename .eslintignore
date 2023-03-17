@@ -2,4 +2,5 @@
 /node_modules/**
 dist
 /src/serverApi/**
+/src/fileStorageApi/**
 /src/pages/Error.page.vue

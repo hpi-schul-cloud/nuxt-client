@@ -61,7 +61,7 @@ export interface FileRecordResponse {
      * @type {string}
      * @memberof FileRecordResponse
      */
-    type: string;
+    mimeType: string;
     /**
      * 
      * @type {string}
