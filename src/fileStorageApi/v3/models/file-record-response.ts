@@ -69,11 +69,11 @@ export interface FileRecordResponse {
      */
     parentType: FileRecordResponseParentType;
     /**
-     * Creation date and time
-     * @type {string}
+     * 
+     * @type {Date}
      * @memberof FileRecordResponse
      */
-    deletedSince?: string;
+    deletedSince?: Date;
 }
 
 /**
