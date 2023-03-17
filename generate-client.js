@@ -5,7 +5,6 @@ const { exec } = require("child_process");
 const { log, error } = console;
 
 // by default, run this script against the server
-const DEFAULT_MODULE = "server";
 const DEFAULT_URL = "http://localhost:3030/api/v3/docs-json/";
 const DEFAULT_PATH = "src/serverApi/v3";
 
@@ -78,7 +77,7 @@ const generateClient = () => {
 const getOpenApiCommand = (configuration) => {
 	const { url, path, config } = configuration;
 	const configFile = config ? `-c ${config}` : "";
-	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --skip-validate-spec`;
+	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --type-mappings DateTime=Date --skip-validate-spec`;
 
 	return command;
 };
