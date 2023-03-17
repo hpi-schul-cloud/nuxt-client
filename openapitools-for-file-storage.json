@@ -1,9 +1,11 @@
 {
 	"npmName": "restClient",
+	"apiPackage": "api",
+	"enumNameSuffix": "",
+	"enumPropertyNaming": "UPPERCASE",
+	"modelPackage": "models",
 	"supportsES6": true,
 	"withInterfaces": true,
-	"withSeparateModelsAndApi": true,
-	"enumNameSuffix": "",
-	"withoutPrefixEnums": true,
-	"enumPropertyNaming": "UPPERCASE"
+	"withoutPrefixEnums": false,
+	"withSeparateModelsAndApi": true
 }

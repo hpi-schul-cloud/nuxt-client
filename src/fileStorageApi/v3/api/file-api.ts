@@ -21,21 +21,21 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../server';
+import { ApiValidationError } from '../models';
 // @ts-ignore
-import { CopyFileListResponse } from '../server';
+import { CopyFileListResponse } from '../models';
 // @ts-ignore
-import { CopyFileParams } from '../server';
+import { CopyFileParams } from '../models';
 // @ts-ignore
-import { CopyFilesOfParentParams } from '../server';
+import { CopyFilesOfParentParams } from '../models';
 // @ts-ignore
-import { FileRecordListResponse } from '../server';
+import { FileRecordListResponse } from '../models';
 // @ts-ignore
-import { FileRecordResponse } from '../server';
+import { FileRecordResponse } from '../models';
 // @ts-ignore
-import { FileUrlParams } from '../server';
+import { FileUrlParams } from '../models';
 // @ts-ignore
-import { RenameFileParams } from '../server';
+import { RenameFileParams } from '../models';
 /**
  * FileApi - axios parameter creator
  * @export

@@ -43,7 +43,7 @@ export interface FileRecordResponse {
      * @type {string}
      * @memberof FileRecordResponse
      */
-    securityCheckStatus: SecurityCheckStatus;
+    securityCheckStatus: FileRecordResponseSecurityCheckStatus;
     /**
      * 
      * @type {number}
@@ -67,9 +67,9 @@ export interface FileRecordResponse {
      * @type {string}
      * @memberof FileRecordResponse
      */
-    parentType: ParentType;
+    parentType: FileRecordResponseParentType;
     /**
-     * 
+     * Creation date and time
      * @type {string}
      * @memberof FileRecordResponse
      */
@@ -80,7 +80,7 @@ export interface FileRecordResponse {
     * @export
     * @enum {string}
     */
-export enum SecurityCheckStatus {
+export enum FileRecordResponseSecurityCheckStatus {
     PENDING = 'pending',
     VERIFIED = 'verified',
     BLOCKED = 'blocked',
@@ -90,7 +90,7 @@ export enum SecurityCheckStatus {
     * @export
     * @enum {string}
     */
-export enum ParentType {
+export enum FileRecordResponseParentType {
     USERS = 'users',
     SCHOOLS = 'schools',
     COURSES = 'courses',

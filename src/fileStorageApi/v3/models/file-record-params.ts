@@ -37,14 +37,14 @@ export interface FileRecordParams {
      * @type {string}
      * @memberof FileRecordParams
      */
-    parentType: ParentType;
+    parentType: FileRecordParamsParentType;
 }
 
 /**
     * @export
     * @enum {string}
     */
-export enum ParentType {
+export enum FileRecordParamsParentType {
     USERS = 'users',
     SCHOOLS = 'schools',
     COURSES = 'courses',

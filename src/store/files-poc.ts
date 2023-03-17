@@ -1,8 +1,8 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
+	FileRecordParamsParentType,
 	FileRecordResponse as FileRecord,
-	ParentType,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { downloadFile } from "@/utils/fileHelper";
@@ -27,7 +27,10 @@ export default class FilesPOCModule extends VuexModule {
 	status: Status = "";
 
 	@Action
-	async fetchFiles(parentId: string, parentType: ParentType): Promise<void> {
+	async fetchFiles(
+		parentId: string,
+		parentType: FileRecordParamsParentType
+	): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
@@ -51,7 +54,7 @@ export default class FilesPOCModule extends VuexModule {
 	@Action
 	async upload(
 		parentId: string,
-		parentType: ParentType,
+		parentType: FileRecordParamsParentType,
 		file: File
 	): Promise<void> {
 		this.resetBusinessError();

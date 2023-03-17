@@ -14,5 +14,5 @@
 
 
 
-export * from './server/file-api';
+export * from './api/file-api';
 

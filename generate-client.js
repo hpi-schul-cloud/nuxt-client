@@ -20,9 +20,6 @@ const args = arg(
 		"--path": String,
 		"-p": "--path",
 
-		"--module": String,
-		"-m": "--module",
-
 		"--config": String,
 		"-c": "--config",
 	},
@@ -39,25 +36,18 @@ OPTIONS:
                         default: ${DEFAULT_PATH}
 	--url (-u)		URL/path to the spec file in yml/json format.
                         default: ${DEFAULT_URL}
-	--module (-m)	URL/path to the spec file in yml/json format.
-                        default: ${DEFAULT_MODULE}
 	--config (-c)	path to the additional-properties config file in yml/json format
 `);
 	process.exit(0);
 }
-
-const configFile =
-	args._[3] || args["--config"] ? `-c ${args._[2] || args["--config"]}` : "";
 
 const config = {
 	/** url to load the open-api definition from */
 	url: args._[0] || args["--url"] || DEFAULT_URL,
 	/** folder to save the open-api client */
 	path: args._[1] || args["--path"] || DEFAULT_PATH,
-	/** module name  */
-	module: args._[2] || args["--module"] || DEFAULT_MODULE,
 
-	configFile,
+	config: args._[2] || args["--config"] || "",
 };
 
 const errorMessageContains = (includedString, error) => {
@@ -86,8 +76,9 @@ const generateClient = () => {
 };
 
 const getOpenApiCommand = (configuration) => {
-	const { url, path, module, configFile } = configuration;
-	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --additional-properties=npmName=restClient,supportsES6=true,withInterfaces=true,modelPackage="${module}",apiPackage="${module}", --skip-validate-spec`;
+	const { url, path, config } = configuration;
+	const configFile = config ? `-c ${config}` : "";
+	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --skip-validate-spec`;
 
 	return command;
 };
