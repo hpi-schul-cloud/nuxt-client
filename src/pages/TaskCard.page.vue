@@ -30,8 +30,8 @@
 			<user-selector
 				v-model="selectedUsers"
 				:users="allUsers"
-				label="Studenten"
-				aria-label="Studenten"
+				:label="t('common.labels.students')"
+				:aria-label="t('common.labels.students')"
 				selectAll
 			/>
 			<card-element-wrapper
@@ -336,21 +336,36 @@ export default defineComponent({
 		const allUsers = [
 			{
 				id: "userId1",
-				firstName: "User",
-				lastName: "1",
+				firstName: "Peter",
+				lastName: "Andre",
 			},
 			{
 				id: "userId2",
-				firstName: "User",
-				lastName: "2",
+				firstName: "Michael",
+				lastName: "Meyer",
 			},
 			{
 				id: "userId3",
-				firstName: "User",
-				lastName: "3",
+				firstName: "Sabine",
+				lastName: "Musterfrau",
+			},
+			{
+				id: "userId4",
+				firstName: "Oliver",
+				lastName: "Lorem",
+			},
+			{
+				id: "userId5",
+				firstName: "Ipsum",
+				lastName: "Dolores",
+			},
+			{
+				id: "userId6",
+				firstName: "Gregor",
+				lastName: "Samsa",
 			},
 		];
-		const selectedUsers = ref(["userId2"]);
+		const selectedUsers = ref(["userId5"]);
 
 		return {
 			breadcrumbs,
