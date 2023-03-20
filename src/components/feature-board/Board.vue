@@ -46,7 +46,6 @@ export default defineComponent({
 	components: { BoardColumn, Container, Draggable },
 	setup() {
 		const route = useRoute();
-		console.log("route.params", route.params);
 		const { board, moveCard, moveColumn, moveCardByKeyboard } = useBoardState(
 			route.params?.id
 		);
