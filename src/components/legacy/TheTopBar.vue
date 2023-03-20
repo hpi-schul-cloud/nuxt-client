@@ -56,8 +56,8 @@
 					class="item"
 					source="fa"
 					icon="question"
-					:title="$t('global.topbar.actions.help')"
-					:aria-label="$t('global.topbar.actions.help')"
+					:title="$t('global.topbar.actions.helpSection')"
+					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
 				>
 					<help-dropdown />
