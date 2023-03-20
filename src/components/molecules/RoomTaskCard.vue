@@ -408,10 +408,15 @@ export default {
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
-				const route = this.isBetaTask
-					? `/task-cards/${this.task.taskCardId}`
-					: `/homework/${this.task.id}`;
+				if (this.isBetaTask) {
+					this.$router.push({
+						name: "task-card-view-edit",
+						params: { id: this.task.taskCardId },
+					});
+					return;
+				}
 
+				const route = `/homework/${this.task.id}`;
 				this.redirectAction(route);
 			}
 		},
