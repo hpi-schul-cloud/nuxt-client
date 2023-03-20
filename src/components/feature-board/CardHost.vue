@@ -1,7 +1,12 @@
 <template>
-	<div class="d-flex" @keydown.up.down.left.right.prevent="onKeyDown">
+	<div
+		class="d-flex"
+		id="refDiv"
+		@keydown.up.down.left.right.prevent="onKeyDown"
+		ref="cardHost"
+	>
 		<VCard
-			:height="height"
+			:height="isLoading ? height : 'auto'"
 			class="w-100"
 			outlined
 			tabindex="0"
@@ -18,6 +23,7 @@
 							:value="card.title"
 							@change="onUpdateCardTitle"
 						></CardHeaderTitleInput>
+						{{ card.height }}
 					</template>
 					<template v-slot:menu>
 						<CardHostMenu>
@@ -43,15 +49,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useCardState } from "./CardState.composable";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
-import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
+import { useElementSize, watchDebounced } from "@vueuse/core";
+import { defineComponent, ref } from "vue";
 import CardHeader from "./CardHeader.vue";
+import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
 import CardHostMenu from "./CardHostMenu.vue";
 import CardHostMenuAction from "./CardHostMenuAction.vue";
-import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
+import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
+import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import { useCardState } from "./CardState.composable";
 import { BoardCardType } from "./types/Card";
 
 export default defineComponent({
@@ -70,7 +77,10 @@ export default defineComponent({
 		id: { type: String, required: true },
 	},
 	setup(props, { emit }) {
-		const { isLoading, card, updateTitle, deleteCard } = useCardState(props.id);
+		const cardHost = ref(null);
+		const { isLoading, card, updateTitle, deleteCard, updateCardHeight } =
+			useCardState(props.id);
+		const { height: cardHostHeight } = useElementSize(cardHost);
 
 		const onKeyDown = (key: KeyboardEvent) => {
 			emit("move-card-keyboard", key.code);
@@ -79,6 +89,12 @@ export default defineComponent({
 		const onUpdateCardTitle = updateTitle;
 		const onDelete = deleteCard;
 
+		watchDebounced(
+			cardHostHeight,
+			(newHeight: number) => updateCardHeight(newHeight),
+			{ debounce: 500, maxWait: 2000 }
+		);
+
 		return {
 			isLoading,
 			card,
@@ -86,6 +102,7 @@ export default defineComponent({
 			onKeyDown,
 			onUpdateCardTitle,
 			onDelete,
+			cardHost,
 		};
 	},
 });

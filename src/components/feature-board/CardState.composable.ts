@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref, toRef, unref } from "vue";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { AnyCard, BoardCardType, LegacyLessonCard } from "./types/Card";
 
@@ -15,38 +15,50 @@ const DUMMY_CARD: LegacyLessonCard = {
 	},
 };
 
+declare type CardState = {
+	isLoading: boolean;
+	card: AnyCard | undefined;
+};
+
 export const useCardState = (id: AnyCard["id"]) => {
-	const isLoading = ref<boolean>(true);
+	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		if (id === DUMMY_CARD.id) {
-			card.value = DUMMY_CARD;
-			isLoading.value = false;
+			cardState.card = { ...DUMMY_CARD };
+			cardState.isLoading = false;
 			return;
 		}
 		try {
-			card.value = await fetchCardFromApi(id);
+			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
 			console.error(error);
 		}
-		isLoading.value = false;
+		cardState.isLoading = false;
 	};
 
 	const updateTitle = (newTitle: string): void => {
-		if (card.value === undefined) {
+		if (cardState.card === undefined) {
 			return;
 		}
-		console.log("new Title!", newTitle);
-		card.value.title = newTitle;
+		cardState.card.title = newTitle;
 	};
 
 	const deleteCard = () => {
 		console.log("DELETE CARD");
 	};
 
-	const card = ref<AnyCard | undefined>(undefined);
+	const updateCardHeight = (newHeight: number) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		if (cardState.card.height === newHeight) {
+			return;
+		}
+		cardState.card.height = newHeight;
+	};
 
 	onMounted(() => fetchCard(id));
 
@@ -54,7 +66,8 @@ export const useCardState = (id: AnyCard["id"]) => {
 		fetchCard,
 		updateTitle,
 		deleteCard,
-		card,
-		isLoading,
+		updateCardHeight,
+		card: toRef(cardState, "card"),
+		isLoading: toRef(cardState, "isLoading"),
 	};
 };
