@@ -7,8 +7,6 @@
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
-		<router-link :to="testURL">Create Beta Task</router-link>
-
 		<template slot="header">
 			<div class="ma-2">
 				<div class="text-h3 pb-2 course-title">
@@ -138,7 +136,6 @@ import {
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
-import { useRouter } from "vue-router/composables";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
@@ -219,14 +216,13 @@ export default defineComponent({
 				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
 				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
 			) {
-				const router = useRouter();
 				const action = {
 					label: this.$t("pages.rooms.fab.add.betatask"),
 					icon: mdiFormatListChecks,
-					href: router.resolve({
+					to: {
 						name: "rooms-task-card-new",
 						params: { course: this.roomData.roomId },
-					}).href,
+					},
 					dataTestid: "fab_button_add_beta_task",
 				};
 				actions.push(action);
