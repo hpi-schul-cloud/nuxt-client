@@ -8,7 +8,7 @@ jest.mock("axios");
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {
-	cardsControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
+	cardControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
 };
 initializeAxios({
 	request: async (path: string) => mockReturnData,
@@ -37,7 +37,7 @@ describe("card-request-pool.composable", () => {
 		const { fetchCard } = useSharedCardRequestPool();
 		await fetchCard(CARD_ID);
 
-		expect(cardsApiFactoryMock.cardsControllerGetCards).toHaveBeenCalledWith([
+		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledWith([
 			CARD_ID,
 		]);
 	});
@@ -57,8 +57,6 @@ describe("card-request-pool.composable", () => {
 			fetchCard(CARD_ID3),
 		]);
 
-		expect(cardsApiFactoryMock.cardsControllerGetCards).toHaveBeenCalledTimes(
-			1
-		);
+		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledTimes(1);
 	});
 });

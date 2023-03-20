@@ -1,6 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
+import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
@@ -85,6 +86,21 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 jest.mock("./BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
+const $route: Route = {
+	params: {
+		id: "a1b2c3",
+	},
+	path: "/rooms/a1b2c3/board",
+	fullPath: "/rooms/a1b2c3/board",
+	hash: "",
+	query: {
+		id: "a1b2c3",
+	},
+	matched: [],
+} as Route;
+
+const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
+
 describe("Board", () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -101,6 +117,10 @@ describe("Board", () => {
 		});
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),
+			mocks: {
+				$router,
+				$route,
+			},
 		});
 	};
 
