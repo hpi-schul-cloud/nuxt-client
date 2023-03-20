@@ -6,6 +6,5 @@
 	"modelPackage": "models",
 	"supportsES6": true,
 	"withInterfaces": true,
-	"withoutPrefixEnums": false,
 	"withSeparateModelsAndApi": true
 }
