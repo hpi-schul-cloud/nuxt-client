@@ -84,6 +84,7 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
+	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
@@ -156,11 +157,27 @@ export default defineComponent({
 						title: roomData.title,
 					},
 				];
-				const taskCardData = taskCardModule.getTaskCardData;
+				const initialCardElements = [
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.Title,
+						content: {
+							value: "",
+						},
+					},
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+						content: {
+							value: "",
+							inputFormat:
+								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+						},
+					},
+				];
 
-				taskCardModule.setCourseId(course.value);
 				dueDate.value = endOfSchoolYear.toISOString();
-				initElements(taskCardData.cardElements);
+				initElements(initialCardElements);
 
 				breadcrumbs.value.push({
 					text: roomData.title,
