@@ -839,7 +839,7 @@ export interface CustomParameterEntryParam {
      * @type {string}
      * @memberof CustomParameterEntryParam
      */
-    value: string;
+    value?: string;
 }
 /**
  * 
