@@ -1,20 +1,18 @@
 <template>
 	<div class="d-flex" @keydown.up.down.left.right.space.prevent="onKeyDown">
-		<VCard :height="height" class="w-100" outlined tabindex="0" :id="id">
+		<VCard class="w-100" outlined tabindex="0" :id="id">
 			<template v-if="isLoading">
 				<CardSkeleton :height="height" />
 			</template>
 			<template v-if="!isLoading && card">
 				<VCardTitle>{{ card.title }}</VCardTitle>
-				<CardLegacyTaskReference
-					v-if="card.cardType === BoardCardType.LegacyTask"
-					:card="card"
-				/>
-				<CardLegacyLessonReference
-					v-else-if="card.cardType === BoardCardType.LegacyLesson"
-					:card="card"
-				/>
-				<div v-else>Unknown card-type</div>
+				<div
+					v-for="(element, index) in card.elements"
+					:key="element.id"
+					class="element"
+				>
+					Element {{ index + 1 }}
+				</div>
 			</template>
 		</VCard>
 	</div>
@@ -22,18 +20,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useCardState } from "./CardState.composable";
 import CardSkeleton from "./CardSkeleton.vue";
-import CardLegacyTaskReference from "./CardLegacyTaskReference.vue";
-import CardLegacyLessonReference from "./CardLegacyLessonReference.vue";
-import { BoardCardType } from "./types/Card";
+import { useCardState } from "./CardState.composable";
 
 export default defineComponent({
 	name: "CardHost",
 	components: {
 		CardSkeleton,
-		CardLegacyTaskReference,
-		CardLegacyLessonReference,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -49,9 +42,18 @@ export default defineComponent({
 		return {
 			isLoading,
 			card,
-			BoardCardType,
 			onKeyDown,
 		};
 	},
 });
 </script>
+
+<style scoped>
+.element {
+	margin-left: 10px;
+	padding: 10px 14px;
+}
+.element:last-child {
+	margin-bottom: 14px;
+}
+</style>
