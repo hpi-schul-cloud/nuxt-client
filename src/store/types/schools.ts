@@ -40,10 +40,7 @@ export type School = {
 	features: {
 		rocketChat: boolean;
 		videoconference: boolean;
-		messenger: boolean;
 		studentVisibility: boolean;
-		messengerSchoolRoom: boolean;
-		messengerStudentRoomCreate: boolean;
 		ldapUniventionMigrationSchool: boolean;
 	};
 	enableStudentTeamCreation: boolean;

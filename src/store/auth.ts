@@ -276,19 +276,6 @@ export default class AuthModule extends VuexModule {
 	@Action
 	logout(redirectUrl = "/logout"): void {
 		localStorage.clear();
-		// Delete matrix messenger indexedDB databases
-		if (window.indexedDB) {
-			// window.indexedDB.databases() is not available in all browsers
-			const databases = [
-				"logs",
-				"matrix-js-sdk:crypto",
-				"matrix-js-sdk:riot-web-sync",
-			];
-
-			for (let i = 0; i < databases.length; i += 1) {
-				window.indexedDB.deleteDatabase(databases[i]);
-			}
-		}
 		this.context.commit("clearAuthData");
 		window.location.assign(redirectUrl);
 	}

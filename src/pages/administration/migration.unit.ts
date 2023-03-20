@@ -62,10 +62,7 @@ const schoolMock = {
 	features: {
 		rocketChat: true,
 		videoconference: false,
-		messenger: true,
 		studentVisibility: false,
-		messengerSchoolRoom: false,
-		messengerStudentRoomCreate: false,
 		ldapUniventionMigrationSchool: false,
 	},
 	enableStudentTeamCreation: false,

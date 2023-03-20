@@ -26,9 +26,6 @@ const school = {
 	features: {
 		rocketChat: true,
 		videoconference: true,
-		messenger: true,
-		messengerSchoolRoom: true,
-		messengerStudentRoomCreate: true,
 		studentVisibility: true,
 	},
 	permissions: {
@@ -79,10 +76,6 @@ const envs = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: "default",
-	FEATURE_MATRIX_MESSENGER_ENABLED: true,
-	MATRIX_MESSENGER__EMBED_URI: "__vue_devtool_undefined__",
-	MATRIX_MESSENGER__URI: "__vue_devtool_undefined__",
-	MATRIX_MESSENGER__DISCOVER_URI: "__vue_devtool_undefined__",
 	LERNSTORE_MODE: "__vue_devtool_undefined__",
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 	FEATURE_ES_COLLECTIONS_ENABLED: true,
@@ -99,9 +92,6 @@ const envs = {
 	I18N__DEFAULT_TIMEZONE: "Europe/Berlin",
 	I18N__FALLBACK_LANGUAGE: "de",
 	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/cloud-instances/",
-	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
-	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
-	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
 	SC_TITLE: "HPI Schul-Cloud",
 	SC_SHORT_TITLE: "HPI Schul-Cloud",
 };

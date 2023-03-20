@@ -104,7 +104,6 @@ describe("rooms module", () => {
 					.fetch({
 						indicateLoading: true,
 						device: "mobile",
-						showSubstitute: true,
 					})
 					.then(() => {
 						expect(roomsModule.getLoading).toBe(false);

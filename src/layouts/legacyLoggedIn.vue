@@ -25,7 +25,6 @@
 				<autoLogoutWarning />
 			</keep-alive>
 			<the-footer v-if="!fullscreenMode" class="footer" />
-			<matrix-messenger />
 		</div>
 	</div>
 </template>
@@ -38,7 +37,6 @@ import TheFooter from "@/components/legacy/TheFooter";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@/utils/sidebar-base-items";
 import toastsFromQueryString from "@/mixins/toastsFromQueryString";
-import MatrixMessenger from "@/components/organisms/Messenger/MatrixMessenger";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
 
 export default {
@@ -47,7 +45,6 @@ export default {
 		TheSidebar,
 		TheFooter,
 		autoLogoutWarning,
-		MatrixMessenger,
 		SkipLinks,
 	},
 	mixins: [toastsFromQueryString],
