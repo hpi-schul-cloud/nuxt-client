@@ -7,6 +7,8 @@
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
+		<router-link :to="testURL">Create Beta Task</router-link>
+
 		<template slot="header">
 			<div class="ma-2">
 				<div class="text-h3 pb-2 course-title">
@@ -252,6 +254,9 @@ export default defineComponent({
 				actions: actions,
 			};
 			return items;
+		},
+		testURL() {
+			return `/rooms/${this.roomData.roomId}/create-task-card`;
 		},
 		roomData() {
 			return roomModule.getRoomData;

@@ -300,8 +300,8 @@ export default defineComponent({
 		};
 
 		const save = async () => {
-			console.log(selectedUsers.value);
-			/*if (hasErrors.value) {
+			//console.log(selectedUsers.value);
+			if (hasErrors.value) {
 				return;
 			}
 
@@ -311,7 +311,7 @@ export default defineComponent({
 				await updateTaskCard();
 			}
 
-			router.go(-1);*/
+			router.go(-1);
 		};
 
 		const hasErrors = ref(false);
