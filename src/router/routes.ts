@@ -184,6 +184,12 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
+		path: `/tasks/create-task-card`,
+		component: () => import("../pages/TaskCard.page.vue"),
+		name: "tasks-task-card-new",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
+	},
+	{
 		path: `/task-cards/:id(${REGEX_ID})`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "task-card-view-edit",
