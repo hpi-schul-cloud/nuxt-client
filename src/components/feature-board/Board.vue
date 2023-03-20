@@ -30,22 +30,24 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router/composables";
+import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
-import { Container, Draggable } from "vue-smooth-dnd";
 import {
-	CardMove,
-	ColumnMove,
-	CardMoveByKeyboard,
 	cardDropPlaceholderOptions,
+	CardMove,
+	CardMoveByKeyboard,
+	ColumnMove,
 } from "./types/DragAndDrop";
 
 export default defineComponent({
 	name: "Board",
 	components: { BoardColumn, Container, Draggable },
 	setup() {
+		const route = useRoute();
 		const { board, moveCard, moveColumn, moveCardByKeyboard } = useBoardState(
-			"0000d213816abba584714caa"
+			route.params?.id
 		);
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {

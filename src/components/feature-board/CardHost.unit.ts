@@ -4,7 +4,6 @@ import Vue, { ref } from "vue";
 import CardHost from "./CardHost.vue";
 import { useCardState } from "./CardState.composable";
 import { LegacyLessonCard, LegacyTaskCard } from "./types/Card";
-import { CardResponseCardTypeEnum as BoardCardType } from "@/serverApi/v3";
 
 const MOCK_PROP_DEFAULT = {
 	height: 200,
@@ -17,7 +16,6 @@ const MOCK_TASK_REFERENCE: LegacyTaskCard = {
 	height: 200,
 	elements: [],
 	taskId: "25",
-	cardType: BoardCardType.LegacyTask,
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
@@ -27,7 +25,6 @@ const MOCK_LESSON_REFERENCE: LegacyLessonCard = {
 	height: 200,
 	elements: [],
 	lessonId: "25",
-	cardType: BoardCardType.LegacyLesson,
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
@@ -74,34 +71,6 @@ describe("BoardColumn", () => {
 					false
 				);
 			});
-		});
-	});
-
-	describe("when cardType is 'legacy-task-reference'", () => {
-		it("should render a 'LegacyTaskReference'", () => {
-			setup({ card: MOCK_TASK_REFERENCE });
-			const taskCardComponent = wrapper.findComponent({
-				name: "CardLegacyTaskReference",
-			});
-			const lessonCardComponent = wrapper.findComponent({
-				name: "CardLegacyLessonReference",
-			});
-			expect(taskCardComponent.vm).toBeDefined();
-			expect(lessonCardComponent.vm).not.toBeDefined();
-		});
-	});
-
-	describe("when cardType is 'legacy-lesson-reference'", () => {
-		it("should render a 'LegacyLessonReference'", () => {
-			setup({ card: MOCK_LESSON_REFERENCE });
-			const taskCardComponent = wrapper.findComponent({
-				name: "CardLegacyTaskReference",
-			});
-			const lessonCardComponent = wrapper.findComponent({
-				name: "CardLegacyLessonReference",
-			});
-			expect(lessonCardComponent.vm).toBeDefined();
-			expect(taskCardComponent.vm).not.toBeDefined();
 		});
 	});
 
