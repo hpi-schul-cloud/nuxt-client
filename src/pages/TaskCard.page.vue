@@ -15,6 +15,7 @@
 				filled
 				disabled
 				:label="$t('common.labels.course')"
+				:rules="[rules.required]"
 			/>
 			<date-time-picker
 				class="mb-4"
@@ -269,11 +270,17 @@ export default defineComponent({
 			if (taskCardModule.getStatus === "error") {
 				const businessError = taskCardModule.getBusinessError;
 				console.log(taskCardModule.getBusinessError);
-				errorMessage.value =
-					businessError?.error?.validationErrors[0].errors[0];
+				const errors = businessError?.error?.validationErrors;
+				errors.forEach((err: any) => {
+					errorMessage.value = errorMessage.value + ", " + err.errors[0];
+				});
 			} else {
 				router.go(-1);
 			}
+		};
+
+		const rules = {
+			required: (value: string) => !!value || t("common.validation.required"),
 		};
 
 		const hasErrors = ref(false);
@@ -312,6 +319,7 @@ export default defineComponent({
 			minDate,
 			maxDate,
 			errorMessage,
+			rules,
 		};
 	},
 });
