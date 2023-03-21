@@ -8,7 +8,7 @@ describe("CardHostMenuAction Component", () => {
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = mount(CardHostMenuAction as MountOptions<Vue>, {
+		wrapper = shallowMount(CardHostMenuAction as MountOptions<Vue>, {
 			...createComponentMocks({}),
 		});
 	};
@@ -19,13 +19,14 @@ describe("CardHostMenuAction Component", () => {
 			expect(wrapper).toBeDefined();
 		});
 
-		it("should emit if is clicked", async () => {
+		it("should emit if is clicked", () => {
 			setup();
 			const listItemComponent = wrapper.findComponent({ name: "VListItem" });
-			listItemComponent.vm.$emit("click"); // TODO: investigate how to handle click.prevent event in testing
+
+			listItemComponent.vm.$emit("click", { preventDefault: jest.fn() });
 			const emitted = wrapper.emitted();
 
-			expect(emitted).toBeDefined();
+			expect(emitted.click).toBeDefined();
 		});
 	});
 });
