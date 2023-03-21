@@ -1,7 +1,7 @@
 <template>
-	<v-list-item @click.prevent="onClick">
+	<VListItem @click.prevent="onClick">
 		<v-list-item-title><slot></slot></v-list-item-title>
-	</v-list-item>
+	</VListItem>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
