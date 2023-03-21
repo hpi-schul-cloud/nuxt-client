@@ -10,7 +10,7 @@
 			auto-grow
 			solo
 			flat
-			:rules="[rules.required]"
+			:rules="[rules.required, rules.maxLength]"
 			validate-on-blur
 			:aria-label="t('components.cardElement.titleElement')"
 			:placeholder="placeholder"
@@ -44,8 +44,8 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
+		const t = (key: string, values?: Array<string> | object) => {
+			const translateResult = i18n.t(key, values);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
@@ -63,9 +63,15 @@ export default defineComponent({
 
 		const handleInput = () => emit("input", title.value);
 
+		const TITLE_MAX_LENGTH = 400;
 		const rules = {
 			required: (value: string) =>
-				!!value || t("components.cardElement.titleElement.required"),
+				!!value || t("components.cardElement.titleElement.validation.required"),
+			maxLength: (value: string) =>
+				value.length <= TITLE_MAX_LENGTH ||
+				t("components.cardElement.titleElement.validation.maxLength", {
+					maxLength: TITLE_MAX_LENGTH.toString(),
+				}),
 		};
 
 		return {
