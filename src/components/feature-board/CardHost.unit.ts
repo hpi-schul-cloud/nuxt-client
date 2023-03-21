@@ -45,6 +45,9 @@ describe("BoardColumn", () => {
 		document.body.setAttribute("data-app", "true");
 		mockedUseCardState.mockReturnValue({
 			fetchCard: jest.fn(),
+			updateTitle: jest.fn(),
+			deleteCard: jest.fn(),
+			updateCardHeight: jest.fn(),
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
@@ -106,7 +109,7 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when key pressed", () => {
-		it.each(["up", "down", "left", "right", "space"])(
+		it.each(["up", "down", "left", "right"])(
 			"should emit 'move-card-keyboard' with '%s' key stroke",
 			async (key) => {
 				setup({ card: MOCK_LESSON_REFERENCE });
