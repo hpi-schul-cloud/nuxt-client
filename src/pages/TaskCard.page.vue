@@ -210,24 +210,17 @@ export default defineComponent({
 			});
 		};
 
-		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
-		const validate = (content: string) => {
-			return content.length > 2;
-		};
-
 		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			elements.value.forEach((element) => {
-				if (validate(element.model)) {
-					const cardElement: CardElementParams = {
-						content: {
-							type: element.type,
-							value: element.model,
-							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
-						},
-					};
-					cardElements.push(cardElement);
-				}
+				const cardElement: CardElementParams = {
+					content: {
+						type: element.type,
+						value: element.model,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+					},
+				};
+				cardElements.push(cardElement);
 			});
 
 			await taskCardModule.createTaskCard({
