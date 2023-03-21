@@ -258,21 +258,14 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 		it("should render add task button", () => {
 			const fabComponent: any = wrapper.find(".wireframe-fab");
-			const actions = fabComponent.vm.actions.map((action: any) => {
-				return action.label;
-			});
-			const hasNewTaskAction = actions.some((item: string) => {
-				return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
-			});
-			expect(fabComponent.exists()).toBe(true);
-			expect(hasNewTaskAction).toBe(true);
-			expect(actions.length).toEqual(1);
+			expect(fabComponent.exists()).toEqual(true);
 		});
 
 		it("'add task' button should have correct path", async () => {
 			const fabComponent: any = wrapper.find(".wireframe-fab");
-			const newTaskAction = fabComponent.vm.actions[0];
-			expect(newTaskAction.href).toStrictEqual("/homework/new?returnUrl=tasks");
+			expect(fabComponent.vm.href).toStrictEqual(
+				"/homework/new?returnUrl=tasks"
+			);
 		});
 
 		describe("new task-card button", () => {
@@ -298,7 +291,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					},
 				});
 				const fabComponent: any = wrapper.find(".wireframe-fab");
-				expect(fabComponent.vm.actions.length).toEqual(1);
+				expect(fabComponent.vm.actions.length).toEqual(0);
+				expect(fabComponent.vm.href).toStrictEqual(
+					"/homework/new?returnUrl=tasks"
+				);
 			});
 			it("should have correct path to task card page", () => {
 				wrapper = mountComponent({
