@@ -66,7 +66,8 @@ export default defineComponent({
 		const TITLE_MAX_LENGTH = 400;
 		const rules = {
 			required: (value: string) =>
-				!!value || t("components.cardElement.titleElement.validation.required"),
+				!!value.trim() ||
+				t("components.cardElement.titleElement.validation.required"),
 			maxLength: (value: string) =>
 				value.length <= TITLE_MAX_LENGTH ||
 				t("components.cardElement.titleElement.validation.maxLength", {
