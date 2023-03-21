@@ -28,8 +28,8 @@
 					<template v-slot:menu>
 						<CardHostMenu>
 							<CardHostMenuAction @click="onDelete"
-								>Delete Card</CardHostMenuAction
-							>
+								>Delete Card
+							</CardHostMenuAction>
 						</CardHostMenu>
 					</template>
 				</CardHeader>
