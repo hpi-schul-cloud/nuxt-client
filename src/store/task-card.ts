@@ -20,14 +20,8 @@ export default class TaskCardModule extends VuexModule {
 		id: "",
 		courseId: "",
 		courseName: "",
+		title: "",
 		cardElements: [
-			{
-				id: "",
-				cardElementType: CardElementResponseCardElementTypeEnum.Title,
-				content: {
-					value: "",
-				},
-			},
 			{
 				id: "",
 				cardElementType: CardElementResponseCardElementTypeEnum.RichText,
@@ -40,6 +34,7 @@ export default class TaskCardModule extends VuexModule {
 		draggable: true,
 		task: {
 			id: "",
+			users: [],
 			name: "",
 			courseName: "",
 			courseId: "",
