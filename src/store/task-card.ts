@@ -34,6 +34,7 @@ export default class TaskCardModule extends VuexModule {
 		draggable: true,
 		task: {
 			id: "",
+			users: [],
 			name: "",
 			courseName: "",
 			courseId: "",
