@@ -26,6 +26,10 @@ const MOCK_BOARD_ONE_COLUMN: Board = {
 					height: 220,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
@@ -55,6 +59,10 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 					height: 220,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 		{
 			id: "989b0ff2-ad1e-11ed-afa1-0242ac120001",
@@ -73,6 +81,10 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 					height: 320,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
