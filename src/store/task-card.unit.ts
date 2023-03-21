@@ -25,6 +25,18 @@ const mockTaskCardData: TaskCardResponse = {
 	draggable: true,
 	task: {
 		id: "456",
+		users: [
+			{
+				id: "user1",
+				firstName: "firstname1",
+				lastName: "lastname1",
+			},
+			{
+				id: "user2",
+				firstName: "firstname2",
+				lastName: "lastname3",
+			},
+		],
 		name: "task",
 		courseName: "course",
 		courseId: "789",
