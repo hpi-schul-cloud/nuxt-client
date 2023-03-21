@@ -801,6 +801,7 @@
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
+	"components.cardElement.titleElement.required": "Por favor ingrese un título.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",

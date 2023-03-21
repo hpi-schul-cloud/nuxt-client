@@ -10,7 +10,9 @@
 			auto-grow
 			solo
 			flat
-			:aria-label="$t('components.cardElement.titleElement')"
+			:rules="[rules.required]"
+			validate-on-blur
+			:aria-label="t('components.cardElement.titleElement')"
 			:placeholder="placeholder"
 			@input="handleInput"
 		/>
@@ -18,7 +20,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, inject } from "vue";
+import VueI18n from "vue-i18n";
+
 export default defineComponent({
 	name: "TitleCardElement",
 	props: {
@@ -35,6 +39,19 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const title = ref(props.value);
 
 		watch(
@@ -46,18 +63,21 @@ export default defineComponent({
 
 		const handleInput = () => emit("input", title.value);
 
+		const rules = {
+			required: (value: string) =>
+				!!value || t("components.cardElement.titleElement.required"),
+		};
+
 		return {
 			title,
 			handleInput,
+			rules,
+			t,
 		};
 	},
 });
 </script>
 <style lang="scss" scoped>
-::v-deep .v-textarea .v-text-field__details {
-	display: none;
-}
-
 ::v-deep .v-textarea .v-input__slot {
 	padding: 0 0 0 var(--ck-spacing-standard) !important;
 	margin-bottom: 0;

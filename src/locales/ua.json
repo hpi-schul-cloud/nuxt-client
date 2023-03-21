@@ -284,6 +284,7 @@
 	"components.cardElement.richTextElement.placeholder": "додати текст",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
+	"components.cardElement.titleElement.required": "Будь ласка, введіть назву.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
