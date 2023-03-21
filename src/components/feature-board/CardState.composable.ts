@@ -1,10 +1,9 @@
 import { onMounted, reactive, ref, toRef, unref } from "vue";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { AnyCard, BoardCardType, LegacyLessonCard } from "./types/Card";
+import { AnyCard, LegacyLessonCard } from "./types/Card";
 
 const DUMMY_CARD: LegacyLessonCard = {
 	id: "0123456789abcdef00000003",
-	cardType: BoardCardType.LegacyLesson,
 	elements: [],
 	height: 250,
 	lessonId: "anystring",
