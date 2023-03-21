@@ -92,6 +92,18 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
+		path: "/cfiles",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "files",
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
+	},
+	{
+		path: "/cfiles/teams/:catchAll(.*)",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
+	},
+	{
 		path: "/content",
 		component: () => import("../pages/LernStoreOverview.page.vue"),
 		name: "content",
@@ -122,7 +134,6 @@ export const routes: Array<RouteConfig> = [
 			isPublic: true,
 		},
 	},
-	// deprecated?
 	{
 		path: "/imprint",
 		component: () => import("../pages/Imprint.page.vue"),
@@ -135,6 +146,65 @@ export const routes: Array<RouteConfig> = [
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
 		name: "login-instances",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
+		name: "user-login-migration-consent",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+			origin: (val: unknown, to: Route) =>
+				isMongoId(val) &&
+				(val === to.query.sourceSystem || val === to.query.targetSystem),
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+			origin: route.query.origin,
+			mandatory: route.query.mandatory === "true",
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration/error",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
+		name: "user-login-migration-error",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration/success",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
+		name: "user-login-migration-success",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+		}),
 		meta: {
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
@@ -195,83 +265,11 @@ export const routes: Array<RouteConfig> = [
 		name: "task-card-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
-
-	// deprecated?
 	{
+		// deprecated?
 		path: "/termsofuse",
 		component: () => import("../pages/TermsOfUse.vue"),
 		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
-		path: "/cfiles",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "files",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
-		path: "/cfiles/teams/:catchAll(.*)",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
-		path: "/migration",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
-		name: "user-login-migration-consent",
-		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
-			targetSystem: isMongoId,
-			origin: (val: unknown, to: Route) =>
-				isMongoId(val) &&
-				(val === to.query.sourceSystem || val === to.query.targetSystem),
-		}),
-		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
-			targetSystem: route.query.targetSystem,
-			origin: route.query.origin,
-			mandatory: route.query.mandatory === "true",
-		}),
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
-		path: "/migration/success",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
-		name: "user-login-migration-success",
-		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
-			targetSystem: isMongoId,
-		}),
-		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
-			targetSystem: route.query.targetSystem,
-		}),
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
-		path: "/migration/error",
-		component: () =>
-			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
-		name: "user-login-migration-error",
-		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
-			targetSystem: isMongoId,
-		}),
-		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
-			targetSystem: route.query.targetSystem,
-		}),
 		meta: {
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
