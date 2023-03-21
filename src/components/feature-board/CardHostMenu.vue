@@ -12,6 +12,7 @@
 				:ripple="false"
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
+				<span class="d-sr-only">Card-Menu</span>
 			</v-btn>
 		</template>
 		<v-list>
