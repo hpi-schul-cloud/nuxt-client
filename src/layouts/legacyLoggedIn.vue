@@ -131,6 +131,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins";
+
 .page {
 	display: grid;
 	grid-template-areas:
