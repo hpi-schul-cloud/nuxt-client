@@ -172,13 +172,6 @@ export default defineComponent({
 				const initialCardElements = [
 					{
 						id: "",
-						cardElementType: CardElementResponseCardElementTypeEnum.Title,
-						content: {
-							value: "",
-						},
-					},
-					{
-						id: "",
 						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
 						content: {
 							value: "",
