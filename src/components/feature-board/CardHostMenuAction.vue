@@ -9,7 +9,6 @@ export default defineComponent({
 	name: "CardHostMenuAction",
 	setup(props, { emit }) {
 		const onClick = () => emit("click");
-
 		return {
 			onClick,
 		};

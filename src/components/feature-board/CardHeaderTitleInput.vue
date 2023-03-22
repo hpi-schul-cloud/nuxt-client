@@ -23,6 +23,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
+	emits: ["change"],
 	setup(props, { emit }) {
 		const onChange = (newTitle: string) => emit("change", newTitle);
 

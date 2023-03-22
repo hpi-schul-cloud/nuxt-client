@@ -50,6 +50,7 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
+	emits: ["card-position-change", "position-change-keyboard"],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
