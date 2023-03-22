@@ -3,7 +3,6 @@
 		v-if="
 			toggleStudentVisibilityEnabled ||
 			toggleStudentLernstoreViewEnabled ||
-			matrixMessengerIsEnabled ||
 			rocketChatEnabled ||
 			videoConferenceEnabled
 		"
@@ -62,99 +61,6 @@
 				</p>
 			</v-col>
 		</v-row>
-		<span v-if="matrixMessengerIsEnabled">
-			<v-row class="matrix-messenger-switch">
-				<v-col>
-					<v-custom-switch
-						:value="features.messenger"
-						:label="
-							$t(
-								'pages.administration.school.index.privacySettings.labels.matrixMessenger'
-							)
-						"
-						class="ml-1 mt-0"
-						@input-changed="
-							($event) => $emit('update-feature-settings', $event, 'messenger')
-						"
-					></v-custom-switch>
-					<p class="body-2 mb-0">
-						{{
-							$t(
-								"pages.administration.school.index.privacySettings.longText.matrixMessenger"
-							)
-						}}
-						<a
-							href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=113650243"
-							target="_blank"
-						>
-							{{
-								$t(
-									"pages.administration.school.index.privacySettings.link.messengerHelpPage"
-								)
-							}}
-						</a>
-					</p>
-				</v-col>
-			</v-row>
-			<v-row
-				v-if="matrixMessengerConfig.schoolRoomEnabled"
-				class="matrix-schoolroom-switch"
-			>
-				<v-col>
-					<v-custom-switch
-						:value="features.messengerSchoolRoom"
-						:label="
-							$t(
-								'pages.administration.school.index.privacySettings.labels.messengerSchoolRoom'
-							)
-						"
-						class="ml-1 mt-0"
-						@input-changed="
-							($event) =>
-								$emit('update-feature-settings', $event, 'messengerSchoolRoom')
-						"
-					></v-custom-switch>
-					<p class="body-2 mb-0">
-						{{
-							$t(
-								"pages.administration.school.index.privacySettings.longText.messengerSchoolRoom"
-							)
-						}}
-					</p>
-				</v-col>
-			</v-row>
-			<v-row
-				v-if="matrixMessengerConfig.studentRoomCreation"
-				class="matrix-studentroom-switch"
-			>
-				<v-col>
-					<v-custom-switch
-						:value="features.messengerStudentRoomCreate"
-						:label="
-							$t(
-								'pages.administration.school.index.privacySettings.labels.messengerStudentRooms'
-							)
-						"
-						class="ml-1 mt-0"
-						@input-changed="
-							($event) =>
-								$emit(
-									'update-feature-settings',
-									$event,
-									'messengerStudentRoomCreate'
-								)
-						"
-					></v-custom-switch>
-					<p class="body-2 mb-0">
-						{{
-							$t(
-								"pages.administration.school.index.privacySettings.longText.messengerStudentRooms"
-							)
-						}}
-					</p>
-				</v-col>
-			</v-row>
-		</span>
 		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
 			<v-col>
 				<v-custom-switch
@@ -226,19 +132,12 @@ export default {
 		},
 	},
 	computed: {
-		matrixMessengerConfig: () => envConfigModule.getMatrixConfig,
 		toggleStudentLernstoreViewEnabled: () =>
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
 		toggleStudentVisibilityEnabled: () =>
 			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
-		matrixMessengerIsEnabled() {
-			return (
-				this.matrixMessengerConfig.enabled &&
-				this.matrixMessengerConfig.schoolSettingsVisible
-			);
-		},
 		studentVisibility() {
 			return this.permissions.teacher
 				? this.permissions.teacher.STUDENT_LIST

@@ -1,6 +1,6 @@
-import { createSharedComposable, useDebounceFn } from "@vueuse/core";
 import { CardsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { createSharedComposable, useDebounceFn } from "@vueuse/core";
 import { AnyCard } from "./types/Card";
 
 type CardRequest = {
@@ -52,7 +52,7 @@ const useCardRequestPool = () => {
 
 	const fetchCards = async (cardRequests: CardRequest[]) => {
 		const cardIds = cardRequests.map(({ id }) => id);
-		const response = await cardsApi.cardsControllerGetCards(cardIds);
+		const response = await cardsApi.cardControllerGetCards(cardIds);
 		const cards = response.data.data as unknown as AnyCard[];
 
 		if (cards) {

@@ -114,8 +114,6 @@ const spyMocks = {
 	savePositionMock: jest.spyOn(RoomOverview.methods, "savePosition"),
 	dragFromGroupMock: jest.spyOn(RoomOverview.methods, "dragFromGroup"),
 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
-	isTeacher: jest.spyOn(RoomOverview.methods, "isTeacher"),
-	isTeacherMock: jest.spyOn(RoomOverview.methods, "isTeacher"),
 };
 
 let copyModuleMock;
@@ -518,9 +516,6 @@ describe("@/pages/RoomOverview", () => {
 	});
 
 	it("should call 'setGroupElements' method for grouping after avatar-to-avatar drag&drop", async () => {
-		spyMocks.storeRoomAlignMock.mockResolvedValue(
-			roomsModule.setAlignedSuccessfully(true)
-		);
 		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {

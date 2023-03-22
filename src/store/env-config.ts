@@ -12,13 +12,8 @@ export const requiredVars = {
 };
 
 export const configsFromEnvironmentVars = {
-	FEATURE_MATRIX_MESSENGER_ENABLED:
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
-	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
-	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 };
 
 const retryLimit = 10;
@@ -86,15 +81,6 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getDefaultTimezone(): string {
 		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin"; // TODO rely on server provided default
-	}
-
-	get getMatrixConfig() {
-		return {
-			enabled: this.env.FEATURE_MATRIX_MESSENGER_ENABLED,
-			schoolSettingsVisible: this.env.MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
-			studentRoomCreation: this.env.MATRIX_MESSENGER__STUDENT_ROOM_CREATION,
-			schoolRoomEnabled: this.env.MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED,
-		};
 	}
 
 	get getAdminToggleStudentLernstoreViewEnabled() {

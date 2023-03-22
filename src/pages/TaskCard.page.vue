@@ -16,6 +16,15 @@
 				disabled
 				:label="$t('common.labels.course')"
 			/>
+			<v-select
+				v-model="isVisible"
+				:items="visibilityOptions"
+				item-value="value"
+				item-text="text"
+				filled
+				disabled
+				:label="$t('common.labels.visibility')"
+			/>
 			<date-time-picker
 				class="mb-4"
 				required
@@ -34,10 +43,10 @@
 				:aria-label="t('common.labels.students')"
 				selectAll
 			/>
-			<card-element-wrapper
-				v-model="title.model"
-				v-bind="title.props"
-				:editMode="true"
+			<title-card-element
+				v-model="title"
+				:placeholder="t('components.cardElement.titleElement.placeholder')"
+				:editable="true"
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
 			<div>
@@ -61,18 +70,14 @@
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
-			<card-element-wrapper
-				v-model="title.model"
-				v-bind="title.props"
-				:editMode="false"
-			/>
+			<title-card-element v-model="title" :editable="false" />
 			<card-element-list v-model="elements" :editMode="false" />
 		</article>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, computed } from "vue";
+import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
@@ -80,7 +85,7 @@ import { taskCardModule, roomModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
+import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
@@ -91,6 +96,7 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
+	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import UserSelector from "@/components/user-selector/UserSelector.vue";
@@ -100,7 +106,7 @@ export default defineComponent({
 	name: "TaskCard",
 	components: {
 		DefaultWireframe,
-		CardElementWrapper,
+		TitleCardElement,
 		CardElementList,
 		DateTimePicker,
 		UserSelector,
@@ -138,11 +144,18 @@ export default defineComponent({
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
-		const title = ref<CardElement>({
-			id: "",
-			type: CardElementResponseCardElementTypeEnum.Title,
-			model: "",
-		});
+		const isVisible: Ref<boolean> = ref(true);
+		const visibilityOptions = ref<object[]>([
+			{
+				text: t("common.labels.visible"),
+				value: true,
+			},
+			{
+				text: t("common.labels.notVisible"),
+				value: false,
+			},
+		]);
+		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
@@ -165,11 +178,20 @@ export default defineComponent({
 						title: roomData.title,
 					},
 				];
-				const taskCardData = taskCardModule.getTaskCardData;
+				const initialCardElements = [
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+						content: {
+							value: "",
+							inputFormat:
+								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+						},
+					},
+				];
 
-				taskCardModule.setCourseId(course.value);
 				dueDate.value = endOfSchoolYear.toISOString();
-				initElements(taskCardData.cardElements);
+				initElements(initialCardElements);
 
 				breadcrumbs.value.push({
 					text: roomData.title,
@@ -183,7 +205,7 @@ export default defineComponent({
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
-
+				title.value = taskCardData.title;
 				course.value = taskCardData.courseId || "";
 				courses.value = [
 					{
@@ -191,6 +213,7 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
@@ -206,27 +229,8 @@ export default defineComponent({
 			}
 		});
 
-		const initElements = (cardElements: Array<CardElementResponse>) => {
+		const initElements = (cardElements: Array<CardElementResponse> = []) => {
 			cardElements.forEach((cardElement) => {
-				if (
-					cardElement.cardElementType ===
-					CardElementResponseCardElementTypeEnum.Title
-				) {
-					title.value = {
-						id: cardElement.id,
-						type: CardElementResponseCardElementTypeEnum.Title,
-						model: cardElement.content.value,
-						props: {
-							component: CardElementComponentEnum.Title,
-							placeholder: i18n.t(
-								"components.cardElement.titleElement.placeholder"
-							) as string,
-							editable: isEditMode.value,
-						},
-					};
-					return;
-				}
-
 				elements.value.push({
 					id: cardElement.id,
 					type: CardElementResponseCardElementTypeEnum.RichText,
@@ -242,28 +246,29 @@ export default defineComponent({
 			});
 		};
 
+		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
+		const validate = (content: string) => {
+			return content.length > 2;
+		};
+
 		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
-			cardElements.push({
-				content: {
-					type: title.value.type,
-					value: title.value.model,
-				},
-			});
 			elements.value.forEach((element) => {
-				if (element.model && element.model.length > 2) {
-					cardElements.push({
+				if (validate(element.model)) {
+					const cardElement: CardElementParams = {
 						content: {
 							type: element.type,
 							value: element.model,
 							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
 						},
-					});
+					};
+					cardElements.push(cardElement);
 				}
 			});
 
 			await taskCardModule.createTaskCard({
 				courseId: course.value,
+				title: title.value,
 				cardElements: cardElements,
 				dueDate: dueDate.value,
 			});
@@ -271,13 +276,6 @@ export default defineComponent({
 
 		const updateTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
-			cardElements.push({
-				id: title.value.id,
-				content: {
-					type: title.value.type,
-					value: title.value.model,
-				},
-			});
 			elements.value.forEach((element) => {
 				const cardElement: CardElementParams = {
 					content: {
@@ -295,6 +293,7 @@ export default defineComponent({
 			await taskCardModule.updateTaskCard({
 				dueDate: dueDate.value,
 				courseId: course.value,
+				title: title.value,
 				cardElements: cardElements,
 			});
 		};
@@ -384,6 +383,8 @@ export default defineComponent({
 			maxDate,
 			allUsers,
 			selectedUsers,
+			isVisible,
+			visibilityOptions,
 		};
 	},
 });
