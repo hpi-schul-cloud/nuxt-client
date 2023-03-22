@@ -6,11 +6,7 @@
 			<v-checkbox
 				v-if="check"
 				v-model="isConfirmed"
-				:label="
-					$t(
-						'components.administration.adminMigrationSection.endWarningCard.check'
-					)
-				"
+				:label="$t(check)"
 				data-testid="migration-confirmation-checkbox"
 			></v-checkbox>
 		</v-card-text>
