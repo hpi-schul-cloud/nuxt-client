@@ -16,9 +16,14 @@ const taskCardModuleMock = () => {
 	return { getTaskCardData: { cardElements: [] } };
 };
 
+const schoolsModuleMock = () => {
+	return { getCurrentYear: { endDate: "" } };
+};
+
 jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
 	taskCardModule: taskCardModuleMock(),
+	schoolsModule: schoolsModuleMock(),
 }));
 
 const getWrapper = (
