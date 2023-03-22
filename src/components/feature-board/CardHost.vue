@@ -60,6 +60,7 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		id: { type: String, required: true },
 	},
+	emits: ["move-card-keyboard"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const { isLoading, card, updateTitle, deleteCard, updateCardHeight } =
