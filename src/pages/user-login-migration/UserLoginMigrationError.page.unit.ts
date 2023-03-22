@@ -11,7 +11,11 @@ describe("UserLoginMigrationError", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = (props: { sourceSystem: string; targetSystem: string }) => {
+	const setup = (props: {
+		sourceSystem: string;
+		targetSystem: string;
+		sourceSchoolNumber?: string;
+		targetSchoolNumber?: string }) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
@@ -99,6 +103,25 @@ describe("UserLoginMigrationError", () => {
 
 				expect(button.text()).toEqual("pages.userMigration.backToLogin");
 				expect(button.props().to).toEqual("/logout");
+			});
+		});
+
+		describe("when the systems and schoolnumbers are loaded", () => {
+			it("should show the schoolNumberMismatch text", () => {
+				const { wrapper } = setup({
+					sourceSystem: "sourceSystemId",
+					targetSystem: "targetSystemId",
+					sourceSchoolNumber: "11111",
+					targetSchoolNumber: "22222",
+				});
+
+				const descriptionText: string = wrapper
+					.find("[data-testId=text-schoolNumberMismatch]")
+					.text();
+
+				expect(descriptionText).toEqual(
+					'pages.userMigration.error.schoolNumberMismatch {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
+				);
 			});
 		});
 	});

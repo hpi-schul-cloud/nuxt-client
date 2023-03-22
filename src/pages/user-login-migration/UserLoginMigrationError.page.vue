@@ -20,7 +20,10 @@
 					})
 				"
 			></p>
-			<p v-if="targetSchoolNumber && sourceSchoolNumber">
+			<p
+				data-testId="text-schoolNumberMismatch"
+				v-if="targetSchoolNumber && sourceSchoolNumber"
+			>
 				{{
 					$t("pages.userMigration.error.schoolNumberMismatch", {
 						sourceSystem: getSystemName(sourceSystem),
