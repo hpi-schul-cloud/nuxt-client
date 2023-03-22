@@ -54,6 +54,10 @@ import EnvConfigModule from "@/store/env-config";
 export default defineComponent({
 	name: "UserLoginMigrationError",
 	props: {
+		error: {
+			type: String,
+			required: false,
+		},
 		sourceSystem: {
 			type: String,
 			required: true,

@@ -260,6 +260,7 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
 		beforeEnter: validateQueryParameters({
+			errorcode: isString,
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 			sourceSchoolNumber: (value: unknown) =>
@@ -268,6 +269,7 @@ export const routes: Array<RouteConfig> = [
 				!isDefined(value) || (isString(value) && /[0-9]{5}/.test(value)),
 		}),
 		props: (route: Route) => ({
+			errorcode: route.query.errorcode,
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
 			sourceSchoolNumber: route.query.sourceSchoolNumber,
