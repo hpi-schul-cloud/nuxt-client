@@ -16,6 +16,15 @@
 				:disabled="isCreationMode ? false : !!course"
 				:label="$t('common.labels.course')"
 			/>
+			<v-select
+				v-model="isVisible"
+				:items="visibilityOptions"
+				item-value="value"
+				item-text="text"
+				filled
+				disabled
+				:label="$t('common.labels.visibility')"
+			/>
 			<date-time-picker
 				class="mb-4"
 				required
@@ -61,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, computed } from "vue";
+import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
@@ -122,7 +131,17 @@ export default defineComponent({
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
-
+		const isVisible: Ref<boolean> = ref(true);
+		const visibilityOptions = ref<object[]>([
+			{
+				text: t("common.labels.visible"),
+				value: true,
+			},
+			{
+				text: t("common.labels.notVisible"),
+				value: false,
+			},
+		]);
 		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
@@ -180,6 +199,7 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
@@ -361,6 +381,8 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			isVisible,
+			visibilityOptions,
 		};
 	},
 });
