@@ -15,6 +15,7 @@
 				filled
 				disabled
 				:label="$t('common.labels.course')"
+				validate-on-blur
 				:rules="[rules.required]"
 			/>
 			<v-select
@@ -25,6 +26,8 @@
 				filled
 				disabled
 				:label="$t('common.labels.visibility')"
+				validate-on-blur
+				:rules="[rules.required]"
 			/>
 			<date-time-picker
 				class="mb-4"
