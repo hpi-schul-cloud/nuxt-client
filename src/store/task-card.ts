@@ -4,8 +4,6 @@ import {
 	CardsApiFactory,
 	CardsApiInterface,
 	TaskCardParams,
-	CardElementResponseCardElementTypeEnum,
-	CardRichTextElementResponseInputFormatEnum,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
@@ -21,16 +19,7 @@ export default class TaskCardModule extends VuexModule {
 		courseId: "",
 		courseName: "",
 		title: "",
-		cardElements: [
-			{
-				id: "",
-				cardElementType: CardElementResponseCardElementTypeEnum.RichText,
-				content: {
-					value: "",
-					inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
-				},
-			},
-		],
+		cardElements: [],
 		draggable: true,
 		task: {
 			id: "",
