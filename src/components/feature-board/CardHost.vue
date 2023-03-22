@@ -32,6 +32,9 @@
 						</CardHostMenu>
 					</template>
 				</CardHeader>
+				<VCardText>
+					<ContentElementList :elements="card.elements"></ContentElementList>
+				</VCardText>
 			</template>
 		</VCard>
 	</div>
@@ -45,7 +48,8 @@ import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
 import CardHostMenu from "./CardHostMenu.vue";
 import CardHostMenuAction from "./CardHostMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
-import { useCardState } from "./CardState.composable";
+import ContentElementList from "./content-elements/ContentElementList.vue";
+import { useCardState } from "./state/CardState.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -55,6 +59,7 @@ export default defineComponent({
 		CardHostMenu,
 		CardHostMenuAction,
 		CardHeaderTitleInput,
+		ContentElementList,
 	},
 	props: {
 		height: { type: Number, required: true },

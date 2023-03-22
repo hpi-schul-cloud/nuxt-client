@@ -1,0 +1,32 @@
+<template>
+	<div>
+		<template v-for="(element, index) in elements">
+			<TextContentElement
+				v-if="element.type === 'text'"
+				:key="index"
+				:element="element"
+			></TextContentElement>
+			<template v-else>
+				Content Element {{ element.type }} not implemented
+			</template>
+		</template>
+	</div>
+</template>
+<script lang="ts">
+import { defineComponent, PropType } from "vue";
+import { AnyContentElement } from "../types/ContentElement";
+import TextContentElement from "./TextContentElement.vue";
+
+export default defineComponent({
+	name: "ContentElementList",
+	components: {
+		TextContentElement,
+	},
+	props: {
+		elements: {
+			type: Array as PropType<AnyContentElement[]>,
+			required: true,
+		},
+	},
+});
+</script>

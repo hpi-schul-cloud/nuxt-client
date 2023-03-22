@@ -33,7 +33,7 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
-import { useBoardState } from "./BoardState.composable";
+import { useBoardState } from "./state/BoardState.composable";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,

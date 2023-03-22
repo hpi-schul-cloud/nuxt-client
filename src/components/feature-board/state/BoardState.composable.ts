@@ -1,8 +1,8 @@
 import { BoardsApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { onMounted, ref } from "vue";
-import { Board } from "./types/Board";
-import { CardMove, CardMoveByKeyboard, ColumnMove } from "./types/DragAndDrop";
+import { Board } from "../types/Board";
+import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
 const DUMMY_BOARD: Board = {
 	id: "0000d213816abba584714caa",

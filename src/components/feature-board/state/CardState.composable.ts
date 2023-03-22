@@ -1,12 +1,17 @@
 import { onMounted, reactive, toRef } from "vue";
-import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { AnyCard, LegacyLessonCard } from "./types/Card";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { BoardCard } from "../types/Card";
 
-const DUMMY_CARD: LegacyLessonCard = {
+const DUMMY_CARD: BoardCard = {
 	id: "0123456789abcdef00000003",
-	elements: [],
+	elements: [
+		{
+			type: "text",
+			content: { text: "MyElementContent" },
+			id: "0123456789abcdef00067003",
+		},
+	],
 	height: 250,
-	lessonId: "anystring",
 	title: "CardTitle",
 	visibility: {
 		publishedAt:
@@ -16,10 +21,10 @@ const DUMMY_CARD: LegacyLessonCard = {
 
 declare type CardState = {
 	isLoading: boolean;
-	card: AnyCard | undefined;
+	card: BoardCard | undefined;
 };
 
-export const useCardState = (id: AnyCard["id"]) => {
+export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
