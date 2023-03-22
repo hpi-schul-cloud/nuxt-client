@@ -3,11 +3,12 @@
 		<v-list-item
 			:key="task.id"
 			v-click-outside="() => handleFocus(false)"
-			:class="getStyleClasses"
+			class="mx-n4 mx-sm-0"
+			:class="{ 'beta-task-background': isBetaTask }"
 			v-bind="$attrs"
-			:href="href"
 			:aria-label="ariaLabel"
 			role="article"
+			@click="handleClick"
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
@@ -57,8 +58,8 @@
 						>
 							{{
 								$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
-							}}</v-chip
-						>
+							}}
+						</v-chip>
 						<i18n
 							v-else
 							path="components.molecules.TaskItemTeacher.status"
@@ -89,11 +90,9 @@
 						<v-list-item-subtitle>{{
 							$t("components.molecules.TaskItemTeacher.submitted")
 						}}</v-list-item-subtitle>
-						<v-list-item-title data-testid="taskSubmitted"
-							>{{ task.status.submitted }}/{{
-								task.status.maxSubmissions
-							}}</v-list-item-title
-						>
+						<v-list-item-title data-testid="taskSubmitted">
+							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						</v-list-item-title>
 					</v-list-item-action>
 					<v-list-item-action class="hidden-xs-only">
 						<v-list-item-subtitle>{{
@@ -159,11 +158,6 @@ export default {
 		};
 	},
 	computed: {
-		href() {
-			return this.isBetaTask
-				? `/task-cards/${this.task.taskCardId}`
-				: `/homework/${this.task.id}`;
-		},
 		isDraft() {
 			return this.task.status.isDraft;
 		},
@@ -255,19 +249,24 @@ export default {
 				? `${this.$t("pages.room.taskCard.label.betaTask")} ${this.task.name}`
 				: `${this.$t("common.words.task")} ${this.task.name}`;
 		},
-		getStyleClasses() {
-			let classes = "mx-n4 mx-sm-0";
-
-			if (this.isBetaTask) {
-				classes = classes + " beta-task-background";
-			}
-			return classes;
+		taskEditRoute() {
+			return this.isBetaTask
+				? {
+						name: "task-card-view-edit",
+						params: { id: this.task.taskCardId },
+				  }
+				: `/homework/${this.task.id}`;
 		},
 	},
 	methods: {
 		toggleMenu(value) {
 			this.isMenuActive = value;
 			this.isHovering = value;
+		},
+		handleClick() {
+			this.isBetaTask
+				? this.$router.push(this.taskEditRoute)
+				: this.redirectAction(this.taskEditRoute);
 		},
 		handleFocus(value) {
 			this.isActive = value;
@@ -277,6 +276,9 @@ export default {
 		},
 		onShareTask(taskId) {
 			this.$emit("share-task", taskId);
+		},
+		redirectAction(value) {
+			window.location = value;
 		},
 	},
 };

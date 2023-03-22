@@ -245,7 +245,10 @@ export default {
 		},
 		fabItems() {
 			const actions = [];
-			if (!this.isStudent) {
+			if (
+				!this.isStudent &&
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
 					icon: mdiFormatListChecks,

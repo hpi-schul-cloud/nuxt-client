@@ -3,11 +3,12 @@
 		<v-list-item
 			:key="task.id"
 			v-click-outside="() => handleFocus(false)"
-			:href="href"
-			:class="getStyleClasses"
+			class="mx-n4 mx-sm-0"
+			:class="{ 'beta-task-background': isBetaTask }"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
+			@click="handleClick"
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
@@ -93,11 +94,6 @@ export default {
 		};
 	},
 	computed: {
-		href() {
-			return this.isBetaTask
-				? `/task-cards/${this.task.taskCardId}`
-				: `/homework/${this.task.id}`;
-		},
 		iconColor() {
 			if (this.isBetaTask) {
 				return "beta-task";
@@ -121,6 +117,14 @@ export default {
 		},
 		isBetaTask() {
 			return !!this.task.taskCardId;
+		},
+		taskEditRoute() {
+			return this.isBetaTask
+				? {
+						name: "task-card-view-edit",
+						params: { id: this.task.taskCardId },
+				  }
+				: `/homework/${this.task.id}`;
 		},
 		taskState() {
 			const { status } = this.task;
@@ -174,21 +178,22 @@ export default {
 				? `${this.$t("pages.room.taskCard.label.betaTask")} ${this.task.name}`
 				: `${this.$t("common.words.task")} ${this.task.name}`;
 		},
-		getStyleClasses() {
-			let classes = "mx-n4 mx-sm-0";
-			if (this.isBetaTask) {
-				classes = classes + " beta-task-background";
-			}
-			return classes;
-		},
 	},
 	methods: {
 		toggleMenu(stateValue) {
 			this.isMenuActive = stateValue;
 			this.isHovering = stateValue;
 		},
+		handleClick() {
+			this.isBetaTask
+				? this.$router.push(this.taskEditRoute)
+				: this.redirectAction(this.taskEditRoute);
+		},
 		handleFocus(value) {
 			this.isActive = value;
+		},
+		redirectAction(value) {
+			window.location = value;
 		},
 	},
 };

@@ -28,6 +28,10 @@ let tasksModuleMock;
 let copyModuleMock;
 let notifierModuleMock;
 
+const mockRouter = {
+	push: jest.fn(),
+};
+
 const getWrapper = (props, options) => {
 	return mount(TaskItemTeacher, {
 		...createComponentMocks({
@@ -43,6 +47,9 @@ const getWrapper = (props, options) => {
 		propsData: props,
 		attachTo: document.body,
 		...options,
+		mocks: {
+			$router: mockRouter,
+		},
 	});
 };
 
@@ -64,15 +71,13 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 	});
 
-	it("should compute regular href value for old tasks", () => {
-		const wrapper = getWrapper({
-			task: tasksTeacher[0],
-		});
+	it("should direct user to legacy task details page", () => {
+		const { location } = window;
+		const wrapper = getWrapper({ task: tasksTeacher[0] });
+		const taskCard = wrapper.findComponent({ name: "v-list-item" });
+		taskCard.trigger("click");
 
-		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
-		expect(wrapper.attributes("href")).toStrictEqual(
-			`/homework/${tasksTeacher[0].id}`
-		);
+		expect(location.pathname).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	it("should passthrough copy-task event", async () => {
@@ -385,13 +390,14 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			);
 		});
 
-		it("should redirect to task-cards page", () => {
-			expect(wrapper.vm.href).toStrictEqual(
-				`/task-cards/${betaTask.taskCardId}`
-			);
-			expect(wrapper.attributes("href")).toStrictEqual(
-				`/task-cards/${betaTask.taskCardId}`
-			);
+		it("should redirect to task-cards page", async () => {
+			const taskCard = wrapper.findComponent({ name: "v-list-item" });
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "task-card-view-edit",
+				params: { id: "789" },
+			});
 		});
 	});
 });

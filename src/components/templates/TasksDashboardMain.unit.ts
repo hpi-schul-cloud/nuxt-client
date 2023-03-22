@@ -233,6 +233,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				envConfigModule: EnvConfigModule,
 			});
 
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
+			authModule.setUser(mockAuthStoreDataTeacher as User);
 			wrapper = mountComponent({
 				propsData: {
 					role: "teacher",
@@ -270,11 +272,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 		describe("new task-card button", () => {
 			const mockRoute = { name: "tasks-task-card-new" };
-			beforeEach(() => {
-				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
-				authModule.setUser(mockAuthStoreDataTeacher as User);
-			});
+
 			it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
 				wrapper = mountComponent({
 					propsData: {
 						role: "teacher",
@@ -284,7 +284,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				expect(fabComponent.vm.actions.length).toEqual(2);
 			});
 			it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
-				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
 				wrapper = mountComponent({
 					propsData: {
 						role: "teacher",
@@ -297,6 +296,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				);
 			});
 			it("should have correct path to task card page", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
 				wrapper = mountComponent({
 					propsData: {
 						role: "teacher",

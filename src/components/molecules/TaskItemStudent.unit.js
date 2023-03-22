@@ -31,6 +31,10 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
+	const mockRouter = {
+		push: jest.fn(),
+	};
+
 	const getWrapper = (props, options) => {
 		return mount(TaskItemStudent, {
 			...createComponentMocks({
@@ -46,16 +50,19 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			vuetify,
 			propsData: props,
 			...options,
+			mocks: {
+				$router: mockRouter,
+			},
 		});
 	};
 
-	it("Should link regularly to page for old tasks", () => {
+	it("Should direct user to legacy task details page", () => {
+		const { location } = window;
 		const wrapper = getWrapper({ task: tasks[0] });
+		const taskCard = wrapper.findComponent({ name: "v-list-item" });
+		taskCard.trigger("click");
 
-		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasks[0].id}`);
-		expect(wrapper.attributes("href")).toStrictEqual(
-			`/homework/${tasks[0].id}`
-		);
+		expect(location.pathname).toStrictEqual(`/homework/${tasks[0].id}`);
 	});
 
 	it("Should display no due date label if task has no duedate", () => {
@@ -179,17 +186,18 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			);
 		});
 
-		it("should redirect to task-cards page", () => {
+		it("should redirect to task-cards page", async () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
 
-			expect(wrapper.vm.href).toStrictEqual(
-				`/task-cards/${betaTask.taskCardId}`
-			);
-			expect(wrapper.attributes("href")).toStrictEqual(
-				`/task-cards/${betaTask.taskCardId}`
-			);
+			const taskCard = wrapper.findComponent({ name: "v-list-item" });
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "task-card-view-edit",
+				params: { id: "789" },
+			});
 		});
 	});
 });
