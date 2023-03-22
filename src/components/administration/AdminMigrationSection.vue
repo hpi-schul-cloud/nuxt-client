@@ -37,7 +37,7 @@
 				)
 			}}
 		</v-btn>
-
+		<!--!isMigrationEnabled|| isAfterFinalFinish-->
 		<v-btn
 			v-if="isShowEndButton"
 			class="my-5 button-end"
@@ -162,6 +162,10 @@ export default defineComponent({
 			() => schoolsModule.getOauthMigration.oauthMigrationFinished ?? ""
 		);
 
+		const oauthMigrationFinalFinish: ComputedRef<string> = computed(
+			() => schoolsModule.getOauthMigration.oauthMigrationFinalFinish ?? ""
+		);
+
 		const setMigration = (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,
@@ -201,6 +205,10 @@ export default defineComponent({
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
 
+		/*const isAfterFinalFinish: ComputedRef<boolean> = computed(
+      () => Date.now() < oauthMigrationFinalFinish
+    );*/
+
 		return {
 			isMigrationEnabled,
 			setMigration,
@@ -212,6 +220,7 @@ export default defineComponent({
 			isShowStartWarning,
 			onToggleShowStartWarning,
 			oauthMigrationFinished,
+			oauthMigrationFinalFinish,
 			isShowStartButton,
 			isShowEndButton,
 			isShowMandatorySwitch,

@@ -109,6 +109,7 @@ export default class SchoolsModule extends VuexModule {
 		oauthMigrationPossible: false,
 		oauthMigrationMandatory: false,
 		oauthMigrationFinished: "",
+		oauthMigrationFinalFinish: "",
 	};
 	systems: any[] = [];
 	loading = false;
@@ -374,6 +375,8 @@ export default class SchoolsModule extends VuexModule {
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
 				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -399,6 +402,8 @@ export default class SchoolsModule extends VuexModule {
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
 				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
 			if (error instanceof Error) {

@@ -11,7 +11,10 @@
 			<p
 				v-html="
 					$t(
-						'components.administration.adminMigrationSection.endWarningCard.text'
+						'components.administration.adminMigrationSection.endWarningCard.text',
+						{
+							gracePeriod: process.env.getMigrationEndGracePeriod / 86400000,
+						}
 					)
 				"
 			></p>
@@ -19,7 +22,10 @@
 				v-model="isConfirmed"
 				:label="
 					$t(
-						'components.administration.adminMigrationSection.endWarningCard.check'
+						'components.administration.adminMigrationSection.endWarningCard.check',
+						{
+							gracePeriod: process.env.getMigrationEndGracePeriod / 86400000,
+						}
 					)
 				"
 				data-testid="migration-confirmation-checkbox"
