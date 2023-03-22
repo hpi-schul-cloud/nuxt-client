@@ -27,7 +27,7 @@
 			class="my-5 button-start"
 			color="primary"
 			depressed
-			:disabled="!isMigrationEnabled"
+			:disabled="!isMigrationEnabled || isCurrentDateAfterFinalFinish"
 			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
@@ -37,7 +37,7 @@
 				)
 			}}
 		</v-btn>
-		<!--!isMigrationEnabled|| isAfterFinalFinish-->
+
 		<v-btn
 			v-if="isShowEndButton"
 			class="my-5 button-end"
@@ -78,13 +78,12 @@
 			data-testid="migration-finished-timestamp"
 		>
 			{{
-				t(
-					"components.administration.adminMigrationSection.oauthMigrationFinished.text",
-					{
-						date: dayjs(oauthMigrationFinished).format("DD.MM.YYYY"),
-						time: dayjs(oauthMigrationFinished).format("HH:mm"),
-					}
-				)
+				t(finalFinishText, {
+					date: dayjs(oauthMigrationFinished).format("DD.MM.YYYY"),
+					time: dayjs(oauthMigrationFinished).format("HH:mm"),
+					finishDate: dayjs(oauthMigrationFinalFinish).format("DD.MM.YYYY"),
+					finishTime: dayjs(oauthMigrationFinalFinish).format("HH:mm"),
+				})
 			}}
 		</p>
 
@@ -205,9 +204,26 @@ export default defineComponent({
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
 
-		/*const isAfterFinalFinish: ComputedRef<boolean> = computed(
-      () => Date.now() < oauthMigrationFinalFinish
-    );*/
+		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
+			if (schoolsModule.getOauthMigration.oauthMigrationFinalFinish) {
+				return (
+					Date.now() >=
+					new Date(
+						schoolsModule.getOauthMigration.oauthMigrationFinalFinish
+					).getTime()
+				);
+			} else {
+				return false;
+			}
+		});
+
+		const finalFinishText: ComputedRef<string> = computed(() => {
+			if (isCurrentDateAfterFinalFinish.value) {
+				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
+			} else {
+				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
+			}
+		});
 
 		return {
 			isMigrationEnabled,
@@ -224,6 +240,8 @@ export default defineComponent({
 			isShowStartButton,
 			isShowEndButton,
 			isShowMandatorySwitch,
+			isCurrentDateAfterFinalFinish,
+			finalFinishText,
 			dayjs,
 		};
 	},
