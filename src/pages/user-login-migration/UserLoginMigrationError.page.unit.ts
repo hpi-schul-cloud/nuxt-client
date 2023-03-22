@@ -15,7 +15,8 @@ describe("UserLoginMigrationError", () => {
 		sourceSystem: string;
 		targetSystem: string;
 		sourceSchoolNumber?: string;
-		targetSchoolNumber?: string }) => {
+		targetSchoolNumber?: string;
+	}) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
@@ -115,11 +116,11 @@ describe("UserLoginMigrationError", () => {
 					targetSchoolNumber: "22222",
 				});
 
-				const descriptionText: string = wrapper
+				const schoolNumberMismatchText: string = wrapper
 					.find("[data-testId=text-schoolNumberMismatch]")
 					.text();
 
-				expect(descriptionText).toEqual(
+				expect(schoolNumberMismatchText).toEqual(
 					'pages.userMigration.error.schoolNumberMismatch {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
 				);
 			});
