@@ -13,7 +13,7 @@
 				item-value="id"
 				item-text="title"
 				filled
-				:disabled="isCreationMode ? false : !!course"
+				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
 			/>
 			<v-select
@@ -353,8 +353,11 @@ export default defineComponent({
 			return getUserPermissions.value.includes("task_card_edit");
 		});
 
-		const isCreationMode = computed(() => {
-			return route.name === "tasks-task-card-new";
+		const isCourseSelectDisabled = computed(() => {
+			if (route.name === "tasks-task-card-new") {
+				return false;
+			}
+			return !!course.value;
 		});
 
 		return {
@@ -367,7 +370,7 @@ export default defineComponent({
 			t,
 			handleDateTimeInput,
 			isEditMode,
-			isCreationMode,
+			isCourseSelectDisabled,
 			course,
 			courses,
 			onError,
