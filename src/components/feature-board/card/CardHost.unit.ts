@@ -2,8 +2,8 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import CardHost from "./CardHost.vue";
-import { useCardState } from "./CardState.composable";
-import { LegacyLessonCard, LegacyTaskCard } from "./types/Card";
+import { useCardState } from "../state/CardState.composable";
+import { LegacyLessonCard, LegacyTaskCard } from "../types/Card";
 
 const MOCK_PROP_DEFAULT = {
 	height: 200,

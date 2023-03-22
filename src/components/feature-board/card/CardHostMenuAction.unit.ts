@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardHostMenuAction from "./CardHostMenuAction.vue";
 

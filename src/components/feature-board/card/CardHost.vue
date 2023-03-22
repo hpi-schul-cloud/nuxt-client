@@ -22,7 +22,6 @@
 							:value="card.title"
 							@change="onUpdateCardTitle"
 						></CardHeaderTitleInput>
-						{{ card.height }}
 					</template>
 					<template v-slot:menu>
 						<CardHostMenu>
@@ -32,9 +31,9 @@
 						</CardHostMenu>
 					</template>
 				</CardHeader>
-				<VCardText>
-					<ContentElementList :elements="card.elements"></ContentElementList>
-				</VCardText>
+
+				<ContentElementList :elements="card.elements"></ContentElementList>
+				<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
 			</template>
 		</VCard>
 	</div>
@@ -48,8 +47,9 @@ import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
 import CardHostMenu from "./CardHostMenu.vue";
 import CardHostMenuAction from "./CardHostMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
-import ContentElementList from "./content-elements/ContentElementList.vue";
-import { useCardState } from "./state/CardState.composable";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useCardState } from "../state/CardState.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -60,6 +60,7 @@ export default defineComponent({
 		CardHostMenuAction,
 		CardHeaderTitleInput,
 		ContentElementList,
+		CardAddElementMenu,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -68,8 +69,14 @@ export default defineComponent({
 	emits: ["move-card-keyboard"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
-		const { isLoading, card, updateTitle, deleteCard, updateCardHeight } =
-			useCardState(props.id);
+		const {
+			isLoading,
+			card,
+			updateTitle,
+			deleteCard,
+			updateCardHeight,
+			addElement,
+		} = useCardState(props.id);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 
 		const onKeyDown = (key: KeyboardEvent) => {
@@ -78,6 +85,7 @@ export default defineComponent({
 
 		const onUpdateCardTitle = updateTitle;
 		const onDelete = deleteCard;
+		const onAddElement = addElement;
 
 		watchDebounced(
 			cardHostHeight,
@@ -91,6 +99,7 @@ export default defineComponent({
 			onKeyDown,
 			onUpdateCardTitle,
 			onDelete,
+			onAddElement,
 			cardHost,
 		};
 	},

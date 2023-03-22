@@ -2,10 +2,10 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import BoardVue from "./Board.vue";
-import BoardColumnVue from "./BoardColumn.vue";
-import { useBoardState } from "./state/BoardState.composable";
-import { Board } from "./types/Board";
+import BoardVue from "../board/Board.vue";
+import BoardColumnVue from "../board/BoardColumn.vue";
+import { useBoardState } from "../state/BoardState.composable";
+import { Board } from "../types/Board";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [

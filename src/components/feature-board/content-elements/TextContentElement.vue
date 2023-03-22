@@ -2,7 +2,7 @@
 	<div>
 		<!-- <text-content-element-edit></text-content-element-edit> -->
 		<!-- <text-content-element-display></text-content-element-display> -->
-		{{ element.content.text }}
+		{{ element.id }} {{ element.content.text }}
 	</div>
 </template>
 

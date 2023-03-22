@@ -1,6 +1,11 @@
 import { onMounted, reactive, toRef } from "vue";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
+import {
+	ContentElementType,
+	TextContentElement,
+} from "../types/ContentElement";
+import { TextContentElementPayload } from "../types/ContentElementPayload";
 
 const DUMMY_CARD: BoardCard = {
 	id: "0123456789abcdef00000003",
@@ -64,6 +69,20 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.height = newHeight;
 	};
 
+	const addElement = (type: ContentElementType) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		if (type === "text") {
+			const newTextContentElement: TextContentElement = {
+				id: "0123456789abcdef00067043",
+				type,
+				content: { text: "" },
+			};
+			cardState.card.elements.push(newTextContentElement);
+		}
+	};
+
 	onMounted(() => fetchCard(id));
 
 	return {
@@ -71,6 +90,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateTitle,
 		deleteCard,
 		updateCardHeight,
+		addElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};

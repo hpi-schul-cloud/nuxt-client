@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<VCardText>
 		<template v-for="(element, index) in elements">
 			<TextContentElement
 				v-if="element.type === 'text'"
@@ -10,7 +10,7 @@
 				Content Element {{ element.type }} not implemented
 			</template>
 		</template>
-	</div>
+	</VCardText>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
