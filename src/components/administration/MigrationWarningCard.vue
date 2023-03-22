@@ -52,7 +52,6 @@ export default defineComponent({
 			type: String,
 			required: true,
 			validator(value: unknown) {
-				const validValues = Object.values(MigrationWarningCardTypeEnum);
 				return (
 					(typeof value === "string" &&
 						value === MigrationWarningCardTypeEnum.START) ||
