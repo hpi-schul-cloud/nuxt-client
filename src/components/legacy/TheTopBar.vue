@@ -55,7 +55,7 @@
 				<popup-icon
 					class="item"
 					source="fa"
-					icon="question"
+					icon="question-circle"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
@@ -123,7 +123,12 @@ import HelpDropdown from "@/components/legacy/HelpDropdown";
 import MenuQrCode from "@/components/legacy/MenuQrCode";
 import StatusAlerts from "@/components/molecules/StatusAlerts";
 import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
-import { mdiArrowCollapse, mdiArrowExpand, mdiMenu } from "@mdi/js";
+import {
+	mdiArrowCollapse,
+	mdiArrowExpand,
+	mdiMenu,
+	mdiHelpCircle,
+} from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -161,6 +166,7 @@ export default defineComponent({
 			mdiArrowCollapse,
 			mdiArrowExpand,
 			mdiMenu,
+			mdiHelpCircle,
 		};
 	},
 	computed: {
