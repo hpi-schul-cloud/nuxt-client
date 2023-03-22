@@ -38,9 +38,10 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="selectTime(timeOfDay)"
+							:disabled="timeOfDay.disabled"
+							@click="selectTime(timeOfDay.timeValue)"
 						>
-							<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+							<v-list-item-title>{{ timeOfDay.timeValue }}</v-list-item-title>
 						</v-list-item>
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
@@ -54,10 +55,12 @@
 import { defineComponent, ref, computed, watch, inject } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
+import { isToday } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "TimePicker",
 	props: {
+		date: { type: String, default: null },
 		time: { type: String, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
@@ -78,12 +81,35 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
+		const isEarlierThanRightNow = (hour: number, minute: number) => {
+			const today = new Date();
+			const currentHour = today.getHours();
+			const currentMinute = today.getMinutes();
+
+			if (hour < currentHour) return true;
+			if (hour === currentHour && minute < currentMinute) return true;
+			return false;
+		};
+
 		const timesOfDayList = computed(() => {
 			const times = [];
 
 			for (let hour = 0; hour < 24; hour++) {
-				times.push(dayjs().hour(hour).minute(0).format("HH:mm"));
-				times.push(dayjs().hour(hour).minute(30).format("HH:mm"));
+				let fullHourDisabled = false;
+				let halfHourDisabled = false;
+				if (props.date !== null && isToday(props.date)) {
+					fullHourDisabled = isEarlierThanRightNow(hour, 0);
+					halfHourDisabled = isEarlierThanRightNow(hour, 30);
+				}
+
+				times.push({
+					timeValue: dayjs().hour(hour).minute(0).format("HH:mm"),
+					disabled: fullHourDisabled,
+				});
+				times.push({
+					timeValue: dayjs().hour(hour).minute(30).format("HH:mm"),
+					disabled: halfHourDisabled,
+				});
 			}
 
 			return times;
