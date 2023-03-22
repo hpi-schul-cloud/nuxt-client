@@ -54,8 +54,9 @@ export default defineComponent({
 			validator(value: unknown) {
 				const validValues = Object.values(MigrationWarningCardTypeEnum);
 				return (
-					typeof value === "string" &&
-					validValues.includes(value as MigrationWarningCardTypeEnum)
+					(typeof value === "string" &&
+						value === MigrationWarningCardTypeEnum.START) ||
+					value === MigrationWarningCardTypeEnum.END
 				);
 			},
 		},
@@ -66,24 +67,18 @@ export default defineComponent({
 		);
 		const isConfirmed: Ref<boolean> = ref(false);
 
-		let title;
-		let text;
-		let agree;
-		let disagree;
-		let check;
-		let eventName;
+		let title =
+			"components.administration.adminMigrationSection.startWarningCard.title";
+		let text =
+			"components.administration.adminMigrationSection.startWarningCard.text";
+		let agree =
+			"components.administration.adminMigrationSection.startWarningCard.agree";
+		let disagree =
+			"components.administration.adminMigrationSection.startWarningCard.disagree";
+		let eventName = "start";
+		let check: string | undefined;
 
-		if (MigrationWarningCardTypeEnum.START === type.value) {
-			title =
-				"components.administration.adminMigrationSection.startWarningCard.title";
-			text =
-				"components.administration.adminMigrationSection.startWarningCard.text";
-			agree =
-				"components.administration.adminMigrationSection.startWarningCard.agree";
-			disagree =
-				"components.administration.adminMigrationSection.startWarningCard.disagree";
-			eventName = "start";
-		} else if (MigrationWarningCardTypeEnum.END === type.value) {
+		if (type.value === MigrationWarningCardTypeEnum.END) {
 			title =
 				"components.administration.adminMigrationSection.endWarningCard.title";
 			text =
