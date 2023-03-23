@@ -251,9 +251,6 @@ export default defineComponent({
 			};
 			return items;
 		},
-		testURL() {
-			return `/rooms/${this.roomData.roomId}/create-task-card`;
-		},
 		roomData() {
 			return roomModule.getRoomData;
 		},
