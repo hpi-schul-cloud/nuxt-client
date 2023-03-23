@@ -9,44 +9,37 @@
 		clearable
 		@change="selectionChanged"
 		v-model="model"
+		attach
 	>
 		<template v-slot:prepend-item>
-			<div v-if="selectAll">
-				<v-list-item ripple @mousedown.prevent @click="toggle">
-					<v-list-item-action>
-						<v-icon :class="icon" class="fa"> </v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title>Select All</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-				<v-divider class="mt-2"></v-divider>
-			</div>
+			<v-list-item ripple @mousedown.prevent @click="toggle">
+				<v-list-item-action>
+					<v-icon :class="icon" class="fa"> </v-icon>
+				</v-list-item-action>
+				<v-list-item-content>
+					<v-list-item-title>Gesamter Kurs</v-list-item-title>
+				</v-list-item-content>
+			</v-list-item>
+			<v-divider class="mt-2"></v-divider>
 		</template>
 	</v-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref, computed, nextTick } from "vue";
+import { User } from "./types/User";
 
-interface User {
-	id: string;
-	firstName: string;
-	lastName: string;
-}
 export default defineComponent({
 	name: "UserSelector",
 	props: {
 		users: { type: Array as PropType<User[]>, required: true },
-		value: { type: Array as PropType<string[]>, required: true },
+		selection: { type: Array as PropType<User[]>, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
-		selectAll: { type: Boolean },
+		required: { type: Boolean },
 	},
-	emits: ["input"],
+	emits: ["input", "error"],
 	setup(props, { emit }) {
-		const model = ref(props.value);
-
 		const items = computed(() => {
 			return props.users.map((user: User) => {
 				return {
@@ -62,8 +55,15 @@ export default defineComponent({
 			});
 		});
 
+		const selectedUserIds = props.selection.map((user: User) => {
+			return user.id;
+		});
+		const model = ref(selectedUserIds);
+
 		const selectionChanged = () => {
-			emit("input", model.value);
+			props.required && model.value.length === 0
+				? emit("error")
+				: emit("input", model.value);
 		};
 
 		const allUsersSelected = computed(() => {
@@ -71,8 +71,7 @@ export default defineComponent({
 		});
 
 		const icon = computed(() => {
-			if (allUsersSelected.value) return "fa-check-square";
-			return "fa-square-o";
+			return allUsersSelected.value ? "fa-check-square" : "fa-square-o";
 		});
 
 		const toggle = () => {
@@ -88,8 +87,8 @@ export default defineComponent({
 		};
 
 		return {
-			model,
 			items,
+			model,
 			selectionChanged,
 			toggle,
 			icon,
