@@ -2,7 +2,6 @@ import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 
 const getWrapper = (props?: object, options?: object) => {
@@ -23,36 +22,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 		it("should render component", () => {
 			const wrapper = getWrapper({ editMode: true });
 			expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
-		});
-
-		it("delete element button for title should not be present", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
-
-			expect(deleteBtn.exists()).toBe(false);
-		});
-
-		it("add element button for title should not be present", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-			const addBtn = wrapper.find('[data-testid="add-element-btn"]');
-
-			expect(addBtn.exists()).toBe(false);
-		});
-
-		it("should not render drag handle for title", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: true,
-			});
-			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
-
-			expect(dragBtn.isVisible()).toBe(false);
 		});
 
 		it("should emit delete-element event for rich text", async () => {
@@ -91,16 +60,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			expect(dragBtn.exists()).toBe(true);
 		});
 
-		it("should not render drag handle for title", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: true,
-			});
-			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
-
-			expect(dragBtn.isVisible()).toBe(false);
-		});
-
 		it("should render dynamic component", () => {
 			const wrapper = getWrapper({
 				component: CardElementComponentEnum.RichText,
@@ -117,16 +76,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
 		});
 
-		it("delete element button for title should not be present", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
-
-			expect(deleteBtn.exists()).toBe(false);
-		});
-
 		it("delete element button for rich text should not be present", () => {
 			const wrapper = getWrapper({
 				component: CardElementComponentEnum.RichText,
@@ -135,16 +84,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
 
 			expect(deleteBtn.exists()).toBe(false);
-		});
-
-		it("add element button for title should not be present", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-			const addBtn = wrapper.find('[data-testid="add-element-btn"]');
-
-			expect(addBtn.exists()).toBe(false);
 		});
 
 		it("add element button for rich text should not be present", () => {
@@ -157,16 +96,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			expect(addBtn.exists()).toBe(false);
 		});
 
-		it("drag element button for title should not be present", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
-
-			expect(dragBtn.exists()).toBe(false);
-		});
-
 		it("drag element button for rich text should not be present", () => {
 			const wrapper = getWrapper({
 				component: CardElementComponentEnum.RichText,
@@ -175,15 +104,6 @@ describe("@components/card-elements/CardElementWrapper", () => {
 			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
 
 			expect(dragBtn.exists()).toBe(false);
-		});
-
-		it("should render title component", () => {
-			const wrapper = getWrapper({
-				component: CardElementComponentEnum.Title,
-				editMode: false,
-			});
-
-			expect(wrapper.findComponent(TitleCardElement).exists()).toBe(true);
 		});
 
 		it("should render rich text component", () => {
