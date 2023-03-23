@@ -87,7 +87,7 @@ export default class FilesPOCModule extends VuexModule {
 				responseType: "blob",
 			});
 
-			downloadFile(res.data as unknown as Blob, file.name, file.type);
+			downloadFile(res.data as unknown as Blob, file.name, file.mimeType);
 
 			this.setStatus("completed");
 		} catch (error) {
