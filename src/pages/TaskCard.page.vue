@@ -37,11 +37,13 @@
 				@error="onError"
 			/>
 			<user-selector
-				v-model="selectedUsers"
 				:users="allUsers"
+				:selection="selectedUsers"
 				:label="t('common.labels.students')"
 				:aria-label="t('common.labels.students')"
-				selectAll
+				required
+				@input="handleAssignmentInput"
+				@error="handleAssignmentError"
 			/>
 			<title-card-element
 				v-model="title"
@@ -100,6 +102,7 @@ import {
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import UserSelector from "@/components/beta-task/UserSelector.vue";
+import { User } from "@/components/beta-task/types/User";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -299,7 +302,6 @@ export default defineComponent({
 		};
 
 		const save = async () => {
-			//console.log(selectedUsers.value);
 			if (hasErrors.value) {
 				return;
 			}
@@ -364,7 +366,15 @@ export default defineComponent({
 				lastName: "Samsa",
 			},
 		];
-		const selectedUsers = ref(["userId5"]);
+		const selectedUsers = ref([allUsers[4]]);
+
+		const handleAssignmentInput = (selectedUsers: User[]) => {
+			console.log(selectedUsers);
+		};
+
+		const handleAssignmentError = () => {
+			console.log("handlAssignmentError");
+		};
 
 		return {
 			breadcrumbs,
@@ -383,6 +393,8 @@ export default defineComponent({
 			maxDate,
 			allUsers,
 			selectedUsers,
+			handleAssignmentInput,
+			handleAssignmentError,
 			isVisible,
 			visibilityOptions,
 		};
