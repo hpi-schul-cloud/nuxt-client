@@ -3,6 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@/store/schools";
+import { nextTick } from "vue";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;

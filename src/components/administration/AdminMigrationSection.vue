@@ -118,9 +118,7 @@ import { MigrationBody } from "@/serverApi/v3";
 import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
 import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
 import dayjs from "dayjs";
-import { envConfigModule } from "../../store";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "AdminMigrationSection",
 	components: { MigrationStartWarningCard, MigrationEndWarningCard },
@@ -134,7 +132,6 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await schoolsModule.fetchSchoolOAuthMigration();
-			console.log(envConfigModule.getMigrationEndGracePeriod);
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
