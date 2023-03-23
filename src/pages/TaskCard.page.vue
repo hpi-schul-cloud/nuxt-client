@@ -1,11 +1,9 @@
 <template>
-	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
-		<div slot="header" class="d-flex flex-row align-end">
-			<v-icon size="20" class="mr-2 mb-4 pb-1">$tasks</v-icon>
-			<h1 class="h6 mt-10">
-				{{ t("pages.rooms.fab.add.betatask") }}
-			</h1>
-		</div>
+	<default-wireframe
+		:full-width="false"
+		:breadcrumbs="breadcrumbs"
+		:headline="t('pages.rooms.fab.add.betatask')"
+	>
 		<v-form v-if="isEditMode" class="d-flex flex-column">
 			<v-select
 				v-model="course"
