@@ -90,7 +90,7 @@
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
-			@set="setMigration(true, isMigrationMandatory)"
+			@set="setMigration(true, false)"
 		></migration-start-warning-card>
 
 		<migration-end-warning-card

@@ -15,6 +15,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationPossible: false,
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: "",
+				oauthMigrationFinalFinish: "",
 			},
 			...schoolGetters,
 		}) as jest.Mocked<SchoolsModule>;
@@ -110,6 +111,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -127,6 +129,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -146,6 +149,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
@@ -161,6 +165,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -177,6 +182,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -197,6 +203,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: true,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -219,6 +226,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -238,8 +246,32 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
+
+			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
+
+			expect(buttonComponent.exists()).toBe(true);
+			expect(buttonComponent.classes("button-start")).toBeTruthy();
+			expect(buttonComponent.text()).toEqual(
+				"components.administration.adminMigrationSection.migrationEnableButton.label"
+			);
+			expect(buttonComponent.props("disabled")).toBeTruthy();
+		});
+
+		it("should be disabled when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 
@@ -258,6 +290,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -278,6 +311,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -298,6 +332,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 
@@ -319,6 +354,7 @@ describe("AdminMigrationSection", () => {
 						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
 						oauthMigrationFinished: "",
+						oauthMigrationFinalFinish: "",
 					},
 				});
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -340,6 +376,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -356,6 +393,32 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationFinished: false,
 			});
 		});
+
+		it("should show an error when grace period is expired", async () => {
+			const date: string = new Date(2023, 1, 1).toDateString();
+			const laterDate: string = new Date(2023, 1, 3).toDateString();
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: date,
+					oauthMigrationFinalFinish: laterDate,
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 2));
+			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
+			await buttonComponent.vm.$emit("click");
+
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 4));
+			const cardComponent = wrapper.findComponent({ name: "v-card" });
+			const cardButtonAgree = cardComponent.find(".agree-btn-start");
+			await cardButtonAgree.vm.$emit("click");
+
+			//expect(error)
+		});
 	});
 
 	describe("when disagree button of card is clicked", () => {
@@ -366,6 +429,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -380,6 +444,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationPossible: false,
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: "",
+				oauthMigrationFinalFinish: "",
 				enableMigrationStart: true,
 			});
 		});
@@ -394,6 +459,7 @@ describe("AdminMigrationSection", () => {
 						oauthMigrationPossible: true,
 						oauthMigrationMandatory: false,
 						oauthMigrationFinished: "",
+						oauthMigrationFinalFinish: "",
 					},
 				});
 
@@ -416,6 +482,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -444,6 +511,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: true,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -467,13 +535,17 @@ describe("AdminMigrationSection", () => {
 
 	describe("Date paragraph", () => {
 		it("should exist when migration has been completed", async () => {
-			const date: string = new Date().toDateString();
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 2));
+			const date: string = new Date(2023, 1, 1).toDateString();
+			const laterDate: string = new Date(2023, 1, 3).toDateString();
 			const { wrapper } = setup({
 				getOauthMigration: {
 					enableMigrationStart: true,
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: date,
+					oauthMigrationFinalFinish: laterDate,
 				},
 			});
 
@@ -485,6 +557,29 @@ describe("AdminMigrationSection", () => {
 			);
 		});
 
+		it("should show finalFinish text when migration grace period has expired", async () => {
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 4));
+			const date: string = new Date(2023, 1, 1).toDateString();
+			const laterDate: string = new Date(2023, 1, 3).toDateString();
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: date,
+					oauthMigrationFinalFinish: laterDate,
+				},
+			});
+
+			const paragraph = wrapper.find(".migration-completion-date");
+
+			expect(paragraph.exists()).toBe(true);
+			expect(paragraph.text()).toEqual(
+				`components.administration.adminMigrationSection.oauthMigrationFinished.textComplete`
+			);
+		});
+
 		it("should not exist when migration has not been completed", async () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
@@ -492,6 +587,7 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationPossible: false,
 					oauthMigrationMandatory: false,
 					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
 				},
 			});
 

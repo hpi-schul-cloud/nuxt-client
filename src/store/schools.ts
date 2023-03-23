@@ -10,7 +10,9 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { ApplicationError } from "./types/application-error";
+import { useApplicationError } from "../composables/application-error.composable";
 
 /**
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
@@ -113,7 +115,7 @@ export default class SchoolsModule extends VuexModule {
 	};
 	systems: any[] = [];
 	loading = false;
-	error: null | object = null;
+	error: null | ApplicationError = null;
 
 	private get schoolApi(): SchoolApiInterface {
 		return SchoolApiFactory(undefined, "v3", $axios);
@@ -150,8 +152,12 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: object | null): void {
-		this.error = error;
+	setError(error: ApplicationError | null): void {
+		if (error instanceof AxiosError) {
+			this.error = error?.response?.data.message;
+		} else {
+			this.error = error;
+		}
 	}
 
 	get getSchool(): School {
@@ -174,7 +180,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): object | null {
+	get getError(): ApplicationError | null {
 		return this.error;
 	}
 
@@ -212,8 +218,10 @@ export default class SchoolsModule extends VuexModule {
 				await this.fetchCurrentYear();
 
 				this.setLoading(false);
-			} catch (error) {
-				this.setError(error as object);
+			} catch (error: unknown) {
+				if (error instanceof AxiosError) {
+					this.setError(this.createApplicationError());
+				}
 				this.setLoading(false);
 			}
 		}
@@ -232,8 +240,8 @@ export default class SchoolsModule extends VuexModule {
 			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -249,8 +257,8 @@ export default class SchoolsModule extends VuexModule {
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -271,8 +279,8 @@ export default class SchoolsModule extends VuexModule {
 			this.setSystems(responses.map((response) => response.data));
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -288,8 +296,8 @@ export default class SchoolsModule extends VuexModule {
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -309,8 +317,8 @@ export default class SchoolsModule extends VuexModule {
 			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -327,8 +335,8 @@ export default class SchoolsModule extends VuexModule {
 			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -354,8 +362,8 @@ export default class SchoolsModule extends VuexModule {
 			});
 			this.setLoading(false);
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 			this.setLoading(false);
 		}
@@ -379,8 +387,8 @@ export default class SchoolsModule extends VuexModule {
 					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 		}
 	}
@@ -406,13 +414,29 @@ export default class SchoolsModule extends VuexModule {
 					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(
+					this.createApplicationError(
+						error.response?.status,
+						"pages.administration.school.index.axiosError"
+					)
+				);
 			}
 		}
 	}
 
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
+	}
+
+	private createApplicationError(
+		statusCode = 500,
+		translationKey = "pages.administration.school.index.error"
+	): ApplicationError {
+		const applicationError = useApplicationError().createApplicationError(
+			statusCode,
+			translationKey
+		);
+		return applicationError;
 	}
 }
