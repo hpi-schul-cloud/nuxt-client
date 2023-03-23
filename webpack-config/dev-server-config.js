@@ -5,7 +5,9 @@ const url = require("url");
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
-		target: "http://localhost:3100",
+		target: process.env.LEGACY_CLIENT_URL
+			? process.env.LEGACY_CLIENT_URL
+			: "http://localhost:3100",
 		changeOrigin: true,
 	});
 	return legacyClientProxy;
@@ -13,7 +15,9 @@ const createLegacyClientProxy = () => {
 
 const createServerProxy = () => {
 	const serverProxy = createProxyMiddleware({
-		target: "http://localhost:3030",
+		target: process.env.SERVER_HOST
+			? process.env.SERVER_HOST
+			: "http://localhost:3030",
 		changeOrigin: true,
 	});
 	return serverProxy;

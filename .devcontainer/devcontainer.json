@@ -2,7 +2,13 @@
 {
 	"name": "frontend",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
-
+	
+	"containerEnv": {
+		"PUBLIC_BACKEND_URL": "http://host.docker.internal:3030/api",
+		"API_HOST": "http://host.docker.internal:3030/api",
+		"SERVER_HOST": "http://host.docker.internal:3030/",
+		"LEGACY_CLIENT_URL": "http://host.docker.internal:3030/api"
+	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
@@ -14,5 +20,8 @@
 	  "source=${localWorkspaceFolderBasename}-dist,target=${containerWorkspaceFolder}/dist,type=volume"
 	],
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "root"
+	"remoteUser": "root",
+	"features": {
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
+	}
 }
