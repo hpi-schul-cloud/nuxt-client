@@ -10,6 +10,7 @@
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
+				@dblclick.stop="() => {}"
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
 				<span class="d-sr-only">Card-Menu</span>

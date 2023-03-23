@@ -1,42 +1,49 @@
 <template>
-	<div
-		class="d-flex"
-		@keydown.up.down.left.right.prevent="onKeyDown"
-		ref="cardHost"
+	<CardHostInteractionHandler
+		:isEditMode="isEditMode"
+		@start-edit-mode="onStartEditMode"
+		@end-edit-mode="onEndEditMode"
+		@move-card-keyboard="onMoveCardKeyboard"
 	>
-		<VCard
-			:height="isLoading ? height : 'auto'"
-			class="w-100"
-			outlined
-			tabindex="0"
-			:id="id"
-			:ripple="false"
-		>
-			<template v-if="isLoading">
-				<CardSkeleton :height="height" />
-			</template>
-			<template v-if="!isLoading && card">
-				<CardHeader>
-					<template v-slot:title>
-						<CardHeaderTitleInput
-							:value="card.title"
-							@change="onUpdateCardTitle"
-						></CardHeaderTitleInput>
-					</template>
-					<template v-slot:menu>
-						<CardHostMenu>
-							<CardHostMenuAction @click="onDelete"
-								>Delete Card
-							</CardHostMenuAction>
-						</CardHostMenu>
-					</template>
-				</CardHeader>
+		<div class="d-flex" ref="cardHost">
+			<VCard
+				:height="isLoading ? height : 'auto'"
+				class="w-100"
+				outlined
+				tabindex="0"
+				:id="id"
+				:ripple="false"
+			>
+				<template v-if="isLoading">
+					<CardSkeleton :height="height" />
+				</template>
+				<template v-if="!isLoading && card">
+					<CardHeader>
+						<template v-slot:title>
+							<CardHeaderTitleInput
+								:isEditMode="isEditMode"
+								:value="card.title"
+								@change="onUpdateCardTitle"
+							></CardHeaderTitleInput>
+						</template>
+						<template v-slot:menu>
+							<CardHostMenu>
+								<CardHostMenuAction @click="onDelete"
+									>Delete Card
+								</CardHostMenuAction>
+							</CardHostMenu>
+						</template>
+					</CardHeader>
 
-				<ContentElementList :elements="card.elements"></ContentElementList>
-				<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
-			</template>
-		</VCard>
-	</div>
+					<ContentElementList
+						:elements="card.elements"
+						:isEditMode="isEditMode"
+					></ContentElementList>
+					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
+				</template>
+			</VCard>
+		</div>
+	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
@@ -49,6 +56,7 @@ import CardHostMenuAction from "./CardHostMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import { useCardState } from "../state/CardState.composable";
 
 export default defineComponent({
@@ -61,6 +69,7 @@ export default defineComponent({
 		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,
+		CardHostInteractionHandler,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -78,14 +87,22 @@ export default defineComponent({
 			addElement,
 		} = useCardState(props.id);
 		const { height: cardHostHeight } = useElementSize(cardHost);
-
-		const onKeyDown = (key: KeyboardEvent) => {
-			emit("move-card-keyboard", key.code);
+		const onMoveCardKeyboard = (event: KeyboardEvent) => {
+			emit("move-card-keyboard", event.code);
 		};
+		const isEditMode = ref<boolean>(false);
 
 		const onUpdateCardTitle = updateTitle;
 		const onDelete = deleteCard;
 		const onAddElement = addElement;
+		const onStartEditMode = () => {
+			isEditMode.value = true;
+		};
+		const onEndEditMode = () => {
+			if (isEditMode.value === true) {
+				isEditMode.value = false;
+			}
+		};
 
 		watchDebounced(
 			cardHostHeight,
@@ -96,22 +113,15 @@ export default defineComponent({
 		return {
 			isLoading,
 			card,
-			onKeyDown,
+			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDelete,
 			onAddElement,
+			onStartEditMode,
+			onEndEditMode,
 			cardHost,
+			isEditMode,
 		};
 	},
 });
 </script>
-
-<style scoped>
-.element {
-	margin-left: 10px;
-	padding: 10px 14px;
-}
-.element:last-child {
-	margin-bottom: 14px;
-}
-</style>

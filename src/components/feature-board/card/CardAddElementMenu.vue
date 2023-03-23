@@ -1,7 +1,14 @@
 <template>
 	<VCardText>
 		<div class="d-flex justify-center w-full">
-			<VBtn @click="onAddElement('text')" elevation="0" outlined icon large>
+			<VBtn
+				@click.stop="onAddElement('text')"
+				@dblclick.stop="() => {}"
+				elevation="0"
+				outlined
+				icon
+				large
+			>
 				<v-icon>{{ mdiPlus }}</v-icon>
 				<span class="d-sr-only">Add Element</span>
 			</VBtn>

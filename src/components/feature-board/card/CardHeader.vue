@@ -1,5 +1,5 @@
 <template>
-	<VCardTitle class="d-flex align-start">
+	<VCardTitle class="d-flex align-start justify-space-between">
 		<slot name="title"></slot>
 		<div class="ml-4">
 			<slot name="menu"></slot>

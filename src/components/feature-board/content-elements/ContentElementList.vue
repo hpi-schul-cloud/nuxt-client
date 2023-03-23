@@ -5,6 +5,7 @@
 				v-if="element.type === 'text'"
 				:key="index"
 				:element="element"
+				:isEditMode="isEditMode"
 			></TextContentElement>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
@@ -25,6 +26,10 @@ export default defineComponent({
 	props: {
 		elements: {
 			type: Array as PropType<AnyContentElement[]>,
+			required: true,
+		},
+		isEditMode: {
+			type: Boolean,
 			required: true,
 		},
 	},
