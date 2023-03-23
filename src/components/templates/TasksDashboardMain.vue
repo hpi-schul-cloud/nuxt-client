@@ -265,7 +265,7 @@ export default {
 					label: this.$t("pages.rooms.fab.add.betatask"),
 					icon: mdiFormatListChecks,
 					to: {
-						name: "tasks-task-card-new",
+						name: "tasks-beta-task-new",
 					},
 					ariaLabel: this.$t("common.actions.create"),
 					dataTestid: "fab_button_add_beta_task",

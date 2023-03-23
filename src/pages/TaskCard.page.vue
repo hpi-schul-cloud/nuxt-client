@@ -155,7 +155,7 @@ export default defineComponent({
 			endOfSchoolYear.setHours(12);
 			maxDate.value = endOfSchoolYear.toISOString();
 
-			if (route.name === "rooms-task-card-new") {
+			if (route.name === "rooms-beta-task-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
 				const roomData = roomModule.getRoomData;
@@ -196,7 +196,7 @@ export default defineComponent({
 				);
 			}
 
-			if (route.name === "task-card-view-edit") {
+			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
@@ -231,7 +231,7 @@ export default defineComponent({
 				);
 			}
 
-			if (route.name === "tasks-task-card-new") {
+			if (route.name === "tasks-beta-task-new") {
 				await roomsModule.fetchAllElements();
 				courses.value = roomsModule.getAllElements;
 
@@ -323,8 +323,8 @@ export default defineComponent({
 			}
 
 			if (
-				route.name === "rooms-task-card-new" ||
-				route.name === "tasks-task-card-new"
+				route.name === "rooms-beta-task-new" ||
+				route.name === "tasks-beta-task-new"
 			) {
 				await createTaskCard();
 			} else {
@@ -354,7 +354,7 @@ export default defineComponent({
 		});
 
 		const isCourseSelectDisabled = computed(() => {
-			if (route.name === "tasks-task-card-new") {
+			if (route.name === "tasks-beta-task-new") {
 				return false;
 			}
 			return !!course.value;

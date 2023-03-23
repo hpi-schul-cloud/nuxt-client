@@ -121,7 +121,7 @@ export default {
 		taskEditRoute() {
 			return this.isBetaTask
 				? {
-						name: "task-card-view-edit",
+						name: "beta-task-view-edit",
 						params: { id: this.task.taskCardId },
 				  }
 				: `/homework/${this.task.id}`;

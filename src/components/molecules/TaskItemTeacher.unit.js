@@ -390,12 +390,12 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			);
 		});
 
-		it("should redirect to task-cards page", async () => {
+		it("should redirect to beta task page", async () => {
 			const taskCard = wrapper.findComponent({ name: "v-list-item" });
 			await taskCard.trigger("click");
 			expect(mockRouter.push).toHaveBeenCalledTimes(1);
 			expect(mockRouter.push).toHaveBeenCalledWith({
-				name: "task-card-view-edit",
+				name: "beta-task-view-edit",
 				params: { id: "789" },
 			});
 		});

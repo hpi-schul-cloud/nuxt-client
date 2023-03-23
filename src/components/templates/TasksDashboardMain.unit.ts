@@ -270,8 +270,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			);
 		});
 
-		describe("new task-card button", () => {
-			const mockRoute = { name: "tasks-task-card-new" };
+		describe("new beta task button", () => {
+			const mockRoute = { name: "tasks-beta-task-new" };
 
 			it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
 				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
