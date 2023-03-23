@@ -1,5 +1,4 @@
 {
-	"npmName": "restClient",
 	"apiPackage": "api",
 	"enumNameSuffix": "",
 	"enumPropertyNaming": "UPPERCASE",
