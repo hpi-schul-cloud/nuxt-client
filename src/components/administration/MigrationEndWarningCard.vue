@@ -13,7 +13,8 @@
 					$t(
 						'components.administration.adminMigrationSection.endWarningCard.text',
 						{
-							gracePeriod: process.env.getMigrationEndGracePeriod / 86400000,
+							gracePeriod:
+								envConfigModule().getMigrationEndGracePeriod / 86400000,
 						}
 					)
 				"
@@ -24,7 +25,8 @@
 					$t(
 						'components.administration.adminMigrationSection.endWarningCard.check',
 						{
-							gracePeriod: process.env.getMigrationEndGracePeriod / 86400000,
+							gracePeriod:
+								envConfigModule().getMigrationEndGracePeriod / 86400000,
 						}
 					)
 				"
@@ -63,10 +65,16 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, Ref } from "vue";
+import { envConfigModule } from "../../store";
 
 // TODO https://ticketsystem.dbildungscloud.de/browse/N21-618 Combine MigrationEndWarningCard and MigrationStartWarningCard
 export default defineComponent({
 	name: "MigrationEndWarningCard",
+	methods: {
+		envConfigModule() {
+			return envConfigModule;
+		},
+	},
 	emits: ["end", "set"],
 	setup() {
 		const isConfirmed: Ref<boolean> = ref(false);

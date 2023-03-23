@@ -14,7 +14,7 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MIGRATION_END_GRACE_PERIOD: process.env.MIGRATION_END_GRACE_PERIOD,
+	MIGRATION_END_GRACE_PERIOD_MS: process.env.MIGRATION_END_GRACE_PERIOD_MS,
 };
 
 const retryLimit = 10;
@@ -96,7 +96,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getMigrationEndGracePeriod() {
-		return this.env.MIGRATION_END_GRACE_PERIOD;
+		return this.env.MIGRATION_END_GRACE_PERIOD_MS;
 	}
 
 	get getTeacherStudentVisibilityIsConfigurable() {

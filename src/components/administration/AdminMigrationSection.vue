@@ -76,16 +76,15 @@
 			v-if="oauthMigrationFinished"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
-		>
-			{{
+			v-html="
 				t(finalFinishText, {
-					date: dayjs(oauthMigrationFinished).format("DD.MM.YYYY"),
-					time: dayjs(oauthMigrationFinished).format("HH:mm"),
-					finishDate: dayjs(oauthMigrationFinalFinish).format("DD.MM.YYYY"),
-					finishTime: dayjs(oauthMigrationFinalFinish).format("HH:mm"),
+					date: dayjs(oauthMigrationFinished).format('DD.MM.YYYY'),
+					time: dayjs(oauthMigrationFinished).format('HH:mm'),
+					finishDate: dayjs(oauthMigrationFinalFinish).format('DD.MM.YYYY'),
+					finishTime: dayjs(oauthMigrationFinalFinish).format('HH:mm'),
 				})
-			}}
-		</p>
+			"
+		></p>
 
 		<migration-start-warning-card
 			v-if="isShowStartWarning"
@@ -119,6 +118,7 @@ import { MigrationBody } from "@/serverApi/v3";
 import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
 import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
 import dayjs from "dayjs";
+import { envConfigModule } from "../../store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -134,6 +134,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await schoolsModule.fetchSchoolOAuthMigration();
+			console.log(envConfigModule.getMigrationEndGracePeriod);
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
