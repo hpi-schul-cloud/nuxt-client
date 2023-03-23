@@ -101,7 +101,6 @@ describe("PrivacySettings", () => {
 			expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(0);
 			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(0);
 		});
-
 	});
 	describe("default values", () => {
 		it("should be correct for permissions (1)", () => {
@@ -364,6 +363,5 @@ describe("PrivacySettings", () => {
 			expect(emitted["update-feature-settings"][1][0]).toBeTruthy();
 			expect(emitted["update-feature-settings"][1][1]).toBe("videoconference");
 		});
-
 	});
 });

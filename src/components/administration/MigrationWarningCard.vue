@@ -1,0 +1,131 @@
+<template>
+	<v-card data-testid="migration-warning-card">
+		<v-card-title class="card-title">{{ $t(title) }}</v-card-title>
+		<v-card-text>
+			<p
+				v-html="
+					$t(text, {
+						gracePeriod: gracePeriodInDays,
+					})
+				"
+			></p>
+			<v-checkbox
+				v-if="check"
+				v-model="isConfirmed"
+				:label="
+					$t(check, {
+						gracePeriod: gracePeriodInDays,
+					})
+				"
+				data-testid="migration-confirmation-checkbox"
+			></v-checkbox>
+		</v-card-text>
+		<v-card-actions>
+			<v-btn
+				data-testid="disagree-btn"
+				color="secondary"
+				@click="$emit(eventName)"
+			>
+				{{ $t(disagree) }}
+			</v-btn>
+			<v-btn
+				color="primary"
+				data-testid="agree-btn"
+				:disabled="check && !isConfirmed"
+				@click="
+					$emit('set');
+					$emit(eventName);
+				"
+			>
+				{{ $t(agree) }}
+			</v-btn>
+		</v-card-actions>
+	</v-card>
+</template>
+<script lang="ts">
+import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import EnvConfigModule from "@/store/env-config";
+
+export enum MigrationWarningCardTypeEnum {
+	START = "start",
+	END = "end",
+}
+
+export default defineComponent({
+	name: "MigrationWarningCard",
+	emits: ["start", "set", "end"],
+	props: {
+		value: {
+			type: String,
+			required: true,
+			validator(value: unknown) {
+				return (
+					(typeof value === "string" &&
+						value === MigrationWarningCardTypeEnum.START) ||
+					value === MigrationWarningCardTypeEnum.END
+				);
+			},
+		},
+	},
+	setup(props) {
+		const envConfigModule: EnvConfigModule | undefined =
+			inject<EnvConfigModule>("envConfigModule");
+		const type: Ref<MigrationWarningCardTypeEnum> = ref(
+			props.value as MigrationWarningCardTypeEnum
+		);
+		const isConfirmed: Ref<boolean> = ref(false);
+
+		let title =
+			"components.administration.adminMigrationSection.startWarningCard.title";
+		let text =
+			"components.administration.adminMigrationSection.startWarningCard.text";
+		let agree =
+			"components.administration.adminMigrationSection.startWarningCard.agree";
+		let disagree =
+			"components.administration.adminMigrationSection.startWarningCard.disagree";
+		let eventName = "start";
+		let check: string | undefined;
+
+		if (type.value === MigrationWarningCardTypeEnum.END) {
+			title =
+				"components.administration.adminMigrationSection.endWarningCard.title";
+			text =
+				"components.administration.adminMigrationSection.endWarningCard.text";
+			agree =
+				"components.administration.adminMigrationSection.endWarningCard.agree";
+			disagree =
+				"components.administration.adminMigrationSection.endWarningCard.disagree";
+			check =
+				"components.administration.adminMigrationSection.endWarningCard.check";
+			eventName = "end";
+		}
+
+		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
+			const days: number | undefined = undefined;
+			if (envConfigModule?.getMigrationEndGracePeriod) {
+				const days = envConfigModule?.getMigrationEndGracePeriod / 86400000;
+				return days;
+			} else {
+				return days;
+			}
+		});
+
+		return {
+			title,
+			text,
+			agree,
+			disagree,
+			check,
+			isConfirmed,
+			eventName,
+			gracePeriodInDays,
+		};
+	},
+});
+</script>
+
+<style lang="scss" scoped>
+.card-title {
+	word-break: break-word;
+}
+</style>

@@ -6,7 +6,7 @@
 		<p
 			v-html="t('components.administration.adminMigrationSection.description')"
 		></p>
-		<div v-if="!isMigrationAvailable">
+		<div v-if="!oauthMigration.oauthMigrationPossible">
 			<v-alert light prominent text type="info">
 				<span
 					v-html="t('components.administration.adminMigrationSection.infoText')"
@@ -27,7 +27,9 @@
 			class="my-5 button-start"
 			color="primary"
 			depressed
-			:disabled="!isMigrationEnabled || isCurrentDateAfterFinalFinish"
+			:disabled="
+				!oauthMigration.enableMigrationStart || isCurrentDateAfterFinalFinish
+			"
 			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
@@ -43,7 +45,7 @@
 			class="my-5 button-end"
 			color="primary"
 			depressed
-			:disabled="!isMigrationAvailable"
+			:disabled="!oauthMigration.oauthMigrationPossible"
 			data-testid="migration-end-button"
 			@click="onToggleShowEndWarning"
 		>
@@ -61,44 +63,52 @@
 					'components.administration.adminMigrationSection.mandatorySwitch.label'
 				)
 			"
-			:disabled="!isMigrationAvailable"
+			:disabled="!oauthMigration.oauthMigrationPossible"
 			:true-value="true"
 			:false-value="false"
-			:value="isMigrationMandatory"
+			:value="oauthMigration.oauthMigrationMandatory"
 			inset
 			dense
 			class="ml-1"
 			data-testid="migration-mandatory-switch"
-			@change="setMigration(true, !isMigrationMandatory)"
+			@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
 		></v-switch>
 
 		<p
-			v-if="oauthMigrationFinished"
+			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			v-html="
 				t(finalFinishText, {
-					date: dayjs(oauthMigrationFinished).format('DD.MM.YYYY'),
-					time: dayjs(oauthMigrationFinished).format('HH:mm'),
-					finishDate: dayjs(oauthMigrationFinalFinish).format('DD.MM.YYYY'),
-					finishTime: dayjs(oauthMigrationFinalFinish).format('HH:mm'),
+					date: dayjs(oauthMigration.oauthMigrationFinished).format(
+						'DD.MM.YYYY'
+					),
+					time: dayjs(oauthMigration.oauthMigrationFinished).format('HH:mm'),
+					finishDate: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
+						'DD.MM.YYYY'
+					),
+					finishTime: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
+						'HH:mm'
+					),
 				})
 			"
 		></p>
 
-		<migration-start-warning-card
+		<migration-warning-card
+			value="start"
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
 			@set="setMigration(true, false)"
-		></migration-start-warning-card>
+		></migration-warning-card>
 
-		<migration-end-warning-card
+		<migration-warning-card
+			value="end"
 			v-if="isShowEndWarning"
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
-			@set="setMigration(false, isMigrationMandatory)"
-		></migration-end-warning-card>
+			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
+		></migration-warning-card>
 	</div>
 </template>
 
@@ -111,17 +121,20 @@ import {
 	onMounted,
 	ref,
 	Ref,
+	watch,
 } from "vue";
 import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
 import { MigrationBody } from "@/serverApi/v3";
-import MigrationStartWarningCard from "@/components/administration/MigrationStartWarningCard.vue";
-import MigrationEndWarningCard from "@/components/administration/MigrationEndWarningCard.vue";
 import dayjs from "dayjs";
+import { OauthMigration, School } from "@/store/types/schools";
+import MigrationWarningCard from "./MigrationWarningCard.vue";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
-	components: { MigrationStartWarningCard, MigrationEndWarningCard },
+	components: {
+		MigrationWarningCard,
+	},
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const schoolsModule: SchoolsModule | undefined =
@@ -143,20 +156,8 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const isMigrationEnabled: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigration.enableMigrationStart
-		);
-
-		const isMigrationAvailable: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigration.oauthMigrationPossible
-		);
-
-		const isMigrationMandatory: ComputedRef<boolean> = computed(
-			() => schoolsModule.getOauthMigration.oauthMigrationMandatory
-		);
-
-		const oauthMigrationFinished: ComputedRef<string> = computed(
-			() => schoolsModule.getOauthMigration.oauthMigrationFinished ?? ""
+		const oauthMigration: ComputedRef<OauthMigration> = computed(
+			() => schoolsModule.getOauthMigration
 		);
 
 		const oauthMigrationFinalFinish: ComputedRef<string> = computed(
@@ -172,6 +173,11 @@ export default defineComponent({
 			schoolsModule.setSchoolOauthMigration(migrationFlags);
 		};
 
+		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+		watch(school, () => {
+			schoolsModule.fetchSchoolOAuthMigration();
+		});
+
 		const isShowEndWarning: Ref<boolean> = ref(false);
 
 		const onToggleShowEndWarning = () => {
@@ -186,14 +192,14 @@ export default defineComponent({
 
 		const isShowStartButton: ComputedRef<boolean> = computed(
 			() =>
-				!isMigrationAvailable.value &&
+				!oauthMigration.value.oauthMigrationPossible &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
 
 		const isShowEndButton: ComputedRef<boolean> = computed(
 			() =>
-				isMigrationAvailable.value &&
+				oauthMigration.value.oauthMigrationPossible &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
@@ -224,17 +230,13 @@ export default defineComponent({
 		});
 
 		return {
-			isMigrationEnabled,
+			oauthMigration,
 			setMigration,
-			isMigrationAvailable,
-			isMigrationMandatory,
 			t,
 			isShowEndWarning,
 			onToggleShowEndWarning,
 			isShowStartWarning,
 			onToggleShowStartWarning,
-			oauthMigrationFinished,
-			oauthMigrationFinalFinish,
 			isShowStartButton,
 			isShowEndButton,
 			isShowMandatorySwitch,

@@ -364,7 +364,6 @@ describe("AdminMigrationSection", () => {
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
 				expect(cardComponent.exists()).toBe(true);
-				expect(cardComponent.classes("migration-start-card")).toBe(true);
 			});
 		});
 	});
@@ -384,7 +383,7 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonAgree = cardComponent.find(".agree-btn-start");
+			const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
 			await cardButtonAgree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -437,7 +436,9 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonDisagree = cardComponent.find(".disagree-btn-start");
+			const cardButtonDisagree = cardComponent.find(
+				"[data-testId=disagree-btn]"
+			);
 			await cardButtonDisagree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -470,7 +471,6 @@ describe("AdminMigrationSection", () => {
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
 				expect(cardComponent.exists()).toBe(true);
-				expect(cardComponent.classes("migration-end-card")).toBe(true);
 			});
 		});
 	});
@@ -490,9 +490,7 @@ describe("AdminMigrationSection", () => {
 			await buttonComponent.vm.$emit("click");
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonAgree = cardComponent.find(
-				"[data-testid=migration-end-agree-button]"
-			);
+			const cardButtonAgree = cardComponent.find("[data-testid=agree-btn]");
 			await cardButtonAgree.vm.$emit("click");
 
 			expect(cardComponent.exists()).toBe(false);
@@ -520,7 +518,7 @@ describe("AdminMigrationSection", () => {
 
 			const cardComponent = wrapper.findComponent({ name: "v-card" });
 			const cardButtonDisagree = cardComponent.find(
-				"[data-testid=migration-end-disagree-button]"
+				"[data-testid=disagree-btn]"
 			);
 			await cardButtonDisagree.vm.$emit("click");
 
