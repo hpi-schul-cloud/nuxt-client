@@ -1,13 +1,8 @@
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import UserSelector from "@/components/user-selector/UserSelector.vue";
-
-interface User {
-	id: string;
-	firstName: string;
-	lastName: string;
-}
+import UserSelector from "@/components/beta-task/UserSelector.vue";
+import { User } from "./types/User";
 
 const MOCK_USERS: User[] = [
 	{
@@ -27,19 +22,22 @@ const MOCK_USERS: User[] = [
 	},
 ];
 
-const MOCK_SELECTED_USERS: string[] = ["userId2"];
+const MOCK_SELECTED_USERS: User[] = [MOCK_USERS[1]];
 
-describe("@components/user-selector/UserSelector", () => {
+const defaultProps = {
+	users: MOCK_USERS,
+	selection: MOCK_SELECTED_USERS,
+	required: true,
+};
+
+describe("@components/beta-task/UserSelector", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = () => {
+	const setup = (props = defaultProps) => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = mount(UserSelector as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: {
-				users: MOCK_USERS,
-				value: MOCK_SELECTED_USERS,
-			},
+			propsData: props,
 		});
 	};
 
@@ -54,16 +52,44 @@ describe("@components/user-selector/UserSelector", () => {
 			const selectedUser = wrapper.find(".v-chip__content");
 			expect(selectedUser.exists()).toBe(true);
 
-			const user = MOCK_USERS[1];
+			const user = MOCK_SELECTED_USERS[0];
 			expect(selectedUser.text()).toEqual(user.firstName + " " + user.lastName);
 		});
 	});
 
-	describe("when user selection changes", () => {
-		it("should emit input event", async () => {
+	describe("when selected user(s) is required", () => {
+		it("should emit input when users are selected", async () => {
 			setup();
 			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
-			expect(selectBox.exists()).toBe(true);
+
+			selectBox.vm.$emit("change");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("input")).toHaveLength(1);
+		});
+
+		it("should emit error event when no user is selected", async () => {
+			setup({ ...defaultProps, selection: [] });
+			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+
+			selectBox.vm.$emit("change");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("error")).toHaveLength(1);
+		});
+	});
+
+	describe("when selected user(s) is not required", () => {
+		it("should not emit error when no user is selected", async () => {
+			setup({ ...defaultProps, selection: [], required: false });
+			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+
+			selectBox.vm.$emit("change");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("error")).toBe(undefined);
+		});
+
+		it("should emit input when users are selected", async () => {
+			setup();
+			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
 
 			selectBox.vm.$emit("change");
 			await wrapper.vm.$nextTick();
