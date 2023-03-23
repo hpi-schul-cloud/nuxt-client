@@ -6,8 +6,8 @@
 	"containerEnv": {
 		"PUBLIC_BACKEND_URL": "http://host.docker.internal:3030/api",
 		"API_HOST": "http://host.docker.internal:3030/api",
-		"SERVER_HOST": "http://host.docker.internal:3030/",
-		"LEGACY_CLIENT_URL": "http://host.docker.internal:3030/api"
+		"SERVER_HOST": "http://host.docker.internal:3030",
+		"LEGACY_CLIENT_URL": "http://host.docker.internal:3100"
 	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
