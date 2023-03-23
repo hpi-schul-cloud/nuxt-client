@@ -308,14 +308,30 @@ export default defineComponent({
 
 			if (taskCardModule.getStatus === "error") {
 				const businessError = taskCardModule.getBusinessError;
-				console.log(taskCardModule.getBusinessError);
-				const errors = businessError?.error?.validationErrors;
-				errors.forEach((err: any) => {
-					errorMessage.value = errorMessage.value + ", " + err.errors[0];
-				});
+				const validationErrors = businessError?.error?.validationErrors;
+
+				createServerErrorMessage(validationErrors);
 			} else {
 				router.go(-1);
 			}
+		};
+
+		const createServerErrorMessage = (errors: Array<object>) => {
+			errors.forEach((err: any) => {
+				if (errorMessage.value === "") {
+					errorMessage.value = err.field[0] + ": ";
+				} else {
+					errorMessage.value = errorMessage.value + ", " + err.field[0] + ": ";
+				}
+
+				err.errors.forEach((e: any, index: number) => {
+					if (index === 0) {
+						errorMessage.value = errorMessage.value + e;
+					} else {
+						errorMessage.value = errorMessage.value + ", " + e;
+					}
+				});
+			});
 		};
 
 		const rules = {
