@@ -2,11 +2,10 @@
 	<ul class="dropdown-menu px-0">
 		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
 			<span class="core">
-				<base-icon
-					:source="menuItem.source"
-					:icon="menuItem.icon"
-					fill="var(--v-secondary-darken1)"
-				/>
+				<svg role="img" class="menu-item__icon">
+					<path :d="menuItem.icon"></path>
+				</svg>
+
 				<base-link
 					:href="menuItem.action"
 					:target="menuItem.target"
@@ -22,33 +21,36 @@
 </template>
 
 <script>
+import {
+	mdiFileQuestionOutline,
+	mdiFileCertificateOutline,
+	mdiChatOutline,
+} from "@mdi/js";
+
 export default {
-	data() {
-		return {
-			menuItems: [
+	computed: {
+		menuItems() {
+			return [
 				{
 					label: this.$t("global.topbar.actions.helpSection"),
-					icon: "question-circle",
+					icon: mdiFileQuestionOutline,
 					action: "/help",
-					source: "fa",
 					target: "_self",
 				},
 				{
 					label: this.$t("global.topbar.actions.contactSupport"),
-					icon: "pencil",
+					icon: mdiChatOutline,
 					action: "/help/contact",
-					source: "fa",
 					target: "_self",
 				},
 				{
 					label: this.$t("global.topbar.actions.training"),
-					icon: "fortbildung",
+					icon: mdiFileCertificateOutline,
 					action: "https://www.lernen.cloud/",
-					source: "custom",
 					target: "_blank",
 				},
-			],
-		};
+			];
+		},
 	},
 };
 </script>
@@ -92,12 +94,23 @@ export default {
 		align-items: center;
 	}
 
+	.core:hover {
+		fill: var(--v-primary-darken1);
+	}
+
 	.link {
 		padding-left: var(--space-sm); // space in legacy client 8px;
+		text-transform: uppercase;
 		&:hover,
 		&:focus {
 			text-decoration: underline;
 		}
+	}
+
+	.menu-item__icon {
+		fill: var(--v-primary-base);
+		height: 24px;
+		width: 24px;
 	}
 }
 </style>
