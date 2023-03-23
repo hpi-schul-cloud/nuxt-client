@@ -415,13 +415,6 @@ export default class SchoolsModule extends VuexModule {
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				/*this.context.commit(
-					"setError",
-					this.createApplicationError(
-						error.response?.status,
-						"pages.administration.school.index.axiosError"
-					)
-				);*/
 				if (error.response?.status) {
 					this.setError(
 						useApplicationError().createApplicationError(
