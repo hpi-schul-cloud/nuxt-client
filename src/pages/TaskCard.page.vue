@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<v-form v-if="isEditMode" class="d-flex flex-column">
+		<v-form v-if="isEditMode" class="d-flex flex-column" ref="form">
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -138,6 +138,7 @@ export default defineComponent({
 			},
 		]);
 
+		const form = ref<HTMLFormElement>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
@@ -288,6 +289,13 @@ export default defineComponent({
 		};
 
 		const save = async () => {
+			if (form.value) {
+				const valid = form.value.validate();
+				if (!valid) {
+					return;
+				}
+			}
+
 			if (hasErrors.value) {
 				return;
 			}
@@ -353,6 +361,7 @@ export default defineComponent({
 			rules,
 			isVisible,
 			visibilityOptions,
+			form,
 		};
 	},
 });
