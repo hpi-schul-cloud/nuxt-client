@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, computed, nextTick } from "vue";
+import { defineComponent, PropType, ref, unref, computed, nextTick } from "vue";
 import { User } from "./types/User";
 
 export default defineComponent({
@@ -63,7 +63,7 @@ export default defineComponent({
 		const selectionChanged = () => {
 			props.required && model.value.length === 0
 				? emit("error")
-				: emit("input", model.value);
+				: emit("input", JSON.parse(JSON.stringify(model.value)));
 		};
 
 		const allUsersSelected = computed(() => {

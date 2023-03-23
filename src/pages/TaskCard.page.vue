@@ -368,7 +368,7 @@ export default defineComponent({
 		];
 		const selectedUsers = ref([allUsers[4]]);
 
-		const handleAssignmentInput = (selectedUsers: User[]) => {
+		const handleAssignmentInput = (selectedUsers: string[]) => {
 			console.log(selectedUsers);
 		};
 
