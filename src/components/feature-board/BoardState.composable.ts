@@ -16,6 +16,10 @@ const DUMMY_BOARD: Board = {
 				{ cardId: "0123456789abcdef00000002", height: 175 },
 				{ cardId: "0123456789abcdef00000004", height: 175 },
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 		{
 			id: "0123456789abcdef00000020",
@@ -24,11 +28,19 @@ const DUMMY_BOARD: Board = {
 				{ cardId: "0123456789abcdef00000003", height: 175 },
 				{ cardId: "0123456789abcdef00000005", height: 175 },
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 		{
 			id: "0123456789abcdef00000030",
 			title: "empty for now",
 			cards: [],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 	],
 	timestamps: {

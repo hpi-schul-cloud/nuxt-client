@@ -951,8 +951,9 @@ describe("ExternalToolsModule", () => {
 					const { toolApiMock } = mockToolApi();
 
 					const schoolExternalToolPostParams: SchoolExternalToolPostParams = {
-						id: "configId",
 						toolId: "toolId",
+						schoolId: "schoolId",
+						version: 1,
 					} as SchoolExternalToolPostParams;
 					jest
 						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
@@ -966,10 +967,7 @@ describe("ExternalToolsModule", () => {
 
 					expect(
 						toolApiMock.toolSchoolControllerUpdateSchoolExternalTool
-					).toHaveBeenCalledWith(
-						schoolExternalToolPostParams.id,
-						schoolExternalToolPostParams
-					);
+					).toHaveBeenCalledWith("configId", schoolExternalToolPostParams);
 				});
 			});
 		});
