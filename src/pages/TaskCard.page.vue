@@ -99,7 +99,7 @@ import {
 	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
-import UserSelector from "@/components/user-selector/UserSelector.vue";
+import UserSelector from "@/components/beta-task/UserSelector.vue";
 
 // TODO - unit tests!
 export default defineComponent({
