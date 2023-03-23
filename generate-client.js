@@ -40,7 +40,7 @@ OPTIONS:
 	process.exit(0);
 }
 
-const config = {
+const params = {
 	/** url to load the open-api definition from */
 	url: args._[0] || args["--url"] || DEFAULT_URL,
 	/** folder to save the open-api client */
@@ -59,23 +59,23 @@ const errorMessageContains = (includedString, error) => {
 };
 
 const generateClient = () => {
-	const cmd = getOpenApiCommand(config);
+	const cmd = getOpenApiCommand(params);
 	log(
-		`Try updating the openapi client in the folder ${config.path} from ${config.url} ...`
+		`Try updating the openapi client in the folder ${params.path} from ${params.url} ...`
 	);
 	asyncExec(cmd)
 		.then((stdout) => log(stdout))
 		.catch((stderr) => {
 			if (errorMessageContains("ConnectException", stderr)) {
 				error(
-					`Failed to connect to ${config.url}, is the server started at this url?`
+					`Failed to connect to ${params.url}, is the server started at this url?`
 				);
 			} else error(stderr.message);
 		});
 };
 
-const getOpenApiCommand = (configuration) => {
-	const { url, path, config } = configuration;
+const getOpenApiCommand = (params) => {
+	const { url, path, config } = params;
 	const configFile = config ? `-c ${config}` : "";
 	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --type-mappings DateTime=Date --skip-validate-spec`;
 
