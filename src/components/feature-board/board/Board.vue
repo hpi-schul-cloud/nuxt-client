@@ -80,3 +80,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style>
+.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+	overflow: visible !important;
+}
+</style>

@@ -8,9 +8,10 @@
 		<div class="d-flex" ref="cardHost">
 			<VCard
 				:height="isLoading ? height : 'auto'"
-				class="w-100"
+				class="w-100 transition-swing"
 				outlined
 				tabindex="0"
+				:elevation="isEditMode ? 6 : 0"
 				:id="id"
 				:ripple="false"
 			>

@@ -15,8 +15,8 @@
 			class="ml-n3 mb-0 w-full"
 			flat
 			background-color="transparent"
-			:aria-hidden="!isEditMode"
 			:readonly="!isEditMode"
+			:aria-hidden="!isEditMode"
 		></VTextarea>
 	</div>
 </template>
@@ -40,10 +40,9 @@ export default defineComponent({
 	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const onFocusCallback = (interactionBoundary: { x: number; y: number }) => {
-			console.log(interactionBoundary);
+		const onFocusCallback = () => {
+			document.getSelection()?.collapseToEnd();
 		};
-
 		useContentElementInteractionHandler(onFocusCallback);
 
 		return {
