@@ -1,35 +1,38 @@
 <template>
-	<div ref="elementHost">
-		<!-- <text-content-element-edit></text-content-element-edit> -->
-		<!-- <text-content-element-display></text-content-element-display> -->
-		{{ element.id }} {{ element.content.text }} {{ isEditMode }}
-		<input class="w-full" ref="input" />
+	<div>
+		<TextContentElementDisplay
+			v-if="!isEditMode"
+			:value="modelValue.text"
+		></TextContentElementDisplay>
+		<TextContentElementEdit
+			v-if="isEditMode"
+			:value="modelValue.text"
+			:autofocus="isAutoFocus"
+			@update:value="($event) => (modelValue.text = $event)"
+		></TextContentElementEdit>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
-import { useContentElementInteractionHandler } from "../ContentElementInteractionHandler.composable";
+import { defineComponent, PropType } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import { TextContentElement } from "../types/ContentElement";
+import TextContentElementDisplay from "./TextContentElementDisplay.vue";
+import TextContentElementEdit from "./TextContentElementEdit.vue";
 
 export default defineComponent({
 	name: "TextContentElement",
+	components: {
+		TextContentElementDisplay,
+		TextContentElementEdit,
+	},
 	props: {
 		element: { type: Object as PropType<TextContentElement>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const { updateElement } = useContentElementState<"text">(props.element.id);
-		const input = ref<HTMLInputElement | undefined>();
-
-		const onFocusCallback = () => {
-			input.value?.focus();
-		};
-
-		useContentElementInteractionHandler(onFocusCallback);
-
-		return { updateElement, input };
+		const { modelValue, isAutoFocus } = useContentElementState<"text">(props);
+		return { modelValue, isAutoFocus };
 	},
 });
 </script>

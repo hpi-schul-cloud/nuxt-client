@@ -23,7 +23,7 @@
 							<CardHeaderTitleInput
 								:isEditMode="isEditMode"
 								:value="card.title"
-								@change="onUpdateCardTitle"
+								@update:value="onUpdateCardTitle"
 							></CardHeaderTitleInput>
 						</template>
 						<template v-slot:menu>

@@ -1,13 +1,11 @@
 <template>
-	<div class="d-flex flex-grow-1">
-		<h3 class="d-sr-only" :aria-hidden="isEditMode">
-			{{ value }}
-		</h3>
-
+	<div>
 		<VTextarea
-			label="Titel"
+			label="Text-Element"
+			placeholder="Schreibe deinen Text..."
 			hide-details="auto"
 			v-model="modelValue"
+			:autofocus="autofocus"
 			solo
 			dense
 			:rows="1"
@@ -15,24 +13,22 @@
 			class="ml-n3 mb-0 w-full"
 			flat
 			background-color="transparent"
-			:aria-hidden="!isEditMode"
-			:readonly="!isEditMode"
+			ref="input"
 		></VTextarea>
 	</div>
 </template>
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
-import { useContentElementInteractionHandler } from "../ContentElementInteractionHandler.composable";
 
 export default defineComponent({
-	name: "CardHeaderTitleInput",
+	name: "TextContentElementDisplay",
 	props: {
 		value: {
 			type: String,
 			required: true,
 		},
-		isEditMode: {
+		autofocus: {
 			type: Boolean,
 			required: true,
 		},
@@ -40,15 +36,7 @@ export default defineComponent({
 	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const onFocusCallback = (interactionBoundary: { x: number; y: number }) => {
-			console.log(interactionBoundary);
-		};
-
-		useContentElementInteractionHandler(onFocusCallback);
-
-		return {
-			modelValue,
-		};
+		return { modelValue };
 	},
 });
 </script>

@@ -5,7 +5,6 @@ import {
 	ContentElementType,
 	TextContentElement,
 } from "../types/ContentElement";
-import { TextContentElementPayload } from "../types/ContentElementPayload";
 
 const DUMMY_CARD: BoardCard = {
 	id: "0123456789abcdef00000003",
@@ -52,6 +51,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
+		console.log("update title", newTitle);
 		cardState.card.title = newTitle;
 	};
 

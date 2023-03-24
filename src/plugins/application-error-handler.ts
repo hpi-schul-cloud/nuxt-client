@@ -1,5 +1,4 @@
 import { ApplicationError } from "@/store/types/application-error";
-import { applicationErrorModule } from "@/store";
 
 export const handleApplicationError = (err: Error) => {
 	/**
@@ -7,15 +6,16 @@ export const handleApplicationError = (err: Error) => {
 	 * so we can't use instanceof ApplicationError here.
 	 */
 	const applicationError = err as ApplicationError;
-	if (err.name === "ApplicationError") {
-		applicationErrorModule.setError({
-			statusCode: applicationError.statusCode,
-			translationKey: applicationError.translationKey,
-		});
-		return;
-	}
-	applicationErrorModule.setError({
-		statusCode: 500,
-		translationKey: "error.generic",
-	});
+	console.error(applicationError);
+	// if (err.name === "ApplicationError") {
+	// 	applicationErrorModule.setError({
+	// 		statusCode: applicationError.statusCode,
+	// 		translationKey: applicationError.translationKey,
+	// 	});
+	// 	return;
+	// }
+	// applicationErrorModule.setError({
+	// 	statusCode: 500,
+	// 	translationKey: "error.generic",
+	// });
 };
