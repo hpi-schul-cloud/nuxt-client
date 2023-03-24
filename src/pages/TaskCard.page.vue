@@ -271,9 +271,10 @@ export default defineComponent({
 
 			await taskCardModule.createTaskCard({
 				courseId: course.value,
+				dueDate: dueDate.value,
+				// assignedUserIds: selectedUserIds.value,
 				title: title.value,
 				cardElements: cardElements,
-				dueDate: dueDate.value,
 			});
 		};
 
@@ -294,8 +295,9 @@ export default defineComponent({
 			});
 
 			await taskCardModule.updateTaskCard({
-				dueDate: dueDate.value,
 				courseId: course.value,
+				dueDate: dueDate.value,
+				// assignedUserIds: selectedUserIds.value,
 				title: title.value,
 				cardElements: cardElements,
 			});
@@ -306,6 +308,7 @@ export default defineComponent({
 				return;
 			}
 
+			console.log(selectedUserIds.value);
 			if (route.name === "rooms-task-card-new") {
 				await createTaskCard();
 			} else {
@@ -368,12 +371,19 @@ export default defineComponent({
 		];
 		const selectedUsers = ref([allUsers[4]]);
 
-		const handleAssignmentInput = (selectedUsers: string[]) => {
-			console.log(selectedUsers);
+		const selectedUserIds = computed(() => {
+			return selectedUsers.value.map((user: User) => {
+				return user.id;
+			});
+		});
+
+		const handleAssignmentInput = (selection: User[]) => {
+			selectedUsers.value = selection;
 		};
 
 		const handleAssignmentError = () => {
-			console.log("handlAssignmentError");
+			selectedUsers.value = [];
+			console.log("handle assignment error");
 		};
 
 		return {
