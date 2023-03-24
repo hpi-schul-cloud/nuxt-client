@@ -31,7 +31,7 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const { modelValue, isAutoFocus } = useContentElementState<"text">(props);
+		const { modelValue, isAutoFocus } = useContentElementState(props);
 		return { modelValue, isAutoFocus };
 	},
 });

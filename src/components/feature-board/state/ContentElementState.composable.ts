@@ -1,22 +1,11 @@
-import { autoResetRef, watchDebounced } from "@vueuse/core";
+import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref, watch } from "vue";
 import { useContentElementInteractionHandler } from "../ContentElementInteractionHandler.composable";
-import {
-	ContentElementType,
-	ImageContentElement,
-	TextContentElement,
-} from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 
-declare type InferAnyContentElement<T extends ContentElementType> =
-	T extends "text"
-		? TextContentElement
-		: T extends "image"
-		? ImageContentElement
-		: never;
-
-export const useContentElementState = <T extends ContentElementType>(
+export const useContentElementState = <T extends AnyContentElement>(
 	props: {
-		element: InferAnyContentElement<T>;
+		element: T;
 		isEditMode: boolean;
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
@@ -28,10 +17,7 @@ export const useContentElementState = <T extends ContentElementType>(
 	const isEditModeRef = toRef(props, "isEditMode");
 
 	const isAutoFocus = ref<boolean>(false);
-
-	const modelValue = ref<InferAnyContentElement<T>["content"]>(
-		unref<InferAnyContentElement<T>>(elementRef).content
-	);
+	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
 	watchDebounced(
 		modelValue.value,
@@ -51,7 +37,7 @@ export const useContentElementState = <T extends ContentElementType>(
 		}
 	);
 
-	const updateElement = (payload: InferAnyContentElement<T>["content"]) => {
+	const updateElement = (payload: T["content"]) => {
 		console.log("update element", { ...payload });
 	};
 
