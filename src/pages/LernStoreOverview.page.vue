@@ -87,9 +87,6 @@ import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft } from "@mdi/js";
 
 export default {
-	meta: {
-		requiredPermissions: ["LERNSTORE_VIEW"],
-	},
 	components: {
 		ContentSearchbar,
 		ContentCard,

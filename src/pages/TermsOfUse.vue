@@ -36,9 +36,5 @@ export default {
 			downloadLink.click();
 		},
 	},
-	meta: {
-		isPublic: true,
-		populateNeeded: true,
-	},
 };
 </script>
