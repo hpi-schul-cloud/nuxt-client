@@ -3,3 +3,4 @@
 /coverage/**
 LICENSE.md
 .browserslistrc
+**/fileStorageApi/**

@@ -77,7 +77,7 @@ const generateClient = () => {
 const getOpenApiCommand = (params) => {
 	const { url, path, config } = params;
 	const configFile = config ? `-c ${config}` : "";
-	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --type-mappings DateTime=Date --skip-validate-spec`;
+	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --skip-validate-spec`;
 
 	return command;
 };
