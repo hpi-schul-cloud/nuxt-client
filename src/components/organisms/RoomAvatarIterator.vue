@@ -1,7 +1,7 @@
 <template>
 	<v-data-iterator
 		:items="items"
-		:items-per-page.sync="maxItems"
+		:items-per-page="maxItems"
 		hide-default-footer
 		no-data-text=""
 	>

@@ -1,7 +1,7 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
-import { inject, Ref, reactive } from "vue";
+import { inject, Ref, ref } from "vue";
 import VueI18n from "vue-i18n";
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
@@ -17,13 +17,13 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		return "unknown translation-key:" + key;
 	};
 
-	const backgroundCopyProcesses: CopyParams[] = reactive([]);
+	const backgroundCopyProcesses: Ref<CopyParams[]> = ref([]);
 
 	const markBackgroundCopyProcess = (data: CopyParams) =>
-		backgroundCopyProcesses.push(data);
+		backgroundCopyProcesses.value.push(data);
 
 	const isCopyProcessInBackground = (copyParams: CopyParams) =>
-		backgroundCopyProcesses.includes(copyParams);
+		backgroundCopyProcesses.value.includes(copyParams);
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 

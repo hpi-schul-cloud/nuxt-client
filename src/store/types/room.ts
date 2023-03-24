@@ -34,14 +34,7 @@ export type RoomData = {
 	elements: [
 		{
 			type: string;
-			content: Task | Lesson | {};
+			content: Task | Lesson | object;
 		}
 	];
-};
-
-export type SharedLessonObject = {
-	code: string;
-	lessonName: string;
-	status: string;
-	message: string;
 };

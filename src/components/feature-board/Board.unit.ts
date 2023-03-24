@@ -1,11 +1,11 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
-import { ref } from "vue";
+import Vue, { ref } from "vue";
+import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
-import { Board } from "./types/Board";
-import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "./BoardState.composable";
+import { Board } from "./types/Board";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [
@@ -26,6 +26,10 @@ const MOCK_BOARD_ONE_COLUMN: Board = {
 					height: 220,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
@@ -55,6 +59,10 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 					height: 220,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 		{
 			id: "989b0ff2-ad1e-11ed-afa1-0242ac120001",
@@ -73,6 +81,10 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 					height: 320,
 				},
 			],
+			timestamps: {
+				createdAt: new Date().toString(),
+				lastUpdatedAt: new Date().toString(),
+			},
 		},
 	],
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
@@ -86,6 +98,21 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 jest.mock("./BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
+const $route: Route = {
+	params: {
+		id: "a1b2c3",
+	},
+	path: "/rooms/a1b2c3/board",
+	fullPath: "/rooms/a1b2c3/board",
+	hash: "",
+	query: {
+		id: "a1b2c3",
+	},
+	matched: [],
+} as Route;
+
+const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
+
 describe("Board", () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -94,15 +121,30 @@ describe("Board", () => {
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
 			fetchBoard: jest.fn(),
-			board: ref(board ?? MOCK_BOARD_ONE_COLUMN),
+			moveCard: jest.fn(),
+			moveCardByKeyboard: jest.fn(),
+			moveColumn: jest.fn(),
+			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
 			isLoading: ref(isLoading ?? false),
 		});
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),
+			mocks: {
+				$router,
+				$route,
+			},
 		});
 	};
 
 	describe("when component is mounted", () => {
+		it("should call 'useBoardState' composable", () => {
+			setup();
+			expect(mockedUseBoardState).toHaveBeenCalled();
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			expect(wrapper.vm.board).toStrictEqual(MOCK_BOARD_ONE_COLUMN);
+		});
+
 		it("should be found in the dom", () => {
 			setup();
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();

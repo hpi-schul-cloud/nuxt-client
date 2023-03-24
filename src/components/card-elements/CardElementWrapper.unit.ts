@@ -18,58 +18,101 @@ const getWrapper = (props?: object, options?: object) => {
 };
 
 describe("@components/card-elements/CardElementWrapper", () => {
-	it("should render component", () => {
-		const wrapper = getWrapper();
-		expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
-	});
-
-	it("should emit delete-element event for rich text", async () => {
-		const wrapper = getWrapper({
-			component: CardElementComponentEnum.RichText,
-		});
-		const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
-
-		expect(deleteBtn.exists()).toBe(true);
-		await deleteBtn.trigger("click");
-
-		expect(wrapper.emitted("delete-element")).toBeTruthy();
-	});
-
-	it("should emit add-element event for rich text", async () => {
-		const wrapper = getWrapper({
-			component: CardElementComponentEnum.RichText,
-		});
-		const addBtn = wrapper.find('[data-testid="add-element-btn"]');
-
-		expect(addBtn.exists()).toBe(true);
-		await addBtn.trigger("click");
-
-		expect(wrapper.emitted("add-element")).toBeTruthy();
-	});
-
-	it("should render drag handle for rich text", async () => {
-		const wrapper = getWrapper({
-			component: CardElementComponentEnum.RichText,
-		});
-		const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
-
-		expect(dragBtn.exists()).toBe(true);
-	});
-
-	it("should not render drag handle for title", async () => {
-		const wrapper = getWrapper({
-			component: CardElementComponentEnum.Title,
-		});
-		const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
-
-		expect(dragBtn.isVisible()).toBe(false);
-	});
-
-	it("should render dynamic component", async () => {
-		const wrapper = getWrapper({
-			component: CardElementComponentEnum.RichText,
+	describe("editMode set to true", () => {
+		it("should render component", () => {
+			const wrapper = getWrapper({ editMode: true });
+			expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
 		});
 
-		expect(wrapper.findComponent(RichTextCardElement).exists()).toBe(true);
+		it("should emit delete-element event for rich text", async () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: true,
+			});
+			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
+
+			expect(deleteBtn.exists()).toBe(true);
+			await deleteBtn.trigger("click");
+
+			expect(wrapper.emitted("delete-element")).toBeTruthy();
+		});
+
+		it("should emit add-element event for rich text", async () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: true,
+			});
+			const addBtn = wrapper.find('[data-testid="add-element-btn"]');
+
+			expect(addBtn.exists()).toBe(true);
+			await addBtn.trigger("click");
+
+			expect(wrapper.emitted("add-element")).toBeTruthy();
+		});
+
+		it("should render drag handle for rich text", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: true,
+			});
+			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
+
+			expect(dragBtn.exists()).toBe(true);
+		});
+
+		it("should render dynamic component", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: true,
+			});
+
+			expect(wrapper.findComponent(RichTextCardElement).exists()).toBe(true);
+		});
+	});
+
+	describe("editMode set to false", () => {
+		it("should render component", () => {
+			const wrapper = getWrapper({ editMode: false });
+			expect(wrapper.findComponent(CardElementWrapper).exists()).toBe(true);
+		});
+
+		it("delete element button for rich text should not be present", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: false,
+			});
+			const deleteBtn = wrapper.find('[data-testid="delete-element-btn"]');
+
+			expect(deleteBtn.exists()).toBe(false);
+		});
+
+		it("add element button for rich text should not be present", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: false,
+			});
+			const addBtn = wrapper.find('[data-testid="add-element-btn"]');
+
+			expect(addBtn.exists()).toBe(false);
+		});
+
+		it("drag element button for rich text should not be present", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: false,
+			});
+			const dragBtn = wrapper.find('[data-testid="drag-element-btn"]');
+
+			expect(dragBtn.exists()).toBe(false);
+		});
+
+		it("should render rich text component", () => {
+			const wrapper = getWrapper({
+				component: CardElementComponentEnum.RichText,
+				editMode: false,
+			});
+
+			expect(wrapper.findComponent(RichTextCardElement).exists()).toBe(true);
+		});
 	});
 });

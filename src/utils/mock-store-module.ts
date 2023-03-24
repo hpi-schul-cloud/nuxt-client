@@ -5,6 +5,7 @@ type ConstructorOf<C> = { new (...args: any[]): C };
 type StaticsType = Record<string, any>;
 
 const mockGetters = <M>(
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	module: Function & Mod<M, any>,
 	statics: StaticsType,
 	getters: Record<string, any>
@@ -17,6 +18,7 @@ const mockGetters = <M>(
 };
 
 const mockMutations = <M>(
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	module: Function & Mod<M, any>,
 	statics: StaticsType
 ) => {
@@ -26,6 +28,7 @@ const mockMutations = <M>(
 };
 
 const mockActions = <M>(
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	module: Function & Mod<M, any>,
 	statics: StaticsType
 ) => {
@@ -38,6 +41,7 @@ export function createModuleMocks<M extends VuexModule>(
 	moduleClass: ConstructorOf<M>,
 	getters: Partial<M> = {}
 ): jest.Mocked<M> {
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	const module: Function & Mod<M, any> = moduleClass;
 
 	const statics: StaticsType = {};

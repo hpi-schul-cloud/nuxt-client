@@ -1,8 +1,7 @@
 <template>
-	<v-card flat class="card mb-7" :class="{ active: isActive }">
+	<v-card v-if="editMode" flat class="card mb-7" :class="{ active: isActive }">
 		<div class="card-actions">
 			<v-btn
-				v-show="actionable"
 				icon
 				outlined
 				color="secondary"
@@ -13,7 +12,7 @@
 				<v-icon>{{ mdiDrag }}</v-icon>
 			</v-btn>
 			<v-btn
-				v-show="actionable && isActive"
+				v-show="isActive"
 				icon
 				outlined
 				color="secondary"
@@ -28,7 +27,7 @@
 		<component
 			:is="component"
 			v-model="model"
-			:editable="editable"
+			:editable="true"
 			:disabled="disabled"
 			:placeholder="placeholder"
 			@input="handleInput"
@@ -36,7 +35,7 @@
 			@blur="handleBlur"
 		/>
 		<v-btn
-			v-show="actionable && isActive"
+			v-show="isActive"
 			icon
 			outlined
 			color="secondary"
@@ -48,19 +47,25 @@
 			<v-icon>{{ mdiPlus }}</v-icon>
 		</v-btn>
 	</v-card>
+	<v-card v-else flat class="card mb-7">
+		<component
+			:is="component"
+			v-model="model"
+			:editable="false"
+			:placeholder="placeholder"
+		/>
+	</v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
 	name: "CardElementWrapper",
 	components: {
-		TitleCardElement,
 		RichTextCardElement,
 	},
 	emits: ["input", "delete-element", "add-element"],
@@ -80,8 +85,9 @@ export default defineComponent({
 		disabled: {
 			type: Boolean,
 		},
-		editable: {
+		editMode: {
 			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
@@ -95,9 +101,6 @@ export default defineComponent({
 		);
 
 		const isActive = ref(false);
-		const actionable = computed(
-			() => props.component !== CardElementComponentEnum.Title
-		);
 
 		const handleInput = () => emit("input", model.value);
 		const handleAdd = () => emit("add-element");
@@ -116,7 +119,6 @@ export default defineComponent({
 			handleDelete,
 			handleFocus,
 			handleBlur,
-			actionable,
 			isActive,
 			mdiTrashCanOutline,
 			mdiDrag,

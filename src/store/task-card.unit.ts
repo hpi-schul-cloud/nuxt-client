@@ -11,14 +11,8 @@ import {
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
+	title: "the title",
 	cardElements: [
-		{
-			id: "456",
-			cardElementType: CardElementResponseCardElementTypeEnum.Title,
-			content: {
-				value: "The Title",
-			},
-		},
 		{
 			id: "789",
 			cardElementType: CardElementResponseCardElementTypeEnum.RichText,
@@ -31,6 +25,18 @@ const mockTaskCardData: TaskCardResponse = {
 	draggable: true,
 	task: {
 		id: "456",
+		users: [
+			{
+				id: "user1",
+				firstName: "firstname1",
+				lastName: "lastname1",
+			},
+			{
+				id: "user2",
+				firstName: "firstname2",
+				lastName: "lastname3",
+			},
+		],
 		name: "task",
 		courseName: "course",
 		courseId: "789",
@@ -134,13 +140,8 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
+					title: "some title",
 					cardElements: [
-						{
-							content: {
-								type: "title",
-								value: "abc",
-							},
-						},
 						{
 							content: {
 								type: "richtext",
@@ -172,6 +173,7 @@ describe("task-card store", () => {
 					);
 
 				await taskCardModule.createTaskCard({
+					title: "some title",
 					cardElements: [],
 				});
 
@@ -202,7 +204,10 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.updateTaskCard({ cardElements: [] });
+				await taskCardModule.updateTaskCard({
+					title: mockTaskCardData.title,
+					cardElements: [],
+				});
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
 					1
@@ -210,6 +215,7 @@ describe("task-card store", () => {
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledWith(
 					mockTaskCardData.id,
 					{
+						title: mockTaskCardData.title,
 						cardElements: [],
 					}
 				);
@@ -230,7 +236,7 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.updateTaskCard({ cardElements: [] });
+				await taskCardModule.updateTaskCard({ title: "", cardElements: [] });
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
 					1
@@ -274,6 +280,16 @@ describe("task-card store", () => {
 					);
 				});
 			});
+		});
+	});
+
+	describe("mutations", () => {
+		it("should set setCourseId", () => {
+			const taskCardModule = new TaskCardModule({});
+			const courseId = "courseId_test";
+			taskCardModule.setCourseId(courseId);
+
+			expect(taskCardModule.taskCardData.courseId).toStrictEqual(courseId);
 		});
 	});
 });

@@ -22,8 +22,10 @@ import {
 } from "@/store/external-tool";
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
-import { toolParameterFactory } from "../../tests/test-utils/factory";
-import { toolConfigurationTemplateFactory } from "../../tests/test-utils/factory/toolConfigurationTemplateFactory";
+import {
+	toolParameterFactory,
+	toolConfigurationTemplateFactory,
+} from "@@/tests/test-utils/factory";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -43,7 +45,6 @@ describe("useExternalToolUtils", () => {
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
-			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
@@ -110,7 +111,6 @@ describe("useExternalToolUtils", () => {
 			schoolExternaToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
-			mapSchoolExternalToolItemToSchoolExternalTool,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
@@ -146,33 +146,15 @@ describe("useExternalToolUtils", () => {
 					expect.objectContaining<SchoolExternalTool[]>([
 						{
 							id: toolResponse.id,
+							toolId: toolResponse.toolId,
 							name: toolResponse.name,
+							parameters: toolResponse.parameters,
 							version: toolResponse.toolVersion,
 							status: SchoolExternalToolStatus.Latest,
 						},
 					])
 				);
 			});
-		});
-	});
-
-	describe("mapSchoolExternalToolItemToSchoolExternalTool is called", () => {
-		it("should return mapped schoolExternalTool", () => {
-			const {
-				mapSchoolExternalToolItemToSchoolExternalTool,
-				schoolExternaToolItem,
-			} = setup();
-
-			const schoolExternalTool: SchoolExternalTool =
-				mapSchoolExternalToolItemToSchoolExternalTool(schoolExternaToolItem);
-
-			expect(schoolExternalTool).toEqual(
-				expect.objectContaining<SchoolExternalTool>({
-					id: schoolExternaToolItem.id,
-					name: schoolExternaToolItem.name,
-					status: SchoolExternalToolStatus.Unknown,
-				})
-			);
 		});
 	});
 
@@ -263,7 +245,6 @@ describe("useExternalToolUtils", () => {
 					parameters: expect.arrayContaining<CustomParameterEntryParam>([
 						{
 							name: template.parameters[0].name,
-							value: "",
 						},
 						{
 							name: template.parameters[1].name,

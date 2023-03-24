@@ -62,8 +62,6 @@
 			:role="dashBoardRole"
 			@copy-board-element="onCopyBoardElement"
 		/>
-		<import-lesson-modal v-model="importDialog.isOpen" class="import-modal">
-		</import-lesson-modal>
 		<v-custom-dialog
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
@@ -102,7 +100,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal type="course"></share-modal>
+		<share-modal type="courses" />
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -114,18 +112,19 @@
 </template>
 
 <script>
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum as Roles,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import ImportLessonModal from "@/components/molecules/ImportLessonModal";
 import MoreItemMenu from "@/components/molecules/MoreItemMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
 	mdiContentCopy,
 	mdiDownload,
 	mdiEmailPlusOutline,
@@ -140,7 +139,6 @@ import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const i18n = inject("i18n");
@@ -161,13 +159,12 @@ export default defineComponent({
 		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
-		ImportLessonModal,
 		MoreItemMenu,
 		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
 	},
-	inject: ["copyModule", "shareCourseModule"],
+	inject: ["copyModule", "shareModule"],
 	data() {
 		return {
 			importDialog: {
@@ -203,47 +200,56 @@ export default defineComponent({
 	},
 	computed: {
 		fabItems() {
+			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
-				const items = {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "add-content-button",
-					actions: [
-						{
-							label: this.$t("pages.rooms.fab.add.task"),
-							icon: mdiFormatListChecks,
-							href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_task",
-							ariaLabel: this.$t("pages.rooms.fab.add.task"),
-						},
-						{
-							label: this.$t("pages.rooms.fab.add.lesson"),
-							icon: mdiViewListOutline,
-							href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
-						},
-					],
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.task"),
+					icon: mdiFormatListChecks,
+					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_task",
+					ariaLabel: this.$t("pages.rooms.fab.add.task"),
+				});
+			}
+			if (
+				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
+				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
+			) {
+				const action = {
+					label: this.$t("pages.rooms.fab.add.betatask"),
+					icon: mdiFormatListChecks,
+					to: {
+						name: "rooms-beta-task-new",
+						params: { course: this.roomData.roomId },
+					},
+					dataTestid: "fab_button_add_beta_task",
 				};
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					items.actions.push({
-						label: this.$t("pages.rooms.fab.import.lesson"),
-						icon: mdiCloudDownload,
-						dataTestid: "fab_button_import_lesson",
-						ariaLabel: this.$t("pages.rooms.fab.import.lesson"),
-						customEvent: {
-							name: "fabButtonEvent",
-							value: true,
-						},
-					});
-				}
-				return items;
+				actions.push(action);
+			}
+			if (
+				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+			) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.lesson"),
+					icon: mdiViewListOutline,
+					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_lesson",
+					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+				});
 			}
 
-			return null;
+			if (actions.length === 0) {
+				return null;
+			}
+			const items = {
+				icon: mdiPlus,
+				title: this.$t("common.actions.create"),
+				ariaLabel: this.$t("common.actions.create"),
+				testId: "add-content-button",
+				actions: actions,
+			};
+			return items;
 		},
 		roomData() {
 			return roomModule.getRoomData;
@@ -333,7 +339,10 @@ export default defineComponent({
 		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
-				this.shareCourseModule.startShareFlow(this.courseId);
+				this.shareModule.startShareFlow({
+					id: this.courseId,
+					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				});
 			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				await roomModule.createCourseShareToken(this.courseId);
 				this.dialog.courseShareToken = roomModule.getCourseShareToken;

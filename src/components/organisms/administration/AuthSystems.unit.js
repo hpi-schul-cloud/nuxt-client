@@ -126,12 +126,12 @@ describe("AuthSystems", () => {
 			it("login link copy button should copy login link", () => {
 				const mockElem = {
 					value: "example_value",
-					select: () => {},
-					setSelectionRange: () => {},
+					select: () => ({}),
+					setSelectionRange: () => ({}),
 				};
 				Object.assign(navigator, {
 					clipboard: {
-						writeText: () => {},
+						writeText: () => ({}),
 					},
 				});
 				Object.assign(document, {

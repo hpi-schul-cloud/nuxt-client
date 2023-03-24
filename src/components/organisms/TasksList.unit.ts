@@ -56,9 +56,11 @@ describe("@/components/organisms/TasksList", () => {
 
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
-			//@ts-ignore
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			const typeValidator = TasksList.props.type.validator;
-			//@ts-ignore
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			const roleValidator = TasksList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
@@ -123,10 +125,12 @@ describe("@/components/organisms/TasksList", () => {
 		dueDateLabels.wrappers.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
 			if (
-				//@ts-ignore
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
 				tasks[index].duedate === null ||
-				//@ts-ignore
-				typeof tasks[index].duedate === "undefined"
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				tasks[index].duedate === undefined
 			)
 				expect(dateLabel.text()).toBe("");
 			else expect(dateLabel.text()).toContain("Abgabe ");
@@ -192,8 +196,6 @@ describe("@/components/organisms/TasksList", () => {
 				},
 			});
 
-			//@ts-ignore
-			expect(wrapper.vm.showSpinner).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
 			expect(
@@ -218,6 +220,7 @@ describe("@/components/organisms/TasksList", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.status).toBe("completed");
 		});

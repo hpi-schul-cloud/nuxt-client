@@ -3,9 +3,15 @@ import CkEditor from "@/components/editor/CKEditor.vue";
 import { mount } from "@vue/test-utils";
 
 class ResizeObserver {
-	observe() {}
-	unobserve() {}
-	disconnect() {}
+	observe() {
+		return;
+	}
+	unobserve() {
+		return;
+	}
+	disconnect() {
+		return;
+	}
 }
 
 describe("@/components/editor/CKEditor", () => {

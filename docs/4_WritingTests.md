@@ -353,3 +353,7 @@ For more details on how to write good components and how to split your component
 End-to-End-Tests are developed in a seperate repository [end-to-end-tests](https://github.com/hpi-schul-cloud/end-to-end-tests)
 
 [Documentation of e2e tests](https://docs.dbildungscloud.de/x/tAgrCg)
+
+## Code-Coverage
+
+For monitoring our code-coverage we are using [Codacy](https://www.codacy.com). The current status can be seen on this [Dashboard](https://app.codacy.com/gh/hpi-schul-cloud/nuxt-client/dashboard/).
