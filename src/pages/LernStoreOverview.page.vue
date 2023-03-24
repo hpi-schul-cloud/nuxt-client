@@ -155,11 +155,9 @@ export default {
 						q: "",
 					},
 				});
-				//contentModule.clearResources();
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
-				//contentModule.clearResources();
 				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
