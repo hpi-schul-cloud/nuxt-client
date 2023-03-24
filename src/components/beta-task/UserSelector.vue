@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, nextTick } from "vue";
+import { defineComponent, PropType, ref, computed, nextTick } from "vue";
 import { User } from "./types/User";
 
 export default defineComponent({
@@ -58,12 +58,19 @@ export default defineComponent({
 		const selectedUserIds = props.selection.map((user: User) => {
 			return user.id;
 		});
+
 		const model = ref(selectedUserIds);
 
 		const selectionChanged = () => {
-			props.required && model.value.length === 0
-				? emit("error")
-				: emit("input", JSON.parse(JSON.stringify(model.value)));
+			if (props.required && model.value.length === 0) {
+				emit("error");
+				return;
+			}
+
+			const selectedUsers = props.users.filter((user: User) => {
+				return model.value.includes(user.id);
+			});
+			emit("input", selectedUsers);
 		};
 
 		const allUsersSelected = computed(() => {
