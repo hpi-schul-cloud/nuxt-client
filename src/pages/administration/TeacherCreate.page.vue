@@ -36,9 +36,6 @@ export default {
 		InfoMessage,
 		DefaultWireframe,
 	},
-	meta: {
-		requiredPermissions: ["TEACHER_CREATE"],
-	},
 	data() {
 		return {
 			error: false,
