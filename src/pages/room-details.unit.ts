@@ -236,7 +236,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("new task-card button", () => {
 		const mockRoute = {
-			name: "rooms-task-card-new",
+			name: "rooms-beta-task-new",
 			params: { course: "123" },
 		};
 		beforeEach(() => {
