@@ -4,6 +4,7 @@ import { Layouts } from "@/layouts/types";
 import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
 import {
 	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
 	REGEX_UUID,
@@ -264,9 +265,9 @@ export const routes: Array<RouteConfig> = [
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 			sourceSchoolNumber: (value: unknown) =>
-				!isDefined(value) || (isString(value) && /[0-9]{5}/.test(value)),
+				!isDefined(value) || isOfficialSchoolNumber(value),
 			targetSchoolNumber: (value: unknown) =>
-				!isDefined(value) || (isString(value) && /[0-9]{5}/.test(value)),
+				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
 		props: (route: Route) => ({
 			errorcode: route.query.errorcode,
