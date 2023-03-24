@@ -3,4 +3,3 @@
 dist
 /src/serverApi/**
 /src/fileStorageApi/**/*.ts
-/src/pages/Error.page.vue
