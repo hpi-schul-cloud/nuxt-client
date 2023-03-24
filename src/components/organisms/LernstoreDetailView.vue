@@ -1,6 +1,6 @@
 <template>
 	<div class="resource">
-		<div ref="icons" class="icons" :style="{ 'justify-content': 'flex-end' }">
+		<div ref="icons" class="icons">
 			<v-btn
 				fab
 				small
@@ -380,6 +380,7 @@ $tablet-portrait-width: 768px;
 		top: 0;
 		z-index: var(--layer-modal);
 		display: flex;
+		justify-content: flex-end;
 		width: 100%;
 		padding: var(--space-md);
 
