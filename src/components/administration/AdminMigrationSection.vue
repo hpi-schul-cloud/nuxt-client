@@ -160,10 +160,6 @@ export default defineComponent({
 			() => schoolsModule.getOauthMigration
 		);
 
-		const oauthMigrationFinalFinish: ComputedRef<string> = computed(
-			() => schoolsModule.getOauthMigration.oauthMigrationFinalFinish ?? ""
-		);
-
 		const setMigration = (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,

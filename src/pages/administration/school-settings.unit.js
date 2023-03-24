@@ -4,6 +4,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import { ApplicationError } from "@/store/types/application-error";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -349,7 +350,7 @@ describe("SchoolSettingPage", () => {
 		);
 	});
 
-	it("error image should visible if schoolError occured", () => {
+	it("error image should visible if schoolError occurred", () => {
 		schoolsModule.setError({ error: { message: "some errors" } });
 		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
@@ -368,6 +369,29 @@ describe("SchoolSettingPage", () => {
 
 		expect(schoolError.exists()).toBeTruthy();
 		expect(noSchoolError.exists()).toBeFalsy();
+	});
+
+	it("error message in should be visible if schoolError occurred", () => {
+		schoolsModule.setError(
+			new ApplicationError(500, "pages.administration.school.index.error")
+		);
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		const text = wrapper.findComponent({ name: "v-alert" }).text();
+
+		expect(text).toStrictEqual(
+			"Beim Laden der Schule ist ein Fehler aufgetreten"
+		);
 	});
 
 	it("should load needed data form server", async () => {

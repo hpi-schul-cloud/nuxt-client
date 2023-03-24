@@ -657,7 +657,7 @@
 	"pages.administration.school.index.beta.feedback": "Hier kannst du Feedback hinterlassen.",
 	"pages.administration.school.index.beta.back": "Zurück zur alten Seite",
 	"pages.administration.school.index.error": "Beim Laden der Schule ist ein Fehler aufgetreten",
-	"pages.administration.school.index.axiosError": "The grace period after finishing migration has expired",
+	"pages.administration.school.index.error.gracePeriodExceeded": "The grace period after finishing migration has expired",
 	"pages.administration.school.index.longText.provideStudentsAndTheirParents": "Lass deinen Schüler:innen und den Eltern individuelle Links zum Erklären des Einverständnisses digital oder analog zukommen. Bei Abschluss der Registrierung wird ein Loginpasswort für die Schüler:innen erstellt.",
 	"pages.administration.school.index.generalSettings": "Allgemeine Einstellungen",
 	"pages.administration.school.index.generalSettings.save": "Allgemeine Einstellungen speichern",

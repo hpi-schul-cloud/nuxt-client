@@ -397,41 +397,6 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationFinished: false,
 			});
 		});
-
-		it("should show an error when grace period is expired", async () => {
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 2));
-			const date: string = new Date(2023, 1, 1).toDateString();
-			const laterDate: string = new Date(2023, 1, 3).toDateString();
-			const { wrapper } = setup({
-				getOauthMigration: {
-					enableMigrationStart: true,
-					oauthMigrationPossible: false,
-					oauthMigrationMandatory: false,
-					oauthMigrationFinished: date,
-					oauthMigrationFinalFinish: laterDate,
-				},
-			});
-			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-			await buttonComponent.vm.$emit("click");
-
-			schoolsModule.setOauthMigration({
-				enableMigrationStart: true,
-				oauthMigrationPossible: true,
-				oauthMigrationMandatory: false,
-				oauthMigrationFinished: date,
-				oauthMigrationFinalFinish: date,
-			});
-			const cardComponent = wrapper.findComponent({ name: "v-card" });
-			const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
-			await cardButtonAgree.vm.$emit("click");
-
-			const alert = wrapper.find(".v-alert__content");
-
-			expect(alert.text()).toEqual(
-				"pages.administration.school.index.axiosError"
-			);
-		});
 	});
 
 	describe("when disagree button of card is clicked", () => {

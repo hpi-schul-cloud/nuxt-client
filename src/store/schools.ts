@@ -1,7 +1,7 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { Year, FederalState, School, OauthMigration } from "./types/schools";
+import { FederalState, OauthMigration, School, Year } from "./types/schools";
 import {
 	MigrationBody,
 	MigrationResponse,
@@ -153,11 +153,7 @@ export default class SchoolsModule extends VuexModule {
 
 	@Mutation
 	setError(error: ApplicationError | null): void {
-		if (error instanceof AxiosError) {
-			this.error = error?.response?.data.message;
-		} else {
-			this.error = error;
-		}
+		this.error = error;
 	}
 
 	get getSchool(): School {
@@ -415,14 +411,12 @@ export default class SchoolsModule extends VuexModule {
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				if (error.response?.status) {
-					this.setError(
-						useApplicationError().createApplicationError(
-							error.response?.status,
-							"pages.administration.school.index.axiosError"
-						)
-					);
-				}
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error.gracePeriodExceeded"
+					)
+				);
 			}
 		}
 	}
