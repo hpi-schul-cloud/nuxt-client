@@ -2,7 +2,7 @@ import { useCurrentElement, useElementBounding } from "@vueuse/core";
 import { inject, onMounted, Ref, watch } from "vue";
 
 export const useContentElementInteractionHandler = (
-	onFocusCallback: () => void
+	onFocusCallback: (interactionBoundary: { x: number; y: number }) => void
 ) => {
 	const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(
 		"CARD_HOST_INTERACTION_EVENT"
@@ -29,7 +29,7 @@ export const useContentElementInteractionHandler = (
 					interactionBoundary
 				)
 			) {
-				onFocusCallback();
+				onFocusCallback(interactionBoundary);
 			}
 		});
 	});
