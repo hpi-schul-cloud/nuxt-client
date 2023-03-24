@@ -103,7 +103,7 @@ export default defineComponent({
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
 			const days: number | undefined = undefined;
 			if (envConfigModule?.getMigrationEndGracePeriod) {
-				const days = envConfigModule?.getMigrationEndGracePeriod / 86400000;
+				const days = envConfigModule.getMigrationEndGracePeriod / 86400000;
 				return days;
 			} else {
 				return days;
