@@ -101,4 +101,8 @@ export default defineComponent({
 	line-height: var(--line-height-sm);
 	color: var(--v-black-base);
 }
+
+::v-deep .v-textarea.error--text textarea {
+	border-bottom: 2px solid var(--v-error-base);
+}
 </style>
