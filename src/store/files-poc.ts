@@ -1,12 +1,14 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
+	FileRecordParamsParentType,
 	FileRecordResponse as FileRecord,
+	RenameFileParams,
 } from "@/fileStorageApi/v3";
-import { authModule } from "@/store";
 import { downloadFile } from "@/utils/fileHelper";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
+import { authModule } from "./store-accessor";
 import { BusinessError, Status } from "./types/commons";
 
 @Module({
@@ -25,16 +27,19 @@ export default class FilesPOCModule extends VuexModule {
 	status: Status = "";
 
 	@Action
-	async fetchFiles(): Promise<void> {
+	async fetchFiles(
+		parentId: string,
+		parentType: FileRecordParamsParentType
+	): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
-			const response = await this.fileStorageApi.filesStorageControllerList(
+			const response = await this.fileStorageApi.list(
 				schoolId,
-				schoolId,
-				"schools"
+				parentId,
+				parentType
 			);
 
 			this.setFiles(response.data.data);
@@ -47,16 +52,20 @@ export default class FilesPOCModule extends VuexModule {
 	}
 
 	@Action
-	async upload(file: File): Promise<void> {
+	async upload(
+		parentId: string,
+		parentType: FileRecordParamsParentType,
+		file: File
+	): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
-			const response = await this.fileStorageApi.filesStorageControllerUpload(
+			const response = await this.fileStorageApi.upload(
 				schoolId,
-				schoolId,
-				"schools",
+				parentId,
+				parentType,
 				file
 			);
 			this.appendFile(response.data);
@@ -74,36 +83,29 @@ export default class FilesPOCModule extends VuexModule {
 		this.setStatus("pending");
 
 		try {
-			const res = await this.fileStorageApi.filesStorageControllerDownload(
-				file.id,
-				file.name,
-				{ responseType: "blob" }
-			);
+			const res = await this.fileStorageApi.download(file.id, file.name, {
+				responseType: "blob",
+			});
 
-			downloadFile(res.data as unknown as Blob, file.name, file.type);
+			downloadFile(res.data as unknown as Blob, file.name, file.mimeType);
 
 			this.setStatus("completed");
 		} catch (error) {
-			console.log(error);
-
 			this.setBusinessError(error as BusinessError);
 			this.setStatus("error");
 		}
 	}
 
 	@Action
-	async rename(params: { fileId: string; fileName: string }): Promise<void> {
+	async rename(fileRecordId: string, params: RenameFileParams): Promise<void> {
 		this.resetBusinessError();
 		this.setStatus("pending");
 
 		try {
-			const response =
-				await this.fileStorageApi.filesStorageControllerPatchFilename(
-					params.fileId,
-					{
-						fileName: params.fileName,
-					}
-				);
+			const response = await this.fileStorageApi.patchFilename(
+				fileRecordId,
+				params
+			);
 
 			this.replaceFile(response.data);
 
