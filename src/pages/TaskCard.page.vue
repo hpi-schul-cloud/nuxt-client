@@ -60,7 +60,35 @@
 				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
+				<v-btn
+					v-if="isDeletable"
+					class="float-right"
+					color="secondary"
+					outlined
+					@click="openDeleteDialog()"
+					data-testid="delete-btn"
+				>
+					{{ $t("common.actions.remove") }}
+				</v-btn>
 			</div>
+			<v-custom-dialog
+				ref="delete-dialog"
+				v-model="deleteDialog.isOpen"
+				data-testid="delete-beta-task-dialog"
+				:size="375"
+				has-buttons
+				confirm-btn-title-key="common.actions.remove"
+				@dialog-confirmed="deleteElement()"
+			>
+				<h2 slot="title" class="text-h4 my-2">
+					{{ $t("pages.taskCard.deleteTaskCard.title") }}
+				</h2>
+				<template slot="content">
+					<p class="text-md mt-2">
+						{{ $t("pages.taskCard.deleteTaskCard.text") }}
+					</p>
+				</template>
+			</v-custom-dialog>
 		</v-form>
 		<article v-else class="d-flex flex-column">
 			<title-card-element v-model="title" :editable="false" />
@@ -92,6 +120,11 @@ import {
 	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+<<<<<<< Updated upstream
+=======
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import RoomsModule from "@/store/rooms";
+>>>>>>> Stashed changes
 
 // TODO - unit tests!
 export default defineComponent({
@@ -101,6 +134,7 @@ export default defineComponent({
 		TitleCardElement,
 		CardElementList,
 		DateTimePicker,
+		vCustomDialog,
 	},
 	setup() {
 		const router = useRouter();
@@ -124,6 +158,7 @@ export default defineComponent({
 			}`
 		);
 
+<<<<<<< Updated upstream
 		const breadcrumbs = ref([
 			{
 				text: i18n.t("pages.courses.index.title"),
@@ -132,6 +167,22 @@ export default defineComponent({
 				}).href,
 			},
 		]);
+=======
+		const deleteDialog = ref({
+			isOpen: false,
+		});
+
+		const openDeleteDialog = () => {
+			deleteDialog.value.isOpen = true;
+		};
+
+		const deleteElement = async () => {
+			await deleteTaskCard();
+			deleteDialog.value.isOpen = false;
+		};
+
+		const breadcrumbs = ref<object[]>([]);
+>>>>>>> Stashed changes
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
@@ -153,6 +204,8 @@ export default defineComponent({
 
 		const minDate = new Date().toISOString();
 		const maxDate = ref("");
+
+		const isDeletable: Ref<boolean> = ref(false);
 
 		onMounted(async () => {
 			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
@@ -204,8 +257,10 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				isDeletable.value = !!taskCardData.id;
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
+
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push({
@@ -303,6 +358,15 @@ export default defineComponent({
 			router.go(-1);
 		};
 
+		const deleteTaskCard = async () => {
+			if (hasErrors.value) {
+				return;
+			}
+
+			await taskCardModule.deleteTaskCard();
+			router.go(-1);
+		};
+
 		const hasErrors = ref(false);
 		const onError = () => {
 			hasErrors.value = true;
@@ -325,10 +389,14 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			title,
+			deleteDialog,
+			deleteElement,
+			openDeleteDialog,
 			dueDate,
 			elements,
 			save,
 			cancel,
+			deleteTaskCard,
 			t,
 			handleDateTimeInput,
 			isEditMode,
@@ -339,6 +407,7 @@ export default defineComponent({
 			maxDate,
 			isVisible,
 			visibilityOptions,
+			isDeletable,
 		};
 	},
 });

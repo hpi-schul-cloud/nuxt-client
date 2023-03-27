@@ -347,6 +347,9 @@ describe("@components/card-elements/CardElementList", () => {
 					value: getNotEditableCardElementsMockData(),
 					editMode: false,
 				});
+				const deleteDialog = wrapper.find({
+					ref: "delete-dialog",
+				});
 				const firstCardElement = wrapper
 					.findAllComponents({
 						ref: "card-element",
@@ -356,6 +359,8 @@ describe("@components/card-elements/CardElementList", () => {
 
 				firstCardElement.vm.$emit("delete-element");
 				await wrapper.vm.$nextTick();
+				expect(deleteDialog.vm).not.toBeDefined();
+
 				const cardElements = wrapper.findAllComponents({
 					ref: "card-element",
 				});

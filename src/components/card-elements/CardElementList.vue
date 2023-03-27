@@ -1,5 +1,6 @@
 <template>
 	<div v-if="editMode">
+		<add-card-element @click="addElementAfter()" />
 		<draggable
 			ref="draggable"
 			v-model="elements"

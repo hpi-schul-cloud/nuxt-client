@@ -794,6 +794,8 @@
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"pages.taskCard.addElement": "Element hinzufügen",
+	"pages.taskCard.deleteTaskCard.text": "Bist du dir sicher, dass du die Beta-Aufgabe löschen möchtest?",
+	"pages.taskCard.deleteTaskCard.title": "Beta-Aufgabe löschen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
 	"pages.tasks.labels.due": "Abgabe",
