@@ -19,9 +19,6 @@ import LernstoreDetailView from "@/components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@/components/organisms/LernstoreCollectionDetailView";
 
 export default {
-	meta: {
-		requiredPermissions: ["LERNSTORE_VIEW"],
-	},
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,

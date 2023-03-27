@@ -29,9 +29,6 @@ export default {
 		DefaultWireframe,
 		FormNews,
 	},
-	meta: {
-		requiredPermissions: ["NEWS_CREATE"],
-	},
 	computed: {
 		news: () => newsModule.getNews,
 		status: () => newsModule.getStatus,
