@@ -225,18 +225,27 @@ const getSidebarItems = (
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			{
-				title: "global.sidebar.school",
-				icon: "building",
-				href: isNewSchoolAdminPageDefault
-					? "/administration/school-settings"
-					: "/administration/school",
-				testId: "Schule",
-				activeForUrls: [
-					"^/administration/school($|/.*)",
-					"^/administration/school-settings($|/.*)",
-				],
-			},
+			isNewSchoolAdminPageDefault
+				? {
+						title: "global.sidebar.school",
+						icon: "building",
+						to: "/administration/school-settings",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  }
+				: {
+						title: "global.sidebar.school",
+						icon: "building",
+						href: "/administration/school",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  },
 		],
 	},
 	{
