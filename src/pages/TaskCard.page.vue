@@ -234,10 +234,20 @@ export default defineComponent({
 			if (route.name === "tasks-beta-task-new") {
 				await roomsModule.fetchAllElements();
 				courses.value = roomsModule.getAllElements;
+				const initialCardElements = [
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+						content: {
+							value: "",
+							inputFormat:
+								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+						},
+					},
+				];
 
-				const taskCardData = taskCardModule.getTaskCardData;
 				dueDate.value = endOfSchoolYear.toISOString();
-				initElements(taskCardData.cardElements);
+				initElements(initialCardElements);
 
 				breadcrumbs.value.push({
 					text: i18n.t("common.words.tasks"),
