@@ -4,7 +4,7 @@
 			src="@/assets/img/migration/migration_error.svg"
 			:alt="$t('pages.userMigration.error.img.alt')"
 		/>
-		<h1 class="pl-4 pr-4">
+		<h1 class="pl-4 pr-4" style="white-space: nowrap">
 			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
@@ -23,16 +23,15 @@
 			<p
 				data-testId="text-schoolNumberMismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
-			>
-				{{
-					$t("pages.userMigration.error.schoolNumberMismatch", {
+				v-html="
+					$t('pages.userMigration.error.schoolNumberMismatch', {
 						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 						targetSchoolNumber,
 						sourceSchoolNumber,
 					})
-				}}
-			</p>
+				"
+			></p>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>

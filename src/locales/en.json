@@ -899,7 +899,7 @@
 	"pages.userMigration.error.img.alt": "Migration failed graphic",
 	"pages.userMigration.error.title": "Relocation of the login system failed",
 	"pages.userMigration.error.description": "Unfortunately, moving the login system from {sourceSystem} to {targetSystem} failed. In order to be able to use the {instance} with the registration system {targetSystem}, please <a href=\"{supportLink}\">contact support</a>.",
-	"pages.userMigration.error.schoolNumberMismatch": "Please send the school number {sourceSystem} {sourceSchoolNumber} and the school number {targetSystem} {targetSchoolNumber} to the problem.",
+	"pages.userMigration.error.schoolNumberMismatch": "Please send the school number <b>{sourceSystem} {sourceSchoolNumber}</b> and the school number <b>{targetSystem} {targetSchoolNumber}</b> to the problem.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent": "Consent form:",
 	"utils.adminFilter.consent.label.missing": "User created",
