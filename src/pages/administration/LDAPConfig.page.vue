@@ -106,9 +106,6 @@ export default {
 		ClassesSection,
 		InfoMessage,
 	},
-	meta: {
-		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-	},
 	data() {
 		return {
 			breadcrumbs: [

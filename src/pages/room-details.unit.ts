@@ -235,10 +235,12 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("new task-card button", () => {
-		const mockRoute = "/rooms/123/create-task-card";
+		const mockRoute = {
+			name: "rooms-beta-task-new",
+			params: { course: "123" },
+		};
 		beforeEach(() => {
 			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
-			$router.resolve.mockReturnValue({ href: mockRoute });
 		});
 		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
 			const wrapper = getWrapper();
@@ -256,7 +258,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.find(".wireframe-fab");
 			const newTaskCardAction = fabComponent.vm.actions[1];
-			expect(newTaskCardAction.href).toStrictEqual(mockRoute);
+			expect(newTaskCardAction.to).toStrictEqual(mockRoute);
 		});
 	});
 

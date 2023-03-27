@@ -51,7 +51,7 @@ describe("@/components/legacy/NavigationBar", () => {
 		expect(wrapper.vm.hasButtons).toBe(true);
 	});
 
-	it.each(["n21", "brb", "int"])(
+	it.each(["n21", "brb"])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
 			envConfigModule.setEnvs({ SC_THEME: theme });

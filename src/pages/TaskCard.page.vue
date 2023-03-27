@@ -16,6 +16,15 @@
 				disabled
 				:label="$t('common.labels.course')"
 			/>
+			<v-select
+				v-model="isVisible"
+				:items="visibilityOptions"
+				item-value="value"
+				item-text="text"
+				filled
+				disabled
+				:label="$t('common.labels.visibility')"
+			/>
 			<date-time-picker
 				class="mb-4"
 				required
@@ -61,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, computed } from "vue";
+import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
@@ -80,6 +89,7 @@ import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
+	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
@@ -125,7 +135,17 @@ export default defineComponent({
 
 		const course = ref("");
 		const courses = ref<object[]>([]);
-
+		const isVisible: Ref<boolean> = ref(true);
+		const visibilityOptions = ref<object[]>([
+			{
+				text: t("common.labels.visible"),
+				value: true,
+			},
+			{
+				text: t("common.labels.notVisible"),
+				value: false,
+			},
+		]);
 		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
@@ -139,7 +159,7 @@ export default defineComponent({
 			endOfSchoolYear.setHours(12);
 			maxDate.value = endOfSchoolYear.toISOString();
 
-			if (route.name === "rooms-task-card-new") {
+			if (route.name === "rooms-beta-task-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
 				const roomData = roomModule.getRoomData;
@@ -149,11 +169,20 @@ export default defineComponent({
 						title: roomData.title,
 					},
 				];
-				const taskCardData = taskCardModule.getTaskCardData;
+				const initialCardElements = [
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+						content: {
+							value: "",
+							inputFormat:
+								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+						},
+					},
+				];
 
-				taskCardModule.setCourseId(course.value);
 				dueDate.value = endOfSchoolYear.toISOString();
-				initElements(taskCardData.cardElements);
+				initElements(initialCardElements);
 
 				breadcrumbs.value.push({
 					text: roomData.title,
@@ -163,7 +192,7 @@ export default defineComponent({
 				});
 			}
 
-			if (route.name === "task-card-view-edit") {
+			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
@@ -175,6 +204,7 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
@@ -264,7 +294,7 @@ export default defineComponent({
 				return;
 			}
 
-			if (route.name === "rooms-task-card-new") {
+			if (route.name === "rooms-beta-task-new") {
 				await createTaskCard();
 			} else {
 				await updateTaskCard();
@@ -307,6 +337,8 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			isVisible,
+			visibilityOptions,
 		};
 	},
 });
