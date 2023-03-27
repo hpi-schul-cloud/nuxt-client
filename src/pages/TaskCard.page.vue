@@ -138,7 +138,7 @@ export default defineComponent({
 			},
 		]);
 
-		const form = ref<HTMLFormElement>(null);
+		const form = ref<HTMLFormElement | null>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
