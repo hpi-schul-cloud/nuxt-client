@@ -654,6 +654,7 @@
 	"pages.administration.school.index.back": "old administration page",
 	"pages.administration.school.index.title": "Manage school",
 	"pages.administration.school.index.error": "An error occured while loading the school",
+	"pages.administration.school.index.error.gracePeriodExceeded": "The grace period after finishing migration has expired",
 	"pages.administration.school.index.longText.provideStudentsAndTheirParents": "Provide your students and their parents with individual links to give their consent in digital or analog form. When registration is complete, a login password will be created for the student.",
 	"pages.administration.school.index.generalSettings": "General Settings",
 	"pages.administration.school.index.generalSettings.save": "Save general settings",

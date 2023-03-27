@@ -656,7 +656,7 @@
 	"pages.administration.school.index.info": "Einige Einstellungen befinden sich noch auf der ",
 	"pages.administration.school.index.back": "alten Administrationsseite",
 	"pages.administration.school.index.error": "Beim Laden der Schule ist ein Fehler aufgetreten",
-	"pages.administration.school.index.error.gracePeriodExceeded": "The grace period after finishing migration has expired",
+	"pages.administration.school.index.error.gracePeriodExceeded": "Die Wartefrist nach Abschluss der Migration ist abgelaufen",
 	"pages.administration.school.index.longText.provideStudentsAndTheirParents": "Lass deinen Schüler:innen und den Eltern individuelle Links zum Erklären des Einverständnisses digital oder analog zukommen. Bei Abschluss der Registrierung wird ein Loginpasswort für die Schüler:innen erstellt.",
 	"pages.administration.school.index.generalSettings": "Allgemeine Einstellungen",
 	"pages.administration.school.index.generalSettings.save": "Allgemeine Einstellungen speichern",
