@@ -795,6 +795,8 @@
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to delete this element?",
 	"pages.taskCard.deleteElement.title": "Delete element",
+	"pages.taskCard.deleteTaskCard.text": "Are you sure, you want to delete the beta task?",
+	"pages.taskCard.deleteTaskCard.title": "Delete beta task",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",

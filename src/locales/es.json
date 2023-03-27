@@ -811,6 +811,8 @@
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
+	"pages.taskCard.deleteTaskCard.text": "¿Estás seguro de que deseas eliminar la tarea beta?",
+	"pages.taskCard.deleteTaskCard.title": "Eliminar tarea beta",
 	"pages.impressum.title": "Impresión",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "¿En qué provincia le gustaría iniciar sesión?",
