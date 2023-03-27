@@ -13,22 +13,26 @@ const authModuleMock = () => {
 	};
 };
 
+const roomsModuleMock = () => {
+	return {
+		getAllElements: [],
+	};
+};
+
 const taskCardModuleMock = () => {
 	return { getTaskCardData: {} };
 };
 
 jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
+	roomsModule: roomsModuleMock(),
 	taskCardModule: taskCardModuleMock(),
 }));
 
 const getWrapper = (
 	userPermission: string,
-<<<<<<< Updated upstream
-=======
 	userCourse: object,
 	taskCardData: object,
->>>>>>> Stashed changes
 	props?: object,
 	options?: object
 ) => {
@@ -46,15 +50,12 @@ const getWrapper = (
 			authModule: {
 				getUserPermissions: [userPermission],
 			},
-<<<<<<< Updated upstream
-=======
 			roomsModule: {
 				getAllElements: [userCourse],
 			},
 			taskCardModule: {
 				getTaskCardData: taskCardData,
 			},
->>>>>>> Stashed changes
 		},
 		localVue,
 		router,
@@ -63,8 +64,6 @@ const getWrapper = (
 	});
 };
 
-<<<<<<< Updated upstream
-=======
 const mockCourse = {
 	id: "123",
 	title: "Mathe",
@@ -133,7 +132,6 @@ const mockTaskCardData: TaskCardResponse = {
 	visibleAtDate: "",
 };
 
->>>>>>> Stashed changes
 describe("TaskCard", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
@@ -141,25 +139,19 @@ describe("TaskCard", () => {
 	});
 
 	describe("when TASK_CARD_EDIT permission is present", () => {
-<<<<<<< Updated upstream
-=======
 		const wrapper = getWrapper("task_card_edit", mockCourse, emptyTaskCardData);
 
->>>>>>> Stashed changes
 		it("should render component page", () => {
-			const wrapper = getWrapper("task_card_edit");
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
 		it("should render cancel button", () => {
-			const wrapper = getWrapper("task_card_edit");
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
 			expect(cancelBtn.exists()).toBe(true);
 		});
 
 		it("should render save button", () => {
-			const wrapper = getWrapper("task_card_edit");
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
 			expect(saveBtn.exists()).toBe(true);
@@ -218,25 +210,19 @@ describe("TaskCard", () => {
 	});
 
 	describe("when only TASK_CARD_VIEW permission is present", () => {
-<<<<<<< Updated upstream
-=======
 		const wrapper = getWrapper("task_card_view", mockCourse, emptyTaskCardData);
 
->>>>>>> Stashed changes
 		it("should render component page", () => {
-			const wrapper = getWrapper("task_card_view");
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
 		it("should not render cancel button", () => {
-			const wrapper = getWrapper("task_card_view");
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
 			expect(cancelBtn.exists()).toBe(false);
 		});
 
 		it("should not render save button", () => {
-			const wrapper = getWrapper("task_card_view");
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
 			expect(saveBtn.exists()).toBe(false);

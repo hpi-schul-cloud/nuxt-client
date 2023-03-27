@@ -14,6 +14,7 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
+	MIGRATION_END_GRACE_PERIOD_MS: process.env.MIGRATION_END_GRACE_PERIOD_MS,
 };
 
 const retryLimit = 10;
@@ -94,6 +95,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
+	get getMigrationEndGracePeriod() {
+		return this.env.MIGRATION_END_GRACE_PERIOD_MS;
+	}
+
 	get getTeacherStudentVisibilityIsConfigurable() {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
@@ -124,6 +129,13 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getAccessibilityReportEmail(): string | undefined {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
+	}
+
+	get getNewSchoolAdminPageAsDefault(): boolean {
+		return (
+			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ||
+			false
+		);
 	}
 
 	get getEnv(): Envs {
