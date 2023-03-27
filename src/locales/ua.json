@@ -590,6 +590,7 @@
 	"pages.administration.school.index.info": "Деякі налаштування все ще знаходяться на ",
 	"pages.administration.school.index.back": "старій сторінці адміністрування",
 	"pages.administration.school.index.error": "Під час завантаження школи сталася помилка",
+	"pages.administration.school.index.error.gracePeriodExceeded": "Пільговий період після завершення міграції минув",
 	"pages.administration.school.index.generalSettings": "Загальні параметри",
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning": "Після налаштування цей параметр буде неможливо змінити!",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty": "Виберіть округ, до якого належить ваша школа",
