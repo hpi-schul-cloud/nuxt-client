@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import { authModule, schoolsModule } from "@/store";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import TheTopBar from "@/components/legacy/TheTopBar";
 import TheSidebar from "@/components/legacy/TheSidebar";
 import TheFooter from "@/components/legacy/TheFooter";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
-import sidebarBaseItems from "@/utils/sidebar-base-items";
+import getSidebarItems from "@/utils/sidebar-base-items";
 import toastsFromQueryString from "@/mixins/toastsFromQueryString";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
 
@@ -50,7 +50,6 @@ export default {
 	mixins: [toastsFromQueryString],
 	data() {
 		return {
-			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
@@ -70,7 +69,11 @@ export default {
 			return [...this.topbarBaseActions];
 		},
 		sidebarItems() {
-			const sidebarItems = this.sidebarBaseItems.filter((item) => {
+			let sidebarItems = getSidebarItems(
+				envConfigModule.getNewSchoolAdminPageAsDefault
+			);
+
+			sidebarItems = sidebarItems.filter((item) => {
 				// Check permissions for all children
 				if ((item.children || []).length >= 1) {
 					item.children = item.children.filter(
