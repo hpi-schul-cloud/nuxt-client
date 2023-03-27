@@ -12,17 +12,25 @@ const authModuleMock = () => {
 	};
 };
 
+const roomsModuleMock = () => {
+	return {
+		getAllElements: [],
+	};
+};
+
 const taskCardModuleMock = () => {
 	return { getTaskCardData: { cardElements: [] } };
 };
 
 jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
+	roomsModule: roomsModuleMock(),
 	taskCardModule: taskCardModuleMock(),
 }));
 
 const getWrapper = (
 	userPermission: string,
+	userCourse: object,
 	props?: object,
 	options?: object
 ) => {
@@ -30,7 +38,7 @@ const getWrapper = (
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
 	const router = new VueRouter({
-		routes: [{ name: "task-card-view-edit", path: "/task-cards" }],
+		routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
 	});
 
 	return mount(TaskCard, {
@@ -40,12 +48,25 @@ const getWrapper = (
 			authModule: {
 				getUserPermissions: [userPermission],
 			},
+			roomsModule: {
+				getAllElements: [userCourse],
+			},
 		},
 		localVue,
 		router,
 		propsData: props,
 		...options,
 	});
+};
+
+const mockCourse = {
+	id: "123",
+	title: "Mathe",
+	shortTitle: "Ma",
+	displayColor: "#54616e",
+	startDate: "2019-12-07T23:00:00.000Z",
+	untilDate: "2020-12-16T23:00:00.000Z",
+	titleDate: "2019/20",
 };
 
 describe("TaskCard", () => {
@@ -55,20 +76,19 @@ describe("TaskCard", () => {
 	});
 
 	describe("when TASK_CARD_EDIT permission is present", () => {
+		const wrapper = getWrapper("task_card_edit", mockCourse);
+
 		it("should render component page", () => {
-			const wrapper = getWrapper("task_card_edit");
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
 		it("should render cancel button", () => {
-			const wrapper = getWrapper("task_card_edit");
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
 			expect(cancelBtn.exists()).toBe(true);
 		});
 
 		it("should render save button", () => {
-			const wrapper = getWrapper("task_card_edit");
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
 			expect(saveBtn.exists()).toBe(true);
@@ -76,20 +96,19 @@ describe("TaskCard", () => {
 	});
 
 	describe("when only TASK_CARD_VIEW permission is present", () => {
+		const wrapper = getWrapper("task_card_view", mockCourse);
+
 		it("should render component page", () => {
-			const wrapper = getWrapper("task_card_view");
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
 		it("should not render cancel button", () => {
-			const wrapper = getWrapper("task_card_view");
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
 			expect(cancelBtn.exists()).toBe(false);
 		});
 
 		it("should not render save button", () => {
-			const wrapper = getWrapper("task_card_view");
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
 			expect(saveBtn.exists()).toBe(false);

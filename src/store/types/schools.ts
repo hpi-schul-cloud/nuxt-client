@@ -61,4 +61,5 @@ export type OauthMigration = {
 	oauthMigrationPossible: boolean;
 	oauthMigrationMandatory: boolean;
 	oauthMigrationFinished?: string;
+	oauthMigrationFinalFinish?: string;
 };
