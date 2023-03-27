@@ -1,5 +1,17 @@
 api.ts
+api/file-api.ts
 base.ts
 common.ts
 configuration.ts
 index.ts
+models/api-validation-error.ts
+models/copy-file-list-response.ts
+models/copy-file-params.ts
+models/copy-file-response.ts
+models/copy-files-of-parent-params.ts
+models/file-record-list-response.ts
+models/file-record-params.ts
+models/file-record-response.ts
+models/file-url-params.ts
+models/index.ts
+models/rename-file-params.ts

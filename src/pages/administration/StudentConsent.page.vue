@@ -336,9 +336,6 @@ export default {
 		StepProgress,
 		ModalBodyInfo,
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
-	},
 	data() {
 		return {
 			mdiAlert,

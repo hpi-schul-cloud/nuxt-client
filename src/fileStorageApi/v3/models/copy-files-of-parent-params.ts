@@ -13,6 +13,20 @@
  */
 
 
+import { FileRecordParams } from './file-record-params';
 
-export * from './api/file-api';
+/**
+ * 
+ * @export
+ * @interface CopyFilesOfParentParams
+ */
+export interface CopyFilesOfParentParams {
+    /**
+     * 
+     * @type {FileRecordParams}
+     * @memberof CopyFilesOfParentParams
+     */
+    target: FileRecordParams;
+}
+
 

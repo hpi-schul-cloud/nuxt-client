@@ -269,7 +269,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			await taskCard.trigger("click");
 			expect(mockRouter.push).toHaveBeenCalledTimes(1);
 			expect(mockRouter.push).toHaveBeenCalledWith({
-				name: "task-card-view-edit",
+				name: "beta-task-view-edit",
 				params: { id: "789" },
 			});
 		});

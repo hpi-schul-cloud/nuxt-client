@@ -171,7 +171,7 @@ export default defineComponent({
 			endOfSchoolYear.setHours(12);
 			maxDate.value = endOfSchoolYear.toISOString();
 
-			if (route.name === "rooms-task-card-new") {
+			if (route.name === "rooms-beta-task-new") {
 				course.value = route.params.id || "";
 				await roomModule.fetchContent(course.value);
 				const roomData = roomModule.getRoomData;
@@ -204,7 +204,7 @@ export default defineComponent({
 				});
 			}
 
-			if (route.name === "task-card-view-edit") {
+			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
@@ -308,8 +308,7 @@ export default defineComponent({
 				return;
 			}
 
-			console.log(selectedUserIds.value);
-			if (route.name === "rooms-task-card-new") {
+			if (route.name === "rooms-beta-task-new") {
 				await createTaskCard();
 			} else {
 				await updateTaskCard();

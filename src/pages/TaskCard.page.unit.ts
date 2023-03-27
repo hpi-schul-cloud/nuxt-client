@@ -35,7 +35,7 @@ const getWrapper = (
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
 	const router = new VueRouter({
-		routes: [{ name: "task-card-view-edit", path: "/task-cards" }],
+		routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
 	});
 
 	return mount(TaskCard, {
