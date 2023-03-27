@@ -14,5 +14,18 @@
 
 
 
-export * from './api/file-api';
+/**
+ * 
+ * @export
+ * @interface RenameFileParams
+ */
+export interface RenameFileParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof RenameFileParams
+     */
+    fileName: string;
+}
+
 
