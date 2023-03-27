@@ -1,7 +1,7 @@
 import { useCurrentElement, useElementBounding } from "@vueuse/core";
 import { inject, onMounted, Ref, watch } from "vue";
 
-export const useContentElementInteractionHandler = (
+export const useCardHostInteractionHandler = (
 	onFocusCallback: (interactionBoundary: { x: number; y: number }) => void
 ) => {
 	const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(

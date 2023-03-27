@@ -1,6 +1,6 @@
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref, watch } from "vue";
-import { useContentElementInteractionHandler } from "../ContentElementInteractionHandler.composable";
+import { useCardHostInteractionHandler } from "../CardHostInteractionHandler.composable";
 import { AnyContentElement } from "../types/ContentElement";
 
 export const useContentElementState = <T extends AnyContentElement>(
@@ -10,7 +10,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
-	useContentElementInteractionHandler(() => {
+	useCardHostInteractionHandler(() => {
 		isAutoFocus.value = true;
 	});
 	const elementRef = toRef(props, "element");
@@ -44,7 +44,6 @@ export const useContentElementState = <T extends AnyContentElement>(
 	return {
 		/**
 		 * Contains the content property of the element.
-		 *
 		 * Will be saved automatically after a debounce
 		 */
 		modelValue,

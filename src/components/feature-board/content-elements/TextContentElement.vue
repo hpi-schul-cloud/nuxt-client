@@ -6,8 +6,8 @@
 		></TextContentElementDisplay>
 		<TextContentElementEdit
 			v-if="isEditMode"
-			:value="modelValue.text"
 			:autofocus="isAutoFocus"
+			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 		></TextContentElementEdit>
 	</div>

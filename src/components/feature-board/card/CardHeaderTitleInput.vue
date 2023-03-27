@@ -23,7 +23,7 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
-import { useContentElementInteractionHandler } from "../ContentElementInteractionHandler.composable";
+import { useCardHostInteractionHandler } from "../CardHostInteractionHandler.composable";
 
 export default defineComponent({
 	name: "CardHeaderTitleInput",
@@ -43,7 +43,7 @@ export default defineComponent({
 		const onFocusCallback = () => {
 			document.getSelection()?.collapseToEnd();
 		};
-		useContentElementInteractionHandler(onFocusCallback);
+		useCardHostInteractionHandler(onFocusCallback);
 
 		return {
 			modelValue,
