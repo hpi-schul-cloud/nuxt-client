@@ -12,7 +12,7 @@
 				outlined
 				tabindex="0"
 				:elevation="isEditMode ? 6 : 0"
-				:id="id"
+				:id="cardId"
 				:ripple="false"
 			>
 				<template v-if="isLoading">
@@ -74,7 +74,7 @@ export default defineComponent({
 	},
 	props: {
 		height: { type: Number, required: true },
-		id: { type: String, required: true },
+		cardId: { type: String, required: true },
 	},
 	emits: ["move-card-keyboard"],
 	setup(props, { emit }) {
@@ -86,7 +86,7 @@ export default defineComponent({
 			deleteCard,
 			updateCardHeight,
 			addElement,
-		} = useCardState(props.id);
+		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move-card-keyboard", event.code);

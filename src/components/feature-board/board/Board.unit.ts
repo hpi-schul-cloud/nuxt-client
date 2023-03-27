@@ -2,8 +2,8 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import BoardVue from "../board/Board.vue";
-import BoardColumnVue from "../board/BoardColumn.vue";
+import BoardVue from "./Board.vue";
+import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board } from "../types/Board";
 
@@ -95,7 +95,7 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 	},
 };
 
-jest.mock("./BoardState.composable");
+jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
 const $route: Route = {

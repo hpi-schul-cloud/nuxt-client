@@ -1,6 +1,6 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
-import * as serverApi from "../../serverApi/v3/api";
+import * as serverApi from "../../../serverApi/v3/api";
 import { useBoardState } from "./BoardState.composable";
 
 let wrapper: Wrapper<Vue>;

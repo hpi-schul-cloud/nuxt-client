@@ -1,43 +1,46 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
-import CardHost from "./CardHost.vue";
 import { useCardState } from "../state/CardState.composable";
-import { LegacyLessonCard, LegacyTaskCard } from "../types/Card";
+import { BoardCard, BoardCardSkeleton } from "../types/Card";
+import CardHost from "./CardHost.vue";
 
-const MOCK_PROP_DEFAULT = {
+const CARD_SKELETON: BoardCardSkeleton = {
 	height: 200,
-	id: "test-id",
+	cardId: "0123456789abcdef00067000",
 };
 
-const MOCK_TASK_REFERENCE: LegacyTaskCard = {
-	id: "task-id",
-	title: "Task Card",
+const CARD_WITHOUT_ELEMENTS: BoardCard = {
+	id: "0123456789abcdef00067000",
+	title: "Empty Card",
 	height: 200,
 	elements: [],
-	taskId: "25",
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
-const MOCK_LESSON_REFERENCE: LegacyLessonCard = {
-	id: "lesson-id",
+const CARD_WITH_ELEMENTS: BoardCard = {
+	id: "0123456789abcdef00067000",
 	title: "Lesson Card",
 	height: 200,
-	elements: [],
-	lessonId: "25",
+	elements: [
+		{
+			type: "text",
+			id: "0123456789abcdef00067003",
+			content: {
+				text: "Element Text",
+			},
+		},
+	],
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
-jest.mock("./CardState.composable");
+jest.mock("../state/CardState.composable");
 const mockedUseCardState = jest.mocked(useCardState);
 
-describe("BoardColumn", () => {
+describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options?: {
-		card: LegacyTaskCard | LegacyLessonCard;
-		isLoading?: boolean;
-	}) => {
+	const setup = (options?: { card: BoardCard; isLoading?: boolean }) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseCardState.mockReturnValue({
@@ -45,49 +48,36 @@ describe("BoardColumn", () => {
 			updateTitle: jest.fn(),
 			deleteCard: jest.fn(),
 			updateCardHeight: jest.fn(),
+			addElement: jest.fn(),
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: MOCK_PROP_DEFAULT,
+			propsData: CARD_SKELETON,
 		});
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ card: MOCK_TASK_REFERENCE });
+			setup({ card: CARD_WITHOUT_ELEMENTS });
 			expect(wrapper.findComponent(CardHost).exists()).toBe(true);
 		});
 
 		describe("'CardSkeleton' component", () => {
 			it("should be rendered if loading is set 'true'", () => {
-				setup({ card: MOCK_TASK_REFERENCE, isLoading: true });
+				setup({ card: CARD_WITHOUT_ELEMENTS, isLoading: true });
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					true
 				);
 			});
 
 			it("should not be rendered if loading is set 'false'", () => {
-				setup({ card: MOCK_TASK_REFERENCE });
+				setup({ card: CARD_WITHOUT_ELEMENTS });
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
 				);
 			});
 		});
-	});
-
-	describe("when key pressed", () => {
-		it.each(["up", "down", "left", "right"])(
-			"should emit 'move-card-keyboard' with '%s' key stroke",
-			async (key) => {
-				setup({ card: MOCK_LESSON_REFERENCE });
-
-				await wrapper.trigger(`keydown.${key}`);
-
-				const emitted = wrapper.emitted("move-card-keyboard") || [[]];
-				expect(emitted[0][0]).toBeDefined();
-			}
-		);
 	});
 });

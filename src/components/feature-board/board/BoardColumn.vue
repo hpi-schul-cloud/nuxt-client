@@ -17,7 +17,7 @@
 					<Draggable :key="card.cardId">
 						<CardHost
 							class="mb-6"
-							:id="card.cardId"
+							:card-id="card.cardId"
 							:height="card.height"
 							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						/>

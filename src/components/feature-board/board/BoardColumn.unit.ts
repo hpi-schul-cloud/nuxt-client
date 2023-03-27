@@ -3,7 +3,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { BoardColumn } from "../types/Board";
-import CardHost from "./CardHost.vue";
+import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
 
 const MOCK_PROP: BoardColumn = {

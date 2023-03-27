@@ -1,6 +1,7 @@
 <template>
 	<OnClickOutside @trigger="onClickOutside">
 		<div
+			data-testid="event-handle"
 			@dblclick.prevent.stop="onDoubleClick"
 			@keydown.escape.capture.stop="onKeydownEscape"
 			@keydown.up.down.left.right="onKeydownArrow"
