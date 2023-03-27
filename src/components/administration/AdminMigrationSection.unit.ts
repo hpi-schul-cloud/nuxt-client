@@ -509,7 +509,7 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("when checkbox is not clicked", () => {
+	describe("when checkbox is unchecked", () => {
 		it("should let agree-button be disabled", async () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
@@ -530,7 +530,7 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("when checkbox is clicked", () => {
+	describe("when checkbox is checked", () => {
 		it("should make agree-button be enabled", async () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
