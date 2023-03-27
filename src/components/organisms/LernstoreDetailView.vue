@@ -61,19 +61,11 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div
-					v-if="shouldShowPlayer && window.width >= 768"
-					class="external-content-warning"
-				>
+				<div v-if="shouldShowPlayer" class="external-content-warning">
 					<p class="text-s external-content-title">
 						{{ $t("pages.content.material.showMaterialHint") }}
 					</p>
-				</div>
-				<div
-					v-else-if="shouldShowPlayer && window.width < 768"
-					class="external-content-warning"
-				>
-					<p class="text-s external-content-title">
+					<p class="text-s external-content-title-mobile">
 						{{ $t("pages.content.material.showMaterialHintMobile") }}
 					</p>
 				</div>
@@ -490,6 +482,16 @@ $tablet-portrait-width: 768px;
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
 			overflow: inherit;
+
+			.external-content-warning {
+				.text-s.external-content-title-mobile {
+					display: block;
+				}
+
+				.external-content-title {
+					display: none;
+				}
+			}
 		}
 
 		.content-container {
@@ -501,6 +503,12 @@ $tablet-portrait-width: 768px;
 			color: var(--v-error-base);
 
 			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+
+			.external-content-title-mobile {
+				display: none;
 				margin-top: var(--space-md);
 				font-weight: var(--font-weight-bold);
 			}
