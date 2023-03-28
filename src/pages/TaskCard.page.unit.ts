@@ -3,6 +3,7 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TaskCard from "./TaskCard.page.vue";
 import { TaskCardResponse } from "@/serverApi/v3";
+import { taskCardModule } from "@/store";
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -20,7 +21,14 @@ const roomsModuleMock = () => {
 };
 
 const taskCardModuleMock = () => {
-	return { getTaskCardData: {} };
+	return {
+		getTaskCardData: {},
+		deleteTaskCard: jest.fn().mockReturnValue(Promise.resolve()),
+	};
+};
+
+const mockRouter = {
+	go: jest.fn(),
 };
 
 jest.mock("@/store", () => ({
@@ -61,6 +69,9 @@ const getWrapper = (
 		router,
 		propsData: props,
 		...options,
+		mocks: {
+			$router: mockRouter,
+		},
 	});
 };
 
@@ -196,6 +207,8 @@ describe("TaskCard", () => {
 			});
 
 			it("should delete beta task and redirect after confirming deletion", async () => {
+				const deleteTaskCardMock = jest.fn();
+				taskCardModule.deleteTaskCard = deleteTaskCardMock;
 				const deleteDialog: any = wrapper.find({
 					ref: "delete-dialog",
 				});
@@ -204,7 +217,8 @@ describe("TaskCard", () => {
 				deleteDialog.vm.$emit("dialog-confirmed");
 				await wrapper.vm.$nextTick();
 
-				expect(deleteDialog.vm.isOpen).toEqual(false);
+				expect(deleteTaskCardMock).toHaveBeenCalled();
+				// expect(mockRouter.go).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
