@@ -12,6 +12,7 @@ const {
 	plannedTask,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
+	betaTask,
 } = mocks;
 
 const defineWindowWidth = (width) => {
@@ -26,6 +27,10 @@ const defineWindowWidth = (width) => {
 let tasksModuleMock;
 let copyModuleMock;
 let notifierModuleMock;
+
+const mockRouter = {
+	push: jest.fn(),
+};
 
 const getWrapper = (props, options) => {
 	return mount(TaskItemTeacher, {
@@ -42,6 +47,9 @@ const getWrapper = (props, options) => {
 		propsData: props,
 		attachTo: document.body,
 		...options,
+		mocks: {
+			$router: mockRouter,
+		},
 	});
 };
 
@@ -63,15 +71,13 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 	});
 
-	it("should compute correct href value", () => {
-		const wrapper = getWrapper({
-			task: tasksTeacher[0],
-		});
+	it("should direct user to legacy task details page", () => {
+		const { location } = window;
+		const wrapper = getWrapper({ task: tasksTeacher[0] });
+		const taskCard = wrapper.findComponent({ name: "v-list-item" });
+		taskCard.trigger("click");
 
-		expect(wrapper.vm.href).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
-		expect(wrapper.attributes("href")).toStrictEqual(
-			`/homework/${tasksTeacher[0].id}`
-		);
+		expect(location.pathname).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	it("should passthrough copy-task event", async () => {
@@ -368,6 +374,30 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			expect(menuBtn.isVisible()).toBe(true);
+		});
+	});
+
+	describe("when task is a beta task", () => {
+		const wrapper = getWrapper({
+			task: betaTask,
+		});
+
+		it("should have correct combined label for beta task", () => {
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+
+			expect(taskLabel.element.textContent).toStrictEqual(
+				"Mathe - Beta-Aufgabe"
+			);
+		});
+
+		it("should redirect to beta task page", async () => {
+			const taskCard = wrapper.findComponent({ name: "v-list-item" });
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "beta-task-view-edit",
+				params: { id: "789" },
+			});
 		});
 	});
 });

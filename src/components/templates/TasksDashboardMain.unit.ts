@@ -1,11 +1,16 @@
 /* eslint-disable max-lines */
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import { authModule, envConfigModule } from "@/store";
+import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
+import { User } from "@/store/types/auth";
+import { Envs } from "@/store/types/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -21,7 +26,7 @@ const $route = {
 	},
 };
 
-const $router = { replace: jest.fn() };
+const $router = { replace: jest.fn(), resolve: jest.fn() };
 
 const defaultTasksModuleGetters: Partial<TasksModule> = {
 	getStatus: "completed",
@@ -41,6 +46,23 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
+const mockAuthStoreDataTeacher = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
+	roles: [{ name: "teacher" }],
+	permissions: [
+		"COURSE_CREATE",
+		"COURSE_EDIT",
+		"TOPIC_CREATE",
+		"TASK_CARD_EDIT",
+		"HOMEWORK_CREATE",
+	],
+};
+
 describe("@/components/templates/TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
@@ -48,6 +70,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
+	let authModuleMock: AuthModule;
+	let envConfigModuleMock: EnvConfigModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -64,6 +88,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
 				shareModule: shareModuleMock,
+				authModule: authModuleMock,
+				envConfigModule: envConfigModuleMock,
 				i18n: { t: (key: string) => key },
 			},
 			...attrs,
@@ -100,6 +126,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
+			});
+
+			setupStores({
+				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
 			});
 
 			wrapper = mountComponent({
@@ -198,8 +229,12 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			setupStores({
 				copyModule: CopyModule,
+				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
 			});
 
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
+			authModule.setUser(mockAuthStoreDataTeacher as User);
 			wrapper = mountComponent({
 				propsData: {
 					role: "teacher",
@@ -224,8 +259,53 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fab = wrapper.findComponent(vCustomFab);
-			expect(fab.exists()).toBe(true);
+			const fabComponent: any = wrapper.find(".wireframe-fab");
+			expect(fabComponent.exists()).toEqual(true);
+		});
+
+		it("'add task' button should have correct path", async () => {
+			const fabComponent: any = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.href).toStrictEqual(
+				"/homework/new?returnUrl=tasks"
+			);
+		});
+
+		describe("new beta task button", () => {
+			const mockRoute = { name: "tasks-beta-task-new" };
+
+			it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				expect(fabComponent.vm.actions.length).toEqual(2);
+			});
+			it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				expect(fabComponent.vm.actions.length).toEqual(0);
+				expect(fabComponent.vm.href).toStrictEqual(
+					"/homework/new?returnUrl=tasks"
+				);
+			});
+			it("should have correct path to task card page", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				const newTaskCardAction = fabComponent.vm.actions[1];
+				expect(newTaskCardAction.to).toStrictEqual(mockRoute);
+			});
 		});
 
 		it("should open tab from store state", async () => {

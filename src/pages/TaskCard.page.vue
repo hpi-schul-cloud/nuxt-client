@@ -11,7 +11,7 @@
 				item-value="id"
 				item-text="title"
 				filled
-				disabled
+				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
 				validate-on-blur
 				:rules="[rules.required]"
@@ -97,6 +97,7 @@ import {
 	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import RoomsModule from "@/store/rooms";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -112,7 +113,9 @@ export default defineComponent({
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
-		if (!i18n || !authModule) {
+		const roomsModule: RoomsModule | undefined =
+			inject<RoomsModule>("roomsModule");
+		if (!i18n || !authModule || !roomsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const t = (key: string) => {
@@ -129,14 +132,7 @@ export default defineComponent({
 			}`
 		);
 
-		const breadcrumbs = ref([
-			{
-				text: i18n.t("pages.courses.index.title"),
-				to: router.resolve({
-					name: "rooms-overview",
-				}).href,
-			},
-		]);
+		const breadcrumbs = ref<object[]>([]);
 
 		const form = ref<HTMLFormElement | null>(null);
 		const course = ref("");
@@ -190,12 +186,20 @@ export default defineComponent({
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
 
-				breadcrumbs.value.push({
-					text: roomData.title,
-					to: router.resolve({
-						name: "rooms-id",
-					}).href,
-				});
+				breadcrumbs.value.push(
+					{
+						text: i18n.t("pages.courses.index.title"),
+						to: {
+							name: "rooms-overview",
+						},
+					},
+					{
+						text: roomData.title,
+						to: {
+							name: "rooms-id",
+						},
+					}
+				);
 			}
 
 			if (route.name === "beta-task-view-edit") {
@@ -214,14 +218,48 @@ export default defineComponent({
 				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
 
-				breadcrumbs.value.push({
-					text: taskCardData.courseName || "",
-					to: router.resolve({
-						name: "rooms-id",
-						params: {
-							id: taskCardData.courseId || "",
+				breadcrumbs.value.push(
+					{
+						text: i18n.t("pages.courses.index.title"),
+						to: {
+							name: "rooms-overview",
 						},
-					}).href,
+					},
+					{
+						text: taskCardData.courseName || "",
+						to: {
+							name: "rooms-id",
+							params: {
+								id: taskCardData.courseId || "",
+							},
+						},
+					}
+				);
+			}
+
+			if (route.name === "tasks-beta-task-new") {
+				await roomsModule.fetchAllElements();
+				courses.value = roomsModule.getAllElements;
+				const initialCardElements = [
+					{
+						id: "",
+						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+						content: {
+							value: "",
+							inputFormat:
+								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+						},
+					},
+				];
+
+				dueDate.value = endOfSchoolYear.toISOString();
+				initElements(initialCardElements);
+
+				breadcrumbs.value.push({
+					text: i18n.t("common.words.tasks"),
+					to: {
+						name: "tasks",
+					},
 				});
 			}
 		});
@@ -300,7 +338,10 @@ export default defineComponent({
 				return;
 			}
 
-			if (route.name === "rooms-beta-task-new") {
+			if (
+				route.name === "rooms-beta-task-new" ||
+				route.name === "tasks-beta-task-new"
+			) {
 				await createTaskCard();
 			} else {
 				await updateTaskCard();
@@ -358,6 +399,13 @@ export default defineComponent({
 			return getUserPermissions.value.includes("task_card_edit");
 		});
 
+		const isCourseSelectDisabled = computed(() => {
+			if (route.name === "tasks-beta-task-new") {
+				return false;
+			}
+			return !!course.value;
+		});
+
 		return {
 			breadcrumbs,
 			title,
@@ -368,6 +416,7 @@ export default defineComponent({
 			t,
 			handleDateTimeInput,
 			isEditMode,
+			isCourseSelectDisabled,
 			course,
 			courses,
 			onError,
