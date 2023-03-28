@@ -10,8 +10,13 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
 
-const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
-	mocks;
+const {
+	tasks,
+	openTasksWithoutDueDate,
+	openTasksWithDueDate,
+	invalidTasks,
+	betaTask,
+} = mocks;
 
 describe("@/components/molecules/TaskItemStudent", () => {
 	let vuetify;
@@ -25,6 +30,10 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
+
+	const mockRouter = {
+		push: jest.fn(),
+	};
 
 	const getWrapper = (props, options) => {
 		return mount(TaskItemStudent, {
@@ -41,16 +50,19 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			vuetify,
 			propsData: props,
 			...options,
+			mocks: {
+				$router: mockRouter,
+			},
 		});
 	};
 
-	it("Should link list item links to task/<id> page", () => {
+	it("Should direct user to legacy task details page", () => {
+		const { location } = window;
 		const wrapper = getWrapper({ task: tasks[0] });
+		const taskCard = wrapper.findComponent({ name: "v-list-item" });
+		taskCard.trigger("click");
 
-		const firstLink = wrapper.find("a");
-
-		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(`/homework/${tasks[0]._id}`);
+		expect(location.pathname).toStrictEqual(`/homework/${tasks[0].id}`);
 	});
 
 	it("Should display no due date label if task has no duedate", () => {
@@ -160,5 +172,32 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
 		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
+	});
+
+	describe("when task is a beta task", () => {
+		it("should have correct combined label for beta task", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
+			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
+			expect(taskLabel.element.textContent).toStrictEqual(
+				"Mathe - Beta-Aufgabe"
+			);
+		});
+
+		it("should redirect to beta task page", async () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
+			const taskCard = wrapper.findComponent({ name: "v-list-item" });
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "beta-task-view-edit",
+				params: { id: "789" },
+			});
+		});
 	});
 });
