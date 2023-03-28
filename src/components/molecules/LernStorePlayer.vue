@@ -14,17 +14,46 @@
 
 <script :src="scriptSrc" charset="UTF-8"></script>
 
-<script>
-export default {
-	components: {},
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
+
+export default defineComponent({
+	name: "LernStorePlayer",
 	props: {
-		nodeId: String,
+		nodeId: {
+			type: String,
+			default: "",
+		},
+		loading: {
+			type: Boolean,
+			default: true,
+		},
+		iframeSrc: {
+			type: String,
+			default: "",
+		},
+		scriptSrc: {
+			type: String,
+			default: "",
+		},
 	},
-	data() {
+	setup(props) {
+		const model = ref(props.nodeId);
+		const loading = ref(props.loading);
+		const iframeSrc = ref(props.iframeSrc);
+		const scriptSrc = ref(props.scriptSrc);
+
+		watch(
+			() => props.nodeId,
+			(newValue: string) => {
+				model.value = newValue;
+			}
+		);
+
 		return {
-			loading: true,
-			iframeSrc: "",
-			scriptSrc: "",
+			loading,
+			iframeSrc,
+			scriptSrc,
 		};
 	},
 	async mounted() {
@@ -43,7 +72,7 @@ export default {
 			this.loading = false;
 		},
 	},
-};
+});
 </script>
 
 <style>
