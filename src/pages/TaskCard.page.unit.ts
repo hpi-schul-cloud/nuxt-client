@@ -33,7 +33,7 @@ jest.mock("@/store", () => ({
 const router = new VueRouter({
 	routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
 });
-const go = jest.spyOn(router, "go");
+const goSpy = jest.spyOn(router, "go");
 
 const getWrapper = (
 	userPermission: string,
@@ -210,7 +210,7 @@ describe("TaskCard", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(deleteTaskCardMock).toHaveBeenCalled();
-				expect(go).toHaveBeenCalledTimes(1);
+				expect(goSpy).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
