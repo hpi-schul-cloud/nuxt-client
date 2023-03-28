@@ -1,24 +1,19 @@
 import LernStorePlayer from "./LernStorePlayer";
-import { Resource } from "@@/tests/test-utils/mockDataResource";
-
-const testPropsResource = {
-	resource: Resource,
-};
+import { mount } from "@vue/test-utils";
 
 describe("@/components/molecules/LernStorePlayer", () => {
-	const wrapper = shallowMount(LernStorePlayer, {
-		...createComponentMocks({
-			i18n: true,
-			$route: {
-				query: {
-					id: "mockId",
-				},
-			},
-		}),
-		propsData: { ...testPropsResource },
+	const wrapper = mount(LernStorePlayer);
+
+	it("Renders the wrapper", () => {
+		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("Renders spinner", () => {
+	it("Renders Spinner", async () => {
+		wrapper.setData({
+			loading: true,
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find(".player-iframe").exists()).toBe(false);
 		expect(
 			wrapper
 				.find(".d-flex, .justify-center, .align-center, .min-height-screen")
@@ -26,8 +21,33 @@ describe("@/components/molecules/LernStorePlayer", () => {
 		).toBe(true);
 	});
 
-	it("Renders not the h5p Iframe", () => {
-		LernStorePlayer.getPlayer;
-		expect(wrapper.find(".player-iframe").exists()).toBe(false);
+	it("Renders Iframe", async () => {
+		wrapper.setData({
+			loading: false,
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find(".player-iframe").exists()).toBe(true);
+	});
+
+	it("Renders Iframe with data", async () => {
+		wrapper.setData({
+			loading: false,
+			iframeSrc: "iframeTestSRC",
+			scriptSrc: "scriptTestSRC",
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find(".player-iframe").attributes("src")).toBe(
+			"iframeTestSRC"
+		);
+	});
+
+	it("Renders script data", async () => {
+		wrapper.setData({
+			loading: false,
+			iframeSrc: "iframeTestSRC",
+			scriptSrc: "scriptTestSRC",
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.props("scriptSrc")).toBe("scriptTestSRC");
 	});
 });
