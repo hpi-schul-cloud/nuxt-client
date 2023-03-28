@@ -4,7 +4,7 @@
 			src="@/assets/img/migration/migration_error.svg"
 			:alt="$t('pages.userMigration.error.img.alt')"
 		/>
-		<h1 class="pl-4 pr-4" style="white-space: nowrap">
+		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
