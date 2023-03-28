@@ -1,12 +1,9 @@
 import VueRouter from "vue-router";
-import { createLocalVue, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TaskCard from "./TaskCard.page.vue";
 import { TaskCardResponse } from "@/serverApi/v3";
 import { taskCardModule } from "@/store";
-
-const localVue = createLocalVue();
-localVue.use(VueRouter);
 
 const authModuleMock = () => {
 	return {
@@ -27,15 +24,16 @@ const taskCardModuleMock = () => {
 	};
 };
 
-const mockRouter = {
-	go: jest.fn(),
-};
-
 jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
 	roomsModule: roomsModuleMock(),
 	taskCardModule: taskCardModuleMock(),
 }));
+
+const router = new VueRouter({
+	routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
+});
+const go = jest.spyOn(router, "go");
 
 const getWrapper = (
 	userPermission: string,
@@ -47,9 +45,6 @@ const getWrapper = (
 	const componentOptions = createComponentMocks({ i18n: true });
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
-	const router = new VueRouter({
-		routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
-	});
 
 	return mount(TaskCard, {
 		...componentOptions,
@@ -69,9 +64,6 @@ const getWrapper = (
 		router,
 		propsData: props,
 		...options,
-		mocks: {
-			$router: mockRouter,
-		},
 	});
 };
 
@@ -218,7 +210,7 @@ describe("TaskCard", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(deleteTaskCardMock).toHaveBeenCalled();
-				// expect(mockRouter.go).toHaveBeenCalledTimes(1);
+				expect(go).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
