@@ -19,7 +19,13 @@
 			border="left"
 			@input="closeNotification"
 		>
-			<div class="alert_text mr-2">
+			<div v-if="messages" class="alert_text mr-2">
+				<div v-for="(message, index) in messages" :key="index" class="mb-1">
+					<b>{{ message.title }}</b>
+					{{ message.text }}
+				</div>
+			</div>
+			<div v-else class="alert_text mr-2">
 				{{ text }}
 			</div>
 		</v-alert>
@@ -51,6 +57,9 @@ export default {
 		},
 		text() {
 			return this.notifierData?.text;
+		},
+		messages() {
+			return this.notifierData?.messages;
 		},
 		transition() {
 			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";

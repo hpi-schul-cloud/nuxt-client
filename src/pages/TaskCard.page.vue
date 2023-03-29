@@ -62,9 +62,6 @@
 				>
 					{{ $t("common.actions.save") }}
 				</v-btn>
-				<div class="error--text text-caption text-right mt-2">
-					{{ errorMessage }}
-				</div>
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
@@ -79,7 +76,12 @@ import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, roomModule, schoolsModule } from "@/store";
+import {
+	taskCardModule,
+	roomModule,
+	schoolsModule,
+	notifierModule,
+} from "@/store";
 import AuthModule from "@/store/auth";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -89,6 +91,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
+import { AlertMessage } from "@/store/types/alert-payload";
 import {
 	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
@@ -351,28 +354,35 @@ export default defineComponent({
 				const businessError = taskCardModule.getBusinessError;
 				const validationErrors = businessError?.error?.validationErrors;
 
-				createServerErrorMessage(validationErrors);
+				notifierModule.show({
+					messages: createServerErrorMessages(validationErrors),
+					status: "error",
+				});
 			} else {
 				router.go(-1);
 			}
 		};
 
-		const createServerErrorMessage = (errors: Array<object>) => {
-			errors.forEach((err: any) => {
-				if (errorMessage.value === "") {
-					errorMessage.value = err.field[0] + ": ";
-				} else {
-					errorMessage.value = errorMessage.value + ", " + err.field[0] + ": ";
-				}
+		const createServerErrorMessages = (errors: Array<object>) => {
+			const errorMessages: Array<AlertMessage> = [];
+			errors.forEach((validationError: any) => {
+				const msg: AlertMessage = { title: "", text: "" };
+				msg.title = validationError.field[0] + ":";
 
-				err.errors.forEach((e: any, index: number) => {
+				let errorText = "";
+				validationError.errors.forEach((error: any, index: number) => {
 					if (index === 0) {
-						errorMessage.value = errorMessage.value + e;
+						errorText = errorText + error;
 					} else {
-						errorMessage.value = errorMessage.value + ", " + e;
+						errorText = errorText + ", " + error;
 					}
 				});
+
+				msg.text = errorText;
+				errorMessages.push(msg);
 			});
+
+			return errorMessages;
 		};
 
 		const rules = {
