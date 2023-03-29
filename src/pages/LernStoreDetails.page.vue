@@ -19,8 +19,8 @@
 
 <script>
 import { contentModule } from "@/store";
-import LernstoreDetailView from "@/components/organisms/LernstoreDetailView";
-import LernstoreCollectionDetailView from "@/components/organisms/LernstoreCollectionDetailView";
+import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
+import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView";
 
 export default {
 	meta: {

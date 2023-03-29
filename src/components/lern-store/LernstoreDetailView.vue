@@ -178,7 +178,7 @@
 import AddContentButton from "@/components/organisms/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
-import LernStorePlayer from "@/components/molecules/LernStorePlayer";
+import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
 import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { mdiClose, mdiOpenInNew } from "@mdi/js";
