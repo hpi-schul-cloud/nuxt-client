@@ -13,13 +13,16 @@
 				data-testId="text-description"
 				v-html="
 					$t('pages.userMigration.success.description', {
-						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 					})
 				"
 			></p>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
-				{{ $t("pages.userMigration.backToLogin") }}
+				{{
+					$t("pages.userMigration.backToLogin", {
+						targetSystem: getSystemName(targetSystem),
+					})
+				}}
 			</v-btn>
 		</div>
 	</div>
