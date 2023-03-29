@@ -105,13 +105,13 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/content",
-		component: () => import("../pages/LernStoreOverview.page.vue"),
+		component: () => import("../pages/lern-store/LernStoreOverview.page.vue"),
 		name: "content",
 		beforeEnter: createPermissionGuard(["lernstore_view"]),
 	},
 	{
 		path: `/content/:id(${REGEX_UUID})`,
-		component: () => import("../pages/LernStoreDetails.page.vue"),
+		component: () => import("../pages/lern-store/LernStoreDetails.page.vue"),
 		name: "content-id",
 		meta: {
 			layout: Layouts.LERN_STORE,
