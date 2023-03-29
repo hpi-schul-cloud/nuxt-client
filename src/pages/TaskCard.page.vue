@@ -42,8 +42,12 @@
 				:editable="true"
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
-			<div>
+			<div class="d-flex">
+				<v-btn color="primary" depressed @click="save" data-testid="save-btn">
+					{{ $t("common.actions.save") }}
+				</v-btn>
 				<v-btn
+					class="ml-1"
 					color="secondary"
 					outlined
 					@click="cancel"
@@ -52,17 +56,8 @@
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn
-					class="float-right"
-					color="primary"
-					depressed
-					@click="save"
-					data-testid="save-btn"
-				>
-					{{ $t("common.actions.save") }}
-				</v-btn>
-				<v-btn
 					v-if="isDeletable"
-					class="float-right"
+					class="ml-auto"
 					color="secondary"
 					outlined
 					@click="openDeleteDialog()"
