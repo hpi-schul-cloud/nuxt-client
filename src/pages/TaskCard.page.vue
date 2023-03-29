@@ -47,7 +47,7 @@
 					{{ $t("common.actions.save") }}
 				</v-btn>
 				<v-btn
-					class="ml-4"
+					class="ml-2"
 					color="secondary"
 					outlined
 					@click="cancel"
