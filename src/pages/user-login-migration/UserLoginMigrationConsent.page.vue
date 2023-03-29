@@ -13,7 +13,6 @@
 				data-testId="text-description"
 				v-html="
 					$t(migrationDescription, {
-						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 						startMigration: $t('pages.userMigration.button.startMigration'),
 					})
