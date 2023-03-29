@@ -25,6 +25,7 @@ const mockEnvs: Envs = {
 	GHOST_BASE_URL: "mockValue",
 	FEATURE_CONSENT_NECESSARY: true,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
+	MIGRATION_END_GRACE_PERIOD_MS: 1,
 };
 
 const URL = "/v1/config/app/public";
@@ -212,6 +213,14 @@ describe("env-config module", () => {
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
 			envConfigModule.env = mockEnvs;
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
+		});
+
+		it("getMigrationEndGracePeriod should get MIGRATION_END_GRACE_PERIOD_MS", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+			expect(envConfigModule.getMigrationEndGracePeriod).toStrictEqual(
+				mockEnvs.MIGRATION_END_GRACE_PERIOD_MS
+			);
 		});
 	});
 });

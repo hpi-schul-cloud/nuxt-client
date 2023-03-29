@@ -202,6 +202,14 @@ export default {
 		isBetaTask() {
 			return !!this.task.taskCardId;
 		},
+		taskEditRoute() {
+			return this.isBetaTask
+				? {
+						name: "beta-task-view-edit",
+						params: { id: this.task.taskCardId },
+				  }
+				: `/homework/${this.task.id}`;
+		},
 		titleIcon() {
 			return this.isBetaTask ? "$taskDoneFilled" : "$tasks";
 		},
@@ -408,11 +416,9 @@ export default {
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
-				const route = this.isBetaTask
-					? `/task-cards/${this.task.taskCardId}`
-					: `/homework/${this.task.id}`;
-
-				this.redirectAction(route);
+				this.isBetaTask
+					? this.$router.push(this.taskEditRoute)
+					: this.redirectAction(this.taskEditRoute);
 			}
 		},
 		redirectAction(value) {

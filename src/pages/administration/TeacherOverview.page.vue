@@ -150,9 +150,6 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["TEACHER_LIST"],
-	},
 	data() {
 		return {
 			mdiPlus,

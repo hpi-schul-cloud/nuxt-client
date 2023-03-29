@@ -266,9 +266,6 @@ export default {
 			isConfirmDialogActive: false,
 		};
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
 	computed: {
 		...mapGetters("users", {
 			students: "getList",
