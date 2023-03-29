@@ -117,7 +117,7 @@ describe("UserLoginMigrationError", () => {
 				});
 
 				const schoolNumberMismatchText: string = wrapper
-					.find("[data-testId=text-schoolnumbermismatch]")
+					.find("[data-testId=text-schoolnumber-mismatch]")
 					.text();
 
 				expect(schoolNumberMismatchText).toEqual(
