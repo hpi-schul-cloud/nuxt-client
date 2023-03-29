@@ -19,7 +19,7 @@
 			></p>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{
-					$t("pages.userMigration.backToLogin", {
+					$t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),
 					})
 				}}
