@@ -75,7 +75,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .spinner {
 	top: 0 !important;
 }
