@@ -85,7 +85,7 @@ describe("UserLoginMigrationError", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
+					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 

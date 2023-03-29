@@ -902,7 +902,7 @@
 	"pages.userMigration.success.login": "Login über {targetSystem}",
 	"pages.userMigration.error.img.alt": "Migrationsfehler Grafik",
 	"pages.userMigration.error.title": "Umzug des Anmeldesystems ist fehlgeschlagen",
-	"pages.userMigration.error.description": "Der Umzug des Anmeldesystems von {sourceSystem} zu {targetSystem} ist leider fehlgeschlagen. Um die {instance} mit dem Anmeldesystem {targetSystem} nutzen zu können, bitte <a href=\"{supportLink}\">Kontakt zum Support</a> aufnehmen.",
+	"pages.userMigration.error.description": "Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href=\"{supportLink}\">Support</a>.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

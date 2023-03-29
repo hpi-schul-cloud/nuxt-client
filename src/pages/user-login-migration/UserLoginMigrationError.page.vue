@@ -13,7 +13,6 @@
 				data-testId="text-description"
 				v-html="
 					$t('pages.userMigration.error.description', {
-						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 						instance: this.$theme.name,
 						supportLink,
