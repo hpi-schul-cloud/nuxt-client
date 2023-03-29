@@ -21,7 +21,7 @@
 				"
 			></p>
 			<p
-				data-testId="text-schoolnumbermismatch"
+				data-testId="text-schoolnumber-mismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
 				v-html="
 					$t('pages.userMigration.error.schoolNumberMismatch', {
