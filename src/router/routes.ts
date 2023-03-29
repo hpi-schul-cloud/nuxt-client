@@ -9,7 +9,7 @@ import {
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
-import { isDefined, isString } from "@vueuse/core";
+import { isDefined } from "@vueuse/core";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [

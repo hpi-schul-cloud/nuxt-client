@@ -1,4 +1,4 @@
-import { isDef, isDefined, isString } from "@vueuse/core";
+import { isDef, isString } from "@vueuse/core";
 
 export const REGEX_ID = "[a-z0-9]{24}";
 export const REGEX_UUID =
