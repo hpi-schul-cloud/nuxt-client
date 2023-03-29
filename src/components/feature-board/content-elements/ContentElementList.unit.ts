@@ -1,7 +1,11 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { AnyContentElement, TextContentElement } from "../types/ContentElement";
+import {
+	AnyContentElement,
+	ContentElementType,
+	TextContentElement,
+} from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import TextContentElementComponent from "./TextContentElement.vue";
 
@@ -24,7 +28,12 @@ describe("ContentElementList", () => {
 			setup({ elements: [], isEditMode: false });
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
-		it.each([{ elementType: "text", component: TextContentElementComponent }])(
+		it.each([
+			{
+				elementType: ContentElementType.TEXT,
+				component: TextContentElementComponent,
+			},
+		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
 				setup({
@@ -38,7 +47,7 @@ describe("ContentElementList", () => {
 			const isEditModeResult = true;
 
 			setup({
-				elements: [{ type: "text" } as TextContentElement],
+				elements: [{ type: ContentElementType.TEXT } as TextContentElement],
 				isEditMode: isEditModeResult,
 			});
 

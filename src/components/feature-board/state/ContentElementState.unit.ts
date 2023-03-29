@@ -1,13 +1,16 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { TextContentElement } from "../types/ContentElement";
+import {
+	ContentElementType,
+	TextContentElement,
+} from "../types/ContentElement";
 import { useContentElementState } from "./ContentElementState.composable";
 
 let wrapper: Wrapper<Vue>;
 
 const TEST_ELEMENT: TextContentElement = {
 	id: "test-id",
-	type: "text",
+	type: ContentElementType.TEXT,
 	content: {
 		text: "TestContent",
 	},

@@ -1,8 +1,9 @@
-export declare type ContentElementType = "text" | "title" | "image" | "task";
+export enum ContentElementType {
+	TEXT = "text",
+	IMAGE = "image",
+}
 
-export declare type AnyContentElement =
-	| TextContentElement
-	| ImageContentElement;
+export type AnyContentElement = TextContentElement | ImageContentElement;
 
 interface ContentElement {
 	id: string;
@@ -11,13 +12,13 @@ interface ContentElement {
 }
 
 export interface TextContentElement extends ContentElement {
-	type: "text";
+	type: ContentElementType.TEXT;
 	content: {
 		text: string;
 	};
 }
 export interface ImageContentElement extends ContentElement {
-	type: "image";
+	type: ContentElementType.IMAGE;
 	content: {
 		image: string;
 	};

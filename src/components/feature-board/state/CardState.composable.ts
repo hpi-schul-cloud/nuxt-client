@@ -10,7 +10,7 @@ const DUMMY_CARD: BoardCard = {
 	id: "0123456789abcdef00000003",
 	elements: [
 		{
-			type: "text",
+			type: ContentElementType.TEXT,
 			content: { text: "MyElementContent" },
 			id: "0123456789abcdef00067003",
 		},

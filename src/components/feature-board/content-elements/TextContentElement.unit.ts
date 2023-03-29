@@ -1,15 +1,17 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { AnyContentElement, TextContentElement } from "../types/ContentElement";
-import ContentElementList from "./ContentElementList.vue";
+import {
+	ContentElementType,
+	TextContentElement,
+} from "../types/ContentElement";
 import TextContentElementComponent from "./TextContentElement.vue";
 import TextContentElementDisplayComponent from "./TextContentElementDisplay.vue";
 import TextContentElementEditComponent from "./TextContentElementEdit.vue";
 
 const TEST_ELEMENT: TextContentElement = {
 	id: "test-id",
-	type: "text",
+	type: ContentElementType.TEXT,
 	content: {
 		text: "TestContent",
 	},

@@ -3,6 +3,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
+import { ContentElementType } from "../types/ContentElement";
 import CardHost from "./CardHost.vue";
 
 const CARD_SKELETON: BoardCardSkeleton = {
@@ -24,7 +25,7 @@ const CARD_WITH_ELEMENTS: BoardCard = {
 	height: 200,
 	elements: [
 		{
-			type: "text",
+			type: ContentElementType.TEXT,
 			id: "0123456789abcdef00067003",
 			content: {
 				text: "Element Text",
