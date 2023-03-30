@@ -33,13 +33,13 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
-import { useBoardState } from "./BoardState.composable";
+import { useBoardState } from "../state/BoardState.composable";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	ColumnMove,
-} from "./types/DragAndDrop";
+} from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "Board",
@@ -80,3 +80,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style>
+.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+	overflow: visible !important;
+}
+</style>
