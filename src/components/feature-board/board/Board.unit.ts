@@ -4,8 +4,8 @@ import Vue, { ref } from "vue";
 import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
-import { useBoardState } from "./BoardState.composable";
-import { Board } from "./types/Board";
+import { useBoardState } from "../state/BoardState.composable";
+import { Board } from "../types/Board";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [
@@ -95,7 +95,7 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 	},
 };
 
-jest.mock("./BoardState.composable");
+jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
 const $route: Route = {
