@@ -1,18 +1,18 @@
 import SchoolsModule from "./schools";
 import { initializeAxios } from "@/utils/api";
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
 import { authModule } from "@/store";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
-import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "./auth";
 import {
 	MigrationBody,
 	MigrationResponse,
 	SchoolApiInterface,
 } from "@/serverApi/v3/api";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "./auth";
 import { OauthMigration } from "./types/schools";
-import { AxiosPromise } from "axios";
+import { ApplicationError } from "./types/application-error";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -30,14 +30,6 @@ const axiosInitializer = () => {
 	} as AxiosInstance);
 };
 axiosInitializer();
-
-// const createAxiosReponse = <T>(data: T) => {
-// 	return {
-// 		data,
-// 		status: 200,
-// 		statusText: "OK",
-// 	};
-// };
 
 describe("schools module", () => {
 	const setupApi = () => {
@@ -117,7 +109,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -193,7 +185,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -247,7 +239,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -306,7 +298,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					get: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -378,7 +370,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				initializeAxios({
 					patch: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return;
 					},
 				} as AxiosInstance);
@@ -463,7 +455,7 @@ describe("schools module", () => {
 				const systemId = "id_1";
 				initializeAxios({
 					delete: async (path: string) => {
-						throw new Error(path);
+						throw new AxiosError(path);
 						return "";
 					},
 				} as AxiosInstance);
@@ -546,7 +538,7 @@ describe("schools module", () => {
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				const error = new Error(
+				const error = new AxiosError(
 					JSON.stringify({ statusCode: "500", message: "foo" })
 				);
 				mockApi = {
@@ -723,6 +715,7 @@ describe("schools module", () => {
 					expect(schoolControllerGetMigration).toHaveBeenCalledTimes(1);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						enableMigrationStart: false,
+						oauthMigrationFinalFinish: "",
 						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
 						oauthMigrationFinished: "",
@@ -738,11 +731,13 @@ describe("schools module", () => {
 						...mockSchool,
 					});
 
-					schoolControllerGetMigration.mockRejectedValue(new Error(""));
+					schoolControllerGetMigration.mockRejectedValue(new AxiosError(""));
 
 					await schoolsModule.fetchSchoolOAuthMigration();
 
-					expect(schoolsModule.getError).toStrictEqual(new Error(""));
+					expect(schoolsModule.getError).toStrictEqual(
+						new ApplicationError(500, "pages.administration.school.index.error")
+					);
 				});
 			});
 		});
@@ -846,6 +841,7 @@ describe("schools module", () => {
 					expect(schoolControllerSetMigration).toHaveBeenCalledTimes(0);
 					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
 						enableMigrationStart: false,
+						oauthMigrationFinalFinish: "",
 						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
 						oauthMigrationFinished: "",
@@ -854,14 +850,16 @@ describe("schools module", () => {
 			});
 
 			describe("when api call fails", () => {
-				it("should set an error", async () => {
+				it("should set an error from axios reponse", async () => {
 					const { schoolControllerSetMigration } = setupApi();
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
 					});
 
-					schoolControllerSetMigration.mockRejectedValue(new Error(""));
+					schoolControllerSetMigration.mockRejectedValue(
+						new AxiosError("", "400")
+					);
 
 					await schoolsModule.setSchoolOauthMigration({
 						oauthMigrationPossible: true,
@@ -869,7 +867,43 @@ describe("schools module", () => {
 						oauthMigrationFinished: false,
 					});
 
-					expect(schoolsModule.getError).toStrictEqual(new Error(""));
+					expect(schoolsModule.getError).toStrictEqual(
+						new ApplicationError(
+							400,
+							"pages.administration.school.index.error.gracePeriodExceeded"
+						)
+					);
+				});
+
+				it("should set an default error when axios reponse is missing", async () => {
+					const { schoolControllerSetMigration } = setupApi();
+					const schoolsModule = new SchoolsModule({});
+					schoolsModule.setSchool({
+						...mockSchool,
+					});
+
+					schoolControllerSetMigration.mockRejectedValue(
+						new AxiosError(
+							undefined,
+							undefined,
+							undefined,
+							undefined,
+							undefined
+						)
+					);
+
+					await schoolsModule.setSchoolOauthMigration({
+						oauthMigrationPossible: true,
+						oauthMigrationMandatory: false,
+						oauthMigrationFinished: false,
+					});
+
+					expect(schoolsModule.getError).toStrictEqual(
+						new ApplicationError(
+							500,
+							"pages.administration.school.index.error.gracePeriodExceeded"
+						)
+					);
 				});
 			});
 		});

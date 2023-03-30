@@ -25,7 +25,9 @@ export type SidebarCategoryItem = SidebarItem & {
 
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
-const sidebarBaseItems: SidebarItemList = [
+const getSidebarItems = (
+	isNewSchoolAdminPageDefault: boolean
+): SidebarItemList => [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
@@ -223,16 +225,27 @@ const sidebarBaseItems: SidebarItemList = [
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			{
-				title: "global.sidebar.school",
-				icon: "building",
-				href: "/administration/school",
-				testId: "Schule",
-				activeForUrls: [
-					"^/administration/school($|/.*)",
-					"^/administration/school-settings($|/.*)",
-				],
-			},
+			isNewSchoolAdminPageDefault
+				? {
+						title: "global.sidebar.school",
+						icon: "building",
+						to: "/administration/school-settings",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  }
+				: {
+						title: "global.sidebar.school",
+						icon: "building",
+						href: "/administration/school",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  },
 		],
 	},
 	{
@@ -251,4 +264,4 @@ const sidebarBaseItems: SidebarItemList = [
 		activeForUrls: ["^/my-material($|/.*)"],
 	},
 ];
-export default sidebarBaseItems;
+export default getSidebarItems;

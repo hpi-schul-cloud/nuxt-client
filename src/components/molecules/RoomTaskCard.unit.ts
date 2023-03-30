@@ -229,6 +229,10 @@ const betaTaskTestProps = {
 	dragInProgress: false,
 };
 
+const mockRouter = {
+	push: jest.fn(),
+};
+
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomTaskCard as MountOptions<Vue>, {
 		...createComponentMocks({
@@ -236,6 +240,9 @@ const getWrapper: any = (props: object, options?: object) => {
 		}),
 		propsData: props,
 		...options,
+		mocks: {
+			$router: mockRouter,
+		},
 	});
 };
 
@@ -256,13 +263,15 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			expect(tagline.element.textContent).toContain("Beta-Aufgabe – Entwurf");
 		});
 
-		it("should redirect to task-cards page", () => {
-			const { location } = window;
+		it("should redirect to task-cards page", async () => {
 			const wrapper = getWrapper({ ...betaTaskTestProps, role });
 			const taskCard = wrapper.findComponent({ name: "v-card" });
-			taskCard.trigger("click");
-
-			expect(location.pathname).toStrictEqual("/task-cards/789");
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "beta-task-view-edit",
+				params: { id: "789" },
+			});
 		});
 	});
 
