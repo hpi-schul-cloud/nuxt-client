@@ -237,7 +237,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../components/feature-board/Board.vue"),
+		component: () => import("../components/feature-board/board/Board.vue"),
 		name: "rooms-board",
 	},
 	{
