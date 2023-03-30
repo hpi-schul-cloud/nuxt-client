@@ -28,11 +28,11 @@
 							></CardHeaderTitleInput>
 						</template>
 						<template v-slot:menu>
-							<CardHostMenu>
-								<CardHostMenuAction @click="onDelete"
+							<BoardMenu scope="card">
+								<BoardMenuAction @click="onDelete"
 									>Delete Card
-								</CardHostMenuAction>
-							</CardHostMenu>
+								</BoardMenuAction>
+							</BoardMenu>
 						</template>
 					</CardHeader>
 
@@ -52,8 +52,8 @@ import { useElementSize, watchDebounced } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
 import CardHeader from "./CardHeader.vue";
 import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
-import CardHostMenu from "./CardHostMenu.vue";
-import CardHostMenuAction from "./CardHostMenuAction.vue";
+import BoardMenu from "../board/BoardMenu.vue";
+import BoardMenuAction from "../board/BoardMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
@@ -65,8 +65,8 @@ export default defineComponent({
 	components: {
 		CardSkeleton,
 		CardHeader,
-		CardHostMenu,
-		CardHostMenuAction,
+		BoardMenu,
+		BoardMenuAction,
 		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,

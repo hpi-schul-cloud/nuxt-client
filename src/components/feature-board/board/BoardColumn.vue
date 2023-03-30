@@ -1,10 +1,10 @@
 <template>
 	<div
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle"
+		class="column-drag-handle mr-4"
 	>
-		<h4 class="text-truncate pr-4">{{ column.title }}</h4>
-		<div class="d-flex flex-column flex-grow-1 mr-4">
+		<BoardColumnHeader :title="column.title"></BoardColumnHeader>
+		<div class="d-flex flex-column flex-grow-1">
 			<Container
 				group-name="col"
 				@drop="onCardDrop"
@@ -32,6 +32,7 @@
 import { defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	CardMove,
@@ -42,7 +43,7 @@ import {
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable },
+	components: { CardHost, Container, Draggable, BoardColumnHeader },
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
