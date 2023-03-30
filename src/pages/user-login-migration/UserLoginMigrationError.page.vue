@@ -24,7 +24,6 @@
 				v-if="targetSchoolNumber && sourceSchoolNumber"
 				v-html="
 					$t('pages.userMigration.error.schoolNumberMismatch', {
-						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 						targetSchoolNumber,
 						sourceSchoolNumber,
@@ -72,7 +71,7 @@ export default defineComponent({
 			required: false,
 		},
 	},
-	setup() {
+	setup(props) {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
 		const envConfigModule: EnvConfigModule | undefined =
@@ -88,9 +87,19 @@ export default defineComponent({
 
 		const isLoading: Ref<boolean> = ref(true);
 
+		const getSubject = (): string => {
+			let subject = "Fehler%20bei%20der%20Migration";
+			if (props.sourceSchoolNumber && props.targetSchoolNumber) {
+				subject = "Schulnummer%20nicht%20korrekt";
+			}
+			return subject;
+		};
+
 		const supportLink: ComputedRef<string> = computed(() =>
 			envConfigModule?.getAccessibilityReportEmail
-				? `mailto:${envConfigModule.getAccessibilityReportEmail}?subject=Fehler%20bei%20der%20Migration`
+				? `mailto:${
+						envConfigModule.getAccessibilityReportEmail
+				  }?subject=${getSubject()}`
 				: ""
 		);
 
