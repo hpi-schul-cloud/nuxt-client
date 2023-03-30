@@ -254,7 +254,7 @@ export default {
 					icon: mdiFormatListChecks,
 					href: "/homework/new?returnUrl=tasks",
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
-					testId: "addTask",
+					dataTestid: "fab_button_add_task",
 				});
 			}
 			if (
