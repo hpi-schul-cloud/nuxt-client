@@ -1,5 +1,5 @@
-import { ApplicationError } from "@/store/types/application-error";
 import { applicationErrorModule } from "@/store";
+import { ApplicationError } from "@/store/types/application-error";
 
 export const handleApplicationError = (err: Error) => {
 	/**
