@@ -20,6 +20,18 @@
 					})
 				"
 			></p>
+			<p
+				data-testId="text-schoolnumber-mismatch"
+				v-if="targetSchoolNumber && sourceSchoolNumber"
+				v-html="
+					$t('pages.userMigration.error.schoolNumberMismatch', {
+						sourceSystem: getSystemName(sourceSystem),
+						targetSystem: getSystemName(targetSystem),
+						targetSchoolNumber,
+						sourceSchoolNumber,
+					})
+				"
+			></p>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
@@ -51,6 +63,14 @@ export default defineComponent({
 		targetSystem: {
 			type: String,
 			required: true,
+		},
+		targetSchoolNumber: {
+			type: String,
+			required: false,
+		},
+		sourceSchoolNumber: {
+			type: String,
+			required: false,
 		},
 	},
 	setup() {
