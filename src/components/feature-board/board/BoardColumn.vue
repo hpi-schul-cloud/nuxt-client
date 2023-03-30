@@ -17,7 +17,7 @@
 					<Draggable :key="card.cardId">
 						<CardHost
 							class="mb-6"
-							:id="card.cardId"
+							:card-id="card.cardId"
 							:height="card.height"
 							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						/>
@@ -31,14 +31,14 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
-import CardHost from "./CardHost.vue";
-import { BoardColumn, BoardSkeletonCard } from "./types/Board";
+import CardHost from "../card/CardHost.vue";
+import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
 	drowpdownDropPlaceholderOptions,
-} from "./types/DragAndDrop";
+} from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -50,6 +50,7 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
+	emits: ["card-position-change", "position-change-keyboard"],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 

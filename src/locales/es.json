@@ -898,6 +898,7 @@
 	"pages.userMigration.error.img.alt": "Gráficos de errores de migración",
 	"pages.userMigration.error.title": "La reubicación del sistema de inicio de sesión falló",
 	"pages.userMigration.error.description": "Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href=\"{supportLink}\">Soporte</a> directamente.",
+	"pages.userMigration.error.description.schoolNumberMismatch":"Envíe el número de la escuela <b>{sourceSystem} {sourceSchoolNumber}</b> y el número de la escuela <b>{targetSystem} {targetSchoolNumber}</b> al problema",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent": "Formulario de consentimiento:",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
