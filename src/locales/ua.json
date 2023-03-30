@@ -291,7 +291,7 @@
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
-	"pages.taskCard.deleteTaskCard.text": "Ви впевнені, що хочете видалити це бета завдання?",
+	"pages.taskCard.deleteTaskCard.text": "Ви впевнені, що хочете видалити це бета завдання \"{title}\"?",
 	"pages.taskCard.deleteTaskCard.title": "Видалити це бета завдання",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error": "Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",

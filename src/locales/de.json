@@ -797,7 +797,7 @@
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
-	"pages.taskCard.deleteTaskCard.text": "Bist du dir sicher, dass du die Beta-Aufgabe löschen möchtest?",
+	"pages.taskCard.deleteTaskCard.text": "Bist du dir sicher, dass du die Beta-Aufgabe \"{title}\" löschen möchtest?",
 	"pages.taskCard.deleteTaskCard.title": "Beta-Aufgabe löschen",
 	"pages.tasks.labels.due": "Abgabe",
 	"pages.tasks.labels.planned": "Geplant",

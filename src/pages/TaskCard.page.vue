@@ -80,7 +80,7 @@
 				</h2>
 				<template slot="content">
 					<p class="text-md mt-2">
-						{{ $t("pages.taskCard.deleteTaskCard.text") }}
+						{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
 					</p>
 				</template>
 			</v-custom-dialog>
@@ -154,15 +154,18 @@ export default defineComponent({
 
 		const deleteDialog = ref({
 			isOpen: false,
+			taskCardId: "",
 		});
 
 		const openDeleteDialog = () => {
 			deleteDialog.value.isOpen = true;
+			deleteDialog.value.taskCardId = route.params.id;
 		};
 
 		const deleteElement = async () => {
-			await deleteTaskCard();
+			await deleteTaskCard(deleteDialog.value.taskCardId);
 			deleteDialog.value.isOpen = false;
+			deleteDialog.value.taskCardId = "";
 		};
 
 		const breadcrumbs = ref<object[]>([]);
@@ -248,7 +251,9 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
-				isDeletable.value = !!taskCardData.id;
+				if (taskCardData.id !== "") {
+					isDeletable.value = !!taskCardData.id;
+				}
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 
@@ -386,12 +391,8 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		const deleteTaskCard = async () => {
-			if (hasErrors.value) {
-				return;
-			}
-
-			await taskCardModule.deleteTaskCard();
+		const deleteTaskCard = async (taskCardId: string) => {
+			await taskCardModule.deleteTaskCard(taskCardId);
 			router.go(-1);
 		};
 

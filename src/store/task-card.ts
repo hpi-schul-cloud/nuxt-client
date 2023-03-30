@@ -106,12 +106,12 @@ export default class TaskCardModule extends VuexModule {
 	}
 
 	@Action
-	async deleteTaskCard(): Promise<void> {
+	async deleteTaskCard(taskCardId: string): Promise<void> {
 		this.resetBusinessError();
 		this.setLoading(true);
 
 		try {
-			await this.cardsApi.taskCardControllerDelete(this.taskCardData.id);
+			await this.cardsApi.taskCardControllerDelete(taskCardId);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setLoading(false);

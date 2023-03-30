@@ -265,7 +265,7 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.deleteTaskCard();
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
 
 				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
 					1
@@ -290,7 +290,7 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.deleteTaskCard();
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
 
 				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
 					1
