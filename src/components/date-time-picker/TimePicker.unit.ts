@@ -159,10 +159,10 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(input.exists()).toBe(true);
 				await input.trigger("click");
 
-				const zeroClockListItem = wrapper
+				const oneOClockListItem = wrapper
 					.findAll({ name: "v-list-item" })
 					.at(0); // 00:00
-				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeDefined();
+				expect(oneOClockListItem.attributes()["aria-disabled"]).toBeDefined();
 			});
 
 			it("should enable selection of times in the future", async () => {
@@ -176,10 +176,12 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(input.exists()).toBe(true);
 				await input.trigger("click");
 
-				const zeroClockListItem = wrapper
+				const fiveOClockListItem = wrapper
 					.findAll({ name: "v-list-item" })
 					.at(10); // 05:00
-				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeUndefined();
+				expect(
+					fiveOClockListItem.attributes()["aria-disabled"]
+				).toBeUndefined();
 			});
 		});
 
@@ -195,10 +197,10 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(input.exists()).toBe(true);
 				await input.trigger("click");
 
-				const zeroClockListItem = wrapper
+				const oneOClockListItem = wrapper
 					.findAll({ name: "v-list-item" })
 					.at(0); // 00:00
-				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeUndefined();
+				expect(oneOClockListItem.attributes()["aria-disabled"]).toBeUndefined();
 			});
 		});
 	});
