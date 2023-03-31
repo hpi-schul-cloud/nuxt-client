@@ -88,9 +88,9 @@ export default defineComponent({
 		const isLoading: Ref<boolean> = ref(true);
 
 		const getSubject = (): string => {
-			let subject = "Fehler%20bei%20der%20Migration";
+			let subject: string = encodeURIComponent("Fehler bei der Migration");
 			if (props.sourceSchoolNumber && props.targetSchoolNumber) {
-				subject = "Schulnummer%20nicht%20korrekt";
+				subject = encodeURIComponent("Schulnummer nicht korrekt");
 			}
 			return subject;
 		};

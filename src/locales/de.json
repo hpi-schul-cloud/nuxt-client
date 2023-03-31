@@ -903,7 +903,7 @@
 	"pages.userMigration.error.img.alt": "Migrationsfehler Grafik",
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.error.description": "Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href=\"{supportLink}\">Support</a>. ",
-	"pages.userMigration.error.schoolNumberMismatch": "Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersaächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.schoolNumberMismatch": "Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

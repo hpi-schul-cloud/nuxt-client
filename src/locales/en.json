@@ -894,7 +894,7 @@
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.description.fromTarget": "Hello!<br>Your school is currently changing the registration system.<br>You must now migrate your account to {targetSystem}.<br>After the move, you can only register here with {targetSystem}.<br><br> Press \"{startMigration}\" and log in with your {targetSystem} account.",
 	"pages.userMigration.description.fromSource": "Hello!<br>Your school is currently changing the registration system.<br>You can now migrate your account to {targetSystem}.<br>After the move, you can only register here with {targetSystem}.<br><br> Press \"{startMigration}\" and log in with your {targetSystem} account.",
-	"pages.userMigration.description.fromSourceMandatory": "Hello!<br>Your school is currently changing the registration system.<br>You must now migrate your account to {targetSystem}.<br>After the move, you can only register here with {targetSystem}.<br><br> Press \"{startMigration}\" and log in with your {targetSystem} account.",
+	"pages.userMigration.description.fromSourceMandatory": "Hello!<br>Your school is currently changing the registration system.<br>You must migrate your account to {targetSystem} now.<br>After the move, you can only register here with {targetSystem}.<br><br> Press \"{startMigration}\" and log in with your {targetSystem} account.",
 	"pages.userMigration.consent.img.alt": "Migration graphic",
 	"pages.userMigration.success.img.alt": "Migration Successful graphic",
 	"pages.userMigration.success.title": "Successful migration of your registration system",
