@@ -35,24 +35,15 @@
 						v-for="(timeOfDay, index) in timesOfDayList"
 						:key="`time-select-${index}`"
 					>
-						<template v-if="timeOfDay.disabled">
-							<v-list-item
-								:data-testid="`time-select-${index}`"
-								class="time-list-item text-left"
-								disabled
-							>
-								<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
-							</v-list-item>
-						</template>
-						<template v-else>
-							<v-list-item
-								:data-testid="`time-select-${index}`"
-								class="time-list-item text-left"
-								@click="selectTime(timeOfDay.value)"
-							>
-								<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
-							</v-list-item>
-						</template>
+						<v-list-item
+							:data-testid="`time-select-${index}`"
+							class="time-list-item text-left"
+							@click="selectTime(timeOfDay.value)"
+							:disabled="timeOfDay.disabled"
+						>
+							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
+						</v-list-item>
+
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
