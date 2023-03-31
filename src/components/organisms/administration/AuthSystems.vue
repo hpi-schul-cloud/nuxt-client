@@ -62,7 +62,7 @@
 						</td>
 						<td>
 							<v-btn
-								v-if="isEditable(system)"
+								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
@@ -153,6 +153,10 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+
+		hasSystemEditPermission: () => {
+			return authModule.getUserPermissions.includes("system_edit");
+		},
 	},
 	methods: {
 		// TODO - Discuss which systems are still gonna be editable in the future
