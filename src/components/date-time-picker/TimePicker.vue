@@ -87,22 +87,31 @@ export default defineComponent({
 				disabled: boolean;
 			};
 			const times: timeItem[] = [];
-
-			const currentHour = new Date().getHours();
-
 			for (let hour = 0; hour < 24; hour++) {
 				times.push({
 					value: dayjs().hour(hour).minute(0).format("HH:mm"),
-					disabled: !props.allowPast && hour <= currentHour,
+					disabled: !props.allowPast && timeInPast(hour, 0),
 				});
 				times.push({
 					value: dayjs().hour(hour).minute(30).format("HH:mm"),
-					disabled: !props.allowPast && hour <= currentHour,
+					disabled: !props.allowPast && timeInPast(hour, 30),
 				});
 			}
-
 			return times;
 		});
+
+		const timeInPast = (hour: number, minute: number): boolean => {
+			const date = new Date();
+			const currentHour = date.getHours();
+			const currentMinute = date.getMinutes();
+			if (hour < currentHour) {
+				return true;
+			}
+			if (hour === currentHour && minute < currentMinute) {
+				return true;
+			}
+			return false;
+		};
 
 		const inputTime = ref(props.time);
 		const showTimeDialog = ref(false);
@@ -156,6 +165,16 @@ export default defineComponent({
 			const found = timeValue.match(regex);
 			if (!found) {
 				errors.value.push(t("components.timePicker.validation.format"));
+				emit("error");
+				return false;
+			}
+
+			const hoursAndMinutes = timeValue.split(":");
+			if (
+				!props.allowPast &&
+				timeInPast(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]))
+			) {
+				errors.value.push(t("components.timePicker.validation.future"));
 				emit("error");
 				return false;
 			}
