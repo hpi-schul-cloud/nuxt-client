@@ -35,13 +35,24 @@
 						v-for="(timeOfDay, index) in timesOfDayList"
 						:key="`time-select-${index}`"
 					>
-						<v-list-item
-							:data-testid="`time-select-${index}`"
-							class="time-list-item text-left"
-							@click="selectTime(timeOfDay)"
-						>
-							<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
-						</v-list-item>
+						<template v-if="timeOfDay.disabled">
+							<v-list-item
+								:data-testid="`time-select-${index}`"
+								class="time-list-item text-left"
+								disabled
+							>
+								<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
+							</v-list-item>
+						</template>
+						<template v-else>
+							<v-list-item
+								:data-testid="`time-select-${index}`"
+								class="time-list-item text-left"
+								@click="selectTime(timeOfDay.value)"
+							>
+								<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
+							</v-list-item>
+						</template>
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
@@ -62,6 +73,7 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
+		allowPast: { type: Boolean, default: true },
 	},
 	emits: ["input", "error"],
 	setup(props, { emit }) {
@@ -79,11 +91,23 @@ export default defineComponent({
 		};
 
 		const timesOfDayList = computed(() => {
-			const times = [];
+			type timeItem = {
+				value: string;
+				disabled: boolean;
+			};
+			const times: timeItem[] = [];
+
+			const currentHour = new Date().getHours();
 
 			for (let hour = 0; hour < 24; hour++) {
-				times.push(dayjs().hour(hour).minute(0).format("HH:mm"));
-				times.push(dayjs().hour(hour).minute(30).format("HH:mm"));
+				times.push({
+					value: dayjs().hour(hour).minute(0).format("HH:mm"),
+					disabled: !props.allowPast && hour <= currentHour,
+				});
+				times.push({
+					value: dayjs().hour(hour).minute(30).format("HH:mm"),
+					disabled: !props.allowPast && hour <= currentHour,
+				});
 			}
 
 			return times;

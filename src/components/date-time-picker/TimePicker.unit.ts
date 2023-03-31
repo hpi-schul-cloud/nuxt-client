@@ -1,40 +1,43 @@
-import { mount } from "@vue/test-utils";
+import Vue from "vue";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 
-const getWrapper = (props?: object, options?: object) => {
-	return mount(TimePicker, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			i18n: { t: (key: string) => key },
-		},
-		propsData: props,
-		...options,
-	});
+type TimePickerProps = {
+	time: string;
+	label?: string;
+	ariaLabel?: string;
+	required?: boolean;
+	allowPast?: boolean;
 };
 
 describe("@components/date-time-picker/TimePicker", () => {
-	it("should render component with empty value", () => {
-		const wrapper = getWrapper({
-			time: "",
+	let wrapper: Wrapper<Vue>;
+
+	const setup = (props: TimePickerProps) => {
+		document.body.setAttribute("data-app", "true");
+		wrapper = mount(TimePicker as MountOptions<Vue>, {
+			...createComponentMocks({}),
+			propsData: props,
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 		});
+	};
+
+	it("should render component with empty value", () => {
+		setup({ time: "" });
 		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
 	});
 
 	it("should render component with given value", () => {
-		const wrapper = getWrapper({
-			time: "12:30",
-		});
+		setup({ time: "12:30" });
 		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
 	});
 
 	describe("when picking a time through typing", () => {
 		it("should emit event on input", async () => {
-			const wrapper = getWrapper({
-				time: new Date().toISOString(),
-			});
+			setup({ time: new Date().toISOString() });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 			const input = textField.find("input");
@@ -49,8 +52,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("when picking a time through select", () => {
 		it("should emit event on input", async () => {
-			const wrapper = getWrapper({
-				time: "12:30",
+			setup({
+				time: new Date().toISOString(),
 			});
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
@@ -69,8 +72,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 	describe("validation", () => {
 		describe("when time is required", () => {
 			it("should emit error event on clear", async () => {
-				const wrapper = getWrapper({
-					time: "12:30",
+				setup({
+					time: new Date().toISOString(),
 					required: true,
 				});
 
@@ -86,8 +89,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 			});
 
 			it("should emit error event on empty input", async () => {
-				const wrapper = getWrapper({
-					time: "12:30",
+				setup({
+					time: new Date().toISOString(),
 					required: true,
 				});
 
@@ -104,9 +107,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 		describe("when time is not required and value is empty", () => {
 			it("should not emit error event", () => {
-				const wrapper = getWrapper({
-					time: "",
-				});
+				setup({ time: "" });
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
@@ -121,9 +122,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 		describe("when time does not fit format", () => {
 			it("should emit error event", async () => {
-				const wrapper = getWrapper({
-					time: "02:00",
-				});
+				setup({ time: "02:00" });
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
@@ -133,6 +132,73 @@ describe("@components/date-time-picker/TimePicker", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
+			});
+		});
+	});
+
+	describe("restriction", () => {
+		beforeEach(() => {
+			const mockedDate = new Date("2023-01-01T03:00:00"); // 03:00
+			jest.useFakeTimers("modern");
+			jest.setSystemTime(mockedDate);
+		});
+
+		afterEach(() => {
+			jest.useRealTimers();
+		});
+
+		describe("when times in the future are not allowed", () => {
+			it("should disable times in the past", async () => {
+				setup({
+					time: new Date().toISOString(),
+					allowPast: false,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				expect(input.exists()).toBe(true);
+				await input.trigger("click");
+
+				const zeroClockListItem = wrapper
+					.findAll({ name: "v-list-item" })
+					.at(0); // 00:00
+				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeDefined();
+			});
+
+			it("should enable times in the future", async () => {
+				setup({
+					time: new Date().toISOString(),
+					allowPast: false,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				expect(input.exists()).toBe(true);
+				await input.trigger("click");
+
+				const zeroClockListItem = wrapper
+					.findAll({ name: "v-list-item" })
+					.at(10); // 05:00
+				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeUndefined();
+			});
+		});
+
+		describe("when times in the future are allowed", () => {
+			it("should enable times in the past", async () => {
+				setup({
+					time: new Date().toISOString(),
+					allowPast: true,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				expect(input.exists()).toBe(true);
+				await input.trigger("click");
+
+				const zeroClockListItem = wrapper
+					.findAll({ name: "v-list-item" })
+					.at(0); // 00:00
+				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeUndefined();
 			});
 		});
 	});
