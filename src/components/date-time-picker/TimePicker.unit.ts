@@ -147,8 +147,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 			jest.useRealTimers();
 		});
 
-		describe("when times in the future are not allowed", () => {
-			it("should disable times in the past", async () => {
+		describe("when times in the past are not allowed", () => {
+			it("should disable selection of times in the past", async () => {
 				setup({
 					time: new Date().toISOString(),
 					allowPast: false,
@@ -165,7 +165,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(zeroClockListItem.attributes()["aria-disabled"]).toBeDefined();
 			});
 
-			it("should enable times in the future", async () => {
+			it("should enable selection of times in the future", async () => {
 				setup({
 					time: new Date().toISOString(),
 					allowPast: false,
@@ -183,8 +183,8 @@ describe("@components/date-time-picker/TimePicker", () => {
 			});
 		});
 
-		describe("when times in the future are allowed", () => {
-			it("should enable times in the past", async () => {
+		describe("when times in the past are allowed", () => {
+			it("should enable selection of times in the past", async () => {
 				setup({
 					time: new Date().toISOString(),
 					allowPast: true,
