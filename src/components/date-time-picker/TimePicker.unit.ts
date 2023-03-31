@@ -138,7 +138,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("restriction", () => {
 		beforeEach(() => {
-			const mockedDate = new Date("2023-01-01T03:00:00"); // 03:00
+			const mockedDate = new Date("2023-01-01T03:10:05"); // 03:00
 			jest.useFakeTimers("modern");
 			jest.setSystemTime(mockedDate);
 		});
