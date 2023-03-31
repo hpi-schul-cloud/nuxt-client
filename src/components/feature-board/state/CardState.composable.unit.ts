@@ -1,6 +1,6 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { useSharedCardRequestPool } from "./CardRequestPool.composable";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
 import Vue from "vue";
 
@@ -22,7 +22,7 @@ const mountComposable = <R>(composable: () => R): R => {
 	//@ts-ignore
 	return wrapper.vm.result;
 };
-jest.mock("./CardRequestPool.composable");
+jest.mock("../CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
 describe("CardState composable", () => {

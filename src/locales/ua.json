@@ -930,6 +930,7 @@
 	"pages.userMigration.error.img.alt": "Графіка помилки міграції",
 	"pages.userMigration.error.title": "Не вдалося перемістити систему входу",
 	"pages.userMigration.error.description": "На жаль, не вдалося перемістити систему входу з {sourceSystem} на {targetSystem}. Щоб мати можливість використовувати {instance} із системою реєстрації {targetSystem}, <a href=\"{supportLink}\">зверніться до служби підтримки</a>.",
+	"pages.userMigration.error.schoolNumberMismatch": "Надішліть до проблеми номер школи <b>{sourceSystem} {sourceSchoolNumber}</b> і номер школи <b>{targetSystem} {targetSchoolNumber}</b>.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent": "Форма згоди:",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

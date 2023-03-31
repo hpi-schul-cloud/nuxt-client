@@ -17,7 +17,6 @@
 		<time-picker
 			class="picker-width"
 			required
-			:date="date"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
