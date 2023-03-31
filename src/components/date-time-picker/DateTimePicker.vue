@@ -20,6 +20,7 @@
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
+			:allow-past="false"
 			@input="handleTimeInput"
 			@error="handleTimeError"
 		/>
