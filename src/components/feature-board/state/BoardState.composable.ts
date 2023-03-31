@@ -122,6 +122,10 @@ export const useBoardState = (id: string) => {
 		);
 	};
 
+	const updateColumnTitle = (columnId: string, newTitle: string) => {
+		console.log("update column title: ", columnId, newTitle);
+	};
+
 	onMounted(() => fetchBoard(id));
 
 	return {
@@ -131,5 +135,6 @@ export const useBoardState = (id: string) => {
 		moveColumn,
 		moveCard,
 		moveCardByKeyboard,
+		updateColumnTitle,
 	};
 };

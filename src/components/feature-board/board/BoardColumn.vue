@@ -3,11 +3,14 @@
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
 		class="column-drag-handle mr-4"
 	>
-		<BoardColumnHeader :title="column.title"></BoardColumnHeader>
+		<BoardColumnHeader
+			:title="column.title"
+			@update:title="onUpdateTitle"
+		></BoardColumnHeader>
 		<div class="d-flex flex-column flex-grow-1">
 			<Container
 				group-name="col"
-				@drop="onCardDrop"
+				@drop="onMoveCard"
 				drag-class="elevation-12"
 				drop-class="elevation-0"
 				:drop-placeholder="drowpdownDropPlaceholderOptions"
@@ -51,14 +54,18 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
-	emits: ["card-position-change", "position-change-keyboard"],
+	emits: [
+		"update:card-position",
+		"update:card-position:keyboard",
+		"update:title",
+	],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
-		const onCardDrop = (dropResult: CardMove): void => {
+		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("card-position-change", dropResult);
+			emit("update:card-position", dropResult);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
@@ -94,15 +101,20 @@ export default defineComponent({
 				cardMoveByKeyboard.targetColumnPosition = 0;
 			}
 
-			emit("position-change-keyboard", cardMoveByKeyboard);
+			emit("update:card-position:keyboard", cardMoveByKeyboard);
+		};
+
+		const onUpdateTitle = (newTitle: string) => {
+			emit("update:title", newTitle);
 		};
 
 		return {
 			colWidth,
 			drowpdownDropPlaceholderOptions,
-			onCardDrop,
+			onMoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
+			onUpdateTitle,
 		};
 	},
 });

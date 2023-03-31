@@ -17,8 +17,11 @@
 							<BoardColumn
 								:column="column"
 								:index="index"
-								@position-change-keyboard="onPositionChangeKeyboard"
-								@card-position-change="onCardPositionChange(index, $event)"
+								@update:card-position:keyboard="onPositionChangeKeyboard"
+								@update:card-position="onCardPositionChange(index, $event)"
+								@update:title="
+									($event) => onUpdateColumnTitle(column.id, $event)
+								"
 							/>
 						</Draggable>
 					</template>
@@ -46,9 +49,13 @@ export default defineComponent({
 	components: { BoardColumn, Container, Draggable },
 	setup() {
 		const route = useRoute();
-		const { board, moveCard, moveColumn, moveCardByKeyboard } = useBoardState(
-			route.params?.id
-		);
+		const {
+			board,
+			moveCard,
+			moveColumn,
+			moveCardByKeyboard,
+			updateColumnTitle,
+		} = useBoardState(route.params?.id);
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
 			moveCard(columnIndex, payload);
@@ -69,6 +76,10 @@ export default defineComponent({
 			return board.value.columns[index].id;
 		};
 
+		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
+			updateColumnTitle(columnId, newTitle);
+		};
+
 		return {
 			board,
 			cardDropPlaceholderOptions,
@@ -76,6 +87,7 @@ export default defineComponent({
 			onCardPositionChange,
 			onColumnDrop,
 			onPositionChangeKeyboard,
+			onUpdateColumnTitle,
 		};
 	},
 });

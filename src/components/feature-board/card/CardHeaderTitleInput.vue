@@ -10,7 +10,6 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
-import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 
 export default defineComponent({
@@ -31,11 +30,6 @@ export default defineComponent({
 	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const onFocusCallback = () => {
-			document.getSelection()?.collapseToEnd();
-		};
-		useInlineEditInteractionHandler(onFocusCallback);
-
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 
 		return {

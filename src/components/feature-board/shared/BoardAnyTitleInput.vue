@@ -17,10 +17,11 @@
 			dense
 			:rows="1"
 			auto-grow
-			class="ml-n3 mb-0 w-full"
 			flat
+			class="ml-n3 mb-0 w-full"
 			:placeholder="placeholder"
 			background-color="transparent"
+			:tabindex="isEditMode ? 0 : -1"
 			:readonly="!isEditMode"
 			:aria-hidden="!isEditMode"
 		></VTextarea>
@@ -30,6 +31,7 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { computed, defineComponent, PropType } from "vue";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -55,6 +57,10 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
+		useInlineEditInteractionHandler(() => {
+			document.getSelection()?.collapseToEnd();
+		});
+
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
 				case "board":
@@ -79,11 +85,24 @@ export default defineComponent({
 					return "UnknownTitle";
 			}
 		});
+		const fontSizeClass = computed(() => {
+			switch (props.scope) {
+				case "board":
+					return { "text-h3": true };
+				case "column":
+					return { "text-h4": true };
+				case "card":
+					return { "text-h5": true };
+				default:
+					return { anyClass: false };
+			}
+		});
 
 		return {
 			modelValue,
 			ariaLevel,
 			label,
+			fontSizeClass,
 		};
 	},
 });
