@@ -122,7 +122,12 @@ export default {
 		},
 		url() {
 			if (getMediatype(this.resource) === "file-h5p") {
-				const baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+				let baseUrlH5p = "";
+				if (this.$axios.defaults.baseURL.includes("/api")) {
+					baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+				} else {
+					baseUrlH5p = this.$axios.defaults.baseURL;
+				}
 				return (
 					baseUrlH5p +
 					"/content/" +
