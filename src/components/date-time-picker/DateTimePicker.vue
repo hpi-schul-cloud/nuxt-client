@@ -77,6 +77,17 @@ export default defineComponent({
 		const timeError = ref(false);
 		const isToday = ref(false);
 
+		const dateIsToday = (dateString: string) => {
+			const today = new Date();
+			const date = new Date(dateString);
+
+			date.getDate() == today.getDate() &&
+			date.getMonth() == today.getMonth() &&
+			date.getFullYear() == today.getFullYear()
+				? (isToday.value = true)
+				: (isToday.value = false);
+		};
+
 		const setDateTime = (dateIsoString: string) => {
 			date.value = dateIsoString;
 			time.value = new Date(dateIsoString).toLocaleTimeString(locale, {
@@ -96,17 +107,6 @@ export default defineComponent({
 				setDateTime(newDateTime);
 			}
 		);
-
-		const dateIsToday = (dateString: string) => {
-			const today = new Date();
-			const date = new Date(dateString);
-
-			date.getDate() == today.getDate() &&
-			date.getMonth() == today.getMonth() &&
-			date.getFullYear() == today.getFullYear()
-				? (isToday.value = true)
-				: (isToday.value = false);
-		};
 
 		const emitDateTime = () => {
 			const dateTime = new Date(date.value);
