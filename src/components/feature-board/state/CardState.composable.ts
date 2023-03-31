@@ -1,5 +1,5 @@
 import { onMounted, reactive, toRef } from "vue";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import {
 	ContentElementType,

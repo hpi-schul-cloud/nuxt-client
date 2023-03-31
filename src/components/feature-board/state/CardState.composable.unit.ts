@@ -1,6 +1,6 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
 import Vue from "vue";
 
