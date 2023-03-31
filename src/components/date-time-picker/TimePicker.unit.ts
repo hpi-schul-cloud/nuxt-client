@@ -183,6 +183,38 @@ describe("@components/date-time-picker/TimePicker", () => {
 					fiveOClockListItem.attributes()["aria-disabled"]
 				).toBeUndefined();
 			});
+
+			it("should emit error event when time inserted is in the past", async () => {
+				setup({
+					time: new Date().toISOString(),
+					allowPast: false,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("03:01");
+
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.emitted("error")).toHaveLength(1);
+			});
+
+			it("should emit input event when time inserted is in the future", async () => {
+				setup({
+					time: new Date().toISOString(),
+					allowPast: false,
+				});
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("03:11");
+
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.emitted("input")).toHaveLength(1);
+			});
 		});
 
 		describe("when times in the past are allowed", () => {
