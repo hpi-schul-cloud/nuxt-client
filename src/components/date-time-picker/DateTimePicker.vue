@@ -20,7 +20,7 @@
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
-			:allow-past="false"
+			:allow-past="!isToday"
 			@input="handleTimeInput"
 			@error="handleTimeError"
 		/>
@@ -75,6 +75,7 @@ export default defineComponent({
 		const time = ref("");
 		const dateError = ref(false);
 		const timeError = ref(false);
+		const isToday = ref(false);
 
 		const setDateTime = (dateIsoString: string) => {
 			date.value = dateIsoString;
@@ -82,6 +83,7 @@ export default defineComponent({
 				timeStyle: "short",
 				hourCycle: "h23",
 			});
+			dateIsToday(date.value);
 		};
 
 		if (props.dateTime !== "") {
@@ -94,6 +96,17 @@ export default defineComponent({
 				setDateTime(newDateTime);
 			}
 		);
+
+		const dateIsToday = (dateString: string) => {
+			const today = new Date();
+			const date = new Date(dateString);
+
+			date.getDate() == today.getDate() &&
+			date.getMonth() == today.getMonth() &&
+			date.getFullYear() == today.getFullYear()
+				? (isToday.value = true)
+				: (isToday.value = false);
+		};
 
 		const emitDateTime = () => {
 			const dateTime = new Date(date.value);
@@ -108,6 +121,7 @@ export default defineComponent({
 		const handleDateInput = (newDate: string) => {
 			dateError.value = false;
 			date.value = newDate;
+			dateIsToday(date.value);
 
 			if (time.value === "") {
 				time.value = "12:00";
@@ -148,6 +162,7 @@ export default defineComponent({
 		return {
 			date,
 			time,
+			isToday,
 			handleDateInput,
 			handleTimeInput,
 			handleDateError,
