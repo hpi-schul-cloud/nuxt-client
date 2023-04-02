@@ -90,7 +90,7 @@ describe("UserLoginMigrationError", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.error.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
+					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 
@@ -121,9 +121,26 @@ describe("UserLoginMigrationError", () => {
 					.text();
 
 				expect(schoolNumberMismatchText).toEqual(
-					'pages.userMigration.error.schoolNumberMismatch {"sourceSystem":"sourceSystem","targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
+					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
 				);
 			});
+		});
+
+		it("should have specific subject in mailto support link", () => {
+			const { wrapper } = setup({
+				sourceSystem: "sourceSystemId",
+				targetSystem: "targetSystemId",
+				sourceSchoolNumber: "11111",
+				targetSchoolNumber: "22222",
+			});
+
+			const descriptionText: string = wrapper
+				.find("[data-testId=text-description]")
+				.text();
+
+			expect(descriptionText).toEqual(
+				'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"}'
+			);
 		});
 	});
 
