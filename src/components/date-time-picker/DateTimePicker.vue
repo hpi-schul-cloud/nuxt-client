@@ -120,14 +120,14 @@ export default defineComponent({
 		};
 
 		const handleTimeInput = (newTime: string) => {
-			timeError.value = false;
-			time.value = newTime;
-
-			if (date.value === "") {
-				date.value = new Date().toISOString();
-			}
-			if (valid.value) {
-				emitDateTime();
+			if (!timeError.value) {
+				time.value = newTime;
+				if (date.value === "") {
+					date.value = new Date().toISOString();
+				}
+				if (valid.value) {
+					emitDateTime();
+				}
 			}
 		};
 
