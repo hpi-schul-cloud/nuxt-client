@@ -6,7 +6,11 @@
 				{{ t("pages.rooms.fab.add.betatask") }}
 			</h1>
 		</div>
-		<v-form v-if="isEditMode && !isLoading" class="d-flex flex-column">
+		<v-form
+			v-if="isEditMode && !isLoading"
+			class="d-flex flex-column"
+			ref="form"
+		>
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -143,6 +147,7 @@ export default defineComponent({
 				value: false,
 			},
 		]);
+		const form = ref<HTMLFormElement | null>(null);
 		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
@@ -331,20 +336,30 @@ export default defineComponent({
 		};
 
 		const save = async () => {
-			if (hasErrors.value) {
-				return;
+			if (form.value) {
+				const valid = form.value.validate();
+				if (!valid) {
+					console.log("form has error(s)");
+					return;
+				} else {
+					console.log("form is valid");
+				}
 			}
 
-			if (
-				route.name === "rooms-beta-task-new" ||
-				route.name === "tasks-beta-task-new"
-			) {
-				await createTaskCard();
-			} else {
-				await updateTaskCard();
-			}
+			// if (hasErrors.value) {
+			// 	return;
+			// }
 
-			router.go(-1);
+			// if (
+			// 	route.name === "rooms-beta-task-new" ||
+			// 	route.name === "tasks-beta-task-new"
+			// ) {
+			// 	await createTaskCard();
+			// } else {
+			// 	await updateTaskCard();
+			// }
+
+			// router.go(-1);
 		};
 
 		const hasErrors = ref(false);
@@ -392,6 +407,7 @@ export default defineComponent({
 			isVisible,
 			visibilityOptions,
 			isLoading,
+			form,
 		};
 	},
 });
