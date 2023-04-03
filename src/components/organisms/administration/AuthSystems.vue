@@ -62,7 +62,7 @@
 						</td>
 						<td>
 							<v-btn
-								v-if="isEditable(system) && hasSystemEditPermission"
+								v-if="isEditable(system)"
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
