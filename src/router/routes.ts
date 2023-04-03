@@ -4,10 +4,12 @@ import { Layouts } from "@/layouts/types";
 import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
 import {
 	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
+import { isDefined } from "@vueuse/core";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -182,10 +184,16 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: validateQueryParameters({
 			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
+			sourceSchoolNumber: (value: unknown) =>
+				!isDefined(value) || isOfficialSchoolNumber(value),
+			targetSchoolNumber: (value: unknown) =>
+				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
+			sourceSchoolNumber: route.query.sourceSchoolNumber,
+			targetSchoolNumber: route.query.targetSchoolNumber,
 		}),
 		meta: {
 			isPublic: true,
