@@ -1,6 +1,7 @@
 import VueRouter from "vue-router";
 import { createLocalVue, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { taskCardModule } from "@/store";
 import TaskCard from "./TaskCard.page.vue";
 
 const localVue = createLocalVue();
@@ -28,9 +29,10 @@ const taskCardModuleMock = () => {
 				},
 			},
 		},
-		findTaskCard: () => true,
+		findTaskCard: jest.fn(),
 	};
 };
+const findTaskCardSpy = jest.spyOn(taskCardModule, "findTaskCard");
 
 const schoolsModuleMock = () => {
 	return {
@@ -110,15 +112,17 @@ describe("TaskCard", () => {
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
-		it("should render cancel button", async () => {
+		it("should fetch task card", () => {
+			expect(findTaskCardSpy).toHaveBeenCalled();
+		});
+
+		it("should render cancel button", () => {
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-			await wrapper.vm.$nextTick();
 			expect(cancelBtn.exists()).toBe(true);
 		});
 
-		it("should render save button", async () => {
+		it("should render save button", () => {
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
-			await wrapper.vm.$nextTick();
 			expect(saveBtn.exists()).toBe(true);
 		});
 	});
@@ -140,12 +144,6 @@ describe("TaskCard", () => {
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
 			expect(saveBtn.exists()).toBe(false);
-		});
-	});
-
-	describe("permission check before mounting", () => {
-		describe("when user does have permission TASK_CARD_EDIT", () => {
-			it.todo("should do what?"); // QUESTION
 		});
 	});
 });
