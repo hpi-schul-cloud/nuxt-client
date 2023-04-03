@@ -62,7 +62,7 @@
 						</td>
 						<td>
 							<v-btn
-								v-if="isEditable(system)"
+								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
@@ -70,7 +70,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isRemovable(system) && hasSystemViewPermission"
+								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
 								@click.stop="openConfirmDeleteDialog(system._id)"
@@ -83,7 +83,7 @@
 			</template>
 		</v-simple-table>
 		<v-btn
-			v-if="hasSystemViewPermission"
+			v-if="hasSystemCreatePermission"
 			color="primary"
 			class="my-8 add-ldap"
 			depressed
@@ -154,6 +154,14 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+
+		hasSystemCreatePermission: () => {
+			return authModule.getUserPermissions.includes("system_create");
+		},
+
+		hasSystemEditPermission: () => {
+			return authModule.getUserPermissions.includes("system_edit");
+		},
 
 		hasSystemViewPermission: () => {
 			return authModule.getUserPermissions.includes("system_view");
