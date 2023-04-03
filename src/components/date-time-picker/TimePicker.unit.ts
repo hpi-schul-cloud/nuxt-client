@@ -37,7 +37,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("when picking a time through typing", () => {
 		it("should emit event on input", async () => {
-			setup({ time: new Date().toISOString() });
+			setup({ time: "12:30" });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 			const input = textField.find("input");
@@ -52,9 +52,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("when picking a time through select", () => {
 		it("should emit event on input", async () => {
-			setup({
-				time: new Date().toISOString(),
-			});
+			setup({ time: "12:30" });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 			const input = textField.find("input");
@@ -70,17 +68,27 @@ describe("@components/date-time-picker/TimePicker", () => {
 	});
 
 	describe("validation", () => {
+		beforeEach(() => {
+			const mockedDate = new Date("2023-01-01T03:10:05"); // 03:00
+			jest.useFakeTimers("modern");
+			jest.setSystemTime(mockedDate);
+		});
+
+		afterEach(() => {
+			jest.useRealTimers();
+		});
+
 		describe("when time is required", () => {
 			it("should emit error event on clear", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					required: true,
 				});
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const clearBtn = textField.find(".v-icon");
 				expect(clearBtn.exists()).toBe(true);
-				await clearBtn.trigger("click");
+				clearBtn.trigger("click");
 
 				textField.vm.$emit("blur");
 				await wrapper.vm.$nextTick();
@@ -90,15 +98,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 			it("should emit error event on empty input", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					required: true,
 				});
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
 				input.setValue("");
-
-				textField.vm.$emit("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -107,7 +113,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 		describe("when time is not required and value is empty", () => {
 			it("should not emit error event", () => {
-				setup({ time: "" });
+				setup({ time: "12:30" });
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
@@ -122,35 +128,21 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 		describe("when time does not fit format", () => {
 			it("should emit error event", async () => {
-				setup({ time: "02:00" });
+				setup({ time: "12:30" });
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
 				input.setValue("25:65");
-
-				textField.vm.$emit("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
 		});
-	});
 
-	describe("restriction", () => {
-		beforeEach(() => {
-			const mockedDate = new Date("2023-01-01T03:10:05"); // 03:00
-			jest.useFakeTimers("modern");
-			jest.setSystemTime(mockedDate);
-		});
-
-		afterEach(() => {
-			jest.useRealTimers();
-		});
-
-		describe("when times in the past are not allowed", () => {
-			it("should disable selection of times in the past", async () => {
+		describe("when time in the past is not allowed", () => {
+			it("should disable selection of time in the past", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					allowPast: false,
 				});
 
@@ -165,9 +157,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 				expect(oneOClockListItem.attributes()["aria-disabled"]).toBeDefined();
 			});
 
-			it("should enable selection of times in the future", async () => {
+			it("should enable selection of time in the future", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					allowPast: false,
 				});
 
@@ -186,15 +178,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 			it("should emit error event when time inserted is in the past", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					allowPast: false,
 				});
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
 				input.setValue("03:01");
-
-				textField.vm.$emit("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -202,7 +192,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 			it("should emit input event when time inserted is in the future", async () => {
 				setup({
-					time: new Date().toISOString(),
+					time: "12:30",
 					allowPast: false,
 				});
 
@@ -217,12 +207,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 			});
 		});
 
-		describe("when times in the past are allowed", () => {
-			it("should enable selection of times in the past", async () => {
-				setup({
-					time: new Date().toISOString(),
-					allowPast: true,
-				});
+		describe("when time in the past is allowed", () => {
+			it("should enable selection of time in the past", async () => {
+				setup({ time: "12:30" });
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
@@ -233,6 +220,19 @@ describe("@components/date-time-picker/TimePicker", () => {
 					.findAll({ name: "v-list-item" })
 					.at(0); // 00:00
 				expect(oneOClockListItem.attributes()["aria-disabled"]).toBeUndefined();
+			});
+
+			it("should emit input event when time inserted is in the past", async () => {
+				setup({ time: "12:30" });
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				input.setValue("02:00");
+
+				textField.vm.$emit("blur");
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.emitted("input")).toHaveLength(1);
 			});
 		});
 	});
