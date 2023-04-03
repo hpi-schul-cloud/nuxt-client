@@ -9,7 +9,7 @@
 		></BoardColumnHeader>
 		<div class="d-flex flex-column flex-grow-1">
 			<Container
-				group-name="col"
+				group-name="cards"
 				@drop="onMoveCard"
 				drag-class="elevation-12"
 				drop-class="elevation-0"

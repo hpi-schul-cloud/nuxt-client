@@ -85,16 +85,16 @@ export default defineComponent({
 					return "UnknownTitle";
 			}
 		});
-		const fontSizeClass = computed(() => {
+		const fontSize = computed(() => {
 			switch (props.scope) {
 				case "board":
-					return { "text-h3": true };
+					return "var(--heading-3)";
 				case "column":
-					return { "text-h4": true };
+					return "var(--heading-5)";
 				case "card":
-					return { "text-h5": true };
+					return "var(--heading-6)";
 				default:
-					return { anyClass: false };
+					return "--heading-6";
 			}
 		});
 
@@ -102,8 +102,14 @@ export default defineComponent({
 			modelValue,
 			ariaLevel,
 			label,
-			fontSizeClass,
+			fontSize,
 		};
 	},
 });
 </script>
+
+<style scoped>
+:deep(textarea) {
+	font-size: v-bind(fontSize);
+}
+</style>

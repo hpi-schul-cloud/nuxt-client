@@ -13,11 +13,13 @@
 					:placeholder="''"
 					@update:value="onUpdateTitle"
 				></BoardAnyTitleInput>
-				<BoardMenu scope="column">
-					<BoardMenuAction> Delete Column </BoardMenuAction>
-				</BoardMenu>
+				<div class="pt-2">
+					<BoardMenu scope="column">
+						<BoardMenuAction> Delete Column </BoardMenuAction>
+					</BoardMenu>
+				</div>
 			</div>
-			<VDivider></VDivider>
+			<VDivider color="black"></VDivider>
 		</div>
 	</InlineEditInteractionHandler>
 </template>

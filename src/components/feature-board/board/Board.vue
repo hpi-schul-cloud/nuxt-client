@@ -1,12 +1,13 @@
 <template>
-	<div class="ml-8 mr-8">
+	<div class="ml-8 mr-8" style="height: 100%">
 		<div>
 			<h1>Board</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1">
+		<div class="d-flex flex-row flex-shrink-1" style="min-height: 80%">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
+					group-name="columns"
 					@drop="onColumnDrop"
 					drag-handle-selector=".column-drag-handle"
 					:get-child-payload="getColumnId"
@@ -26,6 +27,7 @@
 						</Draggable>
 					</template>
 				</Container>
+				<BoardColumnGhost></BoardColumnGhost>
 			</template>
 		</div>
 	</div>
@@ -36,6 +38,7 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
+import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
 	cardDropPlaceholderOptions,
@@ -46,7 +49,7 @@ import {
 
 export default defineComponent({
 	name: "Board",
-	components: { BoardColumn, Container, Draggable },
+	components: { BoardColumn, Container, Draggable, BoardColumnGhost },
 	setup() {
 		const route = useRoute();
 		const {
