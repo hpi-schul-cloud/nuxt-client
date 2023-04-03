@@ -5,6 +5,13 @@ import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
 type DateTimePickerProps = {
 	dateTime: string;
+	dateInputLabel?: string;
+	dateInputAriaLabel?: string;
+	minDate?: string;
+	maxDate?: string;
+	timeInputLabel?: string;
+	timeInputAriaLabel?: string;
+	required?: boolean;
 };
 
 describe("@components/date-time-picker/DateTimePicker", () => {
