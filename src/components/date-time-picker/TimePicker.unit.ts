@@ -102,8 +102,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
-				input.setValue("");
-				await wrapper.vm.$nextTick();
+				await input.setValue("");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -131,8 +130,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
-				input.setValue("25:65");
-				await wrapper.vm.$nextTick();
+				await input.setValue("25:65");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -184,8 +182,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
-				input.setValue("03:01");
-				await wrapper.vm.$nextTick();
+				await input.setValue("03:01");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
