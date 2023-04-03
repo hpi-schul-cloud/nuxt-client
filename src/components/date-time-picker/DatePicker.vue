@@ -7,7 +7,6 @@
 			nudge-bottom="70"
 			min-width="auto"
 			attach
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -23,7 +22,6 @@
 					:error="hasErrors"
 					v-bind="attrs"
 					v-on="on"
-					@input="onInput"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -132,15 +130,8 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const onBlur = (event: any) => {
+		const onBlur = () => {
 			if (showDateDialog.value === false) {
-				const value = event.target.value;
-				validate(value);
-			}
-		};
-
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
 				validate(selectedDate.value);
 			}
 		};
@@ -164,6 +155,12 @@ export default defineComponent({
 			}
 		);
 
+		watch(showDateDialog, (newValue: boolean) => {
+			if (newValue === false) {
+				validate(selectedDate.value);
+			}
+		});
+
 		return {
 			mdiCalendarClock,
 			locale,
@@ -176,7 +173,6 @@ export default defineComponent({
 			validate,
 			hasErrors,
 			resetErrors,
-			onMenuToggle,
 			clearDate,
 			onBlur,
 		};
