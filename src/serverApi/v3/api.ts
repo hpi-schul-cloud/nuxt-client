@@ -3307,6 +3307,7 @@ export interface TaskCardResponse {
      * @memberof TaskCardResponse
      */
     dueDate: string;
+    completed: boolean;
 }
 /**
  * 

@@ -21,6 +21,9 @@ export default class TaskCardModule extends VuexModule {
 		title: "",
 		cardElements: [],
 		draggable: true,
+		dueDate: "",
+		visibleAtDate: "",
+		completed: false,
 		task: {
 			id: "",
 			users: [],
@@ -39,8 +42,6 @@ export default class TaskCardModule extends VuexModule {
 				isFinished: false,
 			},
 		},
-		dueDate: "",
-		visibleAtDate: "",
 	};
 	loading = false;
 	businessError: BusinessError = {
@@ -105,14 +106,24 @@ export default class TaskCardModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async completeBetaTask(completed: boolean): Promise<void> {
+		this.setCompleted(completed);
+	}
+
 	@Mutation
-	setTaskCardData(payload: any): void {
+	setTaskCardData(payload: TaskCardResponse): void {
 		this.taskCardData = payload;
 	}
 
 	@Mutation
 	setCourseId(id: string): void {
 		this.taskCardData.courseId = id;
+	}
+
+	@Mutation
+	setCompleted(completed: boolean): void {
+		this.taskCardData.completed = completed;
 	}
 
 	@Mutation

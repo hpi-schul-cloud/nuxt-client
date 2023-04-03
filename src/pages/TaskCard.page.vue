@@ -63,6 +63,13 @@
 			</div>
 		</v-form>
 		<article v-else class="d-flex flex-column">
+			<div class="d-flex justify-end">
+				<v-checkbox
+					v-model="taskCompleted"
+					label="Aufgabe erledigt"
+					@change="handleTaskCompletion"
+				/>
+			</div>
 			<title-card-element v-model="title" :editable="false" />
 			<card-element-list v-model="elements" :editMode="false" />
 		</article>
@@ -142,10 +149,12 @@ export default defineComponent({
 				value: false,
 			},
 		]);
+
+		const route = useRoute();
 		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
-		const route = useRoute();
+		const taskCompleted = ref(false);
 
 		const minDate = new Date().toISOString();
 		const maxDate = ref("");
@@ -210,6 +219,7 @@ export default defineComponent({
 				];
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
+				taskCompleted.value = taskCardData.completed;
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push(
@@ -357,6 +367,11 @@ export default defineComponent({
 			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
+
+		const handleTaskCompletion = () => {
+			taskCardModule.completeBetaTask(taskCompleted.value);
+		};
+
 		const getUserPermissions = ref(authModule.getUserPermissions);
 
 		const isEditMode = computed(() => {
@@ -379,6 +394,8 @@ export default defineComponent({
 			cancel,
 			t,
 			handleDateTimeInput,
+			taskCompleted,
+			handleTaskCompletion,
 			isEditMode,
 			isCourseSelectDisabled,
 			course,
