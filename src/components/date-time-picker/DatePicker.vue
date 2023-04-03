@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, computed, watch } from "vue";
+import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendarClock } from "@mdi/js";
@@ -114,7 +114,7 @@ export default defineComponent({
 			}
 
 			if (dateValue === "") {
-				errors.value.push(t("components.timePicker.validation.required"));
+				errors.value.push(t("components.datePicker.validation.required"));
 				emit("error");
 				return false;
 			}
@@ -156,13 +156,6 @@ export default defineComponent({
 		const resetErrors = () => {
 			errors.value = [];
 		};
-
-		watch(
-			() => props.date,
-			(newValue: string) => {
-				selectedDate.value = newValue;
-			}
-		);
 
 		return {
 			mdiCalendarClock,
