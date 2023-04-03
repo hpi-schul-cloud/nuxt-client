@@ -7,11 +7,10 @@
 			nudge-bottom="70"
 			min-width="180"
 			attach
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
-					v-model="inputTime"
+					v-model="model"
 					id="time-input"
 					data-testid="time-input"
 					placeholder="HH:MM"
@@ -19,18 +18,18 @@
 					clearable
 					:label="label"
 					:aria-label="ariaLabel"
-					:errors="hasErrors"
-					:error-messages="errors"
 					v-bind="attrs"
 					v-on="on"
-					@input="onInput"
+					:rules="rules"
+					autocomplete="off"
+					@input="handleInput"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@blur="onBlur"
+					@update:error="handleError"
 				/>
 			</template>
 			<v-list height="200" class="col-12 pt-1 px-0">
-				<v-list-item-group v-model="selectedTime" color="primary">
+				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
 						:key="`time-select-${index}`"
@@ -38,7 +37,7 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="selectTime(timeOfDay.value)"
+							@click="handleSelect(timeOfDay.value)"
 							:disabled="timeOfDay.disabled"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
@@ -81,10 +80,8 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const inputTime = ref(props.time);
+		const model = ref(props.time);
 		const showTimeDialog = ref(false);
-		const selectedTime = ref(null);
-		const errors = ref<string[]>([]);
 
 		const timesOfDayList = computed(() => {
 			type timeItem = {
@@ -102,8 +99,6 @@ export default defineComponent({
 					disabled: !props.allowPast && timeInPast(hour, 30),
 				});
 			}
-			validate();
-
 			return times;
 		});
 
@@ -120,91 +115,55 @@ export default defineComponent({
 			return false;
 		};
 
-		const selectTime = (selected: string) => {
-			inputTime.value = selected;
+		const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
+		type Rule = (value: string | null) => boolean | string;
+		const rules: Rule[] = [
+			(value: string | null) => {
+				return props.required && (value === "" || value === null)
+					? t("components.timePicker.validation.required")
+					: true;
+			},
+			(value: string | null) => {
+				return value === null || !value.match(regex)
+					? t("components.timePicker.validation.format")
+					: true;
+			},
+			(value: string | null) => {
+				if (value === null) {
+					return false;
+				}
+				const hoursAndMinutes = value.split(":");
+				return !props.allowPast &&
+					timeInPast(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]))
+					? t("components.timePicker.validation.future")
+					: true;
+			},
+		];
+
+		const handleInput = () => {
 			showTimeDialog.value = false;
-			const validated = validate();
-			if (validated) {
-				emit("input", inputTime.value);
+			if (model.value) {
+				emit("input", model.value);
 			}
 		};
 
-		const onInput = (input: string) => {
-			inputTime.value = input;
-			showTimeDialog.value = false;
+		const handleSelect = (selected: string) => {
+			model.value = selected;
+			handleInput();
 		};
 
-		const onBlur = () => {
-			const validated = validate();
-			if (validated) {
-				emit("input", inputTime.value);
-			}
-		};
-
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
-				validate();
-			}
-		};
-
-		const validate = () => {
-			const timeValue = inputTime.value;
-			resetErrors();
-
-			if (!props.required && (timeValue === "" || timeValue === null)) {
-				return true;
-			}
-
-			if (props.required && (timeValue === "" || timeValue === null)) {
-				errors.value.push(t("components.timePicker.validation.required"));
-				emit("error");
-				return false;
-			}
-
-			// fits hh:mm format
-			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
-			const found = timeValue.match(regex);
-			if (!found) {
-				errors.value.push(t("components.timePicker.validation.format"));
-				emit("error");
-				return false;
-			}
-
-			const hoursAndMinutes = timeValue.split(":");
-			if (
-				!props.allowPast &&
-				timeInPast(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]))
-			) {
-				errors.value.push(t("components.timePicker.validation.future"));
-				emit("error");
-				return false;
-			}
-
-			emit("valid");
-			return true;
-		};
-
-		const hasErrors = computed(() => {
-			return errors.value.length > 0;
-		});
-
-		const resetErrors = () => {
-			errors.value = [];
+		const handleError = (hasError: boolean) => {
+			hasError ? emit("error") : emit("valid");
 		};
 
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			inputTime,
-			selectedTime,
-			selectTime,
-			onInput,
-			onBlur,
-			onMenuToggle,
-			validate,
-			errors,
-			hasErrors,
-			resetErrors,
+			model,
+			rules,
+			handleInput,
+			handleSelect,
+			handleError,
 		};
 	},
 });
