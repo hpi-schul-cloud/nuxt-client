@@ -220,7 +220,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.fab.add.betatask"),
 					icon: mdiFormatListChecks,
 					to: {
-						name: "rooms-task-card-new",
+						name: "rooms-beta-task-new",
 						params: { course: this.roomData.roomId },
 					},
 					dataTestid: "fab_button_add_beta_task",

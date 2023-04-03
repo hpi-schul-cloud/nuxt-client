@@ -1,12 +1,25 @@
-export declare type ContentElementType =
-	| "legacy-lesson"
-	| "legacy-task"
-	| "text"
-	| "title"
-	| "image"
-	| "task";
+export enum ContentElementType {
+	TEXT = "text",
+	IMAGE = "image",
+}
 
-export interface ContentElement {
+export type AnyContentElement = TextContentElement | ImageContentElement;
+
+interface ContentElement {
 	id: string;
-	elementType: ContentElementType;
+	type: ContentElementType;
+	content: object;
+}
+
+export interface TextContentElement extends ContentElement {
+	type: ContentElementType.TEXT;
+	content: {
+		text: string;
+	};
+}
+export interface ImageContentElement extends ContentElement {
+	type: ContentElementType.IMAGE;
+	content: {
+		image: string;
+	};
 }

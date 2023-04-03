@@ -1749,6 +1749,12 @@ export interface MigrationResponse {
      */
     oauthMigrationFinished?: string;
     /**
+     * Date from when Migration is finally finished and cannot be restarted again
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationFinalFinish?: string;
+    /**
      * Enable the Migration
      * @type {boolean}
      * @memberof MigrationResponse

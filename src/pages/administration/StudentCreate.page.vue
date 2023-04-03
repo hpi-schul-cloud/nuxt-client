@@ -48,9 +48,6 @@ export default {
 		InfoMessage,
 		DefaultWireframe,
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_CREATE"],
-	},
 	data() {
 		return {
 			birthday: null,

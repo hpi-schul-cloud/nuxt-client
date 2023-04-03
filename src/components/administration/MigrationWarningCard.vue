@@ -2,11 +2,21 @@
 	<v-card data-testid="migration-warning-card">
 		<v-card-title class="card-title">{{ $t(title) }}</v-card-title>
 		<v-card-text>
-			<p v-html="$t(text)"></p>
+			<p
+				v-html="
+					$t(text, {
+						gracePeriod: gracePeriodInDays,
+					})
+				"
+			></p>
 			<v-checkbox
 				v-if="check"
 				v-model="isConfirmed"
-				:label="$t(check)"
+				:label="
+					$t(check, {
+						gracePeriod: gracePeriodInDays,
+					})
+				"
 				data-testid="migration-confirmation-checkbox"
 			></v-checkbox>
 		</v-card-text>
@@ -33,7 +43,8 @@
 	</v-card>
 </template>
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import EnvConfigModule from "@/store/env-config";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -57,6 +68,8 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const envConfigModule: EnvConfigModule | undefined =
+			inject<EnvConfigModule>("envConfigModule");
 		const type: Ref<MigrationWarningCardTypeEnum> = ref(
 			props.value as MigrationWarningCardTypeEnum
 		);
@@ -87,6 +100,17 @@ export default defineComponent({
 			eventName = "end";
 		}
 
+		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
+			const days: number | undefined = undefined;
+			if (envConfigModule?.getMigrationEndGracePeriod) {
+				const dayInMilliSeconds = 86400000;
+				const days =
+					envConfigModule.getMigrationEndGracePeriod / dayInMilliSeconds;
+				return days;
+			}
+			return days;
+		});
+
 		return {
 			title,
 			text,
@@ -95,6 +119,7 @@ export default defineComponent({
 			check,
 			isConfirmed,
 			eventName,
+			gracePeriodInDays,
 		};
 	},
 });

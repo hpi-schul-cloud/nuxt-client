@@ -48,9 +48,6 @@ export default {
 	computed: {
 		news: () => newsModule.getCurrentNews,
 	},
-	meta: {
-		requiredPermissions: ["NEWS_EDIT"],
-	},
 	mounted() {
 		newsModule.fetchNews(this.$route.params.id);
 		const hasTitle = (this.news || {}).title;
