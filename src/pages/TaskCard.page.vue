@@ -102,6 +102,10 @@ import {
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import RoomsModule from "@/store/rooms";
 
+interface VForm extends HTMLFormElement {
+	validate(): boolean;
+}
+
 // TODO - unit tests!
 export default defineComponent({
 	name: "TaskCard",
@@ -137,7 +141,7 @@ export default defineComponent({
 
 		const breadcrumbs = ref<object[]>([]);
 
-		const form = ref<HTMLFormElement | null>(null);
+		const form = ref<VForm | null>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
