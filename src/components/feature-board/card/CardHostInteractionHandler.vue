@@ -30,12 +30,6 @@ export default defineComponent({
 	},
 	emits: ["start-edit-mode", "end-edit-mode", "move-card-keyboard"],
 	setup(props, { emit }) {
-		const onClickOutside = () => {
-			if (props.isEditMode) {
-				emit("end-edit-mode");
-			}
-		};
-
 		const onStartEditMode = () => {
 			emit("start-edit-mode");
 		};
@@ -48,7 +42,6 @@ export default defineComponent({
 			}
 		};
 		return {
-			onClickOutside,
 			onStartEditMode,
 			onEndEditMode,
 			onKeydownArrow,
