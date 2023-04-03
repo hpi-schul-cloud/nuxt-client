@@ -70,7 +70,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isRemovable(system) && hasSystemEditPermission"
+								v-if="isRemovable(system) && hasSystemViewPermission"
 								class="delete-system-btn"
 								icon
 								@click.stop="openConfirmDeleteDialog(system._id)"
@@ -83,7 +83,7 @@
 			</template>
 		</v-simple-table>
 		<v-btn
-			v-if="hasSystemEditPermission"
+			v-if="hasSystemViewPermission"
 			color="primary"
 			class="my-8 add-ldap"
 			depressed
@@ -155,8 +155,8 @@ export default {
 		},
 		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
 
-		hasSystemEditPermission: () => {
-			return authModule.getUserPermissions.includes("system_edit");
+		hasSystemViewPermission: () => {
+			return authModule.getUserPermissions.includes("system_view");
 		},
 	},
 	methods: {
