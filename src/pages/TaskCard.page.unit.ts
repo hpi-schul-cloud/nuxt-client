@@ -19,13 +19,30 @@ const roomsModuleMock = () => {
 };
 
 const taskCardModuleMock = () => {
-	return { getTaskCardData: { cardElements: [] } };
+	return {
+		getTaskCardData: {
+			cardElements: [],
+			task: {
+				status: {
+					isDraft: false,
+				},
+			},
+		},
+		findTaskCard: () => true,
+	};
+};
+
+const schoolsModuleMock = () => {
+	return {
+		getCurrentYear: { endDate: new Date() },
+	};
 };
 
 jest.mock("@/store", () => ({
 	authModule: authModuleMock(),
 	roomsModule: roomsModuleMock(),
 	taskCardModule: taskCardModuleMock(),
+	schoolsModule: schoolsModuleMock(),
 }));
 
 const getWrapper = (
@@ -38,7 +55,18 @@ const getWrapper = (
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
 	const router = new VueRouter({
-		routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
+		routes: [
+			{
+				name: "beta-task-view-edit",
+				path: "/beta-task/:id()",
+			},
+		],
+	});
+	router.push({
+		name: "beta-task-view-edit",
+		params: {
+			id: "64215f5944a17f1ce8939dd3",
+		},
 	});
 
 	return mount(TaskCard, {
@@ -82,15 +110,15 @@ describe("TaskCard", () => {
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
-		it("should render cancel button", () => {
+		it("should render cancel button", async () => {
 			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-
+			await wrapper.vm.$nextTick();
 			expect(cancelBtn.exists()).toBe(true);
 		});
 
-		it("should render save button", () => {
+		it("should render save button", async () => {
 			const saveBtn = wrapper.find('[data-testid="save-btn"]');
-
+			await wrapper.vm.$nextTick();
 			expect(saveBtn.exists()).toBe(true);
 		});
 	});
