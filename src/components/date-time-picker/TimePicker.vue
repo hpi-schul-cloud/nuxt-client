@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from "vue";
+import { defineComponent, ref, computed, inject } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 
@@ -66,7 +66,7 @@ export default defineComponent({
 		required: { type: Boolean },
 		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["input", "error"],
+	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -80,6 +80,11 @@ export default defineComponent({
 			}
 			return "unknown translation-key:" + key;
 		};
+
+		const inputTime = ref(props.time);
+		const showTimeDialog = ref(false);
+		const selectedTime = ref(null);
+		const errors = ref<string[]>([]);
 
 		const timesOfDayList = computed(() => {
 			type timeItem = {
@@ -97,6 +102,8 @@ export default defineComponent({
 					disabled: !props.allowPast && timeInPast(hour, 30),
 				});
 			}
+			validate();
+
 			return times;
 		});
 
@@ -113,16 +120,10 @@ export default defineComponent({
 			return false;
 		};
 
-		const inputTime = ref(props.time);
-		const showTimeDialog = ref(false);
-		const selectedTime = ref(null);
-		const errors = ref<string[]>([]);
-
 		const selectTime = (selected: string) => {
 			inputTime.value = selected;
 			showTimeDialog.value = false;
-
-			const validated = validate(inputTime.value);
+			const validated = validate();
 			if (validated) {
 				emit("input", inputTime.value);
 			}
@@ -134,8 +135,7 @@ export default defineComponent({
 		};
 
 		const onBlur = () => {
-			const validated = validate(inputTime.value);
-
+			const validated = validate();
 			if (validated) {
 				emit("input", inputTime.value);
 			}
@@ -143,11 +143,12 @@ export default defineComponent({
 
 		const onMenuToggle = (menuOpen: boolean) => {
 			if (menuOpen === false) {
-				validate(inputTime.value);
+				validate();
 			}
 		};
 
-		const validate = (timeValue: string) => {
+		const validate = () => {
+			const timeValue = inputTime.value;
 			resetErrors();
 
 			if (!props.required && (timeValue === "" || timeValue === null)) {
@@ -179,6 +180,7 @@ export default defineComponent({
 				return false;
 			}
 
+			emit("valid");
 			return true;
 		};
 
@@ -189,13 +191,6 @@ export default defineComponent({
 		const resetErrors = () => {
 			errors.value = [];
 		};
-
-		watch(
-			() => props.time,
-			(newValue) => {
-				inputTime.value = newValue;
-			}
-		);
 
 		return {
 			showTimeDialog,
