@@ -77,6 +77,8 @@ describe("useExternalToolUtils", () => {
 
 		const customParameterResponse: CustomParameterResponse = {
 			name: "name",
+			displayName: "displayName",
+			description: "description",
 			defaultValue: "defaultValue",
 			type: CustomParameterResponseTypeEnum.String,
 			location: CustomParameterResponseLocationEnum.Path,
@@ -205,9 +207,11 @@ describe("useExternalToolUtils", () => {
 					parameters: expect.arrayContaining<ToolParameter>([
 						{
 							name: customParameterResponse.name,
+							displayName: customParameterResponse.displayName,
+							description: customParameterResponse.description,
 							value: customParameterResponse.defaultValue,
 							type: ToolParameterType.String,
-							location: ToolParameterLocation.Path,
+							location: ToolParameterLocation.PATH,
 							scope: ToolParameterScope.School,
 							default: customParameterResponse.defaultValue,
 							isOptional: customParameterResponse.isOptional,
