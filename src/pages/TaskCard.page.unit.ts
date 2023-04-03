@@ -50,6 +50,7 @@ jest.mock("@/store", () => ({
 const getWrapper = (
 	userPermission: string,
 	userCourse: object,
+	route: object,
 	props?: object,
 	options?: object
 ) => {
@@ -64,12 +65,7 @@ const getWrapper = (
 			},
 		],
 	});
-	router.push({
-		name: "beta-task-view-edit",
-		params: {
-			id: "64215f5944a17f1ce8939dd3",
-		},
-	});
+	router.push(route);
 
 	return mount(TaskCard, {
 		...componentOptions,
@@ -105,45 +101,53 @@ describe("TaskCard", () => {
 		document.body.setAttribute("data-app", "true");
 	});
 
-	describe("when TASK_CARD_EDIT permission is present", () => {
-		const wrapper = getWrapper("task_card_edit", mockCourse);
+	describe("view or edit task card", () => {
+		const route = {
+			name: "beta-task-view-edit",
+			params: {
+				id: "64215f5944a17f1ce8939dd3",
+			},
+		};
+		describe("when TASK_CARD_EDIT permission is present", () => {
+			const wrapper = getWrapper("task_card_edit", mockCourse, route);
 
-		it("should render component page", () => {
-			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			it("should render component page", () => {
+				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			});
+
+			it("should fetch task card", () => {
+				expect(findTaskCardSpy).toHaveBeenCalled();
+			});
+
+			it("should render cancel button", () => {
+				const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
+				expect(cancelBtn.exists()).toBe(true);
+			});
+
+			it("should render save button", () => {
+				const saveBtn = wrapper.find('[data-testid="save-btn"]');
+				expect(saveBtn.exists()).toBe(true);
+			});
 		});
 
-		it("should fetch task card", () => {
-			expect(findTaskCardSpy).toHaveBeenCalled();
-		});
+		describe("when only TASK_CARD_VIEW permission is present", () => {
+			const wrapper = getWrapper("task_card_view", mockCourse, route);
 
-		it("should render cancel button", () => {
-			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-			expect(cancelBtn.exists()).toBe(true);
-		});
+			it("should render component page", () => {
+				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			});
 
-		it("should render save button", () => {
-			const saveBtn = wrapper.find('[data-testid="save-btn"]');
-			expect(saveBtn.exists()).toBe(true);
-		});
-	});
+			it("should not render cancel button", () => {
+				const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
-	describe("when only TASK_CARD_VIEW permission is present", () => {
-		const wrapper = getWrapper("task_card_view", mockCourse);
+				expect(cancelBtn.exists()).toBe(false);
+			});
 
-		it("should render component page", () => {
-			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
-		});
+			it("should not render save button", () => {
+				const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
-		it("should not render cancel button", () => {
-			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-
-			expect(cancelBtn.exists()).toBe(false);
-		});
-
-		it("should not render save button", () => {
-			const saveBtn = wrapper.find('[data-testid="save-btn"]');
-
-			expect(saveBtn.exists()).toBe(false);
+				expect(saveBtn.exists()).toBe(false);
+			});
 		});
 	});
 });
