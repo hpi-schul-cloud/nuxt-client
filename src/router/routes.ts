@@ -233,6 +233,11 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-board",
 	},
 	{
+		path: `/tldraw`,
+		component: () => import("../pages/drawing-tool/DrawingTool.page.vue"),
+		name: "tldraw",
+	},
+	{
 		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "rooms-task-card-new",

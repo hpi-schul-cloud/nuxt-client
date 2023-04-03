@@ -36,6 +36,7 @@ const vueRoutes = [
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
+	`^/tldraw?$`,
 	`^/rooms/${mongoId}/board?$`,
 	`^/rooms/${mongoId}/create-task-card/?$`,
 	`^/tasks/?$`,
