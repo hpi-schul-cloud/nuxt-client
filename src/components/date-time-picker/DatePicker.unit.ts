@@ -1,32 +1,38 @@
-import { mount } from "@vue/test-utils";
+import Vue from "vue";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 
-const getWrapper = (props?: object, options?: object) => {
-	return mount(DatePicker, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			i18n: { t: (key: string) => key },
-		},
-		propsData: props,
-		...options,
-	});
+type DatePickerProps = {
+	date: string;
+	label?: string;
+	ariaLabel?: string;
+	required?: boolean;
+	minDate?: string;
+	maxDate?: string;
 };
 
 describe("@components/date-time-picker/DatePicker", () => {
-	it("should render component", () => {
-		const wrapper = getWrapper({
-			date: new Date().toISOString(),
+	let wrapper: Wrapper<Vue>;
+
+	const setup = (props: DatePickerProps) => {
+		document.body.setAttribute("data-app", "true");
+		wrapper = mount(DatePicker as MountOptions<Vue>, {
+			...createComponentMocks({}),
+			propsData: props,
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 		});
+	};
+
+	it("should render component", () => {
+		setup({ date: new Date().toISOString() });
 		expect(wrapper.findComponent(DatePicker).exists()).toBe(true);
 	});
 
 	it("should emit input event on input", async () => {
-		const wrapper = getWrapper({
-			date: new Date().toISOString(),
-		});
+		setup({ date: new Date().toISOString() });
 
 		const textField = wrapper
 			.findComponent({ name: "v-text-field" })
@@ -44,7 +50,7 @@ describe("@components/date-time-picker/DatePicker", () => {
 
 	describe("when date is required", () => {
 		it("should emit error event on validation fail", async () => {
-			const wrapper = getWrapper({
+			setup({
 				date: new Date().toISOString(),
 				required: true,
 			});
@@ -60,9 +66,7 @@ describe("@components/date-time-picker/DatePicker", () => {
 
 	describe("when date is not required", () => {
 		it("should not emit error event", async () => {
-			const wrapper = getWrapper({
-				date: new Date().toISOString(),
-			});
+			setup({ date: new Date().toISOString() });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 
