@@ -23,12 +23,13 @@
 			:allow-past="!isToday"
 			@input="handleTimeInput"
 			@error="handleTimeError"
+			@valid="handleTimeValid"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch, computed } from "vue";
+import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
@@ -71,42 +72,29 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		const date = ref("");
-		const time = ref("");
-		const dateError = ref(false);
-		const timeError = ref(false);
-		const isToday = ref(false);
+		const getTime = (dateIsoString: string) => {
+			return new Date(dateIsoString).toLocaleTimeString(locale, {
+				timeStyle: "short",
+				hourCycle: "h23",
+			});
+		};
 
 		const dateIsToday = (dateString: string) => {
 			const today = new Date();
 			const date = new Date(dateString);
 
-			date.getDate() == today.getDate() &&
-			date.getMonth() == today.getMonth() &&
-			date.getFullYear() == today.getFullYear()
-				? (isToday.value = true)
-				: (isToday.value = false);
+			return (
+				date.getDate() == today.getDate() &&
+				date.getMonth() == today.getMonth() &&
+				date.getFullYear() == today.getFullYear()
+			);
 		};
 
-		const setDateTime = (dateIsoString: string) => {
-			date.value = dateIsoString;
-			time.value = new Date(dateIsoString).toLocaleTimeString(locale, {
-				timeStyle: "short",
-				hourCycle: "h23",
-			});
-			dateIsToday(date.value);
-		};
-
-		if (props.dateTime !== "") {
-			setDateTime(props.dateTime);
-		}
-
-		watch(
-			() => props.dateTime,
-			(newDateTime) => {
-				setDateTime(newDateTime);
-			}
-		);
+		const date = ref(props.dateTime);
+		const time = ref(getTime(props.dateTime));
+		const dateError = ref(false);
+		const timeError = ref(false);
+		const isToday = ref(dateIsToday(props.dateTime));
 
 		const emitDateTime = () => {
 			const dateTime = new Date(date.value);
@@ -121,7 +109,7 @@ export default defineComponent({
 		const handleDateInput = (newDate: string) => {
 			dateError.value = false;
 			date.value = newDate;
-			dateIsToday(date.value);
+			isToday.value = dateIsToday(date.value);
 
 			if (time.value === "") {
 				time.value = "12:00";
@@ -153,6 +141,10 @@ export default defineComponent({
 			emit("error");
 		};
 
+		const handleTimeValid = () => {
+			timeError.value = false;
+		};
+
 		const valid = computed(() => !dateError.value && !timeError.value);
 
 		const iconColor = computed(() => {
@@ -167,6 +159,7 @@ export default defineComponent({
 			handleTimeInput,
 			handleDateError,
 			handleTimeError,
+			handleTimeValid,
 			iconColor,
 			mdiCalendarClock,
 		};
