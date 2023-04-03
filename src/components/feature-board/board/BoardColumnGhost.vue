@@ -3,6 +3,7 @@
 		<BoardColumnGhostHeader
 			ref="ghostColumnTitleRef"
 			:isColumnActive="isColumnActive"
+			@add-column="onAddColumn"
 		></BoardColumnGhostHeader>
 		<div
 			:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
@@ -18,16 +19,6 @@
 				drop-class="elevation-0"
 				:drop-placeholder="drowpdownDropPlaceholderOptions"
 			>
-				<!-- <template v-for="(card, index) in column.cards">
-            <Draggable :key="card.cardId">
-              <CardHost
-                class="mb-6"
-                :card-id="card.cardId"
-                :height="card.height"
-                @move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
-              />
-            </Draggable>
-          </template> -->
 			</Container>
 		</div>
 	</div>
@@ -42,7 +33,8 @@ import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 export default defineComponent({
 	name: "BoardColumnGhost",
 	components: { Container, BoardColumnGhostHeader },
-	setup() {
+	emits: ["add-empty-column", "add-column-with-card"],
+	setup(props, { emit }) {
 		const isDragPending = ref<boolean>(false);
 
 		const ghostColumnRef = ref<HTMLDivElement | undefined>();
@@ -58,6 +50,9 @@ export default defineComponent({
 
 		const onDropCard = () => {
 			// sth
+		};
+		const onAddColumn = () => {
+			emit("add-empty-column");
 		};
 
 		const onDragEnter = () => {
@@ -75,6 +70,7 @@ export default defineComponent({
 			onDropCard,
 			onDragEnter,
 			onDragLeave,
+			onAddColumn,
 			colWidth,
 			drowpdownDropPlaceholderOptions,
 			isColumnActive,
