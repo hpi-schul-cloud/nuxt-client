@@ -6,7 +6,7 @@
 				{{ t("pages.rooms.fab.add.betatask") }}
 			</h1>
 		</div>
-		<v-form v-if="isEditMode" class="d-flex flex-column">
+		<v-form v-if="isEditMode && !isLoading" class="d-flex flex-column">
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -129,6 +129,7 @@ export default defineComponent({
 
 		const breadcrumbs = ref<object[]>([]);
 
+		const isLoading = ref(true);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
@@ -179,7 +180,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push(
 					{
 						text: i18n.t("pages.courses.index.title"),
@@ -199,7 +200,9 @@ export default defineComponent({
 			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
+
 				const taskCardData = taskCardModule.getTaskCardData;
+
 				title.value = taskCardData.title;
 				course.value = taskCardData.courseId || "";
 				courses.value = [
@@ -211,7 +214,7 @@ export default defineComponent({
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 				initElements(taskCardData.cardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push(
 					{
 						text: i18n.t("pages.courses.index.title"),
@@ -248,7 +251,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push({
 					text: i18n.t("common.words.tasks"),
 					to: {
@@ -388,6 +391,7 @@ export default defineComponent({
 			maxDate,
 			isVisible,
 			visibilityOptions,
+			isLoading,
 		};
 	},
 });
