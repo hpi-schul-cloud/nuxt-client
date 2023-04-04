@@ -15,7 +15,8 @@
 <script :src="scriptSrc" charset="UTF-8"></script>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
+import { $axios } from "@/utils/api";
 
 export default defineComponent({
 	name: "LernStorePlayer",
@@ -50,27 +51,21 @@ export default defineComponent({
 			}
 		);
 
+		onMounted(async () => {
+			await $axios
+				.get(`/v1/edu-sharing/player/${model.value}`)
+				.then((response) => {
+					iframeSrc.value = response.data.iframe_src;
+					scriptSrc.value = response.data.script_src;
+				});
+			loading.value = false;
+		});
+
 		return {
 			loading,
 			iframeSrc,
 			scriptSrc,
 		};
-	},
-	async mounted() {
-		await this.getPlayer();
-	},
-	methods: {
-		async getPlayer() {
-			await this.$axios
-				.get(`/v1/edu-sharing/player/${this.nodeId}`)
-				.then(
-					(response) => (
-						(this.iframeSrc = response.data.iframe_src),
-						(this.scriptSrc = response.data.script_src)
-					)
-				);
-			this.loading = false;
-		},
 	},
 });
 </script>
