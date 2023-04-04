@@ -1,12 +1,12 @@
-import { $axios } from "@/utils/api";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
 	ShareTokenBodyParams,
-	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenBodyParamsParentType,
 	ShareTokenResponse,
-} from "../serverApi/v3/api";
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export interface ShareOptions {
 	isSchoolInternal: boolean;
@@ -19,7 +19,7 @@ export interface SharePayload extends ShareOptions {
 
 export interface StartFlow {
 	id: string;
-	type: ShareTokenBodyParamsParentTypeEnum;
+	type: ShareTokenBodyParamsParentType;
 }
 
 @Module({
@@ -31,7 +31,7 @@ export default class ShareModule extends VuexModule {
 	private isShareModalOpen = false;
 	private parentId = "";
 	private shareUrl: string | undefined = undefined;
-	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
+	private parentType = ShareTokenBodyParamsParentType.COURSES;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
@@ -48,10 +48,9 @@ export default class ShareModule extends VuexModule {
 			schoolExclusive: payload.isSchoolInternal,
 		};
 		try {
-			const shareTokenResult =
-				await this.shareApi.shareTokenControllerCreateShareToken(
-					shareTokenPayload
-				);
+			const shareTokenResult = await this.shareApi.createShareToken(
+				shareTokenPayload
+			);
 			if (!shareTokenResult) return undefined;
 			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
@@ -81,7 +80,7 @@ export default class ShareModule extends VuexModule {
 	}
 
 	@Mutation
-	setParentType(type: ShareTokenBodyParamsParentTypeEnum): void {
+	setParentType(type: ShareTokenBodyParamsParentType): void {
 		this.parentType = type;
 	}
 
@@ -95,7 +94,7 @@ export default class ShareModule extends VuexModule {
 		this.shareUrl = url;
 	}
 
-	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
+	get getParentType(): ShareTokenBodyParamsParentType {
 		return this.parentType;
 	}
 
