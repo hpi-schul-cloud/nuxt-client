@@ -36,23 +36,17 @@
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
-					<v-tab>
-						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
-						<span class="d-none d-sm-inline" data-testid="learnContent">{{
-							$t("common.words.learnContent")
-						}}</span>
-					</v-tab>
-					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
-						<v-icon class="tab-icon mr-sm-3">fa-puzzle-piece</v-icon>
-						<span class="d-none d-sm-inline" data-testid="tools">{{
-							$t("pages.rooms.tabLabel.tools")
-						}}</span>
-					</v-tab>
-					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=groups`">
-						<v-icon class="tab-icon mr-sm-3">fa-users</v-icon>
-						<span class="d-none d-sm-inline" data-testid="groups">{{
-							$t("pages.rooms.tabLabel.groups")
-						}}</span>
+					<v-tab
+						v-for="(tabItem, index) in tabItems"
+						:key="index"
+						:href="tabItem.href"
+					>
+						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }} </v-icon>
+						<span
+							class="d-none d-sm-inline"
+							:data-testid="`${tabItem.dataTestid}`"
+							>{{ tabItem.label }}</span
+						>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -125,11 +119,14 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
+	mdiAccountGroupOutline,
 	mdiContentCopy,
 	mdiDownload,
 	mdiEmailPlusOutline,
+	mdiFileDocumentMultipleOutline,
 	mdiFormatListChecks,
 	mdiPlus,
+	mdiPuzzleOutline,
 	mdiShareVariant,
 	mdiSquareEditOutline,
 	mdiViewListOutline,
@@ -199,6 +196,27 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		tabItems() {
+			return [
+				{
+					label: this.$t("common.words.learnContent"),
+					icon: mdiFileDocumentMultipleOutline,
+					dataTestid: "learnContent",
+				},
+				{
+					label: this.$t("pages.rooms.tabLabel.tools"),
+					icon: mdiPuzzleOutline,
+					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
+					dataTestid: "tools",
+				},
+				{
+					label: this.$t("pages.rooms.tabLabel.groups"),
+					icon: mdiAccountGroupOutline,
+					href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
+					dataTestid: "groups",
+				},
+			];
+		},
 		fabItems() {
 			const actions = [];
 			if (
