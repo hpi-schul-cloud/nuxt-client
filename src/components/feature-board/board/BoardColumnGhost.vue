@@ -34,7 +34,7 @@ import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 export default defineComponent({
 	name: "BoardColumnGhost",
 	components: { Container, BoardColumnGhostHeader },
-	emits: ["add-empty-column", "add-column-with-card", "add-column-with-card"],
+	emits: ["add-empty-column", "add-column-with-card"],
 	setup(props, { emit }) {
 		const isDragPending = ref<boolean>(false);
 
