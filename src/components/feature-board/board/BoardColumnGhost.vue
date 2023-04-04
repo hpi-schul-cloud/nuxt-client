@@ -28,12 +28,13 @@ import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { Container } from "vue-smooth-dnd";
 import { drowpdownDropPlaceholderOptions } from "../types/DragAndDrop";
+import { BoardCardSkeleton } from "../types/Card";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumnGhost",
 	components: { Container, BoardColumnGhostHeader },
-	emits: ["add-empty-column", "add-column-with-card"],
+	emits: ["add-empty-column", "add-column-with-card", "add-column-with-card"],
 	setup(props, { emit }) {
 		const isDragPending = ref<boolean>(false);
 
@@ -48,8 +49,8 @@ export default defineComponent({
 		);
 		const colWidth = computed<number>(() => (isColumnActive.value ? 400 : 200));
 
-		const onDropCard = () => {
-			// sth
+		const onDropCard = (card: BoardCardSkeleton) => {
+			emit("add-column-with-card", card);
 		};
 		const onAddColumn = () => {
 			emit("add-empty-column");
