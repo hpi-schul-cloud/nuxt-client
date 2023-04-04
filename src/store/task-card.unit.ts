@@ -256,6 +256,60 @@ describe("task-card store", () => {
 				expect(taskCardModule.businessError).toStrictEqual(error);
 			});
 		});
+
+		describe("deleteTaskCard", () => {
+			it("should call backend with correct payload", async () => {
+				const taskCardModule = new TaskCardModule({});
+				const setTaskCardDataMock = jest.spyOn(
+					taskCardModule,
+					"setTaskCardData"
+				);
+
+				const taskCardApiMock = {
+					taskCardControllerDelete: jest.fn(async () => ({
+						data: mockTaskCardData,
+					})),
+				};
+				jest
+					.spyOn(serverApi, "CardsApiFactory")
+					.mockReturnValue(
+						taskCardApiMock as unknown as serverApi.CardsApiInterface
+					);
+
+				taskCardModule.setTaskCardData(mockTaskCardData);
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
+
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
+					1
+				);
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledWith(
+					mockTaskCardData.id
+				);
+				expect(setTaskCardDataMock).toHaveBeenCalledWith(mockTaskCardData);
+			});
+
+			it("should handle an error", async () => {
+				const taskCardModule = new TaskCardModule({});
+				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+
+				const taskCardApiMock = {
+					taskCardControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+				};
+				jest
+					.spyOn(serverApi, "CardsApiFactory")
+					.mockReturnValue(
+						taskCardApiMock as unknown as serverApi.CardsApiInterface
+					);
+
+				taskCardModule.setTaskCardData(mockTaskCardData);
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
+
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
+					1
+				);
+				expect(taskCardModule.businessError).toStrictEqual(error);
+			});
+		});
 	});
 
 	describe("getters", () => {

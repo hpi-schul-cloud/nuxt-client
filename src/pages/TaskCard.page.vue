@@ -44,8 +44,12 @@
 				:editable="true"
 			/>
 			<card-element-list v-model="elements" :editMode="true" />
-			<div>
+			<div class="d-flex">
+				<v-btn color="primary" depressed @click="save" data-testid="save-btn">
+					{{ $t("common.actions.save") }}
+				</v-btn>
 				<v-btn
+					class="ml-2"
 					color="secondary"
 					outlined
 					@click="cancel"
@@ -54,15 +58,34 @@
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn
-					class="float-right"
-					color="primary"
-					depressed
-					@click="save"
-					data-testid="save-btn"
+					v-if="isDeletable"
+					class="ml-auto"
+					color="secondary"
+					outlined
+					@click="openDeleteDialog()"
+					data-testid="delete-btn"
 				>
-					{{ $t("common.actions.save") }}
+					{{ $t("common.actions.remove") }}
 				</v-btn>
 			</div>
+			<v-custom-dialog
+				ref="delete-dialog"
+				v-model="deleteDialog.isOpen"
+				data-testid="delete-beta-task-dialog"
+				:size="375"
+				has-buttons
+				confirm-btn-title-key="common.actions.remove"
+				@dialog-confirmed="deleteElement()"
+			>
+				<h2 slot="title" class="text-h4 my-2">
+					{{ $t("pages.taskCard.deleteTaskCard.title") }}
+				</h2>
+				<template slot="content">
+					<p class="text-md mt-2">
+						{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
+					</p>
+				</template>
+			</v-custom-dialog>
 		</v-form>
 		<article v-else class="d-flex flex-column">
 			<title-card-element v-model="title" :editable="false" />
@@ -100,6 +123,7 @@ import {
 	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomsModule from "@/store/rooms";
 
 interface VForm extends HTMLFormElement {
@@ -114,6 +138,7 @@ export default defineComponent({
 		TitleCardElement,
 		CardElementList,
 		DateTimePicker,
+		vCustomDialog,
 	},
 	setup() {
 		const router = useRouter();
@@ -139,6 +164,22 @@ export default defineComponent({
 			}`
 		);
 
+		const deleteDialog = ref({
+			isOpen: false,
+			taskCardId: "",
+		});
+
+		const openDeleteDialog = () => {
+			deleteDialog.value.isOpen = true;
+			deleteDialog.value.taskCardId = route.params.id;
+		};
+
+		const deleteElement = async () => {
+			await deleteTaskCard(deleteDialog.value.taskCardId);
+			deleteDialog.value.isOpen = false;
+			deleteDialog.value.taskCardId = "";
+		};
+
 		const breadcrumbs = ref<object[]>([]);
 
 		const form = ref<VForm | null>(null);
@@ -162,6 +203,8 @@ export default defineComponent({
 
 		const minDate = new Date().toISOString();
 		const maxDate = ref("");
+
+		const isDeletable: Ref<boolean> = ref(false);
 
 		onMounted(async () => {
 			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
@@ -221,8 +264,12 @@ export default defineComponent({
 						title: taskCardData.courseName || "",
 					},
 				];
+				if (taskCardData.id !== "") {
+					isDeletable.value = !!taskCardData.id;
+				}
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
+
 				initElements(taskCardData.cardElements);
 
 				breadcrumbs.value.push(
@@ -393,6 +440,11 @@ export default defineComponent({
 			required: (value: string) => !!value || t("common.validation.required"),
 		};
 
+		const deleteTaskCard = async (taskCardId: string) => {
+			await taskCardModule.deleteTaskCard(taskCardId);
+			router.go(-1);
+		};
+
 		const hasErrors = ref(false);
 		const errorMessage = ref("");
 		const onError = () => {
@@ -423,10 +475,14 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			title,
+			deleteDialog,
+			deleteElement,
+			openDeleteDialog,
 			dueDate,
 			elements,
 			save,
 			cancel,
+			deleteTaskCard,
 			t,
 			handleDateTimeInput,
 			isEditMode,
@@ -441,6 +497,7 @@ export default defineComponent({
 			isVisible,
 			visibilityOptions,
 			form,
+			isDeletable,
 		};
 	},
 });
