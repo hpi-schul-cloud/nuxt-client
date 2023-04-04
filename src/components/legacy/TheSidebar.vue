@@ -37,7 +37,7 @@
 							<base-icon
 								v-if="route.icon"
 								:icon="route.icon"
-								:source="route.source || 'material'"
+								:source="route.source || DEFAULT_ICON_SOURCE"
 								:fill="
 									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'
@@ -68,7 +68,7 @@
 								<base-icon
 									v-if="child.icon"
 									:icon="child.icon"
-									:source="child.source || 'fa'"
+									:source="child.source || DEFAULT_ICON_SOURCE"
 									:fill="
 										isActive(child.title)
 											? 'var(--v-primary-base)'
@@ -112,6 +112,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const DEFAULT_ICON_SOURCE = "material";
 		const activeItem = ref("");
 		const activeParent = ref("");
 
@@ -150,6 +151,7 @@ export default defineComponent({
 		};
 
 		return {
+			DEFAULT_ICON_SOURCE,
 			isActive,
 			isChildActive,
 		};

@@ -191,6 +191,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
+				source: "fa",
 				to: "/administration/students",
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
@@ -198,6 +199,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teacher",
 				icon: "user",
+				source: "fa",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
@@ -212,6 +214,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.classes",
 				icon: "users",
+				source: "fa",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
