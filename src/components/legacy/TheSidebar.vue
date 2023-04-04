@@ -37,7 +37,7 @@
 							<base-icon
 								v-if="route.icon"
 								:icon="route.icon"
-								:source="route.source || 'fa'"
+								:source="route.source || 'material'"
 								:fill="
 									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'

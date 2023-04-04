@@ -68,7 +68,7 @@
 import {
 	mdiPencilOutline,
 	mdiUndoVariant,
-	mdiShareVariant,
+	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
@@ -102,7 +102,7 @@ export default {
 			icons: {
 				mdiPencilOutline,
 				mdiUndoVariant,
-				mdiShareVariant,
+				mdiShareVariantOutline,
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
@@ -174,7 +174,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariant,
+						icon: this.icons.mdiShareVariantOutline,
 						action: () => this.$emit("open-modal", this.lesson.id),
 						name: this.$t("pages.room.lessonCard.label.shareLesson"),
 						dataTestId: "content-card-lesson-menu-share",

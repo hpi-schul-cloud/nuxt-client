@@ -23,7 +23,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariant }}</v-icon></span
+							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
@@ -104,7 +104,7 @@ import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
-	mdiShareVariant,
+	mdiShareVariantOutline,
 } from "@mdi/js";
 import { defineComponent, inject, ref } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
@@ -180,7 +180,7 @@ export default defineComponent({
 			mdiEmailOutline,
 			mdiContentCopy,
 			mdiQrcode,
-			mdiShareVariant,
+			mdiShareVariantOutline,
 		};
 	},
 });

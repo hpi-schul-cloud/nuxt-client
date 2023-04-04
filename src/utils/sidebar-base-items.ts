@@ -31,14 +31,14 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
-		icon: "th-large",
+		icon: "dashboard_outline",
 		testId: "Übersicht",
 		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
 		title: "global.sidebar.courses",
 		to: "/rooms-overview",
-		icon: "graduation-cap",
+		icon: "course_outline",
 		testId: "Course-Overview",
 		activeForUrls: [
 			"^/rooms-overview($|/.*)",
@@ -49,7 +49,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.teams",
 		href: "/teams",
-		icon: "users",
+		icon: "team_outline",
 		permission: "TEAMS_ENABLED",
 		testId: "Teams",
 		activeForUrls: ["^/teams($|/.*)"],
@@ -57,8 +57,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "tasks",
-		source: "custom",
+		icon: "task",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -66,8 +65,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "tasks",
-		source: "custom",
+		icon: "task",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -76,7 +74,7 @@ const getSidebarItems = (
 		title: "global.sidebar.files-old",
 		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
-		icon: "folder-open",
+		icon: "file_open_outline",
 		testId: "Meine Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
@@ -115,21 +113,21 @@ const getSidebarItems = (
 		title: "global.sidebar.files",
 		permission: "COLLABORATIVE_FILES",
 		href: "/cfiles",
-		icon: "folder-open",
+		icon: "file_open_outline",
 		testId: "Dateien",
 		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",
 		href: "/news",
-		icon: "newspaper-o",
+		icon: "news_outline",
 		testId: "Neuigkeiten",
 		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
-		icon: "table",
+		icon: "calendar_outline",
 		testId: "Termine",
 		activeForUrls: ["^/calendar($|/.*)"],
 	},
@@ -144,7 +142,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.addons",
 		href: "/addons",
-		icon: "puzzle-piece",
+		icon: "puzzle_outline",
 		permission: "ADDONS_ENABLED",
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
@@ -152,7 +150,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "cogs",
+		icon: "setting_outline",
 		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
@@ -185,7 +183,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "cogs",
+		icon: "setting_outline",
 		permission: "ADMIN_VIEW",
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
@@ -206,7 +204,7 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "graduation-cap",
+				icon: "course_outline",
 				href: "/administration/courses",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
@@ -220,7 +218,7 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.teams",
-				icon: "users",
+				icon: "team_outline",
 				href: "/administration/teams",
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
@@ -228,7 +226,8 @@ const getSidebarItems = (
 			isNewSchoolAdminPageDefault
 				? {
 						title: "global.sidebar.school",
-						icon: "building",
+						icon: "tasks",
+						source: "custom",
 						to: "/administration/school-settings",
 						testId: "Schule",
 						activeForUrls: [
@@ -238,7 +237,8 @@ const getSidebarItems = (
 				  }
 				: {
 						title: "global.sidebar.school",
-						icon: "building",
+						icon: "tasks",
+						source: "custom",
 						href: "/administration/school",
 						testId: "Schule",
 						activeForUrls: [
@@ -251,7 +251,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.helpArea",
 		href: "/help",
-		icon: "question-circle",
+		icon: "help_area_outline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
 	},

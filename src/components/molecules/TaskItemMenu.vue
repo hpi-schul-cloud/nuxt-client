@@ -57,7 +57,9 @@
 					@click.stop.prevent="onShareTask"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon"> {{ mdiShareVariant }} </v-icon>
+						<v-icon class="task-action-icon">
+							{{ mdiShareVariantOutline }}
+						</v-icon>
 						{{ $t("pages.room.taskCard.label.shareTask") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -85,7 +87,7 @@
 							{{ $t("common.labels.restore") }}
 						</template>
 						<template v-else>
-							<v-icon class="task-action-icon"> $taskFinished </v-icon>
+							<v-icon class="task-action-icon">{{ mdiArchiveOutline }}</v-icon>
 							{{ $t("components.molecules.TaskItemMenu.finish") }}
 						</template>
 					</v-list-item-title>
@@ -138,7 +140,8 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-	mdiShareVariant,
+	mdiShareVariantOutline,
+	mdiArchiveOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
@@ -190,7 +193,8 @@ export default defineComponent({
 			mdiUndoVariant,
 			mdiTrashCanOutline,
 			mdiContentCopy,
-			mdiShareVariant,
+			mdiShareVariantOutline,
+			mdiArchiveOutline,
 		};
 	},
 	computed: {
