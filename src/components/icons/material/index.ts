@@ -19,7 +19,7 @@ import {
 	mdiEmailOutline,
 	mdiFolder,
 	mdiFolderAccount,
-	mdiFolderOpenOutline,	
+	mdiFolderOpenOutline,
 	mdiFormatBold,
 	mdiFormatItalic,
 	mdiFormatListBulleted,
