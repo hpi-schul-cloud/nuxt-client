@@ -29,6 +29,7 @@
 				</Container>
 				<BoardColumnGhost
 					@add-column-with-card="onAddColumnWithCard"
+					@add-empty-column="onAddEmptyColumn"
 				></BoardColumnGhost>
 			</template>
 		</div>
@@ -85,6 +86,10 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
+		const onAddEmptyColumn = () => {
+			console.log("add-empty-column");
+		};
+
 		const onAddColumnWithCard = (payload: CardMove) => {
 			if (payload.addedIndex === null) return;
 			console.log("onAddColumnWithCard", payload);
@@ -98,6 +103,7 @@ export default defineComponent({
 			onColumnDrop,
 			onPositionChangeKeyboard,
 			onUpdateColumnTitle,
+			onAddEmptyColumn,
 			onAddColumnWithCard,
 		};
 	},
