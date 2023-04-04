@@ -13,6 +13,20 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+import { CardResponse } from './card-response';
+
+/**
+ * 
+ * @export
+ * @interface CardListResponse
+ */
+export interface CardListResponse {
+    /**
+     * 
+     * @type {Array<CardResponse>}
+     * @memberof CardListResponse
+     */
+    data: Array<CardResponse>;
+}
+
+

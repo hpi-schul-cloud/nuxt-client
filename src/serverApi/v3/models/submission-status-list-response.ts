@@ -13,6 +13,20 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+import { SubmissionStatusResponse } from './submission-status-response';
+
+/**
+ * 
+ * @export
+ * @interface SubmissionStatusListResponse
+ */
+export interface SubmissionStatusListResponse {
+    /**
+     * 
+     * @type {Array<SubmissionStatusResponse>}
+     * @memberof SubmissionStatusListResponse
+     */
+    data: Array<SubmissionStatusResponse>;
+}
+
+

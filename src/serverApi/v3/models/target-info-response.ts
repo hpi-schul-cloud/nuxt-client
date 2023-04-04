@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface TargetInfoResponse
+ */
+export interface TargetInfoResponse {
+    /**
+     * The id of the Target entity
+     * @type {string}
+     * @memberof TargetInfoResponse
+     */
+    id: string;
+    /**
+     * The name of the Target entity
+     * @type {string}
+     * @memberof TargetInfoResponse
+     */
+    name: string;
+}
+
+

@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface BasicToolConfigParams
+ */
+export interface BasicToolConfigParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicToolConfigParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BasicToolConfigParams
+     */
+    baseUrl: string;
+}
+
+

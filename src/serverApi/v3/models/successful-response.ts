@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface SuccessfulResponse
+ */
+export interface SuccessfulResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SuccessfulResponse
+     */
+    successful: boolean;
+}
+
+

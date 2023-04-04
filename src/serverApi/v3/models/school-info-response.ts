@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface SchoolInfoResponse
+ */
+export interface SchoolInfoResponse {
+    /**
+     * The id of the School entity
+     * @type {string}
+     * @memberof SchoolInfoResponse
+     */
+    id: string;
+    /**
+     * The name of the School entity
+     * @type {string}
+     * @memberof SchoolInfoResponse
+     */
+    name: string;
+}
+
+

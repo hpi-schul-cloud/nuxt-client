@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface CustomParameterEntryResponse
+ */
+export interface CustomParameterEntryResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterEntryResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterEntryResponse
+     */
+    value?: string;
+}
+
+

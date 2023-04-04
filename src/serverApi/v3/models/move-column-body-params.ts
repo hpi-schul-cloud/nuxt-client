@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface MoveColumnBodyParams
+ */
+export interface MoveColumnBodyParams {
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveColumnBodyParams
+     */
+    toIndex: number;
+}
+
+

@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface MoveContentElementBody
+ */
+export interface MoveContentElementBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof MoveContentElementBody
+     */
+    toCardId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveContentElementBody
+     */
+    toIndex: number;
+}
+
+

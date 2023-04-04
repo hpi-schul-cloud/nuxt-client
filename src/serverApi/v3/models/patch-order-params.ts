@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface PatchOrderParams
+ */
+export interface PatchOrderParams {
+    /**
+     * Array ids determining the new order
+     * @type {Array<string>}
+     * @memberof PatchOrderParams
+     */
+    elements: Array<string>;
+}
+
+

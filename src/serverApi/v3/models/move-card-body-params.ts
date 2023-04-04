@@ -13,6 +13,25 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface MoveCardBodyParams
+ */
+export interface MoveCardBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof MoveCardBodyParams
+     */
+    toColumnId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveCardBodyParams
+     */
+    toIndex: number;
+}
+
+

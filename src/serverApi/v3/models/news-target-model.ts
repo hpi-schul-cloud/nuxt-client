@@ -13,6 +13,17 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum NewsTargetModel {
+    SCHOOLS = 'schools',
+    COURSES = 'courses',
+    TEAMS = 'teams'
+}
+
+
+

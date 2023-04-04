@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface TextElementContent
+ */
+export interface TextElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof TextElementContent
+     */
+    text: string;
+}
+
+

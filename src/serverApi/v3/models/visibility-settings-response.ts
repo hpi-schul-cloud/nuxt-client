@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface VisibilitySettingsResponse
+ */
+export interface VisibilitySettingsResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VisibilitySettingsResponse
+     */
+    publishedAt?: string;
+}
+
+

@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface LessonCopyApiParams
+ */
+export interface LessonCopyApiParams {
+    /**
+     * Destination course parent Id the lesson is copied to
+     * @type {string}
+     * @memberof LessonCopyApiParams
+     */
+    courseId?: string;
+}
+
+

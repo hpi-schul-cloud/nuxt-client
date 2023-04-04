@@ -13,6 +13,20 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+import { PublicSystemResponse } from './public-system-response';
+
+/**
+ * 
+ * @export
+ * @interface PublicSystemListResponse
+ */
+export interface PublicSystemListResponse {
+    /**
+     * 
+     * @type {Array<PublicSystemResponse>}
+     * @memberof PublicSystemListResponse
+     */
+    data: Array<PublicSystemResponse>;
+}
+
+

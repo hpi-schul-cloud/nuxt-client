@@ -13,6 +13,19 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
-export * from "./models";
+
+/**
+ * 
+ * @export
+ * @interface UpdateFlagParams
+ */
+export interface UpdateFlagParams {
+    /**
+     * updates flag for an import user
+     * @type {boolean}
+     * @memberof UpdateFlagParams
+     */
+    flagged: boolean;
+}
+
+
