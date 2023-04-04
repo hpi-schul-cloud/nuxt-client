@@ -34,7 +34,7 @@ export const cardDropPlaceholderOptions = {
 	showOnTop: true,
 };
 
-export const drowpdownDropPlaceholderOptions = {
+export const dropPlaceholderOptions = {
 	className: "mb-6 rounded-sm grey lighten-1",
 	animationDuration: "150",
 	showOnTop: true,

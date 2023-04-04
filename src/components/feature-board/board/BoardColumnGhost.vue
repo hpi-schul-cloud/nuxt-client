@@ -17,7 +17,7 @@
 				@drag-leave="onDragLeave"
 				drag-class="elevation-12"
 				drop-class="elevation-0"
-				:drop-placeholder="drowpdownDropPlaceholderOptions"
+				:drop-placeholder="dropPlaceholderOptions"
 			>
 			</Container>
 		</div>
@@ -27,7 +27,7 @@
 import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { Container } from "vue-smooth-dnd";
-import { drowpdownDropPlaceholderOptions } from "../types/DragAndDrop";
+import { dropPlaceholderOptions } from "../types/DragAndDrop";
 import { BoardCardSkeleton } from "../types/Card";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
@@ -73,7 +73,7 @@ export default defineComponent({
 			onDragLeave,
 			onAddColumn,
 			colWidth,
-			drowpdownDropPlaceholderOptions,
+			dropPlaceholderOptions,
 			isColumnActive,
 			ghostColumnRef,
 			ghostColumnTitleRef,
