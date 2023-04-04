@@ -125,6 +125,7 @@ import {
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomsModule from "@/store/rooms";
+import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -402,8 +403,9 @@ export default defineComponent({
 			}
 
 			if (taskCardModule.getStatus === "error") {
-				const businessError = taskCardModule.getBusinessError;
-				const validationErrors = businessError?.error?.validationErrors;
+				const validationError = taskCardModule.getBusinessError
+					.error as ApiValidationError;
+				const validationErrors = validationError?.validationErrors;
 
 				notifierModule.show({
 					messages: createServerErrorMessages(validationErrors),
@@ -414,14 +416,14 @@ export default defineComponent({
 			}
 		};
 
-		const createServerErrorMessages = (errors: Array<object>) => {
+		const createServerErrorMessages = (errors: Array<ErrorDetails>) => {
 			const errorMessages: Array<AlertMessage> = [];
-			errors.forEach((validationError: any) => {
+			errors.forEach((validationError: ErrorDetails) => {
 				const msg: AlertMessage = { title: "", text: "" };
 				msg.title = validationError.field[0] + ":";
 
 				let errorText = "";
-				validationError.errors.forEach((error: any, index: number) => {
+				validationError.errors.forEach((error: string, index: number) => {
 					if (index === 0) {
 						errorText = errorText + error;
 					} else {

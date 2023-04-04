@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	TaskCardResponse,
@@ -6,7 +7,7 @@ import {
 	TaskCardParams,
 } from "../serverApi/v3";
 import { $axios } from "../utils/api";
-import { BusinessError, Status } from "./types/commons";
+import { ApiValidationError, BusinessError, Status } from "./types/commons";
 
 @Module({
 	name: "taskCardModule",
@@ -65,13 +66,16 @@ export default class TaskCardModule extends VuexModule {
 
 			this.setTaskCardData(data);
 			this.setStatus("completed");
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setStatus("error");
-			this.setBusinessError({
-				error: error?.response?.data,
-				statusCode: error?.response?.data.code,
-				message: error?.response?.data.title,
-			});
+			if (error instanceof AxiosError) {
+				const validationError = error?.response?.data as ApiValidationError;
+				this.setBusinessError({
+					error: validationError,
+					statusCode: validationError.code,
+					message: validationError.title,
+				});
+			}
 		}
 	}
 
@@ -85,13 +89,17 @@ export default class TaskCardModule extends VuexModule {
 
 			this.setTaskCardData(data);
 			this.setStatus("completed");
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setStatus("error");
-			this.setBusinessError({
-				error: error?.response?.data,
-				statusCode: error?.response?.data.code,
-				message: error?.response?.data.title,
-			});
+
+			if (error instanceof AxiosError) {
+				const validationError = error?.response?.data as ApiValidationError;
+				this.setBusinessError({
+					error: validationError,
+					statusCode: validationError.code,
+					message: validationError.title,
+				});
+			}
 		}
 	}
 
@@ -107,13 +115,16 @@ export default class TaskCardModule extends VuexModule {
 			);
 			this.setTaskCardData(data);
 			this.setStatus("completed");
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setStatus("error");
-			this.setBusinessError({
-				error: error?.response?.data,
-				statusCode: error?.response?.data.code,
-				message: error?.response?.data.title,
-			});
+			if (error instanceof AxiosError) {
+				const validationError = error?.response?.data as ApiValidationError;
+				this.setBusinessError({
+					error: validationError,
+					statusCode: validationError.code,
+					message: validationError.title,
+				});
+			}
 		}
 	}
 
