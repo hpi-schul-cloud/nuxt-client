@@ -370,10 +370,10 @@ $tablet-portrait-width: 768px;
 	.icons {
 		position: fixed;
 		top: 0;
+		right: 0;
 		z-index: var(--layer-modal);
 		display: flex;
 		justify-content: flex-end;
-		width: 100%;
 		padding: var(--space-md);
 
 		.close-icon {
