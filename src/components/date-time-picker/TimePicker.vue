@@ -117,28 +117,36 @@ export default defineComponent({
 
 		const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 		type Rule = (value: string | null) => boolean | string;
-		const rules: Rule[] = [
-			(value: string | null) => {
-				return props.required && (value === "" || value === null)
-					? t("components.timePicker.validation.required")
-					: true;
-			},
-			(value: string | null) => {
+		const rules = computed<Rule[]>(() => {
+			const rules: Rule[] = [];
+			if (props.required) {
+				rules.push((value: string | null) => {
+					return value === "" || value === null
+						? t("components.timePicker.validation.required")
+						: true;
+				});
+			}
+			rules.push((value: string | null) => {
 				return value === null || !value.match(regex)
 					? t("components.timePicker.validation.format")
 					: true;
-			},
-			(value: string | null) => {
-				if (value === null) {
-					return false;
-				}
-				const hoursAndMinutes = value.split(":");
-				return !props.allowPast &&
-					timeInPast(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]))
-					? t("components.timePicker.validation.future")
-					: true;
-			},
-		];
+			});
+			if (!props.allowPast) {
+				rules.push((value: string | null) => {
+					if (value === null) {
+						return false;
+					}
+					const hoursAndMinutes = value.split(":");
+					return timeInPast(
+						parseInt(hoursAndMinutes[0]),
+						parseInt(hoursAndMinutes[1])
+					)
+						? t("components.timePicker.validation.future")
+						: true;
+				});
+			}
+			return rules;
+		});
 
 		const handleInput = () => {
 			showTimeDialog.value = false;
