@@ -26,7 +26,7 @@ describe("BoardColumnGhostHeader", () => {
 	});
 
 	describe("when 'add column' button clicked", () => {
-		it("should be found in the dom", () => {
+		it("should emit 'add-column'", () => {
 			setup();
 
 			const button = wrapper.findComponent({ name: "VBtn" });
