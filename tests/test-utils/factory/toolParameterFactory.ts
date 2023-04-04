@@ -11,8 +11,10 @@ export const toolParameterFactory = (
 		default: undefined,
 		scope: ToolParameterScope.School,
 		type: ToolParameterType.String,
-		location: ToolParameterLocation.Path,
+		location: ToolParameterLocation.PATH,
 		name: "Parameter1",
+		displayName: "Parameter 1",
+		description: "test description",
 		isOptional: true,
 		...param,
 	};

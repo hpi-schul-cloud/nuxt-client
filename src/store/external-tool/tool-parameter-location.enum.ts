@@ -1,5 +1,5 @@
 export enum ToolParameterLocation {
-	Path = "path",
-	Token = "token",
-	Query = "query",
+	PATH = "path",
+	BODY = "body",
+	QUERY = "query",
 }

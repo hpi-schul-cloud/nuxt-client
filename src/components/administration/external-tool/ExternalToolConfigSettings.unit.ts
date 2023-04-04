@@ -2,6 +2,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import {
 	ToolConfigurationTemplate,
+	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -114,12 +115,13 @@ describe("ExternalToolConfigSettings", () => {
 		const setupTemplate = (): ToolConfigurationTemplate => {
 			const template: ToolConfigurationTemplate =
 				toolConfigurationTemplateFactory();
-			const param1 = {
+			const param1: ToolParameter = {
 				name: "Parameter1",
+				displayName: "Parameter 1",
 				type: ToolParameterType.String,
 				isOptional: false,
 				scope: ToolParameterScope.School,
-				location: ToolParameterLocation.Path,
+				location: ToolParameterLocation.PATH,
 			};
 			template.parameters = [param1, { ...param1, name: "Param2" }];
 			return template;
