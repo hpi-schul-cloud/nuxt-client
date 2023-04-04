@@ -136,9 +136,16 @@ export default class TaskCardModule extends VuexModule {
 		try {
 			await this.cardsApi.taskCardControllerDelete(taskCardId);
 			this.setStatus("completed");
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setStatus("error");
-			this.setBusinessError(error);
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error: error?.response?.data,
+					statusCode: error?.response?.data.code,
+					message: error?.response?.data.title,
+				});
+			}
 		}
 	}
 

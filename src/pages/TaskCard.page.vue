@@ -444,7 +444,27 @@ export default defineComponent({
 
 		const deleteTaskCard = async (taskCardId: string) => {
 			await taskCardModule.deleteTaskCard(taskCardId);
-			router.go(-1);
+
+			if (taskCardModule.getStatus === "error") {
+				const error = taskCardModule.getBusinessError;
+
+				if (error.statusCode === 400) {
+					const validationError = error?.error as ApiValidationError;
+					notifierModule.show({
+						messages: createServerErrorMessages(
+							validationError.validationErrors
+						),
+						status: "error",
+					});
+				} else {
+					notifierModule.show({
+						text: error.message,
+						status: "error",
+					});
+				}
+			} else {
+				router.go(-1);
+			}
 		};
 
 		const hasErrors = ref(false);
