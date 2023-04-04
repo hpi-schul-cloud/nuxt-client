@@ -228,7 +228,7 @@ const getSidebarItems = (
 			isNewSchoolAdminPageDefault
 				? {
 						title: "global.sidebar.school",
-						icon: "search",
+						icon: "school_outline",
 						source: "custom",
 						to: "/administration/school-settings",
 						testId: "Schule",
@@ -239,7 +239,7 @@ const getSidebarItems = (
 				  }
 				: {
 						title: "global.sidebar.school",
-						icon: "search",
+						icon: "school_outline",
 						source: "custom",
 						href: "/administration/school",
 						testId: "Schule",
