@@ -22,7 +22,7 @@
 			<div v-if="messages" class="alert_text mr-2">
 				<div v-for="(message, index) in messages" :key="index" class="mb-1">
 					<b>{{ message.title }}</b>
-					{{ message.text }}
+					<p class="mb-0">{{ message.text }}</p>
 				</div>
 			</div>
 			<div v-else class="alert_text mr-2">
