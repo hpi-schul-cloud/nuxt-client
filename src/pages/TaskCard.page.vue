@@ -38,7 +38,6 @@
 				:maxDate="maxDate"
 				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
-				@error="onError"
 			/>
 			<title-card-element
 				v-model="title"
@@ -346,10 +345,6 @@ export default defineComponent({
 				}
 			}
 
-			// if (hasErrors.value) {
-			// 	return;
-			// }
-
 			// if (
 			// 	route.name === "rooms-beta-task-new" ||
 			// 	route.name === "tasks-beta-task-new"
@@ -362,17 +357,11 @@ export default defineComponent({
 			// router.go(-1);
 		};
 
-		const hasErrors = ref(false);
-		const onError = () => {
-			hasErrors.value = true;
-		};
-
 		const cancel = () => {
 			router.go(-1);
 		};
 
 		const handleDateTimeInput = (dateTime: string) => {
-			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
 		const getUserPermissions = ref(authModule.getUserPermissions);
@@ -401,7 +390,6 @@ export default defineComponent({
 			isCourseSelectDisabled,
 			course,
 			courses,
-			onError,
 			minDate,
 			maxDate,
 			isVisible,
