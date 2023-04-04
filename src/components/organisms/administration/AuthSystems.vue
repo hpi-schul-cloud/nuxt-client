@@ -162,10 +162,6 @@ export default {
 		hasSystemEditPermission: () => {
 			return authModule.getUserPermissions.includes("system_edit");
 		},
-
-		hasSystemViewPermission: () => {
-			return authModule.getUserPermissions.includes("system_view");
-		},
 	},
 	methods: {
 		// TODO - Discuss which systems are still gonna be editable in the future

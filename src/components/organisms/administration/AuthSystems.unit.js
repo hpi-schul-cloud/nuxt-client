@@ -1,9 +1,11 @@
 import AuthSystems from "./AuthSystems";
-import { schoolsModule, envConfigModule } from "@/store";
+import { schoolsModule, envConfigModule, authModule } from "@/store";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { mockUser } from "@@/tests/test-utils/mockObjects";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const generateProps = () => ({
 	systems: [
@@ -41,6 +43,7 @@ describe("AuthSystems", () => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
+			authModule: AuthModule,
 		});
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
@@ -159,6 +162,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", async () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE"],
+			});
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
@@ -199,6 +206,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", async () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
@@ -312,6 +323,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
+			});
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
@@ -324,6 +339,37 @@ describe("AuthSystems", () => {
 			deleteButton.trigger("click");
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
 			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("1");
+		});
+	});
+
+	describe("when user has not the permission to create and edit systems", () => {
+		beforeEach(() => {
+			envConfigModule.setEnvs({
+				FEATURE_LOGIN_LINK_ENABLED: true,
+			});
+		});
+		it("should not display the add ldap, system edit and system delete buttons", () => {
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			expect(
+				tableCell.wrappers[2].find(searchStrings.addLdap).exists()
+			).toStrictEqual(false);
+
+			expect(
+				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(false);
+
+			expect(
+				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
+			).toStrictEqual(false);
 		});
 	});
 });
