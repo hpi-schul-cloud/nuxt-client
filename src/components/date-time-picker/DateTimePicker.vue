@@ -5,7 +5,7 @@
 		</v-icon>
 		<date-picker
 			class="mr-2 picker-width"
-			required
+			:required="required"
 			:date="date"
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
@@ -13,10 +13,11 @@
 			:maxDate="maxDate"
 			@input="handleDateInput"
 			@error="handleDateError"
+			@valid="handleDateValid"
 		/>
 		<time-picker
 			class="picker-width"
-			required
+			:required="required"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
@@ -56,7 +57,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["input", "error"],
+	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -73,6 +74,9 @@ export default defineComponent({
 		})();
 
 		const getTime = (dateIsoString: string) => {
+			if (dateIsoString === "") {
+				return "";
+			}
 			return new Date(dateIsoString).toLocaleTimeString(locale, {
 				timeStyle: "short",
 				hourCycle: "h23",
@@ -107,23 +111,11 @@ export default defineComponent({
 		};
 
 		const handleDateInput = (newDate: string) => {
-			dateError.value = false;
 			date.value = newDate;
 			isToday.value = dateIsToday(date.value);
-
-			if (time.value === "") {
-				time.value = "12:00";
-			}
-			if (valid.value) {
-				emitDateTime();
-			}
-		};
-
-		const handleTimeInput = (newTime: string) => {
-			if (!timeError.value) {
-				time.value = newTime;
-				if (date.value === "") {
-					date.value = new Date().toISOString();
+			if (!dateError.value) {
+				if (time.value === "") {
+					time.value = "12:00";
 				}
 				if (valid.value) {
 					emitDateTime();
@@ -133,12 +125,26 @@ export default defineComponent({
 
 		const handleDateError = () => {
 			dateError.value = true;
-			emit("error");
+		};
+
+		const handleDateValid = () => {
+			dateError.value = false;
+		};
+
+		const handleTimeInput = (newTime: string) => {
+			time.value = newTime;
+			if (!timeError.value) {
+				if (date.value === "") {
+					date.value = new Date().toISOString();
+				}
+				if (valid.value) {
+					emitDateTime();
+				}
+			}
 		};
 
 		const handleTimeError = () => {
 			timeError.value = true;
-			emit("error");
 		};
 
 		const handleTimeValid = () => {
@@ -156,8 +162,9 @@ export default defineComponent({
 			time,
 			isToday,
 			handleDateInput,
-			handleTimeInput,
 			handleDateError,
+			handleDateValid,
+			handleTimeInput,
 			handleTimeError,
 			handleTimeValid,
 			iconColor,

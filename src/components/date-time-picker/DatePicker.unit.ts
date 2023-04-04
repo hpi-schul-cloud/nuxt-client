@@ -59,6 +59,7 @@ describe("@components/date-time-picker/DatePicker", () => {
 			const clearBtn = textField.find(".v-icon");
 			expect(clearBtn.exists()).toBe(true);
 			await clearBtn.trigger("click");
+			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});

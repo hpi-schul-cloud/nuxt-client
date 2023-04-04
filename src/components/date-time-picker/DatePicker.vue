@@ -7,7 +7,6 @@
 			nudge-bottom="70"
 			min-width="auto"
 			attach
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -19,22 +18,19 @@
 					readonly
 					filled
 					clearable
-					:error-messages="errors"
-					:error="hasErrors"
 					v-bind="attrs"
 					v-on="on"
-					@input="onInput"
+					:rules="rules"
+					autocomplete="off"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
 					@keydown.tab="showDateDialog = false"
-					@focus="resetErrors"
-					@click:clear="clearDate"
-					@blur="onBlur"
+					@update:error="handleError"
 				/>
 			</template>
 			<v-date-picker
-				v-model="selectedDate"
+				v-model="model"
 				:aria-expanded="showDateDialog"
 				color="primary"
 				no-title
@@ -43,7 +39,7 @@
 				:min="minDate"
 				:max="maxDate"
 				show-adjacent-months
-				@input="onInput"
+				@input="handleInput"
 			/>
 		</v-menu>
 	</div>
@@ -65,6 +61,7 @@ export default defineComponent({
 		minDate: { type: String },
 		maxDate: { type: String },
 	},
+	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -88,38 +85,20 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const selectedDate = ref(props.date);
+		const model = ref(props.date);
 		const showDateDialog = ref(false);
-		const errors = ref<string[]>([]);
 
 		const formattedDate = computed(() => {
-			return selectedDate.value
-				? dayjs(selectedDate.value).format(t("format.date"))
-				: selectedDate.value;
+			return model.value
+				? dayjs(model.value).format(t("format.date"))
+				: model.value;
 		});
 
-		const onInput = () => {
-			const validated = validate(selectedDate.value);
-
-			if (validated) {
-				emit("input", new Date(selectedDate.value).toISOString());
-				showDateDialog.value = false;
-				resetErrors();
+		const handleInput = () => {
+			showDateDialog.value = false;
+			if (model.value) {
+				emit("input", model.value);
 			}
-		};
-
-		const validate = (dateValue: string) => {
-			if (!props.required) {
-				return true;
-			}
-
-			if (dateValue === "") {
-				errors.value.push(t("components.datePicker.validation.required"));
-				emit("error");
-				return false;
-			}
-
-			return true;
 		};
 
 		const focusDatePicker = () => {
@@ -132,46 +111,29 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const onBlur = (event: any) => {
-			if (showDateDialog.value === false) {
-				const value = event.target.value;
-				validate(value);
-			}
-		};
+		type Rule = (value: string | null) => boolean | string;
+		const rules: Rule[] = [
+			(value: string | null) => {
+				return props.required && (value === "" || value === null)
+					? t("components.datePicker.validation.required")
+					: true;
+			},
+		];
 
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
-				validate(selectedDate.value);
-			}
-		};
-
-		const clearDate = () => {
-			selectedDate.value = "";
-		};
-
-		const hasErrors = computed(() => {
-			return errors.value.length > 0;
-		});
-
-		const resetErrors = () => {
-			errors.value = [];
+		const handleError = (hasError: boolean) => {
+			hasError ? emit("error") : emit("valid");
 		};
 
 		return {
 			mdiCalendarClock,
 			locale,
-			selectedDate,
+			model,
+			rules,
 			showDateDialog,
 			formattedDate,
-			onInput,
+			handleInput,
+			handleError,
 			focusDatePicker,
-			errors,
-			validate,
-			hasErrors,
-			resetErrors,
-			onMenuToggle,
-			clearDate,
-			onBlur,
 		};
 	},
 });

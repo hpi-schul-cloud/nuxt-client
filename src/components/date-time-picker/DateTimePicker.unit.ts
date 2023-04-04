@@ -60,32 +60,6 @@ describe("@components/date-time-picker/DateTimePicker", () => {
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 
-	it("should emit error event on invalid date input", async () => {
-		setup({ dateTime: new Date().toISOString() });
-
-		const datePicker = wrapper.findComponent({ name: "date-picker" });
-		expect(datePicker.exists()).toBe(true);
-		datePicker.vm.$emit("error");
-
-		await wrapper.vm.$nextTick();
-
-		expect(wrapper.emitted("error")).toHaveLength(1);
-		expect(wrapper.emitted("input")).toBe(undefined);
-	});
-
-	it("should emit error event on invalid time input", async () => {
-		setup({ dateTime: new Date().toISOString() });
-
-		const timePicker = wrapper.findComponent({ name: "time-picker" });
-		expect(timePicker.exists()).toBe(true);
-		timePicker.vm.$emit("error");
-
-		await wrapper.vm.$nextTick();
-
-		expect(wrapper.emitted("error")).toHaveLength(1);
-		expect(wrapper.emitted("input")).toBe(undefined);
-	});
-
 	it("should restrict timepicker when date is today", async () => {
 		setup({ dateTime: new Date().toISOString() });
 
