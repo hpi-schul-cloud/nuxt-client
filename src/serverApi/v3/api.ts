@@ -875,6 +875,18 @@ export interface CustomParameterPostParams {
      * @type {string}
      * @memberof CustomParameterPostParams
      */
+    displayName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
     defaultValue?: string;
     /**
      * 
@@ -925,6 +937,18 @@ export interface CustomParameterResponse {
      * @memberof CustomParameterResponse
      */
     name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterResponse
+     */
+    displayName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterResponse
+     */
+    description?: string;
     /**
      * 
      * @type {string}
@@ -984,7 +1008,7 @@ export enum CustomParameterResponseScopeEnum {
     */
 export enum CustomParameterResponseLocationEnum {
     Path = 'path',
-    Token = 'token',
+    Body = 'body',
     Query = 'query'
 }
 /**
