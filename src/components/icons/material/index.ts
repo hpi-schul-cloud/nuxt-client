@@ -1,6 +1,7 @@
 import {
 	mdiAccount,
 	mdiAccountGroupOutline,
+	mdiAccountSchoolOutline,
 	mdiAlert,
 	mdiAlertCircle,
 	mdiCalendar,
@@ -83,6 +84,7 @@ const materialIcons = {
 	"mdi-report_problem": mdiAlert,
 	"mdi-search": mdiMagnify,
 	"mdi-setting_outline": mdiCogOutline,
+	"mdi-students_outline": mdiAccountSchoolOutline,
 	"mdi-task": mdiFormatListChecks,
 	"mdi-team_outline": mdiAccountGroupOutline,
 	"mdi-undo": mdiUndo,

@@ -190,8 +190,7 @@ const getSidebarItems = (
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "odnoklassniki",
-				source: "fa",
+				icon: "students_outline",
 				to: "/administration/students",
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
@@ -229,7 +228,7 @@ const getSidebarItems = (
 			isNewSchoolAdminPageDefault
 				? {
 						title: "global.sidebar.school",
-						icon: "tasks",
+						icon: "search",
 						source: "custom",
 						to: "/administration/school-settings",
 						testId: "Schule",
@@ -240,7 +239,7 @@ const getSidebarItems = (
 				  }
 				: {
 						title: "global.sidebar.school",
-						icon: "tasks",
+						icon: "search",
 						source: "custom",
 						href: "/administration/school",
 						testId: "Schule",

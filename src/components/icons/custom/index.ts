@@ -54,6 +54,7 @@ import n21 from "./n21.vue";
 import neu from "./neu.vue";
 import openNewWindow from "./open_new_window.vue";
 import personIgnore from "./person_ignore.vue";
+import schoolOutline from "./school_outline.vue";
 import search from "./search.vue";
 import server from "./server.vue";
 import settings from "./settings.vue";
@@ -249,6 +250,9 @@ const customIcons = {
 	},
 	person_ignore: {
 		component: personIgnore,
+	},
+	school_outline: {
+		component: schoolOutline,
 	},
 	search: {
 		component: search,
