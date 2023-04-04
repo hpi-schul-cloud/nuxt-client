@@ -2676,12 +2676,6 @@ export interface PublicSystemResponse {
      */
     type?: string | null;
     /**
-     * Url of the system.
-     * @type {string}
-     * @memberof PublicSystemResponse
-     */
-    url?: string | null;
-    /**
      * Alias of the system.
      * @type {string}
      * @memberof PublicSystemResponse
@@ -10366,6 +10360,40 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerGetSystem: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('systemControllerGetSystem', 'systemId', systemId)
+            const localVarPath = `/systems/public/{systemId}`
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10386,6 +10414,17 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          */
         async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async systemControllerGetSystem(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerGetSystem(systemId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -10409,6 +10448,16 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
             return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
         },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse> {
+            return localVarFp.systemControllerGetSystem(systemId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10428,6 +10477,16 @@ export interface SystemsApiInterface {
      * @memberof SystemsApiInterface
      */
     systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
+
+    /**
+     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+     * @summary Finds a publicly available systems.
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApiInterface
+     */
+    systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse>;
 
 }
 
@@ -10449,6 +10508,18 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      */
     public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
         return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+     * @summary Finds a publicly available systems.
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApi
+     */
+    public systemControllerGetSystem(systemId: string, options?: any) {
+        return SystemsApiFp(this.configuration).systemControllerGetSystem(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
