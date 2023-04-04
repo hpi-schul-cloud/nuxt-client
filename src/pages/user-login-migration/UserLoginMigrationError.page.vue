@@ -13,10 +13,20 @@
 				data-testId="text-description"
 				v-html="
 					$t('pages.userMigration.error.description', {
-						sourceSystem: getSystemName(sourceSystem),
 						targetSystem: getSystemName(targetSystem),
 						instance: this.$theme.name,
 						supportLink,
+					})
+				"
+			></p>
+			<p
+				data-testId="text-schoolnumber-mismatch"
+				v-if="targetSchoolNumber && sourceSchoolNumber"
+				v-html="
+					$t('pages.userMigration.error.schoolNumberMismatch', {
+						targetSystem: getSystemName(targetSystem),
+						targetSchoolNumber,
+						sourceSchoolNumber,
 					})
 				"
 			></p>
@@ -52,8 +62,16 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		targetSchoolNumber: {
+			type: String,
+			required: false,
+		},
+		sourceSchoolNumber: {
+			type: String,
+			required: false,
+		},
 	},
-	setup() {
+	setup(props) {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
 		const envConfigModule: EnvConfigModule | undefined =
@@ -69,9 +87,19 @@ export default defineComponent({
 
 		const isLoading: Ref<boolean> = ref(true);
 
+		const getSubject = (): string => {
+			let subject: string = encodeURIComponent("Fehler bei der Migration");
+			if (props.sourceSchoolNumber && props.targetSchoolNumber) {
+				subject = encodeURIComponent("Schulnummer nicht korrekt");
+			}
+			return subject;
+		};
+
 		const supportLink: ComputedRef<string> = computed(() =>
 			envConfigModule?.getAccessibilityReportEmail
-				? `mailto:${envConfigModule.getAccessibilityReportEmail}?subject=Fehler%20bei%20der%20Migration`
+				? `mailto:${
+						envConfigModule.getAccessibilityReportEmail
+				  }?subject=${getSubject()}`
 				: ""
 		);
 
