@@ -8,6 +8,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	TaskCardResponse,
 } from "../serverApi/v3/api";
+import { AxiosError } from "axios";
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
@@ -56,7 +57,21 @@ const mockTaskCardData: TaskCardResponse = {
 	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
-const APIError = { response: { data: { code: 418, title: "I'm a teapot" } } };
+// const APIError = { response: { data: { code: 418, title: "I'm a teapot" } } };
+const APIError = new AxiosError(
+	"I'm a teapot",
+	"418",
+	undefined,
+	{},
+	{
+		data: { code: 418, title: "I'm a teapot" },
+		status: 418,
+		statusText: "I'm a teapot",
+		headers: {},
+		//@ts-ignore
+		config: { headers: {} },
+	}
+);
 
 describe("task-card store", () => {
 	describe("actions", () => {
@@ -290,10 +305,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+					taskCardControllerDelete: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
