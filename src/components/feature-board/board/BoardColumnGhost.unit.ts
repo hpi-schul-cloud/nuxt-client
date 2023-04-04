@@ -2,7 +2,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-// import {Container} from "vue-smooth-dnd";
 
 describe("BoardColumnGhost", () => {
 	let wrapper: Wrapper<Vue>;
