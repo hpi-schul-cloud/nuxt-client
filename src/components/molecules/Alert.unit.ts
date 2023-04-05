@@ -35,10 +35,22 @@ describe("Alert", () => {
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
-	it("should be visible when set", async () => {
+	it("should be visible when set with text", async () => {
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
 			text: "hello world",
+			status: "success",
+		};
+		notifierModule.show(data);
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.showNotifier).toBe(true);
+	});
+
+	it("should be visible when set with message array", async () => {
+		const wrapper = getWrapper();
+		const data: AlertPayload = {
+			messages: [{ title: "hello world", text: "Lorem ipsum" }],
 			status: "success",
 		};
 		notifierModule.show(data);
