@@ -121,14 +121,14 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
-	mdiDownload,
+	mdiTrayArrowDown,
 	mdiEmailPlusOutline,
-	mdiFileDocumentMultipleOutline,
+	mdiFileDocumentOutline,
 	mdiFormatListChecks,
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariant,
-	mdiSquareEditOutline,
+	mdiPencilOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
@@ -178,11 +178,11 @@ export default defineComponent({
 				courseShareToken: "",
 			},
 			icons: {
-				mdiSquareEditOutline,
+				mdiPencilOutline,
 				mdiEmailPlusOutline,
 				mdiShareVariant,
 				mdiContentCopy,
-				mdiDownload,
+				mdiTrayArrowDown,
 			},
 			breadcrumbs: [
 				{
@@ -200,7 +200,7 @@ export default defineComponent({
 			return [
 				{
 					label: this.$t("common.words.learnContent"),
-					icon: mdiFileDocumentMultipleOutline,
+					icon: mdiFileDocumentOutline,
 					dataTestid: "learnContent",
 				},
 				{
@@ -287,7 +287,7 @@ export default defineComponent({
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
-					icon: this.icons.mdiSquareEditOutline,
+					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
 					name:
@@ -320,7 +320,7 @@ export default defineComponent({
 			}
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
-					icon: this.icons.mdiDownload,
+					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse(),
 					name: this.$t("common.actions.download"),
 					dataTestId: "title-menu-imscc-download",

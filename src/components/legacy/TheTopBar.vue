@@ -40,11 +40,11 @@
 					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
-					<v-icon>{{ mdiArrowExpand }}</v-icon>
+					<v-icon>{{ mdiFullscreen }}</v-icon>
 				</v-btn>
 				<popup-icon
 					class="item"
-					source="fa"
+					source="material"
 					icon="qrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
@@ -54,8 +54,8 @@
 				</popup-icon>
 				<popup-icon
 					class="item"
-					source="fa"
-					icon="question-circle"
+					source="material"
+					icon="help_area_outline"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
@@ -125,7 +125,7 @@ import StatusAlerts from "@/components/molecules/StatusAlerts";
 import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
 import {
 	mdiArrowCollapse,
-	mdiArrowExpand,
+	mdiFullscreen,
 	mdiMenu,
 	mdiHelpCircle,
 } from "@mdi/js";
@@ -164,7 +164,7 @@ export default defineComponent({
 	data() {
 		return {
 			mdiArrowCollapse,
-			mdiArrowExpand,
+			mdiFullscreen,
 			mdiMenu,
 			mdiHelpCircle,
 		};

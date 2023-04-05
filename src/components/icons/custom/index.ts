@@ -47,6 +47,7 @@ import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUa from "./lang-icon-ua.vue";
 import lerninhalte from "./lerninhalte.vue";
+import lernstoreOutline from "./lernstore_outline.vue";
 import lock from "./lock.vue";
 import mailCheck from "./mail-check.vue";
 import mailError from "./mail-error.vue";
@@ -230,6 +231,10 @@ const customIcons = {
 	lerninhalte: {
 		component: lerninhalte,
 	},
+	lernstore_outline: {
+		component: lernstoreOutline,
+	},
+	
 	lock: {
 		component: lock,
 	},

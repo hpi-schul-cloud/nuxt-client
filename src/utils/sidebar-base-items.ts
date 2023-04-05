@@ -134,7 +134,8 @@ const getSidebarItems = (
 	{
 		title: "common.words.lernstore",
 		to: "/content",
-		icon: "search",
+		icon: "lernstore_outline",
+		source: "custom",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
 		activeForUrls: ["^/content($|/.*)"],
