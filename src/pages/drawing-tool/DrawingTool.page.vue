@@ -1,7 +1,7 @@
 <template>
-	<div class="d-flex">
+	<div class="d-flex flex-column">
 		<p>TLDRAW</p>
-		<a href="localhost:4000/tldraw-test" target="_blank">NEW WINDOW</a>
+		<a href="/tldraw-test" target="_blank">NEW WINDOW</a>
 		<iframe src="/tldraw-test" width="600px" height="600px"></iframe>
 	</div>
 </template>
