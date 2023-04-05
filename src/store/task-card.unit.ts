@@ -8,7 +8,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	TaskCardResponse,
 } from "../serverApi/v3/api";
-import { AxiosError } from "axios";
+import { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
@@ -57,7 +57,6 @@ const mockTaskCardData: TaskCardResponse = {
 	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
-// const APIError = { response: { data: { code: 418, title: "I'm a teapot" } } };
 const APIError = new AxiosError(
 	"I'm a teapot",
 	"418",
@@ -68,8 +67,7 @@ const APIError = new AxiosError(
 		status: 418,
 		statusText: "I'm a teapot",
 		headers: {},
-		//@ts-ignore
-		config: { headers: {} },
+		config: {} as InternalAxiosRequestConfig,
 	}
 );
 
