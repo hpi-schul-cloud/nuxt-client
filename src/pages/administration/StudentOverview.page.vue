@@ -647,19 +647,23 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText.trim();
+			if (this.timer) {
+				clearTimeout(this.timer);
+				this.timer = null;
+			}
 
-			const query = this.currentFilterQuery;
+			this.timer = setTimeout(() => {
+				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
+					this.currentFilterQuery.searchQuery = searchText.trim();
 
-			this.setUiState("filter", "pages.administration.students.index", {
-				query,
-			});
+					const query = this.currentFilterQuery;
 
-			setTimeout(() => {
-				this.$store.dispatch("users/findStudents", {
-					query,
-					action: "find",
-				});
+					this.find();
+
+					this.setUiState("filter", "pages.administration.students.index", {
+						query,
+					});
+				}
 			}, 400);
 		},
 		setUiState(key, identifier, data) {
