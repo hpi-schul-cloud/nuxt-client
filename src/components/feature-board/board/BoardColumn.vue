@@ -10,16 +10,17 @@
 		<div class="d-flex flex-column flex-grow-1">
 			<Container
 				group-name="cards"
-				@drop="onMoveCard"
-				drag-class="elevation-12"
-				drop-class="elevation-0"
-				:drop-placeholder="dropPlaceholderOptions"
+				:drag-begin-delay="200"
+				:drop-placeholder="cardDropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
+				@drop="onMoveCard"
+				@drag-start="onDragStart"
+				@drag-end="onDragEnd"
 			>
 				<template v-for="(card, index) in column.cards">
 					<Draggable :key="card.cardId">
 						<CardHost
-							class="mb-6"
+							class="my-3 elevate-transition"
 							:card-id="card.cardId"
 							:height="card.height"
 							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
@@ -41,8 +42,9 @@ import {
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
-	dropPlaceholderOptions,
+	cardDropPlaceholderOptions,
 } from "../types/DragAndDrop";
+import { BoardCard } from "../types/Card";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -61,6 +63,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
+		const draggedCardId = ref<BoardCard["cardId"] | undefined>(undefined);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -108,14 +111,32 @@ export default defineComponent({
 			emit("update:title", newTitle);
 		};
 
+		const onDragStart = (event: { payload: BoardCard }) => {
+			console.log("drag start", event.payload.cardId);
+			draggedCardId.value = event.payload.cardId;
+		};
+
+		const onDragEnd = () => {
+			draggedCardId.value = undefined;
+		};
+
 		return {
 			colWidth,
-			dropPlaceholderOptions,
+			cardDropPlaceholderOptions,
 			onMoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,
+			onDragStart,
+			onDragEnd,
+			draggedCardId,
 		};
 	},
 });
 </script>
+
+<style>
+.elevate-transition {
+	transition: box-shadow 150ms all;
+}
+</style>

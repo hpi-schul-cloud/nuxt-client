@@ -7,7 +7,7 @@ import {
 } from "../types/ContentElement";
 
 const DUMMY_CARD: BoardCard = {
-	id: "0123456789abcdef00000003",
+	cardId: "0123456789abcdef00000003",
 	elements: [
 		{
 			type: ContentElementType.TEXT,
@@ -28,13 +28,13 @@ declare type CardState = {
 	card: BoardCard | undefined;
 };
 
-export const useCardState = (id: BoardCard["id"]) => {
+export const useCardState = (id: BoardCard["cardId"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 
 	const fetchCard = async (id: string): Promise<void> => {
-		if (id === DUMMY_CARD.id) {
+		if (id === DUMMY_CARD.cardId) {
 			cardState.card = { ...DUMMY_CARD };
 			cardState.isLoading = false;
 			return;

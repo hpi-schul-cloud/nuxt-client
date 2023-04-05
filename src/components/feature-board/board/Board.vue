@@ -8,10 +8,12 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					@drop="onColumnDrop"
 					drag-handle-selector=".column-drag-handle"
+					lock-axis="x"
+					:drag-begin-delay="200"
 					:get-child-payload="getColumnId"
-					:drop-placeholder="cardDropPlaceholderOptions"
+					:drop-placeholder="columnDropPlaceholderOptions"
+					@drop="onColumnDrop"
 				>
 					<template v-for="(column, index) in board.columns">
 						<Draggable :key="column.id">
@@ -44,7 +46,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
-	cardDropPlaceholderOptions,
+	columnDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	ColumnMove,
@@ -97,7 +99,7 @@ export default defineComponent({
 
 		return {
 			board,
-			cardDropPlaceholderOptions,
+			columnDropPlaceholderOptions,
 			getColumnId,
 			onCardPositionChange,
 			onColumnDrop,
@@ -110,7 +112,7 @@ export default defineComponent({
 });
 </script>
 <style>
-.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+/* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
 	overflow: visible !important;
-}
+} */
 </style>

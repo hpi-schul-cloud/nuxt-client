@@ -5,7 +5,7 @@
 		@end-edit-mode="onEndEditMode"
 		@move-card-keyboard="onMoveCardKeyboard"
 	>
-		<div class="d-flex" ref="cardHost">
+		<div ref="cardHost">
 			<VCard
 				:height="isLoading ? height : 'auto'"
 				class="w-100 transition-swing"

@@ -29,12 +29,12 @@ export type DragAndDropKeys =
 	| "Enter";
 
 export const cardDropPlaceholderOptions = {
-	className: "mb-6 rounded-sm grey lighten-1",
+	className: "rounded-sm grey lighten-1 my-3",
 	animationDuration: "150",
-	showOnTop: true,
+	showOnTop: false,
 };
 
-export const dropPlaceholderOptions = {
+export const columnDropPlaceholderOptions = {
 	className: "mb-6 rounded-sm grey lighten-1",
 	animationDuration: "150",
 	showOnTop: true,
