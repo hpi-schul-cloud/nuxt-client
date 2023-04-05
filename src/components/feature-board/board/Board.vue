@@ -3,7 +3,7 @@
 		<div>
 			<h1>Board</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1" style="min-height: 80%">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4" style="min-height: 80%">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"

@@ -1,7 +1,7 @@
 <template>
 	<div
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle mr-4"
+		class="column-drag-handle white px-4"
 	>
 		<BoardColumnHeader
 			:title="column.title"
