@@ -58,7 +58,6 @@ import dayjs from "dayjs";
 export default defineComponent({
 	name: "TimePicker",
 	props: {
-		date: { type: String, default: null },
 		time: { type: String, required: true },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
