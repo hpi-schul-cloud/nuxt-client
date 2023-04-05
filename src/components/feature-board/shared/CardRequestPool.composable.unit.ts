@@ -1,6 +1,6 @@
 import { CardsApiInterface } from "@/serverApi/v3";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import * as serverApi from "../../serverApi/v3/api";
+import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
 

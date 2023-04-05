@@ -13,7 +13,7 @@
 				@drop="onMoveCard"
 				drag-class="elevation-12"
 				drop-class="elevation-0"
-				:drop-placeholder="drowpdownDropPlaceholderOptions"
+				:drop-placeholder="dropPlaceholderOptions"
 				:get-child-payload="getChildPayload"
 			>
 				<template v-for="(card, index) in column.cards">
@@ -41,7 +41,7 @@ import {
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
-	drowpdownDropPlaceholderOptions,
+	dropPlaceholderOptions,
 } from "../types/DragAndDrop";
 
 export default defineComponent({
@@ -110,7 +110,7 @@ export default defineComponent({
 
 		return {
 			colWidth,
-			drowpdownDropPlaceholderOptions,
+			dropPlaceholderOptions,
 			onMoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
