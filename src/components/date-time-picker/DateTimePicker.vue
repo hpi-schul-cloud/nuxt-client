@@ -21,7 +21,7 @@
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
-			:allow-past="!isToday"
+			:allow-past="allowPast || !isToday"
 			@input="handleTimeInput"
 			@error="handleTimeError"
 			@valid="handleTimeValid"
@@ -56,6 +56,7 @@ export default defineComponent({
 		required: {
 			type: Boolean,
 		},
+		allowPast: { type: Boolean, default: false },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {

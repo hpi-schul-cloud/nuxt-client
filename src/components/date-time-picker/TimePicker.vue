@@ -24,7 +24,7 @@
 					validate-on-blur
 					autocomplete="off"
 					ref="inputfield"
-					@blur="handleInput"
+					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="handleError"
@@ -66,7 +66,7 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
-		allowPast: { type: Boolean, default: true },
+		allowPast: { type: Boolean, default: false },
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
@@ -159,23 +159,22 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleInput = useDebounceFn(() => {
+		const handleBlur = useDebounceFn(() => {
 			const time = model.value || "";
 			emit("input", time);
 		}, 200);
 
 		const handleSelect = (selected: string) => {
 			showTimeDialog.value = false;
-			validate();
 			model.value = selected;
-			handleInput();
+			triggerValidation();
 		};
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
 		};
 
-		const validate = () => {
+		const triggerValidation = () => {
 			inputfield.value?.focus();
 			inputfield.value?.blur();
 		};
@@ -185,7 +184,7 @@ export default defineComponent({
 			timesOfDayList,
 			model,
 			rules,
-			handleInput,
+			handleBlur,
 			handleSelect,
 			handleError,
 			inputfield,

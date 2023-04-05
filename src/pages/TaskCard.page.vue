@@ -28,6 +28,7 @@
 			<date-time-picker
 				class="mb-4"
 				required
+				:allow-past="false"
 				:date-time="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:minDate="minDate"
