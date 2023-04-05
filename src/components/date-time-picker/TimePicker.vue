@@ -55,6 +55,7 @@
 import { defineComponent, ref, computed, inject } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
+import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -127,14 +128,17 @@ export default defineComponent({
 				});
 			}
 			rules.push((value: string | null) => {
-				return value === null || !value.match(regex)
+				if (value === "" || value === null) {
+					return true;
+				}
+				return !value.match(regex)
 					? t("components.timePicker.validation.format")
 					: true;
 			});
 			if (!props.allowPast) {
 				rules.push((value: string | null) => {
-					if (value === null) {
-						return false;
+					if (value === "" || value === null) {
+						return true;
 					}
 					const hoursAndMinutes = value.split(":");
 					return timeInPast(
@@ -148,14 +152,13 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleInput = () => {
-			showTimeDialog.value = false;
-			if (model.value) {
-				emit("input", model.value);
-			}
-		};
+		const handleInput = useDebounceFn(() => {
+			const time = model.value || "";
+			emit("input", time);
+		}, 200);
 
 		const handleSelect = (selected: string) => {
+			showTimeDialog.value = false;
 			model.value = selected;
 			handleInput();
 		};

@@ -101,25 +101,22 @@ export default defineComponent({
 		const isToday = ref(dateIsToday(props.dateTime));
 
 		const emitDateTime = () => {
-			const dateTime = new Date(date.value);
-			const hoursAndMinutes = time.value.split(":");
-			dateTime.setHours(
-				parseInt(hoursAndMinutes[0]),
-				parseInt(hoursAndMinutes[1])
-			);
-			emit("input", dateTime.toISOString());
+			if (date.value !== "" && time.value !== "") {
+				const dateTime = new Date(date.value);
+				const hoursAndMinutes = time.value.split(":");
+				dateTime.setHours(
+					parseInt(hoursAndMinutes[0]),
+					parseInt(hoursAndMinutes[1])
+				);
+				emit("input", dateTime.toISOString());
+			}
 		};
 
 		const handleDateInput = (newDate: string) => {
 			date.value = newDate;
 			isToday.value = dateIsToday(date.value);
-			if (!dateError.value) {
-				if (time.value === "") {
-					time.value = "12:00";
-				}
-				if (valid.value) {
-					emitDateTime();
-				}
+			if (valid.value) {
+				emitDateTime();
 			}
 		};
 
@@ -133,13 +130,8 @@ export default defineComponent({
 
 		const handleTimeInput = (newTime: string) => {
 			time.value = newTime;
-			if (!timeError.value) {
-				if (date.value === "") {
-					date.value = new Date().toISOString();
-				}
-				if (valid.value) {
-					emitDateTime();
-				}
+			if (valid.value) {
+				emitDateTime();
 			}
 		};
 

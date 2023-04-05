@@ -50,6 +50,7 @@ import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendarClock } from "@mdi/js";
+import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -94,13 +95,6 @@ export default defineComponent({
 				: model.value;
 		});
 
-		const handleInput = () => {
-			showDateDialog.value = false;
-			if (model.value) {
-				emit("input", model.value);
-			}
-		};
-
 		const focusDatePicker = () => {
 			setTimeout(() => {
 				const prevMonthBtn = document.querySelector<HTMLElement>(
@@ -112,13 +106,23 @@ export default defineComponent({
 		};
 
 		type Rule = (value: string | null) => boolean | string;
-		const rules: Rule[] = [
-			(value: string | null) => {
-				return props.required && (value === "" || value === null)
-					? t("components.datePicker.validation.required")
-					: true;
-			},
-		];
+		const rules = computed<Rule[]>(() => {
+			const rules: Rule[] = [];
+			if (props.required) {
+				rules.push((value: string | null) => {
+					return value === "" || value === null
+						? t("components.datePicker.validation.required")
+						: true;
+				});
+			}
+			return rules;
+		});
+
+		const handleInput = useDebounceFn(() => {
+			showDateDialog.value = false;
+			const date = model.value || "";
+			emit("input", date);
+		}, 200);
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");

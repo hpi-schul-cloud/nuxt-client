@@ -49,13 +49,14 @@ describe("@components/date-time-picker/DateTimePicker", () => {
 	});
 
 	it("should emit input event on time input", async () => {
+		jest.useFakeTimers();
 		setup({ dateTime: new Date().toISOString() });
 
 		const timePicker = wrapper.findComponent({ name: "time-picker" });
 		expect(timePicker.exists()).toBe(true);
 		timePicker.vm.$emit("input", "00:00");
 
-		await wrapper.vm.$nextTick();
+		jest.advanceTimersByTime(1000);
 
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});

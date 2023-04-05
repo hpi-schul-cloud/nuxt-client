@@ -37,21 +37,23 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 	describe("when picking a time through typing", () => {
 		it("should emit event on input", async () => {
+			jest.useFakeTimers();
 			setup({ time: "12:30" });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 			const input = textField.find("input");
 			input.setValue("13:12");
 
-			textField.vm.$emit("blur");
-			await wrapper.vm.$nextTick();
+			await textField.vm.$emit("blur");
 
+			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 	});
 
 	describe("when picking a time through select", () => {
 		it("should emit event on input", async () => {
+			jest.useFakeTimers();
 			setup({ time: "12:30" });
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
@@ -63,6 +65,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 			expect(listItem.exists()).toBe(true);
 			await listItem.trigger("click");
 
+			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 	});
@@ -118,8 +121,6 @@ describe("@components/date-time-picker/TimePicker", () => {
 				input.setValue("");
 
 				expect(textField.emitted("input")).toHaveLength(1);
-				jest.advanceTimersByTime(1000);
-
 				expect(wrapper.emitted("error")).toBe(undefined);
 			});
 		});
@@ -197,10 +198,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
 				input.setValue("03:11");
+				await textField.vm.$emit("blur");
 
-				textField.vm.$emit("blur");
-				await wrapper.vm.$nextTick();
-
+				jest.advanceTimersByTime(1000);
 				expect(wrapper.emitted("input")).toHaveLength(1);
 			});
 		});
@@ -226,10 +226,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const input = textField.find("input");
 				input.setValue("02:00");
+				await textField.vm.$emit("blur");
 
-				textField.vm.$emit("blur");
-				await wrapper.vm.$nextTick();
-
+				jest.advanceTimersByTime(1000);
 				expect(wrapper.emitted("input")).toHaveLength(1);
 			});
 		});

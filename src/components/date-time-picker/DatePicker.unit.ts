@@ -32,6 +32,7 @@ describe("@components/date-time-picker/DatePicker", () => {
 	});
 
 	it("should emit input event on input", async () => {
+		jest.useFakeTimers();
 		setup({ date: new Date().toISOString() });
 
 		const textField = wrapper
@@ -43,8 +44,8 @@ describe("@components/date-time-picker/DatePicker", () => {
 		const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
 		expect(dateSelector.exists()).toBe(true);
 		dateSelector.vm.$emit("input", new Date().toISOString());
-		await wrapper.vm.$nextTick();
 
+		jest.advanceTimersByTime(1000);
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 
