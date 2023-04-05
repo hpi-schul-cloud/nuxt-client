@@ -12,7 +12,7 @@
 			:key="index"
 			:data-test-id="`alert-item-${index}`"
 			three-line
-			class="px-2"
+			class="px-2 alert-item"
 		>
 			<v-list-item-avatar size="24" class="mt-6">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -27,7 +27,7 @@
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
-					class="text-right text-caption"
+					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
@@ -86,5 +86,14 @@ export default defineComponent({
 		width: 400px;
 		max-width: 400px;
 	}
+}
+.alerts::-webkit-scrollbar {
+	width: 2px;
+}
+.alert-item:not(:first-child) {
+	border-top: 1px solid #e5e5e5;
+}
+.alert-date {
+	text-align: left !important;
 }
 </style>
