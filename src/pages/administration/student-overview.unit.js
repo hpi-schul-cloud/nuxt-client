@@ -599,10 +599,10 @@ describe("students/index", () => {
 
 		searchBarInput.setValue("abc");
 
-		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
-
 		//run new timer from updating the value
 		jest.runAllTimers();
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 
 		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
 	});
