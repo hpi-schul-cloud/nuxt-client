@@ -6,11 +6,7 @@
 				{{ t("pages.rooms.fab.add.betatask") }}
 			</h1>
 		</div>
-		<v-form
-			v-if="isEditMode && !isLoading"
-			class="d-flex flex-column"
-			ref="form"
-		>
+		<v-form v-if="isEditMode && !isLoading" class="d-flex flex-column">
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -38,6 +34,7 @@
 				:maxDate="maxDate"
 				:time-input-label="t('components.organisms.FormNews.label.time')"
 				@input="handleDateTimeInput"
+				@error="onError"
 			/>
 			<title-card-element
 				v-model="title"
@@ -146,7 +143,6 @@ export default defineComponent({
 				value: false,
 			},
 		]);
-		const form = ref<HTMLFormElement | null>(null);
 		const title = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
@@ -335,26 +331,24 @@ export default defineComponent({
 		};
 
 		const save = async () => {
-			if (form.value) {
-				const valid = form.value.validate();
-				if (!valid) {
-					console.log("form has error(s)");
-					return;
-				} else {
-					console.log("form is valid");
-				}
+			if (hasErrors.value) {
+				return;
+			}
+			if (
+				route.name === "rooms-beta-task-new" ||
+				route.name === "tasks-beta-task-new"
+			) {
+				await createTaskCard();
+			} else {
+				await updateTaskCard();
 			}
 
-			// if (
-			// 	route.name === "rooms-beta-task-new" ||
-			// 	route.name === "tasks-beta-task-new"
-			// ) {
-			// 	await createTaskCard();
-			// } else {
-			// 	await updateTaskCard();
-			// }
+			router.go(-1);
+		};
 
-			// router.go(-1);
+		const hasErrors = ref(false);
+		const onError = () => {
+			hasErrors.value = true;
 		};
 
 		const cancel = () => {
@@ -390,12 +384,12 @@ export default defineComponent({
 			isCourseSelectDisabled,
 			course,
 			courses,
+			onError,
 			minDate,
 			maxDate,
 			isVisible,
 			visibilityOptions,
 			isLoading,
-			form,
 		};
 	},
 });
