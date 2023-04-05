@@ -106,14 +106,16 @@ export default defineComponent({
 		};
 
 		type Rule = (value: string | null) => boolean | string;
+		const requiredRule: Rule = (value: string | null) => {
+			return value === "" || value === null
+				? t("components.datePicker.validation.required")
+				: true;
+		};
+
 		const rules = computed<Rule[]>(() => {
 			const rules: Rule[] = [];
 			if (props.required) {
-				rules.push((value: string | null) => {
-					return value === "" || value === null
-						? t("components.datePicker.validation.required")
-						: true;
-				});
+				rules.push(requiredRule);
 			}
 			return rules;
 		});
