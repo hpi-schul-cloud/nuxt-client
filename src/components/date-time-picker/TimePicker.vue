@@ -21,8 +21,10 @@
 					v-bind="attrs"
 					v-on="on"
 					:rules="rules"
+					validate-on-blur
 					autocomplete="off"
-					@input="handleInput"
+					ref="inputfield"
+					@blur="handleInput"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="handleError"
@@ -83,6 +85,7 @@ export default defineComponent({
 
 		const model = ref(props.time);
 		const showTimeDialog = ref(false);
+		const inputfield = ref<HTMLInputElement | null>(null);
 
 		const timesOfDayList = computed(() => {
 			type timeItem = {
@@ -163,12 +166,18 @@ export default defineComponent({
 
 		const handleSelect = (selected: string) => {
 			showTimeDialog.value = false;
+			validate();
 			model.value = selected;
 			handleInput();
 		};
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
+		};
+
+		const validate = () => {
+			inputfield.value?.focus();
+			inputfield.value?.blur();
 		};
 
 		return {
@@ -179,6 +188,7 @@ export default defineComponent({
 			handleInput,
 			handleSelect,
 			handleError,
+			inputfield,
 		};
 	},
 });

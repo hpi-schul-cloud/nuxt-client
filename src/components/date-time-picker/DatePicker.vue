@@ -21,7 +21,9 @@
 					v-bind="attrs"
 					v-on="on"
 					:rules="rules"
+					validate-on-blur
 					autocomplete="off"
+					ref="inputfield"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -88,6 +90,7 @@ export default defineComponent({
 
 		const model = ref(props.date);
 		const showDateDialog = ref(false);
+		const inputfield = ref<HTMLInputElement | null>(null);
 
 		const formattedDate = computed(() => {
 			return model.value
@@ -122,12 +125,18 @@ export default defineComponent({
 
 		const handleInput = useDebounceFn(() => {
 			showDateDialog.value = false;
+			validate();
 			const date = model.value || "";
 			emit("input", date);
 		}, 200);
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
+		};
+
+		const validate = () => {
+			inputfield.value?.focus();
+			inputfield.value?.blur();
 		};
 
 		return {
@@ -140,6 +149,7 @@ export default defineComponent({
 			handleInput,
 			handleError,
 			focusDatePicker,
+			inputfield,
 		};
 	},
 });
