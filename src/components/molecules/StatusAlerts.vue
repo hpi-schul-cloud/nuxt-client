@@ -20,28 +20,24 @@
 				</v-icon>
 			</v-list-item-avatar>
 			<v-list-item-content class="pb-0">
+				<v-list-item-title :data-test-id="`alert-title-${index}`">
+					{{ item.title }}
+				</v-list-item-title>
+				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
+					{{ item.text }}
+				</v-list-item-subtitle>
 				<v-list-item-subtitle
 					class="text-right text-caption"
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
 				</v-list-item-subtitle>
-				<v-list-item-title :data-test-id="`alert-title-${index}`">
-					{{ item.title }}
-				</v-list-item-title>
-				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
-					{{ getAlertText(item.text) }}
+				<v-list-item-subtitle
+					class="text-right text-caption"
+					:data-test-id="`alert-date-${index}`"
+				>
+					{{ getDate(item.create_at) }}
 				</v-list-item-subtitle>
-				<div class="text-right text-subtitle-2">
-					<a
-						:href="item.url"
-						rel="noopener"
-						target="_blank"
-						:data-test-id="`alert-link-${index}`"
-					>
-						{{ prettifiedUrl(item.url) }}
-					</a>
-				</div>
 			</v-list-item-content>
 		</v-list-item>
 	</v-list>
@@ -73,22 +69,11 @@ export default defineComponent({
 			}
 		};
 
-		const getAlertText = (text: string) => {
-			if (text.length > 200) {
-				return `${text.substring(0, 200)}...`;
-			}
-			return text;
-		};
-
-		const prettifiedUrl = (url: string) => {
-			return url.replace(/(^\w+:|^)\/\//, "");
-		};
-
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
 
-		return { getIconTag, getAlertText, prettifiedUrl, getDate };
+		return { getIconTag, getDate };
 	},
 });
 </script>
@@ -101,7 +86,7 @@ export default defineComponent({
 	width: auto;
 	max-width: 250px;
 	overflow-y: auto;
-
+	max-height: 400px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
