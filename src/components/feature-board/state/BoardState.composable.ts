@@ -61,11 +61,11 @@ export const useBoardState = (id: string) => {
 			setTimeout(r, 1000);
 		});
 		const boardsApi = BoardsApiFactory(undefined, "/v3", $axios);
-		// board.value = {
-		// 	...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
-		// 	id,
-		// };
-		board.value = DUMMY_BOARD;
+		board.value = {
+			...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
+			id,
+		};
+		// board.value = DUMMY_BOARD;
 		isLoading.value = false;
 	};
 
