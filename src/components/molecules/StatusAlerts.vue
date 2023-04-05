@@ -31,11 +31,6 @@
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
-				</v-list-item-subtitle>
-				<v-list-item-subtitle
-					class="text-right text-caption"
-					:data-test-id="`alert-date-${index}`"
-				>
 					{{ getDate(item.create_at) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
@@ -86,7 +81,7 @@ export default defineComponent({
 	width: auto;
 	max-width: 250px;
 	overflow-y: auto;
-	max-height: 400px;
+	height: 400px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
