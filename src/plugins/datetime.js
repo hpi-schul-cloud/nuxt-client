@@ -104,6 +104,15 @@ export const fromUTC = (date) => {
 };
 
 /**
+ * Returns formated date string based on a given UTC date string
+ * @param {String} dateTime
+ * @return {dayjs} Date object based on current timezone
+ */
+export const toDateTimeStringUTC = (dateTime) => {
+	return dayjs.tz(dateTime, "UTC");
+};
+
+/**
  * Returns formated date string based on a given date string in German format
  * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
  * @param {String} date UTC date string in german format
@@ -248,6 +257,13 @@ export const fromNow = (date, isLocalTimeZone) => {
 		return dayjs(date).fromNow();
 	}
 	return fromUTC(date).fromNow();
+};
+
+export const toDateTimeString = (dateTime, isLocalTimeZone) => {
+	if (isLocalTimeZone === true) {
+		return dayjs(dateTime).toDateTimeString();
+	}
+	return toDateTimeStringUTC(dateTime).toDateTimeString();
 };
 
 /**

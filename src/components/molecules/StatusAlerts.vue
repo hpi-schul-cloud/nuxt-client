@@ -30,8 +30,10 @@
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
 				>
-					{{ getDate(item.timestamp) }}
-					{{ getDate(item.create_at) }}
+					{{ $t("common.labels.update_at") }} {{ getDate(item.timestamp) }}
+					{{ $t("common.labels.pipe") }}
+					{{ $t("common.labels.created_at") }}
+					{{ getCreatedAtDate(item.create_at) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
@@ -40,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { fromNow } from "@/plugins/datetime";
+import { fromNow, toDateTimeString } from "@/plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -67,11 +69,11 @@ export default defineComponent({
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
-		// const getCreatedDate = (date: string) => {
-		// 	return toDateTimeString(date, true);
-		// };
+		const getCreatedAtDate = (date: string) => {
+			return toDateTimeString(date, true);
+		};
 
-		return { getIconTag, getDate };
+		return { getIconTag, getDate, getCreatedAtDate };
 	},
 });
 </script>
@@ -90,12 +92,6 @@ export default defineComponent({
 		width: 400px;
 		max-width: 400px;
 	}
-}
-::-webkit-scrollbar {
-	width: 2px;
-}
-.alert-item:not(:first-child) {
-	border-top: 1px solid #e5e5e5;
 }
 .alert-date {
 	text-align: left !important;
