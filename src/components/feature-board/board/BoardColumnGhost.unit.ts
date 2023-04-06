@@ -38,14 +38,34 @@ describe("BoardColumnGhost", () => {
 	describe("when a card dropped", () => {
 		it("should emit 'add-empty-column'", () => {
 			setup();
-
+			const movedCardObject = {
+				removedIndex: null,
+				addedIndex: 0,
+				payload: { cardId: "123", height: 100 },
+			};
 			const containerComponent = wrapper.findComponent({
 				name: "Container",
 			});
-			containerComponent.vm.$emit("drop");
+			containerComponent.vm.$emit("drop", movedCardObject);
 
 			const emitted = wrapper.emitted();
 			expect(emitted["add-column-with-card"]).toBeDefined();
+		});
+
+		it("should not emit 'add-empty-column' if addedIndex equals null", () => {
+			setup();
+			const movedCardObject = {
+				removedIndex: null,
+				addedIndex: null,
+				payload: { cardId: "123", height: 100 },
+			};
+			const containerComponent = wrapper.findComponent({
+				name: "Container",
+			});
+			containerComponent.vm.$emit("drop", movedCardObject);
+
+			const emitted = wrapper.emitted();
+			expect(emitted["add-column-with-card"]).not.toBeDefined();
 		});
 	});
 });

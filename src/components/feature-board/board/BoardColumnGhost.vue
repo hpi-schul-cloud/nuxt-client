@@ -49,6 +49,7 @@ export default defineComponent({
 		const colWidth = computed<number>(() => (isColumnActive.value ? 400 : 200));
 
 		const onDropCard = (card: CardMove) => {
+			if (card.addedIndex === null) return;
 			emit("add-column-with-card", card.payload.cardId);
 		};
 		const onAddColumn = () => {
