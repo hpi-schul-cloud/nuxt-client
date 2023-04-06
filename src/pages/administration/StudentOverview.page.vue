@@ -292,7 +292,6 @@ export default {
 								"pages.administration.students.index.tableActions.registration"
 						  ),
 					icon: "check",
-					"icon-source": "material",
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
@@ -301,13 +300,11 @@ export default {
 						"pages.administration.students.index.tableActions.email"
 					),
 					icon: "mail_outline",
-					"icon-source": "material",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
@@ -317,7 +314,6 @@ export default {
 						"pages.administration.students.index.tableActions.delete"
 					),
 					icon: "delete_outline",
-					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
 					dataTestId: "delete_action",

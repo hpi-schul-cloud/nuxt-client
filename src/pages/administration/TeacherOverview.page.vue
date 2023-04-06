@@ -198,13 +198,11 @@ export default {
 						"pages.administration.teachers.index.tableActions.email"
 					),
 					icon: "mail_outline",
-					"icon-source": "material",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
@@ -214,7 +212,6 @@ export default {
 						"pages.administration.teachers.index.tableActions.delete"
 					),
 					icon: "delete_outline",
-					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",
