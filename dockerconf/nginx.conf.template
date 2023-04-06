@@ -61,14 +61,6 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
-    location ~ '^/tldraw-test/?$' {
-        proxy_pass ${TLDRAW_URL};
-    }
-
-    location ~ '^/static/?$' {
-        proxy_pass ${TLDRAW_URL};
-    }
-
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
