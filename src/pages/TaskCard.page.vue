@@ -274,11 +274,8 @@ export default defineComponent({
 
 			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
-
 				await taskCardModule.findTaskCard(taskCardId);
-				isLoading.value = false;
 				const taskCardData = taskCardModule.getTaskCardData;
-
 				title.value = taskCardData.title;
 				course.value = taskCardData.courseId || "";
 				courses.value = [
@@ -294,6 +291,7 @@ export default defineComponent({
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
+				isLoading.value = false;
 
 				breadcrumbs.value.push(
 					{
