@@ -14,14 +14,25 @@ type TimePickerProps = {
 describe("@components/date-time-picker/TimePicker", () => {
 	let wrapper: Wrapper<Vue>;
 
+	// Fully mount component in the document so that trigger("focus") really focuses
+	// https://v1.test-utils.vuejs.org/api/wrapper/trigger.html
+	const attachToDOM = () => {
+		const div = document.createElement("div");
+		div.id = "root";
+		document.body.appendChild(div);
+	};
+
 	const setup = (props: TimePickerProps) => {
 		document.body.setAttribute("data-app", "true");
+		attachToDOM();
+
 		wrapper = mount(TimePicker as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
 				i18n: { t: (key: string) => key },
 			},
+			attachTo: "#root",
 		});
 	};
 
@@ -40,11 +51,12 @@ describe("@components/date-time-picker/TimePicker", () => {
 			jest.useFakeTimers();
 			setup({ time: "12:30" });
 
-			const textField = wrapper.findComponent({ name: "v-text-field" });
-			const input = textField.find("input");
-			input.setValue("13:12");
+			const input = wrapper
+				.findComponent({ name: "v-text-field" })
+				.find("input");
 
-			await textField.vm.$emit("blur");
+			await input.setValue("16:45");
+			await input.trigger("blur");
 
 			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
@@ -56,9 +68,9 @@ describe("@components/date-time-picker/TimePicker", () => {
 			jest.useFakeTimers();
 			setup({ time: "12:30" });
 
-			const textField = wrapper.findComponent({ name: "v-text-field" });
-			const input = textField.find("input");
-			expect(input.exists()).toBe(true);
+			const input = wrapper
+				.findComponent({ name: "v-text-field" })
+				.find("input");
 			await input.trigger("click");
 
 			const listItem = wrapper.findComponent({ name: "v-list-item" });
@@ -90,8 +102,11 @@ describe("@components/date-time-picker/TimePicker", () => {
 
 				const textField = wrapper.findComponent({ name: "v-text-field" });
 				const clearBtn = textField.find(".v-icon");
+				const input = textField.find("input");
 				expect(clearBtn.exists()).toBe(true);
+
 				await clearBtn.trigger("click");
+				await input.trigger("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -102,10 +117,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 					time: "12:30",
 					required: true,
 				});
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
+				await input.trigger("focus");
 				await input.setValue("");
+				await input.trigger("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -113,14 +131,18 @@ describe("@components/date-time-picker/TimePicker", () => {
 		});
 
 		describe("when time is not required and value is empty", () => {
-			it("should not emit error event", () => {
+			it("should not emit error event", async () => {
 				setup({ time: "12:30" });
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
-				input.setValue("");
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
 
-				expect(textField.emitted("input")).toHaveLength(1);
+				await input.trigger("focus");
+				await input.setValue("");
+				await input.trigger("blur");
+				await wrapper.vm.$nextTick();
+
 				expect(wrapper.emitted("error")).toBe(undefined);
 			});
 		});
@@ -129,9 +151,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 			it("should emit error event", async () => {
 				setup({ time: "12:30" });
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
+
+				await input.trigger("focus");
 				await input.setValue("25:65");
+				await input.trigger("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -181,9 +207,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 					allowPast: false,
 				});
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
+
+				await input.trigger("focus");
 				await input.setValue("03:01");
+				await input.trigger("blur");
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("error")).toHaveLength(1);
@@ -195,10 +225,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 					allowPast: false,
 				});
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
-				input.setValue("03:11");
-				await textField.vm.$emit("blur");
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
+
+				await input.trigger("focus");
+				await input.setValue("03:11");
+				await input.trigger("blur");
 
 				jest.advanceTimersByTime(1000);
 				expect(wrapper.emitted("input")).toHaveLength(1);
@@ -223,10 +256,13 @@ describe("@components/date-time-picker/TimePicker", () => {
 			it("should emit input event when time inserted is in the past", async () => {
 				setup({ time: "12:30" });
 
-				const textField = wrapper.findComponent({ name: "v-text-field" });
-				const input = textField.find("input");
-				input.setValue("02:00");
-				await textField.vm.$emit("blur");
+				const input = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
+
+				await input.trigger("focus");
+				await input.setValue("02:00");
+				await input.trigger("blur");
 
 				jest.advanceTimersByTime(1000);
 				expect(wrapper.emitted("input")).toHaveLength(1);

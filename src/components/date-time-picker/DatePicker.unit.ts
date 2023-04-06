@@ -15,14 +15,25 @@ type DatePickerProps = {
 describe("@components/date-time-picker/DatePicker", () => {
 	let wrapper: Wrapper<Vue>;
 
+	// Fully mount component in the document so that trigger("focus") really focuses
+	// https://v1.test-utils.vuejs.org/api/wrapper/trigger.html
+	const attachToDOM = () => {
+		const div = document.createElement("div");
+		div.id = "root";
+		document.body.appendChild(div);
+	};
+
 	const setup = (props: DatePickerProps) => {
 		document.body.setAttribute("data-app", "true");
+		attachToDOM();
+
 		wrapper = mount(DatePicker as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
 				i18n: { t: (key: string) => key },
 			},
+			attachTo: "#root",
 		});
 	};
 
@@ -58,8 +69,10 @@ describe("@components/date-time-picker/DatePicker", () => {
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
 			const clearBtn = textField.find(".v-icon");
+			const input = textField.find("input");
 			expect(clearBtn.exists()).toBe(true);
 			await clearBtn.trigger("click");
+			await input.trigger("blur");
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("error")).toHaveLength(1);
