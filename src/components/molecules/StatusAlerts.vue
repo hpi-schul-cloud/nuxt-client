@@ -2,7 +2,7 @@
 	<v-list
 		data-test-id="status-alerts"
 		min-width="250"
-		max-height="200"
+		max-height="400"
 		class="alerts"
 		elevation="2"
 		rounded
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { fromNow, toDateTimeString } from "@/plugins/datetime";
+import { fromNow } from "@/plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
