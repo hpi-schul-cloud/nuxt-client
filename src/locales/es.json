@@ -22,7 +22,6 @@
 	"common.labels.admin": "Admin(s)",
 	"common.labels.update_at": "Actualizado:",
 	"common.labels.created_at": "Creado:",
-	"common.labels.pipe": "|",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
 	"common.labels.classes": "clases",

@@ -31,7 +31,7 @@
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
-					<!-- {{ getCreatedAtDate(item.create_at) }} -->
+					{{ getCreatedAtDate(item.create_at) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
