@@ -792,6 +792,8 @@
 	"components.cardElement.richTextElement.placeholder": "Add text",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.titleElement.placeholder": "Add title",
+	"components.cardElement.titleElement.validation.required": "Please enter a title.",
+	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
