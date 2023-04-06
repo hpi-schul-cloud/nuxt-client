@@ -6,8 +6,10 @@
 				text
 				:color="isColumnActive ? 'black' : 'grey darken-2'"
 				@click="onAddColumn"
-				><VIcon>{{ mdiPlus }}</VIcon> Spalte hinzufügen</VBtn
 			>
+				<VIcon>{{ mdiPlus }}</VIcon>
+				{{ $t("components.board.column.ghost.placeholder") }}
+			</VBtn>
 		</div>
 		<VDivider
 			:color="isColumnActive ? 'black' : 'grey'"

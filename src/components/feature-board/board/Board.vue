@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
@@ -51,6 +51,7 @@ import {
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
+import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "Board",
@@ -63,7 +64,10 @@ export default defineComponent({
 			moveColumn,
 			moveCardByKeyboard,
 			updateColumnTitle,
+			addNewColumn,
 		} = useBoardState(route.params?.id);
+
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
 			moveCard(columnIndex, payload);
@@ -88,13 +92,15 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
+		const defaultColumnTitle =
+			i18n?.t("components.board.column.defaultTitle").toString() || "";
+
 		const onAddEmptyColumn = () => {
-			console.log("add-empty-column");
+			addNewColumn(defaultColumnTitle);
 		};
 
-		const onAddColumnWithCard = (payload: CardMove) => {
-			if (payload.addedIndex === null) return;
-			console.log("onAddColumnWithCard", payload);
+		const onAddColumnWithCard = (cardId: string) => {
+			addNewColumn(defaultColumnTitle, cardId);
 		};
 
 		return {

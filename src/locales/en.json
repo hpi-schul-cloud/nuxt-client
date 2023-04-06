@@ -792,6 +792,8 @@
 	"components.cardElement.richTextElement.placeholder": "Add text",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.titleElement.placeholder": "Add title",
+	"components.board.column.ghost.placeholder":"Add column",
+	"components.board.column.defaultTitle":"New column",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

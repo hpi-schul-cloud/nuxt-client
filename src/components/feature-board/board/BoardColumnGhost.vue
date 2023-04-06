@@ -27,8 +27,7 @@
 import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { Container } from "vue-smooth-dnd";
-import { cardDropPlaceholderOptions } from "../types/DragAndDrop";
-import { BoardCardSkeleton } from "../types/Card";
+import { cardDropPlaceholderOptions, CardMove } from "../types/DragAndDrop";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
 export default defineComponent({
@@ -49,8 +48,8 @@ export default defineComponent({
 		);
 		const colWidth = computed<number>(() => (isColumnActive.value ? 400 : 200));
 
-		const onDropCard = (card: BoardCardSkeleton) => {
-			emit("add-column-with-card", card);
+		const onDropCard = (card: CardMove) => {
+			emit("add-column-with-card", card.payload.cardId);
 		};
 		const onAddColumn = () => {
 			emit("add-empty-column");
@@ -58,13 +57,9 @@ export default defineComponent({
 
 		const onDragEnter = () => {
 			isDragPending.value = true;
-			console.log("dargEnter");
-			// hover over column
 		};
 		const onDragLeave = () => {
 			isDragPending.value = false;
-			console.log("dragLEave");
-			// blur over column
 		};
 
 		return {
