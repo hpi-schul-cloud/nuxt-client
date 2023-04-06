@@ -288,6 +288,8 @@
 	"components.cardElement.richTextElement.placeholder": "додати текст",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
+	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
+	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
