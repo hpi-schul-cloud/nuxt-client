@@ -341,14 +341,8 @@ describe("AuthSystems", () => {
 			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("1");
 		});
 	});
-
-	describe("when user has not the permission to create and edit systems", () => {
-		beforeEach(() => {
-			envConfigModule.setEnvs({
-				FEATURE_LOGIN_LINK_ENABLED: true,
-			});
-		});
-		it("should not display the add ldap, system edit and system delete buttons", () => {
+	describe("display system buttons", () => {
+		const setup = () => {
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
@@ -359,17 +353,27 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			expect(
-				tableCell.wrappers[2].find(searchStrings.addLdap).exists()
-			).toStrictEqual(false);
+			return {
+				tableCell,
+			};
+		};
 
-			expect(
-				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
-			).toStrictEqual(false);
+		describe("when user does not have the permission to create and edit systems", () => {
+			it("should not display the add ldap, system edit and system delete buttons", () => {
+				const { tableCell } = setup();
 
-			expect(
-				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
-			).toStrictEqual(false);
+				expect(
+					tableCell.wrappers[2].find(searchStrings.addLdap).exists()
+				).toStrictEqual(false);
+
+				expect(
+					tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
+				).toStrictEqual(false);
+
+				expect(
+					tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
+				).toStrictEqual(false);
+			});
 		});
 	});
 });
