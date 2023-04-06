@@ -30,8 +30,8 @@
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
 				>
-					Updated: {{ getDate(item.timestamp) }} | Created:
-					{{ getDate(item.create_at) }}
+					{{ getDate(item.timestamp) }}
+					{{ getCreatedAtDate(item.create_at) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
