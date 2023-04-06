@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { fromNow } from "@/plugins/datetime";
+import { fromNow, toDateTimeString } from "@/plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -67,11 +67,11 @@ export default defineComponent({
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
-		// const getCreatedAtDate = (date: string) => {
-		// 	return toDateTimeString(date, true);
-		// };
+		const getCreatedAtDate = (dateTime: string) => {
+			return toDateTimeString(dateTime, true);
+		};
 
-		return { getIconTag, getDate };
+		return { getIconTag, getDate, getCreatedAtDate };
 	},
 });
 </script>

@@ -259,6 +259,13 @@ export const fromNow = (date, isLocalTimeZone) => {
 	return fromUTC(date).fromNow();
 };
 
+/**
+ * Returns dateTime difference to current local time
+ * @param {String} dateTime
+ * @param {boolean} isLocalTimeZone set true if input date is to be handled in local time zone instead of utc
+ * @return {String} Date difference based on current timezone
+ */
+
 export const toDateTimeString = (dateTime, isLocalTimeZone) => {
 	if (isLocalTimeZone === true) {
 		return dayjs(dateTime).toDateTimeString();
