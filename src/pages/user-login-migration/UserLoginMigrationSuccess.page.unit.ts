@@ -76,7 +76,7 @@ describe("UserLoginMigrationSuccess", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.success.description {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.success.description {"targetSystem":"targetSystem"}'
 				);
 			});
 
@@ -88,7 +88,9 @@ describe("UserLoginMigrationSuccess", () => {
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
-				expect(button.text()).toEqual("pages.userMigration.backToLogin");
+				expect(button.text()).toEqual(
+					'pages.userMigration.success.login {"targetSystem":"targetSystem"}'
+				);
 				expect(button.props().to).toEqual("/logout");
 			});
 		});

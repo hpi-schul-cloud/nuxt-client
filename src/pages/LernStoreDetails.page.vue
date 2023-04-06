@@ -23,9 +23,6 @@ import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView";
 
 export default {
-	meta: {
-		requiredPermissions: ["LERNSTORE_VIEW"],
-	},
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,

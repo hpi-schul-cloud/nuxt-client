@@ -229,30 +229,35 @@ describe("@components/card-elements/CardElementList", () => {
 				expect(wrapper.emitted("input")).toHaveLength(1);
 			});
 
-			it("Should add card element", async () => {
+			it("Should add card element at the beginning of element list", async () => {
+				const cardElementsMockData = getEditableCardElementsMockData();
 				const wrapper = getWrapper({
 					value: getEditableCardElementsMockData(),
 					editMode: true,
 				});
-				const firstCardElement = wrapper
-					.findAllComponents({
-						ref: "card-element",
-					})
-					.at(0);
-				expect(firstCardElement.exists()).toBeTruthy();
+				const addBeforeBtn = wrapper.find(
+					'[data-testid="add-element-before-btn"]'
+				);
 
-				firstCardElement.vm.$emit("add-element");
+				addBeforeBtn.vm.$emit("click");
 				await wrapper.vm.$nextTick();
 				const cardElements = wrapper.findAllComponents({
 					ref: "card-element",
 				});
 				expect(cardElements.length).toBe(3);
+				expect(cardElements.at(0).props().value).toEqual("");
+				expect(cardElements.at(1).props().value).toEqual(
+					cardElementsMockData[0].model
+				);
+				expect(cardElements.at(2).props().value).toEqual(
+					cardElementsMockData[1].model
+				);
 			});
 
-			it("Should add new card element below", async () => {
+			it("Should add new card element below existing one", async () => {
 				const cardElementsMockData = getEditableCardElementsMockData();
 				const wrapper = getWrapper({
-					value: cardElementsMockData,
+					value: getEditableCardElementsMockData(),
 					editMode: true,
 				});
 				const firstCardElement = wrapper
@@ -274,8 +279,33 @@ describe("@components/card-elements/CardElementList", () => {
 				);
 				expect(cardElements.at(1).props().value).toEqual("");
 				expect(cardElements.at(2).props().value).toEqual(
-					cardElementsMockData[2].model
+					cardElementsMockData[1].model
 				);
+			});
+
+			it("Should add card element at the end of element list", async () => {
+				const cardElementsMockData = getEditableCardElementsMockData();
+				const wrapper = getWrapper({
+					value: getEditableCardElementsMockData(),
+					editMode: true,
+				});
+				const addAfterBtn = wrapper.find(
+					'[data-testid="add-element-after-btn"]'
+				);
+
+				addAfterBtn.vm.$emit("click");
+				await wrapper.vm.$nextTick();
+				const cardElements = wrapper.findAllComponents({
+					ref: "card-element",
+				});
+				expect(cardElements.length).toBe(3);
+				expect(cardElements.at(0).props().value).toEqual(
+					cardElementsMockData[0].model
+				);
+				expect(cardElements.at(1).props().value).toEqual(
+					cardElementsMockData[1].model
+				);
+				expect(cardElements.at(2).props().value).toEqual("");
 			});
 		});
 	});
@@ -342,10 +372,37 @@ describe("@components/card-elements/CardElementList", () => {
 				expect(cardElements.length).toBe(2);
 			});
 
+			it("Should not render add-element-before-btn", async () => {
+				const wrapper = getWrapper({
+					value: getNotEditableCardElementsMockData(),
+					editMode: false,
+				});
+				const addBelowBtn = wrapper.find(
+					'[data-testid="add-element-before-btn"]'
+				);
+
+				expect(addBelowBtn.exists()).toBe(false);
+			});
+
+			it("Should not render add-element-after-btn", async () => {
+				const wrapper = getWrapper({
+					value: getNotEditableCardElementsMockData(),
+					editMode: false,
+				});
+				const addAfterBtn = wrapper.find(
+					'[data-testid="add-element-after-btn"]'
+				);
+
+				expect(addAfterBtn.exists()).toBe(false);
+			});
+
 			it("Should not be possible to delete card elements", async () => {
 				const wrapper = getWrapper({
 					value: getNotEditableCardElementsMockData(),
 					editMode: false,
+				});
+				const deleteDialog = wrapper.find({
+					ref: "delete-dialog",
 				});
 				const firstCardElement = wrapper
 					.findAllComponents({
@@ -356,6 +413,8 @@ describe("@components/card-elements/CardElementList", () => {
 
 				firstCardElement.vm.$emit("delete-element");
 				await wrapper.vm.$nextTick();
+				expect(deleteDialog.vm).not.toBeDefined();
+
 				const cardElements = wrapper.findAllComponents({
 					ref: "card-element",
 				});

@@ -93,7 +93,7 @@ describe("UserLoginMigrationConsent", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.description.fromSource {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.description.fromSource {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
 				);
 			});
 
@@ -140,7 +140,7 @@ describe("UserLoginMigrationConsent", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.description.fromSourceMandatory {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.description.fromSourceMandatory {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
 				);
 			});
 
@@ -172,7 +172,7 @@ describe("UserLoginMigrationConsent", () => {
 					.text();
 
 				expect(descriptionText).toEqual(
-					'pages.userMigration.description.fromTarget {"sourceSystem":"sourceSystem","targetSystem":"targetSystem"}'
+					'pages.userMigration.description.fromTarget {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
 				);
 			});
 		});

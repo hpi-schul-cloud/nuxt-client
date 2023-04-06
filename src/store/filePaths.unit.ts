@@ -43,6 +43,7 @@ const requiredVars = {
 const configsFromEnvironmentVars = {
 	LERNSTORE_MODE: "",
 	ALERT_STATUS_URL: "",
+	MIGRATION_END_GRACE_PERIOD_MS: 1,
 };
 
 const envs = {
