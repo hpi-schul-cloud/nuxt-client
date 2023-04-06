@@ -133,5 +133,5 @@ export const getID = (resource) => {
 			"ccm:replicationsourceuuid"
 		);
 	}
-	return;
+	return null;
 };
