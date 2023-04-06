@@ -234,7 +234,6 @@ const customIcons = {
 	lernstore_outline: {
 		component: lernstoreOutline,
 	},
-	
 	lock: {
 		component: lock,
 	},
