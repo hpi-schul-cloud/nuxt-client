@@ -31,7 +31,7 @@
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
-					{{ getCreatedAtDate(item.create_at) }}
+					<!-- {{ getCreatedAtDate(item.create_at) }} -->
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
@@ -67,11 +67,11 @@ export default defineComponent({
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
-		const getCreatedAtDate = (date: string) => {
-			return toDateTimeString(date, true);
-		};
+		// const getCreatedAtDate = (date: string) => {
+		// 	return toDateTimeString(date, true);
+		// };
 
-		return { getIconTag, getDate, getCreatedAtDate };
+		return { getIconTag, getDate };
 	},
 });
 </script>
