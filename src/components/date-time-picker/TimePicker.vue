@@ -11,7 +11,6 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					v-model="model"
-					id="time-input"
 					data-testid="time-input"
 					placeholder="HH:MM"
 					filled
@@ -54,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject } from "vue";
+import { defineComponent, ref, toRef, computed, inject } from "vue";
 import VueI18n from "vue-i18n";
-import dayjs from "dayjs";
+import { useTimePickerState } from "./state/TimePickerState.composable";
 import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
@@ -87,46 +86,20 @@ export default defineComponent({
 		const showTimeDialog = ref(false);
 		const inputfield = ref<HTMLInputElement | null>(null);
 
-		const timesOfDayList = computed(() => {
-			type timeItem = {
-				value: string;
-				disabled: boolean;
-			};
-			const times: timeItem[] = [];
-			for (let hour = 0; hour < 24; hour++) {
-				times.push({
-					value: dayjs().hour(hour).minute(0).format("HH:mm"),
-					disabled: !props.allowPast && timeInPast(hour, 0),
-				});
-				times.push({
-					value: dayjs().hour(hour).minute(30).format("HH:mm"),
-					disabled: !props.allowPast && timeInPast(hour, 30),
-				});
-			}
-			return times;
-		});
+		const { timesOfDayList, timeInPast } = useTimePickerState(
+			toRef(props, "allowPast")
+		);
 
-		const timeInPast = (hour: number, minute: number): boolean => {
-			const date = new Date();
-			const currentHour = date.getHours();
-			const currentMinute = date.getMinutes();
-			if (hour < currentHour) {
-				return true;
-			}
-			if (hour === currentHour && minute < currentMinute) {
-				return true;
-			}
-			return false;
-		};
-
-		const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 		type Rule = (value: string | null) => boolean | string;
+
 		const requiredRule: Rule = (value: string | null) => {
 			return value === "" || value === null
 				? t("components.timePicker.validation.required")
 				: true;
 		};
+
 		const formatRule: Rule = (value: string | null) => {
+			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 			if (value === "" || value === null) {
 				return true;
 			}
@@ -134,6 +107,7 @@ export default defineComponent({
 				? t("components.timePicker.validation.format")
 				: true;
 		};
+
 		const allowPastRule: Rule = (value: string | null) => {
 			if (value === "" || value === null) {
 				return true;
@@ -167,6 +141,7 @@ export default defineComponent({
 		const handleSelect = (selected: string) => {
 			showTimeDialog.value = false;
 			model.value = selected;
+			// as the click on a list item already blurs the element we need to manually enforce revalidate
 			triggerValidation();
 			handleBlur();
 		};
