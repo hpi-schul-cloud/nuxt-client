@@ -67,6 +67,9 @@ export default defineComponent({
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
+		// const getCreatedDate = (date: string) => {
+		// 	return toDateTimeString(date, true);
+		// };
 
 		return { getIconTag, getDate };
 	},
@@ -80,14 +83,15 @@ export default defineComponent({
 .alerts {
 	width: auto;
 	max-width: 250px;
-	overflow-y: auto;
 	height: 400px;
+	max-height: 400px;
+	overflow-y: auto;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
 	}
 }
-.alerts::-webkit-scrollbar {
+::-webkit-scrollbar {
 	width: 2px;
 }
 .alert-item:not(:first-child) {
