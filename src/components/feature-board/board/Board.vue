@@ -1,9 +1,9 @@
 <template>
-	<div class="ml-8 mr-8" style="height: 100%">
+	<div class="ml-8 mr-8">
 		<div>
 			<h1>Board</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1 ml-n4" style="min-height: 80%">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
@@ -115,4 +115,14 @@ export default defineComponent({
 /* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
 	overflow: visible !important;
 } */
+
+/**
+ * This rule extends the droppable area of columns.
+ * Without this rule cards have to be placed closely below the last card in a column to be added.
+*/
+.smooth-dnd-container.vertical {
+	min-height: 70vh;
+	height: 100%;
+	padding-bottom: 50px;
+}
 </style>

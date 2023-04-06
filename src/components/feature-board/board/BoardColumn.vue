@@ -7,28 +7,26 @@
 			:title="column.title"
 			@update:title="onUpdateTitle"
 		></BoardColumnHeader>
-		<div class="d-flex flex-column flex-grow-1">
-			<Container
-				group-name="cards"
-				:drag-begin-delay="200"
-				:drop-placeholder="cardDropPlaceholderOptions"
-				:get-child-payload="getChildPayload"
-				@drop="onMoveCard"
-				@drag-start="onDragStart"
-				@drag-end="onDragEnd"
-			>
-				<template v-for="(card, index) in column.cards">
-					<Draggable :key="card.cardId">
-						<CardHost
-							class="my-3 elevate-transition"
-							:card-id="card.cardId"
-							:height="card.height"
-							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						/>
-					</Draggable>
-				</template>
-			</Container>
-		</div>
+		<Container
+			group-name="cards"
+			drag-class="elevation-12"
+			drop-class="elevation-0"
+			:drag-begin-delay="200"
+			:drop-placeholder="cardDropPlaceholderOptions"
+			:get-child-payload="getChildPayload"
+			@drop="onMoveCard"
+		>
+			<template v-for="(card, index) in column.cards">
+				<Draggable :key="card.cardId">
+					<CardHost
+						class="my-3"
+						:card-id="card.cardId"
+						:height="card.height"
+						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+					/>
+				</Draggable>
+			</template>
+		</Container>
 	</div>
 </template>
 
@@ -36,15 +34,14 @@
 import { defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
+	cardDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
-	cardDropPlaceholderOptions,
 } from "../types/DragAndDrop";
-import { BoardCard } from "../types/Card";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -63,7 +60,6 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
-		const draggedCardId = ref<BoardCard["cardId"] | undefined>(undefined);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -111,15 +107,6 @@ export default defineComponent({
 			emit("update:title", newTitle);
 		};
 
-		const onDragStart = (event: { payload: BoardCard }) => {
-			console.log("drag start", event.payload.cardId);
-			draggedCardId.value = event.payload.cardId;
-		};
-
-		const onDragEnd = () => {
-			draggedCardId.value = undefined;
-		};
-
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
@@ -127,9 +114,6 @@ export default defineComponent({
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,
-			onDragStart,
-			onDragEnd,
-			draggedCardId,
 		};
 	},
 });
