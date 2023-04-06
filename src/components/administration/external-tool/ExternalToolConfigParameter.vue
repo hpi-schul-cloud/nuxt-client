@@ -9,6 +9,8 @@
 			<v-text-field
 				v-model="parameter.value"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				:rules="validateParameter(parameter)"
 				validate-on-blur
 				:data-testId="parameter.name"
@@ -18,6 +20,8 @@
 			<v-select
 				v-model="selectItem"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				:rules="validateParameter(parameter)"
 				:data-testId="parameter.name"
 				:items="booleanSelectItems"
@@ -29,6 +33,8 @@
 			<v-text-field
 				v-model="parameter.value"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				type="number"
 				:rules="validateParameter(parameter)"
 				validate-on-blur
@@ -77,9 +83,9 @@ export default defineComponent({
 
 		const getLabelText = (): string => {
 			if (parameter.value.isOptional) {
-				return parameter.value.name;
+				return parameter.value.displayName;
 			}
-			return `${parameter.value.name} *`;
+			return `${parameter.value.displayName} *`;
 		};
 
 		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);
