@@ -1,5 +1,6 @@
+import Vue from "vue";
 import VueRouter from "vue-router";
-import { mount } from "@vue/test-utils";
+import { mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TaskCard from "./TaskCard.page.vue";
 import { TaskCardResponse } from "@/serverApi/v3";
@@ -181,11 +182,15 @@ describe("TaskCard", () => {
 
 	describe("when TASK_CARD_EDIT permission is present", () => {
 		describe("when creating new beta task", () => {
-			const wrapper = getWrapper(
-				CREATE_EDIT_PERMISSION,
-				emptyTaskCardData,
-				createRoute
-			);
+			let wrapper: Wrapper<Vue>;
+
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					emptyTaskCardData,
+					createRoute
+				);
+			});
 
 			it("should render component page", () => {
 				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
@@ -211,12 +216,16 @@ describe("TaskCard", () => {
 		});
 
 		describe("when editing existing beta task", () => {
-			const wrapper = getWrapper(
-				CREATE_EDIT_PERMISSION,
-				mockTaskCardData,
-				viewEditRoute
-			);
-			wrapper.setData({ isDeletable: !!mockTaskCardData.id });
+			let wrapper: Wrapper<Vue>;
+
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					mockTaskCardData,
+					viewEditRoute
+				);
+				wrapper.setData({ isDeletable: !!mockTaskCardData.id });
+			});
 
 			it("should render delete button", () => {
 				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
@@ -242,29 +251,30 @@ describe("TaskCard", () => {
 				expect(deleteDialog.vm.isOpen).toEqual(true);
 			});
 
-			// it("should delete beta task and redirect after confirming deletion", async () => {
-			// 	const deleteTaskCardSpy = jest.spyOn(
-			// 		taskCardModuleMock,
-			// 		"deleteTaskCard"
-			// 	);
-			// 	const deleteDialog: any = wrapper.find({
-			// 		ref: "delete-dialog",
-			// 	});
-			// 	deleteDialog.vm.$emit("dialog-confirmed");
-			// 	await wrapper.vm.$nextTick();
+			it("should delete beta task and redirect after confirming deletion", async () => {
+				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
+				const deleteDialog: any = wrapper.find({
+					ref: "delete-dialog",
+				});
 
-			// 	expect(deleteTaskCardSpy).toHaveBeenCalledTimes(1);
-			// 	expect(router.go).toHaveBeenCalledTimes(1);
-			// });
+				deleteBtn.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(deleteDialog.vm.isOpen).toEqual(true);
+				deleteDialog.vm.$emit("dialog-confirmed");
+				await wrapper.vm.$nextTick();
+
+				expect(taskCardModuleMock.findTaskCard).toHaveBeenCalledTimes(1);
+				expect(router.go).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 
 	describe("when only TASK_CARD_VIEW permission is present", () => {
-		const wrapper = getWrapper(
-			VIEW_PERMISSION,
-			emptyTaskCardData,
-			viewEditRoute
-		);
+		let wrapper: Wrapper<Vue>;
+
+		beforeEach(() => {
+			wrapper = getWrapper(VIEW_PERMISSION, emptyTaskCardData, viewEditRoute);
+		});
 
 		it("should render component page", () => {
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
