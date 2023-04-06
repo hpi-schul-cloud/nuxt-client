@@ -66,7 +66,7 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
-		allowPast: { type: Boolean, default: false },
+		allowPast: { type: Boolean, default: true },
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
@@ -168,6 +168,7 @@ export default defineComponent({
 			showTimeDialog.value = false;
 			model.value = selected;
 			triggerValidation();
+			handleBlur();
 		};
 
 		const handleError = (hasError: boolean) => {
