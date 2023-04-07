@@ -30,14 +30,14 @@
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
 				>
-					{{ getDate(item.timestamp) }}
+					{{ textInternationalization.updated }} {{ getDate(item.timestamp) }}
 				</v-list-item-subtitle>
-				<!-- <v-list-item-subtitle
+				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
 				>
-					{{ getCreatedAtDate(item.create_at) }}
-				</v-list-item-subtitle> -->
+					{{ textInternationalization.created }} {{ getDate(item.created_at) }}
+				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
 	</v-list>
@@ -67,6 +67,17 @@ export default defineComponent({
 				default:
 					return { icon: mdiInformation, color: "info" };
 			}
+		};
+
+		interface TextInternationalization {
+			created: string;
+			updated: string;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const textInternationalization: TextInternationalization = {
+			created: `{{ $t("common.labels.created_at:") }}`,
+			updated: `{{ $t("common.labels.update_at: | ") }}`,
 		};
 
 		const getDate = (date: string) => {
