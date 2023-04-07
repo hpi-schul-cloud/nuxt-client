@@ -31,11 +31,6 @@
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
-				</v-list-item-subtitle>
-				<v-list-item-subtitle
-					class="text-left text-caption d-flex flex-row alert-date"
-					:data-test-id="`alert-date-${index}`"
-				>
 					{{ getDate(item.created_at) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>

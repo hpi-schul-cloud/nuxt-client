@@ -108,7 +108,7 @@ export const fromUTC = (date) => {
  * @param {String} dateTime
  * @return {dayjs} Date object based on current timezone
  */
-export const toDateTimeStringUTC = (dateTime) => {
+export const createdFromUTC = (dateTime) => {
 	return dayjs.tz(dateTime, "UTC");
 };
 
@@ -260,19 +260,17 @@ export const fromNow = (date, isLocalTimeZone) => {
 };
 
 /**
- * Returns dateTime difference to current local time
+ * Returns date difference to current local time
  * @param {String} dateTime
  * @param {boolean} isLocalTimeZone set true if input date is to be handled in local time zone instead of utc
  * @return {String} Date difference based on current timezone
  */
-
-export const toDateTimeString = (dateTime, isLocalTimeZone) => {
-	if (isLocalTimeZone === true) {
-		return dayjs(dateTime).toDateTimeString();
+export const createdDate = (dateTime, isLocalTimeZone) => {
+	if (isLocalTimeZone) {
+		return dayjs(dateTime).createdDate();
 	}
-	return toDateTimeStringUTC(dateTime).toDateTimeString();
+	return createdFromUTC(dateTime).createdDate();
 };
-
 /**
  * Returns future date difference to current local time
  * @param {String} date
