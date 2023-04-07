@@ -31,8 +31,13 @@
 					:data-test-id="`alert-date-${index}`"
 				>
 					{{ getDate(item.timestamp) }}
-					<!-- {{ getCreatedAtDate(item.create_at) }} -->
 				</v-list-item-subtitle>
+				<!-- <v-list-item-subtitle
+					class="text-left text-caption d-flex flex-row alert-date"
+					:data-test-id="`alert-date-${index}`"
+				>
+					{{ getCreatedAtDate(item.create_at) }}
+				</v-list-item-subtitle> -->
 			</v-list-item-content>
 		</v-list-item>
 	</v-list>
@@ -40,7 +45,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { fromNow, toDateTimeString } from "@/plugins/datetime";
+import { fromNow } from "@/plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -67,11 +72,11 @@ export default defineComponent({
 		const getDate = (date: string) => {
 			return fromNow(date, true);
 		};
-		const getCreatedAtDate = (dateTime: string) => {
-			return toDateTimeString(dateTime, true);
-		};
+		// const getCreatedAtDate = (dateTime: string) => {
+		// 	return toDateTimeString(dateTime, true);
+		// };
 
-		return { getIconTag, getDate, getCreatedAtDate };
+		return { getIconTag, getDate };
 	},
 });
 </script>
