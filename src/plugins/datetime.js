@@ -260,17 +260,19 @@ export const fromNow = (date, isLocalTimeZone) => {
 };
 
 /**
- * Returns date difference to current local time
- * @param {String} dateTime
+ * Returns a formatted date string based on a given date string
+ * @param {String} date
  * @param {boolean} isLocalTimeZone set true if input date is to be handled in local time zone instead of utc
- * @return {String} Date difference based on current timezone
+ * @return {String} Formatted date string based on current timezone
  */
-export const createdDate = (dateTime, isLocalTimeZone) => {
-	if (isLocalTimeZone) {
-		return dayjs(dateTime).createdDate();
+export const createdDate = (date, isLocalTimeZone) => {
+	const format = DATETIME_FORMAT.dateTime;
+	if (isLocalTimeZone == true) {
+		return dayjs(date).format(format);
 	}
-	return createdFromUTC(dateTime).createdDate();
+	return fromUTC(date).format(format);
 };
+
 /**
  * Returns future date difference to current local time
  * @param {String} date
