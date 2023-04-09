@@ -91,6 +91,12 @@ export default defineComponent({
 		max-width: 400px;
 	}
 }
+
+.alert-title,
+.alert-text {
+	overflow: visible !important;
+	white-space: normal !important;
+}
 .alert-date {
 	text-align: left !important;
 }
