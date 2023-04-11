@@ -61,6 +61,8 @@ import {
 	getMetadataAttribute,
 	getTitle,
 	getUrl,
+	getMediatype,
+	getID,
 } from "@/utils/helpers";
 
 let slowAPICall;
@@ -119,6 +121,22 @@ export default {
 			return getTitle(this.resource);
 		},
 		url() {
+			if (getMediatype(this.resource) === "file-h5p") {
+				let baseUrlH5p = "";
+				if (this.$axios.defaults.baseURL.includes("/api")) {
+					baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+				} else {
+					baseUrlH5p = this.$axios.defaults.baseURL;
+				}
+				return (
+					baseUrlH5p +
+					"/content/" +
+					getMetadataAttribute(
+						this.resource.properties,
+						"ccm:replicationsourceuuid"
+					)
+				);
+			}
 			return getUrl(this.resource);
 		},
 		merlinReference() {
@@ -133,8 +151,19 @@ export default {
 				);
 
 				this.selectedElements = selectedElements.map((element) => {
+					let elementUrl = getUrl(element);
+					if (getMediatype(element) === "file-h5p") {
+						const elementID = getID(element);
+						if (elementID !== null) {
+							const baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+							elementUrl = `${baseUrlH5p}/content/${elementID}`;
+						} else {
+							elementUrl = null;
+						}
+					}
+
 					return {
-						url: getUrl(element),
+						url: elementUrl,
 						title: getTitle(element),
 						client: this.client,
 						merlinReference: getMerlinReference(element),

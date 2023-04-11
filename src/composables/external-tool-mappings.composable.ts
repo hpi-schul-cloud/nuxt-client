@@ -40,9 +40,9 @@ const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
 	ToolParameterLocation
 > = {
-	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocation.Path,
-	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocation.Query,
-	[CustomParameterResponseLocationEnum.Token]: ToolParameterLocation.Token,
+	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocation.PATH,
+	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocation.QUERY,
+	[CustomParameterResponseLocationEnum.Body]: ToolParameterLocation.BODY,
 };
 
 const ToolParamTypeMapping: Record<
@@ -105,6 +105,8 @@ export function useExternalToolMappings() {
 		return parameters.map((resp: CustomParameterResponse) => {
 			return {
 				name: resp.name,
+				displayName: resp.displayName,
+				description: resp.description,
 				default: resp.defaultValue,
 				isOptional: resp.isOptional,
 				regexComment: resp.regexComment,

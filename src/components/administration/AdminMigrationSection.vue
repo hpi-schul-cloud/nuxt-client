@@ -27,7 +27,9 @@
 			class="my-5 button-start"
 			color="primary"
 			depressed
-			:disabled="!oauthMigration.enableMigrationStart"
+			:disabled="
+				!oauthMigration.enableMigrationStart || isCurrentDateAfterFinalFinish
+			"
 			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
@@ -76,26 +78,28 @@
 			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
-		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.oauthMigrationFinished.text",
-					{
-						date: dayjs(oauthMigration.oauthMigrationFinished).format(
-							"DD.MM.YYYY"
-						),
-						time: dayjs(oauthMigration.oauthMigrationFinished).format("HH:mm"),
-					}
-				)
-			}}
-		</p>
+			v-html="
+				t(finalFinishText, {
+					date: dayjs(oauthMigration.oauthMigrationFinished).format(
+						'DD.MM.YYYY'
+					),
+					time: dayjs(oauthMigration.oauthMigrationFinished).format('HH:mm'),
+					finishDate: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
+						'DD.MM.YYYY'
+					),
+					finishTime: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
+						'HH:mm'
+					),
+				})
+			"
+		></p>
 
 		<migration-warning-card
 			value="start"
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
-			@set="setMigration(true, oauthMigration.oauthMigrationMandatory)"
+			@set="setMigration(true, false)"
 		></migration-warning-card>
 
 		<migration-warning-card
@@ -126,7 +130,6 @@ import dayjs from "dayjs";
 import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "AdminMigrationSection",
 	components: {
@@ -201,6 +204,27 @@ export default defineComponent({
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
 
+		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
+			if (schoolsModule.getOauthMigration.oauthMigrationFinalFinish) {
+				return (
+					Date.now() >=
+					new Date(
+						schoolsModule.getOauthMigration.oauthMigrationFinalFinish
+					).getTime()
+				);
+			} else {
+				return false;
+			}
+		});
+
+		const finalFinishText: ComputedRef<string> = computed(() => {
+			if (isCurrentDateAfterFinalFinish.value) {
+				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
+			} else {
+				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
+			}
+		});
+
 		return {
 			oauthMigration,
 			setMigration,
@@ -212,6 +236,8 @@ export default defineComponent({
 			isShowStartButton,
 			isShowEndButton,
 			isShowMandatorySwitch,
+			isCurrentDateAfterFinalFinish,
+			finalFinishText,
 			dayjs,
 		};
 	},

@@ -8,6 +8,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	TaskCardResponse,
 } from "../serverApi/v3/api";
+import { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const mockTaskCardData: TaskCardResponse = {
 	id: "123",
@@ -56,6 +57,20 @@ const mockTaskCardData: TaskCardResponse = {
 	dueDate: "2023-07-31T00:00:00.000Z",
 };
 
+const APIError = new AxiosError(
+	"I'm a teapot",
+	"418",
+	undefined,
+	{},
+	{
+		data: { code: 418, title: "I'm a teapot" },
+		status: 418,
+		statusText: "I'm a teapot",
+		headers: {},
+		config: {} as InternalAxiosRequestConfig,
+	}
+);
+
 describe("task-card store", () => {
 	describe("actions", () => {
 		describe("findTaskCard", () => {
@@ -94,12 +109,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerFindOne: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
+					taskCardControllerFindOne: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -161,10 +178,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerCreate: jest.fn(() => Promise.reject({ ...error })),
+					taskCardControllerCreate: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -224,10 +245,14 @@ describe("task-card store", () => {
 
 			it("should handle an error", async () => {
 				const taskCardModule = new TaskCardModule({});
-				const error = { statusCode: 418, message: "I'm a teapot", error: {} };
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
 
 				const taskCardApiMock = {
-					taskCardControllerUpdate: jest.fn(() => Promise.reject({ ...error })),
+					taskCardControllerUpdate: jest.fn(() => Promise.reject(APIError)),
 				};
 				jest
 					.spyOn(serverApi, "CardsApiFactory")
@@ -244,16 +269,74 @@ describe("task-card store", () => {
 				expect(taskCardModule.businessError).toStrictEqual(error);
 			});
 		});
+
+		describe("deleteTaskCard", () => {
+			it("should call backend with correct payload", async () => {
+				const taskCardModule = new TaskCardModule({});
+				const setTaskCardDataMock = jest.spyOn(
+					taskCardModule,
+					"setTaskCardData"
+				);
+
+				const taskCardApiMock = {
+					taskCardControllerDelete: jest.fn(async () => ({
+						data: mockTaskCardData,
+					})),
+				};
+				jest
+					.spyOn(serverApi, "CardsApiFactory")
+					.mockReturnValue(
+						taskCardApiMock as unknown as serverApi.CardsApiInterface
+					);
+
+				taskCardModule.setTaskCardData(mockTaskCardData);
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
+
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
+					1
+				);
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledWith(
+					mockTaskCardData.id
+				);
+				expect(setTaskCardDataMock).toHaveBeenCalledWith(mockTaskCardData);
+			});
+
+			it("should handle an error", async () => {
+				const taskCardModule = new TaskCardModule({});
+				const error = {
+					statusCode: 418,
+					message: "I'm a teapot",
+					error: { code: 418, title: "I'm a teapot" },
+				};
+
+				const taskCardApiMock = {
+					taskCardControllerDelete: jest.fn(() => Promise.reject(APIError)),
+				};
+				jest
+					.spyOn(serverApi, "CardsApiFactory")
+					.mockReturnValue(
+						taskCardApiMock as unknown as serverApi.CardsApiInterface
+					);
+
+				taskCardModule.setTaskCardData(mockTaskCardData);
+				await taskCardModule.deleteTaskCard(mockTaskCardData.id);
+
+				expect(taskCardApiMock.taskCardControllerDelete).toHaveBeenCalledTimes(
+					1
+				);
+				expect(taskCardModule.businessError).toStrictEqual(error);
+			});
+		});
 	});
 
 	describe("getters", () => {
-		describe("getLoading", () => {
-			it("should return loading state", () => {
+		describe("getStatus", () => {
+			it("should return status", () => {
 				const taskCardModule = new TaskCardModule({});
 
-				expect(taskCardModule.getLoading).toStrictEqual(false);
-				taskCardModule.setLoading(true);
-				expect(taskCardModule.getLoading).toStrictEqual(true);
+				expect(taskCardModule.getStatus).toStrictEqual("");
+				taskCardModule.setStatus("pending");
+				expect(taskCardModule.getStatus).toStrictEqual("pending");
 			});
 		});
 

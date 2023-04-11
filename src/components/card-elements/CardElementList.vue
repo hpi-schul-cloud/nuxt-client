@@ -1,5 +1,9 @@
 <template>
 	<div v-if="editMode">
+		<add-card-element
+			data-testid="add-element-before-btn"
+			@click="addElementBefore()"
+		/>
 		<draggable
 			ref="draggable"
 			v-model="elements"
@@ -26,7 +30,10 @@
 				:editMode="true"
 			/>
 		</draggable>
-		<add-card-element @click="addElementAfter()" />
+		<add-card-element
+			data-testid="add-element-after-btn"
+			@click="addElementAfter()"
+		/>
 		<v-custom-dialog
 			ref="delete-dialog"
 			v-model="deleteDialog.isOpen"
@@ -111,6 +118,21 @@ export default defineComponent({
 			});
 		};
 
+		const addElementBefore = () => {
+			elements.value.unshift({
+				id: "",
+				type: CardElementResponseCardElementTypeEnum.RichText,
+				model: "",
+				props: {
+					component: CardElementComponentEnum.RichText,
+					placeholder: i18n.t(
+						"components.cardElement.richTextElement.placeholder"
+					) as string,
+					editable: true,
+				},
+			});
+		};
+
 		const deleteDialog = ref({
 			isOpen: false,
 			index: NaN,
@@ -135,6 +157,7 @@ export default defineComponent({
 		return {
 			elements,
 			addElementAfter,
+			addElementBefore,
 			deleteDialog,
 			deleteElement,
 			openDeleteDialog,

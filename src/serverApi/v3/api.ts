@@ -875,6 +875,18 @@ export interface CustomParameterPostParams {
      * @type {string}
      * @memberof CustomParameterPostParams
      */
+    displayName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterPostParams
+     */
     defaultValue?: string;
     /**
      * 
@@ -925,6 +937,18 @@ export interface CustomParameterResponse {
      * @memberof CustomParameterResponse
      */
     name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterResponse
+     */
+    displayName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CustomParameterResponse
+     */
+    description?: string;
     /**
      * 
      * @type {string}
@@ -984,7 +1008,7 @@ export enum CustomParameterResponseScopeEnum {
     */
 export enum CustomParameterResponseLocationEnum {
     Path = 'path',
-    Token = 'token',
+    Body = 'body',
     Query = 'query'
 }
 /**
@@ -1748,6 +1772,12 @@ export interface MigrationResponse {
      * @memberof MigrationResponse
      */
     oauthMigrationFinished?: string;
+    /**
+     * Date from when Migration is finally finished and cannot be restarted again
+     * @type {string}
+     * @memberof MigrationResponse
+     */
+    oauthMigrationFinalFinish?: string;
     /**
      * Enable the Migration
      * @type {boolean}
@@ -2645,12 +2675,6 @@ export interface PublicSystemResponse {
      * @memberof PublicSystemResponse
      */
     type?: string | null;
-    /**
-     * Url of the system.
-     * @type {string}
-     * @memberof PublicSystemResponse
-     */
-    url?: string | null;
     /**
      * Alias of the system.
      * @type {string}
@@ -5014,6 +5038,51 @@ export const BoardsApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @param {string} boardId The id of the board.
          * @param {string} columnId The id of the column.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteCard: async (boardId: string, columnId: string, cardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerDeleteCard', 'boardId', boardId)
+            // verify required parameter 'columnId' is not null or undefined
+            assertParamExists('boardControllerDeleteCard', 'columnId', columnId)
+            // verify required parameter 'cardId' is not null or undefined
+            assertParamExists('boardControllerDeleteCard', 'cardId', cardId)
+            const localVarPath = `/boards/{boardId}/columns/{columnId}/cards/{cardId}`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)))
+                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)))
+                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5142,6 +5211,18 @@ export const BoardsApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} boardId The id of the board.
          * @param {string} columnId The id of the column.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerDeleteCard(boardId: string, columnId: string, cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerDeleteCard(boardId, columnId, cardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5209,6 +5290,17 @@ export const BoardsApiFactory = function (configuration?: Configuration, basePat
          * 
          * @param {string} boardId The id of the board.
          * @param {string} columnId The id of the column.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteCard(boardId: string, columnId: string, cardId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.boardControllerDeleteCard(boardId, columnId, cardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5268,6 +5360,17 @@ export interface BoardsApiInterface {
      * @memberof BoardsApiInterface
      */
     boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApiInterface
+     */
+    boardControllerDeleteCard(boardId: string, columnId: string, cardId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -5345,6 +5448,19 @@ export class BoardsApi extends BaseAPI implements BoardsApiInterface {
      * 
      * @param {string} boardId The id of the board.
      * @param {string} columnId The id of the column.
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApi
+     */
+    public boardControllerDeleteCard(boardId: string, columnId: string, cardId: string, options?: any) {
+        return BoardsApiFp(this.configuration).boardControllerDeleteCard(boardId, columnId, cardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardsApi
@@ -5391,43 +5507,6 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             }
 
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerDeleteCard: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cardId' is not null or undefined
-            assertParamExists('cardControllerDeleteCard', 'cardId', cardId)
-            const localVarPath = `/cards/{cardId}`
-                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -5706,16 +5785,6 @@ export const CardsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerDeleteCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerDeleteCard(cardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5797,15 +5866,6 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.cardControllerDeleteCard(cardId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5876,15 +5936,6 @@ export interface CardsApiInterface {
      * @memberof CardsApiInterface
      */
     cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CardsApiInterface
-     */
-    cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -5960,17 +6011,6 @@ export class CardsApi extends BaseAPI implements CardsApiInterface {
      */
     public cardControllerCreateElement(cardId: string, options?: any) {
         return CardsApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CardsApi
-     */
-    public cardControllerDeleteCard(cardId: string, options?: any) {
-        return CardsApiFp(this.configuration).cardControllerDeleteCard(cardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10320,6 +10360,40 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerGetSystem: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('systemControllerGetSystem', 'systemId', systemId)
+            const localVarPath = `/systems/public/{systemId}`
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10340,6 +10414,17 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          */
         async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async systemControllerGetSystem(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerGetSystem(systemId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -10363,6 +10448,16 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
             return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
         },
+        /**
+         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+         * @summary Finds a publicly available systems.
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse> {
+            return localVarFp.systemControllerGetSystem(systemId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10382,6 +10477,16 @@ export interface SystemsApiInterface {
      * @memberof SystemsApiInterface
      */
     systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
+
+    /**
+     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+     * @summary Finds a publicly available systems.
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApiInterface
+     */
+    systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse>;
 
 }
 
@@ -10403,6 +10508,18 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      */
     public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
         return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
+     * @summary Finds a publicly available systems.
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApi
+     */
+    public systemControllerGetSystem(systemId: string, options?: any) {
+        return SystemsApiFp(this.configuration).systemControllerGetSystem(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

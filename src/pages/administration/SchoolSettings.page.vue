@@ -5,7 +5,7 @@
 		:full-width="false"
 	>
 		<v-alert v-if="schoolError" light prominent text type="error">
-			{{ $t("pages.administration.school.index.error") }}
+			{{ $t(schoolError.translationKey) }}
 		</v-alert>
 		<img
 			v-if="schoolError"
