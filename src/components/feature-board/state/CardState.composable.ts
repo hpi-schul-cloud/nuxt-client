@@ -55,8 +55,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.title = newTitle;
 	};
 
-	const deleteCard = () => {
-		console.log("DELETE CARD");
+	const deleteCard = (cardId: string) => {
+		console.log("DELETE CARD", cardId);
 	};
 
 	const updateCardHeight = (newHeight: number) => {

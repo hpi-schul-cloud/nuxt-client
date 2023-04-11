@@ -29,8 +29,11 @@
 						</template>
 						<template v-slot:menu>
 							<CardHostMenu>
-								<CardHostMenuAction @click="onDelete"
-									>Delete Card
+								<CardHostMenuAction @click="onDelete">
+									<v-icon>
+										{{ mdiTrashCanOutline }}
+									</v-icon>
+									Delete Card
 								</CardHostMenuAction>
 							</CardHostMenu>
 						</template>
@@ -43,6 +46,29 @@
 					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
 				</template>
 			</VCard>
+
+			<vCustomDialog
+				v-model="isDeleteModalOpen"
+				data-testid="delete-dialog-item"
+				:size="375"
+				has-buttons
+				confirm-btn-title-key="common.actions.remove"
+				@dialog-confirmed="onDeleteConfirmation"
+				:is-open="isDeleteModalOpen"
+			>
+				<h2 slot="title" class="text-h4 my-2">
+					{{ $t("pages.room.itemDelete.title") }}
+				</h2>
+				<template slot="content">
+					<p class="text-md mt-2">
+						{{
+							$t("components.cardHost.cardDelete.confirmation", {
+								cardTitle: card?.title,
+							})
+						}}
+					</p>
+				</template>
+			</vCustomDialog>
 		</div>
 	</CardHostInteractionHandler>
 </template>
@@ -59,6 +85,9 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import { useCardState } from "../state/CardState.composable";
+import { mdiTrashCanOutline } from "@mdi/js";
+
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -71,6 +100,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		vCustomDialog,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -92,9 +122,13 @@ export default defineComponent({
 			emit("move-card-keyboard", event.code);
 		};
 		const isEditMode = ref<boolean>(false);
+		const isDeleteModalOpen = ref<boolean>(false);
 
 		const onUpdateCardTitle = updateTitle;
-		const onDelete = deleteCard;
+		const onDelete = () => {
+			isDeleteModalOpen.value = true;
+		};
+		const onDeleteConfirmation = () => deleteCard(props.cardId);
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
 			isEditMode.value = true;
@@ -122,6 +156,9 @@ export default defineComponent({
 			onEndEditMode,
 			cardHost,
 			isEditMode,
+			mdiTrashCanOutline,
+			isDeleteModalOpen,
+			onDeleteConfirmation,
 		};
 	},
 });
