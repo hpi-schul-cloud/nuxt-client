@@ -28,7 +28,7 @@
 				</v-list-item-title>
 				<v-list-item-subtitle
 					:data-test-id="`alert-text-${index}`"
-					style="overflow: visible; text-overflow: clip; white-space: normal"
+					style="overflow: unset; text-overflow: unset; white-space: unset"
 				>
 					{{ item.text }}
 				</v-list-item-subtitle>
