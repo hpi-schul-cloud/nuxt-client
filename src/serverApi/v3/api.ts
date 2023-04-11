@@ -5379,10 +5379,10 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
 
 /**
- * BoardCardsApi - axios parameter creator
+ * BoardCardApi - axios parameter creator
  * @export
  */
-export const BoardCardsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const BoardCardApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -5588,11 +5588,11 @@ export const BoardCardsApiAxiosParamCreator = function (configuration?: Configur
 };
 
 /**
- * BoardCardsApi - functional programming interface
+ * BoardCardApi - functional programming interface
  * @export
  */
-export const BoardCardsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardCardsApiAxiosParamCreator(configuration)
+export const BoardCardApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardCardApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -5650,11 +5650,11 @@ export const BoardCardsApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * BoardCardsApi - factory interface
+ * BoardCardApi - factory interface
  * @export
  */
-export const BoardCardsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardCardsApiFp(configuration)
+export const BoardCardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardCardApiFp(configuration)
     return {
         /**
          * 
@@ -5707,17 +5707,17 @@ export const BoardCardsApiFactory = function (configuration?: Configuration, bas
 };
 
 /**
- * BoardCardsApi - interface
+ * BoardCardApi - interface
  * @export
- * @interface BoardCardsApi
+ * @interface BoardCardApi
  */
-export interface BoardCardsApiInterface {
+export interface BoardCardApiInterface {
     /**
      * 
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApiInterface
+     * @memberof BoardCardApiInterface
      */
     cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
 
@@ -5726,7 +5726,7 @@ export interface BoardCardsApiInterface {
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApiInterface
+     * @memberof BoardCardApiInterface
      */
     cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean>;
 
@@ -5735,7 +5735,7 @@ export interface BoardCardsApiInterface {
      * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApiInterface
+     * @memberof BoardCardApiInterface
      */
     cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
 
@@ -5745,7 +5745,7 @@ export interface BoardCardsApiInterface {
      * @param {MoveCardBodyParams} moveCardBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApiInterface
+     * @memberof BoardCardApiInterface
      */
     cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<boolean>;
 
@@ -5755,28 +5755,28 @@ export interface BoardCardsApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApiInterface
+     * @memberof BoardCardApiInterface
      */
     cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
 /**
- * BoardCardsApi - object-oriented interface
+ * BoardCardApi - object-oriented interface
  * @export
- * @class BoardCardsApi
+ * @class BoardCardApi
  * @extends {BaseAPI}
  */
-export class BoardCardsApi extends BaseAPI implements BoardCardsApiInterface {
+export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
     /**
      * 
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApi
+     * @memberof BoardCardApi
      */
     public cardControllerCreateElement(cardId: string, options?: any) {
-        return BoardCardsApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
+        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5784,10 +5784,10 @@ export class BoardCardsApi extends BaseAPI implements BoardCardsApiInterface {
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApi
+     * @memberof BoardCardApi
      */
     public cardControllerDeleteCard(cardId: string, options?: any) {
-        return BoardCardsApiFp(this.configuration).cardControllerDeleteCard(cardId, options).then((request) => request(this.axios, this.basePath));
+        return BoardCardApiFp(this.configuration).cardControllerDeleteCard(cardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5795,10 +5795,10 @@ export class BoardCardsApi extends BaseAPI implements BoardCardsApiInterface {
      * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApi
+     * @memberof BoardCardApi
      */
     public cardControllerGetCards(ids: Array<string>, options?: any) {
-        return BoardCardsApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
+        return BoardCardApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5807,10 +5807,10 @@ export class BoardCardsApi extends BaseAPI implements BoardCardsApiInterface {
      * @param {MoveCardBodyParams} moveCardBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApi
+     * @memberof BoardCardApi
      */
     public cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any) {
-        return BoardCardsApiFp(this.configuration).cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return BoardCardApiFp(this.configuration).cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5819,19 +5819,19 @@ export class BoardCardsApi extends BaseAPI implements BoardCardsApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardCardsApi
+     * @memberof BoardCardApi
      */
     public cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardCardsApiFp(this.configuration).cardControllerUpdateCardTitle(cardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return BoardCardApiFp(this.configuration).cardControllerUpdateCardTitle(cardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * BoardColumnsApi - axios parameter creator
+ * BoardColumnApi - axios parameter creator
  * @export
  */
-export const BoardColumnsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const BoardColumnApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -5997,11 +5997,11 @@ export const BoardColumnsApiAxiosParamCreator = function (configuration?: Config
 };
 
 /**
- * BoardColumnsApi - functional programming interface
+ * BoardColumnApi - functional programming interface
  * @export
  */
-export const BoardColumnsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardColumnsApiAxiosParamCreator(configuration)
+export const BoardColumnApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardColumnApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -6049,11 +6049,11 @@ export const BoardColumnsApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * BoardColumnsApi - factory interface
+ * BoardColumnApi - factory interface
  * @export
  */
-export const BoardColumnsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardColumnsApiFp(configuration)
+export const BoardColumnApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardColumnApiFp(configuration)
     return {
         /**
          * 
@@ -6097,17 +6097,17 @@ export const BoardColumnsApiFactory = function (configuration?: Configuration, b
 };
 
 /**
- * BoardColumnsApi - interface
+ * BoardColumnApi - interface
  * @export
- * @interface BoardColumnsApi
+ * @interface BoardColumnApi
  */
-export interface BoardColumnsApiInterface {
+export interface BoardColumnApiInterface {
     /**
      * 
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApiInterface
+     * @memberof BoardColumnApiInterface
      */
     columnControllerCreateCard(columnId: string, options?: any): AxiosPromise<CardResponse>;
 
@@ -6116,7 +6116,7 @@ export interface BoardColumnsApiInterface {
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApiInterface
+     * @memberof BoardColumnApiInterface
      */
     columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<boolean>;
 
@@ -6126,7 +6126,7 @@ export interface BoardColumnsApiInterface {
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApiInterface
+     * @memberof BoardColumnApiInterface
      */
     columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<boolean>;
 
@@ -6136,28 +6136,28 @@ export interface BoardColumnsApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApiInterface
+     * @memberof BoardColumnApiInterface
      */
     columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
 /**
- * BoardColumnsApi - object-oriented interface
+ * BoardColumnApi - object-oriented interface
  * @export
- * @class BoardColumnsApi
+ * @class BoardColumnApi
  * @extends {BaseAPI}
  */
-export class BoardColumnsApi extends BaseAPI implements BoardColumnsApiInterface {
+export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
     /**
      * 
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApi
+     * @memberof BoardColumnApi
      */
     public columnControllerCreateCard(columnId: string, options?: any) {
-        return BoardColumnsApiFp(this.configuration).columnControllerCreateCard(columnId, options).then((request) => request(this.axios, this.basePath));
+        return BoardColumnApiFp(this.configuration).columnControllerCreateCard(columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6165,10 +6165,10 @@ export class BoardColumnsApi extends BaseAPI implements BoardColumnsApiInterface
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApi
+     * @memberof BoardColumnApi
      */
     public columnControllerDeleteColumn(columnId: string, options?: any) {
-        return BoardColumnsApiFp(this.configuration).columnControllerDeleteColumn(columnId, options).then((request) => request(this.axios, this.basePath));
+        return BoardColumnApiFp(this.configuration).columnControllerDeleteColumn(columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6177,10 +6177,10 @@ export class BoardColumnsApi extends BaseAPI implements BoardColumnsApiInterface
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApi
+     * @memberof BoardColumnApi
      */
     public columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any) {
-        return BoardColumnsApiFp(this.configuration).columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return BoardColumnApiFp(this.configuration).columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6189,19 +6189,19 @@ export class BoardColumnsApi extends BaseAPI implements BoardColumnsApiInterface
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnsApi
+     * @memberof BoardColumnApi
      */
     public columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardColumnsApiFp(this.configuration).columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return BoardColumnApiFp(this.configuration).columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * BoardElementsApi - axios parameter creator
+ * BoardElementApi - axios parameter creator
  * @export
  */
-export const BoardElementsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const BoardElementApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -6287,11 +6287,11 @@ export const BoardElementsApiAxiosParamCreator = function (configuration?: Confi
 };
 
 /**
- * BoardElementsApi - functional programming interface
+ * BoardElementApi - functional programming interface
  * @export
  */
-export const BoardElementsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardElementsApiAxiosParamCreator(configuration)
+export const BoardElementApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardElementApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -6318,11 +6318,11 @@ export const BoardElementsApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * BoardElementsApi - factory interface
+ * BoardElementApi - factory interface
  * @export
  */
-export const BoardElementsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardElementsApiFp(configuration)
+export const BoardElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardElementApiFp(configuration)
     return {
         /**
          * 
@@ -6347,17 +6347,17 @@ export const BoardElementsApiFactory = function (configuration?: Configuration, 
 };
 
 /**
- * BoardElementsApi - interface
+ * BoardElementApi - interface
  * @export
- * @interface BoardElementsApi
+ * @interface BoardElementApi
  */
-export interface BoardElementsApiInterface {
+export interface BoardElementApiInterface {
     /**
      * 
      * @param {string} contentElementId The id of the element.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardElementsApiInterface
+     * @memberof BoardElementApiInterface
      */
     elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<boolean>;
 
@@ -6367,28 +6367,28 @@ export interface BoardElementsApiInterface {
      * @param {MoveContentElementBody} moveContentElementBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardElementsApiInterface
+     * @memberof BoardElementApiInterface
      */
     elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<boolean>;
 
 }
 
 /**
- * BoardElementsApi - object-oriented interface
+ * BoardElementApi - object-oriented interface
  * @export
- * @class BoardElementsApi
+ * @class BoardElementApi
  * @extends {BaseAPI}
  */
-export class BoardElementsApi extends BaseAPI implements BoardElementsApiInterface {
+export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
     /**
      * 
      * @param {string} contentElementId The id of the element.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardElementsApi
+     * @memberof BoardElementApi
      */
     public elementControllerDeleteElement(contentElementId: string, options?: any) {
-        return BoardElementsApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
+        return BoardElementApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6397,10 +6397,10 @@ export class BoardElementsApi extends BaseAPI implements BoardElementsApiInterfa
      * @param {MoveContentElementBody} moveContentElementBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardElementsApi
+     * @memberof BoardElementApi
      */
     public elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any) {
-        return BoardElementsApiFp(this.configuration).elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(this.axios, this.basePath));
+        return BoardElementApiFp(this.configuration).elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
