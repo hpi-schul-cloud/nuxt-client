@@ -26,26 +26,12 @@ describe("CardHeaderTitleInput Component", () => {
 			expect(wrapper).toBeDefined();
 		});
 
-		it("should emit if value changes", async () => {
+		it("should pass the value to its sub component", async () => {
 			setup({ isEditMode: true });
-			const newValue = "new title";
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit("input", "new title");
-			const emitted = wrapper.emitted();
-
-			if (emitted["update:value"] === undefined) {
-				throw new Error("Emitted should be defined");
-			}
-
-			expect(emitted["update:value"][0][0]).toContain(newValue);
-		});
-
-		it("should be read only if not editing", async () => {
-			setup({ isEditMode: false });
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			const result = textAreaComponent.props("readonly");
-
-			expect(result).toStrictEqual(true);
+			const anyTitleInput = wrapper.findComponent({
+				name: "BoardAnyTitleInput",
+			});
+			expect(anyTitleInput.attributes("value")).toStrictEqual("props value");
 		});
 	});
 });

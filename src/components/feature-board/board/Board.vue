@@ -93,7 +93,8 @@ export default defineComponent({
 		};
 
 		const defaultColumnTitle =
-			i18n?.t("components.board.column.defaultTitle").toString() || "";
+			i18n?.t("components.board.column.defaultTitle").toString() ||
+			"Neue Spalte";
 
 		const onAddEmptyColumn = () => {
 			addNewColumn(defaultColumnTitle);
