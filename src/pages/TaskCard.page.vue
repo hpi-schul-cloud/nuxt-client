@@ -1,12 +1,10 @@
 <template>
-	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
-		<div slot="header" class="d-flex flex-row align-end">
-			<v-icon size="20" class="mr-2 mb-4 pb-1">$tasks</v-icon>
-			<h1 class="h6 mt-10">
-				{{ t("pages.rooms.fab.add.betatask") }}
-			</h1>
-		</div>
-		<v-form v-if="isEditMode" class="d-flex flex-column">
+	<default-wireframe
+		:full-width="false"
+		:breadcrumbs="breadcrumbs"
+		:headline="t('pages.rooms.fab.add.betatask')"
+	>
+		<v-form v-if="isEditMode" class="d-flex flex-column" ref="form">
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -15,6 +13,8 @@
 				filled
 				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
+				validate-on-blur
+				:rules="[rules.required]"
 			/>
 			<v-select
 				v-model="isVisible"
@@ -24,6 +24,8 @@
 				filled
 				disabled
 				:label="$t('common.labels.visibility')"
+				validate-on-blur
+				:rules="[rules.required]"
 			/>
 			<date-time-picker
 				class="mb-4"
@@ -97,7 +99,12 @@ import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, roomModule, schoolsModule } from "@/store";
+import {
+	taskCardModule,
+	roomModule,
+	schoolsModule,
+	notifierModule,
+} from "@/store";
 import AuthModule from "@/store/auth";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -107,6 +114,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
+import { AlertMessage } from "@/store/types/alert-payload";
 import {
 	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
@@ -117,6 +125,11 @@ import {
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomsModule from "@/store/rooms";
+import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
+
+interface VForm extends HTMLFormElement {
+	validate(): boolean;
+}
 
 // TODO - unit tests!
 export default defineComponent({
@@ -170,6 +183,7 @@ export default defineComponent({
 
 		const breadcrumbs = ref<object[]>([]);
 
+		const form = ref<VForm | null>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
@@ -322,24 +336,17 @@ export default defineComponent({
 			});
 		};
 
-		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
-		const validate = (content: string) => {
-			return content.length > 2;
-		};
-
 		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			elements.value.forEach((element) => {
-				if (validate(element.model)) {
-					const cardElement: CardElementParams = {
-						content: {
-							type: element.type,
-							value: element.model,
-							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
-						},
-					};
-					cardElements.push(cardElement);
-				}
+				const cardElement: CardElementParams = {
+					content: {
+						type: element.type,
+						value: element.model,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+					},
+				};
+				cardElements.push(cardElement);
 			});
 
 			await taskCardModule.createTaskCard({
@@ -375,6 +382,13 @@ export default defineComponent({
 		};
 
 		const save = async () => {
+			if (form.value) {
+				const valid = form.value.validate();
+				if (!valid) {
+					return;
+				}
+			}
+
 			if (hasErrors.value) {
 				return;
 			}
@@ -388,15 +402,73 @@ export default defineComponent({
 				await updateTaskCard();
 			}
 
-			router.go(-1);
+			if (taskCardModule.getStatus === "error") {
+				const validationError = taskCardModule.getBusinessError
+					.error as ApiValidationError;
+				const validationErrors = validationError?.validationErrors;
+
+				notifierModule.show({
+					messages: createServerErrorMessages(validationErrors),
+					status: "error",
+				});
+			} else {
+				router.go(-1);
+			}
+		};
+
+		const createServerErrorMessages = (errors: Array<ErrorDetails>) => {
+			const errorMessages: Array<AlertMessage> = [];
+			errors.forEach((validationError: ErrorDetails) => {
+				const msg: AlertMessage = { title: "", text: "" };
+				msg.title = validationError.field[0] + ":";
+
+				let errorText = "";
+				validationError.errors.forEach((error: string, index: number) => {
+					if (index === 0) {
+						errorText = errorText + error;
+					} else {
+						errorText = errorText + ", " + error;
+					}
+				});
+
+				msg.text = errorText;
+				errorMessages.push(msg);
+			});
+
+			return errorMessages;
+		};
+
+		const rules = {
+			required: (value: string) => !!value || t("common.validation.required"),
 		};
 
 		const deleteTaskCard = async (taskCardId: string) => {
 			await taskCardModule.deleteTaskCard(taskCardId);
-			router.go(-1);
+
+			if (taskCardModule.getStatus === "error") {
+				const error = taskCardModule.getBusinessError;
+
+				if (error.statusCode === 400) {
+					const validationError = error?.error as ApiValidationError;
+					notifierModule.show({
+						messages: createServerErrorMessages(
+							validationError.validationErrors
+						),
+						status: "error",
+					});
+				} else {
+					notifierModule.show({
+						text: error.message,
+						status: "error",
+					});
+				}
+			} else {
+				router.go(-1);
+			}
 		};
 
 		const hasErrors = ref(false);
+		const errorMessage = ref("");
 		const onError = () => {
 			hasErrors.value = true;
 		};
@@ -442,8 +514,11 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			errorMessage,
+			rules,
 			isVisible,
 			visibilityOptions,
+			form,
 			isDeletable,
 		};
 	},
