@@ -32,6 +32,7 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
+					style="overflow: unset; text-overflow: unset; white-space: unset"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
