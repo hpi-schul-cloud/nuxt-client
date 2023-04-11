@@ -20,10 +20,16 @@
 				</v-icon>
 			</v-list-item-avatar>
 			<v-list-item-content class="pb-0">
-				<v-list-item-title :data-test-id="`alert-title-${index}`">
+				<v-list-item-title
+					:data-test-id="`alert-title-${index}`"
+					style="overflow: visible; text-overflow: clip; white-space: normal"
+				>
 					{{ item.title }}
 				</v-list-item-title>
-				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
+				<v-list-item-subtitle
+					:data-test-id="`alert-text-${index}`"
+					style="overflow: visible; text-overflow: clip; white-space: normal"
+				>
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
@@ -90,12 +96,7 @@ export default defineComponent({
 		width: 400px;
 		max-width: 400px;
 	}
-}
-
-.alert-title,
-.alert-text {
-	overflow: visible !important;
-	white-space: normal !important;
+	@include statusAlertText;
 }
 .alert-date {
 	text-align: left !important;
