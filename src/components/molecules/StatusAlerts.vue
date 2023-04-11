@@ -26,10 +26,7 @@
 				>
 					{{ item.title }}
 				</v-list-item-title>
-				<v-list-item-subtitle
-					:data-test-id="`alert-text-${index}`"
-					style="overflow: unset; text-overflow: unset; white-space: unset"
-				>
+				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
@@ -96,7 +93,6 @@ export default defineComponent({
 		width: 400px;
 		max-width: 400px;
 	}
-	@include statusAlertText;
 }
 .alert-date {
 	text-align: left !important;
