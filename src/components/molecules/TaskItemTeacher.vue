@@ -23,7 +23,38 @@
 						}}</span>
 					</v-list-item-subtitle>
 					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle
+						class="hidden-sm-and-up text--primary text-wrap"
+					>
+						<i18n
+							path="components.molecules.TaskItemTeacher.status"
+							data-testid="task-status-small"
+						>
+							<template #submitted>{{ task.status.submitted }}</template>
+							<template #max>{{ task.status.maxSubmissions }}</template>
+							<template #graded>{{ task.status.graded }}</template>
+						</i18n>
+					</v-list-item-subtitle>
 				</v-list-item-content>
+
+				<section v-if="showTaskStatus" data-testid="task-status" class="mr-8">
+					<v-list-item-action class="hidden-xs-only pl-4">
+						<v-list-item-subtitle>{{
+							$t("components.molecules.TaskItemTeacher.submitted")
+						}}</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskSubmitted">
+							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						</v-list-item-title>
+					</v-list-item-action>
+					<v-list-item-action class="hidden-xs-only">
+						<v-list-item-subtitle>{{
+							$t("components.molecules.TaskItemTeacher.graded")
+						}}</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskGraded"
+							>{{ task.status.graded }}
+						</v-list-item-title>
+					</v-list-item-action>
+				</section>
 			</template>
 			<template v-else>
 				<v-list-item-avatar>
