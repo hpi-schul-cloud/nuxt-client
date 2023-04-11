@@ -15,13 +15,13 @@
 				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<v-icon>fa-solid fa-bars</v-icon>
+				<v-icon>{{ mdiMenu }}</v-icon>
 			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
-					source="fa"
-					icon="exclamation-triangle"
+					source="material"
+					icon="report_problem"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
@@ -40,7 +40,7 @@
 					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
-					<v-icon>{{ mdiFullscreen }}</v-icon>
+					<v-icon>{{ mdiArrowExpand }}</v-icon>
 				</v-btn>
 				<popup-icon
 					class="item"
@@ -125,7 +125,7 @@ import StatusAlerts from "@/components/molecules/StatusAlerts";
 import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
 import {
 	mdiArrowCollapse,
-	mdiFullscreen,
+	mdiArrowExpand,
 	mdiMenu,
 	mdiHelpCircle,
 } from "@mdi/js";
@@ -164,7 +164,7 @@ export default defineComponent({
 	data() {
 		return {
 			mdiArrowCollapse,
-			mdiFullscreen,
+			mdiArrowExpand,
 			mdiMenu,
 			mdiHelpCircle,
 		};
