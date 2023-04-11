@@ -100,6 +100,9 @@ export default defineComponent({
 	height: 400px;
 	max-height: 400px;
 	overflow-y: auto;
+	&:not(:first-child) {
+		border-top: 1px solid #e5e5e5;
+	}
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
@@ -108,7 +111,6 @@ export default defineComponent({
 .alert-date {
 	text-align: left !important;
 	font-size: 14px !important;
-	color: #9e9e9e;
 	padding-top: 3px;
 }
 </style>
