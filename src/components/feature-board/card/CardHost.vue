@@ -57,12 +57,12 @@
 				:is-open="isDeleteModalOpen"
 			>
 				<h2 slot="title" class="text-h4 my-2">
-					{{ $t("pages.room.itemDelete.title") }}
+					{{ $t("components.cardHost.cardDelete.modal.confirmation.title") }}
 				</h2>
 				<template slot="content">
 					<p class="text-md mt-2">
 						{{
-							$t("components.cardHost.cardDelete.confirmation", {
+							$t("components.cardHost.cardDelete.modal.confirmation.text", {
 								cardTitle: card?.title,
 							})
 						}}

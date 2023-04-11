@@ -810,6 +810,8 @@
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
+	"components.cardHost.cardDelete.modal.confirmation.text": "¿Debe suprimirse realmente la tarjeta \"{cardTitle}\"?",
+	"components.cardHost.cardDelete.modal.confirmation.title": "Eliminar tarjeta",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
