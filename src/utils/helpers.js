@@ -65,10 +65,7 @@ export const getMetadataAttribute = (properties, key) => {
 };
 
 export const isCollectionHelper = (properties) => {
-	const type = getMetadataAttribute(
-		properties,
-		"ccm:hpi_lom_general_aggregationlevel"
-	);
+	const type = getMetadataAttribute(properties, "cclom:aggregationlevel");
 	return type === "2";
 };
 
@@ -87,16 +84,16 @@ export const getAuthor = (properties) => {
 };
 
 export const getTags = (properties) => {
-	const tagValue = properties["cclom:general_keyword"];
-	let tags = null;
-	if (Array.isArray(tagValue)) {
-		tags = tagValue;
-	}
-	return tags ? tags : [];
+	const tags = properties["cclom:general_keyword"];
+	return Array.isArray(tags) ? tags : [];
 };
 
 export const getTitle = (resource) => {
 	return resource.title ? resource.title : "";
+};
+
+export const getMediatype = (resource) => {
+	return resource.mediatype ? resource.mediatype : "";
 };
 
 export const getUrl = (resource) => {
@@ -104,6 +101,13 @@ export const getUrl = (resource) => {
 		return getMetadataAttribute(resource.properties, "ccm:wwwurl");
 	}
 	return null;
+};
+
+export const isVideoContent = (resource) => {
+	return (
+		resource.size &&
+		(resource.mediatype === "file-h5p" || resource.mediatype === "file-video")
+	);
 };
 
 export const isMerlinContent = (resource) => {
@@ -120,4 +124,14 @@ export const getMerlinReference = (resource) => {
 		return getMetadataAttribute(resource.properties, "ccm:replicationsourceid");
 	}
 	return "";
+};
+
+export const getID = (resource) => {
+	if (resource.properties) {
+		return getMetadataAttribute(
+			resource.properties,
+			"ccm:replicationsourceuuid"
+		);
+	}
+	return null;
 };
