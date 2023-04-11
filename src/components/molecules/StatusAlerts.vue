@@ -26,13 +26,21 @@
 				>
 					{{ item.title }}
 				</v-list-item-title>
-				<v-list-item-subtitle :data-test-id="`alert-text-${index}`">
+				<v-list-item-subtitle
+					:data-test-id="`alert-text-${index}`"
+					style="
+						overflow: unset;
+						text-overflow: unset;
+						white-space: unset;
+						display: flex;
+						flex-wrap: wrap;
+					"
+				>
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
-					style="overflow: unset; text-overflow: unset; white-space: unset"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
