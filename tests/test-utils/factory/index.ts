@@ -3,3 +3,7 @@ export * from "./schoolExternaToolFactory";
 export * from "./toolConfigurationFactory";
 export * from "./toolConfigurationTemplateFactory";
 export * from "./businessErrorFactory";
+export * from "./taskFactory";
+export * from "./betaTaskFactory";
+export * from "./courseFactory";
+export * from "./roomFactory";

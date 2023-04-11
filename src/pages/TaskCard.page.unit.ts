@@ -10,6 +10,11 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskCardModule from "@/store/task-card";
+import {
+	betaTaskFactory,
+	courseMetadataFactory,
+	roomFactory,
+} from "@@/tests/test-utils/factory";
 
 const routes = [
 	{
@@ -40,6 +45,29 @@ let router = new VueRouter();
 
 let taskCardModuleMock = createModuleMocks(TaskCardModule);
 
+const CREATE_EDIT_PERMISSION = "task_card_edit";
+const VIEW_PERMISSION = "task_card_view";
+
+const mockRoomData = roomFactory();
+
+const mockCourse = courseMetadataFactory();
+
+const emptyTaskCardData = betaTaskFactory({
+	id: "",
+});
+
+const mockCurrentYear = {
+	_id: "",
+	name: "",
+	startDate: "",
+	endDate: "2300-01-01T00:00:00",
+	__v: 0,
+	years: {},
+	isTeamCreationByStudentsEnabled: false,
+};
+
+const mockTaskCardData = betaTaskFactory();
+
 const getWrapper = (
 	userPermission: string,
 	taskCardData: TaskCardResponse,
@@ -55,7 +83,6 @@ const getWrapper = (
 		routes: routes,
 	});
 	router.push(route);
-	jest.spyOn(router, "go");
 
 	taskCardModuleMock = createModuleMocks(TaskCardModule, {
 		getTaskCardData: taskCardData,
@@ -84,94 +111,6 @@ const getWrapper = (
 		propsData: props,
 		...options,
 	});
-};
-
-const CREATE_EDIT_PERMISSION = "task_card_edit";
-const VIEW_PERMISSION = "task_card_view";
-
-const mockRoomData = {
-	roomId: "123",
-	title: "room",
-	displayColor: "#ff00ff",
-	elements: [],
-};
-
-const mockCurrentYear = {
-	_id: "",
-	name: "",
-	startDate: "",
-	endDate: "2300-01-01T00:00:00",
-	__v: 0,
-	years: {},
-	isTeamCreationByStudentsEnabled: false,
-};
-
-const mockCourse = {
-	id: "123",
-	title: "Mathe",
-	shortTitle: "Ma",
-	displayColor: "#54616e",
-	startDate: "2019-12-07T23:00:00.000Z",
-	untilDate: "2020-12-16T23:00:00.000Z",
-	titleDate: "2019/20",
-};
-
-const emptyTaskCardData: TaskCardResponse = {
-	id: "",
-	courseId: "",
-	courseName: "",
-	title: "",
-	cardElements: [],
-	draggable: true,
-	task: {
-		id: "",
-		users: [],
-		name: "",
-		courseName: "",
-		courseId: "",
-		createdAt: "",
-		updatedAt: "",
-		lessonHidden: false,
-		status: {
-			submitted: 0,
-			maxSubmissions: 0,
-			graded: 0,
-			isDraft: true,
-			isSubstitutionTeacher: true,
-			isFinished: false,
-		},
-	},
-	dueDate: "",
-	visibleAtDate: "",
-};
-
-const mockTaskCardData: TaskCardResponse = {
-	id: "642162cc44a17f1ce8939ddb",
-	courseId: "123",
-	courseName: "Mathe",
-	title: "Mathe Task",
-	cardElements: [],
-	draggable: true,
-	task: {
-		id: "248",
-		users: [],
-		name: "Mathe Task",
-		courseName: "Mathe",
-		courseId: "123",
-		createdAt: "",
-		updatedAt: "",
-		lessonHidden: false,
-		status: {
-			submitted: 0,
-			maxSubmissions: 0,
-			graded: 0,
-			isDraft: true,
-			isSubstitutionTeacher: true,
-			isFinished: false,
-		},
-	},
-	dueDate: "",
-	visibleAtDate: "",
 };
 
 describe("TaskCard", () => {
@@ -252,6 +191,7 @@ describe("TaskCard", () => {
 			});
 
 			it("should delete beta task and redirect after confirming deletion", async () => {
+				jest.spyOn(router, "go");
 				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
 				const deleteDialog: any = wrapper.find({
 					ref: "delete-dialog",
