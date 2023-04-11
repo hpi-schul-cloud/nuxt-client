@@ -33,7 +33,11 @@
 									<v-icon>
 										{{ mdiTrashCanOutline }}
 									</v-icon>
-									Delete Card
+									{{
+										$t(
+											"components.cardHost.cardDelete.modal.confirmation.title"
+										)
+									}}
 								</CardHostMenuAction>
 							</CardHostMenu>
 						</template>
@@ -46,29 +50,12 @@
 					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
 				</template>
 			</VCard>
-
-			<vCustomDialog
-				v-model="isDeleteModalOpen"
-				data-testid="delete-dialog-item"
-				:size="375"
-				has-buttons
-				confirm-btn-title-key="common.actions.remove"
-				@dialog-confirmed="onDeleteConfirmation"
-				:is-open="isDeleteModalOpen"
-			>
-				<h2 slot="title" class="text-h4 my-2">
-					{{ $t("components.cardHost.cardDelete.modal.confirmation.title") }}
-				</h2>
-				<template slot="content">
-					<p class="text-md mt-2">
-						{{
-							$t("components.cardHost.cardDelete.modal.confirmation.text", {
-								cardTitle: card?.title,
-							})
-						}}
-					</p>
-				</template>
-			</vCustomDialog>
+			<CardDeleteConfirmation
+				:is-delete-modal-open="isDeleteModalOpen"
+				:card-title="card?.title"
+				@delete-confirm="onDeleteConfirmation"
+				@dialog-cancel="onDialogCancel"
+			></CardDeleteConfirmation>
 		</div>
 	</CardHostInteractionHandler>
 </template>
@@ -86,8 +73,7 @@ import ContentElementList from "../content-elements/ContentElementList.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import { useCardState } from "../state/CardState.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
-
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CardDeleteConfirmation from "./CardDeleteConfirmation.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -100,7 +86,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		vCustomDialog,
+		CardDeleteConfirmation,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -125,10 +111,13 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const onUpdateCardTitle = updateTitle;
-		const onDelete = () => {
-			isDeleteModalOpen.value = true;
+		const onDelete = () => (isDeleteModalOpen.value = true);
+		const onDialogCancel = () => (isDeleteModalOpen.value = false);
+
+		const onDeleteConfirmation = () => {
+			deleteCard(props.cardId);
+			isDeleteModalOpen.value = false;
 		};
-		const onDeleteConfirmation = () => deleteCard(props.cardId);
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
 			isEditMode.value = true;
@@ -159,6 +148,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			isDeleteModalOpen,
 			onDeleteConfirmation,
+			onDialogCancel,
 		};
 	},
 });

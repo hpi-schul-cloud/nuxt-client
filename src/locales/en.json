@@ -798,7 +798,6 @@
 	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",
 	"components.cardHost.cardDelete.modal.confirmation.text": "Should the \"{cardTitle}\" card really be deleted?",
 	"components.cardHost.cardDelete.modal.confirmation.title": "Delete card",
-
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
