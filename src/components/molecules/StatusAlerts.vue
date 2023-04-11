@@ -34,6 +34,7 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
+						color: #9e9e9e;
 					"
 				>
 					{{ item.text }}
@@ -41,6 +42,7 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
+					style="font-size: 14px; color: #9e9e9e"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
@@ -105,5 +107,8 @@ export default defineComponent({
 }
 .alert-date {
 	text-align: left !important;
+	font-size: 14px !important;
+	color: #9e9e9e;
+	padding-top: 3px;
 }
 </style>
