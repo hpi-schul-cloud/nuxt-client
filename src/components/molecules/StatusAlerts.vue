@@ -4,14 +4,10 @@
 		min-width="250"
 		max-height="400"
 		class="alerts"
-<<<<<<< HEAD
 		:style="{
 			'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
 			'padding-bottom': '3px',
 		}"
-=======
-		elevation="2"
->>>>>>> df5425b89 (BC-3348 Add line brake to status alert.)
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -19,6 +15,7 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
+			style="border-top: 1px solid #e5e5e5"
 		>
 			<v-list-item-avatar size="24" class="mt-6">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -111,10 +108,7 @@ export default defineComponent({
 	height: 400px;
 	max-height: 400px;
 	overflow-y: auto;
-<<<<<<< HEAD
-	border-radius: 0.25rem;
-=======
->>>>>>> df5425b89 (BC-3348 Add line brake to status alert.)
+	border-radius: 4px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
