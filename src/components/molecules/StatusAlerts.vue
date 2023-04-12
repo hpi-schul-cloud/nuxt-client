@@ -14,7 +14,7 @@
 			three-line
 			class="px-2 alert-item"
 		>
-			<v-list-item-avatar size="24" class="mt-6">
+			<v-list-item-avatar size="24">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
@@ -34,7 +34,7 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
-						color: #9e9e9e;
+						color: var(--v-black-base);
 					"
 				>
 					{{ item.text }}
