@@ -13,6 +13,7 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
+			style="border-top: 1px solid #e5e5e5"
 		>
 			<v-list-item-avatar size="24">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -34,7 +35,10 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
+<<<<<<< HEAD
 						color: var(--v-black-base);
+=======
+>>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 					"
 				>
 					{{ item.text }}
@@ -42,7 +46,7 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
-					style="font-size: 14px; color: #9e9e9e"
+					style="font-size: 14px"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
@@ -99,13 +103,12 @@ export default defineComponent({
 	max-width: 250px;
 	height: 400px;
 	max-height: 400px;
-	overflow-y: auto;
-	&:not(:first-child) {
-		border-top: 1px solid #e5e5e5;
-	}
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
+	}
+	.alert-item {
+		border-top: 1px solid#e5e5e5;
 	}
 }
 .alert-date {
