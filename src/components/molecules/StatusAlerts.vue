@@ -23,7 +23,12 @@
 			<v-list-item-content class="pb-0">
 				<v-list-item-title
 					:data-test-id="`alert-title-${index}`"
-					style="overflow: visible; text-overflow: clip; white-space: normal"
+					style="
+						overflow: visible;
+						text-overflow: clip;
+						white-space: normal;
+						color: #1b1b1b;
+					"
 				>
 					{{ item.title }}
 				</v-list-item-title>
@@ -35,6 +40,7 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
+						color: #1b1b1b;
 					"
 				>
 					{{ item.text }}
@@ -42,7 +48,7 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
-					style="font-size: 14px"
+					style="font-size: 14px; color: #55595c"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
