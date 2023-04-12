@@ -23,7 +23,7 @@
 					:rules="rules"
 					validate-on-blur
 					autocomplete="off"
-					ref="inputfield"
+					ref="inputField"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -90,7 +90,7 @@ export default defineComponent({
 
 		const model = ref(props.date);
 		const showDateDialog = ref(false);
-		const inputfield = ref<HTMLInputElement | null>(null);
+		const inputField = ref<HTMLInputElement | null>(null);
 
 		const formattedDate = computed(() => {
 			return model.value
@@ -135,8 +135,8 @@ export default defineComponent({
 		};
 
 		const validate = () => {
-			inputfield.value?.focus();
-			inputfield.value?.blur();
+			inputField.value?.focus();
+			inputField.value?.blur();
 		};
 
 		return {
@@ -149,7 +149,7 @@ export default defineComponent({
 			handleInput,
 			handleError,
 			focusDatePicker,
-			inputfield,
+			inputField,
 		};
 	},
 });
