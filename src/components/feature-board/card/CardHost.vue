@@ -53,7 +53,7 @@
 		</div>
 		<CardDeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
-			:card-title="card?.title"
+			:card-title="card ? card.title : ''"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDialogCancel"
 		></CardDeleteConfirmation>
