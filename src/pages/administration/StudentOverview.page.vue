@@ -80,7 +80,7 @@
 					<span class="text-content">
 						<base-icon
 							v-if="status === 'ok'"
-							source="custom"
+							source="material"
 							icon="doublecheck"
 							color="var(--v-success-base)"
 						/>

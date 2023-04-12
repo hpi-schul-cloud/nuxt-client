@@ -33,7 +33,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="account_tree" :fill="fillColor" />
+				<base-icon source="material" icon="account_tree" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input

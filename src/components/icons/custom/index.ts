@@ -1,24 +1,8 @@
-import accountTree from "./account_tree.vue";
-import adminPanelSettings from "./admin_panel_settings.vue";
-import arrowDropDown from "./arrow_drop_down.vue";
 import brb from "./brb.vue";
-import calendar from "./calender.vue";
-import check from "./check.vue";
-import checkBox from "./check_box.vue";
-import checkBoxOutlineBlank from "./check_box_outline_blank.vue";
 import classIcon from "./class.vue";
-import clock from "./clock.vue";
-import close from "./close.vue";
-import create from "./create.vue";
 import dBildungscloud from "./dBildungscloud.vue";
-import doublecheck from "./doublecheck.vue";
-import edit from "./edit.vue";
-import filter from "./filter.vue";
 import flagDeutsch from "./flag_Deutsch.vue";
 import flagEnglish from "./flag_English.vue";
-import fortbildung from "./fortbildung.vue";
-import gruppen from "./gruppen.vue";
-import hashtag from "./hashtag.vue";
 import hourglassBottomBlack from "./hourglass-bottom-black.vue";
 import hourglassDisabled from "./hourglass-disabled.vue";
 import icCollection from "./ic_collection.vue";
@@ -37,20 +21,12 @@ import icVideoCircle from "./ic_video-circle.vue";
 import icVideo from "./ic_video.vue";
 import icWordCircle from "./ic_word-circle.vue";
 import icWord from "./ic_word.vue";
-import indeterminateCheckBox from "./indeterminate_check_box.vue";
-import info from "./info.vue";
 import invisible from "./invisible.vue";
-import keyboardArrowDown from "./keyboard_arrow_down.vue";
-import keyboardArrowRight from "./keyboard_arrow_right.vue";
 import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUa from "./lang-icon-ua.vue";
-import lerninhalte from "./lerninhalte.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
-import lock from "./lock.vue";
-import mailCheck from "./mail-check.vue";
-import mailError from "./mail-error.vue";
 import n21 from "./n21.vue";
 import neu from "./neu.vue";
 import openNewWindow from "./open_new_window.vue";
@@ -88,53 +64,14 @@ import visible from "./visible.vue";
 import warning from "./warning.vue";
 
 const customIcons = {
-	account_tree: {
-		component: accountTree,
-	},
-	admin_panel_settings: {
-		component: adminPanelSettings,
-	},
-	arrow_drop_down: {
-		component: arrowDropDown,
-	},
 	brb: {
 		component: brb,
-	},
-	calender: {
-		component: calendar,
-	},
-	check: {
-		component: check,
-	},
-	check_box: {
-		component: checkBox,
-	},
-	check_box_outline_blank: {
-		component: checkBoxOutlineBlank,
 	},
 	class: {
 		component: classIcon,
 	},
-	clock: {
-		component: clock,
-	},
-	close: {
-		component: close,
-	},
-	create: {
-		component: create,
-	},
 	dBildungscloud: {
 		component: dBildungscloud,
-	},
-	doublecheck: {
-		component: doublecheck,
-	},
-	edit: {
-		component: edit,
-	},
-	filter: {
-		component: filter,
 	},
 	flag_Deutsch: {
 		component: flagDeutsch,
@@ -153,15 +90,6 @@ const customIcons = {
 	},
 	folder_open_user_outline: {
 		component: folderOpenUserOutline,
-	},
-	fortbildung: {
-		component: fortbildung,
-	},
-	gruppen: {
-		component: gruppen,
-	},
-	hashtag: {
-		component: hashtag,
 	},
 	hourglassBottomBlack: {
 		component: hourglassBottomBlack,
@@ -217,20 +145,8 @@ const customIcons = {
 	ic_word: {
 		component: icWord,
 	},
-	indeterminate_check_box: {
-		component: indeterminateCheckBox,
-	},
-	info: {
-		component: info,
-	},
 	invisible: {
 		component: invisible,
-	},
-	keyboard_arrow_down: {
-		component: keyboardArrowDown,
-	},
-	keyboard_arrow_right: {
-		component: keyboardArrowRight,
 	},
 	langIconDe: {
 		component: langIconDe,
@@ -244,20 +160,8 @@ const customIcons = {
 	langIconUa: {
 		component: langIconUa,
 	},
-	lerninhalte: {
-		component: lerninhalte,
-	},
 	lernstore_outline: {
 		component: lernstoreOutline,
-	},
-	lock: {
-		component: lock,
-	},
-	"mail-check": {
-		component: mailCheck,
-	},
-	"mail-error": {
-		component: mailError,
 	},
 	n21: {
 		component: n21,

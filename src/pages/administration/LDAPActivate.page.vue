@@ -25,7 +25,7 @@
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="admin_panel_settings" />
+					<base-icon source="material" icon="admin_panel_settings" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>

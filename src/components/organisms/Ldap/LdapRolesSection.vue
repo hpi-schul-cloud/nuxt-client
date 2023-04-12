@@ -102,7 +102,7 @@
 		>
 			<template #icon>
 				<base-icon
-					source="custom"
+					source="material"
 					icon="admin_panel_settings"
 					:fill="fillColor"
 				/>
