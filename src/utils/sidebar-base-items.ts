@@ -80,14 +80,16 @@ const getSidebarItems = (
 		children: [
 			{
 				title: "global.sidebar.filesPersonal",
-				icon: "folder-open-o",
+				icon: "folder_open_user_outline",
+				source: "custom",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
 				activeForUrls: ["^/files/my($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "folder-open-o",
+				icon: "folder_open_courses_outline",
+				source: "custom",
 				href: "/files/courses/",
 				testId: "Kurse",
 				activeForUrls: ["^/files/courses($|/.*)"],
@@ -95,14 +97,16 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
-				icon: "folder-open-o",
+				icon: "folder_open_teams_outline",
+				source: "custom",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.filesShared",
-				icon: "folder-open-o",
+				icon: "folder_open_shared_outline",
+				source: "custom",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
 				activeForUrls: ["^/files/shared($|/.*)"],

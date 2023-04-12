@@ -54,6 +54,10 @@ import mailError from "./mail-error.vue";
 import n21 from "./n21.vue";
 import neu from "./neu.vue";
 import openNewWindow from "./open_new_window.vue";
+import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
+import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
+import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
+import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import personIgnore from "./person_ignore.vue";
 import schoolOutline from "./school_outline.vue";
 import search from "./search.vue";
@@ -137,6 +141,18 @@ const customIcons = {
 	},
 	flag_English: {
 		component: flagEnglish,
+	},
+	folder_open_courses_outline: {
+		component: folderOpenCoursesOutline,
+	},
+	folder_open_shared_outline: {
+		component: folderOpenSharedOutline,
+	},
+	folder_open_teams_outline: {
+		component: folderOpenTeamsOutline,
+	},
+	folder_open_user_outline: {
+		component: folderOpenUserOutline,
 	},
 	fortbildung: {
 		component: fortbildung,
