@@ -57,6 +57,7 @@ import { defineComponent, ref, toRef, computed, inject } from "vue";
 import VueI18n from "vue-i18n";
 import { useTimePickerState } from "./state/TimePickerState.composable";
 import { useDebounceFn } from "@vueuse/core";
+import { ValidationRule } from "./types/Validation";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -90,15 +91,13 @@ export default defineComponent({
 			toRef(props, "allowPast")
 		);
 
-		type Rule = (value: string | null) => boolean | string;
-
-		const requiredRule: Rule = (value: string | null) => {
+		const requiredRule: ValidationRule = (value: string | null) => {
 			return value === "" || value === null
 				? t("components.timePicker.validation.required")
 				: true;
 		};
 
-		const formatRule: Rule = (value: string | null) => {
+		const formatRule: ValidationRule = (value: string | null) => {
 			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 			if (value === "" || value === null) {
 				return true;
@@ -108,7 +107,7 @@ export default defineComponent({
 				: true;
 		};
 
-		const allowPastRule: Rule = (value: string | null) => {
+		const allowPastRule: ValidationRule = (value: string | null) => {
 			if (value === "" || value === null) {
 				return true;
 			}
@@ -121,8 +120,8 @@ export default defineComponent({
 				: true;
 		};
 
-		const rules = computed<Rule[]>(() => {
-			const rules: Rule[] = [];
+		const rules = computed<ValidationRule[]>(() => {
+			const rules: ValidationRule[] = [];
 			if (props.required) {
 				rules.push(requiredRule);
 			}

@@ -53,6 +53,7 @@ import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
+import { ValidationRule } from "./types/Validation";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -108,15 +109,14 @@ export default defineComponent({
 			}, 100);
 		};
 
-		type Rule = (value: string | null) => boolean | string;
-		const requiredRule: Rule = (value: string | null) => {
+		const requiredRule: ValidationRule = (value: string | null) => {
 			return value === "" || value === null
 				? t("components.datePicker.validation.required")
 				: true;
 		};
 
-		const rules = computed<Rule[]>(() => {
-			const rules: Rule[] = [];
+		const rules = computed<ValidationRule[]>(() => {
+			const rules: ValidationRule[] = [];
 			if (props.required) {
 				rules.push(requiredRule);
 			}
