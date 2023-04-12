@@ -22,7 +22,7 @@
 					:rules="rules"
 					validate-on-blur
 					autocomplete="off"
-					ref="inputfield"
+					ref="inputField"
 					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
@@ -85,7 +85,7 @@ export default defineComponent({
 
 		const model = ref(props.time);
 		const showTimeDialog = ref(false);
-		const inputfield = ref<HTMLInputElement | null>(null);
+		const inputField = ref<HTMLInputElement | null>(null);
 
 		const { timesOfDayList, timeInPast } = useTimePickerState(
 			toRef(props, "allowPast")
@@ -150,8 +150,8 @@ export default defineComponent({
 		};
 
 		const triggerValidation = () => {
-			inputfield.value?.focus();
-			inputfield.value?.blur();
+			inputField.value?.focus();
+			inputField.value?.blur();
 		};
 
 		return {
@@ -162,7 +162,7 @@ export default defineComponent({
 			handleBlur,
 			handleSelect,
 			handleError,
-			inputfield,
+			inputField,
 		};
 	},
 });
