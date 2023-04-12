@@ -36,7 +36,7 @@ describe("BoardColumnGhost", () => {
 	});
 
 	describe("when a card dropped", () => {
-		it("should emit 'add-empty-column'", () => {
+		it("should emit 'add-column-with-card'", () => {
 			setup();
 			const movedCardObject = {
 				removedIndex: null,
