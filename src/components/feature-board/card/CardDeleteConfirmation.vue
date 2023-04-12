@@ -1,6 +1,5 @@
 <template>
 	<vCustomDialog
-		v-model="isOpen"
 		data-testid="delete-dialog-item"
 		:size="375"
 		has-buttons
@@ -12,15 +11,13 @@
 		<h2 slot="title" class="text-h4 my-2">
 			{{ $t("components.cardHost.cardDelete.modal.confirmation.title") }}
 		</h2>
-		<template slot="content">
-			<p class="text-md mt-2">
-				{{
-					$t("components.cardHost.cardDelete.modal.confirmation.text", {
-						cardTitle,
-					})
-				}}
-			</p>
-		</template>
+		<p slot="content" class="text-md mt-2">
+			{{
+				$t("components.cardHost.cardDelete.modal.confirmation.text", {
+					cardTitle,
+				})
+			}}
+		</p>
 	</vCustomDialog>
 </template>
 
@@ -49,6 +46,7 @@ export default defineComponent({
 		const isOpen = useVModel(props, "isDeleteModalOpen", emit);
 		const onDeleteConfirmation = () => emit("delete-confirm");
 		const onCloseDialog = () => emit("dialog-cancel");
+
 		return {
 			isOpen,
 			onDeleteConfirmation,

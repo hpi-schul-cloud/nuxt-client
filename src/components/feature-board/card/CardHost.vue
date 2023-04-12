@@ -50,13 +50,13 @@
 					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
 				</template>
 			</VCard>
-			<CardDeleteConfirmation
-				:is-delete-modal-open="isDeleteModalOpen"
-				:card-title="card?.title"
-				@delete-confirm="onDeleteConfirmation"
-				@dialog-cancel="onDialogCancel"
-			></CardDeleteConfirmation>
 		</div>
+		<CardDeleteConfirmation
+			:is-delete-modal-open="isDeleteModalOpen"
+			:card-title="card?.title"
+			@delete-confirm="onDeleteConfirmation"
+			@dialog-cancel="onDialogCancel"
+		></CardDeleteConfirmation>
 	</CardHostInteractionHandler>
 </template>
 
@@ -71,9 +71,9 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardDeleteConfirmation from "./CardDeleteConfirmation.vue";
 import { useCardState } from "../state/CardState.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
-import CardDeleteConfirmation from "./CardDeleteConfirmation.vue";
 
 export default defineComponent({
 	name: "CardHost",
