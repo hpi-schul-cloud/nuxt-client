@@ -1,4 +1,4 @@
-import { CardsApiInterface } from "@/serverApi/v3";
+import { BoardCardApiInterface } from "@/serverApi/v3";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
@@ -19,8 +19,8 @@ const setup = (...cardIds: string[]) => {
 	mockReturnData = { data: { data: returnedCards } };
 
 	jest
-		.spyOn(serverApi, "CardsApiFactory")
-		.mockReturnValue(cardsApiFactoryMock as unknown as CardsApiInterface);
+		.spyOn(serverApi, "BoardCardApiFactory")
+		.mockReturnValue(cardsApiFactoryMock as unknown as BoardCardApiInterface);
 
 	return { cardsApiFactoryMock };
 };

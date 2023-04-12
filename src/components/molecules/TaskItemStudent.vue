@@ -23,6 +23,20 @@
 					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 				</v-list-item-content>
+				<v-list-item-action>
+					<v-list-item-action-text
+						class="subtitle-2"
+						data-test-id="dueDateLabel"
+						v-text="dueDateLabel"
+					/>
+					<v-spacer />
+					<v-custom-chip-time-remaining
+						v-if="taskState === 'warning'"
+						:type="taskState"
+						:due-date="task.duedate"
+						:shorten-unit="$vuetify.breakpoint.xsOnly"
+					/>
+				</v-list-item-action>
 			</template>
 			<template v-else>
 				<v-list-item-avatar>

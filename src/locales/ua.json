@@ -276,6 +276,8 @@
 	"components.molecules.TaskItemTeacher.lessonIsNotPublished": "тема не опублікований",
 	"components.molecules.TaskItemTeacher.status": "{submitted}/{max} надіслано, {graded} оцінено",
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
+	"components.molecules.TaskItemTeacher.betaTask.completed": "Завершено",
+	"components.molecules.TaskItemTeacher.betaTask.status": "{submitted}/{max} виконаних",
 	"components.molecules.TextEditor.noLocalFiles": "Наразі локальні файли не підтримуються.",
 	"components.molecules.VCustomChipTimeRemaining.hintDueTime": "",
 	"components.molecules.VCustomChipTimeRemaining.hintHours": "",

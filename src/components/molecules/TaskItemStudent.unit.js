@@ -179,20 +179,33 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
-
 			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
+
 			expect(taskLabel.element.textContent).toStrictEqual(
 				"Mathe - Beta-Aufgabe"
 			);
+		});
+
+		it("Should display due date label", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+			const convertedDueDate = dateTimeFromUTC(betaTask.duedate);
+			const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
+				"pages.tasks.labels.due"
+			)} ${convertedDueDate}`;
+
+			const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+			expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
 		});
 
 		it("should redirect to beta task page", async () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
-
 			const taskCard = wrapper.findComponent({ name: "v-list-item" });
 			await taskCard.trigger("click");
+
 			expect(mockRouter.push).toHaveBeenCalledTimes(1);
 			expect(mockRouter.push).toHaveBeenCalledWith({
 				name: "beta-task-view-edit",
