@@ -24,6 +24,8 @@
 					validate-on-blur
 					autocomplete="off"
 					ref="inputField"
+					:class="{ 'menu-open': showDateDialog }"
+					@blur="handleBlur"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -117,27 +119,30 @@ export default defineComponent({
 
 		const rules = computed<ValidationRule[]>(() => {
 			const rules: ValidationRule[] = [];
+
 			if (props.required) {
 				rules.push(requiredRule);
 			}
 			return rules;
 		});
 
-		const handleInput = useDebounceFn(() => {
-			showDateDialog.value = false;
-			validate();
+		const handleBlur = useDebounceFn(() => {
 			const date = model.value || "";
 			emit("input", date);
 		}, 200);
+
+		const handleInput = () => {
+			inputField.value?.focus();
+			closeMenu();
+		};
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
 		};
 
-		const validate = () => {
-			inputField.value?.focus();
-			inputField.value?.blur();
-		};
+		const closeMenu = useDebounceFn(() => {
+			showDateDialog.value = false;
+		}, 50);
 
 		return {
 			mdiCalendarClock,
@@ -150,7 +155,21 @@ export default defineComponent({
 			handleError,
 			focusDatePicker,
 			inputField,
+			handleBlur,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+::v-deep {
+	.menu-open {
+		label {
+			transform: translateY(-6px) scale(0.75) !important;
+		}
+		.v-text-field__details {
+			display: none !important;
+		}
+	}
+}
+</style>

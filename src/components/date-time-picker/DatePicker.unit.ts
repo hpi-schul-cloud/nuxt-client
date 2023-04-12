@@ -55,6 +55,7 @@ describe("@components/date-time-picker/DatePicker", () => {
 		const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
 		expect(dateSelector.exists()).toBe(true);
 		dateSelector.vm.$emit("input", new Date().toISOString());
+		await textField.trigger("blur");
 
 		jest.advanceTimersByTime(1000);
 		expect(wrapper.emitted("input")).toHaveLength(1);

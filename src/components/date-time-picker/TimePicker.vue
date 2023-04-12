@@ -23,6 +23,7 @@
 					validate-on-blur
 					autocomplete="off"
 					ref="inputField"
+					:class="{ 'menu-open': showTimeDialog }"
 					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
@@ -122,6 +123,7 @@ export default defineComponent({
 
 		const rules = computed<ValidationRule[]>(() => {
 			const rules: ValidationRule[] = [];
+
 			if (props.required) {
 				rules.push(requiredRule);
 			}
@@ -138,21 +140,18 @@ export default defineComponent({
 		}, 200);
 
 		const handleSelect = (selected: string) => {
-			showTimeDialog.value = false;
+			inputField.value?.focus();
 			model.value = selected;
-			// as the click on a list item already blurs the element we need to manually enforce revalidate
-			triggerValidation();
-			handleBlur();
+			closeMenu();
 		};
 
 		const handleError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
 		};
 
-		const triggerValidation = () => {
-			inputField.value?.focus();
-			inputField.value?.blur();
-		};
+		const closeMenu = useDebounceFn(() => {
+			showTimeDialog.value = false;
+		}, 50);
 
 		return {
 			showTimeDialog,
@@ -173,5 +172,15 @@ export default defineComponent({
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
+}
+::v-deep {
+	.menu-open {
+		label {
+			transform: translateY(-6px) scale(0.75) !important;
+		}
+		.v-text-field__details {
+			display: none !important;
+		}
+	}
 }
 </style>

@@ -76,6 +76,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 			const listItem = wrapper.findComponent({ name: "v-list-item" });
 			expect(listItem.exists()).toBe(true);
 			await listItem.trigger("click");
+			await input.trigger("blur");
 
 			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
