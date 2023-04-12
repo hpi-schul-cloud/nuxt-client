@@ -5,7 +5,7 @@
 		@end-edit-mode="onEndEditMode"
 	>
 		<div class="mb-4">
-			<div class="py-2 d-flex align-start justify-space-between">
+			<div class="d-flex align-start justify-space-between py-2">
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"

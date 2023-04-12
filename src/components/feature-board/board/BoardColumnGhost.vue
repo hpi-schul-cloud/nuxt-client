@@ -7,7 +7,7 @@
 		></BoardColumnGhostHeader>
 		<div
 			:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-			class="column-drag-handle mr-4 grow-transition"
+			class="column-drag-handle grow-transition mr-4"
 			style="min-height: 500px"
 		>
 			<Container
