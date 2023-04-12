@@ -21,7 +21,7 @@
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
-			:allow-past="allowPast || !isToday"
+			:allow-past="allowPast || !dateIsToday"
 			@input="handleTimeInput"
 			@error="handleTimeError"
 			@valid="handleTimeValid"
@@ -35,6 +35,7 @@ import VueI18n from "vue-i18n";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 import { mdiCalendarClock } from "@mdi/js";
+import { isToday } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -84,22 +85,11 @@ export default defineComponent({
 			});
 		};
 
-		const dateIsToday = (dateString: string) => {
-			const today = new Date();
-			const date = new Date(dateString);
-
-			return (
-				date.getDate() == today.getDate() &&
-				date.getMonth() == today.getMonth() &&
-				date.getFullYear() == today.getFullYear()
-			);
-		};
-
 		const date = ref(props.dateTime);
 		const time = ref(getTime(props.dateTime));
 		const dateError = ref(false);
 		const timeError = ref(false);
-		const isToday = ref(dateIsToday(props.dateTime));
+		const dateIsToday = ref(isToday(props.dateTime));
 
 		const emitDateTime = () => {
 			if (date.value !== "" && time.value !== "") {
@@ -115,7 +105,7 @@ export default defineComponent({
 
 		const handleDateInput = (newDate: string) => {
 			date.value = newDate;
-			isToday.value = dateIsToday(date.value);
+			dateIsToday.value = isToday(date.value);
 			if (valid.value) {
 				emitDateTime();
 			}
@@ -153,7 +143,7 @@ export default defineComponent({
 		return {
 			date,
 			time,
-			isToday,
+			dateIsToday,
 			handleDateInput,
 			handleDateError,
 			handleDateValid,
