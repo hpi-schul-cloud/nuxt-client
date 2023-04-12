@@ -51,7 +51,11 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="person" :fill="ldapActivatedColor" />
+				<base-icon
+					source="material"
+					icon="user_member"
+					:fill="ldapActivatedColor"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -69,7 +73,11 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="student" :fill="fillColor" />
+				<base-icon
+					source="material"
+					icon="students_outline"
+					:fill="fillColor"
+				/>
 			</template>
 		</base-input>
 		<base-input
@@ -118,7 +126,7 @@
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="person_ignore" :fill="fillColor" />
+				<base-icon source="material" icon="user_ignore" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>

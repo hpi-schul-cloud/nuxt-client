@@ -39,7 +39,7 @@
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" :fill="fillColor" />
+				<base-icon source="material" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -54,7 +54,7 @@
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="user" :fill="fillColor" />
+				<base-icon source="material" icon="user" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input

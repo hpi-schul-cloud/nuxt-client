@@ -15,7 +15,7 @@
 			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="student" />
+					<base-icon source="material" icon="students_outline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>

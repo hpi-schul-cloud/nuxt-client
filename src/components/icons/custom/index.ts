@@ -29,22 +29,14 @@ import langIconUa from "./lang-icon-ua.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
 import neu from "./neu.vue";
-import openNewWindow from "./open_new_window.vue";
 import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
 import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
 import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
 import folderOpenUserOutline from "./folder_open_user_outline.vue";
-import personIgnore from "./person_ignore.vue";
 import schoolOutline from "./school_outline.vue";
-import search from "./search.vue";
 import server from "./server.vue";
 import settings from "./settings.vue";
 import shuttle from "./shuttle.vue";
-import sortDown from "./sort-down.vue";
-import sortUp from "./sort-up.vue";
-import sort from "./sort.vue";
-import student from "./student.vue";
-import success from "./success.vue";
 import syncSymbol from "./sync-symbol.vue";
 import taskDoneFilled from "./task-done-filled.vue";
 import taskDone from "./task-done.vue";
@@ -56,12 +48,8 @@ import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
-import tools from "./tools.vue";
 import uid from "./uid.vue";
-import user from "./user.vue";
 import uuid from "./uuid.vue";
-import visible from "./visible.vue";
-import warning from "./warning.vue";
 
 const customIcons = {
 	brb: {
@@ -169,17 +157,8 @@ const customIcons = {
 	neu: {
 		component: neu,
 	},
-	open_new_window: {
-		component: openNewWindow,
-	},
-	person_ignore: {
-		component: personIgnore,
-	},
 	school_outline: {
 		component: schoolOutline,
-	},
-	search: {
-		component: search,
 	},
 	server: {
 		component: server,
@@ -189,21 +168,6 @@ const customIcons = {
 	},
 	shuttle: {
 		component: shuttle,
-	},
-	"sort-down": {
-		component: sortDown,
-	},
-	"sort-up": {
-		component: sortUp,
-	},
-	sort: {
-		component: sort,
-	},
-	student: {
-		component: student,
-	},
-	success: {
-		component: success,
 	},
 	"sync-symbol": {
 		component: syncSymbol,
@@ -238,23 +202,11 @@ const customIcons = {
 	thr: {
 		component: thr,
 	},
-	tools: {
-		component: tools,
-	},
 	uid: {
 		component: uid,
 	},
-	user: {
-		component: user,
-	},
 	uuid: {
 		component: uuid,
-	},
-	visible: {
-		component: visible,
-	},
-	warning: {
-		component: warning,
 	},
 };
 

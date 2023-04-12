@@ -65,13 +65,13 @@
 					</v-btn>
 					<base-icon
 						v-if="hasError"
-						source="custom"
+						source="material"
 						icon="warning"
 						fill="var(--v-error-base)"
 					/>
 					<base-icon
 						v-if="success"
-						source="custom"
+						source="material"
 						icon="success"
 						fill="var(--v-success-base)"
 					/>
