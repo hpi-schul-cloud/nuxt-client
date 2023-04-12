@@ -292,6 +292,8 @@
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
+  "components.board.column.ghost.placeholder":"Додати стовпець",
+	"components.board.column.defaultTitle":"Нова колонка",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",

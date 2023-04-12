@@ -798,6 +798,8 @@
 	"components.cardElement.titleElement.placeholder": "Add title",
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",
+  "components.board.column.ghost.placeholder":"Add column",
+	"components.board.column.defaultTitle":"New column",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

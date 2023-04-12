@@ -1,11 +1,12 @@
 import { useCurrentElement, useElementBounding } from "@vueuse/core";
 import { inject, onMounted, Ref, watch } from "vue";
+import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
 
-export const useCardHostInteractionHandler = (
+export const useInlineEditInteractionHandler = (
 	onFocusCallback: (interactionBoundary: { x: number; y: number }) => void
 ) => {
 	const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(
-		"CARD_HOST_INTERACTION_EVENT"
+		InlineEditInteractionEvent
 	);
 	const elementHost = useCurrentElement<HTMLElement>();
 	const { top, right, bottom, left } = useElementBounding(elementHost);

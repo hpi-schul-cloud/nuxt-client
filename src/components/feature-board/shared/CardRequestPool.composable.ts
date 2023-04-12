@@ -1,7 +1,7 @@
 import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createSharedComposable, useDebounceFn } from "@vueuse/core";
-import { BoardCard } from "./types/Card";
+import { BoardCard } from "../types/Card";
 
 type CardRequest = {
 	id: string;
@@ -57,7 +57,7 @@ const useCardRequestPool = () => {
 
 		if (cards) {
 			for (const card of cards) {
-				const requestEntry = cardRequests.find(({ id }) => id === card.id);
+				const requestEntry = cardRequests.find(({ id }) => id === card.cardId);
 				if (requestEntry) {
 					requestEntry.resolve(card);
 				}
