@@ -35,6 +35,7 @@ describe("@components/beta-task/UserSelector", () => {
 
 	const setup = (props = defaultProps) => {
 		document.body.setAttribute("data-app", "true");
+
 		wrapper = mount(UserSelector as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
@@ -60,39 +61,56 @@ describe("@components/beta-task/UserSelector", () => {
 	describe("when selected user(s) is required", () => {
 		it("should emit input when users are selected", async () => {
 			setup();
-			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+			jest.useFakeTimers();
+			const input = wrapper
+				.findComponent({ name: "v-autocomplete" })
+				.find("input");
+			await input.trigger("blur");
 
-			selectBox.vm.$emit("change");
-			await wrapper.vm.$nextTick();
+			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 
-		it("should emit error event when no user is selected", async () => {
-			setup({ ...defaultProps, selection: [] });
-			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+		it("should not emit input when no user is selected", async () => {
+			setup();
+			jest.useFakeTimers();
+			const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
+			const clearBtn = autocomplete.find(".v-icon");
+			const input = autocomplete.find("input");
+			expect(clearBtn.exists()).toBe(true);
 
-			selectBox.vm.$emit("change");
+			await clearBtn.trigger("click");
+			await input.trigger("blur");
+			await input.trigger("update:error");
 			await wrapper.vm.$nextTick();
-			expect(wrapper.emitted("error")).toHaveLength(1);
+
+			jest.advanceTimersByTime(1000);
+			expect(wrapper.emitted("input")).toBe(undefined);
 		});
 	});
 
 	describe("when selected user(s) is not required", () => {
-		it("should not emit error when no user is selected", async () => {
+		it("should emit input when no user is selected", async () => {
 			setup({ ...defaultProps, selection: [], required: false });
-			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+			jest.useFakeTimers();
+			const selectBox = wrapper
+				.findComponent({ name: "v-autocomplete" })
+				.find("input");
+			await selectBox.trigger("blur");
 
-			selectBox.vm.$emit("change");
-			await wrapper.vm.$nextTick();
-			expect(wrapper.emitted("error")).toBe(undefined);
+			jest.advanceTimersByTime(1000);
+			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 
 		it("should emit input when users are selected", async () => {
-			setup();
-			const selectBox = wrapper.findComponent({ name: "v-autocomplete" });
+			setup({ ...defaultProps, required: false });
+			jest.useFakeTimers();
+			const selectBox = wrapper
+				.findComponent({ name: "v-autocomplete" })
+				.find("input");
+			await selectBox.trigger("blur");
 
-			selectBox.vm.$emit("change");
-			await wrapper.vm.$nextTick();
+			jest.advanceTimersByTime(1000);
 			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 	});

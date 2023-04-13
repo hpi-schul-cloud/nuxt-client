@@ -7,9 +7,12 @@
 		deletable-chips
 		multiple
 		clearable
-		@change="selectionChanged"
+		:rules="rules"
 		v-model="model"
 		attach
+		validate-on-blur
+		@blur="handleBlur"
+		@update:error="handleError"
 	>
 		<template v-slot:prepend-item>
 			<v-list-item ripple @mousedown.prevent @click="toggle">
@@ -26,8 +29,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, computed, nextTick } from "vue";
+import {
+	defineComponent,
+	PropType,
+	ref,
+	computed,
+	nextTick,
+	inject,
+} from "vue";
 import { User } from "./types/User";
+import VueI18n from "vue-i18n";
+import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
 	name: "UserSelector",
@@ -38,8 +50,21 @@ export default defineComponent({
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
 	},
-	emits: ["input", "error"],
+	emits: ["input"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
 		const items = computed(() => {
 			return props.users.map((user: User) => {
 				return {
@@ -60,17 +85,38 @@ export default defineComponent({
 		});
 
 		const model = ref(selectedUserIds);
+		let valid = true;
 
-		const selectionChanged = () => {
-			if (props.required && model.value.length === 0) {
-				emit("error");
-				return;
-			}
+		type ValidationRule = (value: [] | null) => boolean | string;
 
+		const requiredRule: ValidationRule = (value: [] | null) => {
+			return value === null || value.length === 0
+				? t("common.labels.students")
+				: true;
+		};
+
+		const rules: ValidationRule[] = [];
+
+		if (props.required) {
+			rules.push(requiredRule);
+		}
+
+		const handleBlur = useDebounceFn(() => {
 			const selectedUsers = props.users.filter((user: User) => {
 				return model.value.includes(user.id);
 			});
-			emit("input", selectedUsers);
+
+			if (valid) {
+				emit("input", selectedUsers);
+			}
+		}, 200);
+
+		const handleError = (hasError: boolean) => {
+			if (hasError) {
+				valid = false;
+			} else {
+				valid = true;
+			}
 		};
 
 		const allUsersSelected = computed(() => {
@@ -85,10 +131,10 @@ export default defineComponent({
 			nextTick(() => {
 				if (allUsersSelected.value) {
 					model.value = [];
-					selectionChanged();
+					handleBlur();
 				} else {
 					model.value = userIds.value;
-					selectionChanged();
+					handleBlur();
 				}
 			});
 		};
@@ -96,9 +142,11 @@ export default defineComponent({
 		return {
 			items,
 			model,
-			selectionChanged,
-			toggle,
 			icon,
+			rules,
+			toggle,
+			handleBlur,
+			handleError,
 		};
 	},
 });
