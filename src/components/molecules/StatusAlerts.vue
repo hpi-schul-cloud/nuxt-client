@@ -5,7 +5,6 @@
 		max-height="400"
 		class="alerts"
 		elevation="2"
-		rounded
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -40,14 +39,8 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
-<<<<<<< HEAD
-<<<<<<< HEAD
 						color: var(--v-black-base);
-=======
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
-=======
 						color: #1b1b1b;
->>>>>>> 1e9a66ccf (BC-3348 Added to nuxt-client border and recover color.)
 					"
 				>
 					{{ item.text }}
@@ -112,6 +105,7 @@ export default defineComponent({
 	max-width: 250px;
 	height: 400px;
 	max-height: 400px;
+	overflow-y: auto;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
