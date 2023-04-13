@@ -5,7 +5,6 @@
 		max-height="400"
 		class="alerts"
 		elevation="2"
-		rounded
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -105,6 +104,7 @@ export default defineComponent({
 	max-width: 250px;
 	height: 400px;
 	max-height: 400px;
+	overflow-y: auto;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
