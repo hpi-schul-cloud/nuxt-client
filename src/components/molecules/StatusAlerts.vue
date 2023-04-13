@@ -108,6 +108,7 @@ export default defineComponent({
 	height: 400px;
 	max-height: 400px;
 	overflow-y: auto;
+	border-radius: 0.25rem;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
