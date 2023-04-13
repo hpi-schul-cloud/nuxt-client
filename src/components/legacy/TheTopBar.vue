@@ -28,6 +28,7 @@
 					class="item"
 					centered
 					data-test-id="status-alerts-icon"
+					:style="{ 'font-size': '20px' }"
 				>
 					<status-alerts :status-alerts="statusAlerts"></status-alerts>
 				</popup-icon>
