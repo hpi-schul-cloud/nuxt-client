@@ -39,7 +39,6 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
-						color: var(--v-black-base);
 						color: #1b1b1b;
 					"
 				>
@@ -118,5 +117,6 @@ export default defineComponent({
 	text-align: left !important;
 	font-size: 14px !important;
 	padding-top: 3px;
+	padding-bottom: 3px;
 }
 </style>
