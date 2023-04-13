@@ -860,7 +860,7 @@
 	"pages.room.teacher.emptyState": "Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
 	"pages.room.student.emptyState": "Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.lessonCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
-	"pages.room.lessonCard.label.shareLesson": "Themakopie teilen",
+	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.taskCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.taskCard.label.taskDone": "Aufgabe abgeschlossen",
