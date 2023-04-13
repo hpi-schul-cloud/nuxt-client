@@ -7,6 +7,7 @@
 			nudge-bottom="70"
 			min-width="180"
 			attach
+			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -149,6 +150,12 @@ export default defineComponent({
 			hasError ? emit("error") : emit("valid");
 		};
 
+		const handleMenuToggle = () => {
+			if (showTimeDialog.value) {
+				emit("valid");
+			}
+		};
+
 		const closeMenu = useDebounceFn(() => {
 			showTimeDialog.value = false;
 		}, 50);
@@ -158,10 +165,11 @@ export default defineComponent({
 			timesOfDayList,
 			model,
 			rules,
+			inputField,
 			handleBlur,
 			handleSelect,
 			handleError,
-			inputField,
+			handleMenuToggle,
 		};
 	},
 });

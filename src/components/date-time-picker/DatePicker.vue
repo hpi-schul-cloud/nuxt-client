@@ -7,6 +7,7 @@
 			nudge-bottom="70"
 			min-width="auto"
 			attach
+			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -140,6 +141,12 @@ export default defineComponent({
 			hasError ? emit("error") : emit("valid");
 		};
 
+		const handleMenuToggle = () => {
+			if (showDateDialog.value) {
+				emit("valid");
+			}
+		};
+
 		const closeMenu = useDebounceFn(() => {
 			showDateDialog.value = false;
 		}, 50);
@@ -151,11 +158,12 @@ export default defineComponent({
 			rules,
 			showDateDialog,
 			formattedDate,
+			inputField,
+			focusDatePicker,
+			handleBlur,
 			handleInput,
 			handleError,
-			focusDatePicker,
-			inputField,
-			handleBlur,
+			handleMenuToggle,
 		};
 	},
 });
