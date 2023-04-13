@@ -12,7 +12,10 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
-			style="border-top: 1px solid #e5e5e5"
+			:style="{
+				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
+				'padding-bottom': '3px',
+			}"
 		>
 			<v-list-item-avatar size="24">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
