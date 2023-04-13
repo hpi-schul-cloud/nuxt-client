@@ -28,7 +28,7 @@
 					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
-					style="width: 20px !important"
+					style="font-size: 24px"
 				>
 					<status-alerts :status-alerts="statusAlerts"></status-alerts>
 				</popup-icon>
@@ -224,6 +224,9 @@ export default defineComponent({
 			flex-grow: 1;
 			align-items: center;
 			justify-content: flex-end;
+			.exclamation-triangle {
+				font-size: 20px !important;
+			}
 		}
 
 		.item {
@@ -282,10 +285,6 @@ export default defineComponent({
 			}
 		}
 	}
-}
-
-.top-main .exclamation-triangle {
-	font-size: 20px !important;
 }
 .fullscreen-button-active {
 	position: fixed;
