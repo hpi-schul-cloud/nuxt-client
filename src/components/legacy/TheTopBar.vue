@@ -25,7 +25,7 @@
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
-					class="item"
+					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
 					:style="{ 'font-size': '20px' }"
@@ -224,6 +224,9 @@ export default defineComponent({
 			flex-grow: 1;
 			align-items: center;
 			justify-content: flex-end;
+			.exclamation-triangle {
+				font-size: 20px;
+			}
 		}
 
 		.item {
