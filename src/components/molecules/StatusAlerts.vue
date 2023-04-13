@@ -4,7 +4,7 @@
 		min-width="250"
 		max-height="400"
 		class="alerts"
-		elevation="2"
+		elevation="1"
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -12,7 +12,10 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
-			style="border-top: 1px solid #e5e5e5"
+			:style="{
+				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
+				'padding-bottom': '3px',
+			}"
 		>
 			<v-list-item-avatar size="24" class="mt-6">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -117,5 +120,6 @@ export default defineComponent({
 	text-align: left !important;
 	font-size: 14px !important;
 	padding-top: 3px;
+	padding-bottom: 3px;
 }
 </style>
