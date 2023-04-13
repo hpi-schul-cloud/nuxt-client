@@ -28,8 +28,7 @@
 					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
-					height="20"
-					width="20"
+					style="width: 20px !important"
 				>
 					<status-alerts :status-alerts="statusAlerts"></status-alerts>
 				</popup-icon>

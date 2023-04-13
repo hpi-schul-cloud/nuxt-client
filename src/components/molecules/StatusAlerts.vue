@@ -5,7 +5,6 @@
 		max-height="400"
 		class="alerts"
 		style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)"
-		rounded
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
