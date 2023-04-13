@@ -110,13 +110,13 @@ export default defineComponent({
 		max-width: 400px;
 	}
 	.alert-item {
-		border-top: 1px solid#e5e5e5;
+		border-bottom: 1px solid#e5e5e5;
+		padding-bottom: 3px;
 	}
 }
 .alert-date {
 	text-align: left !important;
 	font-size: 14px !important;
 	padding-top: 3px;
-	padding-bottom: 3px;
 }
 </style>
