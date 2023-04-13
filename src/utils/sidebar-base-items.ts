@@ -171,7 +171,8 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "user",
+				icon: "teacher",
+				source: "custom",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
@@ -202,8 +203,8 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "user",
-				source: "fa",
+				icon: "teacher",
+				source: "custom",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
@@ -217,8 +218,8 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "users",
-				source: "fa",
+				icon: "class",
+				source: "custom",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
