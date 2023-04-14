@@ -98,7 +98,7 @@
 						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencil }}</v-icon>
+						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -134,7 +134,12 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
+import {
+	mdiAccountPlus,
+	mdiCloudDownload,
+	mdiPencilOutline,
+	mdiPlus,
+} from "@mdi/js";
 
 export default {
 	components: {
@@ -155,7 +160,7 @@ export default {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			mdiPencil,
+			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
