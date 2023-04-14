@@ -4,7 +4,10 @@
 		min-width="250"
 		max-height="400"
 		class="alerts"
-		style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)"
+		:style="{
+			'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
+			'padding-bottom': '3px',
+		}"
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -12,12 +15,8 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
-			:style="{
-				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
-				'padding-bottom': '3px',
-			}"
 		>
-			<v-list-item-avatar size="24">
+			<v-list-item-avatar size="24" class="mt-6">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
@@ -114,7 +113,7 @@ export default defineComponent({
 		max-width: 400px;
 	}
 	.alert-item {
-		padding-bottom: 3px;
+		border-top: 1px solid#e5e5e5;
 	}
 }
 .alert-date {
