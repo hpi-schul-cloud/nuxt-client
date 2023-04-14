@@ -16,17 +16,7 @@
 				validate-on-blur
 				:rules="[rules.required]"
 			/>
-			<v-select
-				v-model="isVisible"
-				:items="visibilityOptions"
-				item-value="value"
-				item-text="text"
-				filled
-				disabled
-				:label="$t('common.labels.visibility')"
-				validate-on-blur
-				:rules="[rules.required]"
-			/>
+			<visibility-selector v-model="visibleAtDate" />
 			<date-time-picker
 				class="mb-4"
 				required
@@ -126,6 +116,7 @@ import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomsModule from "@/store/rooms";
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
+import VisibilitySelector from "@/components/beta-task/VisibilitySelector.vue";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -140,6 +131,7 @@ export default defineComponent({
 		CardElementList,
 		DateTimePicker,
 		vCustomDialog,
+		VisibilitySelector,
 	},
 	setup() {
 		const router = useRouter();
@@ -186,18 +178,9 @@ export default defineComponent({
 		const form = ref<VForm | null>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
-		const isVisible: Ref<boolean> = ref(true);
-		const visibilityOptions = ref<object[]>([
-			{
-				text: t("common.labels.visible"),
-				value: true,
-			},
-			{
-				text: t("common.labels.notVisible"),
-				value: false,
-			},
-		]);
+
 		const title = ref("");
+		const visibleAtDate = ref("");
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
@@ -268,7 +251,7 @@ export default defineComponent({
 				if (taskCardData.id !== "") {
 					isDeletable.value = !!taskCardData.id;
 				}
-				isVisible.value = !taskCardData.task.status.isDraft;
+				visibleAtDate.value = taskCardData.visibleAtDate;
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
@@ -354,6 +337,7 @@ export default defineComponent({
 				title: title.value,
 				cardElements: cardElements,
 				dueDate: dueDate.value,
+				visibleAtDate: visibleAtDate.value,
 			});
 		};
 
@@ -375,6 +359,7 @@ export default defineComponent({
 
 			await taskCardModule.updateTaskCard({
 				dueDate: dueDate.value,
+				visibleAtDate: visibleAtDate.value,
 				courseId: course.value,
 				title: title.value,
 				cardElements: cardElements,
@@ -500,6 +485,7 @@ export default defineComponent({
 			deleteDialog,
 			deleteElement,
 			openDeleteDialog,
+			visibleAtDate,
 			dueDate,
 			elements,
 			save,
@@ -516,8 +502,6 @@ export default defineComponent({
 			maxDate,
 			errorMessage,
 			rules,
-			isVisible,
-			visibilityOptions,
 			form,
 			isDeletable,
 		};
