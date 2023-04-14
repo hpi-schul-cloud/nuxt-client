@@ -9,6 +9,7 @@
 			<VCard
 				:height="isLoading ? height : 'auto'"
 				class="w-100 transition-swing"
+				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
 				:elevation="isEditMode ? 6 : 0"
@@ -47,7 +48,10 @@
 						:elements="card.elements"
 						:isEditMode="isEditMode"
 					></ContentElementList>
-					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
+					<CardAddElementMenu
+						@add-element="onAddElement"
+						v-if="isEditMode"
+					></CardAddElementMenu>
 				</template>
 			</VCard>
 		</div>
@@ -92,14 +96,14 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard"],
+	emits: ["move-card-keyboard", "remove-card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const {
 			isLoading,
 			card,
-			updateTitle,
 			deleteCard,
+			updateTitle,
 			updateCardHeight,
 			addElement,
 		} = useCardState(props.cardId);
@@ -114,9 +118,10 @@ export default defineComponent({
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDialogCancel = () => (isDeleteModalOpen.value = false);
 
-		const onDeleteConfirmation = () => {
-			deleteCard(props.cardId);
+		const onDeleteConfirmation = async () => {
+			await deleteCard();
 			isDeleteModalOpen.value = false;
+			emit("remove-card", card.value?.id);
 		};
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
