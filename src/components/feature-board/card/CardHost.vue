@@ -5,7 +5,7 @@
 		@end-edit-mode="onEndEditMode"
 		@move-card-keyboard="onMoveCardKeyboard"
 	>
-		<div class="d-flex" ref="cardHost">
+		<div ref="cardHost">
 			<VCard
 				:height="isLoading ? height : 'auto'"
 				class="w-100 transition-swing"
@@ -28,9 +28,9 @@
 							></CardHeaderTitleInput>
 						</template>
 						<template v-slot:menu>
-							<CardHostMenu>
-								<CardHostMenuAction @click="onDelete">
-									<v-icon>
+							<BoardMenu scope="card">
+								<BoardMenuAction @click="onDelete">
+                <v-icon>
 										{{ mdiTrashCanOutline }}
 									</v-icon>
 									{{
@@ -38,8 +38,8 @@
 											"components.cardHost.cardDelete.modal.confirmation.title"
 										)
 									}}
-								</CardHostMenuAction>
-							</CardHostMenu>
+								</BoardMenuAction>
+							</BoardMenu>
 						</template>
 					</CardHeader>
 
@@ -65,8 +65,8 @@ import { useElementSize, watchDebounced } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
 import CardHeader from "./CardHeader.vue";
 import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
-import CardHostMenu from "./CardHostMenu.vue";
-import CardHostMenuAction from "./CardHostMenuAction.vue";
+import BoardMenu from "../shared/BoardMenu.vue";
+import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
@@ -80,8 +80,8 @@ export default defineComponent({
 	components: {
 		CardSkeleton,
 		CardHeader,
-		CardHostMenu,
-		CardHostMenuAction,
+		BoardMenu,
+		BoardMenuAction,
 		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,

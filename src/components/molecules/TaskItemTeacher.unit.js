@@ -13,6 +13,7 @@ const {
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
 	betaTask,
+	substitutionBetaTask,
 } = mocks;
 
 const defineWindowWidth = (width) => {
@@ -386,7 +387,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.element.textContent).toStrictEqual(
-				"Mathe - Beta-Aufgabe"
+				"Mathe - Beta-Aufgabe - Abgabe 11.06.00"
 			);
 		});
 
@@ -397,6 +398,20 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			expect(mockRouter.push).toHaveBeenCalledWith({
 				name: "beta-task-view-edit",
 				params: { id: "789" },
+			});
+		});
+
+		describe("when teacher is a subtitution teacher", () => {
+			const wrapper = getWrapper({
+				task: substitutionBetaTask,
+			});
+
+			it("should add 'substitution' to the course label", () => {
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+
+				expect(taskLabel.exists()).toBe(true);
+				expect(taskLabel.text()).toMatch(/Vertretung Mathe/i);
+				expect(wrapper.vm.courseName).toStrictEqual("Vertretung Mathe");
 			});
 		});
 	});

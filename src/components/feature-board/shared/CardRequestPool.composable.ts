@@ -1,7 +1,7 @@
-import { CardsApiFactory } from "@/serverApi/v3";
+import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createSharedComposable, useDebounceFn } from "@vueuse/core";
-import { BoardCard } from "./types/Card";
+import { BoardCard } from "../types/Card";
 
 type CardRequest = {
 	id: string;
@@ -14,7 +14,7 @@ const WAIT_AFTER_LAST_CALL_IN_MS = 5;
 const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 
 const useCardRequestPool = () => {
-	const cardsApi = CardsApiFactory(undefined, "/v3", $axios);
+	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const requestPool: CardRequest[] = [];
 
 	const fetchCard = async (cardId: string): Promise<BoardCard> => {
@@ -57,7 +57,7 @@ const useCardRequestPool = () => {
 
 		if (cards) {
 			for (const card of cards) {
-				const requestEntry = cardRequests.find(({ id }) => id === card.id);
+				const requestEntry = cardRequests.find(({ id }) => id === card.cardId);
 				if (requestEntry) {
 					requestEntry.resolve(card);
 				}
