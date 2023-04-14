@@ -1,7 +1,7 @@
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
-	source?: "material" | "custom" | "fa";
+	source?: "material" | "custom";
 	testId: string;
 	permission?: string;
 	excludedPermission?: string;
