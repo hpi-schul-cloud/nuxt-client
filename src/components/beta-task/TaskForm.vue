@@ -1,5 +1,5 @@
 <template>
-	<v-form v-if="isEditMode" class="d-flex flex-column" ref="form">
+	<v-form class="d-flex flex-column" ref="form">
 		<v-select
 			v-model="course"
 			:items="courses"
@@ -81,10 +81,6 @@
 			</template>
 		</v-custom-dialog>
 	</v-form>
-	<article v-else class="d-flex flex-column">
-		<title-card-element v-model="title" :editable="false" />
-		<card-element-list v-model="elements" :editMode="false" />
-	</article>
 </template>
 
 <script lang="ts">
@@ -117,7 +113,7 @@ interface VForm extends HTMLFormElement {
 
 // TODO - unit tests!
 export default defineComponent({
-	name: "TaskCard",
+	name: "TaskForm",
 	components: {
 		TitleCardElement,
 		CardElementList,
@@ -214,7 +210,6 @@ export default defineComponent({
 					},
 				];
 
-				// dueDate.value = props.dueDateMax;
 				initElements(initialCardElements);
 			}
 
@@ -246,7 +241,6 @@ export default defineComponent({
 					},
 				];
 
-				// dueDate.value = props.dueDateMax;
 				initElements(initialCardElements);
 			}
 		});

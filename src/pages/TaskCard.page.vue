@@ -5,10 +5,11 @@
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
 		<task-form
-			:is-edit-mode="isEditMode"
+			v-if="isEditMode"
 			:courses="courses"
 			:due-date-max="dueDateMax"
 		/>
+		<task-student-view v-else />
 	</default-wireframe>
 </template>
 
@@ -25,6 +26,7 @@ import TaskCardModule from "@/store/task-card";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TaskForm from "@/components/beta-task/TaskForm.vue";
+import TaskStudentView from "@/components/beta-task/TaskStudentView.vue";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -32,6 +34,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		TaskForm,
+		TaskStudentView,
 	},
 	setup() {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
