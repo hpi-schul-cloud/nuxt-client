@@ -12,7 +12,7 @@ const CARD_SKELETON: BoardCardSkeleton = {
 };
 
 const CARD_WITHOUT_ELEMENTS: BoardCard = {
-	cardId: "0123456789abcdef00067000",
+	id: "0123456789abcdef00067000",
 	title: "Empty Card",
 	height: 200,
 	elements: [],
@@ -20,7 +20,7 @@ const CARD_WITHOUT_ELEMENTS: BoardCard = {
 };
 
 const CARD_WITH_ELEMENTS: BoardCard = {
-	cardId: "0123456789abcdef00067000",
+	id: "0123456789abcdef00067000",
 	title: "Lesson Card",
 	height: 200,
 	elements: [
