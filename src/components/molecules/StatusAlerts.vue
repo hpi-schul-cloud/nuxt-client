@@ -12,14 +12,10 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
-<<<<<<< HEAD
 			:style="{
 				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
 				'padding-bottom': '3px',
 			}"
-=======
-			style="border-top: 1px solid #e5e5e5"
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 		>
 			<v-list-item-avatar size="24">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -46,10 +42,7 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
-<<<<<<< HEAD
 						color: #1b1b1b;
-=======
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 					"
 				>
 					{{ item.text }}
@@ -57,11 +50,7 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date"
 					:data-test-id="`alert-date-${index}`"
-<<<<<<< HEAD
 					style="font-size: 14px; color: #55595c"
-=======
-					style="font-size: 14px"
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
@@ -118,21 +107,14 @@ export default defineComponent({
 	max-width: 250px;
 	height: 400px;
 	max-height: 400px;
-<<<<<<< HEAD
 	overflow-y: auto;
 	border-radius: 0.25rem;
-=======
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
 	}
 	.alert-item {
-<<<<<<< HEAD
 		padding-bottom: 3px;
-=======
-		border-top: 1px solid#e5e5e5;
->>>>>>> 62dc63e15 (BC-3348 Added border top to status alert nuxt.)
 	}
 }
 .alert-date {
