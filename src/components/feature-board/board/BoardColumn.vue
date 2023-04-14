@@ -11,10 +11,10 @@
 			group-name="cards"
 			drag-class="elevation-12"
 			drop-class="elevation-0"
-			:drag-begin-delay="200"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
-			@drop="onMoveCard"
+			non-drag-area-selector=".drag-disabled"
+			@drop="(e) => onMoveCard(column.id, e)"
 		>
 			<template v-for="(card, index) in column.cards">
 				<Draggable :key="card.cardId">
@@ -23,6 +23,7 @@
 						:card-id="card.cardId"
 						:height="card.height"
 						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@remove-card="onRemoveCard"
 					/>
 				</Draggable>
 			</template>
@@ -57,14 +58,19 @@ export default defineComponent({
 		"update:card-position",
 		"update:card-position:keyboard",
 		"update:title",
+		"remove-card",
 	],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
-		const onMoveCard = (dropResult: CardMove): void => {
+		const onMoveCard = (targetColumnId: string, dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("update:card-position", dropResult);
+			emit("update:card-position", { ...dropResult, targetColumnId });
+		};
+
+		const onRemoveCard = (cardId: string): void => {
+			emit("remove-card", cardId);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
@@ -111,6 +117,7 @@ export default defineComponent({
 			colWidth,
 			cardDropPlaceholderOptions,
 			onMoveCard,
+			onRemoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,

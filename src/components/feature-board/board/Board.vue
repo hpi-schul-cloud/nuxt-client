@@ -25,6 +25,7 @@
 								@update:title="
 									($event) => onUpdateColumnTitle(column.id, $event)
 								"
+								@remove-card="onRemoveCard"
 							/>
 						</Draggable>
 					</template>
@@ -61,6 +62,7 @@ export default defineComponent({
 		const {
 			board,
 			moveCard,
+			removeCard,
 			moveColumn,
 			moveCardByKeyboard,
 			updateColumnTitle,
@@ -69,8 +71,12 @@ export default defineComponent({
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 
-		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
-			moveCard(columnIndex, payload);
+		const onCardPositionChange = (_: any, payload: CardMove) => {
+			moveCard(payload);
+		};
+
+		const onRemoveCard = (cardId: string): void => {
+			removeCard(cardId);
 		};
 
 		const onColumnDrop = (columnPayload: ColumnMove): void => {
@@ -107,6 +113,7 @@ export default defineComponent({
 		return {
 			board,
 			columnDropPlaceholderOptions,
+			onRemoveCard,
 			getColumnId,
 			onCardPositionChange,
 			onColumnDrop,
