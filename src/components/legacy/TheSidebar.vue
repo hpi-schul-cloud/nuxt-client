@@ -278,7 +278,7 @@ export default defineComponent({
 					align-items: center;
 					min-width: 80px;
 					height: 100%;
-					padding: 0 20px;
+					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
 					color: var(--v-secondary-base);
@@ -329,7 +329,7 @@ export default defineComponent({
 <style lang="scss">
 .sidebar .contents .list .list-item .list-content .icon {
 	width: 25px;
-	margin-right: 6px;
+	margin-right: 8px;
 	vertical-align: middle;
 
 	.v-icon {
@@ -339,11 +339,6 @@ export default defineComponent({
 		&.custom-icon {
 			height: 18px;
 		}
-	}
-
-	svg {
-		width: 25px;
-		height: 20px;
 	}
 }
 </style>
