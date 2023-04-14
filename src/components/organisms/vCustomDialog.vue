@@ -49,7 +49,7 @@
 					<v-btn
 						v-if="checkButtons('confirm')"
 						data-testId="dialog-confirm"
-						class="dialog-confirmed px-6"
+						class="dialog-confirmed px-6 ml-4"
 						color="primary"
 						depressed
 						:disabled="confirmBtnDisabled"

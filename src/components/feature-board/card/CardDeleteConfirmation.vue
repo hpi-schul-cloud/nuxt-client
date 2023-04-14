@@ -13,9 +13,14 @@
 		</h2>
 		<p slot="content" class="text-md mt-2">
 			{{
-				$t("components.cardHost.cardDelete.modal.confirmation.text", {
-					cardTitle,
-				})
+				cardTitle == ""
+					? $t("components.cardHost.cardDelete.modal.confirmation.text")
+					: $t(
+							"components.cardHost.cardDelete.modal.confirmation.textWithTitle",
+							{
+								cardTitle,
+							}
+					  )
 			}}
 		</p>
 	</vCustomDialog>
