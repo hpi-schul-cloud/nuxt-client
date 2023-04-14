@@ -1,9 +1,6 @@
 import brb from "./brb.vue";
 import classIcon from "./class.vue";
 import dBildungscloud from "./dBildungscloud.vue";
-import flagDeutsch from "./flag_Deutsch.vue";
-import flagEnglish from "./flag_English.vue";
-import hourglassBottomBlack from "./hourglass-bottom-black.vue";
 import hourglassDisabled from "./hourglass-disabled.vue";
 import icCollection from "./ic_collection.vue";
 import icDefaultCircle from "./ic_default-circle.vue";
@@ -21,23 +18,17 @@ import icVideoCircle from "./ic_video-circle.vue";
 import icVideo from "./ic_video.vue";
 import icWordCircle from "./ic_word-circle.vue";
 import icWord from "./ic_word.vue";
-import invisible from "./invisible.vue";
 import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUa from "./lang-icon-ua.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
-import neu from "./neu.vue";
 import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
 import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
 import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
 import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import schoolOutline from "./school_outline.vue";
-import server from "./server.vue";
-import settings from "./settings.vue";
-import shuttle from "./shuttle.vue";
-import syncSymbol from "./sync-symbol.vue";
 import taskDoneFilled from "./task-done-filled.vue";
 import taskDone from "./task-done.vue";
 import taskDraft from "./task-draft.vue";
@@ -61,12 +52,6 @@ const customIcons = {
 	dBildungscloud: {
 		component: dBildungscloud,
 	},
-	flag_Deutsch: {
-		component: flagDeutsch,
-	},
-	flag_English: {
-		component: flagEnglish,
-	},
 	folder_open_courses_outline: {
 		component: folderOpenCoursesOutline,
 	},
@@ -78,9 +63,6 @@ const customIcons = {
 	},
 	folder_open_user_outline: {
 		component: folderOpenUserOutline,
-	},
-	hourglassBottomBlack: {
-		component: hourglassBottomBlack,
 	},
 	hourglassDisabled: {
 		component: hourglassDisabled,
@@ -133,9 +115,6 @@ const customIcons = {
 	ic_word: {
 		component: icWord,
 	},
-	invisible: {
-		component: invisible,
-	},
 	langIconDe: {
 		component: langIconDe,
 	},
@@ -154,23 +133,8 @@ const customIcons = {
 	n21: {
 		component: n21,
 	},
-	neu: {
-		component: neu,
-	},
 	school_outline: {
 		component: schoolOutline,
-	},
-	server: {
-		component: server,
-	},
-	settings: {
-		component: settings,
-	},
-	shuttle: {
-		component: shuttle,
-	},
-	"sync-symbol": {
-		component: syncSymbol,
 	},
 	taskDoneFilled: {
 		component: taskDoneFilled,
