@@ -132,7 +132,7 @@ export default {
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .button-left {
 	width: 25%;
 	text-align: left;
@@ -142,5 +142,12 @@ export default {
 	display: inline-block;
 	width: 75%;
 	text-align: right;
+}
+.button-section {
+	margin-bottom: calc(var(--space-base-vuetify) * 2);
+}
+
+.button-section > button {
+	margin-left: var(--space-base-vuetify);
 }
 </style>
