@@ -4,10 +4,14 @@
 		min-width="250"
 		max-height="400"
 		class="alerts"
+<<<<<<< HEAD
 		:style="{
 			'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
 			'padding-bottom': '3px',
 		}"
+=======
+		elevation="1"
+>>>>>>> 3f3412b3b (BC-3348 Added box shadow.)
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
@@ -15,7 +19,10 @@
 			:data-test-id="`alert-item-${index}`"
 			three-line
 			class="px-2 alert-item"
-			style="border-top: 1px solid #e5e5e5"
+			:style="{
+				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
+				'padding-bottom': '3px',
+			}"
 		>
 			<v-list-item-avatar size="24" class="mt-6">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">

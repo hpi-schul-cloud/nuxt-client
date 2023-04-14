@@ -25,7 +25,7 @@
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
-					class="item"
+					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
 				>
@@ -223,9 +223,15 @@ export default defineComponent({
 			flex-grow: 1;
 			align-items: center;
 			justify-content: flex-end;
+<<<<<<< HEAD
 			// .exclamation-triangle {
 			// 	font-size: 20px;
 			// }
+=======
+			.exclamation-triangle {
+				font-size: 20px;
+			}
+>>>>>>> 3f3412b3b (BC-3348 Added box shadow.)
 		}
 
 		.item {
