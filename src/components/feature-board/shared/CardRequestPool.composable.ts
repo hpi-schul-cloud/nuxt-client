@@ -57,7 +57,7 @@ const useCardRequestPool = () => {
 
 		if (cards) {
 			for (const card of cards) {
-				const requestEntry = cardRequests.find(({ id }) => id === card.cardId);
+				const requestEntry = cardRequests.find(({ id }) => id === card.id);
 				if (requestEntry) {
 					requestEntry.resolve(card);
 				}
