@@ -30,7 +30,7 @@
 						<template v-slot:menu>
 							<BoardMenu scope="card">
 								<BoardMenuAction @click="onDelete">
-                <v-icon>
+									<v-icon>
 										{{ mdiTrashCanOutline }}
 									</v-icon>
 									{{
