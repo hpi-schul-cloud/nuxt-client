@@ -25,7 +25,7 @@
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
-					class="item exclamation-triangle"
+					class="item"
 					centered
 					data-test-id="status-alerts-icon"
 				>
