@@ -32,7 +32,6 @@ import schoolOutline from "./school_outline.vue";
 import taskDoneFilled from "./task-done-filled.vue";
 import taskDone from "./task-done.vue";
 import taskDraft from "./task-draft.vue";
-import taskFinished from "./task-finished.vue";
 import taskMissedFilled from "./task-missed-filled.vue";
 import taskMissed from "./task-missed.vue";
 import taskOpenFilled from "./task-open-filled.vue";
@@ -144,9 +143,6 @@ const customIcons = {
 	},
 	taskDraft: {
 		component: taskDraft,
-	},
-	taskFinished: {
-		component: taskFinished,
 	},
 	taskMissedFilled: {
 		component: taskMissedFilled,
