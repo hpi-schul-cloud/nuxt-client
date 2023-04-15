@@ -224,6 +224,9 @@ export default defineComponent({
 			flex-grow: 1;
 			align-items: center;
 			justify-content: flex-end;
+			.exclamation-triangle {
+				font-size: 20px !important;
+			}
 		}
 
 		.item {
