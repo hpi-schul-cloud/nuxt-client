@@ -13,7 +13,7 @@
 			three-line
 			class="px-2 alert-item"
 			:style="{
-				'border-top': index !== 0 ? '1px solid #e5e5e5' : '',
+				'border-top': index === 0 ? 'none' : '1px solid #e5e5e5',
 				'padding-bottom': '3px',
 			}"
 		>
@@ -107,6 +107,7 @@ export default defineComponent({
 	max-width: 250px;
 	max-height: 400px;
 	overflow-y: auto;
+	border-radius: 4px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
