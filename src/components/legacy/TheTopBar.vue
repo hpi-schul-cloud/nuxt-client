@@ -185,7 +185,7 @@ export default defineComponent({
 
 			return statusAlertsIncludeDanger
 				? "var(--v-error-base)"
-				: "var(--v-secondary-darken1)";
+				: "var(--v-info-base)";
 		},
 		statusAlerts() {
 			return statusAlertsModule.getStatusAlerts;

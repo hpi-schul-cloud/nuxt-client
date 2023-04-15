@@ -5,6 +5,7 @@
 		max-height="400"
 		class="alerts"
 		elevation="1"
+		style="border-radius: 4px"
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
