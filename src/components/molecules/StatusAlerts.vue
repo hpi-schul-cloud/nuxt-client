@@ -105,7 +105,6 @@ export default defineComponent({
 .alerts {
 	width: auto;
 	max-width: 250px;
-	height: 400px;
 	max-height: 400px;
 	overflow-y: auto;
 	@include breakpoint(tablet) {
