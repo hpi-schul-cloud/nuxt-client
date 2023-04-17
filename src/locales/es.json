@@ -71,7 +71,7 @@
 	"common.labels.changed": "Cambiado",
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
-	"common.labels.visibleAt": "Visible ab",
+	"common.labels.visibleAt": "Visible desde",
 	"common.labels.notVisible": "No visible",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
