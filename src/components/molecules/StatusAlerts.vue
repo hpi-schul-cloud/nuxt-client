@@ -18,7 +18,7 @@
 				'padding-bottom': '3px',
 			}"
 		>
-			<v-list-item-avatar size="24" class="mt-6">
+			<v-list-item-avatar size="24" class="ma-3">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
