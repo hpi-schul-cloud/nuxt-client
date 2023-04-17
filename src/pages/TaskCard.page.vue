@@ -115,6 +115,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 	CardRichTextElementResponseInputFormatEnum,
+	TaskCardParams,
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -323,29 +324,10 @@ export default defineComponent({
 			});
 		};
 
-		const createTaskCard = async () => {
-			const cardElements: Array<CardElementParams> = [];
-			elements.value.forEach((element) => {
-				const cardElement: CardElementParams = {
-					content: {
-						type: element.type,
-						value: element.model,
-						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
-					},
-				};
-				cardElements.push(cardElement);
-			});
+		const createPayload = () => {
+			const payload: Partial<TaskCardParams> = {};
 
-			await taskCardModule.createTaskCard({
-				courseId: course.value,
-				title: title.value,
-				cardElements: cardElements,
-				dueDate: dueDate.value,
-				visibleAtDate: visibleAtDate.value,
-			});
-		};
-
-		const updateTaskCard = async () => {
+			payload.title = title.value;
 			const cardElements: Array<CardElementParams> = [];
 			elements.value.forEach((element) => {
 				const cardElement: CardElementParams = {
@@ -360,14 +342,15 @@ export default defineComponent({
 				}
 				cardElements.push(cardElement);
 			});
+			payload.cardElements = cardElements;
+			payload.courseId = course.value;
+			payload.dueDate = dueDate.value;
 
-			await taskCardModule.updateTaskCard({
-				dueDate: dueDate.value,
-				visibleAtDate: visibleAtDate.value,
-				courseId: course.value,
-				title: title.value,
-				cardElements: cardElements,
-			});
+			if (visibleAtDate.value) {
+				payload.visibleAtDate = visibleAtDate.value;
+			}
+
+			return payload as TaskCardParams;
 		};
 
 		const save = async () => {
@@ -386,9 +369,9 @@ export default defineComponent({
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
 			) {
-				await createTaskCard();
+				await taskCardModule.createTaskCard(createPayload());
 			} else {
-				await updateTaskCard();
+				await taskCardModule.updateTaskCard(createPayload());
 			}
 
 			if (taskCardModule.getStatus === "error") {
