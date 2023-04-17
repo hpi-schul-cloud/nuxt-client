@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { useElementSize, watchDebounced } from "@vueuse/core";
+import { useDebounceFn, useElementSize, watchDebounced } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
 import CardHeader from "./CardHeader.vue";
 import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
@@ -114,7 +114,7 @@ export default defineComponent({
 		const isEditMode = ref<boolean>(false);
 		const isDeleteModalOpen = ref<boolean>(false);
 
-		const onUpdateCardTitle = updateTitle;
+		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDialogCancel = () => (isDeleteModalOpen.value = false);
 

@@ -34,6 +34,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useDebounceFn } from "@vueuse/core";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
@@ -109,9 +110,9 @@ export default defineComponent({
 			emit("update:card-position:keyboard", cardMoveByKeyboard);
 		};
 
-		const onUpdateTitle = (newTitle: string) => {
+		const onUpdateTitle = useDebounceFn((newTitle: string) => {
 			emit("update:title", newTitle);
-		};
+		}, 1000);
 
 		return {
 			colWidth,
