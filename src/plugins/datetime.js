@@ -282,6 +282,13 @@ export const isToday = (date) => {
 	);
 };
 
+export const isInPast = (date) => {
+	const nowTimestamp = new Date().getTime();
+	const dateTimestamp = new Date(date).getTime();
+
+	return dateTimestamp <= nowTimestamp;
+};
+
 export default ({ app, store }) => {
 	app.$datetime = {};
 	initDefaultTimezone(app, store);

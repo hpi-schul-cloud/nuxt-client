@@ -32,6 +32,7 @@ import { defineComponent, ref, inject } from "vue";
 import VueI18n from "vue-i18n";
 import { VisibleState, VisibilityOption } from "./types/visibilty";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import { isInPast } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "VisibilitySelector",
@@ -57,22 +58,11 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const dateInPast = (date: string) => {
-			const nowTimestamp = new Date().getTime();
-			const dateTimestamp = new Date(date).getTime();
-
-			if (dateTimestamp <= nowTimestamp) {
-				return true;
-			} else {
-				return false;
-			}
-		};
-
 		const initialSelect = () => {
 			if (props.value === "") {
 				return "notVisible";
 			}
-			if (dateInPast(props.value)) {
+			if (isInPast(props.value)) {
 				return "visible";
 			}
 			return "visibleAt";
