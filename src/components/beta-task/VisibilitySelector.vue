@@ -18,9 +18,11 @@
 			class="mb-4"
 			required
 			:date-time="dateTime"
-			@input="handleDateTimeInput"
-			date-input-label="Sichtbarkeitsdatum"
+			:minDate="minDate"
+			:maxDate="maxDate"
+			:date-input-label="t('components.organisms.FormNews.label.time')"
 			:time-input-label="t('components.organisms.FormNews.label.time')"
+			@input="handleDateTimeInput"
 		/>
 	</div>
 </template>
@@ -38,6 +40,8 @@ export default defineComponent({
 	},
 	props: {
 		value: { type: String, default: "" },
+		minDate: { type: String },
+		maxDate: { type: String },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {

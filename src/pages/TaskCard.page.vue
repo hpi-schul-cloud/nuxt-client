@@ -16,7 +16,11 @@
 				validate-on-blur
 				:rules="[rules.required]"
 			/>
-			<visibility-selector v-model="visibleAtDate" />
+			<visibility-selector
+				v-model="visibleAtDate"
+				:minDate="minDate"
+				:maxDate="maxDate"
+			/>
 			<date-time-picker
 				class="mb-4"
 				required
