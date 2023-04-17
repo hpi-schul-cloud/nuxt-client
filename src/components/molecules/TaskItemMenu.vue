@@ -256,15 +256,15 @@ export default defineComponent({
 <style lang="scss" scoped>
 // stylelint-disable sh-waqar/declaration-use-variable
 .task-action {
-	min-height: 25px !important;
+	min-height: 32px !important;
+	min-width: 12rem;
 }
 
 .task-action-icon {
-	width: 1rem;
-	height: 1rem;
-	margin-top: -2px;
-	margin-right: 4px;
-	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
+	width: 1.1rem;
+	height: 1.1rem;
+	margin: -3px 8px 0 0;
+	font-size: var(--space-md);
+	color: var(--v-grey-darken3);
 }
 </style>

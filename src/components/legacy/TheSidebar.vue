@@ -277,7 +277,7 @@ export default defineComponent({
 					min-width: 80px;
 					height: 100%;
 					padding: 0 20px;
-					font-size: 16px;
+					font-size: 15px;
 					line-height: 100%;
 					color: var(--v-secondary-base);
 					border-bottom: none;

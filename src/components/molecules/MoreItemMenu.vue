@@ -28,7 +28,7 @@
 				:data-testid="item.dataTestId || ''"
 				@click.stop="handleClick(item)"
 			>
-				<v-icon class="menu-action-icon mr-1">
+				<v-icon class="menu-action-icon">
 					{{ item.icon }}
 				</v-icon>
 				<v-list-item-title class="pl-1">
@@ -75,14 +75,15 @@ export default {
 
 <style lang="scss" scoped>
 .menu-action {
-	min-height: var(--space-lg);
+	min-height: 32px !important;
+	min-width: 12rem;
 	text-align: left;
 }
 
 .menu-action-icon {
-	width: var(--space-md);
-	height: var(--space-md);
-	margin-top: calc(-0.5 + var(--space-base-vuetify));
+	width: 1.1rem;
+	height: 1.1rem;
+	margin: -3px 8px 0 0;
 	font-size: var(--space-md);
 	color: var(--v-grey-darken3);
 }

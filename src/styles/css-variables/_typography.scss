@@ -4,8 +4,8 @@ $system-fonts: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu,
 	"Helvetica Neue", arial, sans-serif;
 
 :root {
-	--font-primary: "PT Sans", #{$system-fonts};
-	--font-accent: "PT Sans Narrow", #{$system-fonts};
+	--font-primary: "Roboto", #{$system-fonts};
+	--font-accent: "Roboto Condensed", #{$system-fonts};
 
 	/* set base values */
 	--text-base-size: 1rem;
@@ -35,7 +35,7 @@ $system-fonts: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu,
 	--line-height-xl: 2;
 
 	/* font-weight */
-	--font-weight-light: 200;
+	--font-weight-light: 100;
 	--font-weight-normal: 400;
 	--font-weight-bold: 700;
 }

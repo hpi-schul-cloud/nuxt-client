@@ -412,6 +412,7 @@ export default {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	font-weight: 400;
 }
 
 ::v-deep .v-slide-group__prev,
