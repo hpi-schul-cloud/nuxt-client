@@ -3,7 +3,7 @@
 		data-test-id="status-alerts"
 		min-width="250"
 		max-height="400"
-		class="alerts"
+		class="alerts px-0"
 		elevation="2"
 		style="border-radius: 4px"
 	>
