@@ -90,50 +90,61 @@ export default defineComponent({
 			return endOfSchoolYear.toISOString();
 		};
 
-		onBeforeMount(async () => {
-			courses.value = await getCourses();
-			dueDateMax.value = getDueDateMax();
+		const isTasksRoute = () => {
+			const prevRoute = route.params.previousRoute;
 
-			let course = { id: "", name: "" };
+			if (prevRoute === null) {
+				return true; // TODO - default?
+			}
+			return prevRoute.includes("tasks");
+		};
 
+		const getCurrentCourse = async () => {
 			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
 
-				course = { id: taskCardData.courseId, name: taskCardData.courseName };
+				return { id: taskCardData.courseId, name: taskCardData.courseName };
 			}
 			if (route.name === "rooms-beta-task-new") {
 				await roomModule.fetchContent(route.params.id);
 				const roomData = roomModule.getRoomData;
 
-				course = { id: roomData.roomId, name: roomData.title };
+				return { id: roomData.roomId, name: roomData.title };
 			}
+		};
 
-			breadcrumbs.value = [
-				{
-					text: t("pages.courses.index.title"),
-					to: {
-						name: "rooms-overview",
-					},
-				},
-				{
-					text: course.name,
-					to: {
-						name: "rooms-id",
-						params: {
-							id: course.id,
-						},
-					},
-				},
-			];
+		onBeforeMount(async () => {
+			courses.value = await getCourses();
+			dueDateMax.value = getDueDateMax();
 
-			if (route.name === "tasks-beta-task-new") {
+			const course = await getCurrentCourse();
+
+			if (isTasksRoute() || !course) {
 				breadcrumbs.value = [
 					{
 						text: t("common.words.tasks"),
 						to: {
 							name: "tasks",
+						},
+					},
+				];
+			} else {
+				breadcrumbs.value = [
+					{
+						text: t("pages.courses.index.title"),
+						to: {
+							name: "rooms-overview",
+						},
+					},
+					{
+						text: course?.name,
+						to: {
+							name: "rooms-id",
+							params: {
+								id: course?.id,
+							},
 						},
 					},
 				];

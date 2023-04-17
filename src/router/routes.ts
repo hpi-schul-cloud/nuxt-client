@@ -1,7 +1,8 @@
 import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
+import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
+import { previousRouteGuard } from "@/router/guards/previous-route.guard";
 import {
 	isMongoId,
 	isOfficialSchoolNumber,
@@ -244,7 +245,11 @@ export const routes: Array<RouteConfig> = [
 		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "rooms-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
+		beforeEnter: (to, from, next) => {
+			const permissionGuard = createPermissionGuard(["task_card_view"]);
+			permissionGuard(to, from, next);
+			previousRouteGuard(to, from, next);
+		},
 	},
 	{
 		path: "/rooms-list",
@@ -265,13 +270,21 @@ export const routes: Array<RouteConfig> = [
 		path: `/tasks/create-beta-task`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "tasks-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
+		beforeEnter: (to, from, next) => {
+			const permissionGuard = createPermissionGuard(["task_card_view"]);
+			permissionGuard(to, from, next);
+			previousRouteGuard(to, from, next);
+		},
 	},
 	{
 		path: `/beta-task/:id(${REGEX_ID})`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "beta-task-view-edit",
-		beforeEnter: createPermissionGuard(["task_card_view"]),
+		beforeEnter: (to, from, next) => {
+			const permissionGuard = createPermissionGuard(["task_card_view"]);
+			permissionGuard(to, from, next);
+			previousRouteGuard(to, from, next);
+		},
 	},
 	{
 		// deprecated?
