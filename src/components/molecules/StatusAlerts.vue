@@ -4,7 +4,7 @@
 		min-width="250"
 		max-height="400"
 		class="alerts"
-		elevation="1"
+		elevation="2"
 		style="border-radius: 4px"
 	>
 		<v-list-item
