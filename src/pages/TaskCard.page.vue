@@ -6,6 +6,7 @@
 	>
 		<task-form
 			v-if="isEditMode"
+			:is-edit-mode="isEditMode"
 			:courses="courses"
 			:due-date-max="dueDateMax"
 		/>
@@ -23,6 +24,7 @@ import RoomsModule from "@/store/rooms";
 import RoomModule from "@/store/room";
 import SchoolsModule from "@/store/schools";
 import TaskCardModule from "@/store/task-card";
+import { AllItems } from "@/store/types/rooms";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TaskForm from "@/components/beta-task/TaskForm.vue";
@@ -73,67 +75,68 @@ export default defineComponent({
 		const isEditMode = authModule.getUserPermissions.includes("task_card_edit");
 
 		const breadcrumbs = ref<object[]>([]);
-		const courses = ref<object[]>([]);
+		const courses = ref<AllItems>([]);
 		const dueDateMax = ref("");
 		const route = useRoute();
 
-		onBeforeMount(async () => {
+		const getCourses = async () => {
 			await roomsModule.fetchAllElements();
-			courses.value = roomsModule.getAllElements;
+			return roomsModule.getAllElements;
+		};
 
+		const getDueDateMax = () => {
 			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
 			endOfSchoolYear.setHours(12);
-			dueDateMax.value = endOfSchoolYear.toISOString();
+			return endOfSchoolYear.toISOString();
+		};
+
+		onBeforeMount(async () => {
+			courses.value = await getCourses();
+			dueDateMax.value = getDueDateMax();
+
+			let course = { id: "", name: "" };
 
 			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
 
-				breadcrumbs.value.push(
-					{
-						text: t("pages.courses.index.title"),
-						to: {
-							name: "rooms-overview",
-						},
-					},
-					{
-						text: taskCardData.courseName || "",
-						to: {
-							name: "rooms-id",
-							params: {
-								id: taskCardData.courseId || "",
-							},
-						},
-					}
-				);
+				course = { id: taskCardData.courseId, name: taskCardData.courseName };
 			}
 			if (route.name === "rooms-beta-task-new") {
 				await roomModule.fetchContent(route.params.id);
 				const roomData = roomModule.getRoomData;
-				breadcrumbs.value.push(
-					{
-						text: t("pages.courses.index.title"),
-						to: {
-							name: "rooms-overview",
-						},
-					},
-					{
-						text: roomData.title,
-						to: {
-							name: "rooms-id",
-						},
-					}
-				);
+
+				course = { id: roomData.roomId, name: roomData.title };
 			}
 
-			if (route.name === "tasks-beta-task-new") {
-				breadcrumbs.value.push({
-					text: t("common.words.tasks"),
+			breadcrumbs.value = [
+				{
+					text: t("pages.courses.index.title"),
 					to: {
-						name: "tasks",
+						name: "rooms-overview",
 					},
-				});
+				},
+				{
+					text: course.name,
+					to: {
+						name: "rooms-id",
+						params: {
+							id: course.id,
+						},
+					},
+				},
+			];
+
+			if (route.name === "tasks-beta-task-new") {
+				breadcrumbs.value = [
+					{
+						text: t("common.words.tasks"),
+						to: {
+							name: "tasks",
+						},
+					},
+				];
 			}
 		});
 
