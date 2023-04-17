@@ -20,7 +20,7 @@
 			:date-time="dateTime"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			:date-input-label="t('components.organisms.FormNews.label.time')"
+			:date-input-label="t('components.organisms.FormNews.label.date')"
 			:time-input-label="t('components.organisms.FormNews.label.time')"
 			@input="handleDateTimeInput"
 		/>
