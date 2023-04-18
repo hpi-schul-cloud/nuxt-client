@@ -43,7 +43,7 @@ import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { BOARD_COLUMN_DELETE, IdHolder } from "../types/BoardInjectionKeys";
+import { BoardActions, BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -70,9 +70,9 @@ export default defineComponent({
 	},
 	emits: ["update:title"],
 	setup(props, { emit }) {
-		const deleteColumn: IdHolder | undefined = inject(BOARD_COLUMN_DELETE);
-		if (deleteColumn === undefined) {
-			throw new Error("board:delete-column not injected");
+		const boardActions: BoardActions | undefined = inject(BOARD_ACTIONS);
+		if (boardActions === undefined) {
+			throw new Error("boardActions not injected");
 		}
 
 		const isEditMode = ref<boolean>(false);
@@ -89,9 +89,8 @@ export default defineComponent({
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 		const onDeleteConfirmation = async () => {
-			await deleteColumn(props.columnId);
+			await boardActions.deleteColumn(props.columnId);
 			isDeleteModalOpen.value = false;
-			// emit("remove-card", card.value?.id);
 		};
 
 		const onUpdateTitle = (newTitle: string) => {

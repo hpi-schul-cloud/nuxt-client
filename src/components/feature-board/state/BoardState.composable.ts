@@ -3,7 +3,6 @@ import { $axios } from "@/utils/api";
 import { onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
-import { IdHolder } from "../types/BoardInjectionKeys";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
 const { createColumn, deleteColumnCall, moveCardCall, updateColumnTitleCall } =
@@ -144,7 +143,7 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
-	const deleteColumn: IdHolder = async (id: string) => {
+	const deleteColumn = async (id: string) => {
 		if (board.value === undefined) {
 			return;
 		}
@@ -153,10 +152,15 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
+	const boardActions = {
+		addNewColumn,
+		deleteColumn,
+	};
+
 	onMounted(() => fetchBoard(id));
 
 	return {
-		deleteColumn,
+		boardActions,
 		fetchBoard,
 		board,
 		isLoading,

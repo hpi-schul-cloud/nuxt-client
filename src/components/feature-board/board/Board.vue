@@ -50,7 +50,7 @@ import {
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
-import { BOARD_COLUMN_DELETE } from "../types/BoardInjectionKeys";
+import { BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "Board",
@@ -59,7 +59,7 @@ export default defineComponent({
 		const route = useRoute();
 		const {
 			board,
-			deleteColumn,
+			boardActions,
 			moveCard,
 			removeCard,
 			moveColumn,
@@ -68,7 +68,7 @@ export default defineComponent({
 			addNewColumn,
 		} = useBoardState(route.params?.id);
 
-		provide(BOARD_COLUMN_DELETE, deleteColumn);
+		provide(BOARD_ACTIONS, boardActions);
 
 		const onCardPositionChange = (_: any, payload: CardMove) => {
 			moveCard(payload);
