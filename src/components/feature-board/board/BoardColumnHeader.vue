@@ -28,7 +28,7 @@
 		</div>
 		<DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
-			:card-title="title ?? ''"
+			:card-title="title ? title : ''"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDeleteCancel"
 		></DeleteConfirmation>

@@ -15,7 +15,7 @@ describe("BoardColumnHeader", () => {
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			provide: {
-				[BOARD_COLUMN_DELETE]: jest.fn(),
+				[BOARD_COLUMN_DELETE as symbol]: jest.fn(),
 			},
 			propsData: {
 				title: "title-text",

@@ -27,9 +27,10 @@ describe("BoardColumn", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
 			provide: {
-				[BOARD_COLUMN_DELETE]: jest.fn(),
+				[BOARD_COLUMN_DELETE as symbol]: jest.fn(),
+				i18n: { t: (key: string) => key },
 			},
 			propsData: { column: MOCK_PROP, index: 1 },
 		});
