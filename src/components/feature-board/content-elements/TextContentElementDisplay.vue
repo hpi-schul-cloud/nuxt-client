@@ -24,7 +24,7 @@ export default defineComponent({
 	margin-top: 6px;
 	margin-bottom: 16px;
 }
-.text:first-sibling {
+.text:first-child {
 	margin-top: 4px;
 }
 </style>
