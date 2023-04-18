@@ -153,7 +153,6 @@ export const useBoardState = (id: string) => {
 	};
 
 	const boardActions = {
-		addNewColumn,
 		deleteColumn,
 	};
 

@@ -4,7 +4,7 @@ import Vue from "vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { BOARD_COLUMN_DELETE } from "../types/BoardInjectionKeys";
+import { BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 describe("BoardColumnHeader", () => {
 	let wrapper: Wrapper<Vue>;
@@ -15,7 +15,9 @@ describe("BoardColumnHeader", () => {
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			provide: {
-				[BOARD_COLUMN_DELETE as symbol]: jest.fn(),
+				[BOARD_ACTIONS as symbol]: {
+					deleteColumn: jest.fn(),
+				},
 			},
 			propsData: {
 				title: "title-text",

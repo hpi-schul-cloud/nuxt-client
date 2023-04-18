@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, provide } from "vue";
+import { defineComponent, provide } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
