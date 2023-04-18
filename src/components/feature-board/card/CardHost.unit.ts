@@ -3,7 +3,6 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
-import { ContentElementType } from "../types/ContentElement";
 import CardHost from "./CardHost.vue";
 
 const CARD_SKELETON: BoardCardSkeleton = {
@@ -16,22 +15,6 @@ const CARD_WITHOUT_ELEMENTS: BoardCard = {
 	title: "Empty Card",
 	height: 200,
 	elements: [],
-	visibility: { publishedAt: "2022-01-01 20:00:00" },
-};
-
-const CARD_WITH_ELEMENTS: BoardCard = {
-	id: "0123456789abcdef00067000",
-	title: "Lesson Card",
-	height: 200,
-	elements: [
-		{
-			type: ContentElementType.TEXT,
-			id: "0123456789abcdef00067003",
-			content: {
-				text: "Element Text",
-			},
-		},
-	],
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 

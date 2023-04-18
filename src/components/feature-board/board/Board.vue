@@ -22,9 +22,7 @@
 								:index="index"
 								@update:card-position:keyboard="onPositionChangeKeyboard"
 								@update:card-position="onCardPositionChange(index, $event)"
-								@update:title="
-									($event) => onUpdateColumnTitle(column.id, $event)
-								"
+								@update:title="onUpdateColumnTitle(column.id, $event)"
 								@remove-card="onRemoveCard"
 							/>
 						</Draggable>
@@ -40,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from "vue";
+import { defineComponent, inject, provide } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
@@ -52,7 +50,7 @@ import {
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
-import VueI18n from "vue-i18n";
+import { BOARD_COLUMN_DELETE } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "Board",
@@ -61,6 +59,7 @@ export default defineComponent({
 		const route = useRoute();
 		const {
 			board,
+			deleteColumn,
 			moveCard,
 			removeCard,
 			moveColumn,
@@ -69,7 +68,7 @@ export default defineComponent({
 			addNewColumn,
 		} = useBoardState(route.params?.id);
 
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		provide(BOARD_COLUMN_DELETE, deleteColumn);
 
 		const onCardPositionChange = (_: any, payload: CardMove) => {
 			moveCard(payload);
@@ -98,16 +97,12 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const defaultColumnTitle =
-			i18n?.t("components.board.column.defaultTitle").toString() ||
-			"Neue Spalte";
-
 		const onAddEmptyColumn = () => {
-			addNewColumn(defaultColumnTitle);
+			addNewColumn();
 		};
 
-		const onAddColumnWithCard = (cardId: string) => {
-			addNewColumn(defaultColumnTitle, cardId);
+		const onAddColumnWithCard = (cardId?: string) => {
+			addNewColumn(cardId);
 		};
 
 		return {

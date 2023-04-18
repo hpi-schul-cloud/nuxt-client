@@ -5,6 +5,7 @@ import BoardColumnVue from "./BoardColumn.vue";
 import { BoardColumn } from "../types/Board";
 import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
+import { BOARD_COLUMN_DELETE } from "../types/BoardInjectionKeys";
 
 const MOCK_PROP: BoardColumn = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
@@ -27,6 +28,9 @@ describe("BoardColumn", () => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
+			provide: {
+				[BOARD_COLUMN_DELETE]: jest.fn(),
+			},
 			propsData: { column: MOCK_PROP, index: 1 },
 		});
 	};

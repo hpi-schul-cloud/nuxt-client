@@ -1,9 +1,20 @@
 import { $axios } from "@/utils/api";
-import { BoardCardApiFactory, BoardColumnApiFactory } from "@/serverApi/v3";
+import {
+	BoardApiFactory,
+	BoardCardApiFactory,
+	BoardColumnApiFactory,
+	ColumnResponse,
+} from "@/serverApi/v3";
 
 export const useBoardApi = () => {
-	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
+	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+
+	const createColumn = async (boardId: string): Promise<ColumnResponse> => {
+		const response = await boardApi.boardControllerCreateColumn(boardId);
+		return response.data;
+	};
 
 	const updateCardTitle = async (id: string, title: string) => {
 		await cardsApi.cardControllerUpdateCardTitle(id, { title });
@@ -21,6 +32,10 @@ export const useBoardApi = () => {
 		await cardsApi.cardControllerDeleteCard(cardId);
 	};
 
+	const deleteColumnCall = async (columnId: string) => {
+		await boardColumnApi.columnControllerDeleteColumn(columnId);
+	};
+
 	const moveCardCall = async (
 		cardId: string,
 		toColumnId: string,
@@ -33,8 +48,10 @@ export const useBoardApi = () => {
 	};
 
 	return {
+		createColumn,
 		createElement,
 		deleteCardCall,
+		deleteColumnCall,
 		moveCardCall,
 		updateCardTitle,
 		updateColumnTitleCall,

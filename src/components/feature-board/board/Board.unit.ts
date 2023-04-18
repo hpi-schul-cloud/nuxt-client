@@ -127,6 +127,7 @@ describe("Board", () => {
 			updateColumnTitle: jest.fn(),
 			addNewColumn: jest.fn(),
 			removeCard: jest.fn(),
+			deleteColumn: jest.fn(),
 			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
 			isLoading: ref(isLoading ?? false),
 		});

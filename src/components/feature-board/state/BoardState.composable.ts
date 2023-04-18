@@ -3,9 +3,11 @@ import { $axios } from "@/utils/api";
 import { onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
+import { IdHolder } from "../types/BoardInjectionKeys";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
-const { moveCardCall, updateColumnTitleCall } = useBoardApi();
+const { createColumn, deleteColumnCall, moveCardCall, updateColumnTitleCall } =
+	useBoardApi();
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
@@ -13,9 +15,6 @@ export const useBoardState = (id: string) => {
 
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
-		await new Promise((r) => {
-			setTimeout(r, 1000);
-		});
 		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
 		board.value = {
 			...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
@@ -136,13 +135,28 @@ export const useBoardState = (id: string) => {
 		updateColumnTitleCall(columnId, newTitle);
 	};
 
-	const addNewColumn = (title: string, card?: string) => {
-		console.log(title, card);
+	const addNewColumn = async (cardId?: string) => {
+		if (board.value === undefined) {
+			return;
+		}
+		await createColumn(board.value.id);
+		// WIP: add move card...
+		await fetchBoard(board.value.id);
+	};
+
+	const deleteColumn: IdHolder = async (id: string) => {
+		if (board.value === undefined) {
+			return;
+		}
+
+		await deleteColumnCall(id);
+		await fetchBoard(board.value.id);
 	};
 
 	onMounted(() => fetchBoard(id));
 
 	return {
+		deleteColumn,
 		fetchBoard,
 		board,
 		isLoading,

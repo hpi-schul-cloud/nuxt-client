@@ -38,7 +38,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		await deleteCardCall(cardState.card.id);
-		console.log("DELETE CARD");
 	};
 
 	const updateCardHeight = (newHeight: number) => {

@@ -4,7 +4,9 @@
 		class="column-drag-handle white px-4"
 	>
 		<BoardColumnHeader
+			:columnId="column.id"
 			:title="column.title"
+			:titlePlaceholder="titlePlaceholder"
 			@update:title="onUpdateTitle"
 		></BoardColumnHeader>
 		<Container
@@ -32,9 +34,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, inject, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { useDebounceFn } from "@vueuse/core";
+import VueI18n from "vue-i18n";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
@@ -62,6 +65,7 @@ export default defineComponent({
 		"remove-card",
 	],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
 
 		const onMoveCard = (dropResult: CardMove): void => {
@@ -117,6 +121,10 @@ export default defineComponent({
 			emit("update:title", newTitle);
 		}, 1000);
 
+		const titlePlaceholder = computed(
+			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+		);
+
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
@@ -125,6 +133,7 @@ export default defineComponent({
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,
+			titlePlaceholder,
 		};
 	},
 });

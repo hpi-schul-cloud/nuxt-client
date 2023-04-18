@@ -35,9 +35,7 @@
 										{{ mdiTrashCanOutline }}
 									</v-icon>
 									{{
-										$t(
-											"components.cardHost.cardDelete.modal.confirmation.title"
-										)
+										$t("components.cardHost.deletionModal.confirmation.title")
 									}}
 								</BoardMenuAction>
 							</BoardMenu>
@@ -55,12 +53,12 @@
 				</template>
 			</VCard>
 		</div>
-		<CardDeleteConfirmation
+		<DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
 			:card-title="card ? card.title : ''"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDialogCancel"
-		></CardDeleteConfirmation>
+		></DeleteConfirmation>
 	</CardHostInteractionHandler>
 </template>
 
@@ -75,7 +73,7 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-import CardDeleteConfirmation from "./CardDeleteConfirmation.vue";
+import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import { useCardState } from "../state/CardState.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
 
@@ -90,7 +88,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		CardDeleteConfirmation,
+		DeleteConfirmation,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -116,7 +114,7 @@ export default defineComponent({
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 		const onDelete = () => (isDeleteModalOpen.value = true);
-		const onDialogCancel = () => (isDeleteModalOpen.value = false);
+		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 
 		const onDeleteConfirmation = async () => {
 			await deleteCard();
@@ -153,7 +151,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			isDeleteModalOpen,
 			onDeleteConfirmation,
-			onDialogCancel,
+			onDialogCancel: onDeleteCancel,
 		};
 	},
 });
