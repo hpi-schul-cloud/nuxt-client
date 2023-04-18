@@ -176,6 +176,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/components/VTextField/_variables.scss";
+
 .time-list-item {
 	min-height: 42px;
 	text-align: center;
@@ -184,10 +186,10 @@ export default defineComponent({
 ::v-deep {
 	.menu-open {
 		label {
-			transform: translateY(-6px) scale(0.75) !important;
+			transform: $text-field-filled-full-width-label-active-transform;
 		}
 		.v-text-field__details {
-			display: none !important;
+			display: none;
 		}
 	}
 }
