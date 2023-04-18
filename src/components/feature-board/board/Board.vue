@@ -70,7 +70,7 @@ export default defineComponent({
 
 		provide(BOARD_ACTIONS, boardActions);
 
-		const onCardPositionChange = (_: any, payload: CardMove) => {
+		const onCardPositionChange = (_: unknown, payload: CardMove) => {
 			moveCard(payload);
 		};
 

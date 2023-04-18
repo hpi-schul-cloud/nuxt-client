@@ -135,6 +135,7 @@ export const useBoardState = (id: string) => {
 	};
 
 	const addNewColumn = async (cardId?: string) => {
+		console.log("cardId", cardId);
 		if (board.value === undefined) {
 			return;
 		}
