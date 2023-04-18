@@ -4,7 +4,7 @@ This document is temporary and here to help some early birds when testing multic
 
 ## create a local board
 
-If you want to test the multi-column-board on your local environment, you can create an additional board by executing this command in the command-line (aka shell aka bash):
+If you want to test the multi-column-board on your local environment, you can create an additional board by executing this command in the command-line (aka shell aka bash) of the backend (schulcloud-server):
 
 ```bash
 npm run nest:start:console -- board create-boards
@@ -12,9 +12,11 @@ npm run nest:start:console -- board create-boards
 
 This will create the mongodb-collection `boardnodes` (if it does not exist yet) and add several instances of board-nodes that form a tree of nodes that represents the board as a whole.
 
-## get an id of a local board
+Hint: You can see the id of the column-node in the generated output.
 
-1. open your database-gui-tool of choice e.g. **MongoDB Compass**
+## get an(y) id of a local board
+
+1. open your database-gui-tool of choice (e.g. **MongoDB Compass**)
 2. connect to your local database
 3. open `boardnodes` collection
 4. find a node of type `collumn-board` - e.g.
