@@ -69,6 +69,7 @@ describe("BoardColumn", () => {
 				removedIndex: 0,
 				addedIndex: 0,
 				payload: MOCK_PROP.cards[0],
+				targetColumnId: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
 			};
 			const containerComponent = wrapper.findComponent(Container);
 			await containerComponent.vm.$emit("drop", emitObject);

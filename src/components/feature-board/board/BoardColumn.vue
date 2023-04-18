@@ -14,7 +14,7 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			non-drag-area-selector=".drag-disabled"
-			@drop="(e) => onMoveCard(column.id, e)"
+			@drop="onMoveCard"
 		>
 			<template v-for="(card, index) in column.cards">
 				<Draggable :key="card.cardId">
@@ -64,10 +64,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
-		const onMoveCard = (targetColumnId: string, dropResult: CardMove): void => {
+		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("update:card-position", { ...dropResult, targetColumnId });
+			emit("update:card-position", {
+				...dropResult,
+				targetColumnId: props.column.id,
+			});
 		};
 
 		const onRemoveCard = (cardId: string): void => {
