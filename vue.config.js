@@ -25,6 +25,20 @@ module.exports = defineConfig({
 	// to e.g. exclude test files
 	// https://github.com/vuejs/vue-cli/issues/2421
 	chainWebpack: (config) => {
+		config.resolve.alias.set("vue", "@vue/compat");
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				return {
+					...options,
+					compilerOptions: {
+						compatConfig: {
+							MODE: 2,
+						},
+					},
+				};
+			});
 		config.module
 			.rule("ts")
 			.use("ts-loader")

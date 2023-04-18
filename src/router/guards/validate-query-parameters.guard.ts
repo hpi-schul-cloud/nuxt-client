@@ -1,17 +1,19 @@
 import { useApplicationError } from "@/composables/application-error.composable";
-import { NavigationGuard } from "vue-router";
-import { Route } from "vue-router/types/router";
+import { NavigationGuard, RouteLocation } from "vue-router";
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const { createApplicationError } = useApplicationError();
 
-type ParameterValidationFunction = (value: unknown, to: Route) => boolean;
+type ParameterValidationFunction = (
+	value: unknown,
+	to: RouteLocation
+) => boolean;
 
 export function validateQueryParameters(
 	parameters: Record<string, ParameterValidationFunction>
 ): NavigationGuard {
-	return (to: Route, from: Route, next) => {
+	return (to: RouteLocation, from: RouteLocation, next) => {
 		const isValid = Object.entries(parameters).every(([key, func]) => {
 			return func(to.query[key], to);
 		});

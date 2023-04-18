@@ -1,10 +1,10 @@
-import { NavigationGuardNext, Route } from "vue-router";
+import { NavigationGuardNext, RouteLocation } from "vue-router";
 import { authModule } from "@/store";
 import { getLoginUrlWithRedirect } from "../login-redirect-url";
 
 export const isAuthenticatedGuard = (
-	to: Route,
-	from: Route,
+	to: RouteLocation,
+	from: RouteLocation,
 	next: NavigationGuardNext
 ) => {
 	const userIsLoggedIn = authModule.isLoggedIn;
@@ -17,7 +17,7 @@ export const isAuthenticatedGuard = (
 	}
 };
 
-const isRoutePublic = (route: Route) => {
+const isRoutePublic = (route: RouteLocation) => {
 	if (typeof route.meta?.isPublic === "boolean") {
 		return route.meta.isPublic;
 	} else {

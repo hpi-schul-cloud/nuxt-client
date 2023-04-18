@@ -27,24 +27,26 @@ import {
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
-import { createI18n } from "./plugins/i18n";
+// import { createI18n } from "./plugins/i18n";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./plugins/store";
 
-Vue.config.productionTip = false;
+const app = Vue.createApp(App);
 
-Vue.config.errorHandler = handleApplicationError;
+// app.config.productionTip = false;
+
+app.config.errorHandler = handleApplicationError;
 
 // NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
-Vue.prototype.$theme = themeConfig;
+app.config.globalProperties.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueMq from "vue-mq";
-Vue.use(VueMq, {
+app.use(VueMq, {
 	breakpoints: {
 		mobile: 750,
 		tabletPortrait: 770,
@@ -55,10 +57,10 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
-import Vuelidate from "vuelidate";
-Vue.use(Vuelidate);
+// import Vuelidate from "vuelidate";
+// app.use(Vuelidate);
 
-Vue.mixin({
+app.mixin({
 	computed: {
 		$user() {
 			return authModule.getUser;
@@ -84,6 +86,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
 	initializeAxios(axios);
+	app.config.globalProperties.$axios = axios;
 
 	await envConfigModule.findEnvs();
 
@@ -104,42 +107,37 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 	}
 
 	// creation of i18n relies on envConfigModule authModule
-	const i18n = createI18n();
+	// const i18n = createI18n();
 
-	new Vue({
-		router,
-		store,
-		vuetify,
-		i18n,
-		// NUXT_REMOVAL get rid of store DI
-		provide: {
-			accountsModule,
-			applicationErrorModule,
-			authModule,
-			autoLogoutModule,
-			collaborativeFilesModule,
-			contentModule,
-			copyModule,
-			envConfigModule,
-			externalToolsModule,
-			filePathsModule,
-			filesPOCModule,
-			finishedTasksModule,
-			importUsersModule,
-			loadingStateModule,
-			newsModule,
-			notifierModule,
-			roomModule,
-			roomsModule,
-			schoolsModule,
-			shareModule,
-			statusAlertsModule,
-			systemsModule,
-			taskCardModule,
-			tasksModule,
-			userLoginMigrationModule,
-			i18n,
-		},
-		render: (h) => h(App),
-	}).$mount("#app");
+	app.use(router).use(store).use(vuetify); //.use(i18n);
+
+	// NUXT_REMOVAL get rid of store DI
+	app.provide("accountsModule", accountsModule);
+	app.provide("applicationErrorModule", applicationErrorModule);
+	app.provide("authModule", authModule);
+	app.provide("autoLogoutModule", autoLogoutModule);
+	app.provide("collaborativeFilesModule", collaborativeFilesModule);
+	app.provide("contentModule", contentModule);
+	app.provide("copyModule", copyModule);
+	app.provide("envConfigModule", envConfigModule);
+	app.provide("externalToolsModule", externalToolsModule);
+	app.provide("filePathsModule", filePathsModule);
+	app.provide("filesPOCModule", filesPOCModule);
+	app.provide("finishedTasksModule", finishedTasksModule);
+	app.provide("importUsersModule", importUsersModule);
+	app.provide("loadingStateModule", loadingStateModule);
+	app.provide("newsModule", newsModule);
+	app.provide("notifierModule", notifierModule);
+	app.provide("roomModule", roomModule);
+	app.provide("roomsModule", roomsModule);
+	app.provide("schoolsModule", schoolsModule);
+	app.provide("shareModule", shareModule);
+	app.provide("statusAlertsModule", statusAlertsModule);
+	app.provide("systemsModule", systemsModule);
+	app.provide("taskCardModule", taskCardModule);
+	app.provide("tasksModule", tasksModule);
+	app.provide("userLoginMigrationModule", userLoginMigrationModule);
+	app.provide("i18n", i18n);
+
+	app.mount("#app");
 })();
