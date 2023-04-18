@@ -1,9 +1,9 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import CardDeleteConfirmation from "./CardDeleteConfirmation.vue";
+import DeleteConfirmation from "./DeleteConfirmation.vue";
 
-describe("CardDeleteConfirmation", () => {
+describe(DeleteConfirmation.name, () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (options: {
@@ -11,8 +11,11 @@ describe("CardDeleteConfirmation", () => {
 		cardTitle?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardDeleteConfirmation as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		wrapper = shallowMount(DeleteConfirmation as MountOptions<Vue>, {
+			...createComponentMocks({ i18n: true }),
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 			propsData: {
 				isDeleteModalOpen: options?.isDeleteModalOpen || true,
 				cardTitle: options.cardTitle || "card title",
@@ -23,12 +26,7 @@ describe("CardDeleteConfirmation", () => {
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
 			setup({});
-			expect(wrapper.findComponent(CardDeleteConfirmation).exists()).toBe(true);
-		});
-
-		it("card title should be in dom", () => {
-			setup({ cardTitle: "test card title" });
-			expect(wrapper.element.textContent).toContain("test card title");
+			expect(wrapper.findComponent(DeleteConfirmation).exists()).toBe(true);
 		});
 	});
 

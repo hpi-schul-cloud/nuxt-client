@@ -9,27 +9,19 @@
 		@dialog-closed="onCloseDialog"
 	>
 		<h2 slot="title" class="text-h4 my-2">
-			{{ $t("components.cardHost.cardDelete.modal.confirmation.title") }}
+			{{ $t("components.cardHost.deletionModal.confirmation.title") }}
 		</h2>
 		<p slot="content" class="text-md mt-2">
-			{{
-				cardTitle == ""
-					? $t("components.cardHost.cardDelete.modal.confirmation.text")
-					: $t(
-							"components.cardHost.cardDelete.modal.confirmation.textWithTitle",
-							{
-								cardTitle,
-							}
-					  )
-			}}
+			{{ confirmationMessage }}
 		</p>
 	</vCustomDialog>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { computed, defineComponent, inject } from "vue";
+import VueI18n from "vue-i18n";
 import { useVModel } from "@vueuse/core";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	name: "CardDeleteConfirmation",
@@ -48,11 +40,20 @@ export default defineComponent({
 	},
 	emits: ["delete-confirm", "dialog-cancel"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const isOpen = useVModel(props, "isDeleteModalOpen", emit);
+
+		const confirmationMessage = computed(() =>
+			i18n?.t("components.cardHost.deletionModal.confirmation.text", {
+				cardTitle: props.cardTitle ? `"${props.cardTitle}"` : "",
+			})
+		);
+
 		const onDeleteConfirmation = () => emit("delete-confirm");
 		const onCloseDialog = () => emit("dialog-cancel");
 
 		return {
+			confirmationMessage,
 			isOpen,
 			onDeleteConfirmation,
 			onCloseDialog,
