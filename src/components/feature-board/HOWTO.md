@@ -16,10 +16,11 @@ Hint: You can see the id of the column-node in the generated output.
 
 ## get an(y) id of a local board
 
-1. open your database-gui-tool of choice (e.g. **MongoDB Compass**)
-2. connect to your local database
-3. open `boardnodes` collection
-4. find a node of type `collumn-board` - e.g.
+ 1. open your database-gui-tool of choice (e.g. **MongoDB Compass**)
+ 2. connect to your local database
+ 3. open `boardnodes` collection
+ 4. find a node of type `collumn-board` - e.g.
+
     ```json
     {
     "_id": {
@@ -39,11 +40,12 @@ Hint: You can see the id of the column-node in the generated output.
     "title": "Donnerstag"
     }
     ```
-5. copy the value of "_id" - e.g. `64061baf6ef8e4a9ca38b9c8`
+
+ 5. copy the value of "_id" - e.g. `64061baf6ef8e4a9ca38b9c8`
 
 ## open the board in your browser
 
-1. Login into your local schulcloud-environment
-2. Enter a url like that: `http://localhost:4000/rooms/{{ boardid }}/board`
-3. Replace `{{ boardid }}` with your actual boardid (see section *get an id of a local board* above)
-4. Put this new url into your browser and hit enter
+ 1. Login into your local schulcloud-environment
+ 2. Enter a url like that: `http://localhost:4000/rooms/{{ boardid }}/board`
+ 3. Replace `{{ boardid }}` with your actual boardid (see section *get an id of a local board* above)
+ 4. Put this new url into your browser and hit enter
