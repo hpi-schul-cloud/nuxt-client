@@ -46,7 +46,7 @@ describe("CardState composable", () => {
 	it("should return fetch function that updates card and loading state", async () => {
 		const cardId1 = "123124a";
 		const cardId2 = "123125b";
-		const { fetchCard, card, isLoading } = mountComposable(() =>
+		const { fetchCard, isLoading } = mountComposable(() =>
 			useCardState(cardId1)
 		);
 

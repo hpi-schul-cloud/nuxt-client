@@ -9,6 +9,7 @@
 			<VCard
 				:height="isLoading ? height : 'auto'"
 				class="w-100 transition-swing"
+				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
 				:elevation="isEditMode ? 6 : 0"
@@ -29,8 +30,13 @@
 						</template>
 						<template v-slot:menu>
 							<BoardMenu scope="card">
-								<BoardMenuAction @click="onDelete"
-									>Delete Card
+								<BoardMenuAction @click="onDelete">
+									<v-icon>
+										{{ mdiTrashCanOutline }}
+									</v-icon>
+									{{
+										$t("components.cardHost.deletionModal.confirmation.title")
+									}}
 								</BoardMenuAction>
 							</BoardMenu>
 						</template>
@@ -40,15 +46,24 @@
 						:elements="card.elements"
 						:isEditMode="isEditMode"
 					></ContentElementList>
-					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
+					<CardAddElementMenu
+						@add-element="onAddElement"
+						v-if="isEditMode"
+					></CardAddElementMenu>
 				</template>
 			</VCard>
 		</div>
+		<DeleteConfirmation
+			:is-delete-modal-open="isDeleteModalOpen"
+			:card-title="card ? card.title : ''"
+			@delete-confirm="onDeleteConfirmation"
+			@dialog-cancel="onDialogCancel"
+		></DeleteConfirmation>
 	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
-import { useElementSize, watchDebounced } from "@vueuse/core";
+import { useDebounceFn, useElementSize, watchDebounced } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
 import CardHeader from "./CardHeader.vue";
 import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
@@ -58,7 +73,9 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import { useCardState } from "../state/CardState.composable";
+import { mdiTrashCanOutline } from "@mdi/js";
 
 export default defineComponent({
 	name: "CardHost",
@@ -71,19 +88,20 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		DeleteConfirmation,
 	},
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard"],
+	emits: ["move-card-keyboard", "remove-card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const {
 			isLoading,
 			card,
-			updateTitle,
 			deleteCard,
+			updateTitle,
 			updateCardHeight,
 			addElement,
 		} = useCardState(props.cardId);
@@ -92,9 +110,17 @@ export default defineComponent({
 			emit("move-card-keyboard", event.code);
 		};
 		const isEditMode = ref<boolean>(false);
+		const isDeleteModalOpen = ref<boolean>(false);
 
-		const onUpdateCardTitle = updateTitle;
-		const onDelete = deleteCard;
+		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
+		const onDelete = () => (isDeleteModalOpen.value = true);
+		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
+
+		const onDeleteConfirmation = async () => {
+			await deleteCard();
+			isDeleteModalOpen.value = false;
+			emit("remove-card", card.value?.id);
+		};
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
 			isEditMode.value = true;
@@ -122,6 +148,10 @@ export default defineComponent({
 			onEndEditMode,
 			cardHost,
 			isEditMode,
+			mdiTrashCanOutline,
+			isDeleteModalOpen,
+			onDeleteConfirmation,
+			onDialogCancel: onDeleteCancel,
 		};
 	},
 });

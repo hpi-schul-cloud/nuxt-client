@@ -10,7 +10,6 @@
 		</div>
 
 		<VTextarea
-			:label="label"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -73,18 +72,6 @@ export default defineComponent({
 					return 1;
 			}
 		});
-		const label = computed(() => {
-			switch (props.scope) {
-				case "board":
-					return "BoardTitle";
-				case "column":
-					return "ColumnTitle";
-				case "card":
-					return "CardTitle";
-				default:
-					return "UnknownTitle";
-			}
-		});
 		const fontSize = computed(() => {
 			switch (props.scope) {
 				case "board":
@@ -101,7 +88,6 @@ export default defineComponent({
 		return {
 			modelValue,
 			ariaLevel,
-			label,
 			fontSize,
 		};
 	},
