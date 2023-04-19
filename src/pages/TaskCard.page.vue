@@ -256,7 +256,10 @@ export default defineComponent({
 				if (taskCardData.id !== "") {
 					isDeletable.value = !!taskCardData.id;
 				}
-				visibleAtDate.value = taskCardData.visibleAtDate;
+
+				if (taskCardData.visibleAtDate) {
+					visibleAtDate.value = taskCardData.visibleAtDate;
+				}
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
