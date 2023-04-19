@@ -328,17 +328,14 @@ export default defineComponent({
 </style>
 <style lang="scss">
 .sidebar .contents .list .list-item .list-content .icon {
-	width: 25px;
+	width: 24px;
+	height: 24px;
 	margin-right: 8px;
 	vertical-align: middle;
 
 	.v-icon {
-		width: 25px;
-		height: 19px;
-
-		&.custom-icon {
-			height: 18px;
-		}
+		width: 24px;
+		height: 24px;
 	}
 }
 </style>
