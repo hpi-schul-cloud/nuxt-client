@@ -41,7 +41,7 @@
 					color="primary"
 					depressed
 					data-testId="btn-proceed"
-					:to="{
+					:href="{
 						path: `/login/oauth2/${targetSystem}`,
 						query: { migration: true },
 					}"
