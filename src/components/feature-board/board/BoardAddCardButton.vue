@@ -1,18 +1,22 @@
 <template>
 	<div class="d-flex justify-center w-full" ref="column">
 		<div ref="columnend"></div>
-		<VBtn
-			@click.stop="onAddCard"
-			@dblclick.stop="() => {}"
-			elevation="0"
-			outlined
-			icon
-			large
+		<div
+			class="button-background text-center pt-2 pb-4"
 			:class="{ sticky: isSticky && !overTheTop }"
 		>
-			<v-icon>{{ mdiPlus }}</v-icon>
-			<span class="d-sr-only">Add Card</span>
-		</VBtn>
+			<VBtn
+				@click.stop="onAddCard"
+				@dblclick.stop="() => {}"
+				elevation="0"
+				outlined
+				icon
+				large
+			>
+				<v-icon>{{ mdiPlus }}</v-icon>
+				<span class="d-sr-only">Add Card</span>
+			</VBtn>
+		</div>
 	</div>
 </template>
 
@@ -50,6 +54,15 @@ export default defineComponent({
 .sticky {
 	position: fixed;
 	z-index: 1000;
-	bottom: 10px;
+	bottom: 0px;
+}
+.button-background {
+	background: #fff;
+	background: linear-gradient(
+		0deg,
+		rgba(255, 255, 255, 1) 50%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	width: 400px;
 }
 </style>
