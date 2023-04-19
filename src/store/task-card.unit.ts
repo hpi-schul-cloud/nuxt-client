@@ -55,6 +55,8 @@ const mockTaskCardData: TaskCardResponse = {
 	},
 	visibleAtDate: "2023-01-24T11:53:55.003Z",
 	dueDate: "2023-07-31T00:00:00.000Z",
+	courseName: "course",
+	courseId: "789",
 };
 
 const APIError = new AxiosError(
@@ -168,6 +170,8 @@ describe("task-card store", () => {
 							},
 						},
 					],
+					dueDate: "2023-07-31T00:00:00.000Z",
+					courseId: "789",
 				});
 
 				expect(taskCardApiMock.taskCardControllerCreate).toHaveBeenCalledTimes(
@@ -196,6 +200,8 @@ describe("task-card store", () => {
 				await taskCardModule.createTaskCard({
 					title: "some title",
 					cardElements: [],
+					dueDate: "2023-07-31T00:00:00.000Z",
+					courseId: "789",
 				});
 
 				expect(taskCardApiMock.taskCardControllerCreate).toHaveBeenCalledTimes(
@@ -228,6 +234,8 @@ describe("task-card store", () => {
 				await taskCardModule.updateTaskCard({
 					title: mockTaskCardData.title,
 					cardElements: [],
+					dueDate: "2023-07-31T00:00:00.000Z",
+					courseId: "789",
 				});
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
@@ -238,6 +246,8 @@ describe("task-card store", () => {
 					{
 						title: mockTaskCardData.title,
 						cardElements: [],
+						dueDate: "2023-07-31T00:00:00.000Z",
+						courseId: "789",
 					}
 				);
 				expect(setTaskCardDataMock).toHaveBeenCalledWith(mockTaskCardData);
@@ -261,7 +271,12 @@ describe("task-card store", () => {
 					);
 
 				taskCardModule.setTaskCardData(mockTaskCardData);
-				await taskCardModule.updateTaskCard({ title: "", cardElements: [] });
+				await taskCardModule.updateTaskCard({
+					title: "",
+					cardElements: [],
+					dueDate: "2023-07-31T00:00:00.000Z",
+					courseId: "789",
+				});
 
 				expect(taskCardApiMock.taskCardControllerUpdate).toHaveBeenCalledTimes(
 					1
