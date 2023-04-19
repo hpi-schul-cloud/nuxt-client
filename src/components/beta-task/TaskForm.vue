@@ -85,15 +85,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	onMounted,
-	Ref,
-	watch,
-	computed,
-} from "vue";
+import { defineComponent, inject, ref, onMounted, Ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, notifierModule } from "@/store";

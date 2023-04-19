@@ -90,15 +90,6 @@ export default defineComponent({
 			return endOfSchoolYear.toISOString();
 		};
 
-		// const isTasksRoute = () => {
-		// 	const prevRoute = route.params.previousRoute;
-
-		// 	if (prevRoute === null) {
-		// 		return true; // TODO - default?
-		// 	}
-		// 	return prevRoute.includes("tasks");
-		// };
-
 		const getCurrentCourse = async () => {
 			if (route.name === "beta-task-view-edit") {
 				const taskCardId = route.params.id;
