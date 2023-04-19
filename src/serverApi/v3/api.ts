@@ -1493,6 +1493,37 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  * 
  * @export
+ * @interface LdapAuthorizationBodyParams
+ */
+export interface LdapAuthorizationBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof LdapAuthorizationBodyParams
+     */
+    systemId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LdapAuthorizationBodyParams
+     */
+    username: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LdapAuthorizationBodyParams
+     */
+    password: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LdapAuthorizationBodyParams
+     */
+    schoolId: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonCopyApiParams
  */
 export interface LessonCopyApiParams {
@@ -1502,6 +1533,25 @@ export interface LessonCopyApiParams {
      * @memberof LessonCopyApiParams
      */
     courseId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LocalAuthorizationBodyParams
+ */
+export interface LocalAuthorizationBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof LocalAuthorizationBodyParams
+     */
+    username: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LocalAuthorizationBodyParams
+     */
+    password: string;
 }
 /**
  * 
@@ -2059,6 +2109,31 @@ export interface OAuthTokenDto {
      * @memberof OAuthTokenDto
      */
     accessToken: string;
+}
+/**
+ * 
+ * @export
+ * @interface Oauth2AuthorizationBodyParams
+ */
+export interface Oauth2AuthorizationBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2AuthorizationBodyParams
+     */
+    redirectUri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2AuthorizationBodyParams
+     */
+    code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2AuthorizationBodyParams
+     */
+    systemId: string;
 }
 /**
  * 
@@ -4767,10 +4842,13 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
+         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap: async (options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginLdap: async (ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ldapAuthorizationBodyParams' is not null or undefined
+            assertParamExists('loginControllerLoginLdap', 'ldapAuthorizationBodyParams', ldapAuthorizationBodyParams)
             const localVarPath = `/authentication/ldap`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4785,9 +4863,12 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(ldapAuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4796,10 +4877,13 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal: async (options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginLocal: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'localAuthorizationBodyParams' is not null or undefined
+            assertParamExists('loginControllerLoginLocal', 'localAuthorizationBodyParams', localAuthorizationBodyParams)
             const localVarPath = `/authentication/local`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4814,9 +4898,12 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(localAuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4825,14 +4912,14 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {string} [code] 
-         * @param {string} [error] 
-         * @param {string} [redirect] 
+         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth: async (code?: string, error?: string, redirect?: string, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/authentication/oauth/{systemId}`;
+        loginControllerLoginOauth2: async (oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauth2AuthorizationBodyParams' is not null or undefined
+            assertParamExists('loginControllerLoginOauth2', 'oauth2AuthorizationBodyParams', oauth2AuthorizationBodyParams)
+            const localVarPath = `/authentication/oauth2`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4840,27 +4927,18 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (code !== undefined) {
-                localVarQueryParameter['code'] = code;
-            }
-
-            if (error !== undefined) {
-                localVarQueryParameter['error'] = error;
-            }
-
-            if (redirect !== undefined) {
-                localVarQueryParameter['redirect'] = redirect;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oauth2AuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4879,32 +4957,32 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLdap(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLdap(options);
+        async loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLdap(ldapAuthorizationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLocal(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(options);
+        async loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(localAuthorizationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} [code] 
-         * @param {string} [error] 
-         * @param {string} [redirect] 
+         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth(code, error, redirect, options);
+        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4919,30 +4997,30 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap(options?: any): AxiosPromise<void> {
-            return localVarFp.loginControllerLoginLdap(options).then((request) => request(axios, basePath));
+        loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal(options?: any): AxiosPromise<void> {
-            return localVarFp.loginControllerLoginLocal(options).then((request) => request(axios, basePath));
+        loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} [code] 
-         * @param {string} [error] 
-         * @param {string} [redirect] 
+         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void> {
-            return localVarFp.loginControllerLoginOauth(code, error, redirect, options).then((request) => request(axios, basePath));
+        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4955,30 +5033,30 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLdap(options?: any): AxiosPromise<void>;
+    loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
 
     /**
      * 
+     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLocal(options?: any): AxiosPromise<void>;
+    loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
 
     /**
      * 
-     * @param {string} [code] 
-     * @param {string} [error] 
-     * @param {string} [redirect] 
+     * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void>;
+    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
 
 }
 
@@ -4991,35 +5069,35 @@ export interface AuthenticationApiInterface {
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
      * 
+     * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginLdap(options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginLdap(options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginLocal(options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} [code] 
-     * @param {string} [error] 
-     * @param {string} [redirect] 
+     * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginOauth(code, error, redirect, options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
