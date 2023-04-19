@@ -271,7 +271,7 @@ export const routes: Array<RouteConfig> = [
 		path: `/beta-task/:id(${REGEX_ID})`,
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "beta-task-view-edit",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
+		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
 	{
 		// deprecated?
