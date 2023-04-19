@@ -4,7 +4,11 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<v-form v-if="isEditMode" class="d-flex flex-column" ref="form">
+		<v-form
+			v-if="isEditMode && !isLoading"
+			class="d-flex flex-column"
+			ref="form"
+		>
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -24,6 +28,7 @@
 			<date-time-picker
 				class="mb-4"
 				required
+				:allow-past="false"
 				:date-time="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:minDate="minDate"
@@ -70,6 +75,7 @@
 				has-buttons
 				confirm-btn-title-key="common.actions.remove"
 				@dialog-confirmed="deleteElement()"
+				:is-open="false"
 			>
 				<h2 slot="title" class="text-h4 my-2">
 					{{ $t("pages.taskCard.deleteTaskCard.title") }}
@@ -93,13 +99,12 @@ import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import {
-	taskCardModule,
-	roomModule,
-	schoolsModule,
-	notifierModule,
-} from "@/store";
+import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
+import RoomsModule from "@/store/rooms";
+import RoomModule from "@/store/room";
+import SchoolsModule from "@/store/schools";
+import TaskCardModule from "@/store/task-card";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
@@ -119,7 +124,7 @@ import {
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomsModule from "@/store/rooms";
+
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import VisibilitySelector from "@/components/beta-task/VisibilitySelector.vue";
 
@@ -143,9 +148,21 @@ export default defineComponent({
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		const roomModule: RoomModule | undefined = inject<RoomModule>("roomModule");
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
-		if (!i18n || !authModule || !roomsModule) {
+		const schoolsModule: SchoolsModule | undefined =
+			inject<SchoolsModule>("schoolsModule");
+		const taskCardModule: TaskCardModule | undefined =
+			inject<TaskCardModule>("taskCardModule");
+		if (
+			!i18n ||
+			!authModule ||
+			!roomsModule ||
+			!roomModule ||
+			!schoolsModule ||
+			!taskCardModule
+		) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const t = (key: string) => {
@@ -179,6 +196,8 @@ export default defineComponent({
 		};
 
 		const breadcrumbs = ref<object[]>([]);
+
+		const isLoading = ref(true);
 
 		const form = ref<VForm | null>(null);
 		const course = ref("");
@@ -224,7 +243,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push(
 					{
 						text: i18n.t("pages.courses.index.title"),
@@ -263,6 +282,7 @@ export default defineComponent({
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
+				isLoading.value = false;
 
 				breadcrumbs.value.push(
 					{
@@ -300,7 +320,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push({
 					text: i18n.t("common.words.tasks"),
 					to: {
@@ -367,7 +387,6 @@ export default defineComponent({
 			if (hasErrors.value) {
 				return;
 			}
-
 			if (
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
@@ -419,10 +438,8 @@ export default defineComponent({
 
 		const deleteTaskCard = async (taskCardId: string) => {
 			await taskCardModule.deleteTaskCard(taskCardId);
-
 			if (taskCardModule.getStatus === "error") {
 				const error = taskCardModule.getBusinessError;
-
 				if (error.statusCode === 400) {
 					const validationError = error?.error as ApiValidationError;
 					notifierModule.show({
@@ -453,7 +470,6 @@ export default defineComponent({
 		};
 
 		const handleDateTimeInput = (dateTime: string) => {
-			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
 		const getUserPermissions = ref(authModule.getUserPermissions);
@@ -492,6 +508,7 @@ export default defineComponent({
 			maxDate,
 			errorMessage,
 			rules,
+			isLoading,
 			form,
 			isDeletable,
 		};
