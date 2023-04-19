@@ -3,7 +3,7 @@
 		data-test-id="status-alerts"
 		min-width="250"
 		max-height="400"
-		class="alerts px-0"
+		class="alerts pa-0"
 		elevation="2"
 		style="border-radius: 4px"
 	>
@@ -11,27 +11,21 @@
 			v-for="(item, index) in statusAlerts"
 			:key="index"
 			:data-test-id="`alert-item-${index}`"
-			three-line
-			class="px-2 alert-item"
+			class="alert-item"
 			:style="{
 				'border-top': index === 0 ? 'none' : '1px solid #e5e5e5',
-				'padding-bottom': '3px',
 			}"
 		>
-			<v-list-item-avatar size="24" class="ma-3">
+			<v-list-item-icon class="mt-3 mr-3">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content class="pb-0">
+			</v-list-item-icon>
+			<v-list-item-content>
 				<v-list-item-title
 					:data-test-id="`alert-title-${index}`"
-					style="
-						overflow: visible;
-						text-overflow: clip;
-						white-space: normal;
-						color: #1b1b1b;
-					"
+					style="overflow: visible; text-overflow: clip; white-space: normal"
+					class="subtitle-1 ma-0"
 				>
 					{{ item.title }}
 				</v-list-item-title>
@@ -43,15 +37,15 @@
 						white-space: unset;
 						display: flex;
 						flex-wrap: wrap;
-						color: #1b1b1b;
 					"
+					class="subtitle-2 text--primary ma-0 mt-1"
 				>
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
-					class="text-left text-caption d-flex flex-row alert-date"
+					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
 					:data-test-id="`alert-date-${index}`"
-					style="font-size: 14px; color: #55595c"
+					style="font-size: 14px"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
@@ -113,14 +107,5 @@ export default defineComponent({
 		width: 400px;
 		max-width: 400px;
 	}
-	.alert-item {
-		border-top: 1px solid#e5e5e5;
-	}
-}
-.alert-date {
-	text-align: left !important;
-	font-size: 14px !important;
-	padding-top: 3px;
-	padding-bottom: 3px;
 }
 </style>
