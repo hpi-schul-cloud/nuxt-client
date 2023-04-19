@@ -56,7 +56,7 @@ describe("BoardColumn", () => {
 			const cardHostComponent = wrapper.findComponent(CardHost);
 			cardHostComponent.vm.$emit("move-card-keyboard", "ArrowLeft");
 
-			const emitted = wrapper.emitted("position-change-keyboard") || [[]];
+			const emitted = wrapper.emitted("update:card-position:keyboard") || [[]];
 
 			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
 		});
@@ -75,7 +75,7 @@ describe("BoardColumn", () => {
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted("card-position-change") || [[]];
+			const emitted = wrapper.emitted("update:card-position") || [[]];
 
 			expect(emitted[0][0]).toStrictEqual(emitObject);
 		});
@@ -92,7 +92,7 @@ describe("BoardColumn", () => {
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted("card-position-change");
+			const emitted = wrapper.emitted("update:card-position");
 
 			expect(emitted).toBeUndefined();
 		});

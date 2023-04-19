@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import CardHostMenuAction from "./CardHostMenuAction.vue";
+import BoardMenuAction from "./BoardMenuAction.vue";
 
-describe("CardHostMenuAction Component", () => {
+describe("BoardMenuAction Component", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardHostMenuAction as MountOptions<Vue>, {
+		wrapper = shallowMount(BoardMenuAction as MountOptions<Vue>, {
 			...createComponentMocks({}),
 		});
 	};

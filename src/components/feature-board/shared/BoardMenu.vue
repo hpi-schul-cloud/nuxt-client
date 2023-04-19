@@ -13,7 +13,11 @@
 				@dblclick.stop="() => {}"
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
-				<span class="d-sr-only">Card-Menu</span>
+				<span class="d-sr-only">
+					<template v-if="scope === 'board'">Board-Menu</template>
+					<template v-if="scope === 'column'">Column-Menu</template>
+					<template v-if="scope === 'card'">Card-Menu</template>
+				</span>
 			</v-btn>
 		</template>
 		<v-list>
@@ -23,11 +27,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import { mdiDotsVertical } from "@mdi/js";
 export default defineComponent({
-	name: "CardHostMenu",
+	name: "BoardMenu",
+	props: {
+		scope: {
+			type: String as PropType<"card" | "column" | "board">,
+			required: true,
+		},
+	},
 	setup() {
 		return {
 			mdiDotsVertical,
