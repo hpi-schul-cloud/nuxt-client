@@ -124,6 +124,7 @@
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
+	"components.timePicker.validation.future": "Please enter a time in the future.",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Ok",
 	"components.administration.adminMigrationSection.endWarningCard.disagree": "Abort",
