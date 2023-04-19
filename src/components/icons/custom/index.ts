@@ -38,8 +38,6 @@ import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
-import uid from "./uid.vue";
-import uuid from "./uuid.vue";
 
 const customIcons = {
 	brb: {
@@ -161,12 +159,6 @@ const customIcons = {
 	},
 	thr: {
 		component: thr,
-	},
-	uid: {
-		component: uid,
-	},
-	uuid: {
-		component: uuid,
 	},
 };
 
