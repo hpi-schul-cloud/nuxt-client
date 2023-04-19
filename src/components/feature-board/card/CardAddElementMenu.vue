@@ -2,7 +2,7 @@
 	<VCardText>
 		<div class="d-flex justify-center w-full">
 			<VBtn
-				@click.stop="onAddElement('text')"
+				@click.stop="onAddElement(ContentElementType.TEXT)"
 				@dblclick.stop="() => {}"
 				elevation="0"
 				outlined
@@ -31,6 +31,7 @@ export default defineComponent({
 		return {
 			onAddElement,
 			mdiPlus,
+			ContentElementType,
 		};
 	},
 });

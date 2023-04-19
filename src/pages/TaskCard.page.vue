@@ -1,12 +1,14 @@
 <template>
-	<default-wireframe :full-width="false" :breadcrumbs="breadcrumbs">
-		<div slot="header" class="d-flex flex-row align-end">
-			<v-icon size="20" class="mr-2 mb-4 pb-1">$tasks</v-icon>
-			<h1 class="h6 mt-10">
-				{{ t("pages.rooms.fab.add.betatask") }}
-			</h1>
-		</div>
-		<v-form v-if="isEditMode" class="d-flex flex-column">
+	<default-wireframe
+		:full-width="false"
+		:breadcrumbs="breadcrumbs"
+		:headline="t('pages.rooms.fab.add.betatask')"
+	>
+		<v-form
+			v-if="isEditMode && !isLoading"
+			class="d-flex flex-column"
+			ref="form"
+		>
 			<v-select
 				v-model="course"
 				:items="courses"
@@ -15,6 +17,8 @@
 				filled
 				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
+				validate-on-blur
+				:rules="[rules.required]"
 			/>
 			<v-select
 				v-model="isVisible"
@@ -24,10 +28,13 @@
 				filled
 				disabled
 				:label="$t('common.labels.visibility')"
+				validate-on-blur
+				:rules="[rules.required]"
 			/>
 			<date-time-picker
 				class="mb-4"
 				required
+				:allow-past="false"
 				:date-time="dueDate"
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:minDate="minDate"
@@ -74,6 +81,7 @@
 				has-buttons
 				confirm-btn-title-key="common.actions.remove"
 				@dialog-confirmed="deleteElement()"
+				:is-open="false"
 			>
 				<h2 slot="title" class="text-h4 my-2">
 					{{ $t("pages.taskCard.deleteTaskCard.title") }}
@@ -97,8 +105,12 @@ import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
 import { useTitle } from "@vueuse/core";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, roomModule, schoolsModule } from "@/store";
+import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
+import RoomsModule from "@/store/rooms";
+import RoomModule from "@/store/room";
+import SchoolsModule from "@/store/schools";
+import TaskCardModule from "@/store/task-card";
 import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
@@ -107,6 +119,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
+import { AlertMessage } from "@/store/types/alert-payload";
 import {
 	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
@@ -116,7 +129,12 @@ import {
 } from "@/serverApi/v3";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomsModule from "@/store/rooms";
+
+import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
+
+interface VForm extends HTMLFormElement {
+	validate(): boolean;
+}
 
 // TODO - unit tests!
 export default defineComponent({
@@ -133,9 +151,21 @@ export default defineComponent({
 
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		const roomModule: RoomModule | undefined = inject<RoomModule>("roomModule");
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
-		if (!i18n || !authModule || !roomsModule) {
+		const schoolsModule: SchoolsModule | undefined =
+			inject<SchoolsModule>("schoolsModule");
+		const taskCardModule: TaskCardModule | undefined =
+			inject<TaskCardModule>("taskCardModule");
+		if (
+			!i18n ||
+			!authModule ||
+			!roomsModule ||
+			!roomModule ||
+			!schoolsModule ||
+			!taskCardModule
+		) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const t = (key: string) => {
@@ -170,6 +200,9 @@ export default defineComponent({
 
 		const breadcrumbs = ref<object[]>([]);
 
+		const isLoading = ref(true);
+
+		const form = ref<VForm | null>(null);
 		const course = ref("");
 		const courses = ref<object[]>([]);
 		const isVisible: Ref<boolean> = ref(true);
@@ -222,7 +255,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push(
 					{
 						text: i18n.t("pages.courses.index.title"),
@@ -258,6 +291,7 @@ export default defineComponent({
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
+				isLoading.value = false;
 
 				breadcrumbs.value.push(
 					{
@@ -295,7 +329,7 @@ export default defineComponent({
 
 				dueDate.value = endOfSchoolYear.toISOString();
 				initElements(initialCardElements);
-
+				isLoading.value = false;
 				breadcrumbs.value.push({
 					text: i18n.t("common.words.tasks"),
 					to: {
@@ -322,24 +356,17 @@ export default defineComponent({
 			});
 		};
 
-		// TODO improve with regular frontend validation, needed for now to satisfy backend validation
-		const validate = (content: string) => {
-			return content.length > 2;
-		};
-
 		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
 			elements.value.forEach((element) => {
-				if (validate(element.model)) {
-					const cardElement: CardElementParams = {
-						content: {
-							type: element.type,
-							value: element.model,
-							inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
-						},
-					};
-					cardElements.push(cardElement);
-				}
+				const cardElement: CardElementParams = {
+					content: {
+						type: element.type,
+						value: element.model,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+					},
+				};
+				cardElements.push(cardElement);
 			});
 
 			await taskCardModule.createTaskCard({
@@ -375,10 +402,16 @@ export default defineComponent({
 		};
 
 		const save = async () => {
+			if (form.value) {
+				const valid = form.value.validate();
+				if (!valid) {
+					return;
+				}
+			}
+
 			if (hasErrors.value) {
 				return;
 			}
-
 			if (
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
@@ -388,15 +421,71 @@ export default defineComponent({
 				await updateTaskCard();
 			}
 
-			router.go(-1);
+			if (taskCardModule.getStatus === "error") {
+				const validationError = taskCardModule.getBusinessError
+					.error as ApiValidationError;
+				const validationErrors = validationError?.validationErrors;
+
+				notifierModule.show({
+					messages: createServerErrorMessages(validationErrors),
+					status: "error",
+				});
+			} else {
+				router.go(-1);
+			}
+		};
+
+		const createServerErrorMessages = (errors: Array<ErrorDetails>) => {
+			const errorMessages: Array<AlertMessage> = [];
+			errors.forEach((validationError: ErrorDetails) => {
+				const msg: AlertMessage = { title: "", text: "" };
+				msg.title = validationError.field[0] + ":";
+
+				let errorText = "";
+				validationError.errors.forEach((error: string, index: number) => {
+					if (index === 0) {
+						errorText = errorText + error;
+					} else {
+						errorText = errorText + ", " + error;
+					}
+				});
+
+				msg.text = errorText;
+				errorMessages.push(msg);
+			});
+
+			return errorMessages;
+		};
+
+		const rules = {
+			required: (value: string) => !!value || t("common.validation.required"),
 		};
 
 		const deleteTaskCard = async (taskCardId: string) => {
 			await taskCardModule.deleteTaskCard(taskCardId);
-			router.go(-1);
+			if (taskCardModule.getStatus === "error") {
+				const error = taskCardModule.getBusinessError;
+				if (error.statusCode === 400) {
+					const validationError = error?.error as ApiValidationError;
+					notifierModule.show({
+						messages: createServerErrorMessages(
+							validationError.validationErrors
+						),
+						status: "error",
+					});
+				} else {
+					notifierModule.show({
+						text: error.message,
+						status: "error",
+					});
+				}
+			} else {
+				router.go(-1);
+			}
 		};
 
 		const hasErrors = ref(false);
+		const errorMessage = ref("");
 		const onError = () => {
 			hasErrors.value = true;
 		};
@@ -406,7 +495,6 @@ export default defineComponent({
 		};
 
 		const handleDateTimeInput = (dateTime: string) => {
-			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
 		const getUserPermissions = ref(authModule.getUserPermissions);
@@ -442,8 +530,12 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
+			errorMessage,
+			rules,
 			isVisible,
 			visibilityOptions,
+			isLoading,
+			form,
 			isDeletable,
 		};
 	},

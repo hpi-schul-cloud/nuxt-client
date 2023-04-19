@@ -1,27 +1,8 @@
 import { onMounted, reactive, toRef } from "vue";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useBoardApi } from "../shared/BoardApi.composable";
+import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
-import {
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
-
-const DUMMY_CARD: BoardCard = {
-	id: "0123456789abcdef00000003",
-	elements: [
-		{
-			type: ContentElementType.TEXT,
-			content: { text: "MyElementContent" },
-			id: "0123456789abcdef00067003",
-		},
-	],
-	height: 250,
-	title: "CardTitle",
-	visibility: {
-		publishedAt:
-			"Thu Feb 23 2023 11:56:51 GMT+0100 (Central European Standard Time)",
-	},
-};
+import { ContentElementType } from "../types/ContentElement";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -32,13 +13,9 @@ export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
+	const { createElement, deleteCardCall, updateCardTitle } = useBoardApi();
 
 	const fetchCard = async (id: string): Promise<void> => {
-		if (id === DUMMY_CARD.id) {
-			cardState.card = { ...DUMMY_CARD };
-			cardState.isLoading = false;
-			return;
-		}
 		try {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
@@ -47,16 +24,20 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.isLoading = false;
 	};
 
-	const updateTitle = (newTitle: string): void => {
+	const updateTitle = async (newTitle: string): Promise<void> => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		console.log("update title", newTitle);
+		await updateCardTitle(cardState.card.id, newTitle);
 		cardState.card.title = newTitle;
 	};
 
-	const deleteCard = () => {
-		console.log("DELETE CARD");
+	const deleteCard = async () => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		await deleteCardCall(cardState.card.id);
 	};
 
 	const updateCardHeight = (newHeight: number) => {
@@ -69,18 +50,13 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.height = newHeight;
 	};
 
-	const addElement = (type: ContentElementType) => {
+	const addElement = async (type: ContentElementType) => {
+		console.log("type", type);
 		if (cardState.card === undefined) {
 			return;
 		}
-		if (type === "text") {
-			const newTextContentElement: TextContentElement = {
-				id: "0123456789abcdef00067043",
-				type,
-				content: { text: "" },
-			};
-			cardState.card.elements.push(newTextContentElement);
-		}
+		await createElement(cardState.card.id);
+		await fetchCard(cardState.card.id);
 	};
 
 	onMounted(() => fetchCard(id));

@@ -5,6 +5,7 @@ import BoardColumnVue from "./BoardColumn.vue";
 import { BoardColumn } from "../types/Board";
 import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
+import { BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 const MOCK_PROP: BoardColumn = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
@@ -26,7 +27,13 @@ describe("BoardColumn", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
+			provide: {
+				[BOARD_ACTIONS as symbol]: {
+					deleteColumn: jest.fn(),
+				},
+				i18n: { t: (key: string) => key },
+			},
 			propsData: { column: MOCK_PROP, index: 1 },
 		});
 	};
@@ -56,7 +63,7 @@ describe("BoardColumn", () => {
 			const cardHostComponent = wrapper.findComponent(CardHost);
 			cardHostComponent.vm.$emit("move-card-keyboard", "ArrowLeft");
 
-			const emitted = wrapper.emitted("position-change-keyboard") || [[]];
+			const emitted = wrapper.emitted("update:card-position:keyboard") || [[]];
 
 			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
 		});
@@ -69,13 +76,14 @@ describe("BoardColumn", () => {
 				removedIndex: 0,
 				addedIndex: 0,
 				payload: MOCK_PROP.cards[0],
+				targetColumnId: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
 			};
 			const containerComponent = wrapper.findComponent(Container);
 			await containerComponent.vm.$emit("drop", emitObject);
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted("card-position-change") || [[]];
+			const emitted = wrapper.emitted("update:card-position") || [[]];
 
 			expect(emitted[0][0]).toStrictEqual(emitObject);
 		});
@@ -92,7 +100,7 @@ describe("BoardColumn", () => {
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted("card-position-change");
+			const emitted = wrapper.emitted("update:card-position");
 
 			expect(emitted).toBeUndefined();
 		});

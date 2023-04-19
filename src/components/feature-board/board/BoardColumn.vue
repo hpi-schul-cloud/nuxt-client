@@ -1,48 +1,56 @@
 <template>
 	<div
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle"
+		class="column-drag-handle white px-4"
 	>
-		<h4 class="text-truncate pr-4">{{ column.title }}</h4>
-		<div class="d-flex flex-column flex-grow-1 mr-4">
-			<Container
-				group-name="col"
-				@drop="onCardDrop"
-				drag-class="elevation-12"
-				drop-class="elevation-0"
-				:drop-placeholder="drowpdownDropPlaceholderOptions"
-				:get-child-payload="getChildPayload"
-			>
-				<template v-for="(card, index) in column.cards">
-					<Draggable :key="card.cardId">
-						<CardHost
-							class="mb-6"
-							:card-id="card.cardId"
-							:height="card.height"
-							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						/>
-					</Draggable>
-				</template>
-			</Container>
-		</div>
+		<BoardColumnHeader
+			:columnId="column.id"
+			:title="column.title"
+			:titlePlaceholder="titlePlaceholder"
+			@update:title="onUpdateTitle"
+		></BoardColumnHeader>
+		<Container
+			group-name="cards"
+			drag-class="elevation-12"
+			drop-class="elevation-0"
+			:drop-placeholder="cardDropPlaceholderOptions"
+			:get-child-payload="getChildPayload"
+			non-drag-area-selector=".drag-disabled"
+			@drop="onMoveCard"
+		>
+			<template v-for="(card, index) in column.cards">
+				<Draggable :key="card.cardId">
+					<CardHost
+						class="my-3"
+						:card-id="card.cardId"
+						:height="card.height"
+						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@remove-card="onRemoveCard"
+					/>
+				</Draggable>
+			</template>
+		</Container>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, inject, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useDebounceFn } from "@vueuse/core";
+import VueI18n from "vue-i18n";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
+	cardDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
-	drowpdownDropPlaceholderOptions,
 } from "../types/DragAndDrop";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable },
+	components: { CardHost, Container, Draggable, BoardColumnHeader },
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
@@ -50,14 +58,27 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
-	emits: ["card-position-change", "position-change-keyboard"],
+	emits: [
+		"update:card-position",
+		"update:card-position:keyboard",
+		"update:title",
+		"remove-card",
+	],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
 
-		const onCardDrop = (dropResult: CardMove): void => {
+		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("card-position-change", dropResult);
+			emit("update:card-position", {
+				...dropResult,
+				targetColumnId: props.column.id,
+			});
+		};
+
+		const onRemoveCard = (cardId: string): void => {
+			emit("remove-card", cardId);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
@@ -93,16 +114,33 @@ export default defineComponent({
 				cardMoveByKeyboard.targetColumnPosition = 0;
 			}
 
-			emit("position-change-keyboard", cardMoveByKeyboard);
+			emit("update:card-position:keyboard", cardMoveByKeyboard);
 		};
+
+		const onUpdateTitle = useDebounceFn((newTitle: string) => {
+			emit("update:title", newTitle);
+		}, 1000);
+
+		const titlePlaceholder = computed(
+			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+		);
 
 		return {
 			colWidth,
-			drowpdownDropPlaceholderOptions,
-			onCardDrop,
+			cardDropPlaceholderOptions,
+			onMoveCard,
+			onRemoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
+			onUpdateTitle,
+			titlePlaceholder,
 		};
 	},
 });
 </script>
+
+<style>
+.elevate-transition {
+	transition: box-shadow 150ms all;
+}
+</style>

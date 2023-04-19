@@ -16,19 +16,26 @@
 		</div>
 		<div class="content">
 			<div class="preview">
-				<div class="preview-background-color" />
-				<div
-					class="preview-background"
-					:style="{
-						backgroundImage: `url(${backgroundImage})`,
-					}"
+				<lern-store-player
+					v-if="shouldShowPlayer"
+					class="preview preview-player"
+					:node-id="resource.ref.id"
 				/>
-				<img
-					:src="backgroundImage"
-					class="preview-img"
-					:alt="$t('pages.content.preview_img.alt')"
-					role="img"
-				/>
+				<div v-else>
+					<div
+						class="preview-background"
+						:style="{
+							backgroundImage: `url(${backgroundImage})`,
+						}"
+					/>
+					<img
+						:src="backgroundImage"
+						class="preview-img"
+						:alt="$t('pages.content.preview_img.alt')"
+						role="img"
+					/>
+					<div class="preview-background-color" />
+				</div>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar elevation-6">
@@ -54,7 +61,15 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div>
+				<div v-if="shouldShowPlayer" class="external-content-warning">
+					<p class="text-s external-content-title">
+						{{ $t("pages.content.material.showMaterialHint") }}
+					</p>
+					<p class="text-s external-content-title-mobile">
+						{{ $t("pages.content.material.showMaterialHintMobile") }}
+					</p>
+				</div>
+				<div v-else>
 					<v-btn
 						v-if="isMerlin"
 						outlined
@@ -163,6 +178,7 @@
 import AddContentButton from "@/components/organisms/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
+import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
 import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { mdiClose, mdiOpenInNew } from "@mdi/js";
@@ -173,6 +189,7 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
+	isVideoContent,
 	isMerlinContent,
 } from "@/utils/helpers";
 
@@ -180,8 +197,9 @@ const DEFAULT_AUTHOR = "admin";
 
 export default {
 	components: {
-		BaseLink,
 		AddContentButton,
+		BaseLink,
+		LernStorePlayer,
 		UserHasRole,
 	},
 	mixins: [contentMeta],
@@ -190,6 +208,7 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
+		id: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
@@ -197,60 +216,22 @@ export default {
 		return {
 			mdiClose,
 			mdiOpenInNew,
+			windowWidth: window.outerWidth,
+			window: {
+				width: 0,
+				height: 0,
+			},
 		};
 	},
 	computed: {
-		provider() {
-			const provider = getProvider(this.resource.properties);
-			return provider ? provider.replace(/ {2,}/g, "") : undefined;
-		},
 		author() {
 			return getAuthor(this.resource.properties);
-		},
-		createdAt() {
-			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
-		},
-		updatedAt() {
-			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
-		},
-		type() {
-			return this.getTypeI18nName(this.resource.mimetype);
-		},
-		hasAuthor() {
-			return this.author && this.author !== DEFAULT_AUTHOR;
-		},
-		isMerlin() {
-			return isMerlinContent(this.resource);
-		},
-		merlinTokenReference() {
-			return getMerlinReference(this.resource);
-		},
-		description() {
-			return getDescription(
-				this.resource.description,
-				this.resource.properties
-			);
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
 		},
-		isBrandenburg() {
-			return process.env.SC_THEME === "brb";
-		},
-		downloadUrl() {
-			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
-		},
-		tags() {
-			return getTags(this.resource.properties);
-		},
-		filename() {
-			return this.resource.filename;
-		},
 		closeButtonStyleSelector() {
 			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
-		},
-		isInline() {
-			return !!this.$route.query.inline;
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(
@@ -272,6 +253,59 @@ export default {
 			}
 			return "";
 		},
+		createdAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
+		},
+		description() {
+			return getDescription(
+				this.resource.description,
+				this.resource.properties
+			);
+		},
+		downloadUrl() {
+			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
+		},
+		filename() {
+			return this.resource.filename;
+		},
+		hasAuthor() {
+			return this.author && this.author !== DEFAULT_AUTHOR;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
+		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+		isMerlin() {
+			return isMerlinContent(this.resource);
+		},
+		merlinTokenReference() {
+			return getMerlinReference(this.resource);
+		},
+		provider() {
+			const provider = getProvider(this.resource.properties);
+			return provider ? provider.replace(/ {2,}/g, "") : undefined;
+		},
+		shouldShowPlayer() {
+			return isVideoContent(this.resource);
+		},
+		tags() {
+			return getTags(this.resource.properties);
+		},
+		type() {
+			return this.getTypeI18nName(this.resource.mimetype);
+		},
+		updatedAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
+		},
+	},
+	created() {
+		window.addEventListener("resize", this.handleResize);
+		this.handleResize();
+	},
+	destroyed() {
+		window.removeEventListener("resize", this.handleResize);
 	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
@@ -283,6 +317,10 @@ export default {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
+		},
+		handleResize() {
+			this.window.width = window.innerWidth;
+			this.window.height = window.innerHeight;
 		},
 		goBack() {
 			if (window.history.length > 1) {
@@ -332,10 +370,10 @@ $tablet-portrait-width: 768px;
 	.icons {
 		position: fixed;
 		top: 0;
+		right: 0;
 		z-index: var(--layer-modal);
 		display: flex;
-		justify-content: space-between;
-		width: 100%;
+		justify-content: flex-end;
 		padding: var(--space-md);
 
 		.close-icon {
@@ -369,6 +407,17 @@ $tablet-portrait-width: 768px;
 				height: 70vh;
 			}
 
+			.loading {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				margin: auto;
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				color: white;
+			}
+
 			.preview-background-color {
 				position: absolute;
 				top: 0;
@@ -396,7 +445,6 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				position: absolute;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;
@@ -405,6 +453,17 @@ $tablet-portrait-width: 768px;
 					min-height: auto;
 				}
 			}
+		}
+	}
+
+	.floating-buttons {
+		position: sticky;
+		bottom: 0;
+		z-index: var(--layer-page);
+		border-radius: var(--radius-md);
+
+		@media (max-width: $tablet-portrait-width) {
+			padding-bottom: var(--space-xs);
 		}
 	}
 
@@ -423,6 +482,16 @@ $tablet-portrait-width: 768px;
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
 			overflow: inherit;
+
+			.external-content-warning {
+				.text-s.external-content-title-mobile {
+					display: block;
+				}
+
+				.external-content-title {
+					display: none;
+				}
+			}
 		}
 
 		.content-container {
@@ -437,6 +506,12 @@ $tablet-portrait-width: 768px;
 				margin-top: var(--space-md);
 				font-weight: var(--font-weight-bold);
 			}
+
+			.external-content-title-mobile {
+				display: none;
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
 		}
 
 		.content-button {
@@ -446,15 +521,6 @@ $tablet-portrait-width: 768px;
 		.actions {
 			display: flex;
 			justify-content: flex-end;
-		}
-
-		.title {
-			display: flex;
-			justify-content: space-between;
-			margin: var(--space-xl-2) 0 var(--space-sm) 0;
-			font-size: var(--heading-5);
-			font-weight: var(--font-weight-bold);
-			line-height: var(--line-height-md);
 		}
 
 		.author-provider {
@@ -476,6 +542,15 @@ $tablet-portrait-width: 768px;
 			display: flex;
 			flex-flow: row wrap;
 			word-break: break-word;
+		}
+
+		.title {
+			display: flex;
+			justify-content: space-between;
+			margin: var(--space-xl-2) 0 var(--space-sm) 0;
+			font-size: var(--heading-5);
+			font-weight: var(--font-weight-bold);
+			line-height: var(--line-height-md);
 		}
 
 		.metadata {
@@ -511,17 +586,6 @@ $tablet-portrait-width: 768px;
 						color: var(--v-black-base);
 					}
 				}
-			}
-		}
-
-		.floating-buttons {
-			position: sticky;
-			bottom: 0;
-			z-index: var(--layer-page);
-			border-radius: var(--radius-md);
-
-			@media (max-width: $tablet-portrait-width) {
-				padding-bottom: var(--space-xs);
 			}
 		}
 	}

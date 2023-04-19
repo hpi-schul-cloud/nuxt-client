@@ -7,6 +7,9 @@ const getWrapper = (props?: object, options?: object) => {
 		...createComponentMocks({
 			i18n: true,
 		}),
+		provide: {
+			i18n: { t: (key: string) => key },
+		},
 		propsData: props,
 		...options,
 	});

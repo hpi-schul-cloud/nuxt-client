@@ -14,11 +14,12 @@ describe("useExternalToolValidation", () => {
 
 		const toolParameter: ToolParameter = {
 			name: "ToolParameter",
+			displayName: "Tool Parameter",
 			isOptional: true,
 			value: "x",
 			type: ToolParameterType.String,
 			regexComment: "comment",
-			location: ToolParameterLocation.Path,
+			location: ToolParameterLocation.PATH,
 			regex: "[x]",
 			scope: ToolParameterScope.School,
 			default: undefined,
