@@ -41,10 +41,7 @@
 					color="primary"
 					depressed
 					data-testId="btn-proceed"
-					:href="{
-						path: `/login/oauth2/${targetSystem}`,
-						query: { migration: true },
-					}"
+					:href="`/login/oauth2/${targetSystem}?migration=true`"
 				>
 					{{ $t("pages.userMigration.button.startMigration") }}
 				</v-btn>
