@@ -3,52 +3,71 @@
 		<div>
 			<h1>Board</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
-					@drop="onColumnDrop"
+					group-name="columns"
 					drag-handle-selector=".column-drag-handle"
+					lock-axis="x"
+					:drag-begin-delay="200"
 					:get-child-payload="getColumnId"
-					:drop-placeholder="cardDropPlaceholderOptions"
+					:drop-placeholder="columnDropPlaceholderOptions"
+					@drop="onColumnDrop"
 				>
 					<template v-for="(column, index) in board.columns">
 						<Draggable :key="column.id">
 							<BoardColumn
 								:column="column"
 								:index="index"
-								@position-change-keyboard="onPositionChangeKeyboard"
-								@card-position-change="onCardPositionChange(index, $event)"
+								@update:card-position:keyboard="onPositionChangeKeyboard"
+								@update:card-position="onCardPositionChange(index, $event)"
+								@update:title="
+									($event) => onUpdateColumnTitle(column.id, $event)
+								"
 							/>
 						</Draggable>
 					</template>
 				</Container>
+				<BoardColumnGhost
+					@add-column-with-card="onAddColumnWithCard"
+					@add-empty-column="onAddEmptyColumn"
+				></BoardColumnGhost>
 			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
+import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
-	cardDropPlaceholderOptions,
+	columnDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
+import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "Board",
-	components: { BoardColumn, Container, Draggable },
+	components: { BoardColumn, Container, Draggable, BoardColumnGhost },
 	setup() {
 		const route = useRoute();
-		const { board, moveCard, moveColumn, moveCardByKeyboard } = useBoardState(
-			route.params?.id
-		);
+		const {
+			board,
+			moveCard,
+			moveColumn,
+			moveCardByKeyboard,
+			updateColumnTitle,
+			addNewColumn,
+		} = useBoardState(route.params?.id);
+
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 
 		const onCardPositionChange = (columnIndex: number, payload: CardMove) => {
 			moveCard(columnIndex, payload);
@@ -69,19 +88,48 @@ export default defineComponent({
 			return board.value.columns[index].id;
 		};
 
+		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
+			updateColumnTitle(columnId, newTitle);
+		};
+
+		const defaultColumnTitle =
+			i18n?.t("components.board.column.defaultTitle").toString() ||
+			"Neue Spalte";
+
+		const onAddEmptyColumn = () => {
+			addNewColumn(defaultColumnTitle);
+		};
+
+		const onAddColumnWithCard = (cardId: string) => {
+			addNewColumn(defaultColumnTitle, cardId);
+		};
+
 		return {
 			board,
-			cardDropPlaceholderOptions,
+			columnDropPlaceholderOptions,
 			getColumnId,
 			onCardPositionChange,
 			onColumnDrop,
 			onPositionChangeKeyboard,
+			onUpdateColumnTitle,
+			onAddEmptyColumn,
+			onAddColumnWithCard,
 		};
 	},
 });
 </script>
 <style>
-.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+/* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
 	overflow: visible !important;
+} */
+
+/**
+ * This rule extends the droppable area of columns.
+ * Without this rule cards have to be placed closely below the last card in a column to be added.
+*/
+.smooth-dnd-container.vertical {
+	min-height: 70vh;
+	height: 100%;
+	padding-bottom: 50px;
 }
 </style>

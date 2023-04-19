@@ -1,30 +1,32 @@
 <template>
 	<div
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle"
+		class="column-drag-handle white px-4"
 	>
-		<h4 class="text-truncate pr-4">{{ column.title }}</h4>
-		<div class="d-flex flex-column flex-grow-1 mr-4">
-			<Container
-				group-name="col"
-				@drop="onCardDrop"
-				drag-class="elevation-12"
-				drop-class="elevation-0"
-				:drop-placeholder="drowpdownDropPlaceholderOptions"
-				:get-child-payload="getChildPayload"
-			>
-				<template v-for="(card, index) in column.cards">
-					<Draggable :key="card.cardId">
-						<CardHost
-							class="mb-6"
-							:card-id="card.cardId"
-							:height="card.height"
-							@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						/>
-					</Draggable>
-				</template>
-			</Container>
-		</div>
+		<BoardColumnHeader
+			:title="column.title"
+			@update:title="onUpdateTitle"
+		></BoardColumnHeader>
+		<Container
+			group-name="cards"
+			drag-class="elevation-12"
+			drop-class="elevation-0"
+			:drag-begin-delay="200"
+			:drop-placeholder="cardDropPlaceholderOptions"
+			:get-child-payload="getChildPayload"
+			@drop="onMoveCard"
+		>
+			<template v-for="(card, index) in column.cards">
+				<Draggable :key="card.cardId">
+					<CardHost
+						class="my-3"
+						:card-id="card.cardId"
+						:height="card.height"
+						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+					/>
+				</Draggable>
+			</template>
+		</Container>
 	</div>
 </template>
 
@@ -34,15 +36,16 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
+	cardDropPlaceholderOptions,
 	CardMove,
 	CardMoveByKeyboard,
 	DragAndDropKeys,
-	drowpdownDropPlaceholderOptions,
 } from "../types/DragAndDrop";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable },
+	components: { CardHost, Container, Draggable, BoardColumnHeader },
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
@@ -50,14 +53,18 @@ export default defineComponent({
 		},
 		index: { type: Number, required: true },
 	},
-	emits: ["card-position-change", "position-change-keyboard"],
+	emits: [
+		"update:card-position",
+		"update:card-position:keyboard",
+		"update:title",
+	],
 	setup(props, { emit }) {
 		const colWidth = ref<number>(400);
 
-		const onCardDrop = (dropResult: CardMove): void => {
+		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("card-position-change", dropResult);
+			emit("update:card-position", dropResult);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
@@ -93,16 +100,27 @@ export default defineComponent({
 				cardMoveByKeyboard.targetColumnPosition = 0;
 			}
 
-			emit("position-change-keyboard", cardMoveByKeyboard);
+			emit("update:card-position:keyboard", cardMoveByKeyboard);
+		};
+
+		const onUpdateTitle = (newTitle: string) => {
+			emit("update:title", newTitle);
 		};
 
 		return {
 			colWidth,
-			drowpdownDropPlaceholderOptions,
-			onCardDrop,
+			cardDropPlaceholderOptions,
+			onMoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
+			onUpdateTitle,
 		};
 	},
 });
 </script>
+
+<style>
+.elevate-transition {
+	transition: box-shadow 150ms all;
+}
+</style>
