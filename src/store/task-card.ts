@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { authModule } from "@/store";
 import {
 	TaskCardResponse,
 	CardsApiFactory,
@@ -42,6 +43,7 @@ export default class TaskCardModule extends VuexModule {
 		},
 		dueDate: "",
 		visibleAtDate: "",
+		completedBy: [],
 	};
 	status: Status = "";
 	businessError: BusinessError = {
@@ -149,6 +151,48 @@ export default class TaskCardModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async completeTaskCard(taskCardId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			await this.cardsApi.taskCardControllerCompleteForUser(taskCardId);
+			this.setStatus("completed");
+		} catch (error: unknown) {
+			this.setStatus("error");
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error: error?.response?.data,
+					statusCode: error?.response?.data.code,
+					message: error?.response?.data.title,
+				});
+			}
+		}
+	}
+
+	@Action
+	async undoCompletionForTaskCard(taskCardId: string): Promise<void> {
+		this.resetBusinessError();
+		this.setStatus("pending");
+
+		try {
+			await this.cardsApi.taskCardControllerUndoCompletionForUser(taskCardId);
+			this.setStatus("completed");
+		} catch (error: unknown) {
+			this.setStatus("error");
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error: error?.response?.data,
+					statusCode: error?.response?.data.code,
+					message: error?.response?.data.title,
+				});
+			}
+		}
+	}
+
 	@Mutation
 	setTaskCardData(payload: TaskCardResponse): void {
 		this.taskCardData = payload;
@@ -188,5 +232,11 @@ export default class TaskCardModule extends VuexModule {
 
 	get getBusinessError(): BusinessError {
 		return this.businessError;
+	}
+
+	get getCompletedForStudent(): boolean {
+		if (this.taskCardData.completedBy.length === 0) return false;
+		const user = authModule.getUser;
+		return user ? this.taskCardData.completedBy.includes(user.id) : false;
 	}
 }
