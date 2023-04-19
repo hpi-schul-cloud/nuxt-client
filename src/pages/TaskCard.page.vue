@@ -90,14 +90,14 @@ export default defineComponent({
 			return endOfSchoolYear.toISOString();
 		};
 
-		const isTasksRoute = () => {
-			const prevRoute = route.params.previousRoute;
+		// const isTasksRoute = () => {
+		// 	const prevRoute = route.params.previousRoute;
 
-			if (prevRoute === null) {
-				return true; // TODO - default?
-			}
-			return prevRoute.includes("tasks");
-		};
+		// 	if (prevRoute === null) {
+		// 		return true; // TODO - default?
+		// 	}
+		// 	return prevRoute.includes("tasks");
+		// };
 
 		const getCurrentCourse = async () => {
 			if (route.name === "beta-task-view-edit") {
@@ -113,6 +113,7 @@ export default defineComponent({
 
 				return { id: roomData.roomId, name: roomData.title };
 			}
+			return null;
 		};
 
 		onBeforeMount(async () => {
@@ -121,7 +122,7 @@ export default defineComponent({
 
 			const course = await getCurrentCourse();
 
-			if (isTasksRoute() || !course) {
+			if (!course) {
 				breadcrumbs.value = [
 					{
 						text: t("common.words.tasks"),
