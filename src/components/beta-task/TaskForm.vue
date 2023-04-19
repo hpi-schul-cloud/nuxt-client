@@ -6,6 +6,7 @@
 			item-value="id"
 			item-text="title"
 			filled
+			:disabled="isCourseSelectDisabled"
 			:label="$t('common.labels.course')"
 			validate-on-blur
 			:rules="[rules.required]"
@@ -84,7 +85,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, Ref, watch } from "vue";
+import {
+	defineComponent,
+	inject,
+	ref,
+	onMounted,
+	Ref,
+	watch,
+	computed,
+} from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import { taskCardModule, notifierModule } from "@/store";
@@ -408,6 +417,8 @@ export default defineComponent({
 			dueDate.value = dateTime;
 		};
 
+		const isCourseSelectDisabled = route.name === "beta-task-view-edit";
+
 		return {
 			title,
 			deleteDialog,
@@ -429,6 +440,7 @@ export default defineComponent({
 			visibilityOptions,
 			form,
 			isDeletable,
+			isCourseSelectDisabled,
 		};
 	},
 });
