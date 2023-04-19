@@ -97,9 +97,7 @@ export default defineComponent({
 		const inputField = ref<HTMLInputElement | null>(null);
 
 		const formattedDate = computed(() => {
-			return model.value
-				? dayjs(model.value).format(t("format.date"))
-				: model.value;
+			return model.value ? dayjs(model.value).format(t("format.date")) : "";
 		});
 
 		const focusDatePicker = () => {
