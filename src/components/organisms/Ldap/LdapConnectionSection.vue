@@ -65,7 +65,7 @@
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 			><template #icon>
-				<base-icon source="material" icon="lock" :fill="fillColor" />
+				<base-icon source="material" icon="lock_outline" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>

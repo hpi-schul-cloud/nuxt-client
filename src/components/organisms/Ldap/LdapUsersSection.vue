@@ -85,7 +85,7 @@
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="uid" :fill="fillColor" />
+				<base-icon source="material" icon="uid" :fill="fillColor" />
 			</template>
 		</base-input>
 		<base-input
@@ -101,7 +101,7 @@
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="uuid" :fill="fillColor" />
+				<base-icon source="material" icon="uuid" :fill="fillColor" />
 			</template>
 		</base-input>
 	</div>
