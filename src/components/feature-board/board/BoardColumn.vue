@@ -30,6 +30,7 @@
 				</Draggable>
 			</template>
 		</Container>
+		<BoardAddCardButton></BoardAddCardButton>
 	</div>
 </template>
 
@@ -47,10 +48,17 @@ import {
 	DragAndDropKeys,
 } from "../types/DragAndDrop";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable, BoardColumnHeader },
+	components: {
+		CardHost,
+		Container,
+		Draggable,
+		BoardColumnHeader,
+		BoardAddCardButton,
+	},
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
