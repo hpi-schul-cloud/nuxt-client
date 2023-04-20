@@ -4,6 +4,7 @@ export interface CardMove {
 	removedIndex: number | null;
 	addedIndex: number | null;
 	payload: BoardSkeletonCard;
+	targetColumnId?: string;
 }
 
 export interface CardMoveByKeyboard {

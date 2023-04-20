@@ -4,7 +4,7 @@ import { VisibilitySettings } from "./VisibilitySettings";
 
 export type BoardCardSkeleton = CardSkeletonResponse;
 export interface BoardCard {
-	cardId: string;
+	id: string;
 	height: number;
 	elements: AnyContentElement[];
 	visibility: VisibilitySettings;
