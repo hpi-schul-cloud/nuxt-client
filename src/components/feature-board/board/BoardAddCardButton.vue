@@ -53,7 +53,7 @@ export default defineComponent({
 <style>
 .sticky {
 	position: fixed;
-	z-index: 1000;
+	z-index: 1;
 	bottom: 0px;
 }
 .button-background {
