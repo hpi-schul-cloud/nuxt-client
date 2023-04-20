@@ -70,6 +70,7 @@
 					<task-item-menu
 						:task-id="task.id"
 						:task-is-finished="task.status.isFinished"
+						:task-is-published="!task.status.isFinished"
 						user-role="student"
 						@toggled-menu="toggleMenu"
 						@focus-changed="handleFocus"
