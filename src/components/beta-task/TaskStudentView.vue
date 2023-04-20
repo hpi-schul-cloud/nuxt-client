@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="d-flex justify-end">
+		<div class="d-flex justify-end mb-4">
 			<v-checkbox
 				v-model="task.completed"
 				label="Aufgabe erledigt"
@@ -8,13 +8,11 @@
 			/>
 		</div>
 		<article class="d-flex flex-column">
-			<v-text-field :value="task.course" label="Kurs" filled disabled />
-			<v-text-field
-				:value="task.dueDate"
-				:label="t('pages.taskCard.labels.dateInput')"
-				filled
-				disabled
-			/>
+			<p>
+				<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
+				<br />
+				{{ task.dueDate }}
+			</p>
 			<title-card-element v-model="task.title" />
 			<card-element-list v-model="task.elements" :editMode="false" />
 		</article>
