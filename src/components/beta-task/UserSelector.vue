@@ -37,7 +37,7 @@ import {
 	nextTick,
 	inject,
 } from "vue";
-import { User } from "./types/User";
+import { User, COURSE_ASSIGNMENT } from "./types/User";
 import VueI18n from "vue-i18n";
 import { useDebounceFn } from "@vueuse/core";
 
@@ -45,7 +45,8 @@ export default defineComponent({
 	name: "UserSelector",
 	props: {
 		users: { type: Array as PropType<User[]>, required: true },
-		selection: { type: Array as PropType<User[]>, required: true },
+		selection: { type: Array as PropType<User[]>, default: () => [] },
+		courseAssignment: { type: Boolean, default: false },
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
@@ -80,11 +81,19 @@ export default defineComponent({
 			});
 		});
 
-		const selectedUserIds = props.selection.map((user: User) => {
-			return user.id;
-		});
+		const getSelectedUserIds = () => {
+			if (props.courseAssignment) {
+				return props.users.map((user: User) => {
+					return user.id;
+				});
+			}
 
-		const model = ref(selectedUserIds);
+			return props.selection.map((user: User) => {
+				return user.id;
+			});
+		};
+
+		const model = ref(getSelectedUserIds());
 		let valid = true;
 
 		type ValidationRule = (value: [] | null) => boolean | string;
@@ -106,8 +115,11 @@ export default defineComponent({
 				return model.value.includes(user.id);
 			});
 
-			if (valid) {
+			if (valid && !allUsersSelected.value) {
 				emit("input", selectedUsers);
+			}
+			if (valid && allUsersSelected.value) {
+				emit("input", COURSE_ASSIGNMENT);
 			}
 		}, 200);
 
@@ -131,10 +143,8 @@ export default defineComponent({
 			nextTick(() => {
 				if (allUsersSelected.value) {
 					model.value = [];
-					handleBlur();
 				} else {
 					model.value = userIds.value;
-					handleBlur();
 				}
 			});
 		};

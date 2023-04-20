@@ -44,13 +44,13 @@
 				@error="onError"
 			/>
 			<user-selector
-				:users="allUsers"
+				:users="courseDummyUsers"
 				:selection="selectedUsers"
+				:courseAssignment="courseAssignment"
 				:label="t('common.labels.students')"
 				:aria-label="t('common.labels.students')"
 				required
 				@input="handleAssignmentInput"
-				@error="handleAssignmentError"
 			/>
 			<title-card-element
 				v-model="title"
@@ -238,6 +238,42 @@ export default defineComponent({
 
 		const isDeletable: Ref<boolean> = ref(false);
 
+		const courseDummyUsers = [
+			{
+				id: "userId1",
+				firstName: "Peter",
+				lastName: "Andre",
+			},
+			{
+				id: "userId2",
+				firstName: "Michael",
+				lastName: "Meyer",
+			},
+			{
+				id: "userId3",
+				firstName: "Sabine",
+				lastName: "Musterfrau",
+			},
+			{
+				id: "userId4",
+				firstName: "Oliver",
+				lastName: "Lorem",
+			},
+			{
+				id: "userId5",
+				firstName: "Ipsum",
+				lastName: "Dolores",
+			},
+			{
+				id: "userId6",
+				firstName: "Gregor",
+				lastName: "Samsa",
+			},
+		];
+
+		const selectedUsers = ref<User[]>([]);
+		const courseAssignment = ref(false);
+
 		onMounted(async () => {
 			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
 			endOfSchoolYear.setHours(12);
@@ -301,6 +337,9 @@ export default defineComponent({
 				}
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
+
+				selectedUsers.value = [courseDummyUsers[2]];
+				// courseAssignment.value = true;
 
 				initElements(taskCardData.cardElements);
 				isLoading.value = false;
@@ -384,7 +423,7 @@ export default defineComponent({
 			await taskCardModule.createTaskCard({
 				courseId: course.value,
 				dueDate: dueDate.value,
-				// assignedUserIds: selectedUserIds.value,
+				// assignedUsers: selectedUserIds.value,
 				title: title.value,
 				cardElements: cardElements,
 			});
@@ -409,44 +448,56 @@ export default defineComponent({
 			await taskCardModule.updateTaskCard({
 				courseId: course.value,
 				dueDate: dueDate.value,
-				// assignedUserIds: selectedUserIds.value,
+				// assignedUsers: selectedUserIds.value,
 				title: title.value,
 				cardElements: cardElements,
 			});
 		};
 
+		const selectedUserIds = computed(() => {
+			return selectedUsers.value.map((user: User) => {
+				return user.id;
+			});
+		});
+
 		const save = async () => {
-			if (form.value) {
-				const valid = form.value.validate();
-				if (!valid) {
-					return;
-				}
-			}
-
-			if (hasErrors.value) {
-				return;
-			}
-			if (
-				route.name === "rooms-beta-task-new" ||
-				route.name === "tasks-beta-task-new"
-			) {
-				await createTaskCard();
+			if (courseAssignment.value) {
+				console.log("assignedUsers: null");
 			} else {
-				await updateTaskCard();
+				console.log("assignedUsers: " + selectedUserIds.value);
 			}
 
-			if (taskCardModule.getStatus === "error") {
-				const validationError = taskCardModule.getBusinessError
-					.error as ApiValidationError;
-				const validationErrors = validationError?.validationErrors;
+			// if (form.value) {
+			// 	const valid = form.value.validate();
+			// 	if (!valid) {
+			// 		return;
+			// 	}
+			// }
 
-				notifierModule.show({
-					messages: createServerErrorMessages(validationErrors),
-					status: "error",
-				});
-			} else {
-				router.go(-1);
-			}
+			// if (hasErrors.value) {
+			// 	return;
+			// }
+			// if (
+			// 	route.name === "rooms-beta-task-new" ||
+			// 	route.name === "tasks-beta-task-new"
+			// ) {
+			// 	await createTaskCard();
+			// } else {
+			// 	await updateTaskCard();
+			// }
+
+			// if (taskCardModule.getStatus === "error") {
+			// 	const validationError = taskCardModule.getBusinessError
+			// 		.error as ApiValidationError;
+			// 	const validationErrors = validationError?.validationErrors;
+
+			// 	notifierModule.show({
+			// 		messages: createServerErrorMessages(validationErrors),
+			// 		status: "error",
+			// 	});
+			// } else {
+			// 	router.go(-1);
+			// }
 		};
 
 		const createServerErrorMessages = (errors: Array<ErrorDetails>) => {
@@ -517,53 +568,13 @@ export default defineComponent({
 			return getUserPermissions.value.includes("task_card_edit");
 		});
 
-		const allUsers = [
-			{
-				id: "userId1",
-				firstName: "Peter",
-				lastName: "Andre",
-			},
-			{
-				id: "userId2",
-				firstName: "Michael",
-				lastName: "Meyer",
-			},
-			{
-				id: "userId3",
-				firstName: "Sabine",
-				lastName: "Musterfrau",
-			},
-			{
-				id: "userId4",
-				firstName: "Oliver",
-				lastName: "Lorem",
-			},
-			{
-				id: "userId5",
-				firstName: "Ipsum",
-				lastName: "Dolores",
-			},
-			{
-				id: "userId6",
-				firstName: "Gregor",
-				lastName: "Samsa",
-			},
-		];
-		const selectedUsers = ref([allUsers[4]]);
-
-		const selectedUserIds = computed(() => {
-			return selectedUsers.value.map((user: User) => {
-				return user.id;
-			});
-		});
-
-		const handleAssignmentInput = (selection: User[]) => {
-			selectedUsers.value = selection;
-		};
-
-		const handleAssignmentError = () => {
-			selectedUsers.value = [];
-			console.log("handle assignment error");
+		const handleAssignmentInput = (selection: User[] | string) => {
+			if (typeof selection === "string") {
+				courseAssignment.value = true;
+			} else {
+				courseAssignment.value = false;
+				selectedUsers.value = selection;
+			}
 		};
 
 		const isCourseSelectDisabled = computed(() => {
@@ -593,10 +604,10 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
-			allUsers,
+			courseDummyUsers,
 			selectedUsers,
+			courseAssignment,
 			handleAssignmentInput,
-			handleAssignmentError,
 			errorMessage,
 			rules,
 			isVisible,
