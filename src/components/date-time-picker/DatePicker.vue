@@ -7,7 +7,7 @@
 			nudge-bottom="70"
 			min-width="auto"
 			attach
-			@input="onMenuToggle"
+			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -19,22 +19,23 @@
 					readonly
 					filled
 					clearable
-					:error-messages="errors"
-					:error="hasErrors"
 					v-bind="attrs"
 					v-on="on"
-					@input="onInput"
+					:rules="rules"
+					validate-on-blur
+					autocomplete="off"
+					ref="inputField"
+					:class="{ 'menu-open': showDateDialog }"
+					@blur="handleBlur"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
 					@keydown.tab="showDateDialog = false"
-					@focus="resetErrors"
-					@click:clear="clearDate"
-					@blur="onBlur"
+					@update:error="handleError"
 				/>
 			</template>
 			<v-date-picker
-				v-model="selectedDate"
+				v-model="model"
 				:aria-expanded="showDateDialog"
 				color="primary"
 				no-title
@@ -43,17 +44,19 @@
 				:min="minDate"
 				:max="maxDate"
 				show-adjacent-months
-				@input="onInput"
+				@input="handleInput"
 			/>
 		</v-menu>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, computed, watch } from "vue";
+import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
 import dayjs from "dayjs";
 import { mdiCalendarClock } from "@mdi/js";
+import { useDebounceFn } from "@vueuse/core";
+import { ValidationRule } from "./types/Validation";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -65,6 +68,7 @@ export default defineComponent({
 		minDate: { type: String },
 		maxDate: { type: String },
 	},
+	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -88,39 +92,13 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const selectedDate = ref(props.date);
+		const model = ref(props.date);
 		const showDateDialog = ref(false);
-		const errors = ref<string[]>([]);
+		const inputField = ref<HTMLInputElement | null>(null);
 
 		const formattedDate = computed(() => {
-			return selectedDate.value
-				? dayjs(selectedDate.value).format(t("format.date"))
-				: selectedDate.value;
+			return model.value ? dayjs(model.value).format(t("format.date")) : "";
 		});
-
-		const onInput = () => {
-			const validated = validate(selectedDate.value);
-
-			if (validated) {
-				emit("input", new Date(selectedDate.value).toISOString());
-				showDateDialog.value = false;
-				resetErrors();
-			}
-		};
-
-		const validate = (dateValue: string) => {
-			if (!props.required) {
-				return true;
-			}
-
-			if (dateValue === "") {
-				errors.value.push(t("components.timePicker.validation.required"));
-				emit("error");
-				return false;
-			}
-
-			return true;
-		};
 
 		const focusDatePicker = () => {
 			setTimeout(() => {
@@ -132,54 +110,74 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const onBlur = (event: any) => {
-			if (showDateDialog.value === false) {
-				const value = event.target.value;
-				validate(value);
+		const requiredRule: ValidationRule = (value: string | null) => {
+			return value === "" || value === null
+				? t("components.datePicker.validation.required")
+				: true;
+		};
+
+		const rules = computed<ValidationRule[]>(() => {
+			const rules: ValidationRule[] = [];
+
+			if (props.required) {
+				rules.push(requiredRule);
 			}
-		};
-
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
-				validate(selectedDate.value);
-			}
-		};
-
-		const clearDate = () => {
-			selectedDate.value = "";
-		};
-
-		const hasErrors = computed(() => {
-			return errors.value.length > 0;
+			return rules;
 		});
 
-		const resetErrors = () => {
-			errors.value = [];
+		const handleBlur = useDebounceFn(() => {
+			const date = model.value || "";
+			emit("input", date);
+		}, 200);
+
+		const handleInput = () => {
+			inputField.value?.focus();
+			closeMenu();
 		};
 
-		watch(
-			() => props.date,
-			(newValue: string) => {
-				selectedDate.value = newValue;
+		const handleError = (hasError: boolean) => {
+			hasError ? emit("error") : emit("valid");
+		};
+
+		const handleMenuToggle = () => {
+			if (showDateDialog.value) {
+				emit("valid");
 			}
-		);
+		};
+
+		const closeMenu = useDebounceFn(() => {
+			showDateDialog.value = false;
+		}, 50);
 
 		return {
 			mdiCalendarClock,
 			locale,
-			selectedDate,
+			model,
+			rules,
 			showDateDialog,
 			formattedDate,
-			onInput,
+			inputField,
 			focusDatePicker,
-			errors,
-			validate,
-			hasErrors,
-			resetErrors,
-			onMenuToggle,
-			clearDate,
-			onBlur,
+			handleBlur,
+			handleInput,
+			handleError,
+			handleMenuToggle,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "~vuetify/src/components/VTextField/_variables.scss";
+
+::v-deep {
+	.menu-open {
+		label {
+			transform: $text-field-filled-full-width-label-active-transform;
+		}
+		.v-text-field__details {
+			display: none;
+		}
+	}
+}
+</style>
