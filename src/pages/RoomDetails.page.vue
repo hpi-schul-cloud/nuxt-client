@@ -127,7 +127,7 @@ import {
 	mdiFormatListChecks,
 	mdiPlus,
 	mdiPuzzleOutline,
-	mdiShareVariant,
+	mdiShareVariantOutline,
 	mdiPencilOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
@@ -180,7 +180,7 @@ export default defineComponent({
 			icons: {
 				mdiPencilOutline,
 				mdiEmailPlusOutline,
-				mdiShareVariant,
+				mdiShareVariantOutline,
 				mdiContentCopy,
 				mdiTrayArrowDown,
 			},
@@ -312,7 +312,7 @@ export default defineComponent({
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
 			) {
 				items.push({
-					icon: this.icons.mdiShareVariant,
+					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
