@@ -5,8 +5,13 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
-const { createColumn, deleteColumnCall, moveCardCall, updateColumnTitleCall } =
-	useBoardApi();
+const {
+	createColumn,
+	deleteColumnCall,
+	moveCardCall,
+	updateColumnTitleCall,
+	createCardCall,
+} = useBoardApi();
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
@@ -153,6 +158,13 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
+	const createCard = async (columnId: string) => {
+		if (board.value === undefined) return;
+
+		await createCardCall(columnId);
+		await fetchBoard(board.value.id);
+	};
+
 	const boardActions = {
 		deleteColumn,
 	};
@@ -170,5 +182,6 @@ export const useBoardState = (id: string) => {
 		updateColumnTitle,
 		removeCard,
 		addNewColumn,
+		createCard,
 	};
 };

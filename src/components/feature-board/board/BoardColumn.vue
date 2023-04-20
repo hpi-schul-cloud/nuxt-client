@@ -30,7 +30,7 @@
 				</Draggable>
 			</template>
 		</Container>
-		<BoardAddCardButton></BoardAddCardButton>
+		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
 	</div>
 </template>
 
@@ -71,6 +71,7 @@ export default defineComponent({
 		"update:card-position:keyboard",
 		"update:title",
 		"remove-card",
+		"create-card",
 	],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -133,6 +134,8 @@ export default defineComponent({
 			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
+		const onCreateCard = () => emit("create-card", props.column.id);
+
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
@@ -142,6 +145,7 @@ export default defineComponent({
 			onMoveCardKeyboard,
 			onUpdateTitle,
 			titlePlaceholder,
+			onCreateCard,
 		};
 	},
 });
