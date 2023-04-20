@@ -5110,6 +5110,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a new board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5143,6 +5144,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5180,6 +5182,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Delete a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5217,6 +5220,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Get the skeleton of a a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5254,6 +5258,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Update the title of a single board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5307,6 +5312,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5316,6 +5322,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5326,16 +5333,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerDeleteBoard(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async boardControllerDeleteBoard(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerDeleteBoard(boardId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Get the skeleton of a a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5346,6 +5355,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update the title of a single board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5367,6 +5377,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @summary Create a new board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -5375,6 +5386,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5384,15 +5396,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Delete a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<boolean> {
+        boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<void> {
             return localVarFp.boardControllerDeleteBoard(boardId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Get the skeleton of a a single board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5402,6 +5416,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Update the title of a single board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5421,6 +5436,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
 export interface BoardApiInterface {
     /**
      * 
+     * @summary Create a new board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApiInterface
@@ -5429,6 +5445,7 @@ export interface BoardApiInterface {
 
     /**
      * 
+     * @summary Create a new column on a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5438,15 +5455,17 @@ export interface BoardApiInterface {
 
     /**
      * 
+     * @summary Delete a single board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApiInterface
      */
-    boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<boolean>;
+    boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Get the skeleton of a a single board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5456,6 +5475,7 @@ export interface BoardApiInterface {
 
     /**
      * 
+     * @summary Update the title of a single board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -5475,6 +5495,7 @@ export interface BoardApiInterface {
 export class BoardApi extends BaseAPI implements BoardApiInterface {
     /**
      * 
+     * @summary Create a new board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApi
@@ -5485,6 +5506,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
+     * @summary Create a new column on a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5496,6 +5518,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
+     * @summary Delete a single board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5507,6 +5530,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
+     * @summary Get the skeleton of a a single board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5518,6 +5542,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
+     * @summary Update the title of a single board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -5538,6 +5563,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5575,6 +5601,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Delete a single card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5612,6 +5639,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Get a list of cards by their ids.
          * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5652,6 +5680,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
          * @param {*} [options] Override http request option.
@@ -5695,6 +5724,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5748,6 +5778,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5758,16 +5789,18 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete a single card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerDeleteCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async cardControllerDeleteCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerDeleteCard(cardId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Get a list of cards by their ids.
          * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5778,17 +5811,19 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5810,6 +5845,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5819,15 +5855,17 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @summary Delete a single card.
          * @param {string} cardId The id of the card.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean> {
+        cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<void> {
             return localVarFp.cardControllerDeleteCard(cardId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Get a list of cards by their ids.
          * @param {Array<string>} ids Array of Ids to be loaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5837,16 +5875,18 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<boolean> {
+        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void> {
             return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -5866,6 +5906,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
 export interface BoardCardApiInterface {
     /**
      * 
+     * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5875,15 +5916,17 @@ export interface BoardCardApiInterface {
 
     /**
      * 
+     * @summary Delete a single card.
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean>;
+    cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Get a list of cards by their ids.
      * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5893,16 +5936,18 @@ export interface BoardCardApiInterface {
 
     /**
      * 
+     * @summary Move a single card.
      * @param {string} cardId The id of the card.
      * @param {MoveCardBodyParams} moveCardBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<boolean>;
+    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Update the title of a single card.
      * @param {string} cardId The id of the card.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -5922,6 +5967,7 @@ export interface BoardCardApiInterface {
 export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
     /**
      * 
+     * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5933,6 +5979,7 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
 
     /**
      * 
+     * @summary Delete a single card.
      * @param {string} cardId The id of the card.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5944,6 +5991,7 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
 
     /**
      * 
+     * @summary Get a list of cards by their ids.
      * @param {Array<string>} ids Array of Ids to be loaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5955,6 +6003,7 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
 
     /**
      * 
+     * @summary Move a single card.
      * @param {string} cardId The id of the card.
      * @param {MoveCardBodyParams} moveCardBodyParams 
      * @param {*} [options] Override http request option.
@@ -5967,6 +6016,7 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
 
     /**
      * 
+     * @summary Update the title of a single card.
      * @param {string} cardId The id of the card.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -5987,6 +6037,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6024,6 +6075,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Delete a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6061,6 +6113,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Move a single column.
          * @param {string} columnId The id of the column.
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
@@ -6104,6 +6157,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @summary Update the title of a single column.
          * @param {string} columnId The id of the column.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6157,6 +6211,7 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6167,27 +6222,30 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerDeleteColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async columnControllerDeleteColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerDeleteColumn(columnId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Move a single column.
          * @param {string} columnId The id of the column.
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerMoveColumn(columnId, moveColumnBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Update the title of a single column.
          * @param {string} columnId The id of the column.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6209,6 +6267,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6218,25 +6277,28 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @summary Delete a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<boolean> {
+        columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<void> {
             return localVarFp.columnControllerDeleteColumn(columnId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Move a single column.
          * @param {string} columnId The id of the column.
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<boolean> {
+        columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void> {
             return localVarFp.columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update the title of a single column.
          * @param {string} columnId The id of the column.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6256,6 +6318,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
 export interface BoardColumnApiInterface {
     /**
      * 
+     * @summary Create a new card on a column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6265,25 +6328,28 @@ export interface BoardColumnApiInterface {
 
     /**
      * 
+     * @summary Delete a single column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardColumnApiInterface
      */
-    columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<boolean>;
+    columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Move a single column.
      * @param {string} columnId The id of the column.
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardColumnApiInterface
      */
-    columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<boolean>;
+    columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Update the title of a single column.
      * @param {string} columnId The id of the column.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -6303,6 +6369,7 @@ export interface BoardColumnApiInterface {
 export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
     /**
      * 
+     * @summary Create a new card on a column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6314,6 +6381,7 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
 
     /**
      * 
+     * @summary Delete a single column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6325,6 +6393,7 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
 
     /**
      * 
+     * @summary Move a single column.
      * @param {string} columnId The id of the column.
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
@@ -6337,6 +6406,7 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
 
     /**
      * 
+     * @summary Update the title of a single column.
      * @param {string} columnId The id of the column.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -6357,6 +6427,7 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
+         * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6394,6 +6465,7 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
          * @param {*} [options] Override http request option.
@@ -6447,22 +6519,24 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerDeleteElement(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async elementControllerDeleteElement(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerDeleteElement(contentElementId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerMoveElement(contentElementId, moveContentElementBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6478,21 +6552,23 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
+         * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<boolean> {
+        elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void> {
             return localVarFp.elementControllerDeleteElement(contentElementId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<boolean> {
+        elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<void> {
             return localVarFp.elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -6506,22 +6582,24 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
 export interface BoardElementApiInterface {
     /**
      * 
+     * @summary Delete a single content element.
      * @param {string} contentElementId The id of the element.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<boolean>;
+    elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
+     * @summary Move a single content element.
      * @param {string} contentElementId The id of the element.
      * @param {MoveContentElementBody} moveContentElementBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<boolean>;
+    elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<void>;
 
 }
 
@@ -6534,6 +6612,7 @@ export interface BoardElementApiInterface {
 export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
     /**
      * 
+     * @summary Delete a single content element.
      * @param {string} contentElementId The id of the element.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6545,6 +6624,7 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
 
     /**
      * 
+     * @summary Move a single content element.
      * @param {string} contentElementId The id of the element.
      * @param {MoveContentElementBody} moveContentElementBody 
      * @param {*} [options] Override http request option.
