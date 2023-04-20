@@ -88,15 +88,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	inject,
-	ref,
-	onMounted,
-	Ref,
-	watch,
-	PropType,
-} from "vue";
+import { defineComponent, inject, ref, onMounted, Ref, PropType } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import TaskCardModule from "@/store/task-card";
@@ -172,6 +164,10 @@ export default defineComponent({
 		const router = useRouter();
 		const route = useRoute();
 		const minDate = new Date().toISOString();
+		const isCourseSelectDisabled = route.name === "beta-task-view-edit";
+		const rules = {
+			required: (value: string) => !!value || t("common.validation.required"),
+		};
 		const visibilityOptions = [
 			{
 				text: t("common.labels.visible"),
@@ -199,47 +195,24 @@ export default defineComponent({
 			taskCardId: "",
 		});
 
-		watch(
-			() => props.dueDateMax,
-			(newValue) => {
-				dueDate.value = newValue;
-			}
-		);
-
-		onMounted(async () => {
-			if (route.name === "rooms-beta-task-new") {
-				course.value = route.params.id || "";
-				const initialCardElements = [
-					{
-						id: "",
-						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
-						content: {
-							value: "",
-							inputFormat:
-								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
-						},
+		onMounted(() => {
+			const initialCardElements = [
+				{
+					id: "",
+					cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+					content: {
+						value: "",
+						inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
 					},
-				];
-
-				initElements(initialCardElements);
-			}
+				},
+			];
 
 			if (route.name === "beta-task-view-edit") {
 				initElements(props.task.cardElements);
-			}
-
-			if (route.name === "tasks-beta-task-new") {
-				const initialCardElements = [
-					{
-						id: "",
-						cardElementType: CardElementResponseCardElementTypeEnum.RichText,
-						content: {
-							value: "",
-							inputFormat:
-								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
-						},
-					},
-				];
+			} else {
+				if (route.params.id) {
+					course.value = route.params.id;
+				}
 
 				initElements(initialCardElements);
 			}
@@ -307,6 +280,16 @@ export default defineComponent({
 			});
 		};
 
+		const deleteTaskCard = async (taskCardId: string) => {
+			await taskCardModule.deleteTaskCard(taskCardId);
+
+			if (taskCardModule.getStatus === "error") {
+				showServerError();
+			} else {
+				router.go(-1);
+			}
+		};
+
 		const save = async () => {
 			if (form.value) {
 				const valid = form.value.validate();
@@ -325,8 +308,16 @@ export default defineComponent({
 			}
 
 			if (taskCardModule.getStatus === "error") {
-				const validationError = taskCardModule.getBusinessError
-					.error as ApiValidationError;
+				showServerError();
+			} else {
+				router.go(-1);
+			}
+		};
+
+		const showServerError = () => {
+			const error = taskCardModule.getBusinessError;
+			if (error.statusCode === 400) {
+				const validationError = error?.error as ApiValidationError;
 				const validationErrors = validationError?.validationErrors;
 
 				notifierModule.show({
@@ -334,7 +325,10 @@ export default defineComponent({
 					status: "error",
 				});
 			} else {
-				router.go(-1);
+				notifierModule.show({
+					text: error.message,
+					status: "error",
+				});
 			}
 		};
 
@@ -360,35 +354,6 @@ export default defineComponent({
 			return errorMessages;
 		};
 
-		const rules = {
-			required: (value: string) => !!value || t("common.validation.required"),
-		};
-
-		const deleteTaskCard = async (taskCardId: string) => {
-			await taskCardModule.deleteTaskCard(taskCardId);
-
-			if (taskCardModule.getStatus === "error") {
-				const error = taskCardModule.getBusinessError;
-
-				if (error.statusCode === 400) {
-					const validationError = error?.error as ApiValidationError;
-					notifierModule.show({
-						messages: createServerErrorMessages(
-							validationError.validationErrors
-						),
-						status: "error",
-					});
-				} else {
-					notifierModule.show({
-						text: error.message,
-						status: "error",
-					});
-				}
-			} else {
-				router.go(-1);
-			}
-		};
-
 		const cancel = () => {
 			router.go(-1);
 		};
@@ -396,8 +361,6 @@ export default defineComponent({
 		const handleDateTimeInput = (dateTime: string) => {
 			dueDate.value = dateTime;
 		};
-
-		const isCourseSelectDisabled = route.name === "beta-task-view-edit";
 
 		const openDeleteDialog = () => {
 			deleteDialog.value.isOpen = true;
