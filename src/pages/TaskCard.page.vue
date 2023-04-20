@@ -4,13 +4,16 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<task-form
-			v-if="isEditMode"
-			:is-edit-mode="isEditMode"
-			:courses="courses"
-			:due-date-max="dueDateMax"
-		/>
-		<task-student-view v-else />
+		<template>
+			<task-form
+				v-if="isEditMode"
+				:is-edit-mode="isEditMode"
+				:courses="courses"
+				:due-date-max="dueDateMax"
+				:is-loading="isLoading"
+			/>
+			<task-student-view v-else :is-loading="isLoading" />
+		</template>
 	</default-wireframe>
 </template>
 
@@ -97,11 +100,15 @@ export default defineComponent({
 				await taskCardModule.findTaskCard(taskCardId);
 				const taskCardData = taskCardModule.getTaskCardData;
 
+				isLoading.value = false;
+
 				return { id: taskCardData.courseId, name: taskCardData.courseName };
 			}
 			if (route.name === "rooms-beta-task-new") {
 				await roomModule.fetchContent(route.params.id);
 				const roomData = roomModule.getRoomData;
+
+				isLoading.value = false;
 
 				return { id: roomData.roomId, name: roomData.title };
 			}

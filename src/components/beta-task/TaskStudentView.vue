@@ -1,21 +1,29 @@
 <template>
 	<div>
-		<div class="d-flex justify-end mb-4">
-			<v-checkbox
-				v-model="task.completed"
-				label="Aufgabe erledigt"
-				@change="handleCompletion"
-			/>
+		<div v-if="isLoading" class="mt-12">
+			<v-skeleton-loader type="heading" class="mb-12 d-flex justify-end" />
+			<v-skeleton-loader type="button" class="mb-12" />
+			<v-skeleton-loader type="heading" class="mb-8" />
+			<v-skeleton-loader type="paragraph" />
 		</div>
-		<article class="d-flex flex-column">
-			<p>
-				<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
-				<br />
-				{{ task.dueDate }}
-			</p>
-			<title-card-element v-model="task.title" />
-			<card-element-list v-model="task.elements" :editMode="false" />
-		</article>
+		<div v-else>
+			<div class="d-flex justify-end mb-4">
+				<v-checkbox
+					v-model="task.completed"
+					label="Aufgabe erledigt"
+					@change="handleCompletion"
+				/>
+			</div>
+			<article class="d-flex flex-column">
+				<p>
+					<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
+					<br />
+					{{ task.dueDate }}
+				</p>
+				<title-card-element v-model="task.title" />
+				<card-element-list v-model="task.elements" :editMode="false" />
+			</article>
+		</div>
 	</div>
 </template>
 
@@ -44,6 +52,11 @@ export default defineComponent({
 	components: {
 		TitleCardElement,
 		CardElementList,
+	},
+	props: {
+		isLoading: {
+			type: Boolean,
+		},
 	},
 	setup() {
 		const taskCardModule: TaskCardModule | undefined =
@@ -101,3 +114,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-skeleton-loader__button {
+	width: 40%;
+}
+</style>

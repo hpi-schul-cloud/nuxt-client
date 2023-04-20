@@ -11,6 +11,7 @@ const defaultBetaTask: TaskCardResponse = {
 	task: taskFactory(),
 	visibleAtDate: "",
 	dueDate: "",
+	completedBy: [],
 };
 
 export const betaTaskFactory = (
