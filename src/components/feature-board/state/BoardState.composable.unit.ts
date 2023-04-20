@@ -30,7 +30,7 @@ describe("BoardState composable", () => {
 		mockApi = { boardControllerGetBoardSkeleton };
 
 		jest.useFakeTimers();
-		jest.spyOn(serverApi, "BoardsApiFactory").mockReturnValue(mockApi);
+		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(mockApi);
 	});
 
 	// skipped until using boardsApi

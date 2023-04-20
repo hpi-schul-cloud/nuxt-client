@@ -1,49 +1,77 @@
+import Vue from "vue";
 import VueRouter from "vue-router";
-import { mount } from "@vue/test-utils";
+import { mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TaskCard from "./TaskCard.page.vue";
 import { TaskCardResponse } from "@/serverApi/v3";
-import { taskCardModule } from "@/store";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import AuthModule from "@/store/auth";
+import RoomModule from "@/store/room";
+import RoomsModule from "@/store/rooms";
+import SchoolsModule from "@/store/schools";
+import TaskCardModule from "@/store/task-card";
+import {
+	betaTaskFactory,
+	courseMetadataFactory,
+	roomFactory,
+} from "@@/tests/test-utils/factory";
 
-const authModuleMock = () => {
-	return {
-		getUserPermissions: ["TASK_CARD_EDIT"],
-	};
+const routes = [
+	{
+		name: "beta-task-view-edit",
+		path: "/beta-task/:id()",
+	},
+	{
+		name: "rooms-beta-task-new",
+		path: "/rooms/:id/create-beta-task",
+	},
+];
+
+const createRoute = {
+	name: "rooms-beta-task-new",
+	params: {
+		id: "0000dcfbfb5c7a3f00bf21ab",
+	},
 };
 
-const roomsModuleMock = () => {
-	return {
-		getAllElements: [],
-	};
+const viewEditRoute = {
+	name: "beta-task-view-edit",
+	params: {
+		id: "642162cc44a17f1ce8939ddb",
+	},
 };
 
-const taskCardModuleMock = () => {
-	return {
-		getTaskCardData: {},
-		deleteTaskCard: jest.fn().mockReturnValue(Promise.resolve()),
-	};
-};
+let router = new VueRouter();
 
-const schoolsModuleMock = () => {
-	return { getCurrentYear: { endDate: "" } };
-};
+let taskCardModuleMock = createModuleMocks(TaskCardModule);
 
-jest.mock("@/store", () => ({
-	authModule: authModuleMock(),
-	roomsModule: roomsModuleMock(),
-	taskCardModule: taskCardModuleMock(),
-	schoolsModule: schoolsModuleMock(),
-}));
+const CREATE_EDIT_PERMISSION = "task_card_edit";
+const VIEW_PERMISSION = "task_card_view";
 
-const router = new VueRouter({
-	routes: [{ name: "beta-task-view-edit", path: "/beta-task" }],
+const mockRoomData = roomFactory();
+
+const mockCourse = courseMetadataFactory();
+
+const emptyTaskCardData = betaTaskFactory({
+	id: "",
 });
-const goSpy = jest.spyOn(router, "go");
+
+const mockCurrentYear = {
+	_id: "",
+	name: "",
+	startDate: "",
+	endDate: "2300-01-01T00:00:00",
+	__v: 0,
+	years: {},
+	isTeamCreationByStudentsEnabled: false,
+};
+
+const mockTaskCardData = betaTaskFactory();
 
 const getWrapper = (
 	userPermission: string,
-	userCourse: object,
-	taskCardData: object,
+	taskCardData: TaskCardResponse,
+	route: object,
 	props?: object,
 	options?: object
 ) => {
@@ -51,93 +79,38 @@ const getWrapper = (
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
 
+	router = new VueRouter({
+		routes: routes,
+	});
+	router.push(route);
+
+	taskCardModuleMock = createModuleMocks(TaskCardModule, {
+		getTaskCardData: taskCardData,
+	});
+
 	return mount(TaskCard, {
 		...componentOptions,
 		provide: {
 			i18n: { t: (key: string) => key },
-			authModule: {
+			authModule: createModuleMocks(AuthModule, {
 				getUserPermissions: [userPermission],
-			},
-			roomsModule: {
-				getAllElements: [userCourse],
-			},
-			taskCardModule: {
-				getTaskCardData: taskCardData,
-			},
+			}),
+			roomModule: createModuleMocks(RoomModule, {
+				getRoomData: mockRoomData,
+			}),
+			roomsModule: createModuleMocks(RoomsModule, {
+				getAllElements: [mockCourse],
+			}),
+			schoolsModule: createModuleMocks(SchoolsModule, {
+				getCurrentYear: mockCurrentYear,
+			}),
+			taskCardModule: taskCardModuleMock,
 		},
 		localVue,
 		router,
 		propsData: props,
 		...options,
 	});
-};
-
-const mockCourse = {
-	id: "123",
-	title: "Mathe",
-	shortTitle: "Ma",
-	displayColor: "#54616e",
-	startDate: "2019-12-07T23:00:00.000Z",
-	untilDate: "2020-12-16T23:00:00.000Z",
-	titleDate: "2019/20",
-};
-
-const emptyTaskCardData: TaskCardResponse = {
-	id: "",
-	courseId: "",
-	courseName: "",
-	title: "",
-	cardElements: [],
-	draggable: true,
-	task: {
-		id: "",
-		users: [],
-		name: "",
-		courseName: "",
-		courseId: "",
-		createdAt: "",
-		updatedAt: "",
-		lessonHidden: false,
-		status: {
-			submitted: 0,
-			maxSubmissions: 0,
-			graded: 0,
-			isDraft: true,
-			isSubstitutionTeacher: true,
-			isFinished: false,
-		},
-	},
-	dueDate: "",
-	visibleAtDate: "",
-};
-
-const mockTaskCardData: TaskCardResponse = {
-	id: "842",
-	courseId: "123",
-	courseName: "Mathe",
-	title: "Mathe Task",
-	cardElements: [],
-	draggable: true,
-	task: {
-		id: "248",
-		users: [],
-		name: "Mathe Task",
-		courseName: "Mathe",
-		courseId: "123",
-		createdAt: "",
-		updatedAt: "",
-		lessonHidden: false,
-		status: {
-			submitted: 0,
-			maxSubmissions: 0,
-			graded: 0,
-			isDraft: true,
-			isSubstitutionTeacher: true,
-			isFinished: false,
-		},
-	},
-	dueDate: "",
-	visibleAtDate: "",
 };
 
 describe("TaskCard", () => {
@@ -147,37 +120,51 @@ describe("TaskCard", () => {
 	});
 
 	describe("when TASK_CARD_EDIT permission is present", () => {
-		const wrapper = getWrapper("task_card_edit", mockCourse, emptyTaskCardData);
+		describe("when creating new beta task", () => {
+			let wrapper: Wrapper<Vue>;
 
-		it("should render component page", () => {
-			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
-		});
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					emptyTaskCardData,
+					createRoute
+				);
+			});
 
-		it("should render cancel button", () => {
-			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
+			it("should render component page", () => {
+				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			});
 
-			expect(cancelBtn.exists()).toBe(true);
-		});
+			it("should render cancel button", () => {
+				const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
 
-		it("should render save button", () => {
-			const saveBtn = wrapper.find('[data-testid="save-btn"]');
+				expect(cancelBtn.exists()).toBe(true);
+			});
 
-			expect(saveBtn.exists()).toBe(true);
-		});
+			it("should render save button", () => {
+				const saveBtn = wrapper.find('[data-testid="save-btn"]');
 
-		it("should not render delete button for new beta task", () => {
-			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
+				expect(saveBtn.exists()).toBe(true);
+			});
 
-			expect(deleteBtn.exists()).toBe(false);
+			it("should not render delete button for new beta task", () => {
+				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
+
+				expect(deleteBtn.exists()).toBe(false);
+			});
 		});
 
 		describe("when editing existing beta task", () => {
-			const wrapper = getWrapper(
-				"task_card_edit",
-				mockCourse,
-				mockTaskCardData
-			);
-			wrapper.setData({ isDeletable: !!mockTaskCardData.id });
+			let wrapper: Wrapper<Vue>;
+
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					mockTaskCardData,
+					viewEditRoute
+				);
+				wrapper.setData({ isDeletable: !!mockTaskCardData.id });
+			});
 
 			it("should render delete button", () => {
 				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
@@ -204,24 +191,30 @@ describe("TaskCard", () => {
 			});
 
 			it("should delete beta task and redirect after confirming deletion", async () => {
-				const deleteTaskCardMock = jest.fn();
-				taskCardModule.deleteTaskCard = deleteTaskCardMock;
+				jest.spyOn(router, "go");
+				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
 				const deleteDialog: any = wrapper.find({
 					ref: "delete-dialog",
 				});
-				expect(deleteDialog.vm.isOpen).toEqual(true);
 
+				deleteBtn.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(deleteDialog.vm.isOpen).toEqual(true);
 				deleteDialog.vm.$emit("dialog-confirmed");
 				await wrapper.vm.$nextTick();
 
-				expect(deleteTaskCardMock).toHaveBeenCalled();
-				expect(goSpy).toHaveBeenCalledTimes(1);
+				expect(taskCardModuleMock.findTaskCard).toHaveBeenCalledTimes(1);
+				expect(router.go).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
 
 	describe("when only TASK_CARD_VIEW permission is present", () => {
-		const wrapper = getWrapper("task_card_view", mockCourse, emptyTaskCardData);
+		let wrapper: Wrapper<Vue>;
+
+		beforeEach(() => {
+			wrapper = getWrapper(VIEW_PERMISSION, emptyTaskCardData, viewEditRoute);
+		});
 
 		it("should render component page", () => {
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);

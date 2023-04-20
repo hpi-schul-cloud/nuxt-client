@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import CardHostMenu from "./CardHostMenu.vue";
+import BoardMenu from "./BoardMenu.vue";
 
-describe("CardHostMenu Component", () => {
+describe("BoardMenu Component", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardHostMenu as MountOptions<Vue>, {
+		wrapper = shallowMount(BoardMenu as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			slots: {
 				default: "<div>Delete Card</div>",
