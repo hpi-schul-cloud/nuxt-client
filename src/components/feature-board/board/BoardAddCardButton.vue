@@ -2,6 +2,7 @@
 	<div class="d-flex justify-center w-full" ref="column">
 		<div ref="columnend"></div>
 		<div
+			ref="sticky"
 			class="button-background text-center pt-2 pb-4"
 			:class="{ sticky: isSticky && !overTheTop }"
 		>
