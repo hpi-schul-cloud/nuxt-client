@@ -1,7 +1,10 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { isVueClient } = require("../src/router/vue-client-route");
 const { isServer, isFileStorage } = require("../src/router/server-route");
-const { isTldraw } = require("../src/router/tldraw-route");
+const {
+	isTldrawClient,
+	isTldrawServer,
+} = require("../src/router/tldraw-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
@@ -28,19 +31,28 @@ const createFileStorageProxy = () => {
 	return fileStorageProxy;
 };
 
-const createTldrawProxy = () => {
-	const fileStorageProxy = createProxyMiddleware({
+const createTldrawClientProxy = () => {
+	const clientProxy = createProxyMiddleware({
 		target: "http://localhost:3000",
 		changeOrigin: true,
 	});
-	return fileStorageProxy;
+	return clientProxy;
+};
+
+const createTldrawServerProxy = () => {
+	const serverProxy = createProxyMiddleware({
+		target: "http://localhost:3333",
+		changeOrigin: true,
+	});
+	return serverProxy;
 };
 
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
 	const fileStorageProxy = createFileStorageProxy();
-	const tldrawProxy = createTldrawProxy();
+	const tldrawClientProxy = createTldrawClientProxy();
+	const tldrawServerProxy = createTldrawServerProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -60,9 +72,10 @@ const createDevServerConfig = () => {
 					} else if (isServer(path)) {
 						// console.log("--- serverPath: ", path);
 						serverProxy(req, res, next);
-					} else if (isTldraw(path)) {
-						// console.log("--- vuePath: ", path);
-						tldrawProxy(req, res, next);
+					} else if (isTldrawClient(path)) {
+						tldrawClientProxy(req, res, next);
+					} else if (isTldrawServer(path)) {
+						tldrawServerProxy(req, res, next);
 					} else if (isVueClient(path)) {
 						// console.log("--- vuePath: ", path);
 						next();
