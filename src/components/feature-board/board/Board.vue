@@ -24,6 +24,7 @@
 								@update:card-position="onCardPositionChange(index, $event)"
 								@update:title="onUpdateColumnTitle(column.id, $event)"
 								@remove-card="onRemoveCard"
+								@create-card="onCreateCard"
 							/>
 						</Draggable>
 					</template>
@@ -66,6 +67,7 @@ export default defineComponent({
 			moveCardByKeyboard,
 			updateColumnTitle,
 			addNewColumn,
+			createCard,
 		} = useBoardState(route.params?.id);
 
 		provide(BOARD_ACTIONS, boardActions);
@@ -105,6 +107,10 @@ export default defineComponent({
 			addNewColumn(cardId);
 		};
 
+		const onCreateCard = (columnId: string) => {
+			createCard(columnId);
+		};
+
 		return {
 			board,
 			columnDropPlaceholderOptions,
@@ -116,6 +122,7 @@ export default defineComponent({
 			onUpdateColumnTitle,
 			onAddEmptyColumn,
 			onAddColumnWithCard,
+			onCreateCard,
 		};
 	},
 });

@@ -39,9 +39,7 @@ export default defineComponent({
 
 		return {
 			columnend,
-			bounding,
 			isSticky,
-			targetIsVisible,
 			overTheTop,
 			onAddCard,
 			mdiPlus,
@@ -50,7 +48,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .sticky {
 	position: fixed;
 	z-index: 1000;

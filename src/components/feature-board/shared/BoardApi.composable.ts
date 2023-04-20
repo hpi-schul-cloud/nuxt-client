@@ -36,6 +36,10 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerDeleteColumn(columnId);
 	};
 
+	const createCardCall = async (columnId: string) => {
+		await boardColumnApi.columnControllerCreateCard(columnId);
+	};
+
 	const moveCardCall = async (
 		cardId: string,
 		toColumnId: string,
@@ -55,5 +59,6 @@ export const useBoardApi = () => {
 		moveCardCall,
 		updateCardTitle,
 		updateColumnTitleCall,
+		createCardCall,
 	};
 };
