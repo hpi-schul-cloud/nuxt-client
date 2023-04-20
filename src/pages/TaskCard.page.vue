@@ -4,15 +4,30 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<template>
+		<template v-if="isEditMode">
+			<div v-if="isLoading">
+				<v-skeleton-loader type="button" class="mb-8 teacher-input-loader" />
+				<v-skeleton-loader type="button" class="mb-8 teacher-input-loader" />
+				<v-skeleton-loader type="button" class="mb-14 teacher-input-loader" />
+				<v-skeleton-loader type="heading" class="mb-8" />
+				<v-skeleton-loader type="paragraph" />
+			</div>
 			<task-form
-				v-if="isEditMode"
+				v-else
+				:task="task"
 				:is-edit-mode="isEditMode"
 				:courses="courses"
 				:due-date-max="dueDateMax"
-				:is-loading="isLoading"
 			/>
-			<task-student-view v-else :is-loading="isLoading" :task="task" />
+		</template>
+		<template v-else>
+			<div v-if="isLoading" class="mt-12">
+				<v-skeleton-loader type="heading" class="mb-12 d-flex justify-end" />
+				<v-skeleton-loader type="button" class="mb-12 input-loader" />
+				<v-skeleton-loader type="heading" class="mb-8" />
+				<v-skeleton-loader type="paragraph" />
+			</div>
+			<task-student-view v-else :task="task" />
 		</template>
 	</default-wireframe>
 </template>
@@ -103,7 +118,6 @@ export default defineComponent({
 
 			const taskCardId = route.params.id;
 			await taskCardModule.findTaskCard(taskCardId);
-			isLoading.value = false;
 
 			return taskCardModule.getTaskCardData;
 		};
@@ -117,8 +131,6 @@ export default defineComponent({
 				await roomModule.fetchContent(route.params.id);
 				const roomData = roomModule.getRoomData;
 
-				isLoading.value = false;
-
 				return { id: roomData.roomId, name: roomData.title };
 			}
 
@@ -131,6 +143,8 @@ export default defineComponent({
 			task.value = await getTask();
 
 			const course = await getCurrentCourse();
+
+			isLoading.value = false;
 
 			if (!course) {
 				breadcrumbs.value = [
@@ -174,3 +188,14 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+::v-deep .student-input-loader .v-skeleton-loader__button {
+	width: 40%;
+}
+
+::v-deep .teacher-input-loader .v-skeleton-loader__button {
+	width: 100%;
+	height: 56px;
+}
+</style>

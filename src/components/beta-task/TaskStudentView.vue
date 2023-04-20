@@ -1,34 +1,26 @@
 <template>
 	<div>
-		<div v-if="isLoading" class="mt-12">
-			<v-skeleton-loader type="heading" class="mb-12 d-flex justify-end" />
-			<v-skeleton-loader type="button" class="mb-12" />
-			<v-skeleton-loader type="heading" class="mb-8" />
-			<v-skeleton-loader type="paragraph" />
+		<div class="d-flex justify-end mb-4">
+			<v-checkbox
+				v-model="mappedTask.completed"
+				label="Aufgabe erledigt"
+				@change="handleCompletion"
+			/>
 		</div>
-		<div v-else>
-			<div class="d-flex justify-end mb-4">
-				<v-checkbox
-					v-model="mappedTask.completed"
-					label="Aufgabe erledigt"
-					@change="handleCompletion"
-				/>
-			</div>
-			<article class="d-flex flex-column">
-				<p>
-					<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
-					<br />
-					{{ mappedTask.dueDate }}
-				</p>
-				<title-card-element :value="mappedTask.title" />
-				<card-element-list :value="mappedTask.elements" :editMode="false" />
-			</article>
-		</div>
+		<article class="d-flex flex-column">
+			<p>
+				<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
+				<br />
+				{{ mappedTask.dueDate }}
+			</p>
+			<title-card-element :value="mappedTask.title" />
+			<card-element-list :value="mappedTask.elements" :editMode="false" />
+		</article>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, PropType, watch } from "vue";
+import { defineComponent, inject, reactive, PropType } from "vue";
 import VueI18n from "vue-i18n";
 import TaskCardModule from "@/store/task-card";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
@@ -53,11 +45,9 @@ export default defineComponent({
 		CardElementList,
 	},
 	props: {
-		isLoading: {
-			type: Boolean,
-		},
 		task: {
-			type: Object as PropType<TaskCardResponse | null>,
+			type: Object as PropType<TaskCardResponse>,
+			required: true,
 		},
 	},
 	setup(props) {
@@ -77,27 +67,13 @@ export default defineComponent({
 		};
 
 		const mappedTask: Task = reactive({
-			id: "",
-			title: "",
-			elements: [],
-			course: "",
-			dueDate: "",
-			completed: false,
+			id: props.task.id,
+			title: props.task.title,
+			elements: props.task.cardElements,
+			course: props.task.courseName,
+			dueDate: printDateTimeFromStringUTC(props.task.dueDate, true),
+			completed: taskCardModule.getCompletedForStudent,
 		});
-
-		watch(
-			() => props.task,
-			(task) => {
-				if (task) {
-					mappedTask.id = task.id;
-					mappedTask.title = task.title;
-					mappedTask.elements = task.cardElements;
-					mappedTask.course = task.courseName;
-					mappedTask.dueDate = printDateTimeFromStringUTC(task.dueDate, true);
-					mappedTask.completed = taskCardModule.getCompletedForStudent;
-				}
-			}
-		);
 
 		const handleCompletion = () => {
 			if (mappedTask.completed) {
@@ -115,9 +91,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-::v-deep .v-skeleton-loader__button {
-	width: 40%;
-}
-</style>

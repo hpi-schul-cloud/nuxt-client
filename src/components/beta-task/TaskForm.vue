@@ -1,107 +1,106 @@
 <template>
-	<div>
-		<div v-if="isLoading">
-			<v-skeleton-loader type="button" class="mb-8" />
-			<v-skeleton-loader type="button" class="mb-8" />
-			<v-skeleton-loader type="button" class="mb-14" />
-			<v-skeleton-loader type="heading" class="mb-8" />
-			<v-skeleton-loader type="paragraph" />
-		</div>
-		<v-form class="d-flex flex-column" ref="form">
-			<v-select
-				v-model="course"
-				:items="courses"
-				item-value="id"
-				item-text="title"
-				filled
-				:disabled="isCourseSelectDisabled"
-				:label="$t('common.labels.course')"
-				validate-on-blur
-				:rules="[rules.required]"
-				:menu-props="{ bottom: true, offsetY: true }"
-			/>
-			<v-select
-				v-model="isVisible"
-				:items="visibilityOptions"
-				item-value="value"
-				item-text="text"
-				filled
-				disabled
-				:label="$t('common.labels.visibility')"
-				validate-on-blur
-				:rules="[rules.required]"
-				:menu-props="{ bottom: true, offsetY: true }"
-			/>
-			<date-time-picker
-				class="mb-4"
-				required
-				:allow-past="false"
-				:date-time="dueDate"
-				:date-input-label="t('pages.taskCard.labels.dateInput')"
-				:minDate="minDate"
-				:maxDate="dueDateMax"
-				:time-input-label="t('components.organisms.FormNews.label.time')"
-				@input="handleDateTimeInput"
-			/>
-			<title-card-element
-				v-model="title"
-				:placeholder="t('components.cardElement.titleElement.placeholder')"
-				:editable="true"
-			/>
-			<card-element-list v-model="elements" :editMode="true" />
-			<div class="d-flex">
-				<v-btn color="primary" depressed @click="save" data-testid="save-btn">
-					{{ $t("common.actions.save") }}
-				</v-btn>
-				<v-btn
-					class="ml-2"
-					color="secondary"
-					outlined
-					@click="cancel"
-					data-testid="cancel-btn"
-				>
-					{{ $t("common.actions.cancel") }}
-				</v-btn>
-				<v-btn
-					v-if="isDeletable"
-					class="ml-auto"
-					color="secondary"
-					outlined
-					@click="openDeleteDialog()"
-					data-testid="delete-btn"
-				>
-					{{ $t("common.actions.remove") }}
-				</v-btn>
-			</div>
-			<v-custom-dialog
-				ref="delete-dialog"
-				v-model="deleteDialog.isOpen"
-				data-testid="delete-beta-task-dialog"
-				:size="375"
-				has-buttons
-				confirm-btn-title-key="common.actions.remove"
-				@dialog-confirmed="deleteElement()"
-				:is-open="false"
+	<v-form class="d-flex flex-column" ref="form">
+		<v-select
+			v-model="course"
+			:items="courses"
+			item-value="id"
+			item-text="title"
+			filled
+			:disabled="isCourseSelectDisabled"
+			:label="$t('common.labels.course')"
+			validate-on-blur
+			:rules="[rules.required]"
+			:menu-props="{ bottom: true, offsetY: true }"
+		/>
+		<v-select
+			v-model="isVisible"
+			:items="visibilityOptions"
+			item-value="value"
+			item-text="text"
+			filled
+			disabled
+			:label="$t('common.labels.visibility')"
+			validate-on-blur
+			:rules="[rules.required]"
+			:menu-props="{ bottom: true, offsetY: true }"
+		/>
+		<date-time-picker
+			class="mb-4"
+			required
+			:allow-past="false"
+			:date-time="dueDate"
+			:date-input-label="t('pages.taskCard.labels.dateInput')"
+			:minDate="minDate"
+			:maxDate="dueDateMax"
+			:time-input-label="t('components.organisms.FormNews.label.time')"
+			@input="handleDateTimeInput"
+		/>
+		<title-card-element
+			v-model="title"
+			:placeholder="t('components.cardElement.titleElement.placeholder')"
+			:editable="true"
+		/>
+		<card-element-list v-model="elements" :editMode="true" />
+		<div class="d-flex">
+			<v-btn color="primary" depressed @click="save" data-testid="save-btn">
+				{{ $t("common.actions.save") }}
+			</v-btn>
+			<v-btn
+				class="ml-2"
+				color="secondary"
+				outlined
+				@click="cancel"
+				data-testid="cancel-btn"
 			>
-				<h2 slot="title" class="text-h4 my-2">
-					{{ $t("pages.taskCard.deleteTaskCard.title") }}
-				</h2>
-				<template slot="content">
-					<p class="text-md mt-2">
-						{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
-					</p>
-				</template>
-			</v-custom-dialog>
-		</v-form>
-	</div>
+				{{ $t("common.actions.cancel") }}
+			</v-btn>
+			<v-btn
+				v-if="isDeletable"
+				class="ml-auto"
+				color="secondary"
+				outlined
+				@click="openDeleteDialog()"
+				data-testid="delete-btn"
+			>
+				{{ $t("common.actions.remove") }}
+			</v-btn>
+		</div>
+		<v-custom-dialog
+			ref="delete-dialog"
+			v-model="deleteDialog.isOpen"
+			data-testid="delete-beta-task-dialog"
+			:size="375"
+			has-buttons
+			confirm-btn-title-key="common.actions.remove"
+			@dialog-confirmed="deleteElement()"
+			:is-open="false"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ $t("pages.taskCard.deleteTaskCard.title") }}
+			</h2>
+			<template slot="content">
+				<p class="text-md mt-2">
+					{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
+				</p>
+			</template>
+		</v-custom-dialog>
+	</v-form>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, Ref, watch } from "vue";
+import {
+	defineComponent,
+	inject,
+	ref,
+	onMounted,
+	Ref,
+	watch,
+	PropType,
+} from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
-import { taskCardModule, notifierModule } from "@/store";
-
+import TaskCardModule from "@/store/task-card";
+import NotifierModule from "@/store/notifier";
 import {
 	CardElement,
 	CardElementComponentEnum,
@@ -113,6 +112,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 	CardRichTextElementResponseInputFormatEnum,
+	TaskCardResponse,
 } from "@/serverApi/v3";
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
@@ -146,15 +146,18 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
-		isLoading: {
-			type: Boolean,
+		task: {
+			type: Object as PropType<TaskCardResponse>,
+			default: null,
 		},
 	},
 	setup(props) {
-		const router = useRouter();
-
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const taskCardModule: TaskCardModule | undefined =
+			inject<TaskCardModule>("taskCardModule");
+		const notifierModule: NotifierModule | undefined =
+			inject<NotifierModule>("notifierModule");
+		if (!i18n || !taskCardModule || !notifierModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -166,33 +169,10 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		watch(
-			() => props.dueDateMax,
-			(newValue) => {
-				dueDate.value = newValue;
-			}
-		);
-
-		const deleteDialog = ref({
-			isOpen: false,
-			taskCardId: "",
-		});
-
-		const openDeleteDialog = () => {
-			deleteDialog.value.isOpen = true;
-			deleteDialog.value.taskCardId = route.params.id;
-		};
-
-		const deleteElement = async () => {
-			await deleteTaskCard(deleteDialog.value.taskCardId);
-			deleteDialog.value.isOpen = false;
-			deleteDialog.value.taskCardId = "";
-		};
-
-		const form = ref<VForm | null>(null);
-		const course = ref("");
-		const isVisible: Ref<boolean> = ref(true);
-		const visibilityOptions = ref<object[]>([
+		const router = useRouter();
+		const route = useRoute();
+		const minDate = new Date().toISOString();
+		const visibilityOptions = [
 			{
 				text: t("common.labels.visible"),
 				value: true,
@@ -201,15 +181,30 @@ export default defineComponent({
 				text: t("common.labels.notVisible"),
 				value: false,
 			},
-		]);
-		const title = ref("");
-		const dueDate = ref(props.dueDateMax);
+		];
+
+		const form = ref<VForm | null>(null);
+		const errorMessage = ref("");
+
+		const course = ref(props.task?.courseId || "");
+		const isVisible: Ref<boolean> = ref(
+			props.task?.task.status.isDraft || true
+		);
+		const dueDate = ref(props.task?.dueDate || props.dueDateMax);
+		const title = ref(props.task?.title || "");
 		const elements = ref<CardElement[]>([]);
-		const route = useRoute();
+		const isDeletable = ref(!!props.task?.id || false);
+		const deleteDialog = ref({
+			isOpen: false,
+			taskCardId: "",
+		});
 
-		const minDate = new Date().toISOString();
-
-		const isDeletable: Ref<boolean> = ref(false);
+		watch(
+			() => props.dueDateMax,
+			(newValue) => {
+				dueDate.value = newValue;
+			}
+		);
 
 		onMounted(async () => {
 			if (route.name === "rooms-beta-task-new") {
@@ -230,18 +225,7 @@ export default defineComponent({
 			}
 
 			if (route.name === "beta-task-view-edit") {
-				const taskCardId = route.params.id;
-				await taskCardModule.findTaskCard(taskCardId);
-				const taskCardData = taskCardModule.getTaskCardData;
-				title.value = taskCardData.title;
-				course.value = taskCardData.courseId || "";
-				if (taskCardData.id !== "") {
-					isDeletable.value = !!taskCardData.id;
-				}
-				isVisible.value = !taskCardData.task.status.isDraft;
-				dueDate.value = taskCardData.dueDate;
-
-				initElements(taskCardData.cardElements);
+				initElements(props.task.cardElements);
 			}
 
 			if (route.name === "tasks-beta-task-new") {
@@ -405,8 +389,6 @@ export default defineComponent({
 			}
 		};
 
-		const errorMessage = ref("");
-
 		const cancel = () => {
 			router.go(-1);
 		};
@@ -416,6 +398,17 @@ export default defineComponent({
 		};
 
 		const isCourseSelectDisabled = route.name === "beta-task-view-edit";
+
+		const openDeleteDialog = () => {
+			deleteDialog.value.isOpen = true;
+			deleteDialog.value.taskCardId = route.params.id;
+		};
+
+		const deleteElement = async () => {
+			await deleteTaskCard(deleteDialog.value.taskCardId);
+			deleteDialog.value.isOpen = false;
+			deleteDialog.value.taskCardId = "";
+		};
 
 		return {
 			title,
@@ -442,10 +435,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-::v-deep .v-skeleton-loader__button {
-	width: 100%;
-	height: 56px;
-}
-</style>
