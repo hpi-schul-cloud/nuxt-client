@@ -1,15 +1,13 @@
 <template>
 	<div>
-		<h2 v-if="!editable">
-			{{ title }}
-		</h2>
 		<v-textarea
-			v-if="editable"
 			v-model="title"
 			rows="1"
 			auto-grow
 			solo
 			flat
+			:disabled="!editable"
+			:class="editable ? 'editable' : 'not-editable'"
 			:rules="[rules.required, rules.maxLength]"
 			validate-on-blur
 			:aria-label="t('components.cardElement.titleElement')"
@@ -85,8 +83,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-::v-deep .v-textarea .v-input__slot {
+::v-deep .editable .v-input__slot {
 	padding: 0 0 0 var(--ck-spacing-standard) !important;
+	margin-bottom: 0;
+}
+
+::v-deep .not-editable .v-input__slot {
+	padding: 0 !important;
 	margin-bottom: 0;
 }
 

@@ -38,7 +38,7 @@
 		<title-card-element
 			v-model="title"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
-			:editable="true"
+			editable
 		/>
 		<card-element-list v-model="elements" :editMode="true" />
 		<div class="d-flex">
