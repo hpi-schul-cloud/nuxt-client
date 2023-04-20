@@ -12,7 +12,7 @@
 				:due-date-max="dueDateMax"
 				:is-loading="isLoading"
 			/>
-			<task-student-view v-else :is-loading="isLoading" />
+			<task-student-view v-else :is-loading="isLoading" :task="task" />
 		</template>
 	</default-wireframe>
 </template>
@@ -32,6 +32,7 @@ import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TaskForm from "@/components/beta-task/TaskForm.vue";
 import TaskStudentView from "@/components/beta-task/TaskStudentView.vue";
+import { TaskCardResponse } from "@/serverApi/v3/api";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -81,6 +82,7 @@ export default defineComponent({
 		const courses = ref<AllItems>([]);
 		const dueDateMax = ref("");
 		const isLoading = ref(true);
+		const task = ref<TaskCardResponse | null>(null);
 		const route = useRoute();
 
 		const getCourses = async () => {
@@ -94,16 +96,23 @@ export default defineComponent({
 			return endOfSchoolYear.toISOString();
 		};
 
-		const getCurrentCourse = async () => {
-			if (route.name === "beta-task-view-edit") {
-				const taskCardId = route.params.id;
-				await taskCardModule.findTaskCard(taskCardId);
-				const taskCardData = taskCardModule.getTaskCardData;
-
-				isLoading.value = false;
-
-				return { id: taskCardData.courseId, name: taskCardData.courseName };
+		const getTask = async () => {
+			if (route.name !== "beta-task-view-edit") {
+				return null;
 			}
+
+			const taskCardId = route.params.id;
+			await taskCardModule.findTaskCard(taskCardId);
+			isLoading.value = false;
+
+			return taskCardModule.getTaskCardData;
+		};
+
+		const getCurrentCourse = async () => {
+			if (task.value) {
+				return { id: task.value.courseId, name: task.value.courseName };
+			}
+
 			if (route.name === "rooms-beta-task-new") {
 				await roomModule.fetchContent(route.params.id);
 				const roomData = roomModule.getRoomData;
@@ -112,12 +121,14 @@ export default defineComponent({
 
 				return { id: roomData.roomId, name: roomData.title };
 			}
+
 			return null;
 		};
 
 		onBeforeMount(async () => {
 			courses.value = await getCourses();
 			dueDateMax.value = getDueDateMax();
+			task.value = await getTask();
 
 			const course = await getCurrentCourse();
 
@@ -158,6 +169,7 @@ export default defineComponent({
 			courses,
 			dueDateMax,
 			isLoading,
+			task,
 		};
 	},
 });

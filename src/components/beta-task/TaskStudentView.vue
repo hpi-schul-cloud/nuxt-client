@@ -9,7 +9,7 @@
 		<div v-else>
 			<div class="d-flex justify-end mb-4">
 				<v-checkbox
-					v-model="task.completed"
+					v-model="mappedTask.completed"
 					label="Aufgabe erledigt"
 					@change="handleCompletion"
 				/>
@@ -18,23 +18,22 @@
 				<p>
 					<b>{{ t("pages.taskCard.labels.dateInput") }}</b>
 					<br />
-					{{ task.dueDate }}
+					{{ mappedTask.dueDate }}
 				</p>
-				<title-card-element v-model="task.title" />
-				<card-element-list v-model="task.elements" :editMode="false" />
+				<title-card-element :value="mappedTask.title" />
+				<card-element-list :value="mappedTask.elements" :editMode="false" />
 			</article>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, reactive, onBeforeMount } from "vue";
-import { useRoute } from "vue-router/composables";
+import { defineComponent, inject, reactive, PropType, watch } from "vue";
 import VueI18n from "vue-i18n";
 import TaskCardModule from "@/store/task-card";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
-import { CardElementResponse } from "@/serverApi/v3";
+import { CardElementResponse, TaskCardResponse } from "@/serverApi/v3";
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
 
 type Task = {
@@ -57,8 +56,11 @@ export default defineComponent({
 		isLoading: {
 			type: Boolean,
 		},
+		task: {
+			type: Object as PropType<TaskCardResponse | null>,
+		},
 	},
-	setup() {
+	setup(props) {
 		const taskCardModule: TaskCardModule | undefined =
 			inject<TaskCardModule>("taskCardModule");
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -74,9 +76,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const route = useRoute();
-
-		const task: Task = reactive({
+		const mappedTask: Task = reactive({
 			id: "",
 			title: "",
 			elements: [],
@@ -85,29 +85,30 @@ export default defineComponent({
 			completed: false,
 		});
 
-		onBeforeMount(async () => {
-			const taskCardId = route.params.id;
-			await taskCardModule.findTaskCard(taskCardId);
-			const taskCardData = taskCardModule.getTaskCardData;
-
-			task.id = taskCardData.id;
-			task.title = taskCardData.title;
-			task.elements = taskCardData.cardElements;
-			task.course = taskCardData.courseName;
-			task.dueDate = printDateTimeFromStringUTC(taskCardData.dueDate, true);
-			task.completed = taskCardModule.getCompletedForStudent;
-		});
+		watch(
+			() => props.task,
+			(task) => {
+				if (task) {
+					mappedTask.id = task.id;
+					mappedTask.title = task.title;
+					mappedTask.elements = task.cardElements;
+					mappedTask.course = task.courseName;
+					mappedTask.dueDate = printDateTimeFromStringUTC(task.dueDate, true);
+					mappedTask.completed = taskCardModule.getCompletedForStudent;
+				}
+			}
+		);
 
 		const handleCompletion = () => {
-			if (task.completed) {
-				taskCardModule.completeTaskCard(task.id);
+			if (mappedTask.completed) {
+				taskCardModule.completeTaskCard(mappedTask.id);
 			} else {
-				taskCardModule.undoCompletionForTaskCard(task.id);
+				taskCardModule.undoCompletionForTaskCard(mappedTask.id);
 			}
 		};
 
 		return {
-			task,
+			mappedTask,
 			t,
 			handleCompletion,
 		};
