@@ -34,9 +34,7 @@
 									<v-icon>
 										{{ mdiTrashCanOutline }}
 									</v-icon>
-									{{
-										$t("components.cardHost.deletionModal.confirmation.title")
-									}}
+									{{ $t("components.board.action") }}
 								</BoardMenuAction>
 							</BoardMenu>
 						</template>
@@ -55,7 +53,8 @@
 		</div>
 		<DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
-			:card-title="card ? card.title : ''"
+			:title="card ? card.title : ''"
+			:typeName="$t('components.boardCard').toString()"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDialogCancel"
 		></DeleteConfirmation>
