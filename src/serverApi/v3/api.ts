@@ -875,18 +875,6 @@ export interface CustomParameterPostParams {
      * @type {string}
      * @memberof CustomParameterPostParams
      */
-    displayName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterPostParams
-     */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterPostParams
-     */
     defaultValue?: string;
     /**
      * 
@@ -937,18 +925,6 @@ export interface CustomParameterResponse {
      * @memberof CustomParameterResponse
      */
     name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterResponse
-     */
-    displayName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterResponse
-     */
-    description?: string;
     /**
      * 
      * @type {string}
@@ -1008,7 +984,7 @@ export enum CustomParameterResponseScopeEnum {
     */
 export enum CustomParameterResponseLocationEnum {
     Path = 'path',
-    Body = 'body',
+    Token = 'token',
     Query = 'query'
 }
 /**
@@ -1493,37 +1469,6 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  * 
  * @export
- * @interface LdapAuthorizationBodyParams
- */
-export interface LdapAuthorizationBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    systemId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    password: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    schoolId: string;
-}
-/**
- * 
- * @export
  * @interface LessonCopyApiParams
  */
 export interface LessonCopyApiParams {
@@ -1533,25 +1478,6 @@ export interface LessonCopyApiParams {
      * @memberof LessonCopyApiParams
      */
     courseId?: string;
-}
-/**
- * 
- * @export
- * @interface LocalAuthorizationBodyParams
- */
-export interface LocalAuthorizationBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof LocalAuthorizationBodyParams
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LocalAuthorizationBodyParams
-     */
-    password: string;
 }
 /**
  * 
@@ -1838,63 +1764,6 @@ export interface MigrationResponse {
 /**
  * 
  * @export
- * @interface MoveCardBodyParams
- */
-export interface MoveCardBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof MoveCardBodyParams
-     */
-    toColumnId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveCardBodyParams
-     */
-    toPosition: number;
-}
-/**
- * 
- * @export
- * @interface MoveColumnBodyParams
- */
-export interface MoveColumnBodyParams {
-    /**
-     * The id of the target board
-     * @type {string}
-     * @memberof MoveColumnBodyParams
-     */
-    toBoardId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveColumnBodyParams
-     */
-    toPosition: number;
-}
-/**
- * 
- * @export
- * @interface MoveContentElementBody
- */
-export interface MoveContentElementBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof MoveContentElementBody
-     */
-    toCardId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveContentElementBody
-     */
-    toPosition: number;
-}
-/**
- * 
- * @export
  * @interface MoveElementParams
  */
 export interface MoveElementParams {
@@ -2109,31 +1978,6 @@ export interface OAuthTokenDto {
      * @memberof OAuthTokenDto
      */
     accessToken: string;
-}
-/**
- * 
- * @export
- * @interface Oauth2AuthorizationBodyParams
- */
-export interface Oauth2AuthorizationBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    redirectUri: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    code: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    systemId: string;
 }
 /**
  * 
@@ -2808,6 +2652,12 @@ export interface PublicSystemResponse {
      */
     type?: string | null;
     /**
+     * Url of the system.
+     * @type {string}
+     * @memberof PublicSystemResponse
+     */
+    url?: string | null;
+    /**
      * Alias of the system.
      * @type {string}
      * @memberof PublicSystemResponse
@@ -2838,19 +2688,6 @@ export interface RedirectResponse {
      * @memberof RedirectResponse
      */
     redirect_to: string;
-}
-/**
- * 
- * @export
- * @interface RenameBodyParams
- */
-export interface RenameBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof RenameBodyParams
-     */
-    title: string;
 }
 /**
  * 
@@ -3384,7 +3221,7 @@ export interface TaskCardParams {
      * @type {string}
      * @memberof TaskCardParams
      */
-    courseId: string;
+    courseId?: string;
     /**
      * The title of the card
      * @type {string}
@@ -3402,7 +3239,7 @@ export interface TaskCardParams {
      * @type {string}
      * @memberof TaskCardParams
      */
-    dueDate: string;
+    dueDate?: string;
     /**
      * Card elements array
      * @type {Array<CardElementParams>}
@@ -3439,13 +3276,13 @@ export interface TaskCardResponse {
      * @type {string}
      * @memberof TaskCardResponse
      */
-    courseName: string;
+    courseName?: string;
     /**
      * 
      * @type {string}
      * @memberof TaskCardResponse
      */
-    courseId: string;
+    courseId?: string;
     /**
      * Are the card elements draggable?
      * @type {boolean}
@@ -3987,80 +3824,6 @@ export interface UserInfoResponse {
      * @memberof UserInfoResponse
      */
     lastName?: string;
-}
-/**
- * 
- * @export
- * @interface UserLoginMigrationResponse
- */
-export interface UserLoginMigrationResponse {
-    /**
-     * Id of the system which is the origin of the migration
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    sourceSystemId?: string;
-    /**
-     * Id of the system which is the target of the migration
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    targetSystemId: string;
-    /**
-     * Date when the migration was marked as required
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    mandatorySince?: string;
-    /**
-     * Date when the migration was started
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    startedAt: string;
-    /**
-     * Date when the migration was completed
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    closedAt?: string;
-    /**
-     * Date when the migration was completed including the grace period
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
-     */
-    finishedAt?: string;
-}
-/**
- * 
- * @export
- * @interface UserLoginMigrationSearchListResponse
- */
-export interface UserLoginMigrationSearchListResponse {
-    /**
-     * The items for the current page.
-     * @type {Array<UserLoginMigrationResponse>}
-     * @memberof UserLoginMigrationSearchListResponse
-     */
-    data: Array<UserLoginMigrationResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
-     */
-    limit: number;
 }
 /**
  * 
@@ -4842,13 +4605,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
-         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap: async (ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ldapAuthorizationBodyParams' is not null or undefined
-            assertParamExists('loginControllerLoginLdap', 'ldapAuthorizationBodyParams', ldapAuthorizationBodyParams)
+        loginControllerLoginLdap: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/authentication/ldap`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4863,12 +4623,9 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(ldapAuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4877,13 +4634,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'localAuthorizationBodyParams' is not null or undefined
-            assertParamExists('loginControllerLoginLocal', 'localAuthorizationBodyParams', localAuthorizationBodyParams)
+        loginControllerLoginLocal: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/authentication/local`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4898,12 +4652,9 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(localAuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4912,14 +4663,14 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth2: async (oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'oauth2AuthorizationBodyParams' is not null or undefined
-            assertParamExists('loginControllerLoginOauth2', 'oauth2AuthorizationBodyParams', oauth2AuthorizationBodyParams)
-            const localVarPath = `/authentication/oauth2`;
+        loginControllerLoginOauth: async (code?: string, error?: string, redirect?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/authentication/oauth/{systemId}`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4927,18 +4678,27 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            if (code !== undefined) {
+                localVarQueryParameter['code'] = code;
+            }
+
+            if (error !== undefined) {
+                localVarQueryParameter['error'] = error;
+            }
+
+            if (redirect !== undefined) {
+                localVarQueryParameter['redirect'] = redirect;
+            }
+
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(oauth2AuthorizationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4957,32 +4717,32 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLdap(ldapAuthorizationBodyParams, options);
+        async loginControllerLoginLdap(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLdap(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(localAuthorizationBodyParams, options);
+        async loginControllerLoginLocal(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options);
+        async loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth(code, error, redirect, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4997,30 +4757,30 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
-         * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
-            return localVarFp.loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(axios, basePath));
+        loginControllerLoginLdap(options?: any): AxiosPromise<void> {
+            return localVarFp.loginControllerLoginLdap(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
-            return localVarFp.loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(axios, basePath));
+        loginControllerLoginLocal(options?: any): AxiosPromise<void> {
+            return localVarFp.loginControllerLoginLocal(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
+         * @param {string} [code] 
+         * @param {string} [error] 
+         * @param {string} [redirect] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
-            return localVarFp.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(axios, basePath));
+        loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void> {
+            return localVarFp.loginControllerLoginOauth(code, error, redirect, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5033,30 +4793,30 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
-     * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginLdap(options?: any): AxiosPromise<void>;
 
     /**
      * 
-     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginLocal(options?: any): AxiosPromise<void>;
 
     /**
      * 
-     * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
+     * @param {string} [code] 
+     * @param {string} [error] 
+     * @param {string} [redirect] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -5069,44 +4829,44 @@ export interface AuthenticationApiInterface {
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
      * 
-     * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginLdap(options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginLdap(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginLocal(options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
+     * @param {string} [code] 
+     * @param {string} [error] 
+     * @param {string} [redirect] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
-        return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public loginControllerLoginOauth(code?: string, error?: string, redirect?: string, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginOauth(code, error, redirect, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * BoardApi - axios parameter creator
+ * BoardsApi - axios parameter creator
  * @export
  */
-export const BoardApiAxiosParamCreator = function (configuration?: Configuration) {
+export const BoardsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -5115,6 +4875,47 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          */
         boardControllerCreateBoard: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/boards`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateCard: async (boardId: string, columnId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerCreateCard', 'boardId', boardId)
+            // verify required parameter 'columnId' is not null or undefined
+            assertParamExists('boardControllerCreateCard', 'columnId', columnId)
+            const localVarPath = `/boards/{boardId}/columns/{columnId}/cards`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)))
+                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5217,6 +5018,84 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteCard: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cardId' is not null or undefined
+            assertParamExists('boardControllerDeleteCard', 'cardId', cardId)
+            const localVarPath = `/boards/{boardId}/columns/{columnId}/cards/{cardId}`
+                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteColumn: async (boardId: string, columnId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerDeleteColumn', 'boardId', boardId)
+            // verify required parameter 'columnId' is not null or undefined
+            assertParamExists('boardControllerDeleteColumn', 'columnId', columnId)
+            const localVarPath = `/boards/{boardId}/columns/{columnId}`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)))
+                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5252,58 +5131,15 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerUpdateBoardTitle: async (boardId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('boardControllerUpdateBoardTitle', 'boardId', boardId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('boardControllerUpdateBoardTitle', 'renameBodyParams', renameBodyParams)
-            const localVarPath = `/boards/{boardId}/title`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
 /**
- * BoardApi - functional programming interface
+ * BoardsApi - functional programming interface
  * @export
  */
-export const BoardApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardApiAxiosParamCreator(configuration)
+export const BoardsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardsApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -5312,6 +5148,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
          */
         async boardControllerCreateBoard(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCreateCard(boardId: string, columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateCard(boardId, columnId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5336,6 +5183,27 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerDeleteCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerDeleteCard(cardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerDeleteColumn(boardId: string, columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerDeleteColumn(boardId, columnId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5344,26 +5212,15 @@ export const BoardApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerGetBoardSkeleton(boardId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
-        /**
-         * 
-         * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
     }
 };
 
 /**
- * BoardApi - factory interface
+ * BoardsApi - factory interface
  * @export
  */
-export const BoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardApiFp(configuration)
+export const BoardsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardsApiFp(configuration)
     return {
         /**
          * 
@@ -5372,6 +5229,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          */
         boardControllerCreateBoard(options?: any): AxiosPromise<BoardResponse> {
             return localVarFp.boardControllerCreateBoard(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateCard(boardId: string, columnId: string, options?: any): AxiosPromise<CardResponse> {
+            return localVarFp.boardControllerCreateCard(boardId, columnId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5393,6 +5260,25 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.boardControllerDeleteCard(cardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} boardId The id of the board.
+         * @param {string} columnId The id of the column.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerDeleteColumn(boardId: string, columnId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.boardControllerDeleteColumn(boardId, columnId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5400,39 +5286,39 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse> {
             return localVarFp.boardControllerGetBoardSkeleton(boardId, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
 /**
- * BoardApi - interface
+ * BoardsApi - interface
  * @export
- * @interface BoardApi
+ * @interface BoardsApi
  */
-export interface BoardApiInterface {
+export interface BoardsApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
+     * @memberof BoardsApiInterface
      */
     boardControllerCreateBoard(options?: any): AxiosPromise<BoardResponse>;
 
     /**
      * 
      * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
+     * @memberof BoardsApiInterface
+     */
+    boardControllerCreateCard(boardId: string, columnId: string, options?: any): AxiosPromise<CardResponse>;
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApiInterface
      */
     boardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<ColumnResponse>;
 
@@ -5441,46 +5327,67 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
+     * @memberof BoardsApiInterface
      */
     boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApiInterface
+     */
+    boardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApiInterface
+     */
+    boardControllerDeleteColumn(boardId: string, columnId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
+     * @memberof BoardsApiInterface
      */
     boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse>;
 
-    /**
-     * 
-     * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApiInterface
-     */
-    boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
-
 }
 
 /**
- * BoardApi - object-oriented interface
+ * BoardsApi - object-oriented interface
  * @export
- * @class BoardApi
+ * @class BoardsApi
  * @extends {BaseAPI}
  */
-export class BoardApi extends BaseAPI implements BoardApiInterface {
+export class BoardsApi extends BaseAPI implements BoardsApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
+     * @memberof BoardsApi
      */
     public boardControllerCreateBoard(options?: any) {
-        return BoardApiFp(this.configuration).boardControllerCreateBoard(options).then((request) => request(this.axios, this.basePath));
+        return BoardsApiFp(this.configuration).boardControllerCreateBoard(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApi
+     */
+    public boardControllerCreateCard(boardId: string, columnId: string, options?: any) {
+        return BoardsApiFp(this.configuration).boardControllerCreateCard(boardId, columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5488,10 +5395,10 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
+     * @memberof BoardsApi
      */
     public boardControllerCreateColumn(boardId: string, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
+        return BoardsApiFp(this.configuration).boardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5499,10 +5406,33 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
+     * @memberof BoardsApi
      */
     public boardControllerDeleteBoard(boardId: string, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerDeleteBoard(boardId, options).then((request) => request(this.axios, this.basePath));
+        return BoardsApiFp(this.configuration).boardControllerDeleteBoard(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApi
+     */
+    public boardControllerDeleteCard(cardId: string, options?: any) {
+        return BoardsApiFp(this.configuration).boardControllerDeleteCard(cardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} boardId The id of the board.
+     * @param {string} columnId The id of the column.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardsApi
+     */
+    public boardControllerDeleteColumn(boardId: string, columnId: string, options?: any) {
+        return BoardsApiFp(this.configuration).boardControllerDeleteColumn(boardId, columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5510,31 +5440,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
+     * @memberof BoardsApi
      */
     public boardControllerGetBoardSkeleton(boardId: string, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApi
-     */
-    public boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return BoardsApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * BoardCardApi - axios parameter creator
+ * CardsApi - axios parameter creator
  * @export
  */
-export const BoardCardApiAxiosParamCreator = function (configuration?: Configuration) {
+export const CardsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -5576,14 +5494,18 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @param {string} cardId The id of the card.
+         * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerDeleteCard: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
+        cardControllerDeleteElement: async (cardId: string, contentElementId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cardId' is not null or undefined
-            assertParamExists('cardControllerDeleteCard', 'cardId', cardId)
-            const localVarPath = `/cards/{cardId}`
-                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+            assertParamExists('cardControllerDeleteElement', 'cardId', cardId)
+            // verify required parameter 'contentElementId' is not null or undefined
+            assertParamExists('cardControllerDeleteElement', 'contentElementId', contentElementId)
+            const localVarPath = `/cards/{cardId}/elements/{contentElementId}`
+                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)))
+                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5650,919 +5572,6 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {MoveCardBodyParams} moveCardBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerMoveCard: async (cardId: string, moveCardBodyParams: MoveCardBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cardId' is not null or undefined
-            assertParamExists('cardControllerMoveCard', 'cardId', cardId)
-            // verify required parameter 'moveCardBodyParams' is not null or undefined
-            assertParamExists('cardControllerMoveCard', 'moveCardBodyParams', moveCardBodyParams)
-            const localVarPath = `/cards/{cardId}/position`
-                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(moveCardBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerUpdateCardTitle: async (cardId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cardId' is not null or undefined
-            assertParamExists('cardControllerUpdateCardTitle', 'cardId', cardId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('cardControllerUpdateCardTitle', 'renameBodyParams', renameBodyParams)
-            const localVarPath = `/cards/{cardId}/title`
-                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * BoardCardApi - functional programming interface
- * @export
- */
-export const BoardCardApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardCardApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerCreateElement(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerDeleteCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerDeleteCard(cardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {Array<string>} ids Array of Ids to be loaded
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerGetCards(ids: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerGetCards(ids, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {MoveCardBodyParams} moveCardBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerUpdateCardTitle(cardId, renameBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * BoardCardApi - factory interface
- * @export
- */
-export const BoardCardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardCardApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse> {
-            return localVarFp.cardControllerCreateElement(cardId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.cardControllerDeleteCard(cardId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {Array<string>} ids Array of Ids to be loaded
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse> {
-            return localVarFp.cardControllerGetCards(ids, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {MoveCardBodyParams} moveCardBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<boolean> {
-            return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} cardId The id of the card.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.cardControllerUpdateCardTitle(cardId, renameBodyParams, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * BoardCardApi - interface
- * @export
- * @interface BoardCardApi
- */
-export interface BoardCardApiInterface {
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerDeleteCard(cardId: string, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {Array<string>} ids Array of Ids to be loaded
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {MoveCardBodyParams} moveCardBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
-
-}
-
-/**
- * BoardCardApi - object-oriented interface
- * @export
- * @class BoardCardApi
- * @extends {BaseAPI}
- */
-export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerCreateElement(cardId: string, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerDeleteCard(cardId: string, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerDeleteCard(cardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {Array<string>} ids Array of Ids to be loaded
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerGetCards(ids: Array<string>, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {MoveCardBodyParams} moveCardBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} cardId The id of the card.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerUpdateCardTitle(cardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerUpdateCardTitle(cardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * BoardColumnApi - axios parameter creator
- * @export
- */
-export const BoardColumnApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerCreateCard: async (columnId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'columnId' is not null or undefined
-            assertParamExists('columnControllerCreateCard', 'columnId', columnId)
-            const localVarPath = `/columns/{columnId}/cards`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerDeleteColumn: async (columnId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'columnId' is not null or undefined
-            assertParamExists('columnControllerDeleteColumn', 'columnId', columnId)
-            const localVarPath = `/columns/{columnId}`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {MoveColumnBodyParams} moveColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerMoveColumn: async (columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'columnId' is not null or undefined
-            assertParamExists('columnControllerMoveColumn', 'columnId', columnId)
-            // verify required parameter 'moveColumnBodyParams' is not null or undefined
-            assertParamExists('columnControllerMoveColumn', 'moveColumnBodyParams', moveColumnBodyParams)
-            const localVarPath = `/columns/{columnId}/position`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(moveColumnBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerUpdateColumnTitle: async (columnId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'columnId' is not null or undefined
-            assertParamExists('columnControllerUpdateColumnTitle', 'columnId', columnId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('columnControllerUpdateColumnTitle', 'renameBodyParams', renameBodyParams)
-            const localVarPath = `/columns/{columnId}/title`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * BoardColumnApi - functional programming interface
- * @export
- */
-export const BoardColumnApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardColumnApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async columnControllerCreateCard(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCreateCard(columnId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async columnControllerDeleteColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerDeleteColumn(columnId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {MoveColumnBodyParams} moveColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerMoveColumn(columnId, moveColumnBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerUpdateColumnTitle(columnId, renameBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * BoardColumnApi - factory interface
- * @export
- */
-export const BoardColumnApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardColumnApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerCreateCard(columnId: string, options?: any): AxiosPromise<CardResponse> {
-            return localVarFp.columnControllerCreateCard(columnId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.columnControllerDeleteColumn(columnId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {MoveColumnBodyParams} moveColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<boolean> {
-            return localVarFp.columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} columnId The id of the column.
-         * @param {RenameBodyParams} renameBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * BoardColumnApi - interface
- * @export
- * @interface BoardColumnApi
- */
-export interface BoardColumnApiInterface {
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
-     */
-    columnControllerCreateCard(columnId: string, options?: any): AxiosPromise<CardResponse>;
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
-     */
-    columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {MoveColumnBodyParams} moveColumnBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
-     */
-    columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
-     */
-    columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
-
-}
-
-/**
- * BoardColumnApi - object-oriented interface
- * @export
- * @class BoardColumnApi
- * @extends {BaseAPI}
- */
-export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApi
-     */
-    public columnControllerCreateCard(columnId: string, options?: any) {
-        return BoardColumnApiFp(this.configuration).columnControllerCreateCard(columnId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApi
-     */
-    public columnControllerDeleteColumn(columnId: string, options?: any) {
-        return BoardColumnApiFp(this.configuration).columnControllerDeleteColumn(columnId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {MoveColumnBodyParams} moveColumnBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApi
-     */
-    public columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any) {
-        return BoardColumnApiFp(this.configuration).columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} columnId The id of the column.
-     * @param {RenameBodyParams} renameBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardColumnApi
-     */
-    public columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardColumnApiFp(this.configuration).columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * BoardElementApi - axios parameter creator
- * @export
- */
-export const BoardElementApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerDeleteElement: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerDeleteElement', 'contentElementId', contentElementId)
-            const localVarPath = `/elements/{contentElementId}`
-                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {MoveContentElementBody} moveContentElementBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerMoveElement: async (contentElementId: string, moveContentElementBody: MoveContentElementBody, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerMoveElement', 'contentElementId', contentElementId)
-            // verify required parameter 'moveContentElementBody' is not null or undefined
-            assertParamExists('elementControllerMoveElement', 'moveContentElementBody', moveContentElementBody)
-            const localVarPath = `/elements/{contentElementId}/position`
-                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(moveContentElementBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * BoardElementApi - functional programming interface
- * @export
- */
-export const BoardElementApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardElementApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerDeleteElement(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerDeleteElement(contentElementId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {MoveContentElementBody} moveContentElementBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerMoveElement(contentElementId, moveContentElementBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * BoardElementApi - factory interface
- * @export
- */
-export const BoardElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardElementApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.elementControllerDeleteElement(contentElementId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} contentElementId The id of the element.
-         * @param {MoveContentElementBody} moveContentElementBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<boolean> {
-            return localVarFp.elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * BoardElementApi - interface
- * @export
- * @interface BoardElementApi
- */
-export interface BoardElementApiInterface {
-    /**
-     * 
-     * @param {string} contentElementId The id of the element.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApiInterface
-     */
-    elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {string} contentElementId The id of the element.
-     * @param {MoveContentElementBody} moveContentElementBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApiInterface
-     */
-    elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<boolean>;
-
-}
-
-/**
- * BoardElementApi - object-oriented interface
- * @export
- * @class BoardElementApi
- * @extends {BaseAPI}
- */
-export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
-    /**
-     * 
-     * @param {string} contentElementId The id of the element.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApi
-     */
-    public elementControllerDeleteElement(contentElementId: string, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} contentElementId The id of the element.
-     * @param {MoveContentElementBody} moveContentElementBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApi
-     */
-    public elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * CardsApi - axios parameter creator
- * @export
- */
-export const CardsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
         /**
          * 
          * @param {TaskCardParams} taskCardParams 
@@ -6731,6 +5740,37 @@ export const CardsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerCreateElement(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} cardId The id of the card.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerDeleteElement(cardId: string, contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerDeleteElement(cardId, contentElementId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {Array<string>} ids Array of Ids to be loaded
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerGetCards(ids: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerGetCards(ids, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6782,6 +5822,34 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse> {
+            return localVarFp.cardControllerCreateElement(cardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} cardId The id of the card.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerDeleteElement(cardId: string, contentElementId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.cardControllerDeleteElement(cardId, contentElementId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {Array<string>} ids Array of Ids to be loaded
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse> {
+            return localVarFp.cardControllerGetCards(ids, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {TaskCardParams} taskCardParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6828,6 +5896,34 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
 export interface CardsApiInterface {
     /**
      * 
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApiInterface
+     */
+    cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
+
+    /**
+     * 
+     * @param {string} cardId The id of the card.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApiInterface
+     */
+    cardControllerDeleteElement(cardId: string, contentElementId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
+     * @param {Array<string>} ids Array of Ids to be loaded
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApiInterface
+     */
+    cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
+
+    /**
+     * 
      * @param {TaskCardParams} taskCardParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6872,6 +5968,40 @@ export interface CardsApiInterface {
  * @extends {BaseAPI}
  */
 export class CardsApi extends BaseAPI implements CardsApiInterface {
+    /**
+     * 
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApi
+     */
+    public cardControllerCreateElement(cardId: string, options?: any) {
+        return CardsApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} cardId The id of the card.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApi
+     */
+    public cardControllerDeleteElement(cardId: string, contentElementId: string, options?: any) {
+        return CardsApiFp(this.configuration).cardControllerDeleteElement(cardId, contentElementId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {Array<string>} ids Array of Ids to be loaded
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CardsApi
+     */
+    public cardControllerGetCards(ids: Array<string>, options?: any) {
+        return CardsApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {TaskCardParams} taskCardParams 
@@ -11196,40 +10326,6 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
-         * @summary Finds a publicly available system.
-         * @param {string} systemId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        systemControllerGetSystem: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'systemId' is not null or undefined
-            assertParamExists('systemControllerGetSystem', 'systemId', systemId)
-            const localVarPath = `/systems/public/{systemId}`
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -11250,17 +10346,6 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          */
         async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
-         * @summary Finds a publicly available system.
-         * @param {string} systemId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async systemControllerGetSystem(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerGetSystem(systemId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -11284,16 +10369,6 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
             return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
         },
-        /**
-         * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
-         * @summary Finds a publicly available system.
-         * @param {string} systemId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse> {
-            return localVarFp.systemControllerGetSystem(systemId, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -11313,16 +10388,6 @@ export interface SystemsApiInterface {
      * @memberof SystemsApiInterface
      */
     systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
-
-    /**
-     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
-     * @summary Finds a publicly available system.
-     * @param {string} systemId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SystemsApiInterface
-     */
-    systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse>;
 
 }
 
@@ -11344,18 +10409,6 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      */
     public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
         return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
-     * @summary Finds a publicly available system.
-     * @param {string} systemId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SystemsApi
-     */
-    public systemControllerGetSystem(systemId: string, options?: any) {
-        return SystemsApiFp(this.configuration).systemControllerGetSystem(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -14284,129 +13337,6 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerUpdateFlag(importUserId: string, updateFlagParams: UpdateFlagParams, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerUpdateFlag(importUserId, updateFlagParams, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * UserLoginMigrationApi - axios parameter creator
- * @export
- */
-export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} [userId] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userLoginMigrationControllerGetMigrations: async (userId?: string, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user-login-migrations`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (userId !== undefined) {
-                localVarQueryParameter['userId'] = userId;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * UserLoginMigrationApi - functional programming interface
- * @export
- */
-export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = UserLoginMigrationApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} [userId] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userLoginMigrationControllerGetMigrations(userId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerGetMigrations(userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * UserLoginMigrationApi - factory interface
- * @export
- */
-export const UserLoginMigrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = UserLoginMigrationApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} [userId] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse> {
-            return localVarFp.userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * UserLoginMigrationApi - interface
- * @export
- * @interface UserLoginMigrationApi
- */
-export interface UserLoginMigrationApiInterface {
-    /**
-     * 
-     * @param {string} [userId] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
-     */
-    userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse>;
-
-}
-
-/**
- * UserLoginMigrationApi - object-oriented interface
- * @export
- * @class UserLoginMigrationApi
- * @extends {BaseAPI}
- */
-export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigrationApiInterface {
-    /**
-     * 
-     * @param {string} [userId] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
-     */
-    public userLoginMigrationControllerGetMigrations(userId?: string, options?: any) {
-        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
