@@ -4,7 +4,6 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<<<<<<< HEAD
 		<task-form
 			v-if="isEditMode"
 			:is-edit-mode="isEditMode"
@@ -12,101 +11,6 @@
 			:due-date-max="dueDateMax"
 		/>
 		<task-student-view v-else />
-		=======
-		<v-form
-			v-if="isEditMode && !isLoading"
-			class="d-flex flex-column"
-			ref="form"
-		>
-			<v-select
-				v-model="course"
-				:items="courses"
-				item-value="id"
-				item-text="title"
-				filled
-				:disabled="isCourseSelectDisabled"
-				:label="$t('common.labels.course')"
-				validate-on-blur
-				:rules="[rules.required]"
-			/>
-			<v-select
-				v-model="isVisible"
-				:items="visibilityOptions"
-				item-value="value"
-				item-text="text"
-				filled
-				disabled
-				:label="$t('common.labels.visibility')"
-				validate-on-blur
-				:rules="[rules.required]"
-			/>
-			<date-time-picker
-				class="mb-4"
-				required
-				:allow-past="false"
-				:date-time="dueDate"
-				:date-input-label="t('pages.taskCard.labels.dateInput')"
-				:minDate="minDate"
-				:maxDate="maxDate"
-				:time-input-label="t('components.organisms.FormNews.label.time')"
-				@input="handleDateTimeInput"
-				@error="onError"
-			/>
-			<title-card-element
-				v-model="title"
-				:placeholder="t('components.cardElement.titleElement.placeholder')"
-				:editable="true"
-			/>
-			<card-element-list v-model="elements" :editMode="true" />
-			<div class="d-flex">
-				<v-btn color="primary" depressed @click="save" data-testid="save-btn">
-					{{ $t("common.actions.save") }}
-				</v-btn>
-				<v-btn
-					class="ml-2"
-					color="secondary"
-					outlined
-					@click="cancel"
-					data-testid="cancel-btn"
-				>
-					{{ $t("common.actions.cancel") }}
-				</v-btn>
-				<v-btn
-					v-if="isDeletable"
-					class="ml-auto"
-					color="secondary"
-					outlined
-					@click="openDeleteDialog()"
-					data-testid="delete-btn"
-				>
-					{{ $t("common.actions.remove") }}
-				</v-btn>
-			</div>
-			<v-custom-dialog
-				ref="delete-dialog"
-				v-model="deleteDialog.isOpen"
-				data-testid="delete-beta-task-dialog"
-				:size="375"
-				has-buttons
-				confirm-btn-title-key="common.actions.remove"
-				@dialog-confirmed="deleteElement()"
-				:is-open="false"
-			>
-				<h2 slot="title" class="text-h4 my-2">
-					{{ $t("pages.taskCard.deleteTaskCard.title") }}
-				</h2>
-				<template slot="content">
-					<p class="text-md mt-2">
-						{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
-					</p>
-				</template>
-			</v-custom-dialog>
-		</v-form>
-		<article v-else class="d-flex flex-column">
-			<title-card-element v-model="title" :editable="false" />
-			<card-element-list v-model="elements" :editMode="false" />
-		</article>
-		>>>>>>> 41b554919253b94cc79d89f177b8ca9abaf30de5
 	</default-wireframe>
 </template>
 
