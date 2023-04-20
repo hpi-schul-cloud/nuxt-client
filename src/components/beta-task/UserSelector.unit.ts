@@ -39,6 +39,9 @@ describe("@components/beta-task/UserSelector", () => {
 		wrapper = mount(UserSelector as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 		});
 	};
 
