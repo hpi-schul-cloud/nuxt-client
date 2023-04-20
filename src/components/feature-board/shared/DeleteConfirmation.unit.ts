@@ -8,7 +8,8 @@ describe(DeleteConfirmation.name, () => {
 
 	const setup = (options: {
 		isDeleteModalOpen?: boolean;
-		cardTitle?: string;
+		title?: string;
+		typeName?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(DeleteConfirmation as MountOptions<Vue>, {
@@ -18,7 +19,8 @@ describe(DeleteConfirmation.name, () => {
 			},
 			propsData: {
 				isDeleteModalOpen: options?.isDeleteModalOpen || true,
-				cardTitle: options.cardTitle || "card title",
+				title: options.title || "title",
+				typeName: options.typeName || "card",
 			},
 		});
 	};
