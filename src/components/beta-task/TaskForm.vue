@@ -18,6 +18,7 @@
 				:label="$t('common.labels.course')"
 				validate-on-blur
 				:rules="[rules.required]"
+				:menu-props="{ bottom: true, offsetY: true }"
 			/>
 			<v-select
 				v-model="isVisible"
@@ -29,6 +30,7 @@
 				:label="$t('common.labels.visibility')"
 				validate-on-blur
 				:rules="[rules.required]"
+				:menu-props="{ bottom: true, offsetY: true }"
 			/>
 			<date-time-picker
 				class="mb-4"
