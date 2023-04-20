@@ -25,13 +25,13 @@
 		<date-time-picker
 			class="mb-4"
 			required
+			:allow-past="false"
 			:date-time="dueDate"
 			:date-input-label="t('pages.taskCard.labels.dateInput')"
 			:minDate="minDate"
 			:maxDate="dueDateMax"
 			:time-input-label="t('components.organisms.FormNews.label.time')"
 			@input="handleDateTimeInput"
-			@error="onError"
 		/>
 		<title-card-element
 			v-model="title"
@@ -71,6 +71,7 @@
 			has-buttons
 			confirm-btn-title-key="common.actions.remove"
 			@dialog-confirmed="deleteElement()"
+			:is-open="false"
 		>
 			<h2 slot="title" class="text-h4 my-2">
 				{{ $t("pages.taskCard.deleteTaskCard.title") }}
@@ -316,10 +317,6 @@ export default defineComponent({
 				}
 			}
 
-			if (hasErrors.value) {
-				return;
-			}
-
 			if (
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
@@ -394,18 +391,13 @@ export default defineComponent({
 			}
 		};
 
-		const hasErrors = ref(false);
 		const errorMessage = ref("");
-		const onError = () => {
-			hasErrors.value = true;
-		};
 
 		const cancel = () => {
 			router.go(-1);
 		};
 
 		const handleDateTimeInput = (dateTime: string) => {
-			hasErrors.value = false;
 			dueDate.value = dateTime;
 		};
 
