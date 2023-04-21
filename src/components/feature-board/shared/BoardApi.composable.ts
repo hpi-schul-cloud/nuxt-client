@@ -37,8 +37,13 @@ export const useBoardApi = () => {
 	};
 
 	const createCardCall = async (columnId: string) => {
-		const card = await boardColumnApi.columnControllerCreateCard(columnId);
-		if (card.data.id) createElement(card.data.id);
+		const createdCard = await boardColumnApi.columnControllerCreateCard(
+			columnId
+		);
+		if (createdCard.data.id) {
+			createElement(createdCard.data.id);
+			return createdCard.data.id;
+		}
 	};
 
 	const moveCardCall = async (

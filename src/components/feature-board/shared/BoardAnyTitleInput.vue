@@ -10,9 +10,10 @@
 			auto-grow
 			flat
 			class="ml-n3 mb-0 w-full"
-			:placeholder="placeholder"
+			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
 			:tabindex="isEditMode ? 0 : -1"
+			:autofocus="isFocused"
 		></VTextarea>
 		<div v-else role="heading" :aria-level="ariaLevel" class="heading">
 			{{ value }}
@@ -36,13 +37,12 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		placeholder: {
-			type: String,
-			required: true,
-		},
 		scope: {
 			type: String as PropType<"card" | "column" | "board">,
 			required: true,
+		},
+		isFocused: {
+			type: Boolean,
 		},
 	},
 	emits: ["update:value"],
