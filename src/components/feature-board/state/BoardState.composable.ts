@@ -165,8 +165,16 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const newCardId = await createCardCall(columnId);
-		newlyCreatedCardId.value = newCardId;
-		await fetchBoard(board.value.id);
+		if (newCardId) {
+			const columnIndex = board.value.columns.findIndex(
+				(column) => column.id === columnId
+			);
+			board.value.columns[columnIndex].cards.push({
+				cardId: newCardId,
+				height: 120,
+			});
+			newlyCreatedCardId.value = newCardId;
+		}
 	};
 
 	const boardActions = {
