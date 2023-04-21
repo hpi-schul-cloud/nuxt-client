@@ -6,6 +6,7 @@ import {
 	DashboardApiFactory,
 	DashboardApiInterface,
 	DashboardGridElementResponse,
+	UsersList,
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 
@@ -34,6 +35,7 @@ export default class RoomsModule extends VuexModule {
 		message: "",
 	};
 	importedCourseId = "";
+	students: UsersList[] = [];
 
 	loading = false;
 	error: null | object = null;
@@ -137,6 +139,11 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Mutation
+	setStudents(students: UsersList[]): void {
+		this.students = students;
+	}
+
+	@Mutation
 	setBusinessError(businessError: BusinessError): void {
 		this.businessError = businessError;
 	}
@@ -188,6 +195,10 @@ export default class RoomsModule extends VuexModule {
 
 	get hasCurrentRooms(): boolean {
 		return this.roomsData.length > 0;
+	}
+
+	get getStudents(): UsersList[] {
+		return this.students;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -295,6 +306,21 @@ export default class RoomsModule extends VuexModule {
 			);
 
 			this.setAllElements(data.data);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async fetchStudents(courseId: string): Promise<void> {
+		this.setLoading(true);
+		try {
+			const { data } =
+				await this.coursesApi.courseControllerGetCourseForTeacher(courseId);
+
+			this.setStudents(data.students || []);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
