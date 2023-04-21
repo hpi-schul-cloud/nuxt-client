@@ -36,15 +36,17 @@ import {
 	computed,
 	nextTick,
 	inject,
+	watch,
 } from "vue";
 import { User, COURSE_ASSIGNMENT } from "./types/User";
 import VueI18n from "vue-i18n";
 import { useDebounceFn } from "@vueuse/core";
+import RoomsModule from "@/store/rooms";
 
 export default defineComponent({
 	name: "UserSelector",
 	props: {
-		users: { type: Array as PropType<User[]>, required: true },
+		courseId: { type: String, required: true },
 		selection: { type: Array as PropType<User[]>, default: () => [] },
 		courseAssignment: { type: Boolean, default: false },
 		label: { type: String, default: "" },
@@ -54,7 +56,9 @@ export default defineComponent({
 	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
+		const roomsModule: RoomsModule | undefined =
+			inject<RoomsModule>("roomsModule");
+		if (!i18n || !roomsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -66,8 +70,24 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
+		const users = ref<User[]>([]);
+
+		const getUsers = async (courseId: string) => {
+			await roomsModule.fetchStudents(courseId);
+			users.value = roomsModule.getStudents;
+		};
+
+		getUsers(props.courseId);
+
+		watch(
+			() => props.courseId,
+			(newCourseId) => {
+				getUsers(newCourseId);
+			}
+		);
+
 		const items = computed(() => {
-			return props.users.map((user: User) => {
+			return users.value.map((user: User) => {
 				return {
 					text: user.firstName + " " + user.lastName,
 					value: user.id,
@@ -76,14 +96,14 @@ export default defineComponent({
 		});
 
 		const userIds = computed(() => {
-			return props.users.map((user: User) => {
+			return users.value.map((user: User) => {
 				return user.id;
 			});
 		});
 
 		const getSelectedUserIds = () => {
 			if (props.courseAssignment) {
-				return props.users.map((user: User) => {
+				return users.value.map((user: User) => {
 					return user.id;
 				});
 			}
@@ -111,14 +131,16 @@ export default defineComponent({
 		}
 
 		const handleBlur = useDebounceFn(() => {
-			const selectedUsers = props.users.filter((user: User) => {
+			const selectedUsers = users.value.filter((user: User) => {
 				return model.value.includes(user.id);
 			});
 
 			if (valid && !allUsersSelected.value) {
+				console.log(selectedUsers);
 				emit("input", selectedUsers);
 			}
 			if (valid && allUsersSelected.value) {
+				console.log("all users");
 				emit("input", COURSE_ASSIGNMENT);
 			}
 		}, 200);
