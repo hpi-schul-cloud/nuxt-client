@@ -131,6 +131,7 @@ describe("Board", () => {
 			createCard: jest.fn(),
 			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
 			isLoading: ref(isLoading ?? false),
+			newlyCreatedCardId: ref("abc"),
 		});
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),
