@@ -44,7 +44,8 @@
 				@error="onError"
 			/>
 			<user-selector
-				:users="courseDummyUsers"
+				v-if="course"
+				:courseId="course"
 				:selection="selectedUsers"
 				:courseAssignment="courseAssignment"
 				:label="t('common.labels.students')"
@@ -237,40 +238,6 @@ export default defineComponent({
 		const maxDate = ref("");
 
 		const isDeletable: Ref<boolean> = ref(false);
-
-		const courseDummyUsers = [
-			{
-				id: "userId1",
-				firstName: "Peter",
-				lastName: "Andre",
-			},
-			{
-				id: "userId2",
-				firstName: "Michael",
-				lastName: "Meyer",
-			},
-			{
-				id: "userId3",
-				firstName: "Sabine",
-				lastName: "Musterfrau",
-			},
-			{
-				id: "userId4",
-				firstName: "Oliver",
-				lastName: "Lorem",
-			},
-			{
-				id: "userId5",
-				firstName: "Ipsum",
-				lastName: "Dolores",
-			},
-			{
-				id: "userId6",
-				firstName: "Gregor",
-				lastName: "Samsa",
-			},
-		];
-
 		const selectedUsers = ref<User[]>([]);
 		const courseAssignment = ref(false);
 
@@ -338,8 +305,8 @@ export default defineComponent({
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 
-				selectedUsers.value = [courseDummyUsers[2]];
-				// courseAssignment.value = true;
+				// selectedUsers.value = [courseDummyUsers[2]];
+				courseAssignment.value = true;
 
 				initElements(taskCardData.cardElements);
 				isLoading.value = false;
@@ -604,7 +571,6 @@ export default defineComponent({
 			onError,
 			minDate,
 			maxDate,
-			courseDummyUsers,
 			selectedUsers,
 			courseAssignment,
 			handleAssignmentInput,
