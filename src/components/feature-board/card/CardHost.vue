@@ -137,10 +137,10 @@ export default defineComponent({
 		};
 
 		const boardMenuClasses = computed(() => {
-			if (isFocused.value === false && isHovered.value === false) {
-				return "hidden";
+			if (isFocused.value === true || isHovered.value === true) {
+				return "";
 			}
-			return "";
+			return "hidden";
 		});
 
 		watchDebounced(
@@ -180,6 +180,7 @@ export default defineComponent({
 	z-index: 1;
 }
 .hidden {
-	display: none;
+	transition: opacity 200ms;
+	opacity: 0;
 }
 </style>
