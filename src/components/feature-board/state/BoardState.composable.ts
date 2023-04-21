@@ -9,6 +9,7 @@ const {
 	createColumn,
 	deleteColumnCall,
 	moveCardCall,
+	moveColumnCall,
 	updateColumnTitleCall,
 	createCardCall,
 } = useBoardApi();
@@ -27,13 +28,14 @@ export const useBoardState = (id: string) => {
 		isLoading.value = false;
 	};
 
-	const moveColumn = (payload: ColumnMove) => {
+	const moveColumn = async (payload: ColumnMove) => {
 		if (board.value === undefined) {
 			return;
 		}
 		const element = board.value.columns[payload.removedIndex];
 		board.value.columns.splice(payload.removedIndex, 1);
 		board.value.columns.splice(payload.addedIndex, 0, element);
+		await moveColumnCall(payload.payload, board.value.id, payload.addedIndex);
 	};
 
 	let removedIndex: number | undefined;
@@ -59,16 +61,15 @@ export const useBoardState = (id: string) => {
 			addedIndex !== undefined &&
 			targetColumnId !== undefined
 		) {
+			const card = removeCard(cardPayload.payload.cardId);
+			if (card) {
+				addCard(card, targetColumnId, addedIndex);
+			}
 			await moveCardCall(
 				cardPayload.payload.cardId,
 				targetColumnId,
 				addedIndex
 			);
-
-			const card = removeCard(cardPayload.payload.cardId);
-			if (card) {
-				addCard(card, targetColumnId, addedIndex);
-			}
 			removedIndex = undefined;
 			addedIndex = undefined;
 		}

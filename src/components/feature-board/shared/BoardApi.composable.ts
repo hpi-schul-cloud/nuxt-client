@@ -57,12 +57,24 @@ export const useBoardApi = () => {
 		});
 	};
 
+	const moveColumnCall = async (
+		columnId: string,
+		toBoardId: string,
+		toPosition: number
+	) => {
+		await boardColumnApi.columnControllerMoveColumn(columnId, {
+			toBoardId,
+			toPosition,
+		});
+	};
+
 	return {
 		createColumn,
 		createElement,
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,
+		moveColumnCall,
 		updateCardTitle,
 		updateColumnTitleCall,
 		createCardCall,

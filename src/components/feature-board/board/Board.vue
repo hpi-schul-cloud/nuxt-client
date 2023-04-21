@@ -8,9 +8,7 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					drag-handle-selector=".column-drag-handle"
 					lock-axis="x"
-					:drag-begin-delay="200"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onColumnDrop"
