@@ -347,7 +347,7 @@ export default defineComponent({
 			});
 		};
 
-		const createPayload = () => {
+		const buildPayload = () => {
 			const payload: Partial<TaskCardParams> = {};
 
 			payload.title = title.value;
@@ -391,9 +391,9 @@ export default defineComponent({
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
 			) {
-				await taskCardModule.createTaskCard(createPayload());
+				await taskCardModule.createTaskCard(buildPayload());
 			} else {
-				await taskCardModule.updateTaskCard(createPayload());
+				await taskCardModule.updateTaskCard(buildPayload());
 			}
 
 			if (taskCardModule.getStatus === "error") {
