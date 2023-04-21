@@ -5,7 +5,7 @@ import CardElementList from "@/components/card-elements/CardElementList.vue";
 import {
 	CardElement,
 	CardElementComponentEnum,
-} from "@/store/types/card-element";
+} from "@/store/types/beta-task/card-element";
 
 const getEditableCardElementsMockData = (): CardElement[] => [
 	{

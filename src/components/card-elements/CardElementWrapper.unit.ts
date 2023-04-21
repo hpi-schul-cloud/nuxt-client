@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
-import { CardElementComponentEnum } from "@/store/types/card-element";
+import { CardElementComponentEnum } from "@/store/types/beta-task/card-element";
 
 const getWrapper = (props?: object, options?: object) => {
 	return mount(CardElementWrapper, {

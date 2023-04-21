@@ -70,7 +70,7 @@ import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import AddCardElement from "@/components/card-elements/AddCardElement.vue";
-import { CardElementComponentEnum } from "@/store/types/card-element";
+import { CardElementComponentEnum } from "@/store/types/beta-task/card-element";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useDrag } from "@/composables/drag";

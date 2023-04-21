@@ -60,7 +60,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
-import { CardElementComponentEnum } from "@/store/types/card-element";
+import { CardElementComponentEnum } from "@/store/types/beta-task/card-element";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
