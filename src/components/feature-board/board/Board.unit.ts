@@ -121,10 +121,7 @@ describe("Board", () => {
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
 			boardActions: {
-				createCard: jest.fn(),
 				deleteColumn: jest.fn(),
-				moveCard: jest.fn(),
-				removeCard: jest.fn(),
 			},
 			fetchBoard: jest.fn(),
 			moveCard: jest.fn(),
