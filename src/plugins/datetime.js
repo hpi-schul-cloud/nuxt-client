@@ -282,7 +282,7 @@ export const isToday = (date) => {
 	);
 };
 
-export const isInPast = (date) => {
+export const dateIsInPast = (date) => {
 	const nowTimestamp = new Date().getTime();
 	const dateTimestamp = new Date(date).getTime();
 
