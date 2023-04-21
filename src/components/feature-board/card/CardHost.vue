@@ -16,6 +16,7 @@
 				:elevation="isEditMode ? 6 : 0"
 				:id="cardId"
 				:ripple="false"
+				:hover="isHovered"
 			>
 				<template v-if="isLoading">
 					<CardSkeleton :height="height" />
@@ -34,7 +35,7 @@
 					<CardTitle
 						:isEditMode="isEditMode"
 						:value="card.title"
-						:placeholder="'Überschrift'"
+						:isFocused="canFocusAfterCreate"
 						scope="card"
 						@update:value="onUpdateCardTitle"
 					>
@@ -67,10 +68,9 @@ import {
 	useElementSize,
 	useFocusWithin,
 	watchDebounced,
+	useElementHover,
 } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
-import { useElementHover } from "@vueuse/core";
-import CardTitle from "./CardTitle.vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
@@ -80,6 +80,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import { useCardState } from "../state/CardState.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
+import CardTitle from "./CardTitle.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -96,6 +97,7 @@ export default defineComponent({
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
+		newlyCreatedCardId: { type: String, default: "" },
 	},
 	emits: ["move-card-keyboard", "remove-card"],
 	setup(props, { emit }) {
@@ -143,11 +145,21 @@ export default defineComponent({
 			return "hidden";
 		});
 
+		const canFocusAfterCreate = computed(() => {
+			return props.newlyCreatedCardId === props.cardId;
+		});
+
 		watchDebounced(
 			cardHostHeight,
 			(newHeight: number) => updateCardHeight(newHeight),
 			{ debounce: 500, maxWait: 2000 }
 		);
+
+		onMounted(() => {
+			if (props.newlyCreatedCardId === props.cardId) {
+				isEditMode.value = true;
+			}
+		});
 
 		return {
 			boardMenuClasses,
@@ -167,6 +179,7 @@ export default defineComponent({
 			isDeleteModalOpen,
 			onDeleteConfirmation,
 			onDialogCancel: onDeleteCancel,
+			canFocusAfterCreate,
 		};
 	},
 });

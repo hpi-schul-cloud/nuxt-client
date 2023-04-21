@@ -18,6 +18,7 @@
 							<BoardColumn
 								:column="column"
 								:index="index"
+								:newlyCreatedCardId="newlyCreatedCardId"
 								@update:card-position:keyboard="onPositionChangeKeyboard"
 								@update:card-position="onCardPositionChange(index, $event)"
 								@update:title="onUpdateColumnTitle(column.id, $event)"
@@ -66,6 +67,7 @@ export default defineComponent({
 			updateColumnTitle,
 			addNewColumn,
 			createCard,
+			newlyCreatedCardId,
 		} = useBoardState(route.params?.id);
 
 		provide(BOARD_ACTIONS, boardActions);
@@ -121,6 +123,7 @@ export default defineComponent({
 			onAddEmptyColumn,
 			onAddColumnWithCard,
 			onCreateCard,
+			newlyCreatedCardId,
 		};
 	},
 });

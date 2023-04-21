@@ -7,7 +7,7 @@
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
-			:placeholder="''"
+			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 		></BoardAnyTitleInput>
 	</VCardTitle>
@@ -29,9 +29,8 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		placeholder: {
-			type: String,
-			required: true,
+		isFocused: {
+			type: Boolean,
 		},
 	},
 	emits: ["update:value"],

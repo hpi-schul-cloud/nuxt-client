@@ -159,10 +159,13 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
+	const newlyCreatedCardId = ref<string | undefined>(undefined);
+
 	const createCard = async (columnId: string) => {
 		if (board.value === undefined) return;
 
-		await createCardCall(columnId);
+		const newCardId = await createCardCall(columnId);
+		newlyCreatedCardId.value = newCardId;
 		await fetchBoard(board.value.id);
 	};
 
@@ -184,5 +187,6 @@ export const useBoardState = (id: string) => {
 		removeCard,
 		addNewColumn,
 		createCard,
+		newlyCreatedCardId,
 	};
 };
