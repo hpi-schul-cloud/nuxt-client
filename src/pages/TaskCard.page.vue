@@ -305,8 +305,14 @@ export default defineComponent({
 				isVisible.value = !taskCardData.task.status.isDraft;
 				dueDate.value = taskCardData.dueDate;
 
-				// selectedUsers.value = [courseDummyUsers[2]];
-				courseAssignment.value = true;
+				selectedUsers.value = [
+					{
+						id: "0000d224816abba584714c9c",
+						firstName: "Marla",
+						lastName: "Mathe",
+					},
+				];
+				// courseAssignment.value = true;
 
 				initElements(taskCardData.cardElements);
 				isLoading.value = false;
