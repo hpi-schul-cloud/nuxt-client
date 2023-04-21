@@ -1,4 +1,4 @@
-export type VisibleState = "visible" | "notVisible" | "visibleAt";
+export type VisibleState = "visible" | "notVisible" | "visibleAtDate";
 
 export type VisibilityOption = {
 	text: string;

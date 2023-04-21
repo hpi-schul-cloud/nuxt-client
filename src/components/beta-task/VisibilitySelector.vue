@@ -14,7 +14,7 @@
 			@change="handleChange"
 		/>
 		<date-time-picker
-			v-if="select === 'visibleAt'"
+			v-if="select === 'visibleAtDate'"
 			class="mb-4"
 			required
 			:date-time="dateTime"
@@ -65,7 +65,7 @@ export default defineComponent({
 			if (isInPast(props.value)) {
 				return "visible";
 			}
-			return "visibleAt";
+			return "visibleAtDate";
 		};
 
 		const select = ref<VisibleState>(initialSelect());
@@ -82,7 +82,7 @@ export default defineComponent({
 			},
 			{
 				text: t("common.labels.visibleAt"),
-				value: "visibleAt",
+				value: "visibleAtDate",
 			},
 		]);
 
