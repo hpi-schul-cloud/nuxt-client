@@ -1,5 +1,6 @@
 <template>
 	<v-autocomplete
+		:disabled="isLoading"
 		:label="label"
 		:aria-label="ariaLabel"
 		:items="items"
@@ -36,12 +37,13 @@ import {
 	computed,
 	nextTick,
 	inject,
-	watch,
+	toRef,
+	onBeforeMount,
 } from "vue";
-import { User, COURSE_ASSIGNMENT } from "./types/User";
+import { User, COURSE_ASSIGNMENT, ValidationRule } from "./types/User";
 import VueI18n from "vue-i18n";
 import { useDebounceFn } from "@vueuse/core";
-import RoomsModule from "@/store/rooms";
+import { useUserSelectorState } from "./state/UserSelector.composable";
 
 export default defineComponent({
 	name: "UserSelector",
@@ -56,9 +58,7 @@ export default defineComponent({
 	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const roomsModule: RoomsModule | undefined =
-			inject<RoomsModule>("roomsModule");
-		if (!i18n || !roomsModule) {
+		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -70,53 +70,21 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const users = ref<User[]>([]);
+		const { fetchStudents, users, userIds, items, isLoading } =
+			useUserSelectorState(toRef(props, "courseId"));
 
-		const getUsers = async (courseId: string) => {
-			await roomsModule.fetchStudents(courseId);
-			users.value = roomsModule.getStudents;
-		};
-
-		getUsers(props.courseId);
-
-		watch(
-			() => props.courseId,
-			(newCourseId) => {
-				getUsers(newCourseId);
-			}
-		);
-
-		const items = computed(() => {
-			return users.value.map((user: User) => {
-				return {
-					text: user.firstName + " " + user.lastName,
-					value: user.id,
-				};
-			});
-		});
-
-		const userIds = computed(() => {
-			return users.value.map((user: User) => {
-				return user.id;
-			});
-		});
-
-		const getSelectedUserIds = () => {
-			if (props.courseAssignment) {
-				return users.value.map((user: User) => {
-					return user.id;
-				});
-			}
-
-			return props.selection.map((user: User) => {
-				return user.id;
-			});
-		};
-
-		const model = ref(getSelectedUserIds());
+		const model = ref<string[]>([]);
 		let valid = true;
 
-		type ValidationRule = (value: [] | null) => boolean | string;
+		onBeforeMount(async () => {
+			await fetchStudents(props.courseId);
+
+			model.value = props.courseAssignment
+				? userIds.value
+				: props.selection.map((user: User) => {
+						return user.id;
+				  });
+		});
 
 		const requiredRule: ValidationRule = (value: [] | null) => {
 			return value === null || value.length === 0
@@ -136,11 +104,9 @@ export default defineComponent({
 			});
 
 			if (valid && !allUsersSelected.value) {
-				console.log(selectedUsers);
 				emit("input", selectedUsers);
 			}
 			if (valid && allUsersSelected.value) {
-				console.log("all users");
 				emit("input", COURSE_ASSIGNMENT);
 			}
 		}, 200);
@@ -179,6 +145,7 @@ export default defineComponent({
 			toggle,
 			handleBlur,
 			handleError,
+			isLoading,
 		};
 	},
 });
