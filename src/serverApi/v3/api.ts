@@ -2138,6 +2138,31 @@ export interface Oauth2AuthorizationBodyParams {
 /**
  * 
  * @export
+ * @interface Oauth2MigrationParams
+ */
+export interface Oauth2MigrationParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2MigrationParams
+     */
+    redirectUri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2MigrationParams
+     */
+    code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2MigrationParams
+     */
+    systemId: string;
+}
+/**
+ * 
+ * @export
  * @interface Oauth2ToolConfigParams
  */
 export interface Oauth2ToolConfigParams {
@@ -14412,6 +14437,45 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {Oauth2MigrationParams} oauth2MigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerMigrateUserLogin: async (oauth2MigrationParams: Oauth2MigrationParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauth2MigrationParams' is not null or undefined
+            assertParamExists('userLoginMigrationControllerMigrateUserLogin', 'oauth2MigrationParams', oauth2MigrationParams)
+            const localVarPath = `/user-login-migrations/migrate-to-oauth2`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oauth2MigrationParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -14430,6 +14494,16 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          */
         async userLoginMigrationControllerGetMigrations(userId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerGetMigrations(userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {Oauth2MigrationParams} oauth2MigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -14451,6 +14525,15 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
         userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse> {
             return localVarFp.userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {Oauth2MigrationParams} oauth2MigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void> {
+            return localVarFp.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -14468,6 +14551,15 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse>;
+
+    /**
+     * 
+     * @param {Oauth2MigrationParams} oauth2MigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -14487,6 +14579,17 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerGetMigrations(userId?: string, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {Oauth2MigrationParams} oauth2MigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
