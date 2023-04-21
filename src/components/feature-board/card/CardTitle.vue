@@ -1,11 +1,16 @@
 <template>
-	<BoardAnyTitleInput
-		scope="card"
-		:value="modelValue"
-		:isEditMode="isEditMode"
-		:placeholder="''"
-		@update:value="onUpdateValue"
-	></BoardAnyTitleInput>
+	<VCardTitle
+		class="d-flex align-start justify-space-between"
+		v-if="isEditMode || value !== ''"
+	>
+		<BoardAnyTitleInput
+			scope="card"
+			:value="modelValue"
+			:isEditMode="isEditMode"
+			:placeholder="''"
+			@update:value="onUpdateValue"
+		></BoardAnyTitleInput>
+	</VCardTitle>
 </template>
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
@@ -13,10 +18,8 @@ import { defineComponent } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 
 export default defineComponent({
-	name: "CardHeaderTitleInput",
-	components: {
-		BoardAnyTitleInput,
-	},
+	name: "CardTitle",
+	components: { BoardAnyTitleInput },
 	props: {
 		value: {
 			type: String,
@@ -24,6 +27,10 @@ export default defineComponent({
 		},
 		isEditMode: {
 			type: Boolean,
+			required: true,
+		},
+		placeholder: {
+			type: String,
 			required: true,
 		},
 	},

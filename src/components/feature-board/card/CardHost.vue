@@ -12,6 +12,7 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
+				min-height="120px"
 				:elevation="isEditMode ? 6 : 0"
 				:id="cardId"
 				:ripple="false"
@@ -20,25 +21,24 @@
 					<CardSkeleton :height="height" />
 				</template>
 				<template v-if="!isLoading && card">
-					<CardHeader>
-						<template v-slot:title>
-							<CardHeaderTitleInput
-								:isEditMode="isEditMode"
-								:value="card.title"
-								@update:value="onUpdateCardTitle"
-							></CardHeaderTitleInput>
-						</template>
-						<template v-slot:menu>
-							<BoardMenu scope="card">
-								<BoardMenuAction @click="onDelete">
-									<v-icon>
-										{{ mdiTrashCanOutline }}
-									</v-icon>
-									{{ $t("components.board.action") }}
-								</BoardMenuAction>
-							</BoardMenu>
-						</template>
-					</CardHeader>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu scope="card">
+							<BoardMenuAction @click="onDelete">
+								<v-icon>
+									{{ mdiTrashCanOutline }}
+								</v-icon>
+								{{ $t("components.board.action") }}
+							</BoardMenuAction>
+						</BoardMenu>
+					</div>
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						:placeholder="'Überschrift'"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+					>
+					</CardTitle>
 
 					<ContentElementList
 						:elements="card.elements"
@@ -62,10 +62,15 @@
 </template>
 
 <script lang="ts">
-import { useDebounceFn, useElementSize, watchDebounced } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
-import CardHeader from "./CardHeader.vue";
-import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
+import {
+	useDebounceFn,
+	useElementSize,
+	useFocusWithin,
+	watchDebounced,
+} from "@vueuse/core";
+import { computed, defineComponent, ref } from "vue";
+import { useElementHover } from "@vueuse/core";
+import CardTitle from "./CardTitle.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import CardSkeleton from "./CardSkeleton.vue";
@@ -80,10 +85,9 @@ export default defineComponent({
 	name: "CardHost",
 	components: {
 		CardSkeleton,
-		CardHeader,
+		CardTitle,
 		BoardMenu,
 		BoardMenuAction,
-		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
@@ -96,6 +100,8 @@ export default defineComponent({
 	emits: ["move-card-keyboard", "remove-card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
+		const { focused: isFocused } = useFocusWithin(cardHost);
+		const isHovered = useElementHover(cardHost);
 		const {
 			isLoading,
 			card,
@@ -130,6 +136,13 @@ export default defineComponent({
 			}
 		};
 
+		const boardMenuClasses = computed(() => {
+			if (isFocused.value === false && isHovered.value === false) {
+				return "hidden";
+			}
+			return "";
+		});
+
 		watchDebounced(
 			cardHostHeight,
 			(newHeight: number) => updateCardHeight(newHeight),
@@ -137,8 +150,11 @@ export default defineComponent({
 		);
 
 		return {
+			boardMenuClasses,
 			isLoading,
 			card,
+			isFocused,
+			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDelete,
@@ -155,3 +171,15 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.board-menu {
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	z-index: 1;
+}
+.hidden {
+	display: none;
+}
+</style>

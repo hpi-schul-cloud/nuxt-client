@@ -1,15 +1,7 @@
 <template>
 	<div class="d-flex flex-grow-1">
-		<div
-			role="heading"
-			:aria-level="ariaLevel"
-			class="d-sr-only"
-			:aria-hidden="isEditMode"
-		>
-			{{ value }}
-		</div>
-
 		<VTextarea
+			v-if="isEditMode"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -21,9 +13,10 @@
 			:placeholder="placeholder"
 			background-color="transparent"
 			:tabindex="isEditMode ? 0 : -1"
-			:readonly="!isEditMode"
-			:aria-hidden="!isEditMode"
 		></VTextarea>
+		<div v-else role="heading" :aria-level="ariaLevel" class="heading">
+			{{ value }}
+		</div>
 	</div>
 </template>
 
@@ -97,5 +90,11 @@ export default defineComponent({
 <style scoped>
 :deep(textarea) {
 	font-size: v-bind(fontSize);
+}
+.heading {
+	font-size: v-bind(fontSize);
+	margin-top: 10px;
+	letter-spacing: normal;
+	padding-right: 15px;
 }
 </style>

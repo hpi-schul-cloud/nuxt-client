@@ -1,5 +1,5 @@
 <template>
-	<v-menu offset-y nudge-left="100">
+	<v-menu offset-y nudge-left="80">
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
 				color="black"
