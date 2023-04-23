@@ -812,6 +812,7 @@
 	"pages.taskCard.deleteElement.title": "Remove element",
 	"pages.taskCard.deleteTaskCard.text": "Are you sure, you want to remove the beta task \"{title}\"?",
 	"pages.taskCard.deleteTaskCard.title": "Remove beta task",
+	"pages.betaTask.studentView.taskCompleted": "Task completed",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",
