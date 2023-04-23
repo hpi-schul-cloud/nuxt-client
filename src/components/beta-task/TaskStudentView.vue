@@ -23,8 +23,8 @@
 import { defineComponent, inject, reactive, PropType } from "vue";
 import VueI18n from "vue-i18n";
 import TaskCardModule from "@/store/task-card";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
-import CardElementList from "@/components/card-elements/CardElementList.vue";
+import TitleCardElement from "@/components/beta-task/card-elements/TitleCardElement.vue";
+import CardElementList from "@/components/beta-task/card-elements/CardElementList.vue";
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
 import { CardElement } from "@/store/types/beta-task/card-element";

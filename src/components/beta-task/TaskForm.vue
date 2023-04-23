@@ -106,8 +106,8 @@ import {
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
-import CardElementList from "@/components/card-elements/CardElementList.vue";
+import TitleCardElement from "@/components/beta-task/card-elements/TitleCardElement.vue";
+import CardElementList from "@/components/beta-task/card-elements/CardElementList.vue";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
 
 interface VForm extends HTMLFormElement {

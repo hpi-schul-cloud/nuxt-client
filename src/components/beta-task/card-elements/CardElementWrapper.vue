@@ -56,7 +56,7 @@
 import { defineComponent, ref, watch } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/beta-task/card-element";
-import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
+import RichTextCardElement from "@/components/beta-task/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
 	name: "CardElementWrapper",

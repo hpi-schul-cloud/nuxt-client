@@ -1,23 +1,20 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
+import AddCardElement from "@/components/beta-task/card-elements/AddCardElement.vue";
 
 const getWrapper = (props?: object, options?: object) => {
-	return mount(TitleCardElement, {
+	return mount(AddCardElement, {
 		...createComponentMocks({
 			i18n: true,
 		}),
-		provide: {
-			i18n: { t: (key: string) => key },
-		},
 		propsData: props,
 		...options,
 	});
 };
 
-describe("TitleCardElement", () => {
+describe("AddCardElement", () => {
 	it("should render component with defaults", () => {
 		const wrapper = getWrapper();
-		expect(wrapper.findComponent(TitleCardElement).exists()).toBe(true);
+		expect(wrapper.findComponent(AddCardElement).exists()).toBe(true);
 	});
 });

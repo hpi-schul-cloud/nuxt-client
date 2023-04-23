@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
-import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
+import CardElementWrapper from "@/components/beta-task/card-elements/CardElementWrapper.vue";
+import RichTextCardElement from "@/components/beta-task/card-elements/RichTextCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/beta-task/card-element";
 
 const getWrapper = (props?: object, options?: object) => {
@@ -17,7 +17,7 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@components/card-elements/CardElementWrapper", () => {
+describe("@components/beta-task/card-elements/CardElementWrapper", () => {
 	describe("editMode set to true", () => {
 		it("should render component", () => {
 			const wrapper = getWrapper({ editMode: true });

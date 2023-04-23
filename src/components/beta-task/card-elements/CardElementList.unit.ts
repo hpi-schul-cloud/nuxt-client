@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
-import CardElementList from "@/components/card-elements/CardElementList.vue";
+import CardElementList from "@/components/beta-task/card-elements/CardElementList.vue";
 import {
 	CardElement,
 	CardElementComponentEnum,
@@ -77,7 +77,7 @@ const getWrapper = (props?: object) => {
 	});
 };
 
-describe("@components/card-elements/CardElementList", () => {
+describe("@components/beta-task/card-elements/CardElementList", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
