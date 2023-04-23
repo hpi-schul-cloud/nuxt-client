@@ -40,7 +40,7 @@
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			editable
 		/>
-		<card-element-list v-model="elements" :editMode="true" />
+		<card-element-list v-model="elements" editMode />
 		<div class="d-flex">
 			<v-btn color="primary" depressed @click="save" data-testid="save-btn">
 				{{ $t("common.actions.save") }}
@@ -124,10 +124,6 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	props: {
-		isEditMode: {
-			type: Boolean,
-			required: true,
-		},
 		courses: {
 			type: Array,
 			required: true,
@@ -204,7 +200,7 @@ export default defineComponent({
 						placeholder: i18n.t(
 							"components.cardElement.richTextElement.placeholder"
 						) as string,
-						editable: props.isEditMode,
+						editable: true,
 					},
 				},
 			]

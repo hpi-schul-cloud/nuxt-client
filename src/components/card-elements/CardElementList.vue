@@ -27,7 +27,7 @@
 				:disabled="dragInProgress"
 				@delete-element="openDeleteDialog(index)"
 				@add-element="addElementAfter(index)"
-				:editMode="true"
+				editMode
 			/>
 		</draggable>
 		<add-card-element
@@ -60,7 +60,6 @@
 			:key="index"
 			v-model="element.model"
 			v-bind="element.props"
-			:editMode="false"
 		/>
 	</div>
 </template>
@@ -92,7 +91,6 @@ export default defineComponent({
 		},
 		editMode: {
 			type: Boolean,
-			required: true,
 		},
 	},
 	setup(props, { emit }) {

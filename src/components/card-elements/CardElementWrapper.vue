@@ -27,7 +27,7 @@
 		<component
 			:is="component"
 			v-model="model"
-			:editable="true"
+			editable
 			:disabled="disabled"
 			:placeholder="placeholder"
 			@input="handleInput"
@@ -48,12 +48,7 @@
 		</v-btn>
 	</v-card>
 	<v-card v-else flat class="card mb-7">
-		<component
-			:is="component"
-			v-model="model"
-			:editable="false"
-			:placeholder="placeholder"
-		/>
+		<component :is="component" v-model="model" :placeholder="placeholder" />
 	</v-card>
 </template>
 
@@ -87,7 +82,6 @@ export default defineComponent({
 		},
 		editMode: {
 			type: Boolean,
-			required: true,
 		},
 	},
 	setup(props, { emit }) {

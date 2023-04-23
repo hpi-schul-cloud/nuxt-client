@@ -15,7 +15,6 @@
 			<task-form
 				v-else
 				:task="task"
-				:is-edit-mode="isEditMode"
 				:courses="courses"
 				:due-date-max="dueDateMax"
 			/>

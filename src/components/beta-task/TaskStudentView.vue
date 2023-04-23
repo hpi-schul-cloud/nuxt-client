@@ -14,7 +14,7 @@
 				{{ mappedTask.dueDate }}
 			</p>
 			<title-card-element :value="mappedTask.title" />
-			<card-element-list :value="mappedTask.elements" :editMode="false" />
+			<card-element-list :value="mappedTask.elements" />
 		</article>
 	</div>
 </template>
