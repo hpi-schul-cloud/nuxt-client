@@ -47,7 +47,17 @@ import Theme from "@/theme.config";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TaskForm from "@/components/beta-task/TaskForm.vue";
 import TaskStudentView from "@/components/beta-task/TaskStudentView.vue";
-import { TaskCardResponse } from "@/serverApi/v3/api";
+import {
+	CardElementResponse,
+	CardElementResponseCardElementTypeEnum,
+	CardRichTextElementResponseInputFormatEnum,
+	TaskCardResponse,
+} from "@/serverApi/v3/api";
+import {
+	CardElement,
+	CardElementComponentEnum,
+} from "@/store/types/beta-task/card-element";
+import { TaskCard } from "@/store/types/beta-task/beta-task";
 
 // TODO - unit tests!
 export default defineComponent({
@@ -97,21 +107,10 @@ export default defineComponent({
 		const courses = ref<AllItems>([]);
 		const dueDateMax = ref("");
 		const isLoading = ref(true);
-		const task = ref<TaskCardResponse | null>(null);
+		const task = ref<TaskCard | null>(null);
 		const route = useRoute();
 
-		const getCourses = async () => {
-			await roomsModule.fetchAllElements();
-			return roomsModule.getAllElements;
-		};
-
-		const getDueDateMax = () => {
-			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
-			endOfSchoolYear.setHours(12);
-			return endOfSchoolYear.toISOString();
-		};
-
-		const getTask = async () => {
+		const getTask = async (): Promise<TaskCard | null> => {
 			if (route.name !== "beta-task-view-edit") {
 				return null;
 			}
@@ -119,7 +118,51 @@ export default defineComponent({
 			const taskCardId = route.params.id;
 			await taskCardModule.findTaskCard(taskCardId);
 
-			return taskCardModule.getTaskCardData;
+			const task: TaskCard = {
+				...taskCardModule.getTaskCardData,
+				...{ cardElements: initElements(taskCardModule.getTaskCardData) },
+			};
+
+			return task;
+		};
+
+		const initElements = (
+			task: TaskCardResponse
+		): Array<CardElement> | undefined => {
+			if (task === null) return undefined;
+
+			let initialCardElements: Array<CardElementResponse> = [
+				{
+					id: "",
+					cardElementType: CardElementResponseCardElementTypeEnum.RichText,
+					content: {
+						value: "",
+						inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+					},
+				},
+			];
+
+			if (task.cardElements && task.cardElements.length > 0) {
+				initialCardElements = task.cardElements;
+			}
+
+			const elements: CardElement[] = [];
+			initialCardElements.forEach((cardElement) => {
+				return elements.push({
+					id: cardElement.id,
+					type: CardElementResponseCardElementTypeEnum.RichText,
+					model: cardElement.content.value,
+					props: {
+						component: CardElementComponentEnum.RichText,
+						placeholder: i18n.t(
+							"components.cardElement.richTextElement.placeholder"
+						) as string,
+						editable: isEditMode,
+					},
+				});
+			});
+
+			return elements;
 		};
 
 		const getCurrentCourse = async () => {
@@ -135,6 +178,17 @@ export default defineComponent({
 			}
 
 			return null;
+		};
+
+		const getCourses = async () => {
+			await roomsModule.fetchAllElements();
+			return roomsModule.getAllElements;
+		};
+
+		const getDueDateMax = () => {
+			const endOfSchoolYear = new Date(schoolsModule.getCurrentYear.endDate);
+			endOfSchoolYear.setHours(12);
+			return endOfSchoolYear.toISOString();
 		};
 
 		onBeforeMount(async () => {

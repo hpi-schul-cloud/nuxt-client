@@ -96,21 +96,19 @@ import NotifierModule from "@/store/notifier";
 import {
 	CardElement,
 	CardElementComponentEnum,
-} from "@/store/types/card-element";
+} from "@/store/types/beta-task/card-element";
 import { AlertMessage } from "@/store/types/alert-payload";
 import {
-	CardElementResponse,
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
-	CardRichTextElementResponseInputFormatEnum,
-	TaskCardResponse,
 } from "@/serverApi/v3";
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import CardElementList from "@/components/card-elements/CardElementList.vue";
+import { TaskCard } from "@/store/types/beta-task/beta-task";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -139,7 +137,7 @@ export default defineComponent({
 			default: "",
 		},
 		task: {
-			type: Object as PropType<TaskCardResponse>,
+			type: Object as PropType<TaskCard>,
 			default: null,
 		},
 	},
@@ -188,42 +186,12 @@ export default defineComponent({
 		);
 		const dueDate = ref(props.task?.dueDate || props.dueDateMax);
 		const title = ref(props.task?.title || "");
-		const elements = ref<CardElement[]>([]);
-		const isDeletable = ref(!!props.task?.id || false);
-		const deleteDialog = ref({
-			isOpen: false,
-			taskCardId: "",
-		});
-
-		onMounted(() => {
-			const initialCardElements = [
+		const elements = ref<CardElement[]>(
+			props.task?.cardElements || [
 				{
 					id: "",
-					cardElementType: CardElementResponseCardElementTypeEnum.RichText,
-					content: {
-						value: "",
-						inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
-					},
-				},
-			];
-
-			if (route.name === "beta-task-view-edit") {
-				initElements(props.task.cardElements);
-			} else {
-				if (route.params.id) {
-					course.value = route.params.id;
-				}
-
-				initElements(initialCardElements);
-			}
-		});
-
-		const initElements = (cardElements: Array<CardElementResponse> = []) => {
-			cardElements.forEach((cardElement) => {
-				elements.value.push({
-					id: cardElement.id,
 					type: CardElementResponseCardElementTypeEnum.RichText,
-					model: cardElement.content.value,
+					model: "",
 					props: {
 						component: CardElementComponentEnum.RichText,
 						placeholder: i18n.t(
@@ -231,9 +199,20 @@ export default defineComponent({
 						) as string,
 						editable: props.isEditMode,
 					},
-				});
-			});
-		};
+				},
+			]
+		);
+		const isDeletable = ref(!!props.task?.id || false);
+		const deleteDialog = ref({
+			isOpen: false,
+			taskCardId: "",
+		});
+
+		onMounted(() => {
+			if (route.name === "rooms-beta-task-new") {
+				course.value = route.params.id;
+			}
+		});
 
 		const createTaskCard = async () => {
 			const cardElements: Array<CardElementParams> = [];
@@ -319,11 +298,17 @@ export default defineComponent({
 			if (error.statusCode === 400) {
 				const validationError = error?.error as ApiValidationError;
 				const validationErrors = validationError?.validationErrors;
-
-				notifierModule.show({
-					messages: createServerErrorMessages(validationErrors),
-					status: "error",
-				});
+				if (validationErrors) {
+					notifierModule.show({
+						messages: createServerErrorMessages(validationErrors),
+						status: "error",
+					});
+				} else {
+					notifierModule.show({
+						text: validationError.message,
+						status: "error",
+					});
+				}
 			} else {
 				notifierModule.show({
 					text: error.message,
