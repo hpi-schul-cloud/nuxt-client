@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, Ref, PropType } from "vue";
+import { defineComponent, inject, ref, Ref, PropType } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 import VueI18n from "vue-i18n";
 import TaskCardModule from "@/store/task-card";
@@ -180,7 +180,14 @@ export default defineComponent({
 		const form = ref<VForm | null>(null);
 		const errorMessage = ref("");
 
-		const course = ref(props.task?.courseId || "");
+		const selectedCourse = () => {
+			if (route.name === "rooms-beta-task-new") {
+				return route.params.id;
+			}
+
+			return props.task?.courseId || "";
+		};
+		const course = ref(selectedCourse());
 		const isVisible: Ref<boolean> = ref(
 			props.task?.task.status.isDraft || true
 		);
@@ -206,12 +213,6 @@ export default defineComponent({
 		const deleteDialog = ref({
 			isOpen: false,
 			taskCardId: "",
-		});
-
-		onMounted(() => {
-			if (route.name === "rooms-beta-task-new") {
-				course.value = route.params.id;
-			}
 		});
 
 		const createTaskCard = async () => {
