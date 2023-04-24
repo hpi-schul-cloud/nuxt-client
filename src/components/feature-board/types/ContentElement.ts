@@ -18,7 +18,7 @@ export interface TextContentElement extends ContentElement {
 	};
 }
 export interface FileContentElement extends ContentElement {
-	type: ContentElementType.file;
+	type: ContentElementType.FILE;
 	content: {
 		caption: string;
 	};
