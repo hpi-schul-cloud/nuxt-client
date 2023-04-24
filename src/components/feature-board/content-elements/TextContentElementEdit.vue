@@ -9,7 +9,7 @@
 		dense
 		:rows="1"
 		auto-grow
-		class="ml-n3 mb-0 mr-n6 w-full"
+		class="ml-n3 mr-n6 mb-0 w-full"
 		flat
 		background-color="transparent"
 		ref="input"
