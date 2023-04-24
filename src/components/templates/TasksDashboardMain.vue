@@ -84,7 +84,13 @@ import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import { mdiPlus, mdiFormatListChecks } from "@mdi/js";
+import {
+	mdiPlus,
+	mdiFormatListChecks,
+	mdiArchiveOutline,
+	mdiCheckCircleOutline,
+	mdiPlaylistEdit,
+} from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -219,7 +225,7 @@ export default {
 		},
 		tabOneHeader() {
 			return {
-				icon: "$taskOpenFilled",
+				icon: mdiFormatListChecks,
 				route: `#${this.tabRoutes[0]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.open")
@@ -228,7 +234,7 @@ export default {
 		},
 		tabTwoHeader() {
 			return {
-				icon: this.isStudent ? "$taskDoneFilled" : "$taskDraft",
+				icon: this.isStudent ? mdiCheckCircleOutline : mdiPlaylistEdit,
 				route: `#${this.tabRoutes[1]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
@@ -238,7 +244,7 @@ export default {
 		},
 		tabThreeHeader() {
 			return {
-				icon: "$taskFinished",
+				icon: mdiArchiveOutline,
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
 				route: `#${this.tabRoutes[2]}`,
 			};

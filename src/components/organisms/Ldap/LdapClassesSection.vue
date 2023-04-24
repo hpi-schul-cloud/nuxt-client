@@ -28,7 +28,7 @@
 		>
 			<template #icon>
 				<base-icon
-					source="custom"
+					source="material"
 					icon="account_tree"
 					:fill="classesActivatedColor"
 				/>
@@ -69,8 +69,8 @@
 		>
 			<template #icon>
 				<base-icon
-					source="custom"
-					icon="gruppen"
+					source="material"
+					icon="team_outline"
 					:fill="classesActivatedColor"
 				/>
 			</template>
