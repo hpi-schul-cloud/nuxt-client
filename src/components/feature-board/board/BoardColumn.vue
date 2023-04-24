@@ -8,6 +8,7 @@
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			@update:title="onUpdateTitle"
+			@delete-column="onColumnDelete"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
@@ -74,6 +75,7 @@ export default defineComponent({
 		"update:title",
 		"remove-card",
 		"create-card",
+		"delete-column",
 	],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -86,6 +88,10 @@ export default defineComponent({
 				...dropResult,
 				targetColumnId: props.column.id,
 			});
+		};
+
+		const onColumnDelete = (columnId: string): void => {
+			emit("delete-column", columnId);
 		};
 
 		const onRemoveCard = (cardId: string): void => {
@@ -141,6 +147,7 @@ export default defineComponent({
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
+			onColumnDelete,
 			onMoveCard,
 			onRemoveCard,
 			getChildPayload,

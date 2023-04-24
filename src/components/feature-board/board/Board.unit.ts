@@ -120,9 +120,7 @@ describe("Board", () => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
-			boardActions: {
-				deleteColumn: jest.fn(),
-			},
+			deleteColumn: jest.fn(),
 			fetchBoard: jest.fn(),
 			moveCard: jest.fn(),
 			moveCardByKeyboard: jest.fn(),

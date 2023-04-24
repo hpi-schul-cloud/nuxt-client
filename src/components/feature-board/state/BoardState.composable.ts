@@ -177,14 +177,10 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const boardActions = {
-		deleteColumn,
-	};
-
 	onMounted(() => fetchBoard(id));
 
 	return {
-		boardActions,
+		deleteColumn,
 		fetchBoard,
 		board,
 		isLoading,

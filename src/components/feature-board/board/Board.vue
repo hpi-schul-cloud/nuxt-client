@@ -24,6 +24,7 @@
 								@update:title="onUpdateColumnTitle(column.id, $event)"
 								@remove-card="onRemoveCard"
 								@create-card="onCreateCard"
+								@delete-column="onColumnDelete"
 							/>
 						</Draggable>
 					</template>
@@ -38,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide } from "vue";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
@@ -50,7 +51,6 @@ import {
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
-import { BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "Board",
@@ -59,7 +59,7 @@ export default defineComponent({
 		const route = useRoute();
 		const {
 			board,
-			boardActions,
+			deleteColumn,
 			moveCard,
 			removeCard,
 			moveColumn,
@@ -70,14 +70,16 @@ export default defineComponent({
 			newlyCreatedCardId,
 		} = useBoardState(route.params?.id);
 
-		provide(BOARD_ACTIONS, boardActions);
-
 		const onCardPositionChange = (_: unknown, payload: CardMove) => {
 			moveCard(payload);
 		};
 
 		const onRemoveCard = (cardId: string): void => {
 			removeCard(cardId);
+		};
+
+		const onColumnDelete = async (columnId: string): Promise<void> => {
+			await deleteColumn(columnId);
 		};
 
 		const onColumnDrop = (columnPayload: ColumnMove): void => {
@@ -117,6 +119,7 @@ export default defineComponent({
 			onRemoveCard,
 			getColumnId,
 			onCardPositionChange,
+			onColumnDelete,
 			onColumnDrop,
 			onPositionChangeKeyboard,
 			onUpdateColumnTitle,
