@@ -20,7 +20,7 @@ import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: "TextContentElementDisplay",
+	name: "TextContentElementEdit",
 	props: {
 		value: {
 			type: String,
