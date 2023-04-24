@@ -1,9 +1,9 @@
 <template>
-	<div class="d-flex justify-center w-full" ref="column">
+	<div class="d-flex w-full justify-center" ref="column">
 		<div ref="columnend"></div>
 		<div
 			ref="sticky"
-			class="button-background text-center pt-2 pb-4"
+			class="button-background pb-4 pt-2 text-center"
 			:class="{ sticky: isSticky && !overTheTop }"
 		>
 			<VBtn
