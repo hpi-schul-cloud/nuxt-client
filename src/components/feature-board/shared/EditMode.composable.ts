@@ -10,7 +10,11 @@ import { BoardCard } from "../types/Card";
 export const useEditMode = (card: Ref<BoardCard | undefined>) => {
 	const { editModeCardId, setEditModeCardId } = useSharedEditMode();
 
-	const isEditMode = computed(() => card.value?.id === editModeCardId.value);
+	const isEditMode = computed(
+		() =>
+			editModeCardId.value !== undefined &&
+			card.value?.id === editModeCardId.value
+	);
 
 	const startEditMode = () => {
 		setEditModeCardId(card.value?.id);
