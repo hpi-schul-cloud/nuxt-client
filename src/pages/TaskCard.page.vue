@@ -33,7 +33,7 @@
 				:date-input-label="t('pages.taskCard.labels.dateInput')"
 				:minDate="minDate"
 				:maxDate="maxDate"
-				:time-input-label="t('components.organisms.FormNews.label.time')"
+				:time-input-label="t('common.labels.time')"
 				@input="handleDateTimeInput"
 				@error="onError"
 			/>

@@ -32,14 +32,14 @@
 							<base-input
 								v-model="data.date.date"
 								type="date"
-								:label="$t('components.organisms.FormNews.label.date')"
+								:label="$t('common.labels.date')"
 								data-testid="news_date"
 								placeholder="JJJJ-MM-TT"
 							/>
 							<base-input
 								v-model="data.date.time"
 								type="time"
-								:label="$t('components.organisms.FormNews.label.time')"
+								:label="$t('common.labels.time')"
 								data-testid="news_time"
 								placeholder="HH:MM"
 							/>
