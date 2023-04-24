@@ -4,6 +4,7 @@
 		:label="label"
 		:aria-label="ariaLabel"
 		:items="items"
+		ref="user-selector"
 		chips
 		deletable-chips
 		multiple
