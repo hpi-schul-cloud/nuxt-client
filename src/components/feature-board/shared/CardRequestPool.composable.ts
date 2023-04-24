@@ -47,7 +47,9 @@ const useCardRequestPool = () => {
 		for (const chunk of chunks) {
 			promises.push(fetchCards(chunk));
 		}
-		return Promise.all(promises); // TODO: handle failed requests
+		const results = await Promise.allSettled(promises);
+		const fulfilled = results.filter((result) => result.status === "fulfilled");
+		return fulfilled;
 	};
 
 	const fetchCards = async (cardRequests: CardRequest[]) => {
@@ -57,7 +59,7 @@ const useCardRequestPool = () => {
 
 		if (cards) {
 			for (const card of cards) {
-				const requestEntry = cardRequests.find(({ id }) => id === card.cardId);
+				const requestEntry = cardRequests.find(({ id }) => id === card.id);
 				if (requestEntry) {
 					requestEntry.resolve(card);
 				}

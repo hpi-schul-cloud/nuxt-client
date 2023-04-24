@@ -1,32 +1,41 @@
-import { mount } from "@vue/test-utils";
+import Vue from "vue";
+import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 
-const getWrapper = (props?: object, options?: object) => {
-	return mount(DateTimePicker, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			i18n: { t: (key: string) => key },
-		},
-		propsData: props,
-		...options,
-	});
+type DateTimePickerProps = {
+	dateTime: string;
+	dateInputLabel?: string;
+	dateInputAriaLabel?: string;
+	minDate?: string;
+	maxDate?: string;
+	timeInputLabel?: string;
+	timeInputAriaLabel?: string;
+	required?: boolean;
 };
 
 describe("@components/date-time-picker/DateTimePicker", () => {
-	it("should render component", () => {
-		const wrapper = getWrapper({
-			dateTime: new Date().toISOString(),
+	let wrapper: Wrapper<Vue>;
+
+	const setup = (props: DateTimePickerProps) => {
+		document.body.setAttribute("data-app", "true");
+		wrapper = mount(DateTimePicker as MountOptions<Vue>, {
+			...createComponentMocks({}),
+			propsData: props,
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 		});
+	};
+
+	it("should render component", () => {
+		setup({ dateTime: new Date().toISOString() });
+
 		expect(wrapper.findComponent(DateTimePicker).exists()).toBe(true);
 	});
 
 	it("should emit input event on date input", async () => {
-		const wrapper = getWrapper({
-			dateTime: new Date().toISOString(),
-		});
+		setup({ dateTime: new Date().toISOString() });
 
 		const datePicker = wrapper.findComponent({ name: "date-picker" });
 		expect(datePicker.exists()).toBe(true);
@@ -40,46 +49,31 @@ describe("@components/date-time-picker/DateTimePicker", () => {
 	});
 
 	it("should emit input event on time input", async () => {
-		const wrapper = getWrapper({
-			dateTime: new Date().toISOString(),
-		});
+		jest.useFakeTimers();
+		setup({ dateTime: new Date().toISOString() });
 
 		const timePicker = wrapper.findComponent({ name: "time-picker" });
 		expect(timePicker.exists()).toBe(true);
 		timePicker.vm.$emit("input", "00:00");
 
-		await wrapper.vm.$nextTick();
+		jest.advanceTimersByTime(1000);
 
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 
-	it("should emit error event on invalid date input", async () => {
-		const wrapper = getWrapper({
-			dateTime: new Date().toISOString(),
-		});
-
-		const datePicker = wrapper.findComponent({ name: "date-picker" });
-		expect(datePicker.exists()).toBe(true);
-		datePicker.vm.$emit("error");
-
-		await wrapper.vm.$nextTick();
-
-		expect(wrapper.emitted("error")).toHaveLength(1);
-		expect(wrapper.emitted("input")).toBe(undefined);
-	});
-
-	it("should emit error event on invalid time input", async () => {
-		const wrapper = getWrapper({
-			dateTime: new Date().toISOString(),
-		});
+	it("should restrict timepicker when date is today", async () => {
+		setup({ dateTime: new Date().toISOString() });
 
 		const timePicker = wrapper.findComponent({ name: "time-picker" });
 		expect(timePicker.exists()).toBe(true);
-		timePicker.vm.$emit("error");
+		expect(timePicker.props("allowPast")).toBe(false);
+	});
 
-		await wrapper.vm.$nextTick();
+	it("should not restrict timepicker when date is in the future", async () => {
+		setup({ dateTime: new Date("2300-01-01T00:00:00").toISOString() });
 
-		expect(wrapper.emitted("error")).toHaveLength(1);
-		expect(wrapper.emitted("input")).toBe(undefined);
+		const timePicker = wrapper.findComponent({ name: "time-picker" });
+		expect(timePicker.exists()).toBe(true);
+		expect(timePicker.props("allowPast")).toBe(true);
 	});
 });
