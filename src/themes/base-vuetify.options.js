@@ -56,6 +56,7 @@ export default {
 		},
 	},
 	icons: {
+		iconfont: "mdiSvg",
 		values: {
 			// NUXT_REMOVAL Do we really have to register all these icons
 			// This here is only to supplement the Vuetify Icons.
