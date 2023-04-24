@@ -1,22 +1,20 @@
-import { Ref, ref, inject, watch, computed } from "vue";
-import RoomsModule from "@/store/rooms";
+import { Ref, ref, watch, computed } from "vue";
+import { CoursesApiFactory } from "@/serverApi/v3/api";
+import { $axios } from "@/utils/api";
 import { User } from "../types/User";
 
 export const useUserSelectorState = (courseId: Ref<string>) => {
 	const isLoading = ref<boolean>(false);
-
-	const roomsModule: RoomsModule | undefined =
-		inject<RoomsModule>("roomsModule");
-	if (!roomsModule) {
-		throw new Error("Injection of dependencies failed");
-	}
+	const courseApi = CoursesApiFactory(undefined, "/v3", $axios);
 
 	const users = ref<User[]>([]);
 
 	const fetchStudents = async (courseId: string) => {
 		isLoading.value = true;
-		await roomsModule.fetchStudents(courseId);
-		users.value = roomsModule.getStudents;
+		const response = await courseApi.courseControllerGetCourseForTeacher(
+			courseId
+		);
+		users.value = response.data.students || [];
 		isLoading.value = false;
 	};
 
