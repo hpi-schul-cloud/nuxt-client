@@ -24,8 +24,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { mdiPlus } from "@mdi/js";
-import { useElementVisibility } from "@vueuse/core";
-import { useElementBounding } from "@vueuse/core";
+import { useElementVisibility, useElementBounding } from "@vueuse/core";
 
 export default defineComponent({
 	name: "BoardAddCardButton",
