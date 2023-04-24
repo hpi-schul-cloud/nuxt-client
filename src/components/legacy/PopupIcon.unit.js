@@ -1,6 +1,11 @@
 import PopupIcon from "./PopupIcon";
 
-const testProps = { source: "fa", icon: "pencil", fill: "red", centered: true };
+const testProps = {
+	source: "material",
+	icon: "qrcode",
+	fill: "red",
+	centered: true,
+};
 
 describe("@/components/legacy/BaseIcon", () => {
 	it(
@@ -21,8 +26,8 @@ describe("@/components/legacy/BaseIcon", () => {
 			}),
 			propsData: testProps,
 		});
-		expect(wrapper.find(".fa-pencil").exists()).toBe(true);
-		expect(wrapper.find("svg").exists()).toBe(false);
+		expect(wrapper.find(".material-icon").exists()).toBe(true);
+		expect(wrapper.find("svg").exists()).toBe(true);
 	});
 
 	it("it pops up when it is clicked", async () => {

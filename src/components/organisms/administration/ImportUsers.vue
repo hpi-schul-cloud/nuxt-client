@@ -189,7 +189,7 @@
 							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"
 						>
-							<v-icon small>{{ mdiPencil }}</v-icon>
+							<v-icon small>{{ mdiPencilOutline }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
@@ -262,7 +262,7 @@ import {
 	mdiAccountSwitchOutline,
 	mdiFlag,
 	mdiFlagOutline,
-	mdiPencil,
+	mdiPencilOutline,
 } from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 
@@ -277,7 +277,7 @@ export default {
 			mdiAccountSwitchOutline,
 			mdiFlag,
 			mdiFlagOutline,
-			mdiPencil,
+			mdiPencilOutline,
 			MatchedBy,
 			loading: false,
 			roles: [

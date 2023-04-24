@@ -98,7 +98,7 @@
 						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencil }}</v-icon>
+						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -134,7 +134,12 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
+import {
+	mdiAccountPlus,
+	mdiCloudDownload,
+	mdiPencilOutline,
+	mdiPlus,
+} from "@mdi/js";
 
 export default {
 	components: {
@@ -155,7 +160,7 @@ export default {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			mdiPencil,
+			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
@@ -198,13 +203,11 @@ export default {
 						"pages.administration.teachers.index.tableActions.email"
 					),
 					icon: "mail_outline",
-					"icon-source": "material",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
@@ -214,7 +217,6 @@ export default {
 						"pages.administration.teachers.index.tableActions.delete"
 					),
 					icon: "delete_outline",
-					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",

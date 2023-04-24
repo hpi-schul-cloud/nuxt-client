@@ -12,14 +12,6 @@ describe("@/components/base/BaseIcon", () => {
 		return wrapper;
 	};
 
-	it("can render fontawesome icons", () => {
-		const wrapper = mountComponent({
-			propsData: { source: "fa", icon: "pencil", fill: "red" },
-		});
-		expect(wrapper.find(".fa-pencil").exists()).toBe(true);
-		expect(wrapper.find("svg").exists()).toBe(false);
-	});
-
 	it("can render custom icons", () => {
 		const wrapper = mountComponent({
 			propsData: { source: "custom", icon: "tasks", fill: "green" },
