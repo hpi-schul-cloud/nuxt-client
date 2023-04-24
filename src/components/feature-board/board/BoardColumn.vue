@@ -24,7 +24,6 @@
 						class="my-3"
 						:card-id="card.cardId"
 						:height="card.height"
-						:newlyCreatedCardId="newlyCreatedCardId"
 						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						@remove-card="onRemoveCard"
 					/>
@@ -66,7 +65,6 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
-		newlyCreatedCardId: { type: String, default: "" },
 	},
 	emits: [
 		"update:card-position",

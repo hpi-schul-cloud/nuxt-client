@@ -2,6 +2,7 @@ import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
@@ -17,6 +18,7 @@ const {
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const { setEditModeCardId } = useSharedEditMode();
 
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
@@ -159,8 +161,6 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
-	const newlyCreatedCardId = ref<string | undefined>(undefined);
-
 	const createCard = async (columnId: string) => {
 		if (board.value === undefined) return;
 
@@ -173,7 +173,7 @@ export const useBoardState = (id: string) => {
 				cardId: newCardId,
 				height: 120,
 			});
-			newlyCreatedCardId.value = newCardId;
+			setEditModeCardId(newCardId);
 		}
 	};
 
@@ -195,6 +195,5 @@ export const useBoardState = (id: string) => {
 		removeCard,
 		addNewColumn,
 		createCard,
-		newlyCreatedCardId,
 	};
 };
