@@ -1,7 +1,7 @@
 <template>
 	<VTextarea
 		label="Text-Element"
-		placeholder="Schreibe deinen Text..."
+		:placeholder="$t('common.labels.description')"
 		hide-details="auto"
 		v-model="modelValue"
 		:autofocus="autofocus"
