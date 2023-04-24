@@ -1138,6 +1138,29 @@ export interface DashboardResponse {
 /**
  * 
  * @export
+ * @interface ElementTypeParams
+ */
+export interface ElementTypeParams {
+    /**
+     * The type of element
+     * @type {string}
+     * @memberof ElementTypeParams
+     */
+    type: ElementTypeParamsTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ElementTypeParamsTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
  * @interface EntityNotFoundError
  */
 export interface EntityNotFoundError {
@@ -1356,6 +1379,60 @@ export interface ExternalToolSearchListResponse {
      */
     limit: number;
 }
+/**
+ * 
+ * @export
+ * @interface FileElementContent
+ */
+export interface FileElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    caption: string;
+}
+/**
+ * 
+ * @export
+ * @interface FileElementResponse
+ */
+export interface FileElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementResponse
+     */
+    type: FileElementResponseTypeEnum;
+    /**
+     * 
+     * @type {FileElementContent}
+     * @memberof FileElementResponse
+     */
+    content: FileElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof FileElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum FileElementResponseTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
 /**
  * 
  * @export
@@ -3871,7 +3948,8 @@ export interface TextElementResponse {
     * @enum {string}
     */
 export enum TextElementResponseTypeEnum {
-    Text = 'text'
+    Text = 'text',
+    File = 'file'
 }
 
 /**
@@ -5590,12 +5668,15 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {ElementTypeParams} elementTypeParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
+        cardControllerCreateElement: async (cardId: string, elementTypeParams: ElementTypeParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cardId' is not null or undefined
             assertParamExists('cardControllerCreateElement', 'cardId', cardId)
+            // verify required parameter 'elementTypeParams' is not null or undefined
+            assertParamExists('cardControllerCreateElement', 'elementTypeParams', elementTypeParams)
             const localVarPath = `/cards/{cardId}/elements`
                 .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5615,9 +5696,12 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(elementTypeParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5805,11 +5889,12 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {ElementTypeParams} elementTypeParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, options);
+        async cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, elementTypeParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5872,11 +5957,12 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {ElementTypeParams} elementTypeParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse> {
-            return localVarFp.cardControllerCreateElement(cardId, options).then((request) => request(axios, basePath));
+        cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse> {
+            return localVarFp.cardControllerCreateElement(cardId, elementTypeParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5933,11 +6019,12 @@ export interface BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
+     * @param {ElementTypeParams} elementTypeParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
+    cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse>;
 
     /**
      * 
@@ -5994,12 +6081,13 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
+     * @param {ElementTypeParams} elementTypeParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApi
      */
-    public cardControllerCreateElement(cardId: string, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
+    public cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, elementTypeParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

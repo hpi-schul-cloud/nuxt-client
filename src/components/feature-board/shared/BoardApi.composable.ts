@@ -1,10 +1,11 @@
-import { $axios } from "@/utils/api";
 import {
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	ColumnResponse,
+	ElementTypeParams,
 } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -24,8 +25,10 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
 	};
 
-	const createElement = async (cardId: string) => {
-		await cardsApi.cardControllerCreateElement(cardId);
+	const createElement = async (cardId: string, type: ElementTypeParams) => {
+		const result = await cardsApi.cardControllerCreateElement(cardId, type);
+
+		return result.data;
 	};
 
 	const deleteCardCall = async (cardId: string) => {
