@@ -6,7 +6,7 @@
 			data-testid="add_filter_button"
 			@click="showMenu"
 		>
-			<base-icon source="custom" icon="filter" class="filter-icon mr-2" />
+			<base-icon source="material" icon="filter" class="filter-icon mr-2" />
 			<span class="filter-btn mr-2"> {{ labelAdd }} </span>
 			<base-icon source="material" icon="arrow_drop_down" class="filter-icon" />
 		</v-btn>

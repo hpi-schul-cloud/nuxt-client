@@ -215,10 +215,14 @@
 					</div>
 					<base-icon
 						v-if="sortBy === column.field"
-						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-						source="custom"
+						:icon="sortOrder === 'asc' ? 'sort_up' : 'sort_down'"
+						source="material"
 					/>
-					<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
+					<base-icon
+						v-else-if="column.sortable"
+						icon="sort"
+						source="material"
+					/>
 				</v-btn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
