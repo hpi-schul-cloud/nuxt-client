@@ -24,7 +24,7 @@
 				@focus="onEditRoom"
 			>
 				{{ data.title }}
-				<v-icon>{{ mdiPencil }}</v-icon>
+				<v-icon>{{ mdiPencilOutline }}</v-icon>
 			</h2>
 		</div>
 		<template slot="content">
@@ -46,7 +46,7 @@ import { roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 
-import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
+import { mdiPencilOutline, mdiKeyboardReturn } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -82,7 +82,7 @@ export default Vue.extend({
 	data() {
 		return {
 			roomNameEditMode: false,
-			mdiPencil,
+			mdiPencilOutline,
 			mdiKeyboardReturn,
 			data: {
 				id: "",
