@@ -15,8 +15,16 @@
 			:tabindex="isEditMode ? 0 : -1"
 			:autofocus="true"
 		></VTextarea>
-		<div v-else role="heading" :aria-level="ariaLevel" class="heading">
+		<div
+			v-else-if="value && value !== ''"
+			:aria-level="ariaLevel"
+			role="heading"
+			class="heading"
+		>
 			{{ value }}
+		</div>
+		<div v-else class="heading blue-grey--text darken-1">
+			{{ placeholder }}
 		</div>
 	</div>
 </template>
@@ -40,6 +48,11 @@ export default defineComponent({
 		scope: {
 			type: String as PropType<"card" | "column" | "board">,
 			required: true,
+		},
+		placeholder: {
+			type: String,
+			default: "",
+			required: false,
 		},
 	},
 	emits: ["update:value"],
