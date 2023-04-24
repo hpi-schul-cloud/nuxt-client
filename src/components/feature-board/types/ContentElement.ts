@@ -1,6 +1,6 @@
 export enum ContentElementType {
 	TEXT = "text",
-	file = "file",
+	FILE = "file",
 }
 
 export type AnyContentElement = TextContentElement | FileContentElement;
