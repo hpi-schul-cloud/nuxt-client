@@ -71,7 +71,7 @@ export default defineComponent({
 		const select = ref<VisibleState>(initialSelect());
 		const dateTime = ref(props.value);
 
-		const visibilityOptions = ref<VisibilityOption[]>([
+		const visibilityOptions: VisibilityOption[] = [
 			{
 				text: t("common.labels.visible"),
 				value: "visible",
@@ -84,7 +84,7 @@ export default defineComponent({
 				text: t("common.labels.visibleAt"),
 				value: "visibleAtDate",
 			},
-		]);
+		];
 
 		const rules = {
 			required: (value: string) => !!value || t("common.validation.required"),
