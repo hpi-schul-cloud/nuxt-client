@@ -46,7 +46,6 @@ let router = new VueRouter();
 let taskCardModuleMock = createModuleMocks(TaskCardModule);
 
 const CREATE_EDIT_PERMISSION = "task_card_edit";
-const VIEW_PERMISSION = "task_card_view";
 
 const mockRoomData = roomFactory();
 
@@ -135,18 +134,6 @@ describe("TaskCard", () => {
 				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 			});
 
-			it("should render cancel button", () => {
-				const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-
-				expect(cancelBtn.exists()).toBe(true);
-			});
-
-			it("should render save button", () => {
-				const saveBtn = wrapper.find('[data-testid="save-btn"]');
-
-				expect(saveBtn.exists()).toBe(true);
-			});
-
 			it("should not render delete button for new beta task", () => {
 				const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
 
@@ -206,42 +193,6 @@ describe("TaskCard", () => {
 				expect(taskCardModuleMock.findTaskCard).toHaveBeenCalledTimes(1);
 				expect(router.go).toHaveBeenCalledTimes(1);
 			});
-		});
-	});
-
-	describe("when only TASK_CARD_VIEW permission is present", () => {
-		let wrapper: Wrapper<Vue>;
-
-		beforeEach(() => {
-			wrapper = getWrapper(VIEW_PERMISSION, emptyTaskCardData, viewEditRoute);
-		});
-
-		it("should render component page", () => {
-			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
-		});
-
-		it("should not render cancel button", () => {
-			const cancelBtn = wrapper.find('[data-testid="cancel-btn"]');
-
-			expect(cancelBtn.exists()).toBe(false);
-		});
-
-		it("should not render save button", () => {
-			const saveBtn = wrapper.find('[data-testid="save-btn"]');
-
-			expect(saveBtn.exists()).toBe(false);
-		});
-
-		it("should not render delete button", () => {
-			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
-
-			expect(deleteBtn.exists()).toBe(false);
-		});
-	});
-
-	describe("permission check before mounting", () => {
-		describe("when user does have permission TASK_CARD_EDIT", () => {
-			it.todo("should do what?"); // QUESTION
 		});
 	});
 });

@@ -7,7 +7,7 @@
 			item-text="title"
 			filled
 			:disabled="isCourseSelectDisabled"
-			:label="$t('common.labels.course')"
+			:label="t('common.labels.course')"
 			validate-on-blur
 			:rules="[rules.required]"
 			:menu-props="{ bottom: true, offsetY: true }"
@@ -19,7 +19,7 @@
 			item-text="text"
 			filled
 			disabled
-			:label="$t('common.labels.visibility')"
+			:label="t('common.labels.visibility')"
 			validate-on-blur
 			:rules="[rules.required]"
 			:menu-props="{ bottom: true, offsetY: true }"
@@ -76,11 +76,11 @@
 			:is-open="false"
 		>
 			<h2 slot="title" class="text-h4 my-2">
-				{{ $t("pages.taskCard.deleteTaskCard.title") }}
+				{{ t("pages.taskCard.deleteTaskCard.title") }}
 			</h2>
 			<template slot="content">
 				<p class="text-md mt-2">
-					{{ $t("pages.taskCard.deleteTaskCard.text", { title }) }}
+					{{ t("pages.taskCard.deleteTaskCard.text", { title }) }}
 				</p>
 			</template>
 		</v-custom-dialog>

@@ -38,7 +38,6 @@ type Task = {
 	completed: boolean;
 };
 
-// TODO - unit tests!
 export default defineComponent({
 	name: "TaskStudentView",
 	components: {
