@@ -4,10 +4,9 @@ import { $axios } from "@/utils/api";
 import { User } from "../types/User";
 
 export const useUserSelectorState = (courseId: Ref<string>) => {
+	const users = ref<User[]>([]);
 	const isLoading = ref<boolean>(false);
 	const courseApi = CoursesApiFactory(undefined, "/v3", $axios);
-
-	const users = ref<User[]>([]);
 
 	const fetchStudents = async (courseId: string) => {
 		isLoading.value = true;
@@ -17,8 +16,6 @@ export const useUserSelectorState = (courseId: Ref<string>) => {
 		users.value = response.data.students || [];
 		isLoading.value = false;
 	};
-
-	fetchStudents(courseId.value);
 
 	watch(
 		() => courseId.value,
