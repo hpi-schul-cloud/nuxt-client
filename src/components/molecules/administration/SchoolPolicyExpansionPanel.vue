@@ -21,7 +21,7 @@
 						:download="policy.fileData.filename"
 					>
 						<v-icon class="mr-2">
-							{{ iconMdiDownload }}
+							{{ iconmdiTrayArrowDown }}
 						</v-icon>
 						{{
 							$t("pages.administration.school.index.schoolPolicies.downloadPDF")
@@ -35,7 +35,7 @@
 
 <script>
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
-import { mdiDownload } from "@mdi/js";
+import { mdiTrayArrowDown } from "@mdi/js";
 
 export default {
 	props: {
@@ -46,7 +46,7 @@ export default {
 	},
 	data() {
 		return {
-			iconMdiDownload: mdiDownload,
+			iconmdiTrayArrowDown: mdiTrayArrowDown,
 		};
 	},
 	methods: {

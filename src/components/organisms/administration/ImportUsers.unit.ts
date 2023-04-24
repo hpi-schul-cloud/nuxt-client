@@ -69,7 +69,7 @@ const mockData = {
 	mdiAccountSwitchOutline: "mdiAccountSwitchOutline",
 	mdiFlag: "mdiFlag",
 	mdiFlagOutline: "mdiFlagOutline",
-	mdiPencil: "mdiFlag",
+	mdiPencilOutline: "mdiPencilOutline",
 	options: {
 		page: 1,
 		itemsPerPage: 25,

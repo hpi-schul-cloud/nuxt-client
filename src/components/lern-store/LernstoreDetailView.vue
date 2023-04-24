@@ -125,7 +125,7 @@
 					</div>
 					<div class="meta-container">
 						<div>
-							<base-icon class="meta-icon" source="custom" icon="hashtag" />
+							<base-icon class="meta-icon" source="material" icon="hashtag" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
