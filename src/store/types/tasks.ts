@@ -13,7 +13,7 @@ export type Task = {
 	name: string;
 	description?: RichText;
 	availableDate?: string;
-	duedate?: string;
+	dueDate?: string;
 	courseId: string;
 	courseName: string;
 	displayColor?: string;
