@@ -37,7 +37,7 @@
 							<base-icon
 								v-if="route.icon"
 								:icon="route.icon"
-								:source="route.source || 'fa'"
+								:source="route.source || DEFAULT_ICON_SOURCE"
 								:fill="
 									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'
@@ -68,7 +68,7 @@
 								<base-icon
 									v-if="child.icon"
 									:icon="child.icon"
-									:source="child.source || 'fa'"
+									:source="child.source || DEFAULT_ICON_SOURCE"
 									:fill="
 										isActive(child.title)
 											? 'var(--v-primary-base)'
@@ -112,6 +112,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const DEFAULT_ICON_SOURCE = "material";
 		const activeItem = ref("");
 		const activeParent = ref("");
 
@@ -150,6 +151,7 @@ export default defineComponent({
 		};
 
 		return {
+			DEFAULT_ICON_SOURCE,
 			isActive,
 			isChildActive,
 		};
@@ -276,7 +278,7 @@ export default defineComponent({
 					align-items: center;
 					min-width: 80px;
 					height: 100%;
-					padding: 0 20px;
+					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
 					color: var(--v-secondary-base);
@@ -299,7 +301,7 @@ export default defineComponent({
 
 						@include breakpoint(desktop) {
 							display: initial;
-							margin-top: 4px;
+							margin-top: 2px;
 						}
 					}
 
@@ -326,22 +328,14 @@ export default defineComponent({
 </style>
 <style lang="scss">
 .sidebar .contents .list .list-item .list-content .icon {
-	width: 25px;
-	margin-right: 6px;
+	width: 24px;
+	height: 24px;
+	margin-right: 8px;
 	vertical-align: middle;
 
 	.v-icon {
-		width: 25px;
-		height: 19px;
-
-		&.custom-icon {
-			height: 18px;
-		}
-	}
-
-	svg {
-		width: 25px;
-		height: 20px;
+		width: 24px;
+		height: 24px;
 	}
 }
 </style>
