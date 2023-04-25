@@ -48,8 +48,8 @@
 				:courseId="course"
 				:selection="selectedUsers"
 				:courseAssignment="courseAssignment"
-				:label="t('common.labels.students')"
-				:aria-label="t('common.labels.students')"
+				:label="t('components.betaTask.userSelector.label')"
+				:aria-label="t('components.betaTask.userSelector.label')"
 				required
 				@input="handleAssignmentInput"
 			/>

@@ -22,7 +22,9 @@
 					<v-icon :class="icon" class="fa"> </v-icon>
 				</v-list-item-action>
 				<v-list-item-content>
-					<v-list-item-title>Gesamter Kurs</v-list-item-title>
+					<v-list-item-title>{{
+						$t("components.betaTask.userSelector.courseSelection")
+					}}</v-list-item-title>
 				</v-list-item-content>
 			</v-list-item>
 			<v-divider class="mt-2"></v-divider>
@@ -41,7 +43,8 @@ import {
 	toRef,
 	onBeforeMount,
 } from "vue";
-import { User, COURSE_ASSIGNMENT, ValidationRule } from "./types/User";
+import { User, COURSE_ASSIGNMENT } from "./types/User";
+import { ArrayValidationRule } from "./types/Validation";
 import VueI18n from "vue-i18n";
 import { useDebounceFn } from "@vueuse/core";
 import { useUserSelectorState } from "./state/UserSelector.composable";
@@ -87,13 +90,13 @@ export default defineComponent({
 				  });
 		});
 
-		const requiredRule: ValidationRule = (value: [] | null) => {
+		const requiredRule: ArrayValidationRule = (value: [] | null) => {
 			return value === null || value.length === 0
-				? t("common.labels.students")
+				? t("components.betaTask.userSelector.validation.required")
 				: true;
 		};
 
-		const rules: ValidationRule[] = [];
+		const rules: ArrayValidationRule[] = [];
 
 		if (props.required) {
 			rules.push(requiredRule);
