@@ -816,6 +816,7 @@
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
+	"components.cardElement.visibilityElement.validation.required": "Por favor selecciona visibilidad",
 	"components.cardHost.deletionModal.confirmation.text": "¿Estás seguro de que deseas eliminar la tarjeta {cardTitle}?",
 	"components.cardHost.deletionModal.confirmation.title": "Eliminar tarjeta",
 	"components.board": "tablero",

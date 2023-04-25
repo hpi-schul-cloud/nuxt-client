@@ -87,7 +87,9 @@ export default defineComponent({
 		];
 
 		const rules = {
-			required: (value: string) => !!value || t("common.validation.required"),
+			required: (value: string) =>
+				!!value ||
+				t("components.cardElement.visibilityElement.validation.required"),
 		};
 
 		const handleChange = (option: VisibleState) => {

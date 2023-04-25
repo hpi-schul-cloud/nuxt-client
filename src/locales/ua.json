@@ -296,6 +296,7 @@
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
+	"components.cardElement.visibilityElement.validation.required": "Виберіть Видимість",
 	"components.cardHost.deletionModal.confirmation.text": "Ви впевнені, що хочете видалити картку {cardTitle}?",
 	"components.cardHost.deletionModal.confirmation.title": "Видалити картку",
 	"components.board": "Пінборд",

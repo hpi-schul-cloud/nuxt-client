@@ -802,6 +802,7 @@
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement.validation.maxLength": "Der Titel darf nur {maxLength} Zeichen lang sein.",
+	"components.cardElement.visibilityElement.validation.required": "Bitte Sichtbarkeit auswählen.",
 	"components.cardHost.deletionModal.confirmation.text": "Soll die Karte {cardTitle} wirklich gelöscht werden?",
 	"components.cardHost.deletionModal.confirmation.title": "Karte löschen",
 	"components.board": "Board",
