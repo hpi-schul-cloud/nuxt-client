@@ -301,7 +301,7 @@ export default defineComponent({
 
 						@include breakpoint(desktop) {
 							display: initial;
-							margin-top: 4px;
+							margin-top: 2px;
 						}
 					}
 
