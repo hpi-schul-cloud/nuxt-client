@@ -19,7 +19,7 @@
 		<template v-slot:prepend-item>
 			<v-list-item ripple @mousedown.prevent @click="toggle">
 				<v-list-item-action>
-					<v-icon :class="icon" class="fa"> </v-icon>
+					<v-icon>{{ icon }}</v-icon>
 				</v-list-item-action>
 				<v-list-item-content>
 					<v-list-item-title>{{
@@ -48,6 +48,7 @@ import { ArrayValidationRule } from "./types/Validation";
 import VueI18n from "vue-i18n";
 import { useDebounceFn } from "@vueuse/core";
 import { useUserSelectorState } from "./state/UserSelector.composable";
+import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from "@mdi/js";
 
 export default defineComponent({
 	name: "UserSelector",
@@ -128,7 +129,9 @@ export default defineComponent({
 		});
 
 		const icon = computed(() => {
-			return allUsersSelected.value ? "fa-check-square" : "fa-square-o";
+			return allUsersSelected.value
+				? mdiCheckboxMarked
+				: mdiCheckboxBlankOutline;
 		});
 
 		const toggle = () => {
