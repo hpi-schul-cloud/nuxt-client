@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
+import CardTitle from "./CardTitle.vue";
 
-describe("CardHeaderTitleInput Component", () => {
+describe(CardTitle.name, () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (options: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardHeaderTitleInput as MountOptions<Vue>, {
+		wrapper = shallowMount(CardTitle as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
 				value: "props value",

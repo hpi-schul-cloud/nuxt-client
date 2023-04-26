@@ -8,6 +8,7 @@
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			@update:title="onUpdateTitle"
+			@delete-column="onColumnDelete"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
@@ -30,6 +31,7 @@
 				</Draggable>
 			</template>
 		</Container>
+		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
 	</div>
 </template>
 
@@ -47,10 +49,17 @@ import {
 	DragAndDropKeys,
 } from "../types/DragAndDrop";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable, BoardColumnHeader },
+	components: {
+		CardHost,
+		Container,
+		Draggable,
+		BoardColumnHeader,
+		BoardAddCardButton,
+	},
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
@@ -63,6 +72,8 @@ export default defineComponent({
 		"update:card-position:keyboard",
 		"update:title",
 		"remove-card",
+		"create-card",
+		"delete-column",
 	],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -75,6 +86,10 @@ export default defineComponent({
 				...dropResult,
 				targetColumnId: props.column.id,
 			});
+		};
+
+		const onColumnDelete = (columnId: string): void => {
+			emit("delete-column", columnId);
 		};
 
 		const onRemoveCard = (cardId: string): void => {
@@ -125,15 +140,19 @@ export default defineComponent({
 			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
+		const onCreateCard = () => emit("create-card", props.column.id);
+
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
+			onColumnDelete,
 			onMoveCard,
 			onRemoveCard,
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,
 			titlePlaceholder,
+			onCreateCard,
 		};
 	},
 });
