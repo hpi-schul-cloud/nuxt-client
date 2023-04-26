@@ -142,7 +142,7 @@ export const useBoardState = (id: string) => {
 		updateColumnTitleCall(columnId, newTitle);
 	};
 
-	const addNewColumn = async (cardId?: string) => {
+	const createNewColumn = async (cardId?: string) => {
 		console.log("cardId", cardId);
 		if (board.value === undefined) {
 			return;
@@ -189,7 +189,7 @@ export const useBoardState = (id: string) => {
 		moveCardByKeyboard,
 		updateColumnTitle,
 		removeCard,
-		addNewColumn,
+		createNewColumn,
 		createCard,
 	};
 };

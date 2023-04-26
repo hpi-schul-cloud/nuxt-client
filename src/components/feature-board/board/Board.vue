@@ -29,8 +29,8 @@
 					</template>
 				</Container>
 				<BoardColumnGhost
-					@add-column-with-card="onAddColumnWithCard"
-					@add-empty-column="onAddEmptyColumn"
+					@add-column-with-card="onCreateColumnWithCard"
+					@add-empty-column="onCreateEmptyColumn"
 				></BoardColumnGhost>
 			</template>
 		</div>
@@ -64,7 +64,7 @@ export default defineComponent({
 			moveColumn,
 			moveCardByKeyboard,
 			updateColumnTitle,
-			addNewColumn,
+			createNewColumn,
 			createCard,
 		} = useBoardState(route.params?.id);
 
@@ -99,12 +99,12 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const onAddEmptyColumn = () => {
-			addNewColumn();
+		const onCreateEmptyColumn = () => {
+			createNewColumn();
 		};
 
-		const onAddColumnWithCard = (cardId?: string) => {
-			addNewColumn(cardId);
+		const onCreateColumnWithCard = (cardId?: string) => {
+			createNewColumn(cardId);
 		};
 
 		const onCreateCard = (columnId: string) => {
@@ -121,8 +121,8 @@ export default defineComponent({
 			onColumnDrop,
 			onPositionChangeKeyboard,
 			onUpdateColumnTitle,
-			onAddEmptyColumn,
-			onAddColumnWithCard,
+			onCreateEmptyColumn,
+			onCreateColumnWithCard,
 			onCreateCard,
 		};
 	},
