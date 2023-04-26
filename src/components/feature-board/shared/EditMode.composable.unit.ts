@@ -1,17 +1,8 @@
-import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 import { ref } from "vue";
+import { useEditMode } from "./EditMode.composable";
 
-const cardMock = ref({
-	id: "testId",
-	height: 175,
-	elements: [],
-	visibility: {
-		publishedAt: "26.04.2023",
-	},
-	title: "test title",
-});
-
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardMock);
+const fakeId = ref("testId");
+const { isEditMode, startEditMode, stopEditMode } = useEditMode(fakeId);
 
 describe("EditMode.composable", () => {
 	beforeEach(() => {

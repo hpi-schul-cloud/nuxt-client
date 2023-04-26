@@ -98,7 +98,7 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard", "remove-card"],
+	emits: ["move-card-keyboard", "delete:card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const { focused: isFocused } = useFocusWithin(cardHost);
@@ -115,7 +115,8 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move-card-keyboard", event.code);
 		};
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(card);
+		const cardId = computed(() => card.value?.id);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
@@ -125,7 +126,7 @@ export default defineComponent({
 		const onDeleteConfirm = async () => {
 			await deleteCard();
 			isDeleteModalOpen.value = false;
-			emit("remove-card", card.value?.id);
+			emit("delete:card", card.value?.id);
 		};
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
