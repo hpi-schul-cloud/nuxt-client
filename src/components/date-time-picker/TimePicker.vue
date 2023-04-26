@@ -93,6 +93,8 @@ export default defineComponent({
 			toRef(props, "allowPast")
 		);
 
+		const timeRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
+
 		const requiredRule: ValidationRule = (value: string | null) => {
 			return value === "" || value === null
 				? t("components.timePicker.validation.required")
@@ -100,11 +102,10 @@ export default defineComponent({
 		};
 
 		const formatRule: ValidationRule = (value: string | null) => {
-			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
 			if (value === "" || value === null) {
 				return true;
 			}
-			return !value.match(regex)
+			return !value.match(timeRegex)
 				? t("components.timePicker.validation.format")
 				: true;
 		};
@@ -137,7 +138,9 @@ export default defineComponent({
 
 		const handleBlur = useDebounceFn(() => {
 			const time = model.value || "";
-			emit("input", time);
+			if (time.match(timeRegex)) {
+				emit("input", time);
+			}
 		}, 200);
 
 		const handleSelect = (selected: string) => {
