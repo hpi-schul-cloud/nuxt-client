@@ -18,7 +18,7 @@
 				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
 				validate-on-blur
-				:rules="[rules.required]"
+				:rules="[rules.courseRequired]"
 			/>
 			<visibility-selector
 				v-model="visibleAtDate"
@@ -433,7 +433,8 @@ export default defineComponent({
 		};
 
 		const rules = {
-			required: (value: string) => !!value || t("common.validation.required"),
+			courseRequired: (value: string) =>
+				!!value || t("components.betaTask.courseSelector.validation.required"),
 		};
 
 		const deleteTaskCard = async (taskCardId: string) => {

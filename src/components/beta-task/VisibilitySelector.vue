@@ -89,7 +89,7 @@ export default defineComponent({
 		const rules = {
 			required: (value: string) =>
 				!!value ||
-				t("components.cardElement.visibilityElement.validation.required"),
+				t("components.betaTask.visibilitySelector.validation.required"),
 		};
 
 		const handleChange = (option: VisibleState) => {
