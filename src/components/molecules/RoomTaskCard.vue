@@ -23,7 +23,7 @@
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
-						{{ cardTitle(task.duedate) }}
+						{{ cardTitle(task.dueDate) }}
 					</div>
 				</div>
 				<h6 class="mb-2 task-name mt-1">
@@ -38,7 +38,7 @@
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
-						{{ cardTitle(task.duedate) }}
+						{{ cardTitle(task.dueDate) }}
 					</div>
 					<div class="dot-menu-section">
 						<more-item-menu
@@ -87,7 +87,7 @@
 					<v-custom-chip-time-remaining
 						v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 						type="warning"
-						:due-date="task.duedate"
+						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</div>
@@ -169,14 +169,14 @@ export default {
 			return this.task.status.isDraft;
 		},
 		isOverDue() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			return dueDate && new Date(dueDate) < new Date();
 		},
 		isFinished() {
 			return this.task.status.isFinished;
 		},
 		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
 			if (timeDiff !== null) {
 				return timeDiff <= 24;
 			}

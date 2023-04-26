@@ -5,7 +5,7 @@ type TaskParams = {
 	name?: string;
 	courseName?: string;
 	courseId?: string;
-	duedate?: string;
+	dueDate?: string;
 	status?: {
 		submitted?: number;
 		maxSubmissions?: number;
@@ -25,7 +25,7 @@ class TaskFactory {
 				params.courseName !== undefined ? params.courseName : "course #1",
 			courseId:
 				params.courseId !== undefined ? params.courseId : "course ID #1",
-			duedate: params.duedate,
+			dueDate: params.dueDate,
 			status: {
 				submitted: params.status?.submitted || 0,
 				maxSubmissions: params.status?.maxSubmissions || 0,
@@ -121,7 +121,7 @@ describe("task filter", () => {
 	describe("withoutDueDate", () => {
 		it("should filter all tasks without a due date", () => {
 			const tomorrow = getTodayOffset(1);
-			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task1 = taskFactory.build({ dueDate: tomorrow.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).withoutDueDate().tasks;
@@ -132,7 +132,7 @@ describe("task filter", () => {
 	describe("withDueDate", () => {
 		it("should filter all tasks that have a due date", () => {
 			const tomorrow = getTodayOffset(1);
-			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task1 = taskFactory.build({ dueDate: tomorrow.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).withDueDate().tasks;
@@ -143,7 +143,7 @@ describe("task filter", () => {
 	describe("byOverdue", () => {
 		it("should filter all overdue tasks", () => {
 			const yesterday = getTodayOffset(-1);
-			const task1 = taskFactory.build({ duedate: yesterday.toISOString() });
+			const task1 = taskFactory.build({ dueDate: yesterday.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).byOverdue().tasks;
