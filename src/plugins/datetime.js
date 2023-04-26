@@ -267,7 +267,7 @@ export const fromNow = (date, isLocalTimeZone) => {
  */
 export const createdDate = (date, isLocalTimeZone) => {
 	const format = DATETIME_FORMAT.dateTime;
-	if (isLocalTimeZone == true) {
+	if (isLocalTimeZone) {
 		return dayjs(date).format(format);
 	}
 	return fromUTC(date).format(format);
