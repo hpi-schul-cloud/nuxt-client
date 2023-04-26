@@ -6,7 +6,7 @@
 	>
 		<div
 			data-testid="event-handle"
-			@keydown.up.down.left.right="onKeydownArrow"
+			@keydown.up.down="onKeydownArrow"
 			@keydown.enter.capture="onKeydownEnter"
 			@keydown.tab="onKeydownTab"
 		>
@@ -30,14 +30,14 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["start-edit-mode", "end-edit-mode", "move-card-keyboard"],
+	emits: ["start-edit-mode", "end-edit-mode", "move:column-keyboard"],
 	setup(props, { emit }) {
 		const onStartEditMode = () => emit("start-edit-mode");
 		const onEndEditMode = () => emit("end-edit-mode");
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
-				emit("move-card-keyboard", event);
+				emit("move:column-keyboard", event);
 			}
 		};
 

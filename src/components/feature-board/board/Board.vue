@@ -21,6 +21,9 @@
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
+								@move:column-keyboard="
+									onMoveColumnKeyboard(index, column.id, $event)
+								"
 								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(column.id, $event)"
 							/>
@@ -47,6 +50,8 @@ import {
 	columnDropPlaceholderOptions,
 	CardMove,
 	ColumnMove,
+	horizontalCursorKeys,
+	DragAndDropKey,
 } from "../types/DragAndDrop";
 
 export default defineComponent({
@@ -91,6 +96,24 @@ export default defineComponent({
 			moveColumn(columnPayload);
 		};
 
+		const onMoveColumnKeyboard = (
+			columnIndex: number,
+			columnId: string,
+			keyString: DragAndDropKey
+		) => {
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+
+			if (horizontalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowLeft" ? -1 : +1;
+				columnMove.addedIndex = columnIndex + change;
+				moveColumn(columnMove);
+			}
+		};
+
 		const onUpdateCardPosition = (_: unknown, payload: CardMove) => {
 			moveCard(payload);
 		};
@@ -107,9 +130,10 @@ export default defineComponent({
 			onCreateColumn,
 			onCreateColumnWithCard,
 			onDeleteCard,
-			onDeleteColumn,
-			onUpdateCardPosition,
 			onDropColumn,
+			onDeleteColumn,
+			onMoveColumnKeyboard,
+			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};
 	},

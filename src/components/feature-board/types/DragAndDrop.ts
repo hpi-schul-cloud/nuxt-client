@@ -14,7 +14,7 @@ export interface ColumnMove {
 	payload: BoardColumn["id"];
 }
 
-export type DragAndDropKeys =
+export type DragAndDropKey =
 	| "ArrowUp"
 	| "ArrowDown"
 	| "ArrowLeft"
@@ -33,3 +33,10 @@ export const columnDropPlaceholderOptions = {
 	animationDuration: "150",
 	showOnTop: true,
 };
+
+export const verticalCursorKeys: DragAndDropKey[] = ["ArrowUp", "ArrowDown"];
+
+export const horizontalCursorKeys: DragAndDropKey[] = [
+	"ArrowLeft",
+	"ArrowRight",
+];

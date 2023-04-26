@@ -3,6 +3,7 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
+		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div class="mb-4">
 			<div class="d-flex align-start justify-space-between py-2">
@@ -71,7 +72,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:title", "delete:column"],
+	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
 		const columnId = computed(() => props.columnId);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId);
@@ -88,9 +89,14 @@ export default defineComponent({
 			isDeleteModalOpen.value = false;
 		};
 
+		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
+			emit("move:column-keyboard", event.code);
+		};
+
 		const onUpdateTitle = (newTitle: string) => {
 			emit("update:title", newTitle);
 		};
+
 		return {
 			isEditMode,
 			isDeleteModalOpen,
@@ -100,6 +106,7 @@ export default defineComponent({
 			onDelete,
 			onDeleteCancel,
 			onDeleteConfirmation,
+			onMoveColumnKeyboard,
 			onUpdateTitle,
 		};
 	},

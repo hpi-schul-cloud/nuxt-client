@@ -3,7 +3,7 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
-		@move-card-keyboard="onMoveCardKeyboard"
+		@move:card-keyboard="onMoveCardKeyboard"
 	>
 		<div ref="cardHost">
 			<VCard
