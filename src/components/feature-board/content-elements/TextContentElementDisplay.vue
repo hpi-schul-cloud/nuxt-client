@@ -21,10 +21,10 @@ export default defineComponent({
 .text {
 	font-size: 16px;
 	color: rgba(0, 0, 0, 0.87);
-	margin-top: 6px;
-	margin-bottom: 16px;
+	margin-top: 17px;
+	margin-bottom: 17px;
 }
 .text:first-child {
-	margin-top: 4px;
+	margin-top: 0px;
 }
 </style>

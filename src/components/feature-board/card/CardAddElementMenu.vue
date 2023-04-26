@@ -8,6 +8,7 @@
 				outlined
 				icon
 				large
+				data-testid="add-element-btn"
 			>
 				<v-icon>{{ mdiPlus }}</v-icon>
 				<span class="d-sr-only">Add Element</span>

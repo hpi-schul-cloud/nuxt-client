@@ -2,15 +2,23 @@ import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
 
-const { createColumn, deleteColumnCall, moveCardCall, updateColumnTitleCall } =
-	useBoardApi();
+const {
+	createColumn,
+	deleteColumnCall,
+	moveCardCall,
+	moveColumnCall,
+	updateColumnTitleCall,
+	createCardCall,
+} = useBoardApi();
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const { setEditModeCardId } = useSharedEditMode();
 
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
@@ -22,13 +30,14 @@ export const useBoardState = (id: string) => {
 		isLoading.value = false;
 	};
 
-	const moveColumn = (payload: ColumnMove) => {
+	const moveColumn = async (payload: ColumnMove) => {
 		if (board.value === undefined) {
 			return;
 		}
 		const element = board.value.columns[payload.removedIndex];
 		board.value.columns.splice(payload.removedIndex, 1);
 		board.value.columns.splice(payload.addedIndex, 0, element);
+		await moveColumnCall(payload.payload, board.value.id, payload.addedIndex);
 	};
 
 	let removedIndex: number | undefined;
@@ -54,16 +63,15 @@ export const useBoardState = (id: string) => {
 			addedIndex !== undefined &&
 			targetColumnId !== undefined
 		) {
+			const card = removeCard(cardPayload.payload.cardId);
+			if (card) {
+				addCard(card, targetColumnId, addedIndex);
+			}
 			await moveCardCall(
 				cardPayload.payload.cardId,
 				targetColumnId,
 				addedIndex
 			);
-
-			const card = removeCard(cardPayload.payload.cardId);
-			if (card) {
-				addCard(card, targetColumnId, addedIndex);
-			}
 			removedIndex = undefined;
 			addedIndex = undefined;
 		}
@@ -153,14 +161,26 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board.value.id);
 	};
 
-	const boardActions = {
-		deleteColumn,
+	const createCard = async (columnId: string) => {
+		if (board.value === undefined) return;
+
+		const newCardId = await createCardCall(columnId);
+		if (newCardId) {
+			const columnIndex = board.value.columns.findIndex(
+				(column) => column.id === columnId
+			);
+			board.value.columns[columnIndex].cards.push({
+				cardId: newCardId,
+				height: 120,
+			});
+			setEditModeCardId(newCardId);
+		}
 	};
 
 	onMounted(() => fetchBoard(id));
 
 	return {
-		boardActions,
+		deleteColumn,
 		fetchBoard,
 		board,
 		isLoading,
@@ -170,5 +190,6 @@ export const useBoardState = (id: string) => {
 		updateColumnTitle,
 		removeCard,
 		addNewColumn,
+		createCard,
 	};
 };
