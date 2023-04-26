@@ -16,10 +16,10 @@
 				<div class="pt-2">
 					<BoardMenu scope="column">
 						<BoardMenuAction @click="onDelete">
-							<v-icon>
+							<VIcon>
 								{{ mdiTrashCanOutline }}
-							</v-icon>
-							{{ $t("components.board.action") }}
+							</VIcon>
+							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
 					</BoardMenu>
 				</div>

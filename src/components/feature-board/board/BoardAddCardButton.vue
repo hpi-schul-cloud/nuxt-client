@@ -14,7 +14,7 @@
 				icon
 				large
 			>
-				<v-icon>{{ mdiPlus }}</v-icon>
+				<VIcon>{{ mdiPlus }}</VIcon>
 				<span class="d-sr-only">Add Card</span>
 			</VBtn>
 		</div>
