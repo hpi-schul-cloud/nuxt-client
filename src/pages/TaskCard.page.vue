@@ -205,7 +205,7 @@ export default defineComponent({
 		const courses = ref<object[]>([]);
 
 		const title = ref("");
-		const visibleAtDate = ref("");
+		const visibleAtDate = ref(new Date().toISOString());
 		const dueDate = ref("");
 		const elements = ref<CardElement[]>([]);
 		const route = useRoute();
@@ -277,9 +277,7 @@ export default defineComponent({
 					isDeletable.value = !!taskCardData.id;
 				}
 
-				if (taskCardData.visibleAtDate) {
-					visibleAtDate.value = taskCardData.visibleAtDate;
-				}
+				visibleAtDate.value = taskCardData.visibleAtDate;
 				dueDate.value = taskCardData.dueDate;
 
 				initElements(taskCardData.cardElements);
