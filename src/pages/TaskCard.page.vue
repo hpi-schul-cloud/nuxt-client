@@ -18,6 +18,7 @@
 				:disabled="isCourseSelectDisabled"
 				:label="$t('common.labels.course')"
 				validate-on-blur
+				:menu-props="{ bottom: true, offsetY: true }"
 				:rules="[rules.courseRequired]"
 			/>
 			<visibility-selector
