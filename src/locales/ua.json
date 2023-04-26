@@ -303,7 +303,7 @@
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.betaTask.userSelector.label": "осіб",
 	"components.betaTask.userSelector.courseSelection": "весь курс",
-	"components.betaTask.userSelector.validation.required": "виберіть осіб",
+	"components.betaTask.userSelector.validation.required": "виберіть осіб.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",

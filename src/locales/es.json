@@ -825,7 +825,7 @@
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.betaTask.userSelector.label": "Persona(s)",
 	"components.betaTask.userSelector.courseSelection": "Curso completo",
-	"components.betaTask.userSelector.validation.required": "Por favor selecciona persona(s)",
+	"components.betaTask.userSelector.validation.required": "Por favor selecciona personas.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",

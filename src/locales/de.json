@@ -811,7 +811,7 @@
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.betaTask.userSelector.label": "Person(en)",
 	"components.betaTask.userSelector.courseSelection": "Gesamter Kurs",
-	"components.betaTask.userSelector.validation.required": "Bitte Person(en) auswählen",
+	"components.betaTask.userSelector.validation.required": "Bitte Person(en) auswählen.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",

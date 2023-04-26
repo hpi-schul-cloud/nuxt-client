@@ -809,7 +809,7 @@
 	"components.board.column.defaultTitle": "New column",
 	"components.betaTask.userSelector.label": "User(s)",
 	"components.betaTask.userSelector.courseSelection": "Entire course",
-	"components.betaTask.userSelector.validation.required": "Please choose user(s)",
+	"components.betaTask.userSelector.validation.required": "Please choose user(s).",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
