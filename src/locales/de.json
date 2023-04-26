@@ -98,7 +98,7 @@
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.url": "Gib bitte eine valide URL ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
-	"common.validation.required": "Bitte füll dieses Feld aus",
+	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.regex": "Die Eingabe muss zu folgendem regulären Ausdruck passen: {comment}.",
