@@ -20,7 +20,7 @@
 			:date-time="dateTime"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			:date-input-label="t('common.labels.date')"
+			:date-input-label="t('components.betaTask.visibilitySelector.date.label')"
 			:time-input-label="t('common.labels.time')"
 			@input="handleDateTimeInput"
 		/>

@@ -305,6 +305,7 @@
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.betaTask.courseSelector.validation.required": "Виберіть курс.",
+	"components.betaTask.visibilitySelector.date.label": "Термін виконання",
 	"components.betaTask.visibilitySelector.validation.required": "Виберіть Видимість.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",

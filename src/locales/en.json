@@ -809,6 +809,7 @@
 	"components.board.column.ghost.placeholder": "Add column",
 	"components.board.column.defaultTitle": "New column",
 	"components.betaTask.courseSelector.validation.required": "Please choose course.",
+	"components.betaTask.visibilitySelector.date.label": "Visibility Date",
 	"components.betaTask.visibilitySelector.validation.required": "Please choose visibility.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",

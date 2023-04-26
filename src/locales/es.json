@@ -825,6 +825,7 @@
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.betaTask.courseSelector.validation.required": "Por favor selecciona curso.",
+	"components.betaTask.visibilitySelector.date.label": "Fecha de visibilidad",
 	"components.betaTask.visibilitySelector.validation.required": "Por favor selecciona visibilidad.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",

@@ -811,6 +811,7 @@
 	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.betaTask.courseSelector.validation.required": "Bitte Kurs auswählen.",
+	"components.betaTask.visibilitySelector.date.label": "Sichtbarkeitsdatum",
 	"components.betaTask.visibilitySelector.validation.required": "Bitte Sichtbarkeit auswählen.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
