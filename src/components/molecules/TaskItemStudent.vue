@@ -33,7 +33,7 @@
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"
 						:type="taskState"
-						:due-date="task.duedate"
+						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</v-list-item-action>
@@ -59,7 +59,7 @@
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"
 						:type="taskState"
-						:due-date="task.duedate"
+						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</v-list-item-action>
@@ -117,13 +117,13 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
 			if (timeDiff === null) {
 				return false;
 			} else return timeDiff <= 24;
 		},
 		isOverDue() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			return dueDate && new Date(dueDate) < new Date();
 		},
 		isGradedButMissed() {
@@ -171,7 +171,7 @@ export default {
 				: "";
 		},
 		dueDateLabel() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			const convertedDueDate = this.$vuetify.breakpoint.xsOnly
 				? dateFromUTC(dueDate)
 				: dateTimeFromUTC(dueDate);

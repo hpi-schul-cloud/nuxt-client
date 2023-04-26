@@ -19,7 +19,7 @@
 							<v-icon>
 								{{ mdiTrashCanOutline }}
 							</v-icon>
-							{{ $t("components.cardHost.deletionModal.confirmation.title") }}
+							{{ $t("components.board.action") }}
 						</BoardMenuAction>
 					</BoardMenu>
 				</div>
@@ -28,7 +28,8 @@
 		</div>
 		<DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
-			:card-title="title ? title : ''"
+			:title="title"
+			:typeName="$t('components.boardColumn').toString()"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDeleteCancel"
 		></DeleteConfirmation>
@@ -36,14 +37,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { BoardActions, BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -68,13 +68,8 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:title"],
+	emits: ["update:title", "delete-column"],
 	setup(props, { emit }) {
-		const boardActions: BoardActions | undefined = inject(BOARD_ACTIONS);
-		if (boardActions === undefined) {
-			throw new Error("boardActions not injected");
-		}
-
 		const isEditMode = ref<boolean>(false);
 		const isDeleteModalOpen = ref<boolean>(false);
 
@@ -89,7 +84,7 @@ export default defineComponent({
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 		const onDeleteConfirmation = async () => {
-			await boardActions.deleteColumn(props.columnId);
+			emit("delete-column", props.columnId);
 			isDeleteModalOpen.value = false;
 		};
 
