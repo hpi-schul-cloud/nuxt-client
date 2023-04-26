@@ -1,18 +1,20 @@
 <template>
-	<InlineEditInteractionHandler
+	<BoardColumnInteractionHandler
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
 		<div class="mb-4">
 			<div class="d-flex align-start justify-space-between py-2">
-				<BoardAnyTitleInput
-					:value="title"
-					scope="column"
-					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
-					@update:value="onUpdateTitle"
-				></BoardAnyTitleInput>
+				<div tabindex="0">
+					<BoardAnyTitleInput
+						:value="title"
+						scope="column"
+						:isEditMode="isEditMode"
+						:placeholder="titlePlaceholder"
+						@update:value="onUpdateTitle"
+					></BoardAnyTitleInput>
+				</div>
 				<div class="pt-2">
 					<BoardMenu scope="column">
 						<BoardMenuAction @click="onDelete">
@@ -33,16 +35,17 @@
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDeleteCancel"
 		></DeleteConfirmation>
-	</InlineEditInteractionHandler>
+	</BoardColumnInteractionHandler>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useEditMode } from "../shared/EditMode.composable";
 import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { mdiTrashCanOutline } from "@mdi/js";
 
 export default defineComponent({
@@ -52,7 +55,7 @@ export default defineComponent({
 		BoardAnyTitleInput,
 		BoardMenuAction,
 		DeleteConfirmation,
-		InlineEditInteractionHandler,
+		BoardColumnInteractionHandler,
 	},
 	props: {
 		columnId: {
@@ -70,16 +73,13 @@ export default defineComponent({
 	},
 	emits: ["update:title", "delete:column"],
 	setup(props, { emit }) {
-		const isEditMode = ref<boolean>(false);
+		const columnId = computed(() => props.columnId);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId);
+
 		const isDeleteModalOpen = ref<boolean>(false);
 
-		const onStartEditMode = () => {
-			isEditMode.value = true;
-		};
-
-		const onEndEditMode = () => {
-			isEditMode.value = true;
-		};
+		const onStartEditMode = () => startEditMode();
+		const onEndEditMode = () => stopEditMode();
 
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDeleteCancel = () => (isDeleteModalOpen.value = false);

@@ -12,7 +12,7 @@
 			class="ml-n3 mb-0 w-full"
 			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
-			:tabindex="isEditMode ? 0 : -1"
+			tabindex="0"
 			:autofocus="true"
 		></VTextarea>
 		<div
@@ -75,6 +75,7 @@ export default defineComponent({
 					return 1;
 			}
 		});
+
 		const fontSize = computed(() => {
 			switch (props.scope) {
 				case "board":
@@ -89,9 +90,9 @@ export default defineComponent({
 		});
 
 		return {
-			modelValue,
 			ariaLevel,
 			fontSize,
+			modelValue,
 		};
 	},
 });

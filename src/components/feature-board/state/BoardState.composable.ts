@@ -127,7 +127,7 @@ export const useBoardState = (id: string) => {
 
 		updateColumnTitleCall(columnId, newTitle);
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex) {
+		if (columnIndex !== undefined) {
 			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
