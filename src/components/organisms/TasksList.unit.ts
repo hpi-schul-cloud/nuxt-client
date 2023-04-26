@@ -127,10 +127,10 @@ describe("@/components/organisms/TasksList", () => {
 			if (
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				tasks[index].duedate === null ||
+				tasks[index].dueDate === null ||
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				tasks[index].duedate === undefined
+				tasks[index].dueDate === undefined
 			)
 				expect(dateLabel.text()).toBe("");
 			else expect(dateLabel.text()).toContain("Abgabe ");

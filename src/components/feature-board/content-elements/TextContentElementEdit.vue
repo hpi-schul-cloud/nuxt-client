@@ -1,28 +1,26 @@
 <template>
-	<div>
-		<VTextarea
-			label="Text-Element"
-			placeholder="Schreibe deinen Text..."
-			hide-details="auto"
-			v-model="modelValue"
-			:autofocus="autofocus"
-			solo
-			dense
-			:rows="1"
-			auto-grow
-			class="ml-n3 mb-0 w-full"
-			flat
-			background-color="transparent"
-			ref="input"
-		></VTextarea>
-	</div>
+	<VTextarea
+		label="Text-Element"
+		:placeholder="$t('common.labels.description')"
+		hide-details="auto"
+		v-model="modelValue"
+		:autofocus="autofocus"
+		solo
+		dense
+		:rows="1"
+		auto-grow
+		class="ml-n3 mr-n6 mb-0 w-full"
+		flat
+		background-color="transparent"
+		ref="input"
+	></VTextarea>
 </template>
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: "TextContentElementDisplay",
+	name: "TextContentElementEdit",
 	props: {
 		value: {
 			type: String,
@@ -40,3 +38,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+:deep(textarea) {
+	padding-right: 0;
+}
+</style>
