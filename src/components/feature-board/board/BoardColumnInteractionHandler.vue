@@ -6,7 +6,7 @@
 	>
 		<div
 			data-testid="event-handle"
-			@keydown.up.down="onKeydownArrow"
+			@keydown.left.right="onKeydownArrow"
 			@keydown.enter.capture="onKeydownEnter"
 			@keydown.tab="onKeydownTab"
 		>
