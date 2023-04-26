@@ -29,8 +29,8 @@
 					</template>
 				</Container>
 				<BoardColumnGhost
-					@add-column-with-card="onCreateColumnWithCard"
-					@add-empty-column="onCreateEmptyColumn"
+					@create:column="onCreateColumn"
+					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
 			</template>
 		</div>
@@ -60,8 +60,10 @@ export default defineComponent({
 			board,
 			createCard,
 			createColumn,
+			createColumnWithCard,
 			deleteColumn,
 			extractCard,
+			getColumnId,
 			moveCard,
 			moveCardByKeyboard,
 			moveColumn,
@@ -72,12 +74,12 @@ export default defineComponent({
 			createCard(columnId);
 		};
 
-		const onCreateColumnWithCard = (cardId?: string) => {
-			createColumn(cardId);
+		const onCreateColumn = () => {
+			createColumn();
 		};
 
-		const onCreateEmptyColumn = () => {
-			createColumn();
+		const onCreateColumnWithCard = (cardId: string) => {
+			createColumnWithCard(cardId);
 		};
 
 		const onDeleteCard = (cardId: string): void => {
@@ -104,22 +106,15 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const getColumnId = (index: number): string => {
-			if (board.value === undefined) {
-				return "";
-			}
-			return board.value.columns[index].id;
-		};
-
 		return {
 			board,
 			columnDropPlaceholderOptions,
+			getColumnId,
 			onCreateCard,
+			onCreateColumn,
 			onCreateColumnWithCard,
-			onCreateEmptyColumn,
 			onDeleteCard,
 			onDeleteColumn,
-			getColumnId,
 			onUpdateCardPosition,
 			onDropColumn,
 			onUpdateCardPositionKeyboard,

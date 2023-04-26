@@ -12,7 +12,7 @@ export interface CardMoveByKeyboard {
 	cardIndex: number;
 	columnIndex: number;
 	targetColumnIndex: number;
-	targetColumnPosition: number;
+	addedIndex: number;
 }
 
 export interface ColumnMove {

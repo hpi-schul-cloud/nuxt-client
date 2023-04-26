@@ -36,29 +36,45 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const createColumn = async (cardId?: string) => {
+	const createColumn = async () => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumnCall(board.value.id);
 		setEditModeId(newColumn.id);
-
-		// WIP: add move card...
 		await fetchBoard(board.value.id);
+
+		return newColumn;
+	};
+
+	const createColumnWithCard = async (movingCardId: string) => {
+		if (board.value === undefined) return;
+
+		const newColumn = await createColumn();
+
+		if (newColumn) {
+			const moveCardPayload: CardMove = {
+				addedIndex: 0,
+				removedIndex: null,
+				targetColumnId: newColumn.id,
+				payload: { cardId: movingCardId, height: 100 },
+			};
+			moveCard(moveCardPayload);
+		}
 	};
 
 	const deleteColumn = async (id: string) => {
 		if (board.value === undefined) return;
 
-		await deleteColumnCall(id);
-		await fetchBoard(board.value.id);
+		const columnIndex = getColumnIndex(id);
+		if (columnIndex) {
+			await deleteColumnCall(id);
+			board.value.columns.splice(columnIndex, 1);
+		}
 	};
 
 	const extractCard = (cardId: string): BoardSkeletonCard | undefined => {
 		if (board.value === undefined) return;
 
-		const columnIndex = board.value.columns.findIndex(
-			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
-		);
 		const column = board.value.columns.find(
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
@@ -67,10 +83,7 @@ export const useBoardState = (id: string) => {
 				(card) => card.cardId === cardId
 			);
 			if (cardIndex !== -1) {
-				const extractedCards = board.value.columns[columnIndex].cards.splice(
-					cardIndex,
-					1
-				);
+				const extractedCards = column.cards.splice(cardIndex, 1);
 				return extractedCards[0];
 			}
 		}
@@ -86,60 +99,29 @@ export const useBoardState = (id: string) => {
 		isLoading.value = false;
 	};
 
-	let removedIndex: number | undefined;
-	let addedIndex: number | undefined;
-	let targetColumnId: string | undefined;
-
 	const moveCard = async (cardPayload: CardMove): Promise<void> => {
 		if (board.value === undefined) return;
 
-		if (cardPayload.removedIndex !== null) {
-			removedIndex = cardPayload.removedIndex;
-		}
-
-		if (cardPayload.addedIndex !== null) {
-			addedIndex = cardPayload.addedIndex;
-			targetColumnId = cardPayload.targetColumnId;
-		}
-
-		if (
-			removedIndex !== undefined &&
-			addedIndex !== undefined &&
-			targetColumnId !== undefined
-		) {
-			const card = extractCard(cardPayload.payload.cardId);
+		const { addedIndex, targetColumnId, payload } = cardPayload;
+		if (addedIndex !== null && targetColumnId) {
+			const card = extractCard(payload.cardId);
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
-			await moveCardCall(
-				cardPayload.payload.cardId,
-				targetColumnId,
-				addedIndex
-			);
-			removedIndex = undefined;
-			addedIndex = undefined;
+			await moveCardCall(payload.cardId, targetColumnId, addedIndex);
 		}
 	};
 
 	const moveCardByKeyboard = (cardPayload: CardMoveByKeyboard): void => {
 		if (board.value === undefined) return;
 
-		if (
-			cardPayload.targetColumnIndex < 0 ||
-			cardPayload.targetColumnIndex >= board.value.columns.length
-		) {
+		const { card, cardIndex, columnIndex, addedIndex } = cardPayload;
+		if (addedIndex < 0 || addedIndex >= board.value.columns.length) {
 			return;
 		}
 
-		board.value.columns[cardPayload.columnIndex].cards.splice(
-			cardPayload.cardIndex,
-			1
-		);
-		board.value.columns[cardPayload.targetColumnIndex].cards.splice(
-			cardPayload.targetColumnPosition,
-			0,
-			cardPayload.card
-		);
+		board.value.columns[columnIndex].cards.splice(cardIndex, 1);
+		board.value.columns[addedIndex].cards.splice(addedIndex, 0, card);
 	};
 
 	const moveColumn = async (payload: ColumnMove) => {
@@ -155,10 +137,10 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		updateColumnTitleCall(columnId, newTitle);
-		const columnIndex = board.value.columns.findIndex(
-			(column) => column.id === columnId
-		);
-		board.value.columns[columnIndex].title = newTitle;
+		const columnIndex = getColumnIndex(columnId);
+		if (columnIndex) {
+			board.value.columns[columnIndex].title = newTitle;
+		}
 	};
 
 	const addCard = (
@@ -168,10 +150,24 @@ export const useBoardState = (id: string) => {
 	) => {
 		if (board.value === undefined) return;
 
-		const targetColumnIndex = board.value?.columns.findIndex(
+		const targetColumnIndex = getColumnIndex(columnId);
+		if (targetColumnIndex) {
+			board.value.columns[targetColumnIndex].cards.splice(toPosition, 0, card);
+		}
+	};
+
+	const getColumnId = (columnIndex: number): string => {
+		if (board.value === undefined) {
+			return "";
+		}
+		return board.value.columns[columnIndex].id;
+	};
+
+	const getColumnIndex = (columnId: string): number | undefined => {
+		const columnIndex = board.value?.columns.findIndex(
 			(c) => c.id === columnId
 		);
-		board.value.columns[targetColumnIndex].cards.splice(toPosition, 0, card);
+		return columnIndex;
 	};
 
 	onMounted(() => fetchBoard(id));
@@ -181,9 +177,11 @@ export const useBoardState = (id: string) => {
 		isLoading,
 		createCard,
 		createColumn,
-		extractCard,
+		createColumnWithCard,
 		deleteColumn,
+		extractCard,
 		fetchBoard,
+		getColumnId,
 		moveCard,
 		moveCardByKeyboard,
 		moveColumn,

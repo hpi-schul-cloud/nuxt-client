@@ -110,13 +110,13 @@ export default defineComponent({
 				cardIndex,
 				columnIndex: props.index,
 				targetColumnIndex: props.index,
-				targetColumnPosition: -1,
+				addedIndex: -1,
 			};
 
 			if (
 				new Array<DragAndDropKeys>("ArrowUp", "ArrowDown").includes(keyString)
 			) {
-				cardMoveByKeyboard.targetColumnPosition =
+				cardMoveByKeyboard.addedIndex =
 					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
 			if (
@@ -126,7 +126,7 @@ export default defineComponent({
 			) {
 				cardMoveByKeyboard.targetColumnIndex =
 					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
-				cardMoveByKeyboard.targetColumnPosition = 0;
+				cardMoveByKeyboard.addedIndex = 0;
 			}
 
 			emit("update:card-position:keyboard", cardMoveByKeyboard);
