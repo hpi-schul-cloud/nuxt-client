@@ -77,12 +77,12 @@ export default defineComponent({
 				value: "visible",
 			},
 			{
-				text: t("common.labels.notVisible"),
-				value: "notVisible",
-			},
-			{
 				text: t("common.labels.visibleAt"),
 				value: "visibleAtDate",
+			},
+			{
+				text: t("common.labels.notVisible"),
+				value: "notVisible",
 			},
 		];
 
