@@ -98,7 +98,7 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard", "delete:card"],
+	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const { focused: isFocused } = useFocusWithin(cardHost);
@@ -113,7 +113,7 @@ export default defineComponent({
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
-			emit("move-card-keyboard", event.code);
+			emit("move:card-keyboard", event.code);
 		};
 		const cardId = computed(() => card.value?.id);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);

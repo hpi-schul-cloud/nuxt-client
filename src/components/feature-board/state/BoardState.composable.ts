@@ -4,7 +4,7 @@ import { onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
-import { CardMove, CardMoveByKeyboard, ColumnMove } from "../types/DragAndDrop";
+import { CardMove, ColumnMove } from "../types/DragAndDrop";
 
 const {
 	createColumnCall,
@@ -55,7 +55,7 @@ export const useBoardState = (id: string) => {
 			const moveCardPayload: CardMove = {
 				addedIndex: 0,
 				removedIndex: null,
-				targetColumnId: newColumn.id,
+				columnId: newColumn.id,
 				payload: { cardId: movingCardId, height: 100 },
 			};
 			moveCard(moveCardPayload);
@@ -102,7 +102,8 @@ export const useBoardState = (id: string) => {
 	const moveCard = async (cardPayload: CardMove): Promise<void> => {
 		if (board.value === undefined) return;
 
-		const { addedIndex, targetColumnId, payload } = cardPayload;
+		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
+		const targetColumnId = columnIndex ? getColumnId(columnIndex) : columnId;
 		if (addedIndex !== null && targetColumnId) {
 			const card = extractCard(payload.cardId);
 			if (card) {
@@ -110,18 +111,6 @@ export const useBoardState = (id: string) => {
 			}
 			await moveCardCall(payload.cardId, targetColumnId, addedIndex);
 		}
-	};
-
-	const moveCardByKeyboard = (cardPayload: CardMoveByKeyboard): void => {
-		if (board.value === undefined) return;
-
-		const { card, cardIndex, columnIndex, addedIndex } = cardPayload;
-		if (addedIndex < 0 || addedIndex >= board.value.columns.length) {
-			return;
-		}
-
-		board.value.columns[columnIndex].cards.splice(cardIndex, 1);
-		board.value.columns[addedIndex].cards.splice(addedIndex, 0, card);
 	};
 
 	const moveColumn = async (payload: ColumnMove) => {
@@ -156,10 +145,9 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const getColumnId = (columnIndex: number): string => {
-		if (board.value === undefined) {
-			return "";
-		}
+	const getColumnId = (columnIndex: number): string | undefined => {
+		if (board.value === undefined) return;
+
 		return board.value.columns[columnIndex].id;
 	};
 
@@ -183,7 +171,6 @@ export const useBoardState = (id: string) => {
 		fetchBoard,
 		getColumnId,
 		moveCard,
-		moveCardByKeyboard,
 		moveColumn,
 		updateColumnTitle,
 	};

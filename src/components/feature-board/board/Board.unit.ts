@@ -124,11 +124,12 @@ describe("Board", () => {
 			isLoading: ref(isLoading ?? false),
 			createCard: jest.fn(),
 			createColumn: jest.fn(),
+			createColumnWithCard: jest.fn(),
 			deleteColumn: jest.fn(),
 			extractCard: jest.fn(),
 			fetchBoard: jest.fn(),
+			getColumnId: jest.fn(),
 			moveCard: jest.fn(),
-			moveCardByKeyboard: jest.fn(),
 			moveColumn: jest.fn(),
 			updateColumnTitle: jest.fn(),
 		});

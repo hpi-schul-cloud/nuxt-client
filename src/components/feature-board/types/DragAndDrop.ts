@@ -4,15 +4,8 @@ export interface CardMove {
 	removedIndex: number | null;
 	addedIndex: number | null;
 	payload: BoardSkeletonCard;
-	targetColumnId?: string;
-}
-
-export interface CardMoveByKeyboard {
-	card: BoardSkeletonCard;
-	cardIndex: number;
-	columnIndex: number;
-	targetColumnIndex: number;
-	addedIndex: number;
+	columnId?: string;
+	columnIndex?: number;
 }
 
 export interface ColumnMove {

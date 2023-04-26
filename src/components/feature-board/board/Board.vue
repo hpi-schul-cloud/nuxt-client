@@ -22,7 +22,6 @@
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
 								@update:card-position="onUpdateCardPosition(index, $event)"
-								@update:card-position:keyboard="onUpdateCardPositionKeyboard"
 								@update:column-title="onUpdateColumnTitle(column.id, $event)"
 							/>
 						</Draggable>
@@ -47,7 +46,6 @@ import { useBoardState } from "../state/BoardState.composable";
 import {
 	columnDropPlaceholderOptions,
 	CardMove,
-	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
 
@@ -65,7 +63,6 @@ export default defineComponent({
 			extractCard,
 			getColumnId,
 			moveCard,
-			moveCardByKeyboard,
 			moveColumn,
 			updateColumnTitle,
 		} = useBoardState(route.params?.id);
@@ -98,10 +95,6 @@ export default defineComponent({
 			moveCard(payload);
 		};
 
-		const onUpdateCardPositionKeyboard = (payload: CardMoveByKeyboard) => {
-			moveCardByKeyboard(payload);
-		};
-
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
 			updateColumnTitle(columnId, newTitle);
 		};
@@ -117,7 +110,6 @@ export default defineComponent({
 			onDeleteColumn,
 			onUpdateCardPosition,
 			onDropColumn,
-			onUpdateCardPositionKeyboard,
 			onUpdateColumnTitle,
 		};
 	},

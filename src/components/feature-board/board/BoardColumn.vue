@@ -25,7 +25,7 @@
 						class="my-3"
 						:card-id="card.cardId"
 						:height="card.height"
-						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						@delete:card="onDeleteCard"
 					/>
 				</Draggable>
@@ -45,7 +45,6 @@ import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
-	CardMoveByKeyboard,
 	DragAndDropKeys,
 } from "../types/DragAndDrop";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -72,7 +71,6 @@ export default defineComponent({
 		"delete:card",
 		"delete:column",
 		"update:card-position",
-		"update:card-position:keyboard",
 		"update:column-title",
 	],
 	setup(props, { emit }) {
@@ -84,7 +82,7 @@ export default defineComponent({
 			if (removedIndex === null && addedIndex === null) return;
 			emit("update:card-position", {
 				...dropResult,
-				targetColumnId: props.column.id,
+				columnId: props.column.id,
 			});
 		};
 
@@ -105,18 +103,17 @@ export default defineComponent({
 			card: BoardSkeletonCard,
 			keyString: DragAndDropKeys
 		) => {
-			const cardMoveByKeyboard: CardMoveByKeyboard = {
-				card: card,
-				cardIndex,
-				columnIndex: props.index,
-				targetColumnIndex: props.index,
+			const cardMove: CardMove = {
+				removedIndex: cardIndex,
 				addedIndex: -1,
+				payload: card,
+				columnIndex: props.index,
 			};
 
 			if (
 				new Array<DragAndDropKeys>("ArrowUp", "ArrowDown").includes(keyString)
 			) {
-				cardMoveByKeyboard.addedIndex =
+				cardMove.addedIndex =
 					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
 			}
 			if (
@@ -124,12 +121,12 @@ export default defineComponent({
 					keyString
 				)
 			) {
-				cardMoveByKeyboard.targetColumnIndex =
+				cardMove.columnIndex =
 					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
-				cardMoveByKeyboard.addedIndex = 0;
+				cardMove.addedIndex = 0;
 			}
 
-			emit("update:card-position:keyboard", cardMoveByKeyboard);
+			emit("update:card-position", cardMove);
 		};
 
 		const onUpdateTitle = useDebounceFn((newTitle: string) => {
