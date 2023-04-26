@@ -120,17 +120,17 @@ describe("Board", () => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
+			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
+			isLoading: ref(isLoading ?? false),
+			createCard: jest.fn(),
+			createColumn: jest.fn(),
 			deleteColumn: jest.fn(),
+			extractCard: jest.fn(),
 			fetchBoard: jest.fn(),
 			moveCard: jest.fn(),
 			moveCardByKeyboard: jest.fn(),
 			moveColumn: jest.fn(),
 			updateColumnTitle: jest.fn(),
-			createNewColumn: jest.fn(),
-			removeCard: jest.fn(),
-			createCard: jest.fn(),
-			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
-			isLoading: ref(isLoading ?? false),
 		});
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),

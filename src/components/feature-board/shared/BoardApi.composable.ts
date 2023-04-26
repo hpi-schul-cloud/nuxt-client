@@ -11,7 +11,7 @@ export const useBoardApi = () => {
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 
-	const createColumn = async (boardId: string): Promise<ColumnResponse> => {
+	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
 		return response.data;
 	};
@@ -69,7 +69,7 @@ export const useBoardApi = () => {
 	};
 
 	return {
-		createColumn,
+		createColumnCall,
 		createElement,
 		deleteCardCall,
 		deleteColumnCall,

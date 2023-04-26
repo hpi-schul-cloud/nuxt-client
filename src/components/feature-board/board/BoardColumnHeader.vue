@@ -68,7 +68,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:title", "delete-column"],
+	emits: ["update:title", "delete:column"],
 	setup(props, { emit }) {
 		const isEditMode = ref<boolean>(false);
 		const isDeleteModalOpen = ref<boolean>(false);
@@ -84,7 +84,7 @@ export default defineComponent({
 		const onDelete = () => (isDeleteModalOpen.value = true);
 		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 		const onDeleteConfirmation = async () => {
-			emit("delete-column", props.columnId);
+			emit("delete:column", props.columnId);
 			isDeleteModalOpen.value = false;
 		};
 

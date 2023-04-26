@@ -8,7 +8,7 @@
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			@update:title="onUpdateTitle"
-			@delete-column="onColumnDelete"
+			@delete:column="onColumnDelete"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
@@ -26,7 +26,7 @@
 						:card-id="card.cardId"
 						:height="card.height"
 						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						@remove-card="onRemoveCard"
+						@delete:card="onDeleteCard"
 					/>
 				</Draggable>
 			</template>
@@ -68,12 +68,12 @@ export default defineComponent({
 		index: { type: Number, required: true },
 	},
 	emits: [
+		"create:card",
+		"delete:card",
+		"delete:column",
 		"update:card-position",
 		"update:card-position:keyboard",
-		"update:title",
-		"remove-card",
-		"create-card",
-		"delete-column",
+		"update:column-title",
 	],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
@@ -89,11 +89,11 @@ export default defineComponent({
 		};
 
 		const onColumnDelete = (columnId: string): void => {
-			emit("delete-column", columnId);
+			emit("delete:column", columnId);
 		};
 
-		const onRemoveCard = (cardId: string): void => {
-			emit("remove-card", cardId);
+		const onDeleteCard = (cardId: string): void => {
+			emit("delete:card", cardId);
 		};
 
 		const getChildPayload = (index: number): BoardSkeletonCard => {
@@ -133,21 +133,21 @@ export default defineComponent({
 		};
 
 		const onUpdateTitle = useDebounceFn((newTitle: string) => {
-			emit("update:title", newTitle);
+			emit("update:column-title", newTitle);
 		}, 1000);
 
 		const titlePlaceholder = computed(
 			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
-		const onCreateCard = () => emit("create-card", props.column.id);
+		const onCreateCard = () => emit("create:card", props.column.id);
 
 		return {
 			colWidth,
 			cardDropPlaceholderOptions,
 			onColumnDelete,
 			onMoveCard,
-			onRemoveCard,
+			onDeleteCard,
 			getChildPayload,
 			onMoveCardKeyboard,
 			onUpdateTitle,
