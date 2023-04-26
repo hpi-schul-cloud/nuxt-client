@@ -36,7 +36,6 @@
 				:maxDate="maxDate"
 				:time-input-label="t('common.labels.time')"
 				@input="handleDateTimeInput"
-				@error="onError"
 			/>
 			<title-card-element
 				v-model="title"
@@ -383,9 +382,6 @@ export default defineComponent({
 				}
 			}
 
-			if (hasErrors.value) {
-				return;
-			}
 			if (
 				route.name === "rooms-beta-task-new" ||
 				route.name === "tasks-beta-task-new"
@@ -459,11 +455,7 @@ export default defineComponent({
 			}
 		};
 
-		const hasErrors = ref(false);
 		const errorMessage = ref("");
-		const onError = () => {
-			hasErrors.value = true;
-		};
 
 		const cancel = () => {
 			router.go(-1);
@@ -503,7 +495,6 @@ export default defineComponent({
 			isCourseSelectDisabled,
 			course,
 			courses,
-			onError,
 			minDate,
 			maxDate,
 			errorMessage,
