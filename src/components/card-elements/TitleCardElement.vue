@@ -94,7 +94,7 @@ export default defineComponent({
 	height: auto;
 	max-height: none;
 	padding: 0;
-	margin-bottom: var(--space-sm);
+	margin-bottom: 8px;
 	font-family: var(--font-accent);
 	font-size: var(--heading-2);
 	font-weight: var(--font-weight-normal);
@@ -103,6 +103,6 @@ export default defineComponent({
 }
 
 ::v-deep .v-textarea.error--text textarea {
-	border-bottom: 2px solid var(--v-error-base);
+	border-bottom: 1px solid var(--v-error-base);
 }
 </style>
