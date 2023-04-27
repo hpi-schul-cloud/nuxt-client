@@ -28,16 +28,7 @@ import TitleCardElement from "@/components/beta-task/card-elements/TitleCardElem
 import CardElementList from "@/components/beta-task/card-elements/CardElementList.vue";
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
-import { CardElement } from "@/store/types/beta-task/card-element";
-
-type Task = {
-	id: string;
-	title: string;
-	elements?: Array<CardElement>;
-	course: string;
-	dueDate: string;
-	completed: boolean;
-};
+import { StudentOverviewTask } from "./types/StudentOverviewTask";
 
 export default defineComponent({
 	name: "TaskStudentView",
@@ -67,7 +58,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const mappedTask: Task = reactive({
+		const mappedTask: StudentOverviewTask = reactive({
 			id: props.task.id,
 			title: props.task.title,
 			elements: props.task.cardElements,

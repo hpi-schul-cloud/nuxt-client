@@ -104,6 +104,7 @@ import {
 	RichTextCardElementParamInputFormatEnum,
 	CardElementParams,
 } from "@/serverApi/v3";
+import { VForm } from "./types/VForm";
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -111,11 +112,6 @@ import TitleCardElement from "@/components/beta-task/card-elements/TitleCardElem
 import CardElementList from "@/components/beta-task/card-elements/CardElementList.vue";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
 
-interface VForm extends HTMLFormElement {
-	validate(): boolean;
-}
-
-// TODO - unit tests!
 export default defineComponent({
 	name: "TaskForm",
 	components: {
