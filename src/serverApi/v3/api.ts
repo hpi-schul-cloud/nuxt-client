@@ -1830,7 +1830,7 @@ export interface Lti11ToolConfigParams {
      * @type {string}
      * @memberof Lti11ToolConfigParams
      */
-    secret: string;
+    secret?: string;
     /**
      * 
      * @type {string}
@@ -5893,7 +5893,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
+        async cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse | FileElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, elementTypeParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5961,7 +5961,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse> {
+        cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse | FileElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, elementTypeParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6024,7 +6024,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse>;
+    cardControllerCreateElement(cardId: string, elementTypeParams: ElementTypeParams, options?: any): AxiosPromise<TextElementResponse | FileElementResponse>;
 
     /**
      * 
