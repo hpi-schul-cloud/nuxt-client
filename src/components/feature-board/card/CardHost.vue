@@ -12,35 +12,33 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
+				min-height="120px"
 				:elevation="isEditMode ? 6 : 0"
 				:id="cardId"
 				:ripple="false"
+				:hover="isHovered"
 			>
 				<template v-if="isLoading">
 					<CardSkeleton :height="height" />
 				</template>
 				<template v-if="!isLoading && card">
-					<CardHeader>
-						<template v-slot:title>
-							<CardHeaderTitleInput
-								:isEditMode="isEditMode"
-								:value="card.title"
-								@update:value="onUpdateCardTitle"
-							></CardHeaderTitleInput>
-						</template>
-						<template v-slot:menu>
-							<BoardMenu scope="card">
-								<BoardMenuAction @click="onDelete">
-									<v-icon>
-										{{ mdiTrashCanOutline }}
-									</v-icon>
-									{{
-										$t("components.cardHost.deletionModal.confirmation.title")
-									}}
-								</BoardMenuAction>
-							</BoardMenu>
-						</template>
-					</CardHeader>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu scope="card">
+							<BoardMenuAction @click="onTryDelete">
+								<v-icon>
+									{{ mdiTrashCanOutline }}
+								</v-icon>
+								{{ $t("components.board.action") }}
+							</BoardMenuAction>
+						</BoardMenu>
+					</div>
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+					>
+					</CardTitle>
 
 					<ContentElementList
 						:elements="card.elements"
@@ -55,36 +53,42 @@
 		</div>
 		<DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
-			:card-title="card ? card.title : ''"
-			@delete-confirm="onDeleteConfirmation"
-			@dialog-cancel="onDialogCancel"
+			:title="card ? card.title : ''"
+			:typeName="$t('components.boardCard').toString()"
+			@delete-confirm="onDeleteConfirm"
+			@dialog-cancel="onDeleteCancel"
 		></DeleteConfirmation>
 	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
-import { useDebounceFn, useElementSize, watchDebounced } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
-import CardHeader from "./CardHeader.vue";
-import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
+import { mdiTrashCanOutline } from "@mdi/js";
+import {
+	useDebounceFn,
+	useElementHover,
+	useElementSize,
+	useFocusWithin,
+	watchDebounced,
+} from "@vueuse/core";
+import { computed, defineComponent, ref } from "vue";
+import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
+import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
-import { mdiTrashCanOutline } from "@mdi/js";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import CardTitle from "./CardTitle.vue";
 
 export default defineComponent({
 	name: "CardHost",
 	components: {
 		CardSkeleton,
-		CardHeader,
+		CardTitle,
 		BoardMenu,
 		BoardMenuAction,
-		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
@@ -97,6 +101,8 @@ export default defineComponent({
 	emits: ["move-card-keyboard", "remove-card"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
+		const { focused: isFocused } = useFocusWithin(cardHost);
+		const isHovered = useElementHover(cardHost);
 		const {
 			isLoading,
 			card,
@@ -109,27 +115,32 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move-card-keyboard", event.code);
 		};
-		const isEditMode = ref<boolean>(false);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(card);
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
-		const onDelete = () => (isDeleteModalOpen.value = true);
+		const onTryDelete = () => (isDeleteModalOpen.value = true);
 		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 
-		const onDeleteConfirmation = async () => {
+		const onDeleteConfirm = async () => {
 			await deleteCard();
 			isDeleteModalOpen.value = false;
 			emit("remove-card", card.value?.id);
 		};
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
-			isEditMode.value = true;
+			startEditMode();
 		};
 		const onEndEditMode = () => {
-			if (isEditMode.value === true) {
-				isEditMode.value = false;
-			}
+			stopEditMode();
 		};
+
+		const boardMenuClasses = computed(() => {
+			if (isFocused.value === true || isHovered.value === true) {
+				return "";
+			}
+			return "hidden";
+		});
 
 		watchDebounced(
 			cardHostHeight,
@@ -138,11 +149,14 @@ export default defineComponent({
 		);
 
 		return {
+			boardMenuClasses,
 			isLoading,
 			card,
+			isFocused,
+			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
-			onDelete,
+			onTryDelete,
 			onAddElement,
 			onStartEditMode,
 			onEndEditMode,
@@ -150,9 +164,22 @@ export default defineComponent({
 			isEditMode,
 			mdiTrashCanOutline,
 			isDeleteModalOpen,
-			onDeleteConfirmation,
-			onDialogCancel: onDeleteCancel,
+			onDeleteConfirm,
+			onDeleteCancel,
 		};
 	},
 });
 </script>
+
+<style scoped>
+.board-menu {
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	z-index: 1;
+}
+.hidden {
+	transition: opacity 200ms;
+	opacity: 0;
+}
+</style>

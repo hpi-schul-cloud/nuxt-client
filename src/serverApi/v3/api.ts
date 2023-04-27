@@ -3707,7 +3707,7 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
-    duedate?: string;
+    dueDate?: string;
     /**
      * 
      * @type {string}
