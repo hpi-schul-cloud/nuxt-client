@@ -5,16 +5,12 @@
 		max-height="400"
 		class="alerts pa-0"
 		elevation="2"
-		style="border-radius: 4px"
 	>
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
 			:key="index"
 			:data-test-id="`alert-item-${index}`"
 			class="alert-item"
-			:style="{
-				'border-top': index === 0 ? 'none' : '1px solid #e5e5e5',
-			}"
 		>
 			<v-list-item-icon class="mt-3 mr-3">
 				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
@@ -24,20 +20,12 @@
 			<v-list-item-content>
 				<v-list-item-title
 					:data-test-id="`alert-title-${index}`"
-					style="overflow: visible; text-overflow: clip; white-space: normal"
 					class="subtitle-1 ma-0"
 				>
 					{{ item.title }}
 				</v-list-item-title>
 				<v-list-item-subtitle
 					:data-test-id="`alert-text-${index}`"
-					style="
-						overflow: unset;
-						text-overflow: unset;
-						white-space: unset;
-						display: flex;
-						flex-wrap: wrap;
-					"
 					class="subtitle-2 text--primary ma-0 mt-1"
 				>
 					{{ item.text }}
@@ -45,7 +33,6 @@
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
 					:data-test-id="`alert-date-${index}`"
-					style="font-size: 14px"
 				>
 					Updated: {{ getDate(item.timestamp) }} | Created:
 					{{ getCreatedDate(item.created_at) }}
@@ -102,10 +89,29 @@ export default defineComponent({
 	max-width: 250px;
 	max-height: 400px;
 	overflow-y: auto;
-	border-radius: 4px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
+	}
+	.alert-item {
+		@if index == 0 {
+			border-top: none;
+		} @else {
+			border-top: 1px solid #e5e5e5;
+		}
+	}
+	.subtitle-1 {
+		overflow: visible;
+		text-overflow: clip;
+		white-space: normal;
+	}
+	.subtitle-2 {
+		overflow: unset;
+		text-overflow: unset;
+		white-space: unset;
+		display: flex;
+		flex-wrap: wrap;
+		color: #1b1b1b;
 	}
 }
 </style>
