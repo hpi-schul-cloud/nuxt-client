@@ -129,12 +129,6 @@ describe("TaskCard", () => {
 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 		});
 
-		it("should render loading state", () => {
-			expect(
-				wrapper.findComponent({ name: "v-skeleton-loader" }).exists()
-			).toBe(true);
-		});
-
 		it("should render student view", () => {
 			expect(wrapper.findComponent({ name: "TaskStudentView" }).exists()).toBe(
 				true
@@ -142,81 +136,46 @@ describe("TaskCard", () => {
 		});
 	});
 
-	// describe("when TASK_CARD_EDIT permission is present", () => {
-	// 	describe("when creating new beta task", () => {
-	// 		let wrapper: Wrapper<Vue>;
+	describe("when TASK_CARD_EDIT permission is present", () => {
+		describe("when creating a beta task", () => {
+			let wrapper: Wrapper<Vue>;
 
-	// 		beforeEach(() => {
-	// 			wrapper = getWrapper(
-	// 				CREATE_EDIT_PERMISSION,
-	// 				emptyTaskCardData,
-	// 				createRoute
-	// 			);
-	// 		});
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					emptyTaskCardData,
+					createRoute
+				);
+			});
 
-	// 		it("should render component page", () => {
-	// 			expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
-	// 		});
+			it("should render component page", () => {
+				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			});
 
-	// 		it("should not render delete button for new beta task", () => {
-	// 			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
+			it("should render task form", () => {
+				expect(wrapper.findComponent({ name: "TaskForm" }).exists()).toBe(true);
+			});
+		});
 
-	// 			expect(deleteBtn.exists()).toBe(false);
-	// 		});
-	// 	});
+		describe("when editing existing beta task", () => {
+			let wrapper: Wrapper<Vue>;
 
-	// 	describe("when editing existing beta task", () => {
-	// 		let wrapper: Wrapper<Vue>;
+			beforeEach(() => {
+				wrapper = getWrapper(
+					CREATE_EDIT_PERMISSION,
+					mockTaskCardData,
+					viewEditRoute
+				);
+				wrapper.setData({ isDeletable: !!mockTaskCardData.id });
+			});
 
-	// 		beforeEach(() => {
-	// 			wrapper = getWrapper(
-	// 				CREATE_EDIT_PERMISSION,
-	// 				mockTaskCardData,
-	// 				viewEditRoute
-	// 			);
-	// 			wrapper.setData({ isDeletable: !!mockTaskCardData.id });
-	// 		});
+			it("should render component page", () => {
+				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
+			});
 
-	// 		it("should render delete button", () => {
-	// 			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
-
-	// 			expect(deleteBtn.exists()).toBe(true);
-	// 		});
-
-	// 		it("should not show delete dialog without the need to delete beta task", async () => {
-	// 			const deleteDialog: any = wrapper.find({
-	// 				ref: "delete-dialog",
-	// 			});
-	// 			expect(deleteDialog.vm.isOpen).toEqual(false);
-	// 		});
-
-	// 		it("should show delete dialog when beta task delete button is clicked", async () => {
-	// 			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
-	// 			const deleteDialog: any = wrapper.find({
-	// 				ref: "delete-dialog",
-	// 			});
-
-	// 			deleteBtn.trigger("click");
-	// 			await wrapper.vm.$nextTick();
-	// 			expect(deleteDialog.vm.isOpen).toEqual(true);
-	// 		});
-
-	// 		it("should delete beta task and redirect after confirming deletion", async () => {
-	// 			jest.spyOn(router, "go");
-	// 			const deleteBtn = wrapper.find('[data-testid="delete-btn"]');
-	// 			const deleteDialog: any = wrapper.find({
-	// 				ref: "delete-dialog",
-	// 			});
-
-	// 			deleteBtn.trigger("click");
-	// 			await wrapper.vm.$nextTick();
-	// 			expect(deleteDialog.vm.isOpen).toEqual(true);
-	// 			deleteDialog.vm.$emit("dialog-confirmed");
-	// 			await wrapper.vm.$nextTick();
-
-	// 			expect(taskCardModuleMock.findTaskCard).toHaveBeenCalledTimes(1);
-	// 			expect(router.go).toHaveBeenCalledTimes(1);
-	// 		});
-	// 	});
-	// });
+			it("should render task form", () => {
+				expect(wrapper.findComponent({ name: "TaskForm" }).exists()).toBe(true);
+			});
+		});
+	});
 });
