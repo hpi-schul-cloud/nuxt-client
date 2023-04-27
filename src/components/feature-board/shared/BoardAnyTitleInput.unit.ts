@@ -40,12 +40,12 @@ describe("CardHeaderTitleInput Component", () => {
 			expect(emitted["update:value"][0][0]).toContain(newValue);
 		});
 
-		it("should be read only if not editing", async () => {
+		it("should not have textarea in displaymode", async () => {
 			setup({ isEditMode: false });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			const result = textAreaComponent.props("readonly");
+			console.log("textAreaComponent", textAreaComponent);
 
-			expect(result).toStrictEqual(true);
+			expect(textAreaComponent.element).toBeUndefined();
 		});
 	});
 });

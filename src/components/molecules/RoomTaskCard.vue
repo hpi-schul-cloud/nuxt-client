@@ -23,7 +23,7 @@
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
-						{{ cardTitle(task.duedate) }}
+						{{ cardTitle(task.dueDate) }}
 					</div>
 				</div>
 				<h6 class="mb-2 task-name mt-1">
@@ -38,7 +38,7 @@
 						<v-icon size="14" :color="titleIconColor" class="fill">
 							{{ titleIcon }}
 						</v-icon>
-						{{ cardTitle(task.duedate) }}
+						{{ cardTitle(task.dueDate) }}
 					</div>
 					<div class="dot-menu-section">
 						<more-item-menu
@@ -87,7 +87,7 @@
 					<v-custom-chip-time-remaining
 						v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 						type="warning"
-						:due-date="task.duedate"
+						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</div>
@@ -119,7 +119,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
-	mdiShareVariant,
+	mdiShareVariantOutline,
 } from "@mdi/js";
 import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -158,7 +158,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 				mdiTextBoxCheckOutline,
-				mdiShareVariant,
+				mdiShareVariantOutline,
 			},
 			roles: Roles,
 			canShowDescription: false,
@@ -169,14 +169,14 @@ export default {
 			return this.task.status.isDraft;
 		},
 		isOverDue() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			return dueDate && new Date(dueDate) < new Date();
 		},
 		isFinished() {
 			return this.task.status.isFinished;
 		},
 		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
 			if (timeDiff !== null) {
 				return timeDiff <= 24;
 			}
@@ -342,7 +342,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariant,
+						icon: this.icons.mdiShareVariantOutline,
 						action: () => this.$emit("share-task", this.task.id),
 						name: this.$t("pages.room.taskCard.label.shareTask"),
 						dataTestId: "content-card-task-menu-share",

@@ -1,7 +1,6 @@
 <template>
 	<vCustomDialog
 		data-testid="delete-dialog-item"
-		:size="375"
 		has-buttons
 		confirm-btn-title-key="common.actions.remove"
 		@dialog-confirmed="onDeleteConfirmation"
@@ -9,11 +8,8 @@
 		@dialog-closed="onCloseDialog"
 	>
 		<h2 slot="title" class="text-h4 my-2">
-			{{ $t("components.cardHost.deletionModal.confirmation.title") }}
-		</h2>
-		<p slot="content" class="text-md mt-2">
 			{{ confirmationMessage }}
-		</p>
+		</h2>
 	</vCustomDialog>
 </template>
 
@@ -33,7 +29,11 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		cardTitle: {
+		typeName: {
+			type: String,
+			required: true,
+		},
+		title: {
 			type: String,
 			default: "",
 		},
@@ -44,8 +44,9 @@ export default defineComponent({
 		const isOpen = useVModel(props, "isDeleteModalOpen", emit);
 
 		const confirmationMessage = computed(() =>
-			i18n?.t("components.cardHost.deletionModal.confirmation.text", {
-				cardTitle: props.cardTitle ? `"${props.cardTitle}"` : "",
+			i18n?.t("components.cardHost.deletionModal.confirmation", {
+				title: props.title ? `"${props.title}"` : "",
+				type: props.typeName,
 			})
 		);
 

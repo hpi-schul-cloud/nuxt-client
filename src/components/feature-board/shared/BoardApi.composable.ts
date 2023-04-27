@@ -36,6 +36,16 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerDeleteColumn(columnId);
 	};
 
+	const createCardCall = async (columnId: string) => {
+		const createdCard = await boardColumnApi.columnControllerCreateCard(
+			columnId
+		);
+		if (createdCard.data.id) {
+			createElement(createdCard.data.id);
+			return createdCard.data.id;
+		}
+	};
+
 	const moveCardCall = async (
 		cardId: string,
 		toColumnId: string,
@@ -47,13 +57,26 @@ export const useBoardApi = () => {
 		});
 	};
 
+	const moveColumnCall = async (
+		columnId: string,
+		toBoardId: string,
+		toPosition: number
+	) => {
+		await boardColumnApi.columnControllerMoveColumn(columnId, {
+			toBoardId,
+			toPosition,
+		});
+	};
+
 	return {
 		createColumn,
 		createElement,
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,
+		moveColumnCall,
 		updateCardTitle,
 		updateColumnTitleCall,
+		createCardCall,
 	};
 };
