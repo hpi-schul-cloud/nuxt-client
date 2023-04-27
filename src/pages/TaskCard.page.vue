@@ -58,7 +58,6 @@ import {
 } from "@/store/types/beta-task/card-element";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
 
-// TODO - unit tests!
 export default defineComponent({
 	name: "TaskCard",
 	components: {

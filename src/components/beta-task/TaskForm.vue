@@ -80,7 +80,7 @@
 			</h2>
 			<template slot="content">
 				<p class="text-md mt-2">
-					{{ t("pages.taskCard.deleteTaskCard.text", { title }) }}
+					{{ t("pages.taskCard.deleteTaskCard.text", title) }}
 				</p>
 			</template>
 		</v-custom-dialog>
@@ -98,6 +98,7 @@ import {
 	CardElementComponentEnum,
 } from "@/store/types/beta-task/card-element";
 import { AlertMessage } from "@/store/types/alert-payload";
+import { AllItems } from "@/store/types/rooms";
 import {
 	CardElementResponseCardElementTypeEnum,
 	RichTextCardElementParamInputFormatEnum,
@@ -125,7 +126,7 @@ export default defineComponent({
 	},
 	props: {
 		courses: {
-			type: Array,
+			type: Array as PropType<AllItems>,
 			required: true,
 		},
 		dueDateMax: {
@@ -147,8 +148,8 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
+		const t = (key: string, value?: string) => {
+			const translateResult = i18n.t(key, [value]);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
