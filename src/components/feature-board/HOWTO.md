@@ -47,5 +47,5 @@ Hint: You can see the id of the column-node in the generated output.
 
 1.  Login into your local schulcloud-environment
 2.  Enter a url like that: `http://localhost:4000/rooms/{{ boardid }}/board`
-3.  Replace `{{ boardid }}` with your actual boardid (see section *get an id of a local board* above)
+3.  Replace `{{ boardId }}` with your actual boardid (see section *get an id of a local board* above)
 4.  Put this new url into your browser and hit enter

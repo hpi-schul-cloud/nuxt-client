@@ -1,9 +1,9 @@
 <template>
 	<VCardText>
-		<template v-for="(element, index) in elements">
+		<template v-for="element in elements">
 			<TextContentElement
 				v-if="element.type === ContentElementType.TEXT"
-				:key="index"
+				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
 			></TextContentElement>
