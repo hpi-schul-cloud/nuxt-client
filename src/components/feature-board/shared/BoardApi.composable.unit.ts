@@ -1,4 +1,3 @@
-import { BoardCardApiInterface } from "@/serverApi/v3";
 import { useBoardApi } from "./BoardApi.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
@@ -32,6 +31,16 @@ const mockApi = {
 	columnControllerMoveColumn: jest.fn(),
 };
 
+jest
+	.spyOn(serverApi, "BoardApiFactory")
+	.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+jest
+	.spyOn(serverApi, "BoardCardApiFactory")
+	.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
+jest
+	.spyOn(serverApi, "BoardColumnApiFactory")
+	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
+
 initializeAxios({
 	request: async (path: string) => ({
 		data: "some data",
@@ -45,9 +54,6 @@ describe("BoardApi.composable", () => {
 
 	describe("createColumnCall", () => {
 		it("should call boardControllerCreateColumn api", async () => {
-			jest
-				.spyOn(serverApi, "BoardApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 			const { createColumnCall } = useBoardApi();
 			const BOARD_ID = "test-board-id";
 
@@ -60,9 +66,6 @@ describe("BoardApi.composable", () => {
 
 	describe("updateCardTitle", () => {
 		it("should call cardControllerUpdateCardTitle api", async () => {
-			jest
-				.spyOn(serverApi, "BoardCardApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
 			const { updateCardTitle } = useBoardApi();
 			const PAYLOAD = {
 				id: "update-card-id",
@@ -79,11 +82,6 @@ describe("BoardApi.composable", () => {
 
 	describe("updateColumnTitleCall", () => {
 		it("should call columnControllerUpdateColumnTitle api", async () => {
-			jest
-				.spyOn(serverApi, "BoardColumnApiFactory")
-				.mockReturnValue(
-					mockApi as unknown as serverApi.BoardColumnApiInterface
-				);
 			const { updateColumnTitleCall } = useBoardApi();
 			const PAYLOAD = {
 				id: "update-column-id",
@@ -100,11 +98,6 @@ describe("BoardApi.composable", () => {
 
 	describe("createElement", () => {
 		it("should call cardControllerCreateElement api", async () => {
-			jest
-				.spyOn(serverApi, "BoardColumnApiFactory")
-				.mockReturnValue(
-					mockApi as unknown as serverApi.BoardColumnApiInterface
-				);
 			const { createElement } = useBoardApi();
 			const PAYLOAD = "card-id";
 
@@ -115,9 +108,6 @@ describe("BoardApi.composable", () => {
 
 	describe("deleteCardCall", () => {
 		it("should call cardControllerDeleteCard api", async () => {
-			jest
-				.spyOn(serverApi, "BoardCardApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
 			const { deleteCardCall } = useBoardApi();
 			const PAYLOAD = "card-id";
 
@@ -128,11 +118,6 @@ describe("BoardApi.composable", () => {
 
 	describe("deleteColumnCall", () => {
 		it("should call columnControllerDeleteColumn api", async () => {
-			jest
-				.spyOn(serverApi, "BoardColumnApiFactory")
-				.mockReturnValue(
-					mockApi as unknown as serverApi.BoardColumnApiInterface
-				);
 			const { deleteColumnCall } = useBoardApi();
 			const PAYLOAD = "column-id";
 
@@ -145,9 +130,6 @@ describe("BoardApi.composable", () => {
 
 	describe("createCardCall", () => {
 		it("should call columnControllerDeleteColumn api", async () => {
-			jest
-				.spyOn(serverApi, "BoardCardApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
 			const { createCardCall } = useBoardApi();
 			const PAYLOAD = "column-id";
 
@@ -158,9 +140,6 @@ describe("BoardApi.composable", () => {
 
 	describe("moveCardCall", () => {
 		it("should call cardControllerMoveCard api", async () => {
-			jest
-				.spyOn(serverApi, "BoardCardApiFactory")
-				.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
 			const { moveCardCall } = useBoardApi();
 			const PAYLOAD = {
 				cardId: "card-id",
@@ -186,11 +165,6 @@ describe("BoardApi.composable", () => {
 
 	describe("moveColumnCall", () => {
 		it("should call columnControllerMoveColumn api", async () => {
-			jest
-				.spyOn(serverApi, "BoardColumnApiFactory")
-				.mockReturnValue(
-					mockApi as unknown as serverApi.BoardColumnApiInterface
-				);
 			const { moveColumnCall } = useBoardApi();
 			const PAYLOAD = {
 				columnId: "column-id",
