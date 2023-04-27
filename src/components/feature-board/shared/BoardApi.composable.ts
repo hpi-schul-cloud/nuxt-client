@@ -3,7 +3,7 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	ColumnResponse,
-	ElementTypeParams,
+	ElementTypeParamsTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -44,7 +44,9 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id);
+			createElement(createdCard.data.id, {
+				type: ElementTypeParamsTypeEnum.Text,
+			});
 			return createdCard.data.id;
 		}
 	};
