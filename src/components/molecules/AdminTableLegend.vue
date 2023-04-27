@@ -6,7 +6,7 @@
 				<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
 					<span v-if="icon.style">
 						<base-icon
-							source="custom"
+							source="material"
 							:icon="icon.icon"
 							:color="icon.color"
 							:style="icon.style"

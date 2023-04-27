@@ -5,7 +5,7 @@
 		small
 		data-test-id="dueDateHintLabel"
 	>
-		<v-icon left small> $hourglassBottomBlack </v-icon>
+		<v-icon left small> {{ mdiTimerSandComplete }} </v-icon>
 		{{ hintDueDate(dueDate, shortenUnit) }}
 	</v-chip>
 </template>
@@ -13,6 +13,7 @@
 <script>
 import { fromNowToFuture } from "@/plugins/datetime";
 import dayjs from "dayjs";
+import { mdiTimerSandComplete } from "@mdi/js";
 
 export default {
 	props: {
@@ -30,6 +31,11 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+	},
+	data() {
+		return {
+			mdiTimerSandComplete: mdiTimerSandComplete,
+		};
 	},
 	methods: {
 		hintDueDate(dueDate, shorten = false) {

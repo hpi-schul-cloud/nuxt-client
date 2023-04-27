@@ -62,7 +62,7 @@ export class TaskFilter {
 	}
 
 	withoutDueDate(): TaskFilter {
-		const withoutDueDate = this.tasks.filter((task) => task.duedate == null);
+		const withoutDueDate = this.tasks.filter((task) => task.dueDate == null);
 
 		return new TaskFilter(withoutDueDate);
 	}
@@ -70,7 +70,7 @@ export class TaskFilter {
 	withDueDate(): TaskFilter {
 		const withDueDate = this.tasks.filter(
 			(task) =>
-				task.duedate && new Date(task.duedate).getTime() > new Date().getTime()
+				task.duedate && new Date(task.dueDate).getTime() > new Date().getTime()
 		);
 
 		return new TaskFilter(withDueDate);
@@ -79,7 +79,7 @@ export class TaskFilter {
 	byOverdue(): TaskFilter {
 		const overdue = this.tasks.filter(
 			(task) =>
-				task.duedate && new Date(task.duedate).getTime() < new Date().getTime()
+				task.duedate && new Date(task.dueDate).getTime() < new Date().getTime()
 		);
 
 		return new TaskFilter(overdue);

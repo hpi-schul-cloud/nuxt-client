@@ -51,7 +51,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 	};
 
 	const addElement = async (type: ContentElementType) => {
-		console.log("type", type);
 		if (cardState.card === undefined) {
 			return;
 		}

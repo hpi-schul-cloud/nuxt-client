@@ -65,17 +65,17 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		expect(location.pathname).toStrictEqual(`/homework/${tasks[0].id}`);
 	});
 
-	it("Should display no due date label if task has no duedate", () => {
+	it("Should display no due date label if task has no dueDate", () => {
 		const wrapper = getWrapper({ task: openTasksWithoutDueDate[0] });
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
 		expect(dueDateLabel.text()).toBe("");
 	});
 
-	it("Should display due date label if task has duedate", () => {
+	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC(tasks[0].duedate);
+		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
 			"pages.tasks.labels.due"
 		)} ${convertedDueDate}`;
@@ -93,7 +93,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeToDueDate,
+			dueDate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 			status: {
@@ -118,7 +118,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeToDueDate,
+			dueDate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 			status: {
@@ -147,7 +147,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		wrapper.vm.$vuetify.breakpoint.xsOnly = true;
 
-		const convertedDueDate = dateFromUTC(tasks[0].duedate);
+		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
 			"pages.tasks.labels.due"
 		)} ${convertedDueDate}`;
@@ -190,7 +190,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
-			const convertedDueDate = dateTimeFromUTC(betaTask.duedate);
+			const convertedDueDate = dateTimeFromUTC(betaTask.dueDate);
 			const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
 				"pages.tasks.labels.due"
 			)} ${convertedDueDate}`;

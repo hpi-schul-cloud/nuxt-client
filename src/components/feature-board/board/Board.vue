@@ -8,9 +8,7 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					drag-handle-selector=".column-drag-handle"
 					lock-axis="x"
-					:drag-begin-delay="200"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onColumnDrop"
@@ -24,6 +22,8 @@
 								@update:card-position="onCardPositionChange(index, $event)"
 								@update:title="onUpdateColumnTitle(column.id, $event)"
 								@remove-card="onRemoveCard"
+								@create-card="onCreateCard"
+								@delete-column="onColumnDelete"
 							/>
 						</Draggable>
 					</template>
@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide } from "vue";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
@@ -50,7 +50,6 @@ import {
 	CardMoveByKeyboard,
 	ColumnMove,
 } from "../types/DragAndDrop";
-import { BOARD_ACTIONS } from "../types/BoardInjectionKeys";
 
 export default defineComponent({
 	name: "Board",
@@ -59,16 +58,15 @@ export default defineComponent({
 		const route = useRoute();
 		const {
 			board,
-			boardActions,
+			deleteColumn,
 			moveCard,
 			removeCard,
 			moveColumn,
 			moveCardByKeyboard,
 			updateColumnTitle,
 			addNewColumn,
+			createCard,
 		} = useBoardState(route.params?.id);
-
-		provide(BOARD_ACTIONS, boardActions);
 
 		const onCardPositionChange = (_: unknown, payload: CardMove) => {
 			moveCard(payload);
@@ -76,6 +74,10 @@ export default defineComponent({
 
 		const onRemoveCard = (cardId: string): void => {
 			removeCard(cardId);
+		};
+
+		const onColumnDelete = async (columnId: string): Promise<void> => {
+			await deleteColumn(columnId);
 		};
 
 		const onColumnDrop = (columnPayload: ColumnMove): void => {
@@ -105,33 +107,24 @@ export default defineComponent({
 			addNewColumn(cardId);
 		};
 
+		const onCreateCard = (columnId: string) => {
+			createCard(columnId);
+		};
+
 		return {
 			board,
 			columnDropPlaceholderOptions,
 			onRemoveCard,
 			getColumnId,
 			onCardPositionChange,
+			onColumnDelete,
 			onColumnDrop,
 			onPositionChangeKeyboard,
 			onUpdateColumnTitle,
 			onAddEmptyColumn,
 			onAddColumnWithCard,
+			onCreateCard,
 		};
 	},
 });
 </script>
-<style>
-/* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-	overflow: visible !important;
-} */
-
-/**
- * This rule extends the droppable area of columns.
- * Without this rule cards have to be placed closely below the last card in a column to be added.
-*/
-.smooth-dnd-container.vertical {
-	min-height: 70vh;
-	height: 100%;
-	padding-bottom: 50px;
-}
-</style>

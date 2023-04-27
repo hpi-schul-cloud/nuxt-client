@@ -206,7 +206,7 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		taskLabel() {
-			const { createdAt, duedate, availableDate } = this.task;
+			const { createdAt, dueDate, availableDate } = this.task;
 
 			const labelText = this.isBetaTask
 				? `${this.courseName} - ${this.$t(
@@ -238,9 +238,9 @@ export default {
 				);
 			}
 
-			if (duedate) {
+			if (dueDate) {
 				return labelText.concat(
-					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`
+					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`
 				);
 			}
 
