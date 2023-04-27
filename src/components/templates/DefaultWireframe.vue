@@ -26,7 +26,7 @@
 					></v-custom-fab>
 				</slot>
 			</div>
-			<div v-if="showBorder" class="border"></div>
+			<div v-if="showBorder" class="header-border"></div>
 		</div>
 		<v-container
 			:class="{
@@ -105,7 +105,7 @@ export default defineComponent({
 	margin: 0;
 }
 
-.border {
+.header-border {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
