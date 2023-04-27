@@ -57,6 +57,7 @@ const mockTaskCardData: TaskCardResponse = {
 	dueDate: "2023-07-31T00:00:00.000Z",
 	courseName: "course",
 	courseId: "789",
+	completedBy: [],
 };
 
 const APIError = new AxiosError(
