@@ -292,7 +292,6 @@ export default {
 				padding: 0;
 				margin: 0;
 				line-height: 100%;
-				color: var(--color-text);
 				cursor: text;
 				background: transparent;
 				border: none;

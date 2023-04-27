@@ -118,7 +118,7 @@ ul.progressbar {
 	}
 
 	&::before {
-		color: var(--color-dark-gray);
+		color: var(--v-grey-base);
 		text-decoration: underline;
 		background: var(--v-white-base);
 		border-color: var(--v-primary-base);

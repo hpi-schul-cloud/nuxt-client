@@ -161,6 +161,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
+@import "~vuetify/src/styles/settings/_colors";
 
 @import "@/styles/mixins";
 
@@ -202,7 +203,7 @@ export default defineComponent({
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--v-grey-lighten3);
+		border-right: 1px solid var(--v-border-lighten2);
 		border-bottom: none;
 	}
 

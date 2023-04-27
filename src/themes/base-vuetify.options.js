@@ -42,6 +42,7 @@ export default {
 					base: "#ff1134",
 					darken1: "#bf0d26",
 				},
+				grey: colors.grey.base,
 				border: {
 					base: colors.grey.base,
 					lighten1: colors.grey.lighten2,
