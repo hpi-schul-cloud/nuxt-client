@@ -239,4 +239,8 @@ export default class TaskCardModule extends VuexModule {
 		const user = authModule.getUser;
 		return user ? this.taskCardData.completedBy.includes(user.id) : false;
 	}
+
+	get isExpired(): boolean {
+		return new Date(this.taskCardData.dueDate) < new Date();
+	}
 }

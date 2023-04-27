@@ -3,7 +3,8 @@
 		<div class="d-flex justify-end mb-4">
 			<v-checkbox
 				v-model="mappedTask.completed"
-				label="Aufgabe erledigt"
+				:label="t('pages.betaTask.studentView.taskCompleted')"
+				:disabled="isExpired"
 				@change="handleCompletion"
 			/>
 		</div>
@@ -83,10 +84,13 @@ export default defineComponent({
 			}
 		};
 
+		const isExpired = taskCardModule.isExpired;
+
 		return {
 			mappedTask,
 			t,
 			handleCompletion,
+			isExpired,
 		};
 	},
 });
