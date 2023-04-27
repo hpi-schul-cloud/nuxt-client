@@ -34,6 +34,7 @@
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
+				<DeleteConfirmation></DeleteConfirmation>
 			</template>
 		</div>
 	</div>
@@ -45,6 +46,7 @@ import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
 	columnDropPlaceholderOptions,
@@ -56,7 +58,13 @@ import {
 
 export default defineComponent({
 	name: "Board",
-	components: { BoardColumn, Container, Draggable, BoardColumnGhost },
+	components: {
+		BoardColumn,
+		Container,
+		Draggable,
+		BoardColumnGhost,
+		DeleteConfirmation,
+	},
 	setup() {
 		const route = useRoute();
 		const {

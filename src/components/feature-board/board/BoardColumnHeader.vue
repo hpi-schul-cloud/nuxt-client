@@ -29,13 +29,13 @@
 			</div>
 			<VDivider color="black"></VDivider>
 		</div>
-		<DeleteConfirmation
+		<!-- <DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
 			:title="title"
 			:typeName="$t('components.boardColumn').toString()"
 			@delete-confirm="onDeleteConfirmation"
 			@dialog-cancel="onDeleteCancel"
-		></DeleteConfirmation>
+		></DeleteConfirmation> -->
 	</BoardColumnInteractionHandler>
 </template>
 
@@ -45,7 +45,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
+// import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { mdiTrashCanOutline } from "@mdi/js";
 
@@ -55,7 +55,7 @@ export default defineComponent({
 		BoardMenu,
 		BoardAnyTitleInput,
 		BoardMenuAction,
-		DeleteConfirmation,
+		// DeleteConfirmation,
 		BoardColumnInteractionHandler,
 	},
 	props: {

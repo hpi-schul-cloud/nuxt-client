@@ -51,17 +51,18 @@
 				</template>
 			</VCard>
 		</div>
-		<DeleteConfirmation
+		<!-- <DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
 			:title="card ? card.title : ''"
 			:typeName="$t('components.boardCard').toString()"
 			@delete-confirm="onDeleteConfirm"
 			@dialog-cancel="onDeleteCancel"
-		></DeleteConfirmation>
+		></DeleteConfirmation> -->
 	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -74,7 +75,6 @@ import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -92,7 +92,6 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		DeleteConfirmation,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -117,17 +116,18 @@ export default defineComponent({
 		};
 		const cardId = computed(() => card.value?.id);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
-		const isDeleteModalOpen = ref<boolean>(false);
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
-		const onTryDelete = () => (isDeleteModalOpen.value = true);
-		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
+		const onTryDelete = async () => {
+			const { ask } = useDeleteConfirmation();
 
-		const onDeleteConfirm = async () => {
-			await deleteCard();
-			isDeleteModalOpen.value = false;
-			emit("delete:card", card.value?.id);
+			await ask({ message: "Karte löschen?" }).then(async () => {
+				console.log("delete confirm");
+				await deleteCard();
+				emit("delete:card", card.value?.id);
+			});
 		};
+
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
 			startEditMode();
@@ -164,9 +164,6 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
-			isDeleteModalOpen,
-			onDeleteConfirm,
-			onDeleteCancel,
 		};
 	},
 });
