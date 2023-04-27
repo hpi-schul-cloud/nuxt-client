@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount, Wrapper, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { TaskCardResponse } from "@/serverApi/v3";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -41,20 +41,15 @@ const viewEditRoute = {
 	},
 };
 
-let router = new VueRouter();
-
-let taskCardModuleMock = createModuleMocks(TaskCardModule);
-
 const CREATE_EDIT_PERMISSION = "task_card_edit";
+const VIEW_PERMISSION = "task_card_view";
 
 const mockRoomData = roomFactory();
-
 const mockCourse = courseMetadataFactory();
-
+const mockTaskCardData = betaTaskFactory();
 const emptyTaskCardData = betaTaskFactory({
 	id: "",
 });
-
 const mockCurrentYear = {
 	_id: "",
 	name: "",
@@ -64,8 +59,6 @@ const mockCurrentYear = {
 	years: {},
 	isTeamCreationByStudentsEnabled: false,
 };
-
-const mockTaskCardData = betaTaskFactory();
 
 const getWrapper = (
 	userPermission: string,
@@ -78,16 +71,12 @@ const getWrapper = (
 	const { localVue } = componentOptions;
 	localVue.use(VueRouter);
 
-	router = new VueRouter({
+	const router = new VueRouter({
 		routes: routes,
 	});
 	router.push(route);
 
-	taskCardModuleMock = createModuleMocks(TaskCardModule, {
-		getTaskCardData: taskCardData,
-	});
-
-	return mount(TaskCard, {
+	return shallowMount(TaskCard, {
 		...componentOptions,
 		provide: {
 			i18n: { t: (key: string) => key },
@@ -103,7 +92,9 @@ const getWrapper = (
 			schoolsModule: createModuleMocks(SchoolsModule, {
 				getCurrentYear: mockCurrentYear,
 			}),
-			taskCardModule: taskCardModuleMock,
+			taskCardModule: createModuleMocks(TaskCardModule, {
+				getTaskCardData: taskCardData,
+			}),
 		},
 		localVue,
 		router,
@@ -122,7 +113,7 @@ describe("TaskCard", () => {
 		let wrapper: Wrapper<Vue>;
 
 		beforeEach(() => {
-			wrapper = getWrapper("task_card_view", mockTaskCardData, viewEditRoute);
+			wrapper = getWrapper(VIEW_PERMISSION, mockTaskCardData, viewEditRoute);
 		});
 
 		it("should render component page", () => {
@@ -137,17 +128,17 @@ describe("TaskCard", () => {
 	});
 
 	describe("when TASK_CARD_EDIT permission is present", () => {
+		let wrapper: Wrapper<Vue>;
+
+		beforeEach(() => {
+			wrapper = getWrapper(
+				CREATE_EDIT_PERMISSION,
+				emptyTaskCardData,
+				createRoute
+			);
+		});
+
 		describe("when creating a beta task", () => {
-			let wrapper: Wrapper<Vue>;
-
-			beforeEach(() => {
-				wrapper = getWrapper(
-					CREATE_EDIT_PERMISSION,
-					emptyTaskCardData,
-					createRoute
-				);
-			});
-
 			it("should render component page", () => {
 				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 			});
@@ -158,17 +149,6 @@ describe("TaskCard", () => {
 		});
 
 		describe("when editing existing beta task", () => {
-			let wrapper: Wrapper<Vue>;
-
-			beforeEach(() => {
-				wrapper = getWrapper(
-					CREATE_EDIT_PERMISSION,
-					mockTaskCardData,
-					viewEditRoute
-				);
-				wrapper.setData({ isDeletable: !!mockTaskCardData.id });
-			});
-
 			it("should render component page", () => {
 				expect(wrapper.findComponent(TaskCard).exists()).toBe(true);
 			});
