@@ -134,7 +134,7 @@ export default defineComponent({
 		},
 		task: {
 			type: Object as PropType<TaskCard>,
-			default: null,
+			default: undefined,
 		},
 	},
 	setup(props) {

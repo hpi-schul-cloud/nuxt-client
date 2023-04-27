@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<template v-if="isEditMode">
+		<template v-if="hasEditPermission">
 			<div v-if="isLoading">
 				<v-skeleton-loader type="button" class="mb-8 teacher-input-loader" />
 				<v-skeleton-loader type="button" class="mb-8 teacher-input-loader" />
@@ -20,7 +20,7 @@
 			/>
 		</template>
 		<template v-else>
-			<div v-if="isLoading" class="mt-12">
+			<div v-if="isLoading || task === undefined" class="mt-12">
 				<v-skeleton-loader type="heading" class="mb-12 d-flex justify-end" />
 				<v-skeleton-loader type="button" class="mb-12 input-loader" />
 				<v-skeleton-loader type="heading" class="mb-8" />
@@ -100,18 +100,19 @@ export default defineComponent({
 			`${t("pages.rooms.fab.add.betatask").toString()} - ${Theme.short_name}`
 		);
 
-		const isEditMode = authModule.getUserPermissions.includes("task_card_edit");
+		const hasEditPermission =
+			authModule.getUserPermissions.includes("task_card_edit");
 
 		const breadcrumbs = ref<object[]>([]);
 		const courses = ref<AllItems>([]);
 		const dueDateMax = ref("");
 		const isLoading = ref(true);
-		const task = ref<TaskCard | null>(null);
+		const task = ref<TaskCard | undefined>(undefined);
 		const route = useRoute();
 
-		const getTask = async (): Promise<TaskCard | null> => {
+		const getTask = async (): Promise<TaskCard | undefined> => {
 			if (route.name !== "beta-task-view-edit") {
-				return null;
+				return undefined;
 			}
 
 			const taskCardId = route.params.id;
@@ -128,7 +129,7 @@ export default defineComponent({
 		const initElements = (
 			task: TaskCardResponse
 		): Array<CardElement> | undefined => {
-			if (task === null) return undefined;
+			if (task === undefined) return undefined;
 
 			let initialCardElements: Array<CardElementResponse> = [
 				{
@@ -156,7 +157,7 @@ export default defineComponent({
 						placeholder: i18n.t(
 							"components.cardElement.richTextElement.placeholder"
 						) as string,
-						editable: isEditMode,
+						editable: hasEditPermission,
 					},
 				});
 			});
@@ -232,7 +233,7 @@ export default defineComponent({
 		return {
 			breadcrumbs,
 			t,
-			isEditMode,
+			hasEditPermission,
 			courses,
 			dueDateMax,
 			isLoading,

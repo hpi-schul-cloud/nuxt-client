@@ -1,8 +1,7 @@
 import { TaskCardResponse } from "@/serverApi/v3";
-import { TaskCard } from "@/store/types/beta-task/beta-task";
 import { taskFactory } from "@@/tests/test-utils/factory";
 
-const defaultBetaTask: TaskCard = {
+const defaultBetaTask: TaskCardResponse = {
 	id: "642162cc44a17f1ce8939ddb",
 	courseId: "123",
 	courseName: "Mathe",
@@ -16,8 +15,8 @@ const defaultBetaTask: TaskCard = {
 };
 
 export const betaTaskFactory = (
-	overwrites: Partial<TaskCard> = {}
-): TaskCard => {
+	overwrites: Partial<TaskCardResponse> = {}
+): TaskCardResponse => {
 	return {
 		...defaultBetaTask,
 		...overwrites,

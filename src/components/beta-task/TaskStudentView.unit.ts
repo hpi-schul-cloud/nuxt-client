@@ -4,10 +4,11 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { betaTaskFactory } from "@@/tests/test-utils/factory";
 import TaskCardModule from "@/store/task-card";
 import TaskStudentView from "@/components/beta-task/TaskStudentView.vue";
+import { TaskCard } from "@/store/types/beta-task/beta-task";
 
 const mockBetaTaskData = betaTaskFactory();
 
-const getWrapper = (props?: object, completed = false) => {
+const getWrapper = (task: TaskCard, completed = false) => {
 	return mount(TaskStudentView, {
 		...createComponentMocks({
 			i18n: true,
@@ -18,13 +19,13 @@ const getWrapper = (props?: object, completed = false) => {
 				getCompletedForStudent: completed,
 			}),
 		},
-		propsData: props,
+		propsData: task,
 	});
 };
 
 describe("TaskStudentView", () => {
 	it("should render component", () => {
-		const wrapper = getWrapper(mockBetaTaskData);
+		const wrapper = getWrapper(mockBetaTaskData as TaskCard);
 		expect(wrapper.findComponent(TaskStudentView).exists()).toBe(true);
 	});
 });
