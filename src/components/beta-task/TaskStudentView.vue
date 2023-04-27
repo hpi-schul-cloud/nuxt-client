@@ -29,6 +29,7 @@ import CardElementList from "@/components/beta-task/card-elements/CardElementLis
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
 import { TaskCard } from "@/store/types/beta-task/beta-task";
 import { StudentOverviewTask } from "./types/StudentOverviewTask";
+import { useTranslation } from "@/composables/translate";
 
 export default defineComponent({
 	name: "TaskStudentView",
@@ -50,13 +51,15 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		// const t = (key: string) => {
+		// 	const translateResult = i18n.t(key);
+		// 	if (typeof translateResult === "string") {
+		// 		return translateResult;
+		// 	}
+		// 	return "unknown translation-key:" + key;
+		// };
+
+		const t = useTranslation();
 
 		const mappedTask: StudentOverviewTask = reactive({
 			id: props.task.id,
