@@ -15,13 +15,13 @@
 				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<v-icon>fa-solid fa-bars</v-icon>
+				<v-icon>{{ mdiMenu }}</v-icon>
 			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
-					source="fa"
-					icon="exclamation-triangle"
+					source="material"
+					icon="report_problem"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
@@ -44,7 +44,7 @@
 				</v-btn>
 				<popup-icon
 					class="item"
-					source="fa"
+					source="material"
 					icon="qrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
@@ -54,10 +54,10 @@
 				</popup-icon>
 				<popup-icon
 					class="item"
-					source="fa"
-					icon="question"
-					:title="$t('global.topbar.actions.help')"
-					:aria-label="$t('global.topbar.actions.help')"
+					source="material"
+					icon="help_area_outline"
+					:title="$t('global.topbar.actions.helpSection')"
+					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
 				>
 					<help-dropdown />
@@ -123,7 +123,12 @@ import HelpDropdown from "@/components/legacy/HelpDropdown";
 import MenuQrCode from "@/components/legacy/MenuQrCode";
 import StatusAlerts from "@/components/molecules/StatusAlerts";
 import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
-import { mdiArrowCollapse, mdiArrowExpand, mdiMenu } from "@mdi/js";
+import {
+	mdiArrowCollapse,
+	mdiArrowExpand,
+	mdiMenu,
+	mdiHelpCircle,
+} from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -161,6 +166,7 @@ export default defineComponent({
 			mdiArrowCollapse,
 			mdiArrowExpand,
 			mdiMenu,
+			mdiHelpCircle,
 		};
 	},
 	computed: {

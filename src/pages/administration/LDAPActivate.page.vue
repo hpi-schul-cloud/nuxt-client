@@ -15,7 +15,7 @@
 			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="student" />
+					<base-icon source="material" icon="students_outline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
@@ -25,7 +25,7 @@
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="admin_panel_settings" />
+					<base-icon source="material" icon="admin_panel_settings" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
@@ -212,9 +212,6 @@ const redirectToConfigPage = (page) => {
 
 export default {
 	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage },
-	meta: {
-		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-	},
 	data() {
 		return {
 			migrateUsersCheckbox: false,

@@ -2,7 +2,6 @@
 	<v-card v-if="editMode" flat class="card mb-7" :class="{ active: isActive }">
 		<div class="card-actions">
 			<v-btn
-				v-show="actionable"
 				icon
 				outlined
 				color="secondary"
@@ -13,7 +12,7 @@
 				<v-icon>{{ mdiDrag }}</v-icon>
 			</v-btn>
 			<v-btn
-				v-show="actionable && isActive"
+				v-show="isActive"
 				icon
 				outlined
 				color="secondary"
@@ -36,7 +35,7 @@
 			@blur="handleBlur"
 		/>
 		<v-btn
-			v-show="actionable && isActive"
+			v-show="isActive"
 			icon
 			outlined
 			color="secondary"
@@ -59,16 +58,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
 export default defineComponent({
 	name: "CardElementWrapper",
 	components: {
-		TitleCardElement,
 		RichTextCardElement,
 	},
 	emits: ["input", "delete-element", "add-element"],
@@ -104,9 +101,6 @@ export default defineComponent({
 		);
 
 		const isActive = ref(false);
-		const actionable = computed(
-			() => props.component !== CardElementComponentEnum.Title
-		);
 
 		const handleInput = () => emit("input", model.value);
 		const handleAdd = () => emit("add-element");
@@ -125,7 +119,6 @@ export default defineComponent({
 			handleDelete,
 			handleFocus,
 			handleBlur,
-			actionable,
 			isActive,
 			mdiTrashCanOutline,
 			mdiDrag,

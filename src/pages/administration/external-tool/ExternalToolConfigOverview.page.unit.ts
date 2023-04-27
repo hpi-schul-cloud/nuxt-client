@@ -103,11 +103,11 @@ describe("ExternalToolConfigOverview", () => {
 						i18n: { t: (key: string) => key },
 					},
 				});
-			} catch (e) {}
-
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				expect.stringMatching(/injection "externalToolsModule" not found/)
-			);
+			} catch (e) {
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(/injection "externalToolsModule" not found/)
+				);
+			}
 
 			consoleErrorSpy.mockRestore();
 		});
@@ -121,11 +121,11 @@ describe("ExternalToolConfigOverview", () => {
 						externalToolsModule,
 					},
 				});
-			} catch (e) {}
-
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				expect.stringMatching(/injection "i18n" not found/)
-			);
+			} catch (e) {
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(/injection "i18n" not found/)
+				);
+			}
 
 			consoleErrorSpy.mockRestore();
 		});

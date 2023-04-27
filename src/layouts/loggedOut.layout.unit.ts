@@ -7,6 +7,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
 import VueRouter from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
+import Vue from "vue";
 
 describe("loggedOutLayout", () => {
 	const mountComponent = (attrs = {}) => {

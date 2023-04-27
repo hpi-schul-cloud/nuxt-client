@@ -9,8 +9,8 @@
 		>
 			<template #icon>
 				<base-icon
-					source="custom"
-					:icon="activated ? 'mail-check' : 'mail-error'"
+					source="material"
+					:icon="activated ? 'email_check' : 'email_error'"
 					style="color: var(--v-secondary-base)"
 				/>
 			</template>
@@ -71,7 +71,7 @@ export default {
 			return description;
 		},
 	},
-	created(ctx) {
+	created() {
 		this.submitHandler();
 	},
 	methods: {

@@ -1,13 +1,17 @@
-import { RouteConfig } from "vue-router";
+import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { Route } from "vue-router/types/router";
+import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
+import {
+	isMongoId,
+	isOfficialSchoolNumber,
+	REGEX_ACTIVATION_CODE,
+	REGEX_ID,
+	REGEX_UUID,
+} from "@/utils/validationUtil";
+import { isDefined } from "@vueuse/core";
 
-const REGEX_ID = "[a-z0-9]{24}";
-const REGEX_UUID =
-	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
-
+// routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
@@ -90,6 +94,18 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
+		path: "/cfiles",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "files",
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
+	},
+	{
+		path: "/cfiles/teams/:catchAll(.*)",
+		component: () => import("@/pages/files/FilesOverview.page.vue"),
+		name: "teamfiles",
+		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
+	},
+	{
 		path: "/content",
 		component: () => import("../pages/LernStoreOverview.page.vue"),
 		name: "content",
@@ -128,11 +144,75 @@ export const routes: Array<RouteConfig> = [
 			isPublic: true,
 		},
 	},
-	// deprecated?
 	{
 		path: "/login-instances",
 		component: () => import("../pages/LoginInstances.page.vue"),
 		name: "login-instances",
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
+		name: "user-login-migration-consent",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+			origin: (val: unknown, to: Route) =>
+				isMongoId(val) &&
+				(val === to.query.sourceSystem || val === to.query.targetSystem),
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+			origin: route.query.origin,
+			mandatory: route.query.mandatory === "true",
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration/error",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
+		name: "user-login-migration-error",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+			sourceSchoolNumber: (value: unknown) =>
+				!isDefined(value) || isOfficialSchoolNumber(value),
+			targetSchoolNumber: (value: unknown) =>
+				!isDefined(value) || isOfficialSchoolNumber(value),
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+			sourceSchoolNumber: route.query.sourceSchoolNumber,
+			targetSchoolNumber: route.query.targetSchoolNumber,
+		}),
+		meta: {
+			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/migration/success",
+		component: () =>
+			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
+		name: "user-login-migration-success",
+		beforeEnter: validateQueryParameters({
+			sourceSystem: isMongoId,
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			sourceSystem: route.query.sourceSystem,
+			targetSystem: route.query.targetSystem,
+		}),
 		meta: {
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
@@ -157,13 +237,13 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../components/feature-board/Board.vue"),
+		component: () => import("../components/feature-board/board/Board.vue"),
 		name: "rooms-board",
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})/create-task-card`,
+		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "rooms-task-card-new",
+		name: "rooms-beta-task-new",
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
@@ -182,45 +262,22 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
-		path: `/task-cards/:id(${REGEX_ID})`,
+		path: `/tasks/create-beta-task`,
 		component: () => import("../pages/TaskCard.page.vue"),
-		name: "task-card-view-edit",
+		name: "tasks-beta-task-new",
+		beforeEnter: createPermissionGuard(["task_card_edit"]),
+	},
+	{
+		path: `/beta-task/:id(${REGEX_ID})`,
+		component: () => import("../pages/TaskCard.page.vue"),
+		name: "beta-task-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
-
-	// deprecated?
 	{
+		// deprecated?
 		path: "/termsofuse",
 		component: () => import("../pages/TermsOfUse.vue"),
 		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
-		path: "/cfiles",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "files",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
-		path: "/cfiles/teams/:catchAll(.*)",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-
-	{
-		path: "/migration",
-		component: () => import("@/pages/user-migration/UserMigration.page.vue"),
-		name: "user-migration",
-		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
-			targetSystem: route.query.targetSystem,
-			origin: route.query.origin,
-			mandatory: route.query.mandatory === "true",
-		}),
 		meta: {
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,

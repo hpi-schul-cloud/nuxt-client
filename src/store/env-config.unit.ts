@@ -8,11 +8,7 @@ const mockEnvs: Envs = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	FEATURE_MATRIX_MESSENGER_ENABLED: undefined,
 	FEATURE_LERNSTORE_ENABLED: true,
-	MATRIX_MESSENGER__DISCOVER_URI: "mockvalue",
-	MATRIX_MESSENGER__EMBED_URI: "mockvalue",
-	MATRIX_MESSENGER__URI: "mockvalue",
 	SC_THEME: "mockValue",
 	FALLBACK_DISABLED: false,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
@@ -29,6 +25,7 @@ const mockEnvs: Envs = {
 	GHOST_BASE_URL: "mockValue",
 	FEATURE_CONSENT_NECESSARY: true,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
+	MIGRATION_END_GRACE_PERIOD_MS: 1,
 };
 
 const URL = "/v1/config/app/public";
@@ -216,6 +213,14 @@ describe("env-config module", () => {
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
 			envConfigModule.env = mockEnvs;
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
+		});
+
+		it("getMigrationEndGracePeriod should get MIGRATION_END_GRACE_PERIOD_MS", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+			expect(envConfigModule.getMigrationEndGracePeriod).toStrictEqual(
+				mockEnvs.MIGRATION_END_GRACE_PERIOD_MS
+			);
 		});
 	});
 });

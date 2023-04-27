@@ -53,6 +53,7 @@ import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue"
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -66,7 +67,8 @@ export default defineComponent({
 		type: {
 			type: String,
 			required: true,
-			validator: (type) => ["course", "lesson", "task"].includes(type),
+			validator: (type) =>
+				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 		},
 	},
 	setup(props) {
@@ -81,17 +83,11 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		let shareModule;
-		switch (props.type) {
-			case "course":
-				shareModule = inject("shareCourseModule");
-				break;
-			case "lesson":
-				shareModule = inject("shareLessonModule");
-				break;
-		}
+		const shareModule = inject("shareModule");
 		const isOpen = computed({
-			get: () => shareModule.getIsShareModalOpen,
+			get: () =>
+				shareModule.getIsShareModalOpen &&
+				shareModule.getParentType === props.type,
 			set: () => shareModule.resetShareFlow(),
 		});
 

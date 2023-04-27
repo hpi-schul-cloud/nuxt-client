@@ -18,6 +18,9 @@ const args = arg(
 
 		"--path": String,
 		"-p": "--path",
+
+		"--config": String,
+		"-c": "--config",
 	},
 	{
 		argv: process.argv.slice(2),
@@ -32,15 +35,18 @@ OPTIONS:
                         default: ${DEFAULT_PATH}
 	--url (-u)		URL/path to the spec file in yml/json format.
                         default: ${DEFAULT_URL}
+	--config (-c)	path to the additional-properties config file in yml/json format
 `);
 	process.exit(0);
 }
 
-const config = {
+const params = {
 	/** url to load the open-api definition from */
-	url: args._[0] || DEFAULT_URL,
+	url: args._[0] || args["--url"] || DEFAULT_URL,
 	/** folder to save the open-api client */
-	path: args._[1] || DEFAULT_PATH,
+	path: args._[1] || args["--path"] || DEFAULT_PATH,
+
+	config: args._[2] || args["--config"] || "",
 };
 
 const errorMessageContains = (includedString, error) => {
@@ -53,24 +59,26 @@ const errorMessageContains = (includedString, error) => {
 };
 
 const generateClient = () => {
-	const cmd = getOpenApiCommand(config);
+	const cmd = getOpenApiCommand(params);
 	log(
-		`Try updating the openapi client in the folder ${config.path} from ${config.url} ...`
+		`Try updating the openapi client in the folder ${params.path} from ${params.url} ...`
 	);
 	asyncExec(cmd)
 		.then((stdout) => log(stdout))
 		.catch((stderr) => {
 			if (errorMessageContains("ConnectException", stderr)) {
 				error(
-					`Failed to connect to ${config.url}, is the server started at this url?`
+					`Failed to connect to ${params.url}, is the server started at this url?`
 				);
 			} else error(stderr.message);
 		});
 };
 
-const getOpenApiCommand = (configuration) => {
-	const { url, path } = configuration;
-	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} --additional-properties=npmName=restClient,supportsES6=true,withInterfaces=true --skip-validate-spec`;
+const getOpenApiCommand = (params) => {
+	const { url, path, config } = params;
+	const configFile = config ? `-c ${config}` : "";
+	const command = `openapi-generator-cli generate -i ${url} -g typescript-axios -o ${path} ${configFile} --skip-validate-spec`;
+
 	return command;
 };
 

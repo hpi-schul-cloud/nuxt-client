@@ -1,10 +1,16 @@
 /* eslint-disable max-lines */
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import { authModule, envConfigModule } from "@/store";
+import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
+import { User } from "@/store/types/auth";
+import { Envs } from "@/store/types/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -20,7 +26,7 @@ const $route = {
 	},
 };
 
-const $router = { replace: jest.fn() };
+const $router = { replace: jest.fn(), resolve: jest.fn() };
 
 const defaultTasksModuleGetters: Partial<TasksModule> = {
 	getStatus: "completed",
@@ -40,12 +46,32 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
+const mockAuthStoreDataTeacher = {
+	__v: 1,
+	_id: "asdfg",
+	id: "asdfg",
+	firstName: "Peter",
+	lastName: "Parker",
+	email: "peter.parker@hitchhiker.org",
+	roles: [{ name: "teacher" }],
+	permissions: [
+		"COURSE_CREATE",
+		"COURSE_EDIT",
+		"TOPIC_CREATE",
+		"TASK_CARD_EDIT",
+		"HOMEWORK_CREATE",
+	],
+};
+
 describe("@/components/templates/TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
+	let shareModuleMock: ShareModule;
+	let authModuleMock: AuthModule;
+	let envConfigModuleMock: EnvConfigModule;
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
@@ -61,6 +87,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
+				shareModule: shareModuleMock,
+				authModule: authModuleMock,
+				envConfigModule: envConfigModuleMock,
 				i18n: { t: (key: string) => key },
 			},
 			...attrs,
@@ -71,6 +100,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		it("should receive valid role props", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			const { validator } = TasksDashboardMain.props.role;
 
@@ -97,6 +128,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				tasksIsEmpty: false,
 			});
 
+			setupStores({
+				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
+			});
+
 			wrapper = mountComponent({
 				propsData: {
 					role: "student",
@@ -105,8 +141,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should set isStudent true", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isStudent).toBe(true);
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isTeacher).toBe(false);
 		});
@@ -124,11 +162,13 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.tab).toStrictEqual("open");
 		});
 
 		it("should hide substituteFilter", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
@@ -180,6 +220,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 			notifierModuleMock = createModuleMocks(NotifierModule);
+			shareModuleMock = createModuleMocks(ShareModule);
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
@@ -188,8 +229,12 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			setupStores({
 				copyModule: CopyModule,
+				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
 			});
 
+			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
+			authModule.setUser(mockAuthStoreDataTeacher as User);
 			wrapper = mountComponent({
 				propsData: {
 					role: "teacher",
@@ -198,8 +243,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should set isTeacher true", () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isTeacher).toBe(true);
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isStudent).toBe(false);
 		});
@@ -212,11 +259,57 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fab = wrapper.findComponent(vCustomFab);
-			expect(fab.exists()).toBe(true);
+			const fabComponent: any = wrapper.find(".wireframe-fab");
+			expect(fabComponent.exists()).toEqual(true);
+		});
+
+		it("'add task' button should have correct path", async () => {
+			const fabComponent: any = wrapper.find(".wireframe-fab");
+			expect(fabComponent.vm.href).toStrictEqual(
+				"/homework/new?returnUrl=tasks"
+			);
+		});
+
+		describe("new beta task button", () => {
+			const mockRoute = { name: "tasks-beta-task-new" };
+
+			it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				expect(fabComponent.vm.actions.length).toEqual(2);
+			});
+			it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				expect(fabComponent.vm.actions.length).toEqual(0);
+				expect(fabComponent.vm.href).toStrictEqual(
+					"/homework/new?returnUrl=tasks"
+				);
+			});
+			it("should have correct path to task card page", () => {
+				envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
+				wrapper = mountComponent({
+					propsData: {
+						role: "teacher",
+					},
+				});
+				const fabComponent: any = wrapper.find(".wireframe-fab");
+				const newTaskCardAction = fabComponent.vm.actions[1];
+				expect(newTaskCardAction.to).toStrictEqual(mockRoute);
+			});
 		});
 
 		it("should open tab from store state", async () => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.tab).toStrictEqual("current");
 		});
@@ -233,6 +326,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
@@ -249,6 +343,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(true);
 		});
@@ -265,6 +360,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.showSubstituteFilter).toBe(false);
 		});
@@ -342,6 +438,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
 		});
@@ -374,6 +471,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
 		});

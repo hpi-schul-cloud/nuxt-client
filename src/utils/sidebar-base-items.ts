@@ -1,7 +1,7 @@
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
-	source?: "material" | "custom" | "fa";
+	source?: "material" | "custom";
 	testId: string;
 	permission?: string;
 	excludedPermission?: string;
@@ -25,18 +25,20 @@ export type SidebarCategoryItem = SidebarItem & {
 
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
-const sidebarBaseItems: SidebarItemList = [
+const getSidebarItems = (
+	isNewSchoolAdminPageDefault: boolean
+): SidebarItemList => [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
-		icon: "th-large",
+		icon: "dashboard_outline",
 		testId: "Übersicht",
 		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
 		title: "global.sidebar.courses",
 		to: "/rooms-overview",
-		icon: "graduation-cap",
+		icon: "course_outline",
 		testId: "Course-Overview",
 		activeForUrls: [
 			"^/rooms-overview($|/.*)",
@@ -47,7 +49,7 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.teams",
 		href: "/teams",
-		icon: "users",
+		icon: "team_outline",
 		permission: "TEAMS_ENABLED",
 		testId: "Teams",
 		activeForUrls: ["^/teams($|/.*)"],
@@ -55,8 +57,7 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "tasks",
-		source: "custom",
+		icon: "task",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -64,8 +65,7 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "tasks",
-		source: "custom",
+		icon: "task",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -74,20 +74,22 @@ const sidebarBaseItems: SidebarItemList = [
 		title: "global.sidebar.files-old",
 		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
-		icon: "folder-open",
+		icon: "file_open_outline",
 		testId: "Meine Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.filesPersonal",
-				icon: "folder-open-o",
+				icon: "folder_open_user_outline",
+				source: "custom",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
 				activeForUrls: ["^/files/my($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "folder-open-o",
+				icon: "folder_open_courses_outline",
+				source: "custom",
 				href: "/files/courses/",
 				testId: "Kurse",
 				activeForUrls: ["^/files/courses($|/.*)"],
@@ -95,14 +97,16 @@ const sidebarBaseItems: SidebarItemList = [
 			{
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
-				icon: "folder-open-o",
+				icon: "folder_open_teams_outline",
+				source: "custom",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.filesShared",
-				icon: "folder-open-o",
+				icon: "folder_open_shared_outline",
+				source: "custom",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
 				activeForUrls: ["^/files/shared($|/.*)"],
@@ -113,28 +117,29 @@ const sidebarBaseItems: SidebarItemList = [
 		title: "global.sidebar.files",
 		permission: "COLLABORATIVE_FILES",
 		href: "/cfiles",
-		icon: "folder-open",
+		icon: "file_open_outline",
 		testId: "Dateien",
 		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",
 		href: "/news",
-		icon: "newspaper-o",
+		icon: "news_outline",
 		testId: "Neuigkeiten",
 		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
-		icon: "table",
+		icon: "calendar_outline",
 		testId: "Termine",
 		activeForUrls: ["^/calendar($|/.*)"],
 	},
 	{
 		title: "common.words.lernstore",
 		to: "/content",
-		icon: "search",
+		icon: "lernstore_outline",
+		source: "custom",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
 		activeForUrls: ["^/content($|/.*)"],
@@ -142,7 +147,7 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.addons",
 		href: "/addons",
-		icon: "puzzle-piece",
+		icon: "puzzle_outline",
 		permission: "ADDONS_ENABLED",
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
@@ -150,7 +155,7 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "cogs",
+		icon: "setting_outline",
 		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
@@ -158,7 +163,7 @@ const sidebarBaseItems: SidebarItemList = [
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "odnoklassniki",
+				icon: "students_outline",
 				to: "/administration/students",
 				permission: "STUDENT_LIST",
 				testId: "Schüler:innen",
@@ -166,14 +171,16 @@ const sidebarBaseItems: SidebarItemList = [
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "user",
+				icon: "teacher",
+				source: "custom",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "users",
+				icon: "class",
+				source: "custom",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
@@ -183,62 +190,77 @@ const sidebarBaseItems: SidebarItemList = [
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "cogs",
+		icon: "setting_outline",
 		permission: "ADMIN_VIEW",
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "odnoklassniki",
+				icon: "students_outline",
 				to: "/administration/students",
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "user",
+				icon: "teacher",
+				source: "custom",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "graduation-cap",
+				icon: "course_outline",
 				href: "/administration/courses",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "users",
+				icon: "class",
+				source: "custom",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
-				icon: "users",
+				icon: "team_outline",
 				href: "/administration/teams",
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			{
-				title: "global.sidebar.school",
-				icon: "building",
-				href: "/administration/school",
-				testId: "Schule",
-				activeForUrls: [
-					"^/administration/school($|/.*)",
-					"^/administration/school-settings($|/.*)",
-				],
-			},
+			isNewSchoolAdminPageDefault
+				? {
+						title: "global.sidebar.school",
+						icon: "school_outline",
+						source: "custom",
+						to: "/administration/school-settings",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  }
+				: {
+						title: "global.sidebar.school",
+						icon: "school_outline",
+						source: "custom",
+						href: "/administration/school",
+						testId: "Schule",
+						activeForUrls: [
+							"^/administration/school($|/.*)",
+							"^/administration/school-settings($|/.*)",
+						],
+				  },
 		],
 	},
 	{
 		title: "global.sidebar.helpArea",
 		href: "/help",
-		icon: "question-circle",
+		icon: "help_area_outline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
 	},
@@ -251,4 +273,4 @@ const sidebarBaseItems: SidebarItemList = [
 		activeForUrls: ["^/my-material($|/.*)"],
 	},
 ];
-export default sidebarBaseItems;
+export default getSidebarItems;

@@ -41,12 +41,9 @@ const requiredVars = {
 };
 
 const configsFromEnvironmentVars = {
-	FEATURE_MATRIX_MESSENGER_ENABLED: undefined,
-	MATRIX_MESSENGER__EMBED_URI: "",
-	MATRIX_MESSENGER__URI: "",
-	MATRIX_MESSENGER__DISCOVER_URI: "",
 	LERNSTORE_MODE: "",
 	ALERT_STATUS_URL: "",
+	MIGRATION_END_GRACE_PERIOD_MS: 1,
 };
 
 const envs = {

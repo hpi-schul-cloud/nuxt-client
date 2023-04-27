@@ -65,13 +65,13 @@
 					</v-btn>
 					<base-icon
 						v-if="hasError"
-						source="custom"
+						source="material"
 						icon="warning"
 						fill="var(--v-error-base)"
 					/>
 					<base-icon
 						v-if="success"
-						source="custom"
+						source="material"
 						icon="success"
 						fill="var(--v-success-base)"
 					/>
@@ -94,7 +94,7 @@
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
 import uidMixin from "@/mixins/uid";
-import { mdiEyeOff, mdiEye } from "@mdi/js";
+import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
 
 export const supportedTypes = [
 	"email",
@@ -139,14 +139,14 @@ export default {
 	},
 	data() {
 		return {
-			mdiEyeOff,
-			mdiEye,
+			mdiEyeOffOutline,
+			mdiEyeOutline,
 			hasFocus: false,
 			passwordVisible: false,
 			minDate: inputRangeDate(-100, "y"),
 			maxDate: inputRangeDate(-4, "y"),
 			birthDateValidationPattern:
-				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
+				"(3[01]|[12][0-9]|0?[1-9]).(1[012]|0?[1-9]).((?:19|20)d{2})",
 		};
 	},
 	computed: {
@@ -169,7 +169,7 @@ export default {
 			);
 		},
 		visibilityIcon() {
-			return this.passwordVisible ? mdiEye : mdiEyeOff;
+			return this.passwordVisible ? mdiEyeOutline : mdiEyeOffOutline;
 		},
 	},
 	methods: {

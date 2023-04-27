@@ -4,6 +4,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import { ApplicationError } from "@/store/types/application-error";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -26,9 +27,6 @@ const school = {
 	features: {
 		rocketChat: true,
 		videoconference: true,
-		messenger: true,
-		messengerSchoolRoom: true,
-		messengerStudentRoomCreate: true,
 		studentVisibility: true,
 	},
 	permissions: {
@@ -79,10 +77,6 @@ const envs = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: "default",
-	FEATURE_MATRIX_MESSENGER_ENABLED: true,
-	MATRIX_MESSENGER__EMBED_URI: "__vue_devtool_undefined__",
-	MATRIX_MESSENGER__URI: "__vue_devtool_undefined__",
-	MATRIX_MESSENGER__DISCOVER_URI: "__vue_devtool_undefined__",
 	LERNSTORE_MODE: "__vue_devtool_undefined__",
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 	FEATURE_ES_COLLECTIONS_ENABLED: true,
@@ -99,9 +93,6 @@ const envs = {
 	I18N__DEFAULT_TIMEZONE: "Europe/Berlin",
 	I18N__FALLBACK_LANGUAGE: "de",
 	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/cloud-instances/",
-	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
-	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
-	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
 	SC_TITLE: "HPI Schul-Cloud",
 	SC_SHORT_TITLE: "HPI Schul-Cloud",
 };
@@ -144,7 +135,7 @@ const mockStore = {
 				return [{ _id: "123", type: "itslearning" }];
 			},
 			getCurrentYear: () => {
-				return currentYear;
+				return year;
 			},
 		},
 		actions: {
@@ -359,7 +350,7 @@ describe("SchoolSettingPage", () => {
 		);
 	});
 
-	it("error image should visible if schoolError occured", () => {
+	it("error image should visible if schoolError occurred", () => {
 		schoolsModule.setError({ error: { message: "some errors" } });
 		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
@@ -378,6 +369,29 @@ describe("SchoolSettingPage", () => {
 
 		expect(schoolError.exists()).toBeTruthy();
 		expect(noSchoolError.exists()).toBeFalsy();
+	});
+
+	it("error message in should be visible if schoolError occurred", () => {
+		schoolsModule.setError(
+			new ApplicationError(500, "pages.administration.school.index.error")
+		);
+		const wrapper = shallowMount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+
+		const text = wrapper.findComponent({ name: "v-alert" }).text();
+
+		expect(text).toStrictEqual(
+			"Beim Laden der Schule ist ein Fehler aufgetreten"
+		);
 	});
 
 	it("should load needed data form server", async () => {

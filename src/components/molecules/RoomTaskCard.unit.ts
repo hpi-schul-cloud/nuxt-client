@@ -5,6 +5,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { Envs } from "@/store/types/env-config";
 
 const testProps = {
 	room: {
@@ -25,7 +26,7 @@ const testProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -49,7 +50,7 @@ const draftTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -73,7 +74,7 @@ const finishedTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -101,7 +102,7 @@ const overdueTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2015-09-28T15:00:00.000Z",
+		dueDate: "2015-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -130,7 +131,7 @@ const noDueTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: null,
+		dueDate: null,
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -154,7 +155,7 @@ const plannedTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2300-09-01T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -175,7 +176,7 @@ const studentFinishedTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -196,7 +197,7 @@ const studentTestProps = {
 		},
 		courseName: "Mathe",
 		availableDate: "2017-09-28T08:00:00.000Z",
-		duedate: "2300-09-28T15:00:00.000Z",
+		dueDate: "2300-09-28T15:00:00.000Z",
 		displayColor: "#54616e",
 		description: "some description here",
 	},
@@ -206,6 +207,32 @@ const studentTestProps = {
 	dragInProgress: false,
 };
 
+const betaTaskTestProps = {
+	room: {
+		roomId: "456",
+	},
+	task: {
+		id: "123",
+		name: "Test Name",
+		createdAt: "2017-09-28T11:58:46.601Z",
+		updatedAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			isDraft: true,
+		},
+		courseName: "Mathe",
+		displayColor: "#54616e",
+		taskCardId: "789",
+	},
+	ariaLabel:
+		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
+	keyDrag: false,
+	dragInProgress: false,
+};
+
+const mockRouter = {
+	push: jest.fn(),
+};
+
 const getWrapper: any = (props: object, options?: object) => {
 	return mount(RoomTaskCard as MountOptions<Vue>, {
 		...createComponentMocks({
@@ -213,6 +240,9 @@ const getWrapper: any = (props: object, options?: object) => {
 		}),
 		propsData: props,
 		...options,
+		mocks: {
+			$router: mockRouter,
+		},
 	});
 };
 
@@ -221,6 +251,28 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });
+	});
+
+	describe("beta task behavior", () => {
+		const role = "teacher";
+
+		it("should have correct combined title for beta task", () => {
+			const wrapper = getWrapper({ ...betaTaskTestProps, role });
+			const tagline = wrapper.find("[data-testid='tagline']");
+
+			expect(tagline.element.textContent).toContain("Beta-Aufgabe – Entwurf");
+		});
+
+		it("should redirect to task-cards page", async () => {
+			const wrapper = getWrapper({ ...betaTaskTestProps, role });
+			const taskCard = wrapper.findComponent({ name: "v-card" });
+			await taskCard.trigger("click");
+			expect(mockRouter.push).toHaveBeenCalledTimes(1);
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				name: "beta-task-view-edit",
+				params: { id: "789" },
+			});
+		});
 	});
 
 	describe("common behaviors and actions", () => {
@@ -252,30 +304,36 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 		it("should have correct combined title for published task with due date ", () => {
 			const wrapper = getWrapper({ ...testProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Abgabe 28.09.00");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Abgabe 28.09.00"
+			);
 		});
 
 		it("should have correct combined title for published task with no due date ", () => {
 			const wrapper = getWrapper({ ...noDueTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Kein Abgabedatum");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Kein Abgabedatum"
+			);
 		});
 
 		it("should have correct combined title for planned task", () => {
 			const wrapper = getWrapper({ ...plannedTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Geplant 01.09.00");
+			expect(tagline.element.textContent).toContain(
+				"Aufgabe – Geplant 01.09.00"
+			);
 		});
 
 		it("should have correct combined title for draft", () => {
 			const wrapper = getWrapper({ ...draftTestProps, role });
-			const title = wrapper.find(".title-section");
+			const tagline = wrapper.find("[data-testid='tagline']");
 
-			expect(title.element.textContent).toContain("Aufgabe – Entwurf");
+			expect(tagline.element.textContent).toContain("Aufgabe – Entwurf");
 		});
 
 		it("should show or hide description area", async () => {
@@ -310,6 +368,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const role = "teacher";
+
 			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
 				const draftWrapper = getWrapper({ ...draftTestProps, role });
 				const draftSubmitSection = draftWrapper.findAll(".v-chip");
@@ -507,7 +566,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: availableDate.toISOString(),
-						duedate: "2300-09-28T15:00:00.000Z",
+						dueDate: "2300-09-28T15:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
 					},
@@ -537,7 +596,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: inFutureDate.toISOString(),
-						duedate: "2300-09-28T15:00:00.000Z",
+						dueDate: "2300-09-28T15:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
 					},
@@ -550,8 +609,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-						// @ts-ignore
-						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+						envConfigModule.setEnvs({
+							FEATURE_COPY_SERVICE_ENABLED: true,
+						} as Envs);
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ ...testProps, role });
 						wrapper.vm.copyCard = copyCard;
@@ -570,8 +630,9 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
-						// @ts-ignore
-						envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
+						envConfigModule.setEnvs({
+							FEATURE_COPY_SERVICE_ENABLED: false,
+						} as Envs);
 						const wrapper = getWrapper({ ...testProps, role });
 
 						const threeDotButton = wrapper.find(".three-dot-button");
@@ -586,6 +647,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				});
 			});
 		});
+
 		describe("students", () => {
 			const role = "student";
 			it("should have no button if task is finished", async () => {
@@ -650,7 +712,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
-						duedate: dueDate.toISOString(),
+						dueDate: dueDate.toISOString(),
 						displayColor: "#54616e",
 						description: "some description here",
 					},
@@ -680,7 +742,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
-						duedate: "2000-01-01T00:00:00.000Z",
+						dueDate: "2000-01-01T00:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
 					},
@@ -711,7 +773,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
-						duedate: "2000-01-01T00:00:00.000Z",
+						dueDate: "2000-01-01T00:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
 					},
@@ -742,7 +804,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						},
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
-						duedate: "2000-01-01T00:00:00.000Z",
+						dueDate: "2000-01-01T00:00:00.000Z",
 						displayColor: "#54616e",
 						description: "some description here",
 					},

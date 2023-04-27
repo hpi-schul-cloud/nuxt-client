@@ -36,23 +36,17 @@
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
-					<v-tab>
-						<v-icon class="tab-icon mr-sm-3">fa-file-text-o</v-icon>
-						<span class="d-none d-sm-inline" data-testid="learnContent">{{
-							$t("common.words.learnContent")
-						}}</span>
-					</v-tab>
-					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=tools`">
-						<v-icon class="tab-icon mr-sm-3">fa-puzzle-piece</v-icon>
-						<span class="d-none d-sm-inline" data-testid="tools">{{
-							$t("pages.rooms.tabLabel.tools")
-						}}</span>
-					</v-tab>
-					<v-tab :href="`/courses/${roomData.roomId}/?activeTab=groups`">
-						<v-icon class="tab-icon mr-sm-3">fa-users</v-icon>
-						<span class="d-none d-sm-inline" data-testid="groups">{{
-							$t("pages.rooms.tabLabel.groups")
-						}}</span>
+					<v-tab
+						v-for="(tabItem, index) in tabItems"
+						:key="index"
+						:href="tabItem.href"
+					>
+						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }} </v-icon>
+						<span
+							class="d-none d-sm-inline"
+							:data-testid="`${tabItem.dataTestid}`"
+							>{{ tabItem.label }}</span
+						>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -100,7 +94,7 @@
 			</template>
 		</v-custom-dialog>
 
-		<share-modal type="course"></share-modal>
+		<share-modal type="courses" />
 
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
@@ -112,7 +106,10 @@
 </template>
 
 <script>
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	ImportUserResponseRoleNamesEnum as Roles,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
@@ -122,23 +119,23 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
-	mdiCloudDownload,
+	mdiAccountGroupOutline,
 	mdiContentCopy,
-	mdiDownload,
+	mdiTrayArrowDown,
 	mdiEmailPlusOutline,
+	mdiFileDocumentOutline,
 	mdiFormatListChecks,
 	mdiPlus,
-	mdiShareVariant,
-	mdiSquareEditOutline,
+	mdiPuzzleOutline,
+	mdiShareVariantOutline,
+	mdiPencilOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
 import { useCopy } from "../composables/copy";
-import { useRouter } from "vue-router/composables";
 import { useLoadingState } from "../composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const i18n = inject("i18n");
@@ -164,7 +161,7 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 	},
-	inject: ["copyModule", "shareCourseModule"],
+	inject: ["copyModule", "shareModule"],
 	data() {
 		return {
 			importDialog: {
@@ -181,11 +178,11 @@ export default defineComponent({
 				courseShareToken: "",
 			},
 			icons: {
-				mdiSquareEditOutline,
+				mdiPencilOutline,
 				mdiEmailPlusOutline,
-				mdiShareVariant,
+				mdiShareVariantOutline,
 				mdiContentCopy,
-				mdiDownload,
+				mdiTrayArrowDown,
 			},
 			breadcrumbs: [
 				{
@@ -199,49 +196,78 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		tabItems() {
+			return [
+				{
+					label: this.$t("common.words.learnContent"),
+					icon: mdiFileDocumentOutline,
+					dataTestid: "learnContent",
+				},
+				{
+					label: this.$t("pages.rooms.tabLabel.tools"),
+					icon: mdiPuzzleOutline,
+					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
+					dataTestid: "tools",
+				},
+				{
+					label: this.$t("pages.rooms.tabLabel.groups"),
+					icon: mdiAccountGroupOutline,
+					href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
+					dataTestid: "groups",
+				},
+			];
+		},
 		fabItems() {
+			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
-				const items = {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "add-content-button",
-					actions: [
-						{
-							label: this.$t("pages.rooms.fab.add.task"),
-							icon: mdiFormatListChecks,
-							href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_task",
-							ariaLabel: this.$t("pages.rooms.fab.add.task"),
-						},
-						{
-							label: this.$t("pages.rooms.fab.add.lesson"),
-							icon: mdiViewListOutline,
-							href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-							dataTestid: "fab_button_add_lesson",
-							ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
-						},
-					],
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.task"),
+					icon: mdiFormatListChecks,
+					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_task",
+					ariaLabel: this.$t("pages.rooms.fab.add.task"),
+				});
+			}
+			if (
+				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
+				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
+			) {
+				const action = {
+					label: this.$t("pages.rooms.fab.add.betatask"),
+					icon: mdiFormatListChecks,
+					to: {
+						name: "rooms-beta-task-new",
+						params: { course: this.roomData.roomId },
+					},
+					dataTestid: "fab_button_add_beta_task",
 				};
-				if (envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED) {
-					const router = useRouter();
-					const action = {
-						label: this.$t("pages.rooms.fab.add.betatask"),
-						icon: mdiFormatListChecks,
-						href: router.resolve({
-							name: "rooms-task-card-new",
-							params: { course: this.roomData.roomId },
-						}).href,
-						dataTestid: "fab_button_add_beta_task",
-					};
-					items.actions.splice(1, 0, action);
-				}
-				return items;
+				actions.push(action);
+			}
+			if (
+				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+			) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.lesson"),
+					icon: mdiViewListOutline,
+					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
+					dataTestid: "fab_button_add_lesson",
+					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+				});
 			}
 
-			return null;
+			if (actions.length === 0) {
+				return null;
+			}
+			const items = {
+				icon: mdiPlus,
+				title: this.$t("common.actions.create"),
+				ariaLabel: this.$t("common.actions.create"),
+				testId: "add-content-button",
+				actions: actions,
+			};
+			return items;
 		},
 		roomData() {
 			return roomModule.getRoomData;
@@ -261,7 +287,7 @@ export default defineComponent({
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
-					icon: this.icons.mdiSquareEditOutline,
+					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
 					name:
@@ -286,7 +312,7 @@ export default defineComponent({
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
 			) {
 				items.push({
-					icon: this.icons.mdiShareVariant,
+					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
@@ -294,7 +320,7 @@ export default defineComponent({
 			}
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
-					icon: this.icons.mdiDownload,
+					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse(),
 					name: this.$t("common.actions.download"),
 					dataTestId: "title-menu-imscc-download",
@@ -331,7 +357,10 @@ export default defineComponent({
 		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
-				this.shareCourseModule.startShareFlow(this.courseId);
+				this.shareModule.startShareFlow({
+					id: this.courseId,
+					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				});
 			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				await roomModule.createCourseShareToken(this.courseId);
 				this.dialog.courseShareToken = roomModule.getCourseShareToken;

@@ -30,14 +30,14 @@ const mockData = [
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
 		birthday: "01.01.2000",
-		lastLoginSystemChange: "01.01.2022",
+		lastLoginSystemChange: "2022-01-01T13:36:12.148Z",
 	},
 	{
 		firstName: "Waldemar",
 		lastName: "Wunderlich",
 		birthday: "01.01.1989",
 		email: "waldemar.wunderlich@schul-cloud.org",
-		outdatedSince: "02.02.2020",
+		outdatedSince: "2022-02-02T13:36:12.148Z",
 	},
 ];
 
@@ -104,7 +104,7 @@ describe("students/index", () => {
 	});
 
 	const mockUiState = {
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		get: (key, identifier) => {
 			const state = {
 				pagination: {},
@@ -113,8 +113,8 @@ describe("students/index", () => {
 			};
 			return state[key];
 		},
-		// eslint-disable-next-line no-unused-vars
-		set: (key, identifier) => {},
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		set: (key, identifier) => ({}),
 	};
 
 	afterAll(() => {
@@ -599,10 +599,10 @@ describe("students/index", () => {
 
 		searchBarInput.setValue("abc");
 
-		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
-
 		//run new timer from updating the value
 		jest.runAllTimers();
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 
 		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
 	});

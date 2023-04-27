@@ -55,11 +55,14 @@ export default {
 					base: colors.grey.darken1,
 					lighten1: colors.grey.lighten1,
 				},
+				"beta-task": {
+					base: "#196C9E",
+				},
 			},
 		},
 	},
 	icons: {
-		iconfont: "fa4",
+		iconfont: "mdiSvg",
 		values: {
 			// NUXT_REMOVAL Do we really have to register all these icons
 			// This here is only to supplement the Vuetify Icons.

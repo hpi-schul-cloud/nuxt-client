@@ -87,9 +87,6 @@ import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft } from "@mdi/js";
 
 export default {
-	meta: {
-		requiredPermissions: ["LERNSTORE_VIEW"],
-	},
 	components: {
 		ContentSearchbar,
 		ContentCard,
@@ -113,6 +110,9 @@ export default {
 		resources() {
 			return contentModule.getResourcesGetter;
 		},
+		player() {
+			return contentModule.getCurrentPlayer;
+		},
 		loading() {
 			return contentModule.getLoading;
 		},
@@ -132,8 +132,8 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
-			const { skip, total } = this.resources;
-			if (bottom && !this.loading && skip < total) {
+			const { data, total } = this.resources;
+			if (bottom && !this.loading && data.length < total) {
 				this.addContent();
 			}
 		},
@@ -152,11 +152,9 @@ export default {
 						q: "",
 					},
 				});
-				contentModule.clearResources();
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
-				contentModule.clearResources();
 				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
@@ -183,12 +181,14 @@ export default {
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
 			this.activateTransition = true;
-			this.enterKeyHandler();
+			if (this.resources.data.length === 0) {
+				this.enterKeyHandler();
+			}
 		}
 	},
 	methods: {
 		async addContent() {
-			if (this.query.$skip < this.resources.total) {
+			if (this.resources.data.length < this.resources.total) {
 				this.query.$skip += this.query.$limit;
 				await contentModule.addResources(this.query);
 			}
@@ -203,6 +203,13 @@ export default {
 					timeout: 10000,
 				});
 			}
+		},
+		async searchH5P() {
+			await contentModule.getResources({
+				$limit: 4,
+				$skip: 0,
+				searchQuery: "h5p",
+			});
 		},
 		enterKeyHandler() {
 			if (this.$options.debounceTyping) {

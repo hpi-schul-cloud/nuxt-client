@@ -202,7 +202,6 @@ describe("vRoomAvatar", () => {
 
 			avatarComponent.trigger("dragenter");
 			await wrapper.vm.$nextTick();
-			const emitted = wrapper.emitted();
 
 			expect(wrapper.vm.hovered).toBeTruthy();
 			expect(wrapper.vm.isDragging).toBeFalsy();
@@ -214,7 +213,6 @@ describe("vRoomAvatar", () => {
 
 			avatarComponent.trigger("dragleave");
 			await wrapper.vm.$nextTick();
-			const emitted = wrapper.emitted();
 
 			expect(wrapper.vm.hovered).toBeFalsy();
 		});

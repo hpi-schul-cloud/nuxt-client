@@ -34,9 +34,6 @@ export default defineComponent({
 		InstanceTile,
 	},
 	layout: "loggedOut",
-	meta: {
-		isPublic: true,
-	},
 	setup() {
 		useTitle("dBildungscloud");
 

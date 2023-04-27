@@ -23,7 +23,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariant }}</v-icon></span
+							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
@@ -104,9 +104,10 @@ import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
-	mdiShareVariant,
+	mdiShareVariantOutline,
 } from "@mdi/js";
 import { defineComponent, inject, ref } from "vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -122,7 +123,8 @@ export default defineComponent({
 		type: {
 			type: String,
 			required: true,
-			validator: (type) => ["course", "lesson", "task"].includes(type),
+			validator: (type) =>
+				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 		},
 	},
 	setup(props, { emit }) {
@@ -178,7 +180,7 @@ export default defineComponent({
 			mdiEmailOutline,
 			mdiContentCopy,
 			mdiQrcode,
-			mdiShareVariant,
+			mdiShareVariantOutline,
 		};
 	},
 });

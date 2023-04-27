@@ -28,8 +28,8 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search"
-				/></template>
+					<base-icon source="material" icon="search" />
+				</template>
 			</base-input>
 
 			<data-filter
@@ -80,6 +80,12 @@
 						/>
 					</span>
 				</template>
+				<template #datacolumn-lastLoginSystemChange="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
+				<template #datacolumn-outdatedSince="{ data }">
+					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				</template>
 
 				<template #datacolumn-_id="{ data, selected, highlighted }">
 					<v-btn
@@ -92,7 +98,7 @@
 						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencil }}</v-icon>
+						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -115,8 +121,8 @@
 import {
 	authModule,
 	envConfigModule,
-	schoolsModule,
 	notifierModule,
+	schoolsModule,
 } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
@@ -128,7 +134,12 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
+import {
+	mdiAccountPlus,
+	mdiCloudDownload,
+	mdiPencilOutline,
+	mdiPlus,
+} from "@mdi/js";
 
 export default {
 	components: {
@@ -144,15 +155,12 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["TEACHER_LIST"],
-	},
 	data() {
 		return {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			mdiPencil,
+			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
@@ -195,13 +203,11 @@ export default {
 						"pages.administration.teachers.index.tableActions.email"
 					),
 					icon: "mail_outline",
-					"icon-source": "material",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
@@ -211,7 +217,6 @@ export default {
 						"pages.administration.teachers.index.tableActions.delete"
 					),
 					icon: "delete_outline",
-					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",
@@ -249,6 +254,18 @@ export default {
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
 					sortable: true,
+				},
+				{
+					field: "lastLoginSystemChange",
+					label: this.$t("common.labels.migrated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.migrated.tooltip"),
+				},
+				{
+					field: "outdatedSince",
+					label: this.$t("common.labels.outdated"),
+					sortable: true,
+					tooltipText: this.$t("common.labels.outdated.tooltip"),
 				},
 				{
 					// edit column
@@ -291,6 +308,9 @@ export default {
 		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
+		},
+		getFeatureSchoolSanisUserMigrationEnabled() {
+			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
 		},
 		env() {
 			return envConfigModule.getEnv;
@@ -350,6 +370,12 @@ export default {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
+			}
+
+			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+				editedColumns = editedColumns
+					.filter((col) => col.field !== "lastLoginSystemChange")
+					.filter((col) => col.field !== "outdatedSince");
 			}
 
 			return editedColumns;
@@ -462,7 +488,7 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
-				// TODO wrong use of store (not so bad)
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -567,18 +593,23 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText.trim();
+			if (this.timer) {
+				clearTimeout(this.timer);
+				this.timer = null;
+			}
 
-			const query = this.currentFilterQuery;
+			this.timer = setTimeout(() => {
+				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
+					this.currentFilterQuery.searchQuery = searchText.trim();
 
-			this.setUiState("filter", "pages.administration.teachers.index", {
-				query,
-			});
+					const query = this.currentFilterQuery;
 
-			setTimeout(() => {
-				this.$store.dispatch("users/findTeachers", {
-					query,
-				});
+					this.find();
+
+					this.setUiState("filter", "pages.administration.teachers.index", {
+						query,
+					});
+				}
 			}, 400);
 		},
 		setUiState(key, identifier, data) {

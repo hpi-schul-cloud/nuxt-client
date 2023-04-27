@@ -17,6 +17,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
+		lastLoginSystemChange: "2022-01-01T13:36:12.148Z",
 	},
 	{
 		_id: "0000d231816abba584714c9f",
@@ -26,6 +27,7 @@ const mockData = [
 		classes: [],
 		consentStatus: "ok",
 		createdAt: "2017-01-01T00:06:37.148Z",
+		outdatedSince: "2022-02-02T13:36:12.148Z",
 	},
 ];
 
@@ -126,7 +128,7 @@ describe("teachers/index", () => {
 	});
 
 	const mockUiState = {
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		get: (key, identifier) => {
 			const state = {
 				pagination: {},
@@ -135,8 +137,8 @@ describe("teachers/index", () => {
 			};
 			return state[key];
 		},
-		// eslint-disable-next-line no-unused-vars
-		set: (key, identifier) => {},
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		set: (key, identifier) => ({}),
 	};
 
 	const short_name = "instance name";
@@ -380,6 +382,58 @@ describe("teachers/index", () => {
 		expect(table.vm.data).toHaveLength(mockData.length);
 	});
 
+	it("should display the columns behind the migration feature flag", () => {
+		envConfigModule.setEnvs({
+			...envs,
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+		});
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
+		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
+
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(true);
+		expect(column1.exists()).toBe(true);
+		expect(column2.exists()).toBe(true);
+	});
+
+	it("should not display the columns behind the migration feature flag", () => {
+		envConfigModule.setEnvs({
+			...envs,
+			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+		});
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+			mocks: {
+				$theme: {
+					short_name,
+				},
+			},
+		});
+		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
+		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
+
+		expect(
+			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
+		).toBe(false);
+		expect(column1.exists()).toBe(false);
+		expect(column2.exists()).toBe(false);
+	});
+
 	it("should display the edit button if school is not external", () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -546,10 +600,10 @@ describe("teachers/index", () => {
 
 		searchBarInput.setValue("abc");
 
-		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
-
 		//run new timer from updating the value
 		jest.runAllTimers();
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 
 		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});

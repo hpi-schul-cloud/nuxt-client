@@ -1,7 +1,7 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { Year, FederalState, School, OauthMigration } from "./types/schools";
+import { FederalState, OauthMigration, School, Year } from "./types/schools";
 import {
 	MigrationBody,
 	MigrationResponse,
@@ -10,33 +10,38 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { ApplicationError } from "./types/application-error";
+import { useApplicationError } from "../composables/application-error.composable";
 
-const SCHOOL_FEATURES: any = [
+/**
+ * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
+ * This Type represents this change to the School entity.
+ */
+declare type SchoolPayload = { features: string[] } & Omit<School, "features">;
+
+const SCHOOL_FEATURES: (keyof School["features"])[] = [
 	"rocketChat",
 	"videoconference",
-	"messenger",
 	"studentVisibility", // deprecated
-	"messengerSchoolRoom",
-	"messengerStudentRoomCreate",
 	"ldapUniventionMigrationSchool",
 ];
 
-function transformSchoolServerToClient(school: any): School {
-	const featureObject: any = {};
-	SCHOOL_FEATURES.forEach((schoolFeature: any) => {
+function transformSchoolServerToClient(school: SchoolPayload): School {
+	const featureObject: Partial<School["features"]> = {};
+	SCHOOL_FEATURES.forEach((schoolFeature) => {
 		if (school.features.includes(schoolFeature)) {
 			featureObject[schoolFeature] = true;
 		} else {
 			featureObject[schoolFeature] = false;
 		}
 	});
-	return { ...school, features: featureObject };
+	return { ...school, features: featureObject as Required<School["features"]> };
 }
 
-function transformSchoolClientToServer(school: any): School {
-	const featureArray: any[] = [];
-	SCHOOL_FEATURES.forEach((schoolFeature: any) => {
+function transformSchoolClientToServer(school: School): SchoolPayload {
+	const featureArray: string[] = [];
+	SCHOOL_FEATURES.forEach((schoolFeature) => {
 		if (school.features[schoolFeature]) {
 			featureArray.push(schoolFeature);
 		}
@@ -71,10 +76,7 @@ export default class SchoolsModule extends VuexModule {
 		features: {
 			rocketChat: false,
 			videoconference: false,
-			messenger: false,
 			studentVisibility: false,
-			messengerSchoolRoom: false,
-			messengerStudentRoomCreate: false,
 			ldapUniventionMigrationSchool: false,
 		},
 		enableStudentTeamCreation: false,
@@ -109,10 +111,11 @@ export default class SchoolsModule extends VuexModule {
 		oauthMigrationPossible: false,
 		oauthMigrationMandatory: false,
 		oauthMigrationFinished: "",
+		oauthMigrationFinalFinish: "",
 	};
 	systems: any[] = [];
 	loading = false;
-	error: null | {} = null;
+	error: null | ApplicationError = null;
 
 	private get schoolApi(): SchoolApiInterface {
 		return SchoolApiFactory(undefined, "v3", $axios);
@@ -149,7 +152,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: {} | null): void {
+	setError(error: ApplicationError | null): void {
 		this.error = error;
 	}
 
@@ -165,7 +168,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.federalState;
 	}
 
-	get getSystems(): {} {
+	get getSystems(): any[] {
 		return this.systems;
 	}
 
@@ -173,7 +176,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): {} | null {
+	get getError(): ApplicationError | null {
 		return this.error;
 	}
 
@@ -208,11 +211,14 @@ export default class SchoolsModule extends VuexModule {
 
 				this.setSchool(transformSchoolServerToClient(school));
 
+				await this.fetchCurrentYear();
+
 				this.setLoading(false);
-			} catch (error: any) {
-				this.setError(error);
+			} catch (error: unknown) {
+				if (error instanceof AxiosError) {
+					this.setError(this.createApplicationError());
+				}
 				this.setLoading(false);
-				// TODO what is supposed to happen on error?
 			}
 		}
 	}
@@ -222,16 +228,18 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const data = (
-				await $axios.get(`/v1/federalStates/${this.school.federalState}`)
+				await $axios.get<FederalState>(
+					`/v1/federalStates/${this.school.federalState}`
+				)
 			).data;
 
-			// @ts-ignore
 			this.setFederalState(data);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
-			// TODO what is supposed to happen on error?
 		}
 	}
 
@@ -240,15 +248,15 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const currentYear = (
-				await $axios.get(`/v1/years/${this.school.currentYear}`)
+				await $axios.get<Year>(`/v1/years/${this.school.currentYear}`)
 			).data;
-			// @ts-ignore
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
-			// TODO what is supposed to happen on error?
 		}
 	}
 
@@ -266,26 +274,28 @@ export default class SchoolsModule extends VuexModule {
 
 			this.setSystems(responses.map((response) => response.data));
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
-			// TODO what is supposed to happen on error?
 		}
 	}
 
 	@Action
-	async update(payload: any): Promise<void> {
+	async update(payload: Partial<School>): Promise<void> {
 		this.setLoading(true);
-		const school = transformSchoolClientToServer(payload);
+		const school = transformSchoolClientToServer(payload as Required<School>);
 		try {
 			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
 				.data;
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
-			// TODO what is supposed to happen on error?
 		}
 	}
 
@@ -302,10 +312,11 @@ export default class SchoolsModule extends VuexModule {
 			this.setSystems(updatedSystemsList);
 			await this.fetchSchool();
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
-			// TODO what is supposed to happen on error?
 		}
 	}
 
@@ -319,8 +330,10 @@ export default class SchoolsModule extends VuexModule {
 			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
 			this.setSchool({ ...this.school, inMaintenance: false });
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
 		}
 	}
@@ -344,8 +357,10 @@ export default class SchoolsModule extends VuexModule {
 				inMaintenance: true,
 			});
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
+			}
 			this.setLoading(false);
 		}
 	}
@@ -364,10 +379,12 @@ export default class SchoolsModule extends VuexModule {
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
 				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(this.createApplicationError());
 			}
 		}
 	}
@@ -389,15 +406,33 @@ export default class SchoolsModule extends VuexModule {
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
 				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
 				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				this.setError(error);
+			if (error instanceof AxiosError) {
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error.gracePeriodExceeded"
+					)
+				);
 			}
 		}
 	}
 
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
+	}
+
+	private createApplicationError(
+		statusCode = 500,
+		translationKey = "pages.administration.school.index.error"
+	): ApplicationError {
+		const applicationError = useApplicationError().createApplicationError(
+			statusCode,
+			translationKey
+		);
+		return applicationError;
 	}
 }

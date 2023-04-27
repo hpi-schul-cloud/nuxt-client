@@ -28,8 +28,8 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search"
-				/></template>
+					<base-icon source="material" icon="search" />
+				</template>
 			</base-input>
 
 			<data-filter
@@ -65,7 +65,7 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent> </template>
+				<template #headcolumn-consent></template>
 				<template #columnlabel-consent></template>
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
@@ -80,7 +80,7 @@
 					<span class="text-content">
 						<base-icon
 							v-if="status === 'ok'"
-							source="custom"
+							source="material"
 							icon="doublecheck"
 							color="var(--v-success-base)"
 						/>
@@ -110,7 +110,7 @@
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
 						data-testid="edit_student_button"
 					>
-						<v-icon size="20">{{ mdiPencil }}</v-icon>
+						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -132,7 +132,7 @@
 <script>
 /* eslint-disable max-lines */
 import { mapGetters } from "vuex";
-import { envConfigModule, schoolsModule, notifierModule } from "@/store";
+import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter";
@@ -142,7 +142,12 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload, mdiPencil, mdiPlus } from "@mdi/js";
+import {
+	mdiAccountPlus,
+	mdiCloudDownload,
+	mdiPencilOutline,
+	mdiPlus,
+} from "@mdi/js";
 
 export default {
 	components: {
@@ -163,7 +168,7 @@ export default {
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			mdiPencil,
+			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.students.index"
@@ -229,11 +234,13 @@ export default {
 					field: "lastLoginSystemChange",
 					label: this.$t("common.labels.migrated"),
 					sortable: true,
+					tooltipText: this.$t("common.labels.migrated.tooltip"),
 				},
 				{
 					field: "outdatedSince",
 					label: this.$t("common.labels.outdated"),
 					sortable: true,
+					tooltipText: this.$t("common.labels.outdated.tooltip"),
 				},
 				{
 					// edit column
@@ -264,9 +271,6 @@ export default {
 			isConfirmDialogActive: false,
 		};
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
 	computed: {
 		...mapGetters("users", {
 			students: "getList",
@@ -293,7 +297,6 @@ export default {
 								"pages.administration.students.index.tableActions.registration"
 						  ),
 					icon: "check",
-					"icon-source": "material",
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
@@ -302,13 +305,11 @@ export default {
 						"pages.administration.students.index.tableActions.email"
 					),
 					icon: "mail_outline",
-					"icon-source": "material",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
@@ -318,7 +319,6 @@ export default {
 						"pages.administration.students.index.tableActions.delete"
 					),
 					icon: "delete_outline",
-					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
 					dataTestId: "delete_action",
@@ -648,19 +648,23 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText.trim();
+			if (this.timer) {
+				clearTimeout(this.timer);
+				this.timer = null;
+			}
 
-			const query = this.currentFilterQuery;
+			this.timer = setTimeout(() => {
+				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
+					this.currentFilterQuery.searchQuery = searchText.trim();
 
-			this.setUiState("filter", "pages.administration.students.index", {
-				query,
-			});
+					const query = this.currentFilterQuery;
 
-			setTimeout(() => {
-				this.$store.dispatch("users/findStudents", {
-					query,
-					action: "find",
-				});
+					this.find();
+
+					this.setUiState("filter", "pages.administration.students.index", {
+						query,
+					});
+				}
 			}, 400);
 		},
 		setUiState(key, identifier, data) {

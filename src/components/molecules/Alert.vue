@@ -3,7 +3,6 @@
 		:class="{
 			'alert-wrapper-mobile': isMobile,
 			'alert-wrapper': !isMobile,
-			'alert-wrapper-bottom': !isMobile && !isTop,
 		}"
 	>
 		<v-alert
@@ -20,8 +19,14 @@
 			border="left"
 			@input="closeNotification"
 		>
-			<div class="alert_text mr-2">
-				{{ $t(text) }}
+			<div v-if="messages" class="alert_text mr-2">
+				<div v-for="(message, index) in messages" :key="index" class="mb-1">
+					<b>{{ message.title }}</b>
+					<p class="mb-0">{{ message.text }}</p>
+				</div>
+			</div>
+			<div v-else class="alert_text mr-2">
+				{{ text }}
 			</div>
 		</v-alert>
 	</div>
@@ -53,6 +58,9 @@ export default {
 		text() {
 			return this.notifierData?.text;
 		},
+		messages() {
+			return this.notifierData?.messages;
+		},
 		transition() {
 			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
 		},
@@ -71,9 +79,6 @@ export default {
 				this.closeNotification();
 			},
 		},
-		isTop() {
-			return this.notifierData?.position === "top";
-		},
 	},
 	methods: {
 		closeNotification() {
@@ -87,14 +92,6 @@ export default {
 .alert-wrapper {
 	position: fixed;
 	right: 0;
-	z-index: var(--layer-tooltip);
-	overflow: visible;
-}
-
-.alert-wrapper-bottom {
-	position: fixed;
-	right: 52px;
-	bottom: 37px;
 	z-index: var(--layer-tooltip);
 	overflow: visible;
 }
