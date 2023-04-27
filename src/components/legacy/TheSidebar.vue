@@ -161,8 +161,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-@import "~vuetify/src/styles/settings/_colors";
-
 @import "@/styles/mixins";
 
 @keyframes menu-expand {
