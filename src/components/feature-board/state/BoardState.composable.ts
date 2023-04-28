@@ -8,6 +8,7 @@ import { CardMove, ColumnMove } from "../types/DragAndDrop";
 
 const {
 	createColumnCall,
+	deleteCardCall,
 	deleteColumnCall,
 	moveCardCall,
 	moveColumnCall,
@@ -60,6 +61,11 @@ export const useBoardState = (id: string) => {
 			};
 			moveCard(moveCardPayload);
 		}
+	};
+
+	const deleteCard = async (id: string) => {
+		await deleteCardCall(id);
+		extractCard(id);
 	};
 
 	const deleteColumn = async (id: string) => {
@@ -166,6 +172,7 @@ export const useBoardState = (id: string) => {
 		createCard,
 		createColumn,
 		createColumnWithCard,
+		deleteCard,
 		deleteColumn,
 		extractCard,
 		fetchBoard,

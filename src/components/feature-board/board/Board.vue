@@ -72,8 +72,8 @@ export default defineComponent({
 			createCard,
 			createColumn,
 			createColumnWithCard,
+			deleteCard,
 			deleteColumn,
-			extractCard,
 			getColumnId,
 			moveCard,
 			moveColumn,
@@ -93,7 +93,7 @@ export default defineComponent({
 		};
 
 		const onDeleteCard = (cardId: string): void => {
-			extractCard(cardId);
+			deleteCard(cardId);
 		};
 
 		const onDeleteColumn = (columnId: string): void => {
