@@ -1,4 +1,4 @@
-import { ElementTypeParamsTypeEnum } from "@/serverApi/v3";
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 import { onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
@@ -51,7 +51,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.height = newHeight;
 	};
 
-	const addElement = async (type: ElementTypeParamsTypeEnum) => {
+	const addElement = async (type: CreateContentElementBodyTypeEnum) => {
 		if (cardState.card === undefined) {
 			return;
 		}

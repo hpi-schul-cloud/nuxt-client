@@ -3,7 +3,8 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	ColumnResponse,
-	ElementTypeParamsTypeEnum,
+	CreateContentElementBody,
+	CreateContentElementBodyTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -25,7 +26,10 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
 	};
 
-	const createElement = async (cardId: string, type: ElementTypeParams) => {
+	const createElement = async (
+		cardId: string,
+		type: CreateContentElementBody
+	) => {
 		const result = await cardsApi.cardControllerCreateElement(cardId, type);
 
 		return result.data;
@@ -45,7 +49,7 @@ export const useBoardApi = () => {
 		);
 		if (createdCard.data.id) {
 			createElement(createdCard.data.id, {
-				type: ElementTypeParamsTypeEnum.Text,
+				type: CreateContentElementBodyTypeEnum.Text,
 			});
 			return createdCard.data.id;
 		}
