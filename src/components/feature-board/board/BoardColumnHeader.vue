@@ -5,12 +5,14 @@
 		@end-edit-mode="onEndEditMode"
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
-		<div class="mb-4">
-			<div
-				class="d-flex align-start justify-space-between py-2"
-				:class="{ 'grey lighten-1': isFocused }"
-			>
-				<div tabindex="0" ref="columnHeader">
+		<div
+			class="mb-4 rounded column-header"
+			:class="{ 'grey lighten-3': isFocused }"
+			ref="columnHeader"
+			tabindex="-1"
+		>
+			<div class="d-flex align-start justify-space-between py-2">
+				<div tabindex="0">
 					<BoardAnyTitleInput
 						:value="title"
 						scope="column"
@@ -123,3 +125,11 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.column-header:focus {
+	border-color: inherit;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	outline: none;
+}
+</style>
