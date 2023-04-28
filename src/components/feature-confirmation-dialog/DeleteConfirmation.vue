@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
 
 export default defineComponent({

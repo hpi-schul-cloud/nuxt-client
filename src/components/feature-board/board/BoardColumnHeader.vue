@@ -18,7 +18,7 @@
 				</div>
 				<div class="pt-2">
 					<BoardMenu scope="column">
-						<BoardMenuAction @click="onDelete">
+						<BoardMenuAction @click="onTryDelete">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
 							</VIcon>
@@ -29,25 +29,19 @@
 			</div>
 			<VDivider color="black"></VDivider>
 		</div>
-		<!-- <DeleteConfirmation
-			:is-delete-modal-open="isDeleteModalOpen"
-			:title="title"
-			:typeName="$t('components.boardColumn').toString()"
-			@delete-confirm="onDeleteConfirmation"
-			@dialog-cancel="onDeleteCancel"
-		></DeleteConfirmation> -->
 	</BoardColumnInteractionHandler>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, inject, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-// import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { mdiTrashCanOutline } from "@mdi/js";
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -55,7 +49,6 @@ export default defineComponent({
 		BoardMenu,
 		BoardAnyTitleInput,
 		BoardMenuAction,
-		// DeleteConfirmation,
 		BoardColumnInteractionHandler,
 	},
 	props: {
@@ -74,6 +67,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const columnId = computed(() => props.columnId);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId);
 
@@ -82,11 +76,24 @@ export default defineComponent({
 		const onStartEditMode = () => startEditMode();
 		const onEndEditMode = () => stopEditMode();
 
-		const onDelete = () => (isDeleteModalOpen.value = true);
-		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
-		const onDeleteConfirmation = async () => {
-			emit("delete:column", props.columnId);
-			isDeleteModalOpen.value = false;
+		const onTryDelete = async () => {
+			const message =
+				i18n
+					?.t("components.cardHost.deletionModal.confirmation", {
+						title: props.title ? `"${props.title}"` : "",
+						type: i18n?.t("components.boardColumn").toString(),
+					})
+					.toString() || "";
+
+			const { askConfirmation } = useDeleteConfirmation();
+
+			await askConfirmation({ message }).then(
+				async () => {
+					emit("delete:column", props.columnId);
+				},
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				() => {}
+			);
 		};
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
@@ -103,9 +110,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			onStartEditMode,
 			onEndEditMode,
-			onDelete,
-			onDeleteCancel,
-			onDeleteConfirmation,
+			onTryDelete,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 		};

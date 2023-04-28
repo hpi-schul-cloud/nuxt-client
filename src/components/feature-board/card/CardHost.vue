@@ -71,7 +71,8 @@ import {
 	useFocusWithin,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
@@ -99,7 +100,9 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(null);
+		const cardId = computed(() => card.value?.id);
 		const { focused: isFocused } = useFocusWithin(cardHost);
 		const isHovered = useElementHover(cardHost);
 		const {
@@ -111,21 +114,32 @@ export default defineComponent({
 			addElement,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
+
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
-		const cardId = computed(() => card.value?.id);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
-
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
-		const onTryDelete = async () => {
-			const { ask } = useDeleteConfirmation();
 
-			await ask({ message: "Karte löschen?" }).then(async () => {
-				console.log("delete confirm");
-				await deleteCard();
-				emit("delete:card", card.value?.id);
-			});
+		const onTryDelete = async () => {
+			const message =
+				i18n
+					?.t("components.cardHost.deletionModal.confirmation", {
+						title: card.value?.title ? `"${card.value.title}"` : "",
+						type: i18n?.t("components.boardCard").toString(),
+					})
+					.toString() || "";
+
+			const { askConfirmation } = useDeleteConfirmation();
+
+			await askConfirmation({ message }).then(
+				async () => {
+					await deleteCard();
+					emit("delete:card", card.value?.id);
+				},
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				() => {}
+			);
 		};
 
 		const onAddElement = addElement;
