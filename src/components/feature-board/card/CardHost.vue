@@ -105,14 +105,8 @@ export default defineComponent({
 		const cardId = computed(() => card.value?.id);
 		const { focused: isFocused } = useFocusWithin(cardHost);
 		const isHovered = useElementHover(cardHost);
-		const {
-			isLoading,
-			card,
-			deleteCard,
-			updateTitle,
-			updateCardHeight,
-			addElement,
-		} = useCardState(props.cardId);
+		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
+			useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
 
@@ -132,14 +126,10 @@ export default defineComponent({
 
 			const { askConfirmation } = useDeleteConfirmation();
 
-			await askConfirmation({ message }).then(
-				async () => {
-					await deleteCard();
-					emit("delete:card", card.value?.id);
-				},
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				() => {}
-			);
+			const shouldDelete = await askConfirmation({ message });
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
+			}
 		};
 
 		const onAddElement = addElement;

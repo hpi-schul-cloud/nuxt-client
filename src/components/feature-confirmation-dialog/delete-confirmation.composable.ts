@@ -6,10 +6,12 @@ interface DeleteConfirmationOptions {
 }
 
 export const useDeleteConfirmation = () => {
-	const askConfirmation = async (data: DeleteConfirmationOptions) => {
-		const promise = new Promise<void>((resolve, reject) => {
+	const askConfirmation = async (
+		data: DeleteConfirmationOptions
+	): Promise<boolean> => {
+		const promise = new Promise<boolean>((resolve) => {
 			const { askInternal } = useInternalDeleteConfirmation();
-			askInternal(data, resolve, reject);
+			askInternal(data, resolve);
 		});
 		return promise;
 	};
@@ -20,33 +22,30 @@ export const useDeleteConfirmation = () => {
 };
 
 export const useInternalDeleteConfirmation = createSharedComposable(() => {
-	let confirmInternal: (() => void) | undefined = undefined;
-	let cancelInternal: (() => void) | undefined = undefined;
+	let returnResult: ((value: boolean) => void) | undefined = undefined;
 
 	const dialogOptions = ref<DeleteConfirmationOptions | undefined>(undefined);
 	const isDialogOpen = ref<boolean>(false);
 
 	const confirm = () => {
-		confirmInternal ? confirmInternal() : null;
+		returnResult ? returnResult(true) : null;
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};
 
 	const cancel = () => {
-		cancelInternal ? cancelInternal() : null;
+		returnResult ? returnResult(false) : null;
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};
 
 	const askInternal = (
 		options: DeleteConfirmationOptions,
-		resolve: () => void,
-		reject: () => void
+		resolve: (value: boolean) => void
 	) => {
 		dialogOptions.value = options;
 		isDialogOpen.value = true;
-		confirmInternal = resolve;
-		cancelInternal = reject;
+		returnResult = resolve;
 	};
 
 	return {

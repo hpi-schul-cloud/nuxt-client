@@ -87,13 +87,10 @@ export default defineComponent({
 
 			const { askConfirmation } = useDeleteConfirmation();
 
-			await askConfirmation({ message }).then(
-				async () => {
-					emit("delete:column", props.columnId);
-				},
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				() => {}
-			);
+			const shouldDelete = await askConfirmation({ message });
+			if (shouldDelete) {
+				emit("delete:column", props.columnId);
+			}
 		};
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
