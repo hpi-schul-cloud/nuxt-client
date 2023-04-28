@@ -7,11 +7,11 @@
 	>
 		<div
 			class="mb-4 rounded column-header"
-			:class="{ 'grey lighten-3': isFocused }"
+			:class="{ 'grey lighten-1': isFocused }"
 			ref="columnHeader"
 			tabindex="-1"
 		>
-			<div class="d-flex align-start justify-space-between py-2">
+			<div class="d-flex align-start justify-space-between py-2 pl-1">
 				<div tabindex="0">
 					<BoardAnyTitleInput
 						:value="title"
@@ -127,9 +127,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .column-header:focus {
-	border-color: inherit;
-	-webkit-box-shadow: none;
-	box-shadow: none;
 	outline: none;
 }
 </style>

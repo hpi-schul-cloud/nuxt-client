@@ -20,6 +20,7 @@
 			:aria-level="ariaLevel"
 			role="heading"
 			class="heading"
+			tabindex="-1"
 		>
 			{{ value }}
 		</div>
@@ -107,5 +108,9 @@ export default defineComponent({
 	margin-top: 10px;
 	letter-spacing: normal;
 	padding-right: 15px;
+}
+
+.heading:focus {
+	outline: none;
 }
 </style>
