@@ -2,7 +2,7 @@ import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
 interface DialogOptions {
-	confirmationMessage: string;
+	message: string;
 }
 
 export const useDeleteConfirmation = () => {
