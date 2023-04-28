@@ -6,8 +6,11 @@
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div class="mb-4">
-			<div class="d-flex align-start justify-space-between py-2">
-				<div tabindex="0">
+			<div
+				class="d-flex align-start justify-space-between py-2"
+				:class="{ 'grey lighten-1': isFocused }"
+			>
+				<div tabindex="0" ref="columnHeader">
 					<BoardAnyTitleInput
 						:value="title"
 						scope="column"
@@ -34,6 +37,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, ref } from "vue";
+import { useFocusWithin } from "@vueuse/core";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
@@ -73,6 +77,9 @@ export default defineComponent({
 
 		const isDeleteModalOpen = ref<boolean>(false);
 
+		const columnHeader = ref(null);
+		const { focused: isFocused } = useFocusWithin(columnHeader);
+
 		const onStartEditMode = () => startEditMode();
 		const onEndEditMode = () => stopEditMode();
 
@@ -102,7 +109,9 @@ export default defineComponent({
 		};
 
 		return {
+			columnHeader,
 			isEditMode,
+			isFocused,
 			isDeleteModalOpen,
 			mdiTrashCanOutline,
 			onStartEditMode,
