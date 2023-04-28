@@ -17,6 +17,7 @@ import {
 	DATETIME_FORMAT,
 } from "@/plugins/datetime";
 import datetime from "@/plugins/datetime";
+import createdFromUTC from "@/plugins/datetime";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
@@ -70,6 +71,20 @@ const localizedFormats = {
 };
 
 setDefaultTimezone(TEST_DATETIME_TIMEZONE);
+
+describe("createdFromUTC", () => {
+	test("returns dateTime in the correct format DD.MM.YYYY HH:mm", () => {
+		const dateTime = "2023-04-27T13:25:00.000Z";
+		const result = createdFromUTC(dateTime);
+		expect(result).toBe("27.04.2023 15:25");
+	});
+
+	test("does not return undefined", () => {
+		const dateTime = "2023-04-27T13:25:00.000Z";
+		const result = createdFromUTC(dateTime);
+		expect(result).toBeDefined();
+	});
+});
 
 describe("@/plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
