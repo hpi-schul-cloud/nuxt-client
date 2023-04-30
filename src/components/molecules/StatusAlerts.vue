@@ -37,7 +37,7 @@
 					{{ $t("common.labels.updateAt") }}
 					{{ getDate(item.timestamp) }} |
 					{{ $t("common.labels.createAt") }}
-					{{ getCreatedDate(item.created_at) }}
+					{{ getCreatedDate(item.createdAt) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { createdDate, fromNow } from "@/plugins/datetime";
+import { printDateTime, fromNow } from "@/plugins/datetime";
 import { mdiAlertCircle, mdiInformation, mdiCheckCircle } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -74,7 +74,7 @@ export default defineComponent({
 			return fromNow(date, true);
 		};
 		const getCreatedDate = (dateTime: string) => {
-			return createdDate(dateTime, true);
+			return printDateTime(dateTime);
 		};
 
 		return { getIconTag, getDate, getCreatedDate };
