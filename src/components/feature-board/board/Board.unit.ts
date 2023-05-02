@@ -126,6 +126,7 @@ describe("Board", () => {
 			createColumn: jest.fn(),
 			createColumnWithCard: jest.fn(),
 			deleteColumn: jest.fn(),
+			deleteCard: jest.fn(),
 			extractCard: jest.fn(),
 			fetchBoard: jest.fn(),
 			getColumnId: jest.fn(),

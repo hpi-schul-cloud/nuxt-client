@@ -1,21 +1,21 @@
 <template>
 	<vCustomDialog
 		data-testid="delete-dialog-item"
-		has-buttons
+		:has-buttons="true"
 		confirm-btn-title-key="common.actions.remove"
 		@dialog-confirmed="onDeleteConfirmation"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
 	>
 		<h2 slot="title" class="text-h4 my-2">
-			{{ dialogOptions?.message }}
+			{{ message }}
 		</h2>
 	</vCustomDialog>
 </template>
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
 
 export default defineComponent({
@@ -30,7 +30,12 @@ export default defineComponent({
 		const onDeleteConfirmation = () => confirm();
 		const onCloseDialog = () => cancel();
 
+		const message = computed(() =>
+			dialogOptions.value ? dialogOptions.value.message : ""
+		);
+
 		return {
+			message,
 			dialogOptions,
 			isDialogOpen,
 			onDeleteConfirmation,
