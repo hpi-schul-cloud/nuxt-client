@@ -129,8 +129,8 @@ export default defineComponent({
 			await moveCard(payload);
 		};
 
-		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-			await updateColumnTitle(columnId, newTitle);
+		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
+			updateColumnTitle(columnId, newTitle);
 		};
 
 		return {
