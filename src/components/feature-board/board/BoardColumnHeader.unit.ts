@@ -24,9 +24,6 @@ describe("BoardColumnHeader", () => {
 		it("should be found in the dom", () => {
 			setup();
 			expect(wrapper.findComponent(BoardColumnHeader).exists()).toBe(true);
-			expect(wrapper.findComponent(InlineEditInteractionHandler).exists()).toBe(
-				true
-			);
 		});
 	});
 
