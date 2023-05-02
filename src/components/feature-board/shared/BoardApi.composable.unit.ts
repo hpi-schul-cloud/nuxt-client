@@ -45,7 +45,7 @@ jest
 	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
 
 initializeAxios({
-	request: async (path: string) => ({
+	request: async (_: string) => ({
 		data: "some data",
 	}),
 } as axios.AxiosInstance);

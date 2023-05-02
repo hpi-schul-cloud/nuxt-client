@@ -3,7 +3,7 @@
 		<div ref="columnend" class="columnend"></div>
 		<div
 			ref="sticky"
-			class="button-background pb-4 pt-2 text-center sticky"
+			class="button-background sticky pb-4 pt-2 text-center"
 			:style="stickyStyle"
 		>
 			<VBtn

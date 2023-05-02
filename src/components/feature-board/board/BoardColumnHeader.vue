@@ -6,7 +6,7 @@
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div
-			class="mb-4 rounded column-header"
+			class="column-header mb-4 rounded"
 			:class="{ 'grey lighten-1': isFocused }"
 			ref="columnHeader"
 			tabindex="-1"
