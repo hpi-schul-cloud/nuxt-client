@@ -48,6 +48,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { useBoardState } from "../state/BoardState.composable";
+import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import {
 	columnDropPlaceholderOptions,
 	CardMove,
@@ -79,6 +80,8 @@ export default defineComponent({
 			moveColumn,
 			updateColumnTitle,
 		} = useBoardState(route.params?.id);
+
+		useBodyScrolling();
 
 		const onCreateCard = (columnId: string) => {
 			createCard(columnId);
