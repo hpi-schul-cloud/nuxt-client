@@ -83,31 +83,31 @@ export default defineComponent({
 
 		useBodyScrolling();
 
-		const onCreateCard = (columnId: string) => {
-			createCard(columnId);
+		const onCreateCard = async (columnId: string) => {
+			await createCard(columnId);
 		};
 
-		const onCreateColumn = () => {
-			createColumn();
+		const onCreateColumn = async () => {
+			await createColumn();
 		};
 
-		const onCreateColumnWithCard = (cardId: string) => {
-			createColumnWithCard(cardId);
+		const onCreateColumnWithCard = async (cardId: string) => {
+			await createColumnWithCard(cardId);
 		};
 
-		const onDeleteCard = (cardId: string): void => {
-			deleteCard(cardId);
+		const onDeleteCard = async (cardId: string) => {
+			await deleteCard(cardId);
 		};
 
-		const onDeleteColumn = (columnId: string): void => {
-			deleteColumn(columnId);
+		const onDeleteColumn = async (columnId: string) => {
+			await deleteColumn(columnId);
 		};
 
-		const onDropColumn = (columnPayload: ColumnMove): void => {
-			moveColumn(columnPayload);
+		const onDropColumn = async (columnPayload: ColumnMove) => {
+			await moveColumn(columnPayload);
 		};
 
-		const onMoveColumnKeyboard = (
+		const onMoveColumnKeyboard = async (
 			columnIndex: number,
 			columnId: string,
 			keyString: DragAndDropKey
@@ -121,16 +121,16 @@ export default defineComponent({
 			if (horizontalCursorKeys.includes(keyString)) {
 				const change = keyString === "ArrowLeft" ? -1 : +1;
 				columnMove.addedIndex = columnIndex + change;
-				moveColumn(columnMove);
+				await moveColumn(columnMove);
 			}
 		};
 
-		const onUpdateCardPosition = (_: unknown, payload: CardMove) => {
-			moveCard(payload);
+		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
+			await moveCard(payload);
 		};
 
-		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
-			updateColumnTitle(columnId, newTitle);
+		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
+			await updateColumnTitle(columnId, newTitle);
 		};
 
 		return {
