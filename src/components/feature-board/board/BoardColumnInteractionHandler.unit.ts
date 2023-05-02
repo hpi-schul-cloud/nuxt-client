@@ -35,7 +35,7 @@ describe("BoardColumnInteractionHandler", () => {
 					await element.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(
 						"move:column-keyboard"
-					) || [[]];
+					) ?? [[]];
 					expect(emitted[0][0]).toBeDefined();
 					expect(emitted[0][0]).toBeInstanceOf(KeyboardEvent);
 					expect(emitted[0][0].key.toLowerCase()).toStrictEqual(key);

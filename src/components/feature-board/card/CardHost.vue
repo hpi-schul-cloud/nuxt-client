@@ -122,7 +122,7 @@ export default defineComponent({
 						title: card.value?.title ? `"${card.value.title}"` : "",
 						type: i18n?.t("components.boardCard").toString(),
 					})
-					.toString() || "";
+					.toString() ?? "";
 
 			const { askConfirmation } = useDeleteConfirmation();
 

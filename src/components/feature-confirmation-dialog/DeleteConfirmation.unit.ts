@@ -33,9 +33,9 @@ describe(DeleteConfirmation.name, () => {
 				i18n: { t: (key: string) => key },
 			},
 			propsData: {
-				isDeleteModalOpen: options?.isDeleteModalOpen || true,
-				title: options.title || "title",
-				typeName: options.typeName || "card",
+				isDeleteModalOpen: options?.isDeleteModalOpen ?? true,
+				title: options.title ?? "title",
+				typeName: options.typeName ?? "card",
 			},
 		});
 		return wrapper;
