@@ -59,7 +59,7 @@ export const useBoardState = (id: string) => {
 				columnId: newColumn.id,
 				payload: { cardId: movingCardId, height: 100 },
 			};
-			moveCard(moveCardPayload);
+			await moveCard(moveCardPayload);
 		}
 	};
 

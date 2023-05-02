@@ -28,13 +28,17 @@ export const useInternalDeleteConfirmation = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
 
 	const confirm = () => {
-		returnResult ? returnResult(true) : null;
+		if (returnResult) {
+			returnResult(true);
+		}
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};
 
 	const cancel = () => {
-		returnResult ? returnResult(false) : null;
+		if (returnResult) {
+			returnResult(false);
+		}
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};

@@ -45,8 +45,8 @@ export default defineComponent({
 
 		const debouncedX = useDebounceFn(setX, 10, { maxWait: 200 });
 
-		watch(bounding.x, (newValue) => {
-			debouncedX(newValue);
+		watch(bounding.x, async (newValue) => {
+			await debouncedX(newValue);
 		});
 
 		const stickyStyle = computed(() => {
