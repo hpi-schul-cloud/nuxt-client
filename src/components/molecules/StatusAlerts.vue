@@ -63,8 +63,6 @@ export default defineComponent({
 			switch (status) {
 				case "danger":
 					return { icon: mdiAlertCircle, color: "error" };
-				case "done":
-					return { icon: mdiCheckCircle, color: "success" };
 				default:
 					return { icon: mdiInformation, color: "info" };
 			}
