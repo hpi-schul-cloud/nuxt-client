@@ -72,7 +72,7 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const columnIndex = getColumnIndex(id);
-		if (columnIndex) {
+		if (columnIndex > -1) {
 			await deleteColumnCall(id);
 			board.value.columns.splice(columnIndex, 1);
 		}
@@ -88,7 +88,7 @@ export const useBoardState = (id: string) => {
 			const cardIndex = column?.cards.findIndex(
 				(card) => card.cardId === cardId
 			);
-			if (cardIndex !== -1) {
+			if (cardIndex > -1) {
 				const extractedCards = column.cards.splice(cardIndex, 1);
 				return extractedCards[0];
 			}
@@ -133,7 +133,7 @@ export const useBoardState = (id: string) => {
 
 		updateColumnTitleCall(columnId, newTitle);
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex !== undefined) {
+		if (columnIndex > -1) {
 			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
@@ -146,7 +146,7 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const targetColumnIndex = getColumnIndex(columnId);
-		if (targetColumnIndex) {
+		if (targetColumnIndex > -1) {
 			board.value.columns[targetColumnIndex].cards.splice(toPosition, 0, card);
 		}
 	};
@@ -157,7 +157,9 @@ export const useBoardState = (id: string) => {
 		return board.value.columns[columnIndex].id;
 	};
 
-	const getColumnIndex = (columnId: string): number | undefined => {
+	const getColumnIndex = (columnId: string): number => {
+		if (board.value === undefined) return -1;
+
 		const columnIndex = board.value?.columns.findIndex(
 			(c) => c.id === columnId
 		);
