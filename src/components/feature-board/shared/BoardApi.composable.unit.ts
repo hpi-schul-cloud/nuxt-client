@@ -2,11 +2,7 @@ import { useBoardApi } from "./BoardApi.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
-import {
-	CreateContentElementBody,
-	CreateContentElementBodyTypeEnum,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
 jest.mock("axios");
 

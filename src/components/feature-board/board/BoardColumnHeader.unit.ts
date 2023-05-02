@@ -2,7 +2,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 
 describe("BoardColumnHeader", () => {

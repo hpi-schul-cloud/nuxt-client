@@ -51,13 +51,6 @@
 				</template>
 			</VCard>
 		</div>
-		<!-- <DeleteConfirmation
-			:is-delete-modal-open="isDeleteModalOpen"
-			:title="card ? card.title : ''"
-			:typeName="$t('components.boardCard').toString()"
-			@delete-confirm="onDeleteConfirm"
-			@dialog-cancel="onDeleteCancel"
-		></DeleteConfirmation> -->
 	</CardHostInteractionHandler>
 </template>
 

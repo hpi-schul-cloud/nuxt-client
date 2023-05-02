@@ -92,7 +92,7 @@ export default defineComponent({
 						title: props.title ? `"${props.title}"` : "",
 						type: i18n?.t("components.boardColumn").toString(),
 					})
-					.toString() || "";
+					.toString() ?? "";
 
 			const { askConfirmation } = useDeleteConfirmation();
 
