@@ -2,6 +2,11 @@ import { useBoardApi } from "./BoardApi.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
+import {
+	CreateContentElementBody,
+	CreateContentElementBodyTypeEnum,
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 
 jest.mock("axios");
 
@@ -21,7 +26,9 @@ const mockApi = {
 		.mockImplementation(() => createColumnResponseMock),
 	cardControllerUpdateCardTitle: jest.fn(),
 	columnControllerUpdateColumnTitle: jest.fn(),
-	cardControllerCreateElement: jest.fn(),
+	cardControllerCreateElement: jest
+		.fn()
+		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerDeleteCard: jest.fn(),
 	columnControllerDeleteColumn: jest.fn(),
 	columnControllerCreateCard: jest
@@ -101,8 +108,13 @@ describe("BoardApi.composable", () => {
 			const { createElement } = useBoardApi();
 			const PAYLOAD = "card-id";
 
-			await createElement(PAYLOAD);
-			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(PAYLOAD);
+			await createElement(PAYLOAD, {
+				type: CreateContentElementBodyTypeEnum.Text,
+			});
+			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(
+				PAYLOAD,
+				{ type: CreateContentElementBodyTypeEnum.Text }
+			);
 		});
 	});
 
