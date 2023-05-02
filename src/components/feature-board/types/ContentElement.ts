@@ -1,9 +1,9 @@
 export enum ContentElementType {
 	TEXT = "text",
-	IMAGE = "image",
+	FILE = "file",
 }
 
-export type AnyContentElement = TextContentElement | ImageContentElement;
+export type AnyContentElement = TextContentElement | FileContentElement;
 
 interface ContentElement {
 	id: string;
@@ -17,9 +17,9 @@ export interface TextContentElement extends ContentElement {
 		text: string;
 	};
 }
-export interface ImageContentElement extends ContentElement {
-	type: ContentElementType.IMAGE;
+export interface FileContentElement extends ContentElement {
+	type: ContentElementType.FILE;
 	content: {
-		image: string;
+		caption: string;
 	};
 }
