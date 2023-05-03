@@ -1,5 +1,5 @@
 export * from "./toolParameterFactory";
-export * from "./schoolExternaToolFactory";
+export * from "./schoolExternalToolFactory";
 export * from "./toolConfigurationFactory";
 export * from "./toolConfigurationTemplateFactory";
 export * from "./businessErrorFactory";
