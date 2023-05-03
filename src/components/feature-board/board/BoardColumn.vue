@@ -20,17 +20,15 @@
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 		>
-			<template v-for="(card, index) in column.cards">
-				<Draggable :key="card.cardId">
-					<CardHost
-						class="my-3"
-						:card-id="card.cardId"
-						:height="card.height"
-						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						@delete:card="onDeleteCard"
-					/>
-				</Draggable>
-			</template>
+			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
+				<CardHost
+					class="my-3"
+					:card-id="card.cardId"
+					:height="card.height"
+					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+					@delete:card="onDeleteCard"
+				/>
+			</Draggable>
 		</Container>
 		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
 	</div>

@@ -6,11 +6,7 @@
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div
-<<<<<<< HEAD
-			class="mb-4 rounded column-header"
-=======
 			class="column-header mb-4 rounded"
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 			:class="{ 'grey lighten-1': isFocused }"
 			ref="columnHeader"
 			tabindex="-1"
@@ -42,16 +38,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { mdiTrashCanOutline } from "@mdi/js";
 import { useFocusWithin } from "@vueuse/core";
+import { defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { mdiTrashCanOutline } from "@mdi/js";
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -78,8 +74,9 @@ export default defineComponent({
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const columnId = computed(() => props.columnId);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+			props.columnId
+		);
 
 		const isDeleteModalOpen = ref<boolean>(false);
 
@@ -96,11 +93,7 @@ export default defineComponent({
 						title: props.title ? `"${props.title}"` : "",
 						type: i18n?.t("components.boardColumn").toString(),
 					})
-<<<<<<< HEAD
-					.toString() || "";
-=======
 					.toString() ?? "";
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 
 			const { askConfirmation } = useDeleteConfirmation();
 

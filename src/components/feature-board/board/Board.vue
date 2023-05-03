@@ -13,22 +13,20 @@
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onDropColumn"
 				>
-					<template v-for="(column, index) in board.columns">
-						<Draggable :key="column.id">
-							<BoardColumn
-								:column="column"
-								:index="index"
-								@create:card="onCreateCard"
-								@delete:card="onDeleteCard"
-								@delete:column="onDeleteColumn"
-								@move:column-keyboard="
-									onMoveColumnKeyboard(index, column.id, $event)
-								"
-								@update:card-position="onUpdateCardPosition(index, $event)"
-								@update:column-title="onUpdateColumnTitle(column.id, $event)"
-							/>
-						</Draggable>
-					</template>
+					<Draggable v-for="(column, index) in board.columns" :key="column.id">
+						<BoardColumn
+							:column="column"
+							:index="index"
+							@create:card="onCreateCard"
+							@delete:card="onDeleteCard"
+							@delete:column="onDeleteColumn"
+							@move:column-keyboard="
+								onMoveColumnKeyboard(index, column.id, $event)
+							"
+							@update:card-position="onUpdateCardPosition(index, $event)"
+							@update:column-title="onUpdateColumnTitle(column.id, $event)"
+						/>
+					</Draggable>
 				</Container>
 				<BoardColumnGhost
 					@create:column="onCreateColumn"
@@ -81,52 +79,6 @@ export default defineComponent({
 			updateColumnTitle,
 		} = useBoardState(route.params?.id);
 
-<<<<<<< HEAD
-		const onCreateCard = (columnId: string) => {
-			createCard(columnId);
-		};
-
-		const onCreateColumn = () => {
-			createColumn();
-		};
-
-		const onCreateColumnWithCard = (cardId: string) => {
-			createColumnWithCard(cardId);
-		};
-
-		const onDeleteCard = (cardId: string): void => {
-			deleteCard(cardId);
-		};
-
-		const onDeleteColumn = (columnId: string): void => {
-			deleteColumn(columnId);
-		};
-
-		const onDropColumn = (columnPayload: ColumnMove): void => {
-			moveColumn(columnPayload);
-		};
-
-		const onMoveColumnKeyboard = (
-			columnIndex: number,
-			columnId: string,
-			keyString: DragAndDropKey
-		) => {
-			const columnMove: ColumnMove = {
-				addedIndex: -1,
-				removedIndex: columnIndex,
-				payload: columnId,
-			};
-
-			if (horizontalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowLeft" ? -1 : +1;
-				columnMove.addedIndex = columnIndex + change;
-				moveColumn(columnMove);
-			}
-		};
-
-		const onUpdateCardPosition = (_: unknown, payload: CardMove) => {
-			moveCard(payload);
-=======
 		useBodyScrolling();
 
 		const onCreateCard = async (columnId: string) => {
@@ -173,7 +125,6 @@ export default defineComponent({
 
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
 			await moveCard(payload);
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		};
 
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {

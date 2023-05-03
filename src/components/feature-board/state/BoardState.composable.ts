@@ -1,6 +1,6 @@
 import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
@@ -59,11 +59,7 @@ export const useBoardState = (id: string) => {
 				columnId: newColumn.id,
 				payload: { cardId: movingCardId, height: 100 },
 			};
-<<<<<<< HEAD
-			moveCard(moveCardPayload);
-=======
 			await moveCard(moveCardPayload);
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		}
 	};
 
@@ -76,17 +72,15 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const columnIndex = getColumnIndex(id);
-<<<<<<< HEAD
-		if (columnIndex) {
-=======
 		if (columnIndex > -1) {
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 			await deleteColumnCall(id);
 			board.value.columns.splice(columnIndex, 1);
 		}
 	};
 
-	const extractCard = (cardId: string): BoardSkeletonCard | undefined => {
+	const extractCard = async (
+		cardId: string
+	): Promise<BoardSkeletonCard | undefined> => {
 		if (board.value === undefined) return;
 
 		const column = board.value.columns.find(
@@ -96,12 +90,13 @@ export const useBoardState = (id: string) => {
 			const cardIndex = column?.cards.findIndex(
 				(card) => card.cardId === cardId
 			);
-<<<<<<< HEAD
-			if (cardIndex !== -1) {
-=======
 			if (cardIndex > -1) {
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 				const extractedCards = column.cards.splice(cardIndex, 1);
+				/**
+				 * refreshes the board to force rerendering in tracked v-for
+				 * to maintain focus when moving cards by keyboard
+				 */
+				await nextTick();
 				return extractedCards[0];
 			}
 		}
@@ -123,7 +118,7 @@ export const useBoardState = (id: string) => {
 		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
 		const targetColumnId = columnIndex ? getColumnId(columnIndex) : columnId;
 		if (addedIndex !== null && targetColumnId) {
-			const card = extractCard(payload.cardId);
+			const card = await extractCard(payload.cardId);
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
@@ -142,36 +137,6 @@ export const useBoardState = (id: string) => {
 
 	const updateColumnTitle = (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
-<<<<<<< HEAD
-
-		updateColumnTitleCall(columnId, newTitle);
-		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex !== undefined) {
-			board.value.columns[columnIndex].title = newTitle;
-		}
-	};
-
-	const addCard = (
-		card: BoardSkeletonCard,
-		columnId: string,
-		toPosition: number
-	) => {
-		if (board.value === undefined) return;
-
-		const targetColumnIndex = getColumnIndex(columnId);
-		if (targetColumnIndex) {
-			board.value.columns[targetColumnIndex].cards.splice(toPosition, 0, card);
-		}
-	};
-
-	const getColumnId = (columnIndex: number): string | undefined => {
-		if (board.value === undefined) return;
-
-		return board.value.columns[columnIndex].id;
-	};
-
-	const getColumnIndex = (columnId: string): number | undefined => {
-=======
 
 		updateColumnTitleCall(columnId, newTitle);
 		const columnIndex = getColumnIndex(columnId);
@@ -202,7 +167,6 @@ export const useBoardState = (id: string) => {
 	const getColumnIndex = (columnId: string): number => {
 		if (board.value === undefined) return -1;
 
->>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		const columnIndex = board.value?.columns.findIndex(
 			(c) => c.id === columnId
 		);
