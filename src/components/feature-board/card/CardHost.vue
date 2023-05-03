@@ -3,7 +3,7 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
-		@move-card-keyboard="onMoveCardKeyboard"
+		@move:card-keyboard="onMoveCardKeyboard"
 	>
 		<div ref="cardHost">
 			<VCard
@@ -25,10 +25,10 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu scope="card">
 							<BoardMenuAction @click="onTryDelete">
-								<v-icon>
+								<VIcon>
 									{{ mdiTrashCanOutline }}
-								</v-icon>
-								{{ $t("components.board.action") }}
+								</VIcon>
+								{{ $t("components.board.action.delete") }}
 							</BoardMenuAction>
 						</BoardMenu>
 					</div>
@@ -51,17 +51,11 @@
 				</template>
 			</VCard>
 		</div>
-		<DeleteConfirmation
-			:is-delete-modal-open="isDeleteModalOpen"
-			:title="card ? card.title : ''"
-			:typeName="$t('components.boardCard').toString()"
-			@delete-confirm="onDeleteConfirm"
-			@dialog-cancel="onDeleteCancel"
-		></DeleteConfirmation>
 	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -70,11 +64,11 @@ import {
 	useFocusWithin,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import DeleteConfirmation from "../shared/DeleteConfirmation.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -92,41 +86,45 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		DeleteConfirmation,
 	},
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard", "remove-card"],
+	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(null);
+		const cardId = computed(() => card.value?.id);
 		const { focused: isFocused } = useFocusWithin(cardHost);
 		const isHovered = useElementHover(cardHost);
-		const {
-			isLoading,
-			card,
-			deleteCard,
-			updateTitle,
-			updateCardHeight,
-			addElement,
-		} = useCardState(props.cardId);
+		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
+			useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
+
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
-			emit("move-card-keyboard", event.code);
+			emit("move:card-keyboard", event.code);
 		};
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(card);
-		const isDeleteModalOpen = ref<boolean>(false);
-
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
-		const onTryDelete = () => (isDeleteModalOpen.value = true);
-		const onDeleteCancel = () => (isDeleteModalOpen.value = false);
 
-		const onDeleteConfirm = async () => {
-			await deleteCard();
-			isDeleteModalOpen.value = false;
-			emit("remove-card", card.value?.id);
+		const onTryDelete = async () => {
+			const message =
+				i18n
+					?.t("components.cardHost.deletionModal.confirmation", {
+						title: card.value?.title ? `"${card.value.title}"` : "",
+						type: i18n?.t("components.boardCard").toString(),
+					})
+					.toString() ?? "";
+
+			const { askConfirmation } = useDeleteConfirmation();
+
+			const shouldDelete = await askConfirmation({ message });
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
+			}
 		};
+
 		const onAddElement = addElement;
 		const onStartEditMode = () => {
 			startEditMode();
@@ -163,9 +161,6 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
-			isDeleteModalOpen,
-			onDeleteConfirm,
-			onDeleteCancel,
 		};
 	},
 });

@@ -1,7 +1,7 @@
 <template>
-	<v-menu offset-y left min-width="250">
+	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
-			<v-btn
+			<VBtn
 				color="black"
 				small
 				text
@@ -12,18 +12,18 @@
 				:ripple="false"
 				@dblclick.stop="() => {}"
 			>
-				<v-icon>{{ mdiDotsVertical }}</v-icon>
+				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
 					<template v-if="scope === 'board'">Board-Menu</template>
 					<template v-if="scope === 'column'">Column-Menu</template>
 					<template v-if="scope === 'card'">Card-Menu</template>
 				</span>
-			</v-btn>
+			</VBtn>
 		</template>
-		<v-list>
+		<VList>
 			<slot></slot>
-		</v-list>
-	</v-menu>
+		</VList>
+	</VMenu>
 </template>
 
 <script lang="ts">
