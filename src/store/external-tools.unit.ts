@@ -213,7 +213,7 @@ describe("ExternalToolsModule", () => {
 		const toolConfigurations: ToolConfigurationListItem[] = [toolConfiguration];
 		module.setToolConfigurations(toolConfigurations);
 
-		const businessError: BusinessError = businessErrorFactory();
+		const businessError: BusinessError = businessErrorFactory.build();
 		module.setBusinessError(businessError);
 
 		const axiosErrorResponse: AxiosResponse<ApiValidationError> = {
@@ -367,9 +367,11 @@ describe("ExternalToolsModule", () => {
 		describe("setBusinessError is called", () => {
 			it("should set the given businessError to the state", () => {
 				setup();
-				const expectedBusinessError: BusinessError = businessErrorFactory({
-					message: "expectedMessage",
-				});
+				const expectedBusinessError: BusinessError = businessErrorFactory.build(
+					{
+						message: "expectedMessage",
+					}
+				);
 				module.setBusinessError(expectedBusinessError);
 
 				expect(module.getBusinessError).toEqual(
@@ -381,7 +383,7 @@ describe("ExternalToolsModule", () => {
 		describe("resetBusinessError is called", () => {
 			it("should reset the business error state", () => {
 				setup();
-				module.setBusinessError(businessErrorFactory());
+				module.setBusinessError(businessErrorFactory.build());
 
 				module.resetBusinessError();
 
