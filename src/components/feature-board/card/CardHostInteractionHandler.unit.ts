@@ -26,13 +26,13 @@ describe("CardHostInteractionHandler", () => {
 	describe("interactions", () => {
 		describe("when key pressed", () => {
 			it.each(["up", "down", "left", "right"])(
-				"should emit 'move-card-keyboard' with '%s' key stroke when not editing",
+				"should emit 'move:card-keyboard' with '%s' key stroke when not editing",
 				async (key) => {
 					setup({ isEditMode: false });
 					const eventHandle = await wrapper.find("[data-testid=event-handle]");
 					await eventHandle.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(
-						"move-card-keyboard"
+						"move:card-keyboard"
 					) || [[]];
 					expect(emitted[0][0]).toBeDefined();
 					expect(emitted[0][0]).toBeInstanceOf(KeyboardEvent);
@@ -40,13 +40,13 @@ describe("CardHostInteractionHandler", () => {
 				}
 			);
 			it.each(["up", "down", "left", "right"])(
-				"should not emit 'move-card-keyboard' with '%s' key stroke when editing",
+				"should not emit 'move:card-keyboard' with '%s' key stroke when editing",
 				async (key) => {
 					setup({ isEditMode: true });
 					const eventHandle = await wrapper.find("[data-testid=event-handle]");
 					await eventHandle.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(
-						"move-card-keyboard"
+						"move:card-keyboard"
 					) || [[]];
 					expect(emitted[0][0]).toBeFalsy();
 				}

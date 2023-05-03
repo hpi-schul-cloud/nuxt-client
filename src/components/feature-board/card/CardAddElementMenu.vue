@@ -10,7 +10,7 @@
 				large
 				data-testid="add-element-btn"
 			>
-				<v-icon>{{ mdiPlus }}</v-icon>
+				<VIcon>{{ mdiPlus }}</VIcon>
 				<span class="d-sr-only">Add Element</span>
 			</VBtn>
 		</div>

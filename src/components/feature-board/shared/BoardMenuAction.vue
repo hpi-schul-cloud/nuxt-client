@@ -1,6 +1,6 @@
 <template>
 	<VListItem @click.prevent="onClick">
-		<v-list-item-title><slot></slot></v-list-item-title>
+		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
 <script lang="ts">

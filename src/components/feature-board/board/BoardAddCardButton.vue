@@ -1,10 +1,10 @@
 <template>
 	<div class="d-flex w-full justify-center" ref="column">
-		<div ref="columnend"></div>
+		<div ref="columnend" class="columnend"></div>
 		<div
 			ref="sticky"
-			class="button-background pb-4 pt-2 text-center"
-			:class="{ sticky: isSticky && !overTheTop }"
+			class="button-background sticky pb-4 pt-2 text-center"
+			:style="stickyStyle"
 		>
 			<VBtn
 				@click.stop="onAddCard"
@@ -14,7 +14,7 @@
 				icon
 				large
 			>
-				<v-icon>{{ mdiPlus }}</v-icon>
+				<VIcon>{{ mdiPlus }}</VIcon>
 				<span class="d-sr-only">Add Card</span>
 			</VBtn>
 		</div>
@@ -22,27 +22,53 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { mdiPlus } from "@mdi/js";
-import { useElementVisibility, useElementBounding } from "@vueuse/core";
+import {
+	useDebounceFn,
+	useElementVisibility,
+	useElementBounding,
+} from "@vueuse/core";
 
 export default defineComponent({
 	name: "BoardAddCardButton",
 	emits: ["add-card"],
 	setup(props, { emit }) {
 		const onAddCard = () => emit("add-card");
+
 		const columnend = ref(null);
-		const targetIsVisible = useElementVisibility(columnend);
-		const isSticky = computed(() => targetIsVisible.value === false);
+		const isColumnEndVisible = useElementVisibility(columnend);
 		const bounding = useElementBounding(columnend);
-		const overTheTop = computed(() => bounding.y.value < 0);
+		const buttonX = ref(0);
+
+		const setX = (x: number) => (buttonX.value = Math.round(x - 200));
+
+		const debouncedX = useDebounceFn(setX, 10, { maxWait: 200 });
+
+		watch(bounding.x, async (newValue) => {
+			await debouncedX(newValue);
+		});
+
+		const stickyStyle = computed(() => {
+			if (isColumnEndVisible.value === false && bounding.y.value > 0) {
+				return {
+					position: "fixed",
+					"z-index": 1,
+					bottom: "0px",
+					left: `${buttonX.value}px`,
+				};
+			} else {
+				return {
+					position: "static",
+				};
+			}
+		});
 
 		return {
 			columnend,
-			isSticky,
-			overTheTop,
-			onAddCard,
 			mdiPlus,
+			stickyStyle,
+			onAddCard,
 		};
 	},
 });
@@ -50,9 +76,7 @@ export default defineComponent({
 
 <style scoped>
 .sticky {
-	position: fixed;
-	z-index: 1;
-	bottom: 0px;
+	transition: left 0.1s ease;
 }
 .button-background {
 	background: #fff;
