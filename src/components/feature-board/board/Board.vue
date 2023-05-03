@@ -48,6 +48,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { useBoardState } from "../state/BoardState.composable";
+import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import {
 	columnDropPlaceholderOptions,
 	CardMove,
@@ -80,6 +81,7 @@ export default defineComponent({
 			updateColumnTitle,
 		} = useBoardState(route.params?.id);
 
+<<<<<<< HEAD
 		const onCreateCard = (columnId: string) => {
 			createCard(columnId);
 		};
@@ -124,6 +126,54 @@ export default defineComponent({
 
 		const onUpdateCardPosition = (_: unknown, payload: CardMove) => {
 			moveCard(payload);
+=======
+		useBodyScrolling();
+
+		const onCreateCard = async (columnId: string) => {
+			await createCard(columnId);
+		};
+
+		const onCreateColumn = async () => {
+			await createColumn();
+		};
+
+		const onCreateColumnWithCard = async (cardId: string) => {
+			await createColumnWithCard(cardId);
+		};
+
+		const onDeleteCard = async (cardId: string) => {
+			await deleteCard(cardId);
+		};
+
+		const onDeleteColumn = async (columnId: string) => {
+			await deleteColumn(columnId);
+		};
+
+		const onDropColumn = async (columnPayload: ColumnMove) => {
+			await moveColumn(columnPayload);
+		};
+
+		const onMoveColumnKeyboard = async (
+			columnIndex: number,
+			columnId: string,
+			keyString: DragAndDropKey
+		) => {
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+
+			if (horizontalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowLeft" ? -1 : +1;
+				columnMove.addedIndex = columnIndex + change;
+				await moveColumn(columnMove);
+			}
+		};
+
+		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
+			await moveCard(payload);
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		};
 
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {

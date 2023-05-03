@@ -28,13 +28,25 @@ export const useInternalDeleteConfirmation = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
 
 	const confirm = () => {
+<<<<<<< HEAD
 		returnResult ? returnResult(true) : null;
+=======
+		if (returnResult) {
+			returnResult(true);
+		}
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};
 
 	const cancel = () => {
+<<<<<<< HEAD
 		returnResult ? returnResult(false) : null;
+=======
+		if (returnResult) {
+			returnResult(false);
+		}
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		dialogOptions.value = undefined;
 		isDialogOpen.value = false;
 	};

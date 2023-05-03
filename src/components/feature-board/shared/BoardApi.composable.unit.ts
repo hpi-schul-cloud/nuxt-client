@@ -2,11 +2,15 @@ import { useBoardApi } from "./BoardApi.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
+<<<<<<< HEAD
 import {
 	CreateContentElementBody,
 	CreateContentElementBodyTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+=======
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 
 jest.mock("axios");
 
@@ -49,7 +53,11 @@ jest
 	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
 
 initializeAxios({
+<<<<<<< HEAD
 	request: async (path: string) => ({
+=======
+	request: async (_: string) => ({
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		data: "some data",
 	}),
 } as axios.AxiosInstance);

@@ -59,7 +59,11 @@ export const useBoardState = (id: string) => {
 				columnId: newColumn.id,
 				payload: { cardId: movingCardId, height: 100 },
 			};
+<<<<<<< HEAD
 			moveCard(moveCardPayload);
+=======
+			await moveCard(moveCardPayload);
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		}
 	};
 
@@ -72,7 +76,11 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const columnIndex = getColumnIndex(id);
+<<<<<<< HEAD
 		if (columnIndex) {
+=======
+		if (columnIndex > -1) {
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 			await deleteColumnCall(id);
 			board.value.columns.splice(columnIndex, 1);
 		}
@@ -88,7 +96,11 @@ export const useBoardState = (id: string) => {
 			const cardIndex = column?.cards.findIndex(
 				(card) => card.cardId === cardId
 			);
+<<<<<<< HEAD
 			if (cardIndex !== -1) {
+=======
+			if (cardIndex > -1) {
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 				const extractedCards = column.cards.splice(cardIndex, 1);
 				return extractedCards[0];
 			}
@@ -130,6 +142,7 @@ export const useBoardState = (id: string) => {
 
 	const updateColumnTitle = (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
+<<<<<<< HEAD
 
 		updateColumnTitleCall(columnId, newTitle);
 		const columnIndex = getColumnIndex(columnId);
@@ -158,6 +171,38 @@ export const useBoardState = (id: string) => {
 	};
 
 	const getColumnIndex = (columnId: string): number | undefined => {
+=======
+
+		updateColumnTitleCall(columnId, newTitle);
+		const columnIndex = getColumnIndex(columnId);
+		if (columnIndex > -1) {
+			board.value.columns[columnIndex].title = newTitle;
+		}
+	};
+
+	const addCard = (
+		card: BoardSkeletonCard,
+		columnId: string,
+		toPosition: number
+	) => {
+		if (board.value === undefined) return;
+
+		const targetColumnIndex = getColumnIndex(columnId);
+		if (targetColumnIndex > -1) {
+			board.value.columns[targetColumnIndex].cards.splice(toPosition, 0, card);
+		}
+	};
+
+	const getColumnId = (columnIndex: number): string | undefined => {
+		if (board.value === undefined) return;
+
+		return board.value.columns[columnIndex].id;
+	};
+
+	const getColumnIndex = (columnId: string): number => {
+		if (board.value === undefined) return -1;
+
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 		const columnIndex = board.value?.columns.findIndex(
 			(c) => c.id === columnId
 		);

@@ -51,6 +51,7 @@
 				</template>
 			</VCard>
 		</div>
+<<<<<<< HEAD
 		<!-- <DeleteConfirmation
 			:is-delete-modal-open="isDeleteModalOpen"
 			:title="card ? card.title : ''"
@@ -58,6 +59,8 @@
 			@delete-confirm="onDeleteConfirm"
 			@dialog-cancel="onDeleteCancel"
 		></DeleteConfirmation> -->
+=======
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 	</CardHostInteractionHandler>
 </template>
 
@@ -122,7 +125,11 @@ export default defineComponent({
 						title: card.value?.title ? `"${card.value.title}"` : "",
 						type: i18n?.t("components.boardCard").toString(),
 					})
+<<<<<<< HEAD
 					.toString() || "";
+=======
+					.toString() ?? "";
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 
 			const { askConfirmation } = useDeleteConfirmation();
 

@@ -6,7 +6,11 @@
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div
+<<<<<<< HEAD
 			class="mb-4 rounded column-header"
+=======
+			class="column-header mb-4 rounded"
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 			:class="{ 'grey lighten-1': isFocused }"
 			ref="columnHeader"
 			tabindex="-1"
@@ -92,7 +96,11 @@ export default defineComponent({
 						title: props.title ? `"${props.title}"` : "",
 						type: i18n?.t("components.boardColumn").toString(),
 					})
+<<<<<<< HEAD
 					.toString() || "";
+=======
+					.toString() ?? "";
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 
 			const { askConfirmation } = useDeleteConfirmation();
 

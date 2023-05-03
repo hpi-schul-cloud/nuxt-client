@@ -30,12 +30,20 @@ describe("BoardColumnInteractionHandler", () => {
 				"should emit 'move:column-keyboard' event with '%s' key stroke when it is not in edit mode",
 				async (key) => {
 					setup({ isEditMode: false });
+<<<<<<< HEAD
 					const element = await wrapper.find("[data-testid=event-handle]");
+=======
+					const element = wrapper.find("[data-testid=event-handle]");
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 
 					await element.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(
 						"move:column-keyboard"
+<<<<<<< HEAD
 					) || [[]];
+=======
+					) ?? [[]];
+>>>>>>> 86bcc52f05cd70880b95a6af77f70f8306f60242
 					expect(emitted[0][0]).toBeDefined();
 					expect(emitted[0][0]).toBeInstanceOf(KeyboardEvent);
 					expect(emitted[0][0].key.toLowerCase()).toStrictEqual(key);

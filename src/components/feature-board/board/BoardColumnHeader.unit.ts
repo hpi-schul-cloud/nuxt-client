@@ -1,21 +1,34 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import Vue, { computed } from "vue";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useEditMode } from "../shared/EditMode.composable";
+jest.mock("../shared/EditMode.composable");
 
 describe("BoardColumnHeader", () => {
 	let wrapper: Wrapper<Vue>;
 
+	const mockedUseEditMode = jest.mocked(useEditMode);
+
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
+		const isEditMode = computed(() => true);
+		mockedUseEditMode.mockReturnValue({
+			isEditMode,
+			startEditMode: jest.fn(),
+			stopEditMode: jest.fn(),
+		});
 
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 			propsData: {
 				title: "title-text",
 				titlePlaceholder: "Spalte 1",
+				columnId: "abc123",
 			},
 		});
 	};
