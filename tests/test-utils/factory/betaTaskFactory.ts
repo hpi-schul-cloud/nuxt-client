@@ -1,5 +1,5 @@
 import { TaskCardResponse } from "@/serverApi/v3";
-import { taskFactory } from "@@/tests/test-utils/factory";
+import { taskFactory } from "@/store/task.filter.unit";
 
 const defaultBetaTask: TaskCardResponse = {
 	id: "642162cc44a17f1ce8939ddb",
@@ -8,7 +8,7 @@ const defaultBetaTask: TaskCardResponse = {
 	title: "Mathe Task",
 	cardElements: [],
 	draggable: true,
-	task: taskFactory(),
+	task: taskFactory.build(),
 	visibleAtDate: "",
 	dueDate: "",
 };

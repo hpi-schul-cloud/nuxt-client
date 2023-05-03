@@ -12,8 +12,8 @@ import SchoolsModule from "@/store/schools";
 import TaskCardModule from "@/store/task-card";
 import {
 	betaTaskFactory,
-	courseMetadataFactory,
-	roomFactory,
+	courseMetadataResponseFactory,
+	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils/factory";
 
 const routes = [
@@ -48,9 +48,10 @@ let taskCardModuleMock = createModuleMocks(TaskCardModule);
 const CREATE_EDIT_PERMISSION = "task_card_edit";
 const VIEW_PERMISSION = "task_card_view";
 
-const mockRoomData = roomFactory();
+const mockSingleColumnBoardResponseData =
+	singleColumnBoardResponseFactory.build();
 
-const mockCourse = courseMetadataFactory();
+const mockCourseMetadataResponseData = courseMetadataResponseFactory.build();
 
 const emptyTaskCardData = betaTaskFactory({
 	id: "",
@@ -96,10 +97,10 @@ const getWrapper = (
 				getUserPermissions: [userPermission],
 			}),
 			roomModule: createModuleMocks(RoomModule, {
-				getRoomData: mockRoomData,
+				getRoomData: mockSingleColumnBoardResponseData,
 			}),
 			roomsModule: createModuleMocks(RoomsModule, {
-				getAllElements: [mockCourse],
+				getAllElements: [mockCourseMetadataResponseData],
 			}),
 			schoolsModule: createModuleMocks(SchoolsModule, {
 				getCurrentYear: mockCurrentYear,
