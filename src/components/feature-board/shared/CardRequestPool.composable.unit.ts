@@ -30,7 +30,7 @@ describe("card-request-pool.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	it.skip("should return Card data", async () => {
+	it("should return Card data", async () => {
 		const CARD_ID = "test-id";
 		const { cardsApiFactoryMock } = setup(CARD_ID);
 
@@ -42,7 +42,7 @@ describe("card-request-pool.composable", () => {
 		]);
 	});
 
-	it.skip("should batch requests", async () => {
+	it("should batch requests", async () => {
 		const CARD_ID1 = "test-id1";
 		const CARD_ID2 = "test-id2";
 		const CARD_ID3 = "test-id3";
