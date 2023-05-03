@@ -194,19 +194,16 @@ describe("ExternalToolsModule", () => {
 		const schoolId = "schoolId";
 		const toolId = "toolId";
 
-		const schoolExternalTool: SchoolExternalTool = schoolExternalToolFactory({
-			name: "Test",
-			status: SchoolExternalToolStatus.Latest,
-			id: "testId",
-			version: 1,
-		});
+		const schoolExternalTool: SchoolExternalTool =
+			schoolExternalToolFactory.build({
+				name: "Test",
+				status: SchoolExternalToolStatus.Latest,
+			});
 		const schoolExternalTools: SchoolExternalTool[] = [
 			schoolExternalTool,
-			schoolExternalToolFactory({
+			schoolExternalToolFactory.build({
 				name: "Test2",
 				status: SchoolExternalToolStatus.Outdated,
-				id: "testId2",
-				version: 1,
 			}),
 		];
 		module.setSchoolExternalTools(schoolExternalTools);
@@ -341,11 +338,9 @@ describe("ExternalToolsModule", () => {
 				const expectedName = "NewTool";
 
 				module.setSchoolExternalTools([
-					schoolExternalToolFactory({
-						id: "id",
+					schoolExternalToolFactory.build({
 						name: expectedName,
 						status: SchoolExternalToolStatus.Latest,
-						version: 1,
 					}),
 				]);
 
@@ -522,7 +517,7 @@ describe("ExternalToolsModule", () => {
 					await module.loadSchoolExternalTools();
 
 					expect(setSchoolExternalToolsSpy).toHaveBeenCalledWith([
-						schoolExternalToolFactory({
+						schoolExternalToolFactory.build({
 							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
 							status: SchoolExternalToolStatus.Latest,
