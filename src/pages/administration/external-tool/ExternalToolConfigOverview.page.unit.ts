@@ -46,7 +46,7 @@ describe("ExternalToolConfigOverview", () => {
 		const toolTemplate: ToolConfigurationTemplate =
 			toolConfigurationTemplateFactory();
 		const loadedSchoolExternalTool: SchoolExternalTool =
-			schoolExternalToolFactory();
+			schoolExternalToolFactory.build();
 
 		externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
 			toolTemplate
