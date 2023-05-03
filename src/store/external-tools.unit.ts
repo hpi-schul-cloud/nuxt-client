@@ -21,7 +21,7 @@ import {
 	schoolExternalToolFactory,
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
+import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
@@ -209,7 +209,7 @@ describe("ExternalToolsModule", () => {
 		module.setSchoolExternalTools(schoolExternalTools);
 
 		const toolConfiguration: ToolConfigurationListItem =
-			toolConfigurationFactory();
+			toolConfigurationFactory.build();
 		const toolConfigurations: ToolConfigurationListItem[] = [toolConfiguration];
 		module.setToolConfigurations(toolConfigurations);
 
@@ -238,7 +238,7 @@ describe("ExternalToolsModule", () => {
 		);
 
 		const toolConfigurationTemplate: ToolConfigurationTemplate =
-			toolConfigurationTemplateFactory();
+			toolConfigurationTemplateFactory.build();
 
 		return {
 			schoolId,
@@ -401,7 +401,7 @@ describe("ExternalToolsModule", () => {
 			it("should set the given toolConfigurations array to the state", () => {
 				setup();
 				const expectedToolConfiguration: ToolConfigurationListItem =
-					toolConfigurationFactory();
+					toolConfigurationFactory.build();
 				module.setToolConfigurations([expectedToolConfiguration]);
 
 				expect(module.getToolConfigurations).toEqual(
@@ -698,7 +698,7 @@ describe("ExternalToolsModule", () => {
 					await module.loadAvailableToolConfigurations();
 
 					expect(setToolConfigurationsSpy).toHaveBeenCalledWith([
-						toolConfigurationFactory({
+						toolConfigurationFactory.build({
 							id: toolConfigurationListResponse.data[0].id,
 							name: toolConfigurationListResponse.data[0].name,
 							logoUrl: toolConfigurationListResponse.data[0].logoUrl,
@@ -904,7 +904,7 @@ describe("ExternalToolsModule", () => {
 					const { axiosError, axiosErrorResponse } = setupWithAuth();
 					const { toolApiMock } = mockToolApi();
 					const toolTemplate: ToolConfigurationTemplate =
-						toolConfigurationTemplateFactory();
+						toolConfigurationTemplateFactory.build();
 
 					toolApiMock.toolSchoolControllerUpdateSchoolExternalTool.mockRejectedValue(
 						axiosError

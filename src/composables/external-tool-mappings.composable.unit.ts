@@ -229,9 +229,9 @@ describe("useExternalToolUtils", () => {
 		it("should return schoolExternalToolPostParams", () => {
 			const { mapToolConfigurationTemplateToSchoolExternalToolPostParams } =
 				setup();
-			const toolParameter = toolParameterFactory({ value: undefined });
+			const toolParameter = toolParameterFactory.build({ value: undefined });
 			const template: ToolConfigurationTemplate =
-				toolConfigurationTemplateFactory({
+				toolConfigurationTemplateFactory.build({
 					parameters: [toolParameter, { ...toolParameter, value: "testValue" }],
 				});
 
