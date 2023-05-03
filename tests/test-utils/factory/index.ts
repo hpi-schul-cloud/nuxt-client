@@ -4,6 +4,6 @@ export * from "./toolConfigurationFactory";
 export * from "./toolConfigurationTemplateFactory";
 export * from "./businessErrorFactory";
 export * from "./taskResponseFactory";
-export * from "./betaTaskFactory";
+export * from "./taskCardResponseFactory";
 export * from "./courseMetadataResponseFactory";
 export * from "./singleColumnBoardResponseFactory";

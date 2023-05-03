@@ -11,7 +11,7 @@ import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskCardModule from "@/store/task-card";
 import {
-	betaTaskFactory,
+	taskCardResponseFactory,
 	courseMetadataResponseFactory,
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils/factory";
@@ -53,7 +53,7 @@ const mockSingleColumnBoardResponseData =
 
 const mockCourseMetadataResponseData = courseMetadataResponseFactory.build();
 
-const emptyTaskCardData = betaTaskFactory({
+const emptyTaskCardData = taskCardResponseFactory.build({
 	id: "",
 });
 
@@ -67,7 +67,7 @@ const mockCurrentYear = {
 	isTeamCreationByStudentsEnabled: false,
 };
 
-const mockTaskCardData = betaTaskFactory();
+const mockTaskCardData = taskCardResponseFactory.build();
 
 const getWrapper = (
 	userPermission: string,
