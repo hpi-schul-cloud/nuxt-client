@@ -116,7 +116,16 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
-		const targetColumnId = columnIndex ? getColumnId(columnIndex) : columnId;
+		debugger;
+
+		if (
+			columnIndex !== undefined &&
+			(columnIndex < 0 || columnIndex > board.value.columns.length - 1)
+		) {
+			return;
+		}
+		const targetColumnId =
+			columnIndex !== undefined ? getColumnId(columnIndex) : columnId;
 		if (addedIndex !== null && targetColumnId) {
 			const card = await extractCard(payload.cardId);
 			if (card) {
