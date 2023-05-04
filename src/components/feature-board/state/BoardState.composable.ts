@@ -131,6 +131,11 @@ export const useBoardState = (id: string) => {
 
 		const element = board.value.columns[payload.removedIndex];
 		board.value.columns.splice(payload.removedIndex, 1);
+		/**
+		 * refreshes the board to force rerendering in tracked v-for
+		 * to maintain focus when moving columns by keyboard
+		 */
+		await nextTick();
 		board.value.columns.splice(payload.addedIndex, 0, element);
 		await moveColumnCall(payload.payload, board.value.id, payload.addedIndex);
 	};
