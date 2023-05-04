@@ -20,8 +20,8 @@ import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
 	toolConfigurationFactory,
+	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
