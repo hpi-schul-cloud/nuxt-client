@@ -149,7 +149,6 @@ import {
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import topicsEmptyStateImage from "@/assets/img/empty-state/topics-empty-state.svg";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
@@ -212,7 +211,7 @@ export default {
 		},
 		roomIsEmpty: () => roomModule.roomIsEmpty,
 		emptyState() {
-			const image = topicsEmptyStateImage;
+			const image = "topics-empty-state";
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
 			const maxHeight = "200px";
 			return {
