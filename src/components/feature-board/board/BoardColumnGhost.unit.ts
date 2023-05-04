@@ -31,7 +31,7 @@ describe("BoardColumnGhost", () => {
 			headerComponent.vm.$emit("add-column");
 
 			const emitted = wrapper.emitted();
-			expect(emitted["add-empty-column"]).toBeDefined();
+			expect(emitted["create:column"]).toBeDefined();
 		});
 	});
 
@@ -49,7 +49,7 @@ describe("BoardColumnGhost", () => {
 			containerComponent.vm.$emit("drop", movedCardObject);
 
 			const emitted = wrapper.emitted();
-			expect(emitted["add-column-with-card"]).toBeDefined();
+			expect(emitted["create:column-with-card"]).toBeDefined();
 		});
 
 		it("should not emit 'add-empty-column' if addedIndex equals null", () => {

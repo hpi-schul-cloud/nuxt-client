@@ -4,15 +4,8 @@ export interface CardMove {
 	removedIndex: number | null;
 	addedIndex: number | null;
 	payload: BoardSkeletonCard;
-	targetColumnId?: string;
-}
-
-export interface CardMoveByKeyboard {
-	card: BoardSkeletonCard;
-	cardIndex: number;
-	columnIndex: number;
-	targetColumnIndex: number;
-	targetColumnPosition: number;
+	columnId?: string;
+	columnIndex?: number;
 }
 
 export interface ColumnMove {
@@ -21,7 +14,7 @@ export interface ColumnMove {
 	payload: BoardColumn["id"];
 }
 
-export type DragAndDropKeys =
+export type DragAndDropKey =
 	| "ArrowUp"
 	| "ArrowDown"
 	| "ArrowLeft"
@@ -40,3 +33,10 @@ export const columnDropPlaceholderOptions = {
 	animationDuration: "150",
 	showOnTop: true,
 };
+
+export const verticalCursorKeys: DragAndDropKey[] = ["ArrowUp", "ArrowDown"];
+
+export const horizontalCursorKeys: DragAndDropKey[] = [
+	"ArrowLeft",
+	"ArrowRight",
+];
