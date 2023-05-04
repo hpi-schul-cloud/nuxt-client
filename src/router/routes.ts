@@ -241,8 +241,14 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-board",
 	},
 	{
-		path: `/tldraw`,
+		path: `/tldraw/:id(${REGEX_ID})`,
 		component: () => import("../pages/drawing-tool/DrawingTool.page.vue"),
+		name: "tldraw-room",
+	},
+	{
+		path: `/tldraw`,
+		component: () =>
+			import("../pages/drawing-tool/DrawingToolDashboard.page.vue"),
 		name: "tldraw",
 	},
 	{
