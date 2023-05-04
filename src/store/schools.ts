@@ -287,8 +287,9 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload as Required<School>);
 		try {
-			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
-				.data;
+			await $axios.patch(`/v1/schools/${school.id}`, school);
+			const data = (await $axios.get(`/v1/schools/${school.id}`)).data;
+
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: unknown) {
