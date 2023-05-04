@@ -8,7 +8,7 @@ import { toolParameterFactory } from "@@/tests/test-utils/factory";
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;
 
-	const setup = (parameter: ToolParameter = toolParameterFactory()) => {
+	const setup = (parameter: ToolParameter = toolParameterFactory.build()) => {
 		document.body.setAttribute("data-app", "true");
 
 		wrapper = mount(ExternalToolConfigParameter as MountOptions<Vue>, {
@@ -59,13 +59,13 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type boolean", () => {
 		it("should render a tri state select", () => {
-			setup(toolParameterFactory({ type: ToolParameterType.Boolean }));
+			setup(toolParameterFactory.build({ type: ToolParameterType.Boolean }));
 
 			expect(wrapper.find(".v-select__slot"));
 		});
 
 		it("should use default selectItem when parameter value is undefined", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Boolean,
 				value: undefined,
 			});
@@ -79,7 +79,7 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should watch selectItem and emit event when select input value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Boolean,
 			});
 			setup(parameter);
@@ -93,13 +93,13 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type string", () => {
 		it("should render a text-field", () => {
-			setup(toolParameterFactory({ type: ToolParameterType.String }));
+			setup(toolParameterFactory.build({ type: ToolParameterType.String }));
 
 			expect(wrapper.find(".v-text-field__slot"));
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.String,
 			});
 			setup(parameter);
@@ -115,7 +115,7 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type number", () => {
 		it("should render a text-field with type number", () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Number,
 			});
 			setup(parameter);
@@ -127,7 +127,7 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Number,
 			});
 			setup(parameter);
