@@ -288,7 +288,7 @@ export default {
 	::v-deep *.is-empty:first-child::before {
 		float: left;
 		height: 0;
-		color: var(--v-grey-base);
+		color: map-get($grey, base);
 		pointer-events: none;
 		content: attr(data-empty-text);
 	}

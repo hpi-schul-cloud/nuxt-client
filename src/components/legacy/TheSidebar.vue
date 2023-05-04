@@ -183,7 +183,7 @@ export default defineComponent({
 	height: calc(100vh - 55px);
 	overflow-y: auto;
 	background-color: var(--v-white-base);
-	box-shadow: 0 5px 5px var(--v-grey-lighten3);
+	box-shadow: 0 5px 5px map-get($grey, lighten-3);
 	transition: display 2s;
 
 	&.expanded {
@@ -313,7 +313,7 @@ export default defineComponent({
 				&.active {
 					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--v-grey-lighten3);
+					background-color: map-get($grey, lighten-3);
 				}
 
 				&.active .list-content,

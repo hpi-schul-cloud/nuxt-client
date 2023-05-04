@@ -221,7 +221,7 @@ export default {
 	}
 
 	&:hover {
-		background-color: var(--v-grey-lighten3);
+		background-color: map-get($grey, lighten-3);
 		border-radius: var(--radius-sm);
 	}
 }

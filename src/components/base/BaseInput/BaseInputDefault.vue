@@ -247,8 +247,8 @@ export default {
 	}
 
 	&.disabled {
-		color: var(--v-grey-base);
-		border-bottom-color: var(--v-grey-base);
+		color: map-get($grey, base);
+		border-bottom-color: map-get($grey, base);
 	}
 
 	.info-line {
@@ -304,7 +304,7 @@ export default {
 					background-color: transparent;
 
 					&::placeholder {
-						color: var(--v-grey-base);
+						color: map-get($grey, base);
 					}
 				}
 			}
@@ -313,7 +313,7 @@ export default {
 }
 
 .pwd-toggle {
-	color: var(--v-grey-base);
+	color: map-get($grey, base);
 	border-radius: var(--radius-round);
 
 	&:hover {
@@ -330,7 +330,7 @@ export default {
 .base-input-info {
 	display: block;
 	font-size: var(--text-xs);
-	color: var(--v-grey-base);
+	color: map-get($grey, base);
 }
 
 .base-input-info.base-input-error {

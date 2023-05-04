@@ -141,7 +141,7 @@ export default {
 			}
 
 			&::placeholder {
-				color: var(--v-grey-base);
+				color: map-get($grey, base);
 			}
 
 			&:hover {
