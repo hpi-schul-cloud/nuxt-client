@@ -2,9 +2,12 @@ import {
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
+	BoardElementApiFactory,
 	ColumnResponse,
 	CreateContentElementBody,
 	CreateContentElementBodyTypeEnum,
+	FileElementContent,
+	TextElementContent,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -12,6 +15,7 @@ export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -24,6 +28,13 @@ export const useBoardApi = () => {
 
 	const updateColumnTitleCall = async (id: string, title: string) => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
+	};
+
+	const updateElementCall = async (
+		elementId: string,
+		content: TextElementContent | FileElementContent
+	) => {
+		await elementApi.elementControllerUpdateElement(elementId, { content });
 	};
 
 	const createElement = async (
@@ -86,6 +97,7 @@ export const useBoardApi = () => {
 		moveColumnCall,
 		updateCardTitle,
 		updateColumnTitleCall,
+		updateElementCall,
 		createCardCall,
 	};
 };

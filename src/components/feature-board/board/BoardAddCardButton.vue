@@ -2,11 +2,11 @@
 	<div class="d-flex w-full justify-center" ref="column">
 		<div ref="columnend" class="columnend"></div>
 		<div
-			ref="sticky"
 			class="button-background sticky pb-4 pt-2 text-center"
 			:style="stickyStyle"
 		>
 			<VBtn
+				ref="sticky"
 				@click.stop="onAddCard"
 				@dblclick.stop="() => {}"
 				elevation="0"

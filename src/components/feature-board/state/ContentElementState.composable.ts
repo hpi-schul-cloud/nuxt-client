@@ -1,5 +1,6 @@
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref, watch } from "vue";
+import { useBoardApi } from "../shared/BoardApi.composable";
 import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 import { AnyContentElement } from "../types/ContentElement";
 
@@ -19,6 +20,8 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const isAutoFocus = ref<boolean>(false);
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
+	const { updateElementCall } = useBoardApi();
+
 	watchDebounced(
 		modelValue.value,
 		(modelValue) => {
@@ -37,8 +40,9 @@ export const useContentElementState = <T extends AnyContentElement>(
 		}
 	);
 
-	const updateElement = (payload: T["content"]) => {
+	const updateElement = async (payload: T["content"]) => {
 		console.log("update element", { ...payload });
+		await updateElementCall(props.element.id, payload);
 	};
 
 	return {
