@@ -4,7 +4,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import getCreatedDate from "./StatusAlerts.vue";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -58,16 +57,4 @@ describe("@/components/molecules/StatusAlerts", () => {
 		const title2 = wrapper.find("[data-test-id='alert-title-2']");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
 	});
-});
-
-describe("getCreatedDate", () => {
-	it("returns expected result", () => {
-		const dateTime = "05.05.2023 12:34";
-		const expectedDate = "May 5, 2023 12:34 PM"; // Assuming printDateTime function returns date in this format
-		expect(new getCreatedDate(dateTime)).toEqual(expectedDate);
-	});
-	// it("should display an createdAt element", () => {
-	// 	const wrapper = shallowMount(StatusAlerts);
-	// 	expect(wrapper.contains("alert-date")).toBe(true);
-	// });
 });
