@@ -60,12 +60,9 @@ export default defineComponent({
 	},
 	setup() {
 		const getIconTag = (status: string) => {
-			switch (status) {
-				case "danger":
-					return { icon: mdiAlertCircle, color: "error" };
-				default:
-					return { icon: mdiInformation, color: "info" };
-			}
+			return status === "danger"
+				? { icon: mdiAlertCircle, color: "error" }
+				: { icon: mdiInformation, color: "info" };
 		};
 
 		const getDate = (date: string) => {

@@ -61,14 +61,17 @@ describe("@/components/molecules/StatusAlerts", () => {
 });
 
 describe("getCreatedDate", () => {
-	it("should be getCreatedDate fuction on the template", () => {
-		const wrapper = getWrapper(testProps);
-		expect(wrapper.contains(getCreatedDate)).toBe(true);
-	});
-	it("returns expected result", () => {
+	it("should be 'getCreatedDate' converts date in the template", () => {
 		const wrapper = getWrapper(testProps);
 		const expectedDate = "05.05.2023 12:34";
-		const dateTime = "May 5, 2023 12:34 PM"; // Assuming printDateTime function returns date in this format
+		const alertElement = wrapper.find(".alert-date");
+		expect(alertElement.element.innerHTML).toContain(expectedDate);
+	});
+
+	it("should return expected result", () => {
+		const wrapper = getWrapper(testProps);
+		const expectedDate = "05.05.2023 12:34";
+		const dateTime = "May 5, 2023 12:34 PM";
 		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
 	});
 });
