@@ -26,7 +26,10 @@ describe("BoardColumn", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 			propsData: { column: MOCK_PROP, index: 1 },
 		});
 	};
@@ -44,19 +47,21 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when a card moved by key stroke", () => {
-		it("should emit 'position-change-keyboard'", () => {
+		it("should emit 'position-change-keyboard'", async () => {
 			setup();
 			const expectedEmitObject = {
-				card: MOCK_PROP.cards[0],
-				cardIndex: 0,
-				columnIndex: 1,
-				targetColumnIndex: 0,
-				targetColumnPosition: 0,
+				removedIndex: 0,
+				addedIndex: 0,
+				payload: MOCK_PROP.cards[0],
+				columnIndex: 0,
 			};
-			const cardHostComponent = wrapper.findComponent(CardHost);
-			cardHostComponent.vm.$emit("move-card-keyboard", "ArrowLeft");
 
-			const emitted = wrapper.emitted("update:card-position:keyboard") || [[]];
+			const cardHostComponent = wrapper.findComponent(CardHost);
+			cardHostComponent.vm.$emit("move:card-keyboard", "ArrowLeft");
+
+			const emitted = wrapper.emitted("update:card-position") || [[]];
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
 
 			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
 		});
@@ -69,7 +74,10 @@ describe("BoardColumn", () => {
 				removedIndex: 0,
 				addedIndex: 0,
 				payload: MOCK_PROP.cards[0],
+				targetColumnId: MOCK_PROP.id,
+				columnId: MOCK_PROP.id,
 			};
+
 			const containerComponent = wrapper.findComponent(Container);
 			await containerComponent.vm.$emit("drop", emitObject);
 			await wrapper.vm.$nextTick();

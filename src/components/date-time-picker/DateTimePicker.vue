@@ -5,7 +5,7 @@
 		</v-icon>
 		<date-picker
 			class="mr-2 picker-width"
-			required
+			:required="required"
 			:date="date"
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
@@ -13,25 +13,29 @@
 			:maxDate="maxDate"
 			@input="handleDateInput"
 			@error="handleDateError"
+			@valid="handleDateValid"
 		/>
 		<time-picker
 			class="picker-width"
-			required
+			:required="required"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
+			:allow-past="allowPast || !dateIsToday"
 			@input="handleTimeInput"
 			@error="handleTimeError"
+			@valid="handleTimeValid"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, watch, computed } from "vue";
+import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
 import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 import { mdiCalendarClock } from "@mdi/js";
+import { isToday } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -53,8 +57,9 @@ export default defineComponent({
 		required: {
 			type: Boolean,
 		},
+		allowPast: { type: Boolean, default: false },
 	},
-	emits: ["input", "error"],
+	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -70,59 +75,37 @@ export default defineComponent({
 			return i18n.locale;
 		})();
 
-		const date = ref("");
-		const time = ref("");
-		const dateError = ref(false);
-		const timeError = ref(false);
-
-		const setDateTime = (dateIsoString: string) => {
-			date.value = dateIsoString;
-			time.value = new Date(dateIsoString).toLocaleTimeString(locale, {
+		const getTime = (dateIsoString: string) => {
+			if (dateIsoString === "") {
+				return "";
+			}
+			return new Date(dateIsoString).toLocaleTimeString(locale, {
 				timeStyle: "short",
 				hourCycle: "h23",
 			});
 		};
 
-		if (props.dateTime !== "") {
-			setDateTime(props.dateTime);
-		}
-
-		watch(
-			() => props.dateTime,
-			(newDateTime) => {
-				setDateTime(newDateTime);
-			}
-		);
+		const date = ref(props.dateTime);
+		const time = ref(getTime(props.dateTime));
+		const dateError = ref(false);
+		const timeError = ref(false);
+		const dateIsToday = ref(isToday(props.dateTime));
 
 		const emitDateTime = () => {
-			const dateTime = new Date(date.value);
-			const hoursAndMinutes = time.value.split(":");
-			dateTime.setHours(
-				parseInt(hoursAndMinutes[0]),
-				parseInt(hoursAndMinutes[1])
-			);
-			emit("input", dateTime.toISOString());
+			if (date.value !== "" && time.value !== "") {
+				const dateTime = new Date(date.value);
+				const hoursAndMinutes = time.value.split(":");
+				dateTime.setHours(
+					parseInt(hoursAndMinutes[0]),
+					parseInt(hoursAndMinutes[1])
+				);
+				emit("input", dateTime.toISOString());
+			}
 		};
 
 		const handleDateInput = (newDate: string) => {
-			dateError.value = false;
 			date.value = newDate;
-
-			if (time.value === "") {
-				time.value = "12:00";
-			}
-			if (valid.value) {
-				emitDateTime();
-			}
-		};
-
-		const handleTimeInput = (newTime: string) => {
-			timeError.value = false;
-			time.value = newTime;
-
-			if (date.value === "") {
-				date.value = new Date().toISOString();
-			}
+			dateIsToday.value = isToday(date.value);
 			if (valid.value) {
 				emitDateTime();
 			}
@@ -130,12 +113,25 @@ export default defineComponent({
 
 		const handleDateError = () => {
 			dateError.value = true;
-			emit("error");
+		};
+
+		const handleDateValid = () => {
+			dateError.value = false;
+		};
+
+		const handleTimeInput = (newTime: string) => {
+			time.value = newTime;
+			if (valid.value) {
+				emitDateTime();
+			}
 		};
 
 		const handleTimeError = () => {
 			timeError.value = true;
-			emit("error");
+		};
+
+		const handleTimeValid = () => {
+			timeError.value = false;
 		};
 
 		const valid = computed(() => !dateError.value && !timeError.value);
@@ -147,10 +143,13 @@ export default defineComponent({
 		return {
 			date,
 			time,
+			dateIsToday,
 			handleDateInput,
-			handleTimeInput,
 			handleDateError,
+			handleDateValid,
+			handleTimeInput,
 			handleTimeError,
+			handleTimeValid,
 			iconColor,
 			mdiCalendarClock,
 		};

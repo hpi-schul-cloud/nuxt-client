@@ -33,7 +33,7 @@ import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 export default defineComponent({
 	name: "BoardColumnGhost",
 	components: { Container, BoardColumnGhostHeader },
-	emits: ["add-empty-column", "add-column-with-card"],
+	emits: ["create:column", "create:column-with-card"],
 	setup(props, { emit }) {
 		const isDragPending = ref<boolean>(false);
 
@@ -50,10 +50,10 @@ export default defineComponent({
 
 		const onDropCard = (card: CardMove) => {
 			if (card.addedIndex === null) return;
-			emit("add-column-with-card", card.payload.cardId);
+			emit("create:column-with-card", card.payload.cardId);
 		};
 		const onAddColumn = () => {
-			emit("add-empty-column");
+			emit("create:column");
 		};
 
 		const onDragEnter = () => {
@@ -80,5 +80,19 @@ export default defineComponent({
 <style scoped>
 .grow-transition {
 	transition: min-width 200ms;
+}
+
+/* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+	overflow: visible !important;
+} */
+
+/**
+ * This rule extends the droppable area of columns.
+ * Without this rule cards have to be placed closely below the last card in a column to be added.
+*/
+.smooth-dnd-container.vertical {
+	min-height: 70vh;
+	height: 100%;
+	padding-bottom: 50px;
 }
 </style>

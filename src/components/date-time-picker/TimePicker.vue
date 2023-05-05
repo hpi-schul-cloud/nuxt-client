@@ -7,30 +7,32 @@
 			nudge-bottom="70"
 			min-width="180"
 			attach
-			@input="onMenuToggle"
+			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
-					v-model="inputTime"
-					id="time-input"
+					v-model="model"
 					data-testid="time-input"
 					placeholder="HH:MM"
 					filled
 					clearable
 					:label="label"
 					:aria-label="ariaLabel"
-					:errors="hasErrors"
-					:error-messages="errors"
 					v-bind="attrs"
 					v-on="on"
-					@input="onInput"
+					:rules="rules"
+					validate-on-blur
+					autocomplete="off"
+					ref="inputField"
+					:class="{ 'menu-open': showTimeDialog }"
+					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@blur="onBlur"
+					@update:error="handleError"
 				/>
 			</template>
 			<v-list height="200" class="col-12 pt-1 px-0">
-				<v-list-item-group v-model="selectedTime" color="primary">
+				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
 						:key="`time-select-${index}`"
@@ -38,10 +40,12 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="selectTime(timeOfDay)"
+							@click="handleSelect(timeOfDay.value)"
+							:disabled="timeOfDay.disabled"
 						>
-							<v-list-item-title>{{ timeOfDay }}</v-list-item-title>
+							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
+
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
@@ -51,9 +55,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from "vue";
+import { defineComponent, ref, toRef, computed, inject } from "vue";
 import VueI18n from "vue-i18n";
-import dayjs from "dayjs";
+import { useTimePickerState } from "./state/TimePickerState.composable";
+import { useDebounceFn } from "@vueuse/core";
+import { ValidationRule } from "./types/Validation";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -62,8 +68,9 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
+		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["input", "error"],
+	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		if (!i18n) {
@@ -78,113 +85,115 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		const timesOfDayList = computed(() => {
-			const times = [];
-
-			for (let hour = 0; hour < 24; hour++) {
-				times.push(dayjs().hour(hour).minute(0).format("HH:mm"));
-				times.push(dayjs().hour(hour).minute(30).format("HH:mm"));
-			}
-
-			return times;
-		});
-
-		const inputTime = ref(props.time);
+		const model = ref(props.time);
 		const showTimeDialog = ref(false);
-		const selectedTime = ref(null);
-		const errors = ref<string[]>([]);
+		const inputField = ref<HTMLInputElement | null>(null);
 
-		const selectTime = (selected: string) => {
-			inputTime.value = selected;
-			showTimeDialog.value = false;
+		const { timesOfDayList, timeInPast } = useTimePickerState(
+			toRef(props, "allowPast")
+		);
 
-			const validated = validate(inputTime.value);
-			if (validated) {
-				emit("input", inputTime.value);
-			}
+		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
+
+		const requiredRule: ValidationRule = (value: string | null) => {
+			return value === "" || value === null
+				? t("components.timePicker.validation.required")
+				: true;
 		};
 
-		const onInput = (input: string) => {
-			inputTime.value = input;
-			showTimeDialog.value = false;
-		};
-
-		const onBlur = () => {
-			const validated = validate(inputTime.value);
-
-			if (validated) {
-				emit("input", inputTime.value);
-			}
-		};
-
-		const onMenuToggle = (menuOpen: boolean) => {
-			if (menuOpen === false) {
-				validate(inputTime.value);
-			}
-		};
-
-		const validate = (timeValue: string) => {
-			resetErrors();
-
-			if (!props.required && (timeValue === "" || timeValue === null)) {
+		const formatRule: ValidationRule = (value: string | null) => {
+			if (value === "" || value === null) {
 				return true;
 			}
-
-			if (props.required && (timeValue === "" || timeValue === null)) {
-				errors.value.push(t("components.timePicker.validation.required"));
-				emit("error");
-				return false;
-			}
-
-			// fits hh:mm format
-			const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/g;
-			const found = timeValue.match(regex);
-			if (!found) {
-				errors.value.push(t("components.timePicker.validation.format"));
-				emit("error");
-				return false;
-			}
-
-			return true;
+			return !value.match(timeRegex)
+				? t("components.timePicker.validation.format")
+				: true;
 		};
 
-		const hasErrors = computed(() => {
-			return errors.value.length > 0;
+		const allowPastRule: ValidationRule = (value: string | null) => {
+			if (value === "" || value === null) {
+				return true;
+			}
+			const hoursAndMinutes = value.split(":");
+			return timeInPast(
+				parseInt(hoursAndMinutes[0]),
+				parseInt(hoursAndMinutes[1])
+			)
+				? t("components.timePicker.validation.future")
+				: true;
+		};
+
+		const rules = computed<ValidationRule[]>(() => {
+			const rules: ValidationRule[] = [];
+
+			if (props.required) {
+				rules.push(requiredRule);
+			}
+			rules.push(formatRule);
+			if (!props.allowPast) {
+				rules.push(allowPastRule);
+			}
+			return rules;
 		});
 
-		const resetErrors = () => {
-			errors.value = [];
+		const handleBlur = useDebounceFn(() => {
+			const time = model.value || "";
+			if (time.match(timeRegex)) {
+				emit("input", time);
+			}
+		}, 200);
+
+		const handleSelect = (selected: string) => {
+			inputField.value?.focus();
+			model.value = selected;
+			closeMenu();
 		};
 
-		watch(
-			() => props.time,
-			(newValue) => {
-				inputTime.value = newValue;
+		const handleError = (hasError: boolean) => {
+			hasError ? emit("error") : emit("valid");
+		};
+
+		const handleMenuToggle = () => {
+			if (showTimeDialog.value) {
+				emit("valid");
 			}
-		);
+		};
+
+		const closeMenu = useDebounceFn(() => {
+			showTimeDialog.value = false;
+		}, 50);
 
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			inputTime,
-			selectedTime,
-			selectTime,
-			onInput,
-			onBlur,
-			onMenuToggle,
-			validate,
-			errors,
-			hasErrors,
-			resetErrors,
+			model,
+			rules,
+			inputField,
+			handleBlur,
+			handleSelect,
+			handleError,
+			handleMenuToggle,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/components/VTextField/_variables.scss";
+
 .time-list-item {
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
+}
+::v-deep {
+	.menu-open {
+		label {
+			transform: $text-field-filled-full-width-label-active-transform;
+		}
+		.v-text-field__details {
+			display: none;
+		}
+	}
 }
 </style>

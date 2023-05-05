@@ -4,16 +4,20 @@
 		class="column-drag-handle white px-4"
 	>
 		<BoardColumnHeader
+			:columnId="column.id"
 			:title="column.title"
+			:titlePlaceholder="titlePlaceholder"
+			@delete:column="onColumnDelete"
+			@move:column-keyboard="onMoveColumnKeyboard"
 			@update:title="onUpdateTitle"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
 			drag-class="elevation-12"
 			drop-class="elevation-0"
-			:drag-begin-delay="200"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
+			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 		>
 			<template v-for="(card, index) in column.cards">
@@ -22,30 +26,42 @@
 						class="my-3"
 						:card-id="card.cardId"
 						:height="card.height"
-						@move-card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@delete:card="onDeleteCard"
 					/>
 				</Draggable>
 			</template>
 		</Container>
+		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, inject, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useDebounceFn } from "@vueuse/core";
+import VueI18n from "vue-i18n";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
-	CardMoveByKeyboard,
-	DragAndDropKeys,
+	DragAndDropKey,
+	horizontalCursorKeys,
+	verticalCursorKeys,
 } from "../types/DragAndDrop";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
-	components: { CardHost, Container, Draggable, BoardColumnHeader },
+	components: {
+		CardHost,
+		Container,
+		Draggable,
+		BoardColumnHeader,
+		BoardAddCardButton,
+	},
 	props: {
 		column: {
 			type: Object as PropType<BoardColumn>,
@@ -54,66 +70,90 @@ export default defineComponent({
 		index: { type: Number, required: true },
 	},
 	emits: [
+		"create:card",
+		"delete:card",
+		"delete:column",
+		"move:column-keyboard",
 		"update:card-position",
-		"update:card-position:keyboard",
-		"update:title",
+		"update:column-title",
 	],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
+
+		const onCreateCard = () => emit("create:card", props.column.id);
+
+		const onColumnDelete = (columnId: string): void => {
+			emit("delete:column", columnId);
+		};
+
+		const onDeleteCard = (cardId: string): void => {
+			emit("delete:card", cardId);
+		};
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
-			emit("update:card-position", dropResult);
-		};
-
-		const getChildPayload = (index: number): BoardSkeletonCard => {
-			return props.column.cards[index];
+			emit("update:card-position", {
+				...dropResult,
+				columnId: props.column.id,
+			});
 		};
 
 		const onMoveCardKeyboard = (
 			cardIndex: number,
 			card: BoardSkeletonCard,
-			keyString: DragAndDropKeys
+			keyString: DragAndDropKey
 		) => {
-			const cardMoveByKeyboard: CardMoveByKeyboard = {
-				card: card,
-				cardIndex,
+			const cardMove: CardMove = {
+				removedIndex: cardIndex,
+				addedIndex: -1,
+				payload: card,
 				columnIndex: props.index,
-				targetColumnIndex: props.index,
-				targetColumnPosition: -1,
 			};
 
-			if (
-				new Array<DragAndDropKeys>("ArrowUp", "ArrowDown").includes(keyString)
-			) {
-				cardMoveByKeyboard.targetColumnPosition =
-					keyString === "ArrowUp" ? cardIndex - 1 : cardIndex + 1;
-			}
-			if (
-				new Array<DragAndDropKeys>("ArrowLeft", "ArrowRight").includes(
-					keyString
-				)
-			) {
-				cardMoveByKeyboard.targetColumnIndex =
-					keyString === "ArrowLeft" ? props.index - 1 : props.index + 1;
-				cardMoveByKeyboard.targetColumnPosition = 0;
+			if (verticalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowUp" ? -1 : +1;
+				cardMove.addedIndex = cardIndex + change;
 			}
 
-			emit("update:card-position:keyboard", cardMoveByKeyboard);
+			if (horizontalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowLeft" ? -1 : +1;
+				cardMove.columnIndex = props.index + change;
+				cardMove.addedIndex = 0;
+			}
+
+			emit("update:card-position", cardMove);
 		};
 
-		const onUpdateTitle = (newTitle: string) => {
-			emit("update:title", newTitle);
+		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
+			emit("move:column-keyboard", event);
 		};
+
+		const onUpdateTitle = useDebounceFn((newTitle: string) => {
+			emit("update:column-title", newTitle);
+		}, 1000);
+
+		const getChildPayload = (index: number): BoardSkeletonCard => {
+			return props.column.cards[index];
+		};
+
+		const titlePlaceholder = computed(
+			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+		);
 
 		return {
-			colWidth,
 			cardDropPlaceholderOptions,
+			colWidth,
+			titlePlaceholder,
+			onCreateCard,
+			onDeleteCard,
+			onColumnDelete,
 			onMoveCard,
-			getChildPayload,
 			onMoveCardKeyboard,
+			onMoveColumnKeyboard,
 			onUpdateTitle,
+			getChildPayload,
 		};
 	},
 });

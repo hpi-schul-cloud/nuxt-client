@@ -1,18 +1,6 @@
 <template>
-	<div>
-		<VTextarea
-			label="Text-Element"
-			hide-details="auto"
-			:value="value"
-			solo
-			dense
-			:rows="1"
-			auto-grow
-			class="ml-n3 mb-0 w-full"
-			flat
-			background-color="transparent"
-			:readonly="true"
-		></VTextarea>
+	<div class="text">
+		{{ value }}
 	</div>
 </template>
 <script lang="ts">
@@ -28,3 +16,15 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.text {
+	font-size: 16px;
+	color: rgba(0, 0, 0, 0.87);
+	margin-top: 17px;
+	margin-bottom: 17px;
+}
+.text:first-child {
+	margin-top: 0px;
+}
+</style>

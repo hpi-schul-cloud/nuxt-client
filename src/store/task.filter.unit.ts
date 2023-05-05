@@ -1,11 +1,12 @@
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
+import { taskResponseFactory } from "@@/tests/test-utils/factory";
 
 type TaskParams = {
 	name?: string;
 	courseName?: string;
 	courseId?: string;
-	duedate?: string;
+	dueDate?: string;
 	status?: {
 		submitted?: number;
 		maxSubmissions?: number;
@@ -18,25 +19,7 @@ class TaskFactory {
 	sequence = 0;
 
 	build(params: TaskParams = {}): Task {
-		const task: Task = {
-			id: "0123456789ab",
-			name: params.name || `task #${this.sequence++}`,
-			courseName:
-				params.courseName !== undefined ? params.courseName : "course #1",
-			courseId:
-				params.courseId !== undefined ? params.courseId : "course ID #1",
-			duedate: params.duedate,
-			status: {
-				submitted: params.status?.submitted || 0,
-				maxSubmissions: params.status?.maxSubmissions || 0,
-				graded: params.status?.graded || 0,
-				isDraft: params.status?.isDraft || false,
-				isSubstitutionTeacher: params.status?.isSubstitutionTeacher || false,
-			},
-			createdAt: new Date().toISOString(),
-			updatedAt: new Date().toISOString(),
-		};
-		return task;
+		return taskResponseFactory.build(params);
 	}
 
 	buildList(number: number, params: TaskParams = {}): Task[] {
@@ -121,7 +104,7 @@ describe("task filter", () => {
 	describe("withoutDueDate", () => {
 		it("should filter all tasks without a due date", () => {
 			const tomorrow = getTodayOffset(1);
-			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task1 = taskFactory.build({ dueDate: tomorrow.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).withoutDueDate().tasks;
@@ -132,7 +115,7 @@ describe("task filter", () => {
 	describe("withDueDate", () => {
 		it("should filter all tasks that have a due date", () => {
 			const tomorrow = getTodayOffset(1);
-			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task1 = taskFactory.build({ dueDate: tomorrow.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).withDueDate().tasks;
@@ -143,7 +126,7 @@ describe("task filter", () => {
 	describe("byOverdue", () => {
 		it("should filter all overdue tasks", () => {
 			const yesterday = getTodayOffset(-1);
-			const task1 = taskFactory.build({ duedate: yesterday.toISOString() });
+			const task1 = taskFactory.build({ dueDate: yesterday.toISOString() });
 			const task2 = taskFactory.build();
 			const tasks = [task1, task2];
 			const filteredTasks = new TaskFilter(tasks).byOverdue().tasks;

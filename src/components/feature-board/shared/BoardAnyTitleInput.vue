@@ -1,16 +1,7 @@
 <template>
 	<div class="d-flex flex-grow-1">
-		<div
-			role="heading"
-			:aria-level="ariaLevel"
-			class="d-sr-only"
-			:aria-hidden="isEditMode"
-		>
-			{{ value }}
-		</div>
-
 		<VTextarea
-			:label="label"
+			v-if="isEditMode"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -19,12 +10,23 @@
 			auto-grow
 			flat
 			class="ml-n3 mb-0 w-full"
-			:placeholder="placeholder"
+			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
-			:tabindex="isEditMode ? 0 : -1"
-			:readonly="!isEditMode"
-			:aria-hidden="!isEditMode"
+			tabindex="0"
+			:autofocus="true"
 		></VTextarea>
+		<div
+			v-else-if="value && value !== ''"
+			:aria-level="ariaLevel"
+			role="heading"
+			class="heading"
+			tabindex="-1"
+		>
+			{{ value }}
+		</div>
+		<div v-else class="heading blue-grey--text darken-1">
+			{{ placeholder }}
+		</div>
 	</div>
 </template>
 
@@ -44,13 +46,14 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		placeholder: {
-			type: String,
-			required: true,
-		},
 		scope: {
 			type: String as PropType<"card" | "column" | "board">,
 			required: true,
+		},
+		placeholder: {
+			type: String,
+			default: "",
+			required: false,
 		},
 	},
 	emits: ["update:value"],
@@ -73,18 +76,7 @@ export default defineComponent({
 					return 1;
 			}
 		});
-		const label = computed(() => {
-			switch (props.scope) {
-				case "board":
-					return "BoardTitle";
-				case "column":
-					return "ColumnTitle";
-				case "card":
-					return "CardTitle";
-				default:
-					return "UnknownTitle";
-			}
-		});
+
 		const fontSize = computed(() => {
 			switch (props.scope) {
 				case "board":
@@ -99,10 +91,9 @@ export default defineComponent({
 		});
 
 		return {
-			modelValue,
 			ariaLevel,
-			label,
 			fontSize,
+			modelValue,
 		};
 	},
 });
@@ -111,5 +102,15 @@ export default defineComponent({
 <style scoped>
 :deep(textarea) {
 	font-size: v-bind(fontSize);
+}
+.heading {
+	font-size: v-bind(fontSize);
+	margin-top: 10px;
+	letter-spacing: normal;
+	padding-right: 15px;
+}
+
+.heading:focus {
+	outline: none;
 }
 </style>

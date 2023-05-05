@@ -3,44 +3,51 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
-		@move-card-keyboard="onMoveCardKeyboard"
+		@move:card-keyboard="onMoveCardKeyboard"
 	>
 		<div ref="cardHost">
 			<VCard
 				:height="isLoading ? height : 'auto'"
 				class="w-100 transition-swing"
+				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
+				min-height="120px"
 				:elevation="isEditMode ? 6 : 0"
 				:id="cardId"
 				:ripple="false"
+				:hover="isHovered"
 			>
 				<template v-if="isLoading">
 					<CardSkeleton :height="height" />
 				</template>
 				<template v-if="!isLoading && card">
-					<CardHeader>
-						<template v-slot:title>
-							<CardHeaderTitleInput
-								:isEditMode="isEditMode"
-								:value="card.title"
-								@update:value="onUpdateCardTitle"
-							></CardHeaderTitleInput>
-						</template>
-						<template v-slot:menu>
-							<BoardMenu scope="card">
-								<BoardMenuAction @click="onDelete"
-									>Delete Card
-								</BoardMenuAction>
-							</BoardMenu>
-						</template>
-					</CardHeader>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu scope="card">
+							<BoardMenuAction @click="onTryDelete">
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
+								{{ $t("components.board.action.delete") }}
+							</BoardMenuAction>
+						</BoardMenu>
+					</div>
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+					>
+					</CardTitle>
 
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
 					></ContentElementList>
-					<CardAddElementMenu @add-element="onAddElement"></CardAddElementMenu>
+					<CardAddElementMenu
+						@add-element="onAddElement"
+						v-if="isEditMode"
+					></CardAddElementMenu>
 				</template>
 			</VCard>
 		</div>
@@ -48,26 +55,34 @@
 </template>
 
 <script lang="ts">
-import { useElementSize, watchDebounced } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
-import CardHeader from "./CardHeader.vue";
-import CardHeaderTitleInput from "./CardHeaderTitleInput.vue";
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { mdiTrashCanOutline } from "@mdi/js";
+import {
+	useDebounceFn,
+	useElementHover,
+	useElementSize,
+	useFocusWithin,
+	watchDebounced,
+} from "@vueuse/core";
+import { computed, defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
+import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import CardTitle from "./CardTitle.vue";
 
 export default defineComponent({
 	name: "CardHost",
 	components: {
 		CardSkeleton,
-		CardHeader,
+		CardTitle,
 		BoardMenu,
 		BoardMenuAction,
-		CardHeaderTitleInput,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
@@ -76,34 +91,54 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move-card-keyboard"],
+	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
+		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(null);
-		const {
-			isLoading,
-			card,
-			updateTitle,
-			deleteCard,
-			updateCardHeight,
-			addElement,
-		} = useCardState(props.cardId);
+		const cardId = computed(() => card.value?.id);
+		const { focused: isFocused } = useFocusWithin(cardHost);
+		const isHovered = useElementHover(cardHost);
+		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
+			useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
-		const onMoveCardKeyboard = (event: KeyboardEvent) => {
-			emit("move-card-keyboard", event.code);
-		};
-		const isEditMode = ref<boolean>(false);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
 
-		const onUpdateCardTitle = updateTitle;
-		const onDelete = deleteCard;
-		const onAddElement = addElement;
-		const onStartEditMode = () => {
-			isEditMode.value = true;
+		const onMoveCardKeyboard = (event: KeyboardEvent) => {
+			emit("move:card-keyboard", event.code);
 		};
-		const onEndEditMode = () => {
-			if (isEditMode.value === true) {
-				isEditMode.value = false;
+		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
+
+		const onTryDelete = async () => {
+			const message =
+				i18n
+					?.t("components.cardHost.deletionModal.confirmation", {
+						title: card.value?.title ? `"${card.value.title}"` : "",
+						type: i18n?.t("components.boardCard").toString(),
+					})
+					.toString() ?? "";
+
+			const { askConfirmation } = useDeleteConfirmation();
+
+			const shouldDelete = await askConfirmation({ message });
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
 			}
 		};
+
+		const onAddElement = addElement;
+		const onStartEditMode = () => {
+			startEditMode();
+		};
+		const onEndEditMode = () => {
+			stopEditMode();
+		};
+
+		const boardMenuClasses = computed(() => {
+			if (isFocused.value === true || isHovered.value === true) {
+				return "";
+			}
+			return "hidden";
+		});
 
 		watchDebounced(
 			cardHostHeight,
@@ -112,17 +147,34 @@ export default defineComponent({
 		);
 
 		return {
+			boardMenuClasses,
 			isLoading,
 			card,
+			isFocused,
+			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
-			onDelete,
+			onTryDelete,
 			onAddElement,
 			onStartEditMode,
 			onEndEditMode,
 			cardHost,
 			isEditMode,
+			mdiTrashCanOutline,
 		};
 	},
 });
 </script>
+
+<style scoped>
+.board-menu {
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	z-index: 1;
+}
+.hidden {
+	transition: opacity 200ms;
+	opacity: 0;
+}
+</style>

@@ -1,10 +1,7 @@
 <template>
 	<span>
-		<v-icon v-if="source === 'fa'" :color="fillColor" v-bind="$attrs">{{
-			`fa-${icon}`
-		}}</v-icon>
 		<v-icon
-			v-else-if="source === 'material'"
+			v-if="source === 'material'"
 			:color="fillColor"
 			class="material-icon"
 			v-bind="$attrs"
@@ -25,7 +22,7 @@ export default {
 			type: String,
 			required: true,
 			validator: function (to) {
-				return ["material", "custom", "fa"].includes(to);
+				return ["material", "custom"].includes(to);
 			},
 		},
 		icon: {
