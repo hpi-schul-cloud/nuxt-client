@@ -68,7 +68,8 @@ export default {
 			return this.showBadge === true && this.item.notification === true;
 		},
 		stillBeingCopied() {
-			return this.item.copyingSince !== undefined;
+			// return this.item.copyingSince !== undefined;
+			return true;
 		},
 		avatarAriaLabel() {
 			const course = this.$t("common.labels.course");
@@ -88,14 +89,14 @@ export default {
 				classes.push("single-avatar", "text-h3");
 			}
 			if (this.stillBeingCopied) {
-				classes.push("copy-mode--text");
+				classes.push("grey--text text--darken-1");
 			} else {
 				classes.push("white--text");
 			}
 			return classes;
 		},
 		avatarClass() {
-			return this.stillBeingCopied ? ["copy-mode lighten-1"] : [];
+			return this.stillBeingCopied ? ["grey lighten-1"] : [];
 		},
 		avatarColor() {
 			return this.stillBeingCopied ? undefined : this.item.displayColor;
@@ -111,7 +112,9 @@ export default {
 		},
 		titleClasses() {
 			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
-			const copyingClass = this.stillBeingCopied ? ["copy-mode--text"] : [];
+			const copyingClass = this.stillBeingCopied
+				? ["grey--text text--darken-1"]
+				: [];
 			return [
 				"justify-center",
 				"mt-2",

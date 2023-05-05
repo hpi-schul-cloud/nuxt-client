@@ -51,10 +51,6 @@ export default {
 				"icon-btn": {
 					base: colors.grey.darken3,
 				},
-				"copy-mode": {
-					base: colors.grey.darken1,
-					lighten1: colors.grey.lighten1,
-				},
 				"beta-task": {
 					base: "#196C9E",
 				},

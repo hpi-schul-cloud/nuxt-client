@@ -258,14 +258,14 @@ describe("vRoomAvatar", () => {
 			const element = wrapper.find(".subtitle").element as HTMLElement;
 
 			expect(element.innerHTML.trim()).toContain("Kurs wird erstellt");
-			expect(element.className).toContain("copy-mode--text");
+			expect(element.className).toContain("grey--text");
 		});
 
 		it("should display avatar in grey", () => {
 			const wrapper = setup();
 			const element = wrapper.find(".v-avatar").element as HTMLElement;
 			console.log(element.className);
-			expect(element.className.split(" ")).toContain("copy-mode");
+			expect(element.className.split(" ")).toContain("grey");
 			expect(element.className.split(" ")).toContain("lighten-1");
 		});
 	});
