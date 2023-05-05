@@ -4,6 +4,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import getCreatedDate from "./StatusAlerts.vue";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -56,5 +57,18 @@ describe("@/components/molecules/StatusAlerts", () => {
 		expect(title1.element.textContent).toContain(mockStatusAlerts[1].title);
 		const title2 = wrapper.find("[data-test-id='alert-title-2']");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
+	});
+});
+
+describe("getCreatedDate", () => {
+	it("should be getCreatedDate fuction on the template", () => {
+		const wrapper = getWrapper(testProps);
+		expect(wrapper.contains(getCreatedDate)).toBe(true);
+	});
+	it("returns expected result", () => {
+		const wrapper = getWrapper(testProps);
+		const expectedDate = "05.05.2023 12:34";
+		const dateTime = "May 5, 2023 12:34 PM"; // Assuming printDateTime function returns date in this format
+		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
 	});
 });
