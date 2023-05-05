@@ -114,9 +114,24 @@ export const useBoardState = (id: string) => {
 
 	const moveCard = async (cardPayload: CardMove): Promise<void> => {
 		if (board.value === undefined) return;
-
 		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
-		const targetColumnId = columnIndex ? getColumnId(columnIndex) : columnId;
+		if (
+			addedIndex === -1 ||
+			(columnIndex &&
+				addedIndex &&
+				addedIndex > board.value.columns[columnIndex].cards.length - 1)
+		) {
+			return;
+		}
+		if (
+			columnIndex !== undefined &&
+			(columnIndex < 0 || columnIndex > board.value.columns.length - 1)
+		) {
+			return;
+		}
+
+		const targetColumnId =
+			columnIndex !== undefined ? getColumnId(columnIndex) : columnId;
 		if (addedIndex !== null && targetColumnId) {
 			const card = await extractCard(payload.cardId);
 			if (card) {
