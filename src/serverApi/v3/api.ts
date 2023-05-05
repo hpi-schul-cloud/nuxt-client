@@ -111,6 +111,43 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface ApiValidationError
+ */
+export interface ApiValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ApiValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ApiValidationError
+     */
+    details?: object;
+}
+/**
+ * 
+ * @export
  * @interface BasicToolConfigParams
  */
 export interface BasicToolConfigParams {
@@ -738,6 +775,29 @@ export interface CourseMetadataResponse {
 /**
  * 
  * @export
+ * @interface CreateContentElementBody
+ */
+export interface CreateContentElementBody {
+    /**
+     * The type of element
+     * @type {string}
+     * @memberof CreateContentElementBody
+     */
+    type: CreateContentElementBodyTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateContentElementBodyTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
  * @interface CreateNewsParams
  */
 export interface CreateNewsParams {
@@ -1101,6 +1161,43 @@ export interface DashboardResponse {
 /**
  * 
  * @export
+ * @interface EntityNotFoundError
+ */
+export interface EntityNotFoundError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof EntityNotFoundError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof EntityNotFoundError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof EntityNotFoundError
+     */
+    details?: object;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolConfigurationTemplateResponse
  */
 export interface ExternalToolConfigurationTemplateResponse {
@@ -1281,6 +1378,97 @@ export interface ExternalToolSearchListResponse {
      * @memberof ExternalToolSearchListResponse
      */
     limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface FileElementContent
+ */
+export interface FileElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    caption: string;
+}
+/**
+ * 
+ * @export
+ * @interface FileElementResponse
+ */
+export interface FileElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementResponse
+     */
+    type: FileElementResponseTypeEnum;
+    /**
+     * 
+     * @type {FileElementContent}
+     * @memberof FileElementResponse
+     */
+    content: FileElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof FileElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum FileElementResponseTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
+ * @interface ForbiddenOperationError
+ */
+export interface ForbiddenOperationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ForbiddenOperationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ForbiddenOperationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ForbiddenOperationError
+     */
+    details?: object;
 }
 /**
  * 
@@ -1642,7 +1830,7 @@ export interface Lti11ToolConfigParams {
      * @type {string}
      * @memberof Lti11ToolConfigParams
      */
-    secret: string;
+    secret?: string;
     /**
      * 
      * @type {string}
@@ -3519,7 +3707,7 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
-    duedate?: string;
+    dueDate?: string;
     /**
      * 
      * @type {string}
@@ -3760,7 +3948,8 @@ export interface TextElementResponse {
     * @enum {string}
     */
 export enum TextElementResponseTypeEnum {
-    Text = 'text'
+    Text = 'text',
+    File = 'file'
 }
 
 /**
@@ -4093,6 +4282,43 @@ export interface UsersList {
      * @memberof UsersList
      */
     lastName: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationError
+ */
+export interface ValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ValidationError
+     */
+    details?: object;
 }
 /**
  * 
@@ -5442,12 +5668,15 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {CreateContentElementBody} createContentElementBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
+        cardControllerCreateElement: async (cardId: string, createContentElementBody: CreateContentElementBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cardId' is not null or undefined
             assertParamExists('cardControllerCreateElement', 'cardId', cardId)
+            // verify required parameter 'createContentElementBody' is not null or undefined
+            assertParamExists('cardControllerCreateElement', 'createContentElementBody', createContentElementBody)
             const localVarPath = `/cards/{cardId}/elements`
                 .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5467,9 +5696,12 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createContentElementBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5657,11 +5889,12 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {CreateContentElementBody} createContentElementBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, options);
+        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse | FileElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -5724,11 +5957,12 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
+         * @param {CreateContentElementBody} createContentElementBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse> {
-            return localVarFp.cardControllerCreateElement(cardId, options).then((request) => request(axios, basePath));
+        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse> {
+            return localVarFp.cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5785,11 +6019,12 @@ export interface BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
+     * @param {CreateContentElementBody} createContentElementBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, options?: any): AxiosPromise<TextElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse>;
 
     /**
      * 
@@ -5846,12 +6081,13 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
+     * @param {CreateContentElementBody} createContentElementBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApi
      */
-    public cardControllerCreateElement(cardId: string, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, options).then((request) => request(this.axios, this.basePath));
+    public cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
