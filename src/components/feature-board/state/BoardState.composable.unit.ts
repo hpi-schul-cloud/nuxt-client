@@ -33,21 +33,18 @@ describe("BoardState composable", () => {
 		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(mockApi);
 	});
 
-	// skipped until using boardsApi
-	it.skip("should fetch board on mount", async () => {
+	it("should fetch board on mount", async () => {
 		const boardId = "123124";
 		mountComposable(() => useBoardState(boardId));
 
 		jest.runAllTimers();
-		await nextTick();
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
 			boardId
 		);
 	});
 
-	// skipped until using boardsApi
-	it.skip("should return fetch function that updates board", async () => {
+	it("should return fetch function that updates board", async () => {
 		const boardId1 = "123124";
 		const boardId2 = "a1b1c1";
 		const { fetchBoard, board } = mountComposable(() =>
@@ -57,8 +54,6 @@ describe("BoardState composable", () => {
 		const fetchPromise = fetchBoard(boardId2);
 		jest.runAllTimers();
 		await fetchPromise;
-		await nextTick();
-		await nextTick();
 
 		expect(board.value).toBeDefined();
 		expect(board.value?.id).toBe(boardId2);

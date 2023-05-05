@@ -63,7 +63,7 @@ describe("useContentElementState composable", () => {
 		expect(isAutoFocus.value).toStrictEqual(true);
 	});
 
-	it.skip("should call saving function after debounced change of modelValue", async () => {
+	it("should call saving function after debounced change of modelValue", async () => {
 		jest.useFakeTimers();
 		const { modelValue } = mountComposable(() =>
 			useContentElementState({ isEditMode: true, element: TEST_ELEMENT })

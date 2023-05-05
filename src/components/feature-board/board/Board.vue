@@ -11,27 +11,30 @@
 					lock-axis="x"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="columnDropPlaceholderOptions"
-					@drop="onColumnDrop"
+					@drop="onDropColumn"
 				>
 					<template v-for="(column, index) in board.columns">
 						<Draggable :key="column.id">
 							<BoardColumn
 								:column="column"
 								:index="index"
-								@update:card-position:keyboard="onPositionChangeKeyboard"
-								@update:card-position="onCardPositionChange(index, $event)"
-								@update:title="onUpdateColumnTitle(column.id, $event)"
-								@remove-card="onRemoveCard"
-								@create-card="onCreateCard"
-								@delete-column="onColumnDelete"
+								@create:card="onCreateCard"
+								@delete:card="onDeleteCard"
+								@delete:column="onDeleteColumn"
+								@move:column-keyboard="
+									onMoveColumnKeyboard(index, column.id, $event)
+								"
+								@update:card-position="onUpdateCardPosition(index, $event)"
+								@update:column-title="onUpdateColumnTitle(column.id, $event)"
 							/>
 						</Draggable>
 					</template>
 				</Container>
 				<BoardColumnGhost
-					@add-column-with-card="onAddColumnWithCard"
-					@add-empty-column="onAddEmptyColumn"
+					@create:column="onCreateColumn"
+					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
+				<DeleteConfirmation></DeleteConfirmation>
 			</template>
 		</div>
 	</div>
@@ -43,87 +46,106 @@ import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { useBoardState } from "../state/BoardState.composable";
+import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import {
 	columnDropPlaceholderOptions,
 	CardMove,
-	CardMoveByKeyboard,
 	ColumnMove,
+	horizontalCursorKeys,
+	DragAndDropKey,
 } from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "Board",
-	components: { BoardColumn, Container, Draggable, BoardColumnGhost },
+	components: {
+		BoardColumn,
+		Container,
+		Draggable,
+		BoardColumnGhost,
+		DeleteConfirmation,
+	},
 	setup() {
 		const route = useRoute();
 		const {
 			board,
-			deleteColumn,
-			moveCard,
-			removeCard,
-			moveColumn,
-			moveCardByKeyboard,
-			updateColumnTitle,
-			addNewColumn,
 			createCard,
+			createColumn,
+			createColumnWithCard,
+			deleteCard,
+			deleteColumn,
+			getColumnId,
+			moveCard,
+			moveColumn,
+			updateColumnTitle,
 		} = useBoardState(route.params?.id);
 
-		const onCardPositionChange = (_: unknown, payload: CardMove) => {
-			moveCard(payload);
+		useBodyScrolling();
+
+		const onCreateCard = async (columnId: string) => {
+			await createCard(columnId);
 		};
 
-		const onRemoveCard = (cardId: string): void => {
-			removeCard(cardId);
+		const onCreateColumn = async () => {
+			await createColumn();
 		};
 
-		const onColumnDelete = async (columnId: string): Promise<void> => {
+		const onCreateColumnWithCard = async (cardId: string) => {
+			await createColumnWithCard(cardId);
+		};
+
+		const onDeleteCard = async (cardId: string) => {
+			await deleteCard(cardId);
+		};
+
+		const onDeleteColumn = async (columnId: string) => {
 			await deleteColumn(columnId);
 		};
 
-		const onColumnDrop = (columnPayload: ColumnMove): void => {
-			moveColumn(columnPayload);
+		const onDropColumn = async (columnPayload: ColumnMove) => {
+			await moveColumn(columnPayload);
 		};
 
-		const onPositionChangeKeyboard = (payload: CardMoveByKeyboard) => {
-			moveCardByKeyboard(payload);
-		};
+		const onMoveColumnKeyboard = async (
+			columnIndex: number,
+			columnId: string,
+			keyString: DragAndDropKey
+		) => {
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
 
-		const getColumnId = (index: number): string => {
-			if (board.value === undefined) {
-				return "";
+			if (horizontalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowLeft" ? -1 : +1;
+				columnMove.addedIndex = columnIndex + change;
+				await moveColumn(columnMove);
 			}
-			return board.value.columns[index].id;
+		};
+
+		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
+			await moveCard(payload);
 		};
 
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const onAddEmptyColumn = () => {
-			addNewColumn();
-		};
-
-		const onAddColumnWithCard = (cardId?: string) => {
-			addNewColumn(cardId);
-		};
-
-		const onCreateCard = (columnId: string) => {
-			createCard(columnId);
-		};
-
 		return {
 			board,
 			columnDropPlaceholderOptions,
-			onRemoveCard,
 			getColumnId,
-			onCardPositionChange,
-			onColumnDelete,
-			onColumnDrop,
-			onPositionChangeKeyboard,
-			onUpdateColumnTitle,
-			onAddEmptyColumn,
-			onAddColumnWithCard,
 			onCreateCard,
+			onCreateColumn,
+			onCreateColumnWithCard,
+			onDeleteCard,
+			onDropColumn,
+			onDeleteColumn,
+			onMoveColumnKeyboard,
+			onUpdateCardPosition,
+			onUpdateColumnTitle,
 		};
 	},
 });
