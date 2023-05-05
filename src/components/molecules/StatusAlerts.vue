@@ -97,7 +97,7 @@ export default defineComponent({
 		@if index == 0 {
 			border-top: none;
 		} @else {
-			border-top: 1px solid #e5e5e5;
+			border-top: 1px solid $statusBorderColor;
 		}
 	}
 	.subtitle-1 {
@@ -111,7 +111,6 @@ export default defineComponent({
 		white-space: unset;
 		display: flex;
 		flex-wrap: wrap;
-		color: #1b1b1b;
 	}
 }
 </style>
