@@ -20,6 +20,8 @@
 	"common.actions.shareCourse": "Compartir copia de la cotización",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.labels.admin": "Admin(s)",
+	"common.labels.updateAt": "Actualizado:",
+	"common.labels.createAt": "Creado:",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
 	"common.labels.classes": "clases",
