@@ -22,6 +22,14 @@
 				<CardSkeleton :height="height" />
 			</template>
 			<template v-if="!isLoading && card">
+				<CardTitle
+					:isEditMode="isEditMode"
+					:value="card.title"
+					scope="card"
+					@update:value="onUpdateCardTitle"
+				>
+				</CardTitle>
+
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu scope="card">
 						<BoardMenuAction @click="onTryDelete">
@@ -32,13 +40,6 @@
 						</BoardMenuAction>
 					</BoardMenu>
 				</div>
-				<CardTitle
-					:isEditMode="isEditMode"
-					:value="card.title"
-					scope="card"
-					@update:value="onUpdateCardTitle"
-				>
-				</CardTitle>
 
 				<ContentElementList
 					:elements="card.elements"
