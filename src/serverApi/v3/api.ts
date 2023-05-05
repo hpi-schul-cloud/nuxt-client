@@ -143,7 +143,7 @@ export interface ApiValidationError {
      * @type {object}
      * @memberof ApiValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -1193,7 +1193,7 @@ export interface EntityNotFoundError {
      * @type {object}
      * @memberof EntityNotFoundError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -1468,7 +1468,7 @@ export interface ForbiddenOperationError {
      * @type {object}
      * @memberof ForbiddenOperationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -4318,7 +4318,7 @@ export interface ValidationError {
      * @type {object}
      * @memberof ValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
