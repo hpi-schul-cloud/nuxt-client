@@ -7,7 +7,7 @@
 		<div
 			data-testid="event-handle"
 			@keydown.up.down.left.right="onKeydownArrow"
-			@keydown.enter.capture="onKeydownEnter"
+			@keydown.enter="onKeydownEnter"
 		>
 			<slot></slot>
 		</div>

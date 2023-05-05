@@ -11,6 +11,7 @@
 				v-on="on"
 				:ripple="false"
 				@dblclick.stop="() => {}"
+				@keydown.enter.capture.stop="() => {}"
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
