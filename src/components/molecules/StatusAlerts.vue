@@ -97,7 +97,7 @@ export default defineComponent({
 		@if index == 0 {
 			border-top: none;
 		} @else {
-			border-top: 1px solid $statusBorderColor;
+			border-top: 1px solid var(--v-grey-lighten2);
 		}
 	}
 	.subtitle-1 {
