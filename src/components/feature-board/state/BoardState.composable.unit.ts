@@ -5,7 +5,7 @@ import { useBoardState } from "./BoardState.composable";
 
 let wrapper: Wrapper<Vue>;
 
-const mountComposable = <R>(composable: () => R): R => {
+const mountComposable = (composable: () => unknown) => {
 	const TestComponent = {
 		template: "<div></div>",
 	};
@@ -29,15 +29,12 @@ describe("BoardState composable", () => {
 			.mockResolvedValue({ data: {} });
 		mockApi = { boardControllerGetBoardSkeleton };
 
-		jest.useFakeTimers();
 		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(mockApi);
 	});
 
 	it("should fetch board on mount", async () => {
 		const boardId = "123124";
 		mountComposable(() => useBoardState(boardId));
-
-		jest.runAllTimers();
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
 			boardId
@@ -52,7 +49,6 @@ describe("BoardState composable", () => {
 		);
 
 		const fetchPromise = fetchBoard(boardId2);
-		jest.runAllTimers();
 		await fetchPromise;
 
 		expect(board.value).toBeDefined();
@@ -65,7 +61,6 @@ describe("BoardState composable", () => {
 
 		expect(isLoading.value).toStrictEqual(true);
 
-		jest.runAllTimers();
 		await nextTick();
 		await nextTick();
 
