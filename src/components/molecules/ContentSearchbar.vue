@@ -118,6 +118,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
+		color: map-get($grey, base);
 
 		input {
 			flex: 1;
@@ -137,7 +138,7 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px map-get($grey, lighten-2) solid;
+				border-bottom: 2px map-get($grey, lighten-3) solid;
 			}
 
 			&::placeholder {
