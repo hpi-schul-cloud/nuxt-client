@@ -77,7 +77,9 @@ You can define more custom colors in our vuetify options like this:
 
 As of now you can only use hex values without the alpha property. If a color is only meant for one theme only, please define the color in the relating theme file for our vuetify options.
 
-### Naming
+### Rules
 
 - Do not overwrite vuetify colors
 - Use a semantic name to represent the use case
+- Prefer usage via map-get over new color definition, unless you introduce a new color
+- Either define style in template or in scss

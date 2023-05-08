@@ -259,6 +259,7 @@ describe("vRoomAvatar", () => {
 
 			expect(element.innerHTML.trim()).toContain("Kurs wird erstellt");
 			expect(element.className).toContain("grey--text");
+			expect(element.className).toContain("text--darken-1");
 		});
 
 		it("should display avatar in grey", () => {
@@ -266,7 +267,7 @@ describe("vRoomAvatar", () => {
 			const element = wrapper.find(".v-avatar").element as HTMLElement;
 			console.log(element.className);
 			expect(element.className.split(" ")).toContain("grey");
-			expect(element.className.split(" ")).toContain("lighten-1");
+			expect(element.className.split(" ")).toContain("lighten-2");
 		});
 	});
 });
