@@ -1,6 +1,6 @@
 # Colors
 
-You can find our custom defined theme colors under /src/themes/base-vuetify.options.js and their overwrites per theme in /src/themes/<theme_name>/vuetify.options.js.
+You can find our custom defined theme colors under `/src/themes/base-vuetify.options.js` and their overwrites per theme in `/src/themes/<theme_name>/vuetify.options.js`.
 
 The colors vuetify provides you can find [here](https://v2.vuetifyjs.com/en/styles/colors/)
 
