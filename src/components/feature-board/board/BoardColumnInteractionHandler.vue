@@ -37,6 +37,7 @@ export default defineComponent({
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
+				event.preventDefault();
 				emit("move:column-keyboard", event);
 			}
 		};
