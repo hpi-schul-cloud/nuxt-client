@@ -317,13 +317,14 @@ export default {
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: var(--v-icon-btn-base);
+		color: map-get($grey, darken-3);
 	}
 
 	&:focus {
-		color: var(--v-icon-btn-base);
+		color: map-get($grey, darken-3);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-icon-btn-base);
+		box-shadow: 0 0 0 3px var(--v-white-base),
+			0 0 0 6px map-get($grey, darken-3);
 	}
 }
 

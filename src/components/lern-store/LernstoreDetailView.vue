@@ -378,7 +378,7 @@ $tablet-portrait-width: 768px;
 
 		.close-icon {
 			color: var(--v-white-base);
-			background-color: var(--v-icon-btn-base);
+			background-color: map-get($grey, darken-3);
 		}
 
 		.close-transparent {

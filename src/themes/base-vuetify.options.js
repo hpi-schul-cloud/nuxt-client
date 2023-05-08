@@ -48,9 +48,6 @@ export default {
 					lighten2: colors.grey.lighten3,
 					darken1: colors.grey.darken3,
 				},
-				"icon-btn": {
-					base: colors.grey.darken3,
-				},
 				"beta-task": {
 					base: "#196C9E",
 				},

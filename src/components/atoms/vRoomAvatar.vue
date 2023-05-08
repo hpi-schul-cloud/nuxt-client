@@ -88,7 +88,7 @@ export default {
 				classes.push("single-avatar", "text-h3");
 			}
 			if (this.stillBeingCopied) {
-				classes.push("grey--text text--darken-1");
+				classes.push("grey--text", "text--darken-1");
 			} else {
 				classes.push("white--text");
 			}
