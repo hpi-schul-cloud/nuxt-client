@@ -36,10 +36,6 @@ import { System } from "@/store/types/system";
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
 	props: {
-		sourceSystem: {
-			type: String,
-			required: true,
-		},
 		targetSystem: {
 			type: String,
 			required: true,

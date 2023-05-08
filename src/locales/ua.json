@@ -21,6 +21,8 @@
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
+	"common.labels.updateAt": "Оновлено:",
+	"common.labels.createAt": "Створено:",
 	"common.labels.birthday": "Дата народження",
 	"common.labels.classes": "класи",
 	"common.labels.close": "Закрити",

@@ -20,6 +20,8 @@
 	"common.actions.download": "Download",
 	"common.actions.logout": "Logout",
 	"common.labels.admin": "",
+	"common.labels.updateAt": "Updated:",
+	"common.labels.createAt": "Created:",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
 	"common.labels.classes": "classes",

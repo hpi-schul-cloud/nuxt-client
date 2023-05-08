@@ -159,11 +159,12 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
 		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
+			sourceSystem: (value: unknown) => !isDefined(value) || isMongoId(value),
 			targetSystem: isMongoId,
-			origin: (val: unknown, to: Route) =>
-				isMongoId(val) &&
-				(val === to.query.sourceSystem || val === to.query.targetSystem),
+			origin: (value: unknown, to: Route) =>
+				!isDefined(value) ||
+				(isMongoId(value) &&
+					(value === to.query.sourceSystem || value === to.query.targetSystem)),
 		}),
 		props: (route: Route) => ({
 			sourceSystem: route.query.sourceSystem,
@@ -182,7 +183,6 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
 		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 			sourceSchoolNumber: (value: unknown) =>
 				!isDefined(value) || isOfficialSchoolNumber(value),
@@ -190,7 +190,6 @@ export const routes: Array<RouteConfig> = [
 				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
 		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
 			sourceSchoolNumber: route.query.sourceSchoolNumber,
 			targetSchoolNumber: route.query.targetSchoolNumber,
@@ -206,11 +205,9 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
 		beforeEnter: validateQueryParameters({
-			sourceSystem: isMongoId,
 			targetSystem: isMongoId,
 		}),
 		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
 			targetSystem: route.query.targetSystem,
 		}),
 		meta: {
