@@ -1,28 +1,25 @@
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ref, Ref } from "vue";
-import { BoardCard } from "../types/Card";
 
 /**
  * Handles EditMode for a specific card.
  *
  * Use this to set a card to edit mode from **inside** a card scope.
  */
-export const useEditMode = (card: Ref<BoardCard | undefined>) => {
-	const { editModeCardId, setEditModeCardId } = useSharedEditMode();
+export const useEditMode = (id: Ref<string | undefined>) => {
+	const { editModeId, setEditModeId } = useSharedEditMode();
 
 	const isEditMode = computed(
-		() =>
-			editModeCardId.value !== undefined &&
-			card.value?.id === editModeCardId.value
+		() => editModeId.value !== undefined && id.value === editModeId.value
 	);
 
 	const startEditMode = () => {
-		setEditModeCardId(card.value?.id);
+		setEditModeId(id.value);
 	};
 
 	const stopEditMode = () => {
 		if (isEditMode.value === true) {
-			setEditModeCardId(undefined);
+			setEditModeId(undefined);
 		}
 	};
 
@@ -39,13 +36,13 @@ export const useEditMode = (card: Ref<BoardCard | undefined>) => {
  * Use this to set a card to edit mode from **outside** a card scope.
  */
 const sharedEditMode = () => {
-	const editModeCardId: Ref<BoardCard["id"] | undefined> = ref(undefined);
+	const editModeId: Ref<string | undefined> = ref(undefined);
 
-	const setEditModeCardId = (cardId: BoardCard["id"] | undefined) => {
-		editModeCardId.value = cardId;
+	const setEditModeId = (id: string | undefined) => {
+		editModeId.value = id;
 	};
 
-	return { editModeCardId, setEditModeCardId };
+	return { editModeId, setEditModeId };
 };
 
 export const useSharedEditMode = createSharedComposable(sharedEditMode);

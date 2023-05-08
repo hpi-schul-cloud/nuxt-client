@@ -8,4 +8,5 @@ export type StatusAlert = {
 	};
 	timestamp: string;
 	url: string;
+	createdAt: string;
 };

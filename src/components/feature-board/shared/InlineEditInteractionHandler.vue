@@ -4,7 +4,7 @@
 			ref="event-handle"
 			data-testid="event-handle"
 			@dblclick.prevent.stop="onDoubleClick"
-			@keydown.escape.capture.stop="onKeydownEscape"
+			@keydown.escape="onKeydownEscape"
 		>
 			<slot></slot>
 		</div>

@@ -6,8 +6,9 @@
 	>
 		<div
 			data-testid="event-handle"
-			@keydown.up.down.left.right="onKeydownArrow"
+			@keydown.left.right="onKeydownArrow"
 			@keydown.enter.capture="onKeydownEnter"
+			@keydown.tab="onKeydownTab"
 		>
 			<slot></slot>
 		</div>
@@ -19,7 +20,7 @@ import { defineComponent } from "vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 
 export default defineComponent({
-	name: "CardHostInteractionHandler",
+	name: "BoardColumnInteractionHandler",
 	components: {
 		InlineEditInteractionHandler,
 	},
@@ -29,19 +30,17 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["start-edit-mode", "end-edit-mode", "move:card-keyboard"],
+	emits: ["start-edit-mode", "end-edit-mode", "move:column-keyboard"],
 	setup(props, { emit }) {
-		const onStartEditMode = () => {
-			emit("start-edit-mode");
-		};
-		const onEndEditMode = () => {
-			emit("end-edit-mode");
-		};
+		const onStartEditMode = () => emit("start-edit-mode");
+		const onEndEditMode = () => emit("end-edit-mode");
+
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
-				emit("move:card-keyboard", event);
+				emit("move:column-keyboard", event);
 			}
 		};
+
 		const onKeydownEnter = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
 				emit("start-edit-mode");
@@ -50,11 +49,19 @@ export default defineComponent({
 				event.preventDefault();
 			}
 		};
+
+		const onKeydownTab = () => {
+			if (props.isEditMode) {
+				emit("end-edit-mode");
+			}
+		};
+
 		return {
 			onStartEditMode,
 			onEndEditMode,
 			onKeydownArrow,
 			onKeydownEnter,
+			onKeydownTab,
 		};
 	},
 });

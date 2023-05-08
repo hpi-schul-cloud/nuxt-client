@@ -1,17 +1,19 @@
-import { $axios } from "@/utils/api";
 import {
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	ColumnResponse,
+	CreateContentElementBody,
+	CreateContentElementBodyTypeEnum,
 } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 
-	const createColumn = async (boardId: string): Promise<ColumnResponse> => {
+	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
 		return response.data;
 	};
@@ -24,8 +26,13 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
 	};
 
-	const createElement = async (cardId: string) => {
-		await cardsApi.cardControllerCreateElement(cardId);
+	const createElement = async (
+		cardId: string,
+		type: CreateContentElementBody
+	) => {
+		const result = await cardsApi.cardControllerCreateElement(cardId, type);
+
+		return result.data;
 	};
 
 	const deleteCardCall = async (cardId: string) => {
@@ -41,7 +48,9 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id);
+			createElement(createdCard.data.id, {
+				type: CreateContentElementBodyTypeEnum.Text,
+			});
 			return createdCard.data.id;
 		}
 	};
@@ -69,7 +78,7 @@ export const useBoardApi = () => {
 	};
 
 	return {
-		createColumn,
+		createColumnCall,
 		createElement,
 		deleteCardCall,
 		deleteColumnCall,
