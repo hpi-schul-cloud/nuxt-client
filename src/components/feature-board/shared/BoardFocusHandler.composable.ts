@@ -24,19 +24,12 @@ export const useBoardFocusHandler = (
 	const { announceFocusReceived, focusedId } = useSharedFocusedId();
 
 	const cleanupFocusListener = useEventListener(element, "focus", () => {
-		console.log("received manual focus", id.valueOf());
 		if (id?.valueOf()) {
 			announceFocusReceived(id);
 		}
 	});
 
 	onMounted(() => {
-		console.log(
-			"mounted with cardId: ",
-			id,
-			"shared focusId:",
-			focusedId.value
-		);
 		trySetFocus();
 	});
 
@@ -54,9 +47,7 @@ export const useBoardFocusHandler = (
 		}
 		try {
 			if (hostElement.focus !== undefined) {
-				// element.value.setAttribute("aria-hidden", "true");
 				hostElement.focus();
-				// element.value.setAttribute("aria-hidden", "false");
 			} else {
 				extractHtmlElementFromVueComponent(
 					hostElement as unknown as VueInstance
@@ -91,13 +82,11 @@ const useSharedFocusedId = createSharedComposable(() => {
 		if (focusedId.value === id.valueOf()) {
 			return;
 		}
-		console.log("new shared focus set", id);
 		focusedId.value = id.toString();
 	};
 
 	return {
 		focusedId,
-		// announceFocusLost,
 		announceFocusReceived,
 	};
 });

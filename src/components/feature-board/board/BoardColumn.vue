@@ -30,14 +30,22 @@
 				/>
 			</Draggable>
 		</Container>
-		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
+		<BoardAddCardButton
+			:is-sticky="isSticky"
+			@add-card="onCreateCard"
+		></BoardAddCardButton>
+		<div ref="columnEnd"></div>
 	</div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, inject, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { useDebounceFn } from "@vueuse/core";
+import {
+	useDebounceFn,
+	useElementBounding,
+	useElementVisibility,
+} from "@vueuse/core";
 import VueI18n from "vue-i18n";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
@@ -78,6 +86,14 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
+
+		const columnEnd = ref<HTMLDivElement | null>(null);
+		const isColumnEndVisible = useElementVisibility(columnEnd);
+		const bounding = useElementBounding(columnEnd);
+
+		const isSticky = computed<boolean>(
+			() => isColumnEndVisible.value === false && bounding.y.value > 0
+		);
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -144,6 +160,8 @@ export default defineComponent({
 			cardDropPlaceholderOptions,
 			colWidth,
 			titlePlaceholder,
+			columnEnd,
+			isSticky,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
