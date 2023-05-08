@@ -6,7 +6,15 @@ import {
 	useFocusWithin,
 	VueInstance,
 } from "@vueuse/core";
-import { computed, onMounted, onUnmounted, ref, Ref, unref } from "vue";
+import {
+	computed,
+	nextTick,
+	onMounted,
+	onUnmounted,
+	ref,
+	Ref,
+	unref,
+} from "vue";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
 
@@ -29,15 +37,15 @@ export const useBoardFocusHandler = (
 		}
 	});
 
-	onMounted(() => {
-		trySetFocus();
+	onMounted(async () => {
+		await trySetFocus();
 	});
 
 	onUnmounted(() => {
 		cleanupFocusListener();
 	});
 
-	const trySetFocus = () => {
+	const trySetFocus = async () => {
 		const hostElement = unref(element);
 		if (id !== focusedId.value) {
 			return;
@@ -47,8 +55,10 @@ export const useBoardFocusHandler = (
 		}
 		try {
 			if (hostElement.focus !== undefined) {
+				console.log("focus header");
 				hostElement.focus();
 			} else {
+				console.log("focus card");
 				extractHtmlElementFromVueComponent(
 					hostElement as unknown as VueInstance
 				).focus();
@@ -56,6 +66,7 @@ export const useBoardFocusHandler = (
 		} catch (e: unknown) {
 			console.error(e);
 		}
+		await nextTick();
 	};
 
 	return {

@@ -20,6 +20,7 @@
 						:placeholder="titlePlaceholder"
 						@update:value="onUpdateTitle"
 					></BoardAnyTitleInput>
+					{{ isFocused }}
 				</div>
 				<div class="pt-2">
 					<BoardMenu scope="column">
