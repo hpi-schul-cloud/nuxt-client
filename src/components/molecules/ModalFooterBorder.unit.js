@@ -8,7 +8,7 @@ describe("@/components/molecules/ModalFooterBorder", () => {
 				right: "right",
 			},
 		});
-		expect(wrapper.find(".modal-border").exists()).toBe(true);
+		expect(wrapper.find(".border").exists()).toBe(true);
 		expect(wrapper.find(".right-container").text()).toBe("right");
 	});
 });

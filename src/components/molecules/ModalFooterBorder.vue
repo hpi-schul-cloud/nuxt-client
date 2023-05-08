@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="modal-border"></div>
+		<div class="border"></div>
 		<default-modal-footer>
 			<template #right>
 				<slot name="right"></slot>
@@ -25,7 +25,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/mixins";
 
-.modal-border {
+.border {
 	margin: 0 var(--space-md);
 	border-top: 1px solid black;
 
