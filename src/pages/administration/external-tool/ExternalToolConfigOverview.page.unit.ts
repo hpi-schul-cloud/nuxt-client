@@ -33,8 +33,8 @@ describe("ExternalToolConfigOverview", () => {
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getToolConfigurations: [toolConfigurationFactory()],
-			getBusinessError: businessErrorFactory(),
+			getToolConfigurations: [toolConfigurationFactory.build()],
+			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		}) as jest.Mocked<ExternalToolsModule>;
 
@@ -44,9 +44,9 @@ describe("ExternalToolConfigOverview", () => {
 		};
 
 		const toolTemplate: ToolConfigurationTemplate =
-			toolConfigurationTemplateFactory();
+			toolConfigurationTemplateFactory.build();
 		const loadedSchoolExternalTool: SchoolExternalTool =
-			schoolExternalToolFactory();
+			schoolExternalToolFactory.build();
 
 		externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
 			toolTemplate
@@ -201,7 +201,7 @@ describe("ExternalToolConfigOverview", () => {
 				const name = "nameForSelect";
 				const { wrapper } = await setup({
 					getToolConfigurations: [
-						toolConfigurationFactory({
+						toolConfigurationFactory.build({
 							name,
 						}),
 					],
@@ -217,7 +217,7 @@ describe("ExternalToolConfigOverview", () => {
 			it("should load template when tool configuration was changed", async () => {
 				const id = "expectedToolId";
 				const { wrapper } = await setup({
-					getToolConfigurations: [toolConfigurationFactory({ id })],
+					getToolConfigurations: [toolConfigurationFactory.build({ id })],
 				});
 
 				await openSelect(wrapper);
@@ -230,7 +230,7 @@ describe("ExternalToolConfigOverview", () => {
 			it("should set parameters valid on selection", async () => {
 				const id = "expectedToolId";
 				const toolTemplate: ToolConfigurationTemplate =
-					toolConfigurationTemplateFactory({
+					toolConfigurationTemplateFactory.build({
 						id,
 					});
 				const { wrapper } = await setup({
@@ -290,7 +290,7 @@ describe("ExternalToolConfigOverview", () => {
 		describe("when creating a new configuration", () => {
 			it("should call store action to save tool", async () => {
 				const { wrapper } = await setup();
-				wrapper.vm.toolTemplate = toolConfigurationTemplateFactory();
+				wrapper.vm.toolTemplate = toolConfigurationTemplateFactory.build();
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
@@ -302,7 +302,7 @@ describe("ExternalToolConfigOverview", () => {
 
 			it("should redirect back to school settings page when there is no error", async () => {
 				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory({ message: undefined }),
+					getBusinessError: businessErrorFactory.build({ message: undefined }),
 				});
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
@@ -315,7 +315,7 @@ describe("ExternalToolConfigOverview", () => {
 
 			it("should display alert when server side error on save occurred", async () => {
 				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory({
+					getBusinessError: businessErrorFactory.build({
 						message: "someErrorOccurred",
 					}),
 				});
@@ -347,7 +347,7 @@ describe("ExternalToolConfigOverview", () => {
 
 			it("should redirect back to school settings page when there is no error", async () => {
 				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory({ message: undefined }),
+					getBusinessError: businessErrorFactory.build({ message: undefined }),
 				});
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
@@ -360,7 +360,7 @@ describe("ExternalToolConfigOverview", () => {
 
 			it("should display alert when server side error on save occurred", async () => {
 				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory({
+					getBusinessError: businessErrorFactory.build({
 						message: "someErrorOccurred",
 					}),
 				});

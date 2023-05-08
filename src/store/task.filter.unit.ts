@@ -1,5 +1,6 @@
 import { TaskFilter } from "./task.filter";
 import { Task } from "./types/tasks";
+import { taskResponseFactory } from "@@/tests/test-utils/factory";
 
 type TaskParams = {
 	name?: string;
@@ -18,25 +19,7 @@ class TaskFactory {
 	sequence = 0;
 
 	build(params: TaskParams = {}): Task {
-		const task: Task = {
-			id: "0123456789ab",
-			name: params.name || `task #${this.sequence++}`,
-			courseName:
-				params.courseName !== undefined ? params.courseName : "course #1",
-			courseId:
-				params.courseId !== undefined ? params.courseId : "course ID #1",
-			dueDate: params.dueDate,
-			status: {
-				submitted: params.status?.submitted || 0,
-				maxSubmissions: params.status?.maxSubmissions || 0,
-				graded: params.status?.graded || 0,
-				isDraft: params.status?.isDraft || false,
-				isSubstitutionTeacher: params.status?.isSubstitutionTeacher || false,
-			},
-			createdAt: new Date().toISOString(),
-			updatedAt: new Date().toISOString(),
-		};
-		return task;
+		return taskResponseFactory.build(params);
 	}
 
 	buildList(number: number, params: TaskParams = {}): Task[] {
