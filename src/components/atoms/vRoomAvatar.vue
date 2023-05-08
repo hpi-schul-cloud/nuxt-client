@@ -68,8 +68,7 @@ export default {
 			return this.showBadge === true && this.item.notification === true;
 		},
 		stillBeingCopied() {
-			// return this.item.copyingSince !== undefined;
-			return true;
+			return this.item.copyingSince !== undefined;
 		},
 		avatarAriaLabel() {
 			const course = this.$t("common.labels.course");
