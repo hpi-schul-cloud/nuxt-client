@@ -7,9 +7,12 @@ import {
 	CreateContentElementBody,
 	CreateContentElementBodyTypeEnum,
 	FileElementContent,
+	FileElementContentBodyTypeEnum,
 	TextElementContent,
+	TextElementContentBodyTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { AnyContentElement, ContentElementType } from "../types/ContentElement";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -30,11 +33,27 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
 	};
 
-	const updateElementCall = async (
-		elementId: string,
-		content: TextElementContent | FileElementContent
-	) => {
-		await elementApi.elementControllerUpdateElement(elementId, { content });
+	const updateElementCall = async (element: AnyContentElement) => {
+		const data = generateDataProp(element);
+		await elementApi.elementControllerUpdateElement(element.id, { data });
+	};
+
+	const generateDataProp = (element: AnyContentElement) => {
+		if (element.type === ContentElementType.TEXT) {
+			return {
+				content: element.content as TextElementContent,
+				type: TextElementContentBodyTypeEnum.Text,
+			};
+		}
+
+		if (element.type === ContentElementType.FILE) {
+			return {
+				content: element.content as FileElementContent,
+				type: FileElementContentBodyTypeEnum.File,
+			};
+		}
+
+		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
 	const createElement = async (

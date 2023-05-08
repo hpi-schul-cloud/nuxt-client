@@ -1,8 +1,9 @@
+import { TextElementContent } from "@/serverApi/v3";
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref, watch } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
-import { AnyContentElement } from "../types/ContentElement";
+import { AnyContentElement, TextContentElement } from "../types/ContentElement";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -42,7 +43,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	const updateElement = async (payload: T["content"]) => {
 		console.log("update element", { ...payload });
-		await updateElementCall(props.element.id, payload);
+		await updateElementCall(props.element);
 	};
 
 	return {

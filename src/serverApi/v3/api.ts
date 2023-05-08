@@ -111,19 +111,6 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
- * @interface AnyContentElementBody
- */
-export interface AnyContentElementBody {
-    /**
-     * 
-     * @type {TextElementContent | FileElementContent}
-     * @memberof AnyContentElementBody
-     */
-    content: TextElementContent | FileElementContent;
-}
-/**
- * 
- * @export
  * @interface ApiValidationError
  */
 export interface ApiValidationError {
@@ -156,7 +143,7 @@ export interface ApiValidationError {
      * @type {object}
      * @memberof ApiValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -1174,6 +1161,19 @@ export interface DashboardResponse {
 /**
  * 
  * @export
+ * @interface ElementContentUpdateBodyParams
+ */
+export interface ElementContentUpdateBodyParams {
+    /**
+     * 
+     * @type {TextElementContentBody | FileElementContentBody}
+     * @memberof ElementContentUpdateBodyParams
+     */
+    data: TextElementContentBody | FileElementContentBody;
+}
+/**
+ * 
+ * @export
  * @interface EntityNotFoundError
  */
 export interface EntityNotFoundError {
@@ -1206,7 +1206,7 @@ export interface EntityNotFoundError {
      * @type {object}
      * @memberof EntityNotFoundError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -1395,6 +1395,19 @@ export interface ExternalToolSearchListResponse {
 /**
  * 
  * @export
+ * @interface FileContentBody
+ */
+export interface FileContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileContentBody
+     */
+    caption: string;
+}
+/**
+ * 
+ * @export
  * @interface FileElementContent
  */
 export interface FileElementContent {
@@ -1405,6 +1418,35 @@ export interface FileElementContent {
      */
     caption: string;
 }
+/**
+ * 
+ * @export
+ * @interface FileElementContentBody
+ */
+export interface FileElementContentBody {
+    /**
+     * the type of the updated element
+     * @type {any}
+     * @memberof FileElementContentBody
+     */
+    type: FileElementContentBodyTypeEnum;
+    /**
+     * 
+     * @type {FileContentBody}
+     * @memberof FileElementContentBody
+     */
+    content: FileContentBody;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum FileElementContentBodyTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
 /**
  * 
  * @export
@@ -1471,7 +1513,7 @@ export interface ForbiddenOperationError {
      * @type {object}
      * @memberof ForbiddenOperationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -3904,6 +3946,19 @@ export interface TeamPermissionsBody {
 /**
  * 
  * @export
+ * @interface TextContentBody
+ */
+export interface TextContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof TextContentBody
+     */
+    text: string;
+}
+/**
+ * 
+ * @export
  * @interface TextElementContent
  */
 export interface TextElementContent {
@@ -3914,6 +3969,35 @@ export interface TextElementContent {
      */
     text: string;
 }
+/**
+ * 
+ * @export
+ * @interface TextElementContentBody
+ */
+export interface TextElementContentBody {
+    /**
+     * the type of the updated element
+     * @type {Text}
+     * @memberof TextElementContentBody
+     */
+    type: TextElementContentBodyTypeEnum;
+    /**
+     * 
+     * @type {TextContentBody}
+     * @memberof TextElementContentBody
+     */
+    content: TextContentBody;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum TextElementContentBodyTypeEnum {
+    Text = 'text',
+    File = 'file'
+}
+
 /**
  * 
  * @export
@@ -4311,7 +4395,7 @@ export interface ValidationError {
      * @type {object}
      * @memberof ValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -4938,6 +5022,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4973,6 +5058,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5008,6 +5094,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5053,6 +5140,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5063,6 +5151,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5073,6 +5162,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5093,6 +5183,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5102,6 +5193,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5111,6 +5203,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5129,6 +5222,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5138,6 +5232,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5147,6 +5242,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5165,6 +5261,7 @@ export interface AuthenticationApiInterface {
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5176,6 +5273,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5187,6 +5285,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6617,15 +6716,15 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {AnyContentElementBody} anyContentElementBody 
+         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement: async (contentElementId: string, anyContentElementBody: AnyContentElementBody, options: any = {}): Promise<RequestArgs> => {
+        elementControllerUpdateElement: async (contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentElementId' is not null or undefined
             assertParamExists('elementControllerUpdateElement', 'contentElementId', contentElementId)
-            // verify required parameter 'anyContentElementBody' is not null or undefined
-            assertParamExists('elementControllerUpdateElement', 'anyContentElementBody', anyContentElementBody)
+            // verify required parameter 'elementContentUpdateBodyParams' is not null or undefined
+            assertParamExists('elementControllerUpdateElement', 'elementContentUpdateBodyParams', elementContentUpdateBodyParams)
             const localVarPath = `/elements/{contentElementId}/content`
                 .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -6650,7 +6749,7 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(anyContentElementBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(elementContentUpdateBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6694,12 +6793,12 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {AnyContentElementBody} anyContentElementBody 
+         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, anyContentElementBody: AnyContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, anyContentElementBody, options);
+        async elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -6737,12 +6836,12 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {AnyContentElementBody} anyContentElementBody 
+         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, anyContentElementBody: AnyContentElementBody, options?: any): AxiosPromise<void> {
-            return localVarFp.elementControllerUpdateElement(contentElementId, anyContentElementBody, options).then((request) => request(axios, basePath));
+        elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6778,12 +6877,12 @@ export interface BoardElementApiInterface {
      * 
      * @summary Update a single content element.
      * @param {string} contentElementId The id of the element.
-     * @param {AnyContentElementBody} anyContentElementBody 
+     * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, anyContentElementBody: AnyContentElementBody, options?: any): AxiosPromise<void>;
+    elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -6823,13 +6922,13 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      * 
      * @summary Update a single content element.
      * @param {string} contentElementId The id of the element.
-     * @param {AnyContentElementBody} anyContentElementBody 
+     * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApi
      */
-    public elementControllerUpdateElement(contentElementId: string, anyContentElementBody: AnyContentElementBody, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerUpdateElement(contentElementId, anyContentElementBody, options).then((request) => request(this.axios, this.basePath));
+    public elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
