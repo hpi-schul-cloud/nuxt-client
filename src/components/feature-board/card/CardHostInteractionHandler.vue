@@ -39,6 +39,7 @@ export default defineComponent({
 		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
+				event.preventDefault();
 				emit("move:card-keyboard", event);
 			}
 		};

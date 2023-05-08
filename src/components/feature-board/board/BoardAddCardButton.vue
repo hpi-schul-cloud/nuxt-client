@@ -1,7 +1,6 @@
 <template>
 	<div
-		class="d-flex w-full justify-center button-background pb-4 pt-2 text-center"
-		:class="{ sticky: isSticky }"
+		class="d-flex w-full justify-center button-background pb-4 pt-2 text-center sticky"
 		ref="sticky"
 	>
 		<VBtn
@@ -25,12 +24,6 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "BoardAddCardButton",
 	emits: ["add-card"],
-	props: {
-		isSticky: {
-			type: Boolean,
-			required: true,
-		},
-	},
 	setup(props, { emit }) {
 		const onAddCard = () => emit("add-card");
 		return {

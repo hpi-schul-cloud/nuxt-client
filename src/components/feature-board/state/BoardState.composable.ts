@@ -65,7 +65,7 @@ export const useBoardState = (id: string) => {
 
 	const deleteCard = async (id: string) => {
 		await deleteCardCall(id);
-		extractCard(id);
+		await extractCard(id);
 	};
 
 	const deleteColumn = async (id: string) => {
