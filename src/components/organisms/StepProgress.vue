@@ -95,7 +95,7 @@ ul.progressbar {
 		content: counter(step);
 		counter-increment: step;
 		background: var(--v-white-base);
-		border-color: var(--v-border-darken1);
+		border-color: map-get($grey, darken-3);
 		border-style: dotted;
 		border-radius: var(--radius-round);
 	}

@@ -269,7 +269,7 @@ export default {
 
 	&__separator {
 		margin: 0 var(--space-xs-4);
-		border-top: 1px solid var(--v-border-base);
+		border-top: 1px solid map-get($grey, base);
 	}
 
 	&__content {

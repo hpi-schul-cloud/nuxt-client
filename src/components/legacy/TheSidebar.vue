@@ -201,7 +201,7 @@ export default defineComponent({
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--v-border-lighten2);
+		border-right: 1px solid map-get($grey, lighten-3);
 		border-bottom: none;
 	}
 

@@ -40,6 +40,6 @@ $btn-radius: 18;
 .dashed-divider {
 	flex: 1;
 	border: 0;
-	border-bottom: dashed thin var(--v-border-base);
+	border-bottom: dashed thin map-get($grey, base);
 }
 </style>

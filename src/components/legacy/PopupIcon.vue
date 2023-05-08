@@ -78,7 +78,7 @@ export default {
 		z-index: var(--layer-popover);
 		visibility: hidden;
 		background-color: var(--v-white-base);
-		border: 1px solid var(--v-border-lighten2);
+		border: 1px solid map-get($grey, lighten-3);
 		border-radius: var(--radius-sm);
 
 		@include breakpoint(tablet) {
@@ -109,7 +109,7 @@ export default {
 		);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--v-border-lighten2) transparent;
+		border-color: transparent transparent map-get($grey, lighten-3) transparent;
 		border-style: solid;
 		border-width: var(--outer-arrow-size);
 

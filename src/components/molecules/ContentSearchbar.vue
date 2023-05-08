@@ -137,7 +137,7 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--v-border-lighten2) solid;
+				border-bottom: 2px map-get($grey, lighten-2) solid;
 			}
 
 			&::placeholder {

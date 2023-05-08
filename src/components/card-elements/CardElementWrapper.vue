@@ -136,7 +136,7 @@ $btn-radius: 18;
 }
 
 .active {
-	border: dashed thin var(--v-border-base);
+	border: dashed thin map-get($grey, base);
 }
 
 .card-actions {

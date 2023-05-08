@@ -174,7 +174,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .chosen,
 .drag {
-	border: solid thin var(--v-border-lighten2);
+	border: solid thin map-get($grey, lighten-3);
 	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
 		0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
 	opacity: 1 !important;

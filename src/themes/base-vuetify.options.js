@@ -42,12 +42,6 @@ export default {
 					base: "#ff1134",
 					darken1: "#bf0d26",
 				},
-				border: {
-					base: colors.grey.base,
-					lighten1: colors.grey.lighten2,
-					lighten2: colors.grey.lighten3,
-					darken1: colors.grey.darken3,
-				},
 				"beta-task": {
 					base: "#196C9E",
 				},

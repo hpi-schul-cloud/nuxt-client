@@ -101,7 +101,7 @@ export default {
 		color: var(--v-black-base);
 		white-space: nowrap;
 		background-color: var(--v-white-base);
-		border: 1px solid var(--v-border-lighten1);
+		border: 1px solid map-get($grey, lighten-2);
 		border-radius: var(--radius-sm);
 
 		.username {
@@ -111,7 +111,7 @@ export default {
 			margin-bottom: 5px;
 			/* stylelint-enable */
 			white-space: normal;
-			border-bottom: 1px solid var(--v-border-lighten1);
+			border-bottom: 1px solid map-get($grey, lighten-2);
 		}
 	}
 }

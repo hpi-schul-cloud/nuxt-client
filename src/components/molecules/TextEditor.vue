@@ -270,7 +270,7 @@ export default {
 <style lang="scss" scoped>
 .menubar {
 	padding-bottom: var(--space-xs-2);
-	border-bottom: 1px solid var(--v-border-base);
+	border-bottom: 1px solid map-get($grey, base);
 }
 
 .editor__content {
