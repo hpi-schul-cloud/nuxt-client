@@ -11,6 +11,7 @@ export const mockStatusAlerts: StatusAlert[] = [
 		},
 		timestamp: "2022-08-25 10:33:38",
 		url: "https://status.test.cloud",
+		createdAt: "May 5, 2023 12:34 PM",
 	},
 	{
 		title: "Problem resolved",
@@ -22,6 +23,7 @@ export const mockStatusAlerts: StatusAlert[] = [
 		},
 		timestamp: "2022-08-25 10:33:38",
 		url: "https://status.test.cloud",
+		createdAt: "May 5, 2023 12:34 PM",
 	},
 	{
 		title: "Critical problem in progress info2",
@@ -33,5 +35,6 @@ export const mockStatusAlerts: StatusAlert[] = [
 		},
 		timestamp: "2022-08-25 10:33:38",
 		url: "https://status.test.cloud",
+		createdAt: "May 5, 2023 12:34 PM",
 	},
 ];

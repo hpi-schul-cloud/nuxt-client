@@ -138,6 +138,10 @@ export default class EnvConfigModule extends VuexModule {
 		);
 	}
 
+	get getClientUserLoginMigration(): boolean {
+		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED || false;
+	}
+
 	get getEnv(): Envs {
 		return this.env;
 	}
