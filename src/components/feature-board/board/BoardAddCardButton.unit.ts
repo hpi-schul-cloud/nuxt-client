@@ -19,11 +19,11 @@ describe("BoardAddCardButton Component", () => {
 			expect(wrapper).toBeDefined();
 		});
 
-		it("should have proper class name to set its position", async () => {
+		it("should have proper class name to detect column end", async () => {
 			setup();
-			const stickyElement = wrapper.findComponent({ ref: "sticky" });
+			const stickyElement = wrapper.findComponent({ ref: "columnend" });
 
-			expect(stickyElement.element.className).toContain("sticky");
+			expect(stickyElement.element.className).toContain("columnend");
 		});
 	});
 });
