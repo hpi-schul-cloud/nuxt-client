@@ -426,7 +426,7 @@ export default {
 
 .tooltip .tooltiptext {
 	visibility: hidden;
-	background-color: var(--v-grey-darken3);
+	background-color: map-get($grey, darken-3);
 	color: #fff;
 	text-align: center;
 	border-radius: 6px;
