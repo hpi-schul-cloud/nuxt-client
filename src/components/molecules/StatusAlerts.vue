@@ -89,15 +89,15 @@ export default defineComponent({
 	max-width: 250px;
 	max-height: 400px;
 	overflow-y: auto;
+	border-radius: 4px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;
 	}
 	.alert-item {
-		@if index == 0 {
+		border-top: 1px solid var(--v-grey-lighten2);
+		&:first-child {
 			border-top: none;
-		} @else {
-			border-top: 1px solid var(--v-grey-lighten2);
 		}
 	}
 	.subtitle-1 {
