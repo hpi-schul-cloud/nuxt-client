@@ -24,8 +24,8 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	watchDebounced(
 		modelValue.value,
-		(modelValue) => {
-			updateElement(unref(modelValue));
+		async (modelValue) => {
+			await updateElement(unref(modelValue));
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
