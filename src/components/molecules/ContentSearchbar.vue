@@ -118,7 +118,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		color: var(--v-grey-base);
+		color: map-get($grey, base);
 
 		input {
 			flex: 1;
@@ -138,11 +138,11 @@ export default {
 			}
 
 			&:focus {
-				border-bottom: 2px var(--v-grey-lighten1) solid;
+				border-bottom: 2px map-get($grey, lighten-3) solid;
 			}
 
 			&::placeholder {
-				color: var(--v-grey-base);
+				color: map-get($grey, base);
 			}
 
 			&:hover {
