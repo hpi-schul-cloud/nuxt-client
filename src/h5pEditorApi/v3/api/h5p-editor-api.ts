@@ -20,6 +20,8 @@ import { Configuration } from '../configuration';
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+// @ts-ignore
+import { ApiValidationError } from '../models';
 /**
  * H5pEditorApi - axios parameter creator
  * @export
@@ -28,7 +30,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @summary Get embeddable HTML for the editor
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -62,7 +64,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Get embeddable HTML for the player
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -106,7 +108,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Get embeddable HTML for the editor
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -116,7 +118,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get embeddable HTML for the player
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -136,7 +138,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @summary Get embeddable HTML for the editor
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -145,7 +147,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Get embeddable HTML for the player
+         * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -163,7 +165,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
 export interface H5pEditorApiInterface {
     /**
      * 
-     * @summary Get embeddable HTML for the editor
+     * @summary Return dummy HTML for testing
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
@@ -172,7 +174,7 @@ export interface H5pEditorApiInterface {
 
     /**
      * 
-     * @summary Get embeddable HTML for the player
+     * @summary Return dummy HTML for testing
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
@@ -190,7 +192,7 @@ export interface H5pEditorApiInterface {
 export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
     /**
      * 
-     * @summary Get embeddable HTML for the editor
+     * @summary Return dummy HTML for testing
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
@@ -201,7 +203,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
 
     /**
      * 
-     * @summary Get embeddable HTML for the player
+     * @summary Return dummy HTML for testing
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
