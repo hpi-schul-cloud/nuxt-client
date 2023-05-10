@@ -12,6 +12,7 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("T1234")).toBe(true);
 			expect(isOfficialSchoolNumber("12345-Y")).toBe(true);
 			expect(isOfficialSchoolNumber("AB-123456")).toBe(true);
+			expect(isOfficialSchoolNumber("A-12345")).toBe(true);
 			expect(isOfficialSchoolNumber("123456")).toBe(true);
 			expect(isOfficialSchoolNumber("12345")).toBe(true);
 		});
@@ -28,6 +29,7 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("gelöscht_99016")).toBe(false);
 			expect(isOfficialSchoolNumber("AB-1234567")).toBe(false);
 			expect(isOfficialSchoolNumber("AB-1234")).toBe(false);
+			expect(isOfficialSchoolNumber("-1234")).toBe(false);
 			expect(isOfficialSchoolNumber("1234")).toBe(false);
 		});
 	});
