@@ -13,6 +13,7 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("12345-Y")).toBe(true);
 			expect(isOfficialSchoolNumber("AB-123456")).toBe(true);
 			expect(isOfficialSchoolNumber("123456")).toBe(true);
+			expect(isOfficialSchoolNumber("12345")).toBe(true);
 		});
 
 		it("should return false for invalid official school numbers", () => {
@@ -22,6 +23,10 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("Dev")).toBe(false);
 			expect(isOfficialSchoolNumber("Dev-123")).toBe(false);
 			expect(isOfficialSchoolNumber("ORG-A134V550")).toBe(false);
+			expect(isOfficialSchoolNumber("10033101000")).toBe(false);
+			expect(isOfficialSchoolNumber("nicht_05083")).toBe(false);
+			expect(isOfficialSchoolNumber("gelöscht_99016")).toBe(false);
+			expect(isOfficialSchoolNumber("1234")).toBe(false);
 		});
 	});
 });
