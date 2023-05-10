@@ -4,17 +4,8 @@ import {
 	useEventListener,
 	useFocus,
 	useFocusWithin,
-	VueInstance,
 } from "@vueuse/core";
-import {
-	computed,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	Ref,
-	unref,
-} from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
 
@@ -46,27 +37,11 @@ export const useBoardFocusHandler = (
 	});
 
 	const trySetFocus = async () => {
-		const hostElement = unref(element);
 		if (id !== focusedId.value) {
 			return;
 		}
-		if (hostElement === undefined) {
-			return;
-		}
-		try {
-			if (hostElement.focus !== undefined) {
-				console.log("focus header");
-				hostElement.focus();
-			} else {
-				console.log("focus card");
-				extractHtmlElementFromVueComponent(
-					hostElement as unknown as VueInstance
-				).focus();
-			}
-		} catch (e: unknown) {
-			console.error(e);
-		}
 		await nextTick();
+		isFocused.value = true;
 	};
 
 	return {
@@ -74,12 +49,6 @@ export const useBoardFocusHandler = (
 		isFocusWithin,
 		isFocusContained,
 	};
-};
-
-const extractHtmlElementFromVueComponent = (
-	component: VueInstance
-): HTMLElement => {
-	return component?.$el as HTMLElement;
 };
 
 const useSharedFocusedId = createSharedComposable(() => {

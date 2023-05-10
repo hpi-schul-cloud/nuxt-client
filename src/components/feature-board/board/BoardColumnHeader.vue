@@ -7,7 +7,7 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-1': isFocused }"
+			:class="{ 'grey lighten-2': isFocused }"
 			tabindex="0"
 			ref="columnHeader"
 		>
@@ -20,7 +20,6 @@
 						:placeholder="titlePlaceholder"
 						@update:value="onUpdateTitle"
 					></BoardAnyTitleInput>
-					{{ isFocused }}
 				</div>
 				<div class="pt-2">
 					<BoardMenu scope="column">
