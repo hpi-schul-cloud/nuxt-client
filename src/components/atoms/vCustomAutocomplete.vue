@@ -6,7 +6,7 @@
 		clearable
 		solo
 		rounded
-		:menu-props="{ closeOnContentClick: false, zIndex:30 }"
+		:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 		v-bind="$attrs"
 		data-testid="courseFilter"
 		@change="($event) => $emit('selected-item', $event)"
