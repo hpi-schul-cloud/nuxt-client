@@ -1,3 +1,4 @@
+import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { ContentElementType } from "../types/ContentElement";
 
@@ -8,7 +9,7 @@ export interface CreateElementItems {
 	testId: string;
 	type: ContentElementType;
 }
-export const useCreateElement = () => {
+export const useCreateElement = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
 
 	const items = ref<CreateElementItems[]>([
@@ -45,4 +46,4 @@ export const useCreateElement = () => {
 		openDialog,
 		items,
 	};
-};
+});
