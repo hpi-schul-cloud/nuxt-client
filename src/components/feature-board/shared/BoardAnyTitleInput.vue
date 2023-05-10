@@ -20,7 +20,6 @@
 			:aria-level="ariaLevel"
 			role="heading"
 			class="heading"
-			tabindex="-1"
 		>
 			{{ value }}
 		</div>
