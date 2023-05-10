@@ -73,7 +73,7 @@ export default {
 	font-size: var(--text-md); // text size in legacy client 14px;
 	text-align: inherit;
 	background-color: var(--v-white-base);
-	border-bottom: 1px solid var(--v-grey-lighten2);
+	border-bottom: 1px solid map-get($grey, lighten-2);
 
 	&:first-child {
 		border-top-left-radius: var(--radius-sm);
