@@ -32,6 +32,7 @@
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="$emit('clicked', data.id)"
+				role="button"
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"
