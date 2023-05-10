@@ -26,6 +26,8 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("10033101000")).toBe(false);
 			expect(isOfficialSchoolNumber("nicht_05083")).toBe(false);
 			expect(isOfficialSchoolNumber("gelöscht_99016")).toBe(false);
+			expect(isOfficialSchoolNumber("AB-1234567")).toBe(false);
+			expect(isOfficialSchoolNumber("AB-1234")).toBe(false);
 			expect(isOfficialSchoolNumber("1234")).toBe(false);
 		});
 	});
