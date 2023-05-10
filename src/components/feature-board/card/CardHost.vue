@@ -5,52 +5,52 @@
 		@end-edit-mode="onEndEditMode"
 		@move:card-keyboard="onMoveCardKeyboard"
 	>
-		<div ref="cardHost">
-			<VCard
-				:height="isLoading ? height : 'auto'"
-				class="w-100 transition-swing"
-				:class="{ 'drag-disabled': isEditMode }"
-				outlined
-				tabindex="0"
-				min-height="120px"
-				:elevation="isEditMode ? 6 : 0"
-				:id="cardId"
-				:ripple="false"
-				:hover="isHovered"
-			>
-				<template v-if="isLoading">
-					<CardSkeleton :height="height" />
-				</template>
-				<template v-if="!isLoading && card">
-					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu scope="card">
-							<BoardMenuAction @click="onTryDelete">
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
-								{{ $t("components.board.action.delete") }}
-							</BoardMenuAction>
-						</BoardMenu>
-					</div>
-					<CardTitle
-						:isEditMode="isEditMode"
-						:value="card.title"
-						scope="card"
-						@update:value="onUpdateCardTitle"
-					>
-					</CardTitle>
+		<VCard
+			ref="cardHost"
+			:height="isLoading ? height : 'auto'"
+			class="w-100 transition-swing"
+			:class="{ 'drag-disabled': isEditMode }"
+			outlined
+			tabindex="0"
+			min-height="120px"
+			:elevation="isEditMode ? 6 : 0"
+			:id="cardId"
+			:ripple="false"
+			:hover="isHovered"
+		>
+			<template v-if="isLoading">
+				<CardSkeleton :height="height" />
+			</template>
+			<template v-if="!isLoading && card">
+				<CardTitle
+					:isEditMode="isEditMode"
+					:value="card.title"
+					scope="card"
+					@update:value="onUpdateCardTitle"
+				>
+				</CardTitle>
 
-					<ContentElementList
-						:elements="card.elements"
-						:isEditMode="isEditMode"
-					></ContentElementList>
-					<CardAddElementMenu
-						@add-element="onAddElement"
-						v-if="isEditMode"
-					></CardAddElementMenu>
-				</template>
-			</VCard>
-		</div>
+				<div class="board-menu" :class="boardMenuClasses">
+					<BoardMenu scope="card">
+						<BoardMenuAction @click="onTryDelete">
+							<VIcon>
+								{{ mdiTrashCanOutline }}
+							</VIcon>
+							{{ $t("components.board.action.delete") }}
+						</BoardMenuAction>
+					</BoardMenu>
+				</div>
+
+				<ContentElementList
+					:elements="card.elements"
+					:isEditMode="isEditMode"
+				></ContentElementList>
+				<CardAddElementMenu
+					@add-element="onAddElement"
+					v-if="isEditMode"
+				></CardAddElementMenu>
+			</template>
+		</VCard>
 	</CardHostInteractionHandler>
 </template>
 
@@ -61,12 +61,12 @@ import {
 	useDebounceFn,
 	useElementHover,
 	useElementSize,
-	useFocusWithin,
 	watchDebounced,
 } from "@vueuse/core";
 import { computed, defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
@@ -94,14 +94,15 @@ export default defineComponent({
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const cardHost = ref(null);
-		const cardId = computed(() => card.value?.id);
-		const { focused: isFocused } = useFocusWithin(cardHost);
+		const cardHost = ref(undefined);
+		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
 		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
 			useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+			props.cardId
+		);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -134,7 +135,7 @@ export default defineComponent({
 		};
 
 		const boardMenuClasses = computed(() => {
-			if (isFocused.value === true || isHovered.value === true) {
+			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
 			}
 			return "hidden";
@@ -150,7 +151,6 @@ export default defineComponent({
 			boardMenuClasses,
 			isLoading,
 			card,
-			isFocused,
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
