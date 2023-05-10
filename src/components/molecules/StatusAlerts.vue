@@ -3,7 +3,7 @@
 		data-test-id="status-alerts"
 		min-width="250"
 		max-height="400"
-		class="alerts pa-0"
+		class="alerts pa-0 rounded"
 		elevation="2"
 	>
 		<v-list-item
@@ -86,7 +86,6 @@ export default defineComponent({
 	max-width: 250px;
 	max-height: 400px;
 	overflow-y: auto;
-	border-radius: 4px;
 	@include breakpoint(tablet) {
 		width: 400px;
 		max-width: 400px;

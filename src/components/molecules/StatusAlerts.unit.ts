@@ -60,11 +60,13 @@ describe("@/components/molecules/StatusAlerts", () => {
 });
 
 describe("getCreatedDate", () => {
-	it("should be getCreatedDate fuction on the template", () => {
+	it("should be getCreatedDate function on the template", () => {
 		const wrapper = getWrapper(testProps);
-		expect(wrapper.vm.getCreatedDate).toBeDefined();
+		const expectedDate = "05.05.2023 12:34";
+		const alertElement = wrapper.find(".alert-date");
+		expect(alertElement.element.innerHTML).toContain(expectedDate);
 	});
-	it("returns expected result", () => {
+	it("should returns expected result", () => {
 		const wrapper = getWrapper(testProps);
 		const expectedDate = "05.05.2023 12:34";
 		const dateTime = "May 5, 2023 12:34 PM";
