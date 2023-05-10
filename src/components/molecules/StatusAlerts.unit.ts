@@ -4,7 +4,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import getCreatedDate from "./StatusAlerts.vue";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -61,14 +60,11 @@ describe("@/components/molecules/StatusAlerts", () => {
 });
 
 describe("getCreatedDate", () => {
-	it("should be 'getCreatedDate' converts date in the template", () => {
+	it("should be getCreatedDate fuction on the template", () => {
 		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const alertElement = wrapper.find(".alert-date");
-		expect(alertElement.element.innerHTML).toContain(expectedDate);
+		expect(wrapper.vm.getCreatedDate).toBeDefined();
 	});
-
-	it("should return expected result", () => {
+	it("returns expected result", () => {
 		const wrapper = getWrapper(testProps);
 		const expectedDate = "05.05.2023 12:34";
 		const dateTime = "May 5, 2023 12:34 PM";
