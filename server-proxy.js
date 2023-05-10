@@ -35,18 +35,14 @@ app.use((req, res, next) => {
 	const path = url.parse(req.originalUrl).pathname;
 
 	if (isFileStorage(path)) {
-		// console.log("--- serverPath: ", path);
 		fileStorageProxy(req, res, next);
 	} else if (isH5pEditor(path)) {
 		h5pEditorProxy(req, res, next);
 	} else if (isServer(path)) {
-		// console.log("--- serverUrl: ", path);
 		serverProxy(req, res, next);
 	} else if (isVueClient(path)) {
-		// console.log("--- vueUrl: ", path);
 		vueClientProxy(req, res, next);
 	} else {
-		// console.log("--- legacyUrl: ", path);
 		legacyClientProxy(req, res, next);
 	}
 });
