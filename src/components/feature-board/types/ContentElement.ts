@@ -1,5 +1,6 @@
 export enum ContentElementType {
 	TEXT = "text",
+	RICH_TEXT = "rich_text",
 	FILE = "file",
 }
 
@@ -17,6 +18,14 @@ export interface TextContentElement extends ContentElement {
 		text: string;
 	};
 }
+
+export interface RichTextContentElement extends ContentElement {
+	type: ContentElementType.RICH_TEXT;
+	content: {
+		text: string;
+	};
+}
+
 export interface FileContentElement extends ContentElement {
 	type: ContentElementType.FILE;
 	content: {

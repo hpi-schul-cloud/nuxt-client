@@ -7,6 +7,12 @@
 				:element="element"
 				:isEditMode="isEditMode"
 			></TextContentElement>
+			<RichTextContentElement
+				v-if="element.type === ContentElementType.TEXT"
+				:key="element.id + 'r'"
+				:element="element"
+				:isEditMode="isEditMode"
+			/>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
 			</template>
@@ -17,11 +23,13 @@
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement, ContentElementType } from "../types/ContentElement";
 import TextContentElement from "./TextContentElement.vue";
+import RichTextContentElement from "./RichTextContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
 		TextContentElement,
+		RichTextContentElement,
 	},
 	props: {
 		elements: {
