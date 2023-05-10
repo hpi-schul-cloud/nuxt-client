@@ -131,6 +131,7 @@ import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
+import { injectStrict } from "@/utils/inject";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -149,7 +150,7 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const roomModule: RoomModule | undefined = inject<RoomModule>("roomModule");
 		const roomsModule: RoomsModule | undefined =

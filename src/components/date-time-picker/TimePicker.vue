@@ -60,6 +60,7 @@ import VueI18n from "vue-i18n";
 import { useTimePickerState } from "./state/TimePickerState.composable";
 import { useDebounceFn } from "@vueuse/core";
 import { ValidationRule } from "./types/Validation";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -72,7 +73,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

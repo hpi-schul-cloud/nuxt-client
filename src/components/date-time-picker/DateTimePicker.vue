@@ -36,6 +36,7 @@ import DatePicker from "@/components/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/date-time-picker/TimePicker.vue";
 import { mdiCalendarClock } from "@mdi/js";
 import { isToday } from "@/plugins/datetime";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -61,7 +62,7 @@ export default defineComponent({
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

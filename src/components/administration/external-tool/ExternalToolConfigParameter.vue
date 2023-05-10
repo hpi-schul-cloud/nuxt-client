@@ -52,6 +52,7 @@ import {
 	ToolParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
+import { injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -63,7 +64,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

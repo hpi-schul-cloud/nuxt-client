@@ -102,13 +102,14 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useRouter } from "vue-router/composables";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
 	setup() {
 		const router: VueRouter = useRouter();
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!externalToolsModule || !i18n) {

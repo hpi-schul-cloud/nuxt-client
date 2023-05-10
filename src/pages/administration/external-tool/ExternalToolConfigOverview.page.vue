@@ -94,6 +94,7 @@ import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
+import { injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -109,7 +110,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!i18n || !externalToolsModule) {

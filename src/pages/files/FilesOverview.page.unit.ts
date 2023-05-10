@@ -75,14 +75,13 @@ describe("FileOverview", () => {
 			const collaborativeFilesModule = createModuleMocks(
 				CollaborativeFilesModule
 			);
-			console.error = jest.fn();
 			expect(() => {
 				shallowMount(FilesOverview, {
 					provide: {
 						collaborativeFilesModule,
 					},
 				});
-			}).toThrow("Injection of dependencies failed");
+			}).toThrow();
 		});
 
 		it("should throw an error when collaborativeFilesModule injection fails", () => {

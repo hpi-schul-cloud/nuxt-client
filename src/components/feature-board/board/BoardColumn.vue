@@ -50,6 +50,7 @@ import {
 } from "../types/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -76,7 +77,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
 
 		const onCreateCard = () => emit("create:card", props.column.id);

@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+import { injectStrict } from "@/utils/inject";
 import { defineComponent, ref, watch, inject } from "vue";
 import VueI18n from "vue-i18n";
 
@@ -39,7 +40,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

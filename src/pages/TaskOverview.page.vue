@@ -9,11 +9,12 @@ import TasksModule from "@/store/tasks";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import VueI18n from "vue-i18n";
 import { useTitle } from "@vueuse/core";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	components: { TasksDashboardMain },
 	setup() {
-		const i18n = inject<VueI18n | undefined>("i18n");
+		const i18n = injectStrict<VueI18n>("i18n");
 		const authModule = inject<AuthModule | undefined>("authModule");
 		const tasksModule = inject<TasksModule | undefined>("tasksModule");
 

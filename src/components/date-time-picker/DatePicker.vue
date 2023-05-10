@@ -57,6 +57,7 @@ import dayjs from "dayjs";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import { ValidationRule } from "./types/Validation";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -70,7 +71,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

@@ -113,21 +113,13 @@ describe("ExternalToolConfigOverview", () => {
 		});
 
 		it("should throw an error when i18n injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
+			expect(() => {
 				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},
 				});
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "i18n" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
+			}).toThrow();
 		});
 	});
 

@@ -75,6 +75,7 @@ import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useDrag } from "@/composables/drag";
 import draggable from "vuedraggable";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "CardElemenList",
@@ -96,7 +97,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
 		}

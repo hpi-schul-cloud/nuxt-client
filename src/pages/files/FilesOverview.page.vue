@@ -45,11 +45,12 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
 import { useRoute, useRouter } from "vue-router/composables";
 import { fromNow } from "@/plugins/datetime";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const collaborativeFilesModule: CollaborativeFilesModule | undefined =
 			inject<CollaborativeFilesModule>("collaborativeFilesModule");
 		if (!collaborativeFilesModule || !i18n) {

@@ -26,6 +26,7 @@ import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useTitle } from "@vueuse/core";
 import { useStorage } from "@/composables/locale-storage.composable";
+import { injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -41,7 +42,7 @@ export default defineComponent({
 			HttpStatusCode.Unauthorized,
 			HttpStatusCode.Forbidden,
 		];
-		const i18n = inject<VueI18n | undefined>("i18n");
+		const i18n = injectStrict<VueI18n | undefined>("i18n");
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);

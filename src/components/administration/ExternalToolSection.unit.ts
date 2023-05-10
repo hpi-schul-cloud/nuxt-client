@@ -40,29 +40,17 @@ describe("ExternalToolSection", () => {
 	describe("inject is called", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
 				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 					getSchoolExternalTools: [],
 				});
 
-				try {
+				expect(() => {
 					shallowMount(ExternalToolSection, {
 						provide: {
 							externalToolsModule,
 						},
 					});
-				} catch (e) {
-					expect(consoleErrorSpy).toHaveBeenCalledWith(
-						expect.stringMatching(
-							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-						)
-					);
-				}
-
-				consoleErrorSpy.mockRestore();
+				}).toThrow();
 			});
 		});
 

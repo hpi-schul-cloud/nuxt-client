@@ -27,22 +27,9 @@ describe("ExternalToolConfigParameter", () => {
 	describe("inject", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
+				expect(() => {
 					shallowMount(ExternalToolConfigParameter as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
+				}).toThrow();
 			});
 		});
 	});

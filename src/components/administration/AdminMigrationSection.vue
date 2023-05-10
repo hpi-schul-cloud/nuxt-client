@@ -129,6 +129,7 @@ import { MigrationBody } from "@/serverApi/v3";
 import dayjs from "dayjs";
 import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -136,7 +137,7 @@ export default defineComponent({
 		MigrationWarningCard,
 	},
 	setup() {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {

@@ -48,6 +48,7 @@ import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -73,7 +74,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.columnId
 		);
