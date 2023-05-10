@@ -117,7 +117,7 @@ export const useBoardState = (id: string) => {
 		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
 		if (
 			addedIndex === -1 ||
-			(columnIndex &&
+			(columnIndex !== undefined &&
 				addedIndex &&
 				addedIndex > board.value.columns[columnIndex].cards.length - 1)
 		) {
