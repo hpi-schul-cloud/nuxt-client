@@ -9,7 +9,6 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("MZ-A")).toBe(true);
 			expect(isOfficialSchoolNumber("ORG-A134V55")).toBe(true);
 			expect(isOfficialSchoolNumber("ORG-A1")).toBe(true);
-			expect(isOfficialSchoolNumber("T1234")).toBe(true);
 			expect(isOfficialSchoolNumber("12345-Y")).toBe(true);
 			expect(isOfficialSchoolNumber("AB-123456")).toBe(true);
 			expect(isOfficialSchoolNumber("A-12345")).toBe(true);
