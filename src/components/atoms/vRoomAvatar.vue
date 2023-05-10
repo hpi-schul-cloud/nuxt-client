@@ -29,6 +29,7 @@
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
+				role="button"
 			>
 				<span :class="avatarTextClass">{{ item.shortTitle }}</span>
 			</v-avatar>
