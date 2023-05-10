@@ -7,5 +7,8 @@ export const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
 export const isMongoId = (val: unknown): boolean =>
 	isString(val) && new RegExp(REGEX_ID).test(val);
 
+const REGEX_OFFICIAL_SCHOOL_NUMBER =
+	"^(Dev-\\d{1,2}|EXPERTEN|MZ-[A-Z]{1,3}|ORG-[A-Z\\d]{2,7}|T\\d{4}|\\d{5,6}-[A-Za-z]{1,10}|[A-Za-z]{1,2}-\\d{5,6}|\\d{5,6})$";
+
 export const isOfficialSchoolNumber = (value: unknown): boolean =>
-	isString(value) && /[0-9]{5}/.test(value);
+	isString(value) && new RegExp(REGEX_OFFICIAL_SCHOOL_NUMBER).test(value);
