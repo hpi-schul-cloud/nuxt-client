@@ -82,10 +82,6 @@ export default defineComponent({
 	transition: min-width 200ms;
 }
 
-/* .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-	overflow: visible !important;
-} */
-
 /**
  * This rule extends the droppable area of columns.
  * Without this rule cards have to be placed closely below the last card in a column to be added.

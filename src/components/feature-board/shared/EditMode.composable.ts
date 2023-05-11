@@ -6,15 +6,15 @@ import { computed, ref, Ref } from "vue";
  *
  * Use this to set a card to edit mode from **inside** a card scope.
  */
-export const useEditMode = (id: Ref<string | undefined>) => {
+export const useEditMode = (id: string) => {
 	const { editModeId, setEditModeId } = useSharedEditMode();
 
 	const isEditMode = computed(
-		() => editModeId.value !== undefined && id.value === editModeId.value
+		() => editModeId.value !== undefined && id === editModeId.value
 	);
 
 	const startEditMode = () => {
-		setEditModeId(id.value);
+		setEditModeId(id);
 	};
 
 	const stopEditMode = () => {
