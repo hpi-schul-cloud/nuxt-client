@@ -70,12 +70,12 @@ import ContentElementList from "../content-elements/ContentElementList.vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useCreateElement } from "../shared/create-element.composable";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import { useElementTypeSelection } from "../shared/element-type-selection.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -104,8 +104,6 @@ export default defineComponent({
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(cardId);
 
-		const { openDialog } = useCreateElement();
-
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
@@ -128,7 +126,15 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = () => openDialog(props.cardId);
+		const onAddElement = async () => {
+			const { askType } = useElementTypeSelection();
+
+			const type = await askType();
+			if (type) {
+				addElement(type);
+			}
+		};
+
 		const onStartEditMode = () => {
 			startEditMode();
 		};

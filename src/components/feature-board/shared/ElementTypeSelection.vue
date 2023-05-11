@@ -1,8 +1,10 @@
 <template>
 	<vCustomDialog
-		data-testid="create-element-dialog"
-		:has-buttons="false"
+		data-testid="element-type-selection"
+		:has-buttons="true"
 		:is-open="isDialogOpen"
+		@dialog-closed="onCloseDialog"
+		:buttons="actionButtons"
 	>
 		<template v-slot:title> {{ $t("create-element.title") }} </template>
 		<template v-slot:content>
@@ -38,9 +40,10 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { ContentElementType } from "../types/ContentElement";
-import { useCreateElement } from "./create-element.composable";
+import { useInternalElementTypeSelection } from "./element-type-selection.composable";
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
-export interface CreateElementItems {
+export interface ElementTypeButtons {
 	icon: string;
 	label: string;
 	action: string;
@@ -49,37 +52,43 @@ export interface CreateElementItems {
 }
 
 export default defineComponent({
-	name: "CreateElementDialog",
+	name: "ElementTypeSelection",
 	components: {
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { isDialogOpen, addTextElement, addFileElement } = useCreateElement();
+		const { select, isDialogOpen } = useInternalElementTypeSelection();
 		const items = [
 			{
 				icon: "",
 				label: "create-element.text",
-				action: addTextElement,
+				action: () => select(CreateContentElementBodyTypeEnum.Text),
 				testId: "create-element-text",
 				type: ContentElementType.TEXT,
 			},
 			{
 				icon: "",
 				label: "create-element.file",
-				action: addFileElement,
+				action: () => select(CreateContentElementBodyTypeEnum.File),
 				testId: "create-element-file",
 				type: ContentElementType.FILE,
 			},
 		];
 
+		const onCloseDialog = select;
+
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);
 
+		const actionButtons = ["close"];
+
 		return {
 			onAddElement,
-			isDialogOpen,
+			onCloseDialog,
 			mdiEmailOutline,
 			items,
+			isDialogOpen,
+			actionButtons,
 		};
 	},
 });
