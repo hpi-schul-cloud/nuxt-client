@@ -34,9 +34,12 @@ export const columnDropPlaceholderOptions = {
 	showOnTop: true,
 };
 
-export const verticalCursorKeys: DragAndDropKey[] = ["ArrowUp", "ArrowDown"];
+export const verticalCursorKeys: (DragAndDropKey | string)[] = [
+	"ArrowUp",
+	"ArrowDown",
+];
 
-export const horizontalCursorKeys: DragAndDropKey[] = [
+export const horizontalCursorKeys: (DragAndDropKey | string)[] = [
 	"ArrowLeft",
 	"ArrowRight",
 ];
