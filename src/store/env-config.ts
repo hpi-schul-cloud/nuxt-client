@@ -142,6 +142,14 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED || false;
 	}
 
+	get getCtlToolsTabEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED || true;
+	}
+
+	get getLtiToolsTabEnabled(): boolean {
+		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED || true;
+	}
+
 	get getEnv(): Envs {
 		return this.env;
 	}

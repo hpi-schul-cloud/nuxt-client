@@ -2,7 +2,7 @@
 	<default-wireframe
 		ref="main"
 		:full-width="true"
-		:fab-items="fabItems"
+		:fab-items="currentTab?.fabItems"
 		:breadcrumbs="breadcrumbs"
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" class="tabs-max-width" grow>
+				<v-tabs v-model="tabIndex" class="tabs-max-width" grow>
 					<v-tab
 						v-for="(tabItem, index) in tabItems"
 						:key="index"
@@ -51,11 +51,17 @@
 				</v-tabs>
 			</div>
 		</template>
-		<room-dashboard
-			:room-data-object="roomData"
-			:role="dashBoardRole"
-			@copy-board-element="onCopyBoardElement"
-		/>
+
+		<keep-alive>
+			<component
+				v-if="currentTab?.component"
+				:is="currentTab.component"
+				:room-data-object="roomData"
+				:role="dashBoardRole"
+				@copy-board-element="onCopyBoardElement"
+			/>
+		</keep-alive>
+
 		<v-custom-dialog
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
@@ -132,9 +138,10 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent, inject } from "vue";
-import { useCopy } from "../composables/copy";
-import { useLoadingState } from "../composables/loadingState";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import RoomExternalToolsOverview from "./external-tools/RoomExternalToolsOverview.vue";
 
 export default defineComponent({
 	setup() {
@@ -191,33 +198,75 @@ export default defineComponent({
 				},
 			],
 			courseId: this.$route.params.id,
-			tab: null,
 			isShareModalOpen: false,
+			tabIndex: 0,
 		};
 	},
 	computed: {
 		tabItems() {
-			return [
+			const ctlToolsTabEnabled = envConfigModule.getCtlToolsTabEnabled;
+			const ltiToolsTabEnabled = envConfigModule.getLtiToolsTabEnabled;
+
+			const tabs = [
 				{
+					name: "learnContent",
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
-					dataTestid: "learnContent",
-				},
-				{
-					label: this.$t("pages.rooms.tabLabel.tools"),
-					icon: mdiPuzzleOutline,
-					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
-					dataTestid: "tools",
-				},
-				{
-					label: this.$t("pages.rooms.tabLabel.groups"),
-					icon: mdiAccountGroupOutline,
-					href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
-					dataTestid: "groups",
+					dataTestId: "learnContent",
+					component: RoomDashboard,
+					fabItems: this.learnContentFabItems,
 				},
 			];
+
+			if (ctlToolsTabEnabled) {
+				const ctlToolFabItems = {
+					icon: mdiPlus,
+					title: this.$t("common.actions.add"),
+					ariaLabel: this.$t("common.actions.add"),
+					testId: "add-tool-button",
+				};
+
+				tabs.push({
+					name: "tools",
+					label: this.$t("pages.rooms.tabLabel.tools"),
+					icon: mdiPuzzleOutline,
+					dataTestId: "tools",
+					component: RoomExternalToolsOverview,
+					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
+				});
+			}
+
+			if (ltiToolsTabEnabled) {
+				tabs.push({
+					name: "old-tools",
+					label: this.$t("pages.rooms.tabLabel.toolsOld"),
+					icon: mdiPuzzleOutline,
+					dataTestId: "old-tools",
+					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
+				});
+			}
+
+			tabs.push({
+				name: "groups",
+				label: this.$t("pages.rooms.tabLabel.groups"),
+				icon: mdiAccountGroupOutline,
+				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
+				dataTestId: "groups",
+			});
+
+			return tabs;
 		},
-		fabItems() {
+		currentTab() {
+			let index = this.tabIndex;
+			if (this.tabIndex < 0 || this.tabIndex >= this.tabItems.length) {
+				index = 0;
+			}
+
+			const currentTab = this.tabItems[index];
+
+			return currentTab;
+		},
+		learnContentFabItems() {
 			const actions = [];
 			if (
 				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
@@ -283,6 +332,11 @@ export default defineComponent({
 			if (this.roles.includes(Roles.Student)) return Roles.Student;
 			return undefined;
 		},
+		canEditTools() {
+			return !!authModule?.getUserPermissions.includes(
+				"CONTEXT_TOOL_ADMIN".toLowerCase()
+			);
+		},
 		headlineMenuItems() {
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
@@ -345,6 +399,8 @@ export default defineComponent({
 		},
 	},
 	async created() {
+		this.setActiveTab(this.$route.query.tab);
+
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
 			courseId: this.courseId,
@@ -352,8 +408,17 @@ export default defineComponent({
 		});
 	},
 	methods: {
+		setActiveTab(tabName) {
+			const index = this.tabItems.findIndex(
+				(tabItem) => tabItem.name === tabName
+			);
+
+			this.tabIndex = index >= 0 ? index : 0;
+		},
 		fabClick() {
-			this.importDialog.isOpen = true;
+			if (this.currentTab.name === "learnContent") {
+				this.importDialog.isOpen = true;
+			}
 		},
 		async shareCourse() {
 			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
@@ -412,6 +477,15 @@ export default defineComponent({
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
+		},
+	},
+	watch: {
+		tabIndex(newIndex) {
+			if (newIndex >= 0 && newIndex < this.tabItems.length) {
+				this.$router.replace({
+					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
+				});
+			}
 		},
 	},
 	mounted() {
