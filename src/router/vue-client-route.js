@@ -36,6 +36,7 @@ const vueRoutes = [
 	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
+	`^/H5P/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board?$`,
 	`^/rooms/${mongoId}/create-beta-task/?$`,
