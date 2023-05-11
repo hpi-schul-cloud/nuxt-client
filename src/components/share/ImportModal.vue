@@ -19,9 +19,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon class="blue--text text--darken-1">{{
-							mdiInformation
-						}}</v-icon>
+						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
 					<div>
 						{{
