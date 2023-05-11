@@ -61,7 +61,16 @@ export default defineComponent({
 		})();
 
 		const toolbarItems = [];
-		toolbarItems["simple"] = ["bold", "italic", "underline"];
+		toolbarItems["simple"] = [
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"|",
+			"link",
+			"bulletedList",
+			"numberedList",
+		];
 		toolbarItems["regular"] = [
 			"undo",
 			"redo",
@@ -89,15 +98,7 @@ export default defineComponent({
 			"removeFormat",
 		];
 
-		const plugins = [];
-		plugins["simple"] = [
-			"Essentials",
-			"Bold",
-			"Italic",
-			"Paragraph",
-			"Underline",
-		];
-		plugins["regular"] = [
+		const plugins = [
 			"Autoformat",
 			"Essentials",
 			"BlockQuote",
@@ -132,7 +133,28 @@ export default defineComponent({
 			toolbar: {
 				items: toolbarItems[props.mode],
 			},
-			plugins: plugins[props.mode],
+			plugins: plugins,
+			heading: {
+				options: [
+					{
+						model: "paragraph",
+						title: "Paragraph",
+						class: "ck-heading_paragraph",
+					},
+					{
+						model: "heading1",
+						view: "h4",
+						title: "Heading 1",
+						class: "ck-heading_heading1",
+					},
+					{
+						model: "heading2",
+						view: "h5",
+						title: "Heading 2",
+						class: "ck-heading_heading2",
+					},
+				],
+			},
 			highlight: {
 				options: [
 					{
