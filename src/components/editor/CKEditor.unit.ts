@@ -50,12 +50,12 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have reduced toolbar items in simple mode", () => {
 		const wrapper = getWrapper({ propsData: { mode: "simple" } });
-		expect(wrapper.vm.config.toolbar.items).toHaveLength(3);
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(8);
 	});
 
-	it("should have reduced plugins available in simple mode", () => {
+	it("should have all plugins available in simple mode", () => {
 		const wrapper = getWrapper({ propsData: { mode: "simple" } });
-		expect(wrapper.vm.config.plugins).toHaveLength(5);
+		expect(wrapper.vm.config.plugins).toHaveLength(21);
 	});
 
 	it("should have all toolbar items in regular mode", () => {
