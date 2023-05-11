@@ -1,6 +1,10 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { isVueClient } = require("../src/router/vue-client-route");
-const { isServer, isFileStorage } = require("../src/router/server-route");
+const {
+	isServer,
+	isFileStorage,
+	isH5pEditor,
+} = require("../src/router/server-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
@@ -27,10 +31,19 @@ const createFileStorageProxy = () => {
 	return fileStorageProxy;
 };
 
+const createH5pEditorProxy = () => {
+	const h5pEditorProxy = createProxyMiddleware({
+		target: "http://localhost:4448",
+		changeOrigin: true,
+	});
+	return h5pEditorProxy;
+};
+
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
 	const fileStorageProxy = createFileStorageProxy();
+	const h5pEditorProxy = createH5pEditorProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -45,16 +58,14 @@ const createDevServerConfig = () => {
 					const path = url.parse(req.originalUrl).pathname;
 
 					if (isFileStorage(path)) {
-						// console.log("--- serverPath: ", path);
 						fileStorageProxy(req, res, next);
+					} else if (isH5pEditor(path)) {
+						h5pEditorProxy(req, res, next);
 					} else if (isServer(path)) {
-						// console.log("--- serverPath: ", path);
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
-						// console.log("--- vuePath: ", path);
 						next();
 					} else {
-						// console.log("--- legacyPath: ", path);
 						legacyClientProxy(req, res, next);
 					}
 				},
@@ -72,4 +83,5 @@ module.exports = {
 	createServerProxy,
 	createDevServerConfig,
 	createFileStorageProxy,
+	createH5pEditorProxy,
 };

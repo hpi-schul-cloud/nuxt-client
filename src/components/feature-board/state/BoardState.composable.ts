@@ -1,6 +1,6 @@
 import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
@@ -65,7 +65,7 @@ export const useBoardState = (id: string) => {
 
 	const deleteCard = async (id: string) => {
 		await deleteCardCall(id);
-		extractCard(id);
+		await extractCard(id);
 	};
 
 	const deleteColumn = async (id: string) => {
@@ -78,7 +78,9 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const extractCard = (cardId: string): BoardSkeletonCard | undefined => {
+	const extractCard = async (
+		cardId: string
+	): Promise<BoardSkeletonCard | undefined> => {
 		if (board.value === undefined) return;
 
 		const column = board.value.columns.find(
@@ -90,6 +92,11 @@ export const useBoardState = (id: string) => {
 			);
 			if (cardIndex > -1) {
 				const extractedCards = column.cards.splice(cardIndex, 1);
+				/**
+				 * refreshes the board to force rerendering in tracked v-for
+				 * to maintain focus when moving cards by keyboard
+				 */
+				await nextTick();
 				return extractedCards[0];
 			}
 		}
@@ -107,11 +114,26 @@ export const useBoardState = (id: string) => {
 
 	const moveCard = async (cardPayload: CardMove): Promise<void> => {
 		if (board.value === undefined) return;
-
 		const { addedIndex, columnId, columnIndex, payload } = cardPayload;
-		const targetColumnId = columnIndex ? getColumnId(columnIndex) : columnId;
+		if (
+			addedIndex === -1 ||
+			(columnIndex !== undefined &&
+				addedIndex &&
+				addedIndex > board.value.columns[columnIndex].cards.length - 1)
+		) {
+			return;
+		}
+		if (
+			columnIndex !== undefined &&
+			(columnIndex < 0 || columnIndex > board.value.columns.length - 1)
+		) {
+			return;
+		}
+
+		const targetColumnId =
+			columnIndex !== undefined ? getColumnId(columnIndex) : columnId;
 		if (addedIndex !== null && targetColumnId) {
-			const card = extractCard(payload.cardId);
+			const card = await extractCard(payload.cardId);
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
@@ -124,6 +146,11 @@ export const useBoardState = (id: string) => {
 
 		const element = board.value.columns[payload.removedIndex];
 		board.value.columns.splice(payload.removedIndex, 1);
+		/**
+		 * refreshes the board to force rerendering in tracked v-for
+		 * to maintain focus when moving columns by keyboard
+		 */
+		await nextTick();
 		board.value.columns.splice(payload.addedIndex, 0, element);
 		await moveColumnCall(payload.payload, board.value.id, payload.addedIndex);
 	};

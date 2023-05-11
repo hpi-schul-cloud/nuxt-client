@@ -3,3 +3,4 @@
 dist
 /src/serverApi/**
 /src/fileStorageApi/**/*.ts
+/src/h5pEditorApi/**/*.ts
