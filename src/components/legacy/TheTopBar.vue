@@ -25,7 +25,7 @@
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
-					class="item"
+					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
 				>
@@ -184,7 +184,7 @@ export default defineComponent({
 
 			return statusAlertsIncludeDanger
 				? "var(--v-error-base)"
-				: "var(--v-secondary-darken1)";
+				: "var(--v-info-base)";
 		},
 		statusAlerts() {
 			return statusAlertsModule.getStatusAlerts;

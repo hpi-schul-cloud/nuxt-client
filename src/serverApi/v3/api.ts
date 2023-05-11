@@ -143,7 +143,7 @@ export interface ApiValidationError {
      * @type {object}
      * @memberof ApiValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -606,6 +606,107 @@ export interface ConsentSessionResponse {
      */
     challenge: string;
 }
+/**
+ * 
+ * @export
+ * @interface ContextExternalToolPostParams
+ */
+export interface ContextExternalToolPostParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolPostParams
+     */
+    schoolToolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolPostParams
+     */
+    contextId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolPostParams
+     */
+    contextType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolPostParams
+     */
+    contextToolName: string;
+    /**
+     * 
+     * @type {Array<CustomParameterEntryParam>}
+     * @memberof ContextExternalToolPostParams
+     */
+    parameters?: Array<CustomParameterEntryParam>;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolPostParams
+     */
+    toolVersion: number;
+}
+/**
+ * 
+ * @export
+ * @interface ContextExternalToolResponse
+ */
+export interface ContextExternalToolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    schoolToolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    contextId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    contextType: ContextExternalToolResponseContextTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    contextToolName?: string;
+    /**
+     * 
+     * @type {Array<CustomParameterEntryResponse>}
+     * @memberof ContextExternalToolResponse
+     */
+    parameters: Array<CustomParameterEntryResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolResponse
+     */
+    toolVersion: number;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ContextExternalToolResponseContextTypeEnum {
+    Course = 'course'
+}
+
 /**
  * 
  * @export
@@ -1193,7 +1294,7 @@ export interface EntityNotFoundError {
      * @type {object}
      * @memberof EntityNotFoundError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -1468,7 +1569,7 @@ export interface ForbiddenOperationError {
      * @type {object}
      * @memberof ForbiddenOperationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -4318,7 +4419,7 @@ export interface ValidationError {
      * @type {object}
      * @memberof ValidationError
      */
-    details: object;
+    details?: object;
 }
 /**
  * 
@@ -4945,6 +5046,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4980,6 +5082,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5015,6 +5118,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5060,6 +5164,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5070,6 +5175,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5080,6 +5186,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5100,6 +5207,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5109,6 +5217,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5118,6 +5227,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5136,6 +5246,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5145,6 +5256,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5154,6 +5266,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5172,6 +5285,7 @@ export interface AuthenticationApiInterface {
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5183,6 +5297,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5194,6 +5309,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12487,6 +12603,45 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolContextControllerCreateContextExternalTool: async (contextExternalToolPostParams: ContextExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolPostParams' is not null or undefined
+            assertParamExists('toolContextControllerCreateContextExternalTool', 'contextExternalToolPostParams', contextExternalToolPostParams)
+            const localVarPath = `/tools/context`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(contextExternalToolPostParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {ExternalToolPostParams} externalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12972,6 +13127,16 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {ExternalToolPostParams} externalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13118,6 +13283,15 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse> {
+            return localVarFp.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {ExternalToolPostParams} externalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13249,6 +13423,15 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolConfigurationControllerGetExternalToolForScope(toolId: string, options?: any): AxiosPromise<ExternalToolConfigurationTemplateResponse>;
+
+    /**
+     * 
+     * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse>;
 
     /**
      * 
@@ -13386,6 +13569,17 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolConfigurationControllerGetExternalToolForScope(toolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetExternalToolForScope(toolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any) {
+        return ToolApiFp(this.configuration).toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

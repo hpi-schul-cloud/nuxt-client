@@ -20,6 +20,8 @@
 	"common.actions.download": "Herunterladen",
 	"common.actions.logout": "Abmelden",
 	"common.labels.admin": "Admin(s)",
+	"common.labels.updateAt": "Aktualisiert:",
+	"common.labels.createAt": "Erstellt:",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
 	"common.labels.classes": "Klasse(n)",
