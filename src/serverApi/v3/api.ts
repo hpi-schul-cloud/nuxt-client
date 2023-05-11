@@ -684,7 +684,7 @@ export interface ContextExternalToolResponse {
      * @type {string}
      * @memberof ContextExternalToolResponse
      */
-    contextToolName: string;
+    contextToolName?: string;
     /**
      * 
      * @type {Array<CustomParameterEntryResponse>}
@@ -5046,6 +5046,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5081,6 +5082,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5116,6 +5118,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5161,6 +5164,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5171,6 +5175,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5181,6 +5186,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5201,6 +5207,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5210,6 +5217,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are locally managed.
          * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5219,6 +5227,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5237,6 +5246,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5246,6 +5256,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5255,6 +5266,7 @@ export interface AuthenticationApiInterface {
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5273,6 +5285,7 @@ export interface AuthenticationApiInterface {
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5284,6 +5297,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are locally managed.
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5295,6 +5309,7 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
 
     /**
      * 
+     * @summary Starts the login process for users which are authenticated via OAuth 2.
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
