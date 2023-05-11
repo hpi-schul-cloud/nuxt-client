@@ -58,6 +58,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 		const result = await createElement(cardState.card.id, { type });
 
 		cardState.card.elements.push(result as unknown as AnyContentElement);
+
+		return result;
 	};
 
 	onMounted(() => fetchCard(id));

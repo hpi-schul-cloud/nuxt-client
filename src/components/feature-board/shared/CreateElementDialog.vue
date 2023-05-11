@@ -17,7 +17,7 @@
 					:height="84"
 					class="d-sm-flex button-alignment-top"
 					:data-testid="item.testId"
-					@click.stop="onAddElement(item.type)"
+					@click.stop="item.action"
 				>
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
@@ -40,17 +40,40 @@ import { defineComponent } from "vue";
 import { ContentElementType } from "../types/ContentElement";
 import { useCreateElement } from "./create-element.composable";
 
+export interface CreateElementItems {
+	icon: string;
+	label: string;
+	action: string;
+	testId: string;
+	type: ContentElementType;
+}
+
 export default defineComponent({
 	name: "CreateElementDialog",
 	components: {
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { isDialogOpen, items } = useCreateElement();
+		const { isDialogOpen, addTextElement, addFileElement } = useCreateElement();
+		const items = [
+			{
+				icon: "",
+				label: "create-element.text",
+				action: addTextElement,
+				testId: "create-element-text",
+				type: ContentElementType.TEXT,
+			},
+			{
+				icon: "",
+				label: "create-element.file",
+				action: addFileElement,
+				testId: "create-element-file",
+				type: ContentElementType.FILE,
+			},
+		];
 
-		const onAddElement = (type: ContentElementType) =>
-			emit("add-element", type);
-		console.log(isDialogOpen);
+		const onAddElement = (eventType: string, type: ContentElementType) =>
+			emit(eventType, type);
 
 		return {
 			onAddElement,

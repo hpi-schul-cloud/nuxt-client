@@ -1,49 +1,42 @@
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
-import { ContentElementType } from "../types/ContentElement";
+import { useCardState } from "../state/CardState.composable";
 
-export interface CreateElementItems {
-	icon: string;
-	label: string;
-	action?: string;
-	testId: string;
-	type: ContentElementType;
-}
 export const useCreateElement = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
+	const cardId = ref<string | undefined>(undefined);
 
-	const items = ref<CreateElementItems[]>([
-		{
-			icon: "",
-			label: "create-element.text",
-			action: "",
-			testId: "create-element-text",
-			type: ContentElementType.TEXT,
-		},
-		{
-			icon: "",
-			label: "create-element.file",
-			action: "",
-			testId: "create-element-file",
-			type: ContentElementType.FILE,
-		},
-		{
-			icon: "",
-			label: "create-element.test",
-			action: "",
-			testId: "create-element-test",
-			type: ContentElementType.TEXT,
-		},
-	]);
+	const getElementAction = () => {
+		if (cardId.value) {
+			const { addElement } = useCardState(cardId.value);
 
-	const openDialog = () => {
+			return { addElement };
+		}
+		throw new Error("ID unknown");
+	};
+
+	const openDialog = (id: string) => {
+		cardId.value = id;
 		isDialogOpen.value = true;
 		console.log("openDialog", isDialogOpen.value);
+	};
+
+	const addTextElement = async () => {
+		const { addElement } = getElementAction();
+		const result = await addElement(CreateContentElementBodyTypeEnum.Text);
+
+		console.log(result);
+	};
+
+	const addFileElement = () => {
+		console.log("addFileElement");
 	};
 
 	return {
 		isDialogOpen,
 		openDialog,
-		items,
+		addTextElement,
+		addFileElement,
 	};
 });

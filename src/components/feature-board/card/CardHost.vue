@@ -128,7 +128,7 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = openDialog;
+		const onAddElement = () => openDialog(props.cardId);
 		const onStartEditMode = () => {
 			startEditMode();
 		};
