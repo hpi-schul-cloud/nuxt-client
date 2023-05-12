@@ -41,7 +41,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { ContentElementType } from "../types/ContentElement";
-import { useInternalElementTypeSelection } from "./element-type-selection.composable";
+import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
 import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
 export interface ElementTypeButtons {

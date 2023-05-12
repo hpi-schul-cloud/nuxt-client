@@ -73,7 +73,7 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/element-type-selection.composable";
+import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
