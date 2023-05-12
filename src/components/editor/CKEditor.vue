@@ -202,8 +202,4 @@ export default defineComponent({
 	border: none !important;
 	box-shadow: none !important;
 }
-
-.ck.ck-editor__editable_inline > :last-child {
-	margin-bottom: 34px !important;
-}
 </style>

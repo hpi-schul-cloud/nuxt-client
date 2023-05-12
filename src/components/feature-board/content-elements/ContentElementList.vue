@@ -1,12 +1,12 @@
 <template>
 	<VCardText>
 		<template v-for="element in elements">
-			<TextContentElement
+			<!-- <TextContentElement
 				v-if="element.type === ContentElementType.TEXT"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-			></TextContentElement>
+			></TextContentElement> -->
 			<RichTextContentElement
 				v-if="element.type === ContentElementType.TEXT"
 				:key="element.id + 'r'"
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement, ContentElementType } from "../types/ContentElement";
-import TextContentElement from "./TextContentElement.vue";
+// import TextContentElement from "./TextContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
-		TextContentElement,
+		// TextContentElement,
 		RichTextContentElement,
 	},
 	props: {
@@ -48,3 +48,12 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.theme--light.v-card > .v-card__text {
+	color: rgba(0, 0, 0, 0.87);
+	font-size: 16px;
+	margin-top: 17px;
+	margin-bottom: 17px;
+}
+</style>
