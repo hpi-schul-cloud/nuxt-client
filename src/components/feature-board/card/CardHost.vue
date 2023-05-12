@@ -53,7 +53,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<input ref="openFilePicker" type="file" @selected:file="uploadFile" />
+		<CreateFileElement :show="showCreateFileElement" />
 	</div>
 </template>
 
@@ -79,6 +79,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import CreateFileElement from "../shared/CreateFileElement.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -90,6 +91,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		CreateFileElement,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -99,7 +101,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(undefined);
-		const openFilePicker: any = ref(null);
+		const showCreateFileElement = ref(false);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
 		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
@@ -137,7 +139,7 @@ export default defineComponent({
 			const type = await askType();
 			if (type) {
 				if (type === "file") {
-					openFilePicker.value.click();
+					showCreateFileElement.value = true;
 				}
 				await addElement(type);
 			}
@@ -185,7 +187,7 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
-			openFilePicker,
+			showCreateFileElement,
 		};
 	},
 });
