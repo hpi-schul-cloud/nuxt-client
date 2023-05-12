@@ -1,0 +1,11 @@
+.gitignore
+.npmignore
+api.ts
+api/h5p-editor-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+models/api-validation-error.ts
+models/index.ts
