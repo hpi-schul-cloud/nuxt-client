@@ -53,7 +53,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<CreateFileElement />
+		<FilePicker />
 	</div>
 </template>
 
@@ -79,8 +79,8 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import CreateFileElement from "../shared/CreateFileElement.vue";
-import { useCreateFileElement } from "../shared/CreateFileElement.composable";
+import FilePicker from "../shared/FilePicker.vue";
+import { useFilePicker } from "../shared/FilePicker.composable";
 import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
 export default defineComponent({
@@ -93,7 +93,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		CreateFileElement,
+		FilePicker,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -103,7 +103,6 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(undefined);
-		const { triggerFilePicker } = useCreateFileElement();
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
 		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
