@@ -19,6 +19,7 @@
 							:index="index"
 							:hasMovePermission="hasMovePermission"
 							:hasCardCreatePermission="hasCardCreatePermission"
+							:hasEditPermission="hasEditPermission"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -50,6 +51,7 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	columnDropPlaceholderOptions,
 	CardMove,
@@ -80,7 +82,6 @@ export default defineComponent({
 			moveCard,
 			moveColumn,
 			updateColumnTitle,
-			boardPermissions,
 		} = useBoardState(route.params?.id);
 
 		useBodyScrolling();
@@ -145,14 +146,19 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const permissions = boardPermissions();
+		const { permissions } = useBoardPermissions();
 
-		const hasMovePermission = computed(() => permissions.includes("move_"));
+		const hasMovePermission = computed(() =>
+			permissions.value.includes("move")
+		);
 		const hasCardCreatePermission = computed(() =>
-			permissions.includes("card_create")
+			permissions.value.includes("card_create")
 		);
 		const hasColumnCreatePermission = computed(() =>
-			permissions.includes("column_create_")
+			permissions.value.includes("column_create")
+		);
+		const hasEditPermission = computed(() =>
+			permissions.value.includes("board_edit")
 		);
 
 		return {
@@ -171,6 +177,7 @@ export default defineComponent({
 			hasMovePermission,
 			hasCardCreatePermission,
 			hasColumnCreatePermission,
+			hasEditPermission,
 		};
 	},
 });
