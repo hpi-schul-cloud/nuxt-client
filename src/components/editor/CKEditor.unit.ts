@@ -60,7 +60,7 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have reduced toolbar items in simple mode", () => {
 		setup({ mode: "simple" });
-		expect(wrapper.vm.config.toolbar.items).toHaveLength(8);
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(9);
 	});
 
 	it("should have all plugins available in simple mode", () => {

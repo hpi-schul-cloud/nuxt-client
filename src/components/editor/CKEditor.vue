@@ -70,6 +70,7 @@ export default defineComponent({
 			"link",
 			"bulletedList",
 			"numberedList",
+			"removeFormat",
 		];
 		toolbarItems["regular"] = [
 			"undo",
