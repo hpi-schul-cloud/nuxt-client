@@ -5,6 +5,7 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
+import { authModule } from "@/store";
 
 const {
 	createColumnCall,
@@ -195,6 +196,11 @@ export const useBoardState = (id: string) => {
 		return columnIndex;
 	};
 
+	const boardPermissions = () => {
+		// return authModule.getUserPermissions;
+		return ["move", "card_create", "card_delete", "column_create"];
+	};
+
 	onMounted(() => fetchBoard(id));
 
 	return {
@@ -211,5 +217,6 @@ export const useBoardState = (id: string) => {
 		moveCard,
 		moveColumn,
 		updateColumnTitle,
+		boardPermissions,
 	};
 };
