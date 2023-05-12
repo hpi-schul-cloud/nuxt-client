@@ -32,7 +32,7 @@
 			</Draggable>
 		</Container>
 		<BoardAddCardButton
-			v-if="hasCardCreatePermission"
+			v-if="hasColumnCreatePermission"
 			@add-card="onCreateCard"
 		></BoardAddCardButton>
 	</div>
@@ -45,6 +45,7 @@ import VueI18n from "vue-i18n";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -70,8 +71,6 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
-		hasMovePermission: { type: Boolean },
-		hasCardCreatePermission: { type: Boolean },
 	},
 	emits: [
 		"create:card",
@@ -84,6 +83,8 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
+		const { hasMovePermission, hasColumnCreatePermission } =
+			useBoardPermissions();
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -149,6 +150,8 @@ export default defineComponent({
 		return {
 			cardDropPlaceholderOptions,
 			colWidth,
+			hasMovePermission,
+			hasColumnCreatePermission,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,

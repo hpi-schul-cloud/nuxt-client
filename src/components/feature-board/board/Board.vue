@@ -17,9 +17,6 @@
 						<BoardColumn
 							:column="column"
 							:index="index"
-							:hasMovePermission="hasMovePermission"
-							:hasCardCreatePermission="hasCardCreatePermission"
-							:hasEditPermission="hasEditPermission"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -43,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import BoardColumn from "./BoardColumn.vue";
@@ -150,7 +147,6 @@ export default defineComponent({
 			hasMovePermission,
 			hasCardCreatePermission,
 			hasColumnCreatePermission,
-			hasEditPermission,
 		} = useBoardPermissions();
 
 		return {
@@ -169,7 +165,6 @@ export default defineComponent({
 			hasMovePermission,
 			hasCardCreatePermission,
 			hasColumnCreatePermission,
-			hasEditPermission,
 		};
 	},
 });
