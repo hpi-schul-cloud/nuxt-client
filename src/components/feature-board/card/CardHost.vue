@@ -31,7 +31,7 @@
 				</CardTitle>
 
 				<div class="board-menu" :class="boardMenuClasses">
-					<BoardMenu scope="card">
+					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction @click="onTryDelete">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
@@ -75,6 +75,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -103,6 +104,7 @@ export default defineComponent({
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
 		);
+		const { hasDeletePermission } = useBoardPermissions();
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -151,6 +153,7 @@ export default defineComponent({
 			boardMenuClasses,
 			isLoading,
 			card,
+			hasDeletePermission,
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,

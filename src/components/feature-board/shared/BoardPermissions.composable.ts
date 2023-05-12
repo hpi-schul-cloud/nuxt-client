@@ -10,8 +10,8 @@ export const useBoardPermissions = () => {
 	// can be mapped board spesific permissions
 	permissions.value = [
 		"move",
+		"delete",
 		"card_create",
-		"card_delete",
 		"column_create",
 		"board_edit",
 	];
@@ -20,6 +20,7 @@ export const useBoardPermissions = () => {
 	const hasCardCreatePermission = permissions.value.includes("card_create");
 	const hasColumnCreatePermission = permissions.value.includes("column_create");
 	const hasEditPermission = permissions.value.includes("board_edit");
+	const hasDeletePermission = permissions.value.includes("delete");
 
 	return {
 		permissions,
@@ -27,5 +28,6 @@ export const useBoardPermissions = () => {
 		hasCardCreatePermission,
 		hasColumnCreatePermission,
 		hasEditPermission,
+		hasDeletePermission,
 	};
 };
