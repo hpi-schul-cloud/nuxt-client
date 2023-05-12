@@ -91,7 +91,10 @@ export default defineComponent({
 		max-width: 400px;
 	}
 	.alert-item {
-		@include status-alert-border;
+		border-top: 1px solid map-get($grey, lighten-2);
+		&:first-child {
+			border-top: none;
+		}
 	}
 
 	.subtitle-1 {
