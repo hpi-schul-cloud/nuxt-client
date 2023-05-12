@@ -132,7 +132,7 @@ export default defineComponent({
 
 			const type = await askType();
 			if (type) {
-				addElement(type);
+				await addElement(type);
 			}
 		};
 
