@@ -53,7 +53,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<CreateFileElement :show="showCreateFileElement" />
+		<CreateFileElement />
 	</div>
 </template>
 
@@ -80,6 +80,8 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import CreateFileElement from "../shared/CreateFileElement.vue";
+import { useCreateFileElement } from "../shared/CreateFileElement.composable";
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "CardHost",
@@ -101,7 +103,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const cardHost = ref(undefined);
-		const showCreateFileElement = ref(false);
+		const { triggerFilePicker } = useCreateFileElement();
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
 		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
@@ -137,21 +139,19 @@ export default defineComponent({
 			const { askType } = useElementTypeSelection();
 
 			const type = await askType();
-			if (type) {
-				if (type === "file") {
-					showCreateFileElement.value = true;
-				}
+			if (!type) {
+				return;
+			}
+
+			if (type === CreateContentElementBodyTypeEnum.File) {
+				triggerFilePicker();
+				// TODO : add element
+			} else if (type === CreateContentElementBodyTypeEnum.Text) {
 				await addElement(type);
+			} else {
+				// Do nothing
 			}
 		};
-
-		/* 		const uploadFile = (file: Buffer, type: string) => {
-			const res = await addElement(type);
-
-			if(res.id) {
-				await uploadFileToFileStorage(parent)
-			}
-		} */
 
 		const onStartEditMode = () => {
 			startEditMode();
@@ -187,7 +187,6 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
-			showCreateFileElement,
 		};
 	},
 });

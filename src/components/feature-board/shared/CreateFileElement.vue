@@ -3,32 +3,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, Ref, watch } from "vue";
+import { useCreateFileElement } from "./CreateFileElement.composable";
 
 export default defineComponent({
-	name: "CreateFileELement",
+	name: "CreateFileElement",
 	components: {},
-	props: {
-		show: { type: Boolean, required: true },
-	},
-	setup(props) {
-		const isFilePickerOpen = ref(props.show);
-		const openFilePicker: any = ref(null);
+	props: {},
+	setup() {
+		const { isFilePickerOpen, triggerFilePicker } = useCreateFileElement();
+		const openFilePicker: Ref<any> = ref(null);
 		const file = ref(null);
 
-		watch(
-			() => props.show,
-			(newValue: boolean) => {
-				if (newValue) {
-					openFilePicker.value.$refs.input.click();
-					isFilePickerOpen.value = false;
-				}
+		watch(isFilePickerOpen, (newValue: boolean) => {
+			if (newValue) {
+				openFilePicker.value.$refs.input.click();
+				triggerFilePicker();
 			}
-		);
+		});
+
+		const uploadFile = () => {
+			openFilePicker.value.$refs.input.click();
+
+			// TODO ... evaluate returned file name
+		};
 
 		return {
 			openFilePicker,
 			file,
+			uploadFile,
 		};
 	},
 });
