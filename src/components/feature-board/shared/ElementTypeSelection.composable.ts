@@ -1,5 +1,7 @@
+import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
+import { useFilePicker } from "./FilePicker.composable";
 
 export const useElementTypeSelection = () => {
 	const askType = async (): Promise<any | undefined> => {
@@ -16,25 +18,56 @@ export const useElementTypeSelection = () => {
 };
 
 export const useInternalElementTypeSelection = createSharedComposable(() => {
-	let returnResult: ((addElement?: any) => void) | undefined = undefined;
-
+	const { triggerFilePicker } = useFilePicker();
 	const isDialogOpen = ref<boolean>(false);
 
-	const select = (addElement?: any) => {
-		if (returnResult) {
-			returnResult(addElement);
+	let resolveWithCreateFunction: ((addElement?: any) => void) | undefined =
+		undefined;
+
+	const createTextElement = (addElement: any) => {
+		addElement(CreateContentElementBodyTypeEnum.Text);
+	};
+
+	const createFileElement = (addElement: any) => {
+		triggerFilePicker();
+	};
+
+	const returnCreateFunction = (addElement?: any) => {
+		if (resolveWithCreateFunction) {
+			resolveWithCreateFunction(addElement);
 		}
+
 		isDialogOpen.value = false;
 	};
 
+	const buttons = [
+		{
+			icon: "",
+			label: "create-element.text",
+			action: () => returnCreateFunction(createTextElement),
+			testId: "create-element-text",
+		},
+		{
+			icon: "",
+			label: "create-element.file",
+			action: () => returnCreateFunction(createFileElement),
+			testId: "create-element-file",
+		},
+	];
+
 	const askInternal = (resolve: (addElement?: any) => void) => {
 		isDialogOpen.value = true;
-		returnResult = resolve;
+		resolveWithCreateFunction = resolve;
+	};
+
+	const closeDialog = () => {
+		isDialogOpen.value = false;
 	};
 
 	return {
 		askInternal,
 		isDialogOpen,
-		select,
+		buttons,
+		closeDialog,
 	};
 });

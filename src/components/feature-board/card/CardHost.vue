@@ -80,8 +80,6 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import FilePicker from "../shared/FilePicker.vue";
-import { useFilePicker } from "../shared/FilePicker.composable";
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "CardHost",
