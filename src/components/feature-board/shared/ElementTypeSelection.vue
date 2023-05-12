@@ -1,6 +1,7 @@
 <template>
 	<vCustomDialog
 		data-testid="element-type-selection"
+		:size="320"
 		:has-buttons="true"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -14,8 +15,8 @@
 				<v-btn
 					v-for="(item, key) in items"
 					:key="key"
-					outlined
-					x-large
+					plain
+					large
 					:height="84"
 					class="d-sm-flex button-alignment-top"
 					:data-testid="item.testId"
