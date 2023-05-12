@@ -17,6 +17,7 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
+			:lock-axis="hasMovePermission ? '' : 'x,y'"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 		>
@@ -30,7 +31,10 @@
 				/>
 			</Draggable>
 		</Container>
-		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
+		<BoardAddCardButton
+			v-if="hasCardCreatePermission"
+			@add-card="onCreateCard"
+		></BoardAddCardButton>
 	</div>
 </template>
 
@@ -66,6 +70,8 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
+		hasMovePermission: { type: Boolean },
+		hasCardCreatePermission: { type: Boolean },
 	},
 	emits: [
 		"create:card",
