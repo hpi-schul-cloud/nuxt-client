@@ -12,6 +12,7 @@
 					:min="minDate"
 					:max="maxDate"
 					data-testid="input_create-student_birthdate"
+					:class="{ hideCurrentDate: !date }"
 					type="date"
 				></v-text-field>
 				<v-checkbox
@@ -111,3 +112,16 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+// hide default current date in MacOS/Safari if input date is indeed empty
+::v-deep {
+	.hideCurrentDate {
+		input[type="date"]::-webkit-datetime-edit-day-field,
+		input[type="date"]::-webkit-datetime-edit-month-field,
+		input[type="date"]::-webkit-datetime-edit-year-field {
+			opacity: var(--field-opacity, 0);
+		}
+	}
+}
+</style>
