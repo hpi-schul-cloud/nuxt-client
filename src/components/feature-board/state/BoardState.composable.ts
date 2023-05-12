@@ -143,16 +143,18 @@ export const useBoardState = (id: string) => {
 
 	const moveColumn = async (payload: ColumnMove) => {
 		if (board.value === undefined) return;
+		const { addedIndex, removedIndex } = payload;
+		if (addedIndex < 0 || addedIndex > board.value.columns.length - 1) return;
 
-		const element = board.value.columns[payload.removedIndex];
-		board.value.columns.splice(payload.removedIndex, 1);
+		const element = board.value.columns[removedIndex];
+		board.value.columns.splice(removedIndex, 1);
 		/**
 		 * refreshes the board to force rerendering in tracked v-for
 		 * to maintain focus when moving columns by keyboard
 		 */
 		await nextTick();
-		board.value.columns.splice(payload.addedIndex, 0, element);
-		await moveColumnCall(payload.payload, board.value.id, payload.addedIndex);
+		board.value.columns.splice(addedIndex, 0, element);
+		await moveColumnCall(payload.payload, board.value.id, addedIndex);
 	};
 
 	const updateColumnTitle = (columnId: string, newTitle: string) => {
