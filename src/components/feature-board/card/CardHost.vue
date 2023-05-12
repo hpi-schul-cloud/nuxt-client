@@ -138,18 +138,9 @@ export default defineComponent({
 		const onAddElement = async () => {
 			const { askType } = useElementTypeSelection();
 
-			const type = await askType();
-			if (!type) {
-				return;
-			}
-
-			if (type === CreateContentElementBodyTypeEnum.File) {
-				triggerFilePicker();
-				// TODO : add element
-			} else if (type === CreateContentElementBodyTypeEnum.Text) {
-				await addElement(type);
-			} else {
-				// Do nothing
+			const createElement = await askType();
+			if (createElement) {
+				await createElement(addElement);
 			}
 		};
 

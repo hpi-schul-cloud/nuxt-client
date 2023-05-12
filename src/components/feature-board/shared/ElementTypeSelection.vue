@@ -43,6 +43,7 @@ import { defineComponent } from "vue";
 import { ContentElementType } from "../types/ContentElement";
 import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
 import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+import { useCreateFileElement } from "./CreateFileElement.composable";
 
 export interface ElementTypeButtons {
 	icon: string;
@@ -59,18 +60,28 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { select, isDialogOpen } = useInternalElementTypeSelection();
+
+		const { triggerFilePicker } = useCreateFileElement();
+
+		const createTextElement = (addElement: any) => {
+			addElement(CreateContentElementBodyTypeEnum.Text);
+		};
+		const createFileElement = (addElement: any) => {
+			triggerFilePicker();
+		};
+
 		const items = [
 			{
 				icon: "",
 				label: "create-element.text",
-				action: () => select(CreateContentElementBodyTypeEnum.Text),
+				action: () => select(createTextElement),
 				testId: "create-element-text",
 				type: ContentElementType.TEXT,
 			},
 			{
 				icon: "",
 				label: "create-element.file",
-				action: () => select(CreateContentElementBodyTypeEnum.File),
+				action: () => select(createFileElement),
 				testId: "create-element-file",
 				type: ContentElementType.FILE,
 			},

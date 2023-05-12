@@ -1,17 +1,12 @@
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
 export const useElementTypeSelection = () => {
-	const askType = async (): Promise<
-		CreateContentElementBodyTypeEnum | undefined
-	> => {
-		const promise = new Promise<CreateContentElementBodyTypeEnum | undefined>(
-			(resolve) => {
-				const { askInternal } = useInternalElementTypeSelection();
-				askInternal(resolve);
-			}
-		);
+	const askType = async (): Promise<any | undefined> => {
+		const promise = new Promise<any | undefined>((resolve) => {
+			const { askInternal } = useInternalElementTypeSelection();
+			askInternal(resolve);
+		});
 		return promise;
 	};
 
@@ -21,22 +16,18 @@ export const useElementTypeSelection = () => {
 };
 
 export const useInternalElementTypeSelection = createSharedComposable(() => {
-	let returnResult:
-		| ((value?: CreateContentElementBodyTypeEnum) => void)
-		| undefined = undefined;
+	let returnResult: ((addElement?: any) => void) | undefined = undefined;
 
 	const isDialogOpen = ref<boolean>(false);
 
-	const select = (type?: CreateContentElementBodyTypeEnum) => {
+	const select = (addElement?: any) => {
 		if (returnResult) {
-			returnResult(type);
+			returnResult(addElement);
 		}
 		isDialogOpen.value = false;
 	};
 
-	const askInternal = (
-		resolve: (type?: CreateContentElementBodyTypeEnum) => void
-	) => {
+	const askInternal = (resolve: (addElement?: any) => void) => {
 		isDialogOpen.value = true;
 		returnResult = resolve;
 	};
