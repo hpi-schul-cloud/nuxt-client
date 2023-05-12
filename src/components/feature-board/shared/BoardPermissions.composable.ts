@@ -13,10 +13,19 @@ export const useBoardPermissions = () => {
 		"card_create",
 		"card_delete",
 		"column_create",
-		"board_edit_",
+		"board_edit",
 	];
+
+	const hasMovePermission = permissions.value.includes("move");
+	const hasCardCreatePermission = permissions.value.includes("card_create");
+	const hasColumnCreatePermission = permissions.value.includes("column_create");
+	const hasEditPermission = permissions.value.includes("board_edit");
 
 	return {
 		permissions,
+		hasMovePermission,
+		hasCardCreatePermission,
+		hasColumnCreatePermission,
+		hasEditPermission,
 	};
 };

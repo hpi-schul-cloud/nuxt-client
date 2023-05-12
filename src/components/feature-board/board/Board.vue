@@ -87,33 +87,33 @@ export default defineComponent({
 		useBodyScrolling();
 
 		const onCreateCard = async (columnId: string) => {
-			if (!hasCardCreatePermission.value) return;
+			if (!hasCardCreatePermission) return;
 
 			await createCard(columnId);
 		};
 
 		const onCreateColumn = async () => {
-			if (!hasColumnCreatePermission.value) return;
+			if (!hasColumnCreatePermission) return;
 			await createColumn();
 		};
 
 		const onCreateColumnWithCard = async (cardId: string) => {
-			if (!hasColumnCreatePermission.value) return;
+			if (!hasColumnCreatePermission) return;
 			await createColumnWithCard(cardId);
 		};
 
 		const onDeleteCard = async (cardId: string) => {
-			if (!hasCardCreatePermission.value) return;
+			if (!hasCardCreatePermission) return;
 			await deleteCard(cardId);
 		};
 
 		const onDeleteColumn = async (columnId: string) => {
-			if (!hasColumnCreatePermission.value) return;
+			if (!hasColumnCreatePermission) return;
 			await deleteColumn(columnId);
 		};
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
-			if (!hasColumnCreatePermission.value) return;
+			if (!hasColumnCreatePermission) return;
 			await moveColumn(columnPayload);
 		};
 
@@ -122,7 +122,7 @@ export default defineComponent({
 			columnId: string,
 			keyString: DragAndDropKey
 		) => {
-			if (!hasMovePermission.value) return;
+			if (!hasMovePermission) return;
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
@@ -137,29 +137,21 @@ export default defineComponent({
 		};
 
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
-			if (!hasMovePermission.value) return;
+			if (!hasMovePermission) return;
 			await moveCard(payload);
 		};
 
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
-			if (!hasColumnCreatePermission.value) return;
+			if (!hasColumnCreatePermission) return;
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const { permissions } = useBoardPermissions();
-
-		const hasMovePermission = computed(() =>
-			permissions.value.includes("move")
-		);
-		const hasCardCreatePermission = computed(() =>
-			permissions.value.includes("card_create")
-		);
-		const hasColumnCreatePermission = computed(() =>
-			permissions.value.includes("column_create")
-		);
-		const hasEditPermission = computed(() =>
-			permissions.value.includes("board_edit")
-		);
+		const {
+			hasMovePermission,
+			hasCardCreatePermission,
+			hasColumnCreatePermission,
+			hasEditPermission,
+		} = useBoardPermissions();
 
 		return {
 			board,
