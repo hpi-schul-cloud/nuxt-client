@@ -74,12 +74,12 @@ import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
+import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import FilePicker from "../shared/FilePicker.vue";
 
 export default defineComponent({
 	name: "CardHost",

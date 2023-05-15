@@ -45,6 +45,7 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
 	CardMove,
@@ -55,7 +56,6 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 
 export default defineComponent({
 	name: "Board",

@@ -1,12 +1,15 @@
 import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
+import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
+
+type CreateElementFn = (addElement: AddCardElement) => void;
 
 export const useElementTypeSelection = () => {
-	const askType = async (): Promise<any | undefined> => {
-		const promise = new Promise<any | undefined>((resolve) => {
+	const askType = async (): Promise<CreateElementFn | undefined> => {
+		const promise = new Promise<CreateElementFn | undefined>((resolve) => {
 			const { askInternal } = useInternalElementTypeSelection();
 			askInternal(resolve);
 		});
@@ -22,20 +25,21 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	const { triggerFilePicker } = useFilePicker();
 	const isDialogOpen = ref<boolean>(false);
 
-	let resolveWithCreateFunction: ((addElement?: any) => void) | undefined =
-		undefined;
+	let resolveWithCreateFunction:
+		| ((createElementFn?: CreateElementFn) => void)
+		| undefined = undefined;
 
-	const createTextElement = (addElement: any) => {
+	const createTextElement = (addElement: AddCardElement) => {
 		addElement(CreateContentElementBodyTypeEnum.Text);
 	};
 
-	const createFileElement = (addElement: any) => {
+	const createFileElement = (addElement: AddCardElement) => {
 		triggerFilePicker();
 	};
 
-	const returnCreateFunction = (addElement?: any) => {
+	const returnCreateFunction = (createElementFn?: CreateElementFn) => {
 		if (resolveWithCreateFunction) {
-			resolveWithCreateFunction(addElement);
+			resolveWithCreateFunction(createElementFn);
 		}
 
 		isDialogOpen.value = false;
@@ -56,13 +60,13 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		},
 	];
 
-	const askInternal = (resolve: (addElement?: any) => void) => {
+	const askInternal = (resolve: (value?: CreateElementFn) => void) => {
 		isDialogOpen.value = true;
 		resolveWithCreateFunction = resolve;
 	};
 
 	const closeDialog = () => {
-		isDialogOpen.value = false;
+		returnCreateFunction();
 	};
 
 	return {
