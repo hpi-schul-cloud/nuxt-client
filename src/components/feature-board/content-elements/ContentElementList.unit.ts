@@ -4,10 +4,10 @@ import Vue from "vue";
 import {
 	AnyContentElement,
 	ContentElementType,
-	TextContentElement,
+	RichTextContentElement,
 } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import TextContentElementComponent from "./TextContentElement.vue";
+import RichTextContentElementComponent from "./RichTextContentElement.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -31,7 +31,7 @@ describe("ContentElementList", () => {
 		it.each([
 			{
 				elementType: ContentElementType.TEXT,
-				component: TextContentElementComponent,
+				component: RichTextContentElementComponent,
 			},
 		])(
 			"should render elements based on type %s",
@@ -47,7 +47,7 @@ describe("ContentElementList", () => {
 			const isEditModeResult = true;
 
 			setup({
-				elements: [{ type: ContentElementType.TEXT } as TextContentElement],
+				elements: [{ type: ContentElementType.TEXT } as RichTextContentElement],
 				isEditMode: isEditModeResult,
 			});
 

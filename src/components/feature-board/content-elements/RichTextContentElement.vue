@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
-import { TextContentElement } from "../types/ContentElement";
+import { RichTextContentElement } from "../types/ContentElement";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 
@@ -29,7 +29,10 @@ export default defineComponent({
 		RichTextContentElementEdit,
 	},
 	props: {
-		element: { type: Object as PropType<TextContentElement>, required: true },
+		element: {
+			type: Object as PropType<RichTextContentElement>,
+			required: true,
+		},
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {

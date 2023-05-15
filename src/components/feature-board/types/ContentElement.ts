@@ -4,7 +4,7 @@ export enum ContentElementType {
 	FILE = "file",
 }
 
-export type AnyContentElement = TextContentElement | FileContentElement;
+export type AnyContentElement = RichTextContentElement | FileContentElement;
 
 interface ContentElement {
 	id: string;
@@ -12,15 +12,8 @@ interface ContentElement {
 	content: object;
 }
 
-export interface TextContentElement extends ContentElement {
-	type: ContentElementType.TEXT;
-	content: {
-		text: string;
-	};
-}
-
 export interface RichTextContentElement extends ContentElement {
-	type: ContentElementType.RICH_TEXT;
+	type: ContentElementType.TEXT; // TODO - adjust this after backend renamed
 	content: {
 		text: string;
 	};
