@@ -6,7 +6,7 @@
 			v-model="content"
 			:placeholder="placeholder"
 			:disabled="disabled"
-			mode="simple"
+			mode="regular"
 			@input="handleInput"
 			@focus="handleFocus"
 			@blur="handleBlur"
