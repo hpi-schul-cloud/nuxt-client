@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { useEditMode } from "./EditMode.composable";
 
 const fakeId = ref("testId");
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(fakeId);
+const { isEditMode, startEditMode, stopEditMode } = useEditMode(fakeId.value);
 
 describe("EditMode.composable", () => {
 	beforeEach(() => {

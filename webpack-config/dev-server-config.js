@@ -58,19 +58,14 @@ const createDevServerConfig = () => {
 					const path = url.parse(req.originalUrl).pathname;
 
 					if (isFileStorage(path)) {
-						// console.log("--- serverPath: ", path);
 						fileStorageProxy(req, res, next);
 					} else if (isH5pEditor(path)) {
-						// console.log("--- serverPath: ", path);
 						h5pEditorProxy(req, res, next);
 					} else if (isServer(path)) {
-						// console.log("--- serverPath: ", path);
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
-						// console.log("--- vuePath: ", path);
 						next();
 					} else {
-						// console.log("--- legacyPath: ", path);
 						legacyClientProxy(req, res, next);
 					}
 				},

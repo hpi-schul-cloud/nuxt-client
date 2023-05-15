@@ -17,7 +17,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon class="orange--text text--darken-1">{{ mdiAlert }}</v-icon>
+						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
 					<div>
 						<template v-for="(warning, index) in copyResultWarnings">

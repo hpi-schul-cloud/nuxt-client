@@ -45,7 +45,7 @@
 				</base-link>
 			</strong>
 		</span>
-		<p class="hint">
+		<p class="grey--text mt-6">
 			{{
 				$t("components.molecules.admintablelegend.hint", {
 					institute_title: setInstituteTitle,
@@ -119,11 +119,6 @@ $vertically-center: auto 0;
 .wrapper {
 	display: flex;
 	justify-content: left;
-}
-
-.hint {
-	margin-top: var(--space-lg);
-	color: var(--v-grey-base);
 }
 
 .link-style {

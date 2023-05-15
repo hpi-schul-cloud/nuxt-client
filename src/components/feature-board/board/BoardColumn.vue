@@ -20,27 +20,25 @@
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 		>
-			<template v-for="(card, index) in column.cards">
-				<Draggable :key="card.cardId">
-					<CardHost
-						class="my-3"
-						:card-id="card.cardId"
-						:height="card.height"
-						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
-						@delete:card="onDeleteCard"
-					/>
-				</Draggable>
-			</template>
+			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
+				<CardHost
+					class="my-3"
+					:card-id="card.cardId"
+					:height="card.height"
+					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+					@delete:card="onDeleteCard"
+				/>
+			</Draggable>
 		</Container>
 		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import { Container, Draggable } from "vue-smooth-dnd";
 import { useDebounceFn } from "@vueuse/core";
+import { computed, defineComponent, inject, PropType, ref } from "vue";
 import VueI18n from "vue-i18n";
+import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
@@ -50,8 +48,8 @@ import {
 	horizontalCursorKeys,
 	verticalCursorKeys,
 } from "../types/DragAndDrop";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
