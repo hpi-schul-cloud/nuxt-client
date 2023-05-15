@@ -1,11 +1,13 @@
 <template>
-	<div>
+	<div class="offset">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
+			class="rich_text"
 			:value="modelValue.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
+			class="rich_text"
 			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
@@ -36,3 +38,14 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.offset {
+	margin-left: -0.6em;
+}
+
+.rich_text {
+	color: rgba(0, 0, 0, 0.87);
+	font-size: 16px;
+}
+</style>

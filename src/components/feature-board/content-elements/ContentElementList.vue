@@ -48,12 +48,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.theme--light.v-card > .v-card__text {
-	color: rgba(0, 0, 0, 0.87);
-	font-size: 16px;
-	margin-top: 17px;
-	margin-bottom: 17px;
-}
-</style>
