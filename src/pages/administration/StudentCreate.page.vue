@@ -120,7 +120,7 @@ export default {
 		input[type="date"]::-webkit-datetime-edit-day-field,
 		input[type="date"]::-webkit-datetime-edit-month-field,
 		input[type="date"]::-webkit-datetime-edit-year-field {
-			opacity: var(--field-opacity, 0);
+			opacity: 0;
 		}
 	}
 }
