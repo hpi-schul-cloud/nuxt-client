@@ -139,6 +139,8 @@ export default defineComponent({
 			if (createElement) {
 				await createElement(addElement);
 			}
+
+			startEditMode();
 		};
 
 		const onStartEditMode = () => {
