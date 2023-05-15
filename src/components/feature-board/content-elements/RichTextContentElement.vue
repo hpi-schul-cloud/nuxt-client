@@ -1,5 +1,5 @@
 <template>
-	<div class="offset">
+	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			:value="modelValue.text"
@@ -36,9 +36,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.offset {
-	margin-left: -0.6em;
-}
-</style>
