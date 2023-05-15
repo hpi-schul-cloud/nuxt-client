@@ -13,7 +13,7 @@
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
-					v-for="(item, key) in items"
+					v-for="(item, key) in elementTypeOptions"
 					:key="key"
 					plain
 					large
@@ -42,8 +42,6 @@ import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { ContentElementType } from "../types/ContentElement";
 import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
-import { useCreateFileElement } from "./CreateFileElement.composable";
 
 export interface ElementTypeButtons {
 	icon: string;
@@ -59,35 +57,10 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { select, isDialogOpen } = useInternalElementTypeSelection();
+		const { closeDialog, isDialogOpen, elementTypeOptions } =
+			useInternalElementTypeSelection();
 
-		const { triggerFilePicker } = useCreateFileElement();
-
-		const createTextElement = (addElement: any) => {
-			addElement(CreateContentElementBodyTypeEnum.Text);
-		};
-		const createFileElement = (addElement: any) => {
-			triggerFilePicker();
-		};
-
-		const items = [
-			{
-				icon: "",
-				label: "create-element.text",
-				action: () => select(createTextElement),
-				testId: "create-element-text",
-				type: ContentElementType.TEXT,
-			},
-			{
-				icon: "",
-				label: "create-element.file",
-				action: () => select(createFileElement),
-				testId: "create-element-file",
-				type: ContentElementType.FILE,
-			},
-		];
-
-		const onCloseDialog = select;
+		const onCloseDialog = closeDialog;
 
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);
@@ -98,7 +71,7 @@ export default defineComponent({
 			onAddElement,
 			onCloseDialog,
 			mdiEmailOutline,
-			items,
+			elementTypeOptions,
 			isDialogOpen,
 			actionButtons,
 		};

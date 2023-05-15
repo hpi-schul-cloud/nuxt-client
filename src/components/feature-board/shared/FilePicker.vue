@@ -4,14 +4,14 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref, watch } from "vue";
-import { useCreateFileElement } from "./CreateFileElement.composable";
+import { useFilePicker } from "./FilePicker.composable";
 
 export default defineComponent({
-	name: "CreateFileElement",
+	name: "FilePicker",
 	components: {},
 	props: {},
 	setup() {
-		const { isFilePickerOpen, triggerFilePicker } = useCreateFileElement();
+		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
 		const openFilePicker: Ref<any> = ref(null);
 		const file = ref(null);
 
@@ -22,16 +22,9 @@ export default defineComponent({
 			}
 		});
 
-		const uploadFile = () => {
-			openFilePicker.value.$refs.input.click();
-
-			// TODO ... evaluate returned file name
-		};
-
 		return {
 			openFilePicker,
 			file,
-			uploadFile,
 		};
 	},
 });
