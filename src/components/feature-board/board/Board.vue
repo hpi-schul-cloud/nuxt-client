@@ -13,22 +13,20 @@
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onDropColumn"
 				>
-					<template v-for="(column, index) in board.columns">
-						<Draggable :key="column.id">
-							<BoardColumn
-								:column="column"
-								:index="index"
-								@create:card="onCreateCard"
-								@delete:card="onDeleteCard"
-								@delete:column="onDeleteColumn"
-								@move:column-keyboard="
-									onMoveColumnKeyboard(index, column.id, $event)
-								"
-								@update:card-position="onUpdateCardPosition(index, $event)"
-								@update:column-title="onUpdateColumnTitle(column.id, $event)"
-							/>
-						</Draggable>
-					</template>
+					<Draggable v-for="(column, index) in board.columns" :key="column.id">
+						<BoardColumn
+							:column="column"
+							:index="index"
+							@create:card="onCreateCard"
+							@delete:card="onDeleteCard"
+							@delete:column="onDeleteColumn"
+							@move:column-keyboard="
+								onMoveColumnKeyboard(index, column.id, $event)
+							"
+							@update:card-position="onUpdateCardPosition(index, $event)"
+							@update:column-title="onUpdateColumnTitle(column.id, $event)"
+						/>
+					</Draggable>
 				</Container>
 				<BoardColumnGhost
 					@create:column="onCreateColumn"

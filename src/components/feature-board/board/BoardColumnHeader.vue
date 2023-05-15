@@ -7,12 +7,12 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-1': isFocused }"
+			:class="{ 'grey lighten-2': isFocused }"
+			tabindex="0"
 			ref="columnHeader"
-			tabindex="-1"
 		>
 			<div class="d-flex align-start justify-space-between py-2 pl-1">
-				<div tabindex="0">
+				<div>
 					<BoardAnyTitleInput
 						:value="title"
 						scope="column"
@@ -38,16 +38,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
-import { useFocusWithin } from "@vueuse/core";
+import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { mdiTrashCanOutline } from "@mdi/js";
+import { defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { mdiTrashCanOutline } from "@mdi/js";
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -74,13 +74,14 @@ export default defineComponent({
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const columnId = computed(() => props.columnId);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId);
+		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+			props.columnId
+		);
 
 		const isDeleteModalOpen = ref<boolean>(false);
 
-		const columnHeader = ref(null);
-		const { focused: isFocused } = useFocusWithin(columnHeader);
+		const columnHeader = ref(undefined);
+		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
 
 		const onStartEditMode = () => startEditMode();
 		const onEndEditMode = () => stopEditMode();
