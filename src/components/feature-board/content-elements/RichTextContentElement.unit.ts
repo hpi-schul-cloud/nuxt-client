@@ -11,7 +11,7 @@ import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vu
 
 const TEST_ELEMENT: RichTextContentElement = {
 	id: "test-id",
-	type: ContentElementType.RICH_TEXT,
+	type: ContentElementType.TEXT,
 	content: {
 		text: "TestContent",
 	},
