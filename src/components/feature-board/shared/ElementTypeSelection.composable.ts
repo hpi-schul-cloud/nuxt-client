@@ -40,7 +40,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		isDialogOpen.value = false;
 	};
 
-	const buttons = [
+	const elementTypeOptions = [
 		{
 			icon: "",
 			label: "create-element.text",
@@ -67,7 +67,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	return {
 		askInternal,
 		isDialogOpen,
-		buttons,
+		elementTypeOptions,
 		closeDialog,
 	};
 });

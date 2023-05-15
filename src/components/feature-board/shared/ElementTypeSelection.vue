@@ -13,7 +13,7 @@
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
-					v-for="(item, key) in buttons"
+					v-for="(item, key) in elementTypeOptions"
 					:key="key"
 					plain
 					large
@@ -57,7 +57,7 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { closeDialog, isDialogOpen, buttons } =
+		const { closeDialog, isDialogOpen, elementTypeOptions } =
 			useInternalElementTypeSelection();
 
 		const onCloseDialog = closeDialog;
@@ -71,7 +71,7 @@ export default defineComponent({
 			onAddElement,
 			onCloseDialog,
 			mdiEmailOutline,
-			buttons,
+			elementTypeOptions,
 			isDialogOpen,
 			actionButtons,
 		};
