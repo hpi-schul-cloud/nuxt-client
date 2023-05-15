@@ -22,9 +22,12 @@ describe("RichTextContentElementDisplay", () => {
 			).toBe(true);
 		});
 
-		it("should props 'value' be found in dom", () => {
+		it("should pass props to ck-editor component", () => {
 			setup({ value: "test value" });
-			expect(wrapper.element.innerHTML).toContain("test value");
+			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
+			console.log(ckEditor.element);
+
+			expect(ckEditor.props("value")).toStrictEqual("test value");
 		});
 	});
 });

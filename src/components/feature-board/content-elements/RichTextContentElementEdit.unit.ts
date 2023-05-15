@@ -22,7 +22,7 @@ describe("RichTextContentElementEdit", () => {
 			);
 		});
 
-		it("should pass props to textarea component", async () => {
+		it("should pass props to ck-editor component", async () => {
 			setup({ value: "test value", autofocus: true });
 
 			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
