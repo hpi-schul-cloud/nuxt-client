@@ -2,7 +2,7 @@
 	<VCardText>
 		<div class="d-flex justify-center w-full">
 			<VBtn
-				@click.stop="onAddElement(ContentElementType.TEXT)"
+				@click.stop="onAddElement()"
 				@dblclick.stop="() => {}"
 				elevation="0"
 				outlined
@@ -18,16 +18,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { ContentElementType } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
-import { ContentElementType } from "../types/ContentElement";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "CardAddElementMenu",
 	emits: ["add-element"],
 	setup(props, { emit }) {
-		const onAddElement = (type: ContentElementType) =>
-			emit("add-element", type);
+		const onAddElement = () => emit("add-element");
 
 		return {
 			onAddElement,
