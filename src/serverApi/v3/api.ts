@@ -4255,6 +4255,12 @@ export interface ToolLaunchRequestResponse {
      * @memberof ToolLaunchRequestResponse
      */
     payload?: string;
+    /**
+     * Specifies whether the Tool should be launched in a new tab
+     * @type {boolean}
+     * @memberof ToolLaunchRequestResponse
+     */
+    openNewTab?: boolean;
 }
 
 /**
