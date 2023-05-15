@@ -2,6 +2,7 @@ import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useFilePicker } from "./FilePicker.composable";
+import { mdiFormatSize, mdiUpload } from "@mdi/js";
 
 export const useElementTypeSelection = () => {
 	const askType = async (): Promise<any | undefined> => {
@@ -42,14 +43,14 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 
 	const elementTypeOptions = [
 		{
-			icon: "",
-			label: "create-element.text",
+			icon: mdiFormatSize,
+			label: "components.elementTypeSelection.elements.textElement.subtitle",
 			action: () => returnCreateFunction(createTextElement),
 			testId: "create-element-text",
 		},
 		{
-			icon: "",
-			label: "create-element.file",
+			icon: mdiUpload,
+			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: () => returnCreateFunction(createFileElement),
 			testId: "create-element-file",
 		},

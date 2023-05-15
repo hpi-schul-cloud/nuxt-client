@@ -7,7 +7,9 @@
 		@dialog-closed="onCloseDialog"
 		:buttons="actionButtons"
 	>
-		<template v-slot:title> {{ $t("create-element.title") }} </template>
+		<template v-slot:title>
+			{{ $t("components.elementTypeSelection.dialog.title") }}
+		</template>
 		<template v-slot:content>
 			<div
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
@@ -26,7 +28,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+							<v-icon large>{{ item.icon }}</v-icon></span
 						>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
