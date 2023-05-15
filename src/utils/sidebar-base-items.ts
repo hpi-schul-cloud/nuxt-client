@@ -47,13 +47,6 @@ const getSidebarItems = (
 		],
 	},
 	{
-		title: "H5P Player",
-		to: "/H5P",
-		icon: "course_outline",
-		testId: "H5P",
-		activeForUrls: ["^/H5P($|/.*)"],
-	},
-	{
 		title: "global.sidebar.teams",
 		href: "/teams",
 		icon: "team_outline",

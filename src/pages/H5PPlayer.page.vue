@@ -15,7 +15,7 @@
 <script :src="scriptSrc" charset="UTF-8"></script>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
 	name: "H5PPlayer",
@@ -33,15 +33,18 @@ export default defineComponent({
 			default: "",
 		},
 	},
+	mounted() {
+		this.iframeSrc = `api/v3/h5p-editor/${this.$route.params.id}/play`;
+		this.loading = false;
+	},
 	setup(props) {
 		const loading = ref(props.loading);
 		let iframeSrc = ref(props.iframeSrc);
 		const scriptSrc = ref(props.scriptSrc);
 
-		onMounted(() => {
-			iframeSrc.value = "api/v3/h5p-editor/0/play";
-			loading.value = false;
-		});
+		/* onMounted(() => {
+			
+		}); */
 		return {
 			loading,
 			iframeSrc,
@@ -52,10 +55,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.spinner {
-	top: 0 !important;
-}
-
 .player-iframe {
 	width: 100%;
 	height: 100%;
