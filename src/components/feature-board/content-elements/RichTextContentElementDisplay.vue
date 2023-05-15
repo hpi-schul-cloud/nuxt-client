@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
 import CkEditor from "@/components/editor/CKEditor.vue";
+import { defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",
