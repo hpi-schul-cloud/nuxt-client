@@ -1,30 +1,29 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-	<ck-editor v-model="content" disabled />
+	<div>
+		<div v-html="value" />
+	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
-import CkEditor from "@/components/editor/CKEditor.vue";
+<script>
+import { defineComponent, onMounted } from "vue";
+import renderMathInElement from "katex/dist/contrib/auto-render.js";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",
-	components: { CkEditor },
 	props: {
 		value: {
 			type: String,
 			required: true,
 		},
 	},
-	setup(props) {
-		const content = ref(props.value);
-
-		watch(
-			() => props.value,
-			(newValue) => {
-				content.value = newValue;
+	setup() {
+		onMounted(() => {
+			const mathElements = document.getElementsByClassName("math-tex");
+			for (const element of mathElements) {
+				renderMathInElement(element);
 			}
-		);
-		return { content };
+		});
 	},
 });
 </script>
