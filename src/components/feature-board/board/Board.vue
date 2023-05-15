@@ -8,7 +8,7 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					:lock-axis="hasMovePermission ? 'x' : 'x,y'"
+					:lock-axis="hasBoardMovePermission ? 'x' : 'x,y'"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onDropColumn"
@@ -29,7 +29,7 @@
 					</Draggable>
 				</Container>
 				<BoardColumnGhost
-					v-if="hasColumnCreatePermission"
+					v-if="hasBoardColumnCreatePermission"
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
@@ -84,33 +84,33 @@ export default defineComponent({
 		useBodyScrolling();
 
 		const onCreateCard = async (columnId: string) => {
-			if (!hasCardCreatePermission) return;
+			if (!hasBoardCardCreatePermission) return;
 
 			await createCard(columnId);
 		};
 
 		const onCreateColumn = async () => {
-			if (!hasColumnCreatePermission) return;
+			if (!hasBoardColumnCreatePermission) return;
 			await createColumn();
 		};
 
 		const onCreateColumnWithCard = async (cardId: string) => {
-			if (!hasColumnCreatePermission) return;
+			if (!hasBoardColumnCreatePermission) return;
 			await createColumnWithCard(cardId);
 		};
 
 		const onDeleteCard = async (cardId: string) => {
-			if (!hasCardCreatePermission) return;
+			if (!hasBoardCardCreatePermission) return;
 			await deleteCard(cardId);
 		};
 
 		const onDeleteColumn = async (columnId: string) => {
-			if (!hasColumnCreatePermission) return;
+			if (!hasBoardColumnCreatePermission) return;
 			await deleteColumn(columnId);
 		};
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
-			if (!hasColumnCreatePermission) return;
+			if (!hasBoardColumnCreatePermission) return;
 			await moveColumn(columnPayload);
 		};
 
@@ -119,7 +119,7 @@ export default defineComponent({
 			columnId: string,
 			keyString: DragAndDropKey
 		) => {
-			if (!hasMovePermission) return;
+			if (!hasBoardMovePermission) return;
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
@@ -134,19 +134,19 @@ export default defineComponent({
 		};
 
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
-			if (!hasMovePermission) return;
+			if (!hasBoardMovePermission) return;
 			await moveCard(payload);
 		};
 
 		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
-			if (!hasColumnCreatePermission) return;
+			if (!hasBoardColumnCreatePermission) return;
 			updateColumnTitle(columnId, newTitle);
 		};
 
 		const {
-			hasMovePermission,
-			hasCardCreatePermission,
-			hasColumnCreatePermission,
+			hasBoardMovePermission,
+			hasBoardCardCreatePermission,
+			hasBoardColumnCreatePermission,
 		} = useBoardPermissions();
 
 		return {
@@ -162,9 +162,9 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
-			hasMovePermission,
-			hasCardCreatePermission,
-			hasColumnCreatePermission,
+			hasBoardMovePermission,
+			hasBoardCardCreatePermission,
+			hasBoardColumnCreatePermission,
 		};
 	},
 });

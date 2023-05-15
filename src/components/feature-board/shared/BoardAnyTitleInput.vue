@@ -59,10 +59,10 @@ export default defineComponent({
 	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const { hasEditPermission } = useBoardPermissions();
+		const { hasBoardEditPermission } = useBoardPermissions();
 
 		useInlineEditInteractionHandler(() => {
-			if (!hasEditPermission) return;
+			if (!hasBoardEditPermission) return;
 			document.getSelection()?.collapseToEnd();
 		});
 
