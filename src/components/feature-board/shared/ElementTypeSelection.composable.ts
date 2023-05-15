@@ -1,4 +1,4 @@
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
@@ -30,7 +30,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		| undefined = undefined;
 
 	const createTextElement = (addElement: AddCardElement) => {
-		addElement(CreateContentElementBodyTypeEnum.Text);
+		addElement(ContentElementType.Text);
 	};
 
 	const createFileElement = (addElement: AddCardElement) => {

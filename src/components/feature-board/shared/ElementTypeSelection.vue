@@ -40,9 +40,9 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { ContentElementType } from "@/serverApi/v3";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
-import { ContentElementType } from "../types/ContentElement";
 import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
 
 export interface ElementTypeButtons {

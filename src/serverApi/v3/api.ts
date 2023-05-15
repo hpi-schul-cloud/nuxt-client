@@ -609,6 +609,16 @@ export interface ConsentSessionResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ContentElementType {
+    Text = 'text',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
  * @interface ContextExternalToolPostParams
  */
 export interface ContextExternalToolPostParams {
@@ -876,63 +886,16 @@ export interface CourseMetadataResponse {
 /**
  * 
  * @export
- * @interface CourseResponse
- */
-export interface CourseResponse {
-    /**
-     * The id of the Grid element
-     * @type {string}
-     * @memberof CourseResponse
-     */
-    id: string;
-    /**
-     * Title of the Grid element
-     * @type {string}
-     * @memberof CourseResponse
-     */
-    title: string;
-    /**
-     * Start date of the course
-     * @type {string}
-     * @memberof CourseResponse
-     */
-    startDate?: string;
-    /**
-     * End date of the course. After this the course counts as archived
-     * @type {string}
-     * @memberof CourseResponse
-     */
-    untilDate?: string;
-    /**
-     * List of students enrolled in course
-     * @type {Array<UsersList>}
-     * @memberof CourseResponse
-     */
-    students?: Array<UsersList>;
-}
-/**
- * 
- * @export
  * @interface CreateContentElementBody
  */
 export interface CreateContentElementBody {
     /**
-     * The type of element
-     * @type {string}
+     * 
+     * @type {ContentElementType}
      * @memberof CreateContentElementBody
      */
-    type: CreateContentElementBodyTypeEnum;
+    type: ContentElementType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateContentElementBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1563,11 +1526,11 @@ export interface FileElementContent {
  */
 export interface FileElementContentBody {
     /**
-     * the type of the updated element
-     * @type {any}
+     * 
+     * @type {ContentElementType}
      * @memberof FileElementContentBody
      */
-    type: FileElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {FileContentBody}
@@ -1575,16 +1538,6 @@ export interface FileElementContentBody {
      */
     content: FileContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1599,10 +1552,10 @@ export interface FileElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof FileElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {FileElementContent}
@@ -4114,11 +4067,11 @@ export interface TextElementContent {
  */
 export interface TextElementContentBody {
     /**
-     * the type of the updated element
-     * @type {Text}
+     * 
+     * @type {ContentElementType}
      * @memberof TextElementContentBody
      */
-    type: TextElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {TextContentBody}
@@ -4126,16 +4079,6 @@ export interface TextElementContentBody {
      */
     content: TextContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TextElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -4150,10 +4093,10 @@ export interface TextElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof TextElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {TextElementContent}
@@ -7581,7 +7524,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {string} courseId The id of the course
+         * @param {string} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7659,43 +7602,6 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} courseId The id of the course
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerGetCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('courseControllerGetCourse', 'courseId', courseId)
-            const localVarPath = `/courses/{courseId}`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -7708,7 +7614,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} courseId The id of the course
+         * @param {string} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7727,16 +7633,6 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
-        /**
-         * 
-         * @param {string} courseId The id of the course
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async courseControllerGetCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetCourse(courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
     }
 };
 
@@ -7749,7 +7645,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {string} courseId The id of the course
+         * @param {string} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -7766,15 +7662,6 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
             return localVarFp.courseControllerFindForUser(skip, limit, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {string} courseId The id of the course
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerGetCourse(courseId: string, options?: any): AxiosPromise<CourseResponse> {
-            return localVarFp.courseControllerGetCourse(courseId, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -7786,7 +7673,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 export interface CoursesApiInterface {
     /**
      * 
-     * @param {string} courseId The id of the course
+     * @param {string} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
@@ -7803,15 +7690,6 @@ export interface CoursesApiInterface {
      */
     courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
 
-    /**
-     * 
-     * @param {string} courseId The id of the course
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApiInterface
-     */
-    courseControllerGetCourse(courseId: string, options?: any): AxiosPromise<CourseResponse>;
-
 }
 
 /**
@@ -7823,7 +7701,7 @@ export interface CoursesApiInterface {
 export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
-     * @param {string} courseId The id of the course
+     * @param {string} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
@@ -7842,17 +7720,6 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} courseId The id of the course
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApi
-     */
-    public courseControllerGetCourse(courseId: string, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerGetCourse(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
