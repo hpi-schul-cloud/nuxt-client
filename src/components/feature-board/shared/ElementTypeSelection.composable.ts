@@ -8,16 +8,16 @@ import { useFilePicker } from "./FilePicker.composable";
 type CreateElementFn = (addElement: AddCardElement) => void;
 
 export const useElementTypeSelection = () => {
-	const askType = async (): Promise<CreateElementFn | undefined> => {
+	const getCreateFn = async (): Promise<CreateElementFn | undefined> => {
 		const promise = new Promise<CreateElementFn | undefined>((resolve) => {
-			const { askInternal } = useInternalElementTypeSelection();
-			askInternal(resolve);
+			const { askType } = useInternalElementTypeSelection();
+			askType(resolve);
 		});
 		return promise;
 	};
 
 	return {
-		askType,
+		getCreateFn,
 	};
 };
 
@@ -60,7 +60,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		},
 	];
 
-	const askInternal = (resolve: (value?: CreateElementFn) => void) => {
+	const askType = (resolve: (value?: CreateElementFn) => void) => {
 		isDialogOpen.value = true;
 		resolveWithCreateFunction = resolve;
 	};
@@ -70,7 +70,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	};
 
 	return {
-		askInternal,
+		askType,
 		isDialogOpen,
 		elementTypeOptions,
 		closeDialog,

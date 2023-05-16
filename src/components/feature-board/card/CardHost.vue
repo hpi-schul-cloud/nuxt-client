@@ -133,11 +133,11 @@ export default defineComponent({
 		};
 
 		const onAddElement = async () => {
-			const { askType } = useElementTypeSelection();
+			const { getCreateFn } = useElementTypeSelection();
 
-			const createElement = await askType();
+			const createElement = await getCreateFn();
 			if (createElement) {
-				await createElement(addElement);
+				createElement(addElement);
 			}
 
 			startEditMode();
