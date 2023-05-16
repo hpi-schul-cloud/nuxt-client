@@ -125,17 +125,16 @@ describe("BoardColumn", () => {
 				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
 			});
 		});
-	});
+		describe("when hasBoardCardCreatePermission is set false", () => {
+			it("should not be rendered on DOM", () => {
+				setup({ permissions: { hasBoardColumnCreatePermission: false } });
 
-	describe("when hasBoardCardCreatePermission is set false", () => {
-		it("should not be rendered on DOM", () => {
-			setup({ permissions: { hasBoardColumnCreatePermission: false } });
+				const addCardComponent = wrapper.findAllComponents({
+					name: "BoardAddCardButton",
+				});
 
-			const addCardComponent = wrapper.findAllComponents({
-				name: "BoardAddCardButton",
+				expect(addCardComponent.length).toStrictEqual(0);
 			});
-
-			expect(addCardComponent.length).toStrictEqual(0);
 		});
 	});
 });
