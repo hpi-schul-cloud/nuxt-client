@@ -442,4 +442,53 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 		});
 	});
+
+	describe("tabs", () => {
+		describe("when feature flag is enabled", () => {
+			it("should find tools(new)-tab", () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+				const wrapper = getWrapper();
+
+				const tabs = wrapper.findAll(".v-tab");
+
+				expect(tabs).toContain(
+					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
+				);
+			});
+		});
+
+		describe("when feature flag is disabled", () => {
+			it("should  not find tools(new)-tab", () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+				} as Envs);
+				const wrapper = getWrapper();
+
+				const tabs = wrapper.findAll(".v-tab");
+
+				expect(tabs).not.toContain(
+					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
+				);
+			});
+		});
+
+		describe("when Tools(new) tab is active", () => {
+			it("should show an 'add' button", async () => {
+				envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+				const wrapper = getWrapper();
+
+				const tabs = wrapper.findAll(".v-tab");
+				const toolsNewTab = tabs.find(
+					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
+				);
+
+				await toolsNewTab.click();
+				const addButton = toolsNewTab.find(`[data-testid="add-tool-button"]`);
+
+				expect(addButton.exists()).toBe(true);
+			});
+		});
+	});
 });
