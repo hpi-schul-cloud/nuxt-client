@@ -49,6 +49,7 @@ const vueRoutes = [
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
+	`^/tools/${mongoId}/launch?$`,
 ];
 
 const isVueClient = (path) => {

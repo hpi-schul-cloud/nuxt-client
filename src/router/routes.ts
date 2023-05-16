@@ -280,4 +280,13 @@ export const routes: Array<RouteConfig> = [
 			layout: Layouts.LOGGED_OUT,
 		},
 	},
+	{
+		path: `/tools/:contextExternalToolId/launch`,
+		name: "toolLaunch",
+		component: () => import("../components/tool/ToolLaunchComponent.vue"),
+		beforeEnter: createPermissionGuard(["tool_view"]),
+		props: (route: Route) => ({
+			contextExternalToolId: route.params.contextExternalToolId,
+		}),
+	},
 ];

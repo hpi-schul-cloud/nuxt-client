@@ -9,6 +9,7 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	ToolLaunchRequestResponse,
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
@@ -23,9 +24,12 @@ import {
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
 import {
-	toolParameterFactory,
 	toolConfigurationTemplateFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
+import { ToolLaunch } from "../components/tool/tool-launch.interface";
+import { ToolLaunchMethod } from "../components/tool/tool-launch-method";
+import { toolLaunchRequestResponeFactory } from "../../tests/test-utils/factory/toolLaunchRequestResponeFactory";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -48,6 +52,7 @@ describe("useExternalToolUtils", () => {
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+			mapToolLaunchRequestResponse,
 		} = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -119,6 +124,7 @@ describe("useExternalToolUtils", () => {
 			customParameterResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 			schoolExternalToolPostParam,
+			mapToolLaunchRequestResponse,
 		};
 	};
 
@@ -257,6 +263,25 @@ describe("useExternalToolUtils", () => {
 					]),
 				})
 			);
+		});
+	});
+
+	describe("mapToolLaunchRequestResponse", () => {
+		it("should return ToolLaunch", () => {
+			const { mapToolLaunchRequestResponse } = setup();
+
+			const toolLaunchRequestResponse: ToolLaunchRequestResponse =
+				toolLaunchRequestResponeFactory.build();
+
+			const toolLaunch: ToolLaunch = mapToolLaunchRequestResponse(
+				toolLaunchRequestResponse
+			);
+
+			expect(toolLaunch).toEqual<ToolLaunch>({
+				method: ToolLaunchMethod.GET,
+				payload: toolLaunchRequestResponse.payload,
+				url: toolLaunchRequestResponse.url,
+			});
 		});
 	});
 });

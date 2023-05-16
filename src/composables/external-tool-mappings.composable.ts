@@ -11,6 +11,8 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
+	ToolLaunchRequestResponse,
+	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import {
 	SchoolExternalTool,
@@ -23,6 +25,8 @@ import {
 	ToolParameterType,
 } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
+import { ToolLaunchMethod } from "../components/tool/tool-launch-method";
+import { ToolLaunch } from "../components/tool/tool-launch.interface";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -64,9 +68,17 @@ const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
 	ToolParameterScope
 > = {
-	[CustomParameterResponseScopeEnum.Course]: ToolParameterScope.Course,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
+	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
+};
+
+const ToolLaunchMethodMapping: Record<
+	ToolLaunchRequestResponseMethodEnum,
+	ToolLaunchMethod
+> = {
+	[ToolLaunchRequestResponseMethodEnum.Get]: ToolLaunchMethod.GET,
+	[ToolLaunchRequestResponseMethodEnum.Post]: ToolLaunchMethod.POST,
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
@@ -189,6 +201,17 @@ export function useExternalToolMappings() {
 		return businessError.message;
 	};
 
+	const mapToolLaunchRequestResponse = (
+		response: ToolLaunchRequestResponse
+	): ToolLaunch => {
+		return {
+			url: response.url,
+			method: ToolLaunchMethodMapping[response.method],
+			payload: response.payload,
+			openNewTab: response.openNewTab,
+		};
+	};
+
 	return {
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
@@ -196,5 +219,6 @@ export function useExternalToolMappings() {
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		getTranslationKey,
+		mapToolLaunchRequestResponse,
 	};
 }
