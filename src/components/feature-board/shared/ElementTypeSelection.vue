@@ -20,6 +20,7 @@
 					plain
 					large
 					:height="84"
+					:width="126"
 					class="d-sm-flex button-alignment-top"
 					:data-testid="item.testId"
 					@click.stop="item.action"
