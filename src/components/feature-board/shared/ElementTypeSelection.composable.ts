@@ -27,10 +27,10 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 
 	let resolveWithCreateFunction:
 		| ((createElementFn?: CreateElementFn) => void)
-		| undefined = undefined;
+		| undefined;
 
-	const createTextElement = (addElement: AddCardElement) => {
-		addElement(ContentElementType.Text);
+	const createTextElement = async (addElement: AddCardElement) => {
+		await addElement(ContentElementType.Text);
 	};
 
 	const createFileElement = (addElement: AddCardElement) => {
