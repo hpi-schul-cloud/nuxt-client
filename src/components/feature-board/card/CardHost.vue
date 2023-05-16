@@ -75,10 +75,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import {
-	useBoardPermissions,
-	useBoardElementPermissions,
-} from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -108,7 +105,6 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasBoardDeletePermission } = useBoardPermissions();
-		const cardPermissions = useBoardElementPermissions(props.cardId);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -168,7 +164,6 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
-			cardPermissions,
 		};
 	},
 });
