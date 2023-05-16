@@ -24,7 +24,7 @@ jobs:
         id: docker_meta_img_hub
         uses: docker/metadata-action@v4
         with:
-          images: docker.io/schulcloud/nuxt-client-${{ matrix.tenants }}, quay.io/schulcloudverbund/schulcloud-frontend-${{ matrix.tenants }}
+          images: docker.io/schulcloud/schulcloud-nuxt-client-${{ matrix.tenants }}, quay.io/schulcloudverbund/schulcloud-frontend-${{ matrix.tenants }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
