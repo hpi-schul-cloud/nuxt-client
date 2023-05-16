@@ -21,12 +21,4 @@ describe("FilePicker", () => {
 		setup();
 		expect(wrapper.findComponent(FilePicker).exists()).toBe(true);
 	});
-
-	/* it("should emit click event", () => {
-			const { filePicker } = setup();
-
-			triggerFilePicker();
-
-			expect(filePicker.emitted("click")).toBeTruthy();
-		}); */
 });
