@@ -4,7 +4,6 @@ import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
 import { BoardPermissionsType } from "../types/Board";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);

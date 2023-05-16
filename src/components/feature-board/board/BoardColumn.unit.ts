@@ -2,9 +2,18 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
-import { BoardColumn } from "../types/Board";
+import { BoardColumn, BoardPermissionsType } from "../types/Board";
 import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+
+jest.mock("../shared/BoardPermissions.composable");
+const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+const defaultPermissions = {
+	hasBoardMovePermission: true,
+	hasBoardColumnCreatePermission: true,
+};
 
 const MOCK_PROP: BoardColumn = {
 	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
@@ -23,8 +32,13 @@ const MOCK_PROP: BoardColumn = {
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = () => {
+	const setup = (options?: { permissions?: BoardPermissionsType }) => {
 		document.body.setAttribute("data-app", "true");
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
+		});
+
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
@@ -79,9 +93,7 @@ describe("BoardColumn", () => {
 			};
 
 			const containerComponent = wrapper.findComponent(Container);
-			await containerComponent.vm.$emit("drop", emitObject);
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			containerComponent.vm.$emit("drop", emitObject);
 
 			const emitted = wrapper.emitted("update:card-position") || [[]];
 
@@ -96,13 +108,34 @@ describe("BoardColumn", () => {
 				payload: MOCK_PROP.cards[0],
 			};
 			const containerComponent = wrapper.findComponent(Container);
-			await containerComponent.vm.$emit("drop", emitObject);
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			containerComponent.vm.$emit("drop", emitObject);
 
 			const emitted = wrapper.emitted("update:card-position");
 
 			expect(emitted).toBeUndefined();
+		});
+	});
+
+	describe("user permissions", () => {
+		describe("when hasBoardMovePermission is set false", () => {
+			it("should set lock-axis to 'x,y", () => {
+				setup({ permissions: { hasBoardMovePermission: false } });
+
+				const dndContainer = wrapper.findComponent({ name: "Container" });
+				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
+			});
+		});
+	});
+
+	describe("when hasBoardCardCreatePermission is set false", () => {
+		it("should not be rendered on DOM", () => {
+			setup({ permissions: { hasBoardColumnCreatePermission: false } });
+
+			const addCardComponent = wrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+
+			expect(addCardComponent.length).toStrictEqual(0);
 		});
 	});
 });

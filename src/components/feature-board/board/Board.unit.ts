@@ -225,7 +225,7 @@ describe("Board", () => {
 		});
 
 		describe("when hasBoardColumnCreatePermission is set false", () => {
-			it("should not be rendered on BOM", () => {
+			it("should not be rendered on DOM", () => {
 				setup({ permissions: { hasBoardColumnCreatePermission: false } });
 
 				const ghostColumnComponent = wrapper.findComponent({
