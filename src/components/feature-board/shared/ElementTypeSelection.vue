@@ -46,14 +46,6 @@ import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
 
-export interface ElementTypeButtons {
-	icon: string;
-	label: string;
-	action: string;
-	testId: string;
-	type: ContentElementType;
-}
-
 export default defineComponent({
 	name: "ElementTypeSelection",
 	components: {
