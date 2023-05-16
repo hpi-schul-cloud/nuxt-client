@@ -5,9 +5,8 @@ import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
-import { Board } from "../types/Board";
+import { Board, BoardPermissionsType } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsType } from "../types/Board";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [
