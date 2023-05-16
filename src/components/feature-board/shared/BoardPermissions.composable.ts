@@ -2,10 +2,6 @@ import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { authModule } from "@/store";
 
-/**
- * Shares board permissions
- *
- */
 const boardPermissions = () => {
 	const permissions = authModule.getUserPermissions;
 
@@ -18,6 +14,11 @@ const boardPermissions = () => {
 		hasBoardDeletePermission: permissions.includes("course_remove"),
 	};
 };
+
+/**
+ * Shares user permissions (/me)
+ *
+ */
 export const useBoardPermissions = createSharedComposable(boardPermissions);
 
 declare type boardObjectPermissionType = {
@@ -25,13 +26,22 @@ declare type boardObjectPermissionType = {
 	permissions: Array<string>;
 };
 
-export const useBoardElementPermissions = (id: string) => {
-	const permissions: Ref<Array<boardObjectPermissionType>> = ref([]);
-	// TODO: find a way to push each board object's permissions here
+const permissions: Ref<Array<boardObjectPermissionType>> = ref([]);
+/**
+ *
+ * Shares board element specific permissions
+ */
+export const useBoardElementPermissions = (
+	id: string
+): boardObjectPermissionType | undefined => {
 	permissions.value = [
 		{
 			id: "643ea6ebe8ba9e586e041e8c", // card
-			permissions: ["edit", "change", "delete", "create"],
+			permissions: ["edit", "delete", "create"],
+		},
+		{
+			id: "643ea6ebe8ba9e586e041e8a", // card
+			permissions: ["edit", "delete", "create"],
 		},
 		{
 			id: "643ea6ebe8ba9e586e041e89", // card
@@ -43,9 +53,24 @@ export const useBoardElementPermissions = (id: string) => {
 		},
 	];
 
-	const result = permissions.value.find(
-		(boardObject) => boardObject.id === id
-	)?.permissions;
+	return permissions.value.find((boardObject) => boardObject.id === id);
+};
 
-	return result;
+/**
+ *
+ * Adds board object specific permissions into reactive array
+ */
+export const addBoardObjectPermission = (
+	payload: boardObjectPermissionType
+) => {
+	const index = permissions.value.findIndex(
+		(boardObject) => boardObject.id === payload.id
+	);
+
+	if (!index) {
+		permissions.value.push(payload);
+		return;
+	}
+
+	permissions.value.splice(index, 0, payload);
 };
