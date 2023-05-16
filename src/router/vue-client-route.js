@@ -3,6 +3,7 @@
 // using the ./proxy.js serverMiddleware
 
 const mongoId = "[a-z0-9]{24}";
+const h5pId = "[a-z0-9]+";
 const activationCode = "[a-z0-9]+";
 const uuid =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
@@ -36,7 +37,7 @@ const vueRoutes = [
 	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
-	`^/H5P/?$`,
+	`^/H5P/${h5pId}/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board?$`,
 	`^/rooms/${mongoId}/create-beta-task/?$`,

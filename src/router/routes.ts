@@ -3,6 +3,7 @@ import { createPermissionGuard } from "@/router/guards/permission.guard";
 import {
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
+	REGEX_H5P_ID,
 	REGEX_UUID,
 	isMongoId,
 	isOfficialSchoolNumber,
@@ -281,7 +282,7 @@ export const routes: Array<RouteConfig> = [
 		},
 	},
 	{
-		path: `/H5P`,
+		path: `/H5P/:id(${REGEX_H5P_ID})`,
 		component: () => import("../pages/H5PPlayer.page.vue"),
 		name: "H5P",
 		//beforeEnter: createPermissionGuard(["H5P"]),

@@ -15,7 +15,7 @@
 <script :src="scriptSrc" charset="UTF-8"></script>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "H5PPlayer",
@@ -34,17 +34,15 @@ export default defineComponent({
 		},
 	},
 	mounted() {
-		this.iframeSrc = `api/v3/h5p-editor/${this.$route.params.id}/play`;
+		this.iframeSrc =
+			window.location.origin +
+			`/api/v3/h5p-editor/${this.$route.params.id}/play`;
 		this.loading = false;
 	},
 	setup(props) {
 		const loading = ref(props.loading);
 		let iframeSrc = ref(props.iframeSrc);
 		const scriptSrc = ref(props.scriptSrc);
-
-		/* onMounted(() => {
-			
-		}); */
 		return {
 			loading,
 			iframeSrc,
