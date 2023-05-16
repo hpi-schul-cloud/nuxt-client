@@ -18,7 +18,6 @@
 </template>
 
 <script lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
 import { mdiPlus } from "@mdi/js";
 import { defineComponent } from "vue";
 
@@ -31,7 +30,6 @@ export default defineComponent({
 		return {
 			onAddElement,
 			mdiPlus,
-			ContentElementType,
 		};
 	},
 });
