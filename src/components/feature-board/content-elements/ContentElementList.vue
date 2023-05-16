@@ -7,12 +7,6 @@
 				:element="element"
 				:isEditMode="isEditMode"
 			></TextContentElement>
-			<FileContentElement
-				v-else-if="element.type === ContentElementType.File"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-			></FileContentElement>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
 			</template>
