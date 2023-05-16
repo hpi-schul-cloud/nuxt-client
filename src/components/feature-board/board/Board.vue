@@ -8,7 +8,7 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					:lock-axis="hasBoardMovePermission ? 'x' : 'x,y'"
+					:lock-axis="lockAxis"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="columnDropPlaceholderOptions"
 					@drop="onDropColumn"
@@ -83,6 +83,14 @@ export default defineComponent({
 
 		useBodyScrolling();
 
+		const {
+			hasBoardMovePermission,
+			hasBoardCardCreatePermission,
+			hasBoardColumnCreatePermission,
+		} = useBoardPermissions();
+
+		const lockAxis = hasBoardMovePermission ? "x" : "x,y";
+
 		const onCreateCard = async (columnId: string) => {
 			if (!hasBoardCardCreatePermission) return;
 
@@ -143,15 +151,13 @@ export default defineComponent({
 			updateColumnTitle(columnId, newTitle);
 		};
 
-		const {
-			hasBoardMovePermission,
-			hasBoardCardCreatePermission,
-			hasBoardColumnCreatePermission,
-		} = useBoardPermissions();
-
 		return {
 			board,
 			columnDropPlaceholderOptions,
+			hasBoardMovePermission,
+			hasBoardCardCreatePermission,
+			hasBoardColumnCreatePermission,
+			lockAxis,
 			getColumnId,
 			onCreateCard,
 			onCreateColumn,
@@ -162,9 +168,6 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
-			hasBoardMovePermission,
-			hasBoardCardCreatePermission,
-			hasBoardColumnCreatePermission,
 		};
 	},
 });

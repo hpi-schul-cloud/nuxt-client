@@ -1,11 +1,11 @@
 import { createSharedComposable } from "@vueuse/core";
 import { authModule } from "@/store";
+import { BoardPermissionsType } from "../types/Board";
 
-const boardPermissions = () => {
+const boardPermissions = (): BoardPermissionsType => {
 	const permissions = authModule.getUserPermissions;
 
 	return {
-		permissions,
 		hasBoardMovePermission: permissions.includes("course_create"),
 		hasBoardCardCreatePermission: permissions.includes("course_create"),
 		hasBoardColumnCreatePermission: permissions.includes("course_create"),

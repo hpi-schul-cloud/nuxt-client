@@ -6,6 +6,8 @@ import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board } from "../types/Board";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionsType } from "../types/Board";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [
@@ -98,6 +100,9 @@ const MOCK_BOARD_TWO_COLUMNS: Board = {
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
+jest.mock("../shared/BoardPermissions.composable");
+const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
 const $route: Route = {
 	params: {
 		id: "a1b2c3",
@@ -113,26 +118,43 @@ const $route: Route = {
 
 const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
 
+const defaultPermissions = {
+	hasBoardMovePermission: true,
+	hasBoardCardCreatePermission: true,
+	hasBoardColumnCreatePermission: true,
+};
+
+const createCardMock = jest.fn();
+const deleteCardMock = jest.fn();
+
 describe("Board", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options?: { board?: Board; isLoading?: boolean }) => {
+	const setup = (options?: {
+		board?: Board;
+		isLoading?: boolean;
+		permissions?: BoardPermissionsType;
+	}) => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
 			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
 			isLoading: ref(isLoading ?? false),
-			createCard: jest.fn(),
+			createCard: createCardMock,
 			createColumn: jest.fn(),
 			createColumnWithCard: jest.fn(),
 			deleteColumn: jest.fn(),
-			deleteCard: jest.fn(),
+			deleteCard: deleteCardMock,
 			extractCard: jest.fn(),
 			fetchBoard: jest.fn(),
 			getColumnId: jest.fn(),
 			moveCard: jest.fn(),
 			moveColumn: jest.fn(),
 			updateColumnTitle: jest.fn(),
+		});
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
 		});
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),
@@ -170,6 +192,49 @@ describe("Board", () => {
 		it("should fetch board from store and render two columns", () => {
 			setup({ board: MOCK_BOARD_TWO_COLUMNS });
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
+		});
+	});
+
+	describe("user permissions", () => {
+		describe("when hasBoardMovePermission is set false", () => {
+			it("should set lock-axis to 'x,y", () => {
+				setup({ permissions: { hasBoardMovePermission: false } });
+
+				const dndContainer = wrapper.findComponent({ name: "Container" });
+				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
+			});
+		});
+
+		describe("when hasBoardCardCreatePermission is set false", () => {
+			it("should not call createCard api", () => {
+				setup({ permissions: { hasBoardCardCreatePermission: false } });
+
+				const columnComponent = wrapper.findComponent({ name: "BoardColumn" });
+				columnComponent.vm.$emit("create:card");
+
+				expect(createCardMock).not.toHaveBeenCalled();
+			});
+
+			it("should not call onDeleteCard api", () => {
+				setup({ permissions: { hasBoardCardCreatePermission: false } });
+
+				const columnComponent = wrapper.findComponent({ name: "BoardColumn" });
+				columnComponent.vm.$emit("delete:card");
+
+				expect(deleteCardMock).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when hasBoardColumnCreatePermission is set false", () => {
+			it("should not be rendered on BOM", () => {
+				setup({ permissions: { hasBoardColumnCreatePermission: false } });
+
+				const ghostColumnComponent = wrapper.findComponent({
+					name: "BoardColumnGhost",
+				});
+
+				expect(ghostColumnComponent.vm).not.toBeDefined();
+			});
 		});
 	});
 });
