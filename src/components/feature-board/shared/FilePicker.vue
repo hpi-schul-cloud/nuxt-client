@@ -1,5 +1,5 @@
 <template>
-	<v-file-input v-show="false" ref="openFilePicker" v-model="file" />
+	<v-file-input v-show="false" ref="inputRef" v-model="file" />
 </template>
 
 <script lang="ts">
@@ -12,18 +12,18 @@ export default defineComponent({
 	props: {},
 	setup() {
 		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
-		const openFilePicker: Ref<any> = ref(null);
+		const inputRef: Ref<any> = ref(null);
 		const file = ref(null);
 
 		watch(isFilePickerOpen, (newValue: boolean) => {
 			if (newValue) {
-				openFilePicker.value.$refs.input.click();
+				inputRef.value.$refs.input.click();
 				triggerFilePicker();
 			}
 		});
 
 		return {
-			openFilePicker,
+			inputRef,
 			file,
 		};
 	},
