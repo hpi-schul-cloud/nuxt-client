@@ -6,7 +6,7 @@
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
-			mode="regular"
+			mode="simple"
 		/>
 	</div>
 </template>
