@@ -949,6 +949,7 @@
 	"pages.files.title": "Dateien",
 	"pages.tool.title": "Konfiguration Externer Tools",
 	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
+	"pages.tool.context.description": "Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.select.label": "Tool Auswahl",
 	"pages.tool.addBtn.label": "Tool hinzufügen",

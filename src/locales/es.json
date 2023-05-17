@@ -944,6 +944,7 @@
 	"pages.files.title": "Archivos",
 	"pages.tool.title": "Configuración de Herramientas Externas",
 	"pages.tool.description": "Aquí se configuran los parámetros específicos de la escuela para la herramienta externa.\nUna vez guardada la configuración, la herramienta estará disponible en la escuela.<br><br>\nAl borrar una configuración, la herramienta vuelve a desaparecer de la escuela.<br><br>\nEncontrará más información en nuestra <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Sección de ayuda sobre herramientas externas</a>.",
+	"pages.tool.context.description": "Después de guardar la selección, la herramienta está disponible dentro del curso.<br><br>\nEncontrará más información en nuestra <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Sección de ayuda sobre herramientas externas</a>.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.select.label": "Selección de Herramientas",
 	"pages.tool.addBtn.label": "Agregar Herramienta",

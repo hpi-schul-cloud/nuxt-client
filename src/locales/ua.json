@@ -975,6 +975,7 @@
 	"pages.files.title": "файли",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.tool.description": "\nТут налаштовуються спеціальні параметри школи для зовнішнього інструменту.\n\nПісля збереження конфігурації інструмент Inside School стає доступним.<br><br>\n\nВидалення конфігурації знову видаляє інструмент зі школи.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Довідковий центр зовнішніх інструментів</a>.",
+	"pages.tool.context.description": "Після збереження вибору інструмент доступний у межах курсу.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Довідковий центр зовнішніх інструментів</a>.",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.select.label": "вибір інструменту",
 	"pages.tool.addBtn.label": "додати інструмент",
