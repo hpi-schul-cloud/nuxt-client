@@ -137,7 +137,7 @@ export default defineComponent({
 
 			const createElement = await getCreateFn();
 			if (createElement) {
-				createElement(addElement);
+				await createElement(addElement);
 			}
 
 			startEditMode();
