@@ -10,6 +10,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -269,6 +270,34 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/TaskCard.page.vue"),
 		name: "beta-task-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
+	},
+	{
+		path: `/tools/context/tool-configuration`,
+		component: () =>
+			import(
+				"../pages/contextExternalTool/ContextExternalToolConfigOverview.page.vue"
+			),
+		name: "ContextExternalToolConfigOverview",
+		beforeEnter: (to, from, next) => {
+			const permissionGuard = createPermissionGuard(["context_tool_admin"]);
+			const queryValidator = validateQueryParameters({
+				contextId: isMongoId,
+				contextType: (value: any) =>
+					Object.values(ToolContextType).includes(value),
+			});
+
+			permissionGuard(to, from, (valid) => {
+				if (valid instanceof Error) {
+					next(valid);
+				} else {
+					queryValidator(to, from, next);
+				}
+			});
+		},
+		props: (route: Route) => ({
+			contextId: route.query.contextId,
+			contextType: route.query.contextType,
+		}),
 	},
 	{
 		// deprecated?
