@@ -258,7 +258,6 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
-@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 // TODO move all style to ckbuild
 .ck-blurred {
