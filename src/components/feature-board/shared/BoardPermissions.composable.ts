@@ -3,7 +3,7 @@ import { authModule } from "@/store";
 import { BoardPermissionsType } from "../types/Board";
 
 const boardPermissions = (): BoardPermissionsType => {
-	const permissions = authModule.getUserPermissions;
+	const permissions = authModule?.getUserPermissions || [];
 
 	return {
 		hasBoardMovePermission: permissions.includes("course_create"),
@@ -16,6 +16,5 @@ const boardPermissions = (): BoardPermissionsType => {
 
 /**
  * Shares user permissions (/me)
- *
  */
 export const useBoardPermissions = createSharedComposable(boardPermissions);

@@ -85,7 +85,7 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 		const { hasBoardMovePermission, hasBoardColumnCreatePermission } =
 			useBoardPermissions();
-		const lockAxis = hasBoardMovePermission ? "x" : "x,y";
+		const lockAxis = hasBoardMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
