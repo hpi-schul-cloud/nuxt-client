@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useFilePicker } from "./FilePicker.composable";
 
 export default defineComponent({
@@ -12,8 +12,8 @@ export default defineComponent({
 	props: {},
 	setup() {
 		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
-		const inputRef: Ref<any> = ref(null);
-		const file = ref(null);
+		const inputRef = ref();
+		const file = ref();
 
 		watch(isFilePickerOpen, (newValue: boolean) => {
 			if (newValue) {
