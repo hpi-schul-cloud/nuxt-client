@@ -4,6 +4,15 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useEditMode } from "../shared/EditMode.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionsType } from "../types/Board";
+
+jest.mock("../shared/BoardPermissions.composable");
+const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+const defaultPermissions = {
+	hasBoardDeletePermission: true,
+};
 jest.mock("../shared/EditMode.composable");
 
 describe("BoardColumnHeader", () => {
@@ -11,13 +20,17 @@ describe("BoardColumnHeader", () => {
 
 	const mockedUseEditMode = jest.mocked(useEditMode);
 
-	const setup = () => {
+	const setup = (options?: { permissions?: BoardPermissionsType }) => {
 		document.body.setAttribute("data-app", "true");
 		const isEditMode = computed(() => true);
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
 			startEditMode: jest.fn(),
 			stopEditMode: jest.fn(),
+		});
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
 		});
 
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
@@ -49,6 +62,22 @@ describe("BoardColumnHeader", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["update:title"]).toBeDefined();
+		});
+	});
+
+	describe("user permissions", () => {
+		describe("when hasBoardDeletePermission is set false", () => {
+			it("should not be rendered on DOM", () => {
+				setup({
+					permissions: { hasBoardDeletePermission: false },
+				});
+
+				const boardMenuComponent = wrapper.findAllComponents({
+					name: "BoardMenu",
+				});
+
+				expect(boardMenuComponent.length).toStrictEqual(0);
+			});
 		});
 	});
 });
