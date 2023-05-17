@@ -9,6 +9,7 @@ import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
 import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
 import {
+	ContextExternalToolPostParams,
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
@@ -18,6 +19,7 @@ import {
 } from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
 import { AxiosResponse } from "axios";
+import { ToolContextType } from "./external-tool/tool-context-type.enum";
 
 @Module({
 	name: "externalToolsModule",
@@ -288,6 +290,113 @@ export default class ExternalToolsModule extends VuexModule {
 		} catch (error: any) {
 			console.log(
 				`Some error occurred while loading schoolExternalTool with id ${configId}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
+	}
+
+	// TODO: missing test
+	@Action
+	async loadAvailableSchoolToolConfigurations(
+		contextId: string
+	): Promise<void> {
+		try {
+			this.setLoading(true);
+			this.resetBusinessError();
+
+			const testTools: ToolConfigurationListItem[] = [
+				{
+					id: "testId1",
+					name: "SchoolTestTool 1",
+					logoUrl:
+						"https://www.google.de/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+				},
+				{
+					id: "testId2",
+					name: "SchoolTestTool 2",
+				},
+			];
+
+			this.setToolConfigurations(testTools);
+
+			this.setLoading(false);
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while loading available tools for scope CONTEXT and contextId ${contextId}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
+	}
+
+	// TODO: missing test
+	@Action
+	async loadToolConfigurationTemplateFromSchoolExternalTool(
+		toolId: string
+	): Promise<ToolConfigurationTemplate | undefined> {
+		try {
+			this.setLoading(true);
+			this.resetBusinessError();
+
+			const toolConfigurationTemplate: ToolConfigurationTemplate = {
+				id: "testId1",
+				name: "SchoolTestTool 1",
+				logoUrl:
+					"https://www.google.de/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+				parameters: [],
+				version: 1,
+			};
+			this.setLoading(false);
+
+			return toolConfigurationTemplate;
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while loading tool configuration template for school external tool with id ${toolId}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
+	}
+
+	// TODO: missing test
+	@Action
+	async createContextExternalTool(payload: {
+		toolTemplate: ToolConfigurationTemplate;
+		contextId: string;
+		contextType: ToolContextType;
+	}): Promise<void> {
+		try {
+			this.setLoading(true);
+			this.resetBusinessError();
+			if (payload.contextId && payload.contextType) {
+				const contextExternalToolPostParams: ContextExternalToolPostParams =
+					useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
+						payload.toolTemplate,
+						payload.contextId,
+						payload.contextType
+					);
+				await this.toolApi.toolContextControllerCreateContextExternalTool(
+					contextExternalToolPostParams
+				);
+			}
+
+			this.setLoading(false);
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while saving contextExternalTool for schoolExternalTool with id ${payload.toolTemplate.id}: ${error}`
 			);
 			this.setBusinessError({
 				...error,
