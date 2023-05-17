@@ -195,51 +195,39 @@ export default defineComponent({
 				colors: [
 					{
 						color: "#D4D6D9",
-						label: "Grey",
 					},
 					{
 						color: "#DBD4D1",
-						label: "Brown",
 					},
 					{
 						color: "#F3D9C3",
-						label: "Orange",
 					},
 					{
 						color: "#DDDBC8",
-						label: "Olive",
 					},
 					{
 						color: "#D8E3CE",
-						label: "Green",
 					},
 					{
 						color: "#C3E1DE",
-						label: "Turquoise",
 					},
 					{
 						color: "#C3E0F2",
-						label: "Light blue",
 					},
 					{
 						color: "#CDD3F6",
-						label: "Blue",
 					},
 					{
 						color: "#E2CBE6",
-						label: "Purple",
 					},
 					{
 						color: "#EEC3F5",
-						label: "Pink",
 					},
 					{
 						color: "#F2D0DB",
-						label: "Rose",
 					},
 					{
 						color: "#EEC3C3",
-						label: "Red",
 					},
 				],
 			},
@@ -270,6 +258,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
+@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 // TODO move all style to ckbuild
 .ck-blurred {
