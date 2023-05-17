@@ -14,7 +14,8 @@ describe("ElementTypeSelection", () => {
 		const askType = jest.fn();
 		const isDialogOpen = ref(false);
 
-		const action = jest.fn();
+		const action1 = jest.fn();
+		const action2 = jest.fn();
 
 		const elementTypeOptions: {
 			icon: string;
@@ -23,10 +24,16 @@ describe("ElementTypeSelection", () => {
 			testId: string;
 		}[] = [
 			{
-				icon: "test-icon",
-				label: "test-label",
-				action: action,
-				testId: "test-id",
+				icon: "action1-icon",
+				label: "action1-label",
+				action: action1,
+				testId: "action1-id",
+			},
+			{
+				icon: "action2-icon",
+				label: "action2-label",
+				action: action2,
+				testId: "action2-id",
 			},
 		];
 
@@ -91,17 +98,25 @@ describe("ElementTypeSelection", () => {
 			expect(wrapper.isVisible()).toBe(true);
 		});
 
-		it("should call action on item button click", async () => {
+		it("should render buttons correctly and correct action will be called on click", async () => {
 			const { elementTypeOptions, wrapper } = await setup();
 
-			const elementTypeOption = elementTypeOptions[0];
+			elementTypeOptions.forEach(async (elementTypeOption) => {
+				const button = wrapper.find(
+					`[data-testId=${elementTypeOption.testId}]`
+				);
 
-			const button = wrapper.find(`[data-testId=${elementTypeOption.testId}]`);
-			await button.trigger("click");
+				const icon = button.find(".v-icon");
+				icon.contains(elementTypeOption.icon);
+				const label = button.find(".subtitle");
+				label.contains(elementTypeOption.label);
 
-			await nextTick();
+				await button.trigger("click");
 
-			expect(elementTypeOption.action).toHaveBeenCalled();
+				await nextTick();
+
+				expect(elementTypeOption.action).toHaveBeenCalled();
+			});
 		});
 
 		it("should close modal on close button click", async () => {
