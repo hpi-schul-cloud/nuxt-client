@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
 	<div>
-		<div v-if="!editable" v-html="value" />
+		<div v-if="!editable" class="ck-content" v-html="value" />
 		<ck-editor
 			v-if="editable"
 			v-model="content"

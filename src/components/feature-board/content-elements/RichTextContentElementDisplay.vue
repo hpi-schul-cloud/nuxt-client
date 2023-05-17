@@ -1,8 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<div>
-		<div v-html="value" />
-	</div>
+	<div class="ck-content" v-html="value" />
 </template>
 
 <script>
