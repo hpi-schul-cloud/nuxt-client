@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
 
-type CreateElementFn = (addElement: AddCardElement) => void;
+type CreateElementFn = (addElement: AddCardElement) => Promise<void>;
 
 export const useElementTypeSelection = () => {
 	const getCreateFn = async (): Promise<CreateElementFn | undefined> => {
@@ -33,8 +33,9 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		await addElement(ContentElementType.Text);
 	};
 
-	const createFileElement = (addElement: AddCardElement) => {
+	const createFileElement = async (addElement: AddCardElement) => {
 		triggerFilePicker();
+		await addElement(ContentElementType.File);
 	};
 
 	const returnCreateFunction = (createElementFn?: CreateElementFn) => {
