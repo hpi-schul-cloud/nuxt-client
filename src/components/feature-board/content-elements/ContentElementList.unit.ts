@@ -1,11 +1,8 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import {
-	AnyContentElement,
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
+import { ContentElementType, TextElementResponse } from "@/serverApi/v3";
+import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import TextContentElementComponent from "./TextContentElement.vue";
 
@@ -30,7 +27,7 @@ describe("ContentElementList", () => {
 		});
 		it.each([
 			{
-				elementType: ContentElementType.TEXT,
+				elementType: ContentElementType.Text,
 				component: TextContentElementComponent,
 			},
 		])(
@@ -47,7 +44,7 @@ describe("ContentElementList", () => {
 			const isEditModeResult = true;
 
 			setup({
-				elements: [{ type: ContentElementType.TEXT } as TextContentElement],
+				elements: [{ type: ContentElementType.Text } as TextElementResponse],
 				isEditMode: isEditModeResult,
 			});
 
