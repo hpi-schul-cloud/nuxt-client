@@ -1,4 +1,5 @@
 import {
+	ContextExternalToolPostParams,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -22,6 +23,7 @@ import {
 	ToolParameterScope,
 	ToolParameterType,
 } from "@/store/external-tool";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 
 const ResponseStatusMapping: Record<
@@ -64,7 +66,7 @@ const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
 	ToolParameterScope
 > = {
-	[CustomParameterResponseScopeEnum.Course]: ToolParameterScope.Course,
+	[CustomParameterResponseScopeEnum.Course]: ToolParameterScope.Context,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
 };
@@ -167,6 +169,24 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	// TODO: missing test
+	const mapToolConfigurationTemplateToContextExternalToolPostParams = (
+		template: ToolConfigurationTemplate,
+		contextId: string,
+		contextType: ToolContextType
+	): ContextExternalToolPostParams => {
+		return {
+			schoolToolId: template.id,
+			contextId,
+			contextType,
+			contextToolName: template.name,
+			toolVersion: template.version,
+			parameters: mapToolParametersToCustomParameterEntryParams(
+				template.parameters
+			),
+		};
+	};
+
 	const mapToolParametersToCustomParameterEntryParams = (
 		params: ToolParameter[]
 	) => {
@@ -195,6 +215,7 @@ export function useExternalToolMappings() {
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+		mapToolConfigurationTemplateToContextExternalToolPostParams,
 		getTranslationKey,
 	};
 }
