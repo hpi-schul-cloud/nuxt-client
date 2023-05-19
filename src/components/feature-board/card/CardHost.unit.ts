@@ -5,7 +5,7 @@ import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsType } from "../types/Board";
+import { BoardPermissionsTypes } from "../types/Board";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -36,7 +36,7 @@ describe("CardHost", () => {
 	const setup = (options?: {
 		card: BoardCard;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsType;
+		permissions?: BoardPermissionsTypes;
 	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");

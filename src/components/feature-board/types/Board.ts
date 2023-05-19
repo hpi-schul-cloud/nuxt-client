@@ -10,7 +10,7 @@ export type BoardColumn = ColumnResponse;
 
 export type BoardSkeletonCard = CardSkeletonResponse;
 
-export type BoardPermissionsType = {
+export type BoardPermissionsTypes = {
 	hasBoardMovePermission?: boolean;
 	hasBoardCardCreatePermission?: boolean;
 	hasBoardColumnCreatePermission?: boolean;

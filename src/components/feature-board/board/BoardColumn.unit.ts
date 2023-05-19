@@ -2,7 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
-import { BoardColumn, BoardPermissionsType } from "../types/Board";
+import { BoardColumn, BoardPermissionsTypes } from "../types/Board";
 import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -32,7 +32,7 @@ const MOCK_PROP: BoardColumn = {
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options?: { permissions?: BoardPermissionsType }) => {
+	const setup = (options?: { permissions?: BoardPermissionsTypes }) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,

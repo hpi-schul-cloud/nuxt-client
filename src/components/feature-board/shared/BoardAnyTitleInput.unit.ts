@@ -3,7 +3,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { BoardPermissionsType } from "../types/Board";
+import { BoardPermissionsTypes } from "../types/Board";
 
 jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -17,7 +17,7 @@ describe("CardHeaderTitleInput Component", () => {
 
 	const setup = (options: {
 		isEditMode: boolean;
-		permissions?: BoardPermissionsType;
+		permissions?: BoardPermissionsTypes;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({

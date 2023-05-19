@@ -5,7 +5,7 @@ import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
-import { Board, BoardPermissionsType } from "../types/Board";
+import { Board, BoardPermissionsTypes } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
@@ -132,7 +132,7 @@ describe("Board", () => {
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsType;
+		permissions?: BoardPermissionsTypes;
 	}) => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");

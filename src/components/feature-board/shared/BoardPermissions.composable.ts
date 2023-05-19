@@ -1,8 +1,8 @@
 import { createSharedComposable } from "@vueuse/core";
 import { authModule } from "@/store";
-import { BoardPermissionsType } from "../types/Board";
+import { BoardPermissionsTypes } from "../types/Board";
 
-const boardPermissions = (): BoardPermissionsType => {
+const boardPermissions = (): BoardPermissionsTypes => {
 	const permissions = authModule?.getUserPermissions || [];
 
 	return {
@@ -18,3 +18,18 @@ const boardPermissions = (): BoardPermissionsType => {
  * Shares user permissions (/me)
  */
 export const useBoardPermissions = createSharedComposable(boardPermissions);
+
+/**
+ *
+ * @param permission - board action permission
+ * @param callback - board action callback
+ * @param args - rest of the action's parameters
+ */
+export const handlePermittedAction = async <T, P>(
+	permission: boolean | undefined,
+	callback: (...params: Array<P>) => Promise<T>,
+	...args: Array<P>
+): Promise<T | void> => {
+	console.log({ ...args, callback: callback.name });
+	if (permission) await callback(...args);
+};
