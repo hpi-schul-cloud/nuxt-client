@@ -30,6 +30,5 @@ export const handlePermittedAction = async <T, P>(
 	callback: (...params: Array<P>) => Promise<T>,
 	...args: Array<P>
 ): Promise<T | void> => {
-	console.log({ ...args, callback: callback.name });
 	if (permission) await callback(...args);
 };
