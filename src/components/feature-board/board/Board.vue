@@ -93,24 +93,24 @@ export default defineComponent({
 			permission: boolean | undefined,
 			callback: (...args: Array<P>) => Promise<T>,
 			args: Array<P> = []
-		) => {
-			if (permission) await callback(...args);
+		): Promise<void> => {
+			if (permission) callback(...args);
 		};
 
 		const lockAxis = hasBoardMovePermission ? "x" : "x,y";
 
 		const onCreateCard = async (columnId: string) => {
-			handlePermittedAction(hasBoardCardCreatePermission, createCard, [
+			await handlePermittedAction(hasBoardCardCreatePermission, createCard, [
 				columnId,
 			]);
 		};
 
 		const onCreateColumn = async () => {
-			handlePermittedAction(hasBoardCardCreatePermission, createColumn);
+			await handlePermittedAction(hasBoardCardCreatePermission, createColumn);
 		};
 
 		const onCreateColumnWithCard = async (cardId: string) => {
-			handlePermittedAction(
+			await handlePermittedAction(
 				hasBoardCardCreatePermission,
 				createColumnWithCard,
 				[cardId]
@@ -118,17 +118,19 @@ export default defineComponent({
 		};
 
 		const onDeleteCard = async (cardId: string) => {
-			handlePermittedAction(hasBoardCardCreatePermission, deleteCard, [cardId]);
+			await handlePermittedAction(hasBoardCardCreatePermission, deleteCard, [
+				cardId,
+			]);
 		};
 
 		const onDeleteColumn = async (columnId: string) => {
-			handlePermittedAction(hasBoardCardCreatePermission, deleteColumn, [
+			await handlePermittedAction(hasBoardCardCreatePermission, deleteColumn, [
 				columnId,
 			]);
 		};
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
-			handlePermittedAction(hasBoardCardCreatePermission, moveColumn, [
+			await handlePermittedAction(hasBoardCardCreatePermission, moveColumn, [
 				columnPayload,
 			]);
 		};
@@ -147,19 +149,22 @@ export default defineComponent({
 			if (horizontalCursorKeys.includes(keyString)) {
 				const change = keyString === "ArrowLeft" ? -1 : +1;
 				columnMove.addedIndex = columnIndex + change;
-				handlePermittedAction(hasBoardMovePermission, moveColumn, [columnMove]);
+				await handlePermittedAction(hasBoardMovePermission, moveColumn, [
+					columnMove,
+				]);
 			}
 		};
 
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
-			handlePermittedAction(hasBoardMovePermission, moveCard, [payload]);
+			await handlePermittedAction(hasBoardMovePermission, moveCard, [payload]);
 		};
 
-		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
-			handlePermittedAction(hasBoardColumnCreatePermission, updateColumnTitle, [
-				columnId,
-				newTitle,
-			]);
+		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
+			await handlePermittedAction(
+				hasBoardColumnCreatePermission,
+				updateColumnTitle,
+				[columnId, newTitle]
+			);
 		};
 
 		return {
