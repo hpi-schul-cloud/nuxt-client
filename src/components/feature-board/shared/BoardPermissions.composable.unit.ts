@@ -10,7 +10,7 @@ describe("BoardPermissions.composable", () => {
 		});
 	});
 
-	// TODO: trouble with authModule mocking
+	// trouble with authModule mocking
 	it("should set user permissions to boardPermission", async () => {
 		const permissions = useBoardPermissions();
 
