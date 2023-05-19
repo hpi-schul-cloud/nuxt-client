@@ -13,7 +13,7 @@
 <script lang="ts">
 import CkEditor from "@/components/editor/CKEditor.vue";
 import { Fn, useEventListener, useVModel } from "@vueuse/core";
-import { computed, defineComponent, onUnmounted } from "vue";
+import { computed, defineComponent, onUnmounted, onMounted } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -32,34 +32,44 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
-		let bubbleClickListenerCleanup: Fn | undefined = undefined;
+		// let bubbleClickListenerCleanup: Fn | undefined = undefined;
 
 		const onFocus = () => {
-			const element = computed(() =>
-				document.querySelector<HTMLElement>(
-					"div.ck-balloon-panel.ck-balloon-panel_visible"
-				)
+			const elements = computed(() =>
+				document.getElementsByClassName("ck-balloon-panel")
 			);
 
-			if (bubbleClickListenerCleanup !== undefined) return;
-
-			bubbleClickListenerCleanup = useEventListener(
-				element,
-				"click",
-				(event: PointerEvent) => {
+			for (const element of elements.value) {
+				console.log(element);
+				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 					event.stopImmediatePropagation();
-					event.preventDefault();
-				}
-			);
+					// event.preventDefault();
+				});
+			}
+			// 	const element = computed(() =>
+			// 		document.querySelector<HTMLElement>(
+			// 			"div.ck-balloon-panel.ck-balloon-panel_visible"
+			// 		)
+			// 	);
+			// 	if (bubbleClickListenerCleanup !== undefined) return;
+			// 	bubbleClickListenerCleanup = useEventListener(
+			// 		element,
+			// 		"click",
+			// 		(event: PointerEvent) => {
+			// 			event.stopPropagation();
+			// 			event.stopImmediatePropagation();
+			// 			event.preventDefault();
+			// 		}
+			// 	);
 		};
 
-		onUnmounted(() => {
-			if (bubbleClickListenerCleanup) {
-				bubbleClickListenerCleanup();
-				bubbleClickListenerCleanup = undefined;
-			}
-		});
+		// onUnmounted(() => {
+		// 	if (bubbleClickListenerCleanup) {
+		// 		bubbleClickListenerCleanup();
+		// 		bubbleClickListenerCleanup = undefined;
+		// 	}
+		// });
 
 		return { modelValue, onFocus };
 	},
