@@ -26,28 +26,28 @@ describe("BoardPermissions.composable", () => {
 			jest.clearAllMocks();
 		});
 		describe("when the action is permitted", () => {
-			it("should call the action without any parameter", () => {
+			it("should call the action without any parameter", async () => {
 				const mockAction = jest.fn();
 
-				handlePermittedAction(true, mockAction);
+				await handlePermittedAction(true, mockAction);
 
 				expect(mockAction).toHaveBeenCalled();
 			});
 
-			it("should call the action with parameters", () => {
+			it("should call the action with parameters", async () => {
 				const mockAction = jest.fn();
 
-				handlePermittedAction(true, mockAction, "params_1", "params_2");
+				await handlePermittedAction(true, mockAction, "params_1", "params_2");
 
 				expect(mockAction).toHaveBeenCalled();
 				expect(mockAction).toHaveBeenCalledWith("params_1", "params_2");
 			});
 		});
 		describe("when the action is not permitted", () => {
-			it("should call the action without any parameter", () => {
+			it("should not call the action ", async () => {
 				const mockAction = jest.fn();
 
-				handlePermittedAction(false, mockAction);
+				await handlePermittedAction(false, mockAction);
 
 				expect(mockAction).not.toHaveBeenCalled();
 			});
