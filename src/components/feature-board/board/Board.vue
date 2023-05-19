@@ -94,7 +94,7 @@ export default defineComponent({
 			callback: (...args: Array<P>) => Promise<T>,
 			args: Array<P> = []
 		): Promise<void> => {
-			if (permission) callback(...args);
+			if (permission) await callback(...args);
 		};
 
 		const lockAxis = hasBoardMovePermission ? "x" : "x,y";
