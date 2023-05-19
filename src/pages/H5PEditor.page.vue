@@ -4,8 +4,7 @@
 		:src="iframeSrc"
 		class="editor-iframe"
 		allowfullscreen="allowfullscreen"
-		frameborder="0"
-		scrolling="yes"
+		title="H5PEditor"
 	></iframe>
 	<div v-else class="d-flex justify-center align-center min-height-screen">
 		<v-progress-circular indeterminate color="secondary" size="115" />
@@ -57,6 +56,7 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	border: none;
+	overflow: auto;
 	background-color: #b1b1b1;
 }
 </style>
