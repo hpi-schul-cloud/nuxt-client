@@ -33,7 +33,9 @@
 			>
 				<span :class="avatarTextClass">{{ item.shortTitle }}</span>
 			</v-avatar>
-			<div v-if="!condenseLayout" :class="titleClasses">{{ title }}</div>
+			<div v-if="!condenseLayout" aria-hidden="true" :class="titleClasses">
+				{{ title }}
+			</div>
 		</v-badge>
 	</div>
 </template>
