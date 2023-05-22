@@ -49,6 +49,6 @@ export default defineComponent({
 
 .rich_text {
 	color: rgba(0, 0, 0, 0.87);
-	font-size: 16px;
+	font-size: 1rem;
 }
 </style>
