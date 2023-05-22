@@ -14,8 +14,9 @@
 	</VCardText>
 </template>
 <script lang="ts">
+import { ContentElementType } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
-import { AnyContentElement, ContentElementType } from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
 export default defineComponent({

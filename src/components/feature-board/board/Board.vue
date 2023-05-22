@@ -33,27 +33,29 @@
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
 				<DeleteConfirmation></DeleteConfirmation>
+				<ElementTypeSelection></ElementTypeSelection>
 			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
+import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 import { Container, Draggable } from "vue-smooth-dnd";
-import BoardColumn from "./BoardColumn.vue";
-import BoardColumnGhost from "./BoardColumnGhost.vue";
-import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
-import { useBoardState } from "../state/BoardState.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
+import { useBoardState } from "../state/BoardState.composable";
 import {
-	columnDropPlaceholderOptions,
 	CardMove,
 	ColumnMove,
-	horizontalCursorKeys,
 	DragAndDropKey,
+	columnDropPlaceholderOptions,
+	horizontalCursorKeys,
 } from "../types/DragAndDrop";
+import BoardColumn from "./BoardColumn.vue";
+import BoardColumnGhost from "./BoardColumnGhost.vue";
 
 export default defineComponent({
 	name: "Board",
@@ -63,6 +65,7 @@ export default defineComponent({
 		Draggable,
 		BoardColumnGhost,
 		DeleteConfirmation,
+		ElementTypeSelection,
 	},
 	setup() {
 		const route = useRoute();

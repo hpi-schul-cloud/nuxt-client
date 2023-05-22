@@ -1,11 +1,8 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import {
-	AnyContentElement,
-	ContentElementType,
-	RichTextContentElement,
-} from "../types/ContentElement";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 
@@ -48,7 +45,9 @@ describe("ContentElementList", () => {
 
 			setup({
 				elements: [
-					{ type: ContentElementType.RICH_TEXT } as RichTextContentElement,
+					{
+						type: ContentElementType.RICH_TEXT,
+					} as RichTextElementResponse,
 				],
 				isEditMode: isEditModeResult,
 			});
