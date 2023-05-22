@@ -7,7 +7,7 @@
 		<div
 			data-testid="event-handle"
 			@keydown.left.right="onKeydownArrow"
-			@keydown.enter.capture="onKeydownEnter"
+			@keydown.enter="onKeydownEnter"
 			@keydown.tab="onKeydownTab"
 		>
 			<slot></slot>
@@ -37,6 +37,7 @@ export default defineComponent({
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
+				event.preventDefault();
 				emit("move:column-keyboard", event);
 			}
 		};
