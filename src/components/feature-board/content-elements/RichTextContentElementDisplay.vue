@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-	<div class="ck-content" v-html="value" />
+	<div class="ck-content margin" v-html="value" />
 </template>
 
 <script>
@@ -25,3 +25,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.margin {
+	margin: 0.9em 0;
+}
+</style>

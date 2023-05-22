@@ -1,5 +1,5 @@
 <template>
-	<div class="offset">
+	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
@@ -7,7 +7,7 @@
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
-			class="rich_text"
+			class="rich_text offset"
 			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
