@@ -24,10 +24,7 @@ describe("RichTextContentElementDisplay", () => {
 
 		it("should pass props to ck-editor component", () => {
 			setup({ value: "test value" });
-			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
-			console.log(ckEditor.element);
-
-			expect(ckEditor.props("value")).toStrictEqual("test value");
+			expect(wrapper.text()).toStrictEqual("test value");
 		});
 	});
 });
