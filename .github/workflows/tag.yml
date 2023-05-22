@@ -19,20 +19,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Docker meta Service Name
-        id: docker_meta_img
-        uses: docker/metadata-action@v3
-        with:
-          images: docker.io/schulcloud/nuxt-client-${{ matrix.tenants }}, quay.io/schulcloudverbund/schulcloud-frontend-${{ matrix.tenants }}
-          tags: |
-            type=ref,event=branch,enable=false,priority=600
-            type=sha,enable=true,priority=600,prefix=
 
-      - name: Docker meta Service Name for docker hub
+      - name: Docker meta Service Name
         id: docker_meta_img_hub
         uses: docker/metadata-action@v4
         with:
-          images: schulcloud/schulcloud-nuxt-client-${{ matrix.tenants }}
+          images: docker.io/schulcloud/schulcloud-nuxt-client-${{ matrix.tenants }}, quay.io/schulcloudverbund/schulcloud-frontend-${{ matrix.tenants }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}

@@ -7,7 +7,7 @@
 		<div
 			data-testid="event-handle"
 			@keydown.up.down.left.right="onKeydownArrow"
-			@keydown.enter.capture="onKeydownEnter"
+			@keydown.enter="onKeydownEnter"
 		>
 			<slot></slot>
 		</div>
@@ -39,6 +39,7 @@ export default defineComponent({
 		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
+				event.preventDefault();
 				emit("move:card-keyboard", event);
 			}
 		};

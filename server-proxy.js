@@ -10,8 +10,13 @@ const {
 	createLegacyClientProxy,
 	createServerProxy,
 	createFileStorageProxy,
+	createH5pEditorProxy,
 } = require("./webpack-config/dev-server-config");
-const { isServer, isFileStorage } = require("./src/router/server-route");
+const {
+	isServer,
+	isFileStorage,
+	isH5pEditor,
+} = require("./src/router/server-route");
 const { isVueClient } = require("./src/router/vue-client-route");
 
 const vueClientProxy = createProxyMiddleware({
@@ -22,6 +27,7 @@ const vueClientProxy = createProxyMiddleware({
 const legacyClientProxy = createLegacyClientProxy();
 const serverProxy = createServerProxy();
 const fileStorageProxy = createFileStorageProxy();
+const h5pEditorProxy = createH5pEditorProxy();
 
 const app = express();
 
@@ -29,16 +35,14 @@ app.use((req, res, next) => {
 	const path = url.parse(req.originalUrl).pathname;
 
 	if (isFileStorage(path)) {
-		// console.log("--- serverPath: ", path);
 		fileStorageProxy(req, res, next);
+	} else if (isH5pEditor(path)) {
+		h5pEditorProxy(req, res, next);
 	} else if (isServer(path)) {
-		// console.log("--- serverUrl: ", path);
 		serverProxy(req, res, next);
 	} else if (isVueClient(path)) {
-		// console.log("--- vueUrl: ", path);
 		vueClientProxy(req, res, next);
 	} else {
-		// console.log("--- legacyUrl: ", path);
 		legacyClientProxy(req, res, next);
 	}
 });
