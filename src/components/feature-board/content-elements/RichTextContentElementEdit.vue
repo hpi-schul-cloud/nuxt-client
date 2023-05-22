@@ -38,7 +38,6 @@ export default defineComponent({
 			);
 
 			for (const element of elements.value) {
-				console.log(element);
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 					event.stopImmediatePropagation();
