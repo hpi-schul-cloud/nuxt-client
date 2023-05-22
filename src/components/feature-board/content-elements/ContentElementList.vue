@@ -2,7 +2,7 @@
 	<VCardText>
 		<template v-for="element in elements">
 			<TextContentElement
-				v-if="element.type === ContentElementType.TEXT"
+				v-if="element.type === ContentElementType.Text"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
@@ -14,8 +14,9 @@
 	</VCardText>
 </template>
 <script lang="ts">
+import { ContentElementType } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
-import { AnyContentElement, ContentElementType } from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 import TextContentElement from "./TextContentElement.vue";
 
 export default defineComponent({

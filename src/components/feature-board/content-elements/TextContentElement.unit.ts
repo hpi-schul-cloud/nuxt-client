@@ -1,19 +1,20 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import {
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
+import { ContentElementType, TextElementResponse } from "@/serverApi/v3";
 import TextContentElementComponent from "./TextContentElement.vue";
 import TextContentElementDisplayComponent from "./TextContentElementDisplay.vue";
 import TextContentElementEditComponent from "./TextContentElementEdit.vue";
 
-const TEST_ELEMENT: TextContentElement = {
+const TEST_ELEMENT: TextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.TEXT,
+	type: ContentElementType.Text,
 	content: {
 		text: "TestContent",
+	},
+	timestamps: {
+		lastUpdatedAt: new Date().toString(),
+		createdAt: new Date().toString(),
 	},
 };
 
@@ -33,7 +34,7 @@ describe("TextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (props: {
-		element: TextContentElement;
+		element: TextElementResponse;
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
