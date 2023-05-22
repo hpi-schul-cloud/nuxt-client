@@ -2,7 +2,7 @@ import { useBoardApi } from "./BoardApi.composable";
 import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 
 jest.mock("axios");
 
@@ -105,11 +105,11 @@ describe("BoardApi.composable", () => {
 			const PAYLOAD = "card-id";
 
 			await createElement(PAYLOAD, {
-				type: CreateContentElementBodyTypeEnum.Text,
+				type: ContentElementType.Text,
 			});
 			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(
 				PAYLOAD,
-				{ type: CreateContentElementBodyTypeEnum.Text }
+				{ type: ContentElementType.Text }
 			);
 		});
 	});
