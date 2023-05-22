@@ -2,16 +2,23 @@ import {
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
+	BoardElementApiFactory,
 	ColumnResponse,
 	CreateContentElementBody,
 	CreateContentElementBodyTypeEnum,
+	FileElementContent,
+	FileElementContentBodyTypeEnum,
+	TextElementContent,
+	TextElementContentBodyTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { AnyContentElement, ContentElementType } from "../types/ContentElement";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -24,6 +31,29 @@ export const useBoardApi = () => {
 
 	const updateColumnTitleCall = async (id: string, title: string) => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
+	};
+
+	const updateElementCall = async (element: AnyContentElement) => {
+		const data = generateDataProp(element);
+		await elementApi.elementControllerUpdateElement(element.id, { data });
+	};
+
+	const generateDataProp = (element: AnyContentElement) => {
+		if (element.type === ContentElementType.TEXT) {
+			return {
+				content: element.content as TextElementContent,
+				type: TextElementContentBodyTypeEnum.Text,
+			};
+		}
+
+		if (element.type === ContentElementType.FILE) {
+			return {
+				content: element.content as FileElementContent,
+				type: FileElementContentBodyTypeEnum.File,
+			};
+		}
+
+		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
 	const createElement = async (
@@ -86,6 +116,7 @@ export const useBoardApi = () => {
 		moveColumnCall,
 		updateCardTitle,
 		updateColumnTitleCall,
+		updateElementCall,
 		createCardCall,
 	};
 };
