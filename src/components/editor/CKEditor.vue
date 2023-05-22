@@ -66,6 +66,7 @@ export default defineComponent({
 			"|",
 			"bold",
 			"italic",
+			"fontBackgroundColor",
 			"|",
 			"link",
 			"bulletedList",
@@ -83,6 +84,7 @@ export default defineComponent({
 			"underline",
 			"strikethrough",
 			"highlight",
+			"fontBackgroundColor",
 			"code",
 			"superscript",
 			"subscript",
@@ -105,6 +107,7 @@ export default defineComponent({
 			"BlockQuote",
 			"Bold",
 			"Code",
+			"Font",
 			"Heading",
 			"Highlight",
 			"HorizontalLine",
@@ -185,6 +188,46 @@ export default defineComponent({
 						title: "Blue marker",
 						color: "var(--ck-highlight-marker-blue)",
 						type: "marker",
+					},
+				],
+			},
+			fontBackgroundColor: {
+				colors: [
+					{
+						color: "#D4D6D9",
+					},
+					{
+						color: "#DBD4D1",
+					},
+					{
+						color: "#F3D9C3",
+					},
+					{
+						color: "#DDDBC8",
+					},
+					{
+						color: "#D8E3CE",
+					},
+					{
+						color: "#C3E1DE",
+					},
+					{
+						color: "#C3E0F2",
+					},
+					{
+						color: "#CDD3F6",
+					},
+					{
+						color: "#E2CBE6",
+					},
+					{
+						color: "#EEC3F5",
+					},
+					{
+						color: "#F2D0DB",
+					},
+					{
+						color: "#EEC3C3",
 					},
 				],
 			},
