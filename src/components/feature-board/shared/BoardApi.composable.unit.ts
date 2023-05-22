@@ -105,11 +105,11 @@ describe("BoardApi.composable", () => {
 			const PAYLOAD = "card-id";
 
 			await createElement(PAYLOAD, {
-				type: CreateContentElementBodyTypeEnum.Text,
+				type: CreateContentElementBodyTypeEnum.RichText,
 			});
 			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(
 				PAYLOAD,
-				{ type: CreateContentElementBodyTypeEnum.Text }
+				{ type: CreateContentElementBodyTypeEnum.RichText }
 			);
 		});
 	});
