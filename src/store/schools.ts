@@ -287,10 +287,9 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload as Required<School>);
 		try {
-			await $axios.patch(`/v1/schools/${school.id}`, school);
+			const data = (await $axios.patch(`/v1/schools/${school.id}`, school)).data;
 			// TODO: Patch returns old data in response since it doesn't have enough time to sync between db instances
 			// Get request can be removed after https://ticketsystem.dbildungscloud.de/browse/BC-3449 (need to be retested)
-			const data = (await $axios.get(`/v1/schools/${school.id}`)).data;
 
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);

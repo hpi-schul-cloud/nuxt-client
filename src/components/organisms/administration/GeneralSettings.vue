@@ -159,6 +159,7 @@ import { printDate } from "@/plugins/datetime";
 import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { mapActions } from "vuex";
+import { nextTick } from "Vue";
 
 export default {
 	components: {
@@ -274,6 +275,7 @@ export default {
 				updatedSchool.logo_dataUrl = "";
 			}
 			schoolsModule.update(updatedSchool);
+			await nextTick();
 		},
 	},
 };
