@@ -2,7 +2,7 @@
 	<VCardText>
 		<template v-for="element in elements">
 			<RichTextContentElement
-				v-if="element.type === ContentElementType.TEXT"
+				v-if="element.type === ContentElementType.RICH_TEXT"
 				:key="element.id + 'r'"
 				:element="element"
 				:isEditMode="isEditMode"

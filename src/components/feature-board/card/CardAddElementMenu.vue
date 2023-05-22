@@ -2,7 +2,7 @@
 	<VCardText>
 		<div class="d-flex justify-center w-full">
 			<VBtn
-				@click.stop="onAddElement(ContentElementType.TEXT)"
+				@click.stop="onAddElement(ContentElementType.RICH_TEXT)"
 				@dblclick.stop="() => {}"
 				elevation="0"
 				outlined

@@ -39,7 +39,7 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
-		if (element.type === ContentElementType.TEXT) {
+		if (element.type === ContentElementType.RICH_TEXT) {
 			return {
 				content: element.content as TextElementContent,
 				type: TextElementContentBodyTypeEnum.Text,

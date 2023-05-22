@@ -30,7 +30,7 @@ describe("ContentElementList", () => {
 		});
 		it.each([
 			{
-				elementType: ContentElementType.TEXT,
+				elementType: ContentElementType.RICH_TEXT,
 				component: RichTextContentElementComponent,
 			},
 		])(
@@ -47,7 +47,9 @@ describe("ContentElementList", () => {
 			const isEditModeResult = true;
 
 			setup({
-				elements: [{ type: ContentElementType.TEXT } as RichTextContentElement],
+				elements: [
+					{ type: ContentElementType.RICH_TEXT } as RichTextContentElement,
+				],
 				isEditMode: isEditModeResult,
 			});
 
