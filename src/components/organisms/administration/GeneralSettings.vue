@@ -159,7 +159,7 @@ import { printDate } from "@/plugins/datetime";
 import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { mapActions } from "vuex";
-import { nextTick } from "Vue";
+import { nextTick } from "vue";
 
 export default {
 	components: {
