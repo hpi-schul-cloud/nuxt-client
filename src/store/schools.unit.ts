@@ -349,17 +349,7 @@ describe("schools module", () => {
 							},
 						};
 					},
-					get: async () => {
-						receivedRequests.push();
-						return {
-							data: {
-								id: "id_123",
-								data: "some data to be updated",
-								features: ["rocketChat"],
-							},
-						};
-					},
-				} as unknown as AxiosInstance);
+				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
