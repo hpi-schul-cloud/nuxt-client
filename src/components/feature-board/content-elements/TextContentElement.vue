@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
+import { TextElementResponse } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
-import { TextContentElement } from "../types/ContentElement";
 import TextContentElementDisplay from "./TextContentElementDisplay.vue";
 import TextContentElementEdit from "./TextContentElementEdit.vue";
 
@@ -27,7 +27,7 @@ export default defineComponent({
 		TextContentElementEdit,
 	},
 	props: {
-		element: { type: Object as PropType<TextContentElement>, required: true },
+		element: { type: Object as PropType<TextElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
