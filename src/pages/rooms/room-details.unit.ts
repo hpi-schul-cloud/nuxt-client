@@ -10,9 +10,8 @@ import { User } from "@/store/types/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { provide } from "vue";
 import { mount } from "@vue/test-utils";
-import Room from "./RoomDetails.page.vue";
+import RoomDetailsPage from "./RoomDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import { Envs } from "@/store/types/env-config";
@@ -122,8 +121,10 @@ let shareModuleMock: ShareModule;
 const $router = { push: jest.fn(), resolve: jest.fn() };
 
 const getWrapper: any = () => {
-	return mount(Room, {
-		...createComponentMocks({}),
+	return mount(RoomDetailsPage, {
+		...createComponentMocks({
+			i18n: true,
+		}),
 		mocks: {
 			$theme: {
 				short_name: "instance name",
@@ -131,12 +132,12 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		},
-		setup() {
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide("notifierModule", notifierModuleMock);
-			provide("i18n", { t: (key: string) => key });
-			provide("shareModule", shareModuleMock);
+		provide: {
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			i18n: { t: (key: string) => key },
+			shareModule: shareModuleMock,
 		},
 	});
 };
@@ -445,11 +446,18 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("tabs", () => {
 		describe("when feature flag is enabled", () => {
-			it("should find tools(new)-tab", () => {
+			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
+
 				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should find tools(new)-tab", () => {
+				const { wrapper } = setup();
 
 				const tabs = wrapper.findAll(".v-tab");
 
@@ -460,11 +468,18 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("when feature flag is disabled", () => {
-			it("should  not find tools(new)-tab", () => {
+			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
 				} as Envs);
+
 				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should  not find tools(new)-tab", () => {
+				const { wrapper } = setup();
 
 				const tabs = wrapper.findAll(".v-tab");
 
@@ -475,9 +490,16 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("when Tools(new) tab is active", () => {
-			it("should show an 'add' button", async () => {
+			const setup = () => {
 				envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+
 				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should show an 'add' button", async () => {
+				const { wrapper } = setup();
 
 				const tabs = wrapper.findAll(".v-tab");
 				const toolsNewTab = tabs.find(
@@ -488,6 +510,21 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const addButton = toolsNewTab.find(`[data-testid="add-tool-button"]`);
 
 				expect(addButton.exists()).toBe(true);
+			});
+
+			it("should show the tools component", async () => {
+				const { wrapper } = setup();
+
+				const tabs = wrapper.findAll(".v-tab");
+				const toolsNewTab = tabs.find(
+					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
+				);
+
+				await toolsNewTab.click();
+
+				const toolsContent = wrapper.find('[data-testid="room-content"]');
+
+				expect(toolsContent.exists()).toBe(true);
 			});
 		});
 	});

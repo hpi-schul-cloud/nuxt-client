@@ -1,0 +1,116 @@
+import { mount, Wrapper } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import Vue from "vue";
+import AuthModule from "@/store/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import ContextExternalToolsModule from "@/store/context-external-tool";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
+
+describe("RoomExternalToolOverview", () => {
+	const getWrapper = (tools: ContextExternalTool[]) => {
+		document.body.setAttribute("data-app", "true");
+
+		const authModule = createModuleMocks(AuthModule, {
+			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
+		});
+
+		const contextExternalToolsModule = createModuleMocks(
+			ContextExternalToolsModule,
+			{
+				getContextExternalTools: tools,
+			}
+		);
+
+		const wrapper: Wrapper<Vue> = mount(RoomExternalToolsOverview, {
+			...createComponentMocks({
+				i18n: true,
+				mocks: {
+					$t: (key: string): string => key,
+				},
+			}),
+			provide: {
+				authModule,
+				contextExternalToolsModule,
+			},
+		});
+
+		return wrapper;
+	};
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
+	describe("when no tools are in the list", () => {
+		const setup = () => {
+			const wrapper: Wrapper<Vue> = getWrapper([]);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display a empty state text", () => {
+			const { wrapper } = setup();
+
+			const title = wrapper.find("tools-empty-state > h4");
+
+			expect(title.text()).toEqual("pages.rooms.tools.emptyState");
+		});
+	});
+
+	describe("when there are tools in the list", () => {
+		const setup = () => {
+			const tool: ContextExternalTool = {
+				name: "mockTool",
+				openInNewTab: false,
+			};
+
+			const wrapper: Wrapper<Vue> = getWrapper([tool, tool]);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display the tools", () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.find({ name: "room-external-tool-card" });
+
+			expect(card).toHaveLength(2);
+		});
+	});
+
+	describe("when clicking the delete button on a tool", () => {
+		const setup = () => {
+			const tool: ContextExternalTool = {
+				name: "mockTool",
+				openInNewTab: false,
+			};
+
+			const wrapper: Wrapper<Vue> = getWrapper([tool]);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should open the delete dialog", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.find({ name: "room-external-tool-card" });
+
+			const itemMenu = card.find('[data-testid="tool-card-menu"]');
+			await itemMenu.find(".three-dot-button").trigger("click");
+
+			const deleteButton = itemMenu.find('[data-testid="tool-delete"]');
+			await deleteButton.trigger("click");
+
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
+
+			expect(deleteDialog.isVisible()).toEqual(true);
+		});
+	});
+});

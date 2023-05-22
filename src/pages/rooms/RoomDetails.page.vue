@@ -59,6 +59,7 @@
 				:room-data-object="roomData"
 				:role="dashBoardRole"
 				@copy-board-element="onCopyBoardElement"
+				data-testid="room-content"
 			/>
 		</keep-alive>
 

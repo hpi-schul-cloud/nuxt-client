@@ -26,7 +26,11 @@
 			@click="onClickTool"
 		></room-external-tool-card>
 
-		<v-dialog v-model="isDeleteDialogOpen" max-width="450">
+		<v-dialog
+			v-model="isDeleteDialogOpen"
+			max-width="450"
+			data-testId="delete-dialog"
+		>
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
@@ -72,56 +76,20 @@
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
 import AuthModule from "@/store/auth";
-import { ContextExternalTool } from "./types/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tool";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
 	components: { RoomExternalToolCard },
 	setup() {
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
+			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 
-		// TODO remove mock data
-		const tools: ContextExternalTool[] = [
-			{
-				name: "WIDE Test Tool",
-				logoUrl: "https://www.cmsimaging.com/assets/img/brands/wide/wide.png",
-				openInNewTab: false,
-			},
-			{
-				name: "Just a Google Test Tool with a very long name, since you never know what people put in text boxes for names",
-				logoUrl:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/588px-Google_%22G%22_Logo.svg.png?20230305195327",
-				openInNewTab: true,
-			},
-			{
-				name: "Video Konferenzen mit BigBlueButton",
-				openInNewTab: true,
-			},
-			{
-				name: "Video Konferenzen ohne BigBlueButton",
-				logoUrl:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzfbsOdEp6L8Jm3lTHE1yYOvd511icc8-NGw&usqp=CAU",
-				openInNewTab: false,
-			},
-			{
-				name: "Video Konferenzen ohne BigBlueButton",
-				logoUrl:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzfbsOdEp6L8Jm3lTHE1yYOvd511icc8-NGw&usqp=CAU",
-				openInNewTab: false,
-			},
-			{
-				name: "Video Konferenzen ohne BigBlueButton",
-				logoUrl:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzfbsOdEp6L8Jm3lTHE1yYOvd511icc8-NGw&usqp=CAU",
-				openInNewTab: false,
-			},
-			{
-				name: "Video Konferenzen ohne BigBlueButton",
-				logoUrl:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzfbsOdEp6L8Jm3lTHE1yYOvd511icc8-NGw&usqp=CAU",
-				openInNewTab: false,
-			},
-		];
+		const tools: ComputedRef<ContextExternalTool[]> = computed(
+			() => contextExternalToolsModule?.getContextExternalTools || []
+		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 

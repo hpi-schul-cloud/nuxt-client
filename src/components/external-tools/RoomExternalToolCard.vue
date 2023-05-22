@@ -12,10 +12,14 @@
 				class="mx-auto logo"
 				:src="tool.logoUrl"
 				contain
+				data-testid="tool-card-logo"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>
-		<span v-if="tool.openInNewTab" class="ml-1 my-auto no-wrap"
+		<span
+			v-if="tool.openInNewTab"
+			class="ml-1 my-auto no-wrap"
+			data-testid="tool-card-new-tab-text"
 			>({{ $t("pages.rooms.tools.newTab") }})</span
 		>
 		<div class="mx-auto"></div>
@@ -38,8 +42,8 @@ import {
 } from "@mdi/js";
 import { defineComponent, inject, PropType } from "vue";
 import VueI18n from "vue-i18n";
-import { ContextExternalTool } from "../../pages/rooms/external-tools/types/context-external-tool";
-import MoreItemMenu from "../molecules/MoreItemMenu.vue";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -48,9 +52,11 @@ export default defineComponent({
 	props: {
 		tool: {
 			type: Object as PropType<ContextExternalTool>,
+			required: true,
 		},
 		canEdit: {
 			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {
