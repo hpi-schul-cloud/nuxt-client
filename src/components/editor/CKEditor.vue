@@ -51,11 +51,11 @@ export default defineComponent({
 		const ck = ref(null);
 		const content = ref(props.value);
 		const language = (() => {
-			// map ua to correct uk
-			// TODO remove if language code is fixed
-			if (i18n.locale === "ua") {
-				return "uk";
-			}
+			// 	// map ua to correct uk
+			// 	// TODO remove if language code is fixed
+			// 	if (i18n.locale === "ua") {
+			// 		return "uk";
+			// 	}
 
 			return i18n.locale;
 		})();

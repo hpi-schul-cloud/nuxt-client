@@ -76,12 +76,11 @@ export default defineComponent({
 		}
 
 		const locale = (() => {
-			// TODO remove if language code for ukraine is fixed
-			if (i18n.locale === "ua") {
-				return "uk";
-			}
-
-			return i18n.locale;
+			// 	// TODO remove if language code for ukraine is fixed
+			// 	if (i18n.locale === "ua") {
+			// 		return "uk";
+			// 	}
+			// 	return i18n.locale;
 		})();
 
 		const t = (key: string) => {

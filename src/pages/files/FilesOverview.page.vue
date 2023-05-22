@@ -85,9 +85,9 @@ export default defineComponent({
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);
 
 		const locale = (): Locale => {
-			if (i18n.locale === ChangeLanguageParamsLanguageEnum.Ua) {
-				return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
-			}
+			// if (i18n.locale === ChangeLanguageParamsLanguageEnum.Uk) {
+			// 	return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
+			// }
 			return i18n.locale || "de";
 		};
 
