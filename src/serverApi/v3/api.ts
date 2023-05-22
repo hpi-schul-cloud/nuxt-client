@@ -609,6 +609,16 @@ export interface ConsentSessionResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ContentElementType {
+    Text = 'text',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
  * @interface ContextExternalToolPostParams
  */
 export interface ContextExternalToolPostParams {
@@ -917,22 +927,12 @@ export interface CourseResponse {
  */
 export interface CreateContentElementBody {
     /**
-     * The type of element
-     * @type {string}
+     * 
+     * @type {ContentElementType}
      * @memberof CreateContentElementBody
      */
-    type: CreateContentElementBodyTypeEnum;
+    type: ContentElementType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateContentElementBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1563,11 +1563,11 @@ export interface FileElementContent {
  */
 export interface FileElementContentBody {
     /**
-     * the type of the updated element
-     * @type {any}
+     * 
+     * @type {ContentElementType}
      * @memberof FileElementContentBody
      */
-    type: FileElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {FileContentBody}
@@ -1575,16 +1575,6 @@ export interface FileElementContentBody {
      */
     content: FileContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1599,10 +1589,10 @@ export interface FileElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof FileElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {FileElementContent}
@@ -4114,11 +4104,11 @@ export interface TextElementContent {
  */
 export interface TextElementContentBody {
     /**
-     * the type of the updated element
-     * @type {Text}
+     * 
+     * @type {ContentElementType}
      * @memberof TextElementContentBody
      */
-    type: TextElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {TextContentBody}
@@ -4126,16 +4116,6 @@ export interface TextElementContentBody {
      */
     content: TextContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TextElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -4150,10 +4130,10 @@ export interface TextElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof TextElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {TextElementContent}
