@@ -8,8 +8,8 @@ import {
 	CreateContentElementBodyTypeEnum,
 	FileElementContent,
 	FileElementContentBodyTypeEnum,
-	TextElementContent,
-	TextElementContentBodyTypeEnum,
+	RichTextElementContent,
+	RichTextElementContentBodyTypeEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement, ContentElementType } from "../types/ContentElement";
@@ -41,8 +41,8 @@ export const useBoardApi = () => {
 	const generateDataProp = (element: AnyContentElement) => {
 		if (element.type === ContentElementType.RICH_TEXT) {
 			return {
-				content: element.content as TextElementContent,
-				type: TextElementContentBodyTypeEnum.Text,
+				content: element.content as RichTextElementContent,
+				type: RichTextElementContentBodyTypeEnum.RichText,
 			};
 		}
 
@@ -79,7 +79,7 @@ export const useBoardApi = () => {
 		);
 		if (createdCard.data.id) {
 			createElement(createdCard.data.id, {
-				type: CreateContentElementBodyTypeEnum.Text,
+				type: CreateContentElementBodyTypeEnum.RichText,
 			});
 			return createdCard.data.id;
 		}
