@@ -11,7 +11,9 @@
 				data-testid="add-element-btn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
-				<span class="d-sr-only">Add Element</span>
+				<span class="d-sr-only"
+					>{{ $t("components.elementTypeSelection.dialog.title") }}
+				</span>
 			</VBtn>
 		</div>
 	</VCardText>
