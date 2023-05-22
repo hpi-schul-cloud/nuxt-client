@@ -3,7 +3,7 @@
 		data-test-id="status-alerts"
 		min-width="250"
 		max-height="400"
-		class="alerts pa-0"
+		class="alerts pa-0 rounded"
 		elevation="2"
 	>
 		<v-list-item
@@ -91,12 +91,12 @@ export default defineComponent({
 		max-width: 400px;
 	}
 	.alert-item {
-		@if index == 0 {
+		border-top: 1px solid map-get($grey, lighten-2);
+		&:first-child {
 			border-top: none;
-		} @else {
-			border-top: 1px solid var(--v-grey-lighten2);
 		}
 	}
+
 	.subtitle-1 {
 		overflow: visible;
 		text-overflow: clip;
