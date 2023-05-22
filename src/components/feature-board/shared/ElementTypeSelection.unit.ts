@@ -101,7 +101,7 @@ describe("ElementTypeSelection", () => {
 		it("should render buttons correctly and correct action will be called on click", async () => {
 			const { elementTypeOptions, wrapper } = await setup();
 
-			elementTypeOptions.forEach(async (elementTypeOption) => {
+			for (const elementTypeOption of elementTypeOptions) {
 				const button = wrapper.find(
 					`[data-testId=${elementTypeOption.testId}]`
 				);
@@ -116,7 +116,7 @@ describe("ElementTypeSelection", () => {
 				await nextTick();
 
 				expect(elementTypeOption.action).toHaveBeenCalled();
-			});
+			}
 		});
 
 		it("should close modal on close button click", async () => {
