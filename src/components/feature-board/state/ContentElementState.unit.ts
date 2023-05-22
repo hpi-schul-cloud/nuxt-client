@@ -13,7 +13,7 @@ const TEST_ELEMENT: RichTextContentElement = {
 	type: ContentElementType.RICH_TEXT,
 	content: {
 		text: "TestContent",
-		inputFormat: "richtext_ck5",
+		inputFormat: "richTextCk5",
 	},
 };
 

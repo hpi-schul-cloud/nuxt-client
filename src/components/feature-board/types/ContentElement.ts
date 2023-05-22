@@ -1,6 +1,6 @@
 export enum ContentElementType {
 	TEXT = "text",
-	RICH_TEXT = "richtext",
+	RICH_TEXT = "richText",
 	FILE = "file",
 }
 
@@ -16,7 +16,7 @@ export interface RichTextContentElement extends ContentElement {
 	type: ContentElementType.RICH_TEXT;
 	content: {
 		text: string;
-		inputFormat: "richtext_ck5";
+		inputFormat: "richTextCk5";
 	};
 }
 
