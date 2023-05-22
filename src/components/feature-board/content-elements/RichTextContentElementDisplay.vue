@@ -30,4 +30,8 @@ export default defineComponent({
 .margin {
 	margin: 0.9em 0;
 }
+
+.margin:first-child {
+	margin-top: 0;
+}
 </style>
