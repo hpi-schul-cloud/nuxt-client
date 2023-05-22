@@ -153,7 +153,7 @@
 	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
 	"components.administration.externalToolsSection.dialog.content": "¿Le gustaría eliminar la Herramienta Externa <b>{itemName}</b> de su escuela? </br></br> Si elimina la Herramienta externa de su escuela, se eliminará de todos los cursos de su escuela. La herramienta ya no se puede utilizar.",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
-	"components.legacy.footer.ariaLabel": "Enlace, {itemName}, presione Intro para abrir",
+	"components.legacy.footer.ariaLabel": "Enlace, {itemName}",
 	"components.legacy.footer.accessibility.report": "Accesibilidad feedback",
 	"components.legacy.footer.accessibility.statement": "Declaración de accesibilidad",
 	"components.legacy.footer.contact": "Contacto",
