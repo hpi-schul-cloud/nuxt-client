@@ -37,9 +37,8 @@ import { DataTableHeader } from "vuetify";
 import { computed, ComputedRef, inject, onMounted, Ref, ref } from "vue";
 import { CollaborativeFile } from "@/store/types/collaborative-file";
 import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
-import VueI18n, { Locale } from "vue-i18n";
+import VueI18n from "vue-i18n";
 import VueRouter, { Route } from "vue-router";
-import { ChangeLanguageParamsLanguageEnum } from "@/serverApi/v3";
 import CollaborativeFilesModule from "@/store/collaborative-files";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
@@ -83,13 +82,6 @@ export default defineComponent({
 
 		const title: Ref<string> = ref(filesPage.title);
 		const breadcrumbs: Ref<Breadcrumb[]> = ref(filesPage.breadcrumbs);
-
-		const locale = (): Locale => {
-			// if (i18n.locale === ChangeLanguageParamsLanguageEnum.Uk) {
-			// 	return "uk"; // TODO https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes use everywhere uk (language code)
-			// }
-			return i18n.locale || "de";
-		};
 
 		const timesAgo = (value: string): string => {
 			return fromNow(value, true);
