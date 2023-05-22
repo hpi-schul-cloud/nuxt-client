@@ -6,7 +6,10 @@ import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board, BoardPermissionsTypes } from "../types/Board";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import {
+	useBoardPermissions,
+	handlePermittedAction,
+} from "../shared/BoardPermissions.composable";
 
 const MOCK_BOARD_ONE_COLUMN: Board = {
 	columns: [
@@ -101,6 +104,7 @@ const mockedUseBoardState = jest.mocked(useBoardState);
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedHandlePermittedAction = jest.mocked(handlePermittedAction);
 
 const $route: Route = {
 	params: {
@@ -195,6 +199,9 @@ describe("Board", () => {
 	});
 
 	describe("user permissions", () => {
+		beforeEach(() => {
+			jest.clearAllMocks();
+		});
 		describe("when hasBoardMovePermission is set false", () => {
 			it("should set lock-axis to 'x,y", () => {
 				setup({ permissions: { hasBoardMovePermission: false } });
@@ -204,23 +211,185 @@ describe("Board", () => {
 			});
 		});
 
-		describe("when hasBoardCardCreatePermission is set false", () => {
-			it("should not call createCard api", () => {
-				setup({ permissions: { hasBoardCardCreatePermission: false } });
+		describe("@onCreateCard", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction with 'true' parameter", () => {
+					setup();
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("create:card");
 
-				const columnComponent = wrapper.findComponent({ name: "BoardColumn" });
-				columnComponent.vm.$emit("create:card");
-
-				expect(createCardMock).not.toHaveBeenCalled();
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
 			});
 
-			it("should not call onDeleteCard api", () => {
-				setup({ permissions: { hasBoardCardCreatePermission: false } });
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction with 'false' parameter", () => {
+					setup({ permissions: { hasBoardCardCreatePermission: false } });
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("create:card");
 
-				const columnComponent = wrapper.findComponent({ name: "BoardColumn" });
-				columnComponent.vm.$emit("delete:card");
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
+			});
+		});
 
-				expect(deleteCardMock).not.toHaveBeenCalled();
+		describe("@onCreateColumn", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction with 'true' parameter", () => {
+					setup();
+					const ghostColumnComponent = wrapper.findComponent({
+						name: "BoardColumnGhost",
+					});
+					ghostColumnComponent.vm.$emit("create:column");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+		});
+		describe("@onCreateColumnWithCard", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction with 'true' parameter", () => {
+					setup();
+					const ghostColumnComponent = wrapper.findComponent({
+						name: "BoardColumnGhost",
+					});
+					ghostColumnComponent.vm.$emit("create:column-with-card");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+		});
+
+		describe("@onDeleteCard", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction with 'true' parameter", () => {
+					setup();
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("delete:card");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction with 'false' parameter", () => {
+					setup({ permissions: { hasBoardCardCreatePermission: false } });
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("delete:card");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
+			});
+		});
+
+		describe("@onDeleteColumn", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction' with 'true' parameter", () => {
+					setup();
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("delete:column");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction' with 'false' parameter", () => {
+					setup({ permissions: { hasBoardCardCreatePermission: false } });
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("delete:column");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
+			});
+		});
+
+		describe("@onDropColumn", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction' with 'true' parameter", () => {
+					setup();
+					const containerComponent = wrapper.findComponent({
+						name: "Container",
+					});
+					containerComponent.vm.$emit("drop");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction' with 'false' parameter", () => {
+					setup({ permissions: { hasBoardCardCreatePermission: false } });
+					const containerComponent = wrapper.findComponent({
+						name: "Container",
+					});
+					containerComponent.vm.$emit("drop");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
+			});
+		});
+
+		describe("@onUpdateCardPosition", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction' with 'true' parameter", () => {
+					setup();
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("update:card-position");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction' with 'false' parameter", () => {
+					setup({ permissions: { hasBoardMovePermission: false } });
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("update:card-position");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
+			});
+		});
+		describe("@onUpdateColumnTitle", () => {
+			describe("when user is permitted to call the method", () => {
+				it("should call 'handlePermittedAction' with 'true' parameter", () => {
+					setup();
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("update:column-title");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(true);
+				});
+			});
+
+			describe("when user is not permitted to call the method", () => {
+				it("should  call 'handlePermittedAction' with 'false' parameter", () => {
+					setup({ permissions: { hasBoardColumnCreatePermission: false } });
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("update:column-title");
+
+					expect(mockedHandlePermittedAction.mock.calls[0]).toContain(false);
+				});
 			});
 		});
 

@@ -10,7 +10,7 @@
 					group-name="columns"
 					:lock-axis="lockAxis"
 					:get-child-payload="getColumnId"
-					:drop-placeholder="columnDropPlaceholderOptions"
+					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
@@ -93,6 +93,9 @@ export default defineComponent({
 		} = useBoardPermissions();
 
 		const lockAxis = hasBoardMovePermission ? "x" : "x,y";
+		const placeholderOptions = hasBoardMovePermission
+			? columnDropPlaceholderOptions
+			: null;
 
 		const onCreateCard = async (columnId: string) => {
 			await handlePermittedAction(
@@ -179,6 +182,7 @@ export default defineComponent({
 			hasBoardMovePermission,
 			hasBoardCardCreatePermission,
 			hasBoardColumnCreatePermission,
+			placeholderOptions,
 			lockAxis,
 			getColumnId,
 			onCreateCard,
