@@ -7,6 +7,12 @@
 				:element="element"
 				:isEditMode="isEditMode"
 			></TextContentElement>
+			<FileContentElement
+				v-else-if="element.type === ContentElementType.File"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+			></FileContentElement>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
 			</template>
@@ -17,12 +23,14 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
+import FileContentElement from "./FileContentElement.vue";
 import TextContentElement from "./TextContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
 		TextContentElement,
+		FileContentElement,
 	},
 	props: {
 		elements: {
