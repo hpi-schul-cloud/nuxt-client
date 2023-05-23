@@ -2,7 +2,7 @@
 	<default-wireframe
 		ref="main"
 		:full-width="true"
-		:fab-items="currentTab?.fabItems"
+		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
@@ -40,13 +40,12 @@
 						v-for="(tabItem, index) in tabItems"
 						:key="index"
 						:href="tabItem.href"
+						:data-testid="tabItem.dataTestId"
 					>
 						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }} </v-icon>
-						<span
-							class="d-none d-sm-inline"
-							:data-testid="`${tabItem.dataTestid}`"
-							>{{ tabItem.label }}</span
-						>
+						<span class="d-none d-sm-inline">
+							{{ tabItem.label }}
+						</span>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -54,8 +53,8 @@
 
 		<keep-alive>
 			<component
-				v-if="currentTab?.component"
-				:is="currentTab.component"
+				v-if="getCurrentComponent"
+				:is="getCurrentComponent"
 				:room-data-object="roomData"
 				:role="dashBoardRole"
 				@copy-board-element="onCopyBoardElement"
@@ -204,6 +203,12 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		getCurrentFabItems() {
+			return this.currentTab?.fabItems;
+		},
+		getCurrentComponent() {
+			return this.currentTab?.component;
+		},
 		tabItems() {
 			const ctlToolsTabEnabled = envConfigModule.getCtlToolsTabEnabled;
 			const ltiToolsTabEnabled = envConfigModule.getLtiToolsTabEnabled;
@@ -213,7 +218,7 @@ export default defineComponent({
 					name: "learnContent",
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
-					dataTestId: "learnContent",
+					dataTestId: "learnContent-tab",
 					component: RoomDashboard,
 					fabItems: this.learnContentFabItems,
 				},
@@ -231,7 +236,7 @@ export default defineComponent({
 					name: "tools",
 					label: this.$t("pages.rooms.tabLabel.tools"),
 					icon: mdiPuzzleOutline,
-					dataTestId: "tools",
+					dataTestId: "tools-tab",
 					component: RoomExternalToolsOverview,
 					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
 				});
@@ -242,7 +247,7 @@ export default defineComponent({
 					name: "old-tools",
 					label: this.$t("pages.rooms.tabLabel.toolsOld"),
 					icon: mdiPuzzleOutline,
-					dataTestId: "old-tools",
+					dataTestId: "old-tools-tab",
 					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
 				});
 			}
@@ -252,7 +257,7 @@ export default defineComponent({
 				label: this.$t("pages.rooms.tabLabel.groups"),
 				icon: mdiAccountGroupOutline,
 				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
-				dataTestId: "groups",
+				dataTestId: "groups-tab",
 			});
 
 			return tabs;
@@ -400,7 +405,9 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		this.setActiveTab(this.$route.query.tab);
+		if (this.$route.query && this.$route.query.tab) {
+			this.setActiveTab(this.$route.query.tab);
+		}
 
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({

@@ -118,7 +118,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareModuleMock: ShareModule;
 
-const $router = { push: jest.fn(), resolve: jest.fn() };
+const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
 const getWrapper: any = () => {
 	return mount(RoomDetailsPage, {
@@ -138,6 +138,8 @@ const getWrapper: any = () => {
 			notifierModule: notifierModuleMock,
 			i18n: { t: (key: string) => key },
 			shareModule: shareModuleMock,
+			authModule: undefined,
+			contextExternalToolsModule: undefined,
 		},
 	});
 };
@@ -173,6 +175,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				return { data: [] };
 			},
 		} as AxiosInstance);
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
 	});
 
 	it("should fetch data", async () => {
@@ -459,10 +465,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			it("should find tools(new)-tab", () => {
 				const { wrapper } = setup();
 
-				const tabs = wrapper.findAll(".v-tab");
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-				expect(tabs).toContain(
-					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
+				expect(tabTitle.text()).toEqual(
+					wrapper.vm.$t("pages.rooms.tabLabel.tools")
 				);
 			});
 		});
@@ -478,20 +484,44 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				return { wrapper };
 			};
 
-			it("should  not find tools(new)-tab", () => {
+			it("should not find tools(new)-tab", () => {
 				const { wrapper } = setup();
 
-				const tabs = wrapper.findAll(".v-tab");
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-				expect(tabs).not.toContain(
-					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
-				);
+				expect(tabTitle.exists()).toEqual(false);
 			});
 		});
 
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+
+				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should show the tools component", async () => {
+				const { wrapper } = setup();
+
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
+
+				const toolsContent = wrapper.find('[data-testid="room-content"]');
+
+				expect(toolsContent.exists()).toBe(true);
+			});
+		});
+
+		describe("when Tools(new) tab is active and the user has admin permissions", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 
@@ -501,30 +531,12 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			it("should show an 'add' button", async () => {
 				const { wrapper } = setup();
 
-				const tabs = wrapper.findAll(".v-tab");
-				const toolsNewTab = tabs.find(
-					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
-				);
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
 
-				await toolsNewTab.click();
-				const addButton = toolsNewTab.find(`[data-testid="add-tool-button"]`);
+				const addButton = wrapper.find('[data-testid="add-tool-button"]');
 
-				expect(addButton.exists()).toBe(true);
-			});
-
-			it("should show the tools component", async () => {
-				const { wrapper } = setup();
-
-				const tabs = wrapper.findAll(".v-tab");
-				const toolsNewTab = tabs.find(
-					wrapper.vm.$i18n.t("pages.rooms.tabLabel.tools")
-				);
-
-				await toolsNewTab.click();
-
-				const toolsContent = wrapper.find('[data-testid="room-content"]');
-
-				expect(toolsContent.exists()).toBe(true);
+				expect(addButton.exists()).toEqual(true);
 			});
 		});
 	});

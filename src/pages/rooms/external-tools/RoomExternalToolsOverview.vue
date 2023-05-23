@@ -42,7 +42,7 @@
 						class="text-md mt-2"
 						v-html="
 							$t('pages.rooms.tools.deleteDialog.content', {
-								itemName: itemToDelete?.name || '???',
+								itemName: getItemToDeleteName,
 							})
 						"
 					/>
@@ -95,6 +95,10 @@ export default defineComponent({
 
 		const itemToDelete: Ref<ContextExternalTool | undefined> = ref();
 
+		const getItemToDeleteName: ComputedRef<string> = computed(
+			() => itemToDelete.value?.name || "???"
+		);
+
 		const onOpenDeleteDialog = (tool: ContextExternalTool) => {
 			itemToDelete.value = tool;
 			isDeleteDialogOpen.value = true;
@@ -130,6 +134,7 @@ export default defineComponent({
 			tools,
 			canEdit,
 			itemToDelete,
+			getItemToDeleteName,
 			isDeleteDialogOpen,
 			onOpenDeleteDialog,
 			onCloseDeleteDialog,

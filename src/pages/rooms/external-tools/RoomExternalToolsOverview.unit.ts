@@ -32,6 +32,7 @@ describe("RoomExternalToolOverview", () => {
 			provide: {
 				authModule,
 				contextExternalToolsModule,
+				i18n: undefined,
 			},
 		});
 
@@ -54,7 +55,7 @@ describe("RoomExternalToolOverview", () => {
 		it("should display a empty state text", () => {
 			const { wrapper } = setup();
 
-			const title = wrapper.find("tools-empty-state > h4");
+			const title = wrapper.find('[data-testid="tools-empty-state"] > h4');
 
 			expect(title.text()).toEqual("pages.rooms.tools.emptyState");
 		});
@@ -77,9 +78,11 @@ describe("RoomExternalToolOverview", () => {
 		it("should display the tools", () => {
 			const { wrapper } = setup();
 
-			const card = wrapper.find({ name: "room-external-tool-card" });
+			const cards = wrapper.findAllComponents({
+				name: "room-external-tool-card",
+			});
 
-			expect(card).toHaveLength(2);
+			expect(cards.length).toEqual(2);
 		});
 	});
 
@@ -100,13 +103,10 @@ describe("RoomExternalToolOverview", () => {
 		it("should open the delete dialog", async () => {
 			const { wrapper } = setup();
 
-			const card = wrapper.find({ name: "room-external-tool-card" });
-
-			const itemMenu = card.find('[data-testid="tool-card-menu"]');
-			await itemMenu.find(".three-dot-button").trigger("click");
-
-			const deleteButton = itemMenu.find('[data-testid="tool-delete"]');
-			await deleteButton.trigger("click");
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			card.trigger("delete");
 
 			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
 
