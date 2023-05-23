@@ -609,6 +609,16 @@ export interface ConsentSessionResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ContentElementType {
+    RichText = 'richText',
+    File = 'file'
+}
+
+/**
+ * 
+ * @export
  * @interface ContextExternalToolPostParams
  */
 export interface ContextExternalToolPostParams {
@@ -917,22 +927,12 @@ export interface CourseResponse {
  */
 export interface CreateContentElementBody {
     /**
-     * The type of element
-     * @type {string}
+     * 
+     * @type {ContentElementType}
      * @memberof CreateContentElementBody
      */
-    type: CreateContentElementBodyTypeEnum;
+    type: ContentElementType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateContentElementBodyTypeEnum {
-    RichText = 'richText',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1563,11 +1563,11 @@ export interface FileElementContent {
  */
 export interface FileElementContentBody {
     /**
-     * the type of the updated element
-     * @type {any}
+     * 
+     * @type {ContentElementType}
      * @memberof FileElementContentBody
      */
-    type: FileElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {FileContentBody}
@@ -1575,16 +1575,6 @@ export interface FileElementContentBody {
      */
     content: FileContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileElementContentBodyTypeEnum {
-    RichText = 'richText',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1599,10 +1589,10 @@ export interface FileElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof FileElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {FileElementContent}
@@ -3309,11 +3299,11 @@ export interface RichTextElementContent {
  */
 export interface RichTextElementContentBody {
     /**
-     * the type of the updated element
-     * @type {RichText}
+     * 
+     * @type {ContentElementType}
      * @memberof RichTextElementContentBody
      */
-    type: RichTextElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {RichTextContentBody}
@@ -3321,16 +3311,6 @@ export interface RichTextElementContentBody {
      */
     content: RichTextContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum RichTextElementContentBodyTypeEnum {
-    RichText = 'richText',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -3345,10 +3325,10 @@ export interface RichTextElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof RichTextElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {RichTextElementContent}

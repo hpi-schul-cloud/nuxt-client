@@ -7,7 +7,7 @@ let wrapper: Wrapper<Vue>;
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.RICH_TEXT,
+	type: ContentElementType.RichText,
 	content: {
 		text: "TestContent",
 		inputFormat: "richTextCk5",
