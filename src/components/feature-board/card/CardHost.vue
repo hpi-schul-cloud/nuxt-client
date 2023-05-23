@@ -1,57 +1,60 @@
 <template>
-	<CardHostInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-		@move:card-keyboard="onMoveCardKeyboard"
-	>
-		<VCard
-			ref="cardHost"
-			:height="isLoading ? height : 'auto'"
-			class="w-100 transition-swing"
-			:class="{ 'drag-disabled': isEditMode }"
-			outlined
-			tabindex="0"
-			min-height="120px"
-			:elevation="isEditMode ? 6 : 0"
-			:id="cardId"
-			:ripple="false"
-			:hover="isHovered"
+	<div>
+		<CardHostInteractionHandler
+			:isEditMode="isEditMode"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
+			@move:card-keyboard="onMoveCardKeyboard"
 		>
-			<template v-if="isLoading">
-				<CardSkeleton :height="height" />
-			</template>
-			<template v-if="!isLoading && card">
-				<CardTitle
-					:isEditMode="isEditMode"
-					:value="card.title"
-					scope="card"
-					@update:value="onUpdateCardTitle"
-				>
-				</CardTitle>
+			<VCard
+				ref="cardHost"
+				:height="isLoading ? height : 'auto'"
+				class="w-100 transition-swing"
+				:class="{ 'drag-disabled': isEditMode }"
+				outlined
+				tabindex="0"
+				min-height="120px"
+				:elevation="isEditMode ? 6 : 0"
+				:id="cardId"
+				:ripple="false"
+				:hover="isHovered"
+			>
+				<template v-if="isLoading">
+					<CardSkeleton :height="height" />
+				</template>
+				<template v-if="!isLoading && card">
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+					>
+					</CardTitle>
 
-				<div class="board-menu" :class="boardMenuClasses">
-					<BoardMenu v-if="hasBoardDeletePermission" scope="card">
-						<BoardMenuAction @click="onTryDelete">
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
-					</BoardMenu>
-				</div>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu v-if="hasBoardDeletePermission" scope="card">
+							<BoardMenuAction @click="onTryDelete">
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
+								{{ $t("components.board.action.delete") }}
+							</BoardMenuAction>
+						</BoardMenu>
+					</div>
 
-				<ContentElementList
-					:elements="card.elements"
-					:isEditMode="isEditMode"
-				></ContentElementList>
-				<CardAddElementMenu
-					@add-element="onAddElement"
-					v-if="isEditMode"
-				></CardAddElementMenu>
-			</template>
-		</VCard>
-	</CardHostInteractionHandler>
+					<ContentElementList
+						:elements="card.elements"
+						:isEditMode="isEditMode"
+					></ContentElementList>
+					<CardAddElementMenu
+						@add-element="onAddElement"
+						v-if="isEditMode"
+					></CardAddElementMenu>
+				</template>
+			</VCard>
+		</CardHostInteractionHandler>
+		<FilePicker />
+	</div>
 </template>
 
 <script lang="ts">
@@ -70,6 +73,8 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
+import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
+import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
@@ -87,6 +92,7 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		FilePicker,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -128,7 +134,17 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = addElement;
+		const onAddElement = async () => {
+			const { getCreateFn } = useElementTypeSelection();
+
+			const createElement = await getCreateFn();
+			if (createElement) {
+				await createElement(addElement);
+			}
+
+			startEditMode();
+		};
+
 		const onStartEditMode = () => {
 			startEditMode();
 		};
