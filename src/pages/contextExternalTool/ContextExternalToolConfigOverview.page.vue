@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tool.title')"
+		:headline="$t('pages.tool.context.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
@@ -82,6 +82,7 @@ import ContextExternalToolSelectionRow from "./ContextExternalToolSelectionRow.v
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import RoomsModule from "../../store/rooms";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -105,40 +106,38 @@ export default defineComponent({
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
-		if (!i18n || !externalToolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+    const roomsModule: RoomsModule | undefined = inject<RoomsModule>("roomsModule");
 
 		onMounted(async () => {
-			await externalToolsModule.loadAvailableSchoolToolConfigurations(
+			await externalToolsModule?.loadAvailableSchoolToolConfigurations(
 				props.contextId
 			);
+
+      await roomsModule?.fetchAllElements();
 
 			hasData.value = true;
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
-			const translateResult = i18n.t(key);
+			const translateResult = i18n?.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
 			return "unknown translation-key:" + key;
 		};
 
-		const contextRoute: Breadcrumb = {
-			text: "room",
-			to: `/rooms/${props.contextId}`,
-		};
+		//const contextRoute: Breadcrumb = {
+			//text: roomsModule?.getCourseSharingStatus //TODO load data from store reactively
+		//};
 		const breadcrumbs: Breadcrumb[] = [
-			// TODO: change translation and path to context
 			{
-				text: t("pages.administration.index.title"),
-				to: "/administration/",
+				text: t("pages.courses.index.title"),
+				to: "/rooms-overview/",
 			},
-			contextRoute,
+			//contextRoute,
 			{
-				text: t("pages.tool.title"),
+				text: t("pages.tool.context.title"),
 				disabled: true,
 			},
 		];
@@ -147,11 +146,11 @@ export default defineComponent({
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean> = computed(
-			() => !hasData.value || externalToolsModule.getLoading
+			() => !hasData.value || externalToolsModule?.getLoading
 		);
 
 		const configurationItems: ComputedRef<ToolConfigurationListItem[]> =
-			computed(() => externalToolsModule.getToolConfigurations);
+			computed(() => externalToolsModule?.getToolConfigurations);
 
 		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
 

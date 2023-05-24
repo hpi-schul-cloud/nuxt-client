@@ -984,5 +984,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_param_required": "Цей інструмент вимагає значення параметра, яке не вказано. Будь ласка, додайте значення.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
-	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення."
+	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення.",
+	"pages.tool.context.title": "Додавання зовнішніх інструментів"
 }
