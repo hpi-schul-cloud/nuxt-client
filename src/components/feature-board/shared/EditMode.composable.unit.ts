@@ -11,7 +11,7 @@ describe("EditMode.composable", () => {
 	it("should set edit mode", () => {
 		expect(isEditMode.value).toBe(false);
 		startEditMode();
-		// it cannot read properties of undefined (reading 'hasBoardEditPermission')
+		// it cannot read properties of undefined (reading 'hasEditPermission')
 		// expect(isEditMode.value).toBe(true);
 		stopEditMode();
 		expect(isEditMode.value).toBe(false);

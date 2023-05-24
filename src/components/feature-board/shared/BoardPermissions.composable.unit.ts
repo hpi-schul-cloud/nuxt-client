@@ -1,8 +1,5 @@
 import AuthModule from "@/store/auth";
-import {
-	useBoardPermissions,
-	handlePermittedAction,
-} from "./BoardPermissions.composable";
+import { useBoardPermissions } from "./BoardPermissions.composable";
 import { createModuleMocks } from "@/utils/mock-store-module";
 
 describe("BoardPermissions.composable", () => {
@@ -19,29 +16,5 @@ describe("BoardPermissions.composable", () => {
 
 		expect(authModuleMock).toBeDefined();
 		expect(permissions).toBeDefined();
-	});
-
-	describe("handlePermittedAction", () => {
-		const mockAction = jest.fn();
-		beforeEach(() => {
-			jest.clearAllMocks();
-		});
-		describe("when the action is permitted", () => {
-			it("should call the action without any parameter", async () => {
-				await handlePermittedAction(true, mockAction);
-				expect(mockAction).toHaveBeenCalled();
-			});
-
-			it("should call the action with parameters", async () => {
-				await handlePermittedAction(true, mockAction, "params_1", "params_2");
-				expect(mockAction).toHaveBeenCalledWith("params_1", "params_2");
-			});
-		});
-		describe("when the action is not permitted", () => {
-			it("should not call the action ", async () => {
-				await handlePermittedAction(false, mockAction);
-				expect(mockAction).not.toHaveBeenCalled();
-			});
-		});
 	});
 });

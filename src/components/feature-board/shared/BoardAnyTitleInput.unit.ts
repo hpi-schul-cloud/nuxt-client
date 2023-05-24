@@ -9,7 +9,7 @@ jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 const defaultPermissions = {
-	hasBoardEditPermission: true,
+	hasEditPermission: true,
 };
 
 describe("CardHeaderTitleInput Component", () => {
@@ -59,7 +59,6 @@ describe("CardHeaderTitleInput Component", () => {
 		it("should not have textarea in displaymode", async () => {
 			setup({ isEditMode: false });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			console.log("textAreaComponent", textAreaComponent);
 
 			expect(textAreaComponent.element).toBeUndefined();
 		});

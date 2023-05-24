@@ -11,9 +11,9 @@ export type BoardColumn = ColumnResponse;
 export type BoardSkeletonCard = CardSkeletonResponse;
 
 export type BoardPermissionsTypes = {
-	hasBoardMovePermission?: boolean;
-	hasBoardCardCreatePermission?: boolean;
-	hasBoardColumnCreatePermission?: boolean;
-	hasBoardEditPermission?: boolean;
-	hasBoardDeletePermission?: boolean;
+	hasMovePermission?: boolean;
+	hasCreateCardPermission?: boolean;
+	hasCreateColumnPermission?: boolean;
+	hasEditPermission?: boolean;
+	hasDeletePermission?: boolean;
 };

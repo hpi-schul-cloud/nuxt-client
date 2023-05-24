@@ -22,7 +22,7 @@
 					></BoardAnyTitleInput>
 				</div>
 				<div class="pt-2">
-					<BoardMenu v-if="hasBoardDeletePermission" scope="column">
+					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
@@ -83,15 +83,14 @@ export default defineComponent({
 
 		const columnHeader = ref(undefined);
 		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
-		const { hasBoardEditPermission, hasBoardDeletePermission } =
-			useBoardPermissions();
+		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
-			if (!hasBoardEditPermission) return;
+			if (!hasEditPermission) return;
 			startEditMode();
 		};
 		const onEndEditMode = () => {
-			if (!hasBoardEditPermission) return;
+			if (!hasEditPermission) return;
 			stopEditMode();
 		};
 
@@ -125,7 +124,7 @@ export default defineComponent({
 			isEditMode,
 			isFocused,
 			isDeleteModalOpen,
-			hasBoardDeletePermission,
+			hasDeletePermission,
 			mdiTrashCanOutline,
 			onStartEditMode,
 			onEndEditMode,

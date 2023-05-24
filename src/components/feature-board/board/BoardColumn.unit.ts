@@ -11,8 +11,8 @@ jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 const defaultPermissions = {
-	hasBoardMovePermission: true,
-	hasBoardColumnCreatePermission: true,
+	hasMovePermission: true,
+	hasCreateColumnPermission: true,
 };
 
 const MOCK_PROP: BoardColumn = {
@@ -117,17 +117,17 @@ describe("BoardColumn", () => {
 	});
 
 	describe("user permissions", () => {
-		describe("when hasBoardMovePermission is set false", () => {
+		describe("when user is not permitted to move a column", () => {
 			it("should set lock-axis to 'x,y", () => {
-				setup({ permissions: { hasBoardMovePermission: false } });
+				setup({ permissions: { hasMovePermission: false } });
 
 				const dndContainer = wrapper.findComponent({ name: "Container" });
 				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
 			});
 		});
-		describe("when hasBoardCardCreatePermission is set false", () => {
-			it("should not be rendered on DOM", () => {
-				setup({ permissions: { hasBoardColumnCreatePermission: false } });
+		describe("when user is not permitted to create a card", () => {
+			it("should addCardComponent not be rendered on DOM", () => {
+				setup({ permissions: { hasCreateColumnPermission: false } });
 
 				const addCardComponent = wrapper.findAllComponents({
 					name: "BoardAddCardButton",

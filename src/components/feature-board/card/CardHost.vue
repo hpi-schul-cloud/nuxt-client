@@ -32,7 +32,7 @@
 					</CardTitle>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu v-if="hasBoardDeletePermission" scope="card">
+						<BoardMenu v-if="hasDeletePermission" scope="card">
 							<BoardMenuAction @click="onTryDelete">
 								<VIcon>
 									{{ mdiTrashCanOutline }}
@@ -110,7 +110,7 @@ export default defineComponent({
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
 		);
-		const { hasBoardDeletePermission } = useBoardPermissions();
+		const { hasDeletePermission } = useBoardPermissions();
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -169,7 +169,7 @@ export default defineComponent({
 			boardMenuClasses,
 			isLoading,
 			card,
-			hasBoardDeletePermission,
+			hasDeletePermission,
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,

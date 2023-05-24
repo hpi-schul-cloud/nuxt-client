@@ -11,7 +11,7 @@ jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 const defaultPermissions = {
-	hasBoardDeletePermission: true,
+	hasDeletePermission: true,
 };
 
 const CARD_SKELETON: BoardCardSkeleton = {
@@ -84,11 +84,11 @@ describe("CardHost", () => {
 	});
 
 	describe("user permissions", () => {
-		describe("when hasBoardDeletePermission is set false", () => {
+		describe("when user is not permitted to delete", () => {
 			it("should not be rendered on DOM", () => {
 				setup({
 					card: CARD_WITHOUT_ELEMENTS,
-					permissions: { hasBoardDeletePermission: false },
+					permissions: { hasDeletePermission: false },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
