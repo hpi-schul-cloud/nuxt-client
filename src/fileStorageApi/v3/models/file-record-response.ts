@@ -70,10 +70,10 @@ export interface FileRecordResponse {
     parentType: FileRecordResponseParentType;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof FileRecordResponse
      */
-    deletedSince?: Date;
+    deletedSince?: string;
 }
 
 /**
@@ -96,7 +96,8 @@ export enum FileRecordResponseParentType {
     COURSES = 'courses',
     TASKS = 'tasks',
     LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions'
+    SUBMISSIONS = 'submissions',
+    BOARDNODES = 'boardnodes'
 }
 
 

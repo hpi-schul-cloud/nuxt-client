@@ -47,12 +47,12 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Copy all files of a parent entityId to a target entitId
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', copyFilesOfParentParams: CopyFilesOfParentParams, options: any = {}): Promise<RequestArgs> => {
+        copy: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', copyFilesOfParentParams: CopyFilesOfParentParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('copy', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -143,11 +143,11 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByParent: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options: any = {}): Promise<RequestArgs> => {
+        deleteByParent: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('deleteByParent', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -269,13 +269,13 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Get a list of file meta data of a parent entityId.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        list: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('list', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -369,11 +369,11 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restore: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options: any = {}): Promise<RequestArgs> => {
+        restore: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('restore', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -453,12 +453,12 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Streamable upload of a binary file.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upload: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', file: any, options: any = {}): Promise<RequestArgs> => {
+        upload: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', file: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('upload', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -510,12 +510,12 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Upload file from url
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFromUrl: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', fileUrlParams: FileUrlParams, options: any = {}): Promise<RequestArgs> => {
+        uploadFromUrl: async (schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', fileUrlParams: FileUrlParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('uploadFromUrl', 'schoolId', schoolId)
             // verify required parameter 'parentId' is not null or undefined
@@ -572,12 +572,12 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Copy all files of a parent entityId to a target entitId
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
+        async copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.copy(schoolId, parentId, parentType, copyFilesOfParentParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -598,11 +598,11 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+        async deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteByParent(schoolId, parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -634,13 +634,13 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Get a list of file meta data of a parent entityId.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+        async list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.list(schoolId, parentId, parentType, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -661,11 +661,11 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+        async restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.restore(schoolId, parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -685,12 +685,12 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Streamable upload of a binary file.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+        async upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.upload(schoolId, parentId, parentType, file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -699,12 +699,12 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @summary Upload file from url
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', fileUrlParams: FileUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+        async uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', fileUrlParams: FileUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -723,12 +723,12 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Copy all files of a parent entityId to a target entitId
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse> {
+        copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse> {
             return localVarFp.copy(schoolId, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -747,11 +747,11 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): AxiosPromise<FileRecordListResponse> {
+        deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): AxiosPromise<FileRecordListResponse> {
             return localVarFp.deleteByParent(schoolId, parentId, parentType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -780,13 +780,13 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Get a list of file meta data of a parent entityId.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse> {
+        list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse> {
             return localVarFp.list(schoolId, parentId, parentType, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -805,11 +805,11 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): AxiosPromise<FileRecordListResponse> {
+        restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): AxiosPromise<FileRecordListResponse> {
             return localVarFp.restore(schoolId, parentId, parentType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -827,12 +827,12 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Streamable upload of a binary file.
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', file: any, options?: any): AxiosPromise<FileRecordResponse> {
+        upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', file: any, options?: any): AxiosPromise<FileRecordResponse> {
             return localVarFp.upload(schoolId, parentId, parentType, file, options).then((request) => request(axios, basePath));
         },
         /**
@@ -840,12 +840,12 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @summary Upload file from url
          * @param {string} schoolId 
          * @param {string} parentId 
-         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+         * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse> {
+        uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse> {
             return localVarFp.uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -862,13 +862,13 @@ export interface FileApiInterface {
      * @summary Copy all files of a parent entityId to a target entitId
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse>;
+    copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse>;
 
     /**
      * 
@@ -886,12 +886,12 @@ export interface FileApiInterface {
      * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): AxiosPromise<FileRecordListResponse>;
+    deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -919,14 +919,14 @@ export interface FileApiInterface {
      * @summary Get a list of file meta data of a parent entityId.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse>;
+    list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -944,12 +944,12 @@ export interface FileApiInterface {
      * @summary Restore all files of a parent entityId that are marked for deletion.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any): AxiosPromise<FileRecordListResponse>;
+    restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -966,26 +966,26 @@ export interface FileApiInterface {
      * @summary Streamable upload of a binary file.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {any} file 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', file: any, options?: any): AxiosPromise<FileRecordResponse>;
+    upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', file: any, options?: any): AxiosPromise<FileRecordResponse>;
 
     /**
      * 
      * @summary Upload file from url
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {FileUrlParams} fileUrlParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse>;
+    uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse>;
 
 }
 
@@ -1001,13 +1001,13 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Copy all files of a parent entityId to a target entitId
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any) {
+    public copy(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', copyFilesOfParentParams: CopyFilesOfParentParams, options?: any) {
         return FileApiFp(this.configuration).copy(schoolId, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1029,12 +1029,12 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any) {
+    public deleteByParent(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any) {
         return FileApiFp(this.configuration).deleteByParent(schoolId, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1068,14 +1068,14 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Get a list of file meta data of a parent entityId.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', skip?: number, limit?: number, options?: any) {
+    public list(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', skip?: number, limit?: number, options?: any) {
         return FileApiFp(this.configuration).list(schoolId, parentId, parentType, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1097,12 +1097,12 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Restore all files of a parent entityId that are marked for deletion.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', options?: any) {
+    public restore(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', options?: any) {
         return FileApiFp(this.configuration).restore(schoolId, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1123,13 +1123,13 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Streamable upload of a binary file.
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {any} file 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', file: any, options?: any) {
+    public upload(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', file: any, options?: any) {
         return FileApiFp(this.configuration).upload(schoolId, parentId, parentType, file, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1138,13 +1138,13 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @summary Upload file from url
      * @param {string} schoolId 
      * @param {string} parentId 
-     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions'} parentType 
+     * @param {'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes'} parentType 
      * @param {FileUrlParams} fileUrlParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions', fileUrlParams: FileUrlParams, options?: any) {
+    public uploadFromUrl(schoolId: string, parentId: string, parentType: 'users' | 'schools' | 'courses' | 'tasks' | 'lessons' | 'submissions' | 'boardnodes', fileUrlParams: FileUrlParams, options?: any) {
         return FileApiFp(this.configuration).uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -50,7 +50,8 @@ export enum FileRecordParamsParentType {
     COURSES = 'courses',
     TASKS = 'tasks',
     LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions'
+    SUBMISSIONS = 'submissions',
+    BOARDNODES = 'boardnodes'
 }
 
 
