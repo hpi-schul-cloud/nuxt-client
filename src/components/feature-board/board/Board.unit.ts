@@ -201,6 +201,30 @@ describe("Board", () => {
 			setup({ board: MOCK_BOARD_TWO_COLUMNS });
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
 		});
+
+		describe("BoardColumnGhost component", () => {
+			describe("when user has create column permission", () => {
+				it("should not be rendered on DOM", () => {
+					setup();
+					const ghostColumnComponent = wrapper.findComponent({
+						name: "BoardColumnGhost",
+					});
+
+					expect(ghostColumnComponent.vm).toBeDefined();
+				});
+			});
+
+			describe("when user doesn't have create column permission", () => {
+				it("should not be rendered on DOM", () => {
+					setup({ permissions: { hasCreateColumnPermission: false } });
+					const ghostColumnComponent = wrapper.findComponent({
+						name: "BoardColumnGhost",
+					});
+
+					expect(ghostColumnComponent.vm).not.toBeDefined();
+				});
+			});
+		});
 	});
 
 	describe("user permissions", () => {
@@ -253,18 +277,6 @@ describe("Board", () => {
 					ghostColumnComponent.vm.$emit("create:column");
 
 					expect(createColumnMock).toHaveBeenCalled();
-				});
-			});
-
-			describe("when user is not permitted to create a column", () => {
-				it("should not be rendered on DOM", () => {
-					setup({ permissions: { hasCreateColumnPermission: false } });
-
-					const ghostColumnComponent = wrapper.findComponent({
-						name: "BoardColumnGhost",
-					});
-
-					expect(ghostColumnComponent.vm).not.toBeDefined();
 				});
 			});
 		});
