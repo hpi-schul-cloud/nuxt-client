@@ -4,6 +4,8 @@ import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
+import { filesPOCModule } from "@/store";
+import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 
 type CreateElementFn = (addElement: AddCardElement) => Promise<void>;
 
@@ -28,14 +30,38 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	let resolveWithCreateFunction:
 		| ((createElementFn?: CreateElementFn) => void)
 		| undefined;
+	let addElementFunction: AddCardElement | undefined;
 
 	const createTextElement = async (addElement: AddCardElement) => {
 		await addElement(ContentElementType.Text);
 	};
 
-	const createFileElement = async (addElement: AddCardElement) => {
+	const openFilePicker = async (addElement: AddCardElement) => {
+		addElementFunction = addElement;
 		triggerFilePicker();
-		await addElement(ContentElementType.File);
+	};
+
+	const createFileElement = async (file: File) => {
+		if (addElementFunction && file) {
+			const result = await addElementFunction(ContentElementType.File);
+			console.log("result", result);
+			// TODO: upload multiple files at once? File array?
+			if (result?.id) {
+				await filesPOCModule.upload(
+					result.id,
+					FileRecordParamsParentType.BOARDNODES,
+					file
+				);
+				console.log("filesPOCModule.files", filesPOCModule.files);
+				console.log("filesPOCModule.status", filesPOCModule.status);
+				console.log(
+					"filesPOCModule.businessError",
+					filesPOCModule.businessError
+				);
+				// 	result.fileRecord = fileRecordResponse;
+				//	result.showProgress = true; // until upload is finished
+			}
+		}
 	};
 
 	const returnCreateFunction = (createElementFn?: CreateElementFn) => {
@@ -56,7 +82,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		{
 			icon: mdiUpload,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
-			action: () => returnCreateFunction(createFileElement),
+			action: () => returnCreateFunction(openFilePicker),
 			testId: "create-element-file",
 		},
 	];
@@ -75,5 +101,6 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		isDialogOpen,
 		elementTypeOptions,
 		closeDialog,
+		createFileElement,
 	};
 });
