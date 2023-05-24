@@ -1,4 +1,5 @@
 import {
+	ContextExternalToolPostParams,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -23,9 +24,10 @@ import {
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
 import {
-	toolParameterFactory,
 	toolConfigurationTemplateFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
+import { ToolContextType } from "../store/external-tool/tool-context-type.enum";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -48,6 +50,7 @@ describe("useExternalToolUtils", () => {
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+			mapToolConfigurationTemplateToContextExternalToolPostParams,
 		} = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -64,6 +67,7 @@ describe("useExternalToolUtils", () => {
 			],
 			status: SchoolExternalToolResponseStatusEnum.Latest,
 		};
+
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
@@ -87,6 +91,7 @@ describe("useExternalToolUtils", () => {
 			regexComment: "regexComment",
 			isOptional: true,
 		};
+
 		const toolConfigurationTemplateResponse: ExternalToolConfigurationTemplateResponse =
 			{
 				id: "id",
@@ -100,11 +105,21 @@ describe("useExternalToolUtils", () => {
 			name: "name",
 			value: "value",
 		};
+
 		const schoolExternalToolPostParam: SchoolExternalToolPostParams = {
 			schoolId: "schoolId",
 			toolId: "toolId",
 			version: 0,
 			parameters: [customParameterEntryParam],
+		};
+
+		const contextExternalToolPostParams: ContextExternalToolPostParams = {
+			contextId: "contextId",
+			parameters: [customParameterEntryParam],
+			contextToolName: "contextToolName",
+			contextType: "course",
+			schoolToolId: "toolId",
+			toolVersion: 0,
 		};
 
 		return {
@@ -118,7 +133,9 @@ describe("useExternalToolUtils", () => {
 			toolConfigurationTemplateResponse,
 			customParameterResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+			mapToolConfigurationTemplateToContextExternalToolPostParams,
 			schoolExternalToolPostParam,
+			contextExternalToolPostParams,
 		};
 	};
 
@@ -255,6 +272,44 @@ describe("useExternalToolUtils", () => {
 							value: "testValue",
 						},
 					]),
+				})
+			);
+		});
+	});
+
+	describe("mapToolConfigurationTemplateToContextExternalToolPostParams", () => {
+		it("should return contextExternalToolPostParams", () => {
+			const { mapToolConfigurationTemplateToContextExternalToolPostParams } =
+				setup();
+			const toolParameter = toolParameterFactory.build({ value: undefined });
+			const template: ToolConfigurationTemplate =
+				toolConfigurationTemplateFactory.build({
+					parameters: [toolParameter, { ...toolParameter, value: "testValue" }],
+				});
+
+			const contextExternalToolPostParams: ContextExternalToolPostParams =
+				mapToolConfigurationTemplateToContextExternalToolPostParams(
+					template,
+					"contextId",
+					ToolContextType.COURSE
+				);
+
+			expect(contextExternalToolPostParams).toEqual(
+				expect.objectContaining<ContextExternalToolPostParams>({
+					contextId: "contextId",
+					toolVersion: template.version,
+					schoolToolId: template.id,
+					parameters: expect.arrayContaining<CustomParameterEntryParam>([
+						{
+							name: template.parameters[0].name,
+						},
+						{
+							name: template.parameters[1].name,
+							value: "testValue",
+						},
+					]),
+					contextType: "course",
+					contextToolName: template.name,
 				})
 			);
 		});

@@ -168,8 +168,6 @@ export function useExternalToolMappings() {
 			),
 		};
 	};
-
-	// TODO: missing test
 	const mapToolConfigurationTemplateToContextExternalToolPostParams = (
 		template: ToolConfigurationTemplate,
 		contextId: string,
