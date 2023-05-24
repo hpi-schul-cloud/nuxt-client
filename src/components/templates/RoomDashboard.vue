@@ -13,6 +13,10 @@
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
+				<RoomBoardCard
+					:key-drag="isDragging"
+					:drag-in-progress="dragInProgress"
+				></RoomBoardCard>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
@@ -149,6 +153,7 @@ import {
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
@@ -159,6 +164,7 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
+		RoomBoardCard,
 		RoomTaskCard,
 		RoomLessonCard,
 		vCustomDialog,
