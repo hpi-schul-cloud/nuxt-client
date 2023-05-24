@@ -4,7 +4,7 @@
 			<RichTextContentElement
 				v-if="element.type === ContentElementType.RichText"
 				:key="element.id"
-				:element="element"
+				:element="asRichTextElementResponse(element)"
 				:isEditMode="isEditMode"
 			/>
 			<template v-else>
@@ -13,8 +13,9 @@
 		</template>
 	</VCardText>
 </template>
+
 <script lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import RichTextContentElement from "./RichTextContentElement.vue";
@@ -35,8 +36,13 @@ export default defineComponent({
 		},
 	},
 	setup() {
+		const asRichTextElementResponse = (element: AnyContentElement) => {
+			return element as RichTextElementResponse;
+		};
+
 		return {
 			ContentElementType,
+			asRichTextElementResponse,
 		};
 	},
 });
