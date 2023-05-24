@@ -407,7 +407,7 @@ export enum ChangeLanguageParamsLanguageEnum {
     De = 'de',
     En = 'en',
     Es = 'es',
-    Ua = 'ua'
+    Uk = 'uk'
 }
 
 /**
