@@ -1,14 +1,14 @@
-import { authModule, roomsModule } from "../../store";
-import AuthModule from "../../store/auth";
-import EnvConfigModule from "../../store/env-config";
-import RoomsModule from "../../store/rooms";
+import { authModule, roomsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import CopyModule from "../../store/copy";
-import LoadingStateModule from "../../store/loading-state";
-import NotifierModule from "../../store/notifier";
-import { createModuleMocks } from "../../utils/mock-store-module";
+import CopyModule from "@/store/copy";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomOverview from "./RoomOverview.page.vue";
 
 const mockRoomStoreData = [
