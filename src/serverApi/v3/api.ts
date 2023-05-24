@@ -407,7 +407,7 @@ export enum ChangeLanguageParamsLanguageEnum {
     De = 'de',
     En = 'en',
     Es = 'es',
-    Ua = 'ua'
+    Uk = 'uk'
 }
 
 /**
@@ -10990,6 +10990,39 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetPublicSchool: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school/public`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11053,6 +11086,15 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetPublicSchool(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetPublicSchool(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11080,6 +11122,14 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetPublicSchool(options?: any): AxiosPromise<object> {
+            return localVarFp.schoolControllerGetPublicSchool(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11111,6 +11161,14 @@ export interface SchoolApiInterface {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetPublicSchool(options?: any): AxiosPromise<object>;
+
+    /**
+     * 
      * @param {string} schoolId The id of the school.
      * @param {MigrationBody} migrationBody 
      * @param {*} [options] Override http request option.
@@ -11137,6 +11195,16 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetMigration(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetPublicSchool(options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetPublicSchool(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

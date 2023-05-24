@@ -21,7 +21,7 @@ import icWord from "./ic_word.vue";
 import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
-import langIconUa from "./lang-icon-ua.vue";
+import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
 import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
@@ -121,8 +121,8 @@ const customIcons = {
 	langIconEs: {
 		component: langIconEs,
 	},
-	langIconUa: {
-		component: langIconUa,
+	langIconUk: {
+		component: langIconUk,
 	},
 	lernstore_outline: {
 		component: lernstoreOutline,
