@@ -4,13 +4,13 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
 import flushPromises from "flush-promises";
 import Vue from "vue";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
-import { ToolConfigurationTemplate } from "@/store/external-tool";
-import ContextExternalToolConfigOverviewPage from "./ContextExternalToolConfigOverview.page.vue";
 import {
+	toolConfigurationTemplateFactory,
 	businessErrorFactory,
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
+import { ToolConfigurationTemplate } from "@/store/external-tool";
+import ContextExternalToolConfigOverviewPage from "./ContextExternalToolConfigOverview.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 
@@ -33,7 +33,7 @@ describe("ContextExternalToolConfigOverview", () => {
 			getToolConfigurations: [toolConfigurationFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
-		}) as jest.Mocked<ExternalToolsModule>;
+		});
 
 		const routerPush = jest.fn();
 		const $router = {
@@ -171,8 +171,8 @@ describe("ContextExternalToolConfigOverview", () => {
 	});
 
 	describe("onMounted is called", () => {
-		it("should load available tool configurations", () => {
-			setup();
+		it("should load available tool configurations", async () => {
+			await setup();
 			expect(
 				externalToolsModule.loadAvailableSchoolToolConfigurations
 			).toHaveBeenCalled();

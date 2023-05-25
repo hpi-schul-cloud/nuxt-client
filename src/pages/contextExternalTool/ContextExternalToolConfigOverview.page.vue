@@ -110,12 +110,12 @@ export default defineComponent({
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
 
-		onMounted(async () => {
-			await externalToolsModule?.loadAvailableSchoolToolConfigurations(
+		onMounted(() => {
+			externalToolsModule?.loadAvailableSchoolToolConfigurations(
 				props.contextId
 			);
 
-			await roomsModule?.fetchAllElements();
+			roomsModule?.fetchAllElements();
 
 			hasData.value = true;
 		});
@@ -184,8 +184,8 @@ export default defineComponent({
 		};
 
 		const router: VueRouter = useRouter();
-		const onCancel = () => {
-			router.push({ path: contextRoute.to });
+		const onCancel = async () => {
+			await router.push({ path: contextRoute.to });
 		};
 
 		const onSaveTool = async () => {
