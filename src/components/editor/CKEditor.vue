@@ -50,18 +50,21 @@ export default defineComponent({
 
 		const ck = ref(null);
 		const content = ref(props.value);
-		const language = (() => {
-			// map ua to correct uk
-			// TODO remove if language code is fixed
-			if (i18n.locale === "ua") {
-				return "uk";
-			}
-
-			return i18n.locale;
-		})();
+		const language = i18n.locale;
 
 		const toolbarItems = [];
-		toolbarItems["simple"] = ["bold", "italic", "underline"];
+		toolbarItems["simple"] = [
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"fontBackgroundColor",
+			"|",
+			"link",
+			"bulletedList",
+			"numberedList",
+			"removeFormat",
+		];
 		toolbarItems["regular"] = [
 			"undo",
 			"redo",
@@ -73,6 +76,7 @@ export default defineComponent({
 			"underline",
 			"strikethrough",
 			"highlight",
+			"fontBackgroundColor",
 			"code",
 			"superscript",
 			"subscript",
@@ -89,20 +93,13 @@ export default defineComponent({
 			"removeFormat",
 		];
 
-		const plugins = [];
-		plugins["simple"] = [
-			"Essentials",
-			"Bold",
-			"Italic",
-			"Paragraph",
-			"Underline",
-		];
-		plugins["regular"] = [
+		const plugins = [
 			"Autoformat",
 			"Essentials",
 			"BlockQuote",
 			"Bold",
 			"Code",
+			"Font",
 			"Heading",
 			"Highlight",
 			"HorizontalLine",
@@ -132,7 +129,28 @@ export default defineComponent({
 			toolbar: {
 				items: toolbarItems[props.mode],
 			},
-			plugins: plugins[props.mode],
+			plugins: plugins,
+			heading: {
+				options: [
+					{
+						model: "paragraph",
+						title: "Paragraph",
+						class: "ck-heading_paragraph",
+					},
+					{
+						model: "heading1",
+						view: "h4",
+						title: "Heading 1",
+						class: "ck-heading_heading1",
+					},
+					{
+						model: "heading2",
+						view: "h5",
+						title: "Heading 2",
+						class: "ck-heading_heading2",
+					},
+				],
+			},
 			highlight: {
 				options: [
 					{
@@ -162,6 +180,46 @@ export default defineComponent({
 						title: "Blue marker",
 						color: "var(--ck-highlight-marker-blue)",
 						type: "marker",
+					},
+				],
+			},
+			fontBackgroundColor: {
+				colors: [
+					{
+						color: "#D4D6D9",
+					},
+					{
+						color: "#DBD4D1",
+					},
+					{
+						color: "#F3D9C3",
+					},
+					{
+						color: "#DDDBC8",
+					},
+					{
+						color: "#D8E3CE",
+					},
+					{
+						color: "#C3E1DE",
+					},
+					{
+						color: "#C3E0F2",
+					},
+					{
+						color: "#CDD3F6",
+					},
+					{
+						color: "#E2CBE6",
+					},
+					{
+						color: "#EEC3F5",
+					},
+					{
+						color: "#F2D0DB",
+					},
+					{
+						color: "#EEC3C3",
 					},
 				],
 			},
@@ -201,9 +259,5 @@ export default defineComponent({
 .ck-focused {
 	border: none !important;
 	box-shadow: none !important;
-}
-
-.ck.ck-editor__editable_inline > :last-child {
-	margin-bottom: 34px !important;
 }
 </style>

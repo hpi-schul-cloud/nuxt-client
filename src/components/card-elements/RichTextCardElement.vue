@@ -1,12 +1,13 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
 	<div>
-		<ck-editor v-if="!editable" v-model="content" :disabled="true"></ck-editor>
+		<div v-if="!editable" class="ck-content" v-html="value" />
 		<ck-editor
 			v-if="editable"
 			v-model="content"
 			:placeholder="placeholder"
 			:disabled="disabled"
-			mode="regular"
+			mode="simple"
 			@input="handleInput"
 			@focus="handleFocus"
 			@blur="handleBlur"
@@ -15,10 +16,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
 import CkEditor from "@/components/editor/CKEditor.vue";
+import renderMathInElement from "katex/dist/contrib/auto-render.js";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "RichTextCardElement",
 	components: { CkEditor },
@@ -40,6 +41,14 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
+		onMounted(() => {
+			const mathElements = document.getElementsByClassName("math-tex");
+
+			for (const element of mathElements) {
+				renderMathInElement(element);
+			}
+		});
+
 		const content = ref(props.value);
 
 		watch(

@@ -1,13 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import {
-	AnyContentElement,
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import TextContentElementComponent from "./TextContentElement.vue";
+import RichTextContentElementComponent from "./RichTextContentElement.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -30,8 +27,8 @@ describe("ContentElementList", () => {
 		});
 		it.each([
 			{
-				elementType: ContentElementType.TEXT,
-				component: TextContentElementComponent,
+				elementType: ContentElementType.RichText,
+				component: RichTextContentElementComponent,
 			},
 		])(
 			"should render elements based on type %s",
@@ -47,7 +44,11 @@ describe("ContentElementList", () => {
 			const isEditModeResult = true;
 
 			setup({
-				elements: [{ type: ContentElementType.TEXT } as TextContentElement],
+				elements: [
+					{
+						type: ContentElementType.RichText,
+					} as RichTextElementResponse,
+				],
 				isEditMode: isEditModeResult,
 			});
 

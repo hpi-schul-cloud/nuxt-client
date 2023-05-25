@@ -2,16 +2,21 @@ import {
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
+	BoardElementApiFactory,
 	ColumnResponse,
+	ContentElementType,
 	CreateContentElementBody,
-	CreateContentElementBodyTypeEnum,
+	FileElementContent,
+	RichTextElementContent,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { AnyContentElement } from "../types/ContentElement";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -26,11 +31,34 @@ export const useBoardApi = () => {
 		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
 	};
 
+	const updateElementCall = async (element: AnyContentElement) => {
+		const data = generateDataProp(element);
+		await elementApi.elementControllerUpdateElement(element.id, { data });
+	};
+
+	const generateDataProp = (element: AnyContentElement) => {
+		if (element.type === ContentElementType.RichText) {
+			return {
+				content: element.content as RichTextElementContent,
+				type: ContentElementType.RichText,
+			};
+		}
+
+		if (element.type === ContentElementType.File) {
+			return {
+				content: element.content as FileElementContent,
+				type: ContentElementType.File,
+			};
+		}
+
+		throw new Error("element.type mapping is undefined for updateElementCall");
+	};
+
 	const createElement = async (
 		cardId: string,
-		type: CreateContentElementBody
+		params: CreateContentElementBody
 	) => {
-		const result = await cardsApi.cardControllerCreateElement(cardId, type);
+		const result = await cardsApi.cardControllerCreateElement(cardId, params);
 
 		return result.data;
 	};
@@ -49,7 +77,7 @@ export const useBoardApi = () => {
 		);
 		if (createdCard.data.id) {
 			createElement(createdCard.data.id, {
-				type: CreateContentElementBodyTypeEnum.Text,
+				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
 		}
@@ -86,6 +114,7 @@ export const useBoardApi = () => {
 		moveColumnCall,
 		updateCardTitle,
 		updateColumnTitleCall,
+		updateElementCall,
 		createCardCall,
 	};
 };

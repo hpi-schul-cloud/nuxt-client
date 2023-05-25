@@ -1,4 +1,4 @@
-import { CreateContentElementBodyTypeEnum } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import { onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
@@ -9,6 +9,10 @@ declare type CardState = {
 	isLoading: boolean;
 	card: BoardCard | undefined;
 };
+
+export type AddCardElement = (
+	type: ContentElementType
+) => Promise<AnyContentElement | undefined>;
 
 export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
@@ -51,13 +55,15 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.height = newHeight;
 	};
 
-	const addElement = async (type: CreateContentElementBodyTypeEnum) => {
+	const addElement = async (type: ContentElementType) => {
 		if (cardState.card === undefined) {
 			return;
 		}
 		const result = await createElement(cardState.card.id, { type });
 
 		cardState.card.elements.push(result as unknown as AnyContentElement);
+
+		return result;
 	};
 
 	onMounted(() => fetchCard(id));
