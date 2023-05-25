@@ -2,13 +2,14 @@
 	<v-card data-testid="migration-warning-card">
 		<v-card-title class="card-title">{{ $t(title) }}</v-card-title>
 		<v-card-text>
-			<p
-				v-html="
+			<RenderHTML
+				:html="
 					$t(text, {
 						gracePeriod: gracePeriodInDays,
-					})
+					}).toString()
 				"
-			></p>
+				component="p"
+			/>
 			<v-checkbox
 				v-if="check"
 				v-model="isConfirmed"
@@ -18,7 +19,7 @@
 					})
 				"
 				data-testid="migration-confirmation-checkbox"
-			></v-checkbox>
+			/>
 		</v-card-text>
 		<v-card-actions>
 			<v-btn
@@ -45,6 +46,7 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import EnvConfigModule from "@/store/env-config";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -53,6 +55,7 @@ export enum MigrationWarningCardTypeEnum {
 
 export default defineComponent({
 	name: "MigrationWarningCard",
+	components: { RenderHTML },
 	emits: ["start", "set", "end"],
 	props: {
 		value: {

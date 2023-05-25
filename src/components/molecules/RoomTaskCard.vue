@@ -51,13 +51,12 @@
 				<h6 class="mt-1 mb-2 task-name">
 					{{ task.name }}
 				</h6>
-				<!-- eslint-disable vue/no-v-html -->
-				<div
+				<RenderHTML
 					v-if="canShowDescription"
 					class="text--primary mt-1 mb-0 pb-0 text-description"
 					tabindex="0"
-					v-html="task.description"
-				></div>
+					:html="task.description"
+				/>
 			</v-card-text>
 			<v-card-text
 				v-if="!isPlanned && !isDraft && !isFinished"
@@ -125,11 +124,12 @@ import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
 import { envConfigModule } from "@/store";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { MoreItemMenu, VCustomChipTimeRemaining },
+	components: { MoreItemMenu, VCustomChipTimeRemaining, RenderHTML },
 	props: {
 		task: {
 			type: Object,

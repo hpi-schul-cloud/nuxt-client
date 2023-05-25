@@ -125,11 +125,14 @@
 				"
 				data-testid="migrateUsersCheckbox"
 			/>
-			<p
-				v-html="
-					$t('pages.administration.ldap.activate.migrateExistingUsers.info')
+			<RenderHTML
+				:html="
+					$t(
+						'pages.administration.ldap.activate.migrateExistingUsers.info'
+					).toString()
 				"
-			></p>
+				component="p"
+			/>
 		</section>
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
@@ -200,6 +203,7 @@ import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import { mdiChevronLeft } from "@mdi/js";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -211,7 +215,7 @@ const redirectToConfigPage = (page) => {
 };
 
 export default {
-	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage },
+	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage, RenderHTML },
 	data() {
 		return {
 			migrateUsersCheckbox: false,

@@ -1,11 +1,11 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tool.title')"
+		:headline="$t('pages.tool.title').toString()"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<p v-html="$t('pages.tool.description')"></p>
-		<v-spacer class="mt-10"></v-spacer>
+		<RenderHTML :html="$t('pages.tool.description').toString()" component="p" />
+		<v-spacer class="mt-10" />
 		<v-select
 			:label="$t('pages.tool.select.label')"
 			item-title="name"
@@ -31,9 +31,7 @@
 			</template>
 		</v-select>
 		<template v-if="toolTemplate && toolTemplate.parameters.length > 0">
-			<external-tool-config-settings
-				v-model="toolTemplate"
-			></external-tool-config-settings>
+			<external-tool-config-settings v-model="toolTemplate" />
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
@@ -94,14 +92,15 @@ import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
 	components: {
 		DefaultWireframe,
 		ExternalToolConfigSettings,
 		ExternalToolSelectionRow,
+		RenderHTML,
 	},
 	props: {
 		configId: {

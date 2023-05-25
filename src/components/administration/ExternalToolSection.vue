@@ -48,14 +48,15 @@
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
-					<p
+					<RenderHTML
 						class="text-md mt-2"
-						v-html="
+						:html="
 							$t(
 								'components.administration.externalToolsSection.dialog.content',
 								{ itemName: getItemName }
-							)
+							).toString()
 						"
+						component="p"
 					/>
 				</v-card-text>
 				<v-card-actions>
@@ -102,10 +103,11 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useRouter } from "vue-router/composables";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "ExternalToolSection",
-	components: { ExternalToolToolbar },
+	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
 		const router: VueRouter = useRouter();
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
