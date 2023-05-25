@@ -1,21 +1,21 @@
 <template>
-	<vCard
+	<VCard
 		class="mx-auto mb-4 board-card"
 		role="button"
 		tabindex="0"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 	>
-		<v-card-text>
+		<VCardText>
 			<div class="mb-0">
 				<div class="title-section">
-					<v-icon size="14">{{ mdiViewDashboard }}</v-icon>
+					<VIcon size="14">{{ mdiViewDashboard }}</VIcon>
 					Spalten-Board
 				</div>
 			</div>
-			<h6 class="mb-2 task-name mt-1">Kurs-Board</h6>
-		</v-card-text>
-	</vCard>
+			<h6 class="mb-2 board-title mt-1">Kurs-Board</h6>
+		</VCardText>
+	</VCard>
 </template>
 
 <script lang="ts">
