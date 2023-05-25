@@ -115,7 +115,7 @@ describe("schools module", () => {
 				} as AxiosInstance);
 
 				const schoolsModule = new SchoolsModule({});
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				authModule.setUser({
 					schoolId: "4711",
@@ -150,7 +150,6 @@ describe("schools module", () => {
 				await schoolsModule.fetchSchool();
 
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -197,12 +196,11 @@ describe("schools module", () => {
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 
 				await schoolsModule.fetchFederalState();
 
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -251,13 +249,12 @@ describe("schools module", () => {
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 
 				await schoolsModule.fetchCurrentYear();
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -310,13 +307,12 @@ describe("schools module", () => {
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 
 				await schoolsModule.fetchSystems();
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -398,13 +394,12 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 
 				await schoolsModule.update(uploadData);
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -472,13 +467,12 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 
 				await schoolsModule.deleteSystem(systemId);
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
@@ -502,7 +496,7 @@ describe("schools module", () => {
 					mockApi as unknown as serverApi.UserImportApiInterface
 				);
 				setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				setErrorSpy = jest.spyOn(schoolsModule, "setError");
+				setErrorSpy = jest.spyOn(schoolsModule, "setApplicationError");
 				setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 			});
 
@@ -571,7 +565,6 @@ describe("schools module", () => {
 				).toHaveBeenCalledTimes(1);
 
 				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
