@@ -9,7 +9,7 @@ const loadLocaleMessages = (): LocaleMessages => {
 		en: require("../locales/en.json"),
 		de: require("../locales/de.json"),
 		es: require("../locales/es.json"),
-		ua: require("../locales/ua.json"),
+		uk: require("../locales/uk.json"),
 	};
 	return messages;
 };
