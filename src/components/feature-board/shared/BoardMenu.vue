@@ -3,7 +3,6 @@
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
 				color="black"
-				small
 				text
 				dark
 				icon
