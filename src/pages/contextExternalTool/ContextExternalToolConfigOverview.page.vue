@@ -184,8 +184,8 @@ export default defineComponent({
 		};
 
 		const router: VueRouter = useRouter();
-		const onCancel = () => {
-			router.push({ path: contextRoute.to });
+		const onCancel = async () => {
+			await router.push({ path: contextRoute.to });
 		};
 
 		const onSaveTool = async () => {

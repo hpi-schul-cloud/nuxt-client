@@ -171,8 +171,8 @@ describe("ContextExternalToolConfigOverview", () => {
 	});
 
 	describe("onMounted is called", () => {
-		it("should load available tool configurations", () => {
-			setup();
+		it("should load available tool configurations", async () => {
+			await setup();
 			expect(
 				externalToolsModule.loadAvailableSchoolToolConfigurations
 			).toHaveBeenCalled();
