@@ -225,7 +225,7 @@ export default class SchoolsModule extends VuexModule {
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
 					this.setApplicationError(
-						error.response?.status ?? 500,
+						error.response?.status,
 						"pages.administration.school.index.error"
 					);
 				}
@@ -249,7 +249,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -269,7 +269,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -294,7 +294,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -317,7 +317,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -341,7 +341,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -362,7 +362,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -392,7 +392,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -420,7 +420,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setApplicationError(
-					error.response?.status ?? 500,
+					error.response?.status,
 					"pages.administration.school.index.error"
 				);
 			}
@@ -451,11 +451,11 @@ export default class SchoolsModule extends VuexModule {
 			if (error instanceof AxiosError) {
 				if (error.response?.data.message.startsWith("grace_period_expired")) {
 					this.setApplicationError(
-						error.response?.status ?? 500,
+						error.response?.status,
 						"pages.administration.school.index.error.gracePeriodExceeded"
 					);
 				} else {
-					this.setApplicationError(error.response?.status ?? 500);
+					this.setApplicationError(error.response?.status);
 				}
 			}
 		}
