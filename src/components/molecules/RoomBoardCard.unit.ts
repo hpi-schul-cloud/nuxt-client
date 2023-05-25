@@ -10,27 +10,27 @@ const $router = {
 describe("RoomBoardCard", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = () => {
+	const setup = (props: { dragInProgress: boolean; keyDrag: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(RoomBoardCard as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				i18n: { t: (key: string) => key },
 			},
-			propsData: { keyDrag: false, dragInProgress: false },
+			propsData: props,
 			mocks: { $router },
 		});
 	};
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup();
+			setup({ dragInProgress: false, keyDrag: false });
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
 	});
 
 	describe("when a board card is rendered", () => {
 		it("should have correct board title", () => {
-			setup();
+			setup({ dragInProgress: false, keyDrag: false });
 			const expectedBoardTitle = "Kurs-Board";
 			const boardTitle = wrapper.find(".board-title").element.textContent;
 
@@ -38,7 +38,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should redirect to column board when clicking on the card", () => {
-			setup();
+			setup({ dragInProgress: false, keyDrag: false });
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
@@ -49,12 +49,12 @@ describe("RoomBoardCard", () => {
 			);
 		});
 
-		it("should NOT redirect to column board if a card is dragged", () => {
-			setup();
-			wrapper.setProps({ dragInProgress: true });
+		it("should not redirect to column board if a card is dragged", async () => {
+			setup({ dragInProgress: true, keyDrag: false });
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
+			await wrapper.vm.$nextTick();
 
 			expect($router.push).not.toHaveBeenCalled();
 		});

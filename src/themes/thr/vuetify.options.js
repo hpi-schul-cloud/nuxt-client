@@ -9,6 +9,7 @@ const custom = {
 				primary: {
 					base: "#2876d0",
 					darken1: "#1e599c",
+					lighten10: "#e9f1fb",
 				},
 				secondary: {
 					base: "#185888",

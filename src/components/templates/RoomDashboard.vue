@@ -16,6 +16,9 @@
 				<RoomBoardCard
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
+					@move-element="moveByKeyboard"
+					@on-drag="isDragging = !isDragging"
+					@tab-pressed="isDragging = false"
 				></RoomBoardCard>
 				<div v-for="(item, index) of roomData.elements" :key="index">
 					<room-task-card

@@ -5,6 +5,10 @@
 		tabindex="0"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
+		@keydown.up.prevent="onKeyPress"
+		@keydown.down.prevent="onKeyPress"
+		@keydown.space.prevent="onKeyPress"
+		@keydown.tab="$emit('tab-pressed')"
 	>
 		<VCardText>
 			<div class="mb-0">
@@ -26,20 +30,44 @@ import { useRouter } from "vue-router/composables";
 export default defineComponent({
 	name: "RoomBoardCard",
 	props: {
+		id: { type: String, default: "646e1722d921ff87bc02f7df" },
 		keyDrag: { type: Boolean, required: true },
 		dragInProgress: { type: Boolean, required: true },
 	},
-
-	setup(props) {
+	emits: ["tab-pressed", "on-drag", "move-element"],
+	setup(props, { emit }) {
 		const router = useRouter();
 		const openBoard = () => {
 			if (!props.dragInProgress) {
 				router.push("646e1722d921ff87bc02f7df/board");
 			}
 		};
+		const onKeyPress = (e: KeyboardEvent) => {
+			if (e.key === "") {
+				emit("on-drag");
+			}
+			if (e.key === "ArrowUp") {
+				if (props.keyDrag) {
+					emit("move-element", {
+						id: props.id,
+						moveIndex: -1,
+					});
+				}
+			}
+			if (e.key === "ArrowDown") {
+				if (props.keyDrag) {
+					emit("move-element", {
+						id: props.id,
+						moveIndex: 1,
+					});
+				}
+			}
+		};
+
 		return {
 			mdiViewDashboard,
 			openBoard,
+			onKeyPress,
 		};
 	},
 });
@@ -47,6 +75,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .board-card {
-	background-color: rgba(158, 41, 43, 0.1);
+	background-color: var(--v-primary-lighten10);
 }
 </style>
