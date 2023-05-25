@@ -83,6 +83,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "../../store/rooms";
+import { CourseMetadataResponse } from "../../serverApi/v3";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -106,14 +107,15 @@ export default defineComponent({
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
-    const roomsModule: RoomsModule | undefined = inject<RoomsModule>("roomsModule");
+		const roomsModule: RoomsModule | undefined =
+			inject<RoomsModule>("roomsModule");
 
 		onMounted(async () => {
 			await externalToolsModule?.loadAvailableSchoolToolConfigurations(
 				props.contextId
 			);
 
-      await roomsModule?.fetchAllElements();
+			await roomsModule?.fetchAllElements();
 
 			hasData.value = true;
 		});
@@ -127,15 +129,23 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		//const contextRoute: Breadcrumb = {
-			//text: roomsModule?.getCourseSharingStatus //TODO load data from store reactively
-		//};
+		/*const allElements: CourseMetadataResponse[] | undefined =
+			roomsModule?.getAllElements;
+
+		if (allElements) {
+			const title = allElements[0].title;
+		}*/
+
+		const contextRoute: Breadcrumb = {
+			text: "Mathe", //roomsModule?.allElements[0].title as string, //TODO load data from store reactively
+			to: `/rooms/${props.contextId}`,
+		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
 				text: t("pages.courses.index.title"),
 				to: "/rooms-overview/",
 			},
-			//contextRoute,
+			contextRoute,
 			{
 				text: t("pages.tool.context.title"),
 				disabled: true,
@@ -145,27 +155,28 @@ export default defineComponent({
 		const { getTranslationKey } = useExternalToolMappings();
 
 		const hasData: Ref<boolean> = ref(false);
-		const loading: ComputedRef<boolean> = computed(
+		const loading: ComputedRef<boolean | undefined> = computed(
 			() => !hasData.value || externalToolsModule?.getLoading
 		);
 
-		const configurationItems: ComputedRef<ToolConfigurationListItem[]> =
-			computed(() => externalToolsModule?.getToolConfigurations);
+		const configurationItems: ComputedRef<
+			ToolConfigurationListItem[] | undefined
+		> = computed(() => externalToolsModule?.getToolConfigurations);
 
 		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
 
 		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
 		const hasToolTemplate: Ref<boolean> = ref(false);
 
-		const apiError: ComputedRef<BusinessError> = computed(
-			() => externalToolsModule.getBusinessError
+		const apiError: ComputedRef<BusinessError | undefined> = computed(
+			() => externalToolsModule?.getBusinessError
 		);
 
 		const onSelectTemplate = async (
 			selectedTool: ToolConfigurationListItem
 		) => {
 			toolTemplate.value =
-				await externalToolsModule.loadToolConfigurationTemplateFromSchoolExternalTool(
+				await externalToolsModule?.loadToolConfigurationTemplateFromSchoolExternalTool(
 					selectedTool.id
 				);
 
@@ -179,14 +190,14 @@ export default defineComponent({
 
 		const onSaveTool = async () => {
 			if (toolTemplate.value && props.contextId && props.contextType) {
-				await externalToolsModule.createContextExternalTool({
+				await externalToolsModule?.createContextExternalTool({
 					toolTemplate: toolTemplate.value,
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});
 			}
 
-			if (!externalToolsModule.getBusinessError.message) {
+			if (!externalToolsModule?.getBusinessError.message) {
 				await router.push({ path: contextRoute.to });
 			}
 		};

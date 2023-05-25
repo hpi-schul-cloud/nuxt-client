@@ -126,6 +126,28 @@ describe("ContextExternalToolConfigOverview", () => {
 
 			consoleErrorSpy.mockRestore();
 		});
+
+		it("should throw an error when i18n injection fails", () => {
+			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+			try {
+				shallowMount(
+					ContextExternalToolConfigOverviewPage as MountOptions<Vue>,
+					{
+						provide: {
+							externalToolsModule,
+							i18n: { t: (key: string) => key },
+						},
+					}
+				);
+			} catch (e) {
+				expect(consoleErrorSpy).toHaveBeenCalledWith(
+					expect.stringMatching(/injection "roomsModule" not found/)
+				);
+			}
+
+			consoleErrorSpy.mockRestore();
+		});
 	});
 
 	describe("t", () => {
@@ -163,12 +185,9 @@ describe("ContextExternalToolConfigOverview", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			// TODO: change to context title
-			expect(breadcrumbs.at(0).text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1).text()).toEqual("room");
-			expect(breadcrumbs.at(2).text()).toEqual("pages.tool.title");
+			expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
+			expect(breadcrumbs.at(1).text()).toEqual("Mathe"); //TODO change to courseName after implementation
+			expect(breadcrumbs.at(2).text()).toEqual("pages.tool.context.title");
 		});
 	});
 

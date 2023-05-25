@@ -371,7 +371,6 @@ export default class ExternalToolsModule extends VuexModule {
 		}
 	}
 
-	// TODO: missing test
 	@Action
 	async createContextExternalTool(payload: {
 		toolTemplate: ToolConfigurationTemplate;
