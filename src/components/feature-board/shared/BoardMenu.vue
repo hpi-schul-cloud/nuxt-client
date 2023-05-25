@@ -2,9 +2,7 @@
 	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
-				color="black"
 				text
-				dark
 				icon
 				v-bind="attrs"
 				v-on="on"
