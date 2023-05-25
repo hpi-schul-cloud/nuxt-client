@@ -10,7 +10,7 @@ If you want to test the multi-column-board on your local environment, you can cr
 npm run nest:start:console -- board create-boards
 ```
 
-This will create the mongodb-collection `boardnodes` (if it does not exist yet) and add several instances of board-nodes that form a tree of nodes that represents the board as a whole.
+This will create the mongodb-collection `boardnodes` (if it does not exist yet) and add several instances of board-nodes that form a tree of nodes that represents the board as a whole!
 
 Hint: You can see the id of the column-node in the generated output.
 
