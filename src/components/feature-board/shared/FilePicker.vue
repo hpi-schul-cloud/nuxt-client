@@ -24,10 +24,9 @@ export default defineComponent({
 			}
 		});
 
-		watch(file, (newValue: File) => {
+		watch(file, async (newValue: File) => {
 			if (newValue) {
-				console.log("newValue", newValue);
-				createFileElement(newValue);
+				await createFileElement(newValue);
 			}
 		});
 
