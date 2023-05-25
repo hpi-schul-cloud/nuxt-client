@@ -7,7 +7,7 @@ import {
 	ContentElementType,
 	CreateContentElementBody,
 	FileElementContent,
-	TextElementContent,
+	RichTextElementContent,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
@@ -37,10 +37,10 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
-		if (element.type === ContentElementType.Text) {
+		if (element.type === ContentElementType.RichText) {
 			return {
-				content: element.content as TextElementContent,
-				type: ContentElementType.Text,
+				content: element.content as RichTextElementContent,
+				type: ContentElementType.RichText,
 			};
 		}
 
@@ -77,7 +77,7 @@ export const useBoardApi = () => {
 		);
 		if (createdCard.data.id) {
 			createElement(createdCard.data.id, {
-				type: ContentElementType.Text,
+				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
 		}
