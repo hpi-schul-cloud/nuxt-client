@@ -215,7 +215,7 @@ export default defineComponent({
 
 			const tabs = [
 				{
-					name: "learnContent",
+					name: "learn-content",
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
 					dataTestId: "learnContent-tab",
@@ -424,7 +424,7 @@ export default defineComponent({
 			this.tabIndex = index >= 0 ? index : 0;
 		},
 		fabClick() {
-			if (this.currentTab.name === "learnContent") {
+			if (this.currentTab.name === "learn-content") {
 				this.importDialog.isOpen = true;
 			}
 		},
