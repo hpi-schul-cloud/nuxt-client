@@ -1,7 +1,6 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
 	<div>
-		<div v-if="!editable" class="ck-content" v-html="value" />
+		<RenderHTML class="ck-content" :html="value" />
 		<ck-editor
 			v-if="editable"
 			v-model="content"
@@ -19,10 +18,11 @@
 import { defineComponent, ref, watch, onMounted } from "vue";
 import CkEditor from "@/components/editor/CKEditor.vue";
 import renderMathInElement from "katex/dist/contrib/auto-render.js";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "RichTextCardElement",
-	components: { CkEditor },
+	components: { CkEditor, RenderHTML },
 	emits: ["input"],
 	props: {
 		value: {

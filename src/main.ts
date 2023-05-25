@@ -66,6 +66,9 @@ Vue.mixin({
 	},
 });
 
+import VueDOMPurifyHTML from "vue-dompurify-html";
+Vue.use(VueDOMPurifyHTML);
+
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";
