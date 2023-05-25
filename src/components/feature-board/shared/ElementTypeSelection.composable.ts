@@ -4,7 +4,7 @@ import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
-import { filesPOCModule } from "@/store";
+import { useFileStorageApi } from "./FileStorageApi.composable";
 import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 
 type CreateElementFn = (addElement: AddCardElement) => Promise<void>;
@@ -25,6 +25,7 @@ export const useElementTypeSelection = () => {
 
 export const useInternalElementTypeSelection = createSharedComposable(() => {
 	const { triggerFilePicker } = useFilePicker();
+	const { upload } = useFileStorageApi();
 	const isDialogOpen = ref<boolean>(false);
 
 	let resolveWithCreateFunction:
@@ -43,23 +44,16 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 
 	const createFileElement = async (file: File) => {
 		if (addElementFunction && file) {
-			const result = await addElementFunction(ContentElementType.File);
-			console.log("result", result);
+			const element = await addElementFunction(ContentElementType.File);
 			// TODO: upload multiple files at once? File array?
-			if (result?.id) {
-				await filesPOCModule.upload(
-					result.id,
+			if (element?.id) {
+				const fileRecordResponse = await upload(
+					element.id,
 					FileRecordParamsParentType.BOARDNODES,
 					file
 				);
-				console.log("filesPOCModule.files", filesPOCModule.files);
-				console.log("filesPOCModule.status", filesPOCModule.status);
-				console.log(
-					"filesPOCModule.businessError",
-					filesPOCModule.businessError
-				);
-				// 	result.fileRecord = fileRecordResponse;
-				//	result.showProgress = true; // until upload is finished
+				// element.fileRecord = fileRecordResponse;
+				// element.showProgress = true; // until upload is finished
 			}
 		}
 	};
