@@ -29,10 +29,12 @@ describe("RoomBoardCard", () => {
 	});
 
 	describe("when a board card is rendered", () => {
-		it.todo("should have correct board title", () => {
+		it("should have correct board title", () => {
 			setup();
 			const expectedBoardTitle = "Kurs-Board";
-			const boardTitle = wrapper.find(".board-title");
+			const boardTitle = wrapper.find(".board-title").element.textContent;
+
+			expect(boardTitle).toContain(expectedBoardTitle);
 		});
 
 		it("should redirect to column board when clicking on the card", () => {
@@ -47,11 +49,14 @@ describe("RoomBoardCard", () => {
 			);
 		});
 
-		it.todo(
-			"should NOT redirect to column board if dragging is in progress",
-			() => {
-				setup();
-			}
-		);
+		it("should NOT redirect to column board if a card is dragged", () => {
+			setup();
+			wrapper.setProps({ dragInProgress: true });
+			const boardCard = wrapper.findComponent({ name: "VCard" });
+
+			boardCard.vm.$emit("click");
+
+			expect($router.push).not.toHaveBeenCalled();
+		});
 	});
 });

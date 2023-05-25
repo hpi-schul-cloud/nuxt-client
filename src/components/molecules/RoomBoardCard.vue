@@ -30,10 +30,12 @@ export default defineComponent({
 		dragInProgress: { type: Boolean, required: true },
 	},
 
-	setup() {
+	setup(props) {
 		const router = useRouter();
 		const openBoard = () => {
-			router.push("646e1722d921ff87bc02f7df/board");
+			if (!props.dragInProgress) {
+				router.push("646e1722d921ff87bc02f7df/board");
+			}
 		};
 		return {
 			mdiViewDashboard,
