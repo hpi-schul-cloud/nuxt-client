@@ -1,8 +1,14 @@
 <template>
-	<vCard class="mx-auto mb-4 board-card" @click="handleClick">
+	<vCard
+		class="mx-auto mb-4 board-card"
+		role="button"
+		tabindex="0"
+		@click="openBoard"
+		@keydown.enter.self="openBoard"
+	>
 		<v-card-text>
 			<div class="mb-0">
-				<div class="title-section" tabindex="0">
+				<div class="title-section">
 					<v-icon size="14">{{ mdiViewDashboard }}</v-icon>
 					Spalten-Board
 				</div>
@@ -26,12 +32,12 @@ export default defineComponent({
 
 	setup() {
 		const router = useRouter();
-		const handleClick = () => {
+		const openBoard = () => {
 			router.push("646e1722d921ff87bc02f7df/board");
 		};
 		return {
 			mdiViewDashboard,
-			handleClick,
+			openBoard,
 		};
 	},
 });
