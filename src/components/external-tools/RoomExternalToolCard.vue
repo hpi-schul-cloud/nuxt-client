@@ -13,6 +13,7 @@
 				:src="tool.logoUrl"
 				contain
 				data-testid="tool-card-logo"
+				:alt="$t('pages.rooms.tools.logo')"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>

@@ -889,6 +889,7 @@
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.ariaLabel": "Список поточних {itemCount} елементів курсів",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.tools.logo": "Інструмент-логотип",
 	"pages.rooms.tabLabel.toolsOld": "Інструмент",
 	"pages.rooms.tabLabel.tools": "Інструмент (новий)",
 	"pages.rooms.tabLabel.groups": "Групи",

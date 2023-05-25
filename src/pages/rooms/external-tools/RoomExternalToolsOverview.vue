@@ -9,6 +9,7 @@
 				height="200"
 				src="@/assets/img/empty-state/tools-empty-state.svg"
 				contain
+				:alt="$t('pages.rooms.tools.logo')"
 			/>
 			<h4>
 				{{ $t("pages.rooms.tools.emptyState") }}
