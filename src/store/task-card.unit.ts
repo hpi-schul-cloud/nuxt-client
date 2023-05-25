@@ -19,7 +19,7 @@ const mockTaskCardData: TaskCardResponse = {
 			cardElementType: CardElementResponseCardElementTypeEnum.RichText,
 			content: {
 				value: "<p>some editor content</p>",
-				inputFormat: CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+				inputFormat: CardRichTextElementResponseInputFormatEnum.RichTextCk5,
 			},
 		},
 	],
@@ -163,9 +163,9 @@ describe("task-card store", () => {
 					cardElements: [
 						{
 							content: {
-								type: "richtext",
+								type: "richText",
 								inputFormat:
-									RichTextCardElementParamInputFormatEnum.RichtextCk5,
+									RichTextCardElementParamInputFormatEnum.RichTextCk5,
 								value: "Lorem ipsum",
 							},
 						},
