@@ -300,7 +300,7 @@ export default class ExternalToolsModule extends VuexModule {
 		}
 	}
 
-	// TODO: missing test
+	// TODO: test the real endpoint
 	@Action
 	async loadAvailableSchoolToolConfigurations(
 		contextId: string
@@ -338,7 +338,7 @@ export default class ExternalToolsModule extends VuexModule {
 		}
 	}
 
-	// TODO: missing test
+	// TODO: test the real endpoint
 	@Action
 	async loadToolConfigurationTemplateFromSchoolExternalTool(
 		toolId: string
