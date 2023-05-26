@@ -1,14 +1,14 @@
+import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { createSharedComposable } from "@vueuse/core";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
-import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 
 export const useInternalElementTypeSelection = createSharedComposable(() => {
-	const { file, triggerFilePicker } = useFilePicker();
+	const { triggerFilePicker } = useFilePicker();
 	const { upload } = useFileStorageApi();
 	const isDialogOpen = ref<boolean>(false);
 
@@ -41,13 +41,6 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 			}
 		}
 	};
-
-	watch(file, async (newValue) => {
-		if (newValue) {
-			await createFileElement(newValue);
-		}
-		closeDialog();
-	});
 
 	const elementTypeOptions = [
 		{

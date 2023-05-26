@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-file-input v-show="false" ref="inputRef" v-model="file" />
+		<v-file-input v-show="false" ref="inputRef" v-model="modelFile" />
 	</div>
 </template>
 
@@ -11,10 +11,11 @@ import { useFilePicker } from "./FilePicker.composable";
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
-	props: {},
-	setup() {
-		const { isFilePickerOpen, file, triggerFilePicker } = useFilePicker();
+	emits: ["update:file"],
+	setup(props, { emit }) {
+		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
 		const inputRef = ref();
+		const modelFile = ref();
 
 		watch(isFilePickerOpen, (newValue: boolean) => {
 			if (newValue) {
@@ -23,9 +24,15 @@ export default defineComponent({
 			}
 		});
 
+		watch(modelFile, (newValue) => {
+			if (newValue) {
+				emit("update:file", newValue);
+			}
+		});
+
 		return {
 			inputRef,
-			file,
+			modelFile,
 		};
 	},
 });

@@ -53,7 +53,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker />
+		<FilePicker @update:file="(e) => onCreateFileElementMode(e)" />
 	</div>
 </template>
 
@@ -134,17 +134,23 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = async () => {
-			const { askType } = useInternalElementTypeSelection();
+		const { askType, createFileElement } = useInternalElementTypeSelection();
 
+		const onAddElement = async () => {
 			askType(addElement);
 
 			startEditMode();
 		};
 
+		const onCreateFileElementMode = (file: File) => {
+			createFileElement(file);
+			onStartEditMode();
+		};
+
 		const onStartEditMode = () => {
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			stopEditMode();
 		};
@@ -177,6 +183,7 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
+			onCreateFileElementMode,
 		};
 	},
 });
