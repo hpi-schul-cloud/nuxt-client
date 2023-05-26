@@ -1,13 +1,10 @@
 <template>
 	<VCard
 		class="mx-auto mb-4 board-card"
-		role="button"
 		tabindex="0"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
-		@keydown.up.prevent="onKeyPress"
-		@keydown.down.prevent="onKeyPress"
-		@keydown.space.prevent="onKeyPress"
+		@keydown.up.down.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
 		<VCardText>
@@ -30,7 +27,7 @@ import { useRouter } from "vue-router/composables";
 export default defineComponent({
 	name: "RoomBoardCard",
 	props: {
-		id: { type: String, default: "646e1722d921ff87bc02f7df" },
+		id: { type: String, default: "646c64347fc09976edcff185" },
 		keyDrag: { type: Boolean, required: true },
 		dragInProgress: { type: Boolean, required: true },
 	},
@@ -43,6 +40,7 @@ export default defineComponent({
 			}
 		};
 		const onKeyPress = (e: KeyboardEvent) => {
+			console.log(e);
 			if (e.key === " ") {
 				emit("on-drag");
 			}

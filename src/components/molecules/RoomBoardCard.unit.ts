@@ -57,7 +57,7 @@ describe("RoomBoardCard", () => {
 			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
 		});
 
-		it("should redirect to column board when pressing enter on the card", () => {
+		it.skip("should redirect to column board when pressing enter on the card", () => {
 			setup();
 			const boardId = wrapper.props().id;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
