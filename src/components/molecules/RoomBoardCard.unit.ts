@@ -30,14 +30,12 @@ describe("RoomBoardCard", () => {
 		$router.push.mockReset();
 	});
 
-	describe("when component is mounted", () => {
+	describe("when a board card is rendered", () => {
 		it("should be found in dom", () => {
 			setup();
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
-	});
 
-	describe("when a board card is rendered", () => {
 		it("should have correct board title", () => {
 			setup();
 			const expectedBoardTitle = "Kurs-Board";
@@ -45,13 +43,26 @@ describe("RoomBoardCard", () => {
 
 			expect(boardTitle).toContain(expectedBoardTitle);
 		});
+	});
 
+	describe("when interacting with a board card", () => {
 		it("should redirect to column board when clicking on the card", () => {
 			setup();
 			const boardId = wrapper.props().id;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
+
+			expect($router.push).toHaveBeenCalledTimes(1);
+			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
+		});
+
+		it("should redirect to column board when pressing enter on the card", () => {
+			setup();
+			const boardId = wrapper.props().id;
+			const boardCard = wrapper.findComponent({ name: "VCard" });
+
+			boardCard.vm.$emit("keydown.enter");
 
 			expect($router.push).toHaveBeenCalledTimes(1);
 			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
