@@ -4,6 +4,15 @@ import Vue, { ref } from "vue";
 import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionsTypes } from "../types/Board";
+
+jest.mock("../shared/BoardPermissions.composable");
+const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+const defaultPermissions = {
+	hasDeletePermission: true,
+};
 
 const CARD_SKELETON: BoardCardSkeleton = {
 	height: 200,
@@ -24,7 +33,11 @@ const mockedUseCardState = jest.mocked(useCardState);
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options?: { card: BoardCard; isLoading?: boolean }) => {
+	const setup = (options?: {
+		card: BoardCard;
+		isLoading?: boolean;
+		permissions?: BoardPermissionsTypes;
+	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseCardState.mockReturnValue({
@@ -36,6 +49,11 @@ describe("CardHost", () => {
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
+		});
+
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
@@ -61,6 +79,23 @@ describe("CardHost", () => {
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
 				);
+			});
+		});
+	});
+
+	describe("user permissions", () => {
+		describe("when user is not permitted to delete", () => {
+			it("should not be rendered on DOM", () => {
+				setup({
+					card: CARD_WITHOUT_ELEMENTS,
+					permissions: { hasDeletePermission: false },
+				});
+
+				const boardMenuComponent = wrapper.findAllComponents({
+					name: "BoardMenu",
+				});
+
+				expect(boardMenuComponent.length).toStrictEqual(0);
 			});
 		});
 	});
