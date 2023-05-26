@@ -185,7 +185,7 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
-										<div
+										<RenderHTML
 											:html="
 												$t('pages.administration.migration.summary', {
 													instance: $theme.short_name,
@@ -398,14 +398,13 @@
 <script>
 /* eslint-disable max-lines */
 import { mdiClose, mdiLoading } from "@mdi/js";
-
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
+import RenderHTML from "@/components/render-html/RenderHTML.vue";
 
 export default {
-	components: { DefaultWireframe, ImportUsers },
+	components: { DefaultWireframe, ImportUsers, RenderHTML },
 	data() {
 		return {
 			mdiClose,
