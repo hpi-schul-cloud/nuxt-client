@@ -59,6 +59,7 @@
 
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -66,8 +67,7 @@ import {
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
@@ -80,7 +80,6 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "CardHost",
@@ -100,7 +99,7 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);

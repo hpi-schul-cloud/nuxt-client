@@ -1,6 +1,6 @@
+import { authModule, envConfigModule } from "@/store";
 import Vue from "vue";
 import VueI18n, { LocaleMessages } from "vue-i18n";
-import { authModule, envConfigModule } from "@/store";
 
 Vue.use(VueI18n);
 
@@ -14,12 +14,15 @@ const loadLocaleMessages = (): LocaleMessages => {
 	return messages;
 };
 
+export let i18n: VueI18n;
+
 export const createI18n = (): VueI18n => {
-	return new VueI18n({
+	i18n = new VueI18n({
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
 		messages: loadLocaleMessages(),
 	});
+	return i18n;
 };
 
 // NUXT_REMOVAL remove $ts when refactored

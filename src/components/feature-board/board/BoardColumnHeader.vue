@@ -39,16 +39,15 @@
 
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -74,7 +73,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.columnId
 		);

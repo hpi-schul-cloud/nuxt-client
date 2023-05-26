@@ -25,10 +25,9 @@
 <script lang="ts">
 import InstanceTile from "@/components/molecules/InstanceTile.vue";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { injectStrict } from "@/utils/inject";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useMediaQuery, useTitle } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
-import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -38,11 +37,7 @@ export default defineComponent({
 	setup() {
 		useTitle("dBildungscloud");
 
-		const i18n = injectStrict<VueI18n>("i18n");
-
-		if (i18n === undefined) {
-			throw new Error("i18n module undefined"); // NUXT_REMOVAL throw createApplicationError instead
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
 		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);

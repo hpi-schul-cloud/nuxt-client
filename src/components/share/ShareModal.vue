@@ -51,9 +51,10 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -72,7 +73,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const notifier = inject("notifierModule");
 
 		const t = (key) => {

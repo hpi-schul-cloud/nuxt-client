@@ -27,10 +27,11 @@
 <script>
 import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ImportFlow",
@@ -54,7 +55,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const copyModule = inject("copyModule");
 		const notifier = inject("notifierModule");
 		const loadingStateModule = inject("loadingStateModule");

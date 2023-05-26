@@ -30,26 +30,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FileTableItem } from "@/pages/files/file-table-item";
-import { DataTableHeader } from "vuetify";
-import { computed, ComputedRef, inject, onMounted, Ref, ref } from "vue";
-import { CollaborativeFile } from "@/store/types/collaborative-file";
-import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
-import VueI18n from "vue-i18n";
-import VueRouter, { Route } from "vue-router";
-import CollaborativeFilesModule from "@/store/collaborative-files";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
-import { useRoute, useRouter } from "vue-router/composables";
+import { FileTableItem } from "@/pages/files/file-table-item";
+import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 import { fromNow } from "@/plugins/datetime";
-import { injectStrict } from "@/utils/inject";
+import CollaborativeFilesModule from "@/store/collaborative-files";
+import { CollaborativeFile } from "@/store/types/collaborative-file";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	Ref,
+	ref,
+} from "vue";
+import VueRouter, { Route } from "vue-router";
+import { useRoute, useRouter } from "vue-router/composables";
+import { DataTableHeader } from "vuetify";
 
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const collaborativeFilesModule: CollaborativeFilesModule | undefined =
 			inject<CollaborativeFilesModule>("collaborativeFilesModule");
 		if (!collaborativeFilesModule || !i18n) {

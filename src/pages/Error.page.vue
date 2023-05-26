@@ -18,15 +18,14 @@
 	</div>
 </template>
 <script lang="ts">
-import ApplicationErrorModule from "@/store/application-error";
-import { computed, defineComponent, inject, onUnmounted } from "vue";
-import VueI18n from "vue-i18n";
-import Theme from "@/theme.config";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { useTitle } from "@vueuse/core";
 import { useStorage } from "@/composables/locale-storage.composable";
-import { injectStrict } from "@/utils/inject";
+import ApplicationErrorModule from "@/store/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import Theme from "@/theme.config";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useTitle } from "@vueuse/core";
+import { computed, defineComponent, inject, onUnmounted } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -42,7 +41,7 @@ export default defineComponent({
 			HttpStatusCode.Unauthorized,
 			HttpStatusCode.Forbidden,
 		];
-		const i18n = injectStrict<VueI18n | undefined>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
 			"applicationErrorModule"
 		);

@@ -106,11 +106,6 @@
 </template>
 
 <script>
-import {
-	ImportUserResponseRoleNamesEnum as Roles,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import { authModule, envConfigModule, roomModule } from "@/store";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import MoreItemMenu from "@/components/molecules/MoreItemMenu";
@@ -119,26 +114,32 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import {
+	ImportUserResponseRoleNamesEnum as Roles,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
+import { authModule, envConfigModule, roomModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
-	mdiTrayArrowDown,
 	mdiEmailPlusOutline,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
+	mdiPencilOutline,
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiPencilOutline,
+	mdiTrayArrowDown,
 	mdiViewListOutline,
 } from "@mdi/js";
-import { defineComponent, inject } from "vue";
+import { defineComponent } from "vue";
 import { useCopy } from "../composables/copy";
 import { useLoadingState } from "../composables/loadingState";
-import { CopyParamsTypeEnum } from "@/store/copy";
 
 export default defineComponent({
 	setup() {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isLoadingDialogOpen } = useLoadingState(
 			i18n.t("components.molecules.copyResult.title.loading")
 		);

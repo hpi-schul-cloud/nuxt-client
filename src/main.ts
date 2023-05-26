@@ -28,9 +28,9 @@ import {
 import Vue from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
+import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import store from "./plugins/store";
 
 Vue.config.productionTip = false;
 
@@ -74,8 +74,8 @@ import "@/plugins/polyfills";
 import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { initializeAxios } from "./utils/api";
 import { handleApplicationError } from "./plugins/application-error-handler";
+import { initializeAxios } from "./utils/api";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -138,7 +138,6 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			i18n,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts">
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
@@ -50,7 +50,6 @@ import {
 } from "../types/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -77,7 +76,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const colWidth = ref<number>(400);
 
 		const onCreateCard = () => emit("create:card", props.column.id);

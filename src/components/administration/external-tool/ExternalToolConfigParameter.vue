@@ -45,14 +45,14 @@
 </template>
 
 <script lang="ts">
-import { useExternalToolValidation } from "./external-tool-validation.composable";
-import VueI18n from "vue-i18n";
-import { defineComponent, inject, PropType, ref, Ref, watch } from "vue";
 import {
 	ToolParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
-import { injectStrict } from "@/utils/inject";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { PropType, Ref, defineComponent, ref, watch } from "vue";
+import VueI18n from "vue-i18n";
+import { useExternalToolValidation } from "./external-tool-validation.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -64,10 +64,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const parameter: Ref<ToolParameter> = ref(props.value);
 

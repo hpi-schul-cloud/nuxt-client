@@ -85,6 +85,8 @@
 </template>
 
 <script lang="ts">
+import ExternalToolsModule from "@/store/external-tools";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	computed,
 	ComputedRef,
@@ -94,22 +96,19 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
-import ExternalToolsModule from "@/store/external-tools";
 import { default as VueRouter } from "vue-router";
+import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { useRouter } from "vue-router/composables";
-import { injectStrict } from "@/utils/inject";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar },
 	setup() {
 		const router: VueRouter = useRouter();
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!externalToolsModule || !i18n) {

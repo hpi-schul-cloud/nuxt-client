@@ -55,12 +55,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, inject } from "vue";
-import VueI18n from "vue-i18n";
-import { useTimePickerState } from "./state/TimePickerState.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
+import { computed, defineComponent, ref, toRef } from "vue";
+import { useTimePickerState } from "./state/TimePickerState.composable";
 import { ValidationRule } from "./types/Validation";
-import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -73,10 +72,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n: VueI18n = injectStrict<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const t = (key: string) => {
 			const translateResult = i18n.t(key);
