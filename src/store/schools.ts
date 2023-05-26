@@ -1,7 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { isGracePeriodError } from "./schools-util";
 import { FederalState, OauthMigration, School, Year } from "./types/schools";
 import {
 	MigrationBody,
@@ -10,6 +9,7 @@ import {
 	SchoolApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
+	ValidationError,
 } from "@/serverApi/v3";
 import { AxiosError, AxiosResponse } from "axios";
 import { ApplicationError } from "./types/application-error";
@@ -48,6 +48,10 @@ function transformSchoolClientToServer(school: School): SchoolPayload {
 		}
 	});
 	return { ...school, features: featureArray };
+}
+
+function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
+	return !!error.response?.data.message.startsWith("grace_period_expired");
 }
 
 @Module({
