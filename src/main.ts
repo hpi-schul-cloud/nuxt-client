@@ -108,7 +108,11 @@ Vue.use(VueDOMPurifyHTML, {
 			},
 		},
 		translations: {
-			ALLOWED_TAGS: ["u", "h2"],
+			ALLOWED_TAGS: ["br", "span", "p", "ul", "li", "a", "b"],
+			ALLOWED_ATTR: {
+				a: ["href", "target"],
+				span: ["class"],
+			},
 		},
 	},
 });
