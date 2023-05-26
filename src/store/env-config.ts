@@ -133,13 +133,21 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getNewSchoolAdminPageAsDefault(): boolean {
 		return (
-			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ||
+			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ??
 			false
 		);
 	}
 
 	get getClientUserLoginMigration(): boolean {
-		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED || false;
+		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED ?? false;
+	}
+
+	get getCtlToolsTabEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED ?? false;
+	}
+
+	get getLtiToolsTabEnabled(): boolean {
+		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED ?? true;
 	}
 
 	get getEnv(): Envs {
