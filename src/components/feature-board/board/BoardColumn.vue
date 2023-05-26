@@ -17,6 +17,7 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
+			:lock-axis="lockAxis"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 		>
@@ -30,7 +31,10 @@
 				/>
 			</Draggable>
 		</Container>
-		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
+		<BoardAddCardButton
+			v-if="hasCreateColumnPermission"
+			@add-card="onCreateCard"
+		></BoardAddCardButton>
 	</div>
 </template>
 
@@ -41,6 +45,7 @@ import VueI18n from "vue-i18n";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -78,6 +83,9 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
+		const { hasMovePermission, hasCreateColumnPermission } =
+			useBoardPermissions();
+		const lockAxis = hasMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -143,6 +151,8 @@ export default defineComponent({
 		return {
 			cardDropPlaceholderOptions,
 			colWidth,
+			hasCreateColumnPermission,
+			lockAxis,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
