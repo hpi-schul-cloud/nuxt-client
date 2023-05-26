@@ -1073,10 +1073,10 @@ describe("ExternalToolsModule", () => {
 
 		describe("loadAvailableSchoolToolConfigurations is called", () => {
 			describe("when no error occurs", () => {
-				it("should set tool configurations", () => {
+				it("should set tool configurations", async () => {
 					const contextId = "contextId";
 
-					module.loadAvailableSchoolToolConfigurations(contextId);
+					await module.loadAvailableSchoolToolConfigurations(contextId);
 					const result = module.getToolConfigurations;
 
 					expect(result).toEqual<ToolConfigurationListItem[]>([

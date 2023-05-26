@@ -83,7 +83,6 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "../../store/rooms";
-import { CourseMetadataResponse } from "../../serverApi/v3";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -110,12 +109,12 @@ export default defineComponent({
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
 
-		onMounted(() => {
-			externalToolsModule?.loadAvailableSchoolToolConfigurations(
+		onMounted(async () => {
+			await externalToolsModule?.loadAvailableSchoolToolConfigurations(
 				props.contextId
 			);
 
-			roomsModule?.fetchAllElements();
+			await roomsModule?.fetch();
 
 			hasData.value = true;
 		});
@@ -129,15 +128,15 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		/*const allElements: CourseMetadataResponse[] | undefined =
-			roomsModule?.getAllElements;
-
-		if (allElements) {
-			const title = allElements[0].title;
-		}*/
+		const courseTitle: ComputedRef<string | undefined> = computed(
+			() =>
+				roomsModule?.getRoomsData.find(
+					(element) => (element.id = props.contextId)
+				)?.title
+		);
 
 		const contextRoute: Breadcrumb = {
-			text: "Mathe", //roomsModule?.allElements[0].title as string, //TODO load data from store reactively
+			text: courseTitle.value as string,
 			to: `/rooms/${props.contextId}`,
 		};
 		const breadcrumbs: Breadcrumb[] = [
@@ -204,6 +203,7 @@ export default defineComponent({
 
 		return {
 			t,
+			courseTitle,
 			breadcrumbs,
 			getTranslationKey,
 			loading,
