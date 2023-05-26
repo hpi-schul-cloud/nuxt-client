@@ -18,6 +18,7 @@
 					<template v-if="scope === 'board'">Board-Menu</template>
 					<template v-if="scope === 'column'">Column-Menu</template>
 					<template v-if="scope === 'card'">Card-Menu</template>
+					<template v-if="scope === 'element'">Element-Menu</template>
 				</span>
 			</VBtn>
 		</template>
@@ -35,7 +36,7 @@ export default defineComponent({
 	name: "BoardMenu",
 	props: {
 		scope: {
-			type: String as PropType<"card" | "column" | "board">,
+			type: String as PropType<"element" | "card" | "column" | "board">,
 			required: true,
 		},
 	},
