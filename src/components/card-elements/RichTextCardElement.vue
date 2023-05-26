@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<RenderHTML class="ck-content" :html="value" />
+		<RenderHTML class="ck-content" :html="value" config="ck5" />
 		<ck-editor
 			v-if="editable"
 			v-model="content"

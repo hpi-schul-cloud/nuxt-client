@@ -1,5 +1,5 @@
 <template>
-	<component :is="component" v-dompurify-html="html" />
+	<component :is="component" v-dompurify-html:[config]="html" />
 </template>
 
 <script lang="ts">
@@ -10,6 +10,7 @@ export default defineComponent({
 	props: {
 		component: { type: String, default: "div" },
 		html: { type: String, required: true },
+		config: { type: String },
 	},
 });
 </script>

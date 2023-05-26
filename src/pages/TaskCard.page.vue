@@ -4,7 +4,6 @@
 		:breadcrumbs="breadcrumbs"
 		:headline="t('pages.rooms.fab.add.betatask')"
 	>
-		<div v-dompurify-html:[sanitizeProfile]="html"></div>
 		<v-form
 			v-if="isEditMode && !isLoading"
 			class="d-flex flex-column"
@@ -511,10 +510,6 @@ export default defineComponent({
 			return !!course.value;
 		});
 
-		const html = "<h2>Headline</h2><b class='hello'>bold</b> <u>underline</u>";
-		// const sanitizeProfile = "ck5Profile";
-		const sanitizeProfile = "otherProfile";
-
 		return {
 			breadcrumbs,
 			title,
@@ -542,8 +537,6 @@ export default defineComponent({
 			isLoading,
 			form,
 			isDeletable,
-			html,
-			sanitizeProfile,
 		};
 	},
 });

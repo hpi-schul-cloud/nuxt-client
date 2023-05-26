@@ -69,11 +69,45 @@ Vue.mixin({
 import VueDOMPurifyHTML from "vue-dompurify-html";
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: {
-		ck5Profile: {
-			ALLOWED_TAGS: ["b", "i"],
-			ALLOWED_ATTR: ["class"],
+		ck5: {
+			ALLOWED_TAGS: [
+				"h4",
+				"h5",
+				"p",
+				"span",
+				"br",
+				"strong",
+				"b",
+				"i",
+				"em",
+				"u",
+				"s",
+				"code",
+				"sup",
+				"sub",
+				"mark",
+				"blockquote",
+				"ul",
+				"ol",
+				"li",
+				"hr",
+				"table",
+				"thead",
+				"tbody",
+				"tr",
+				"td",
+				"th",
+				"a",
+				"figure",
+			],
+			ALLOWED_ATTR: {
+				a: ["href", "name", "target", "rel"],
+				figure: ["class"],
+				mark: ["class"],
+				span: ["class", "style"],
+			},
 		},
-		otherProfile: {
+		translations: {
 			ALLOWED_TAGS: ["u", "h2"],
 		},
 	},
