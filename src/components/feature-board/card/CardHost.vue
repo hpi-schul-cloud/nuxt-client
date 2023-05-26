@@ -73,7 +73,7 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
+import { useInternalElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -135,12 +135,9 @@ export default defineComponent({
 		};
 
 		const onAddElement = async () => {
-			const { getCreateFn } = useElementTypeSelection();
+			const { askType } = useInternalElementTypeSelection();
 
-			const createElement = await getCreateFn();
-			if (createElement) {
-				await createElement(addElement);
-			}
+			askType(addElement);
 
 			startEditMode();
 		};
