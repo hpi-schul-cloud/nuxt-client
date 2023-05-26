@@ -316,10 +316,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<TextElementResponse>}
+     * @type {Array<RichTextElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<TextElementResponse>;
+    elements: Array<RichTextElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -358,12 +358,12 @@ export interface CardRichTextElementResponse {
     * @enum {string}
     */
 export enum CardRichTextElementResponseInputFormatEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
 /**
@@ -612,7 +612,7 @@ export interface ConsentSessionResponse {
  * @enum {string}
  */
 export enum ContentElementType {
-    Text = 'text',
+    RichText = 'richText',
     File = 'file'
 }
 
@@ -1304,10 +1304,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {TextElementContentBody | FileElementContentBody}
+     * @type {RichTextElementContentBody | FileElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: TextElementContentBody | FileElementContentBody;
+    data: RichTextElementContentBody | FileElementContentBody;
 }
 /**
  * 
@@ -3207,12 +3207,12 @@ export interface RichText {
     * @enum {string}
     */
 export enum RichTextTypeEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
 /**
@@ -3246,14 +3246,102 @@ export interface RichTextCardElementParam {
     * @enum {string}
     */
 export enum RichTextCardElementParamInputFormatEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
+/**
+ * 
+ * @export
+ * @interface RichTextContentBody
+ */
+export interface RichTextContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextContentBody
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextContentBody
+     */
+    inputFormat: string;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementContent
+ */
+export interface RichTextElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementContent
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementContent
+     */
+    inputFormat: string;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementContentBody
+ */
+export interface RichTextElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof RichTextElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {RichTextContentBody}
+     * @memberof RichTextElementContentBody
+     */
+    content: RichTextContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementResponse
+ */
+export interface RichTextElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof RichTextElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {RichTextElementContent}
+     * @memberof RichTextElementResponse
+     */
+    content: RichTextElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof RichTextElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
 /**
  * 
  * @export
@@ -4070,82 +4158,6 @@ export interface TeamPermissionsBody {
      * @memberof TeamPermissionsBody
      */
     share: boolean;
-}
-/**
- * 
- * @export
- * @interface TextContentBody
- */
-export interface TextContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextContentBody
-     */
-    text: string;
-}
-/**
- * 
- * @export
- * @interface TextElementContent
- */
-export interface TextElementContent {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextElementContent
-     */
-    text: string;
-}
-/**
- * 
- * @export
- * @interface TextElementContentBody
- */
-export interface TextElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TextElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TextContentBody}
-     * @memberof TextElementContentBody
-     */
-    content: TextContentBody;
-}
-/**
- * 
- * @export
- * @interface TextElementResponse
- */
-export interface TextElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TextElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TextElementContent}
-     * @memberof TextElementResponse
-     */
-    content: TextElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof TextElementResponse
-     */
-    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -6103,7 +6115,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse | FileElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6171,7 +6183,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6234,7 +6246,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
 
     /**
      * 
