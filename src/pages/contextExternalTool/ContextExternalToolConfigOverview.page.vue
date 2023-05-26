@@ -135,21 +135,29 @@ export default defineComponent({
 				)?.title
 		);
 
-		const contextRoute: Breadcrumb = {
-			text: courseTitle.value as string,
-			to: `/rooms/${props.contextId}`,
-		};
-		const breadcrumbs: Breadcrumb[] = [
-			{
-				text: t("pages.courses.index.title"),
-				to: "/rooms-overview/",
-			},
-			contextRoute,
-			{
-				text: t("pages.tool.context.title"),
-				disabled: true,
-			},
-		];
+		const contextRoute = `/rooms/${props.contextId}`;
+
+		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+			if (courseTitle.value) {
+				return [
+					{
+						text: t("pages.courses.index.title"),
+						to: "/rooms-overview/",
+					},
+					{
+						text: courseTitle.value,
+						to: contextRoute,
+					},
+				];
+			} else {
+				return [
+					{
+						text: t("pages.courses.index.title"),
+						to: "/rooms-overview/",
+					},
+				];
+			}
+		});
 
 		const { getTranslationKey } = useExternalToolMappings();
 
@@ -184,7 +192,7 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 		const onCancel = async () => {
-			await router.push({ path: contextRoute.to });
+			await router.push({ path: contextRoute });
 		};
 
 		const onSaveTool = async () => {
@@ -197,7 +205,7 @@ export default defineComponent({
 			}
 
 			if (!externalToolsModule?.getBusinessError.message) {
-				await router.push({ path: contextRoute.to });
+				await router.push({ path: contextRoute });
 			}
 		};
 
