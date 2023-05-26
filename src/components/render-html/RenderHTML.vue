@@ -10,7 +10,7 @@ export default defineComponent({
 	props: {
 		component: { type: String, default: "div" },
 		html: { type: String, required: true },
-		config: { type: String },
+		config: { type: String, default: "translations" },
 	},
 });
 </script>

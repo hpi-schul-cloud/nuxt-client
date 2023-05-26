@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import Vuetify from "vuetify";
 import fs from "fs";
 import path from "path";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 // import { mixin as userMixin } from "@/plugins/user.js";
 import { mountBaseComponents } from "@/components/base/_globals";
@@ -24,6 +25,56 @@ Vue.config.productionTip = false;
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 Vue.use(Vuelidate);
 Vue.use(Vuex);
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: {
+		ck5: {
+			ALLOWED_TAGS: [
+				"h4",
+				"h5",
+				"p",
+				"span",
+				"br",
+				"strong",
+				"b",
+				"i",
+				"em",
+				"u",
+				"s",
+				"code",
+				"sup",
+				"sub",
+				"mark",
+				"blockquote",
+				"ul",
+				"ol",
+				"li",
+				"hr",
+				"table",
+				"thead",
+				"tbody",
+				"tr",
+				"td",
+				"th",
+				"a",
+				"figure",
+			],
+			ALLOWED_ATTR: {
+				a: ["href", "name", "target", "rel"],
+				figure: ["class"],
+				mark: ["class"],
+				span: ["class", "style"],
+			},
+		},
+		translations: {
+			ALLOWED_TAGS: ["br", "span", "p", "ul", "li", "a", "b"],
+			ALLOWED_ATTR: {
+				a: ["href", "target"],
+				span: ["class"],
+			},
+		},
+	},
+});
 
 function readDirRecursiveSync(dir) {
 	const results = [];
