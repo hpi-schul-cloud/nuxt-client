@@ -119,7 +119,6 @@ describe("useExternalToolUtils", () => {
 			customParameterResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 			schoolExternalToolPostParam,
-			mapToolLaunchRequestResponse,
 		};
 	};
 
