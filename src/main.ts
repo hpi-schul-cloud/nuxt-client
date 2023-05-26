@@ -67,7 +67,17 @@ Vue.mixin({
 });
 
 import VueDOMPurifyHTML from "vue-dompurify-html";
-Vue.use(VueDOMPurifyHTML);
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: {
+		ck5Profile: {
+			ALLOWED_TAGS: ["b", "i"],
+			ALLOWED_ATTR: ["class"],
+		},
+		otherProfile: {
+			ALLOWED_TAGS: ["u", "h2"],
+		},
+	},
+});
 
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
