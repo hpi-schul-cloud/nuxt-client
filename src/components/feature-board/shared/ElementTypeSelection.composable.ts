@@ -96,5 +96,6 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		elementTypeOptions,
 		closeDialog,
 		createFileElement,
+		createTextElement,
 	};
 });

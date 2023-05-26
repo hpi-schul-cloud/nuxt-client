@@ -14,8 +14,8 @@ describe("ElementTypeSelection", () => {
 		const askType = jest.fn();
 		const isDialogOpen = ref(false);
 
-		const action1 = jest.fn();
-		const action2 = jest.fn();
+		const createTextElement = jest.fn();
+		const createFileElement = jest.fn();
 
 		const elementTypeOptions: {
 			icon: string;
@@ -26,13 +26,13 @@ describe("ElementTypeSelection", () => {
 			{
 				icon: "action1-icon",
 				label: "action1-label",
-				action: action1,
+				action: createTextElement,
 				testId: "action1-id",
 			},
 			{
 				icon: "action2-icon",
 				label: "action2-label",
-				action: action2,
+				action: createFileElement,
 				testId: "action2-id",
 			},
 		];
@@ -44,6 +44,8 @@ describe("ElementTypeSelection", () => {
 			isDialogOpen,
 			elementTypeOptions,
 			closeDialog,
+			createTextElement,
+			createFileElement,
 		});
 
 		return { askType, isDialogOpen, elementTypeOptions, closeDialog };
