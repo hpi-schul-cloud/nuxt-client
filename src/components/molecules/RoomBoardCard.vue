@@ -39,28 +39,26 @@ export default defineComponent({
 		const router = useRouter();
 		const openBoard = () => {
 			if (!props.dragInProgress) {
-				router.push("646e1722d921ff87bc02f7df/board");
+				router.push(`${props.id}/board`);
 			}
 		};
 		const onKeyPress = (e: KeyboardEvent) => {
-			if (e.key === "") {
+			if (e.key === " ") {
 				emit("on-drag");
 			}
-			if (e.key === "ArrowUp") {
-				if (props.keyDrag) {
-					emit("move-element", {
-						id: props.id,
-						moveIndex: -1,
-					});
-				}
+
+			if (e.key === "ArrowUp" && props.keyDrag) {
+				emit("move-element", {
+					id: props.id,
+					moveIndex: -1,
+				});
 			}
-			if (e.key === "ArrowDown") {
-				if (props.keyDrag) {
-					emit("move-element", {
-						id: props.id,
-						moveIndex: 1,
-					});
-				}
+
+			if (e.key === "ArrowDown" && props.keyDrag) {
+				emit("move-element", {
+					id: props.id,
+					moveIndex: 1,
+				});
 			}
 		};
 
