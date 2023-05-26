@@ -50,15 +50,7 @@ export default defineComponent({
 
 		const ck = ref(null);
 		const content = ref(props.value);
-		const language = (() => {
-			// map ua to correct uk
-			// TODO remove if language code is fixed
-			if (i18n.locale === "ua") {
-				return "uk";
-			}
-
-			return i18n.locale;
-		})();
+		const language = i18n.locale;
 
 		const toolbarItems = [];
 		toolbarItems["simple"] = [
@@ -267,9 +259,5 @@ export default defineComponent({
 .ck-focused {
 	border: none !important;
 	box-shadow: none !important;
-}
-
-.ck.ck-editor__editable_inline > :last-child {
-	margin-bottom: 34px !important;
 }
 </style>

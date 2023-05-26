@@ -4,15 +4,13 @@ import {
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
 	ColumnResponse,
+	ContentElementType,
 	CreateContentElementBody,
-	CreateContentElementBodyTypeEnum,
 	FileElementContent,
-	FileElementContentBodyTypeEnum,
-	TextElementContent,
-	TextElementContentBodyTypeEnum,
+	RichTextElementContent,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { AnyContentElement, ContentElementType } from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -39,17 +37,17 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
-		if (element.type === ContentElementType.TEXT) {
+		if (element.type === ContentElementType.RichText) {
 			return {
-				content: element.content as TextElementContent,
-				type: TextElementContentBodyTypeEnum.Text,
+				content: element.content as RichTextElementContent,
+				type: ContentElementType.RichText,
 			};
 		}
 
-		if (element.type === ContentElementType.FILE) {
+		if (element.type === ContentElementType.File) {
 			return {
 				content: element.content as FileElementContent,
-				type: FileElementContentBodyTypeEnum.File,
+				type: ContentElementType.File,
 			};
 		}
 
@@ -58,9 +56,9 @@ export const useBoardApi = () => {
 
 	const createElement = async (
 		cardId: string,
-		type: CreateContentElementBody
+		params: CreateContentElementBody
 	) => {
-		const result = await cardsApi.cardControllerCreateElement(cardId, type);
+		const result = await cardsApi.cardControllerCreateElement(cardId, params);
 
 		return result.data;
 	};
@@ -79,7 +77,7 @@ export const useBoardApi = () => {
 		);
 		if (createdCard.data.id) {
 			createElement(createdCard.data.id, {
-				type: CreateContentElementBodyTypeEnum.Text,
+				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
 		}

@@ -316,10 +316,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<TextElementResponse>}
+     * @type {Array<RichTextElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<TextElementResponse>;
+    elements: Array<RichTextElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -358,12 +358,12 @@ export interface CardRichTextElementResponse {
     * @enum {string}
     */
 export enum CardRichTextElementResponseInputFormatEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
 /**
@@ -407,7 +407,7 @@ export enum ChangeLanguageParamsLanguageEnum {
     De = 'de',
     En = 'en',
     Es = 'es',
-    Ua = 'ua'
+    Uk = 'uk'
 }
 
 /**
@@ -606,6 +606,16 @@ export interface ConsentSessionResponse {
      */
     challenge: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ContentElementType {
+    RichText = 'richText',
+    File = 'file'
+}
+
 /**
  * 
  * @export
@@ -917,22 +927,12 @@ export interface CourseResponse {
  */
 export interface CreateContentElementBody {
     /**
-     * The type of element
-     * @type {string}
+     * 
+     * @type {ContentElementType}
      * @memberof CreateContentElementBody
      */
-    type: CreateContentElementBodyTypeEnum;
+    type: ContentElementType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateContentElementBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1304,10 +1304,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {TextElementContentBody | FileElementContentBody}
+     * @type {RichTextElementContentBody | FileElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: TextElementContentBody | FileElementContentBody;
+    data: RichTextElementContentBody | FileElementContentBody;
 }
 /**
  * 
@@ -1563,11 +1563,11 @@ export interface FileElementContent {
  */
 export interface FileElementContentBody {
     /**
-     * the type of the updated element
-     * @type {any}
+     * 
+     * @type {ContentElementType}
      * @memberof FileElementContentBody
      */
-    type: FileElementContentBodyTypeEnum;
+    type: ContentElementType;
     /**
      * 
      * @type {FileContentBody}
@@ -1575,16 +1575,6 @@ export interface FileElementContentBody {
      */
     content: FileContentBody;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
 /**
  * 
  * @export
@@ -1599,10 +1589,10 @@ export interface FileElementResponse {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {ContentElementType}
      * @memberof FileElementResponse
      */
-    type: string;
+    type: ContentElementType;
     /**
      * 
      * @type {FileElementContent}
@@ -3217,12 +3207,12 @@ export interface RichText {
     * @enum {string}
     */
 export enum RichTextTypeEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
 /**
@@ -3256,14 +3246,102 @@ export interface RichTextCardElementParam {
     * @enum {string}
     */
 export enum RichTextCardElementParamInputFormatEnum {
-    Plaintext = 'plaintext',
-    Richtext = 'richtext',
+    PlainText = 'plainText',
+    RichText = 'richText',
     Inline = 'inline',
-    RichtextCk4 = 'richtext_ck4',
-    RichtextCk5 = 'richtext_ck5',
-    RichtextCk5Inline = 'richtext_ck5_inline'
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5',
+    RichTextCk5Inline = 'richTextCk5Inline'
 }
 
+/**
+ * 
+ * @export
+ * @interface RichTextContentBody
+ */
+export interface RichTextContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextContentBody
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextContentBody
+     */
+    inputFormat: string;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementContent
+ */
+export interface RichTextElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementContent
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementContent
+     */
+    inputFormat: string;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementContentBody
+ */
+export interface RichTextElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof RichTextElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {RichTextContentBody}
+     * @memberof RichTextElementContentBody
+     */
+    content: RichTextContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface RichTextElementResponse
+ */
+export interface RichTextElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RichTextElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof RichTextElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {RichTextElementContent}
+     * @memberof RichTextElementResponse
+     */
+    content: RichTextElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof RichTextElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
 /**
  * 
  * @export
@@ -4080,92 +4158,6 @@ export interface TeamPermissionsBody {
      * @memberof TeamPermissionsBody
      */
     share: boolean;
-}
-/**
- * 
- * @export
- * @interface TextContentBody
- */
-export interface TextContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextContentBody
-     */
-    text: string;
-}
-/**
- * 
- * @export
- * @interface TextElementContent
- */
-export interface TextElementContent {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextElementContent
-     */
-    text: string;
-}
-/**
- * 
- * @export
- * @interface TextElementContentBody
- */
-export interface TextElementContentBody {
-    /**
-     * the type of the updated element
-     * @type {Text}
-     * @memberof TextElementContentBody
-     */
-    type: TextElementContentBodyTypeEnum;
-    /**
-     * 
-     * @type {TextContentBody}
-     * @memberof TextElementContentBody
-     */
-    content: TextContentBody;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TextElementContentBodyTypeEnum {
-    Text = 'text',
-    File = 'file'
-}
-
-/**
- * 
- * @export
- * @interface TextElementResponse
- */
-export interface TextElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextElementResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {TextElementContent}
-     * @memberof TextElementResponse
-     */
-    content: TextElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof TextElementResponse
-     */
-    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -6164,7 +6156,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextElementResponse | FileElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6232,7 +6224,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6295,7 +6287,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<TextElementResponse | FileElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
 
     /**
      * 
@@ -11051,6 +11043,39 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetPublicSchool: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school/public`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11114,6 +11139,15 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetPublicSchool(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetPublicSchool(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11141,6 +11175,14 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetPublicSchool(options?: any): AxiosPromise<object> {
+            return localVarFp.schoolControllerGetPublicSchool(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11172,6 +11214,14 @@ export interface SchoolApiInterface {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetPublicSchool(options?: any): AxiosPromise<object>;
+
+    /**
+     * 
      * @param {string} schoolId The id of the school.
      * @param {MigrationBody} migrationBody 
      * @param {*} [options] Override http request option.
@@ -11198,6 +11248,16 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetMigration(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetPublicSchool(options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetPublicSchool(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

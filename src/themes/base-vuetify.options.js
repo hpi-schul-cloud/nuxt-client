@@ -1,5 +1,4 @@
 import customIcons from "@/components/icons/custom";
-import colors from "vuetify/lib/util/colors";
 
 export default {
 	theme: {
