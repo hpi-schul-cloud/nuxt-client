@@ -24,24 +24,24 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/administration/ldap/activate",
-		component: () => import("../pages/administration/LDAPActivate.page.vue"),
+		component: () => import("@/pages/administration/LDAPActivate.page.vue"),
 		name: "administration-ldap-activate",
 		beforeEnter: createPermissionGuard(["admin_view", "school_edit"]),
 	},
 	{
 		path: "/administration/ldap/config",
-		component: () => import("../pages/administration/LDAPConfig.page.vue"),
+		component: () => import("@/pages/administration/LDAPConfig.page.vue"),
 		name: "administration-ldap-config",
 		beforeEnter: createPermissionGuard(["admin_view", "school_edit"]),
 	},
 	{
 		path: "/administration/migration",
-		component: () => import("../pages/administration/Migration.page.vue"),
+		component: () => import("@/pages/administration/Migration.page.vue"),
 		name: "administration-migration",
 	},
 	{
 		path: "/administration/school-settings",
-		component: () => import("../pages/administration/SchoolSettings.page.vue"),
+		component: () => import("@/pages/administration/SchoolSettings.page.vue"),
 		name: "administration-school-settings",
 		beforeEnter: createPermissionGuard(["school_edit"]),
 	},
@@ -49,7 +49,7 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
-				"../pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
+				"@/pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
@@ -65,31 +65,31 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/administration/students",
-		component: () => import("../pages/administration/StudentOverview.page.vue"),
+		component: () => import("@/pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
 		beforeEnter: createPermissionGuard(["student_list"]),
 	},
 	{
 		path: "/administration/students/consent",
-		component: () => import("../pages/administration/StudentConsent.page.vue"),
+		component: () => import("@/pages/administration/StudentConsent.page.vue"),
 		name: "administration-students-consent",
 		beforeEnter: createPermissionGuard(["student_edit", "student_list"]),
 	},
 	{
 		path: "/administration/students/new",
-		component: () => import("../pages/administration/StudentCreate.page.vue"),
+		component: () => import("@/pages/administration/StudentCreate.page.vue"),
 		name: "administration-students-new",
 		beforeEnter: createPermissionGuard(["student_create"]),
 	},
 	{
 		path: "/administration/teachers",
-		component: () => import("../pages/administration/TeacherOverview.page.vue"),
+		component: () => import("@/pages/administration/TeacherOverview.page.vue"),
 		name: "administration-teachers",
 		beforeEnter: createPermissionGuard(["teacher_list"]),
 	},
 	{
 		path: "/administration/teachers/new",
-		component: () => import("../pages/administration/TeacherCreate.page.vue"),
+		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
@@ -107,13 +107,13 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/content",
-		component: () => import("../pages/LernStoreOverview.page.vue"),
+		component: () => import("@/pages/LernStoreOverview.page.vue"),
 		name: "content",
 		beforeEnter: createPermissionGuard(["lernstore_view"]),
 	},
 	{
 		path: `/content/:id(${REGEX_UUID})`,
-		component: () => import("../pages/LernStoreDetails.page.vue"),
+		component: () => import("@/pages/LernStoreDetails.page.vue"),
 		name: "content-id",
 		meta: {
 			layout: Layouts.LERN_STORE,
@@ -130,7 +130,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/error/proxy",
-		component: () => import("../pages/ProxyError.page.vue"),
+		component: () => import("@/pages/ProxyError.page.vue"),
 		name: "error-proxy",
 		meta: {
 			isPublic: true,
@@ -138,7 +138,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/imprint",
-		component: () => import("../pages/Imprint.page.vue"),
+		component: () => import("@/pages/Imprint.page.vue"),
 		name: "imprint",
 		meta: {
 			isPublic: true,
@@ -146,7 +146,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/login-instances",
-		component: () => import("../pages/LoginInstances.page.vue"),
+		component: () => import("@/pages/LoginInstances.page.vue"),
 		name: "login-instances",
 		meta: {
 			isPublic: true,
@@ -217,63 +217,63 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: "/news/new",
-		component: () => import("../pages/NewsCreate.page.vue"),
+		component: () => import("@/pages/NewsCreate.page.vue"),
 		name: "news-new",
 		beforeEnter: createPermissionGuard(["news_create"]),
 	},
 	{
 		path: `/news/:id(${REGEX_ID})/edit`,
-		component: () => import("../pages/NewsEdit.page.vue"),
+		component: () => import("@/pages/NewsEdit.page.vue"),
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("../pages/RoomDetails.page.vue"),
+		component: () => import("@/pages/rooms/RoomDetails.page.vue"),
 		name: "rooms-id",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../components/feature-board/board/Board.vue"),
+		component: () => import("@/components/feature-board/board/Board.vue"),
 		name: "rooms-board",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
-		component: () => import("../pages/TaskCard.page.vue"),
+		component: () => import("../pages/tasks/TaskCard.page.vue"),
 		name: "rooms-beta-task-new",
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
 		path: "/rooms-list",
-		component: () => import("../pages/RoomList.page.vue"),
+		component: () => import("@/pages/rooms/RoomList.page.vue"),
 		name: "rooms-list",
 	},
 	{
 		path: "/rooms-overview",
-		component: () => import("../pages/RoomOverview.page.vue"),
+		component: () => import("@/pages/rooms/RoomOverview.page.vue"),
 		name: "rooms-overview",
 	},
 	{
 		path: "/tasks",
-		component: () => import("../pages/TaskOverview.page.vue"),
+		component: () => import("../pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
 	},
 	{
 		path: `/tasks/create-beta-task`,
-		component: () => import("../pages/TaskCard.page.vue"),
+		component: () => import("../pages/tasks/TaskCard.page.vue"),
 		name: "tasks-beta-task-new",
 		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
 		path: `/beta-task/:id(${REGEX_ID})`,
-		component: () => import("../pages/TaskCard.page.vue"),
+		component: () => import("../pages/tasks/TaskCard.page.vue"),
 		name: "beta-task-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
 	{
 		// deprecated?
 		path: "/termsofuse",
-		component: () => import("../pages/TermsOfUse.vue"),
+		component: () => import("@/pages/TermsOfUse.vue"),
 		name: "termsofuse",
 		meta: {
 			isPublic: true,
