@@ -34,7 +34,7 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	let addElementFunction: AddCardElement | undefined;
 
 	const createTextElement = async (addElement: AddCardElement) => {
-		await addElement(ContentElementType.Text);
+		await addElement(ContentElementType.RichText);
 	};
 
 	const openFilePicker = async (addElement: AddCardElement) => {

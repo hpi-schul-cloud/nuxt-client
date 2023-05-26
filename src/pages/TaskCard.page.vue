@@ -248,7 +248,7 @@ export default defineComponent({
 						content: {
 							value: "",
 							inputFormat:
-								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+								CardRichTextElementResponseInputFormatEnum.RichTextCk5,
 						},
 					},
 				];
@@ -322,7 +322,7 @@ export default defineComponent({
 						content: {
 							value: "",
 							inputFormat:
-								CardRichTextElementResponseInputFormatEnum.RichtextCk5,
+								CardRichTextElementResponseInputFormatEnum.RichTextCk5,
 						},
 					},
 				];
@@ -363,7 +363,7 @@ export default defineComponent({
 					content: {
 						type: element.type,
 						value: element.model,
-						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichTextCk5,
 					},
 				};
 				cardElements.push(cardElement);
@@ -384,7 +384,7 @@ export default defineComponent({
 					content: {
 						type: element.type,
 						value: element.model,
-						inputFormat: RichTextCardElementParamInputFormatEnum.RichtextCk5,
+						inputFormat: RichTextCardElementParamInputFormatEnum.RichTextCk5,
 					},
 				};
 				if (element.id) {
