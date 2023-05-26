@@ -7,7 +7,7 @@ This document is temporary and here to help some early birds when testing multic
 If you want to test the multi-column-board on your local environment, you can create an additional board by executing this command in the command-line (aka shell aka bash) of the backend (schulcloud-server):
 
 ```bash
-npm run nest:start:console -- board create-boards
+npm run nest:start:console -- board create-board {{ id of an existing course }}
 ```
 
 This will create the mongodb-collection `boardnodes` (if it does not exist yet) and add several instances of board-nodes that form a tree of nodes that represents the board as a whole!
