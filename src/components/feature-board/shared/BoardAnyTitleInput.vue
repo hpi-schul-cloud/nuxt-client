@@ -33,6 +33,7 @@
 import { useVModel } from "@vueuse/core";
 import { computed, defineComponent, PropType } from "vue";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -58,8 +59,10 @@ export default defineComponent({
 	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
+		const { hasEditPermission } = useBoardPermissions();
 
 		useInlineEditInteractionHandler(() => {
+			if (!hasEditPermission) return;
 			document.getSelection()?.collapseToEnd();
 		});
 
