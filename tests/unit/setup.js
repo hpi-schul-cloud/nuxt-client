@@ -180,7 +180,8 @@ global.createComponentMocks = ({
 	$router,
 	router,
 	// uiState,
-	// dialog,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	dialog,
 	/*style,*/ mocks,
 	stubs,
 	$config,
