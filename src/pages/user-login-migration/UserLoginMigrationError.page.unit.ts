@@ -84,7 +84,6 @@ describe("UserLoginMigrationError", () => {
 					sourceSystem: "sourceSystemId",
 					targetSystem: "targetSystemId",
 				});
-				console.log(wrapper.html());
 
 				const descriptionText = wrapper
 					.find("[data-testId=text-description]")
