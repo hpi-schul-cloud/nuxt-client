@@ -124,7 +124,7 @@ import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
 import { envConfigModule } from "@/store";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 

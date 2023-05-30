@@ -24,7 +24,7 @@
 <script>
 import CenterSlot from "@/components/atoms/CenterSlot";
 import { autoLogoutModule, notifierModule } from "@/store";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const toast = {
 	error401: -1,

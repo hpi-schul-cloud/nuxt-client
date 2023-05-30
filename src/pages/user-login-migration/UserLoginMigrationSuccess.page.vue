@@ -33,7 +33,7 @@
 import { defineComponent, inject, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",

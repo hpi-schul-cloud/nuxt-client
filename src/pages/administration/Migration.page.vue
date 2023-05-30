@@ -401,7 +401,7 @@ import { mdiClose, mdiLoading } from "@mdi/js";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default {
 	components: { DefaultWireframe, ImportUsers, RenderHTML },

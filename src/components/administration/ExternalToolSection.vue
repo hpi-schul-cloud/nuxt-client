@@ -103,7 +103,7 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useRouter } from "vue-router/composables";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "ExternalToolSection",

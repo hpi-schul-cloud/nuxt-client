@@ -191,7 +191,7 @@ import {
 	isVideoContent,
 	isMerlinContent,
 } from "@/utils/helpers";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const DEFAULT_AUTHOR = "admin";
 

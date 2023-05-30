@@ -203,7 +203,7 @@ import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import { mdiChevronLeft } from "@mdi/js";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;

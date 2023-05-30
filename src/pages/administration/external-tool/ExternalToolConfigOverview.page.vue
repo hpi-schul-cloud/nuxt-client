@@ -92,7 +92,7 @@ import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",

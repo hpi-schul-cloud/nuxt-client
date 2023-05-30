@@ -46,7 +46,7 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import EnvConfigModule from "@/store/env-config";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",

@@ -128,7 +128,7 @@ import { MigrationBody } from "@/serverApi/v3";
 import dayjs from "dayjs";
 import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "AdminMigrationSection",

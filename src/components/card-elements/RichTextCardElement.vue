@@ -16,9 +16,9 @@
 
 <script>
 import { defineComponent, ref, watch, onMounted } from "vue";
-import CkEditor from "@/components/editor/CKEditor.vue";
+import CkEditor from "@/components/common/editor/CKEditor.vue";
 import renderMathInElement from "katex/dist/contrib/auto-render.js";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "RichTextCardElement",

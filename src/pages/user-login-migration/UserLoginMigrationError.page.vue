@@ -52,7 +52,7 @@ import {
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import EnvConfigModule from "@/store/env-config";
-import RenderHTML from "@/components/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
