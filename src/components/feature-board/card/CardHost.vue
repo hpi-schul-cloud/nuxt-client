@@ -146,7 +146,6 @@ export default defineComponent({
 
 		const onCreateFileElementMode = (file: File) => {
 			createFileElement(file);
-			onStartEditMode();
 		};
 
 		const onStartEditMode = () => {

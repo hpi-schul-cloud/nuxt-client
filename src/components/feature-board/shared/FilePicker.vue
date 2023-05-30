@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "FilePicker",
@@ -20,6 +20,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const modelFile = ref();
+
+		onMounted(() => {
+			inputRef.value.$refs.input.onclick = (e: Event) => {
+				e.stopPropagation();
+			};
+		});
 
 		watch(
 			() => props.isFilePickerOpen,
