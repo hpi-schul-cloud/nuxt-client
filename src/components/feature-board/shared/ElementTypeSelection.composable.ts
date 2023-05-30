@@ -7,7 +7,7 @@ import { AddCardElement } from "../state/CardState.composable";
 import { useFilePicker } from "./FilePicker.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
 
-export const useInternalElementTypeSelection = createSharedComposable(() => {
+export const useElementTypeSelection = createSharedComposable(() => {
 	const { triggerFilePicker } = useFilePicker();
 	const { upload } = useFileStorageApi();
 	const isDialogOpen = ref<boolean>(false);

@@ -1,15 +1,13 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue, { ref, nextTick } from "vue";
-import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
+import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 import ElementTypeSelection from "./ElementTypeSelection.vue";
 jest.mock("./ElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
 	const setupElementTypeSelectionComposableMock = () => {
-		const mockedUseInternalElementTypeSelection = jest.mocked(
-			useInternalElementTypeSelection
-		);
+		const mockedUseElementTypeSelection = jest.mocked(useElementTypeSelection);
 
 		const askType = jest.fn();
 		const isDialogOpen = ref(false);
@@ -39,7 +37,7 @@ describe("ElementTypeSelection", () => {
 
 		const closeDialog = jest.fn();
 
-		mockedUseInternalElementTypeSelection.mockReturnValue({
+		mockedUseElementTypeSelection.mockReturnValue({
 			askType,
 			isDialogOpen,
 			elementTypeOptions,
