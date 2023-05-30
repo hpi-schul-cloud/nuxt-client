@@ -1,20 +1,24 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
-	FileRecordParamsParentType,
 	FileRecordResponse as FileRecord,
-	RenameFileParams,
+	FileRecordParamsParentType,
 	FileRecordResponse,
+	RenameFileParams,
 } from "@/fileStorageApi/v3";
-import { downloadFile } from "@/utils/fileHelper";
-import { $axios } from "../../../utils/api";
 import { authModule } from "@/store/store-accessor";
 import { BusinessError, Status } from "@/store/types/commons";
+import { downloadFile } from "@/utils/fileHelper";
+import { createSharedComposable } from "@vueuse/core";
+import { ref } from "vue";
+import { $axios } from "../../../utils/api";
 
-export const useFileStorageApi = () => {
+export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 
-	let files: FileRecord[] = [];
+	const files: Map<FileRecord["parentId"], FileRecord> = new Map();
+
+	const newFile = ref<FileRecord>();
 
 	let businessError: BusinessError = {
 		statusCode: "",
@@ -60,6 +64,7 @@ export const useFileStorageApi = () => {
 				file
 			);
 			appendFile(response.data);
+			newFile.value = files.get(parentId);
 
 			setStatus("completed");
 
@@ -109,15 +114,17 @@ export const useFileStorageApi = () => {
 	};
 
 	const setFiles = (_files: FileRecord[]) => {
-		files = _files;
+		_files.forEach((file) => {
+			files.set(file.parentId, file);
+		});
 	};
 
 	const appendFile = (_file: FileRecord) => {
-		files.push(_file);
+		files.set(_file.parentId, _file);
 	};
 
 	const replaceFile = (_file: FileRecord) => {
-		files = files.map((f) => (f.id === _file.id ? _file : f));
+		files.set(_file.parentId, _file);
 	};
 
 	const setStatus = (_status: Status) => {
@@ -143,5 +150,6 @@ export const useFileStorageApi = () => {
 		businessError,
 		files,
 		status,
+		newFile,
 	};
-};
+});

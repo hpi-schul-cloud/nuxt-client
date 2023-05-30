@@ -27,15 +27,8 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const createFileElement = async (file: File) => {
 		if (addElementFunction && file) {
 			const element = await addElementFunction(ContentElementType.File);
-			// TODO: upload multiple files at once? File array?
 			if (element?.id) {
-				const fileRecordResponse = await upload(
-					element.id,
-					FileRecordParamsParentType.BOARDNODES,
-					file
-				);
-				// element.fileRecord = fileRecordResponse;
-				// element.showProgress = true; // until upload is finished
+				await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
 			}
 		}
 
