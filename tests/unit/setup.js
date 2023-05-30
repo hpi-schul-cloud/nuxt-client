@@ -180,7 +180,7 @@ global.createComponentMocks = ({
 	$router,
 	router,
 	// uiState,
-	dialog,
+	// dialog,
 	/*style,*/ mocks,
 	stubs,
 	$config,
