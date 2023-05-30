@@ -53,7 +53,10 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker @update:file="(e) => onCreateFileElementMode(e)" />
+		<FilePicker
+			@update:file="(e) => onCreateFileElementMode(e)"
+			:isFilePickerOpen="isFilePickerOpen"
+		/>
 	</div>
 </template>
 
@@ -134,7 +137,8 @@ export default defineComponent({
 			}
 		};
 
-		const { askType, createFileElement } = useElementTypeSelection();
+		const { askType, createFileElement, isFilePickerOpen } =
+			useElementTypeSelection();
 
 		const onAddElement = async () => {
 			askType(addElement);
@@ -184,6 +188,7 @@ export default defineComponent({
 			isEditMode,
 			mdiTrashCanOutline,
 			onCreateFileElementMode,
+			isFilePickerOpen,
 		};
 	},
 });

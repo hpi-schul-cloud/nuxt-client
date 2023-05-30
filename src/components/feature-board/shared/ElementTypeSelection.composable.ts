@@ -4,13 +4,12 @@ import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
-import { useFilePicker } from "./FilePicker.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
 
 export const useElementTypeSelection = createSharedComposable(() => {
-	const { triggerFilePicker } = useFilePicker();
 	const { upload } = useFileStorageApi();
 	const isDialogOpen = ref<boolean>(false);
+	const isFilePickerOpen = ref<boolean>(false);
 
 	let addElementFunction: AddCardElement | undefined;
 
@@ -22,7 +21,7 @@ export const useElementTypeSelection = createSharedComposable(() => {
 	};
 
 	const openFilePicker = () => {
-		triggerFilePicker();
+		isFilePickerOpen.value = true;
 		closeDialog();
 	};
 
@@ -40,6 +39,8 @@ export const useElementTypeSelection = createSharedComposable(() => {
 				// element.showProgress = true; // until upload is finished
 			}
 		}
+
+		isFilePickerOpen.value = false;
 	};
 
 	const elementTypeOptions = [
@@ -72,5 +73,6 @@ export const useElementTypeSelection = createSharedComposable(() => {
 		elementTypeOptions,
 		closeDialog,
 		createFileElement,
+		isFilePickerOpen,
 	};
 });

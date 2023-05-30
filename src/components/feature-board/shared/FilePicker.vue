@@ -6,23 +6,29 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { useFilePicker } from "./FilePicker.composable";
 
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
+	props: {
+		isFilePickerOpen: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	emits: ["update:file"],
 	setup(props, { emit }) {
-		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
 		const inputRef = ref();
 		const modelFile = ref();
 
-		watch(isFilePickerOpen, (newValue: boolean) => {
-			if (newValue) {
-				inputRef.value.$refs.input.click();
-				triggerFilePicker();
+		watch(
+			() => props.isFilePickerOpen,
+			(newValue: boolean) => {
+				if (newValue) {
+					inputRef.value.$refs.input.click();
+				}
 			}
-		});
+		);
 
 		watch(modelFile, (newValue) => {
 			if (newValue) {
