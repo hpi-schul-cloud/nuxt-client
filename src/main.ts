@@ -67,54 +67,10 @@ Vue.mixin({
 });
 
 import VueDOMPurifyHTML from "vue-dompurify-html";
+import htmlConfig from "@/components/common/render-html/config";
+
 Vue.use(VueDOMPurifyHTML, {
-	namedConfigurations: {
-		ck5: {
-			ALLOWED_TAGS: [
-				"h4",
-				"h5",
-				"p",
-				"span",
-				"br",
-				"strong",
-				"b",
-				"i",
-				"em",
-				"u",
-				"s",
-				"code",
-				"sup",
-				"sub",
-				"mark",
-				"blockquote",
-				"ul",
-				"ol",
-				"li",
-				"hr",
-				"table",
-				"thead",
-				"tbody",
-				"tr",
-				"td",
-				"th",
-				"a",
-				"figure",
-			],
-			ALLOWED_ATTR: {
-				a: ["href", "name", "target", "rel"],
-				figure: ["class"],
-				mark: ["class"],
-				span: ["class", "style"],
-			},
-		},
-		translations: {
-			ALLOWED_TAGS: ["br", "span", "p", "ul", "li", "a", "b"],
-			ALLOWED_ATTR: {
-				a: ["href", "target"],
-				span: ["class"],
-			},
-		},
-	},
+	namedConfigurations: htmlConfig,
 });
 
 // NUXT_REMOVAL change how global components are handled
