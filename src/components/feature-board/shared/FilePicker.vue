@@ -16,7 +16,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:file"],
+	emits: ["update:file", "update:isFilePickerOpen"],
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const modelFile = ref();
@@ -33,6 +33,8 @@ export default defineComponent({
 				if (newValue) {
 					inputRef.value.$refs.input.click();
 				}
+
+				emit("update:isFilePickerOpen");
 			}
 		);
 

@@ -56,6 +56,7 @@
 		<FilePicker
 			@update:file="(e) => onCreateFileElementMode(e)"
 			:isFilePickerOpen="isFilePickerOpen"
+			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
 		/>
 	</div>
 </template>
