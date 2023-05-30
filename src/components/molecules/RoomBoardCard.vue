@@ -4,8 +4,10 @@
 		tabindex="0"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
-		@keydown.up.down.space.prevent="onKeyPress"
+		@keydown.space.prevent="$emit('on-drag')"
 		@keydown.tab="$emit('tab-pressed')"
+		@keydown.down.prevent="moveCardDown"
+		@keydown.up.prevent="moveCardUp"
 	>
 		<VCardText>
 			<div class="mb-0">
@@ -39,20 +41,9 @@ export default defineComponent({
 				router.push(`${props.id}/board`);
 			}
 		};
-		const onKeyPress = (e: KeyboardEvent) => {
-			console.log(e);
-			if (e.key === " ") {
-				emit("on-drag");
-			}
 
-			if (e.key === "ArrowUp" && props.keyDrag) {
-				emit("move-element", {
-					id: props.id,
-					moveIndex: -1,
-				});
-			}
-
-			if (e.key === "ArrowDown" && props.keyDrag) {
+		const moveCardDown = () => {
+			if (props.keyDrag) {
 				emit("move-element", {
 					id: props.id,
 					moveIndex: 1,
@@ -60,10 +51,20 @@ export default defineComponent({
 			}
 		};
 
+		const moveCardUp = () => {
+			if (props.keyDrag) {
+				emit("move-element", {
+					id: props.id,
+					moveIndex: -1,
+				});
+			}
+		};
+
 		return {
 			mdiViewDashboard,
+			moveCardDown,
+			moveCardUp,
 			openBoard,
-			onKeyPress,
 		};
 	},
 });

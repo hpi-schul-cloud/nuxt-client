@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import RoomBoardCard from "./RoomBoardCard.vue";
 
@@ -12,7 +12,7 @@ describe("RoomBoardCard", () => {
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(RoomBoardCard as MountOptions<Vue>, {
+		wrapper = mount(RoomBoardCard as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				i18n: { t: (key: string) => key },
@@ -57,12 +57,12 @@ describe("RoomBoardCard", () => {
 			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
 		});
 
-		it.skip("should redirect to column board when pressing enter on the card", () => {
+		it("should redirect to column board when pressing enter on the card", async () => {
 			setup();
 			const boardId = wrapper.props().id;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
-			boardCard.vm.$emit("keydown.enter");
+			await boardCard.trigger("keydown.enter");
 
 			expect($router.push).toHaveBeenCalledTimes(1);
 			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
@@ -79,5 +79,48 @@ describe("RoomBoardCard", () => {
 
 			expect($router.push).not.toHaveBeenCalled();
 		});
+
+		it("should emit 'onDrag' when pressing space", async () => {
+			setup();
+			const boardCard = wrapper.findComponent({ name: "VCard" });
+
+			await boardCard.trigger("keydown.space");
+
+			expect(wrapper.emitted("on-drag")).toHaveLength(1);
+		});
+
+		it("should emit 'tab-pressed' when pressing tab", async () => {
+			setup();
+			const boardCard = wrapper.findComponent({ name: "VCard" });
+
+			await boardCard.trigger("keydown.tab");
+
+			expect(wrapper.emitted("tab-pressed")).toHaveLength(1);
+		});
+
+		it.each([["up"], ["down"]])(
+			"should emit 'move-element' when pressing the %s arrow key and keyDrag is true",
+			async (key) => {
+				setup();
+				await wrapper.setProps({ keyDrag: true });
+				const boardCard = wrapper.findComponent({ name: "VCard" });
+
+				await boardCard.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted("move-element")).toHaveLength(1);
+			}
+		);
+
+		it.each([["up"], ["down"]])(
+			"should not emit 'move-element' when pressing the %s arrow key and keyDrag is false",
+			async (key) => {
+				setup();
+				const boardCard = wrapper.findComponent({ name: "VCard" });
+
+				await boardCard.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted("move-element")).toBeUndefined();
+			}
+		);
 	});
 });
