@@ -133,8 +133,6 @@ export default defineComponent({
 			const launchToolResponse: ToolLaunchRequestResponse | undefined =
 				await externalToolsModule?.getToolLaunchData(contextToolId);
 
-			console.log(launchToolResponse); // TODO remove
-
 			switch (launchToolResponse?.method) {
 				case ToolLaunchRequestResponseMethodEnum.Get:
 					handleGetLaunchRequest(launchToolResponse);
