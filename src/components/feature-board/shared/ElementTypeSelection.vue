@@ -55,7 +55,10 @@ export default defineComponent({
 		const { closeDialog, isDialogOpen, elementTypeOptions } =
 			useElementTypeSelection();
 
-		const onCloseDialog = closeDialog;
+		const onCloseDialog = (_: boolean, event: Event) => {
+			event.stopPropagation();
+			closeDialog();
+		};
 
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);

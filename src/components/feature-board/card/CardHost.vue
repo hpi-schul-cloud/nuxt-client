@@ -140,10 +140,8 @@ export default defineComponent({
 		const { askType, createFileElement, isFilePickerOpen } =
 			useElementTypeSelection();
 
-		const onAddElement = async () => {
+		const onAddElement = () => {
 			askType(addElement);
-
-			startEditMode();
 		};
 
 		const onCreateFileElementMode = (file: File) => {
