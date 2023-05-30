@@ -13,9 +13,11 @@ import { ToolConfigurationTemplate } from "@/store/external-tool";
 import ContextExternalToolConfigOverviewPage from "./ContextExternalToolConfigOverview.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import RoomsModule from "../../store/rooms";
 
 describe("ContextExternalToolConfigOverview", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
+	let roomsModule: jest.Mocked<RoomsModule>;
 
 	jest
 		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
@@ -33,6 +35,18 @@ describe("ContextExternalToolConfigOverview", () => {
 			getToolConfigurations: [toolConfigurationFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
+		});
+		roomsModule = createModuleMocks(RoomsModule, {
+			getRoomsData: [
+				{
+					title: "Mathematik",
+					id: propsData?.contextId as string,
+					displayColor: "red",
+					shortTitle: "Mathe",
+					xPosition: 1,
+					yPosition: 1,
+				},
+			],
 		});
 
 		const routerPush = jest.fn();
@@ -56,6 +70,7 @@ describe("ContextExternalToolConfigOverview", () => {
 				provide: {
 					i18n: { t: (key: string) => key },
 					externalToolsModule,
+					roomsModule,
 				},
 				propsData: {
 					...propsData,
@@ -181,13 +196,16 @@ describe("ContextExternalToolConfigOverview", () => {
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", async () => {
-			const { wrapper } = await setup();
+			const { wrapper } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 
+			const courseTitle = roomsModule?.getRoomsData[0].title;
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
-			expect(breadcrumbs.at(1).text()).toEqual("Mathe"); //TODO change to courseName after implementation
-			expect(breadcrumbs.at(2).text()).toEqual("pages.tool.context.title");
+			expect(breadcrumbs.at(1).text()).toEqual(courseTitle);
 		});
 	});
 
