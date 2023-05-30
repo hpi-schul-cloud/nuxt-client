@@ -9,12 +9,12 @@
 	>
 		<VCardText>
 			<div class="mb-0">
-				<div class="title-section">
-					<VIcon size="14">{{ mdiViewDashboard }}</VIcon>
+				<div class="d-flex align-center">
+					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
 					Spalten-Board
 				</div>
 			</div>
-			<h6 class="mb-2 board-title mt-1">Kurs-Board</h6>
+			<h6 class="board-title mt-2">Kurs-Board</h6>
 		</VCardText>
 	</VCard>
 </template>

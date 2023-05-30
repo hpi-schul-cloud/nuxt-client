@@ -1,7 +1,7 @@
 <template>
-	<div class="ml-8 mr-8">
+	<div>
 		<div>
-			<h1>Board</h1>
+			<h3>Board</h3>
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4">
 			<template v-if="board">
