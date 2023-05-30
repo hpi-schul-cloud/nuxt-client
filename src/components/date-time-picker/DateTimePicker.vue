@@ -66,14 +66,7 @@ export default defineComponent({
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const locale = (() => {
-			// TODO remove if language code for ukraine is fixed
-			if (i18n.locale === "ua") {
-				return "uk";
-			}
-
-			return i18n.locale;
-		})();
+		const locale = i18n.locale;
 
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {

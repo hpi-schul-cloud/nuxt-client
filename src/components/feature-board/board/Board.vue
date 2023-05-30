@@ -8,9 +8,9 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					lock-axis="x"
+					:lock-axis="lockAxis"
 					:get-child-payload="getColumnId"
-					:drop-placeholder="columnDropPlaceholderOptions"
+					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
@@ -29,6 +29,7 @@
 					</Draggable>
 				</Container>
 				<BoardColumnGhost
+					v-if="hasCreateColumnPermission"
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
@@ -47,11 +48,12 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 import { useBoardState } from "../state/BoardState.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
+	columnDropPlaceholderOptions,
 	CardMove,
 	ColumnMove,
 	DragAndDropKey,
-	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
@@ -84,28 +86,41 @@ export default defineComponent({
 
 		useBodyScrolling();
 
+		const {
+			hasMovePermission,
+			hasCreateCardPermission,
+			hasCreateColumnPermission,
+			hasDeletePermission,
+			hasEditPermission,
+		} = useBoardPermissions();
+
+		const lockAxis = hasMovePermission ? "x" : "x,y";
+		const placeholderOptions = hasMovePermission
+			? columnDropPlaceholderOptions
+			: null;
+
 		const onCreateCard = async (columnId: string) => {
-			await createCard(columnId);
+			if (hasCreateCardPermission) await createCard(columnId);
 		};
 
 		const onCreateColumn = async () => {
-			await createColumn();
+			if (hasCreateCardPermission) await createColumn();
 		};
 
 		const onCreateColumnWithCard = async (cardId: string) => {
-			await createColumnWithCard(cardId);
+			if (hasCreateCardPermission) await createColumnWithCard(cardId);
 		};
 
 		const onDeleteCard = async (cardId: string) => {
-			await deleteCard(cardId);
+			if (hasCreateCardPermission) await deleteCard(cardId);
 		};
 
 		const onDeleteColumn = async (columnId: string) => {
-			await deleteColumn(columnId);
+			if (hasDeletePermission) await deleteColumn(columnId);
 		};
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
-			await moveColumn(columnPayload);
+			if (hasMovePermission) await moveColumn(columnPayload);
 		};
 
 		const onMoveColumnKeyboard = async (
@@ -122,21 +137,26 @@ export default defineComponent({
 			if (horizontalCursorKeys.includes(keyString)) {
 				const change = keyString === "ArrowLeft" ? -1 : +1;
 				columnMove.addedIndex = columnIndex + change;
-				await moveColumn(columnMove);
+				if (hasMovePermission) await moveColumn(columnMove);
 			}
 		};
 
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
-			await moveCard(payload);
+			if (hasMovePermission) await moveCard(payload);
 		};
 
-		const onUpdateColumnTitle = (columnId: string, newTitle: string) => {
-			updateColumnTitle(columnId, newTitle);
+		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
+			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
 
 		return {
 			board,
 			columnDropPlaceholderOptions,
+			hasMovePermission,
+			hasCreateCardPermission,
+			hasCreateColumnPermission,
+			placeholderOptions,
+			lockAxis,
 			getColumnId,
 			onCreateCard,
 			onCreateColumn,
