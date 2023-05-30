@@ -1,21 +1,21 @@
 <template>
-	<v-file-input v-show="false" ref="inputRef" v-model="file" />
+	<div>
+		<v-file-input v-show="false" ref="inputRef" v-model="modelFile" />
+	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { useFilePicker } from "./FilePicker.composable";
-import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
-	props: {},
-	setup() {
+	emits: ["update:file"],
+	setup(props, { emit }) {
 		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
-		const { createFileElement } = useInternalElementTypeSelection();
 		const inputRef = ref();
-		const file = ref();
+		const modelFile = ref();
 
 		watch(isFilePickerOpen, (newValue: boolean) => {
 			if (newValue) {
@@ -24,15 +24,15 @@ export default defineComponent({
 			}
 		});
 
-		watch(file, async (newValue: File) => {
+		watch(modelFile, (newValue) => {
 			if (newValue) {
-				await createFileElement(newValue);
+				emit("update:file", newValue);
 			}
 		});
 
 		return {
 			inputRef,
-			file,
+			modelFile,
 		};
 	},
 });

@@ -22,7 +22,7 @@
 					></BoardAnyTitleInput>
 				</div>
 				<div class="pt-2">
-					<BoardMenu scope="column">
+					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
@@ -48,6 +48,7 @@ import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
@@ -82,9 +83,16 @@ export default defineComponent({
 
 		const columnHeader = ref(undefined);
 		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
+		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
-		const onStartEditMode = () => startEditMode();
-		const onEndEditMode = () => stopEditMode();
+		const onStartEditMode = () => {
+			if (!hasEditPermission) return;
+			startEditMode();
+		};
+		const onEndEditMode = () => {
+			if (!hasEditPermission) return;
+			stopEditMode();
+		};
 
 		const onTryDelete = async () => {
 			const message =
@@ -116,6 +124,7 @@ export default defineComponent({
 			isEditMode,
 			isFocused,
 			isDeleteModalOpen,
+			hasDeletePermission,
 			mdiTrashCanOutline,
 			onStartEditMode,
 			onEndEditMode,
