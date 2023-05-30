@@ -21,7 +21,7 @@
 					:html="
 						t('components.administration.adminMigrationSection.migrationActive')
 					"
-					component="p"
+					component="span"
 				/>
 			</v-alert>
 		</div>
