@@ -7,13 +7,7 @@ import { ContextExternalTool } from "./external-tool/context-external-tool";
 	stateFactory: true,
 })
 export default class ContextExternalToolsModule extends VuexModule {
-	private contextExternalTools: ContextExternalTool[] = [
-		{
-			id: "6475bcfa882d1d1cdb3d6cb7",
-			name: "TEST TOOL",
-			openInNewTab: false,
-		},
-	];
+	private contextExternalTools: ContextExternalTool[] = [];
 
 	get getContextExternalTools() {
 		return this.contextExternalTools;
