@@ -94,16 +94,19 @@ export default class ExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async launchTool(
+	async getToolLaunchData(
 		contextExternalToolId: string
 	): Promise<ToolLaunchRequestResponse | undefined> {
 		try {
 			this.setLoading(true);
+
 			const resp: AxiosResponse<ToolLaunchRequestResponse> =
 				await this.toolApi.toolLaunchControllerGetToolLaunchRequest(
 					contextExternalToolId
 				);
+
 			this.setLoading(false);
+
 			return resp.data;
 		} catch (error: any) {
 			console.log(`Some error occurred while launching tool: ${error}`);

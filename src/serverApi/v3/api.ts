@@ -5476,40 +5476,6 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @summary Create a new board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerCreateBoard: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/boards`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -5678,16 +5644,6 @@ export const BoardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Create a new board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async boardControllerCreateBoard(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -5743,15 +5699,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @summary Create a new board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerCreateBoard(options?: any): AxiosPromise<BoardResponse> {
-            return localVarFp.boardControllerCreateBoard(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -5802,15 +5749,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
 export interface BoardApiInterface {
     /**
      * 
-     * @summary Create a new board.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApiInterface
-     */
-    boardControllerCreateBoard(options?: any): AxiosPromise<BoardResponse>;
-
-    /**
-     * 
      * @summary Create a new column on a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
@@ -5859,17 +5797,6 @@ export interface BoardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
-    /**
-     * 
-     * @summary Create a new board.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApi
-     */
-    public boardControllerCreateBoard(options?: any) {
-        return BoardApiFp(this.configuration).boardControllerCreateBoard(options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @summary Create a new column on a board.

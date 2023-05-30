@@ -74,11 +74,16 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
+import { externalToolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import {
+	ToolLaunchRequestResponse,
+	ToolLaunchRequestResponseMethodEnum,
+} from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
@@ -120,8 +125,57 @@ export default defineComponent({
 			console.log("Edit Tool");
 		};
 
-		const onClickTool = () => {
-			console.log("Launch Tool");
+		const onClickTool = async (tool: ContextExternalTool) => {
+			await launchTool(tool.id);
+		};
+
+		const launchTool = async (contextToolId: string) => {
+			const launchToolResponse: ToolLaunchRequestResponse | undefined =
+				await externalToolsModule?.getToolLaunchData(contextToolId);
+
+			console.log(launchToolResponse); // TODO remove
+
+			switch (launchToolResponse?.method) {
+				case ToolLaunchRequestResponseMethodEnum.Get:
+					handleGetLaunchRequest(launchToolResponse);
+					break;
+				case ToolLaunchRequestResponseMethodEnum.Post:
+					handlePostLaunchRequest(launchToolResponse);
+					break;
+				default:
+					break;
+			}
+		};
+
+		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+			if (toolLaunch.openNewTab) {
+				window.open(toolLaunch.url, "_blank");
+			} else {
+				window.location.href = toolLaunch.url;
+			}
+		};
+
+		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+			const form: HTMLFormElement = document.createElement("form");
+			form.method = "POST";
+			form.action = toolLaunch.url;
+			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
+
+			const payload = JSON.parse(toolLaunch.payload || "{}");
+
+			for (const key in payload) {
+				if (Object.prototype.hasOwnProperty.call(payload, key)) {
+					const hiddenField = document.createElement("input");
+					hiddenField.type = "hidden";
+					hiddenField.name = key;
+					hiddenField.value = payload[key];
+
+					form.appendChild(hiddenField);
+				}
+			}
+
+			document.body.appendChild(form);
+			form.submit();
 		};
 
 		const canEdit: ComputedRef<boolean> = computed(
