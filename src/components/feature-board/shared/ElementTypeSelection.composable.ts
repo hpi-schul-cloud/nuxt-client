@@ -1,17 +1,16 @@
 import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-export const useElementTypeSelection = createSharedComposable(() => {
+export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const { upload } = useFileStorageApi();
-	const isDialogOpen = ref<boolean>(false);
+	const { isDialogOpen, closeDialog, elementTypeOptions } =
+		useSharedElementTypeSelection();
 	const isFilePickerOpen = ref<boolean>(false);
-
-	let addElementFunction: AddCardElement | undefined;
 
 	const createTextElement = async () => {
 		if (addElementFunction) {
@@ -43,7 +42,7 @@ export const useElementTypeSelection = createSharedComposable(() => {
 		isFilePickerOpen.value = false;
 	};
 
-	const elementTypeOptions = [
+	const options = [
 		{
 			icon: mdiFormatSize,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
@@ -58,21 +57,16 @@ export const useElementTypeSelection = createSharedComposable(() => {
 		},
 	];
 
-	const askType = (addElement: AddCardElement) => {
+	const askType = () => {
+		elementTypeOptions.value = options;
 		isDialogOpen.value = true;
-		addElementFunction = addElement;
-	};
-
-	const closeDialog = () => {
-		isDialogOpen.value = false;
 	};
 
 	return {
 		askType,
 		isDialogOpen,
 		elementTypeOptions,
-		closeDialog,
 		createFileElement,
 		isFilePickerOpen,
 	};
-});
+};

@@ -139,10 +139,10 @@ export default defineComponent({
 		};
 
 		const { askType, createFileElement, isFilePickerOpen } =
-			useElementTypeSelection();
+			useElementTypeSelection(addElement);
 
 		const onAddElement = () => {
-			askType(addElement);
+			askType();
 		};
 
 		const onCreateFileElementMode = (file: File) => {
