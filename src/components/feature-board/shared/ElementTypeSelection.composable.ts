@@ -13,9 +13,8 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const isFilePickerOpen = ref<boolean>(false);
 
 	const createTextElement = async () => {
-		if (addElementFunction) {
-			await addElementFunction(ContentElementType.RichText);
-		}
+		await addElementFunction(ContentElementType.RichText);
+
 		closeDialog();
 	};
 
@@ -25,11 +24,9 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	};
 
 	const createFileElement = async (file: File) => {
-		if (addElementFunction && file) {
-			const element = await addElementFunction(ContentElementType.File);
-			if (element?.id) {
-				await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
-			}
+		const element = await addElementFunction(ContentElementType.File);
+		if (element?.id) {
+			await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
 		}
 
 		isFilePickerOpen.value = false;
