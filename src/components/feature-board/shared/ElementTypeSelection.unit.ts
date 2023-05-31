@@ -1,13 +1,15 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue, { ref, nextTick } from "vue";
-import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 import ElementTypeSelection from "./ElementTypeSelection.vue";
-jest.mock("./ElementTypeSelection.composable");
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+jest.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const setupElementTypeSelectionComposableMock = () => {
-		const mockedUseElementTypeSelection = jest.mocked(useElementTypeSelection);
+	const setupSharedElementTypeSelectionMock = () => {
+		const mockedSharedElementTypeSelection = jest.mocked(
+			useSharedElementTypeSelection
+		);
 
 		const askType = jest.fn();
 		const isDialogOpen = ref(false);
@@ -15,12 +17,7 @@ describe("ElementTypeSelection", () => {
 		const createTextElement = jest.fn();
 		const createFileElement = jest.fn();
 
-		const elementTypeOptions: {
-			icon: string;
-			label: string;
-			action: () => void;
-			testId: string;
-		}[] = [
+		const elementTypeOptions = ref([
 			{
 				icon: "action1-icon",
 				label: "action1-label",
@@ -33,17 +30,14 @@ describe("ElementTypeSelection", () => {
 				action: createFileElement,
 				testId: "action2-id",
 			},
-		];
+		]);
 
 		const closeDialog = jest.fn();
 
-		mockedUseElementTypeSelection.mockReturnValue({
-			askType,
+		mockedSharedElementTypeSelection.mockReturnValue({
 			isDialogOpen,
 			elementTypeOptions,
 			closeDialog,
-			createTextElement,
-			createFileElement,
 		});
 
 		return { askType, isDialogOpen, elementTypeOptions, closeDialog };
@@ -53,7 +47,7 @@ describe("ElementTypeSelection", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			setupElementTypeSelectionComposableMock();
+			setupSharedElementTypeSelectionMock();
 
 			const wrapper: Wrapper<Vue> = mount(
 				ElementTypeSelection as MountOptions<Vue>,
@@ -77,7 +71,7 @@ describe("ElementTypeSelection", () => {
 			document.body.setAttribute("data-app", "true");
 
 			const { isDialogOpen, elementTypeOptions, closeDialog } =
-				setupElementTypeSelectionComposableMock();
+				setupSharedElementTypeSelectionMock();
 
 			const wrapper: Wrapper<Vue> = mount(
 				ElementTypeSelection as MountOptions<Vue>,
@@ -101,7 +95,7 @@ describe("ElementTypeSelection", () => {
 		it("should render buttons correctly and correct action will be called on click", async () => {
 			const { elementTypeOptions, wrapper } = await setup();
 
-			for (const elementTypeOption of elementTypeOptions) {
+			for (const elementTypeOption of elementTypeOptions.value) {
 				const button = wrapper.find(
 					`[data-testId=${elementTypeOption.testId}]`
 				);
