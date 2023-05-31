@@ -58,6 +58,7 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		elementTypeOptions,
 		createFileElement,
 		createTextElement,
+		openFilePicker,
 		isFilePickerOpen,
 	};
 };
