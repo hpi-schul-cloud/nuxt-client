@@ -14,8 +14,8 @@
 				@end="endDragging"
 			>
 				<RoomBoardCard
-					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
+					:key-drag="isDragging"
 					@move-element="moveByKeyboard"
 					@on-drag="isDragging = !isDragging"
 					@tab-pressed="isDragging = false"
