@@ -32,9 +32,8 @@ export default defineComponent({
 			(newValue: boolean) => {
 				if (newValue) {
 					inputRef.value.$refs.input.click();
+					emit("update:isFilePickerOpen");
 				}
-
-				emit("update:isFilePickerOpen");
 			}
 		);
 
