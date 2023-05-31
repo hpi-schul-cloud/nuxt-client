@@ -110,10 +110,10 @@ export default defineComponent({
 			inject<RoomsModule>("roomsModule");
 
 		onMounted(async () => {
-			await externalToolsModule?.loadAvailableSchoolToolConfigurations(
-				props.contextId
-			);
-
+			await externalToolsModule?.loadAvailableSchoolToolConfigurations({
+				contextId: props.contextId,
+				contextType: props.contextType,
+			});
 			await roomsModule?.fetch();
 
 			hasData.value = true;

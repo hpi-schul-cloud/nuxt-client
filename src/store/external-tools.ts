@@ -300,32 +300,32 @@ export default class ExternalToolsModule extends VuexModule {
 
 	// TODO: test the real endpoint
 	@Action
-	async loadAvailableSchoolToolConfigurations(
-		contextId: string
-	): Promise<void> {
+	async loadAvailableSchoolToolConfigurations(payload: {
+		contextId: string;
+		contextType: ToolContextType;
+	}): Promise<void> {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
 
-			const testTools: ToolConfigurationListItem[] = [
-				{
-					id: "testId1",
-					name: "SchoolTestTool 1",
-					logoUrl:
-						"https://www.google.de/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-				},
-				{
-					id: "testId2",
-					name: "SchoolTestTool 2",
-				},
-			];
+			if (payload.contextId && payload.contextType) {
+				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
+					await this.toolApi.toolConfigurationControllerGetAvailableToolsForContext(
+						payload.contextType,
+						payload.contextId
+					);
 
-			this.setToolConfigurations(testTools);
+				this.setToolConfigurations(
+					useExternalToolMappings().mapToolConfigurationListResponse(
+						availableTools.data
+					)
+				);
+			}
 
 			this.setLoading(false);
 		} catch (error: any) {
 			console.log(
-				`Some error occurred while loading available tools for scope CONTEXT and contextId ${contextId}: ${error}`
+				`Some error occurred while loading available tools for scope CONTEXT and contextId ${payload.contextId}: ${error}`
 			);
 			this.setBusinessError({
 				...error,
