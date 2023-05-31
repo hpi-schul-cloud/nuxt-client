@@ -14,38 +14,38 @@ export function createApplicationError(
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode,
-	translationKey: string,
-	message?: string | undefined
+	translationKey?: string,
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.BadRequest,
 	translationKey: "error.400" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.Unauthorized,
 	translationKey: "error.401" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.Forbidden,
 	translationKey: "error.403" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.NotFound,
 	translationKey: "error.404" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.RequestTimeout,
 	translationKey: "error.408" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 export function createApplicationError(
 	statusCode: HttpStatusCode.InternalServerError,
 	translationKey: "error.generic" | string,
-	message?: string | undefined
+	message?: string
 ): ApplicationError;
 /**
  *  Creates an ApplicationError which has to be thrown to trigger global ApplicationError-Handling.
@@ -67,8 +67,8 @@ export function createApplicationError(
  */
 export function createApplicationError(
 	statusCode: HttpStatusCode,
-	translationKey?: string | undefined,
-	message?: string | undefined
+	translationKey?: string,
+	message?: string
 ): ApplicationError {
 	if (translationKey !== undefined) {
 		return new ApplicationError(statusCode, translationKey, message);
