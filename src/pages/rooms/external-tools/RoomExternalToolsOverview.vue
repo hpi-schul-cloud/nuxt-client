@@ -157,7 +157,6 @@ export default defineComponent({
 
 		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
 			const form: HTMLFormElement = document.createElement("form");
-			form.setAttribute("data-testid", "testthisshit");
 			form.method = "POST";
 			form.action = toolLaunch.url;
 			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
