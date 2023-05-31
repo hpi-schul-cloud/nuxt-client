@@ -896,6 +896,8 @@
 	"pages.room.taskCard.label.edit": "Editar",
 	"pages.room.taskCard.label.shareTask": "Compartir copia de la tarea",
 	"pages.room.taskCard.label.betaTask": "Tarea beta",
+	"pages.room.taskCard.label.columnBoard": "Tablero de columna",
+	"pages.room.taskCard.label.courseBoard": "Junta del curso",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.itemDelete.text": "¿Estás seguro de que deseas eliminar el elemento \"{itemTitle}\"?",

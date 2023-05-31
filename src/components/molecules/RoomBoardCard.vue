@@ -13,10 +13,12 @@
 			<div class="mb-0">
 				<div class="d-flex align-center">
 					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
-					Spalten-Board
+					{{ $t("pages.room.taskCard.label.columnBoard") }}
 				</div>
 			</div>
-			<h6 class="board-title mt-2">Kurs-Board</h6>
+			<h6 class="board-title mt-2">
+				{{ $t("pages.room.taskCard.label.courseBoard") }}
+			</h6>
 		</VCardText>
 	</VCard>
 </template>
@@ -29,7 +31,7 @@ import { useRouter } from "vue-router/composables";
 export default defineComponent({
 	name: "RoomBoardCard",
 	props: {
-		id: { type: String, default: "646c64347fc09976edcff185" },
+		id: { type: String, default: "6477489d770242f9200a3df0" },
 		keyDrag: { type: Boolean, required: true },
 		dragInProgress: { type: Boolean, required: true },
 	},

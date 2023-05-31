@@ -11,7 +11,7 @@ export const useBoardBreadcrums = (rootId: string) => {
 			to: `/rooms/${rootId}`,
 		},
 		{
-			text: "Kurs-Titel",
+			text: i18n?.t("components.board"),
 			to: `/rooms/${rootId}/board`,
 		},
 	];
