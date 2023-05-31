@@ -6,6 +6,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
+import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 
 describe("RoomExternalToolOverview", () => {
@@ -72,13 +73,10 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when there are tools in the list", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				id: "toolId",
-				name: "mockTool",
-				openInNewTab: false,
-			};
+			const tools: ContextExternalTool[] =
+				contextExternalToolFactory.buildList(2);
 
-			const { wrapper } = getWrapper([tool, tool]);
+			const { wrapper } = getWrapper(tools);
 
 			return {
 				wrapper,
@@ -98,11 +96,7 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when clicking the delete button on a tool", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				id: "toolId",
-				name: "mockTool",
-				openInNewTab: false,
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
 
 			const { wrapper } = getWrapper([tool]);
 
@@ -123,6 +117,34 @@ describe("RoomExternalToolOverview", () => {
 			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
 
 			expect(deleteDialog.isVisible()).toEqual(true);
+		});
+	});
+
+	describe("when clicking on a tool", () => {
+		const setup = () => {
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
+
+			const { wrapper, externalToolsModule } = getWrapper([tool]);
+
+			return {
+				wrapper,
+				externalToolsModule,
+				tool,
+			};
+		};
+
+		it("should fetch the launch data", async () => {
+			const { wrapper, externalToolsModule, tool } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+
+			await card.trigger("click");
+
+			expect(externalToolsModule.getToolLaunchData).toHaveBeenCalledWith(
+				tool.id
+			);
 		});
 	});
 });
