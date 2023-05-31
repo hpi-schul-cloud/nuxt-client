@@ -11,9 +11,9 @@
 			@update:caption="($event) => (modelValue.caption = $event)"
 		></FileContentElementEdit>
 	</div>
-	<div v-else>
+	<v-sheet v-else class="pa-4 mb-2" outlined rounded>
 		<v-progress-linear indeterminate></v-progress-linear>
-	</div>
+	</v-sheet>
 </template>
 
 <script lang="ts">
@@ -40,23 +40,24 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { files, newFile, fetchFiles } = useFileStorageApi();
+		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
 
 		const fileRecordModel = ref<FileRecordResponse>();
+		const parentId = ref<string>("");
 
 		onMounted(async () => {
-			const parentId = props.element.id;
-			if (files.has(parentId)) {
-				fileRecordModel.value = files.get(parentId);
-			} else {
-				await fetchFiles(parentId, FileRecordParamsParentType.BOARDNODES);
-				fileRecordModel.value = files.get(parentId);
+			parentId.value = props.element.id;
+			fileRecordModel.value = getFile(parentId.value);
+
+			if (!fileRecordModel.value) {
+				await fetchFiles(parentId.value, FileRecordParamsParentType.BOARDNODES);
+				fileRecordModel.value = getFile(parentId.value);
 			}
 		});
 
-		watch(newFile, (newValue) => {
-			if (newValue && props.element.id === newValue.parentId) {
-				fileRecordModel.value = newValue;
+		watch(newFileForParent, (newValue) => {
+			if (newValue === parentId.value) {
+				fileRecordModel.value = getFile(parentId.value);
 			}
 		});
 

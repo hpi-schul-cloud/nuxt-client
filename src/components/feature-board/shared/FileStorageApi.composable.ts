@@ -10,16 +10,13 @@ import { authModule } from "@/store/store-accessor";
 import { BusinessError, Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
 import { createSharedComposable } from "@vueuse/core";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { $axios } from "../../../utils/api";
 
 export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-
-	const files: Map<FileRecord["parentId"], FileRecord> = new Map();
-
-	const newFile = ref<FileRecord>();
-
+	const newFileForParent = ref("");
+	const files: Record<FileRecord["parentId"], FileRecord> = reactive({});
 	let businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -64,8 +61,7 @@ export const useFileStorageApi = createSharedComposable(() => {
 				file
 			);
 			appendFile(response.data);
-			newFile.value = files.get(parentId);
-
+			newFileForParent.value = response.data.parentId;
 			setStatus("completed");
 
 			return response.data;
@@ -115,16 +111,20 @@ export const useFileStorageApi = createSharedComposable(() => {
 
 	const setFiles = (_files: FileRecord[]) => {
 		_files.forEach((file) => {
-			files.set(file.parentId, file);
+			files[file.parentId] = file;
 		});
 	};
 
+	const getFile = (parentId: FileRecord["parentId"]) => {
+		return files[parentId];
+	};
+
 	const appendFile = (_file: FileRecord) => {
-		files.set(_file.parentId, _file);
+		files[_file.parentId] = _file;
 	};
 
 	const replaceFile = (_file: FileRecord) => {
-		files.set(_file.parentId, _file);
+		files[_file.parentId] = _file;
 	};
 
 	const setStatus = (_status: Status) => {
@@ -147,9 +147,10 @@ export const useFileStorageApi = createSharedComposable(() => {
 		fetchFiles,
 		rename,
 		upload,
+		getFile,
 		businessError,
 		files,
 		status,
-		newFile,
+		newFileForParent,
 	};
 });
