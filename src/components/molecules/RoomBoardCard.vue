@@ -31,23 +31,23 @@ import { useRouter } from "vue-router/composables";
 export default defineComponent({
 	name: "RoomBoardCard",
 	props: {
-		id: { type: String, default: "6477489d770242f9200a3df0" },
+		columnBoardItem: { type: Object, required: true },
 		keyDrag: { type: Boolean, required: true },
 		dragInProgress: { type: Boolean, required: true },
 	},
 	emits: ["tab-pressed", "on-drag", "move-element"],
 	setup(props, { emit }) {
 		const router = useRouter();
-		const openBoard = () => {
+		const openBoard = async () => {
 			if (!props.dragInProgress) {
-				router.push(`${props.id}/board`);
+				await router.push(`${props.columnBoardItem.id}/board`);
 			}
 		};
 
 		const moveCardDown = () => {
 			if (props.keyDrag) {
 				emit("move-element", {
-					id: props.id,
+					id: props.columnBoardItem.id,
 					moveIndex: 1,
 				});
 			}
@@ -56,7 +56,7 @@ export default defineComponent({
 		const moveCardUp = () => {
 			if (props.keyDrag) {
 				emit("move-element", {
-					id: props.id,
+					id: props.columnBoardItem.id,
 					moveIndex: -1,
 				});
 			}

@@ -13,14 +13,17 @@
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
-				<RoomBoardCard
-					:key-drag="isDragging"
-					:drag-in-progress="dragInProgress"
-					@move-element="moveByKeyboard"
-					@on-drag="isDragging = !isDragging"
-					@tab-pressed="isDragging = false"
-				></RoomBoardCard>
 				<div v-for="(item, index) of roomData.elements" :key="index">
+					<RoomBoardCard
+						v-if="item.type === cardTypes.ColumnBoard"
+						:ref="`item_${index}`"
+						:key-drag="isDragging"
+						:drag-in-progress="dragInProgress"
+						:column-board-item="item.content"
+						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
+					></RoomBoardCard>
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
