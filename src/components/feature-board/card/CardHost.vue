@@ -53,7 +53,11 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker @update:file="(e) => onCreateFileElementMode(e)" />
+		<FilePicker
+			@update:file="(e) => onCreateFileElementMode(e)"
+			:isFilePickerOpen="isFilePickerOpen"
+			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+		/>
 	</div>
 </template>
 
@@ -73,7 +77,7 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useInternalElementTypeSelection } from "../shared/ElementTypeSelection.composable";
+import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -134,17 +138,15 @@ export default defineComponent({
 			}
 		};
 
-		const { askType, createFileElement } = useInternalElementTypeSelection();
+		const { askType, createFileElement, isFilePickerOpen } =
+			useElementTypeSelection(addElement);
 
-		const onAddElement = async () => {
-			askType(addElement);
-
-			startEditMode();
+		const onAddElement = () => {
+			askType();
 		};
 
 		const onCreateFileElementMode = (file: File) => {
 			createFileElement(file);
-			onStartEditMode();
 		};
 
 		const onStartEditMode = () => {
@@ -184,6 +186,7 @@ export default defineComponent({
 			isEditMode,
 			mdiTrashCanOutline,
 			onCreateFileElementMode,
+			isFilePickerOpen,
 		};
 	},
 });

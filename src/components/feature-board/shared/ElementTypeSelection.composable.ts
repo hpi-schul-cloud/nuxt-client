@@ -1,18 +1,16 @@
 import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
-import { useFilePicker } from "./FilePicker.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-export const useInternalElementTypeSelection = createSharedComposable(() => {
-	const { triggerFilePicker } = useFilePicker();
+export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const { upload } = useFileStorageApi();
-	const isDialogOpen = ref<boolean>(false);
-
-	let addElementFunction: AddCardElement | undefined;
+	const { isDialogOpen, closeDialog, elementTypeOptions } =
+		useSharedElementTypeSelection();
+	const isFilePickerOpen = ref<boolean>(false);
 
 	const createTextElement = async () => {
 		if (addElementFunction) {
@@ -22,27 +20,22 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 	};
 
 	const openFilePicker = () => {
-		triggerFilePicker();
+		isFilePickerOpen.value = true;
 		closeDialog();
 	};
 
 	const createFileElement = async (file: File) => {
 		if (addElementFunction && file) {
 			const element = await addElementFunction(ContentElementType.File);
-			// TODO: upload multiple files at once? File array?
 			if (element?.id) {
-				const fileRecordResponse = await upload(
-					element.id,
-					FileRecordParamsParentType.BOARDNODES,
-					file
-				);
-				// element.fileRecord = fileRecordResponse;
-				// element.showProgress = true; // until upload is finished
+				await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
 			}
 		}
+
+		isFilePickerOpen.value = false;
 	};
 
-	const elementTypeOptions = [
+	const options = [
 		{
 			icon: mdiFormatSize,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
@@ -57,21 +50,17 @@ export const useInternalElementTypeSelection = createSharedComposable(() => {
 		},
 	];
 
-	const askType = (addElement: AddCardElement) => {
+	const askType = () => {
+		elementTypeOptions.value = options;
 		isDialogOpen.value = true;
-		addElementFunction = addElement;
-	};
-
-	const closeDialog = () => {
-		isDialogOpen.value = false;
 	};
 
 	return {
 		askType,
 		isDialogOpen,
 		elementTypeOptions,
-		closeDialog,
 		createFileElement,
 		createTextElement,
+		isFilePickerOpen,
 	};
-});
+};

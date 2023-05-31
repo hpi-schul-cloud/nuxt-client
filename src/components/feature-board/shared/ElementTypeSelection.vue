@@ -44,7 +44,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "ElementTypeSelection",
@@ -52,10 +52,13 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { closeDialog, isDialogOpen, elementTypeOptions } =
-			useInternalElementTypeSelection();
+		const { isDialogOpen, closeDialog, elementTypeOptions } =
+			useSharedElementTypeSelection();
 
-		const onCloseDialog = closeDialog;
+		const onCloseDialog = (_: boolean, event: Event) => {
+			event.stopPropagation();
+			closeDialog();
+		};
 
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);
