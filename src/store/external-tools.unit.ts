@@ -29,7 +29,6 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
-	ToolConfigurationScope,
 	ToolConfigurationTemplate,
 	ToolParameter,
 } from "./external-tool";
@@ -679,7 +678,7 @@ describe("ExternalToolsModule", () => {
 
 					expect(
 						toolApiMock.toolConfigurationControllerGetAvailableToolsForSchool
-					).toHaveBeenCalledWith(ToolConfigurationScope.school, schoolId);
+					).toHaveBeenCalledWith(schoolId);
 				});
 
 				it("should call mapToolConfigurationListResponse", async () => {
