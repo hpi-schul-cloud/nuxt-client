@@ -106,6 +106,7 @@ const getWrapper = (props: object, options?: object) => {
 			i18n: true,
 		}),
 		provide: {
+			i18n: { t: (key: string) => key },
 			notifierModule: notifierModuleMock,
 			shareModule: shareModuleMock,
 		},
@@ -133,6 +134,13 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 			expect(wrapper.vm.roomData).toStrictEqual(mockData);
 			expect(wrapper.vm.role).toStrictEqual("teacher");
+		});
+
+		it("should list board card", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			const boardCard = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			expect(boardCard).toHaveLength(1);
 		});
 
 		it("should list task cards", async () => {
