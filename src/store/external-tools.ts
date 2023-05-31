@@ -18,7 +18,7 @@ import {
 	ToolLaunchRequestResponse,
 } from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 @Module({
 	name: "externalToolsModule",
@@ -108,13 +108,17 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 
 			return resp.data;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.log(`Some error occurred while launching tool: ${error}`);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error,
+					statusCode: error?.response?.status ?? 500,
+					message: error?.response?.data.message ?? "",
+				});
+			}
+
 			this.setLoading(false);
 		}
 	}

@@ -75,7 +75,6 @@
 
 <script lang="ts">
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
-import { externalToolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
@@ -84,6 +83,7 @@ import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
+import ExternalToolsModule from "@/store/external-tools";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
@@ -92,6 +92,8 @@ export default defineComponent({
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
 			inject<ContextExternalToolsModule>("contextExternalToolsModule");
+		const externalToolsModule: ExternalToolsModule | undefined =
+			inject<ExternalToolsModule>("externalToolsModule");
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
 			() => contextExternalToolsModule?.getContextExternalTools || []
@@ -155,6 +157,7 @@ export default defineComponent({
 
 		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
 			const form: HTMLFormElement = document.createElement("form");
+			form.setAttribute("data-testid", "testthisshit");
 			form.method = "POST";
 			form.action = toolLaunch.url;
 			form.target = toolLaunch.openNewTab ? "_blank" : "_self";

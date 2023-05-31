@@ -37,6 +37,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the tool has a name", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 			};
@@ -61,6 +62,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the tool has a logoUrl", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 				logoUrl: "mockLogoUrl",
@@ -86,6 +88,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the tool has no logoUrl", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 			};
@@ -110,6 +113,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the tool is opened in a new tab", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 				logoUrl: "mockLogoUrl",
@@ -135,6 +139,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the tool is in the same window", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: false,
 				logoUrl: "mockLogoUrl",
@@ -160,6 +165,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the user clicks the card", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 				logoUrl: "mockLogoUrl",
@@ -185,6 +191,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the user can edit the tool card", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 				logoUrl: "mockLogoUrl",
@@ -268,6 +275,7 @@ describe("RoomExternalToolCard", () => {
 	describe("when the user cannot edit the tool card", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockName",
 				openInNewTab: true,
 				logoUrl: "mockLogoUrl",

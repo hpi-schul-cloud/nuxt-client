@@ -1,10 +1,11 @@
-import { mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
 import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ExternalToolsModule from "@/store/external-tools";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 
 describe("RoomExternalToolOverview", () => {
@@ -22,6 +23,8 @@ describe("RoomExternalToolOverview", () => {
 			}
 		);
 
+		const externalToolsModule = createModuleMocks(ExternalToolsModule);
+
 		const wrapper: Wrapper<Vue> = mount(RoomExternalToolsOverview, {
 			...createComponentMocks({
 				i18n: true,
@@ -32,11 +35,17 @@ describe("RoomExternalToolOverview", () => {
 			provide: {
 				authModule,
 				contextExternalToolsModule,
+				externalToolsModule,
 				i18n: undefined,
 			},
 		});
 
-		return wrapper;
+		return {
+			wrapper,
+			externalToolsModule,
+			authModule,
+			contextExternalToolsModule,
+		};
 	};
 
 	afterEach(() => {
@@ -45,7 +54,7 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when no tools are in the list", () => {
 		const setup = () => {
-			const wrapper: Wrapper<Vue> = getWrapper([]);
+			const { wrapper } = getWrapper([]);
 
 			return {
 				wrapper,
@@ -64,11 +73,12 @@ describe("RoomExternalToolOverview", () => {
 	describe("when there are tools in the list", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockTool",
 				openInNewTab: false,
 			};
 
-			const wrapper: Wrapper<Vue> = getWrapper([tool, tool]);
+			const { wrapper } = getWrapper([tool, tool]);
 
 			return {
 				wrapper,
@@ -89,11 +99,12 @@ describe("RoomExternalToolOverview", () => {
 	describe("when clicking the delete button on a tool", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = {
+				id: "toolId",
 				name: "mockTool",
 				openInNewTab: false,
 			};
 
-			const wrapper: Wrapper<Vue> = getWrapper([tool]);
+			const { wrapper } = getWrapper([tool]);
 
 			return {
 				wrapper,
@@ -106,7 +117,8 @@ describe("RoomExternalToolOverview", () => {
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
 			});
-			card.trigger("delete");
+
+			await card.trigger("delete");
 
 			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
 
