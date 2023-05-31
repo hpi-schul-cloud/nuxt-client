@@ -18,18 +18,23 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		closeDialog();
 	};
 
-	const openFilePicker = () => {
-		isFilePickerOpen.value = true;
-		closeDialog();
-	};
-
 	const createFileElement = async (file: File) => {
-		const element = await addElementFunction(ContentElementType.File);
-		if (element?.id) {
-			await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
+		try {
+			const element = await addElementFunction(ContentElementType.File);
+			if (element?.id) {
+				await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
+			}
+		} catch (error) {
+			isFilePickerOpen.value = false;
+			throw error;
 		}
 
 		isFilePickerOpen.value = false;
+	};
+
+	const openFilePicker = () => {
+		isFilePickerOpen.value = true;
+		closeDialog();
 	};
 
 	const options = [
