@@ -7,6 +7,14 @@ const $router = {
 	push: jest.fn(),
 };
 
+const mockBoardData = {
+	id: "test-id",
+	title: "title",
+	published: false,
+	createdAt: "2023-05-31T15:34:59.276Z",
+	updatedAt: "2023-05-31T15:34:59.276Z",
+};
+
 describe("RoomBoardCard", () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -20,7 +28,7 @@ describe("RoomBoardCard", () => {
 			propsData: {
 				dragInProgress: false,
 				keyDrag: false,
-				id: "646e1722d921ff87bc02f7df",
+				columnBoardItem: mockBoardData,
 			},
 			mocks: { $router },
 		});
@@ -48,7 +56,7 @@ describe("RoomBoardCard", () => {
 	describe("when interacting with a board card", () => {
 		it("should redirect to column board when clicking on the card", () => {
 			setup();
-			const boardId = wrapper.props().id;
+			const boardId = wrapper.props().columnBoardItem.id;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
@@ -59,7 +67,7 @@ describe("RoomBoardCard", () => {
 
 		it("should redirect to column board when pressing enter on the card", async () => {
 			setup();
-			const boardId = wrapper.props().id;
+			const boardId = wrapper.props().columnBoardItem.id;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.enter");
