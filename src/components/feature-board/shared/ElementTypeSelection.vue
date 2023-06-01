@@ -7,10 +7,11 @@
 		@dialog-closed="onCloseDialog"
 		:buttons="actionButtons"
 	>
-		<template v-slot:title>
+		<div slot="title" class="text-h4 my-2 text-break">
 			{{ $t("components.elementTypeSelection.dialog.title") }}
-		</template>
-		<template v-slot:content>
+		</div>
+
+		<template slot="content">
 			<div
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>

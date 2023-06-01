@@ -2,7 +2,7 @@ import {
 	FileApiFactory,
 	FileApiInterface,
 	FileRecordResponse as FileRecord,
-	FileRecordParamsParentType,
+	FileRecordParentType,
 	FileRecordResponse,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
@@ -25,7 +25,7 @@ export const useFileStorageApi = createSharedComposable(() => {
 
 	const fetchFiles = async (
 		parentId: string,
-		parentType: FileRecordParamsParentType
+		parentType: FileRecordParentType
 	): Promise<void> => {
 		resetBusinessError();
 
@@ -41,7 +41,7 @@ export const useFileStorageApi = createSharedComposable(() => {
 
 	const upload = async (
 		parentId: string,
-		parentType: FileRecordParamsParentType,
+		parentType: FileRecordParentType,
 		file: File
 	): Promise<FileRecordResponse | undefined> => {
 		resetBusinessError();

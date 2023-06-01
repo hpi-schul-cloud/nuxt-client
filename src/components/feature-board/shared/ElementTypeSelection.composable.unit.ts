@@ -1,4 +1,7 @@
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
+import { mdiFormatSize, mdiUpload } from "@mdi/js";
+import { ref } from "vue";
 import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 import { ref } from "vue";
 import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
@@ -36,12 +39,12 @@ describe("ElementTypeSelection Composable", () => {
 				return { addElementMock };
 			};
 
-			it("should call resolve with createTextElement", () => {
+			it("should call resolve with createTextElement", async () => {
 				const { addElementMock } = setup();
 				const { isDialogOpen, createTextElement } =
 					useElementTypeSelection(addElementMock);
 
-				createTextElement();
+				await createTextElement();
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(ContentElementType.RichText);
@@ -57,11 +60,11 @@ describe("ElementTypeSelection Composable", () => {
 				return { addElementMock, error };
 			};
 
-			it("should call resolve with createTextElement", () => {
+			it("should call resolve with createTextElement", async () => {
 				const { addElementMock, error } = setup();
 				const { createTextElement } = useElementTypeSelection(addElementMock);
 
-				expect(createTextElement()).rejects.toThrowError(error);
+				await expect(createTextElement()).rejects.toThrowError(error);
 			});
 		});
 	});
@@ -97,7 +100,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(upload).toHaveBeenCalledTimes(1);
 				expect(upload).toBeCalledWith(
 					element.id,
-					FileRecordParamsParentType.BOARDNODES,
+					FileRecordParentType.BOARDNODES,
 					file
 				);
 			});

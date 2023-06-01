@@ -13,6 +13,7 @@
  */
 
 
+import { FileRecordParentType } from './file-record-parent-type';
 
 /**
  * 
@@ -34,25 +35,10 @@ export interface FileRecordParams {
     parentId: string;
     /**
      * 
-     * @type {string}
+     * @type {FileRecordParentType}
      * @memberof FileRecordParams
      */
-    parentType: FileRecordParamsParentType;
+    parentType: FileRecordParentType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileRecordParamsParentType {
-    USERS = 'users',
-    SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TASKS = 'tasks',
-    LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions',
-    BOARDNODES = 'boardnodes'
-}
-
 
 
