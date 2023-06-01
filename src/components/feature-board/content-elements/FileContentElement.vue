@@ -1,13 +1,15 @@
 <template>
-	<div class="file-content-element-container" v-if="fileRecordModel">
+	<div class="file-content-element-container margin" v-if="fileRecordModel">
 		<FileContentElementDisplay
 			v-if="!isEditMode"
+			:fileRecord="fileRecordModel"
 			:caption="modelValue.caption"
 		></FileContentElementDisplay>
 		<FileContentElementEdit
 			v-if="isEditMode"
 			:autofocus="isAutoFocus"
 			:caption="modelValue.caption"
+			:fileRecord="fileRecordModel"
 			@update:caption="($event) => (modelValue.caption = $event)"
 		></FileContentElementEdit>
 	</div>
@@ -71,5 +73,13 @@ export default defineComponent({
 	box-sizing: border-box;
 	padding: 8px 0px 8px 8px;
 	border: 1px solid #e0e0e0;
+}
+
+.margin {
+	margin: 0.9em 0;
+}
+
+.margin:first-child {
+	margin-top: 0;
 }
 </style>

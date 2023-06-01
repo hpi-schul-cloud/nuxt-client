@@ -3,15 +3,17 @@
 		<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
 		<a
 			class="file-content-element-display-label truncate"
-			href="https://niedersachsen.cloud/"
+			v-bind:href="fileRecord.url"
+			download
 		>
-			{{ caption }}
+			{{ fileRecord.name }}
 		</a>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
@@ -21,9 +23,13 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		fileRecord: {
+			type: Object as () => FileRecordResponse,
+			required: true,
+		},
 	},
 
-	setup(props, { emit }) {
+	setup() {
 		return {
 			mdiFileDocumentOutline,
 		};

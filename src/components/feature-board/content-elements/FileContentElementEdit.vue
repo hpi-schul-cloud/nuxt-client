@@ -4,28 +4,34 @@
 			<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
 			<a
 				class="file-content-element-display-label truncate"
-				href="https://niedersachsen.cloud/"
+				v-bind:href="fileRecord.url"
+				download
 			>
-				{{ caption }}
+				{{ fileRecord.name }}
 			</a>
 		</div>
-		<vTextField v-model="modelCaption" label="Caption"></vTextField>
+		<!-- <vTextField v-model="modelCaption" label="Caption"></vTextField> -->
 	</div>
 </template>
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
 	props: {
+		autofocus: {
+			type: Boolean,
+			required: true,
+		},
 		caption: {
 			type: String,
 			required: true,
 		},
-		autofocus: {
-			type: Boolean,
+		fileRecord: {
+			type: Object as () => FileRecordResponse,
 			required: true,
 		},
 	},
