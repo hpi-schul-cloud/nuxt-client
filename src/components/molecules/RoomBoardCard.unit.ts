@@ -13,6 +13,7 @@ const mockBoardData = {
 	published: false,
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
+	columnBoardId: "column-board-id",
 };
 
 describe("RoomBoardCard", () => {
@@ -56,7 +57,7 @@ describe("RoomBoardCard", () => {
 	describe("when interacting with a board card", () => {
 		it("should redirect to column board when clicking on the card", () => {
 			setup();
-			const boardId = wrapper.props().columnBoardItem.id;
+			const boardId = wrapper.props().columnBoardItem.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
@@ -67,7 +68,7 @@ describe("RoomBoardCard", () => {
 
 		it("should redirect to column board when pressing enter on the card", async () => {
 			setup();
-			const boardId = wrapper.props().columnBoardItem.id;
+			const boardId = wrapper.props().columnBoardItem.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.enter");

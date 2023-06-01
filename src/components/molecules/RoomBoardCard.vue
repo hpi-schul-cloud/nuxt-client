@@ -40,7 +40,7 @@ export default defineComponent({
 		const router = useRouter();
 		const openBoard = async () => {
 			if (!props.dragInProgress) {
-				await router.push(`${props.columnBoardItem.id}/board`);
+				await router.push(`${props.columnBoardItem.columnBoardId}/board`);
 			}
 		};
 
