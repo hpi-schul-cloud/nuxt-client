@@ -1,13 +1,10 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { ref } from "vue";
 import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 import { ref } from "vue";
-import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { setupFileStorageApiMock } from "@@/tests/test-utils/composableMocks/fileStorageApiMock";
+import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 jest.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection Composable", () => {
