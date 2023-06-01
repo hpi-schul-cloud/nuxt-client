@@ -1,6 +1,7 @@
 import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
 import { reactive, ref } from "vue";
 import { jest } from "@jest/globals";
+import { BusinessError } from "@/store/types/commons";
 
 interface Props {
 	uploadMock?: jest.Mock;
@@ -20,14 +21,14 @@ export const setupFileStorageApiMock = (props: Props) => {
 	const upload = uploadMock ?? jest.fn();
 	const getFile = getFileMock ?? jest.fn();
 
-	const businessError = {
+	const businessError = ref<BusinessError>({
 		statusCode: "",
 		message: "",
-	};
+	});
 	const fileRecords = reactive({});
 	const newFileForParent = ref("");
 
-	const params = {
+	const mocks = {
 		download,
 		fetchFiles,
 		rename,
@@ -38,7 +39,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 		newFileForParent,
 	};
 
-	mockedFileStorageApi.mockReturnValue(params);
+	mockedFileStorageApi.mockReturnValue(mocks);
 
-	return { ...params };
+	return mocks;
 };
