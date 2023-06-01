@@ -7,7 +7,6 @@ import fs from "fs";
 import path from "path";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
-// import { mixin as userMixin } from "@/plugins/user.js";
 import { mountBaseComponents } from "@/components/base/_globals";
 import { setupI18n } from "@/plugins/i18n-test.js";
 import "@/plugins/directives";
@@ -38,10 +37,8 @@ function readDirRecursiveSync(dir) {
 		const filepath = path.join(dir, file);
 		const stat = fs.statSync(filepath);
 		if (stat && stat.isDirectory()) {
-			/* Recurse into a subdirectory */
 			results.push(...readDirRecursiveSync(filepath));
 		} else {
-			/* Is a file */
 			results.push(filepath);
 		}
 	});
@@ -120,11 +117,6 @@ global.mount = mount;
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = shallowMount;
 
-// global.wait = (duration) =>
-// 	new Promise((resolve) => {
-// 		setTimeout(resolve, duration);
-// 	});
-
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
@@ -134,10 +126,9 @@ global.createComponentMocks = ({
 	$route,
 	$router,
 	router,
-	// uiState,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	dialog,
-	/*style,*/ mocks,
+	mocks,
 	stubs,
 	$config,
 }) => {
@@ -158,7 +149,6 @@ global.createComponentMocks = ({
 			stubs[name] = globalStubs[name]();
 		}
 	});
-	// returnOptions.stubs.NuxtLink = RouterLinkStub;
 
 	// Converts a `store` option shaped like:
 	//
@@ -179,9 +169,7 @@ global.createComponentMocks = ({
 	if (store || i18n || user || vueMeta) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
-		// if (user) {
-		// 	WIP: storeModules.auth = authStoreModule;
-		// }
+
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)
 				.map(([moduleName, storeModule]) => {
