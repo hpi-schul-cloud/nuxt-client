@@ -300,7 +300,7 @@ export default class ExternalToolsModule extends VuexModule {
 
 	// TODO: test the real endpoint
 	@Action
-	async loadAvailableSchoolToolConfigurations(payload: {
+	async loadAvailableToolConfigurationsForContext(payload: {
 		contextId: string;
 		contextType: ToolContextType;
 	}): Promise<void> {
@@ -327,47 +327,6 @@ export default class ExternalToolsModule extends VuexModule {
 		} catch (error: any) {
 			console.log(
 				`Some error occurred while loading available tools for scope CONTEXT and contextId ${payload.contextId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	// TODO: test the real endpoint
-	@Action
-	async loadToolConfigurationTemplateFromSchoolExternalTool(
-		toolId: string
-	): Promise<ToolConfigurationTemplate | undefined> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			console.log(toolId);
-
-			const configTemplate: AxiosResponse<SchoolExternalToolResponse> =
-				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(toolId);
-			const toolConfigurationTemplate: ToolConfigurationTemplate =
-				useExternalToolMappings().mapSchoolExternalToolConfigurationTemplateResponse(
-					configTemplate.data
-				);
-
-			/*const toolConfigurationTemplate: ToolConfigurationTemplate = {
-				id: "testId1",
-				name: "SchoolTestTool 1",
-				logoUrl:
-					"https://www.google.de/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-				parameters: [],
-				version: 1,
-			};*/
-			this.setLoading(false);
-
-			return toolConfigurationTemplate;
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading tool configuration template for school external tool with id ${toolId}: ${error}`
 			);
 			this.setBusinessError({
 				...error,

@@ -1070,12 +1070,15 @@ describe("ExternalToolsModule", () => {
 			});
 		});
 
-		describe("loadAvailableSchoolToolConfigurations is called", () => {
+		describe("loadAvailableToolConfigurationsForContext is called", () => {
 			describe("when no error occurs", () => {
 				it("should set tool configurations", async () => {
-					const contextId = "contextId";
+					const payload = {
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
 
-					await module.loadAvailableSchoolToolConfigurations(contextId);
+					await module.loadAvailableToolConfigurationsForContext(payload);
 					const result = module.getToolConfigurations;
 
 					expect(result).toEqual<ToolConfigurationListItem[]>([

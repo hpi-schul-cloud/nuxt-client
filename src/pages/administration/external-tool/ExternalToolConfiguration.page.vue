@@ -97,7 +97,7 @@ import ExternalToolsModule from "@/store/external-tools";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "ExternalToolConfigOverview",
+	name: "ExternalToolConfiguration",
 	components: {
 		DefaultWireframe,
 		ExternalToolConfigSettings,

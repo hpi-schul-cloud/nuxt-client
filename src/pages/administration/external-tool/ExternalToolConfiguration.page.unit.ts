@@ -9,7 +9,7 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
-import ExternalToolConfigOverviewPage from "./ExternalToolConfigOverview.page.vue";
+import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
@@ -17,7 +17,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 
-describe("ExternalToolConfigOverview", () => {
+describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	jest
@@ -56,7 +56,7 @@ describe("ExternalToolConfigOverview", () => {
 		);
 
 		const wrapper: Wrapper<any> = mount(
-			ExternalToolConfigOverviewPage as MountOptions<Vue>,
+			ExternalToolConfiguration as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
@@ -87,9 +87,9 @@ describe("ExternalToolConfigOverview", () => {
 	describe("basic functions", () => {
 		it("should render component", async () => {
 			const { wrapper } = await setup();
-			expect(
-				wrapper.findComponent(ExternalToolConfigOverviewPage).exists()
-			).toBe(true);
+			expect(wrapper.findComponent(ExternalToolConfiguration).exists()).toBe(
+				true
+			);
 		});
 	});
 
@@ -98,7 +98,7 @@ describe("ExternalToolConfigOverview", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
 			try {
-				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
+				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
 						i18n: { t: (key: string) => key },
 					},
@@ -116,7 +116,7 @@ describe("ExternalToolConfigOverview", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
 			try {
-				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
+				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},

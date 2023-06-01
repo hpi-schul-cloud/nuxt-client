@@ -86,7 +86,7 @@ import ExternalToolSelectionRow from "../administration/external-tool/ExternalTo
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	name: "ContextExternalToolConfigOverview",
+	name: "ContextExternalToolConfiguration",
 	components: {
 		DefaultWireframe,
 		ExternalToolSelectionRow,
@@ -101,7 +101,6 @@ export default defineComponent({
 			required: true,
 		},
 	},
-
 	setup(props) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
@@ -110,7 +109,7 @@ export default defineComponent({
 			inject<RoomsModule>("roomsModule");
 
 		onMounted(async () => {
-			await externalToolsModule?.loadAvailableSchoolToolConfigurations({
+			await externalToolsModule?.loadAvailableToolConfigurationsForContext({
 				contextId: props.contextId,
 				contextType: props.contextType,
 			});
@@ -178,10 +177,10 @@ export default defineComponent({
 		const onSelectTemplate = async (
 			selectedTool: ToolConfigurationListItem
 		) => {
-			toolTemplate.value =
-				await externalToolsModule?.loadToolConfigurationTemplateFromSchoolExternalTool(
-					selectedTool.id
-				);
+			//toolTemplate.value =
+			//await externalToolsModule?.loadToolConfigurationTemplateFromSchoolExternalTool(
+			//selectedTool.id
+			//);
 
 			hasToolTemplate.value = true;
 		};

@@ -1,21 +1,21 @@
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
 import flushPromises from "flush-promises";
 import Vue from "vue";
 import {
-	toolConfigurationTemplateFactory,
 	businessErrorFactory,
 	toolConfigurationFactory,
+	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
 import { ToolConfigurationTemplate } from "@/store/external-tool";
-import ContextExternalToolConfigOverviewPage from "./ContextExternalToolConfigOverview.page.vue";
+import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 
-describe("ContextExternalToolConfigOverview", () => {
+describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 	let roomsModule: jest.Mocked<RoomsModule>;
 
@@ -55,15 +55,15 @@ describe("ContextExternalToolConfigOverview", () => {
 			push: routerPush,
 		};
 
-		const toolTemplate: ToolConfigurationTemplate =
+		/*const toolTemplate: ToolConfigurationTemplate =
 			toolConfigurationTemplateFactory.build();
 
 		externalToolsModule.loadToolConfigurationTemplateFromSchoolExternalTool.mockResolvedValue(
 			toolTemplate
-		);
+		);*/
 
 		const wrapper: Wrapper<any> = mount(
-			ContextExternalToolConfigOverviewPage as MountOptions<Vue>,
+			ContextExternalToolConfiguration as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
@@ -87,23 +87,29 @@ describe("ContextExternalToolConfigOverview", () => {
 		return {
 			wrapper,
 			routerPush,
-			toolTemplate,
+			//toolTemplate,
 			courseTitle,
 		};
 	};
 
 	describe("basic functions", () => {
 		it("should render component", async () => {
-			const { wrapper } = await setup();
+			const { wrapper } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 			expect(
-				wrapper.findComponent(ContextExternalToolConfigOverviewPage).exists()
+				wrapper.findComponent(ContextExternalToolConfiguration).exists()
 			).toBe(true);
 		});
 	});
 
 	describe("t", () => {
 		it("should return translation", async () => {
-			const { wrapper } = await setup({});
+			const { wrapper } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 			const testKey = "testKey";
 
 			const result: string = wrapper.vm.t(testKey);
@@ -112,7 +118,10 @@ describe("ContextExternalToolConfigOverview", () => {
 		});
 
 		it("should return 'unknown translation-key'", async () => {
-			const { wrapper } = await setup({});
+			const { wrapper } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 			const testKey = 123;
 
 			const result: string = wrapper.vm.t(testKey);
@@ -123,9 +132,12 @@ describe("ContextExternalToolConfigOverview", () => {
 
 	describe("onMounted is called", () => {
 		it("should load available tool configurations", async () => {
-			await setup();
+			await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 			expect(
-				externalToolsModule.loadAvailableSchoolToolConfigurations
+				externalToolsModule.loadAvailableToolConfigurationsForContext
 			).toHaveBeenCalled();
 		});
 	});
@@ -146,8 +158,13 @@ describe("ContextExternalToolConfigOverview", () => {
 
 	describe("title", () => {
 		it("should render title", async () => {
-			const { wrapper } = await setup();
-			expect(wrapper.find("h1").exists()).toBeTruthy();
+			const { wrapper } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
+			expect(wrapper.find(".wireframe-header").text()).toContain(
+				wrapper.vm.$i18n.t("pages.tool.context.title")
+			);
 		});
 	});
 
@@ -167,13 +184,16 @@ describe("ContextExternalToolConfigOverview", () => {
 
 			it("should display name and logo of an tool configuration in selection list", async () => {
 				const name = "nameForSelect";
-				const { wrapper } = await setup({
-					getToolConfigurations: [
-						toolConfigurationFactory.build({
-							name,
-						}),
-					],
-				});
+				const { wrapper } = await setup(
+					{
+						getToolConfigurations: [
+							toolConfigurationFactory.build({
+								name,
+							}),
+						],
+					},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
 				await openSelect(wrapper);
 
@@ -182,24 +202,30 @@ describe("ContextExternalToolConfigOverview", () => {
 				expect(selectionRow.find("span").text().includes(name));
 			});
 
-			it("should load template when tool configuration was changed", async () => {
+			/*it("should load template when tool configuration was changed", async () => {
 				const id = "expectedToolId";
-				const { wrapper } = await setup({
-					getToolConfigurations: [toolConfigurationFactory.build({ id })],
-				});
+				const { wrapper } = await setup(
+					{
+						getToolConfigurations: [toolConfigurationFactory.build({ id })],
+					},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
 				await openSelect(wrapper);
 
 				expect(
 					externalToolsModule.loadToolConfigurationTemplateFromSchoolExternalTool
 				).toHaveBeenCalledWith(id);
-			});
+			});*/
 		});
 	});
 
 	describe("cancel button", () => {
 		it("should change page when cancel button was clicked", async () => {
-			const { wrapper, routerPush } = await setup();
+			const { wrapper, routerPush } = await setup(
+				{},
+				{ contextId: "contextId", contextType: ToolContextType.COURSE }
+			);
 
 			await wrapper.find('[data-testid="cancel-button"]').trigger("click");
 
@@ -236,9 +262,14 @@ describe("ContextExternalToolConfigOverview", () => {
 			});
 
 			it("should redirect back to context page when there is no error", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({ message: undefined }),
-				});
+				const { wrapper, routerPush } = await setup(
+					{
+						getBusinessError: businessErrorFactory.build({
+							message: undefined,
+						}),
+					},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
@@ -249,11 +280,14 @@ describe("ContextExternalToolConfigOverview", () => {
 			});
 
 			it("should display alert when server side error on save occurred", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({
-						message: "someErrorOccurred",
-					}),
-				});
+				const { wrapper, routerPush } = await setup(
+					{
+						getBusinessError: businessErrorFactory.build({
+							message: "someErrorOccurred",
+						}),
+					},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
