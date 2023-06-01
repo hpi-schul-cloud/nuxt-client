@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<RenderHTML class="ck-content" :html="value" config="ck5" />
+		<RenderHTML
+			v-if="!editable"
+			class="ck-content"
+			:html="value"
+			config="ck5"
+		/>
 		<ck-editor
 			v-if="editable"
 			v-model="content"
