@@ -1,5 +1,5 @@
 <template>
-	<div v-if="fileRecordModel">
+	<div class="file-content-element-container" v-if="fileRecordModel">
 		<FileContentElementDisplay
 			v-if="!isEditMode"
 			:caption="modelValue.caption"
@@ -65,3 +65,14 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@/styles/mixins";
+@import "~vuetify/src/styles/styles.sass";
+
+.file-content-element-container {
+	box-sizing: border-box;
+	padding: 8px 0px 8px 8px;
+	border: 1px solid #e0e0e0;
+}
+</style>
