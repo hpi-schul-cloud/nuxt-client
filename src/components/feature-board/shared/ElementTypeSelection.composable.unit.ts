@@ -6,6 +6,7 @@ import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.comp
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 jest.mock("./SharedElementTypeSelection.composable");
+jest.mock("../shared/FileStorageApi.composable");
 
 describe("ElementTypeSelection Composable", () => {
 	const setupSharedElementTypeSelection = () => {

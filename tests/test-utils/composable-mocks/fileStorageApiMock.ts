@@ -1,6 +1,6 @@
 import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
 import { reactive, ref } from "vue";
-jest.mock("./FileStorageApi.composable");
+import { jest } from "@jest/globals";
 
 interface Props {
 	uploadMock?: jest.Mock;
