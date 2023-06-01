@@ -18,10 +18,10 @@ export const useFileStorageApi = createSharedComposable(() => {
 	const fileRecords: Record<FileRecord["parentId"], FileRecord> = reactive({});
 	const newFileForParent = ref("");
 
-	let businessError: BusinessError = {
+	const businessError = ref<BusinessError>({
 		statusCode: "",
 		message: "",
-	};
+	});
 
 	const fetchFiles = async (
 		parentId: string,
@@ -113,11 +113,11 @@ export const useFileStorageApi = createSharedComposable(() => {
 	};
 
 	const setBusinessError = (error: BusinessError): void => {
-		businessError = error;
+		businessError.value = error;
 	};
 
 	const resetBusinessError = (): void => {
-		businessError = {
+		businessError.value = {
 			statusCode: "",
 			message: "",
 		};
