@@ -85,6 +85,16 @@ const mockData = {
 				hidden: false,
 			},
 		},
+		{
+			type: "column-board",
+			content: {
+				id: "column-board-id",
+				title: "title",
+				published: false,
+				createdAt: "2023-05-31T15:34:59.276Z",
+				updatedAt: "2023-05-31T15:34:59.276Z",
+			},
+		},
 	],
 };
 
