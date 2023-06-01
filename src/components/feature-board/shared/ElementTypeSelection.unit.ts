@@ -2,22 +2,18 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue, { ref, nextTick } from "vue";
 import ElementTypeSelection from "./ElementTypeSelection.vue";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 jest.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
-	const setupSharedElementTypeSelectionMock = () => {
-		const mockedSharedElementTypeSelection = jest.mocked(
-			useSharedElementTypeSelection
-		);
-
-		const askType = jest.fn();
-		const isDialogOpen = ref(false);
+	const setupMocks = () => {
+		const { closeDialog, isDialogOpen, elementTypeOptions } =
+			setupSharedElementTypeSelectionMock({});
 
 		const createTextElement = jest.fn();
 		const createFileElement = jest.fn();
 
-		const elementTypeOptions = ref([
+		elementTypeOptions.value = [
 			{
 				icon: "action1-icon",
 				label: "action1-label",
@@ -30,24 +26,16 @@ describe("ElementTypeSelection", () => {
 				action: createFileElement,
 				testId: "action2-id",
 			},
-		]);
+		];
 
-		const closeDialog = jest.fn();
-
-		mockedSharedElementTypeSelection.mockReturnValue({
-			isDialogOpen,
-			elementTypeOptions,
-			closeDialog,
-		});
-
-		return { askType, isDialogOpen, elementTypeOptions, closeDialog };
+		return { isDialogOpen, elementTypeOptions, closeDialog };
 	};
 
 	describe("when isDialogOpen is false", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			setupSharedElementTypeSelectionMock();
+			setupMocks();
 
 			const wrapper: Wrapper<Vue> = mount(
 				ElementTypeSelection as MountOptions<Vue>,
@@ -70,8 +58,7 @@ describe("ElementTypeSelection", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isDialogOpen, elementTypeOptions, closeDialog } =
-				setupSharedElementTypeSelectionMock();
+			const { isDialogOpen, elementTypeOptions, closeDialog } = setupMocks();
 
 			const wrapper: Wrapper<Vue> = mount(
 				ElementTypeSelection as MountOptions<Vue>,
