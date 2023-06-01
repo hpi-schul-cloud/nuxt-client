@@ -27,7 +27,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 	const fileRecords = reactive({});
 	const newFileForParent = ref("");
 
-	mockedFileStorageApi.mockReturnValue({
+	const params = {
 		download,
 		fetchFiles,
 		rename,
@@ -36,7 +36,9 @@ export const setupFileStorageApiMock = (props: Props) => {
 		businessError,
 		fileRecords,
 		newFileForParent,
-	});
+	};
 
-	return { upload };
+	mockedFileStorageApi.mockReturnValue(params);
+
+	return { ...params };
 };
