@@ -1162,7 +1162,7 @@ export interface CustomParameterResponse {
 export enum CustomParameterResponseScopeEnum {
     Global = 'global',
     School = 'school',
-    Course = 'course'
+    Context = 'context'
 }
 /**
     * @export
@@ -4223,6 +4223,47 @@ export interface ToolConfigurationListResponse {
      */
     data: Array<ToolConfigurationEntryResponse>;
 }
+/**
+ * 
+ * @export
+ * @interface ToolLaunchRequestResponse
+ */
+export interface ToolLaunchRequestResponse {
+    /**
+     * The Launch Request method (GET or POST)
+     * @type {string}
+     * @memberof ToolLaunchRequestResponse
+     */
+    method: ToolLaunchRequestResponseMethodEnum;
+    /**
+     * The URL for the Tool Launch Request
+     * @type {string}
+     * @memberof ToolLaunchRequestResponse
+     */
+    url: string;
+    /**
+     * The payload for the Tool Launch Request (optional)
+     * @type {string}
+     * @memberof ToolLaunchRequestResponse
+     */
+    payload?: string;
+    /**
+     * Specifies whether the Tool should be launched in a new tab
+     * @type {boolean}
+     * @memberof ToolLaunchRequestResponse
+     */
+    openNewTab?: boolean;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ToolLaunchRequestResponseMethodEnum {
+    Get = 'GET',
+    Post = 'POST'
+}
+
 /**
  * 
  * @export
@@ -10930,39 +10971,6 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        schoolControllerGetPublicSchool: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/school/public`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11026,15 +11034,6 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async schoolControllerGetPublicSchool(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetPublicSchool(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {string} schoolId The id of the school.
          * @param {MigrationBody} migrationBody 
          * @param {*} [options] Override http request option.
@@ -11062,14 +11061,6 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          */
         schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
             return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        schoolControllerGetPublicSchool(options?: any): AxiosPromise<object> {
-            return localVarFp.schoolControllerGetPublicSchool(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11101,14 +11092,6 @@ export interface SchoolApiInterface {
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SchoolApiInterface
-     */
-    schoolControllerGetPublicSchool(options?: any): AxiosPromise<object>;
-
-    /**
-     * 
      * @param {string} schoolId The id of the school.
      * @param {MigrationBody} migrationBody 
      * @param {*} [options] Override http request option.
@@ -11135,16 +11118,6 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetMigration(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SchoolApi
-     */
-    public schoolControllerGetPublicSchool(options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetPublicSchool(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13138,6 +13111,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get tool launch request for a context external tool id
+         * @param {string} contextExternalToolId The id of the context external tool
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolLaunchControllerGetToolLaunchRequest: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolId' is not null or undefined
+            assertParamExists('toolLaunchControllerGetToolLaunchRequest', 'contextExternalToolId', contextExternalToolId)
+            const localVarPath = `/tools/context/{contextExternalToolId}/launch`
+                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13451,6 +13462,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get tool launch request for a context external tool id
+         * @param {string} contextExternalToolId The id of the context external tool
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13609,6 +13631,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get tool launch request for a context external tool id
+         * @param {string} contextExternalToolId The id of the context external tool
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse> {
+            return localVarFp.toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13758,6 +13790,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @summary Get tool launch request for a context external tool id
+     * @param {string} contextExternalToolId The id of the context external tool
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse>;
 
     /**
      * 
@@ -13929,6 +13971,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any) {
         return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(toolId, externalToolPostParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get tool launch request for a context external tool id
+     * @param {string} contextExternalToolId The id of the context external tool
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
