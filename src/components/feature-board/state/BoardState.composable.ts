@@ -157,10 +157,10 @@ export const useBoardState = (id: string) => {
 		await moveColumnCall(payload.payload, board.value.id, addedIndex);
 	};
 
-	const updateColumnTitle = (columnId: string, newTitle: string) => {
+	const updateColumnTitle = async (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
 
-		updateColumnTitleCall(columnId, newTitle);
+		await updateColumnTitleCall(columnId, newTitle);
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex > -1) {
 			board.value.columns[columnIndex].title = newTitle;

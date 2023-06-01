@@ -9,6 +9,7 @@ import {
 	SchoolApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
+	ValidationError,
 } from "@/serverApi/v3";
 import { AxiosError, AxiosResponse } from "axios";
 import { ApplicationError } from "./types/application-error";
@@ -47,6 +48,10 @@ function transformSchoolClientToServer(school: School): SchoolPayload {
 		}
 	});
 	return { ...school, features: featureArray };
+}
+
+function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
+	return !!error.response?.data.message.startsWith("grace_period_expired");
 }
 
 @Module({
@@ -216,7 +221,12 @@ export default class SchoolsModule extends VuexModule {
 				this.setLoading(false);
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
-					this.setError(this.createApplicationError());
+					this.setError(
+						useApplicationError().createApplicationError(
+							error.response?.status ?? 500,
+							"pages.administration.school.index.error"
+						)
+					);
 				}
 				this.setLoading(false);
 			}
@@ -237,7 +247,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -254,7 +269,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -276,7 +296,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -287,13 +312,21 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		const school = transformSchoolClientToServer(payload as Required<School>);
 		try {
-			const data = (await $axios.patch(`/v1/schools/${school.id}`, school))
-				.data;
+			await $axios.patch(`/v1/schools/${school.id}`, school);
+			// TODO: Patch returns old data in response since it doesn't have enough time to sync between db instances
+			// Get request can be removed after https://ticketsystem.dbildungscloud.de/browse/BC-3449 (need to be retested)
+			const data = (await $axios.get(`/v1/schools/${school.id}`)).data;
+
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -314,7 +347,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -332,7 +370,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -359,7 +402,12 @@ export default class SchoolsModule extends VuexModule {
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 			this.setLoading(false);
 		}
@@ -384,7 +432,12 @@ export default class SchoolsModule extends VuexModule {
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setError(this.createApplicationError());
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
 			}
 		}
 	}
@@ -411,10 +464,14 @@ export default class SchoolsModule extends VuexModule {
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
+				const translationKey: string | undefined = isGracePeriodError(error)
+					? "pages.administration.school.index.error.gracePeriodExceeded"
+					: undefined;
+
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error.gracePeriodExceeded"
+						translationKey
 					)
 				);
 			}
@@ -423,16 +480,5 @@ export default class SchoolsModule extends VuexModule {
 
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
-	}
-
-	private createApplicationError(
-		statusCode = 500,
-		translationKey = "pages.administration.school.index.error"
-	): ApplicationError {
-		const applicationError = useApplicationError().createApplicationError(
-			statusCode,
-			translationKey
-		);
-		return applicationError;
 	}
 }

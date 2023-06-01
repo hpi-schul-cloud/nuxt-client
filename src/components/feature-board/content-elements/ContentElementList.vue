@@ -1,27 +1,29 @@
 <template>
 	<VCardText>
 		<template v-for="element in elements">
-			<TextContentElement
-				v-if="element.type === ContentElementType.TEXT"
+			<RichTextContentElement
+				v-if="element.type === ContentElementType.RichText"
 				:key="element.id"
-				:element="element"
+				:element="asRichTextElementResponse(element)"
 				:isEditMode="isEditMode"
-			></TextContentElement>
+			/>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
 			</template>
 		</template>
 	</VCardText>
 </template>
+
 <script lang="ts">
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
-import { AnyContentElement, ContentElementType } from "../types/ContentElement";
-import TextContentElement from "./TextContentElement.vue";
+import { AnyContentElement } from "../types/ContentElement";
+import RichTextContentElement from "./RichTextContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
-		TextContentElement,
+		RichTextContentElement,
 	},
 	props: {
 		elements: {
@@ -34,8 +36,13 @@ export default defineComponent({
 		},
 	},
 	setup() {
+		const asRichTextElementResponse = (element: AnyContentElement) => {
+			return element as RichTextElementResponse;
+		};
+
 		return {
 			ContentElementType,
+			asRichTextElementResponse,
 		};
 	},
 });

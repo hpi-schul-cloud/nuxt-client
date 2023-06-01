@@ -23,8 +23,8 @@ import {
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
 import {
-	toolParameterFactory,
 	toolConfigurationTemplateFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 
 jest.mock("@/store/store-accessor", () => ({
