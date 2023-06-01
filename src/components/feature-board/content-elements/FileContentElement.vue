@@ -23,10 +23,7 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import {
-	FileRecordParamsParentType,
-	FileRecordResponse,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -50,7 +47,7 @@ export default defineComponent({
 			fileRecordModel.value = getFile(parentId.value);
 
 			if (!fileRecordModel.value) {
-				await fetchFiles(parentId.value, FileRecordParamsParentType.BOARDNODES);
+				await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
 				fileRecordModel.value = getFile(parentId.value);
 			}
 		});
