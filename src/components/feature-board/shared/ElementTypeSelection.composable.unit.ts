@@ -15,24 +15,24 @@ describe("ElementTypeSelection Composable", () => {
 		const fetchFiles = jest.fn();
 		const rename = jest.fn();
 		const upload = uploadMock;
+		const getFile = jest.fn();
 
 		const businessError = {
 			statusCode: "",
 			message: "",
 		};
-		const files = new Map();
-		const status = "";
-		const newFile = ref(undefined);
+		const fileRecords = {};
+		const newFileForParent = ref("");
 
 		mockedFileStorageApi.mockReturnValue({
 			download,
 			fetchFiles,
 			rename,
 			upload,
+			getFile,
 			businessError,
-			files,
-			status,
-			newFile,
+			fileRecords,
+			newFileForParent,
 		});
 
 		return { upload };
