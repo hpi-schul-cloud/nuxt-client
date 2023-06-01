@@ -10,7 +10,7 @@
 			<FileContentElement
 				v-else-if="element.type === ContentElementType.File"
 				:key="element.id"
-				:element="element"
+				:element="asFileElementResponse(element)"
 				:isEditMode="isEditMode"
 			/>
 			<template v-else>
@@ -21,7 +21,11 @@
 </template>
 
 <script lang="ts">
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	FileElementResponse,
+	RichTextElementResponse,
+} from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
@@ -48,8 +52,13 @@ export default defineComponent({
 			return element as RichTextElementResponse;
 		};
 
+		const asFileElementResponse = (element: AnyContentElement) => {
+			return element as FileElementResponse;
+		};
+
 		return {
 			ContentElementType,
+			asFileElementResponse,
 			asRichTextElementResponse,
 		};
 	},
