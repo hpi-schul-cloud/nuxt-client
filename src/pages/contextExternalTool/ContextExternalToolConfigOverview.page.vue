@@ -19,14 +19,14 @@
 			data-testId="configuration-select"
 		>
 			<template #selection="{ item }">
-				<context-external-tool-selection-row
+				<external-tool-selection-row
 					:item="item"
 					max-height="20"
 					max-width="20"
 				/>
 			</template>
 			<template #item="{ item }">
-				<context-external-tool-selection-row :item="item" />
+				<external-tool-selection-row :item="item" />
 			</template>
 		</v-select>
 		<v-spacer class="mt-10"></v-spacer>
@@ -78,18 +78,18 @@ import {
 } from "@/store/external-tool";
 import { useRouter } from "vue-router/composables";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import ContextExternalToolSelectionRow from "./ContextExternalToolSelectionRow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import RoomsModule from "../../store/rooms";
+import RoomsModule from "@/store/rooms";
+import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ContextExternalToolConfigOverview",
 	components: {
 		DefaultWireframe,
-		ContextExternalToolSelectionRow,
+		ExternalToolSelectionRow,
 	},
 	props: {
 		contextId: {
@@ -131,32 +131,28 @@ export default defineComponent({
 		const courseTitle: ComputedRef<string | undefined> = computed(
 			() =>
 				roomsModule?.getRoomsData.find(
-					(element) => (element.id = props.contextId)
+					(element) => element.id === props.contextId
 				)?.title
 		);
 
 		const contextRoute = `/rooms/${props.contextId}`;
 
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+			const crumbs: Breadcrumb[] = [
+				{
+					text: t("pages.courses.index.title"),
+					to: "/rooms-overview/",
+				},
+			];
+
 			if (courseTitle.value) {
-				return [
-					{
-						text: t("pages.courses.index.title"),
-						to: "/rooms-overview/",
-					},
-					{
-						text: courseTitle.value,
-						to: contextRoute,
-					},
-				];
-			} else {
-				return [
-					{
-						text: t("pages.courses.index.title"),
-						to: "/rooms-overview/",
-					},
-				];
+				crumbs.push({
+					text: courseTitle.value,
+					to: contextRoute,
+				});
 			}
+
+			return crumbs;
 		});
 
 		const { getTranslationKey } = useExternalToolMappings();

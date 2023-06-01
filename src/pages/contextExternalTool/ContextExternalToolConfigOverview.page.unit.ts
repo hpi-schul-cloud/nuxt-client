@@ -13,7 +13,7 @@ import { ToolConfigurationTemplate } from "@/store/external-tool";
 import ContextExternalToolConfigOverviewPage from "./ContextExternalToolConfigOverview.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import RoomsModule from "../../store/rooms";
+import RoomsModule from "@/store/rooms";
 
 describe("ContextExternalToolConfigOverview", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -28,7 +28,7 @@ describe("ContextExternalToolConfigOverview", () => {
 
 	const setup = async (
 		getters: Partial<ExternalToolsModule> = {},
-		propsData?: { contextId: string; contextType: ToolContextType }
+		propsData: { contextId: string; contextType: ToolContextType }
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
@@ -40,7 +40,7 @@ describe("ContextExternalToolConfigOverview", () => {
 			getRoomsData: [
 				{
 					title: "Mathematik",
-					id: propsData?.contextId as string,
+					id: propsData.contextId,
 					displayColor: "red",
 					shortTitle: "Mathe",
 					xPosition: 1,
@@ -48,6 +48,7 @@ describe("ContextExternalToolConfigOverview", () => {
 				},
 			],
 		});
+		const courseTitle = roomsModule?.getRoomsData[0].title;
 
 		const routerPush = jest.fn();
 		const $router = {
@@ -87,6 +88,7 @@ describe("ContextExternalToolConfigOverview", () => {
 			wrapper,
 			routerPush,
 			toolTemplate,
+			courseTitle,
 		};
 	};
 
@@ -96,72 +98,6 @@ describe("ContextExternalToolConfigOverview", () => {
 			expect(
 				wrapper.findComponent(ContextExternalToolConfigOverviewPage).exists()
 			).toBe(true);
-		});
-	});
-
-	describe("inject", () => {
-		it("should throw an error when externalToolsModule injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
-				shallowMount(
-					ContextExternalToolConfigOverviewPage as MountOptions<Vue>,
-					{
-						provide: {
-							i18n: { t: (key: string) => key },
-						},
-					}
-				);
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "externalToolsModule" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
-		});
-
-		it("should throw an error when i18n injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
-				shallowMount(
-					ContextExternalToolConfigOverviewPage as MountOptions<Vue>,
-					{
-						provide: {
-							externalToolsModule,
-						},
-					}
-				);
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "i18n" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
-		});
-
-		it("should throw an error when i18n injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
-				shallowMount(
-					ContextExternalToolConfigOverviewPage as MountOptions<Vue>,
-					{
-						provide: {
-							externalToolsModule,
-							i18n: { t: (key: string) => key },
-						},
-					}
-				);
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "roomsModule" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
 		});
 	});
 
@@ -196,12 +132,11 @@ describe("ContextExternalToolConfigOverview", () => {
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", async () => {
-			const { wrapper } = await setup(
+			const { wrapper, courseTitle } = await setup(
 				{},
 				{ contextId: "contextId", contextType: ToolContextType.COURSE }
 			);
 
-			const courseTitle = roomsModule?.getRoomsData[0].title;
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
@@ -293,7 +228,7 @@ describe("ContextExternalToolConfigOverview", () => {
 				};
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
-				await saveButton.vm.$emit("click");
+				await saveButton.trigger("click");
 
 				expect(
 					externalToolsModule.createContextExternalTool

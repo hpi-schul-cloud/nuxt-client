@@ -314,6 +314,7 @@ export default class ExternalToolsModule extends VuexModule {
 						payload.contextType,
 						payload.contextId
 					);
+				console.log(availableTools.data);
 
 				this.setToolConfigurations(
 					useExternalToolMappings().mapToolConfigurationListResponse(
@@ -344,15 +345,23 @@ export default class ExternalToolsModule extends VuexModule {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
+			console.log(toolId);
 
-			const toolConfigurationTemplate: ToolConfigurationTemplate = {
+			const configTemplate: AxiosResponse<SchoolExternalToolResponse> =
+				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(toolId);
+			const toolConfigurationTemplate: ToolConfigurationTemplate =
+				useExternalToolMappings().mapSchoolExternalToolConfigurationTemplateResponse(
+					configTemplate.data
+				);
+
+			/*const toolConfigurationTemplate: ToolConfigurationTemplate = {
 				id: "testId1",
 				name: "SchoolTestTool 1",
 				logoUrl:
 					"https://www.google.de/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
 				parameters: [],
 				version: 1,
-			};
+			};*/
 			this.setLoading(false);
 
 			return toolConfigurationTemplate;

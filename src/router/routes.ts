@@ -275,7 +275,7 @@ export const routes: Array<RouteConfig> = [
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
-				"../pages/contextExternalTool/ContextExternalToolConfigOverview.page.vue"
+				"@/pages/contextExternalTool/ContextExternalToolConfigOverview.page.vue"
 			),
 		name: "ContextExternalToolConfigOverview",
 		beforeEnter: (to, from, next) => {

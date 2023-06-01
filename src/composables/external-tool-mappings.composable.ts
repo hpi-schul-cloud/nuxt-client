@@ -133,6 +133,17 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapSchoolExternalToolConfigurationTemplateResponse = (
+		resp: SchoolExternalToolResponse
+	): ToolConfigurationTemplate => {
+		return {
+			id: resp.id,
+			name: resp.name,
+			version: resp.toolVersion,
+			parameters: [],
+		};
+	};
+
 	const mapToolConfigurationEntryResponse = (
 		resp: ToolConfigurationEntryResponse
 	): ToolConfigurationListItem => {
@@ -211,6 +222,7 @@ export function useExternalToolMappings() {
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
+		mapSchoolExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		mapToolConfigurationTemplateToContextExternalToolPostParams,
