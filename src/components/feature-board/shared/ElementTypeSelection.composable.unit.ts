@@ -1,10 +1,10 @@
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
+import { mdiFormatSize, mdiUpload } from "@mdi/js";
+import { ref } from "vue";
 import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
-import { ref } from "vue";
-import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
 jest.mock("./FileStorageApi.composable");
 jest.mock("./SharedElementTypeSelection.composable");
 
@@ -129,7 +129,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(upload).toHaveBeenCalledTimes(1);
 				expect(upload).toBeCalledWith(
 					element.id,
-					FileRecordParamsParentType.BOARDNODES,
+					FileRecordParentType.BOARDNODES,
 					file
 				);
 			});

@@ -1,4 +1,4 @@
-import { FileRecordParamsParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { ref } from "vue";
@@ -22,7 +22,7 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		try {
 			const element = await addElementFunction(ContentElementType.File);
 			if (element?.id) {
-				await upload(element.id, FileRecordParamsParentType.BOARDNODES, file);
+				await upload(element.id, FileRecordParentType.BOARDNODES, file);
 			}
 		} catch (error) {
 			isFilePickerOpen.value = false;
