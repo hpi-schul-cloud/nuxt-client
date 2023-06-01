@@ -17,13 +17,13 @@
 					<VIcon>
 						{{ mdiArrowCollapseUp }}
 					</VIcon>
-					Nach oben verschieben
+					{{ $t("components.board.action.moveUp") }}
 				</BoardMenuAction>
 				<BoardMenuAction>
 					<VIcon>
 						{{ mdiArrowCollapseDown }}
 					</VIcon>
-					Nach unten verschieben
+					{{ $t("components.board.action.moveDown") }}
 				</BoardMenuAction>
 				<BoardMenuAction>
 					<VIcon>

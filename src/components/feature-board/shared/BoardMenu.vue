@@ -15,10 +15,18 @@
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
-					<template v-if="scope === 'board'">Board-Menu</template>
-					<template v-if="scope === 'column'">Column-Menu</template>
-					<template v-if="scope === 'card'">Card-Menu</template>
-					<template v-if="scope === 'element'">Element-Menu</template>
+					<template v-if="scope === 'board'">{{
+						$t("components.board.menu.board").toString()
+					}}</template>
+					<template v-if="scope === 'column'">{{
+						$t("components.board.menu.column").toString()
+					}}</template>
+					<template v-if="scope === 'card'">{{
+						$t("components.board.menu.card").toString()
+					}}</template>
+					<template v-if="scope === 'element'">{{
+						$t("components.board.menu.element").toString()
+					}}</template>
 				</span>
 			</VBtn>
 		</template>
