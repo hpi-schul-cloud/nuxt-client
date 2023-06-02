@@ -39,13 +39,14 @@
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
-					<p
+					<RenderHTML
 						class="text-md mt-2"
-						v-html="
+						:html="
 							$t('pages.rooms.tools.deleteDialog.content', {
 								itemName: getItemToDeleteName,
-							})
+							}).toString()
 						"
+						component="p"
 					/>
 				</v-card-text>
 				<v-card-actions>
@@ -79,10 +80,11 @@ import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCa
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
-	components: { RoomExternalToolCard },
+	components: { RoomExternalToolCard, RenderHTML },
 	setup() {
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
