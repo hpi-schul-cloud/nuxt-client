@@ -14,7 +14,7 @@
 				outlined
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : 0"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
@@ -195,5 +195,17 @@ export default defineComponent({
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+</style>
+
+<style>
+.v-card:focus::before {
+	opacity: 0;
+}
+
+.v-card:focus,
+.v-card:focus-within {
+	outline: 2px solid var(--v-secondary-base);
+	outline-offset: 0;
 }
 </style>
