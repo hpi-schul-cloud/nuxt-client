@@ -3,6 +3,7 @@
 		class="mx-auto mb-4 board-card"
 		hover
 		tabindex="0"
+		role="button"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
