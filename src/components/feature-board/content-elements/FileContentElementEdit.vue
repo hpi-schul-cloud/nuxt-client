@@ -20,10 +20,6 @@ import { mdiFileDocumentOutline } from "@mdi/js";
 export default defineComponent({
 	name: "FileContentElementEdit",
 	props: {
-		autofocus: {
-			type: Boolean,
-			required: true,
-		},
 		caption: {
 			type: String,
 			required: true,
