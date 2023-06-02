@@ -1,4 +1,5 @@
 import { Route, RouteConfig } from "vue-router";
+import Multiguard from "vue-router-multiguard";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
@@ -278,22 +279,14 @@ export const routes: Array<RouteConfig> = [
 				"../pages/contextExternalTool/ContextExternalToolConfiguration.page.vue"
 			),
 		name: "ContextExternalToolConfigOverview",
-		beforeEnter: (to, from, next) => {
-			const permissionGuard = createPermissionGuard(["context_tool_admin"]);
-			const queryValidator = validateQueryParameters({
+		beforeEnter: Multiguard([
+			createPermissionGuard(["context_tool_admin"]),
+			validateQueryParameters({
 				contextId: isMongoId,
 				contextType: (value: any) =>
 					Object.values(ToolContextType).includes(value),
-			});
-
-			permissionGuard(to, from, (valid) => {
-				if (valid instanceof Error) {
-					next(valid);
-				} else {
-					queryValidator(to, from, next);
-				}
-			});
-		},
+			}),
+		]),
 		props: (route: Route) => ({
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,

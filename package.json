@@ -36,6 +36,7 @@
 		"vue-i18n": "^8.26.3",
 		"vue-mq": "^1.0.1",
 		"vue-router": "^3.6.5",
+		"vue-router-multiguard": "^1.0.3",
 		"vue-smooth-dnd": "^0.8.1",
 		"vuedraggable": "^2.24.3",
 		"vuelidate": "^0.7.7",
