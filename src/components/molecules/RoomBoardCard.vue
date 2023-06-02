@@ -1,6 +1,7 @@
 <template>
 	<VCard
 		class="mx-auto mb-4 board-card"
+		hover
 		tabindex="0"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"

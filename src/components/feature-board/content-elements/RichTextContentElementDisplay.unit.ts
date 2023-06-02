@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 
@@ -8,7 +8,7 @@ describe("RichTextContentElementDisplay", () => {
 
 	const setup = (props: { value?: string }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(RichTextContentElementDisplay as MountOptions<Vue>, {
+		wrapper = mount(RichTextContentElementDisplay as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
 		});
