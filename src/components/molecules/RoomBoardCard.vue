@@ -15,12 +15,12 @@
 				<div class="d-flex align-center mb-3">
 					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
 					<span class="title-board-card">
-						{{ $t("pages.room.taskCard.label.columnBoard") }}
+						{{ $t("pages.room.boardCard.label.columnBoard") }}
 					</span>
 				</div>
 			</div>
 			<h6 class="board-title mt-2">
-				{{ $t("pages.room.taskCard.label.courseBoard") }}
+				{{ $t("pages.room.boardCard.label.courseBoard") }}
 			</h6>
 		</VCardText>
 	</VCard>
