@@ -2,20 +2,17 @@
 	<VCardText>
 		<template v-for="element in elements">
 			<RichTextContentElement
-				v-if="element.type === ContentElementType.RichText"
+				v-if="isRichTextElementResponse(element)"
 				:key="element.id"
-				:element="asRichTextElementResponse(element)"
+				:element="element"
 				:isEditMode="isEditMode"
 			/>
 			<FileContentElement
-				v-else-if="element.type === ContentElementType.File"
+				v-else-if="isFileElementResponse(element)"
 				:key="element.id"
-				:element="asFileElementResponse(element)"
+				:element="element"
 				:isEditMode="isEditMode"
 			/>
-			<template v-else>
-				Content Element {{ element.type }} not implemented
-			</template>
 		</template>
 	</VCardText>
 </template>
@@ -48,18 +45,22 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const asRichTextElementResponse = (element: AnyContentElement) => {
-			return element as RichTextElementResponse;
+		const isRichTextElementResponse = (
+			element: AnyContentElement
+		): element is RichTextElementResponse => {
+			return element.type === ContentElementType.RichText;
 		};
 
-		const asFileElementResponse = (element: AnyContentElement) => {
-			return element as FileElementResponse;
+		const isFileElementResponse = (
+			element: AnyContentElement
+		): element is FileElementResponse => {
+			return element.type === ContentElementType.File;
 		};
 
 		return {
 			ContentElementType,
-			asFileElementResponse,
-			asRichTextElementResponse,
+			isRichTextElementResponse,
+			isFileElementResponse,
 		};
 	},
 });
