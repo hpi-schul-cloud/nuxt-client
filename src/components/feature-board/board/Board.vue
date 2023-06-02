@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div>
+		<div class="ml-1">
 			<h3>Board</h3>
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4">
