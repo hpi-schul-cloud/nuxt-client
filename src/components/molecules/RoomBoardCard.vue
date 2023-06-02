@@ -11,9 +11,11 @@
 	>
 		<VCardText>
 			<div class="mb-0">
-				<div class="d-flex align-center">
+				<div class="d-flex align-center mb-3">
 					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
-					{{ $t("pages.room.taskCard.label.columnBoard") }}
+					<span class="title-board-card">
+						{{ $t("pages.room.taskCard.label.columnBoard") }}
+					</span>
 				</div>
 			</div>
 			<h6 class="board-title mt-2">
@@ -85,5 +87,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .board-card {
 	background-color: var(--v-primary-lighten10);
+}
+.title-board-card {
+	margin-top: calc(var(--space-base-vuetify) / 2);
 }
 </style>
