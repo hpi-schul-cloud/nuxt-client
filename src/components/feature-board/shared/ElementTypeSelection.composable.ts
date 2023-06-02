@@ -41,13 +41,13 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		{
 			icon: mdiFormatSize,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
-			action: () => createTextElement(),
+			action: createTextElement,
 			testId: "create-element-text",
 		},
 		{
 			icon: mdiUpload,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
-			action: () => openFilePicker(),
+			action: openFilePicker,
 			testId: "create-element-file",
 		},
 	];
