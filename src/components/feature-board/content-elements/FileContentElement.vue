@@ -1,13 +1,9 @@
 <template>
-	<div
-		class="file-content-element-container margin"
-		:class="{ 'is-editable': isEditMode }"
-		v-if="fileRecordModel"
-	>
+	<div v-if="fileRecordModel">
 		<FileContentElementDisplay
 			v-if="!isEditMode"
-			:fileRecord="fileRecordModel"
 			:caption="modelValue.caption"
+			:fileRecord="fileRecordModel"
 		></FileContentElementDisplay>
 		<FileContentElementEdit
 			v-if="isEditMode"
@@ -67,27 +63,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/mixins";
-@import "~vuetify/src/styles/styles.sass";
-
-.file-content-element-container {
-	box-sizing: border-box;
-	padding: 8px 0px 8px 8px;
-	border: 1px solid #e0e0e0; //var(--v-gray-lighten2);
-	border-radius: 3px;
-}
-
-.is-editable:hover {
-	background-color: #eeeeee; //var(--v-gray-lighten1);
-}
-
-.margin {
-	margin: 0.9em 0;
-}
-
-.margin:first-child {
-	margin-top: 0;
-}
-</style>
