@@ -65,6 +65,13 @@ Vue.mixin({
 	},
 });
 
+import VueDOMPurifyHTML from "vue-dompurify-html";
+import htmlConfig from "@/components/common/render-html/config";
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: htmlConfig,
+});
+
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";

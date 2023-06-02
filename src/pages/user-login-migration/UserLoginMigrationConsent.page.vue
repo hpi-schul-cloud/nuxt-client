@@ -2,22 +2,23 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/move.svg"
-			:alt="$t('pages.userMigration.consent.img.alt')"
+			:alt="$t('pages.userMigration.consent.img.alt').toString()"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
 		<div>
-			<p
+			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
-				v-html="
+				:html="
 					$t(migrationDescription, {
 						targetSystem: getSystemName(targetSystem),
 						startMigration: $t('pages.userMigration.button.startMigration'),
-					})
+					}).toString()
 				"
-			></p>
+				component="p"
+			/>
 			<div
 				v-if="isNewLoginFlowEnabled"
 				class="d-flex flex-wrap justify-center mt-8"
@@ -90,10 +91,12 @@ import {
 	ref,
 } from "vue";
 import EnvConfigModule from "@/store/env-config";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
+	components: { RenderHTML },
 	props: {
 		sourceSystem: {
 			type: String,

@@ -127,7 +127,7 @@ import {
 	CardElementParams,
 	CardRichTextElementResponseInputFormatEnum,
 } from "@/serverApi/v3";
-import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
