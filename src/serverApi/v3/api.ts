@@ -3468,6 +3468,50 @@ export interface SchoolInfoResponse {
 /**
  * 
  * @export
+ * @interface SchoolToolConfigurationEntryResponse
+ */
+export interface SchoolToolConfigurationEntryResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    logoUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    schoolToolId: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolToolConfigurationListResponse
+ */
+export interface SchoolToolConfigurationListResponse {
+    /**
+     * 
+     * @type {Array<SchoolToolConfigurationEntryResponse>}
+     * @memberof SchoolToolConfigurationListResponse
+     */
+    data: Array<SchoolToolConfigurationEntryResponse>;
+}
+/**
+ * 
+ * @export
  * @interface ShareTokenBodyParams
  */
 export interface ShareTokenBodyParams {
@@ -12798,6 +12842,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -13453,12 +13498,13 @@ export const ToolApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolConfigurationListResponse>> {
+        async toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolToolConfigurationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForContext(context, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13631,12 +13677,13 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<ToolConfigurationListResponse> {
+        toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<SchoolToolConfigurationListResponse> {
             return localVarFp.toolConfigurationControllerGetAvailableToolsForContext(context, id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13792,13 +13839,14 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
 export interface ToolApiInterface {
     /**
      * 
+     * @summary Lists all available tools that can be added for a given context
      * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<ToolConfigurationListResponse>;
+    toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<SchoolToolConfigurationListResponse>;
 
     /**
      * 
@@ -13953,6 +14001,7 @@ export interface ToolApiInterface {
 export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
+     * @summary Lists all available tools that can be added for a given context
      * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
