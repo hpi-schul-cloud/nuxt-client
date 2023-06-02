@@ -1,7 +1,7 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import * as fileHelper from "@/utils/fileHelper";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStoragFactoryMock";
+import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStorageFactoryMock";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { useFileStorageApi } from "./FileStorageApi.composable";
 
