@@ -1,14 +1,15 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
-	<div class="ck-content margin" v-html="value" />
+	<RenderHTML class="ck-content" :html="value" config="ck5" />
 </template>
 
 <script>
 import { defineComponent, onMounted } from "vue";
 import renderMathInElement from "katex/dist/contrib/auto-render.js";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",
+	components: { RenderHTML },
 	props: {
 		value: {
 			type: String,

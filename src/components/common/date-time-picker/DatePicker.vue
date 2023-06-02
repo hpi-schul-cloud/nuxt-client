@@ -123,9 +123,9 @@ export default defineComponent({
 			emit("input", date);
 		}, 200);
 
-		const handleInput = () => {
+		const handleInput = async () => {
 			inputField.value?.focus();
-			closeMenu();
+			await closeMenu();
 		};
 
 		const handleError = (hasError: boolean) => {

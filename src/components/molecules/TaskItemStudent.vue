@@ -17,18 +17,21 @@
 					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 				</v-list-item-avatar>
 				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">{{
-						taskLabel
-					}}</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
 						class="subtitle-2"
 						data-test-id="dueDateLabel"
-						v-text="dueDateLabel"
-					/>
+					>
+						{{ dueDateLabel }}
+					</v-list-item-action-text>
 					<v-spacer />
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"
@@ -43,18 +46,21 @@
 					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 				</v-list-item-avatar>
 				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">{{
-						taskLabel
-					}}</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
 						class="subtitle-2"
 						data-test-id="dueDateLabel"
-						v-text="dueDateLabel"
-					/>
+					>
+						{{ dueDateLabel }}
+					</v-list-item-action-text>
 					<v-spacer />
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"

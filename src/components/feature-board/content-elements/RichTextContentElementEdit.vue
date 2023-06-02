@@ -36,7 +36,7 @@
 	</div>
 </template>
 <script lang="ts">
-import CkEditor from "@/components/editor/CKEditor.vue";
+import CkEditor from "@/components/common/editor/CKEditor.vue";
 import { useEventListener, useVModel } from "@vueuse/core";
 import { computed, defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
