@@ -823,7 +823,7 @@
 	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.delete": "Eliminar",
 	"components.board.action.moveUp": "Ascender",
-	"components.board.action.moveDown": "Mover hacia abajo",
+	"components.board.action.moveDown": "Bajar",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
