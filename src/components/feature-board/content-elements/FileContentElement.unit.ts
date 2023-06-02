@@ -163,7 +163,6 @@ describe("FileContentElement", () => {
 
 		it("should render v-progress-linear component", async () => {
 			const { wrapper } = setup();
-			console.log(wrapper.html());
 
 			const progressLinear = wrapper.find("v-progress-linear-stub");
 			expect(progressLinear.exists()).toBe(true);
