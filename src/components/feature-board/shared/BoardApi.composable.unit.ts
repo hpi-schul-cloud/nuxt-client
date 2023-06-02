@@ -1,10 +1,10 @@
-import { useBoardApi } from "./BoardApi.composable";
-import * as serverApi from "../../../serverApi/v3/api";
-import * as axios from "axios";
-import { initializeAxios } from "@/utils/api";
 import { ContentElementType } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { initializeAxios } from "@/utils/api";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import * as axios from "axios";
 import { AnyContentElement } from "../types/ContentElement";
+import { useBoardApi } from "./BoardApi.composable";
 
 jest.mock("axios");
 
