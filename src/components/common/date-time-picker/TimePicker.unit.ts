@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TimePicker from "@/components/date-time-picker/TimePicker.vue";
+import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
 
 type TimePickerProps = {
 	time: string;
