@@ -193,7 +193,7 @@ describe("ElementTypeSelection Composable", () => {
 		const setup = () => {
 			const addElementMock = jest.fn();
 			const { elementTypeOptions, isDialogOpen } =
-				setupSharedElementTypeSelectionMock();
+				setupSharedElementTypeSelectionMock({});
 			setupFileStorageApiMock({});
 
 			return { elementTypeOptions, addElementMock, isDialogOpen };
