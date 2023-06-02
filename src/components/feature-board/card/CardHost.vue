@@ -9,7 +9,7 @@
 			<VCard
 				ref="cardHost"
 				:height="isLoading ? height : 'auto'"
-				class="w-100 transition-swing"
+				class="transition-swing"
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
