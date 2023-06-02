@@ -3,18 +3,21 @@ import { mount, shallowMount } from "@vue/test-utils";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 
 describe("FileContentElementEdit", () => {
+	const setupProps = () => ({
+		caption: "Test Caption",
+	});
+
 	describe("shallow mounted", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const captionProp = "Test Caption";
-
+			const propsData = setupProps();
 			const wrapper = shallowMount(FileContentElementEdit, {
 				...createComponentMocks({ i18n: true }),
-				propsData: { caption: captionProp, autofocus: false },
+				propsData,
 			});
 
-			return { wrapper, captionProp };
+			return { wrapper, captionProp: propsData.caption };
 		};
 
 		it("should be found in dom", () => {
@@ -37,14 +40,13 @@ describe("FileContentElementEdit", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const captionProp = "Test Caption";
-
+			const propsData = setupProps();
 			const wrapper = mount(FileContentElementEdit, {
 				...createComponentMocks({ i18n: true }),
-				propsData: { caption: captionProp, autofocus: false },
+				propsData,
 			});
 
-			return { wrapper, captionProp };
+			return { wrapper, captionProp: propsData.caption };
 		};
 
 		it("should emit update:caption on text input", async () => {

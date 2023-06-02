@@ -11,7 +11,6 @@
 		></FileContentElementDisplay>
 		<FileContentElementEdit
 			v-if="isEditMode"
-			:autofocus="isAutoFocus"
 			:caption="modelValue.caption"
 			:fileRecord="fileRecordModel"
 			@update:caption="($event) => (modelValue.caption = $event)"
