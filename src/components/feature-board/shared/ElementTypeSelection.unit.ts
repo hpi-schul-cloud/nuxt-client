@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue, { ref, nextTick } from "vue";
+import Vue, { nextTick } from "vue";
 import ElementTypeSelection from "./ElementTypeSelection.vue";
 import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 jest.mock("./SharedElementTypeSelection.composable");
