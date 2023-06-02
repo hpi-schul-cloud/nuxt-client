@@ -3,6 +3,8 @@ import * as serverApi from "../../../serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
 import { ContentElementType } from "@/serverApi/v3";
+import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import { AnyContentElement } from "../types/ContentElement";
 
 jest.mock("axios");
 
@@ -22,6 +24,7 @@ const mockApi = {
 		.mockImplementation(() => createColumnResponseMock),
 	cardControllerUpdateCardTitle: jest.fn(),
 	columnControllerUpdateColumnTitle: jest.fn(),
+	elementControllerUpdateElement: jest.fn(),
 	cardControllerCreateElement: jest
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
@@ -32,6 +35,7 @@ const mockApi = {
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerMoveCard: jest.fn(),
 	columnControllerMoveColumn: jest.fn(),
+	generateDataProp: jest.fn(),
 };
 
 jest
@@ -43,6 +47,9 @@ jest
 jest
 	.spyOn(serverApi, "BoardColumnApiFactory")
 	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
+jest
+	.spyOn(serverApi, "BoardElementApiFactory")
+	.mockReturnValue(mockApi as unknown as serverApi.BoardElementApiInterface);
 
 initializeAxios({
 	request: async (_: string) => ({
@@ -95,6 +102,65 @@ describe("BoardApi.composable", () => {
 			expect(mockApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ title: PAYLOAD.title }
+			);
+		});
+	});
+
+	describe("updateElementTitleCall", () => {
+		it("should call elementControllerUpdateElement api with RichtTextElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "richt-text-element-id",
+				type: ContentElementType.RichText,
+				content: {
+					text: "content-text",
+					inputFormat: "input-format",
+				},
+
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: PAYLOAD.content,
+				type: ContentElementType.RichText,
+			};
+
+			await updateElementCall(PAYLOAD);
+			expect(mockApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ data }
+			);
+		});
+
+		it("should call elementControllerUpdateElement api with FileElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "file-element-id",
+				type: ContentElementType.File,
+				content: {
+					caption: "caption",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: PAYLOAD.content,
+				type: ContentElementType.File,
+			};
+
+			await updateElementCall(PAYLOAD);
+			expect(mockApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ data }
+			);
+		});
+
+		it("should throw error for unkown element type", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				type: "unkown" as ContentElementType,
+			} as AnyContentElement;
+
+			await expect(() => updateElementCall(PAYLOAD)).rejects.toThrow(
+				new Error("element.type mapping is undefined for updateElementCall")
 			);
 		});
 	});
