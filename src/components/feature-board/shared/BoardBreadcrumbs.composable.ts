@@ -9,7 +9,7 @@ type BoardBreadcrumbsData = {
 
 type BoardBreadcrumbs = {
 	text: string | undefined;
-	to?: string | undefined;
+	to?: string;
 	disabled?: boolean;
 };
 
