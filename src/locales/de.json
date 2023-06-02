@@ -18,6 +18,8 @@
 	"common.actions.shareCourse": "Kurskopie teilen",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.download": "Herunterladen",
+	"common.actions.download.dropdownItem1": "CC Version 1.1",
+	"common.actions.download.dropdownItem2": "CC version 1.3",
 	"common.actions.logout": "Abmelden",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.updateAt": "Aktualisiert:",
