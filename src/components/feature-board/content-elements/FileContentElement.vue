@@ -51,7 +51,6 @@ export default defineComponent({
 				if (!fileRecordModel.value) {
 					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
 					fileRecordModel.value = getFile(parentId.value);
-					console.log(fileRecordModel.value);
 				}
 			})();
 		});
