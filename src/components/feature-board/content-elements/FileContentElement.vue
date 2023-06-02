@@ -1,5 +1,9 @@
 <template>
-	<div class="file-content-element-container margin" v-if="fileRecordModel">
+	<div
+		class="file-content-element-container margin"
+		:class="{ 'is-editable': isEditMode }"
+		v-if="fileRecordModel"
+	>
 		<FileContentElementDisplay
 			v-if="!isEditMode"
 			:fileRecord="fileRecordModel"
@@ -72,7 +76,12 @@ export default defineComponent({
 .file-content-element-container {
 	box-sizing: border-box;
 	padding: 8px 0px 8px 8px;
-	border: 1px solid #e0e0e0;
+	border: 1px solid #e0e0e0; //var(--v-gray-lighten2);
+	border-radius: 3px;
+}
+
+.is-editable:hover {
+	background-color: #eeeeee; //var(--v-gray-lighten1);
 }
 
 .margin {

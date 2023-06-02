@@ -60,6 +60,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	letter-spacing: 0.02px;
-	color: #9e292b;
+	color: var(--v-primary-base);
+	text-decoration: none;
 }
 </style>

@@ -1,18 +1,16 @@
 <template>
-	<div class="d-flex flex-column">
-		<div class="d-flex flex-sm-row align-items-center">
-			<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
-			<a
-				class="file-content-element-display-label truncate"
-				v-bind:href="fileRecord.url"
-				download
-			>
-				{{ fileRecord.name }}
-			</a>
-		</div>
-		<!-- <vTextField v-model="modelCaption" label="Caption"></vTextField> -->
+	<div class="file-content-element-edit">
+		<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
+		<a
+			class="file-content-element-edit-label truncate"
+			v-bind:href="fileRecord.url"
+			download
+		>
+			{{ fileRecord.name }}
+		</a>
 	</div>
 </template>
+
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
@@ -69,6 +67,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	letter-spacing: 0.02px;
-	color: #9e292b;
+	color: var(--v-primary-base);
+	text-decoration: none;
 }
 </style>
