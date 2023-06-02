@@ -3,6 +3,8 @@
 		class="mx-auto mb-4 board-card"
 		hover
 		tabindex="0"
+		role="button"
+		color="var(--v-primary-lighten10)"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -86,9 +88,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.board-card {
-	background-color: var(--v-primary-lighten10);
-}
 .title-board-card {
 	margin-top: calc(var(--space-base-vuetify) / 2);
 }
