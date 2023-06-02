@@ -293,7 +293,9 @@ describe("ContextExternalToolConfiguration", () => {
 				await saveButton.vm.$emit("click");
 
 				expect(routerPush).not.toHaveBeenCalled();
-				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
+				expect(
+					wrapper.find('[data-testId="context-tool-error"]').exists()
+				).toBeTruthy();
 			});
 		});
 	});

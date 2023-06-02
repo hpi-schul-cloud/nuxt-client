@@ -30,7 +30,7 @@
 			</template>
 		</v-select>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-alert v-if="apiError.message" light prominent text type="error">
+		<v-alert v-if="apiError.message" light prominent text type="error" data-testId="context-tool-error">
 			{{ $t(getTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
