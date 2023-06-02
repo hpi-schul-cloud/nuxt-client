@@ -3,15 +3,14 @@ import {
 	FileApiInterface,
 	FileRecordResponse as FileRecord,
 	FileRecordParentType,
-	FileRecordResponse,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { BusinessError } from "@/store/types/commons";
+import { $axios } from "@/utils/api";
 import { downloadFile } from "@/utils/fileHelper";
 import { createSharedComposable } from "@vueuse/core";
 import { reactive, ref } from "vue";
-import { $axios } from "../../../utils/api";
 
 export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
@@ -27,8 +26,6 @@ export const useFileStorageApi = createSharedComposable(() => {
 		parentId: string,
 		parentType: FileRecordParentType
 	): Promise<void> => {
-		resetBusinessError();
-
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
@@ -43,9 +40,7 @@ export const useFileStorageApi = createSharedComposable(() => {
 		parentId: string,
 		parentType: FileRecordParentType,
 		file: File
-	): Promise<FileRecordResponse | undefined> => {
-		resetBusinessError();
-
+	): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.upload(
@@ -54,10 +49,9 @@ export const useFileStorageApi = createSharedComposable(() => {
 				parentType,
 				file
 			);
+
 			appendFile(response.data);
 			newFileForParent.value = response.data.parentId;
-
-			return response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
 
@@ -66,8 +60,6 @@ export const useFileStorageApi = createSharedComposable(() => {
 	};
 
 	const download = async (file: FileRecord): Promise<void> => {
-		resetBusinessError();
-
 		try {
 			const res = await fileApi.download(file.id, file.name, {
 				responseType: "blob",
@@ -80,11 +72,9 @@ export const useFileStorageApi = createSharedComposable(() => {
 	};
 
 	const rename = async (
-		fileRecordId: string,
+		fileRecordId: FileRecord["id"],
 		params: RenameFileParams
 	): Promise<void> => {
-		resetBusinessError();
-
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
@@ -114,13 +104,6 @@ export const useFileStorageApi = createSharedComposable(() => {
 
 	const setBusinessError = (error: BusinessError): void => {
 		businessError.value = error;
-	};
-
-	const resetBusinessError = (): void => {
-		businessError.value = {
-			statusCode: "",
-			message: "",
-		};
 	};
 
 	return {
