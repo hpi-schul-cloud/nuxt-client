@@ -16,6 +16,11 @@ const mockBoardData = {
 	columnBoardId: "column-board-id",
 };
 
+const mockCourseData = {
+	courseId: "test-course-id",
+	courseName: "test-course-name",
+};
+
 describe("RoomBoardCard", () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -30,6 +35,7 @@ describe("RoomBoardCard", () => {
 				dragInProgress: false,
 				keyDrag: false,
 				columnBoardItem: mockBoardData,
+				courseData: mockCourseData,
 			},
 			mocks: { $router },
 		});

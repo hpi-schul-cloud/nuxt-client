@@ -20,6 +20,10 @@
 						:key-drag="isDragging"
 						:drag-in-progress="dragInProgress"
 						:column-board-item="item.content"
+						:course-data="{
+							courseName: roomData.title,
+							courseId: roomData.roomId,
+						}"
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"

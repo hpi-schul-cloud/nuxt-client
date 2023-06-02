@@ -6,7 +6,7 @@
 <script lang="ts">
 import { defineComponent, inject } from "vue";
 import { useRoute } from "vue-router/composables";
-import { useBoardBreadcrums } from "@/components/feature-board/shared/BoardBreadcrums.composable";
+import { useBoardBreadcrumbs } from "@/components/feature-board/shared/BoardBreadcrumbs.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import Board from "@/components/feature-board/board/Board.vue";
 import Theme from "@/theme.config";
@@ -20,7 +20,7 @@ export default defineComponent({
 		const i18n = inject<VueI18n | undefined>("i18n");
 		const route = useRoute();
 		const boardId = route.params?.id;
-		const breadcrumbs = useBoardBreadcrums(boardId);
+		const breadcrumbs = useBoardBreadcrumbs();
 
 		useTitle(`${i18n?.t("components.board")} -  ${Theme.name}`);
 
