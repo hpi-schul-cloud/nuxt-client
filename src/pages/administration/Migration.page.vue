@@ -94,7 +94,7 @@
 								<v-progress-linear
 									v-if="school.inUserMigration && totalImportUsers === 0"
 									indeterminate
-								></v-progress-linear>
+								/>
 								<v-card-text>
 									<iframe class="full" :src="helpPageUri"></iframe>
 									<v-alert
@@ -102,7 +102,8 @@
 										dense
 										outlined
 										type="info"
-										>{{ $t("pages.administration.migration.tutorialWait") }}
+									>
+										{{ $t("pages.administration.migration.tutorialWait") }}
 									</v-alert>
 								</v-card-text>
 								<v-card-actions>
@@ -131,7 +132,7 @@
 												"
 												:size="20"
 												indeterminate
-											></v-progress-circular>
+											/>
 											{{
 												totalImportUsers > 0 || school.inUserMigration === false
 													? $t("pages.administration.migration.next")
@@ -153,10 +154,10 @@
 					</v-stepper-content>
 
 					<v-stepper-content step="2" data-testid="migration_importUsers">
-						<import-users></import-users>
+						<import-users />
 						<div class="text-right">
-							<v-btn color="secondary" @click="migrationStep = 1"
-								>{{ $t("pages.administration.migration.back") }}
+							<v-btn color="secondary" @click="migrationStep = 1">
+								{{ $t("pages.administration.migration.back") }}
 							</v-btn>
 							<v-btn
 								class="ml-2"
@@ -164,7 +165,8 @@
 								color="primary"
 								:disabled="!canPerformMigration"
 								@click="migrationStep = 3"
-								>{{ $t("pages.administration.migration.next") }}
+							>
+								{{ $t("pages.administration.migration.next") }}
 							</v-btn>
 						</div>
 					</v-stepper-content>
@@ -183,8 +185,8 @@
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
-										<div
-											v-html="
+										<RenderHTML
+											:html="
 												$t('pages.administration.migration.summary', {
 													instance: $theme.short_name,
 													source: ldapSourceTranslation,
@@ -194,12 +196,12 @@
 													usersUnmatchedCount: totalUnmatched,
 												})
 											"
-										></div>
+										/>
 										<v-row>
 											<v-checkbox
 												v-model="isMigrationConfirm"
 												:label="$t('pages.administration.migration.confirm')"
-											></v-checkbox>
+											/>
 										</v-row>
 									</v-card-text>
 									<div class="text-right">
@@ -221,13 +223,13 @@
 												v-if="isLoading"
 												:size="20"
 												indeterminate
-											></v-progress-circular>
+											/>
 											{{ $t("pages.administration.migration.migrate") }}
 										</v-btn>
 									</div>
 								</div>
 								<div v-else>
-									<v-progress-linear indeterminate></v-progress-linear>
+									<v-progress-linear indeterminate />
 									{{ $t("pages.administration.migration.performingMigration") }}
 								</div>
 							</v-card>
@@ -311,7 +313,8 @@
 											class="primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
-											>{{
+										>
+											{{
 												$t("pages.administration.migration.finishTransferPhase")
 											}}
 										</v-btn>
@@ -378,7 +381,8 @@
 										class="primary"
 										data-testid="migration_backToAdministration"
 										to="/administration"
-										>{{
+									>
+										{{
 											$t("pages.administration.migration.backToAdministration")
 										}}
 									</v-btn>
@@ -394,14 +398,13 @@
 <script>
 /* eslint-disable max-lines */
 import { mdiClose, mdiLoading } from "@mdi/js";
-
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default {
-	components: { DefaultWireframe, ImportUsers },
+	components: { DefaultWireframe, ImportUsers, RenderHTML },
 	data() {
 		return {
 			mdiClose,

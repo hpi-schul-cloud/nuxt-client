@@ -2,21 +2,22 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_successful.svg"
-			:alt="$t('pages.userMigration.success.img.alt')"
+			:alt="$t('pages.userMigration.success.img.alt').toString()"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.success.title") }}
 		</h1>
 		<div>
-			<p
+			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
-				v-html="
+				:html="
 					$t('pages.userMigration.success.description', {
 						targetSystem: getSystemName(targetSystem),
-					})
+					}).toString()
 				"
-			></p>
+				component="p"
+			/>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{
 					$t("pages.userMigration.success.login", {
@@ -32,9 +33,11 @@
 import { defineComponent, inject, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
+	component: { RenderHTML },
 	props: {
 		targetSystem: {
 			type: String,

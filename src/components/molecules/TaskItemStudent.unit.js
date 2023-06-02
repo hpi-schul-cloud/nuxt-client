@@ -181,9 +181,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			});
 			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
 
-			expect(taskLabel.element.textContent).toStrictEqual(
-				"Mathe - Beta-Aufgabe"
-			);
+			expect(taskLabel.text()).toStrictEqual("Mathe - Beta-Aufgabe");
 		});
 
 		it("Should display due date label", () => {
