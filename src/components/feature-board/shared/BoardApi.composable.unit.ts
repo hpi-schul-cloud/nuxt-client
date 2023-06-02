@@ -153,13 +153,13 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
-		it("should throw error for unkown element type", () => {
+		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const PAYLOAD = {
 				type: "unkown" as ContentElementType,
 			} as AnyContentElement;
 
-			expect(updateElementCall(PAYLOAD)).rejects.toThrow(
+			await expect(updateElementCall(PAYLOAD)).rejects.toThrow(
 				new Error("element.type mapping is undefined for updateElementCall")
 			);
 		});
