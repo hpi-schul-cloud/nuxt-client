@@ -43,14 +43,17 @@ export default defineComponent({
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
 
-		onMounted(async () => {
-			parentId.value = props.element.id;
-			fileRecordModel.value = getFile(parentId.value);
-
-			if (!fileRecordModel.value) {
-				await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
+		onMounted(() => {
+			(async () => {
+				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
-			}
+
+				if (!fileRecordModel.value) {
+					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
+					fileRecordModel.value = getFile(parentId.value);
+					console.log(fileRecordModel.value);
+				}
+			})();
 		});
 
 		watch(newFileForParent, (newValue) => {
