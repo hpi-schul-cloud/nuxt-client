@@ -12,10 +12,6 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		autofocus: {
-			type: Boolean,
-			required: true,
-		},
 	},
 	emits: ["update:caption"],
 	setup(props, { emit }) {
