@@ -8,7 +8,7 @@
 					role="presentation"
 					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<p class="sloth-text" v-html="getText" />
+				<RenderHTML class="sloth-text" :html="getText" component="p" />
 			</div>
 		</template>
 		<template #footer>
@@ -24,6 +24,7 @@
 <script>
 import CenterSlot from "@/components/atoms/CenterSlot";
 import { autoLogoutModule, notifierModule } from "@/store";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const toast = {
 	error401: -1,
@@ -34,6 +35,7 @@ const toast = {
 export default {
 	components: {
 		CenterSlot,
+		RenderHTML,
 	},
 	computed: {
 		remainingTimeInMinutes() {
