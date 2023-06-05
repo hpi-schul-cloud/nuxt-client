@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-grow-1">
+		<!-- v-if="isEditMode" -->
 		<VTextarea
-			v-if="isEditMode"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -13,25 +13,26 @@
 			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
 			tabindex="0"
-			:autofocus="true"
+			ref="titleInput"
+			:readonly="!isEditMode"
 		></VTextarea>
-		<div
+		<!-- <div
 			v-else-if="value && value !== ''"
 			:aria-level="ariaLevel"
 			role="heading"
 			class="heading"
 		>
 			{{ value }}
-		</div>
-		<div v-else class="heading blue-grey--text darken-1">
+		</div> -->
+		<!-- <div v-else class="heading blue-grey--text darken-1">
 			{{ placeholder }}
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType } from "vue";
+import { useFocus, useVModel } from "@vueuse/core";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
@@ -60,11 +61,15 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
+		const titleInput = ref<HTMLInputElement | null>(null);
 
 		useInlineEditInteractionHandler(() => {
 			if (!hasEditPermission) return;
+			isFocused.value = true;
 			document.getSelection()?.collapseToEnd();
 		});
+
+		const { focused: isFocused } = useFocus(titleInput);
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
@@ -96,6 +101,8 @@ export default defineComponent({
 			ariaLevel,
 			fontSize,
 			modelValue,
+			titleInput,
+			isFocused,
 		};
 	},
 });
