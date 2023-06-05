@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { mdiFileDocumentOutline } from "@mdi/js";
 
@@ -25,7 +25,7 @@ export default defineComponent({
 			required: true,
 		},
 		fileRecord: {
-			type: Object as () => FileRecordResponse,
+			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
 	},
