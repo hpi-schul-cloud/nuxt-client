@@ -14,10 +14,8 @@ const loadLocaleMessages = (): LocaleMessages => {
 	return messages;
 };
 
-export let i18n: VueI18n;
-
 export const createI18n = (): VueI18n => {
-	i18n = new VueI18n({
+	const i18n = new VueI18n({
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
 		messages: loadLocaleMessages(),

@@ -103,7 +103,7 @@
 <script lang="ts">
 import CardElementList from "@/components/card-elements/CardElementList.vue";
 import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
-import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {

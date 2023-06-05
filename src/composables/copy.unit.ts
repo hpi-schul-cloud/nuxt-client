@@ -2,10 +2,10 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { defineComponent, watch } from "vue";
-import { provide, ref } from "vue";
 import { shallowMount } from "@vue/test-utils";
+import { defineComponent, provide, ref, watch } from "vue";
 import { useCopy } from "./copy";
 
 jest.mock("./loadingState");
@@ -16,7 +16,7 @@ export interface MountOptions {
 
 const mountComposable = <R>(
 	composable: () => R,
-	providers: Record<string, unknown>
+	providers: Record<string | symbol, unknown>
 ): R => {
 	const ParentComponent = defineComponent({
 		setup() {
@@ -36,6 +36,7 @@ const mountComposable = <R>(
 			return { result };
 		},
 		parentComponent: ParentComponent,
+		provide: providers,
 	});
 
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,7 +63,7 @@ describe("copy composable", () => {
 			copyModule: copyModuleMock,
 			notifierModule: notifierModuleMock,
 			loadingStateModule: loadingStateModuleMock,
-			i18n: i18n,
+			[I18N_KEY as symbol]: i18n,
 		});
 
 		return {

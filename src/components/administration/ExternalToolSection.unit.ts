@@ -4,6 +4,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { SchoolExternalToolStatus } from "@/store/external-tool";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -22,7 +23,7 @@ describe("ExternalToolSection", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 				externalToolsModule,
 			},
 		});
@@ -56,25 +57,13 @@ describe("ExternalToolSection", () => {
 
 		describe("when externalToolsModule injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
+				expect(() =>
 					shallowMount(ExternalToolSection, {
 						provide: {
 							i18n: { t: (key: string) => key },
 						},
-					});
-				} catch (e) {
-					expect(consoleErrorSpy).toHaveBeenCalledWith(
-						expect.stringMatching(
-							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-						)
-					);
-				}
-
-				consoleErrorSpy.mockRestore();
+					})
+				).toThrow();
 			});
 		});
 	});

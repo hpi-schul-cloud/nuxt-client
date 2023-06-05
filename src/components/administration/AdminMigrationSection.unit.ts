@@ -4,6 +4,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -29,7 +30,7 @@ describe("AdminMigrationSection", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 				schoolsModule,
 				envConfigModule,
 			},
@@ -49,24 +50,13 @@ describe("AdminMigrationSection", () => {
 
 	describe("inject", () => {
 		it("should throw an error when schoolsModule injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
+			expect(() =>
 				shallowMount(AdminMigrationSection, {
 					provide: {
-						i18n: { t: (key: string) => key },
+						[I18N_KEY as symbol]: { t: (key: string) => key },
 					},
-				});
-				// eslint-disable-next-line no-empty
-			} catch (e) {}
-
-			expect(consoleErrorSpy).toHaveBeenCalledWith(
-				expect.stringMatching(
-					/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-				)
-			);
-
-			consoleErrorSpy.mockRestore();
+				})
+			).toThrow();
 		});
 
 		it("should throw an error when i18n injection fails", () => {

@@ -7,6 +7,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { CollaborativeFileType } from "@/store/types/collaborative-file";
 import * as fileTableComposable from "@/pages/files/file-table-utils.composable";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
+import { I18N_KEY } from "@/utils/inject";
 
 const $route: Route = {
 	path: "/cfiles",
@@ -57,7 +58,7 @@ describe("FileOverview", () => {
 				$route,
 			},
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 				collaborativeFilesModule,
 			},
 		});
@@ -88,7 +89,7 @@ describe("FileOverview", () => {
 			console.error = jest.fn();
 			expect(() => {
 				shallowMount(FilesOverview, {
-					provide: { i18n: { t: (key: string) => key } },
+					provide: { [I18N_KEY as symbol]: { t: (key: string) => key } },
 				});
 			}).toThrow("Injection of dependencies failed");
 		});

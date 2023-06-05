@@ -16,6 +16,7 @@ import {
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigOverview", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -62,7 +63,7 @@ describe("ExternalToolConfigOverview", () => {
 					i18n: true,
 				}),
 				provide: {
-					i18n: { t: (key: string) => key },
+					[I18N_KEY as symbol]: { t: (key: string) => key },
 					externalToolsModule,
 				},
 				propsData: {
@@ -100,7 +101,7 @@ describe("ExternalToolConfigOverview", () => {
 			try {
 				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
 					provide: {
-						i18n: { t: (key: string) => key },
+						[I18N_KEY as symbol]: { t: (key: string) => key },
 					},
 				});
 			} catch (e) {

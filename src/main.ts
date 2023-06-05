@@ -83,6 +83,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
+import { I18N_KEY } from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -145,6 +146,7 @@ import { initializeAxios } from "./utils/api";
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
+			[I18N_KEY as symbol]: i18n,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

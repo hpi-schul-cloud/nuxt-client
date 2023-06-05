@@ -6,6 +6,7 @@ import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { BoardPermissionsTypes } from "../types/Board";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -58,7 +59,7 @@ describe("CardHost", () => {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
 	};

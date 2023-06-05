@@ -6,6 +6,7 @@ import { BoardColumn, BoardPermissionsTypes } from "../types/Board";
 import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -42,7 +43,7 @@ describe("BoardColumn", () => {
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: { column: MOCK_PROP, index: 1 },
 		});
