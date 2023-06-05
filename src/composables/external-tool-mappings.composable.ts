@@ -70,7 +70,7 @@ const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
 	ToolParameterScope
 > = {
-	[CustomParameterResponseScopeEnum.Course]: ToolParameterScope.Context,
+	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
 };

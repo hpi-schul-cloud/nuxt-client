@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<p v-html="$t('pages.tool.context.description')"></p>
+		RenderHTML: "$t('pages.tool.context.description')"
 		<v-spacer class="mt-10"></v-spacer>
 		<v-select
 			:label="$t('pages.tool.select.label')"

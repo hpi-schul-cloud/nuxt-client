@@ -1,6 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalTool,
+	SchoolToolConfigurationListItem,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
 } from "./external-tool";
@@ -20,7 +21,6 @@ import {
 import { BusinessError } from "./types/commons";
 import { AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
-import { SchoolToolConfigurationListItem } from "./external-tool/school-tool-configuration-list-item";
 
 @Module({
 	name: "externalToolsModule",
