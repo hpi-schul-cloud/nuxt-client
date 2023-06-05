@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		RenderHTML: "$t('pages.tool.context.description')"
+		<RenderHTML :html="t('pages.tool.context.description')" component="p" />
 		<v-spacer class="mt-10"></v-spacer>
 		<v-select
 			:label="$t('pages.tool.select.label')"
@@ -80,7 +80,6 @@ import {
 } from "vue";
 import { BusinessError } from "@/store/types/commons";
 import {
-	ToolConfigurationListItem,
 	SchoolToolConfigurationListItem,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
@@ -92,6 +91,7 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -99,6 +99,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		ExternalToolSelectionRow,
+		RenderHTML,
 	},
 	props: {
 		contextId: {
