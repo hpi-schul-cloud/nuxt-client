@@ -105,6 +105,17 @@ export const useBoardApi = () => {
 		});
 	};
 
+	const moveElementCall = async (
+		elementId: string,
+		toCardId: string,
+		toPosition: number
+	) => {
+		await elementApi.elementControllerMoveElement(elementId, {
+			toCardId,
+			toPosition,
+		});
+	};
+
 	return {
 		createColumnCall,
 		createElement,
@@ -112,6 +123,7 @@ export const useBoardApi = () => {
 		deleteColumnCall,
 		moveCardCall,
 		moveColumnCall,
+		moveElementCall,
 		updateCardTitle,
 		updateColumnTitleCall,
 		updateElementCall,

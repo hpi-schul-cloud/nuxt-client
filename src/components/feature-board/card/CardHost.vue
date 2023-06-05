@@ -45,6 +45,8 @@
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
+						@move-down:rich-text="onTryMoveContentElementDown"
+						@move-up:rich-text="onTryMoveContentElementUp"
 					></ContentElementList>
 					<CardAddElementMenu
 						@add-element="onAddElement"
@@ -104,8 +106,15 @@ export default defineComponent({
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
-		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
-			useCardState(props.cardId);
+		const {
+			isLoading,
+			card,
+			updateTitle,
+			updateCardHeight,
+			addElement,
+			moveElementDown,
+			moveElementUp,
+		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
@@ -152,6 +161,12 @@ export default defineComponent({
 			stopEditMode();
 		};
 
+		const onTryMoveContentElementDown = async (elementId: string) =>
+			await moveElementDown(elementId);
+
+		const onTryMoveContentElementUp = async (elementId: string) =>
+			await moveElementUp(elementId);
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -177,6 +192,8 @@ export default defineComponent({
 			onAddElement,
 			onStartEditMode,
 			onEndEditMode,
+			onTryMoveContentElementDown,
+			onTryMoveContentElementUp,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,

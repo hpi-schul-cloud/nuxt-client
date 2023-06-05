@@ -13,13 +13,13 @@
 
 		<div class="board-menu">
 			<BoardMenu scope="element">
-				<BoardMenuAction>
+				<BoardMenuAction @click="onTryMoveElementUp">
 					<VIcon>
 						{{ mdiArrowCollapseUp }}
 					</VIcon>
 					{{ $t("components.board.action.moveUp") }}
 				</BoardMenuAction>
-				<BoardMenuAction>
+				<BoardMenuAction @click="onTryMoveElementDown">
 					<VIcon>
 						{{ mdiArrowCollapseDown }}
 					</VIcon>
@@ -60,7 +60,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
@@ -76,9 +76,19 @@ export default defineComponent({
 			}
 		};
 
+		const onTryMoveElementDown = async () => {
+			emit("move-down:element");
+		};
+
+		const onTryMoveElementUp = async () => {
+			emit("move-up:element");
+		};
+
 		return {
 			modelValue,
 			onFocus,
+			onTryMoveElementDown,
+			onTryMoveElementUp,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,

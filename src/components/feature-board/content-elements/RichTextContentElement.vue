@@ -11,6 +11,8 @@
 			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
+			@move-down:element="onTryMoveRichTextEditDown"
+			@move-up:element="onTryMoveRichTextEditUp"
 		/>
 	</div>
 </template>
@@ -35,9 +37,24 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup(props) {
+	emits: ["move-down:rich-text-edit", "move-up:rich-text-edit"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		return { modelValue, isAutoFocus };
+
+		const onTryMoveRichTextEditDown = () => {
+			emit("move-down:rich-text-edit");
+		};
+
+		const onTryMoveRichTextEditUp = () => {
+			emit("move-up:rich-text-edit");
+		};
+
+		return {
+			modelValue,
+			isAutoFocus,
+			onTryMoveRichTextEditDown,
+			onTryMoveRichTextEditUp,
+		};
 	},
 });
 </script>

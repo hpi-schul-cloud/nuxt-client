@@ -32,6 +32,7 @@ const mockApi = {
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerMoveCard: jest.fn(),
 	columnControllerMoveColumn: jest.fn(),
+	elementControllerMoveElement: jest.fn(),
 };
 
 jest
@@ -43,6 +44,9 @@ jest
 jest
 	.spyOn(serverApi, "BoardColumnApiFactory")
 	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
+jest
+	.spyOn(serverApi, "BoardElementApiFactory")
+	.mockReturnValue(mockApi as unknown as serverApi.BoardElementApiInterface);
 
 initializeAxios({
 	request: async (_: string) => ({
@@ -189,6 +193,31 @@ describe("BoardApi.composable", () => {
 			);
 			expect(mockApi.columnControllerMoveColumn).toHaveBeenCalledWith(
 				PAYLOAD.columnId,
+				{
+					...PAYLOAD.position,
+				}
+			);
+		});
+	});
+
+	describe("moveElementCall", () => {
+		it("should call elementControllerMoveElement api", async () => {
+			const { moveElementCall } = useBoardApi();
+			const PAYLOAD = {
+				elementId: "element-id",
+				position: {
+					toCardId: "card-id",
+					toPosition: 3,
+				},
+			};
+
+			await moveElementCall(
+				PAYLOAD.elementId,
+				PAYLOAD.position.toCardId,
+				PAYLOAD.position.toPosition
+			);
+			expect(mockApi.elementControllerMoveElement).toHaveBeenCalledWith(
+				PAYLOAD.elementId,
 				{
 					...PAYLOAD.position,
 				}

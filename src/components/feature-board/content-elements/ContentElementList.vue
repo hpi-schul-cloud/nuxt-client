@@ -6,6 +6,8 @@
 				:key="element.id"
 				:element="asRichTextElementResponse(element)"
 				:isEditMode="isEditMode"
+				@move-down:rich-text-edit="onTryMoveRichTextDown(element.id)"
+				@move-up:rich-text-edit="onTryMoveRichTextUp(element.id)"
 			/>
 			<template v-else>
 				Content Element {{ element.type }} not implemented
@@ -35,14 +37,25 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	emits: ["move-down:rich-text", "move-up:rich-text"],
+	setup(_, { emit }) {
 		const asRichTextElementResponse = (element: AnyContentElement) => {
 			return element as RichTextElementResponse;
+		};
+
+		const onTryMoveRichTextDown = (elementId: string) => {
+			emit("move-down:rich-text", elementId);
+		};
+
+		const onTryMoveRichTextUp = (elementId: string) => {
+			emit("move-up:rich-text", elementId);
 		};
 
 		return {
 			ContentElementType,
 			asRichTextElementResponse,
+			onTryMoveRichTextDown,
+			onTryMoveRichTextUp,
 		};
 	},
 });

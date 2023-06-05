@@ -1,5 +1,5 @@
-import { ContentElementType } from "@/serverApi/v3";
-import { onMounted, reactive, toRef } from "vue";
+import { CardsApi, ContentElementType } from "@/serverApi/v3";
+import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
@@ -18,7 +18,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
-	const { createElement, deleteCardCall, updateCardTitle } = useBoardApi();
+	const { createElement, deleteCardCall, moveElementCall, updateCardTitle } =
+		useBoardApi();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
@@ -66,6 +67,64 @@ export const useCardState = (id: BoardCard["id"]) => {
 		return result;
 	};
 
+	const extractElement = async (
+		elementId: string
+	): Promise<AnyContentElement | undefined> => {
+		if (cardState.card === undefined) return;
+
+		const elementIndex = cardState.card.elements.findIndex(
+			(element) => element.id === elementId
+		);
+		if (elementIndex > -1) {
+			const extractedElements = cardState.card.elements.splice(elementIndex, 1);
+			/**
+			 * refreshes the board to force rerendering in tracked v-for
+			 * to maintain focus when moving cards by keyboard
+			 */
+			await nextTick();
+			return extractedElements[0];
+		}
+	};
+
+	const moveElementDown = async (elementId: string) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		const elementIndex = cardState.card.elements.findIndex(
+			(element) => element.id === elementId
+		);
+		if (
+			elementIndex === cardState.card.elements.length - 1 ||
+			elementIndex === -1
+		) {
+			return;
+		}
+
+		const element = await extractElement(elementId);
+		if (element) {
+			cardState.card.elements.splice(elementIndex + 1, 0, element);
+		}
+		await moveElementCall(elementId, cardState.card.id, elementIndex + 1);
+	};
+
+	const moveElementUp = async (elementId: string) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		const elementIndex = cardState.card.elements.findIndex(
+			(element) => element.id === elementId
+		);
+		if (elementIndex <= 0) {
+			return;
+		}
+
+		const element = await extractElement(elementId);
+		if (element) {
+			cardState.card.elements.splice(elementIndex - 1, 0, element);
+		}
+		await moveElementCall(elementId, cardState.card.id, elementIndex - 1);
+	};
+
 	onMounted(() => fetchCard(id));
 
 	return {
@@ -74,6 +133,9 @@ export const useCardState = (id: BoardCard["id"]) => {
 		deleteCard,
 		updateCardHeight,
 		addElement,
+		extractElement,
+		moveElementDown,
+		moveElementUp,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};
