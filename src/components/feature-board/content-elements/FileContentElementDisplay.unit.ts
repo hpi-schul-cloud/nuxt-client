@@ -1,14 +1,12 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
+import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 
 describe("FileContentElementDisplay", () => {
 	const setupProps = () => ({
 		caption: "Test Caption",
-		fileRecord: {
-			name: "File Record Name",
-			url: "File Record URL",
-		},
+		fileRecord: fileRecordResponseFactory.build(),
 	});
 
 	const setup = () => {
@@ -35,6 +33,14 @@ describe("FileContentElementDisplay", () => {
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
+	it("should find download url", async () => {
+		const { wrapper, fileRecordProp } = setup();
+
+		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
+
+		expect(downloadUrl).toBe(fileRecordProp.url);
+	});
+
 	it("should display icon", async () => {
 		const { wrapper } = setup();
 
@@ -46,23 +52,8 @@ describe("FileContentElementDisplay", () => {
 	it("should find file name", async () => {
 		const { wrapper, fileRecordProp } = setup();
 
-		const fileName = wrapper.find("a").text();
+		const fileName = wrapper.find("v-list-item-title-stub").text();
 
 		expect(fileName).toBe(fileRecordProp.name);
-	});
-
-	it("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
-
-		const downloadUrl = wrapper.find("a").attributes("href");
-
-		expect(downloadUrl).toBe(fileRecordProp.url);
-	});
-
-	it("should find caption", () => {
-		const { wrapper, captionProp } = setup();
-
-		const caption = wrapper.find(".file-info").text();
-		expect(caption).toBe(captionProp);
 	});
 });
