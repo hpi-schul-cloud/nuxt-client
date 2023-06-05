@@ -33,6 +33,7 @@
 								v-model="data.date.date"
 								type="date"
 								:label="$t('components.organisms.FormNews.label.date')"
+								:class="{ hideCurrentDate: !data.date.date }"
 								data-testid="news_date"
 								placeholder="JJJJ-MM-TT"
 							/>
@@ -40,6 +41,7 @@
 								v-model="data.date.time"
 								type="time"
 								:label="$t('components.organisms.FormNews.label.time')"
+								:class="{ hideCurrentTime: !data.date.time }"
 								data-testid="news_time"
 								placeholder="HH:MM"
 							/>
@@ -269,5 +271,23 @@ export default Vue.extend({
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+// hide default current date/time in MacOS/Safari if input date/time is indeed empty
+::v-deep {
+	.hideCurrentDate {
+		input[type="date"]::-webkit-datetime-edit-day-field,
+		input[type="date"]::-webkit-datetime-edit-month-field,
+		input[type="date"]::-webkit-datetime-edit-year-field {
+			opacity: 0;
+		}
+	}
+
+	.hideCurrentTime {
+		input[type="time"]::-webkit-datetime-edit-hour-field,
+		input[type="time"]::-webkit-datetime-edit-minute-field {
+			opacity: 0;
+		}
+	}
 }
 </style>

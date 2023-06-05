@@ -32,8 +32,8 @@
 <script lang="ts">
 import { defineComponent, inject, ref, computed } from "vue";
 import VueI18n from "vue-i18n";
-import DatePicker from "@/components/date-time-picker/DatePicker.vue";
-import TimePicker from "@/components/date-time-picker/TimePicker.vue";
+import DatePicker from "@/components/common/date-time-picker/DatePicker.vue";
+import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
 import { mdiCalendarClock } from "@mdi/js";
 import { isToday } from "@/plugins/datetime";
 
