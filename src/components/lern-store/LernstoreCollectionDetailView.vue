@@ -20,32 +20,29 @@
 					</h3>
 					<div class="author-provider">
 						<span v-if="hasAuthor">
-							<base-link :href="'/content/?q=' + author" class="content-link">{{
-								author
-							}}</base-link>
+							<base-link :href="'/content/?q=' + author" class="content-link">
+								{{ author }}
+							</base-link>
 							({{ $t("pages.content._id.metadata.author") }})
 						</span>
 						<span v-if="provider">
 							<span v-if="hasAuthor">,</span>
-							<base-link
-								:href="'/content/?q=' + provider"
-								class="content-link"
-								>{{ provider }}</base-link
-							>
+							<base-link :href="'/content/?q=' + provider" class="content-link">
+								{{ provider }}
+							</base-link>
 							({{ $t("pages.content._id.metadata.provider") }})
 						</span>
 					</div>
-					<div
+					<RenderHTML
 						v-if="description"
 						class="description text-wrap"
-						v-html="description"
-					></div>
+						:html="description"
+					/>
 					<div class="metadata">
 						<div v-if="createdAt || updatedAt" class="meta-container">
 							<div class="meta-icon">
 								<base-icon source="material" icon="event" />
 							</div>
-
 							<div class="meta-text">
 								<div v-if="createdAt">
 									{{ $t("pages.content._id.metadata.createdAt") }}
@@ -68,16 +65,16 @@
 										:key="index"
 										class="meta-text"
 									>
-										<base-link :href="'/content/?q=' + tag" class="tag link"
-											>#{{ tag }}</base-link
-										>
+										<base-link :href="'/content/?q=' + tag" class="tag link">
+											#{{ tag }}
+										</base-link>
 									</span>
 								</div>
 							</template>
 							<template v-if="tags.length === 0">
-								<span class="meta-text link">{{
-									$t("pages.content._id.metadata.noTags")
-								}}</span>
+								<span class="meta-text link">
+									{{ $t("pages.content._id.metadata.noTags") }}
+								</span>
 							</template>
 						</div>
 					</div>
@@ -129,15 +126,7 @@
 </template>
 
 <script>
-import { contentModule, notifierModule } from "@/store";
-import AddContentButton from "@/components/organisms/AddContentButton";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
-import UserHasRole from "@/components/helpers/UserHasRole";
-
-import contentMeta from "@/mixins/contentMeta";
-import BaseLink from "../base/BaseLink";
-
+import { defineComponent } from "vue";
 import {
 	getAuthor,
 	getDescription,
@@ -146,8 +135,15 @@ import {
 	getTags,
 } from "@/utils/helpers";
 import { printDateFromTimestamp } from "@/plugins/datetime";
+import contentMeta from "@/mixins/contentMeta";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
-import { defineComponent } from "vue";
+import { contentModule, notifierModule } from "@/store";
+import AddContentButton from "@/components/organisms/AddContentButton";
+import ContentCard from "@/components/organisms/ContentCard";
+import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import UserHasRole from "@/components/helpers/UserHasRole";
+import BaseLink from "../base/BaseLink";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -158,6 +154,7 @@ export default defineComponent({
 		ContentCard,
 		ContentEduSharingFooter,
 		UserHasRole,
+		RenderHTML,
 	},
 	mixins: [contentMeta, infiniteScrolling],
 	props: {
