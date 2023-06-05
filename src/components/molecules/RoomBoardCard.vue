@@ -4,7 +4,7 @@
 		hover
 		tabindex="0"
 		role="button"
-		color="var(--v-primary-lighten10)"
+		color="grey lighten-3"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -29,11 +29,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from "vue";
 import { mdiViewDashboard } from "@mdi/js";
+import { defineComponent, inject } from "vue";
+import VueI18n from "vue-i18n";
 import { useRouter } from "vue-router/composables";
 import { setBoardBreadcrumbs } from "../feature-board/shared/BoardBreadcrumbs.composable";
-import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "RoomBoardCard",
