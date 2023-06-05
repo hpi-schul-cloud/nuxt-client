@@ -1,20 +1,22 @@
 <template>
-	<div v-if="fileRecordModel">
-		<FileContentElementDisplay
-			v-if="!isEditMode"
-			:caption="modelValue.caption"
-			:fileRecord="fileRecordModel"
-		></FileContentElementDisplay>
-		<FileContentElementEdit
-			v-if="isEditMode"
-			:caption="modelValue.caption"
-			:fileRecord="fileRecordModel"
-			@update:caption="($event) => (modelValue.caption = $event)"
-		></FileContentElementEdit>
-	</div>
-	<v-sheet v-else class="pa-4 mb-2" outlined rounded>
-		<v-progress-linear indeterminate></v-progress-linear>
-	</v-sheet>
+	<v-card class="mb-4" elevation="0" outlined dense>
+		<div v-if="fileRecordModel">
+			<FileContentElementDisplay
+				v-if="!isEditMode"
+				:caption="modelValue.caption"
+				:fileRecord="fileRecordModel"
+			></FileContentElementDisplay>
+			<FileContentElementEdit
+				v-if="isEditMode"
+				:caption="modelValue.caption"
+				:fileRecord="fileRecordModel"
+				@update:caption="($event) => (modelValue.caption = $event)"
+			></FileContentElementEdit>
+		</div>
+		<v-card-text v-else>
+			<v-progress-linear indeterminate></v-progress-linear>
+		</v-card-text>
+	</v-card>
 </template>
 
 <script lang="ts">
