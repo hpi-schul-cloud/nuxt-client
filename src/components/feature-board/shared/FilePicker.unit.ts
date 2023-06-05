@@ -1,32 +1,18 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
-import { useFilePicker } from "./FilePicker.composable";
+import Vue, { nextTick } from "vue";
 import FilePicker from "./FilePicker.vue";
-jest.mock("./FilePicker.composable");
 
 describe("FilePicker", () => {
-	const setupFilePickerComposableMock = () => {
-		const isFilePickerOpen = ref(false);
-		const triggerFilePicker = jest.fn();
-
-		const mockedUseFilePicker = jest.mocked(useFilePicker);
-		mockedUseFilePicker.mockReturnValue({
-			isFilePickerOpen,
-			triggerFilePicker,
-		});
-
-		return { isFilePickerOpen, triggerFilePicker };
-	};
-
 	describe("when isFilePickerOpen is false", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			setupFilePickerComposableMock();
-
 			const wrapper: Wrapper<Vue> = mount(FilePicker as MountOptions<Vue>, {
 				...createComponentMocks({}),
+				propsData: {
+					isFilePickerOpen: false,
+				},
 			});
 
 			return { wrapper };
@@ -40,37 +26,73 @@ describe("FilePicker", () => {
 	});
 
 	describe("when isFilePickerOpen is changed from false to true", () => {
-		const setup = async () => {
+		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isFilePickerOpen, triggerFilePicker } =
-				setupFilePickerComposableMock();
-
-			const wrapper: Wrapper<Vue> = mount(FilePicker as MountOptions<Vue>, {
+			const wrapper = mount(FilePicker as MountOptions<Vue>, {
 				...createComponentMocks({}),
 				attachTo: document.body,
+				propsData: {
+					isFilePickerOpen: false,
+				},
 			});
 
-			isFilePickerOpen.value = true;
-			await nextTick();
+			const input = (wrapper.vm.$refs.inputRef as any).$refs?.input;
+			input.click = jest.fn();
 
-			return { triggerFilePicker, wrapper };
+			return { wrapper, input };
 		};
 
-		it("should call triggerFilePicker", async () => {
-			const { triggerFilePicker } = await setup();
+		it("should emit update:isFilePickerOpen", async () => {
+			const { wrapper } = setup();
 
-			expect(triggerFilePicker).toBeCalled();
+			await wrapper.setProps({ isFilePickerOpen: true });
+			await nextTick();
+
+			expect(wrapper.emitted("update:isFilePickerOpen")).toHaveLength(1);
+
+			await wrapper.setProps({ isFilePickerOpen: false });
+			await nextTick();
+
+			await wrapper.setProps({ isFilePickerOpen: true });
+			await nextTick();
+
+			expect(wrapper.emitted("update:isFilePickerOpen")).toHaveLength(2);
 		});
 
 		it("should click input element", async () => {
-			const { wrapper } = await setup();
+			const { wrapper, input } = setup();
 
-			const input = (wrapper.vm.$refs.inputRef as any).$refs?.input;
-			const focusedElement = document.activeElement;
+			await wrapper.setProps({ isFilePickerOpen: true });
+			await nextTick();
 
-			// Checks if the input element was clicked implicitly by checking if it is focused
-			expect(focusedElement === input).toBe(true);
+			expect(input.click).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe("when file is selected", () => {
+		const setup = () => {
+			document.body.setAttribute("data-app", "true");
+
+			const wrapper = mount(FilePicker as MountOptions<Vue>, {
+				...createComponentMocks({}),
+				attachTo: document.body,
+				propsData: {
+					isFilePickerOpen: false,
+				},
+			});
+			const file = new File([""], "filename", { type: "text/plain" });
+
+			return { wrapper, file };
+		};
+
+		it("should emit update:fileOpen", async () => {
+			const { wrapper, file } = setup();
+
+			await wrapper.setData({ modelFile: file });
+			await nextTick();
+
+			expect(wrapper.emitted("update:file")).toHaveLength(1);
 		});
 	});
 });

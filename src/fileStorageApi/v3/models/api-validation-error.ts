@@ -49,7 +49,7 @@ export interface ApiValidationError {
      * @type {object}
      * @memberof ApiValidationError
      */
-    details: object;
+    details?: object;
 }
 
 
