@@ -10,7 +10,9 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	SchoolToolConfigurationListResponse,
 	ToolConfigurationEntryResponse,
+	SchoolToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
 } from "@/serverApi/v3";
 import {
@@ -25,6 +27,8 @@ import {
 } from "@/store/external-tool";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
+import { SchoolToolConfigurationListItem } from "../store/external-tool/school-tool-configuration-list-item";
+import { SchoolToolConfigurationTemplate } from "../store/external-tool/school-tool-configuration-template";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -154,6 +158,17 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapSchoolToolConfigurationEntryResponse = (
+		resp: SchoolToolConfigurationEntryResponse
+	): SchoolToolConfigurationListItem => {
+		return {
+			id: resp.id,
+			name: resp.name,
+			logoUrl: resp.logoUrl,
+			schoolToolId: resp.schoolToolId,
+		};
+	};
+
 	const mapToolConfigurationListResponse = (
 		resp: ToolConfigurationListResponse
 	): ToolConfigurationListItem[] => {
@@ -162,6 +177,18 @@ export function useExternalToolMappings() {
 				entryResp: ToolConfigurationEntryResponse
 			): ToolConfigurationListItem => {
 				return mapToolConfigurationEntryResponse(entryResp);
+			}
+		);
+	};
+
+	const mapSchoolToolConfigurationListResponse = (
+		resp: SchoolToolConfigurationListResponse
+	): SchoolToolConfigurationListItem[] => {
+		return resp.data.map(
+			(
+				entryResp: SchoolToolConfigurationEntryResponse
+			): SchoolToolConfigurationListItem => {
+				return mapSchoolToolConfigurationEntryResponse(entryResp);
 			}
 		);
 	};
@@ -196,6 +223,15 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapToolConfigurationTemplateToSchoolToolConfigurationTemplate = (
+		template: ToolConfigurationTemplate,
+		schoolToolId: string
+	): SchoolToolConfigurationTemplate => {
+		return {
+			schoolToolId: schoolToolId,
+			...template,
+		};
+	};
 	const mapToolParametersToCustomParameterEntryParams = (
 		params: ToolParameter[]
 	) => {
@@ -224,8 +260,10 @@ export function useExternalToolMappings() {
 		mapExternalToolConfigurationTemplateResponse,
 		mapSchoolExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
+		mapSchoolToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		mapToolConfigurationTemplateToContextExternalToolPostParams,
+		mapToolConfigurationTemplateToSchoolToolConfigurationTemplate,
 		getTranslationKey,
 	};
 }

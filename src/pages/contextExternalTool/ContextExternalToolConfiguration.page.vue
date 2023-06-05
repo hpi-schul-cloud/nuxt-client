@@ -81,6 +81,7 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import {
 	ToolConfigurationListItem,
+	SchoolToolConfigurationListItem,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
 import { useRouter } from "vue-router/composables";
@@ -90,6 +91,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
+import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -169,12 +171,17 @@ export default defineComponent({
 		);
 
 		const configurationItems: ComputedRef<
-			ToolConfigurationListItem[] | undefined
-		> = computed(() => externalToolsModule?.getToolConfigurations);
+			SchoolToolConfigurationListItem[] | undefined
+		> = computed(() => externalToolsModule?.getSchoolToolConfigurations);
 
-		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
+		const selectedItem: Ref<SchoolToolConfigurationListItem | undefined> =
+			ref();
 
 		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
+
+		const schoolToolTemplate: Ref<SchoolToolConfigurationTemplate | undefined> =
+			ref();
+
 		const hasToolTemplate: Ref<boolean> = ref(false);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(
@@ -182,14 +189,23 @@ export default defineComponent({
 		);
 
 		const onSelectTemplate = async (
-			selectedTool: ToolConfigurationListItem
+			selectedTool: SchoolToolConfigurationListItem
 		) => {
-			//toolTemplate.value =
-			//await externalToolsModule?.loadToolConfigurationTemplateFromSchoolExternalTool(
-			//selectedTool.id
-			//);
+			toolTemplate.value =
+				await externalToolsModule?.loadToolConfigurationTemplateFromExternalTool(
+					selectedTool.id
+				);
+			console.log("ToolTemplate", toolTemplate.value);
+			if (toolTemplate.value) {
+				schoolToolTemplate.value =
+					useExternalToolMappings().mapToolConfigurationTemplateToSchoolToolConfigurationTemplate(
+						toolTemplate.value,
+						selectedTool.schoolToolId
+					);
+				console.log("SchoolToolTemplate", schoolToolTemplate.value);
 
-			hasToolTemplate.value = true;
+				hasToolTemplate.value = true;
+			}
 		};
 
 		const router: VueRouter = useRouter();
@@ -198,9 +214,9 @@ export default defineComponent({
 		};
 
 		const onSaveTool = async () => {
-			if (toolTemplate.value && props.contextId && props.contextType) {
+			if (schoolToolTemplate.value && props.contextId && props.contextType) {
 				await externalToolsModule?.createContextExternalTool({
-					toolTemplate: toolTemplate.value,
+					toolTemplate: schoolToolTemplate.value,
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});

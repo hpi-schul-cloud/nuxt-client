@@ -15,10 +15,12 @@ import {
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolConfigurationListResponse,
+	SchoolToolConfigurationListResponse,
 } from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
 import { AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
+import { SchoolToolConfigurationListItem } from "./external-tool/school-tool-configuration-list-item";
 
 @Module({
 	name: "externalToolsModule",
@@ -29,6 +31,8 @@ export default class ExternalToolsModule extends VuexModule {
 	private schoolExternalTools: SchoolExternalTool[] = [];
 
 	private toolConfigurations: ToolConfigurationListItem[] = [];
+
+	private schoolToolConfigurations: SchoolToolConfigurationListItem[] = [];
 	private loading = false;
 
 	private businessError: BusinessError = {
@@ -51,6 +55,10 @@ export default class ExternalToolsModule extends VuexModule {
 
 	get getToolConfigurations(): ToolConfigurationListItem[] {
 		return this.toolConfigurations;
+	}
+
+	get getSchoolToolConfigurations(): SchoolToolConfigurationListItem[] {
+		return this.schoolToolConfigurations;
 	}
 
 	get getBusinessError() {
@@ -91,6 +99,13 @@ export default class ExternalToolsModule extends VuexModule {
 	@Mutation
 	setToolConfigurations(toolConfigurations: ToolConfigurationListItem[]): void {
 		this.toolConfigurations = [...toolConfigurations];
+	}
+
+	@Mutation
+	setSchoolToolConfigurations(
+		schoolToolConfigurations: SchoolToolConfigurationListItem[]
+	): void {
+		this.schoolToolConfigurations = [...schoolToolConfigurations];
 	}
 
 	@Action
@@ -180,6 +195,7 @@ export default class ExternalToolsModule extends VuexModule {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
+			console.log("here we go");
 			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
@@ -309,20 +325,20 @@ export default class ExternalToolsModule extends VuexModule {
 			this.resetBusinessError();
 
 			if (payload.contextId && payload.contextType) {
-				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
+				const availableTools: AxiosResponse<SchoolToolConfigurationListResponse> =
 					await this.toolApi.toolConfigurationControllerGetAvailableToolsForContext(
 						payload.contextType,
 						payload.contextId
 					);
-				console.log(availableTools.data);
+				console.log("available tools: ", availableTools.data);
 
-				this.setToolConfigurations(
-					useExternalToolMappings().mapToolConfigurationListResponse(
+				this.setSchoolToolConfigurations(
+					useExternalToolMappings().mapSchoolToolConfigurationListResponse(
 						availableTools.data
 					)
 				);
 			}
-
+			console.log("after mapping: ", this.getSchoolToolConfigurations);
 			this.setLoading(false);
 		} catch (error: any) {
 			console.log(

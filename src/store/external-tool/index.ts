@@ -6,3 +6,4 @@ export * from "./tool-configuration-template";
 export * from "./school-external-tool-status.enum";
 export * from "./school-external-tool";
 export * from "./tool-configuration-list-item";
+export * from "./school-tool-configuration-list-item";
