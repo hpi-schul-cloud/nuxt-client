@@ -61,7 +61,7 @@
 						data-testId="dialog-close"
 						depressed
 						outlined
-						@click="$emit('dialog-closed', false)"
+						@click="closeDialog"
 					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
@@ -125,6 +125,9 @@ export default {
 		cancelDialog() {
 			this.$emit("dialog-canceled");
 			this.$emit("dialog-closed", false);
+		},
+		closeDialog(event) {
+			this.$emit("dialog-closed", false, event);
 		},
 		checkButtons(buttonName) {
 			return this.buttons.some((button) => button == buttonName);
