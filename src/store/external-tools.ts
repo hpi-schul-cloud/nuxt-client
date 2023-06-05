@@ -17,9 +17,10 @@ import {
 	ToolApiInterface,
 	ToolConfigurationListResponse,
 	SchoolToolConfigurationListResponse,
+	ToolLaunchRequestResponse,
 } from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
 
 @Module({
@@ -99,6 +100,36 @@ export default class ExternalToolsModule extends VuexModule {
 	@Mutation
 	setToolConfigurations(toolConfigurations: ToolConfigurationListItem[]): void {
 		this.toolConfigurations = [...toolConfigurations];
+	}
+
+	@Action
+	async getToolLaunchData(
+		contextExternalToolId: string
+	): Promise<ToolLaunchRequestResponse | undefined> {
+		try {
+			this.setLoading(true);
+
+			const resp: AxiosResponse<ToolLaunchRequestResponse> =
+				await this.toolApi.toolLaunchControllerGetToolLaunchRequest(
+					contextExternalToolId
+				);
+
+			this.setLoading(false);
+
+			return resp.data;
+		} catch (error: unknown) {
+			console.log(`Some error occurred while launching tool: ${error}`);
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error,
+					statusCode: error?.response?.status ?? 500,
+					message: error?.response?.data.message ?? "",
+				});
+			}
+
+			this.setLoading(false);
+		}
 	}
 
 	@Mutation
