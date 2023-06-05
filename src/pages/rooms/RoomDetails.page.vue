@@ -382,18 +382,9 @@ export default defineComponent({
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse(),
-					name: this.$t("common.actions.download"),
-					dataTestId: "title-menu-imscc-download",
-				});
-			}
-
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-				items.push({
-					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
-					name: this.$t("common.actions.download.dropdownItem1"),
-					dataTestId: "title-menu-imscc-download",
+					name: this.$t("common.actions.download.v1.1"),
+					dataTestId: "title-menu-imscc-download-v1.1",
 				});
 			}
 
@@ -401,42 +392,10 @@ export default defineComponent({
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
-					name: this.$t("common.actions.download.dropdownItem2"),
-					dataTestId: "title-menu-imscc-download",
+					name: this.$t("common.actions.download.v1.3"),
+					dataTestId: "title-menu-imscc-download-v1.3",
 				});
 			}
-
-			// Versuch
-			/* if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-				const downloadItem = {
-					icon: this.icons.mdiTrayArrowDown,
-					// action: async () => await roomModule.downloadImsccCourse(),
-					name: this.$t("common.actions.download"),
-					dataTestId: "title-menu-imscc-download",
-				};
-
-				const dropdownItem = {
-					// name: this.$t("common.actions.dropdown"),
-					name: "test",
-					items: [
-						{
-							// icon: this.icons.mdiTrayArrowDown,
-							action: async () => await roomModule.downloadImsccCourse(),
-							name: this.$t("common.actions.download.dropdownItem1"),
-						},
-						{
-							// icon: this.icons.mdiTrayArrowDown,
-							action: async () => await roomModule.downloadImsccCourse(),
-							name: this.$t("common.actions.download.dropdownItem2"),
-						},
-					],
-				};
-
-				// Add the dropdown item as a submenu item to the download item
-				downloadItem.items = [dropdownItem];
-
-				items.push(downloadItem);
-			} */
 
 			return items;
 		},
