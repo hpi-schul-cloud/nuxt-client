@@ -5,15 +5,13 @@
 			class="mt-16 text-center"
 			data-testid="tools-empty-state"
 		>
-			<v-img
-				height="200"
-				src="@/assets/img/empty-state/tools-empty-state.svg"
-				contain
-				:alt="$t('pages.rooms.tools.logo')"
+			<v-custom-empty-state
+				ref="tools-empty-state"
+				image="tools-empty-state"
+				:title="$t('pages.rooms.tools.emptyState')"
+				class="mt-16"
+				imgHeight="200px"
 			/>
-			<h4>
-				{{ $t("pages.rooms.tools.emptyState") }}
-			</h4>
 		</div>
 
 		<room-external-tool-card

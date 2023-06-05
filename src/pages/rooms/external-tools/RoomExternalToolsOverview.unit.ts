@@ -52,12 +52,12 @@ describe("RoomExternalToolOverview", () => {
 			};
 		};
 
-		it("should display a empty state text", () => {
+		it("should display empty state", () => {
 			const { wrapper } = setup();
 
-			const title = wrapper.find('[data-testid="tools-empty-state"] > h4');
-
-			expect(title.text()).toEqual("pages.rooms.tools.emptyState");
+			expect(wrapper.findComponent({ ref: "tools-empty-state" }).exists()).toBe(
+				true
+			);
 		});
 	});
 
