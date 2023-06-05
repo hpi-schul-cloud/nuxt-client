@@ -22,6 +22,7 @@ import {
 import { BusinessError } from "./types/commons";
 import { AxiosError, AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
+import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 
 @Module({
 	name: "externalToolsModule",
@@ -226,7 +227,6 @@ export default class ExternalToolsModule extends VuexModule {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
-			console.log("here we go");
 			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
 				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
 					toolId
@@ -361,7 +361,6 @@ export default class ExternalToolsModule extends VuexModule {
 						payload.contextType,
 						payload.contextId
 					);
-				console.log("available tools: ", availableTools.data);
 
 				this.setSchoolToolConfigurations(
 					useExternalToolMappings().mapSchoolToolConfigurationListResponse(
@@ -369,7 +368,7 @@ export default class ExternalToolsModule extends VuexModule {
 					)
 				);
 			}
-			console.log("after mapping: ", this.getSchoolToolConfigurations);
+
 			this.setLoading(false);
 		} catch (error: any) {
 			console.log(
@@ -386,7 +385,7 @@ export default class ExternalToolsModule extends VuexModule {
 
 	@Action
 	async createContextExternalTool(payload: {
-		toolTemplate: ToolConfigurationTemplate;
+		toolTemplate: SchoolToolConfigurationTemplate;
 		contextId: string;
 		contextType: ToolContextType;
 	}): Promise<void> {

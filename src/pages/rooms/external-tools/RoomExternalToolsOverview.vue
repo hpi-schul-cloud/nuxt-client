@@ -84,10 +84,11 @@ import {
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import ExternalToolsModule from "@/store/external-tools";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
-	components: { RoomExternalToolCard, RenderHTML },
+	components: { RoomExternalToolCard, RenderHTML, VCustomEmptyState },
 	setup() {
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const contextExternalToolsModule: ContextExternalToolsModule | undefined =

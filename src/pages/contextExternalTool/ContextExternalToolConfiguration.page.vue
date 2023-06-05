@@ -196,14 +196,13 @@ export default defineComponent({
 				await externalToolsModule?.loadToolConfigurationTemplateFromExternalTool(
 					selectedTool.id
 				);
-			console.log("ToolTemplate", toolTemplate.value);
+
 			if (toolTemplate.value) {
 				schoolToolTemplate.value =
 					useExternalToolMappings().mapToolConfigurationTemplateToSchoolToolConfigurationTemplate(
 						toolTemplate.value,
 						selectedTool.schoolToolId
 					);
-				console.log("SchoolToolTemplate", schoolToolTemplate.value);
 
 				hasToolTemplate.value = true;
 			}
@@ -221,6 +220,8 @@ export default defineComponent({
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});
+
+				await router.push({ path: `${contextRoute}?tab=tools` });
 			}
 
 			if (!externalToolsModule?.getBusinessError.message) {
