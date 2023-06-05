@@ -140,10 +140,10 @@ export default defineComponent({
 			}
 		}, 200);
 
-		const handleSelect = (selected: string) => {
+		const handleSelect = async (selected: string) => {
 			inputField.value?.focus();
 			model.value = selected;
-			closeMenu();
+			await closeMenu();
 		};
 
 		const handleError = (hasError: boolean) => {

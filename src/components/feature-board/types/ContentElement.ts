@@ -1,3 +1,3 @@
-import { FileElementResponse, TextElementResponse } from "@/serverApi/v3";
+import { FileElementResponse, RichTextElementResponse } from "@/serverApi/v3";
 
-export type AnyContentElement = TextElementResponse | FileElementResponse;
+export type AnyContentElement = RichTextElementResponse | FileElementResponse;

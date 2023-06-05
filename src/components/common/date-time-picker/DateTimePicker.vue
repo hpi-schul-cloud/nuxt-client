@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts">
-import DatePicker from "@/components/date-time-picker/DatePicker.vue";
-import TimePicker from "@/components/date-time-picker/TimePicker.vue";
+import DatePicker from "@/components/common/date-time-picker/DatePicker.vue";
+import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
 import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";

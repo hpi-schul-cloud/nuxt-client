@@ -18,7 +18,7 @@ import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { provide } from "vue";
 import VueI18n from "vue-i18n";
-import Room from "./RoomDetails.page.vue";
+import RoomDetailsPage from "./RoomDetails.page.vue";
 
 const mockData = {
 	roomId: "123",
@@ -121,11 +121,13 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareModuleMock: ShareModule;
 
-const $router = { push: jest.fn(), resolve: jest.fn() };
+const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
 const getWrapper: any = () => {
-	return mount(Room, {
-		...createComponentMocks({}),
+	return mount(RoomDetailsPage, {
+		...createComponentMocks({
+			i18n: true,
+		}),
 		mocks: {
 			$theme: {
 				short_name: "instance name",
@@ -174,6 +176,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				return { data: [] };
 			},
 		} as AxiosInstance);
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
 	});
 
 	it("should fetch data", async () => {
@@ -441,6 +447,97 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				await closeButton.trigger("click");
 
 				expect(closeDialogSpy).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("tabs", () => {
+		describe("when feature flag is enabled", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+
+				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should find tools(new)-tab", () => {
+				const { wrapper } = setup();
+
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
+
+				expect(tabTitle.text()).toEqual(
+					wrapper.vm.$t("pages.rooms.tabLabel.tools")
+				);
+			});
+		});
+
+		describe("when feature flag is disabled", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+				} as Envs);
+
+				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should not find tools(new)-tab", () => {
+				const { wrapper } = setup();
+
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
+
+				expect(tabTitle.exists()).toEqual(false);
+			});
+		});
+
+		describe("when Tools(new) tab is active", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+
+				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should show the tools component", async () => {
+				const { wrapper } = setup();
+
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
+
+				const toolsContent = wrapper.find('[data-testid="room-content"]');
+
+				expect(toolsContent.exists()).toBe(true);
+			});
+		});
+
+		describe("when Tools(new) tab is active and the user has admin permissions", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
+
+				const wrapper = getWrapper();
+
+				return { wrapper };
+			};
+
+			it("should show an 'add' button", async () => {
+				const { wrapper } = setup();
+
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
+
+				const addButton = wrapper.find('[data-testid="add-tool-button"]');
+
+				expect(addButton.exists()).toEqual(true);
 			});
 		});
 	});
