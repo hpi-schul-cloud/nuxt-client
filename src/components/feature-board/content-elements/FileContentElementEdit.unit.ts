@@ -5,6 +5,10 @@ import FileContentElementEdit from "./FileContentElementEdit.vue";
 describe("FileContentElementEdit", () => {
 	const setupProps = () => ({
 		caption: "Test Caption",
+		fileRecord: {
+			name: "File Record Name",
+			url: "File Record URL",
+		},
 	});
 
 	describe("shallow mounted", () => {
@@ -17,7 +21,11 @@ describe("FileContentElementEdit", () => {
 				propsData,
 			});
 
-			return { wrapper, captionProp: propsData.caption };
+			return {
+				wrapper,
+				captionProp: propsData.caption,
+				fileRecordProp: propsData.fileRecord,
+			};
 		};
 
 		it("should be found in dom", () => {
@@ -25,6 +33,30 @@ describe("FileContentElementEdit", () => {
 
 			const fileContentElement = wrapper.findComponent(FileContentElementEdit);
 			expect(fileContentElement.exists()).toBe(true);
+		});
+
+		it("should display icon", async () => {
+			const { wrapper } = setup();
+
+			const fileIcon = wrapper.find("v-icon-stub");
+
+			expect(fileIcon.exists()).toBe(true);
+		});
+
+		it("should find file name", async () => {
+			const { wrapper, fileRecordProp } = setup();
+
+			const fileName = wrapper.find("a").text();
+
+			expect(fileName).toBe(fileRecordProp.name);
+		});
+
+		it("should find download url", async () => {
+			const { wrapper, fileRecordProp } = setup();
+
+			const downloadUrl = wrapper.find("a").attributes("href");
+
+			expect(downloadUrl).toBe(fileRecordProp.url);
 		});
 
 		it("should find caption", async () => {
