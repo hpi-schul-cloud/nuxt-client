@@ -1,79 +1,69 @@
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
-import { useFilePicker } from "./FilePicker.composable";
+import { useFileStorageApi } from "./FileStorageApi.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-type CreateElementFn = (addElement: AddCardElement) => Promise<void>;
+export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
+	const { upload } = useFileStorageApi();
+	const { isDialogOpen, closeDialog, elementTypeOptions } =
+		useSharedElementTypeSelection();
+	const isFilePickerOpen = ref<boolean>(false);
 
-export const useElementTypeSelection = () => {
-	const getCreateFn = async (): Promise<CreateElementFn | undefined> => {
-		const promise = new Promise<CreateElementFn | undefined>((resolve) => {
-			const { askType } = useInternalElementTypeSelection();
-			askType(resolve);
-		});
-		return promise;
+	const createTextElement = async () => {
+		await addElementFunction(ContentElementType.RichText);
+
+		closeDialog();
 	};
 
-	return {
-		getCreateFn,
-	};
-};
-
-export const useInternalElementTypeSelection = createSharedComposable(() => {
-	const { triggerFilePicker } = useFilePicker();
-	const isDialogOpen = ref<boolean>(false);
-
-	let resolveWithCreateFunction:
-		| ((createElementFn?: CreateElementFn) => void)
-		| undefined;
-
-	const createTextElement = async (addElement: AddCardElement) => {
-		await addElement(ContentElementType.RichText);
-	};
-
-	const createFileElement = async (addElement: AddCardElement) => {
-		triggerFilePicker();
-		await addElement(ContentElementType.File);
-	};
-
-	const returnCreateFunction = (createElementFn?: CreateElementFn) => {
-		if (resolveWithCreateFunction) {
-			resolveWithCreateFunction(createElementFn);
+	const createFileElement = async (file: File) => {
+		try {
+			const element = await addElementFunction(ContentElementType.File);
+			if (element?.id) {
+				await upload(element.id, FileRecordParentType.BOARDNODES, file);
+			}
+		} catch (error) {
+			isFilePickerOpen.value = false;
+			throw error;
 		}
 
-		isDialogOpen.value = false;
+		isFilePickerOpen.value = false;
 	};
 
-	const elementTypeOptions = [
+	const openFilePicker = () => {
+		isFilePickerOpen.value = true;
+		closeDialog();
+	};
+
+	const options = [
 		{
 			icon: mdiFormatSize,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
-			action: () => returnCreateFunction(createTextElement),
+			action: createTextElement,
 			testId: "create-element-text",
 		},
 		{
 			icon: mdiUpload,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
-			action: () => returnCreateFunction(createFileElement),
+			action: openFilePicker,
 			testId: "create-element-file",
 		},
 	];
 
-	const askType = (resolve: (value?: CreateElementFn) => void) => {
+	const askType = () => {
+		elementTypeOptions.value = options;
 		isDialogOpen.value = true;
-		resolveWithCreateFunction = resolve;
-	};
-
-	const closeDialog = () => {
-		returnCreateFunction();
 	};
 
 	return {
 		askType,
 		isDialogOpen,
 		elementTypeOptions,
-		closeDialog,
+		createFileElement,
+		createTextElement,
+		openFilePicker,
+		isFilePickerOpen,
 	};
-});
+};
