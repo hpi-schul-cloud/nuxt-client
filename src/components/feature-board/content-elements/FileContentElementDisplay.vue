@@ -1,8 +1,8 @@
 <template>
-	<v-list>
+	<v-list dense flat class="py-0">
 		<v-list-item :href="fileRecord.url" download>
-			<v-list-item-icon>
-				<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
+			<v-list-item-icon class="mr-2">
+				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
 
 			<v-list-item-content>
