@@ -57,7 +57,7 @@ export default defineComponent({
 			useSharedElementTypeSelection();
 
 		const onCloseDialog = (_: boolean, event: Event) => {
-			event.stopPropagation();
+			event?.stopPropagation();
 			closeDialog();
 		};
 
