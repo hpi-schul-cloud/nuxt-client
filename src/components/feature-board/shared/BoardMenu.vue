@@ -1,5 +1,5 @@
 <template>
-	<VMenu offset-y left attach min-width="250">
+	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
 				color="black"
