@@ -2,29 +2,38 @@
 	<VCardText>
 		<template v-for="element in elements">
 			<RichTextContentElement
-				v-if="element.type === ContentElementType.RichText"
+				v-if="isRichTextElementResponse(element)"
 				:key="element.id"
-				:element="asRichTextElementResponse(element)"
+				:element="element"
+				:isEditMode="isEditMode"
+			/>
+			<FileContentElement
+				v-else-if="isFileElementResponse(element)"
+				:key="element.id"
+				:element="element"
 				:isEditMode="isEditMode"
 				@move-down:rich-text-edit="onTryMoveRichTextDown(element.id)"
 				@move-up:rich-text-edit="onTryMoveRichTextUp(element.id)"
 			/>
-			<template v-else>
-				Content Element {{ element.type }} not implemented
-			</template>
 		</template>
 	</VCardText>
 </template>
 
 <script lang="ts">
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	FileElementResponse,
+	RichTextElementResponse,
+} from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
+import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		FileContentElement,
 		RichTextContentElement,
 	},
 	props: {
@@ -39,8 +48,16 @@ export default defineComponent({
 	},
 	emits: ["move-down:rich-text", "move-up:rich-text"],
 	setup(_, { emit }) {
-		const asRichTextElementResponse = (element: AnyContentElement) => {
-			return element as RichTextElementResponse;
+		const isRichTextElementResponse = (
+			element: AnyContentElement
+		): element is RichTextElementResponse => {
+			return element.type === ContentElementType.RichText;
+		};
+
+		const isFileElementResponse = (
+			element: AnyContentElement
+		): element is FileElementResponse => {
+			return element.type === ContentElementType.File;
 		};
 
 		const onTryMoveRichTextDown = (elementId: string) => {
@@ -53,7 +70,8 @@ export default defineComponent({
 
 		return {
 			ContentElementType,
-			asRichTextElementResponse,
+			isRichTextElementResponse,
+			isFileElementResponse,
 			onTryMoveRichTextDown,
 			onTryMoveRichTextUp,
 		};
