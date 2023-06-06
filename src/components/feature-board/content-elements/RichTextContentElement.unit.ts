@@ -6,6 +6,8 @@ import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 
+jest.mock("../shared/InlineEditInteractionHandler.composable");
+
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
 	type: ContentElementType.RichText,

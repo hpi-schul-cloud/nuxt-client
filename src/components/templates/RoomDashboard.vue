@@ -14,6 +14,20 @@
 				@end="endDragging"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
+					<RoomBoardCard
+						v-if="item.type === cardTypes.ColumnBoard"
+						:ref="`item_${index}`"
+						:key-drag="isDragging"
+						:drag-in-progress="dragInProgress"
+						:column-board-item="item.content"
+						:course-data="{
+							courseName: roomData.title,
+							courseId: roomData.roomId,
+						}"
+						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
+					></RoomBoardCard>
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
@@ -149,6 +163,7 @@ import {
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
@@ -159,6 +174,7 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
+		RoomBoardCard,
 		RoomTaskCard,
 		RoomLessonCard,
 		vCustomDialog,
