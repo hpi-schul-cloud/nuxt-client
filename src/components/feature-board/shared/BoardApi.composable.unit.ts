@@ -35,7 +35,6 @@ const mockApi = {
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerMoveCard: jest.fn(),
 	columnControllerMoveColumn: jest.fn(),
-	generateDataProp: jest.fn(),
 };
 
 jest
