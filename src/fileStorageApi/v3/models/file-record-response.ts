@@ -13,6 +13,8 @@
  */
 
 
+import { FileRecordParentType } from './file-record-parent-type';
+import { FileRecordScanStatus } from './file-record-scan-status';
 
 /**
  * 
@@ -43,7 +45,13 @@ export interface FileRecordResponse {
      * @type {string}
      * @memberof FileRecordResponse
      */
-    securityCheckStatus: FileRecordResponseSecurityCheckStatus;
+    url: string;
+    /**
+     * 
+     * @type {FileRecordScanStatus}
+     * @memberof FileRecordResponse
+     */
+    securityCheckStatus: FileRecordScanStatus;
     /**
      * 
      * @type {number}
@@ -64,40 +72,16 @@ export interface FileRecordResponse {
     mimeType: string;
     /**
      * 
+     * @type {FileRecordParentType}
+     * @memberof FileRecordResponse
+     */
+    parentType: FileRecordParentType;
+    /**
+     * 
      * @type {string}
      * @memberof FileRecordResponse
      */
-    parentType: FileRecordResponseParentType;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FileRecordResponse
-     */
-    deletedSince?: Date;
+    deletedSince?: string;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileRecordResponseSecurityCheckStatus {
-    PENDING = 'pending',
-    VERIFIED = 'verified',
-    BLOCKED = 'blocked',
-    ERROR = 'error'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum FileRecordResponseParentType {
-    USERS = 'users',
-    SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TASKS = 'tasks',
-    LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions'
-}
-
 
 
