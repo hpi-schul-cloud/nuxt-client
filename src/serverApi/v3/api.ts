@@ -190,7 +190,8 @@ export interface BoardElementResponse {
     */
 export enum BoardElementResponseTypeEnum {
     Task = 'task',
-    Lesson = 'lesson'
+    Lesson = 'lesson',
+    ColumnBoard = 'column-board'
 }
 
 /**
@@ -612,9 +613,8 @@ export interface ConsentSessionResponse {
  * @enum {string}
  */
 export enum ContentElementType {
-    File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    File = 'file'
 }
 
 /**
@@ -1318,10 +1318,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | TaskElementContentBody}
+     * @type {RichTextElementContentBody | FileElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | TaskElementContentBody;
+    data: RichTextElementContentBody | FileElementContentBody;
 }
 /**
  * 
@@ -3851,19 +3851,6 @@ export interface TaskCardResponse {
 /**
  * 
  * @export
- * @interface TaskContentBody
- */
-export interface TaskContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskContentBody
-     */
-    dueDate: string;
-}
-/**
- * 
- * @export
  * @interface TaskCopyApiParams
  */
 export interface TaskCopyApiParams {
@@ -3928,25 +3915,6 @@ export interface TaskCreateParams {
      * @memberof TaskCreateParams
      */
     dueDate?: string;
-}
-/**
- * 
- * @export
- * @interface TaskElementContentBody
- */
-export interface TaskElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TaskElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TaskContentBody}
-     * @memberof TaskElementContentBody
-     */
-    content: TaskContentBody;
 }
 /**
  * 
