@@ -56,6 +56,9 @@ describe("CardHost", () => {
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
+			provide: {
+				i18n: { t: (key: string) => key },
+			},
 			propsData: CARD_SKELETON,
 		});
 	};

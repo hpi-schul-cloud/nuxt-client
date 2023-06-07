@@ -9,12 +9,12 @@
 			<VCard
 				ref="cardHost"
 				:height="isLoading ? height : 'auto'"
-				class="w-100 transition-swing"
+				class="transition-swing"
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : 0"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
@@ -53,7 +53,11 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker />
+		<FilePicker
+			@update:file="onFileSelect"
+			:isFilePickerOpen="isFilePickerOpen"
+			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+		/>
 	</div>
 </template>
 
@@ -134,20 +138,21 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = async () => {
-			const { getCreateFn } = useElementTypeSelection();
+		const { askType, createFileElement, isFilePickerOpen } =
+			useElementTypeSelection(addElement);
 
-			const createElement = await getCreateFn();
-			if (createElement) {
-				await createElement(addElement);
-			}
+		const onAddElement = () => {
+			askType();
+		};
 
-			startEditMode();
+		const onFileSelect = async (file: File) => {
+			await createFileElement(file);
 		};
 
 		const onStartEditMode = () => {
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			stopEditMode();
 		};
@@ -180,6 +185,8 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
+			onFileSelect,
+			isFilePickerOpen,
 		};
 	},
 });
@@ -195,5 +202,17 @@ export default defineComponent({
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+</style>
+
+<style>
+.v-card:focus::before {
+	opacity: 0;
+}
+
+.v-card:focus,
+.v-card:focus-within {
+	outline: 2px solid var(--v-secondary-base);
+	outline-offset: 0;
 }
 </style>

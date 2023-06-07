@@ -23,7 +23,7 @@ export type DragAndDropKey =
 	| "Enter";
 
 export const cardDropPlaceholderOptions = {
-	className: "rounded-sm grey lighten-1 my-3",
+	className: "rounded-sm grey lighten-1 my-3 mx-3",
 	animationDuration: "150",
 	showOnTop: false,
 };
