@@ -41,10 +41,10 @@
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { mdiFileDocumentOutline } from "@mdi/js";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
+	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiTrashCanOutline,
