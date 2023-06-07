@@ -1,6 +1,6 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item>
+		<v-list-item :href="fileRecord.url" download>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
@@ -50,6 +50,7 @@ import { FileRecordResponse } from "@/fileStorageApi/v3";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
+	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiFileDocumentOutline,

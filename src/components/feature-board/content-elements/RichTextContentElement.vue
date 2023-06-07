@@ -55,4 +55,10 @@ export default defineComponent({
 	color: rgba(0, 0, 0, 0.87);
 	font-size: 1rem;
 }
+
+::v-deep {
+	.ck.ck-editor__editable_inline > :first-child {
+		margin-top: 0;
+	}
+}
 </style>
