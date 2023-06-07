@@ -613,9 +613,8 @@ export interface ConsentSessionResponse {
  * @enum {string}
  */
 export enum ContentElementType {
-    File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    File = 'file'
 }
 
 /**
@@ -1319,10 +1318,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | TaskElementContentBody}
+     * @type {RichTextElementContentBody | FileElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | TaskElementContentBody;
+    data: RichTextElementContentBody | FileElementContentBody;
 }
 /**
  * 
@@ -3483,19 +3482,6 @@ export interface SchoolInfoResponse {
 /**
  * 
  * @export
- * @interface SetHeightBodyParams
- */
-export interface SetHeightBodyParams {
-    /**
-     * 
-     * @type {number}
-     * @memberof SetHeightBodyParams
-     */
-    height: number;
-}
-/**
- * 
- * @export
  * @interface ShareTokenBodyParams
  */
 export interface ShareTokenBodyParams {
@@ -3865,19 +3851,6 @@ export interface TaskCardResponse {
 /**
  * 
  * @export
- * @interface TaskContentBody
- */
-export interface TaskContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskContentBody
-     */
-    dueDate: string;
-}
-/**
- * 
- * @export
  * @interface TaskCopyApiParams
  */
 export interface TaskCopyApiParams {
@@ -3942,25 +3915,6 @@ export interface TaskCreateParams {
      * @memberof TaskCreateParams
      */
     dueDate?: string;
-}
-/**
- * 
- * @export
- * @interface TaskElementContentBody
- */
-export interface TaskElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TaskElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TaskContentBody}
-     * @memberof TaskElementContentBody
-     */
-    content: TaskContentBody;
 }
 /**
  * 
@@ -5670,7 +5624,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -6083,50 +6037,6 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Update the height of a single card.
-         * @param {string} cardId The id of the card.
-         * @param {SetHeightBodyParams} setHeightBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerUpdateCardHeight: async (cardId: string, setHeightBodyParams: SetHeightBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cardId' is not null or undefined
-            assertParamExists('cardControllerUpdateCardHeight', 'cardId', cardId)
-            // verify required parameter 'setHeightBodyParams' is not null or undefined
-            assertParamExists('cardControllerUpdateCardHeight', 'setHeightBodyParams', setHeightBodyParams)
-            const localVarPath = `/cards/{cardId}/height`
-                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(setHeightBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
@@ -6147,7 +6057,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -6227,18 +6137,6 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Update the height of a single card.
-         * @param {string} cardId The id of the card.
-         * @param {SetHeightBodyParams} setHeightBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerUpdateCardHeight(cardId: string, setHeightBodyParams: SetHeightBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerUpdateCardHeight(cardId, setHeightBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
@@ -6303,17 +6201,6 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Update the height of a single card.
-         * @param {string} cardId The id of the card.
-         * @param {SetHeightBodyParams} setHeightBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerUpdateCardHeight(cardId: string, setHeightBodyParams: SetHeightBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.cardControllerUpdateCardHeight(cardId, setHeightBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Update the title of a single card.
          * @param {string} cardId The id of the card.
          * @param {RenameBodyParams} renameBodyParams 
@@ -6373,17 +6260,6 @@ export interface BoardCardApiInterface {
      * @memberof BoardCardApiInterface
      */
     cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
-
-    /**
-     * 
-     * @summary Update the height of a single card.
-     * @param {string} cardId The id of the card.
-     * @param {SetHeightBodyParams} setHeightBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerUpdateCardHeight(cardId: string, setHeightBodyParams: SetHeightBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -6453,19 +6329,6 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      */
     public cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any) {
         return BoardCardApiFp(this.configuration).cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Update the height of a single card.
-     * @param {string} cardId The id of the card.
-     * @param {SetHeightBodyParams} setHeightBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerUpdateCardHeight(cardId: string, setHeightBodyParams: SetHeightBodyParams, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerUpdateCardHeight(cardId, setHeightBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6631,7 +6494,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -6983,7 +6846,7 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
