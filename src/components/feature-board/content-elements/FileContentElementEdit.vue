@@ -11,7 +11,10 @@
 				}}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
-		<v-list-item style="background: #ffdbe1">
+		<v-list-item
+			v-if="fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED"
+			style="background: #ffdbe1"
+		>
 			<v-list-item-icon class="mr-2">
 				<v-icon color="error">{{ mdiAlertCircle }}</v-icon>
 			</v-list-item-icon>
@@ -26,7 +29,7 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
 import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
@@ -45,6 +48,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
 		return {
+			FileRecordScanStatus,
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			modelCaption,

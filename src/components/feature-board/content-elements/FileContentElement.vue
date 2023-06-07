@@ -26,7 +26,11 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import {
+	FileRecordParentType,
+	FileRecordResponse,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -45,15 +49,24 @@ export default defineComponent({
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
 
+		const refreshFileState = async () => {
+			await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
+			fileRecordModel.value = getFile(parentId.value);
+
+			if (
+				fileRecordModel.value.securityCheckStatus ===
+				FileRecordScanStatus.PENDING
+			) {
+				setTimeout(refreshFileState, 10000);
+			}
+		};
+
 		onMounted(() => {
 			(async () => {
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
-				if (!fileRecordModel.value) {
-					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-					fileRecordModel.value = getFile(parentId.value);
-				}
+				await refreshFileState();
 			})();
 		});
 
