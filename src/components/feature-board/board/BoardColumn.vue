@@ -25,7 +25,7 @@
 		>
 			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
 				<CardHost
-					class="my-3 mx-2"
+					class="my-6 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
@@ -200,5 +200,9 @@ export default defineComponent({
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
 	background: var(--v-secondary-base);
+}
+
+.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+	overflow: visible;
 }
 </style>
