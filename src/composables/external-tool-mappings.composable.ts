@@ -14,6 +14,8 @@ import {
 	ToolConfigurationEntryResponse,
 	SchoolToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
+	ContextExternalToolSearchListResponse,
+	ContextExternalToolResponse,
 } from "@/serverApi/v3";
 import {
 	SchoolExternalTool,
@@ -29,6 +31,7 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 import { SchoolToolConfigurationListItem } from "../store/external-tool/school-tool-configuration-list-item";
 import { SchoolToolConfigurationTemplate } from "../store/external-tool/school-tool-configuration-template";
+import { ContextExternalTool } from "../store/external-tool/context-external-tool";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -84,6 +87,25 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 ]);
 
 export function useExternalToolMappings() {
+	const mapContextExternalToolSearchListResponse = (
+		response: ContextExternalToolSearchListResponse
+	): ContextExternalTool[] => {
+		return response.data.map((toolResponse: ContextExternalToolResponse) =>
+			mapContextExternalToolResponse(toolResponse)
+		);
+	};
+
+	//TODO: N21-575: make correct mapping
+	const mapContextExternalToolResponse = (
+		toolResponse: ContextExternalToolResponse
+	): ContextExternalTool => {
+		return {
+			id: toolResponse.id,
+			name: toolResponse.contextToolName!,
+			logoUrl: toolResponse.schoolToolId,
+			openInNewTab: true,
+		};
+	};
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -255,6 +277,8 @@ export function useExternalToolMappings() {
 	};
 
 	return {
+		mapContextExternalToolSearchListResponse,
+		mapContextExternalToolResponse,
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,

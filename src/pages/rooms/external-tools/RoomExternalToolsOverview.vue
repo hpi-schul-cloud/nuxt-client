@@ -78,13 +78,23 @@ import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import ExternalToolsModule from "@/store/external-tools";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { ToolContextType } from "../../../store/external-tool/tool-context-type.enum";
+import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
@@ -95,6 +105,14 @@ export default defineComponent({
 			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
+
+		const { params } = useRoute();
+		onMounted(async () => {
+			await contextExternalToolsModule?.loadContextExternalTools({
+				contextId: params.id,
+				contextType: ToolContextType.COURSE,
+			});
+		});
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
 			() => contextExternalToolsModule?.getContextExternalTools || []

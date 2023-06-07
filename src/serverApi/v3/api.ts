@@ -13553,7 +13553,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ContextExternalToolSearchListResponse>>> {
+        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13752,7 +13752,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ContextExternalToolSearchListResponse>> {
+        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse> {
             return localVarFp.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13938,7 +13938,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ContextExternalToolSearchListResponse>>;
+    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse>;
 
     /**
      * 

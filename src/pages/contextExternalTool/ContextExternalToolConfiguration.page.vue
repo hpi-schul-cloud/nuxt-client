@@ -220,12 +220,10 @@ export default defineComponent({
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});
-
-				await router.push({ path: `${contextRoute}?tab=tools` });
 			}
 
 			if (!externalToolsModule?.getBusinessError.message) {
-				await router.push({ path: contextRoute });
+				await router.push({ path: contextRoute, query: { tab: "tools" } });
 			}
 		};
 
