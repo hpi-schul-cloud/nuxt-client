@@ -12,15 +12,15 @@
 			ref="columnHeader"
 		>
 			<div class="d-flex align-start justify-space-between py-2 pl-1">
-				<div>
-					<BoardAnyTitleInput
-						:value="title"
-						scope="column"
-						:isEditMode="isEditMode"
-						:placeholder="titlePlaceholder"
-						@update:value="onUpdateTitle"
-					></BoardAnyTitleInput>
-				</div>
+				<!-- <div> -->
+				<BoardAnyTitleInput
+					:value="title"
+					scope="column"
+					:isEditMode="isEditMode"
+					:placeholder="titlePlaceholder"
+					@update:value="onUpdateTitle"
+				></BoardAnyTitleInput>
+				<!-- </div> -->
 				<div class="pt-2">
 					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">

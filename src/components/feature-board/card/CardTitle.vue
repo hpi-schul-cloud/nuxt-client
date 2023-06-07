@@ -1,8 +1,5 @@
 <template>
-	<VCardTitle
-		class="d-flex align-start justify-space-between"
-		v-if="isEditMode || value !== ''"
-	>
+	<VCardTitle class="d-block" v-if="isEditMode || value !== ''">
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"

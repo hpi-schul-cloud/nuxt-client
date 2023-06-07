@@ -1,7 +1,7 @@
 <template>
-	<div class="d-flex flex-grow-1">
-		<!-- v-if="isEditMode" -->
+	<div>
 		<VTextarea
+			v-if="scope === 'card'"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -9,24 +9,62 @@
 			:rows="1"
 			auto-grow
 			flat
-			class="ml-n3 mb-0 w-full"
+			class="w-full mx-n3 mb-n2"
 			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
-			tabindex="0"
 			ref="titleInput"
 			:readonly="!isEditMode"
+			:aria-hidden="!isEditMode"
 		></VTextarea>
-		<!-- <div
-			v-else-if="value && value !== ''"
+
+		<v-text-field
+			v-if="scope === 'column'"
+			ref="titleInput"
+			class="w-full mx-n3 pt-2 d-block"
+			:placeholder="placeholder"
+			v-model="modelValue"
+			hide-details="auto"
+			solo
+			dense
+			flat
+		></v-text-field>
+		<!-- <div class="w-full" v-show="isEditMode">
+				<div
+					role="textbox"
+					contenteditable
+					type="text"
+					class="heading w-full d-block"
+					@input="onInput"
+				>
+					{{ modelValue }}
+				</div>
+			</div> -->
+		<!-- </template> -->
+		<!-- <template v-else> </template> -->
+		<!-- <pre
+			v-show="!isEditMode && hasValue"
 			:aria-level="ariaLevel"
 			role="heading"
 			class="heading"
 		>
 			{{ value }}
-		</div> -->
-		<!-- <div v-else class="heading blue-grey--text darken-1">
+		</pre
+		>
+		<div
+			v-show="!isEditMode && !hasValue"
+			class="heading blue-grey--text darken-1"
+		>
 			{{ placeholder }}
 		</div> -->
+		<!-- </div> -->
+		<div
+			class="d-sr-only"
+			role="heading"
+			:aria-level="ariaLevel"
+			:aria-hidden="isEditMode"
+		>
+			{{ modelValue }}
+		</div>
 	</div>
 </template>
 
@@ -71,6 +109,10 @@ export default defineComponent({
 
 		const { focused: isFocused } = useFocus(titleInput);
 
+		const hasValue = computed<boolean>(
+			() => props.value !== "" && !!props.value
+		);
+
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
 				case "board":
@@ -103,23 +145,25 @@ export default defineComponent({
 			modelValue,
 			titleInput,
 			isFocused,
+			hasValue,
 		};
 	},
 });
 </script>
 
 <style scoped>
+:deep(div.v-input__slot) {
+	padding: 0;
+	color: red !important;
+}
+
 :deep(textarea) {
 	font-size: v-bind(fontSize);
 }
-.heading {
+:deep(input) {
 	font-size: v-bind(fontSize);
-	margin-top: 10px;
-	letter-spacing: normal;
-	padding-right: 15px;
 }
-
-.heading:focus {
-	outline: none;
+:deep(textarea[readonly]) {
+	cursor: pointer;
 }
 </style>
