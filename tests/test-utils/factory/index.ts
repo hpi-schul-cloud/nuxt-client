@@ -7,3 +7,4 @@ export * from "./taskResponseFactory";
 export * from "./taskCardResponseFactory";
 export * from "./courseMetadataResponseFactory";
 export * from "./singleColumnBoardResponseFactory";
+export * from "./schoolToolConfigurationTemplateFactory";
