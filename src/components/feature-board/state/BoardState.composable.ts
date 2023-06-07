@@ -30,8 +30,7 @@ export const useBoardState = (id: string) => {
 
 		const newCardId = await createCardCall(columnId);
 		if (!newCardId) {
-			showFailure();
-			await fetchBoard(board.value.id);
+			await showErrorAndReload();
 			return;
 		}
 
@@ -50,8 +49,7 @@ export const useBoardState = (id: string) => {
 
 		const newColumn = await createColumnCall(board.value.id);
 		if (!newColumn?.id) {
-			showFailure();
-			await fetchBoard(board.value.id);
+			await showErrorAndReload();
 			return;
 		}
 
@@ -66,8 +64,7 @@ export const useBoardState = (id: string) => {
 
 		const newColumn = await createColumn();
 		if (!newColumn?.id) {
-			showFailure();
-			await fetchBoard(board.value.id);
+			await showErrorAndReload();
 			return;
 		}
 		const moveCardPayload: CardMove = {
@@ -81,11 +78,10 @@ export const useBoardState = (id: string) => {
 
 	const deleteCard = async (id: string) => {
 		if (board.value === undefined) return;
-		const deleteCardResponse = await deleteCardCall(id);
+		const response = await deleteCardCall(id);
 
-		if (deleteCardResponse?.status !== HttpStatusCode.NoContent) {
-			showFailure();
-			await fetchBoard(board.value.id);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload();
 			return;
 		}
 		await extractCard(id);
@@ -98,10 +94,10 @@ export const useBoardState = (id: string) => {
 		if (columnIndex < 0) {
 			return;
 		}
-		const deleteColumnResponse = await deleteColumnCall(id);
-		if (deleteColumnResponse?.status !== HttpStatusCode.NoContent) {
-			showFailure();
-			await fetchBoard(board.value.id);
+		const response = await deleteColumnCall(id);
+
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload();
 			return;
 		}
 		board.value.columns.splice(columnIndex, 1);
@@ -135,19 +131,14 @@ export const useBoardState = (id: string) => {
 		isLoading.value = true;
 		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
 
-		const fetchBoardResponse = (
-			await boardsApi.boardControllerGetBoardSkeleton(id)
-		).data;
+		const response = (await boardsApi.boardControllerGetBoardSkeleton(id)).data;
 
-		console.log(fetchBoardResponse);
-
-		if (!fetchBoardResponse?.id) {
-			showFailure(); // custom failure message could be here
-			isLoading.value = false;
+		if (!response?.id) {
+			await showErrorAndReload();
 			return;
 		}
 
-		board.value = { ...fetchBoardResponse, id };
+		board.value = { ...response, id };
 		isLoading.value = false;
 	};
 
@@ -176,14 +167,13 @@ export const useBoardState = (id: string) => {
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
-			const moveCardResponse = await moveCardCall(
+			const response = await moveCardCall(
 				payload.cardId,
 				targetColumnId,
 				addedIndex
 			);
-			if (moveCardResponse?.status !== HttpStatusCode.NoContent) {
-				showFailure();
-				await fetchBoard(board.value.id);
+			if (isErrorCode(response?.status)) {
+				await showErrorAndReload();
 			}
 		}
 	};
@@ -201,29 +191,24 @@ export const useBoardState = (id: string) => {
 		 */
 		await nextTick();
 		board.value.columns.splice(addedIndex, 0, element);
-		const moveColumnResponse = await moveColumnCall(
+		const response = await moveColumnCall(
 			payload.payload,
 			board.value.id,
 			addedIndex
 		);
 
-		if (moveColumnResponse?.status !== HttpStatusCode.NoContent) {
-			showFailure();
-			await fetchBoard(board.value.id);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload();
 		}
 	};
 
 	const updateColumnTitle = async (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
 
-		const updateColumnTitleResponse = await updateColumnTitleCall(
-			columnId,
-			newTitle
-		);
+		const response = await updateColumnTitleCall(columnId, newTitle);
 
-		if (updateColumnTitleResponse?.status !== HttpStatusCode.NoContent) {
-			showFailure();
-			await fetchBoard(board.value.id);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload();
 			return;
 		}
 
@@ -259,6 +244,18 @@ export const useBoardState = (id: string) => {
 			(c) => c.id === columnId
 		);
 		return columnIndex;
+	};
+
+	const isErrorCode = (statusCode: HttpStatusCode) => {
+		if (statusCode >= 300) return true;
+		return false;
+	};
+
+	const showErrorAndReload = async () => {
+		if (board.value === undefined) return;
+
+		showFailure();
+		await fetchBoard(board?.value.id);
 	};
 
 	onMounted(() => fetchBoard(id));
