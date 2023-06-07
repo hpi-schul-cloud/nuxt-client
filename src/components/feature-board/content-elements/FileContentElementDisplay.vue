@@ -1,6 +1,14 @@
 <template>
 	<v-list dense flat class="py-0">
-		<v-list-item :href="fileRecord.url" download>
+		<v-list-item
+			:href="
+				fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
+				fileRecord.securityCheckStatus === FileRecordScanStatus.VERIFIED
+					? fileRecord.url
+					: ''
+			"
+			download
+		>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
