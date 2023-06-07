@@ -1,5 +1,5 @@
 <template>
-	<v-list dense flat class="py-0">
+	<v-list flat class="py-0">
 		<v-list-item>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
