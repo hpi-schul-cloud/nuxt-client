@@ -1,15 +1,16 @@
-import { Route, RouteConfig } from "vue-router";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import {
-	isMongoId,
-	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
+	REGEX_H5P_ID,
 	REGEX_UUID,
+	isMongoId,
+	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
+import { Route, RouteConfig } from "vue-router";
+import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -279,5 +280,17 @@ export const routes: Array<RouteConfig> = [
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
+	},
+	{
+		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		component: () => import("../pages/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		//beforeEnter: createPermissionGuard(["H5P"]),
+	},
+	{
+		path: `/h5p/editor/:id(${REGEX_H5P_ID})`,
+		component: () => import("../pages/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 ];
