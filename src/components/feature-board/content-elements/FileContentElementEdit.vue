@@ -50,7 +50,6 @@ import { FileRecordResponse } from "@/fileStorageApi/v3";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
-	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiFileDocumentOutline,
