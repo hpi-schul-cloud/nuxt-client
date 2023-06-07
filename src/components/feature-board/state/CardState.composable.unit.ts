@@ -1,13 +1,8 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
-import { nextTick } from "vue";
+import Vue, { nextTick } from "vue";
+import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
-import Vue from "vue";
-import { useBoardApi } from "../shared/BoardApi.composable";
-import {
-	cardResponseFactory,
-	timestampsResponseFactory,
-} from "@@/tests/test-utils/factory";
 
 let wrapper: Wrapper<Vue>;
 
@@ -60,39 +55,41 @@ describe("CardState composable", () => {
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
 
-	it("should fetch card on mount", async () => {
-		const cardId = "123124";
-		mountComposable(() => useCardState(cardId));
+	describe("fetchCard", () => {
+		it("should fetch card on mount", async () => {
+			const cardId = "123124";
+			mountComposable(() => useCardState(cardId));
 
-		expect(fetchMock).toHaveBeenCalledWith(cardId);
-	});
+			expect(fetchMock).toHaveBeenCalledWith(cardId);
+		});
 
-	it("should return fetch function that updates card and loading state", async () => {
-		const cardId1 = "123124a";
-		const cardId2 = "123125b";
-		const { fetchCard, isLoading } = mountComposable(() =>
-			useCardState(cardId1)
-		);
+		it("should return fetch function that updates card and loading state", async () => {
+			const cardId1 = "123124a";
+			const cardId2 = "123125b";
+			const { fetchCard, isLoading } = mountComposable(() =>
+				useCardState(cardId1)
+			);
 
-		await fetchCard(cardId2);
-		expect(fetchMock).toHaveBeenLastCalledWith(cardId2);
-		// expect(card.value?.cardId).toBe("abc"); // TODO: refactor after connected to the backend again
-		expect(isLoading.value).toBe(false);
-	});
+			await fetchCard(cardId2);
+			expect(fetchMock).toHaveBeenLastCalledWith(cardId2);
+			// expect(card.value?.cardId).toBe("abc"); // TODO: refactor after connected to the backend again
+			expect(isLoading.value).toBe(false);
+		});
 
-	it("should log on error", async () => {
-		const cardId = "123124";
-		const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-		const errorToThrow = new Error("something went wrong");
+		it("should log on error", async () => {
+			const cardId = "123124";
+			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+			const errorToThrow = new Error("something went wrong");
 
-		fetchMock.mockRejectedValue(errorToThrow);
-		mountComposable(() => useCardState(cardId));
-		await nextTick();
-		await nextTick(); // test mounts it twice
+			fetchMock.mockRejectedValue(errorToThrow);
+			mountComposable(() => useCardState(cardId));
+			await nextTick();
+			await nextTick(); // test mounts it twice
 
-		expect(consoleErrorSpy).toHaveBeenCalledWith(errorToThrow);
+			expect(consoleErrorSpy).toHaveBeenCalledWith(errorToThrow);
 
-		consoleErrorSpy.mockRestore();
+			consoleErrorSpy.mockRestore();
+		});
 	});
 
 	describe("updateTitle", () => {
@@ -120,7 +117,31 @@ describe("CardState composable", () => {
 		});
 		it("should update card title", async () => {});
 	});
-	describe("deleteCard", () => {});
+
+	describe("deleteCard", () => {
+		it("should call deleteCard", async () => {
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+
+			const { deleteCard, card } = mountComposable(() =>
+				useCardState(testCard.id)
+			);
+			card.value = testCard;
+
+			await deleteCard();
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
+				testCard.id
+			);
+		});
+	});
+
 	describe("updateCardHeight", () => {});
 	describe("addElement", () => {});
 });
