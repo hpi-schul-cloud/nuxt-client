@@ -11,6 +11,8 @@
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
 				@update:caption="($event) => (modelValue.caption = $event)"
+				@move-down:element="onTryMoveFileEditDown"
+				@move-up:element="onTryMoveFileEditUp"
 			></FileContentElementEdit>
 		</div>
 		<v-card-text v-else>
@@ -38,7 +40,8 @@ export default defineComponent({
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup(props) {
+	emits: ["move-down:file-edit", "move-up:file-edit"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
 
@@ -63,7 +66,21 @@ export default defineComponent({
 			}
 		});
 
-		return { modelValue, isAutoFocus, fileRecordModel };
+		const onTryMoveFileEditDown = () => {
+			emit("move-down:file-edit");
+		};
+
+		const onTryMoveFileEditUp = () => {
+			emit("move-up:file-edit");
+		};
+
+		return {
+			modelValue,
+			isAutoFocus,
+			fileRecordModel,
+			onTryMoveFileEditDown,
+			onTryMoveFileEditUp,
+		};
 	},
 });
 </script>

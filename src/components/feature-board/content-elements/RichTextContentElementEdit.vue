@@ -28,7 +28,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value", "move-down:element", "move-up:element"],
+	emits: ["update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 

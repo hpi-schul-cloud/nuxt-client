@@ -15,13 +15,13 @@
 		</v-list>
 		<div class="board-menu">
 			<BoardMenu scope="element">
-				<BoardMenuAction>
+				<BoardMenuAction @click="onTryMoveElementUp">
 					<VIcon>
 						{{ mdiArrowCollapseUp }}
 					</VIcon>
 					{{ $t("components.board.action.moveUp") }}
 				</BoardMenuAction>
-				<BoardMenuAction>
+				<BoardMenuAction @click="onTryMoveElementDown">
 					<VIcon>
 						{{ mdiArrowCollapseDown }}
 					</VIcon>
@@ -42,12 +42,12 @@
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { mdiFileDocumentOutline } from "@mdi/js";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
+	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
 
@@ -64,15 +64,26 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:caption"],
+	emits: ["update:caption", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
+
+		const onTryMoveElementDown = async () => {
+			emit("move-down:element");
+		};
+
+		const onTryMoveElementUp = async () => {
+			emit("move-up:element");
+		};
+
 		return {
 			mdiFileDocumentOutline,
 			modelCaption,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
+			onTryMoveElementDown,
+			onTryMoveElementUp,
 		};
 	},
 });

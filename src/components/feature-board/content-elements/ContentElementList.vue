@@ -12,8 +12,8 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				@move-down:rich-text-edit="onTryMoveRichTextDown(element.id)"
-				@move-up:rich-text-edit="onTryMoveRichTextUp(element.id)"
+				@move-down:file-edit="onTryMoveFileDown(element.id)"
+				@move-up:file-edit="onTryMoveFileUp(element.id)"
 			/>
 		</template>
 	</VCardText>
@@ -46,7 +46,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["move-down:rich-text", "move-up:rich-text"],
+	emits: ["move-down:file", "move-up:file"],
 	setup(_, { emit }) {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
@@ -60,20 +60,20 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onTryMoveRichTextDown = (elementId: string) => {
-			emit("move-down:rich-text", elementId);
+		const onTryMoveFileDown = (elementId: string) => {
+			emit("move-down:file", elementId);
 		};
 
-		const onTryMoveRichTextUp = (elementId: string) => {
-			emit("move-up:rich-text", elementId);
+		const onTryMoveFileUp = (elementId: string) => {
+			emit("move-up:file", elementId);
 		};
 
 		return {
 			ContentElementType,
 			isRichTextElementResponse,
 			isFileElementResponse,
-			onTryMoveRichTextDown,
-			onTryMoveRichTextUp,
+			onTryMoveFileDown,
+			onTryMoveFileUp,
 		};
 	},
 });

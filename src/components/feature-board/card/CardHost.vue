@@ -45,8 +45,8 @@
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
-						@move-down:rich-text="onTryMoveContentElementDown"
-						@move-up:rich-text="onTryMoveContentElementUp"
+						@move-down:file="onTryMoveContentElementDown"
+						@move-up:file="onTryMoveContentElementUp"
 					></ContentElementList>
 					<CardAddElementMenu
 						@add-element="onAddElement"
