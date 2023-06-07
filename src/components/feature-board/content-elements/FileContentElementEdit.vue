@@ -11,6 +11,15 @@
 				}}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
+		<v-list-item style="background: #ffdbe1">
+			<v-list-item-icon class="mr-2">
+				<v-icon color="error">{{ mdiAlertCircle }}</v-icon>
+			</v-list-item-icon>
+
+			<v-list-item-content>
+				{{ $t("components.cardElement.fileElement.virusDetected") }}
+			</v-list-item-content>
+		</v-list-item>
 	</v-list>
 </template>
 
@@ -18,7 +27,7 @@
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { mdiFileDocumentOutline } from "@mdi/js";
+import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
@@ -36,6 +45,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
 		return {
+			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			modelCaption,
 		};

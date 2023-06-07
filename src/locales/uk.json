@@ -292,6 +292,7 @@
 	"components.molecules.VCustomChipTimeRemaining.hintMinutes": "",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
+	"components.cardElement.fileElement.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.richTextElement": "Текстовий елемент",
 	"components.cardElement.richTextElement.placeholder": "додати текст",
 	"components.cardElement.titleElement": "Елемент заголовка",
