@@ -1,9 +1,10 @@
+import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
-import { useCardState } from "./CardState.composable";
 import { BoardCard } from "../types/Card";
+import { useCardState } from "./CardState.composable";
 
 let wrapper: Wrapper<Vue>;
 
@@ -156,5 +157,33 @@ describe("CardState composable", () => {
 	});
 
 	describe("updateCardHeight", () => {});
-	describe("addElement", () => {});
+
+	describe("addElement", () => {
+		it("should call addElement", async () => {
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+
+			const { addElement, card } = mountComposable(() =>
+				useCardState(testCard.id)
+			);
+			card.value = testCard;
+
+			const elementType: CreateContentElementBody = {
+				type: ContentElementType.RichText,
+			};
+
+			await addElement(elementType.type);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.createElement).toHaveBeenCalledWith(
+				testCard.id,
+				elementType
+			);
+		});
+	});
 });
