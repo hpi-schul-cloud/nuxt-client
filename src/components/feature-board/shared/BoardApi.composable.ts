@@ -8,6 +8,7 @@ import {
 	CreateContentElementBody,
 	FileElementContent,
 	RichTextElementContent,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
@@ -73,12 +74,14 @@ export const useBoardApi = () => {
 
 	const createCardCall = async (columnId: string) => {
 		const createdCard = await boardColumnApi.columnControllerCreateCard(
-			columnId
+			columnId,
+			{
+				requiredEmptyElements: [
+					CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+				],
+			}
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id, {
-				type: ContentElementType.RichText,
-			});
 			return createdCard.data.id;
 		}
 	};
