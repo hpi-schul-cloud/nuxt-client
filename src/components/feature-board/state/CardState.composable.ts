@@ -73,7 +73,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) return;
 
 		const elementIndex = cardState.card.elements.findIndex(
-			(element) => element.id === elementId
+			(element: AnyContentElement) => element.id === elementId
 		);
 		if (elementIndex > -1) {
 			const extractedElements = cardState.card.elements.splice(elementIndex, 1);
@@ -91,7 +91,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 		const elementIndex = cardState.card.elements.findIndex(
-			(element) => element.id === elementId
+			(element: AnyContentElement) => element.id === elementId
 		);
 		if (
 			elementIndex === cardState.card.elements.length - 1 ||
@@ -112,7 +112,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 		const elementIndex = cardState.card.elements.findIndex(
-			(element) => element.id === elementId
+			(element: AnyContentElement) => element.id === elementId
 		);
 		if (elementIndex <= 0) {
 			return;

@@ -13,13 +13,19 @@
 
 			<v-list-item-icon>
 				<BoardMenu scope="element">
-					<BoardMenuAction @click="onTryMoveElementUp">
+					<BoardMenuAction
+						v-if="hasMultipleElements && !isFirstElement"
+						@click="onTryMoveElementUp"
+					>
 						<VIcon>
 							{{ mdiArrowCollapseUp }}
 						</VIcon>
 						{{ $t("components.board.action.moveUp") }}
 					</BoardMenuAction>
-					<BoardMenuAction @click="onTryMoveElementDown">
+					<BoardMenuAction
+						v-if="hasMultipleElements && !isLastElement"
+						@click="onTryMoveElementDown"
+					>
 						<VIcon>
 							{{ mdiArrowCollapseDown }}
 						</VIcon>
@@ -62,6 +68,9 @@ export default defineComponent({
 			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: ["update:caption", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {

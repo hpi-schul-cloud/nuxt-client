@@ -11,7 +11,9 @@
 				v-else-if="isFileElementResponse(element)"
 				:key="element.id"
 				:element="element"
-				:isEditMode="isEditMode"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
 				@move-down:file-edit="onTryMoveFileDown(element.id)"
 				@move-up:file-edit="onTryMoveFileUp(element.id)"
 			/>
@@ -47,7 +49,7 @@ export default defineComponent({
 		},
 	},
 	emits: ["move-down:file", "move-up:file"],
-	setup(_, { emit }) {
+	setup(props, { emit }) {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
@@ -68,10 +70,41 @@ export default defineComponent({
 			emit("move-up:file", elementId);
 		};
 
+		const hasMultipleElements = () => props.elements.length > 0;
+
+		const isFirstElement = (elementId: string) => {
+			const elementIndex = props.elements.findIndex(
+				(element: AnyContentElement) => element.id === elementId
+			);
+
+			if (elementIndex === -1) {
+				return false;
+			}
+
+			const isFirstElement = elementIndex === 0;
+			return isFirstElement && hasMultipleElements;
+		};
+
+		const isLastElement = (elementId: string) => {
+			const elementIndex = props.elements.findIndex(
+				(element: AnyContentElement) => element.id === elementId
+			);
+
+			if (elementIndex === -1) {
+				return false;
+			}
+
+			const isLastElement = elementIndex === props.elements.length - 1;
+			return isLastElement && hasMultipleElements;
+		};
+
 		return {
 			ContentElementType,
-			isRichTextElementResponse,
+			hasMultipleElements,
 			isFileElementResponse,
+			isFirstElement,
+			isLastElement,
+			isRichTextElementResponse,
 			onTryMoveFileDown,
 			onTryMoveFileUp,
 		};

@@ -10,6 +10,9 @@
 				v-if="isEditMode"
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
 				@update:caption="($event) => (modelValue.caption = $event)"
 				@move-down:element="onTryMoveFileEditDown"
 				@move-up:element="onTryMoveFileEditUp"
@@ -39,6 +42,9 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: ["move-down:file-edit", "move-up:file-edit"],
 	setup(props, { emit }) {
