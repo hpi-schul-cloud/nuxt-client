@@ -3,6 +3,7 @@ import Vue, { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
+import { BoardCard } from "../types/Card";
 
 let wrapper: Wrapper<Vue>;
 
@@ -93,29 +94,41 @@ describe("CardState composable", () => {
 	});
 
 	describe("updateTitle", () => {
-		// WIP
-		it("should call updateCardTitle", async () => {
-			const testCard = {
-				id: `cardid`,
-				height: 200,
-				title: "old Title",
-				elements: [],
-				visibility: { publishedAt: },
-			};
+		const boardCard: BoardCard = {
+			id: `cardid`,
+			height: 200,
+			title: "old Title",
+			elements: [],
+			visibility: { publishedAt: new Date().toUTCString() },
+		};
 
+		it("should call updateCardTitle", async () => {
 			const { updateTitle, card } = mountComposable(() =>
-				useCardState(testCard.id)
+				useCardState(boardCard.id)
 			);
-			card.value = testCard;
+			card.value = boardCard;
+
 			await updateTitle("new title");
 			await nextTick();
-			await nextTick();
+
 			expect(mockedBoardApiCalls.updateCardTitle).toHaveBeenCalledWith(
-				testCard.id,
-				testCard.title
+				boardCard.id,
+				boardCard.title
 			);
 		});
-		it("should update card title", async () => {});
+
+		it("should update card title", async () => {
+			const newTitle = "new Title";
+			const { updateTitle, card } = mountComposable(() =>
+				useCardState(boardCard.id)
+			);
+			card.value = boardCard;
+
+			await updateTitle(newTitle);
+			await nextTick();
+
+			expect(boardCard.title).toEqual(newTitle);
+		});
 	});
 
 	describe("deleteCard", () => {
