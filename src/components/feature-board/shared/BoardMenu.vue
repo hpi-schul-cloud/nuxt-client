@@ -13,16 +13,16 @@
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
 					<template v-if="scope === 'board'">{{
-						$t("components.board.menu.board").toString()
+						$t("components.board.menu.board")
 					}}</template>
 					<template v-if="scope === 'column'">{{
-						$t("components.board.menu.column").toString()
+						$t("components.board.menu.column")
 					}}</template>
 					<template v-if="scope === 'card'">{{
-						$t("components.board.menu.card").toString()
+						$t("components.board.menu.card")
 					}}</template>
 					<template v-if="scope === 'element'">{{
-						$t("components.board.menu.element").toString()
+						$t("components.board.menu.element")
 					}}</template>
 				</span>
 			</VBtn>
