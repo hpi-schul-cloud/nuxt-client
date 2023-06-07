@@ -228,13 +228,14 @@ export function useExternalToolMappings() {
 			),
 		};
 	};
+
 	const mapToolConfigurationTemplateToContextExternalToolPostParams = (
-		template: ToolConfigurationTemplate,
+		template: SchoolToolConfigurationTemplate,
 		contextId: string,
 		contextType: ToolContextType
 	): ContextExternalToolPostParams => {
 		return {
-			schoolToolId: template.id,
+			schoolToolId: template.schoolToolId,
 			contextId,
 			contextType,
 			contextToolName: template.name,
