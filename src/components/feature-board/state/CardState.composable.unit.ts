@@ -155,6 +155,43 @@ describe("CardState composable", () => {
 		});
 	});
 
-	describe("updateCardHeight", () => {});
+	describe("updateCardHeight", () => {
+		const boardCard: BoardCard = {
+			id: `cardid`,
+			height: 200,
+			title: "old Title",
+			elements: [],
+			visibility: { publishedAt: new Date().toUTCString() },
+		};
+
+		it("should call updateCardHeightCall", async () => {
+			const { updateCardHeight, card } = mountComposable(() =>
+				useCardState(boardCard.id)
+			);
+			card.value = boardCard;
+			const newHeight = 300;
+
+			await updateCardHeight(newHeight);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateCardHeightCall).toHaveBeenCalledWith(
+				boardCard.id,
+				newHeight
+			);
+		});
+
+		it("should update card height", async () => {
+			const newHeight = 300;
+			const { updateCardHeight, card } = mountComposable(() =>
+				useCardState(boardCard.id)
+			);
+			card.value = boardCard;
+
+			await updateCardHeight(newHeight);
+			await nextTick();
+
+			expect(boardCard.height).toEqual(newHeight);
+		});
+	});
 	describe("addElement", () => {});
 });
