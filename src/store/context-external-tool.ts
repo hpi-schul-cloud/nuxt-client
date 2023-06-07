@@ -66,7 +66,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
-			console.log("payload: ", payload); //TODO N21-575: remove
 
 			if (payload.contextId && payload.contextType) {
 				const tools: AxiosResponse<ContextExternalToolSearchListResponse> =
@@ -74,17 +73,12 @@ export default class ContextExternalToolsModule extends VuexModule {
 						payload.contextId,
 						payload.contextType
 					);
-				console.log("tools nach dem call: ", tools); //TODO N21-575: remove
 
 				this.setContextExternalTools(
 					useExternalToolMappings().mapContextExternalToolSearchListResponse(
 						tools.data
 					)
 				);
-				console.log(
-					"ContextExternalTools nach dem mapping: ",
-					this.getContextExternalTools
-				); //TODO N21-575: remove
 			}
 
 			this.setLoading(false);

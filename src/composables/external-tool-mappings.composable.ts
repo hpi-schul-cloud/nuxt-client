@@ -95,17 +95,17 @@ export function useExternalToolMappings() {
 		);
 	};
 
-	//TODO: N21-575: make correct mapping
 	const mapContextExternalToolResponse = (
 		toolResponse: ContextExternalToolResponse
 	): ContextExternalTool => {
 		return {
 			id: toolResponse.id,
 			name: toolResponse.contextToolName!,
-			logoUrl: toolResponse.schoolToolId,
+			logoUrl: toolResponse.schoolToolId, //TODO N21-575 map after serverimplementation
 			openInNewTab: true,
 		};
 	};
+
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {

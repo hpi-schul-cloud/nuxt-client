@@ -707,6 +707,12 @@ export interface ContextExternalToolResponse {
      * @memberof ContextExternalToolResponse
      */
     toolVersion: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    logoUrl?: string;
 }
 
 /**
