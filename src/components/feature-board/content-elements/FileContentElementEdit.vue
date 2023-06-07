@@ -1,41 +1,40 @@
 <template>
-	<div class="file-content-edit">
-		<v-list dense flat class="py-0">
-			<v-list-item :href="fileRecord.url" download>
-				<v-list-item-icon class="mr-2">
-					<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
-				</v-list-item-icon>
+	<v-list dense flat class="py-0">
+		<v-list-item>
+			<v-list-item-icon class="mr-2">
+				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
+			</v-list-item-icon>
 
-				<v-list-item-content>
-					<v-list-item-title style="color: var(--v-primary-base)">{{
-						fileRecord.name
-					}}</v-list-item-title>
-				</v-list-item-content>
-			</v-list-item>
-		</v-list>
-		<div class="board-menu">
-			<BoardMenu scope="element">
-				<BoardMenuAction>
-					<VIcon>
-						{{ mdiArrowCollapseUp }}
-					</VIcon>
-					{{ $t("components.board.action.moveUp") }}
-				</BoardMenuAction>
-				<BoardMenuAction>
-					<VIcon>
-						{{ mdiArrowCollapseDown }}
-					</VIcon>
-					{{ $t("components.board.action.moveDown") }}
-				</BoardMenuAction>
-				<BoardMenuAction>
-					<VIcon>
-						{{ mdiTrashCanOutline }}
-					</VIcon>
-					{{ $t("components.board.action.delete") }}
-				</BoardMenuAction>
-			</BoardMenu>
-		</div>
-	</div>
+			<v-list-item-content>
+				<v-list-item-title style="color: var(--v-primary-base)">{{
+					fileRecord.name
+				}}</v-list-item-title>
+			</v-list-item-content>
+
+			<v-list-item-icon>
+				<BoardMenu scope="element">
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiArrowCollapseUp }}
+						</VIcon>
+						{{ $t("components.board.action.moveUp") }}
+					</BoardMenuAction>
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiArrowCollapseDown }}
+						</VIcon>
+						{{ $t("components.board.action.moveDown") }}
+					</BoardMenuAction>
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiTrashCanOutline }}
+						</VIcon>
+						{{ $t("components.board.action.delete") }}
+					</BoardMenuAction>
+				</BoardMenu>
+			</v-list-item-icon>
+		</v-list-item>
+	</v-list>
 </template>
 
 <script lang="ts">
@@ -77,14 +76,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.file-content-edit {
-	position: relative;
-}
-
-.board-menu {
-	position: absolute;
-	top: 7px;
-	right: 0;
-}
-</style>
