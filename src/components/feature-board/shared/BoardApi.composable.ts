@@ -78,7 +78,7 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id, {
+			await createElement(createdCard.data.id, {
 				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
