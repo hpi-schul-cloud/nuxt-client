@@ -190,7 +190,8 @@ export interface BoardElementResponse {
     */
 export enum BoardElementResponseTypeEnum {
     Task = 'task',
-    Lesson = 'lesson'
+    Lesson = 'lesson',
+    ColumnBoard = 'column-board'
 }
 
 /**
