@@ -1,6 +1,6 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecordModel">
+		<div v-if="fileRecordModel?.id">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
 				:caption="modelValue.caption"
@@ -21,12 +21,12 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, watch, ref, onMounted } from "vue";
+import { defineComponent, PropType, ref, onMounted, computed } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -40,30 +40,29 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
+		const { fetchFiles, fileRecords } = useFileStorageApi();
 
-		const fileRecordModel = ref<FileRecordResponse>();
-		const parentId = ref<string>("");
+		const parentId = ref<string>(props.element.id);
+
+		const fileRecordModel = computed(() => {
+			const fileRecord = fileRecords.value[parentId.value];
+
+			return fileRecord;
+		});
 
 		onMounted(() => {
 			(async () => {
-				parentId.value = props.element.id;
-				fileRecordModel.value = getFile(parentId.value);
-
 				if (!fileRecordModel.value) {
 					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-					fileRecordModel.value = getFile(parentId.value);
 				}
 			})();
 		});
 
-		watch(newFileForParent, (newValue) => {
-			if (newValue === parentId.value) {
-				fileRecordModel.value = getFile(parentId.value);
-			}
-		});
-
-		return { modelValue, isAutoFocus, fileRecordModel };
+		return {
+			modelValue,
+			isAutoFocus,
+			fileRecordModel,
+		};
 	},
 });
 </script>

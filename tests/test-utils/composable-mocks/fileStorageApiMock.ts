@@ -1,7 +1,7 @@
 import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
-import { reactive, ref } from "vue";
-import { jest } from "@jest/globals";
 import { BusinessError } from "@/store/types/commons";
+import { jest } from "@jest/globals";
+import { ref } from "vue";
 
 interface Props {
 	uploadMock?: jest.Mock;
@@ -25,7 +25,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 		statusCode: "",
 		message: "",
 	});
-	const fileRecords = reactive({});
+	const fileRecords = ref({});
 	const newFileForParent = ref("");
 
 	const mocks = {

@@ -10,11 +10,11 @@ import { BusinessError } from "@/store/types/commons";
 import { $axios } from "@/utils/api";
 import { downloadFile } from "@/utils/fileHelper";
 import { createSharedComposable } from "@vueuse/core";
-import { reactive, ref } from "vue";
+import { ref, set } from "vue";
 
 export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecords: Record<FileRecord["parentId"], FileRecord> = reactive({});
+	const fileRecords = ref<Record<FileRecord["parentId"], FileRecord>>({});
 	const newFileForParent = ref("");
 
 	const businessError = ref<BusinessError>({
@@ -86,20 +86,20 @@ export const useFileStorageApi = createSharedComposable(() => {
 
 	const setFiles = (files: FileRecord[]) => {
 		files.forEach((file) => {
-			fileRecords[file.parentId] = file;
+			set(fileRecords.value, `${file.parentId}`, file);
 		});
 	};
 
 	const getFile = (parentId: FileRecord["parentId"]) => {
-		return fileRecords[parentId];
+		return fileRecords.value[parentId];
 	};
 
 	const appendFile = (file: FileRecord) => {
-		fileRecords[file.parentId] = file;
+		set(fileRecords.value, `${file.parentId}`, file);
 	};
 
 	const replaceFile = (file: FileRecord) => {
-		fileRecords[file.parentId] = file;
+		set(fileRecords.value, `${file.parentId}`, file);
 	};
 
 	const setBusinessError = (error: BusinessError): void => {
