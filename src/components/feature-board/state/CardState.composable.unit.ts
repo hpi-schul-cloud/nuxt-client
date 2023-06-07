@@ -70,4 +70,9 @@ describe("CardState composable", () => {
 
 		consoleErrorSpy.mockRestore();
 	});
+
+	describe("updateTitle", () => {});
+	describe("deleteCard", () => {});
+	describe("updateCardHeight", () => {});
+	describe("addElement", () => {});
 });
