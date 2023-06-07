@@ -3,6 +3,11 @@ import { nextTick } from "vue";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { useCardState } from "./CardState.composable";
 import Vue from "vue";
+import { useBoardApi } from "../shared/BoardApi.composable";
+import {
+	cardResponseFactory,
+	timestampsResponseFactory,
+} from "@@/tests/test-utils/factory";
 
 let wrapper: Wrapper<Vue>;
 
@@ -25,8 +30,12 @@ const mountComposable = <R>(composable: () => R): R => {
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
+jest.mock("../shared/BoardApi.composable");
+const mockedUseBoardApi = jest.mocked(useBoardApi);
+
 describe("CardState composable", () => {
 	let fetchMock: jest.Mock;
+	let mockedBoardApiCalls: ReturnType<typeof useBoardApi>;
 	beforeEach(() => {
 		fetchMock = jest.fn().mockResolvedValue({
 			id: "abc",
@@ -34,6 +43,21 @@ describe("CardState composable", () => {
 		mockedUseSharedCardRequestPool.mockReturnValue({
 			fetchCard: fetchMock,
 		});
+
+		mockedBoardApiCalls = {
+			updateCardTitle: jest.fn(),
+			createColumnCall: jest.fn(),
+			createElement: jest.fn(),
+			deleteCardCall: jest.fn(),
+			deleteColumnCall: jest.fn(),
+			moveCardCall: jest.fn(),
+			moveColumnCall: jest.fn(),
+			updateCardHeightCall: jest.fn(),
+			updateColumnTitleCall: jest.fn(),
+			updateElementCall: jest.fn(),
+			createCardCall: jest.fn(),
+		};
+		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
 
 	it("should fetch card on mount", async () => {
@@ -71,7 +95,31 @@ describe("CardState composable", () => {
 		consoleErrorSpy.mockRestore();
 	});
 
-	describe("updateTitle", () => {});
+	describe("updateTitle", () => {
+		// WIP
+		it("should call updateCardTitle", async () => {
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: },
+			};
+
+			const { updateTitle, card } = mountComposable(() =>
+				useCardState(testCard.id)
+			);
+			card.value = testCard;
+			await updateTitle("new title");
+			await nextTick();
+			await nextTick();
+			expect(mockedBoardApiCalls.updateCardTitle).toHaveBeenCalledWith(
+				testCard.id,
+				testCard.title
+			);
+		});
+		it("should update card title", async () => {});
+	});
 	describe("deleteCard", () => {});
 	describe("updateCardHeight", () => {});
 	describe("addElement", () => {});
