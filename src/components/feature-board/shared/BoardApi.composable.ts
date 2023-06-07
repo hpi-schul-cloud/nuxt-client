@@ -24,11 +24,13 @@ export const useBoardApi = () => {
 	};
 
 	const updateCardTitle = async (id: string, title: string) => {
-		await cardsApi.cardControllerUpdateCardTitle(id, { title });
+		return await cardsApi.cardControllerUpdateCardTitle(id, { title });
 	};
 
 	const updateColumnTitleCall = async (id: string, title: string) => {
-		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
+		return await boardColumnApi.columnControllerUpdateColumnTitle(id, {
+			title,
+		});
 	};
 
 	const updateElementCall = async (element: AnyContentElement) => {
@@ -64,11 +66,11 @@ export const useBoardApi = () => {
 	};
 
 	const deleteCardCall = async (cardId: string) => {
-		await cardsApi.cardControllerDeleteCard(cardId);
+		return await cardsApi.cardControllerDeleteCard(cardId);
 	};
 
 	const deleteColumnCall = async (columnId: string) => {
-		await boardColumnApi.columnControllerDeleteColumn(columnId);
+		return await boardColumnApi.columnControllerDeleteColumn(columnId);
 	};
 
 	const createCardCall = async (columnId: string) => {
@@ -88,7 +90,7 @@ export const useBoardApi = () => {
 		toColumnId: string,
 		toPosition: number
 	) => {
-		await cardsApi.cardControllerMoveCard(cardId, {
+		return await cardsApi.cardControllerMoveCard(cardId, {
 			toColumnId,
 			toPosition,
 		});
@@ -99,7 +101,7 @@ export const useBoardApi = () => {
 		toBoardId: string,
 		toPosition: number
 	) => {
-		await boardColumnApi.columnControllerMoveColumn(columnId, {
+		return await boardColumnApi.columnControllerMoveColumn(columnId, {
 			toBoardId,
 			toPosition,
 		});

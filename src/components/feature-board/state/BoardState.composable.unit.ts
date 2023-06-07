@@ -26,7 +26,7 @@ describe("BoardState composable", () => {
 	beforeEach(() => {
 		const boardControllerGetBoardSkeleton = jest
 			.fn()
-			.mockResolvedValue({ data: {} });
+			.mockResolvedValue({ data: { id: "board-id" } });
 		mockApi = { boardControllerGetBoardSkeleton };
 
 		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(mockApi);

@@ -5,6 +5,8 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const {
 	createColumnCall,
@@ -16,6 +18,8 @@ const {
 	createCardCall,
 } = useBoardApi();
 
+const { showFailure } = useBoardNotifier();
+
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
@@ -25,22 +29,32 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const newCardId = await createCardCall(columnId);
-		if (newCardId) {
-			const columnIndex = board.value.columns.findIndex(
-				(column) => column.id === columnId
-			);
-			board.value.columns[columnIndex].cards.push({
-				cardId: newCardId,
-				height: 120,
-			});
-			setEditModeId(newCardId);
+		if (!newCardId) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
 		}
+
+		const columnIndex = board.value.columns.findIndex(
+			(column) => column.id === columnId
+		);
+		board.value.columns[columnIndex].cards.push({
+			cardId: newCardId,
+			height: 120,
+		});
+		setEditModeId(newCardId);
 	};
 
 	const createColumn = async () => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumnCall(board.value.id);
+		if (!newColumn?.id) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
+		}
+
 		setEditModeId(newColumn.id);
 		await fetchBoard(board.value.id);
 
@@ -51,20 +65,29 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumn();
-
-		if (newColumn) {
-			const moveCardPayload: CardMove = {
-				addedIndex: 0,
-				removedIndex: null,
-				columnId: newColumn.id,
-				payload: { cardId: movingCardId, height: 100 },
-			};
-			await moveCard(moveCardPayload);
+		if (!newColumn?.id) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
 		}
+		const moveCardPayload: CardMove = {
+			addedIndex: 0,
+			removedIndex: null,
+			columnId: newColumn.id,
+			payload: { cardId: movingCardId, height: 100 },
+		};
+		await moveCard(moveCardPayload);
 	};
 
 	const deleteCard = async (id: string) => {
-		await deleteCardCall(id);
+		if (board.value === undefined) return;
+		const deleteCardResponse = await deleteCardCall(id);
+
+		if (deleteCardResponse?.status !== HttpStatusCode.NoContent) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
+		}
 		await extractCard(id);
 	};
 
@@ -72,10 +95,16 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const columnIndex = getColumnIndex(id);
-		if (columnIndex > -1) {
-			await deleteColumnCall(id);
-			board.value.columns.splice(columnIndex, 1);
+		if (columnIndex < 0) {
+			return;
 		}
+		const deleteColumnResponse = await deleteColumnCall(id);
+		if (deleteColumnResponse?.status !== HttpStatusCode.NoContent) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
+		}
+		board.value.columns.splice(columnIndex, 1);
 	};
 
 	const extractCard = async (
@@ -105,10 +134,20 @@ export const useBoardState = (id: string) => {
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
 		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
-		board.value = {
-			...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
-			id,
-		};
+
+		const fetchBoardResponse = (
+			await boardsApi.boardControllerGetBoardSkeleton(id)
+		).data;
+
+		console.log(fetchBoardResponse);
+
+		if (!fetchBoardResponse?.id) {
+			showFailure(); // custom failure message could be here
+			isLoading.value = false;
+			return;
+		}
+
+		board.value = { ...fetchBoardResponse, id };
 		isLoading.value = false;
 	};
 
@@ -137,7 +176,15 @@ export const useBoardState = (id: string) => {
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
-			await moveCardCall(payload.cardId, targetColumnId, addedIndex);
+			const moveCardResponse = await moveCardCall(
+				payload.cardId,
+				targetColumnId,
+				addedIndex
+			);
+			if (moveCardResponse?.status !== HttpStatusCode.NoContent) {
+				showFailure();
+				await fetchBoard(board.value.id);
+			}
 		}
 	};
 
@@ -154,13 +201,32 @@ export const useBoardState = (id: string) => {
 		 */
 		await nextTick();
 		board.value.columns.splice(addedIndex, 0, element);
-		await moveColumnCall(payload.payload, board.value.id, addedIndex);
+		const moveColumnResponse = await moveColumnCall(
+			payload.payload,
+			board.value.id,
+			addedIndex
+		);
+
+		if (moveColumnResponse?.status !== HttpStatusCode.NoContent) {
+			showFailure();
+			await fetchBoard(board.value.id);
+		}
 	};
 
 	const updateColumnTitle = async (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
 
-		await updateColumnTitleCall(columnId, newTitle);
+		const updateColumnTitleResponse = await updateColumnTitleCall(
+			columnId,
+			newTitle
+		);
+
+		if (updateColumnTitleResponse?.status !== HttpStatusCode.NoContent) {
+			showFailure();
+			await fetchBoard(board.value.id);
+			return;
+		}
+
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex > -1) {
 			board.value.columns[columnIndex].title = newTitle;
