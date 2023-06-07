@@ -193,7 +193,7 @@ describe("CardState composable", () => {
 
 			expect(boardCard.height).toEqual(newHeight);
 		});
-	});,
+	});
 
 	describe("addElement", () => {
 		it("should call addElement", async () => {
