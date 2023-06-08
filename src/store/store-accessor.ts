@@ -15,7 +15,6 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import ExternalToolsModule from "@/store/external-tools";
 import FilePaths from "@/store/filePaths";
-import FilesPOCModule from "@/store/files-poc";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
@@ -46,7 +45,6 @@ export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
 export let externalToolsModule: ExternalToolsModule;
 export let filePathsModule: FilePaths;
-export let filesPOCModule: FilesPOCModule;
 export let finishedTasksModule: FinishedTasksModule;
 export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
@@ -74,7 +72,6 @@ export function initializeStores(store: Store<any>): void {
 	envConfigModule = getModule(EnvConfigModule, store);
 	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
-	filesPOCModule = getModule(FilesPOCModule, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
@@ -105,7 +102,6 @@ export const modules = {
 	envConfigModule: EnvConfigModule,
 	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
-	filesPOCModule: FilesPOCModule,
 	finishedTasksModule: FinishedTasksModule,
 	importUsersModule: ImportUsersModule,
 	loadingStateModule: LoadingStateModule,

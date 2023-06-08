@@ -14,7 +14,9 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MIGRATION_END_GRACE_PERIOD_MS: process.env.MIGRATION_END_GRACE_PERIOD_MS,
+	MIGRATION_END_GRACE_PERIOD_MS: Number(
+		process.env.MIGRATION_END_GRACE_PERIOD_MS
+	),
 };
 
 const retryLimit = 10;

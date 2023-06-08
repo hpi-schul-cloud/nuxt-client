@@ -902,6 +902,8 @@
 	"pages.room.taskCard.label.edit": "Edit",
 	"pages.room.taskCard.label.shareTask": "Share task copy",
 	"pages.room.taskCard.label.betaTask": "Beta task",
+	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.itemDelete.text": "Are you sure, you want to delete item \"{itemTitle}\"?",
