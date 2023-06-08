@@ -101,7 +101,7 @@ export function useExternalToolMappings() {
 		return {
 			id: toolResponse.id,
 			name: toolResponse.contextToolName!,
-			logoUrl: toolResponse.schoolToolId, //TODO N21-575 map after serverimplementation
+			logoUrl: "",
 			openInNewTab: true,
 		};
 	};

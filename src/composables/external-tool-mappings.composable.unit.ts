@@ -1,5 +1,8 @@
 import {
 	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ContextExternalToolResponseContextTypeEnum,
+	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -9,7 +12,7 @@ import {
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolSearchListResponse,
+	SchoolExternalToolSearchListResponse
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
@@ -30,6 +33,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { ToolContextType } from "../store/external-tool/tool-context-type.enum";
 import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
+import { ContextExternalTool } from "../store/external-tool/context-external-tool";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -49,6 +53,8 @@ describe("useExternalToolUtils", () => {
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
+			mapContextExternalToolResponse,
+			mapContextExternalToolSearchListResponse,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
@@ -72,6 +78,26 @@ describe("useExternalToolUtils", () => {
 
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
+		};
+
+		const contextToolResponse: ContextExternalToolResponse = {
+			id: "id",
+			contextToolName: "contextToolName",
+			contextId: "contextId",
+			schoolToolId: "schoolToolId",
+			toolVersion: 1,
+			parameters: [
+				{
+					name: "name",
+					value: "value",
+				},
+			],
+			contextType: ContextExternalToolResponseContextTypeEnum.Course,
+			logoUrl: "logoUrl",
+		};
+
+		const contextListResponse: ContextExternalToolSearchListResponse = {
+			data: [contextToolResponse],
 		};
 
 		const schoolExternaToolItem: SchoolExternalToolItem = {
@@ -126,10 +152,13 @@ describe("useExternalToolUtils", () => {
 
 		return {
 			listResponse,
+			contextListResponse,
 			toolResponse,
 			schoolExternaToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
+			mapContextExternalToolResponse,
+			mapContextExternalToolSearchListResponse,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
@@ -172,6 +201,44 @@ describe("useExternalToolUtils", () => {
 							parameters: toolResponse.parameters,
 							version: toolResponse.toolVersion,
 							status: SchoolExternalToolStatus.Latest,
+						},
+					])
+				);
+			});
+		});
+	});
+
+	describe("mapContextExternalToolSearchListResponse is called", () => {
+		describe("when maps the response", () => {
+			it("should return a contextExternalTool array", () => {
+				const {
+					mapContextExternalToolSearchListResponse,
+					contextListResponse,
+					setup();
+
+				const contextExternalTools: ContextExternalTool[] =
+					mapContextExternalToolSearchListResponse(contextListResponse);
+
+				expect(Array.isArray(contextExternalTools)).toBeTruthy();
+			});
+
+			it("should map the response correctly", () => {
+				const {
+					mapContextExternalToolSearchListResponse,
+					contextListResponse,
+					contextToolResponse,
+				} = setup();
+
+				const contextExternalTools: ContextExternalTool[] =
+					mapContextExternalToolSearchListResponse(contextListResponse);
+
+				expect(contextExternalTools).toEqual(
+					expect.objectContaining<ContextExternalTool[]>([
+						{
+							id: contextToolResponse.id,
+							name: contextToolResponse.name,
+							logoUrl: contextToolResponse.logoUrl,
+							openInNewTab: contextToolResponse.openInNewTab,
 						},
 					])
 				);

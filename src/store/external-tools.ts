@@ -345,7 +345,6 @@ export default class ExternalToolsModule extends VuexModule {
 		}
 	}
 
-	// TODO: test the real endpoint
 	@Action
 	async loadAvailableToolConfigurationsForContext(payload: {
 		contextId: string;
