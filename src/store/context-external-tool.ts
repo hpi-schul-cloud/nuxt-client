@@ -58,6 +58,13 @@ export default class ContextExternalToolsModule extends VuexModule {
 		};
 	}
 
+	@Mutation
+	removeContextExternalTool(toolId: string): void {
+		this.contextExternalTools = this.contextExternalTools.filter(
+			(tool: ContextExternalTool) => tool.id !== toolId
+		);
+	}
+
 	@Action
 	async loadContextExternalTools(payload: {
 		contextId: string;
@@ -85,6 +92,28 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: any) {
 			console.log(
 				`Some error occurred while loading available tools for scope CONTEXT and contextId ${payload.contextId}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
+	}
+
+	@Action
+	async deleteContextExternalTool(toolId: string): Promise<void> {
+		try {
+			this.setLoading(true);
+
+			await this.toolApi.toolContextControllerDeleteContextExternalTool(toolId);
+			this.removeContextExternalTool(toolId);
+
+			this.setLoading(false);
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while deleting tool configuration with id ${toolId}: ${error}`
 			);
 			this.setBusinessError({
 				...error,

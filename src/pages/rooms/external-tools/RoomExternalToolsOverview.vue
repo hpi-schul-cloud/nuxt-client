@@ -136,8 +136,12 @@ export default defineComponent({
 			isDeleteDialogOpen.value = false;
 		};
 
-		const onDeleteTool = () => {
-			console.log("Delete Tool");
+		const onDeleteTool = async () => {
+			if (itemToDelete.value) {
+				await contextExternalToolsModule?.deleteContextExternalTool(
+					itemToDelete.value.id
+				);
+			}
 
 			onCloseDeleteDialog();
 		};
