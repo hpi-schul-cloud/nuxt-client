@@ -12,7 +12,7 @@ import {
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolSearchListResponse
+	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
@@ -154,6 +154,7 @@ describe("useExternalToolUtils", () => {
 			listResponse,
 			contextListResponse,
 			toolResponse,
+			contextToolResponse,
 			schoolExternaToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
@@ -214,7 +215,7 @@ describe("useExternalToolUtils", () => {
 				const {
 					mapContextExternalToolSearchListResponse,
 					contextListResponse,
-					setup();
+				} = setup();
 
 				const contextExternalTools: ContextExternalTool[] =
 					mapContextExternalToolSearchListResponse(contextListResponse);
@@ -236,9 +237,9 @@ describe("useExternalToolUtils", () => {
 					expect.objectContaining<ContextExternalTool[]>([
 						{
 							id: contextToolResponse.id,
-							name: contextToolResponse.name,
+							name: contextToolResponse.contextToolName!,
 							logoUrl: contextToolResponse.logoUrl,
-							openInNewTab: contextToolResponse.openInNewTab,
+							openInNewTab: true,
 						},
 					])
 				);

@@ -101,7 +101,7 @@ export function useExternalToolMappings() {
 		return {
 			id: toolResponse.id,
 			name: toolResponse.contextToolName!,
-			logoUrl: "",
+			logoUrl: toolResponse.logoUrl,
 			openInNewTab: true,
 		};
 	};
