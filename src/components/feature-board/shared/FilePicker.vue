@@ -6,20 +6,18 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue";
+import { useFilePicker } from "./FilePicker.composable";
 
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
-	props: {
-		isFilePickerOpen: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["update:file", "update:isFilePickerOpen"],
+	props: {},
+	emits: ["update:file"],
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const modelFile = ref();
+		const { isFilePickerOpen, closeFilePicker, setSelectedFiles } =
+			useFilePicker();
 
 		onMounted(() => {
 			inputRef.value.$refs.input.onclick = (e: Event) => {
@@ -27,19 +25,19 @@ export default defineComponent({
 			};
 		});
 
-		watch(
-			() => props.isFilePickerOpen,
-			(newValue: boolean) => {
-				if (newValue) {
-					inputRef.value.$refs.input.click();
-					emit("update:isFilePickerOpen");
-				}
+		watch(isFilePickerOpen, (newValue: boolean) => {
+			if (newValue) {
+				inputRef.value.$refs.input.click();
 			}
-		);
+
+			closeFilePicker();
+		});
 
 		watch(modelFile, (newValue) => {
 			if (newValue) {
 				emit("update:file", newValue);
+
+				setSelectedFiles(newValue);
 			}
 		});
 

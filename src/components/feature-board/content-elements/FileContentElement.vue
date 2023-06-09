@@ -26,7 +26,8 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import { useFilePicker } from "../shared/FilePicker.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -40,20 +41,34 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, fileRecords } = useFileStorageApi();
-
-		const parentId = ref<string>(props.element.id);
-
-		const fileRecordModel = computed(() => {
-			const fileRecord = fileRecords.value[parentId.value];
-
-			return fileRecord;
-		});
+		const { fetchFiles, upload } = useFileStorageApi(
+			props.element.id,
+			FileRecordParentType.BOARDNODES
+		);
+		const { setSelectedFiles } = useFilePicker();
+		const fileRecordModel = ref<FileRecordResponse>();
 
 		onMounted(() => {
 			(async () => {
-				if (!fileRecordModel.value) {
-					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
+				const { getSelectedFiles } = useFilePicker();
+				const filesToUpload = getSelectedFiles();
+
+				if (filesToUpload) {
+					try {
+						fileRecordModel.value = await upload(filesToUpload);
+
+						setSelectedFiles();
+					} catch (error) {
+						//Remove element
+					}
+				} else {
+					if (!fileRecordModel.value) {
+						const fileRecords = await fetchFiles();
+
+						if (fileRecords) {
+							fileRecordModel.value = fileRecords[0];
+						}
+					}
 				}
 			})();
 		});

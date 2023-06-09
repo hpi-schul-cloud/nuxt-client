@@ -1,39 +1,24 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { useFilePicker } from "./FilePicker.composable";
 
 export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
-	const { upload } = useFileStorageApi();
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
-	const isFilePickerOpen = ref<boolean>(false);
+	const { openFilePicker } = useFilePicker();
 
-	const createTextElement = async () => {
-		await addElementFunction(ContentElementType.RichText);
+	const onElementClick = async (elementType: ContentElementType) => {
+		await addElementFunction(elementType);
 
 		closeDialog();
 	};
 
-	const createFileElement = async (file: File) => {
-		try {
-			const element = await addElementFunction(ContentElementType.File);
-			if (element?.id) {
-				await upload(element.id, FileRecordParentType.BOARDNODES, file);
-			}
-		} catch (error) {
-			isFilePickerOpen.value = false;
-			throw error;
-		}
-
-		isFilePickerOpen.value = false;
-	};
-
-	const openFilePicker = () => {
-		isFilePickerOpen.value = true;
+	const onFileElementClick = () => {
+		openFilePicker();
 		closeDialog();
 	};
 
@@ -41,13 +26,13 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		{
 			icon: mdiFormatSize,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
-			action: createTextElement,
+			action: () => onElementClick(ContentElementType.RichText),
 			testId: "create-element-text",
 		},
 		{
 			icon: mdiUpload,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
-			action: openFilePicker,
+			action: onFileElementClick,
 			testId: "create-element-file",
 		},
 	];
@@ -61,9 +46,8 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		askType,
 		isDialogOpen,
 		elementTypeOptions,
-		createFileElement,
-		createTextElement,
+		onElementClick,
+		onFileElementClick,
 		openFilePicker,
-		isFilePickerOpen,
 	};
 };

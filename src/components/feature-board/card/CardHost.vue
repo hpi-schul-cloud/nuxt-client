@@ -53,11 +53,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker
-			@update:file="onFileSelect"
-			:isFilePickerOpen="isFilePickerOpen"
-			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
-		/>
+		<FilePicker @update:file="onFileSelect" />
 	</div>
 </template>
 
@@ -85,6 +81,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { ContentElementType } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "CardHost",
@@ -138,15 +135,14 @@ export default defineComponent({
 			}
 		};
 
-		const { askType, createFileElement, isFilePickerOpen } =
-			useElementTypeSelection(addElement);
+		const { askType } = useElementTypeSelection(addElement);
 
 		const onAddElement = () => {
 			askType();
 		};
 
-		const onFileSelect = async (file: File) => {
-			await createFileElement(file);
+		const onFileSelect = async () => {
+			await addElement(ContentElementType.File);
 		};
 
 		const onStartEditMode = () => {
@@ -186,7 +182,6 @@ export default defineComponent({
 			isEditMode,
 			mdiTrashCanOutline,
 			onFileSelect,
-			isFilePickerOpen,
 		};
 	},
 });
