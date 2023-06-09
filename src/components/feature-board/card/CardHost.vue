@@ -9,12 +9,12 @@
 			<VCard
 				ref="cardHost"
 				:height="isLoading ? height : 'auto'"
-				class="w-100 transition-swing"
+				class="transition-swing"
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : 0"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
@@ -32,7 +32,7 @@
 					</CardTitle>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu scope="card">
+						<BoardMenu v-if="hasDeletePermission" scope="card">
 							<BoardMenuAction @click="onTryDelete">
 								<VIcon>
 									{{ mdiTrashCanOutline }}
@@ -53,7 +53,11 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker />
+		<FilePicker
+			@update:file="onFileSelect"
+			:isFilePickerOpen="isFilePickerOpen"
+			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+		/>
 	</div>
 </template>
 
@@ -80,6 +84,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "CardHost",
@@ -109,6 +114,7 @@ export default defineComponent({
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
 		);
+		const { hasDeletePermission } = useBoardPermissions();
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -132,20 +138,21 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = async () => {
-			const { getCreateFn } = useElementTypeSelection();
+		const { askType, createFileElement, isFilePickerOpen } =
+			useElementTypeSelection(addElement);
 
-			const createElement = await getCreateFn();
-			if (createElement) {
-				await createElement(addElement);
-			}
+		const onAddElement = () => {
+			askType();
+		};
 
-			startEditMode();
+		const onFileSelect = async (file: File) => {
+			await createFileElement(file);
 		};
 
 		const onStartEditMode = () => {
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			stopEditMode();
 		};
@@ -167,6 +174,7 @@ export default defineComponent({
 			boardMenuClasses,
 			isLoading,
 			card,
+			hasDeletePermission,
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
@@ -177,6 +185,8 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
+			onFileSelect,
+			isFilePickerOpen,
 		};
 	},
 });
@@ -192,5 +202,17 @@ export default defineComponent({
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+</style>
+
+<style>
+.v-card:focus::before {
+	opacity: 0;
+}
+
+.v-card:focus,
+.v-card:focus-within {
+	outline: 2px solid var(--v-secondary-base);
+	outline-offset: 0;
 }
 </style>

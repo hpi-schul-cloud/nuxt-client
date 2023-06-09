@@ -14,7 +14,9 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_LERNSTORE_ENABLED:
 		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MIGRATION_END_GRACE_PERIOD_MS: process.env.MIGRATION_END_GRACE_PERIOD_MS,
+	MIGRATION_END_GRACE_PERIOD_MS: Number(
+		process.env.MIGRATION_END_GRACE_PERIOD_MS
+	),
 };
 
 const retryLimit = 10;
@@ -133,13 +135,21 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getNewSchoolAdminPageAsDefault(): boolean {
 		return (
-			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ||
+			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ??
 			false
 		);
 	}
 
 	get getClientUserLoginMigration(): boolean {
-		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED || false;
+		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED ?? false;
+	}
+
+	get getCtlToolsTabEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED ?? false;
+	}
+
+	get getLtiToolsTabEnabled(): boolean {
+		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED ?? true;
 	}
 
 	get getEnv(): Envs {

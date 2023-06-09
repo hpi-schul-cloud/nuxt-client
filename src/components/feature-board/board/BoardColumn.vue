@@ -10,6 +10,7 @@
 			@delete:column="onColumnDelete"
 			@move:column-keyboard="onMoveColumnKeyboard"
 			@update:title="onUpdateTitle"
+			class="pl-2"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
@@ -17,12 +18,14 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
+			:lock-axis="lockAxis"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
+			class="scrollable-column pr-1 -mt-3"
 		>
 			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
 				<CardHost
-					class="my-3"
+					class="my-3 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
@@ -30,7 +33,10 @@
 				/>
 			</Draggable>
 		</Container>
-		<BoardAddCardButton @add-card="onCreateCard"></BoardAddCardButton>
+		<BoardAddCardButton
+			v-if="hasCreateColumnPermission"
+			@add-card="onCreateCard"
+		></BoardAddCardButton>
 	</div>
 </template>
 
@@ -41,6 +47,7 @@ import VueI18n from "vue-i18n";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -78,6 +85,9 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const colWidth = ref<number>(400);
+		const { hasMovePermission, hasCreateColumnPermission } =
+			useBoardPermissions();
+		const lockAxis = hasMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -143,6 +153,8 @@ export default defineComponent({
 		return {
 			cardDropPlaceholderOptions,
 			colWidth,
+			hasCreateColumnPermission,
+			lockAxis,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -160,5 +172,33 @@ export default defineComponent({
 <style>
 .elevate-transition {
 	transition: box-shadow 150ms all;
+}
+</style>
+<style scoped>
+.scrollable-column {
+	overflow-y: auto;
+	max-height: 75vh;
+}
+
+/* width */
+.scrollable-column::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+.scrollable-column::-webkit-scrollbar-track {
+	background: white;
+	border: none;
+}
+
+/* Handle */
+.scrollable-column::-webkit-scrollbar-thumb {
+	background: var(--v-secondary-lighten1);
+	border-radius: 5px;
+}
+
+/* Handle on hover */
+.scrollable-column::-webkit-scrollbar-thumb:hover {
+	background: var(--v-secondary-base);
 }
 </style>

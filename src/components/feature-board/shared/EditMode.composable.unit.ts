@@ -1,18 +1,34 @@
-import { ref } from "vue";
 import { useEditMode } from "./EditMode.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
-const fakeId = ref("testId");
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(fakeId.value);
+jest.mock("../shared/BoardPermissions.composable");
+const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
 
 describe("EditMode.composable", () => {
-	beforeEach(() => {
-		stopEditMode();
-	});
+	const fakeId = "testId";
 
-	it("should set edit mode", () => {
+	const setup = (hasEditPermission: boolean) => {
+		mockedUseBoardPermissions.mockReturnValue({
+			hasEditPermission,
+		});
+		return useEditMode(fakeId);
+	};
+
+	it("should set edit mode with permissions", () => {
+		const { isEditMode, startEditMode, stopEditMode } = setup(true);
 		expect(isEditMode.value).toBe(false);
 		startEditMode();
 		expect(isEditMode.value).toBe(true);
+		stopEditMode();
+		expect(isEditMode.value).toBe(false);
+	});
+
+	it("should not set edit mode without permissions ", () => {
+		const { isEditMode, startEditMode, stopEditMode } = setup(false);
+
+		expect(isEditMode.value).toBe(false);
+		startEditMode();
+		expect(isEditMode.value).toBe(false);
 		stopEditMode();
 		expect(isEditMode.value).toBe(false);
 	});

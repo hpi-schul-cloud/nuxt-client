@@ -9,7 +9,6 @@ import {
 	envConfigModule,
 	externalToolsModule,
 	filePathsModule,
-	filesPOCModule,
 	finishedTasksModule,
 	importUsersModule,
 	loadingStateModule,
@@ -64,6 +63,13 @@ Vue.mixin({
 			return authModule.getUser;
 		},
 	},
+});
+
+import VueDOMPurifyHTML from "vue-dompurify-html";
+import htmlConfig from "@/components/common/render-html/config";
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: htmlConfig,
 });
 
 // NUXT_REMOVAL change how global components are handled
@@ -123,7 +129,6 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			envConfigModule,
 			externalToolsModule,
 			filePathsModule,
-			filesPOCModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,

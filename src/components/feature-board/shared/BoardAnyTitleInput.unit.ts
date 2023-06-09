@@ -2,17 +2,37 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
+import { useBoardPermissions } from "./BoardPermissions.composable";
+import { BoardPermissionsTypes } from "../types/Board";
 
-describe("CardHeaderTitleInput Component", () => {
+jest.mock("./InlineEditInteractionHandler.composable");
+
+jest.mock("./BoardPermissions.composable");
+const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+const defaultPermissions = {
+	hasEditPermission: true,
+};
+
+describe("BoardAnyTitleTitleInput", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options: { isEditMode: boolean }) => {
+	const setup = (options: {
+		isEditMode: boolean;
+		permissions?: BoardPermissionsTypes;
+	}) => {
 		document.body.setAttribute("data-app", "true");
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
+		});
+
 		wrapper = shallowMount(BoardAnyTitleInput as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
 				value: "props value",
 				isEditMode: options.isEditMode,
+				scope: "card",
 			},
 			provide: {
 				CARD_HOST_INTERACTION_EVENT: undefined,
@@ -43,7 +63,6 @@ describe("CardHeaderTitleInput Component", () => {
 		it("should not have textarea in displaymode", async () => {
 			setup({ isEditMode: false });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			console.log("textAreaComponent", textAreaComponent);
 
 			expect(textAreaComponent.element).toBeUndefined();
 		});
