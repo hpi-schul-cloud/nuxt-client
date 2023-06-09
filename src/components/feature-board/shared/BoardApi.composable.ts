@@ -76,11 +76,16 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
+			justATest();
 			createElement(createdCard.data.id, {
 				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
 		}
+	};
+
+	const justATest = () => {
+		console.log("test sonarcloud sync");
 	};
 
 	const moveCardCall = async (
