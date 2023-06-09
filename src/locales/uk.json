@@ -876,6 +876,8 @@
 	"pages.room.taskCard.student.label.overdue": "Відсутня",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.label.betaTask": "Бета завдання",
+	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.fab.add": "Створити",
 	"pages.rooms.fab.add.aria": "Створити курс",

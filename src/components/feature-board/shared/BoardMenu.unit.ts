@@ -13,6 +13,7 @@ describe("BoardMenu Component", () => {
 			slots: {
 				default: "<div>Delete Card</div>",
 			},
+			propsData: { scope: "card" },
 		});
 	};
 

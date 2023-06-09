@@ -7,10 +7,11 @@
 		@dialog-closed="onCloseDialog"
 		:buttons="actionButtons"
 	>
-		<template v-slot:title>
+		<div slot="title" class="text-h4 my-2 text-break">
 			{{ $t("components.elementTypeSelection.dialog.title") }}
-		</template>
-		<template v-slot:content>
+		</div>
+
+		<template slot="content">
 			<div
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
@@ -44,7 +45,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useInternalElementTypeSelection } from "./ElementTypeSelection.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "ElementTypeSelection",
@@ -52,10 +53,13 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
-		const { closeDialog, isDialogOpen, elementTypeOptions } =
-			useInternalElementTypeSelection();
+		const { isDialogOpen, closeDialog, elementTypeOptions } =
+			useSharedElementTypeSelection();
 
-		const onCloseDialog = closeDialog;
+		const onCloseDialog = (_: boolean, event: Event) => {
+			event?.stopPropagation();
+			closeDialog();
+		};
 
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);
