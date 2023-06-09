@@ -55,23 +55,32 @@ export default defineComponent({
 ::v-deep {
 	.ck-content {
 		h4 {
+			font-family: "PT Sans";
 			font-style: normal;
-			font-weight: 500;
-			font-size: 20px;
+			font-weight: 700;
+			font-size: 16px;
 			line-height: 24px;
 			letter-spacing: 0.15px;
-			color: #1b1b1b;
 			margin: 0 0 0.5rem 0;
 		}
 
 		h5 {
+			font-family: "PT Sans";
 			font-style: normal;
-			font-weight: 500;
-			font-size: 18px;
+			font-weight: 700;
+			font-size: 14px;
 			line-height: 20px;
 			letter-spacing: 0.1px;
-			color: #1b1b1b;
 			margin: 0 0 0.5rem 0;
+		}
+
+		p {
+			font-family: "PT Sans";
+			font-style: normal;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 20px;
+			letter-spacing: 0.02px;
 		}
 
 		ul {
