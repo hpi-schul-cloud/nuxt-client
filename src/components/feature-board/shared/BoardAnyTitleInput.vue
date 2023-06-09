@@ -106,6 +106,7 @@ export default defineComponent({
 	font-size: v-bind(fontSize);
 }
 .heading {
+	font-family: var(--font-accent);
 	font-size: v-bind(fontSize);
 	margin-top: 10px;
 	letter-spacing: normal;
