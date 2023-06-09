@@ -32,7 +32,7 @@ describe("FileContentElementEdit", () => {
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
-	it.todo("should find download url", async () => {
+	it.skip("should find download url", async () => {
 		const { wrapper, fileRecordProp } = setup();
 
 		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
