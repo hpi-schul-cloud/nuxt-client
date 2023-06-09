@@ -201,8 +201,4 @@ export default defineComponent({
 .scrollable-column::-webkit-scrollbar-thumb:hover {
 	background: var(--v-secondary-base);
 }
-
-.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-	overflow: visible;
-}
 </style>
