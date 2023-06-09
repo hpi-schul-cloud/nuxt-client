@@ -31,7 +31,7 @@ describe("FileContentElement", () => {
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
-				const getFileMock = jest.fn().mockReturnValueOnce(fileRecordResponse);
+				const getFileMock = jest.fn().mockReturnValue(fileRecordResponse);
 				setupFileStorageApiMock({ getFileMock });
 
 				const { wrapper } = getWrapper({ element, isEditMode });

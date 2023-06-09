@@ -54,7 +54,7 @@ export default defineComponent({
 			fileRecordModel.value = getFile(parentId.value);
 
 			if (
-				fileRecordModel.value.securityCheckStatus ===
+				fileRecordModel.value?.securityCheckStatus ===
 				FileRecordScanStatus.PENDING
 			) {
 				setTimeout(refreshFileState, 10000);
