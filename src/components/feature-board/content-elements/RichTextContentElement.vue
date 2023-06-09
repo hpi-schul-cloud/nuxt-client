@@ -54,6 +54,10 @@ export default defineComponent({
 
 ::v-deep {
 	.ck-content {
+		& > :first-child {
+			margin-top: 0;
+		}
+
 		h4 {
 			font-family: "PT Sans";
 			font-style: normal;
@@ -61,7 +65,8 @@ export default defineComponent({
 			font-size: 16px;
 			line-height: 24px;
 			letter-spacing: 0.15px;
-			margin: 0 0 0.5rem 0;
+			margin-bottom: 0.5rem;
+			margin-top: 1.5rem;
 		}
 
 		h5 {
@@ -71,20 +76,19 @@ export default defineComponent({
 			font-size: 14px;
 			line-height: 20px;
 			letter-spacing: 0.1px;
-			margin: 0 0 0.5rem 0;
+			margin-bottom: 0.5rem;
+			margin-top: 1.5rem;
 		}
 
-		p {
+		p,
+		ul,
+		ol {
 			font-family: "PT Sans";
 			font-style: normal;
 			font-weight: 400;
 			font-size: 14px;
 			line-height: 20px;
 			letter-spacing: 0.02px;
-		}
-
-		ul {
-			list-style-type: square;
 		}
 	}
 }

@@ -104,6 +104,7 @@ export default defineComponent({
 <style scoped>
 :deep(textarea) {
 	font-size: v-bind(fontSize);
+	font-family: var(--font-accent);
 }
 .heading {
 	font-family: var(--font-accent);
