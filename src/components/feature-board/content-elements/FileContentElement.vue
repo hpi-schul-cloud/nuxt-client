@@ -14,8 +14,8 @@
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
 				@update:caption="($event) => (modelValue.caption = $event)"
-				@move-down:element="onTryMoveFileEditDown"
-				@move-up:element="onTryMoveFileEditUp"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
 			></FileContentElementEdit>
 		</div>
 		<v-card-text v-else>
@@ -72,11 +72,11 @@ export default defineComponent({
 			}
 		});
 
-		const onTryMoveFileEditDown = () => {
+		const onMoveFileEditDown = () => {
 			emit("move-down:file-edit");
 		};
 
-		const onTryMoveFileEditUp = () => {
+		const onMoveFileEditUp = () => {
 			emit("move-up:file-edit");
 		};
 
@@ -84,8 +84,8 @@ export default defineComponent({
 			modelValue,
 			isAutoFocus,
 			fileRecordModel,
-			onTryMoveFileEditDown,
-			onTryMoveFileEditUp,
+			onMoveFileEditDown,
+			onMoveFileEditUp,
 		};
 	},
 });

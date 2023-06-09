@@ -11,11 +11,12 @@
 				v-else-if="isFileElementResponse(element)"
 				:key="element.id"
 				:element="element"
+				:isEditMode="isEditMode"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
-				@move-down:file-edit="onTryMoveFileDown(element.id)"
-				@move-up:file-edit="onTryMoveFileUp(element.id)"
+				@move-down:file-edit="onMoveFileDown(element.id)"
+				@move-up:file-edit="onMoveFileUp(element.id)"
 			/>
 		</template>
 	</VCardText>
@@ -62,15 +63,15 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onTryMoveFileDown = (elementId: string) => {
+		const onMoveFileDown = (elementId: string) => {
 			emit("move-down:file", elementId);
 		};
 
-		const onTryMoveFileUp = (elementId: string) => {
+		const onMoveFileUp = (elementId: string) => {
 			emit("move-up:file", elementId);
 		};
 
-		const hasMultipleElements = () => props.elements.length > 0;
+		const hasMultipleElements = () => props.elements.length > 1;
 
 		const isFirstElement = (elementId: string) => {
 			const elementIndex = props.elements.findIndex(
@@ -105,8 +106,8 @@ export default defineComponent({
 			isFirstElement,
 			isLastElement,
 			isRichTextElementResponse,
-			onTryMoveFileDown,
-			onTryMoveFileUp,
+			onMoveFileDown,
+			onMoveFileUp,
 		};
 	},
 });

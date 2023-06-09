@@ -45,8 +45,8 @@
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
-						@move-down:file="onTryMoveContentElementDown"
-						@move-up:file="onTryMoveContentElementUp"
+						@move-down:file="onMoveContentElementDown"
+						@move-up:file="onMoveContentElementUp"
 					></ContentElementList>
 					<CardAddElementMenu
 						@add-element="onAddElement"
@@ -166,10 +166,10 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onTryMoveContentElementDown = async (elementId: string) =>
+		const onMoveContentElementDown = async (elementId: string) =>
 			await moveElementDown(elementId);
 
-		const onTryMoveContentElementUp = async (elementId: string) =>
+		const onMoveContentElementUp = async (elementId: string) =>
 			await moveElementUp(elementId);
 
 		const boardMenuClasses = computed(() => {
@@ -197,8 +197,8 @@ export default defineComponent({
 			onAddElement,
 			onStartEditMode,
 			onEndEditMode,
-			onTryMoveContentElementDown,
-			onTryMoveContentElementUp,
+			onMoveContentElementDown,
+			onMoveContentElementUp,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,

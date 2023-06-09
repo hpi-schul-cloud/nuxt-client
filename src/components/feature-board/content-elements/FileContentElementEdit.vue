@@ -15,7 +15,7 @@
 				<BoardMenu scope="element">
 					<BoardMenuAction
 						v-if="hasMultipleElements && !isFirstElement"
-						@click="onTryMoveElementUp"
+						@click="onMoveElementUp"
 					>
 						<VIcon>
 							{{ mdiArrowCollapseUp }}
@@ -24,7 +24,7 @@
 					</BoardMenuAction>
 					<BoardMenuAction
 						v-if="hasMultipleElements && !isLastElement"
-						@click="onTryMoveElementDown"
+						@click="onMoveElementDown"
 					>
 						<VIcon>
 							{{ mdiArrowCollapseDown }}
@@ -76,11 +76,11 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
 
-		const onTryMoveElementDown = async () => {
+		const onMoveElementDown = async () => {
 			emit("move-down:element");
 		};
 
-		const onTryMoveElementUp = async () => {
+		const onMoveElementUp = async () => {
 			emit("move-up:element");
 		};
 
@@ -90,8 +90,8 @@ export default defineComponent({
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
-			onTryMoveElementDown,
-			onTryMoveElementUp,
+			onMoveElementDown,
+			onMoveElementUp,
 		};
 	},
 });
