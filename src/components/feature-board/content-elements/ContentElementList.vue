@@ -15,8 +15,8 @@
 				:isFirstElement="isFirstElement(element.id)"
 				:isLastElement="isLastElement(element.id)"
 				:hasMultipleElements="hasMultipleElements"
-				@move-down:file-edit="onMoveFileDown(element.id)"
-				@move-up:file-edit="onMoveFileUp(element.id)"
+				@move-down:edit="onMoveFileDown(element.id)"
+				@move-up:edit="onMoveFileUp(element.id)"
 			/>
 		</template>
 	</VCardText>

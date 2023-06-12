@@ -46,7 +46,7 @@ export default defineComponent({
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: ["move-down:file-edit", "move-up:file-edit"],
+	emits: ["move-down:edit", "move-up:edit"],
 	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
@@ -73,11 +73,11 @@ export default defineComponent({
 		});
 
 		const onMoveFileEditDown = () => {
-			emit("move-down:file-edit");
+			emit("move-down:edit");
 		};
 
 		const onMoveFileEditUp = () => {
-			emit("move-up:file-edit");
+			emit("move-up:edit");
 		};
 
 		return {
