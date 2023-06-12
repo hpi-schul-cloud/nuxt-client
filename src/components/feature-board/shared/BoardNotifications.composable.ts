@@ -1,25 +1,25 @@
 import { notifierModule } from "@/store";
 
 export const useBoardNotifier = () => {
-	const showSuccess = () => {
+	const showSuccess = (text: string | undefined) => {
 		notifierModule?.show({
-			text: "success text",
+			text,
 			status: "success",
 			autoClose: true,
 		});
 	};
 
-	const showFailure = () => {
+	const showFailure = (text: string | undefined) => {
 		notifierModule?.show({
-			text: "failure text",
+			text,
 			status: "error",
-			autoClose: false,
+			timeout: 10000,
 		});
 	};
 
-	const showInfo = () => {
+	const showInfo = (text: string | undefined) => {
 		notifierModule?.show({
-			text: "info text",
+			text,
 			status: "info",
 			autoClose: true,
 		});

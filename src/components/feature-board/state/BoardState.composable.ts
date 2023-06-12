@@ -1,12 +1,13 @@
 import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { nextTick, onMounted, ref } from "vue";
+import { inject, nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import VueI18n from "vue-i18n";
 
 const {
 	createColumnCall,
@@ -24,13 +25,20 @@ export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setEditModeId } = useSharedEditMode();
+	const i18n = inject<VueI18n>("i18n");
 
 	const createCard = async (columnId: string) => {
 		if (board.value === undefined) return;
 
 		const newCardId = await createCardCall(columnId);
 		if (!newCardId) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notCreated", {
+					type: i18n?.t("components.boardCard"),
+				})
+				.toString();
+
+			await showErrorAndReload(errorText);
 			return;
 		}
 
@@ -49,7 +57,12 @@ export const useBoardState = (id: string) => {
 
 		const newColumn = await createColumnCall(board.value.id);
 		if (!newColumn?.id) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notCreated", {
+					type: i18n?.t("components.boardColumn"),
+				})
+				.toString();
+			await showErrorAndReload(errorText);
 			return;
 		}
 
@@ -64,7 +77,12 @@ export const useBoardState = (id: string) => {
 
 		const newColumn = await createColumn();
 		if (!newColumn?.id) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notCreated", {
+					type: i18n?.t("components.boardColumn"),
+				})
+				.toString();
+			await showErrorAndReload(errorText);
 			return;
 		}
 		const moveCardPayload: CardMove = {
@@ -81,7 +99,12 @@ export const useBoardState = (id: string) => {
 		const response = await deleteCardCall(id);
 
 		if (isErrorCode(response?.status)) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notDeleted", {
+					type: i18n?.t("components.boardCard"),
+				})
+				.toString();
+			await showErrorAndReload(errorText);
 			return;
 		}
 		await extractCard(id);
@@ -97,7 +120,12 @@ export const useBoardState = (id: string) => {
 		const response = await deleteColumnCall(id);
 
 		if (isErrorCode(response?.status)) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notDeleted", {
+					type: i18n?.t("components.boardColumn"),
+				})
+				.toString();
+			await showErrorAndReload(errorText);
 			return;
 		}
 		board.value.columns.splice(columnIndex, 1);
@@ -134,7 +162,7 @@ export const useBoardState = (id: string) => {
 		const response = (await boardsApi.boardControllerGetBoardSkeleton(id)).data;
 
 		if (!response?.id) {
-			await showErrorAndReload();
+			await showErrorAndReload("");
 			return;
 		}
 
@@ -173,7 +201,11 @@ export const useBoardState = (id: string) => {
 				addedIndex
 			);
 			if (isErrorCode(response?.status)) {
-				await showErrorAndReload();
+				const errorText = i18n
+					?.t("components.board.notifications.errors.notUpdated")
+					.toString();
+
+				await showErrorAndReload(errorText);
 			}
 		}
 	};
@@ -198,7 +230,10 @@ export const useBoardState = (id: string) => {
 		);
 
 		if (isErrorCode(response?.status)) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notUpdated")
+				.toString();
+			await showErrorAndReload(errorText);
 		}
 	};
 
@@ -208,7 +243,10 @@ export const useBoardState = (id: string) => {
 		const response = await updateColumnTitleCall(columnId, newTitle);
 
 		if (isErrorCode(response?.status)) {
-			await showErrorAndReload();
+			const errorText = i18n
+				?.t("components.board.notifications.errors.notUpdated")
+				.toString();
+			await showErrorAndReload(errorText);
 			return;
 		}
 
@@ -251,10 +289,10 @@ export const useBoardState = (id: string) => {
 		return false;
 	};
 
-	const showErrorAndReload = async () => {
+	const showErrorAndReload = async (errorText: string | undefined) => {
 		if (board.value === undefined) return;
 
-		showFailure();
+		showFailure(errorText);
 		await fetchBoard(board?.value.id);
 	};
 
