@@ -22,6 +22,7 @@ const mockApi = {
 	boardControllerCreateColumn: jest
 		.fn()
 		.mockImplementation(() => createColumnResponseMock),
+	cardControllerUpdateCardHeight: jest.fn(),
 	cardControllerUpdateCardTitle: jest.fn(),
 	columnControllerUpdateColumnTitle: jest.fn(),
 	elementControllerUpdateElement: jest.fn(),
@@ -69,6 +70,22 @@ describe("BoardApi.composable", () => {
 			await createColumnCall(BOARD_ID);
 			expect(mockApi.boardControllerCreateColumn).toHaveBeenCalledWith(
 				BOARD_ID
+			);
+		});
+	});
+
+	describe("updateCardHeight", () => {
+		it("should call cardControllerUpdateCardHeight api", async () => {
+			const { updateCardHeightCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "update-card-id",
+				height: 200,
+			};
+
+			await updateCardHeightCall(PAYLOAD.id, PAYLOAD.height);
+			expect(mockApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ height: PAYLOAD.height }
 			);
 		});
 	});
