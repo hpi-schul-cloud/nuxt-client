@@ -18,14 +18,13 @@ export type AddCardElement = (
 export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
-	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 	const {
 		createElement,
 		deleteCardCall,
 		updateCardHeightCall,
 		updateCardTitle,
 	} = useBoardApi();
-
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
