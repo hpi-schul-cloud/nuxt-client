@@ -3,6 +3,7 @@ import { ContextExternalTool } from "./external-tool/context-external-tool";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
 import { AxiosResponse } from "axios";
 import {
+	ContextExternalToolPostParams,
 	ContextExternalToolSearchListResponse,
 	ToolApiFactory,
 	ToolApiInterface,
@@ -10,6 +11,7 @@ import {
 import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
 import { BusinessError } from "./types/commons";
 import { $axios } from "../utils/api";
+import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 
 @Module({
 	name: "contextExternalToolsModule",
@@ -30,8 +32,16 @@ export default class ContextExternalToolsModule extends VuexModule {
 		return ToolApiFactory(undefined, "v3", $axios);
 	}
 
+	get getLoading(): boolean {
+		return this.loading;
+	}
+
 	get getContextExternalTools() {
 		return this.contextExternalTools;
+	}
+
+	get getBusinessError() {
+		return this.businessError;
 	}
 
 	@Mutation
@@ -63,6 +73,41 @@ export default class ContextExternalToolsModule extends VuexModule {
 		this.contextExternalTools = this.contextExternalTools.filter(
 			(tool: ContextExternalTool) => tool.id !== toolId
 		);
+	}
+
+	@Action
+	async createContextExternalTool(payload: {
+		toolTemplate: SchoolToolConfigurationTemplate;
+		contextId: string;
+		contextType: ToolContextType;
+	}): Promise<void> {
+		try {
+			this.setLoading(true);
+			this.resetBusinessError();
+			if (payload.contextId && payload.contextType) {
+				const contextExternalToolPostParams: ContextExternalToolPostParams =
+					useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
+						payload.toolTemplate,
+						payload.contextId,
+						payload.contextType
+					);
+				await this.toolApi.toolContextControllerCreateContextExternalTool(
+					contextExternalToolPostParams
+				);
+			}
+
+			this.setLoading(false);
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while saving contextExternalTool for schoolExternalTool with id ${payload.toolTemplate.id}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
 	}
 
 	@Action

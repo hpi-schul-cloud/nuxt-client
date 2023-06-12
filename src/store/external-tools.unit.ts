@@ -1,7 +1,6 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import {
 	ApiValidationError,
-	ContextExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
@@ -42,7 +41,6 @@ import { User } from "./types/auth";
 import { BusinessError } from "./types/commons";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -1268,62 +1266,6 @@ describe("ExternalToolsModule", () => {
 							statusCode: axiosErrorResponse.data.code,
 							message: axiosErrorResponse.data.message,
 						});
-					});
-				});
-			});
-
-			describe("createContextExternalTool is called", () => {
-				const contextId = "contextId";
-				const contextType: ToolContextType = ToolContextType.COURSE;
-				const toolTemplate: SchoolToolConfigurationTemplate = {
-					name: "toolName",
-					version: 0,
-					parameters: [],
-					configId: "configId",
-					logoUrl: "logoUrl",
-					id: "id",
-					schoolToolId: "schoolToolId",
-				};
-				const payload = {
-					toolTemplate,
-					contextId,
-					contextType,
-				};
-				describe("when an error occurs", () => {
-					it("should set the businessError", async () => {
-						const { axiosError, axiosErrorResponse } = setupWithAuth();
-						const { toolApiMock } = mockToolApi();
-
-						toolApiMock.toolContextControllerCreateContextExternalTool.mockRejectedValue(
-							axiosError
-						);
-
-						await module.createContextExternalTool(payload);
-
-						expect(module.getBusinessError).toEqual<BusinessError>({
-							...axiosError,
-							statusCode: axiosErrorResponse.data.code,
-							message: axiosErrorResponse.data.message,
-						});
-					});
-				});
-
-				describe("when no error occurs", () => {
-					it("should call the toolApi.toolContextControllerCreateContextExternalTool", async () => {
-						setupWithAuth();
-						const { toolApiMock } = mockToolApi();
-						const contextExternalToolPostParams: ContextExternalToolPostParams =
-							useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
-								payload.toolTemplate,
-								payload.contextId,
-								payload.contextType
-							);
-
-						await module.createContextExternalTool(payload);
-
-						expect(
-							toolApiMock.toolContextControllerCreateContextExternalTool
-						).toHaveBeenCalledWith(contextExternalToolPostParams);
 					});
 				});
 			});

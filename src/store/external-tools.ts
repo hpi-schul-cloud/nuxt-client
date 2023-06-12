@@ -381,39 +381,4 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 		}
 	}
-
-	@Action
-	async createContextExternalTool(payload: {
-		toolTemplate: SchoolToolConfigurationTemplate;
-		contextId: string;
-		contextType: ToolContextType;
-	}): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			if (payload.contextId && payload.contextType) {
-				const contextExternalToolPostParams: ContextExternalToolPostParams =
-					useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
-						payload.toolTemplate,
-						payload.contextId,
-						payload.contextType
-					);
-				await this.toolApi.toolContextControllerCreateContextExternalTool(
-					contextExternalToolPostParams
-				);
-			}
-
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while saving contextExternalTool for schoolExternalTool with id ${payload.toolTemplate.id}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
 }

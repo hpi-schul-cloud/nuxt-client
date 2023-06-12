@@ -92,6 +92,7 @@ import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import ContextExternalToolsModule from "../../store/context-external-tool";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -115,6 +116,8 @@ export default defineComponent({
 		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
+		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
+			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
 
@@ -215,7 +218,7 @@ export default defineComponent({
 
 		const onSaveTool = async () => {
 			if (schoolToolTemplate.value && props.contextId && props.contextType) {
-				await externalToolsModule?.createContextExternalTool({
+				await contextExternalToolsModule?.createContextExternalTool({
 					toolTemplate: schoolToolTemplate.value,
 					contextId: props.contextId,
 					contextType: props.contextType,
