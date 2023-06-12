@@ -12,8 +12,8 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
+				:isFirstElement="isFirstElement(element.id)"
+				:isLastElement="isLastElement(element.id)"
 				:hasMultipleElements="hasMultipleElements"
 				@move-down:file-edit="onMoveFileDown(element.id)"
 				@move-up:file-edit="onMoveFileUp(element.id)"
@@ -83,7 +83,7 @@ export default defineComponent({
 			}
 
 			const isFirstElement = elementIndex === 0;
-			return isFirstElement && hasMultipleElements;
+			return isFirstElement;
 		};
 
 		const isLastElement = (elementId: string) => {
@@ -95,8 +95,10 @@ export default defineComponent({
 				return false;
 			}
 
-			const isLastElement = elementIndex === props.elements.length - 1;
-			return isLastElement && hasMultipleElements;
+			const lastElementIndex = props.elements.length - 1;
+
+			const isLastElement = elementIndex === lastElementIndex;
+			return isLastElement;
 		};
 
 		return {
