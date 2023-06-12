@@ -49,6 +49,7 @@ describe("CardState composable", () => {
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
 			moveColumnCall: jest.fn(),
+			moveElementCall: jest.fn(),
 			updateCardHeightCall: jest.fn(),
 			updateColumnTitleCall: jest.fn(),
 			updateElementCall: jest.fn(),
