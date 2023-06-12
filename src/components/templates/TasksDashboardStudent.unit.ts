@@ -12,6 +12,7 @@ import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
@@ -34,7 +35,7 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

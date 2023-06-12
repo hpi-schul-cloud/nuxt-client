@@ -66,33 +66,33 @@
 </template>
 
 <script lang="ts">
-import VueI18n from "vue-i18n";
-import VueRouter from "vue-router";
+import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	onMounted,
-	ref,
-	Ref,
-} from "vue";
-import { BusinessError } from "@/store/types/commons";
 import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
 	ToolParameter,
 } from "@/store/external-tool";
-import { useRouter } from "vue-router/composables";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
 import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
-import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { BusinessError } from "@/store/types/commons";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ComputedRef,
+	Ref,
+	computed,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+} from "vue";
+import VueRouter from "vue-router";
+import { useRouter } from "vue-router/composables";
+import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
@@ -108,7 +108,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!i18n || !externalToolsModule) {

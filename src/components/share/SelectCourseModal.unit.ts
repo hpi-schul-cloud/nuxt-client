@@ -1,6 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("@components/share/SelectCourseModal", () => {
 	const course = {
@@ -21,6 +22,9 @@ describe("@components/share/SelectCourseModal", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			},
 			...attrs,
 		});
 
