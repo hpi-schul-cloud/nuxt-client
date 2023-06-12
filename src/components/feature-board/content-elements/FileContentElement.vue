@@ -58,7 +58,8 @@ export default defineComponent({
 				fileRecordModel.value?.securityCheckStatus ===
 					FileRecordScanStatus.PENDING
 			) {
-				setTimeout(refreshFileState, 10000);
+				await new Promise((resolve) => setTimeout(resolve, 10000));
+				await refreshFileState();
 			}
 		};
 
