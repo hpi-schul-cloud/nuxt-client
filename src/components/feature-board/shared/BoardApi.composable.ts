@@ -35,7 +35,9 @@ export const useBoardApi = () => {
 
 	const updateElementCall = async (element: AnyContentElement) => {
 		const data = generateDataProp(element);
-		await elementApi.elementControllerUpdateElement(element.id, { data });
+		return await elementApi.elementControllerUpdateElement(element.id, {
+			data,
+		});
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
