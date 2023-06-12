@@ -54,8 +54,9 @@ export default defineComponent({
 			fileRecordModel.value = getFile(parentId.value);
 
 			if (
+				!fileRecordModel.value ||
 				fileRecordModel.value?.securityCheckStatus ===
-				FileRecordScanStatus.PENDING
+					FileRecordScanStatus.PENDING
 			) {
 				setTimeout(refreshFileState, 10000);
 			}
@@ -66,7 +67,13 @@ export default defineComponent({
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
-				await refreshFileState();
+				if (
+					!fileRecordModel.value ||
+					fileRecordModel.value?.securityCheckStatus ===
+						FileRecordScanStatus.PENDING
+				) {
+					await refreshFileState();
+				}
 			})();
 		});
 

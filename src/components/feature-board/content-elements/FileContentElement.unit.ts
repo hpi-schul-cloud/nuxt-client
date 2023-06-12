@@ -87,7 +87,7 @@ describe("FileContentElement", () => {
 				const getFileMock = jest
 					.fn()
 					.mockReturnValueOnce(undefined)
-					.mockReturnValueOnce(fileRecordResponse);
+					.mockReturnValue(fileRecordResponse);
 				const { fetchFiles } = setupFileStorageApiMock({
 					getFileMock,
 				});
