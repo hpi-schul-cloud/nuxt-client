@@ -828,7 +828,7 @@
 	"components.boardElement": "elemento",
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.column.defaultTitle": "Nueva columna",
-	"components.board.notifications.errors.board.notLoaded": "No se han podido cargar los datos de la placa.",
+	"components.board.notifications.errors.notLoaded": "No se pudo cargar el {type}.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",

@@ -1,12 +1,11 @@
 import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { inject, nextTick, onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import VueI18n from "vue-i18n";
 
 const {
 	createColumnCall,
@@ -18,13 +17,11 @@ const {
 	createCardCall,
 } = useBoardApi();
 
-const { isErrorCode, showFailure } = useBoardNotifier();
-
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setEditModeId } = useSharedEditMode();
-	const i18n = inject<VueI18n>("i18n");
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const createCard = async (columnId: string) => {
 		if (board.value === undefined) return;
@@ -140,8 +137,8 @@ export const useBoardState = (id: string) => {
 		const response = (await boardsApi.boardControllerGetBoardSkeleton(id)).data;
 
 		if (!response?.id) {
-			const errorText = generateErrorText("fetch");
-			await showErrorAndReload(errorText);
+			const errorText = generateErrorText("read", "board");
+			showFailure(errorText);
 			return;
 		}
 
@@ -209,7 +206,6 @@ export const useBoardState = (id: string) => {
 		if (isErrorCode(response?.status)) {
 			const errorText = generateErrorText("update");
 			await showErrorAndReload(errorText);
-			return;
 		}
 	};
 
@@ -263,40 +259,6 @@ export const useBoardState = (id: string) => {
 
 		showFailure(errorText);
 		await fetchBoard(board?.value.id);
-	};
-
-	const generateErrorText = (
-		errorType: "create" | "fetch" | "update" | "delete",
-		elementType?: "board" | "boardCard" | "boardColumn" | "boardElement"
-	) => {
-		if (errorType === "create") {
-			return i18n
-				?.t("components.board.notifications.errors.notCreated", {
-					type: i18n?.t(`components.${elementType}`),
-				})
-				.toString();
-		}
-		if (errorType === "delete") {
-			return i18n
-				?.t("components.board.notifications.errors.notDeleted", {
-					type: i18n?.t(`components.${elementType}`),
-				})
-				.toString();
-		}
-		if (errorType === "update") {
-			const errorText = () =>
-				i18n?.t("components.board.notifications.errors.notUpdated").toString();
-
-			return errorText();
-		}
-		if (errorType === "fetch") {
-			const errorText = () =>
-				i18n
-					?.t("components.board.notifications.errors.board.notLoaded")
-					.toString();
-
-			return errorText();
-		}
 	};
 
 	onMounted(() => fetchBoard(id));
