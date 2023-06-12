@@ -5,6 +5,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
+import { I18N_KEY } from "@/utils/inject";
 
 const {
 	tasksTeacher,
@@ -43,7 +44,7 @@ const getWrapper = (props, options) => {
 			tasksModule: tasksModuleMock,
 			copyModule: copyModuleMock,
 			notifierModule: notifierModuleMock,
-			i18n: { t: (key) => key },
+			[I18N_KEY]: { t: (key) => key },
 		},
 		propsData: props,
 		attachTo: document.body,
