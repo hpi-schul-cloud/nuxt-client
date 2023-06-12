@@ -18,7 +18,7 @@
 						@click="onMoveElementUp"
 					>
 						<VIcon>
-							{{ mdiArrowCollapseUp }}
+							{{ mdiArrowUp }}
 						</VIcon>
 						{{ $t("components.board.action.moveUp") }}
 					</BoardMenuAction>
@@ -27,7 +27,7 @@
 						@click="onMoveElementDown"
 					>
 						<VIcon>
-							{{ mdiArrowCollapseDown }}
+							{{ mdiArrowDown }}
 						</VIcon>
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
@@ -50,8 +50,8 @@ import { FileRecordResponse } from "@/fileStorageApi/v3";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
-	mdiArrowCollapseUp,
-	mdiArrowCollapseDown,
+	mdiArrowUp,
+	mdiArrowDown,
 	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
@@ -87,8 +87,8 @@ export default defineComponent({
 		return {
 			mdiFileDocumentOutline,
 			modelCaption,
-			mdiArrowCollapseUp,
-			mdiArrowCollapseDown,
+			mdiArrowUp,
+			mdiArrowDown,
 			mdiTrashCanOutline,
 			onMoveElementDown,
 			onMoveElementUp,
