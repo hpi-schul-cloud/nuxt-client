@@ -814,7 +814,7 @@
 	"components.boardElement": "Element",
 	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.notifications.errors.notLoaded": "Das {type} konnte nicht geladen werden.",
+	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",

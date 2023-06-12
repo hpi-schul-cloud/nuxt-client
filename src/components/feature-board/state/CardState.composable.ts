@@ -4,6 +4,7 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -19,11 +20,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { createElement, deleteCardCall, updateCardTitle } = useBoardApi();
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
+			const errorText = generateErrorText("read", "boardCard");
+			showFailure(errorText);
 			console.error(error);
 		}
 		cardState.isLoading = false;
@@ -33,16 +37,21 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		await updateCardTitle(cardState.card.id, newTitle);
+		const response = await updateCardTitle(cardState.card.id, newTitle);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		cardState.card.title = newTitle;
 	};
 
 	const deleteCard = async () => {
-		if (cardState.card === undefined) {
-			return;
-		}
+		if (cardState.card === undefined) return;
 
-		await deleteCardCall(cardState.card.id);
+		const response = await deleteCardCall(cardState.card.id);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload(generateErrorText("delete", "boardCard"));
+		}
 	};
 
 	const updateCardHeight = (newHeight: number) => {
@@ -60,10 +69,19 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 		const result = await createElement(cardState.card.id, { type });
-
+		if (!result.id) {
+			await showErrorAndReload(generateErrorText("create", "boardElement"));
+			return;
+		}
 		cardState.card.elements.push(result as unknown as AnyContentElement);
 
 		return result;
+	};
+
+	const showErrorAndReload = async (errorText: string | undefined) => {
+		if (cardState.card === undefined) return;
+		showFailure(errorText);
+		await fetchCard(cardState.card.id);
 	};
 
 	onMounted(() => fetchCard(id));
