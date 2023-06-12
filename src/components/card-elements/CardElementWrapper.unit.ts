@@ -3,6 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 import { CardElementComponentEnum } from "@/store/types/card-element";
+import { I18N_KEY } from "@/utils/inject";
 
 const getWrapper = (props?: object, options?: object) => {
 	return mount(CardElementWrapper, {
@@ -10,7 +11,7 @@ const getWrapper = (props?: object, options?: object) => {
 			i18n: true,
 		}),
 		provide: {
-			i18n: { t: (key: string) => key },
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,

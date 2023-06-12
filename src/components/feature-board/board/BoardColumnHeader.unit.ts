@@ -6,6 +6,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { BoardPermissionsTypes } from "../types/Board";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -36,7 +37,7 @@ describe("BoardColumnHeader", () => {
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				title: "title-text",

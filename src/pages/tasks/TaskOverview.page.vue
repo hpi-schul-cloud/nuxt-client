@@ -3,23 +3,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, ref } from "vue";
+import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
-import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import VueI18n from "vue-i18n";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
+import { computed, defineComponent, inject, onMounted, ref } from "vue";
 
 export default defineComponent({
 	components: { TasksDashboardMain },
 	setup() {
-		const i18n = inject<VueI18n | undefined>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const authModule = inject<AuthModule | undefined>("authModule");
 		const tasksModule = inject<TasksModule | undefined>("tasksModule");
 
-		if (i18n === undefined) {
-			throw new Error("i18n Module undefined"); // NUXT_REMOVAL use application error
-		}
 		if (authModule === undefined) {
 			throw new Error("authModule Module undefined"); // NUXT_REMOVAL use application error
 		}

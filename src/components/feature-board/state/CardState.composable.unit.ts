@@ -1,29 +1,11 @@
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { useCardState } from "./CardState.composable";
 
-let wrapper: Wrapper<Vue>;
-
-const mountComposable = <R>(composable: () => R): R => {
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-	});
-
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	//@ts-ignore
-	return wrapper.vm.result;
-};
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 

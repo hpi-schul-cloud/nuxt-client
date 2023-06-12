@@ -15,6 +15,7 @@ import {
 	courseMetadataResponseFactory,
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { I18N_KEY } from "@/utils/inject";
 
 const routes = [
 	{
@@ -92,7 +93,7 @@ const getWrapper = (
 	return mount(TaskCard, {
 		...componentOptions,
 		provide: {
-			i18n: { t: (key: string) => key },
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 			authModule: createModuleMocks(AuthModule, {
 				getUserPermissions: [userPermission],
 			}),
