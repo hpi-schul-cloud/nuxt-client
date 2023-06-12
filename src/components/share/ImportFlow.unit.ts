@@ -20,6 +20,7 @@ import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
@@ -43,7 +44,7 @@ describe("@components/share/ImportFlow", () => {
 				copyModule: copyModuleMock,
 				notifierModule: notifierModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				token,
