@@ -132,7 +132,7 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const t = (key) => {
-			const translateResult = i18n?.t(key);
+			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}

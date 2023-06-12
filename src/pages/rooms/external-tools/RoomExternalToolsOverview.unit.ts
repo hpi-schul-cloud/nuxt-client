@@ -6,6 +6,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("RoomExternalToolOverview", () => {
 	const getWrapper = (tools: ContextExternalTool[]) => {
@@ -32,7 +33,10 @@ describe("RoomExternalToolOverview", () => {
 			provide: {
 				authModule,
 				contextExternalToolsModule,
-				i18n: undefined,
+				[I18N_KEY as symbol]: {
+					$t: (key: string): string => key,
+					tc: (key: string): string => key,
+				},
 			},
 		});
 

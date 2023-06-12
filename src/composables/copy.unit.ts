@@ -24,6 +24,7 @@ const mountComposable = <R>(
 				provide(key, mockFn);
 			}
 		},
+		provide: providers,
 	});
 
 	const TestComponent = {
@@ -36,7 +37,6 @@ const mountComposable = <R>(
 			return { result };
 		},
 		parentComponent: ParentComponent,
-		provide: providers,
 	});
 
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment

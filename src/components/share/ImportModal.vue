@@ -61,7 +61,7 @@ export default defineComponent({
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-			required: (value) => !!value || i18n?.t("common.validation.required"),
+			required: (value) => !!value || i18n.t("common.validation.required"),
 		});
 
 		const newName = computed({

@@ -82,7 +82,7 @@ export default defineComponent({
 		);
 
 		const { isLoadingDialogOpen } = useLoadingState(
-			i18n?.t("components.molecules.import.options.loadingMessage")
+			i18n.t("components.molecules.import.options.loadingMessage")
 		);
 
 		const openModal = (modalName) => {
@@ -98,7 +98,7 @@ export default defineComponent({
 
 		const showFailureBackend = (name) => {
 			notifier?.show({
-				text: i18n?.t(
+				text: i18n.t(
 					"components.molecules.import.options.failure.backendError",
 					{ name }
 				),
@@ -110,7 +110,7 @@ export default defineComponent({
 
 		const showFailureInvalidToken = () => {
 			notifier?.show({
-				text: i18n?.t(
+				text: i18n.t(
 					"components.molecules.import.options.failure.invalidToken"
 				),
 				status: "error",
@@ -121,7 +121,7 @@ export default defineComponent({
 
 		const showFailurePermission = () => {
 			notifier?.show({
-				text: i18n?.t(
+				text: i18n.t(
 					"components.molecules.import.options.failure.permissionError"
 				),
 				status: "error",

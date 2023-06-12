@@ -97,9 +97,9 @@ export default defineComponent({
 		const onTryDelete = async () => {
 			const message =
 				i18n
-					?.t("components.cardHost.deletionModal.confirmation", {
+					.t("components.cardHost.deletionModal.confirmation", {
 						title: props.title ? `"${props.title}"` : "",
-						type: i18n?.t("components.boardColumn").toString(),
+						type: i18n.t("components.boardColumn").toString(),
 					})
 					.toString() ?? "";
 

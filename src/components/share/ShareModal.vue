@@ -77,7 +77,7 @@ export default defineComponent({
 		const notifier = inject("notifierModule");
 
 		const t = (key) => {
-			const translateResult = i18n?.t(key);
+			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}

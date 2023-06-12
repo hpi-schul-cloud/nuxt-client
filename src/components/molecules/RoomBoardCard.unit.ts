@@ -2,6 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import RoomBoardCard from "./RoomBoardCard.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 const $router = {
 	push: jest.fn(),
@@ -29,7 +30,7 @@ describe("RoomBoardCard", () => {
 		wrapper = mount(RoomBoardCard as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				dragInProgress: false,

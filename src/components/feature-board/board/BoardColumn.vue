@@ -147,7 +147,7 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {

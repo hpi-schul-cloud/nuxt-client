@@ -77,7 +77,7 @@ export default defineComponent({
 		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
 
 		const rules = reactive({
-          required: value => !!value || i18n?.t("common.validation.required"),
+          required: value => !!value || i18n.t("common.validation.required"),
 		});
 
 		const onNext = () => {
