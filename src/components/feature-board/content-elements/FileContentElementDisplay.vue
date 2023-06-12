@@ -1,5 +1,5 @@
 <template>
-	<v-list dense flat class="py-0">
+	<v-list flat class="py-0">
 		<v-list-item
 			:href="
 				fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||

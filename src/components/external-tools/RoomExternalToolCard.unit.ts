@@ -3,6 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("RoomExternalToolCard", () => {
 	const getWrapper = (tool: ContextExternalTool, canEdit: boolean) => {
@@ -22,7 +23,10 @@ describe("RoomExternalToolCard", () => {
 					canEdit,
 				},
 				provide: {
-					i18n: undefined,
+					[I18N_KEY as symbol]: {
+						$t: (key: string): string => key,
+						tc: (key: string): string => key,
+					},
 				},
 			}
 		);

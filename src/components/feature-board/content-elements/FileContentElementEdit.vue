@@ -1,5 +1,5 @@
 <template>
-	<v-list dense flat class="py-0">
+	<v-list flat class="py-0">
 		<v-list-item
 			:href="
 				fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
@@ -18,6 +18,29 @@
 					fileRecord.name
 				}}</v-list-item-title>
 			</v-list-item-content>
+
+			<v-list-item-icon>
+				<BoardMenu scope="element">
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiArrowCollapseUp }}
+						</VIcon>
+						{{ $t("components.board.action.moveUp") }}
+					</BoardMenuAction>
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiArrowCollapseDown }}
+						</VIcon>
+						{{ $t("components.board.action.moveDown") }}
+					</BoardMenuAction>
+					<BoardMenuAction>
+						<VIcon>
+							{{ mdiTrashCanOutline }}
+						</VIcon>
+						{{ $t("components.board.action.delete") }}
+					</BoardMenuAction>
+				</BoardMenu>
+			</v-list-item-icon>
 		</v-list-item>
 		<v-list-item
 			v-if="fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED"
@@ -38,10 +61,19 @@
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
-import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
+import BoardMenu from "../shared/BoardMenu.vue";
+import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import {
+	mdiAlertCircle,
+  mdiFileDocumentOutline,
+	mdiArrowCollapseUp,
+	mdiArrowCollapseDown,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
+	components: { BoardMenu, BoardMenuAction },
 	props: {
 		caption: {
 			type: String,
@@ -60,6 +92,9 @@ export default defineComponent({
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			modelCaption,
+			mdiArrowCollapseUp,
+			mdiArrowCollapseDown,
+			mdiTrashCanOutline,
 		};
 	},
 });
