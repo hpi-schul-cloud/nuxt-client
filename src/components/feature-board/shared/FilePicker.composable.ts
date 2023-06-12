@@ -3,14 +3,14 @@ import { createSharedComposable } from "@vueuse/core";
 
 export const useFilePicker = createSharedComposable(() => {
 	const isFilePickerOpen = ref<boolean>(false);
-	const selectedFiles = ref<File>();
+	const selectedFile = ref<File>();
 
-	const setSelectedFiles = (file?: File) => {
-		selectedFiles.value = file;
+	const setSelectedFile = (file?: File) => {
+		selectedFile.value = file;
 	};
 
-	const getSelectedFiles = () => {
-		return selectedFiles.value;
+	const getSelectedFile = () => {
+		return selectedFile.value;
 	};
 
 	const openFilePicker = () => {
@@ -22,8 +22,8 @@ export const useFilePicker = createSharedComposable(() => {
 	};
 
 	return {
-		setSelectedFiles,
-		getSelectedFiles,
+		setSelectedFile,
+		getSelectedFile,
 		openFilePicker,
 		closeFilePicker,
 		isFilePickerOpen,

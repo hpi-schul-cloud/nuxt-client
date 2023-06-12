@@ -16,7 +16,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const modelFile = ref();
-		const { isFilePickerOpen, closeFilePicker, setSelectedFiles } =
+		const { isFilePickerOpen, closeFilePicker, setSelectedFile } =
 			useFilePicker();
 
 		onMounted(() => {
@@ -37,7 +37,7 @@ export default defineComponent({
 			if (newValue) {
 				emit("update:file", newValue);
 
-				setSelectedFiles(newValue);
+				setSelectedFile(newValue);
 			}
 		});
 

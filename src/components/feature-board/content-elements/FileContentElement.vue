@@ -1,15 +1,15 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecordModel?.id">
+		<div v-if="fileRecord?.id">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
 				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileRecord="fileRecord"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileRecord="fileRecord"
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
 		</div>
@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, ref, onMounted, computed } from "vue";
+import { defineComponent, PropType, ref, onMounted } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
@@ -45,38 +45,46 @@ export default defineComponent({
 			props.element.id,
 			FileRecordParentType.BOARDNODES
 		);
-		const { setSelectedFiles } = useFilePicker();
-		const fileRecordModel = ref<FileRecordResponse>();
+		const { setSelectedFile, getSelectedFile } = useFilePicker();
+		const fileRecord = ref<FileRecordResponse>();
 
 		onMounted(() => {
 			(async () => {
-				const { getSelectedFiles } = useFilePicker();
-				const filesToUpload = getSelectedFiles();
+				const file = getSelectedFile();
 
-				if (filesToUpload) {
-					try {
-						fileRecordModel.value = await upload(filesToUpload);
-
-						setSelectedFiles();
-					} catch (error) {
-						//Remove element
-					}
+				if (file) {
+					await tryUpload(file);
 				} else {
-					if (!fileRecordModel.value) {
-						const fileRecords = await fetchFiles();
-
-						if (fileRecords) {
-							fileRecordModel.value = fileRecords[0];
-						}
-					}
+					await getFileRecord();
 				}
 			})();
 		});
 
+		const tryUpload = async (file: File) => {
+			try {
+				const uploadedFileRecord = await upload(file);
+				fileRecord.value = uploadedFileRecord;
+
+				setSelectedFile();
+			} catch (error) {
+				//Remove element
+			}
+		};
+
+		const getFileRecord = async () => {
+			if (!fileRecord.value) {
+				const fileRecords = await fetchFiles();
+
+				if (fileRecords) {
+					fileRecord.value = fileRecords[0];
+				}
+			}
+		};
+
 		return {
 			modelValue,
 			isAutoFocus,
-			fileRecordModel,
+			fileRecord,
 		};
 	},
 });

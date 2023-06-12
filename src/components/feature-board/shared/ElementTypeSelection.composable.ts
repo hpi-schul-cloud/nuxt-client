@@ -1,8 +1,6 @@
-import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { AddCardElement } from "../state/CardState.composable";
-import { useFileStorageApi } from "./FileStorageApi.composable";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { useFilePicker } from "./FilePicker.composable";
 
