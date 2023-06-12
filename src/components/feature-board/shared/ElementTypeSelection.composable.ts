@@ -20,6 +20,7 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const onFileSelect = async (file: File) => {
 		setSelectedFile(file);
 		await addElementFunction(ContentElementType.File);
+		// TODO: Add Error handling and in error case remove file from selected file
 	};
 
 	const onFileElementClick = () => {

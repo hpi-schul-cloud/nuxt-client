@@ -68,6 +68,7 @@ export default defineComponent({
 				setSelectedFile();
 			} catch (error) {
 				//Remove element
+				setSelectedFile();
 			}
 		};
 
