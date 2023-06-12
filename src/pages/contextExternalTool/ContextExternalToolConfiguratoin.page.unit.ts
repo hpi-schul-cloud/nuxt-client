@@ -6,14 +6,15 @@ import flushPromises from "flush-promises";
 import Vue from "vue";
 import {
 	businessErrorFactory,
+	schoolToolConfigurationTemplateFactory,
 	toolConfigurationFactory,
-	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
 import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "../../store/context-external-tool";
+import { schoolToolConfigurationFactory } from "../../../tests/test-utils/factory/schoolToolConfigurationFactory";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -38,7 +39,7 @@ describe("ContextExternalToolConfiguration", () => {
 			...getters,
 		});
 		contextExternalToolsModule = createModuleMocks(ContextExternalToolsModule, {
-			getToolConfigurations: [toolConfigurationFactory.build()],
+			getSchoolToolConfigurations: [schoolToolConfigurationFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
@@ -69,6 +70,7 @@ describe("ContextExternalToolConfiguration", () => {
 				provide: {
 					i18n: { t: (key: string) => key },
 					externalToolsModule,
+					contextExternalToolsModule,
 					roomsModule,
 				},
 				propsData: {
@@ -85,7 +87,6 @@ describe("ContextExternalToolConfiguration", () => {
 		return {
 			wrapper,
 			routerPush,
-			//toolTemplate,
 		};
 	};
 
@@ -191,7 +192,9 @@ describe("ContextExternalToolConfiguration", () => {
 				const id = "expectedToolId";
 				const { wrapper } = await getWrapper(
 					{
-						getToolConfigurations: [toolConfigurationFactory.build({ id })],
+						getSchoolToolConfigurations: [
+							schoolToolConfigurationFactory.build({ id }),
+						],
 					},
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
@@ -230,10 +233,8 @@ describe("ContextExternalToolConfiguration", () => {
 						contextType: ToolContextType.COURSE,
 					}
 				);
-				wrapper.vm.toolTemplate = {
-					schoolToolId: "schoolToolId",
-					...toolConfigurationTemplateFactory.build(),
-				};
+				wrapper.vm.toolTemplate =
+					schoolToolConfigurationTemplateFactory.build();
 
 				const payload = {
 					toolTemplate: wrapper.vm.toolTemplate,
