@@ -902,6 +902,8 @@
 	"pages.room.taskCard.label.edit": "Bearbeiten",
 	"pages.room.taskCard.label.shareTask": "Aufgabenkopie teilen",
 	"pages.room.taskCard.label.betaTask": "Beta-Aufgabe",
+	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.itemDelete.text": "Bist du dir sicher, dass du das Element \"{itemTitle}\" löschen möchtest?",

@@ -5,6 +5,8 @@ import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
 import { BoardPermissionsTypes } from "../types/Board";
 
+jest.mock("./InlineEditInteractionHandler.composable");
+
 jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
@@ -12,7 +14,7 @@ const defaultPermissions = {
 	hasEditPermission: true,
 };
 
-describe("CardHeaderTitleInput Component", () => {
+describe("BoardAnyTitleTitleInput", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (options: {
@@ -24,11 +26,13 @@ describe("CardHeaderTitleInput Component", () => {
 			...defaultPermissions,
 			...options?.permissions,
 		});
+
 		wrapper = shallowMount(BoardAnyTitleInput as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
 				value: "props value",
 				isEditMode: options.isEditMode,
+				scope: "card",
 			},
 			provide: {
 				CARD_HOST_INTERACTION_EVENT: undefined,
