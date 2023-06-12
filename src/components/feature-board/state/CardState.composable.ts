@@ -133,7 +133,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		deleteCard,
 		updateCardHeight,
 		addElement,
-		extractElement,
 		moveElementDown,
 		moveElementUp,
 		card: toRef(cardState, "card"),
