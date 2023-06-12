@@ -5,19 +5,20 @@
 </template>
 
 <script lang="ts">
+import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
-import { useFilePicker } from "./FilePicker.composable";
 
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
-	props: {},
+	props: {
+		isFilePickerOpen: { type: Boolean, required: true },
+	},
 	emits: ["update:file"],
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const modelFile = ref();
-		const { isFilePickerOpen, closeFilePicker, setSelectedFile } =
-			useFilePicker();
+		const isFilePickerOpen = useVModel(props, "isFilePickerOpen", emit);
 
 		onMounted(() => {
 			inputRef.value.$refs.input.onclick = (e: Event) => {
@@ -25,19 +26,20 @@ export default defineComponent({
 			};
 		});
 
-		watch(isFilePickerOpen, (newValue: boolean) => {
-			if (newValue) {
-				inputRef.value.$refs.input.click();
-			}
+		watch(
+			() => props.isFilePickerOpen,
+			(newValue: boolean) => {
+				if (newValue) {
+					inputRef.value.$refs.input.click();
+				}
 
-			closeFilePicker();
-		});
+				isFilePickerOpen.value = false;
+			}
+		);
 
 		watch(modelFile, (newValue) => {
 			if (newValue) {
 				emit("update:file", newValue);
-
-				setSelectedFile(newValue);
 			}
 		});
 

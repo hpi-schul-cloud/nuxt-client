@@ -27,7 +27,7 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
-import { useFilePicker } from "../shared/FilePicker.composable";
+import { useSelectedFile } from "@/components/feature-board/shared/SelectedFile.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -45,7 +45,7 @@ export default defineComponent({
 			props.element.id,
 			FileRecordParentType.BOARDNODES
 		);
-		const { setSelectedFile, getSelectedFile } = useFilePicker();
+		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const fileRecord = ref<FileRecordResponse>();
 
 		onMounted(() => {
