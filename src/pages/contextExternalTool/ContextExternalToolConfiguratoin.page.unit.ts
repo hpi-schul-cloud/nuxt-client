@@ -9,14 +9,15 @@ import {
 	toolConfigurationFactory,
 	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
-import { ToolConfigurationTemplate } from "@/store/external-tool";
 import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
+import ContextExternalToolsModule from "../../store/context-external-tool";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
+	let contextExternalToolsModule: jest.Mocked<ContextExternalToolsModule>;
 	let roomsModule: jest.Mocked<RoomsModule>;
 
 	jest
@@ -32,6 +33,11 @@ describe("ContextExternalToolConfiguration", () => {
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
+			getToolConfigurations: [toolConfigurationFactory.build()],
+			getBusinessError: businessErrorFactory.build(),
+			...getters,
+		});
+		contextExternalToolsModule = createModuleMocks(ContextExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
@@ -53,13 +59,6 @@ describe("ContextExternalToolConfiguration", () => {
 		const $router = {
 			push: routerPush,
 		};
-
-		/*const toolTemplate: ToolConfigurationTemplate =
-			toolConfigurationTemplateFactory.build();
-
-		externalToolsModule.loadToolConfigurationTemplateFromSchoolExternalTool.mockResolvedValue(
-			toolTemplate
-		);*/
 
 		const wrapper: Wrapper<any> = mount(
 			ContextExternalToolConfiguration as MountOptions<Vue>,
@@ -184,13 +183,13 @@ describe("ContextExternalToolConfiguration", () => {
 				await openSelect(wrapper);
 
 				const selectionRow = wrapper.find(".row");
-				expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
+				// expect(selectionRow.find(".v-image__image").exists()).toBeTruthy(); //TODO N21-XXX: add this test when logoUrl is implemented
 				expect(selectionRow.find("span").text().includes(name));
 			});
 
-			/*it("should load template when tool configuration was changed", async () => {
+			it("should load template when tool configuration was changed", async () => {
 				const id = "expectedToolId";
-				const { wrapper } = await setup(
+				const { wrapper } = await getWrapper(
 					{
 						getToolConfigurations: [toolConfigurationFactory.build({ id })],
 					},
@@ -200,9 +199,9 @@ describe("ContextExternalToolConfiguration", () => {
 				await openSelect(wrapper);
 
 				expect(
-					externalToolsModule.loadToolConfigurationTemplateFromSchoolExternalTool
-				).toHaveBeenCalledWith(id);
-			});*/
+					contextExternalToolsModule.loadContextExternalTools
+				).toHaveBeenCalledWith("contextId", ToolContextType.COURSE);
+			});
 		});
 	});
 
@@ -223,7 +222,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 	describe("save button", () => {
 		describe("when creating a new configuration", () => {
-			it.skip("should call store action to save tool", async () => {
+			it("should call store action to save tool", async () => {
 				const { wrapper } = await getWrapper(
 					{},
 					{
@@ -231,7 +230,10 @@ describe("ContextExternalToolConfiguration", () => {
 						contextType: ToolContextType.COURSE,
 					}
 				);
-				wrapper.vm.toolTemplate = toolConfigurationTemplateFactory.build();
+				wrapper.vm.toolTemplate = {
+					schoolToolId: "schoolToolId",
+					...toolConfigurationTemplateFactory.build(),
+				};
 
 				const payload = {
 					toolTemplate: wrapper.vm.toolTemplate,
@@ -243,7 +245,7 @@ describe("ContextExternalToolConfiguration", () => {
 				await saveButton.trigger("click");
 
 				expect(
-					externalToolsModule.createContextExternalTool
+					contextExternalToolsModule.createContextExternalTool
 				).toHaveBeenCalledWith(payload);
 			});
 
@@ -262,6 +264,9 @@ describe("ContextExternalToolConfiguration", () => {
 
 				expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
 					path: "/rooms/contextId",
+					query: {
+						tab: "tools",
+					},
 				});
 			});
 
