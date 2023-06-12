@@ -1,39 +1,8 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { defineComponent, nextTick, provide } from "vue";
+import { I18N_KEY } from "@/utils/inject";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { nextTick } from "vue";
 import * as serverApi from "../../../serverApi/v3/api";
 import { useBoardState } from "./BoardState.composable";
-import { I18N_KEY } from "@/utils/inject";
-
-let wrapper: Wrapper<Vue>;
-
-const mountComposable = (
-	composable: () => unknown,
-	providers: Record<string | symbol, unknown> = {}
-) => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-		provide: providers,
-	});
-
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-		parentComponent: ParentComponent,
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
 
 describe("BoardState composable", () => {
 	let mockApi: any;

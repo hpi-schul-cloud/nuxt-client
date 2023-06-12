@@ -4,45 +4,11 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
-import { defineComponent, provide, ref, watch } from "vue";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { ref, watch } from "vue";
 import { useCopy } from "./copy";
 
 jest.mock("./loadingState");
-
-export interface MountOptions {
-	provider?: () => void;
-}
-
-const mountComposable = <R>(
-	composable: () => R,
-	providers: Record<string | symbol, unknown>
-): R => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-		provide: providers,
-	});
-
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	const wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-		parentComponent: ParentComponent,
-	});
-
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
 
 describe("copy composable", () => {
 	const setup = () => {

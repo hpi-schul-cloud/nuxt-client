@@ -1,41 +1,9 @@
-import { Wrapper, shallowMount } from "@vue/test-utils";
-import {
-	useBoardBreadcrumbs,
-	setBoardBreadcrumbs,
-} from "./BoardBreadcrumbs.composable";
-import Vue, { defineComponent, provide } from "vue";
 import { I18N_KEY } from "@/utils/inject";
-
-let wrapper: Wrapper<Vue>;
-
-const mountComposable = (
-	composable: () => unknown,
-	providers: Record<string | symbol, unknown> = {}
-) => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-		provide: providers,
-	});
-
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-		parentComponent: ParentComponent,
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
+import {
+	setBoardBreadcrumbs,
+	useBoardBreadcrumbs,
+} from "./BoardBreadcrumbs.composable";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 
 describe("BoardBreadcrumbs.composable", () => {
 	it("should generate breadcrumb list", () => {
