@@ -65,7 +65,7 @@ import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
 	mdiAlertCircle,
-  mdiFileDocumentOutline,
+	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiTrashCanOutline,
