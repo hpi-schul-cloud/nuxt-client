@@ -306,6 +306,7 @@
 	"components.boardElement": "Eлемент",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.column.defaultTitle": "Нова колонка",
+	"components.board.notifications.errors.board.notLoaded": "Не вдалося завантажити дані плати.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.errors.notCreated": "{type} Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type} Не вдалося видалити.",

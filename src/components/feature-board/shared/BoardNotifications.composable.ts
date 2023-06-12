@@ -1,4 +1,5 @@
 import { notifierModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useBoardNotifier = () => {
 	const showSuccess = (text: string | undefined) => {
@@ -37,7 +38,13 @@ export const useBoardNotifier = () => {
 		});
 	};
 
+	const isErrorCode = (statusCode: HttpStatusCode) => {
+		if (statusCode >= 300) return true;
+		return false;
+	};
+
 	return {
+		isErrorCode,
 		showSuccess,
 		showFailure,
 		showInfo,
