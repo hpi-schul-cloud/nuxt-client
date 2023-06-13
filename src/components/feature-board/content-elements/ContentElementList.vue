@@ -15,8 +15,8 @@
 				:isFirstElement="isFirstElement(element.id)"
 				:isLastElement="isLastElement(element.id)"
 				:hasMultipleElements="hasMultipleElements"
-				@move-down:edit="onMoveFileDown(element.id)"
-				@move-up:edit="onMoveFileUp(element.id)"
+				@move-down:edit="onMoveElementDown(element.id)"
+				@move-up:edit="onMoveElementUp(element.id)"
 			/>
 		</template>
 	</VCardText>
@@ -49,7 +49,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["move-down:file", "move-up:file"],
+	emits: ["move-down:element", "move-up:element"],
 	setup(props, { emit }) {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
@@ -63,12 +63,12 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onMoveFileDown = (elementId: string) => {
-			emit("move-down:file", elementId);
+		const onMoveElementDown = (elementId: string) => {
+			emit("move-down:element", elementId);
 		};
 
-		const onMoveFileUp = (elementId: string) => {
-			emit("move-up:file", elementId);
+		const onMoveElementUp = (elementId: string) => {
+			emit("move-up:element", elementId);
 		};
 
 		const hasMultipleElements = () => props.elements.length > 1;
@@ -108,8 +108,8 @@ export default defineComponent({
 			isFirstElement,
 			isLastElement,
 			isRichTextElementResponse,
-			onMoveFileDown,
-			onMoveFileUp,
+			onMoveElementDown,
+			onMoveElementUp,
 		};
 	},
 });
