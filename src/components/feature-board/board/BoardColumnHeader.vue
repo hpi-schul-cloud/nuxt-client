@@ -12,7 +12,6 @@
 			ref="columnHeader"
 		>
 			<div class="d-flex align-start py-2">
-				<!-- <div> -->
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"
@@ -21,7 +20,6 @@
 					@update:value="onUpdateTitle"
 					class="w-100"
 				></BoardAnyTitleInput>
-				<!-- </div> -->
 				<div class="pt-2">
 					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">
