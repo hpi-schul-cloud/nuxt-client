@@ -3,7 +3,7 @@ import { shallowMount } from "@vue/test-utils";
 import { AnyContentElement } from "../types/ContentElement";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileContentElement from "./FileContentElement.vue";
@@ -27,7 +27,7 @@ describe("FileContentElement", () => {
 	describe("when file is already uploaded", () => {
 		describe("when file is already loaded in state", () => {
 			const setup = (isEditMode: boolean) => {
-				const element = fileElementResponse.build();
+				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
@@ -80,7 +80,7 @@ describe("FileContentElement", () => {
 
 		describe("when file needs to be loaded", () => {
 			const setup = (isEditMode: boolean) => {
-				const element = fileElementResponse.build();
+				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
@@ -151,7 +151,7 @@ describe("FileContentElement", () => {
 
 	describe("when file is not upload onMount", () => {
 		const setup = () => {
-			const element = fileElementResponse.build();
+			const element = fileElementResponseFactory.build();
 			document.body.setAttribute("data-app", "true");
 
 			setupFileStorageApiMock({});
@@ -172,7 +172,7 @@ describe("FileContentElement", () => {
 	describe("when file finished uploading and newFileForParent becomes defined", () => {
 		describe("when newFileForParent equals element id", () => {
 			const setup = () => {
-				const element = fileElementResponse.build();
+				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
@@ -207,7 +207,7 @@ describe("FileContentElement", () => {
 
 		describe("when newFileForParent not equals element id", () => {
 			const setup = () => {
-				const element = fileElementResponse.build();
+				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
