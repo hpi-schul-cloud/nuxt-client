@@ -42,18 +42,6 @@
 				</BoardMenu>
 			</v-list-item-icon>
 		</v-list-item>
-		<v-list-item
-			v-if="fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED"
-			style="background: #ffdbe1"
-		>
-			<v-list-item-icon class="mr-2">
-				<v-icon color="error">{{ mdiAlertCircle }}</v-icon>
-			</v-list-item-icon>
-
-			<v-list-item-content>
-				{{ $t("components.cardElement.fileElement.virusDetected") }}
-			</v-list-item-content>
-		</v-list-item>
 	</v-list>
 </template>
 
