@@ -271,4 +271,42 @@ describe("FileStorageApi Composable", () => {
 			});
 		});
 	});
+
+	describe("refreshFile", () => {
+		const setup = () => {
+			const parentId = ObjectIdMock();
+			const parentType = FileRecordParentType.BOARDNODES;
+			const fileRecordResponse = fileRecordResponseFactory.build({
+				parentId,
+				parentType,
+			});
+			const response = {
+				data: { data: [fileRecordResponse] },
+			};
+
+			fileApiFactory.list.mockImplementationOnce(() => response);
+
+			return { parentId, parentType, fileRecordResponse };
+		};
+
+		it("should call FileApiFactory.list", async () => {
+			const { parentId, parentType } = setup();
+			const { refreshFile } = useFileStorageApi();
+
+			await refreshFile(parentId, parentType);
+
+			expect(fileApiFactory.list).toBeCalledWith(
+				"schoolId",
+				parentId,
+				parentType
+			);
+		});
+
+		it("should set files", async () => {
+			const { parentId, parentType, fileRecordResponse } = setup();
+			const { refreshFile } = useFileStorageApi();
+
+			expect(await refreshFile(parentId, parentType)).toBe(fileRecordResponse);
+		});
+	});
 });

@@ -106,12 +106,21 @@ export const useFileStorageApi = createSharedComposable(() => {
 		businessError.value = error;
 	};
 
+	const refreshFile = async (
+		parentId: string,
+		parentType: FileRecordParentType
+	) => {
+		await fetchFiles(parentId, parentType);
+		return getFile(parentId);
+	};
+
 	return {
 		download,
 		fetchFiles,
 		rename,
 		upload,
 		getFile,
+		refreshFile,
 		businessError,
 		fileRecords,
 		newFileForParent,

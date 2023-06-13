@@ -54,7 +54,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
+		const { getFile, refreshFile, newFileForParent } = useFileStorageApi();
 
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
@@ -65,15 +65,19 @@ export default defineComponent({
 				FileRecordScanStatus.BLOCKED
 		);
 
-		const refreshFileState = async () => {
-			await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-			fileRecordModel.value = getFile(parentId.value);
-
-			if (
-				!fileRecordModel.value ||
+		const isPending = computed(
+			() =>
 				fileRecordModel.value?.securityCheckStatus ===
-					FileRecordScanStatus.PENDING
-			) {
+				FileRecordScanStatus.PENDING
+		);
+
+		const refreshFileState = async () => {
+			fileRecordModel.value = await refreshFile(
+				parentId.value,
+				FileRecordParentType.BOARDNODES
+			);
+
+			if (!fileRecordModel.value || isPending) {
 				await new Promise((resolve) => setTimeout(resolve, 10000));
 				await refreshFileState();
 			}
@@ -84,11 +88,7 @@ export default defineComponent({
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
-				if (
-					!fileRecordModel.value ||
-					fileRecordModel.value?.securityCheckStatus ===
-						FileRecordScanStatus.PENDING
-				) {
+				if (!fileRecordModel.value || isPending) {
 					await refreshFileState();
 				}
 			})();
