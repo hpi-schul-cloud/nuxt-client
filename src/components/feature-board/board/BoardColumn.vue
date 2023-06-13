@@ -193,13 +193,12 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
-	background: transparent;
+	background-color: transparent;
 	border-radius: 5px;
 }
 .column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
-	background: var(--v-secondary-lighten1);
+	background-color: var(--v-secondary-lighten1);
 	border-radius: 5px;
-	transition: all 150ms ease-in;
 }
 
 /* Handle on hover */
