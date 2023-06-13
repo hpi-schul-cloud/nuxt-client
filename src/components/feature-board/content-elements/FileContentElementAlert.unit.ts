@@ -25,8 +25,6 @@ describe("FileContentElementAlert", () => {
 	it("should display icon", async () => {
 		const { wrapper } = setup();
 
-		console.log(wrapper.overview());
-
 		const icon = wrapper.find("v-alert-stub").attributes("icon");
 
 		expect(icon).toBe("$error");
