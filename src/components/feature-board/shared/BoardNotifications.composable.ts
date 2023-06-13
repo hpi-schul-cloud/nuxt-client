@@ -1,13 +1,16 @@
-import { notifierModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import VueI18n from "vue-i18n";
 import { inject } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import NotifierModule from "@/store/notifier";
 
 type ErrorTypes = "create" | "read" | "update" | "delete";
 type BoardObjectTypes = "board" | "boardColumn" | "boardCard" | "boardElement";
 
 export const useBoardNotifier = () => {
-	const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+	const i18n = injectStrict(I18N_KEY);
+
+	const notifierModule = inject<NotifierModule>("notifierModule");
+
 	const showSuccess = (text: string | undefined) => {
 		notifierModule?.show({
 			text,
@@ -62,17 +65,21 @@ export const useBoardNotifier = () => {
 
 		const errorKey = errorTextMap[errorType] ?? "error.generic";
 
-		return i18n
-			?.t(errorKey, { type: i18n?.t(`components.${boardObjectType}`) })
-			.toString();
+		return boardObjectType
+			? i18n
+					?.t(errorKey, {
+						type: i18n?.t(`components.${boardObjectType}`),
+					})
+					.toString()
+			: i18n?.t(errorKey).toString();
 	};
 
 	return {
+		generateErrorText,
 		isErrorCode,
-		showSuccess,
+		showCustomNotifier,
 		showFailure,
 		showInfo,
-		showCustomNotifier,
-		generateErrorText,
+		showSuccess,
 	};
 };
