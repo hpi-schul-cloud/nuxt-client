@@ -28,7 +28,7 @@ import {
 	FileElementResponse,
 	RichTextElementResponse,
 } from "@/serverApi/v3";
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
@@ -71,7 +71,7 @@ export default defineComponent({
 			emit("move-up:element", elementId);
 		};
 
-		const hasMultipleElements = () => props.elements.length > 1;
+		const hasMultipleElements = computed(() => props.elements.length > 1);
 
 		const isFirstElement = (elementId: string) => {
 			const elementIndex = props.elements.findIndex(
