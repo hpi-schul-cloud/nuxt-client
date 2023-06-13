@@ -31,7 +31,10 @@ describe("FileContentElement", () => {
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
-				const getFileMock = jest.fn().mockReturnValue(fileRecordResponse);
+				const getFileMock = jest
+					.fn()
+					.mockReturnValueOnce(fileRecordResponse)
+					.mockReturnValueOnce(fileRecordResponse);
 				setupFileStorageApiMock({ getFileMock });
 
 				const { wrapper } = getWrapper({ element, isEditMode });
@@ -87,7 +90,7 @@ describe("FileContentElement", () => {
 				const getFileMock = jest
 					.fn()
 					.mockReturnValueOnce(undefined)
-					.mockReturnValue(fileRecordResponse);
+					.mockReturnValueOnce(fileRecordResponse);
 				const { fetchFiles } = setupFileStorageApiMock({
 					getFileMock,
 				});

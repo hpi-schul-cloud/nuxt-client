@@ -10,52 +10,56 @@ describe("FileContentElementDisplay", () => {
 		fileRecord: fileRecordResponseFactory.build(),
 	});
 
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
+	describe("when no virus is detected", () => {
+		const setup = () => {
+			document.body.setAttribute("data-app", "true");
 
-		const propsData = setupProps();
+			const propsData = setupProps();
 
-		const wrapper = shallowMount(FileContentElementDisplay, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
+			const wrapper = shallowMount(FileContentElementDisplay, {
+				...createComponentMocks({ i18n: true }),
+				propsData,
+			});
+
+			return {
+				wrapper,
+				captionProp: propsData.caption,
+				fileRecordProp: propsData.fileRecord,
+			};
+		};
+
+		it("should be found in dom", () => {
+			const { wrapper } = setup();
+
+			const fileContentElement = wrapper.findComponent(
+				FileContentElementDisplay
+			);
+			expect(fileContentElement.exists()).toBe(true);
 		});
 
-		return {
-			wrapper,
-			captionProp: propsData.caption,
-			fileRecordProp: propsData.fileRecord,
-		};
-	};
+		it("should find download url", async () => {
+			const { wrapper, fileRecordProp } = setup();
 
-	it("should be found in dom", () => {
-		const { wrapper } = setup();
+			const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
 
-		const fileContentElement = wrapper.findComponent(FileContentElementDisplay);
-		expect(fileContentElement.exists()).toBe(true);
-	});
+			expect(downloadUrl).toBe(fileRecordProp.url);
+		});
 
-	it("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
+		it("should display icon", async () => {
+			const { wrapper } = setup();
 
-		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
+			const fileIcon = wrapper.find("v-icon-stub");
 
-		expect(downloadUrl).toBe(fileRecordProp.url);
-	});
+			expect(fileIcon.exists()).toBe(true);
+		});
 
-	it("should display icon", async () => {
-		const { wrapper } = setup();
+		it("should find file name", async () => {
+			const { wrapper, fileRecordProp } = setup();
 
-		const fileIcon = wrapper.find("v-icon-stub");
+			const fileName = wrapper.find("v-list-item-title-stub").text();
 
-		expect(fileIcon.exists()).toBe(true);
-	});
-
-	it("should find file name", async () => {
-		const { wrapper, fileRecordProp } = setup();
-
-		const fileName = wrapper.find("v-list-item-title-stub").text();
-
-		expect(fileName).toBe(fileRecordProp.name);
+			expect(fileName).toBe(fileRecordProp.name);
+		});
 	});
 
 	describe("when a virus is detected", () => {
