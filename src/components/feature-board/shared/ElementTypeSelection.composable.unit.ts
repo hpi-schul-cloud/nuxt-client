@@ -4,7 +4,6 @@ import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
-import { set } from "vue/types/umd";
 jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("./FileStorageApi.composable");
 jest.mock("./SelectedFile.composable");
@@ -15,7 +14,7 @@ describe("ElementTypeSelection Composable", () => {
 			const setup = () => {
 				setupFileStorageApiMock({});
 				setupSharedElementTypeSelectionMock({});
-				setupSelectedFileMock();
+				setupSelectedFileMock({});
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
@@ -73,7 +72,7 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn().mockResolvedValueOnce(element);
 				const file = new File([], "test");
 				setupSharedElementTypeSelectionMock({});
-				const { setSelectedFile } = setupSelectedFileMock();
+				const { setSelectedFile } = setupSelectedFileMock({});
 
 				return { addElementMock, file, setSelectedFile };
 			};
@@ -105,7 +104,7 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn().mockRejectedValueOnce(error);
 				const file = new File([], "test");
 				const { upload } = setupFileStorageApiMock({});
-				setupSelectedFileMock();
+				setupSelectedFileMock({});
 
 				return { addElementMock, file, upload, error };
 			};
@@ -127,7 +126,7 @@ describe("ElementTypeSelection Composable", () => {
 			const { elementTypeOptions, isDialogOpen } =
 				setupSharedElementTypeSelectionMock({});
 			setupFileStorageApiMock({});
-			setupSelectedFileMock();
+			setupSelectedFileMock({});
 
 			return { elementTypeOptions, addElementMock, isDialogOpen };
 		};
