@@ -28,6 +28,7 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import { DeleteElementEventPayload } from "../types/ContentElement";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -66,8 +67,10 @@ export default defineComponent({
 		});
 
 		const onDeleteElement = (): void => {
-			console.log("FileContentElement - delete:element", props.element.id);
-			emit("delete:element", props.element.id);
+			emit("delete:element", {
+				elementId: props.element.id,
+				name: fileRecordModel.value?.name,
+			} as DeleteElementEventPayload);
 		};
 
 		return { onDeleteElement, modelValue, isAutoFocus, fileRecordModel };

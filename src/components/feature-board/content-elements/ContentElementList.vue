@@ -25,7 +25,10 @@ import {
 	RichTextElementResponse,
 } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
-import { AnyContentElement } from "../types/ContentElement";
+import {
+	AnyContentElement,
+	DeleteElementEventPayload,
+} from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
@@ -59,9 +62,8 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onDeleteElement = (elementId: string): void => {
-			console.log("ContentElementList - delete:element", elementId);
-			emit("delete:element", elementId);
+		const onDeleteElement = (data: DeleteElementEventPayload): void => {
+			emit("delete:element", data);
 		};
 
 		return {

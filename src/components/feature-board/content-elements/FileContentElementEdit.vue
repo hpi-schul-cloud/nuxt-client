@@ -25,7 +25,7 @@
 						</VIcon>
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
-					<BoardMenuAction @click="onTryDelete">
+					<BoardMenuAction @click="onDelete">
 						<VIcon>
 							{{ mdiTrashCanOutline }}
 						</VIcon>
@@ -38,8 +38,6 @@
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useVModel } from "@vueuse/core";
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
@@ -67,25 +65,10 @@ export default defineComponent({
 	},
 	emits: ["delete:element", "update:caption"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
 		const modelCaption = useVModel(props, "caption", emit);
 
-		const onTryDelete = async () => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						type: i18n.t("components.boardElement").toString(),
-					})
-					.toString() ?? "";
-
-			const { askConfirmation } = useDeleteConfirmation();
-
-			const shouldDelete = await askConfirmation({ message });
-			if (shouldDelete) {
-				console.log("FileContentElementEdit - delete:element");
-				emit("delete:element");
-			}
+		const onDelete = () => {
+			emit("delete:element");
 		};
 
 		return {
@@ -94,7 +77,7 @@ export default defineComponent({
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
-			onTryDelete,
+			onDelete,
 		};
 	},
 });

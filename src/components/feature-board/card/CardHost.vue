@@ -33,7 +33,7 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasDeletePermission" scope="card">
-							<BoardMenuAction @click="onTryDelete">
+							<BoardMenuAction @click="onDeleteCard">
 								<VIcon>
 									{{ mdiTrashCanOutline }}
 								</VIcon>
@@ -86,6 +86,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { DeleteElementEventPayload } from "../types/ContentElement";
 
 export default defineComponent({
 	name: "CardHost",
@@ -128,21 +129,40 @@ export default defineComponent({
 		};
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 
-		const onTryDelete = async () => {
+		const onDeleteCard = async () => {
+			const shouldDelete = await onTryDelete(card.value?.title, "boardCard");
+
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
+			}
+		};
+
+		const onDeleteElement = async (data: DeleteElementEventPayload) => {
+			const { elementId, name } = data;
+			const shouldDelete = await onTryDelete(name, "boardElement");
+
+			if (shouldDelete) {
+				await deleteElement(elementId);
+			}
+		};
+
+		const onTryDelete = async (
+			title: string | undefined,
+			type: "boardCard" | "boardElement"
+		) => {
 			const message =
 				i18n
 					.t("components.cardHost.deletionModal.confirmation", {
-						title: card.value?.title ? `"${card.value.title}"` : "",
-						type: i18n.t("components.boardCard").toString(),
+						title: title ? `"${title}"` : "",
+						type: i18n.t(`components.${type}`).toString(),
 					})
 					.toString() ?? "";
 
 			const { askConfirmation } = useDeleteConfirmation();
 
 			const shouldDelete = await askConfirmation({ message });
-			if (shouldDelete) {
-				emit("delete:card", card.value?.id);
-			}
+
+			return shouldDelete;
 		};
 
 		const { askType, createFileElement, isFilePickerOpen } =
@@ -150,11 +170,6 @@ export default defineComponent({
 
 		const onAddElement = () => {
 			askType();
-		};
-
-		const onDeleteElement = async (elementId: string) => {
-			console.log("CardHost - delete:element", elementId);
-			await deleteElement(elementId);
 		};
 
 		const onFileSelect = async (file: File) => {
@@ -190,7 +205,7 @@ export default defineComponent({
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
-			onTryDelete,
+			onDeleteCard,
 			onAddElement,
 			onDeleteElement,
 			onStartEditMode,
