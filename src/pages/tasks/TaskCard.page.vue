@@ -101,36 +101,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, onMounted, computed, Ref } from "vue";
-import { useTitle } from "@vueuse/core";
-import { useRouter, useRoute } from "vue-router/composables";
-import VueI18n from "vue-i18n";
+import CardElementList from "@/components/card-elements/CardElementList.vue";
+import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
+import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import {
+	CardElementParams,
+	CardElementResponse,
+	CardElementResponseCardElementTypeEnum,
+	CardRichTextElementResponseInputFormatEnum,
+	RichTextCardElementParamInputFormatEnum,
+} from "@/serverApi/v3";
 import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
-import RoomsModule from "@/store/rooms";
 import RoomModule from "@/store/room";
+import RoomsModule from "@/store/rooms";
 import SchoolsModule from "@/store/schools";
 import TaskCardModule from "@/store/task-card";
-import Theme from "@/theme.config";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import TitleCardElement from "@/components/card-elements/TitleCardElement.vue";
-import CardElementList from "@/components/card-elements/CardElementList.vue";
+import { AlertMessage } from "@/store/types/alert-payload";
 import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import { AlertMessage } from "@/store/types/alert-payload";
-import {
-	CardElementResponse,
-	CardElementResponseCardElementTypeEnum,
-	RichTextCardElementParamInputFormatEnum,
-	CardElementParams,
-	CardRichTextElementResponseInputFormatEnum,
-} from "@/serverApi/v3";
-import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import Theme from "@/theme.config";
+import { useTitle } from "@vueuse/core";
+import { Ref, computed, defineComponent, inject, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router/composables";
 
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -149,7 +149,7 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const roomModule: RoomModule | undefined = inject<RoomModule>("roomModule");
 		const roomsModule: RoomsModule | undefined =

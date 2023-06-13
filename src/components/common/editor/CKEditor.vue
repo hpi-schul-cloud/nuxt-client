@@ -13,12 +13,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject, watch } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
+import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+import { defineComponent, ref, watch } from "vue";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -46,7 +47,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 
 		const ck = ref(null);
 		const content = ref(props.value);
