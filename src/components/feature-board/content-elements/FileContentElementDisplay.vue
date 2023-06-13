@@ -37,11 +37,9 @@ export default defineComponent({
 		},
 	},
 
-	setup(props) {
-		const fileSize = (props.fileRecord.size / 1024).toFixed(2);
+	setup() {
 		return {
 			mdiFileDocumentOutline,
-			fileSize,
 		};
 	},
 });
