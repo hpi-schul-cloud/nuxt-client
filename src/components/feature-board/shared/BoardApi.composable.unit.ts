@@ -181,12 +181,12 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
-	describe("createElement", () => {
+	describe("createElementCall", () => {
 		it("should call cardControllerCreateElement api", async () => {
-			const { createElement } = useBoardApi();
+			const { createElementCall } = useBoardApi();
 			const PAYLOAD = "card-id";
 
-			await createElement(PAYLOAD, {
+			await createElementCall(PAYLOAD, {
 				type: ContentElementType.RichText,
 			});
 			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(

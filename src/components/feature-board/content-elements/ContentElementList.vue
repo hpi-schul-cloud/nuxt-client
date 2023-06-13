@@ -12,6 +12,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
+				@delete:element="onDeleteElement"
 			/>
 		</template>
 	</VCardText>
@@ -44,7 +45,8 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	emits: ["delete:element"],
+	setup(props, { emit }) {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
@@ -57,10 +59,16 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
+		const onDeleteElement = (elementId: string): void => {
+			console.log("ContentElementList - delete:element", elementId);
+			emit("delete:element", elementId);
+		};
+
 		return {
 			ContentElementType,
 			isRichTextElementResponse,
 			isFileElementResponse,
+			onDeleteElement,
 		};
 	},
 });

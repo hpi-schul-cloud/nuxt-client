@@ -1,5 +1,5 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { onMounted, reactive, toRef } from "vue";
+import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
@@ -19,7 +19,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		updateCardHeightCall,
 		updateCardTitle,
@@ -65,11 +66,39 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const result = await createElement(cardState.card.id, { type });
+		const result = await createElementCall(cardState.card.id, { type });
 
 		cardState.card.elements.push(result as unknown as AnyContentElement);
 
 		return result;
+	};
+
+	const deleteElement = async (elementId: string) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		await deleteElementCall(elementId);
+		await extractElement(elementId);
+	};
+
+	const extractElement = async (
+		elementId: string
+	): Promise<AnyContentElement | undefined> => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		const index = cardState.card.elements.findIndex((e) => e.id === elementId);
+		if (index > -1) {
+			const extractedCards = cardState.card.elements.splice(index, 1);
+			/**
+			 * refreshes the board to force rerendering in tracked v-for
+			 * to maintain focus when moving cards by keyboard
+			 */
+			await nextTick();
+			return extractedCards[0];
+		}
 	};
 
 	onMounted(() => fetchCard(id));
@@ -80,6 +109,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		deleteCard,
 		updateCardHeight,
 		addElement,
+		deleteElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};

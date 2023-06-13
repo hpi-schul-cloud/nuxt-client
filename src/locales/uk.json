@@ -291,6 +291,7 @@
 	"components.molecules.VCustomChipTimeRemaining.hintMinShort": "",
 	"components.molecules.VCustomChipTimeRemaining.hintMinutes": "",
 	"components.cardElement.deleteElement": "Видалити елемент",
+	"components.cardElement.deletionModal.confirmation": "{type} буде видалена. Ви впевнені, що хочете видалити?",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.richTextElement": "Текстовий елемент",
 	"components.cardElement.richTextElement.placeholder": "додати текст",

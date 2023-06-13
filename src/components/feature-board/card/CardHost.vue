@@ -45,6 +45,7 @@
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
+						@delete:element="onDeleteElement"
 					></ContentElementList>
 					<CardAddElementMenu
 						@add-element="onAddElement"
@@ -108,8 +109,14 @@ export default defineComponent({
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
-		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
-			useCardState(props.cardId);
+		const {
+			isLoading,
+			card,
+			updateTitle,
+			updateCardHeight,
+			addElement,
+			deleteElement,
+		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
@@ -143,6 +150,11 @@ export default defineComponent({
 
 		const onAddElement = () => {
 			askType();
+		};
+
+		const onDeleteElement = async (elementId: string) => {
+			console.log("CardHost - delete:element", elementId);
+			await deleteElement(elementId);
 		};
 
 		const onFileSelect = async (file: File) => {
@@ -180,6 +192,7 @@ export default defineComponent({
 			onUpdateCardTitle,
 			onTryDelete,
 			onAddElement,
+			onDeleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			cardHost,

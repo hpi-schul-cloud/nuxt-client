@@ -11,6 +11,7 @@
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
 				@update:caption="($event) => (modelValue.caption = $event)"
+				@delete:element="onDeleteElement"
 			></FileContentElementEdit>
 		</div>
 		<v-card-text v-else>
@@ -38,7 +39,8 @@ export default defineComponent({
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup(props) {
+	emits: ["delete:element"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
 
@@ -63,7 +65,12 @@ export default defineComponent({
 			}
 		});
 
-		return { modelValue, isAutoFocus, fileRecordModel };
+		const onDeleteElement = (): void => {
+			console.log("FileContentElement - delete:element", props.element.id);
+			emit("delete:element", props.element.id);
+		};
+
+		return { onDeleteElement, modelValue, isAutoFocus, fileRecordModel };
 	},
 });
 </script>
