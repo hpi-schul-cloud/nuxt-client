@@ -23,7 +23,7 @@ describe("BoardNotifications.composable", () => {
 			});
 		});
 		describe("when statusCode below 300", () => {
-			it("should return true", () => {
+			it("should return false", () => {
 				const { isErrorCode } = mountComposable(() => useBoardNotifier(), {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 				});
