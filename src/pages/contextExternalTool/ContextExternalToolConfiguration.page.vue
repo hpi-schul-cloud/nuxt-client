@@ -93,6 +93,7 @@ import ExternalToolSelectionRow from "../administration/external-tool/ExternalTo
 import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ContextExternalToolsModule from "../../store/context-external-tool";
+import { I18N_KEY, injectStrict } from "../../utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -113,7 +114,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
