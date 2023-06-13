@@ -1,3 +1,4 @@
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
@@ -7,15 +8,17 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
+import { Envs } from "@/store/types/env-config";
+import { initializeAxios } from "@/utils/api";
+import { I18N_KEY } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomDetailsPage from "./RoomDetails.page.vue";
-import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
-import { Envs } from "@/store/types/env-config";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { provide } from "vue";
+import VueI18n from "vue-i18n";
+import RoomDetailsPage from "./RoomDetails.page.vue";
 
 const mockData = {
 	roomId: "123",
@@ -132,14 +135,12 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		},
-		provide: {
-			copyModule: copyModuleMock,
-			loadingStateModule: loadingStateModuleMock,
-			notifierModule: notifierModuleMock,
-			i18n: { t: (key: string) => key },
-			shareModule: shareModuleMock,
-			authModule: undefined,
-			contextExternalToolsModule: undefined,
+		setup() {
+			provide("copyModule", copyModuleMock);
+			provide("loadingStateModule", loadingStateModuleMock);
+			provide("notifierModule", notifierModuleMock);
+			provide(I18N_KEY, { t: (key: string) => key } as VueI18n);
+			provide("shareModule", shareModuleMock);
 		},
 	});
 };

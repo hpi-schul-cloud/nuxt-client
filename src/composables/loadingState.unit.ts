@@ -1,44 +1,8 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { defineComponent, provide } from "vue";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { useLoadingState } from "./loadingState";
-import Vue from "vue";
-
-export interface MountOptions {
-	provider?: () => void;
-}
-
-let wrapper: Wrapper<Vue>;
-
-const mountComposable = <R>(
-	composable: () => R,
-	providers: Record<string, unknown>
-): R => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-	});
-
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-		parentComponent: ParentComponent,
-	});
-
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	//@ts-ignore
-	return wrapper.vm.result;
-};
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 
 describe("loadingState composable", () => {
 	it("should call loadingStateModule.open()", async () => {
@@ -52,7 +16,7 @@ describe("loadingState composable", () => {
 		);
 
 		isLoadingDialogOpen.value = true;
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(loadingStateModuleMock.open).toBeCalled();
 		expect(loadingStateModuleMock.open).toHaveBeenCalledWith({
@@ -71,7 +35,7 @@ describe("loadingState composable", () => {
 		);
 
 		isLoadingDialogOpen.value = false;
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(loadingStateModuleMock.close).toBeCalled();
 	});

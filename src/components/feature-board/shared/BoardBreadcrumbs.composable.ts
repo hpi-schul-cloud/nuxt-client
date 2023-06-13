@@ -1,5 +1,4 @@
-import { inject } from "vue";
-import VueI18n from "vue-i18n";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 type BoardBreadcrumbsData = {
 	courseName: string | undefined;
@@ -30,18 +29,17 @@ export const setBoardBreadcrumbs = (
 };
 
 export const useBoardBreadcrumbs = (): BoardBreadcrumbs[] => {
-	const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+	const i18n = injectStrict(I18N_KEY);
 	return [
 		{
 			text:
 				boardBreadCrumbsData.courseName ||
-				i18n?.t("pages.courses.index.title").toString(),
+				i18n.t("pages.courses.index.title").toString(),
 			to: boardBreadCrumbsData.courseUrl,
 		},
 		{
 			text:
-				boardBreadCrumbsData.boardName ||
-				i18n?.t("components.board").toString(),
+				boardBreadCrumbsData.boardName || i18n.t("components.board").toString(),
 			disabled: true,
 		},
 	];

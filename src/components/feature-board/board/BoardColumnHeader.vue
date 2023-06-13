@@ -38,9 +38,9 @@
 
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
@@ -73,7 +73,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.columnId
 		);
@@ -96,9 +96,9 @@ export default defineComponent({
 		const onTryDelete = async () => {
 			const message =
 				i18n
-					?.t("components.cardHost.deletionModal.confirmation", {
+					.t("components.cardHost.deletionModal.confirmation", {
 						title: props.title ? `"${props.title}"` : "",
-						type: i18n?.t("components.boardColumn").toString(),
+						type: i18n.t("components.boardColumn").toString(),
 					})
 					.toString() ?? "";
 
