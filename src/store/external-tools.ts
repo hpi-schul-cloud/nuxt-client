@@ -9,7 +9,6 @@ import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
 import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
 import {
-	ContextExternalToolPostParams,
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
@@ -22,7 +21,6 @@ import {
 import { BusinessError } from "./types/commons";
 import { AxiosError, AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool/tool-context-type.enum";
-import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 
 @Module({
 	name: "externalToolsModule",
