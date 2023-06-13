@@ -1,23 +1,30 @@
+import { I18N_KEY } from "@/utils/inject";
+import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
-import { AnyContentElement } from "../types/ContentElement";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { MountOptions, shallowMount } from "@vue/test-utils";
+import { AnyContentElement } from "../types/ContentElement";
+import FileContentElement from "./FileContentElement.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import FileContentElement from "./FileContentElement.vue";
+
 jest.mock("../shared/FileStorageApi.composable");
 
 describe("FileContentElement", () => {
+	const i18n = {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+	};
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(FileContentElement, {
+		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
+			provide: { ...i18n },
 			propsData: props,
 		});
 

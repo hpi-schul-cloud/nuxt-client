@@ -5,6 +5,7 @@ import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/InlineEditInteractionHandler.composable");
 
@@ -23,6 +24,9 @@ const TEST_ELEMENT: RichTextElementResponse = {
 
 describe("RichTextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
+	const i18n = {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+	};
 
 	const setup = (props: {
 		element: RichTextElementResponse;
@@ -33,6 +37,7 @@ describe("RichTextContentElement", () => {
 			RichTextContentElementComponent as MountOptions<Vue>,
 			{
 				...createComponentMocks({}),
+				provide: { ...i18n },
 				propsData: props,
 			}
 		);
