@@ -1,14 +1,6 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item
-			:href="
-				fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
-				fileRecord.securityCheckStatus === FileRecordScanStatus.VERIFIED
-					? fileRecord.url
-					: ''
-			"
-			download
-		>
+		<v-list-item :href="isBlocked ? fileRecord.url : ''" download>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
@@ -23,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
 import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
 
@@ -40,9 +32,14 @@ export default defineComponent({
 		},
 	},
 
-	setup() {
+	setup(props) {
+		const isBlocked = computed(
+			() =>
+				props.fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED
+		);
+
 		return {
-			FileRecordScanStatus,
+			isBlocked,
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 		};

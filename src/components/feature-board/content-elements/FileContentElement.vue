@@ -12,11 +12,7 @@
 				:fileRecord="fileRecordModel"
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
-			<FileContentElementAlert
-				v-if="
-					fileRecordModel.securityCheckStatus === FileRecordScanStatus.BLOCKED
-				"
-			/>
+			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -26,7 +22,14 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, watch, ref, onMounted } from "vue";
+import {
+	computed,
+	defineComponent,
+	PropType,
+	watch,
+	ref,
+	onMounted,
+} from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
@@ -55,6 +58,12 @@ export default defineComponent({
 
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
+
+		const isBlocked = computed(
+			() =>
+				fileRecordModel.value?.securityCheckStatus ===
+				FileRecordScanStatus.PENDING
+		);
 
 		const refreshFileState = async () => {
 			await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
@@ -91,7 +100,12 @@ export default defineComponent({
 			}
 		});
 
-		return { modelValue, isAutoFocus, fileRecordModel, FileRecordScanStatus };
+		return {
+			isAutoFocus,
+			isBlocked,
+			fileRecordModel,
+			modelValue,
+		};
 	},
 });
 </script>
