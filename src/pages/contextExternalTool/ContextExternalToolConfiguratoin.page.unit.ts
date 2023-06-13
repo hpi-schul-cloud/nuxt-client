@@ -6,8 +6,8 @@ import flushPromises from "flush-promises";
 import Vue from "vue";
 import {
 	businessErrorFactory,
-	schoolToolConfigurationTemplateFactory,
 	toolConfigurationFactory,
+	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
 import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
@@ -15,6 +15,7 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "../../store/context-external-tool";
 import { schoolToolConfigurationFactory } from "../../../tests/test-utils/factory/schoolToolConfigurationFactory";
+import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -172,8 +173,8 @@ describe("ContextExternalToolConfiguration", () => {
 				const name = "nameForSelect";
 				const { wrapper } = await getWrapper(
 					{
-						getToolConfigurations: [
-							toolConfigurationFactory.build({
+						getSchoolToolConfigurations: [
+							schoolToolConfigurationFactory.build({
 								name,
 							}),
 						],
@@ -184,7 +185,7 @@ describe("ContextExternalToolConfiguration", () => {
 				await openSelect(wrapper);
 
 				const selectionRow = wrapper.find(".row");
-				// expect(selectionRow.find(".v-image__image").exists()).toBeTruthy(); //TODO N21-XXX: add this test when logoUrl is implemented
+				expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
 				expect(selectionRow.find("span").text().includes(name));
 			});
 
@@ -202,8 +203,8 @@ describe("ContextExternalToolConfiguration", () => {
 				await openSelect(wrapper);
 
 				expect(
-					contextExternalToolsModule.loadContextExternalTools
-				).toHaveBeenCalledWith("contextId", ToolContextType.COURSE);
+					externalToolsModule.loadToolConfigurationTemplateFromExternalTool
+				).toHaveBeenCalledWith(id);
 			});
 		});
 	});
@@ -225,23 +226,44 @@ describe("ContextExternalToolConfiguration", () => {
 
 	describe("save button", () => {
 		describe("when creating a new configuration", () => {
+			const openSelect = async (wrapper: Wrapper<any>) => {
+				await wrapper
+					.find('[data-testid="configuration-select"]')
+					.trigger("click");
+				await wrapper
+					.find(".menuable__content__active")
+					.findAll(".v-list-item")
+					.at(0)
+					.trigger("click");
+				await Vue.nextTick();
+			};
 			it("should call store action to save tool", async () => {
+				const id = "expectedToolId";
 				const { wrapper } = await getWrapper(
-					{},
+					{
+						getSchoolToolConfigurations: [
+							schoolToolConfigurationFactory.build({ id }),
+						],
+					},
 					{
 						contextId: "contextId",
 						contextType: ToolContextType.COURSE,
 					}
 				);
-				wrapper.vm.toolTemplate =
-					schoolToolConfigurationTemplateFactory.build();
+				externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+					toolConfigurationTemplateFactory.build()
+				);
 
+				await openSelect(wrapper);
+				const schoolToolTemplate: SchoolToolConfigurationTemplate = {
+					schoolToolId: "schoolToolId",
+					...wrapper.vm.toolTemplate,
+				};
 				const payload = {
-					toolTemplate: wrapper.vm.toolTemplate,
+					toolTemplate: schoolToolTemplate,
 					contextId: "contextId",
 					contextType: ToolContextType.COURSE,
 				};
-
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.trigger("click");
 
