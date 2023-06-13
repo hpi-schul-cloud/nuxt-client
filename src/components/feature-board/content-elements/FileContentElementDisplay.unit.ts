@@ -83,8 +83,6 @@ describe("FileContentElementDisplay", () => {
 		it("should show user feedback", async () => {
 			const { wrapper } = setup();
 
-			console.log(wrapper.overview());
-
 			const virusIcon = wrapper.findAll("v-icon-stub").at(1);
 
 			expect(virusIcon.exists()).toBe(true);
