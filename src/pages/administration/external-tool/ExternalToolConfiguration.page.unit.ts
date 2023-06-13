@@ -16,6 +16,7 @@ import {
 	toolConfigurationFactory,
 } from "@@/tests/test-utils/factory";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -62,7 +63,7 @@ describe("ExternalToolConfiguration", () => {
 					i18n: true,
 				}),
 				provide: {
-					i18n: { t: (key: string) => key },
+					[I18N_KEY as symbol]: { t: (key: string) => key },
 					externalToolsModule,
 				},
 				propsData: {
@@ -100,7 +101,7 @@ describe("ExternalToolConfiguration", () => {
 			try {
 				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
-						i18n: { t: (key: string) => key },
+						[I18N_KEY as symbol]: { t: (key: string) => key },
 					},
 				});
 			} catch (e) {
@@ -113,21 +114,13 @@ describe("ExternalToolConfiguration", () => {
 		});
 
 		it("should throw an error when i18n injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
-				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
+			expect(() => {
+				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},
 				});
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "i18n" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
+			}).toThrow();
 		});
 	});
 
