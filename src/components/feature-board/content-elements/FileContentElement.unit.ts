@@ -4,9 +4,11 @@ import { AnyContentElement } from "../types/ContentElement";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileContentElement from "./FileContentElement.vue";
+import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 jest.mock("../shared/FileStorageApi.composable");
 
 describe("FileContentElement", () => {
@@ -239,6 +241,36 @@ describe("FileContentElement", () => {
 				const progressLinear = wrapper.find("v-progress-linear-stub");
 				expect(progressLinear.exists()).toBe(true);
 			});
+		});
+	});
+
+	describe("when a virus is detected", () => {
+		const setup = (isEditMode: boolean) => {
+			const element = fileElementResponse.build();
+			document.body.setAttribute("data-app", "true");
+
+			const fileRecordResponse = fileRecordResponseFactory.build();
+			fileRecordResponse.securityCheckStatus = FileRecordScanStatus.BLOCKED;
+			const getFileMock = jest
+				.fn()
+				.mockReturnValueOnce(fileRecordResponse)
+				.mockReturnValueOnce(fileRecordResponse);
+			setupFileStorageApiMock({ getFileMock });
+
+			const { wrapper } = getWrapper({ element, isEditMode });
+
+			return { wrapper };
+		};
+
+		it("should render FileContentElementAlert component", async () => {
+			const { wrapper } = setup(true);
+
+			await wrapper.vm.$nextTick();
+
+			const fileContentElementAlert = wrapper.findComponent(
+				FileContentElementAlert
+			);
+			expect(fileContentElementAlert.exists()).toBe(true);
 		});
 	});
 });
