@@ -352,19 +352,17 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(true);
 			this.resetBusinessError();
 
-			if (payload.contextId && payload.contextType) {
-				const availableTools: AxiosResponse<SchoolToolConfigurationListResponse> =
-					await this.toolApi.toolConfigurationControllerGetAvailableToolsForContext(
-						payload.contextType,
-						payload.contextId
-					);
-
-				this.setSchoolToolConfigurations(
-					useExternalToolMappings().mapSchoolToolConfigurationListResponse(
-						availableTools.data
-					)
+			const availableTools: AxiosResponse<SchoolToolConfigurationListResponse> =
+				await this.toolApi.toolConfigurationControllerGetAvailableToolsForContext(
+					payload.contextType,
+					payload.contextId
 				);
-			}
+
+			const mapped =
+				useExternalToolMappings().mapSchoolToolConfigurationListResponse(
+					availableTools.data
+				);
+			this.setSchoolToolConfigurations(mapped);
 
 			this.setLoading(false);
 		} catch (error: any) {

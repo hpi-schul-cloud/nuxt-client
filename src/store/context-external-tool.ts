@@ -10,7 +10,7 @@ import {
 } from "../serverApi/v3";
 import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
 import { BusinessError } from "./types/commons";
-import { $axios } from "../utils/api";
+import { $axios } from "@/utils/api";
 import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 
 @Module({
@@ -84,17 +84,15 @@ export default class ContextExternalToolsModule extends VuexModule {
 		try {
 			this.setLoading(true);
 			this.resetBusinessError();
-			if (payload.contextId && payload.contextType) {
-				const contextExternalToolPostParams: ContextExternalToolPostParams =
-					useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
-						payload.toolTemplate,
-						payload.contextId,
-						payload.contextType
-					);
-				await this.toolApi.toolContextControllerCreateContextExternalTool(
-					contextExternalToolPostParams
+			const contextExternalToolPostParams: ContextExternalToolPostParams =
+				useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
+					payload.toolTemplate,
+					payload.contextId,
+					payload.contextType
 				);
-			}
+			await this.toolApi.toolContextControllerCreateContextExternalTool(
+				contextExternalToolPostParams
+			);
 
 			this.setLoading(false);
 		} catch (error: any) {
@@ -119,19 +117,17 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setLoading(true);
 			this.resetBusinessError();
 
-			if (payload.contextId && payload.contextType) {
-				const tools: AxiosResponse<ContextExternalToolSearchListResponse> =
-					await this.toolApi.toolContextControllerGetContextExternalToolsForContext(
-						payload.contextId,
-						payload.contextType
-					);
-
-				this.setContextExternalTools(
-					useExternalToolMappings().mapContextExternalToolSearchListResponse(
-						tools.data
-					)
+			const tools: AxiosResponse<ContextExternalToolSearchListResponse> =
+				await this.toolApi.toolContextControllerGetContextExternalToolsForContext(
+					payload.contextId,
+					payload.contextType
 				);
-			}
+
+			const mapped =
+				useExternalToolMappings().mapContextExternalToolSearchListResponse(
+					tools.data
+				);
+			this.setContextExternalTools(mapped);
 
 			this.setLoading(false);
 		} catch (error: any) {

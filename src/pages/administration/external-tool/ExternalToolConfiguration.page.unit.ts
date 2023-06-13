@@ -115,7 +115,7 @@ describe("ExternalToolConfiguration", () => {
 
 		it("should throw an error when i18n injection fails", () => {
 			expect(() => {
-				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
+				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},

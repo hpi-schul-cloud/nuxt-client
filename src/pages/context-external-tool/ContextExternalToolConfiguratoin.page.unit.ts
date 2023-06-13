@@ -13,9 +13,9 @@ import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
-import ContextExternalToolsModule from "../../store/context-external-tool";
-import { schoolToolConfigurationFactory } from "../../../tests/test-utils/factory/schoolToolConfigurationFactory";
-import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
+import ContextExternalToolsModule from "@/store/context-external-tool";
+import { schoolToolConfigurationFactory } from "@@/tests/test-utils/factory/schoolToolConfigurationFactory";
+import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -283,7 +283,7 @@ describe("ContextExternalToolConfiguration", () => {
 				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
-				await saveButton.vm.$emit("click");
+				await saveButton.trigger("click");
 
 				expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
 					path: "/rooms/contextId",
@@ -304,7 +304,7 @@ describe("ContextExternalToolConfiguration", () => {
 				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
-				await saveButton.vm.$emit("click");
+				await saveButton.trigger("click");
 
 				expect(wrapper.vm.$router.push).not.toHaveBeenCalled();
 				expect(

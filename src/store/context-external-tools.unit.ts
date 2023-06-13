@@ -18,7 +18,7 @@ import { ToolContextType } from "./external-tool/tool-context-type.enum";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 import ContextExternalToolsModule from "./context-external-tool";
-import { contextExternalToolFactory } from "../../tests/test-utils/factory/contextExternalToolFactory";
+import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import { ContextExternalTool } from "./external-tool/context-external-tool";
 import * as useExternalToolUtilsComposable from "../composables/external-tool-mappings.composable";
 

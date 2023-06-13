@@ -29,9 +29,9 @@ import {
 } from "@/store/external-tool";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
-import { SchoolToolConfigurationListItem } from "../store/external-tool/school-tool-configuration-list-item";
-import { SchoolToolConfigurationTemplate } from "../store/external-tool/school-tool-configuration-template";
-import { ContextExternalTool } from "../store/external-tool/context-external-tool";
+import { SchoolToolConfigurationListItem } from "@/store/external-tool/school-tool-configuration-list-item";
+import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,

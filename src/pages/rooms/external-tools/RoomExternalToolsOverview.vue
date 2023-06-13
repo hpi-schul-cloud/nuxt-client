@@ -93,7 +93,7 @@ import {
 } from "@/serverApi/v3";
 import ExternalToolsModule from "@/store/external-tools";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { ToolContextType } from "../../../store/external-tool/tool-context-type.enum";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
@@ -106,7 +106,7 @@ export default defineComponent({
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 
-		const { params } = useRoute();
+		const { params } = useRoute(); // TODO N21-575 roomId from props
 		onMounted(async () => {
 			await contextExternalToolsModule?.loadContextExternalTools({
 				contextId: params.id,
@@ -115,7 +115,7 @@ export default defineComponent({
 		});
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
-			() => contextExternalToolsModule?.getContextExternalTools || []
+			() => /*contextExternalToolsModule?.getContextExternalTools ||*/ []
 		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
