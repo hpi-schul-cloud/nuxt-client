@@ -5,7 +5,7 @@
 				v-if="!isEditMode"
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
-			></FileContentElementDisplay>
+			/>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:caption="modelValue.caption"
@@ -16,7 +16,7 @@
 				@update:caption="($event) => (modelValue.caption = $event)"
 				@move-down:element="onMoveFileEditDown"
 				@move-up:element="onMoveFileEditUp"
-			></FileContentElementEdit>
+			/>
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
