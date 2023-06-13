@@ -1,6 +1,6 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecord?.id">
+		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
 				:caption="modelValue.caption"
@@ -27,7 +27,7 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
-import { useSelectedFile } from "@/components/feature-board/shared/SelectedFile.composable";
+import { useSelectedFile } from "../shared/SelectedFile.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
