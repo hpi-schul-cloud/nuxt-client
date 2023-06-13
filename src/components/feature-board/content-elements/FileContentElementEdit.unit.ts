@@ -2,6 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("FileContentElementEdit", () => {
 	const setupProps = () => ({
@@ -16,6 +17,9 @@ describe("FileContentElementEdit", () => {
 		const wrapper = shallowMount(FileContentElementEdit, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			},
 		});
 
 		return {

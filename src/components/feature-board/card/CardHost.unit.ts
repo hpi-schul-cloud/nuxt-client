@@ -47,6 +47,7 @@ describe("CardHost", () => {
 			deleteCard: jest.fn(),
 			updateCardHeight: jest.fn(),
 			addElement: jest.fn(),
+			deleteElement: jest.fn(),
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});

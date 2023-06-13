@@ -26,7 +26,8 @@ describe("CardState composable", () => {
 		mockedBoardApiCalls = {
 			updateCardTitle: jest.fn(),
 			createColumnCall: jest.fn(),
-			createElement: jest.fn(),
+			createElementCall: jest.fn(),
+			deleteElementCall: jest.fn(),
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
@@ -199,7 +200,7 @@ describe("CardState composable", () => {
 			await addElement(elementType.type);
 			await nextTick();
 
-			expect(mockedBoardApiCalls.createElement).toHaveBeenCalledWith(
+			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalledWith(
 				testCard.id,
 				elementType
 			);
