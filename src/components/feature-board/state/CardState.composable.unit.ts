@@ -5,6 +5,7 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { useCardState } from "./CardState.composable";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
@@ -15,6 +16,9 @@ const mockedUseBoardApi = jest.mocked(useBoardApi);
 describe("CardState composable", () => {
 	let fetchMock: jest.Mock;
 	let mockedBoardApiCalls: ReturnType<typeof useBoardApi>;
+	const i18n = {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+	};
 	beforeEach(() => {
 		fetchMock = jest.fn().mockResolvedValue({
 			id: "abc",
@@ -26,7 +30,7 @@ describe("CardState composable", () => {
 		mockedBoardApiCalls = {
 			updateCardTitle: jest.fn(),
 			createColumnCall: jest.fn(),
-			createElement: jest.fn(),
+			createElement: jest.fn().mockReturnValue({ id: "test-id" }),
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
@@ -42,7 +46,7 @@ describe("CardState composable", () => {
 	describe("fetchCard", () => {
 		it("should fetch card on mount", async () => {
 			const cardId = "123124";
-			mountComposable(() => useCardState(cardId));
+			mountComposable(() => useCardState(cardId), i18n);
 
 			expect(fetchMock).toHaveBeenCalledWith(cardId);
 		});
@@ -50,8 +54,9 @@ describe("CardState composable", () => {
 		it("should return fetch function that updates card and loading state", async () => {
 			const cardId1 = "123124a";
 			const cardId2 = "123125b";
-			const { fetchCard, isLoading } = mountComposable(() =>
-				useCardState(cardId1)
+			const { fetchCard, isLoading } = mountComposable(
+				() => useCardState(cardId1),
+				i18n
 			);
 
 			await fetchCard(cardId2);
@@ -66,7 +71,7 @@ describe("CardState composable", () => {
 			const errorToThrow = new Error("something went wrong");
 
 			fetchMock.mockRejectedValue(errorToThrow);
-			mountComposable(() => useCardState(cardId));
+			mountComposable(() => useCardState(cardId), i18n);
 			await nextTick();
 			await nextTick(); // test mounts it twice
 
@@ -86,8 +91,9 @@ describe("CardState composable", () => {
 		};
 
 		it("should call updateCardTitle", async () => {
-			const { updateTitle, card } = mountComposable(() =>
-				useCardState(boardCard.id)
+			const { updateTitle, card } = mountComposable(
+				() => useCardState(boardCard.id),
+				i18n
 			);
 			card.value = boardCard;
 
@@ -102,8 +108,9 @@ describe("CardState composable", () => {
 
 		it("should update card title", async () => {
 			const newTitle = "new Title";
-			const { updateTitle, card } = mountComposable(() =>
-				useCardState(boardCard.id)
+			const { updateTitle, card } = mountComposable(
+				() => useCardState(boardCard.id),
+				i18n
 			);
 			card.value = boardCard;
 
@@ -124,8 +131,9 @@ describe("CardState composable", () => {
 				visibility: { publishedAt: new Date().toUTCString() },
 			};
 
-			const { deleteCard, card } = mountComposable(() =>
-				useCardState(testCard.id)
+			const { deleteCard, card } = mountComposable(
+				() => useCardState(testCard.id),
+				i18n
 			);
 			card.value = testCard;
 
@@ -148,8 +156,9 @@ describe("CardState composable", () => {
 		};
 
 		it("should call updateCardHeightCall", async () => {
-			const { updateCardHeight, card } = mountComposable(() =>
-				useCardState(boardCard.id)
+			const { updateCardHeight, card } = mountComposable(
+				() => useCardState(boardCard.id),
+				i18n
 			);
 			card.value = boardCard;
 			const newHeight = 300;
@@ -165,8 +174,9 @@ describe("CardState composable", () => {
 
 		it("should update card height", async () => {
 			const newHeight = 300;
-			const { updateCardHeight, card } = mountComposable(() =>
-				useCardState(boardCard.id)
+			const { updateCardHeight, card } = mountComposable(
+				() => useCardState(boardCard.id),
+				i18n
 			);
 			card.value = boardCard;
 
@@ -187,8 +197,9 @@ describe("CardState composable", () => {
 				visibility: { publishedAt: new Date().toUTCString() },
 			};
 
-			const { addElement, card } = mountComposable(() =>
-				useCardState(testCard.id)
+			const { addElement, card } = mountComposable(
+				() => useCardState(testCard.id),
+				i18n
 			);
 			card.value = testCard;
 

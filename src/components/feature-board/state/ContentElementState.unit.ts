@@ -1,6 +1,7 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useContentElementState } from "./ContentElementState.composable";
+import { I18N_KEY } from "@/utils/inject";
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
@@ -28,17 +29,24 @@ const TEST_ELEMENT: RichTextElementResponse = {
 // }));
 
 describe("useContentElementState composable", () => {
+	const i18n = {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+	};
 	it("should unwrap element model data", async () => {
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
+		const { modelValue } = mountComposable(
+			() =>
+				useContentElementState({ isEditMode: false, element: TEST_ELEMENT }),
+			i18n
 		);
 
 		expect(modelValue.value).toStrictEqual(TEST_ELEMENT.content);
 	});
 
 	it.skip("should set isAutoFocus on element interaction", async () => {
-		const { isAutoFocus } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
+		const { isAutoFocus } = mountComposable(
+			() =>
+				useContentElementState({ isEditMode: false, element: TEST_ELEMENT }),
+			i18n
 		);
 
 		expect(isAutoFocus.value).toStrictEqual(false);
@@ -48,8 +56,9 @@ describe("useContentElementState composable", () => {
 
 	it("should call saving function after debounced change of modelValue", async () => {
 		jest.useFakeTimers();
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: true, element: TEST_ELEMENT })
+		const { modelValue } = mountComposable(
+			() => useContentElementState({ isEditMode: true, element: TEST_ELEMENT }),
+			i18n
 		);
 
 		const updatedModel: RichTextElementResponse["content"] = {

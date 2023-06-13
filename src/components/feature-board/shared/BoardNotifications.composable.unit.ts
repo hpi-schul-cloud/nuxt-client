@@ -11,12 +11,14 @@ describe("BoardNotifications.composable", () => {
 		jest.clearAllMocks();
 	});
 
+	const i18n = {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+	};
+
 	describe("@isErrorCode", () => {
 		describe("when statusCode above 300", () => {
 			it("should return true", () => {
-				const { isErrorCode } = mountComposable(() => useBoardNotifier(), {
-					[I18N_KEY as symbol]: { t: (key: string) => key },
-				});
+				const { isErrorCode } = mountComposable(() => useBoardNotifier(), i18n);
 				const errorCodeStatus = isErrorCode(300);
 
 				expect(errorCodeStatus).toBe(true);
@@ -24,9 +26,7 @@ describe("BoardNotifications.composable", () => {
 		});
 		describe("when statusCode below 300", () => {
 			it("should return false", () => {
-				const { isErrorCode } = mountComposable(() => useBoardNotifier(), {
-					[I18N_KEY as symbol]: { t: (key: string) => key },
-				});
+				const { isErrorCode } = mountComposable(() => useBoardNotifier(), i18n);
 				const errorCodeStatus = isErrorCode(204);
 
 				expect(errorCodeStatus).toBe(false);
@@ -37,7 +37,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@showSuccess method", () => {
 		it("should call the notifier module", () => {
 			const { showSuccess } = mountComposable(() => useBoardNotifier(), {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				...i18n,
 				notifierModule,
 			});
 			const expectedCallObject = {
@@ -55,7 +55,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@showFailure method", () => {
 		it("should call the notifier module", () => {
 			const { showFailure } = mountComposable(() => useBoardNotifier(), {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				...i18n,
 				notifierModule,
 			});
 			const expectedCallObject = {
@@ -73,7 +73,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@showInfo method", () => {
 		it("should call the notifier module", () => {
 			const { showInfo } = mountComposable(() => useBoardNotifier(), {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				...i18n,
 				notifierModule,
 			});
 			const expectedCallObject = {
@@ -91,7 +91,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@showCustomNotifier method", () => {
 		it("should call the notifier module", () => {
 			const { showCustomNotifier } = mountComposable(() => useBoardNotifier(), {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				...i18n,
 				notifierModule,
 			});
 			const expectedCallObject = {
@@ -109,7 +109,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@generateErrorText", () => {
 		it("should return i18n keys", () => {
 			const { generateErrorText } = mountComposable(() => useBoardNotifier(), {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				...i18n,
 				notifierModule,
 			});
 			const i18nCreateErrorKey = generateErrorText("create", "board");
