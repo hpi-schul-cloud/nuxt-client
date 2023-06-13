@@ -9,7 +9,7 @@
 			:rows="1"
 			auto-grow
 			flat
-			class="w-full mx-n3 mb-n2"
+			class="mx-n3 mb-n2"
 			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
 			ref="titleInput"
@@ -17,46 +17,40 @@
 			:aria-hidden="!isEditMode"
 		></VTextarea>
 
-		<v-text-field
+		<VTextarea
 			v-if="scope === 'column'"
-			ref="titleInput"
-			class="w-full mx-n3 pt-2 d-block"
-			:placeholder="placeholder"
-			v-model="modelValue"
 			hide-details="auto"
+			v-model="modelValue"
 			solo
 			dense
+			:rows="1"
+			auto-grow
 			flat
-		></v-text-field>
-		<!-- <div class="w-full" v-show="isEditMode">
-				<div
-					role="textbox"
-					contenteditable
-					type="text"
-					class="heading w-full d-block"
-					@input="onInput"
-				>
-					{{ modelValue }}
-				</div>
-			</div> -->
-		<!-- </template> -->
-		<!-- <template v-else> </template> -->
-		<!-- <pre
-			v-show="!isEditMode && hasValue"
-			:aria-level="ariaLevel"
-			role="heading"
-			class="heading"
-		>
-			{{ value }}
-		</pre
-		>
-		<div
-			v-show="!isEditMode && !hasValue"
-			class="heading blue-grey--text darken-1"
-		>
-			{{ placeholder }}
-		</div> -->
-		<!-- </div> -->
+			class="mx-n3 mb-n2"
+			:placeholder="$t('common.labels.title').toString()"
+			:style="{ 'pointer-events': isEditMode ? 'auto' : 'none' }"
+			background-color="transparent"
+			ref="titleInput"
+			:readonly="!isEditMode"
+			:aria-hidden="!isEditMode"
+		></VTextarea>
+
+		<VTextarea
+			v-if="scope === 'board'"
+			hide-details="auto"
+			v-model="modelValue"
+			solo
+			dense
+			:rows="1"
+			auto-grow
+			flat
+			class="mx-n3 mb-n2"
+			:placeholder="$t('common.labels.title').toString()"
+			background-color="transparent"
+			ref="titleInput"
+			:readonly="!isEditMode"
+			:aria-hidden="!isEditMode"
+		></VTextarea>
 		<div
 			class="d-sr-only"
 			role="heading"
@@ -69,10 +63,10 @@
 </template>
 
 <script lang="ts">
-import { useFocus, useVModel } from "@vueuse/core";
+import { useVModel } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -103,11 +97,9 @@ export default defineComponent({
 
 		useInlineEditInteractionHandler(() => {
 			if (!hasEditPermission) return;
-			isFocused.value = true;
-			document.getSelection()?.collapseToEnd();
+			if (titleInput.value === null) return;
+			titleInput.value.focus();
 		});
-
-		const { focused: isFocused } = useFocus(titleInput);
 
 		const hasValue = computed<boolean>(
 			() => props.value !== "" && !!props.value
@@ -144,7 +136,6 @@ export default defineComponent({
 			fontSize,
 			modelValue,
 			titleInput,
-			isFocused,
 			hasValue,
 		};
 	},
@@ -154,16 +145,27 @@ export default defineComponent({
 <style scoped>
 :deep(div.v-input__slot) {
 	padding: 0;
-	color: red !important;
 }
 
 :deep(textarea) {
 	font-size: v-bind(fontSize);
+	background: transparent !important;
 }
 :deep(input) {
 	font-size: v-bind(fontSize);
 }
 :deep(textarea[readonly]) {
 	cursor: pointer;
+}
+
+/** Edge */
+:deep(textarea)::-ms-input-placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
+}
+/** Other common browsers */
+:deep(textarea)::placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
 }
 </style>

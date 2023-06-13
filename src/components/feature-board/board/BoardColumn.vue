@@ -182,7 +182,7 @@ export default defineComponent({
 
 /* width */
 .scrollable-column::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
 
 /* Track */
@@ -193,12 +193,17 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
+	background: transparent;
+	border-radius: 5px;
+}
+.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
 	background: var(--v-secondary-lighten1);
 	border-radius: 5px;
+	transition: all 150ms ease-in;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base);
+	background: var(--v-secondary-base) !important;
 }
 </style>

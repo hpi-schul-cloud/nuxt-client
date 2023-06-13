@@ -11,7 +11,7 @@
 			tabindex="0"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start justify-space-between py-2 pl-1">
+			<div class="d-flex align-start py-2">
 				<!-- <div> -->
 				<BoardAnyTitleInput
 					:value="title"
@@ -19,6 +19,7 @@
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
+					class="w-100"
 				></BoardAnyTitleInput>
 				<!-- </div> -->
 				<div class="pt-2">
