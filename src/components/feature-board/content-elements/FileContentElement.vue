@@ -62,7 +62,7 @@ export default defineComponent({
 		const isBlocked = computed(
 			() =>
 				fileRecordModel.value?.securityCheckStatus ===
-				FileRecordScanStatus.PENDING
+				FileRecordScanStatus.BLOCKED
 		);
 
 		const refreshFileState = async () => {

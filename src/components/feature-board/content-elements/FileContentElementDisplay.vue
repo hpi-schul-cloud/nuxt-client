@@ -1,6 +1,6 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item :href="isBlocked ? fileRecord.url : ''" download>
+		<v-list-item :href="!isBlocked ? fileRecord.url : ''" download>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>

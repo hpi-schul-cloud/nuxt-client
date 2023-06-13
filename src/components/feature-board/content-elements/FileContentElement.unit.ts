@@ -30,7 +30,6 @@ describe("FileContentElement", () => {
 		describe("when file is already loaded in state", () => {
 			const setup = (isEditMode: boolean) => {
 				const element = fileElementResponse.build();
-				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
 				const getFileMock = jest
@@ -86,7 +85,6 @@ describe("FileContentElement", () => {
 		describe("when file needs to be loaded", () => {
 			const setup = (isEditMode: boolean) => {
 				const element = fileElementResponse.build();
-				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
 				const getFileMock = jest
@@ -157,7 +155,6 @@ describe("FileContentElement", () => {
 	describe("when file is not upload onMount", () => {
 		const setup = () => {
 			const element = fileElementResponse.build();
-			document.body.setAttribute("data-app", "true");
 
 			setupFileStorageApiMock({});
 
@@ -178,7 +175,6 @@ describe("FileContentElement", () => {
 		describe("when newFileForParent equals element id", () => {
 			const setup = () => {
 				const element = fileElementResponse.build();
-				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
 				const getFileMock = jest
@@ -213,7 +209,6 @@ describe("FileContentElement", () => {
 		describe("when newFileForParent not equals element id", () => {
 			const setup = () => {
 				const element = fileElementResponse.build();
-				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build();
 				const getFileMock = jest
@@ -247,7 +242,6 @@ describe("FileContentElement", () => {
 	describe("when a virus is detected", () => {
 		const setup = (isEditMode: boolean) => {
 			const element = fileElementResponse.build();
-			document.body.setAttribute("data-app", "true");
 
 			const fileRecordResponse = fileRecordResponseFactory.build();
 			fileRecordResponse.securityCheckStatus = FileRecordScanStatus.BLOCKED;
