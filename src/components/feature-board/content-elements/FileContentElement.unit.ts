@@ -40,7 +40,7 @@ describe("FileContentElement", () => {
 
 				const { wrapper } = getWrapper({ element, isEditMode });
 
-				return { wrapper };
+				return { wrapper, fileRecordResponse };
 			};
 
 			describe("when component is not in edit mode", () => {
@@ -61,6 +61,30 @@ describe("FileContentElement", () => {
 					);
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
+
+				it("should hand over correct file name to FileContentElementDisplay", async () => {
+					const { wrapper, fileRecordResponse } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const fileName = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("fileName");
+
+					expect(fileName).toBe(fileRecordResponse.name);
+				});
+
+				it("should hand over correct url to FileContentElementDisplay", async () => {
+					const { wrapper, fileRecordResponse } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const url = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("url");
+
+					expect(url).toBe(fileRecordResponse.url);
+				});
 			});
 
 			describe("when component is in edit mode", () => {
@@ -78,6 +102,30 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should hand over correct file name to FileContentElementEdit", async () => {
+					const { wrapper, fileRecordResponse } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const fileName = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("fileName");
+
+					expect(fileName).toBe(fileRecordResponse.name);
+				});
+
+				it("should hand over correct url to FileContentElementEdit", async () => {
+					const { wrapper, fileRecordResponse } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const url = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("url");
+
+					expect(url).toBe(fileRecordResponse.url);
 				});
 			});
 		});
@@ -101,7 +149,12 @@ describe("FileContentElement", () => {
 
 				const { wrapper } = getWrapper({ element, isEditMode });
 
-				return { wrapper, getFileMock, fetchFileRecursivelyMock };
+				return {
+					wrapper,
+					fileRecordResponse,
+					getFileMock,
+					fetchFileRecursivelyMock,
+				};
 			};
 
 			describe("when component is not in edit mode", () => {
@@ -119,8 +172,6 @@ describe("FileContentElement", () => {
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					console.log(wrapper.overview());
-
 					const fileContentElementDisplay = wrapper.findComponent(
 						FileContentElementDisplay
 					);
@@ -128,6 +179,30 @@ describe("FileContentElement", () => {
 					expect(fetchFileRecursivelyMock).toHaveBeenCalledTimes(1);
 
 					expect(fileContentElementDisplay.exists()).toBe(true);
+				});
+
+				it("should hand over correct file name to FileContentElementDisplay", async () => {
+					const { wrapper, fileRecordResponse } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const fileName = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("fileName");
+
+					expect(fileName).toBe(fileRecordResponse.name);
+				});
+
+				it("should hand over correct url to FileContentElementDisplay", async () => {
+					const { wrapper, fileRecordResponse } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const url = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("url");
+
+					expect(url).toBe(fileRecordResponse.url);
 				});
 			});
 
@@ -147,6 +222,30 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should hand over correct file name to FileContentElementEdit", async () => {
+					const { wrapper, fileRecordResponse } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const fileName = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("fileName");
+
+					expect(fileName).toBe(fileRecordResponse.name);
+				});
+
+				it("should hand over correct url to FileContentElementEdit", async () => {
+					const { wrapper, fileRecordResponse } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const url = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("url");
+
+					expect(url).toBe(fileRecordResponse.url);
 				});
 			});
 		});
@@ -193,6 +292,7 @@ describe("FileContentElement", () => {
 
 				return {
 					wrapper,
+					fileRecordResponse,
 					newFileForParent,
 					element,
 					getFileMock,
@@ -203,6 +303,7 @@ describe("FileContentElement", () => {
 			it("should render FileContentElementEdit component", async () => {
 				const {
 					wrapper,
+					fileRecordResponse,
 					newFileForParent,
 					element,
 					getFileMock,
@@ -221,6 +322,16 @@ describe("FileContentElement", () => {
 					FileContentElementEdit
 				);
 				expect(fileContentElementEdit.exists()).toBe(true);
+
+				const fileName = wrapper
+					.findComponent(FileContentElementEdit)
+					.props("fileName");
+
+				expect(fileName).toBe(fileRecordResponse.name);
+
+				const url = wrapper.findComponent(FileContentElementEdit).props("url");
+
+				expect(url).toBe(fileRecordResponse.url);
 			});
 		});
 
@@ -288,10 +399,34 @@ describe("FileContentElement", () => {
 
 			const { wrapper } = getWrapper({ element, isEditMode });
 
-			return { wrapper };
+			return { wrapper, fileRecordResponse };
 		};
 
 		describe("when component is not in edit mode", () => {
+			it("should hand over correct file name to FileContentElementDisplay", async () => {
+				const { wrapper, fileRecordResponse } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const fileName = wrapper
+					.findComponent(FileContentElementDisplay)
+					.props("fileName");
+
+				expect(fileName).toBe(fileRecordResponse.name);
+			});
+
+			it("should hand over empty url to FileContentElementDisplay", async () => {
+				const { wrapper } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const url = wrapper
+					.findComponent(FileContentElementDisplay)
+					.props("url");
+
+				expect(url).toBe("");
+			});
+
 			it("should render FileContentElementAlert component", async () => {
 				const { wrapper } = setup(false);
 
@@ -305,6 +440,28 @@ describe("FileContentElement", () => {
 		});
 
 		describe("when component is in edit mode", () => {
+			it("should hand over correct file name to FileContentElementEdit", async () => {
+				const { wrapper, fileRecordResponse } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const fileName = wrapper
+					.findComponent(FileContentElementEdit)
+					.props("fileName");
+
+				expect(fileName).toBe(fileRecordResponse.name);
+			});
+
+			it("should hand over empty url to FileContentElementEdit", async () => {
+				const { wrapper } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const url = wrapper.findComponent(FileContentElementEdit).props("url");
+
+				expect(url).toBe("");
+			});
+
 			it("should render FileContentElementAlert component", async () => {
 				const { wrapper } = setup(true);
 
