@@ -11,7 +11,7 @@
 			tabindex="0"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start py-2">
+			<div class="d-flex align-start py-2 pl-2">
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"
