@@ -7,7 +7,7 @@
 
 			<v-list-item-content>
 				<v-list-item-title style="color: var(--v-primary-base)">{{
-					fileRecord.name
+					fileName
 				}}</v-list-item-title>
 			</v-list-item-content>
 
@@ -38,9 +38,7 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { defineComponent, PropType } from "vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
@@ -55,12 +53,8 @@ export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		caption: {
+		fileName: {
 			type: String,
-			required: true,
-		},
-		fileRecord: {
-			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
 		url: {
@@ -68,17 +62,13 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:caption"],
-	setup(props, { emit }) {
-		const modelCaption = useVModel(props, "caption", emit);
-
+	setup() {
 		return {
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
-			modelCaption,
 		};
 	},
 });

@@ -3,16 +3,13 @@
 		<div v-if="fileRecordModel">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileName="fileRecordModel.name"
 				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileName="fileRecordModel.name"
 				:url="url"
-				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>

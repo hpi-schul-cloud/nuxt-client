@@ -7,7 +7,7 @@
 
 			<v-list-item-content>
 				<v-list-item-title style="color: var(--v-primary-base)">{{
-					fileRecord.name
+					fileName
 				}}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
@@ -15,19 +15,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { defineComponent } from "vue";
 import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
 	props: {
-		caption: {
+		fileName: {
 			type: String,
-			required: true,
-		},
-		fileRecord: {
-			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
 		url: {
