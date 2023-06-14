@@ -1,12 +1,12 @@
 <template>
 	<v-list-item>
-		<v-chip class="ma-2" small> {{ fileRecord.mimeType }} </v-chip>
-		<v-chip class="ma-2" small> {{ fileSize }} KB </v-chip>
+		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
+		<v-chip class="ma-2" small> {{ convertFileSize() }} </v-chip>
 	</v-list-item>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 
 export default defineComponent({
@@ -19,9 +19,30 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const fileSize = (props.fileRecord.size / 1024).toFixed(2);
+		const fileRecordSize = ref(props.fileRecord.size);
+		const sizes = ["bytes", "KB", "MB", "GB"];
+
+		const convertFileSize = () => {
+			if (fileRecordSize.value < 1024)
+				return (fileRecordSize.value / 1024).toFixed(2) + sizes[0];
+			if (fileRecordSize.value < 1024 ** 2)
+				return (fileRecordSize.value / 1024).toFixed(2) + sizes[1];
+			if (fileRecordSize.value < 1024 ** 3)
+				return (fileRecordSize.value / 1024 ** 2).toFixed(2) + sizes[2];
+			return (fileRecordSize.value / 1024 ** 3).toFixed(2) + sizes[3];
+		};
+
+		const fileName = ref(props.fileRecord.name);
+
+		const fileExtension = computed(() => {
+			return fileName.value
+				.substring(fileName.value.lastIndexOf(".") + 1)
+				.toUpperCase();
+		});
+
 		return {
-			fileSize,
+			convertFileSize,
+			fileExtension,
 		};
 	},
 });
