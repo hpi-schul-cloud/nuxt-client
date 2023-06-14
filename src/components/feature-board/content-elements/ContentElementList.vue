@@ -15,6 +15,7 @@
 				:isFirstElement="isFirstElement(element.id)"
 				:isLastElement="isLastElement(element.id)"
 				:hasMultipleElements="hasMultipleElements"
+				@move-keyboard:edit="onMoveElementKeyboard"
 				@move-down:edit="onMoveElementDown(element.id)"
 				@move-up:edit="onMoveElementUp(element.id)"
 			/>
@@ -49,7 +50,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["move-down:element", "move-up:element"],
+	emits: ["move-down:element", "move-up:element", "move-keyboard:element"],
 	setup(props, { emit }) {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
@@ -69,6 +70,10 @@ export default defineComponent({
 
 		const onMoveElementUp = (elementId: string) => {
 			emit("move-up:element", elementId);
+		};
+
+		const onMoveElementKeyboard = (elementId: string, event: KeyboardEvent) => {
+			emit("move-keyboard:element", elementId, event.code);
 		};
 
 		const hasMultipleElements = computed(() => props.elements.length > 1);
@@ -110,6 +115,7 @@ export default defineComponent({
 			isRichTextElementResponse,
 			onMoveElementDown,
 			onMoveElementUp,
+			onMoveElementKeyboard,
 		};
 	},
 });

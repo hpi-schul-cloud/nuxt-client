@@ -13,9 +13,10 @@
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
-				@update:caption="($event) => (modelValue.caption = $event)"
+				@keydown.up.down="onKeydownArrow"
 				@move-down:element="onMoveFileEditDown"
 				@move-up:element="onMoveFileEditUp"
+				@update:caption="($event) => (modelValue.caption = $event)"
 			/>
 		</div>
 		<v-card-text v-else>
@@ -46,7 +47,7 @@ export default defineComponent({
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: ["move-down:edit", "move-up:edit"],
+	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
@@ -72,6 +73,11 @@ export default defineComponent({
 			}
 		});
 
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			event.preventDefault();
+			emit("move-keyboard:edit", event);
+		};
+
 		const onMoveFileEditDown = () => {
 			emit("move-down:edit");
 		};
@@ -81,9 +87,10 @@ export default defineComponent({
 		};
 
 		return {
-			modelValue,
 			isAutoFocus,
 			fileRecordModel,
+			modelValue,
+			onKeydownArrow,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
 		};

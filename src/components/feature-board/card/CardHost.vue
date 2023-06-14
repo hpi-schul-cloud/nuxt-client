@@ -47,6 +47,7 @@
 						:isEditMode="isEditMode"
 						@move-down:element="onMoveContentElementDown"
 						@move-up:element="onMoveContentElementUp"
+						@move-keyboard:element="onMoveContentElementKeyboard"
 					></ContentElementList>
 					<CardAddElementMenu
 						@add-element="onAddElement"
@@ -87,6 +88,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { DragAndDropKey, verticalCursorKeys } from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "CardHost",
@@ -172,6 +174,20 @@ export default defineComponent({
 		const onMoveContentElementUp = async (elementId: string) =>
 			await moveElementUp(elementId);
 
+		const onMoveContentElementKeyboard = async (
+			elementId: string,
+			keyString: DragAndDropKey
+		) => {
+			if (verticalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowUp" ? -1 : +1;
+				if (change === -1) {
+					await moveElementUp(elementId);
+				} else if (change === +1) {
+					await moveElementDown(elementId);
+				}
+			}
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -199,6 +215,7 @@ export default defineComponent({
 			onEndEditMode,
 			onMoveContentElementDown,
 			onMoveContentElementUp,
+			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
