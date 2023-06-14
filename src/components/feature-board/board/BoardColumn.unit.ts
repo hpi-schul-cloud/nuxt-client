@@ -1,15 +1,16 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import BoardColumnVue from "./BoardColumn.vue";
-import { BoardPermissionsTypes } from "../types/Board";
-import CardHost from "../card/CardHost.vue";
-import { Container } from "vue-smooth-dnd";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import { Container } from "vue-smooth-dnd";
+import CardHost from "../card/CardHost.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionsTypes } from "../types/Board";
+import BoardColumnVue from "./BoardColumn.vue";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -37,7 +38,7 @@ describe("BoardColumn", () => {
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: { column, index: 1 },
 		});
