@@ -7,19 +7,18 @@ import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
-const {
-	createColumnCall,
-	deleteCardCall,
-	deleteColumnCall,
-	moveCardCall,
-	moveColumnCall,
-	updateColumnTitleCall,
-	createCardCall,
-} = useBoardApi();
-
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const {
+		createColumnCall,
+		deleteCardCall,
+		deleteColumnCall,
+		moveCardCall,
+		moveColumnCall,
+		updateColumnTitleCall,
+		createCardCall,
+	} = useBoardApi();
 	const { setEditModeId } = useSharedEditMode();
 	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
