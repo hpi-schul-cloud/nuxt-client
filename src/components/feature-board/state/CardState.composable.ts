@@ -79,25 +79,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		await deleteElementCall(elementId);
-		await extractElement(elementId);
+		extractElement(elementId);
 	};
 
-	const extractElement = async (
-		elementId: string
-	): Promise<AnyContentElement | undefined> => {
-		if (cardState.card === undefined) {
-			return;
-		}
+	const extractElement = (elementId: string): void => {
+		const index = cardState.card?.elements.findIndex((e) => e.id === elementId);
 
-		const index = cardState.card.elements.findIndex((e) => e.id === elementId);
-		if (index > -1) {
-			const extractedCards = cardState.card.elements.splice(index, 1);
-			/**
-			 * refreshes the board to force rerendering in tracked v-for
-			 * to maintain focus when moving cards by keyboard
-			 */
-			await nextTick();
-			return extractedCards[0];
+		if (index !== undefined && index > -1) {
+			cardState.card?.elements.splice(index, 1);
 		}
 	};
 
