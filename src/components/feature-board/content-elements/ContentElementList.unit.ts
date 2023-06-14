@@ -1,10 +1,13 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import Vue, { del } from "vue";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import FileContentElement from "./FileContentElement.vue";
+import { deleteElementEventPayloadFactory } from "@@/tests/test-utils/factory";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -56,6 +59,26 @@ describe("ContentElementList", () => {
 
 			expect(childComponent.exists()).toBe(true);
 			expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
+		});
+	});
+
+	describe("when deleteElement is emitted by FileContentElement", () => {
+		it("should emit deleteElement event", () => {
+			const fileElementResponse = fileElementResponseFactory.build();
+			setup({
+				elements: [fileElementResponse],
+				isEditMode: true,
+			});
+
+			const childComponent = wrapper.findComponent(FileContentElement);
+			const deleteElementEventPayload =
+				deleteElementEventPayloadFactory.build();
+			childComponent.vm.$emit("delete:element", deleteElementEventPayload);
+
+			expect(wrapper.emitted("delete:element")?.length).toBe(1);
+			expect(wrapper.emitted("delete:element")?.[0]).toEqual([
+				deleteElementEventPayload,
+			]);
 		});
 	});
 });

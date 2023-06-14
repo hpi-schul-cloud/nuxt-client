@@ -12,3 +12,4 @@ export * from "./columnResponseFactory";
 export * from "./boardResponseFactory";
 export * from "./cardSkeletonResponseFactory";
 export * from "./boardCardFactory";
+export * from "./deleteElementEventPayloadFactory";
