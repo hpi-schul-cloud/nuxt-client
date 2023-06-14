@@ -62,8 +62,8 @@ describe("ContentElementList", () => {
 		});
 	});
 
-	describe("when deleteElement is emitted by FileContentElement", () => {
-		it("should emit deleteElement event", () => {
+	describe("when delete:element is emitted by FileContentElement", () => {
+		it("should emit delete:element event", () => {
 			const fileElementResponse = fileElementResponseFactory.build();
 			setup({
 				elements: [fileElementResponse],

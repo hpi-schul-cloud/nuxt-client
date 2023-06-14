@@ -7,6 +7,7 @@ import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElem
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileContentElement from "./FileContentElement.vue";
+import { nextTick } from "vue";
 jest.mock("../shared/FileStorageApi.composable");
 
 describe("FileContentElement", () => {
@@ -236,6 +237,37 @@ describe("FileContentElement", () => {
 				const progressLinear = wrapper.find("v-progress-linear-stub");
 				expect(progressLinear.exists()).toBe(true);
 			});
+		});
+	});
+
+	describe("when delete:element is emitted by FileContentElementEdit", () => {
+		const setup = (isEditMode: boolean) => {
+			const element = fileElementResponseFactory.build();
+			document.body.setAttribute("data-app", "true");
+
+			const fileRecordResponse = fileRecordResponseFactory.build();
+			const getFileMock = jest.fn().mockReturnValueOnce(fileRecordResponse);
+			setupFileStorageApiMock({ getFileMock });
+
+			const { wrapper } = getWrapper({ element, isEditMode });
+
+			return { wrapper, fileRecordResponse, element };
+		};
+
+		it("should emit delete:element event", async () => {
+			const { wrapper, fileRecordResponse, element } = setup(true);
+			await nextTick();
+
+			const childComponent = wrapper.findComponent(FileContentElementEdit);
+			childComponent.vm.$emit("delete:element");
+
+			expect(wrapper.emitted("delete:element")?.length).toBe(1);
+			expect(wrapper.emitted("delete:element")?.[0]).toEqual([
+				{
+					elementId: element.id,
+					name: fileRecordResponse.name,
+				},
+			]);
 		});
 	});
 });
