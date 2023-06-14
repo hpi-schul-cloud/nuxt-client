@@ -81,7 +81,8 @@ export default defineComponent({
 				fileRecordModel.value = getFile(parentId.value);
 
 				if (!fileRecordModel.value || isPending.value) {
-					fileRecordModel.value = await fetchFileRecursively(
+					await fetchFileRecursively(
+						fileRecordModel,
 						parentId.value,
 						FileRecordParentType.BOARDNODES
 					);

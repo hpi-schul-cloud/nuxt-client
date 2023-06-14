@@ -90,15 +90,18 @@ describe("FileContentElement", () => {
 				const getFileMock = jest.fn().mockReturnValueOnce(undefined);
 				const fetchFileRecursivelyMock = jest
 					.fn()
-					.mockReturnValueOnce(fileRecordResponse);
-				const { fetchFiles } = setupFileStorageApiMock({
+					.mockImplementationOnce((fileRecordModel) => {
+						fileRecordModel.value = fileRecordResponse;
+					});
+
+				setupFileStorageApiMock({
 					getFileMock,
 					fetchFileRecursivelyMock,
 				});
 
 				const { wrapper } = getWrapper({ element, isEditMode });
 
-				return { wrapper, fetchFiles, getFileMock, fetchFileRecursivelyMock };
+				return { wrapper, getFileMock, fetchFileRecursivelyMock };
 			};
 
 			describe("when component is not in edit mode", () => {
@@ -115,6 +118,8 @@ describe("FileContentElement", () => {
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
+
+					console.log(wrapper.overview());
 
 					const fileContentElementDisplay = wrapper.findComponent(
 						FileContentElementDisplay

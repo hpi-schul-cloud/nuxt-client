@@ -3,6 +3,7 @@ import {
 	FileApiInterface,
 	FileRecordResponse as FileRecord,
 	FileRecordParentType,
+	FileRecordResponse,
 	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
@@ -11,7 +12,7 @@ import { BusinessError } from "@/store/types/commons";
 import { $axios } from "@/utils/api";
 import { downloadFile } from "@/utils/fileHelper";
 import { createSharedComposable } from "@vueuse/core";
-import { reactive, ref } from "vue";
+import { Ref, reactive, ref } from "vue";
 
 export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
@@ -116,21 +117,24 @@ export const useFileStorageApi = createSharedComposable(() => {
 	};
 
 	const fetchFileRecursively = async (
+		fileRecordModel: Ref<FileRecordResponse | undefined>,
 		parentId: string,
 		parentType: FileRecordParentType,
 		waitTime = 10000,
 		waitTimeMax = 50000,
 		refreshTimer = 0
 	) => {
-		let result = await refreshFile(parentId, parentType);
+		fileRecordModel.value = await refreshFile(parentId, parentType);
 
 		if (
-			result.securityCheckStatus === FileRecordScanStatus.PENDING &&
+			fileRecordModel.value.securityCheckStatus ===
+				FileRecordScanStatus.PENDING &&
 			refreshTimer <= waitTimeMax
 		) {
 			refreshTimer = refreshTimer + waitTime;
 			await new Promise((resolve) => setTimeout(resolve, waitTime));
-			result = await fetchFileRecursively(
+			await fetchFileRecursively(
+				fileRecordModel,
 				parentId,
 				parentType,
 				waitTime,
@@ -138,8 +142,6 @@ export const useFileStorageApi = createSharedComposable(() => {
 				refreshTimer
 			);
 		}
-
-		return result;
 	};
 
 	return {
