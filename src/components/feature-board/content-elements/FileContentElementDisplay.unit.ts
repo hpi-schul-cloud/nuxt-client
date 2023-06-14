@@ -7,6 +7,7 @@ describe("FileContentElementDisplay", () => {
 	const setupProps = () => ({
 		caption: "Test Caption",
 		fileRecord: fileRecordResponseFactory.build(),
+		url: "www.test-url.com/download",
 	});
 
 	const setup = () => {
@@ -23,6 +24,7 @@ describe("FileContentElementDisplay", () => {
 			wrapper,
 			captionProp: propsData.caption,
 			fileRecordProp: propsData.fileRecord,
+			urlProp: propsData.url,
 		};
 	};
 
@@ -34,11 +36,11 @@ describe("FileContentElementDisplay", () => {
 	});
 
 	it("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
+		const { wrapper, urlProp } = setup();
 
 		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
 
-		expect(downloadUrl).toBe(fileRecordProp.url);
+		expect(downloadUrl).toBe(urlProp);
 	});
 
 	it("should display icon", async () => {

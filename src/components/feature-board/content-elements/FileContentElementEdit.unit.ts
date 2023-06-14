@@ -7,6 +7,7 @@ describe("FileContentElementEdit", () => {
 	const setupProps = () => ({
 		caption: "Test Caption",
 		fileRecord: fileRecordResponseFactory.build(),
+		url: "www.test-url.com/download",
 	});
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
@@ -21,6 +22,7 @@ describe("FileContentElementEdit", () => {
 			wrapper,
 			captionProp: propsData.caption,
 			fileRecordProp: propsData.fileRecord,
+			urlProp: propsData.url,
 		};
 	};
 
@@ -32,11 +34,11 @@ describe("FileContentElementEdit", () => {
 	});
 
 	it("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
+		const { wrapper, urlProp } = setup();
 
 		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
 
-		expect(downloadUrl).toBe(fileRecordProp.url);
+		expect(downloadUrl).toBe(urlProp);
 	});
 
 	it("should display icon", async () => {
