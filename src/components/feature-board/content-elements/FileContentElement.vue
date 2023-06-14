@@ -5,11 +5,13 @@
 				v-if="!isEditMode"
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
+				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
+				:url="url"
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
 			<FileContentElementAlert v-if="isBlocked" />
@@ -71,7 +73,11 @@ export default defineComponent({
 				FileRecordScanStatus.PENDING
 		);
 
-		const fetchFilesRecursively = async () => {
+		const url = computed(() =>
+			!isBlocked.value ? fileRecordModel.value?.url : ""
+		);
+
+		const fetchFileRecursively = async () => {
 			fileRecordModel.value = await refreshFile(
 				parentId.value,
 				FileRecordParentType.BOARDNODES
@@ -79,7 +85,7 @@ export default defineComponent({
 
 			if (!fileRecordModel.value || isPending) {
 				await new Promise((resolve) => setTimeout(resolve, 10000));
-				await fetchFilesRecursively();
+				await fetchFileRecursively();
 			}
 		};
 
@@ -89,7 +95,7 @@ export default defineComponent({
 				fileRecordModel.value = getFile(parentId.value);
 
 				if (!fileRecordModel.value || isPending) {
-					await fetchFilesRecursively();
+					await fetchFileRecursively();
 				}
 			})();
 		});
@@ -105,6 +111,7 @@ export default defineComponent({
 			isBlocked,
 			fileRecordModel,
 			modelValue,
+			url,
 		};
 	},
 });

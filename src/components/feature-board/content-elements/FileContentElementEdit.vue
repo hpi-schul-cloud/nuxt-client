@@ -39,8 +39,8 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType } from "vue";
-import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
+import { defineComponent, PropType } from "vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
@@ -63,17 +63,14 @@ export default defineComponent({
 			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
+		url: {
+			type: String,
+			required: true,
+		},
 	},
 	emits: ["update:caption"],
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
-
-		const url = computed(() =>
-			props.fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
-			props.fileRecord.securityCheckStatus === FileRecordScanStatus.VERIFIED
-				? props.fileRecord.url
-				: ""
-		);
 
 		return {
 			mdiAlertCircle,
@@ -82,7 +79,6 @@ export default defineComponent({
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
 			modelCaption,
-			url,
 		};
 	},
 });

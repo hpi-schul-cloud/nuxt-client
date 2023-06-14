@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
+import { defineComponent, PropType } from "vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { mdiAlertCircle, mdiFileDocumentOutline } from "@mdi/js";
 
 export default defineComponent({
@@ -30,20 +30,15 @@ export default defineComponent({
 			type: Object as PropType<FileRecordResponse>,
 			required: true,
 		},
+		url: {
+			type: String,
+			required: true,
+		},
 	},
-
-	setup(props) {
-		const url = computed(() =>
-			props.fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
-			props.fileRecord.securityCheckStatus === FileRecordScanStatus.VERIFIED
-				? props.fileRecord.url
-				: ""
-		);
-
+	setup() {
 		return {
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
-			url,
 		};
 	},
 });
