@@ -1,7 +1,7 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { useElementTypeSelection } from "./ElementTypeSelection.composable";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
+import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 jest.mock("./SharedElementTypeSelection.composable");
@@ -208,14 +208,14 @@ describe("ElementTypeSelection Composable", () => {
 
 			const expectedOptions = [
 				{
-					icon: mdiFormatSize,
+					icon: mdiFormatText,
 					label:
 						"components.elementTypeSelection.elements.textElement.subtitle",
 					action: () => createTextElement(),
 					testId: "create-element-text",
 				},
 				{
-					icon: mdiUpload,
+					icon: mdiTrayArrowUp,
 					label:
 						"components.elementTypeSelection.elements.fileElement.subtitle",
 					action: () => openFilePicker(),
