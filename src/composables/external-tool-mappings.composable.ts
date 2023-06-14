@@ -100,7 +100,7 @@ export function useExternalToolMappings() {
 	): ContextExternalTool => {
 		return {
 			id: toolResponse.id,
-			name: toolResponse.contextToolName!,
+			name: toolResponse.contextToolName!, //TODO N21-575 should contextToolName be optional?
 			logoUrl: toolResponse.logoUrl,
 			openInNewTab: true,
 		};
@@ -156,17 +156,6 @@ export function useExternalToolMappings() {
 			logoUrl: resp.logoUrl,
 			version: resp.version,
 			parameters: mapCustomParameterResponse(resp.parameters),
-		};
-	};
-
-	const mapSchoolExternalToolConfigurationTemplateResponse = (
-		resp: SchoolExternalToolResponse
-	): ToolConfigurationTemplate => {
-		return {
-			id: resp.id,
-			name: resp.name,
-			version: resp.toolVersion,
-			parameters: [],
 		};
 	};
 
@@ -283,7 +272,6 @@ export function useExternalToolMappings() {
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
-		mapSchoolExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
 		mapSchoolToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,

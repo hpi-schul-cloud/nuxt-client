@@ -124,6 +124,8 @@ describe("RoomExternalToolOverview", () => {
 		});
 	});
 
+	//TODO N21-575 test deleting a tool
+
 	describe("when clicking on a tool", () => {
 		const setup = () => {
 			const tool: ContextExternalTool = contextExternalToolFactory.build();

@@ -115,7 +115,7 @@ export default defineComponent({
 		});
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
-			() => /*contextExternalToolsModule?.getContextExternalTools ||*/ []
+			() => contextExternalToolsModule?.getContextExternalTools || []
 		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
