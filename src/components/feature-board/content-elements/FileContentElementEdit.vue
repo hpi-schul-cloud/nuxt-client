@@ -1,6 +1,6 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item :href="!isBlocked ? fileRecord.url : ''" download>
+		<v-list-item :href="url" download>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
@@ -68,19 +68,21 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelCaption = useVModel(props, "caption", emit);
 
-		const isBlocked = computed(
-			() =>
-				props.fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED
+		const url = computed(() =>
+			props.fileRecord.securityCheckStatus === FileRecordScanStatus.PENDING ||
+			props.fileRecord.securityCheckStatus === FileRecordScanStatus.VERIFIED
+				? props.fileRecord.url
+				: ""
 		);
 
 		return {
-			isBlocked,
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
 			modelCaption,
+			url,
 		};
 	},
 });

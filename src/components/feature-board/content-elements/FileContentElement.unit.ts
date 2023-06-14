@@ -258,8 +258,9 @@ describe("FileContentElement", () => {
 		const setup = (isEditMode: boolean) => {
 			const element = fileElementResponse.build();
 
-			const fileRecordResponse = fileRecordResponseFactory.build();
-			fileRecordResponse.securityCheckStatus = FileRecordScanStatus.BLOCKED;
+			const fileRecordResponse = fileRecordResponseFactory.build({
+				securityCheckStatus: FileRecordScanStatus.BLOCKED,
+			});
 			const getFileMock = jest.fn().mockReturnValueOnce(fileRecordResponse);
 			const refreshFileMock = jest.fn().mockReturnValueOnce(fileRecordResponse);
 			setupFileStorageApiMock({ getFileMock, refreshFileMock });
@@ -269,15 +270,30 @@ describe("FileContentElement", () => {
 			return { wrapper };
 		};
 
-		it("should render FileContentElementAlert component", async () => {
-			const { wrapper } = setup(true);
+		describe("when component is not in edit mode", () => {
+			it("should render FileContentElementAlert component", async () => {
+				const { wrapper } = setup(false);
 
-			await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
 
-			const fileContentElementAlert = wrapper.findComponent(
-				FileContentElementAlert
-			);
-			expect(fileContentElementAlert.exists()).toBe(true);
+				const fileContentElementAlert = wrapper.findComponent(
+					FileContentElementAlert
+				);
+				expect(fileContentElementAlert.exists()).toBe(true);
+			});
+		});
+
+		describe("when component is in edit mode", () => {
+			it("should render FileContentElementAlert component", async () => {
+				const { wrapper } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const fileContentElementAlert = wrapper.findComponent(
+					FileContentElementAlert
+				);
+				expect(fileContentElementAlert.exists()).toBe(true);
+			});
 		});
 	});
 });

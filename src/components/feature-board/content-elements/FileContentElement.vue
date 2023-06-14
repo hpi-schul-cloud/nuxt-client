@@ -71,7 +71,7 @@ export default defineComponent({
 				FileRecordScanStatus.PENDING
 		);
 
-		const refreshFileState = async () => {
+		const fetchFilesRecursively = async () => {
 			fileRecordModel.value = await refreshFile(
 				parentId.value,
 				FileRecordParentType.BOARDNODES
@@ -79,7 +79,7 @@ export default defineComponent({
 
 			if (!fileRecordModel.value || isPending) {
 				await new Promise((resolve) => setTimeout(resolve, 10000));
-				await refreshFileState();
+				await fetchFilesRecursively();
 			}
 		};
 
@@ -89,7 +89,7 @@ export default defineComponent({
 				fileRecordModel.value = getFile(parentId.value);
 
 				if (!fileRecordModel.value || isPending) {
-					await refreshFileState();
+					await fetchFilesRecursively();
 				}
 			})();
 		});
