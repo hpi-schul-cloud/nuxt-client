@@ -6,6 +6,13 @@ import NotifierModule from "@/store/notifier";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
+const setup = () => {
+	return mountComposable(() => useBoardNotifier(), {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+		notifierModule,
+	});
+};
+
 describe("BoardNotifications.composable", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -18,7 +25,7 @@ describe("BoardNotifications.composable", () => {
 	describe("@isErrorCode", () => {
 		describe("when statusCode above 300", () => {
 			it("should return true", () => {
-				const { isErrorCode } = mountComposable(() => useBoardNotifier(), i18n);
+				const { isErrorCode } = setup();
 				const errorCodeStatus = isErrorCode(300);
 
 				expect(errorCodeStatus).toBe(true);
@@ -26,7 +33,7 @@ describe("BoardNotifications.composable", () => {
 		});
 		describe("when statusCode below 300", () => {
 			it("should return false", () => {
-				const { isErrorCode } = mountComposable(() => useBoardNotifier(), i18n);
+				const { isErrorCode } = setup();
 				const errorCodeStatus = isErrorCode(204);
 
 				expect(errorCodeStatus).toBe(false);
@@ -36,10 +43,7 @@ describe("BoardNotifications.composable", () => {
 
 	describe("@showSuccess method", () => {
 		it("should call the notifier module", () => {
-			const { showSuccess } = mountComposable(() => useBoardNotifier(), {
-				...i18n,
-				notifierModule,
-			});
+			const { showSuccess } = setup();
 			const expectedCallObject = {
 				text: "test-text",
 				status: "success",
@@ -54,10 +58,7 @@ describe("BoardNotifications.composable", () => {
 
 	describe("@showFailure method", () => {
 		it("should call the notifier module", () => {
-			const { showFailure } = mountComposable(() => useBoardNotifier(), {
-				...i18n,
-				notifierModule,
-			});
+			const { showFailure } = setup();
 			const expectedCallObject = {
 				text: "test-text",
 				status: "error",
@@ -72,10 +73,7 @@ describe("BoardNotifications.composable", () => {
 
 	describe("@showInfo method", () => {
 		it("should call the notifier module", () => {
-			const { showInfo } = mountComposable(() => useBoardNotifier(), {
-				...i18n,
-				notifierModule,
-			});
+			const { showInfo } = setup();
 			const expectedCallObject = {
 				text: "test-text",
 				status: "info",
@@ -90,10 +88,7 @@ describe("BoardNotifications.composable", () => {
 
 	describe("@showCustomNotifier method", () => {
 		it("should call the notifier module", () => {
-			const { showCustomNotifier } = mountComposable(() => useBoardNotifier(), {
-				...i18n,
-				notifierModule,
-			});
+			const { showCustomNotifier } = setup();
 			const expectedCallObject = {
 				text: "custom-text",
 				status: "warning",
@@ -108,10 +103,7 @@ describe("BoardNotifications.composable", () => {
 
 	describe("@generateErrorText", () => {
 		it("should return i18n keys", () => {
-			const { generateErrorText } = mountComposable(() => useBoardNotifier(), {
-				...i18n,
-				notifierModule,
-			});
+			const { generateErrorText } = setup();
 			const i18nCreateErrorKey = generateErrorText("create", "board");
 			expect(i18nCreateErrorKey).toBe(
 				"components.board.notifications.errors.notCreated"
