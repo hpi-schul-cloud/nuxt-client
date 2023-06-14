@@ -1,3 +1,4 @@
+import { useBoardNotifier } from "./../shared/BoardNotifications.composable";
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
@@ -24,12 +25,12 @@ const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 jest.mock("../shared/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
+jest.mock("../shared/BoardApi.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 describe("CardState composable", () => {
 	let fetchMock: jest.Mock;
 	let mockedBoardApiCalls: ReturnType<typeof useBoardApi>;
-	const i18n = {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-	};
 	beforeEach(() => {
 		fetchMock = jest.fn().mockResolvedValue({
 			id: "abc",
@@ -111,6 +112,16 @@ describe("CardState composable", () => {
 			);
 		});
 
+		it("should not call updateCardTitle when card value is undefined", async () => {
+			const { updateTitle, card } = setup(boardCard.id);
+			card.value = undefined;
+
+			await updateTitle("new title");
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateCardTitle).not.toHaveBeenCalled();
+		});
+
 		it("should update card title", async () => {
 			const newTitle = "new Title";
 			const { updateTitle, card } = setup(boardCard.id);
@@ -120,6 +131,28 @@ describe("CardState composable", () => {
 			await nextTick();
 
 			expect(boardCard.title).toEqual(newTitle);
+		});
+
+		it("should not update card title when api response has error", async () => {
+			const boardCardNew: BoardCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+			mockedBoardApiCalls.updateCardTitle = jest
+				.fn()
+				.mockResolvedValue({ status: 300 });
+
+			const newTitle = "new Title";
+			const { updateTitle, card } = setup(boardCardNew.id);
+			card.value = boardCardNew;
+
+			await updateTitle(newTitle);
+			await nextTick();
+
+			expect(boardCardNew.title).toEqual("old Title");
 		});
 	});
 
@@ -142,6 +175,38 @@ describe("CardState composable", () => {
 			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
 				testCard.id
 			);
+		});
+
+		it("should not call deleteCard when card value is undefined", async () => {
+			const { deleteCard, card } = setup("test-id");
+			card.value = undefined;
+
+			await deleteCard();
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteCardCall).not.toHaveBeenCalled();
+		});
+
+		it("should call showErrorAndReload method when api response has error", async () => {
+			mockedBoardApiCalls.deleteCardCall = jest
+				.fn()
+				.mockResolvedValue({ status: 300 });
+
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+
+			const { deleteCard, card } = setup(testCard.id);
+			card.value = testCard;
+
+			await deleteCard();
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalled();
 		});
 	});
 
@@ -168,6 +233,17 @@ describe("CardState composable", () => {
 			);
 		});
 
+		it("should not call updateCardHeightCall when card value is undefined", async () => {
+			const { updateCardHeight, card } = setup(boardCard.id);
+			card.value = undefined;
+			const newHeight = 300;
+
+			await updateCardHeight(newHeight);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateCardHeightCall).not.toHaveBeenCalled();
+		});
+
 		it("should update card height", async () => {
 			const newHeight = 300;
 			const { updateCardHeight, card } = setup(boardCard.id);
@@ -177,6 +253,28 @@ describe("CardState composable", () => {
 			await nextTick();
 
 			expect(boardCard.height).toEqual(newHeight);
+		});
+
+		it("should not update card height when api response has error", async () => {
+			mockedBoardApiCalls.updateCardHeightCall = jest
+				.fn()
+				.mockResolvedValue({ status: 300 });
+
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+
+			const { updateCardHeight, card } = setup(boardCard.id);
+			card.value = testCard;
+
+			await updateCardHeight(300);
+			await nextTick();
+
+			expect(testCard.height).toEqual(200);
 		});
 	});
 
@@ -204,6 +302,47 @@ describe("CardState composable", () => {
 				testCard.id,
 				elementType
 			);
+			expect(testCard.elements).toHaveLength(1);
+		});
+
+		it("should not call addElement when card value is undefined", async () => {
+			const { addElement, card } = setup("test-id");
+			card.value = undefined;
+
+			const elementType: CreateContentElementBody = {
+				type: ContentElementType.RichText,
+			};
+
+			await addElement(elementType.type);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.createElement).not.toHaveBeenCalled();
+		});
+
+		it("should not add element when api response has error", async () => {
+			mockedBoardApiCalls.createElement = jest
+				.fn()
+				.mockResolvedValue({ status: 300 });
+
+			const testCard = {
+				id: `cardid`,
+				height: 200,
+				title: "old Title",
+				elements: [],
+				visibility: { publishedAt: new Date().toUTCString() },
+			};
+
+			const { addElement, card } = setup(testCard.id);
+			card.value = testCard;
+
+			const elementType: CreateContentElementBody = {
+				type: ContentElementType.RichText,
+			};
+
+			await addElement(elementType.type);
+			await nextTick();
+
+			expect(testCard.elements).toHaveLength(0);
 		});
 	});
 });

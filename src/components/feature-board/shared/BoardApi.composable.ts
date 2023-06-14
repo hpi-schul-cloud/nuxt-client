@@ -24,7 +24,7 @@ export const useBoardApi = () => {
 	};
 
 	const updateCardHeightCall = async (id: string, height: number) => {
-		await cardsApi.cardControllerUpdateCardHeight(id, { height });
+		return await cardsApi.cardControllerUpdateCardHeight(id, { height });
 	};
 
 	const updateCardTitle = async (id: string, title: string) => {

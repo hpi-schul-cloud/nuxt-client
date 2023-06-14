@@ -65,7 +65,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card.height === newHeight) {
 			return;
 		}
-		await updateCardHeightCall(cardState.card.id, newHeight);
+		const response = await updateCardHeightCall(cardState.card.id, newHeight);
+		if (isErrorCode(response?.status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		cardState.card.height = newHeight;
 	};
 
@@ -92,11 +96,12 @@ export const useCardState = (id: BoardCard["id"]) => {
 	onMounted(() => fetchCard(id));
 
 	return {
-		fetchCard,
-		updateTitle,
-		deleteCard,
-		updateCardHeight,
 		addElement,
+		deleteCard,
+		fetchCard,
+		showErrorAndReload,
+		updateCardHeight,
+		updateTitle,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};
