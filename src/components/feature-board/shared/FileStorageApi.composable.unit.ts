@@ -1,4 +1,7 @@
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import {
+	FileRecordParentType,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 import * as fileHelper from "@/utils/fileHelper";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStorageFactoryMock";
@@ -291,6 +294,179 @@ describe("FileStorageApi Composable", () => {
 			const { refreshFile } = useFileStorageApi();
 
 			expect(await refreshFile(parentId, parentType)).toBe(fileRecordResponse);
+		});
+	});
+
+	describe("fetchFileRecursively", () => {
+		beforeEach(() => {
+			jest.useFakeTimers(); // <- use fake timer
+		});
+
+		afterEach(() => {
+			jest.useRealTimers();
+		});
+
+		describe("when security check status is not pending right from the start", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponse = fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+					securityCheckStatus: FileRecordScanStatus.VERIFIED,
+				});
+				const response = {
+					data: { data: [fileRecordResponse] },
+				};
+
+				fileApiFactory.list.mockImplementationOnce(() => response);
+
+				return { parentId, parentType, fileRecordResponse };
+			};
+
+			it("should call FileApiFactory.list only once", async () => {
+				const { parentId, parentType } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then(() => {
+						expect(fileApiFactory.list).toBeCalledWith(
+							"schoolId",
+							parentId,
+							parentType
+						);
+						expect(fileApiFactory.list).toBeCalledTimes(1);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
+
+			it("should set files", async () => {
+				const { parentId, parentType, fileRecordResponse } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
+						expect(fileRecord).toBe(fileRecordResponse);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
+		});
+
+		describe("when security check status changes in between", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponsePending = fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+					securityCheckStatus: FileRecordScanStatus.PENDING,
+				});
+				const fileRecordResponseVerfied = fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+					securityCheckStatus: FileRecordScanStatus.VERIFIED,
+				});
+				const responsePending = {
+					data: { data: [fileRecordResponsePending] },
+				};
+				const responseVerified = {
+					data: { data: [fileRecordResponseVerfied] },
+				};
+
+				fileApiFactory.list
+					.mockReturnValueOnce(responsePending)
+					.mockReturnValueOnce(responsePending)
+					.mockReturnValueOnce(responsePending)
+					.mockReturnValueOnce(responseVerified);
+
+				return { parentId, parentType, fileRecordResponseVerfied };
+			};
+
+			it("should call FileApiFactory.list four times", async () => {
+				const { parentId, parentType } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then(() => {
+						expect(fileApiFactory.list).toBeCalledWith(
+							"schoolId",
+							parentId,
+							parentType
+						);
+						expect(fileApiFactory.list).toBeCalledTimes(4);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
+
+			it("should set files", async () => {
+				const { parentId, parentType, fileRecordResponseVerfied } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
+						expect(fileRecord).toBe(fileRecordResponseVerfied);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
+		});
+
+		describe("when security check status is always pending", () => {
+			it("should call FileApiFactory.list six times", async () => {
+				const { parentId, parentType } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then(() => {
+						expect(fileApiFactory.list).toBeCalledWith(
+							"schoolId",
+							parentId,
+							parentType
+						);
+						expect(fileApiFactory.list).toBeCalledTimes(6);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
+
+			it("should set files", () => {
+				const { parentId, parentType, fileRecordResponse } = setup();
+				const { fetchFileRecursively } = useFileStorageApi();
+
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
+						expect(fileRecord).toBe(fileRecordResponse);
+					})
+					.catch(() => {
+						// Do nothing!
+					});
+
+				jest.runAllTimers(); // <- explicitly tell jest to run all setTimeout, setInterval
+				jest.runAllTicks(); // <- explicitly tell jest to run all Promise callback
+			});
 		});
 	});
 });

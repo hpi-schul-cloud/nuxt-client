@@ -53,7 +53,8 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { getFile, refreshFile, newFileForParent } = useFileStorageApi();
+		const { getFile, fetchFileRecursively, newFileForParent } =
+			useFileStorageApi();
 
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
@@ -74,30 +75,16 @@ export default defineComponent({
 			!isBlocked.value ? fileRecordModel.value?.url : ""
 		);
 
-		const waitTimeMax = 50000;
-		const waitTime = 10000;
-		let refreshTimer = 0;
-
-		const fetchFileRecursively = async () => {
-			fileRecordModel.value = await refreshFile(
-				parentId.value,
-				FileRecordParentType.BOARDNODES
-			);
-
-			if (isPending.value && refreshTimer <= waitTimeMax) {
-				refreshTimer = refreshTimer + waitTime;
-				await new Promise((resolve) => setTimeout(resolve, waitTime));
-				await fetchFileRecursively();
-			}
-		};
-
 		onMounted(() => {
 			(async () => {
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
 				if (!fileRecordModel.value || isPending.value) {
-					await fetchFileRecursively();
+					fileRecordModel.value = await fetchFileRecursively(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
 				}
 			})();
 		});

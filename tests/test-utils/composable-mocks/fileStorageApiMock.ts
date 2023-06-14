@@ -7,6 +7,7 @@ interface Props {
 	uploadMock?: jest.Mock;
 	downloadMock?: jest.Mock;
 	fetchFilesMock?: jest.Mock;
+	fetchFileRecursivelyMock?: jest.Mock;
 	renameMock?: jest.Mock;
 	getFileMock?: jest.Mock;
 	refreshFileMock?: jest.Mock;
@@ -16,6 +17,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 	const {
 		downloadMock,
 		fetchFilesMock,
+		fetchFileRecursivelyMock,
 		renameMock,
 		uploadMock,
 		getFileMock,
@@ -24,6 +26,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
 	const download = downloadMock ?? jest.fn();
 	const fetchFiles = fetchFilesMock ?? jest.fn();
+	const fetchFileRecursively = fetchFileRecursivelyMock ?? jest.fn();
 	const rename = renameMock ?? jest.fn();
 	const upload = uploadMock ?? jest.fn();
 	const getFile = getFileMock ?? jest.fn();
@@ -39,6 +42,7 @@ export const setupFileStorageApiMock = (props: Props) => {
 	const mocks = {
 		download,
 		fetchFiles,
+		fetchFileRecursively,
 		rename,
 		upload,
 		getFile,

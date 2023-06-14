@@ -3,6 +3,7 @@ import {
 	FileApiInterface,
 	FileRecordResponse as FileRecord,
 	FileRecordParentType,
+	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
@@ -114,8 +115,36 @@ export const useFileStorageApi = createSharedComposable(() => {
 		return getFile(parentId);
 	};
 
+	const fetchFileRecursively = async (
+		parentId: string,
+		parentType: FileRecordParentType,
+		waitTime = 10000,
+		waitTimeMax = 50000,
+		refreshTimer = 0
+	) => {
+		let result = await refreshFile(parentId, parentType);
+
+		if (
+			result.securityCheckStatus === FileRecordScanStatus.PENDING &&
+			refreshTimer <= waitTimeMax
+		) {
+			refreshTimer = refreshTimer + waitTime;
+			await new Promise((resolve) => setTimeout(resolve, waitTime));
+			result = await fetchFileRecursively(
+				parentId,
+				parentType,
+				waitTime,
+				waitTimeMax,
+				refreshTimer
+			);
+		}
+
+		return result;
+	};
+
 	return {
 		download,
+		fetchFileRecursively,
 		fetchFiles,
 		rename,
 		upload,
