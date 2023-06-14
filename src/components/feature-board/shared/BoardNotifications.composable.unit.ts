@@ -18,10 +18,6 @@ describe("BoardNotifications.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	const i18n = {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-	};
-
 	describe("@isErrorCode", () => {
 		describe("when statusCode above 300", () => {
 			it("should return true", () => {
