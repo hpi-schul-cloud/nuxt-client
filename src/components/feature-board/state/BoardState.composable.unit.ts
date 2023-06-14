@@ -3,12 +3,20 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
 import * as serverApi from "../../../serverApi/v3/api";
 import { useBoardState } from "./BoardState.composable";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+
+const notifierModule = createModuleMocks(NotifierModule);
+
+const setup = (boardId = "123123") => {
+	return mountComposable(() => useBoardState(boardId), {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+		notifierModule,
+	});
+};
 
 describe("BoardState composable", () => {
 	let mockApi: any;
-	const i18n = {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-	};
 	beforeEach(() => {
 		const boardControllerGetBoardSkeleton = jest
 			.fn()
@@ -20,7 +28,7 @@ describe("BoardState composable", () => {
 
 	it("should fetch board on mount", async () => {
 		const boardId = "123124";
-		mountComposable(() => useBoardState(boardId), i18n);
+		setup(boardId);
 
 		expect(mockApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
 			boardId
@@ -28,12 +36,8 @@ describe("BoardState composable", () => {
 	});
 
 	it("should return fetch function that updates board", async () => {
-		const boardId1 = "123124";
 		const boardId2 = "a1b1c1";
-		const { fetchBoard, board } = mountComposable(
-			() => useBoardState(boardId1),
-			i18n
-		);
+		const { fetchBoard, board } = setup();
 
 		const fetchPromise = fetchBoard(boardId2);
 		await fetchPromise;
@@ -43,8 +47,7 @@ describe("BoardState composable", () => {
 	});
 
 	it("should return isLoading which reflects pending api calls", async () => {
-		const boardId1 = "123124";
-		const { isLoading } = mountComposable(() => useBoardState(boardId1), i18n);
+		const { isLoading } = setup();
 
 		expect(isLoading.value).toStrictEqual(true);
 
