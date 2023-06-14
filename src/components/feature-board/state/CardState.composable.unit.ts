@@ -6,6 +6,17 @@ import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { useCardState } from "./CardState.composable";
 import { I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+
+const notifierModule = createModuleMocks(NotifierModule);
+
+const setup = (cardId = "123123") => {
+	return mountComposable(() => useCardState(cardId), {
+		[I18N_KEY as symbol]: { t: (key: string) => key },
+		notifierModule,
+	});
+};
 
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
@@ -46,7 +57,8 @@ describe("CardState composable", () => {
 	describe("fetchCard", () => {
 		it("should fetch card on mount", async () => {
 			const cardId = "123124";
-			mountComposable(() => useCardState(cardId), i18n);
+			// mountComposable(() => useCardState(cardId), i18n);
+			setup(cardId);
 
 			expect(fetchMock).toHaveBeenCalledWith(cardId);
 		});
@@ -54,10 +66,7 @@ describe("CardState composable", () => {
 		it("should return fetch function that updates card and loading state", async () => {
 			const cardId1 = "123124a";
 			const cardId2 = "123125b";
-			const { fetchCard, isLoading } = mountComposable(
-				() => useCardState(cardId1),
-				i18n
-			);
+			const { fetchCard, isLoading } = setup(cardId1);
 
 			await fetchCard(cardId2);
 			expect(fetchMock).toHaveBeenLastCalledWith(cardId2);
@@ -66,12 +75,11 @@ describe("CardState composable", () => {
 		});
 
 		it("should log on error", async () => {
-			const cardId = "123124";
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 			const errorToThrow = new Error("something went wrong");
 
 			fetchMock.mockRejectedValue(errorToThrow);
-			mountComposable(() => useCardState(cardId), i18n);
+			setup();
 			await nextTick();
 			await nextTick(); // test mounts it twice
 
@@ -91,10 +99,7 @@ describe("CardState composable", () => {
 		};
 
 		it("should call updateCardTitle", async () => {
-			const { updateTitle, card } = mountComposable(
-				() => useCardState(boardCard.id),
-				i18n
-			);
+			const { updateTitle, card } = setup(boardCard.id);
 			card.value = boardCard;
 
 			await updateTitle("new title");
@@ -108,10 +113,7 @@ describe("CardState composable", () => {
 
 		it("should update card title", async () => {
 			const newTitle = "new Title";
-			const { updateTitle, card } = mountComposable(
-				() => useCardState(boardCard.id),
-				i18n
-			);
+			const { updateTitle, card } = setup(boardCard.id);
 			card.value = boardCard;
 
 			await updateTitle(newTitle);
@@ -131,10 +133,7 @@ describe("CardState composable", () => {
 				visibility: { publishedAt: new Date().toUTCString() },
 			};
 
-			const { deleteCard, card } = mountComposable(
-				() => useCardState(testCard.id),
-				i18n
-			);
+			const { deleteCard, card } = setup(testCard.id);
 			card.value = testCard;
 
 			await deleteCard();
@@ -156,10 +155,7 @@ describe("CardState composable", () => {
 		};
 
 		it("should call updateCardHeightCall", async () => {
-			const { updateCardHeight, card } = mountComposable(
-				() => useCardState(boardCard.id),
-				i18n
-			);
+			const { updateCardHeight, card } = setup(boardCard.id);
 			card.value = boardCard;
 			const newHeight = 300;
 
@@ -174,10 +170,7 @@ describe("CardState composable", () => {
 
 		it("should update card height", async () => {
 			const newHeight = 300;
-			const { updateCardHeight, card } = mountComposable(
-				() => useCardState(boardCard.id),
-				i18n
-			);
+			const { updateCardHeight, card } = setup(boardCard.id);
 			card.value = boardCard;
 
 			await updateCardHeight(newHeight);
@@ -197,10 +190,7 @@ describe("CardState composable", () => {
 				visibility: { publishedAt: new Date().toUTCString() },
 			};
 
-			const { addElement, card } = mountComposable(
-				() => useCardState(testCard.id),
-				i18n
-			);
+			const { addElement, card } = setup(testCard.id);
 			card.value = testCard;
 
 			const elementType: CreateContentElementBody = {
