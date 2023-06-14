@@ -80,7 +80,7 @@ export default defineComponent({
 				FileRecordParentType.BOARDNODES
 			);
 
-			if (!fileRecordModel.value || isPending) {
+			if (isPending.value) {
 				await new Promise((resolve) => setTimeout(resolve, 10000));
 				await fetchFileRecursively();
 			}
@@ -91,7 +91,7 @@ export default defineComponent({
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
-				if (!fileRecordModel.value || isPending) {
+				if (!fileRecordModel.value || isPending.value) {
 					await fetchFileRecursively();
 				}
 			})();
