@@ -1,4 +1,3 @@
-import { useBoardNotifier } from "./../shared/BoardNotifications.composable";
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
@@ -24,9 +23,6 @@ const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
 jest.mock("../shared/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
-
-jest.mock("../shared/BoardApi.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("CardState composable", () => {
 	let fetchMock: jest.Mock;
@@ -58,7 +54,6 @@ describe("CardState composable", () => {
 	describe("fetchCard", () => {
 		it("should fetch card on mount", async () => {
 			const cardId = "123124";
-			// mountComposable(() => useCardState(cardId), i18n);
 			setup(cardId);
 
 			expect(fetchMock).toHaveBeenCalledWith(cardId);

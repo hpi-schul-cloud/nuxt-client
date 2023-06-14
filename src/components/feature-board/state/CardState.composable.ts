@@ -99,7 +99,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		addElement,
 		deleteCard,
 		fetchCard,
-		showErrorAndReload,
 		updateCardHeight,
 		updateTitle,
 		card: toRef(cardState, "card"),
