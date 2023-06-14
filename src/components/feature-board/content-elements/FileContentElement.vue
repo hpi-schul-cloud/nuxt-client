@@ -74,14 +74,19 @@ export default defineComponent({
 			!isBlocked.value ? fileRecordModel.value?.url : ""
 		);
 
+		const waitTimeMax = 50000;
+		const waitTime = 10000;
+		let refreshTimer = 0;
+
 		const fetchFileRecursively = async () => {
 			fileRecordModel.value = await refreshFile(
 				parentId.value,
 				FileRecordParentType.BOARDNODES
 			);
 
-			if (isPending.value) {
-				await new Promise((resolve) => setTimeout(resolve, 10000));
+			if (isPending.value && refreshTimer <= waitTimeMax) {
+				refreshTimer = refreshTimer + waitTime;
+				await new Promise((resolve) => setTimeout(resolve, waitTime));
 				await fetchFileRecursively();
 			}
 		};
