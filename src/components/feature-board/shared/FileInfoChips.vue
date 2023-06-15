@@ -1,7 +1,7 @@
 <template>
 	<v-list-item>
 		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
-		<v-chip class="ma-2" small> {{ convertFileSize() }} </v-chip>
+		<v-chip class="ma-2" small> {{ fileSize }} </v-chip>
 	</v-list-item>
 </template>
 
@@ -22,7 +22,7 @@ export default defineComponent({
 		const fileRecordSize = ref(props.fileRecord.size);
 		const sizes = ["bytes", "KB", "MB", "GB"];
 
-		const convertFileSize = () => {
+		const fileSize = computed(() => {
 			if (fileRecordSize.value < 1024)
 				return (fileRecordSize.value / 1024).toFixed(2) + sizes[0];
 			if (fileRecordSize.value < 1024 ** 2)
@@ -30,7 +30,7 @@ export default defineComponent({
 			if (fileRecordSize.value < 1024 ** 3)
 				return (fileRecordSize.value / 1024 ** 2).toFixed(2) + sizes[2];
 			return (fileRecordSize.value / 1024 ** 3).toFixed(2) + sizes[3];
-		};
+		});
 
 		const fileName = ref(props.fileRecord.name);
 
@@ -41,7 +41,7 @@ export default defineComponent({
 		});
 
 		return {
-			convertFileSize,
+			fileSize,
 			fileExtension,
 		};
 	},
