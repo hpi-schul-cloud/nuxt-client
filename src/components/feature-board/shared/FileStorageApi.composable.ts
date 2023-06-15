@@ -75,6 +75,7 @@ export const useFileStorageApi = (
 	): Promise<FileRecordResponse | undefined> => {
 		let fileRecord: FileRecordResponse | undefined;
 
+		await new Promise((resolve) => setTimeout(resolve, waitTime));
 		const result = await fetchFiles();
 		if (result) {
 			fileRecord = result[0];
@@ -83,7 +84,6 @@ export const useFileStorageApi = (
 				refreshTimer <= waitTimeMax
 			) {
 				refreshTimer = refreshTimer + waitTime;
-				await new Promise((resolve) => setTimeout(resolve, waitTime));
 				fileRecord = await fetchFileRecursively(
 					waitTime,
 					waitTimeMax,

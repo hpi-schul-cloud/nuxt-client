@@ -81,9 +81,11 @@ export default defineComponent({
 		const tryUpload = async (file: File) => {
 			try {
 				const uploadedFileRecord = await upload(file);
-				fileRecord.value = uploadedFileRecord;
-
-				setSelectedFile();
+				if (uploadedFileRecord) {
+					fileRecord.value = uploadedFileRecord;
+					setSelectedFile();
+					await checkSecurityStatus();
+				}
 			} catch (error) {
 				//Remove element
 				setSelectedFile();
@@ -96,9 +98,12 @@ export default defineComponent({
 
 				if (fileRecords) {
 					fileRecord.value = fileRecords[0];
+					await checkSecurityStatus();
 				}
 			}
+		};
 
+		const checkSecurityStatus = async () => {
 			if (isPending.value) {
 				fileRecord.value = await fetchFileRecursively();
 			}
