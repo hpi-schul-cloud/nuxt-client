@@ -295,7 +295,7 @@ describe("FileContentElement", () => {
 				const refreshFileMock = jest.fn().mockReturnValueOnce(undefined);
 				const fetchFileRecursivelyMock = jest
 					.fn()
-					.mockReturnValueOnce(undefined);
+					.mockReturnValueOnce(fileRecordResponse);
 
 				const { newFileForParent } = setupFileStorageApiMock({
 					getFileMock,
@@ -335,7 +335,7 @@ describe("FileContentElement", () => {
 
 				expect(getFileMock).toHaveBeenCalledTimes(2);
 				expect(refreshFileMock).toHaveBeenCalledTimes(1);
-				expect(fetchFileRecursivelyMock).toHaveBeenCalledTimes(0);
+				expect(fetchFileRecursivelyMock).toHaveBeenCalledTimes(1);
 				const fileContentElementEdit = wrapper.findComponent(
 					FileContentElementEdit
 				);
