@@ -311,7 +311,6 @@ describe("FileStorageApi Composable", () => {
 
 		describe("when security check status is not pending right from the start", () => {
 			const setup = () => {
-				const fileRecord: Ref<FileRecordResponse | undefined> = ref(undefined);
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
 				const fileRecordResponse = fileRecordResponseFactory.build({
@@ -325,14 +324,14 @@ describe("FileStorageApi Composable", () => {
 
 				fileApiFactory.list.mockImplementationOnce(() => response);
 
-				return { fileRecord, parentId, parentType, fileRecordResponse };
+				return { parentId, parentType, fileRecordResponse };
 			};
 
 			it("should call FileApiFactory.list only once", async () => {
-				const { fileRecord, parentId, parentType } = setup();
+				const { parentId, parentType } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
+				fetchFileRecursively(parentId, parentType)
 					.then(() => {
 						expect(fileApiFactory.list).toBeCalledWith(
 							"schoolId",
@@ -350,12 +349,11 @@ describe("FileStorageApi Composable", () => {
 			});
 
 			it("should set files", async () => {
-				const { fileRecord, parentId, parentType, fileRecordResponse } =
-					setup();
+				const { parentId, parentType, fileRecordResponse } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
-					.then(() => {
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
 						expect(fileRecord).toBe(fileRecordResponse);
 					})
 					.catch(() => {
@@ -369,7 +367,6 @@ describe("FileStorageApi Composable", () => {
 
 		describe("when security check status changes in between", () => {
 			const setup = () => {
-				const fileRecord: Ref<FileRecordResponse | undefined> = ref(undefined);
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
 				const fileRecordResponsePending = fileRecordResponseFactory.build({
@@ -395,14 +392,14 @@ describe("FileStorageApi Composable", () => {
 					.mockReturnValueOnce(responsePending)
 					.mockReturnValueOnce(responseVerified);
 
-				return { fileRecord, parentId, parentType, fileRecordResponseVerfied };
+				return { parentId, parentType, fileRecordResponseVerfied };
 			};
 
 			it("should call FileApiFactory.list four times", async () => {
-				const { fileRecord, parentId, parentType } = setup();
+				const { parentId, parentType } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
+				fetchFileRecursively(parentId, parentType)
 					.then(() => {
 						expect(fileApiFactory.list).toBeCalledWith(
 							"schoolId",
@@ -420,12 +417,11 @@ describe("FileStorageApi Composable", () => {
 			});
 
 			it("should set files", async () => {
-				const { fileRecord, parentId, parentType, fileRecordResponseVerfied } =
-					setup();
+				const { parentId, parentType, fileRecordResponseVerfied } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
-					.then(() => {
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
 						expect(fileRecord).toBe(fileRecordResponseVerfied);
 					})
 					.catch(() => {
@@ -439,10 +435,10 @@ describe("FileStorageApi Composable", () => {
 
 		describe("when security check status is always pending", () => {
 			it("should call FileApiFactory.list six times", async () => {
-				const { fileRecord, parentId, parentType } = setup();
+				const { parentId, parentType } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
+				fetchFileRecursively(parentId, parentType)
 					.then(() => {
 						expect(fileApiFactory.list).toBeCalledWith(
 							"schoolId",
@@ -460,12 +456,11 @@ describe("FileStorageApi Composable", () => {
 			});
 
 			it("should set files", () => {
-				const { fileRecord, parentId, parentType, fileRecordResponse } =
-					setup();
+				const { parentId, parentType, fileRecordResponse } = setup();
 				const { fetchFileRecursively } = useFileStorageApi();
 
-				fetchFileRecursively(fileRecord, parentId, parentType)
-					.then(() => {
+				fetchFileRecursively(parentId, parentType)
+					.then((fileRecord) => {
 						expect(fileRecord).toBe(fileRecordResponse);
 					})
 					.catch(() => {
