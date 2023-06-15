@@ -1,8 +1,8 @@
 <template>
-	<v-list-item>
+	<div>
 		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
 		<v-chip class="ma-2" small> {{ fileSize }} </v-chip>
-	</v-list-item>
+	</div>
 </template>
 
 <script lang="ts">

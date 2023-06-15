@@ -34,7 +34,6 @@
 				</BoardMenu>
 			</v-list-item-icon>
 		</v-list-item>
-		<FileInfoChips :fileRecord="fileRecord" />
 	</v-list>
 </template>
 
@@ -44,7 +43,6 @@ import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import FileInfoChips from "../shared/FileInfoChips.vue";
 import {
 	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
@@ -54,7 +52,7 @@ import {
 
 export default defineComponent({
 	name: "FileContentElementEdit",
-	components: { BoardMenu, BoardMenuAction, FileInfoChips },
+	components: { BoardMenu, BoardMenuAction },
 	props: {
 		caption: {
 			type: String,

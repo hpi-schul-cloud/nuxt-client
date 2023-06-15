@@ -11,7 +11,6 @@
 				}}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
-		<FileInfoChips :fileRecord="fileRecord" />
 	</v-list>
 </template>
 
@@ -19,13 +18,9 @@
 import { defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { mdiFileDocumentOutline } from "@mdi/js";
-import FileInfoChips from "../shared/FileInfoChips.vue";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
-	components: {
-		FileInfoChips,
-	},
 	props: {
 		caption: {
 			type: String,
