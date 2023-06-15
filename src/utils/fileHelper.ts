@@ -50,3 +50,28 @@ export function downloadFile(
 		}, 200);
 	}
 }
+
+export function convertFileSizeToHumanReadable(fileSize: number): string {
+	const units = ["B", "KB", "MB", "GB", "TB"];
+	const threshold = 1024;
+
+	let convertedSize = fileSize;
+	let unit = units[0];
+	let power = 1;
+
+	while (convertedSize >= threshold && units.length >= power) {
+		convertedSize /= threshold;
+		unit = units[power];
+		power++;
+	}
+
+	const humanReadableFileSize = convertedSize.toFixed(2) + " " + unit;
+
+	return humanReadableFileSize;
+}
+
+export function getFileExtension(fileName: string): string {
+	const ext = fileName.substring(fileName.lastIndexOf(".") + 1).toUpperCase();
+
+	return ext;
+}
