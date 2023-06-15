@@ -127,7 +127,7 @@ export const useFileStorageApi = createSharedComposable(() => {
 		fileRecordModel.value = await refreshFile(parentId, parentType);
 
 		if (
-			fileRecordModel.value.securityCheckStatus ===
+			fileRecordModel.value?.securityCheckStatus ===
 				FileRecordScanStatus.PENDING &&
 			refreshTimer <= waitTimeMax
 		) {
