@@ -39,9 +39,11 @@ export default defineComponent({
 		});
 
 		const fileExtension = computed(() => {
-			return props.fileRecord.name
+			const ext = props.fileRecord.name
 				.substring(props.fileRecord.name.lastIndexOf(".") + 1)
 				.toUpperCase();
+
+			return ext;
 		});
 
 		return {
