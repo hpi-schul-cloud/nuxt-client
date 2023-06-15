@@ -368,7 +368,6 @@ describe("useExternalToolUtils", () => {
 					schoolToolId: template.id,
 					parameters: [],
 					contextType: "course",
-					contextToolName: template.name,
 				})
 			);
 		});

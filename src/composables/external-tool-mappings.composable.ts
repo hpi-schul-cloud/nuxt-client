@@ -100,8 +100,8 @@ export function useExternalToolMappings() {
 	): ContextExternalTool => {
 		return {
 			id: toolResponse.id,
-			name: toolResponse.contextToolName!, //TODO N21-575 should contextToolName be optional?
-			logoUrl: toolResponse.logoUrl,
+			name: toolResponse.contextToolName || "Toolname",
+			logoUrl: undefined,
 			openInNewTab: true,
 		};
 	};
@@ -227,7 +227,6 @@ export function useExternalToolMappings() {
 			schoolToolId: template.schoolToolId,
 			contextId,
 			contextType,
-			contextToolName: template.name,
 			toolVersion: template.version,
 			parameters: mapToolParametersToCustomParameterEntryParams(
 				template.parameters

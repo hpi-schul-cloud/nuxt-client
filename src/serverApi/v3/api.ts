@@ -647,7 +647,7 @@ export interface ContextExternalToolPostParams {
      * @type {string}
      * @memberof ContextExternalToolPostParams
      */
-    contextToolName: string;
+    contextToolName?: string;
     /**
      * 
      * @type {Array<CustomParameterEntryParam>}
