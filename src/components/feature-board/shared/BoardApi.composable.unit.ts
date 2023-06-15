@@ -30,6 +30,7 @@ const mockApi = {
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerDeleteCard: jest.fn(),
+	elementControllerDeleteElement: jest.fn(),
 	columnControllerDeleteColumn: jest.fn(),
 	columnControllerCreateCard: jest
 		.fn()
@@ -213,6 +214,18 @@ describe("BoardApi.composable", () => {
 
 			await deleteColumnCall(PAYLOAD);
 			expect(mockApi.columnControllerDeleteColumn).toHaveBeenCalledWith(
+				PAYLOAD
+			);
+		});
+	});
+
+	describe("deleteElementCall", () => {
+		it("should call elementControllerDeleteElement api", async () => {
+			const { deleteElementCall } = useBoardApi();
+			const PAYLOAD = "element-id";
+
+			await deleteElementCall(PAYLOAD);
+			expect(mockApi.elementControllerDeleteElement).toHaveBeenCalledWith(
 				PAYLOAD
 			);
 		});
