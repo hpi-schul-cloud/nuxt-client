@@ -20,16 +20,16 @@ export default defineComponent({
 
 	setup(props) {
 		const fileRecordSize = ref(props.fileRecord.size);
-		const sizes = ["bytes", "KB", "MB", "GB"];
+		const units = ["B", "KB", "MB", "GB"];
 
 		const fileSize = computed(() => {
 			if (fileRecordSize.value < 1024)
-				return (fileRecordSize.value / 1024).toFixed(2) + sizes[0];
+				return (fileRecordSize.value / 1024).toFixed(2) + units[0];
 			if (fileRecordSize.value < 1024 ** 2)
-				return (fileRecordSize.value / 1024).toFixed(2) + sizes[1];
+				return (fileRecordSize.value / 1024).toFixed(2) + units[1];
 			if (fileRecordSize.value < 1024 ** 3)
-				return (fileRecordSize.value / 1024 ** 2).toFixed(2) + sizes[2];
-			return (fileRecordSize.value / 1024 ** 3).toFixed(2) + sizes[3];
+				return (fileRecordSize.value / 1024 ** 2).toFixed(2) + units[2];
+			return (fileRecordSize.value / 1024 ** 3).toFixed(2) + units[3];
 		});
 
 		const fileName = ref(props.fileRecord.name);
