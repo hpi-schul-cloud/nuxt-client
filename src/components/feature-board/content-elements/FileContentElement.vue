@@ -87,37 +87,25 @@ export default defineComponent({
 					);
 				}
 
-				console.log(
-					">>> fileRecordModel.value?.securityCheckStatu",
-					fileRecordModel.value?.securityCheckStatus
-				);
-				console.log(">>> isPending", isPending.value);
 				if (isPending.value) {
-					console.log(
-						">>> entering 'fetchFileRecursively'",
-						parentId.value,
-						FileRecordParentType.BOARDNODES
-					);
 					fileRecordModel.value = await fetchFileRecursively(
 						parentId.value,
 						FileRecordParentType.BOARDNODES
-					);
-					console.log(
-						">>> leaving 'fetchFileRecursively'",
-						parentId.value,
-						FileRecordParentType.BOARDNODES
-					);
-					console.log(
-						">>> fileRecordModel.value?.securityCheckStatu",
-						fileRecordModel.value?.securityCheckStatus
 					);
 				}
 			})();
 		});
 
-		watch(newFileForParent, (newValue) => {
+		watch(newFileForParent, async (newValue) => {
 			if (newValue === parentId.value) {
 				fileRecordModel.value = getFile(parentId.value);
+
+				if (isPending.value) {
+					fileRecordModel.value = await fetchFileRecursively(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
+				}
 			}
 		});
 
