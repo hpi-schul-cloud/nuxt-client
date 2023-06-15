@@ -6,18 +6,20 @@
 				:caption="modelValue.caption"
 				:fileRecord="fileRecordModel"
 			/>
-			<FileContentElementEdit
-				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@keydown.up.down="onKeydownArrow"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@update:caption="($event) => (modelValue.caption = $event)"
-			/>
+
+			<div tabindex="0" @keydown.up.down="onKeydownArrow">
+				<FileContentElementEdit
+					v-if="isEditMode"
+					:caption="modelValue.caption"
+					:fileRecord="fileRecordModel"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@update:caption="($event) => (modelValue.caption = $event)"
+				/>
+			</div>
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -75,7 +77,7 @@ export default defineComponent({
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			event.preventDefault();
-			emit("move-keyboard:edit", event);
+			emit("move-keyboard:edit", props.element.id, event);
 		};
 
 		const onMoveFileEditDown = () => {
