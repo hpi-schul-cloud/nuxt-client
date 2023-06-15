@@ -814,6 +814,7 @@
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
+	"components.cardElement.fileElement.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.richTextElement": "Elemento texto",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.titleElement": "Elemento título",
