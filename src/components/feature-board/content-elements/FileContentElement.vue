@@ -12,7 +12,7 @@
 				:fileRecord="fileRecordModel"
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
-			<FileInfoChips :fileRecord="fileRecordModel" />
+			<FileContentElementChips :fileRecord="fileRecordModel" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -28,14 +28,14 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
-import FileInfoChips from "../shared/FileInfoChips.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
 		FileContentElementDisplay,
 		FileContentElementEdit,
-		FileInfoChips,
+		FileContentElementChips,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },

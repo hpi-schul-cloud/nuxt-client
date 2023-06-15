@@ -14,7 +14,7 @@ import {
 } from "@/utils/fileHelper";
 
 export default defineComponent({
-	name: "FileInfoChips",
+	name: "FileContentElementChips",
 	props: {
 		fileRecord: {
 			type: Object as PropType<FileRecordResponse>,
