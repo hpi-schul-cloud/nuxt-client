@@ -1,17 +1,17 @@
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ExternalToolDisplayData } from "../../../store/external-tool/external-tool-display-data";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
-import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
+import { externalToolDisplayDataFactory } from "../../../../tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 describe("RoomExternalToolOverview", () => {
-	const getWrapper = (tools: ContextExternalTool[]) => {
+	const getWrapper = (tools: ExternalToolDisplayData[]) => {
 		document.body.setAttribute("data-app", "true");
 
 		const authModule = createModuleMocks(AuthModule, {
@@ -77,8 +77,8 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when there are tools in the list", () => {
 		const setup = () => {
-			const tools: ContextExternalTool[] =
-				contextExternalToolFactory.buildList(2);
+			const tools: ExternalToolDisplayData[] =
+				externalToolDisplayDataFactory.buildList(2);
 
 			const { wrapper } = getWrapper(tools);
 
@@ -100,7 +100,8 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when clicking the delete button on a tool", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const { wrapper } = getWrapper([tool]);
 
@@ -128,7 +129,8 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when clicking on a tool", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const { wrapper, externalToolsModule } = getWrapper([tool]);
 

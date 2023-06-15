@@ -14,7 +14,7 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "@/store/context-external-tool";
-import { schoolToolConfigurationFactory } from "@@/tests/test-utils/factory/schoolToolConfigurationFactory";
+import { contextExternalToolTemplateListItemFactory } from "../../../tests/test-utils/factory/contextExternalToolTemplateListItemFactory";
 import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
 
 describe("ContextExternalToolConfiguration", () => {
@@ -40,7 +40,9 @@ describe("ContextExternalToolConfiguration", () => {
 			...getters,
 		});
 		contextExternalToolsModule = createModuleMocks(ContextExternalToolsModule, {
-			getSchoolToolConfigurations: [schoolToolConfigurationFactory.build()],
+			getSchoolToolConfigurations: [
+				contextExternalToolTemplateListItemFactory.build(),
+			],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
@@ -174,7 +176,7 @@ describe("ContextExternalToolConfiguration", () => {
 				const { wrapper } = await getWrapper(
 					{
 						getSchoolToolConfigurations: [
-							schoolToolConfigurationFactory.build({
+							contextExternalToolTemplateListItemFactory.build({
 								name,
 							}),
 						],
@@ -194,7 +196,7 @@ describe("ContextExternalToolConfiguration", () => {
 				const { wrapper } = await getWrapper(
 					{
 						getSchoolToolConfigurations: [
-							schoolToolConfigurationFactory.build({ id }),
+							contextExternalToolTemplateListItemFactory.build({ id }),
 						],
 					},
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
@@ -242,7 +244,7 @@ describe("ContextExternalToolConfiguration", () => {
 				const { wrapper } = await getWrapper(
 					{
 						getSchoolToolConfigurations: [
-							schoolToolConfigurationFactory.build({ id }),
+							contextExternalToolTemplateListItemFactory.build({ id }),
 						],
 					},
 					{

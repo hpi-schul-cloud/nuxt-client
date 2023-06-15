@@ -18,9 +18,10 @@ import { ToolContextType } from "./external-tool/tool-context-type.enum";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-configuration-template";
 import ContextExternalToolsModule from "./context-external-tool";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory";
+import { ExternalToolDisplayData } from "./external-tool";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import { ContextExternalTool } from "./external-tool/context-external-tool";
-import * as useExternalToolUtilsComposable from "../composables/external-tool-mappings.composable";
 
 describe("ContextExternalToolsModule", () => {
 	let module: ContextExternalToolsModule;
@@ -34,75 +35,11 @@ describe("ContextExternalToolsModule", () => {
 		jest.restoreAllMocks();
 	});
 
-	const mockToolApi = (
-		error: Error | undefined = undefined,
-		contextExternalToolMock: Partial<ContextExternalToolResponse> = {}
-	) => {
-		const searchListResponse: ContextExternalToolSearchListResponse = {
-			data: [
-				{
-					id: "id",
-					schoolToolId: "schoolToolId",
-					logoUrl: "logoUrl",
-					contextId: "contextId",
-					contextType: ContextExternalToolResponseContextTypeEnum.Course,
-					contextToolName: "ContextToolName",
-					parameters: [],
-					toolVersion: 1,
-					...contextExternalToolMock,
-				},
-			],
-		};
-
-		const promise = Promise.resolve({
-			data: {
-				...searchListResponse,
-			},
-			status: 200,
-			statusText: "OK",
-			headers: {},
-			config: {},
-		});
-
-		const toolContextControllerCreateContextExternalTool = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return Promise.resolve({
-				data: undefined,
-				status: 201,
-				statusText: "Created",
-				headers: {},
-				config: {},
-			});
-		});
-
-		const toolContextControllerGetContextExternalToolsForContext = jest.fn(
-			async () => {
-				if (error) {
-					throw error;
-				}
-				return promise;
-			}
-		);
-
-		const toolContextControllerDeleteContextExternalTool = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return Promise.resolve({
-				data: undefined,
-				status: 200,
-				statusText: "OK",
-				headers: {},
-				config: {},
-			});
-		});
-
+	const mockToolApi = () => {
 		const toolApiMock = {
-			toolContextControllerCreateContextExternalTool,
-			toolContextControllerDeleteContextExternalTool,
-			toolContextControllerGetContextExternalToolsForContext,
+			toolContextControllerCreateContextExternalTool: jest.fn(),
+			toolContextControllerDeleteContextExternalTool: jest.fn(),
+			toolContextControllerGetContextExternalToolsForContext: jest.fn(),
 		};
 		jest
 			.spyOn(serverApi, "ToolApiFactory")
@@ -110,21 +47,20 @@ describe("ContextExternalToolsModule", () => {
 
 		return {
 			toolApiMock,
-			searchListResponse,
 		};
 	};
 
 	const setup = () => {
-		const contextExternalTool: ContextExternalTool =
-			contextExternalToolFactory.build({
+		const contextExternalTool: ExternalToolDisplayData =
+			externalToolDisplayDataFactory.build({
 				name: "Test",
 				id: "id",
 				logoUrl: "logoUrl",
 				openInNewTab: true,
 			});
-		const contextExternalTools: ContextExternalTool[] = [
+		const contextExternalTools: ExternalToolDisplayData[] = [
 			contextExternalTool,
-			contextExternalToolFactory.build({
+			externalToolDisplayDataFactory.build({
 				name: "Test2",
 				id: "id2",
 				logoUrl: "logoUrl2",
@@ -171,17 +107,45 @@ describe("ContextExternalToolsModule", () => {
 			it("should initialized as empty array", () => {
 				module = new ContextExternalToolsModule({});
 
-				const tools: ContextExternalTool[] = module.getContextExternalTools;
+					const tools: ExternalToolDisplayData[] =
+						module.getExternalToolDisplayDataList;
 
-				expect(tools.length).toEqual(0);
+					expect(tools.length).toEqual(0);
+				});
 			});
 
-			it("should return the state of contextExternalTools", () => {
-				const { contextExternalTools } = setup();
+			describe("when tools are found", () => {
+				const setup = () => {
+					const contextExternalTool: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							name: "Test",
+							id: "id",
+							logoUrl: "logoUrl",
+							openInNewTab: true,
+						});
+					const contextExternalTools: ExternalToolDisplayData[] = [
+						contextExternalTool,
+						externalToolDisplayDataFactory.build({
+							name: "Test2",
+							id: "id2",
+							logoUrl: "logoUrl2",
+							openInNewTab: true,
+						}),
+					];
+					module.setContextExternalTools(contextExternalTools);
 
-				const tools: ContextExternalTool[] = module.getContextExternalTools;
+					return {
+						contextExternalTools,
+					};
+				};
+				it("should return the state of contextExternalTools", () => {
+					const { contextExternalTools } = setup();
 
-				expect(tools).toEqual(contextExternalTools);
+					const tools: ExternalToolDisplayData[] =
+						module.getExternalToolDisplayDataList;
+
+					expect(tools).toEqual(contextExternalTools);
+				});
 			});
 		});
 
@@ -212,12 +176,14 @@ describe("ContextExternalToolsModule", () => {
 
 	describe("mutations", () => {
 		describe("setLoading is called", () => {
-			describe("when is called with true", () => {
+			describe("when it is called with true", () => {
 				it("should set loading state to true", () => {
 					module.setLoading(true);
 					expect(module.getLoading).toBeTruthy();
 				});
+			});
 
+			describe("when it is calles with false", () => {
 				it("should set loading state to false", () => {
 					module.setLoading(false);
 					expect(module.getLoading).toBeFalsy();
@@ -226,69 +192,118 @@ describe("ContextExternalToolsModule", () => {
 		});
 
 		describe("setContextExternalTools is called", () => {
-			it("should set the new state", () => {
-				setup();
-				const expectedName = "NewTool";
+			describe("when configurations change", () => {
+				const setup = () => {
+					const expectedName = "NewTool";
+					const contextExternalTools: ExternalToolDisplayData[] = [
+						externalToolDisplayDataFactory.build({
+							name: expectedName,
+							id: "id",
+							logoUrl: "logoUrl",
+							openInNewTab: true,
+						}),
+					];
+					module.setContextExternalTools(contextExternalTools);
 
-				module.setContextExternalTools([
-					contextExternalToolFactory.build({
-						name: expectedName,
-						id: "id",
-						logoUrl: "logoUrl",
-						openInNewTab: true,
-					}),
-				]);
+					return {
+						contextExternalTools,
+					};
+				};
+				it("should set the new state", () => {
+					const { contextExternalTools } = setup();
 
-				const tools: ContextExternalTool[] = module.getContextExternalTools;
-				expect(tools.length).toEqual(1);
-				expect(tools[0].name).toEqual("NewTool");
+					module.setContextExternalTools(contextExternalTools);
+
+					const tools: ExternalToolDisplayData[] =
+						module.getExternalToolDisplayDataList;
+					expect(tools.length).toEqual(1);
+					expect(tools[0].name).toEqual("NewTool");
+				});
 			});
 		});
 
 		describe("removeContextExternalTool is called", () => {
-			it("should remove the given tool from the state", () => {
-				const { contextExternalTool } = setup();
+			describe("when it is called", () => {
+				const setup = () => {
+					const contextExternalTool: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							name: "Test",
+							id: "id",
+							logoUrl: "logoUrl",
+							openInNewTab: true,
+						});
+					const contextExternalTools: ExternalToolDisplayData[] = [
+						contextExternalTool,
+						externalToolDisplayDataFactory.build({
+							name: "Test2",
+							id: "id2",
+							logoUrl: "logoUrl2",
+							openInNewTab: true,
+						}),
+					];
+					module.setContextExternalTools(contextExternalTools);
 
-				let tools: ContextExternalTool[] = module.getContextExternalTools;
-				expect(tools.length).toEqual(2);
+					return {
+						contextExternalTool,
+					};
+				};
+				it("should remove the given tool from the state", () => {
+					const { contextExternalTool } = setup();
 
-				module.removeContextExternalTool(contextExternalTool.id);
+					let tools: ExternalToolDisplayData[] =
+						module.getExternalToolDisplayDataList;
+					expect(tools.length).toEqual(2);
 
-				tools = module.getContextExternalTools;
-				expect(tools.length).toEqual(1);
+					module.removeContextExternalTool(contextExternalTool.id);
+
+					tools = module.getExternalToolDisplayDataList;
+					expect(tools.length).toEqual(1);
+				});
 			});
 		});
 
 		describe("setBusinessError is called", () => {
-			it("should set the given businessError to the state", () => {
-				setup();
-				const expectedBusinessError: BusinessError = businessErrorFactory.build(
-					{
-						message: "expectedMessage",
-					}
-				);
-				module.setBusinessError(expectedBusinessError);
+			describe("when businessError can be set", () => {
+				const setup = () => {
+					const expectedBusinessError: BusinessError =
+						businessErrorFactory.build({
+							message: "expectedMessage",
+						});
+					module.setBusinessError(expectedBusinessError);
 
-				expect(module.getBusinessError).toEqual(
-					expect.objectContaining<BusinessError>(expectedBusinessError)
-				);
+					return {
+						expectedBusinessError,
+					};
+				};
+				it("should set the given businessError to the state", () => {
+					const { expectedBusinessError } = setup();
+
+					expect(module.getBusinessError).toEqual(
+						expect.objectContaining<BusinessError>(expectedBusinessError)
+					);
+				});
 			});
 		});
 
 		describe("resetBusinessError is called", () => {
-			it("should reset the business error state", () => {
-				setup();
-				module.setBusinessError(businessErrorFactory.build());
+			describe("when it is called", () => {
+				const setup = () => {
+					module.setBusinessError(businessErrorFactory.build());
+				};
 
-				module.resetBusinessError();
+				it("should reset the business error state", () => {
+					setup();
 
-				expect(module.getBusinessError).toEqual(
-					expect.objectContaining<BusinessError>({
-						statusCode: "",
-						message: "",
-						error: undefined,
-					})
-				);
+					module.resetBusinessError();
+
+					expect(module.getBusinessError).toEqual(
+						expect.objectContaining<BusinessError>({
+							statusCode: "",
+							message: "",
+							error: undefined,
+						})
+					);
+				});
 			});
 		});
 	});
@@ -323,13 +338,39 @@ describe("ContextExternalToolsModule", () => {
 				contextType,
 			};
 			describe("when an error occurs", () => {
-				it("should set the businessError", async () => {
+				const setup = () => {
 					const { axiosError, axiosErrorResponse } = setupWithAuth();
 					const { toolApiMock } = mockToolApi();
+
+					const payload = {
+						toolTemplate: toolConfigurationTemplateFactory.build(),
+						schoolToolId: "schoolToolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					toolApiMock.toolContextControllerCreateContextExternalTool.mockResolvedValue(
+						axiosError
+					);
+
+					return {
+						toolApiMock,
+						axiosError,
+						axiosErrorResponse,
+						payload,
+					};
+				};
+
+				it("should set the businessError", async () => {
+					const { toolApiMock, axiosError, axiosErrorResponse, payload } =
+						setup();
+
 					toolApiMock.toolContextControllerCreateContextExternalTool.mockRejectedValue(
 						axiosError
 					);
+
 					await module.createContextExternalTool(payload);
+
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						...axiosError,
 						statusCode: axiosErrorResponse.data.code,
@@ -339,15 +380,39 @@ describe("ContextExternalToolsModule", () => {
 			});
 
 			describe("when no error occurs", () => {
-				it("should call the toolApi.toolContextControllerCreateContextExternalTool", async () => {
+				const setup = () => {
 					setupWithAuth();
 					const { toolApiMock } = mockToolApi();
+
+					const payload = {
+						toolTemplate: toolConfigurationTemplateFactory.build(),
+						schoolToolId: "schoolToolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
 					const contextExternalToolPostParams: ContextExternalToolPostParams =
 						useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
 							payload.toolTemplate,
+							payload.schoolToolId,
 							payload.contextId,
 							payload.contextType
 						);
+
+					toolApiMock.toolContextControllerCreateContextExternalTool.mockResolvedValue(
+						{}
+					);
+
+					return {
+						toolApiMock,
+						contextExternalToolPostParams,
+						payload,
+					};
+				};
+
+				it("should call the toolApi.toolContextControllerCreateContextExternalTool", async () => {
+					const { toolApiMock, contextExternalToolPostParams, payload } =
+						setup();
+
 					await module.createContextExternalTool(payload);
 					expect(
 						toolApiMock.toolContextControllerCreateContextExternalTool
@@ -356,11 +421,11 @@ describe("ContextExternalToolsModule", () => {
 			});
 		});
 
-		describe("loadContextExternalTools is called", () => {
+		describe("loadExternalToolDisplayData is called", () => {
 			describe("when loading", () => {
 				it("should set loading to true and after operation to false", async () => {
 					const setLoadingSpy = jest.spyOn(module, "setLoading");
-					await module.loadContextExternalTools({
+					await module.loadExternalToolDisplayData({
 						contextId: "contextId",
 						contextType: ToolContextType.COURSE,
 					});
@@ -371,30 +436,46 @@ describe("ContextExternalToolsModule", () => {
 			});
 
 			describe("when an error occurs", () => {
-				it("should set loading to false", async () => {
-					setupWithAuth();
+				const setup = () => {
+					const { axiosError, axiosErrorResponse } = setupWithAuth();
+					const { toolApiMock } = mockToolApi();
+
 					const setLoadingSpy = jest.spyOn(module, "setLoading");
-					mockToolApi(new Error(), {});
-					const func = async () =>
-						await module.loadContextExternalTools({
-							contextId: "contextId",
-							contextType: ToolContextType.COURSE,
-						});
-					await expect(func()).toEqual(Promise.resolve());
+					const setBusinessSpy = jest.spyOn(module, "setBusinessError");
+
+					toolApiMock.toolContextControllerGetContextExternalToolsForContext.mockRejectedValue(
+						axiosError
+					);
+
+					return {
+						setLoadingSpy,
+						toolApiMock,
+						axiosError,
+						axiosErrorResponse,
+						setBusinessSpy,
+					};
+				};
+
+				it("should set loading to false", async () => {
+					const { setLoadingSpy } = setup();
+
+					await module.loadExternalToolDisplayData({
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					});
+
 					expect(setLoadingSpy).toHaveBeenCalledWith(false);
 					expect(module.getLoading).toBeFalsy();
 				});
 
 				it("should set the businessError", async () => {
-					const { axiosError, axiosErrorResponse } = setupWithAuth();
-					const setBusinessSpy = jest.spyOn(module, "setBusinessError");
-					mockToolApi(axiosError);
-					const func = async () =>
-						await module.loadContextExternalTools({
-							contextId: "contextId2",
-							contextType: ToolContextType.COURSE,
-						});
-					await expect(func()).toEqual(Promise.resolve());
+					const { axiosError, axiosErrorResponse, setBusinessSpy } = setup();
+
+					await module.loadExternalToolDisplayData({
+						contextId: "contextId2",
+						contextType: ToolContextType.COURSE,
+					});
+
 					expect(setBusinessSpy).toHaveBeenCalledWith({
 						...axiosError,
 						statusCode: axiosErrorResponse.data.code,
@@ -404,67 +485,88 @@ describe("ContextExternalToolsModule", () => {
 			});
 
 			describe("when contextId and ContextType exist", () => {
-				it("should call the toolApi.toolContextControllerGetContextExternalTools", async () => {
+				const setup = () => {
+					setupWithAuth();
 					const { toolApiMock } = mockToolApi();
-					await module.loadContextExternalTools({
+
+					const contextExternalTool: ContextExternalTool =
+						contextExternalToolFactory.build({ id: "toolId" });
+					const externalToolDisplayData: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							id: "toolId",
+							openInNewTab: true,
+							logoUrl: undefined,
+							name: "Toolname",
+						});
+
+					const searchListResponse: ContextExternalToolSearchListResponse = {
+						data: [contextExternalTool],
+					};
+
+					toolApiMock.toolContextControllerGetContextExternalToolsForContext.mockResolvedValue(
+						{
+							data: searchListResponse,
+						}
+					);
+
+					const setContextExternalToolsSpy = jest.spyOn(
+						module,
+						"setContextExternalTools"
+					);
+
+					return {
+						toolApiMock,
+						searchListResponse,
+						setContextExternalToolsSpy,
+						externalToolDisplayData,
+					};
+				};
+				it("should call the toolApi.toolContextControllerGetContextExternalToolsForContext", async () => {
+					const { toolApiMock } = setup();
+
+					await module.loadExternalToolDisplayData({
 						contextId: "contextId",
 						contextType: ToolContextType.COURSE,
 					});
+
 					expect(
 						toolApiMock.toolContextControllerGetContextExternalToolsForContext
 					).toHaveBeenCalledWith("contextId", ToolContextType.COURSE);
 				});
 
-				it("should call mapContextExternalToolSearchListResponse", async () => {
-					setupWithAuth();
-					const { searchListResponse } = mockToolApi();
-					const mapContextExternalToolSearchListResponseMock = jest
-						.fn()
-						.mockReturnValue([{ id: "toolId" }]);
-					jest
-						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-						.mockReturnValue({
-							...useExternalToolUtilsComposable.useExternalToolMappings(),
-							mapContextExternalToolSearchListResponse:
-								mapContextExternalToolSearchListResponseMock,
-						});
-					await module.loadContextExternalTools({
-						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
-					});
-					expect(
-						mapContextExternalToolSearchListResponseMock
-					).toHaveBeenCalledWith(searchListResponse);
-				});
-
 				it("should call setContextExternalTools", async () => {
-					setupWithAuth();
-					const { searchListResponse } = mockToolApi();
-					const setContextExternalToolsSpy = jest.spyOn(
-						module,
-						"setContextExternalTools"
-					);
-					await module.loadContextExternalTools({
+					const { setContextExternalToolsSpy, externalToolDisplayData } =
+						setup();
+
+					await module.loadExternalToolDisplayData({
 						contextId: "contextId",
 						contextType: ToolContextType.COURSE,
 					});
 					expect(setContextExternalToolsSpy).toHaveBeenCalledWith([
-						contextExternalToolFactory.build({
-							id: searchListResponse.data[0].id,
-							name: searchListResponse.data[0].contextToolName,
-							logoUrl: searchListResponse.data[0].logoUrl,
-							openInNewTab: true,
-						}),
+						externalToolDisplayData,
 					]);
 				});
 			});
 		});
 		describe("deleteContextExternalTool is called", () => {
 			describe("when loading", () => {
+				const setup = () => {
+					const { toolApiMock } = mockToolApi();
+					const contextExternalTool: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							name: "Test",
+							id: "id",
+							logoUrl: "logoUrl",
+							openInNewTab: true,
+						});
+					return {
+						toolApiMock,
+						contextExternalTool,
+					};
+				};
 				it("should set loading to true and after operation to false", async () => {
 					const { contextExternalTool } = setup();
 					const setLoadingSpy = jest.spyOn(module, "setLoading");
-					mockToolApi();
 
 					await module.deleteContextExternalTool(contextExternalTool.id);
 
@@ -474,29 +576,54 @@ describe("ContextExternalToolsModule", () => {
 				});
 
 				describe("when an error occurs", () => {
-					it("should set loading to false", async () => {
-						const { contextExternalTool, axiosError } = setup();
+					const setup = () => {
+						const { axiosError, axiosErrorResponse } = setupWithAuth();
+						const { toolApiMock } = mockToolApi();
+
 						const setLoadingSpy = jest.spyOn(module, "setLoading");
-						mockToolApi(axiosError);
+						const setBusinessSpy = jest.spyOn(module, "setBusinessError");
 
-						const func = async () =>
-							await module.deleteContextExternalTool(contextExternalTool.id);
+						const contextExternalTool: ExternalToolDisplayData =
+							externalToolDisplayDataFactory.build({
+								name: "Test",
+								id: "id",
+								logoUrl: "logoUrl",
+								openInNewTab: true,
+							});
 
-						await expect(func()).toEqual(Promise.resolve());
+						toolApiMock.toolContextControllerDeleteContextExternalTool.mockRejectedValue(
+							axiosError
+						);
+
+						return {
+							setLoadingSpy,
+							toolApiMock,
+							axiosError,
+							axiosErrorResponse,
+							setBusinessSpy,
+							contextExternalTool,
+						};
+					};
+
+					it("should set loading to false", async () => {
+						const { contextExternalTool, setLoadingSpy } = setup();
+
+						await module.deleteContextExternalTool(contextExternalTool.id);
+
 						expect(setLoadingSpy).toHaveBeenCalledWith(false);
 						expect(module.getLoading).toBeFalsy();
 					});
 
 					it("should set the businessError", async () => {
-						const { contextExternalTool, axiosError, axiosErrorResponse } =
-							setup();
-						const setBusinessSpy = jest.spyOn(module, "setBusinessError");
-						mockToolApi(axiosError);
+						const {
+							contextExternalTool,
+							axiosError,
+							axiosErrorResponse,
+							setBusinessSpy,
+						} = setup();
 
-						const func = async () =>
-							await module.deleteContextExternalTool(contextExternalTool.id);
+						await module.deleteContextExternalTool(contextExternalTool.id);
 
-						await expect(func()).toEqual(Promise.resolve());
 						expect(setBusinessSpy).toHaveBeenCalledWith({
 							...axiosError,
 							statusCode: axiosErrorResponse.data.code,
@@ -507,9 +634,27 @@ describe("ContextExternalToolsModule", () => {
 			});
 
 			describe("when toolToDelete is given", () => {
-				it("should call the api with id of given tool", async () => {
-					const { contextExternalTool } = setup();
+				const setup = () => {
 					const { toolApiMock } = mockToolApi();
+					const contextExternalTool: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							name: "Test",
+							id: "id",
+							logoUrl: "logoUrl",
+							openInNewTab: true,
+						});
+					const removeContextExternalToolSpy = jest.spyOn(
+						module,
+						"removeContextExternalTool"
+					);
+					return {
+						toolApiMock,
+						contextExternalTool,
+						removeContextExternalToolSpy,
+					};
+				};
+				it("should call the api with id of given tool", async () => {
+					const { contextExternalTool, toolApiMock } = setup();
 
 					await module.deleteContextExternalTool(contextExternalTool.id);
 
@@ -519,13 +664,8 @@ describe("ContextExternalToolsModule", () => {
 				});
 
 				it("should call the mutation removeSchoolExternalTool", async () => {
-					const { contextExternalTool } = setup();
+					const { contextExternalTool, removeContextExternalToolSpy } = setup();
 					mockToolApi();
-
-					const removeContextExternalToolSpy = jest.spyOn(
-						module,
-						"removeContextExternalTool"
-					);
 
 					await module.deleteContextExternalTool(contextExternalTool.id);
 

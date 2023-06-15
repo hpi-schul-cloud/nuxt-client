@@ -1,4 +1,4 @@
-export interface SchoolToolConfigurationListItem {
+export interface ContextExternalToolTemplateListItem {
 	id: string;
 
 	name: string;

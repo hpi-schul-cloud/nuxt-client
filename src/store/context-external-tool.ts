@@ -1,6 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { ContextExternalTool } from "./external-tool/context-external-tool";
-import { ToolContextType } from "./external-tool/tool-context-type.enum";
+import { ExternalToolDisplayData, ToolContextType } from "./external-tool";
 import { AxiosResponse } from "axios";
 import {
 	ContextExternalToolPostParams,
@@ -19,7 +18,7 @@ import { SchoolToolConfigurationTemplate } from "./external-tool/school-tool-con
 	stateFactory: true,
 })
 export default class ContextExternalToolsModule extends VuexModule {
-	private contextExternalTools: ContextExternalTool[] = [];
+	private externalToolDisplayDataList: ExternalToolDisplayData[] = [];
 	private loading = false;
 
 	private businessError: BusinessError = {
@@ -45,8 +44,10 @@ export default class ContextExternalToolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setContextExternalTools(contextExternalTools: ContextExternalTool[]): void {
-		this.contextExternalTools = [...contextExternalTools];
+	setContextExternalTools(
+		externalToolDisplayData: ExternalToolDisplayData[]
+	): void {
+		this.externalToolDisplayDataList = [...externalToolDisplayData];
 	}
 
 	@Mutation
@@ -70,8 +71,8 @@ export default class ContextExternalToolsModule extends VuexModule {
 
 	@Mutation
 	removeContextExternalTool(toolId: string): void {
-		this.contextExternalTools = this.contextExternalTools.filter(
-			(tool: ContextExternalTool) => tool.id !== toolId
+		this.externalToolDisplayDataList = this.externalToolDisplayDataList.filter(
+			(tool: ExternalToolDisplayData) => tool.id !== toolId
 		);
 	}
 
@@ -109,7 +110,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async loadContextExternalTools(payload: {
+	async loadExternalToolDisplayData(payload: {
 		contextId: string;
 		contextType: ToolContextType;
 	}): Promise<void> {
@@ -124,7 +125,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 				);
 
 			const mapped =
-				useExternalToolMappings().mapContextExternalToolSearchListResponse(
+				useExternalToolMappings().mapContextExternalToolSearchListResponseToExternalToolDisplayData(
 					tools.data
 				);
 			this.setContextExternalTools(mapped);

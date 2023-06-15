@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ExternalToolDisplayData } from "../../store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiPencilOutline,
@@ -52,7 +52,7 @@ export default defineComponent({
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
-			type: Object as PropType<ContextExternalTool>,
+			type: Object as PropType<ExternalToolDisplayData>,
 			required: true,
 		},
 		canEdit: {

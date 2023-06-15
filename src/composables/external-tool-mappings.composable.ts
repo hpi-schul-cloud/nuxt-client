@@ -29,9 +29,10 @@ import {
 } from "@/store/external-tool";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
-import { SchoolToolConfigurationListItem } from "@/store/external-tool/school-tool-configuration-list-item";
-import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import {
+	ContextExternalToolTemplateListItem,
+	ExternalToolDisplayData,
+} from "@/store/external-tool";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -87,9 +88,9 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 ]);
 
 export function useExternalToolMappings() {
-	const mapContextExternalToolSearchListResponse = (
+	const mapContextExternalToolSearchListResponseToExternalToolDisplayData = (
 		response: ContextExternalToolSearchListResponse
-	): ContextExternalTool[] => {
+	): ExternalToolDisplayData[] => {
 		return response.data.map((toolResponse: ContextExternalToolResponse) =>
 			mapContextExternalToolResponse(toolResponse)
 		);
@@ -97,7 +98,7 @@ export function useExternalToolMappings() {
 
 	const mapContextExternalToolResponse = (
 		toolResponse: ContextExternalToolResponse
-	): ContextExternalTool => {
+	): ExternalToolDisplayData => {
 		return {
 			id: toolResponse.id,
 			name: toolResponse.contextToolName || "Toolname",
@@ -171,7 +172,7 @@ export function useExternalToolMappings() {
 
 	const mapSchoolToolConfigurationEntryResponse = (
 		resp: SchoolToolConfigurationEntryResponse
-	): SchoolToolConfigurationListItem => {
+	): ContextExternalToolTemplateListItem => {
 		return {
 			id: resp.id,
 			name: resp.name,
@@ -266,7 +267,7 @@ export function useExternalToolMappings() {
 	};
 
 	return {
-		mapContextExternalToolSearchListResponse,
+		mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 		mapContextExternalToolResponse,
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
