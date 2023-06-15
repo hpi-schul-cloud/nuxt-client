@@ -112,6 +112,11 @@
 </template>
 
 <script lang="ts">
+import { MigrationBody } from "@/serverApi/v3";
+import SchoolsModule from "@/store/schools";
+import { OauthMigration, School } from "@/store/types/schools";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
@@ -122,11 +127,7 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
-import { MigrationBody } from "@/serverApi/v3";
-import dayjs from "dayjs";
-import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
@@ -137,7 +138,7 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {

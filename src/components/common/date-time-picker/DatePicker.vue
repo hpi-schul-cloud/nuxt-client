@@ -51,11 +51,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, computed } from "vue";
-import VueI18n from "vue-i18n";
-import dayjs from "dayjs";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
+import dayjs from "dayjs";
+import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "./types/Validation";
 
 export default defineComponent({
@@ -70,10 +70,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const locale = i18n.locale;
 

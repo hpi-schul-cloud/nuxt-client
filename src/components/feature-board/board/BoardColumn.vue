@@ -41,9 +41,9 @@
 </template>
 
 <script lang="ts">
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
@@ -83,7 +83,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
@@ -147,7 +147,7 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {

@@ -1,24 +1,6 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { Ref, ref } from "vue";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { Ref, ref } from "vue";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-
-let wrapper: Wrapper<Vue>;
-
-const mountComposable = (composable: () => unknown) => {
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
 
 describe("BoardFocusHandler composable", () => {
 	const columnId = "testColumnId";

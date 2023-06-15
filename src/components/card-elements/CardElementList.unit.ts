@@ -6,6 +6,7 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
+import { I18N_KEY } from "@/utils/inject";
 
 const getEditableCardElementsMockData = (): CardElement[] => [
 	{
@@ -71,7 +72,7 @@ const getWrapper = (props?: object) => {
 			i18n: true,
 		}),
 		provide: {
-			i18n: { t: (key: string) => key },
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 		},
 		propsData: props,
 	});

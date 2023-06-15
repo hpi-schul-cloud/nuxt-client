@@ -100,14 +100,15 @@
 
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariantOutline,
 } from "@mdi/js";
-import { defineComponent, inject, ref } from "vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { defineComponent, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -128,10 +129,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 
 		const t = (key) => {
-			const translateResult = i18n?.t(key);
+			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
