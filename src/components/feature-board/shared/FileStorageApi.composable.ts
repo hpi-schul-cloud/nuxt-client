@@ -123,8 +123,9 @@ export const useFileStorageApi = createSharedComposable(() => {
 		waitTimeMax = 50000,
 		refreshTimer = 0
 	) => {
+		console.log("<<< fetchFileRecursively", parentId, parentType);
 		let result = await refreshFile(parentId, parentType);
-
+		console.log("<<< result.securityCheckStatus", result?.securityCheckStatus);
 		if (
 			result?.securityCheckStatus === FileRecordScanStatus.PENDING &&
 			refreshTimer <= waitTimeMax

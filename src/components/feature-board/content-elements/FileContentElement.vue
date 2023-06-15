@@ -87,10 +87,29 @@ export default defineComponent({
 					);
 				}
 
+				console.log(
+					">>> fileRecordModel.value?.securityCheckStatu",
+					fileRecordModel.value?.securityCheckStatus
+				);
+				console.log(">>> isPending", isPending.value);
 				if (isPending.value) {
+					console.log(
+						">>> entering 'fetchFileRecursively'",
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
 					fileRecordModel.value = await fetchFileRecursively(
 						parentId.value,
 						FileRecordParentType.BOARDNODES
+					);
+					console.log(
+						">>> leaving 'fetchFileRecursively'",
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
+					console.log(
+						">>> fileRecordModel.value?.securityCheckStatu",
+						fileRecordModel.value?.securityCheckStatus
 					);
 				}
 			})();
