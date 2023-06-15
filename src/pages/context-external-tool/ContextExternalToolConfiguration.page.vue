@@ -54,7 +54,7 @@
 				class="mr-2"
 				color="primary"
 				depressed
-				:disabled="!hasToolTemplate"
+				:disabled="!canSave"
 				@click="onSaveTool"
 				data-testId="save-button"
 			>
@@ -79,7 +79,7 @@ import {
 } from "vue";
 import { BusinessError } from "@/store/types/commons";
 import {
-	SchoolToolConfigurationListItem,
+	ContextExternalToolTemplateListItem,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
 import { useRouter } from "vue-router/composables";
@@ -89,7 +89,6 @@ import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
-import { SchoolToolConfigurationTemplate } from "../../store/external-tool/school-tool-configuration-template";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -175,40 +174,30 @@ export default defineComponent({
 		);
 
 		const configurationItems: ComputedRef<
-			SchoolToolConfigurationListItem[] | undefined
-		> = computed(() => externalToolsModule?.getSchoolToolConfigurations);
+			ContextExternalToolTemplateListItem[] | undefined
+		> = computed(() => externalToolsModule?.getContextExternalToolTemplates);
 
-		const selectedItem: Ref<SchoolToolConfigurationListItem | undefined> =
+		const selectedItem: Ref<ContextExternalToolTemplateListItem | undefined> =
 			ref();
 
+		// TODO N21-904 use ContextExternalToolTemplate as a type for the list and the selected template, so we don't have to load another template
 		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
 
-		const schoolToolTemplate: Ref<SchoolToolConfigurationTemplate | undefined> =
-			ref();
-
-		const hasToolTemplate: Ref<boolean> = ref(false);
+		const canSave: ComputedRef<boolean> = computed(
+			() => !!toolTemplate.value && !!selectedItem.value
+		);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(
 			() => externalToolsModule?.getBusinessError
 		);
 
 		const onSelectTemplate = async (
-			selectedTool: SchoolToolConfigurationListItem
+			selectedTool: ContextExternalToolTemplateListItem
 		) => {
 			toolTemplate.value =
 				await externalToolsModule?.loadToolConfigurationTemplateFromExternalTool(
 					selectedTool.id
 				);
-
-			if (toolTemplate.value) {
-				schoolToolTemplate.value =
-					useExternalToolMappings().mapToolConfigurationTemplateToSchoolToolConfigurationTemplate(
-						toolTemplate.value,
-						selectedTool.schoolToolId
-					);
-
-				hasToolTemplate.value = true;
-			}
 		};
 
 		const router: VueRouter = useRouter();
@@ -217,9 +206,15 @@ export default defineComponent({
 		};
 
 		const onSaveTool = async () => {
-			if (schoolToolTemplate.value && props.contextId && props.contextType) {
+			if (
+				toolTemplate.value &&
+				selectedItem.value &&
+				props.contextId &&
+				props.contextType
+			) {
 				await contextExternalToolsModule?.createContextExternalTool({
-					toolTemplate: schoolToolTemplate.value,
+					toolTemplate: toolTemplate.value,
+					schoolToolId: selectedItem.value.schoolToolId,
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});
@@ -240,7 +235,7 @@ export default defineComponent({
 			selectedItem,
 			toolTemplate,
 			apiError,
-			hasToolTemplate,
+			canSave,
 			onSelectTemplate,
 			onCancel,
 			onSaveTool,

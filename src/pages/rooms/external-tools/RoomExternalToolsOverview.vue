@@ -76,7 +76,7 @@
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import {
 	computed,
@@ -94,39 +94,43 @@ import {
 import ExternalToolsModule from "@/store/external-tools";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
-	name: "RoomExternalToolOverview",
+	name: "RoomExternalToolsOverview",
 	components: { RoomExternalToolCard, RenderHTML, VCustomEmptyState },
-	setup() {
+	props: {
+		roomId: {
+			type: String,
+			required: true,
+		},
+	},
+	setup(props) {
 		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
 		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
 			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 
-		const { params } = useRoute(); // TODO N21-575 roomId from props
 		onMounted(async () => {
-			await contextExternalToolsModule?.loadContextExternalTools({
-				contextId: params.id,
+			await contextExternalToolsModule?.loadExternalToolDisplayData({
+				contextId: props.roomId,
 				contextType: ToolContextType.COURSE,
 			});
 		});
 
-		const tools: ComputedRef<ContextExternalTool[]> = computed(
-			() => contextExternalToolsModule?.getContextExternalTools || []
+		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
+			() => contextExternalToolsModule?.getExternalToolDisplayDataList || []
 		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
-		const itemToDelete: Ref<ContextExternalTool | undefined> = ref();
+		const itemToDelete: Ref<ExternalToolDisplayData | undefined> = ref();
 
 		const getItemToDeleteName: ComputedRef<string> = computed(
 			() => itemToDelete.value?.name || "???"
 		);
 
-		const onOpenDeleteDialog = (tool: ContextExternalTool) => {
+		const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 			itemToDelete.value = tool;
 			isDeleteDialogOpen.value = true;
 		};
@@ -150,7 +154,7 @@ export default defineComponent({
 			console.log("Edit Tool");
 		};
 
-		const onClickTool = async (tool: ContextExternalTool) => {
+		const onClickTool = async (tool: ExternalToolDisplayData) => {
 			await launchTool(tool.id);
 		};
 

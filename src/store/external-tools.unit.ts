@@ -29,9 +29,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { toolLaunchRequestResponeFactory } from "@@/tests/test-utils/factory/toolLaunchRequestResponeFactory";
 import {
+	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
-	SchoolToolConfigurationListItem,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
 	ToolParameter,
@@ -39,8 +39,7 @@ import {
 import ExternalToolsModule from "./external-tools";
 import { User } from "./types/auth";
 import { BusinessError } from "./types/commons";
-import { ToolContextType } from "./external-tool/tool-context-type.enum";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { ToolContextType } from "./external-tool";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -1195,7 +1194,7 @@ describe("ExternalToolsModule", () => {
 				});
 
 				it("should call set SchoolToolConfiguration", async () => {
-					const schoolToolConfigurationListItems: SchoolToolConfigurationListItem[] =
+					const schoolToolConfigurationListItems: ContextExternalToolTemplateListItem[] =
 						[
 							{
 								schoolToolId: "schoolToolId",
@@ -1233,7 +1232,7 @@ describe("ExternalToolsModule", () => {
 
 					await module.loadAvailableToolConfigurationsForContext(payload);
 
-					expect(module.getSchoolToolConfigurations).toEqual([
+					expect(module.getContextExternalToolTemplates).toEqual([
 						{
 							schoolToolId: schoolToolConfigurationListItems[0].schoolToolId,
 							name: schoolToolConfigurationListItems[0].name,

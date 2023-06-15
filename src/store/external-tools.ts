@@ -1,13 +1,13 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
-	SchoolToolConfigurationListItem,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
 } from "./external-tool";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
-import { useExternalToolMappings } from "../composables/external-tool-mappings.composable";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
@@ -17,10 +17,10 @@ import {
 	ToolConfigurationListResponse,
 	SchoolToolConfigurationListResponse,
 	ToolLaunchRequestResponse,
-} from "../serverApi/v3";
+} from "@/serverApi/v3";
 import { BusinessError } from "./types/commons";
 import { AxiosError, AxiosResponse } from "axios";
-import { ToolContextType } from "./external-tool/tool-context-type.enum";
+import { ToolContextType } from "./external-tool";
 
 @Module({
 	name: "externalToolsModule",
@@ -32,7 +32,9 @@ export default class ExternalToolsModule extends VuexModule {
 
 	private toolConfigurations: ToolConfigurationListItem[] = [];
 
-	private schoolToolConfigurations: SchoolToolConfigurationListItem[] = [];
+	private contextExternalToolTemplates: ContextExternalToolTemplateListItem[] =
+		[];
+
 	private loading = false;
 
 	private businessError: BusinessError = {
@@ -57,8 +59,8 @@ export default class ExternalToolsModule extends VuexModule {
 		return this.toolConfigurations;
 	}
 
-	get getSchoolToolConfigurations(): SchoolToolConfigurationListItem[] {
-		return this.schoolToolConfigurations;
+	get getContextExternalToolTemplates(): ContextExternalToolTemplateListItem[] {
+		return this.contextExternalToolTemplates;
 	}
 
 	get getBusinessError() {
@@ -132,10 +134,10 @@ export default class ExternalToolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setSchoolToolConfigurations(
-		schoolToolConfigurations: SchoolToolConfigurationListItem[]
+	setContextExternalToolTemplates(
+		contextExternalToolTemplates: ContextExternalToolTemplateListItem[]
 	): void {
-		this.schoolToolConfigurations = [...schoolToolConfigurations];
+		this.contextExternalToolTemplates = [...contextExternalToolTemplates];
 	}
 
 	@Action
@@ -362,7 +364,7 @@ export default class ExternalToolsModule extends VuexModule {
 				useExternalToolMappings().mapSchoolToolConfigurationListResponse(
 					availableTools.data
 				);
-			this.setSchoolToolConfigurations(mapped);
+			this.setContextExternalToolTemplates(mapped);
 
 			this.setLoading(false);
 		} catch (error: any) {

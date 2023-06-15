@@ -165,6 +165,7 @@ export default defineComponent({
 			});
 		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
 
+		// TODO N21-904 use SchoolExternalToolTemplate as a type for the list and the selected template so we don't have to load another template
 		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
 		const parametersValid: ComputedRef<boolean> = computed(
 			() => !!toolTemplate.value

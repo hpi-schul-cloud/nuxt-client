@@ -27,13 +27,14 @@ import {
 import { SchoolExternalToolItem } from "@/components/administration/school-external-tool-item";
 import { BusinessError } from "@/store/types/commons";
 import {
-	schoolToolConfigurationTemplateFactory,
 	toolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import { ToolContextType } from "../store/external-tool/tool-context-type.enum";
-import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
-import { ContextExternalTool } from "../store/external-tool/context-external-tool";
+import {
+	ContextExternalToolTemplateListItem,
+	ToolContextType,
+	ExternalToolDisplayData,
+} from "@/store/external-tool";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -54,7 +55,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
 			mapContextExternalToolResponse,
-			mapContextExternalToolSearchListResponse,
+			mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
@@ -159,7 +160,7 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
 			mapContextExternalToolResponse,
-			mapContextExternalToolSearchListResponse,
+			mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
@@ -209,36 +210,40 @@ describe("useExternalToolUtils", () => {
 		});
 	});
 
-	describe("mapContextExternalToolSearchListResponse is called", () => {
+	describe("mapContextExternalToolSearchListResponseToExternalToolDisplayData is called", () => {
 		describe("when maps the response", () => {
 			it("should return a contextExternalTool array", () => {
 				const {
-					mapContextExternalToolSearchListResponse,
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 					contextListResponse,
 				} = setup();
 
-				const contextExternalTools: ContextExternalTool[] =
-					mapContextExternalToolSearchListResponse(contextListResponse);
+				const contextExternalTools: ExternalToolDisplayData[] =
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
+						contextListResponse
+					);
 
 				expect(Array.isArray(contextExternalTools)).toBeTruthy();
 			});
 
 			it("should map the response correctly", () => {
 				const {
-					mapContextExternalToolSearchListResponse,
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 					contextListResponse,
 					contextToolResponse,
 				} = setup();
 
-				const contextExternalTools: ContextExternalTool[] =
-					mapContextExternalToolSearchListResponse(contextListResponse);
+				const contextExternalTools: ExternalToolDisplayData[] =
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
+						contextListResponse
+					);
 
 				expect(contextExternalTools).toEqual(
-					expect.objectContaining<ContextExternalTool[]>([
+					expect.objectContaining<ExternalToolDisplayData[]>([
 						{
 							id: contextToolResponse.id,
-							name: contextToolResponse.contextToolName!,
-							logoUrl: contextToolResponse.logoUrl,
+							name: "Toolname",
+							logoUrl: undefined,
 							openInNewTab: true,
 						},
 					])
@@ -351,12 +356,13 @@ describe("useExternalToolUtils", () => {
 		it("should return contextExternalToolPostParams", () => {
 			const { mapToolConfigurationTemplateToContextExternalToolPostParams } =
 				setup();
-			const template: SchoolToolConfigurationTemplate =
-				schoolToolConfigurationTemplateFactory.build();
+			const template: ToolConfigurationTemplate =
+				toolConfigurationTemplateFactory.build();
 
 			const contextExternalToolPostParams: ContextExternalToolPostParams =
 				mapToolConfigurationTemplateToContextExternalToolPostParams(
 					template,
+					"schoolToolId",
 					"contextId",
 					ToolContextType.COURSE
 				);

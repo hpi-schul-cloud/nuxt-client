@@ -1,13 +1,13 @@
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
+import { ExternalToolDisplayData } from "../../store/external-tool/external-tool-display-data";
+import { externalToolDisplayDataFactory } from "../../../tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 describe("RoomExternalToolCard", () => {
-	const getWrapper = (tool: ContextExternalTool, canEdit: boolean) => {
+	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
 		const wrapper: Wrapper<Vue> = mount(
@@ -41,7 +41,8 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has a name", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -62,9 +63,10 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has a logoUrl", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build({
-				logoUrl: "logoUrl",
-			});
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					logoUrl: "logoUrl",
+				});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -85,9 +87,10 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has no logoUrl", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build({
-				logoUrl: undefined,
-			});
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					logoUrl: undefined,
+				});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -108,9 +111,10 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool is opened in a new tab", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build({
-				openInNewTab: true,
-			});
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					openInNewTab: true,
+				});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -131,9 +135,10 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool is in the same window", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build({
-				openInNewTab: false,
-			});
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build({
+					openInNewTab: false,
+				});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -154,7 +159,8 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user clicks the card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -175,7 +181,8 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user can edit the tool card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -254,7 +261,8 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user cannot edit the tool card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, false);
 
