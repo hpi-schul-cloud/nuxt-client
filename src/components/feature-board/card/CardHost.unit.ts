@@ -1,12 +1,14 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
+import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useCardState } from "../state/CardState.composable";
+import { BoardPermissionsTypes } from "../types/Board";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsTypes } from "../types/Board";
-import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -30,6 +32,11 @@ const CARD_WITHOUT_ELEMENTS: BoardCard = {
 
 jest.mock("../state/CardState.composable");
 const mockedUseCardState = jest.mocked(useCardState);
+
+jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+const mockedDeleteBoardNodeConfirmation = jest.mocked(
+	useDeleteBoardNodeConfirmation
+);
 
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
@@ -56,6 +63,12 @@ describe("CardHost", () => {
 			...options?.permissions,
 		});
 
+		const onDeleteElement = jest.fn();
+		mockedDeleteBoardNodeConfirmation.mockReturnValue({
+			onDeleteElement,
+			askDeleteBoardNodeConfirmation: jest.fn(),
+		});
+
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
@@ -63,6 +76,8 @@ describe("CardHost", () => {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
+
+		return { onDeleteElement };
 	};
 
 	describe("when component is mounted", () => {
@@ -85,6 +100,15 @@ describe("CardHost", () => {
 					false
 				);
 			});
+		});
+	});
+
+	describe("when ContentElementList emits delete:element", () => {
+		it("should call onDeleteElement", () => {
+			const { onDeleteElement } = setup({ card: CARD_WITHOUT_ELEMENTS });
+
+			wrapper.findComponent(ContentElementList).vm.$emit("delete:element");
+			expect(onDeleteElement).toHaveBeenCalledTimes(1);
 		});
 	});
 

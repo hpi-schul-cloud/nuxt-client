@@ -63,8 +63,6 @@
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -77,6 +75,8 @@ import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
@@ -85,8 +85,6 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { DeleteElementEventPayload } from "../types/ContentElement";
 
 export default defineComponent({
 	name: "CardHost",
@@ -106,7 +104,6 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
@@ -123,6 +120,8 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
+		const { onDeleteElement, askDeleteBoardNodeConfirmation } =
+			useDeleteBoardNodeConfirmation(deleteElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -130,39 +129,14 @@ export default defineComponent({
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 
 		const onDeleteCard = async () => {
-			const shouldDelete = await onTryDelete(card.value?.title, "boardCard");
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				card.value?.title,
+				"boardCard"
+			);
 
 			if (shouldDelete) {
 				emit("delete:card", card.value?.id);
 			}
-		};
-
-		const onDeleteElement = async (data: DeleteElementEventPayload) => {
-			const { elementId, name } = data;
-			const shouldDelete = await onTryDelete(name, "boardElement");
-
-			if (shouldDelete) {
-				await deleteElement(elementId);
-			}
-		};
-
-		const onTryDelete = async (
-			title: string | undefined,
-			type: "boardCard" | "boardElement"
-		) => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						title: title ? `"${title}"` : "",
-						type: i18n.t(`components.${type}`).toString(),
-					})
-					.toString() ?? "";
-
-			const { askConfirmation } = useDeleteConfirmation();
-
-			const shouldDelete = await askConfirmation({ message });
-
-			return shouldDelete;
 		};
 
 		const { askType, createFileElement, isFilePickerOpen } =
