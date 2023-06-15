@@ -2,6 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
 import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("@components/share/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
@@ -10,7 +11,7 @@ describe("@components/share/ImportModal", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

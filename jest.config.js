@@ -19,7 +19,7 @@ module.exports = {
 	collectCoverageFrom: [
 		// Include
 		"<rootDir>/src/components/**/*.{js,ts,vue}",
-		// "<rootDir>/src/pages/**/*.{js,vue}",
+		"<rootDir>/src/pages/**/*.{js,vue}",
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.js",
 		"<rootDir>/src/store/**/*.(js|ts)",
@@ -27,6 +27,15 @@ module.exports = {
 		// Exclude
 		"!<rootDir>/src/components/base/_globals.js",
 		"!<rootDir>/src/components/icons/**/*",
+		"!<rootDir>/src/pages/ActivationCode.page.vue",
+		"!<rootDir>/src/pages/Imprint.page.vue",
+		"!<rootDir>/src/pages/LernStoreDetails.page.vue",
+		"!<rootDir>/src/pages/LernStoreOverview.page.vue",
+		"!<rootDir>/src/pages/LoginInstances.page.vue",
+		"!<rootDir>/src/pages/NewsCreate.page.vue",
+		"!<rootDir>/src/pages/NewsEdit.page.vue",
+		"!<rootDir>/src/pages/ProxyError.page.vue",
+		"!<rootDir>/src/pages/TermsOfUse.vue",
 	],
 
 	// maxWorkers: 2, // limited for not taking all workers within of a single github action

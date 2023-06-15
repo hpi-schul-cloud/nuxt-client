@@ -1,11 +1,16 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	cardSkeletonResponseFactory,
+	columnResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import BoardColumnVue from "./BoardColumn.vue";
-import { BoardColumn, BoardPermissionsTypes } from "../types/Board";
-import CardHost from "../card/CardHost.vue";
 import { Container } from "vue-smooth-dnd";
+import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionsTypes } from "../types/Board";
+import BoardColumnVue from "./BoardColumn.vue";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -15,22 +20,13 @@ const defaultPermissions = {
 	hasCreateColumnPermission: true,
 };
 
-const MOCK_PROP: BoardColumn = {
-	id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
-	title: "Col1",
-	cards: [
-		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004", height: 200 },
-		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005", height: 250 },
-		{ cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006", height: 220 },
-	],
-	timestamps: {
-		createdAt: new Date().toString(),
-		lastUpdatedAt: new Date().toString(),
-	},
-};
-
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
+
+	const cards = cardSkeletonResponseFactory.buildList(3);
+	const column = columnResponseFactory.build({
+		cards,
+	});
 
 	const setup = (options?: { permissions?: BoardPermissionsTypes }) => {
 		document.body.setAttribute("data-app", "true");
@@ -42,9 +38,9 @@ describe("BoardColumn", () => {
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
-			propsData: { column: MOCK_PROP, index: 1 },
+			propsData: { column, index: 1 },
 		});
 	};
 
@@ -66,7 +62,7 @@ describe("BoardColumn", () => {
 			const expectedEmitObject = {
 				removedIndex: 0,
 				addedIndex: 0,
-				payload: MOCK_PROP.cards[0],
+				payload: column.cards[0],
 				columnIndex: 0,
 			};
 
@@ -87,9 +83,9 @@ describe("BoardColumn", () => {
 			const emitObject = {
 				removedIndex: 0,
 				addedIndex: 0,
-				payload: MOCK_PROP.cards[0],
-				targetColumnId: MOCK_PROP.id,
-				columnId: MOCK_PROP.id,
+				payload: column.cards[0],
+				targetColumnId: column.id,
+				columnId: column.id,
 			};
 
 			const containerComponent = wrapper.findComponent(Container);
@@ -105,7 +101,7 @@ describe("BoardColumn", () => {
 			const emitObject = {
 				removedIndex: null,
 				addedIndex: null,
-				payload: MOCK_PROP.cards[0],
+				payload: column.cards[0],
 			};
 			const containerComponent = wrapper.findComponent(Container);
 			containerComponent.vm.$emit("drop", emitObject);
