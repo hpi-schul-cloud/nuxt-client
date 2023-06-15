@@ -1,12 +1,11 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 
 describe("FileContentElementEdit", () => {
 	const setupProps = () => ({
-		caption: "Test Caption",
-		fileRecord: fileRecordResponseFactory.build(),
+		fileName: "file-record #1.txt",
+		url: "1/file-record #1.txt",
 	});
 
 	const setup = () => {
@@ -20,8 +19,8 @@ describe("FileContentElementEdit", () => {
 
 		return {
 			wrapper,
-			captionProp: propsData.caption,
-			fileRecordProp: propsData.fileRecord,
+			fileNameProp: propsData.fileName,
+			urlProp: propsData.url,
 		};
 	};
 
@@ -30,14 +29,6 @@ describe("FileContentElementEdit", () => {
 
 		const fileContentElement = wrapper.findComponent(FileContentElementEdit);
 		expect(fileContentElement.exists()).toBe(true);
-	});
-
-	it.skip("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
-
-		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
-
-		expect(downloadUrl).toBe(fileRecordProp.url);
 	});
 
 	it("should display icon", async () => {
@@ -49,10 +40,18 @@ describe("FileContentElementEdit", () => {
 	});
 
 	it("should find file name", async () => {
-		const { wrapper, fileRecordProp } = setup();
+		const { wrapper, fileNameProp } = setup();
 
 		const fileName = wrapper.find("v-list-item-title-stub").text();
 
-		expect(fileName).toBe(fileRecordProp.name);
+		expect(fileName).toBe(fileNameProp);
+	});
+
+	it("should find download url", async () => {
+		const { wrapper, urlProp } = setup();
+
+		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
+
+		expect(downloadUrl).toBe(urlProp);
 	});
 });

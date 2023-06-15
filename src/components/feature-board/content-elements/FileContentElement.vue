@@ -3,15 +3,15 @@
 		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecord"
+				:fileName="fileRecord.name"
+				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecord"
-				@update:caption="($event) => (modelValue.caption = $event)"
+				:fileName="fileRecord.name"
+				:url="url"
 			></FileContentElementEdit>
+			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -21,17 +21,23 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, ref, onMounted } from "vue";
+import { defineComponent, PropType, ref, onMounted, computed } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import {
+	FileRecordParentType,
+	FileRecordResponse,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
+		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
 	},
@@ -41,12 +47,24 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, upload } = useFileStorageApi(
+		const { fetchFiles, upload, fetchFileRecursively } = useFileStorageApi(
 			props.element.id,
 			FileRecordParentType.BOARDNODES
 		);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const fileRecord = ref<FileRecordResponse>();
+
+		const isBlocked = computed(
+			() =>
+				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
+		);
+
+		const isPending = computed(
+			() =>
+				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.PENDING
+		);
+
+		const url = computed(() => (!isBlocked.value ? fileRecord.value?.url : ""));
 
 		onMounted(() => {
 			(async () => {
@@ -80,12 +98,18 @@ export default defineComponent({
 					fileRecord.value = fileRecords[0];
 				}
 			}
+
+			if (isPending.value) {
+				fileRecord.value = await fetchFileRecursively();
+			}
 		};
 
 		return {
-			modelValue,
 			isAutoFocus,
+			isBlocked,
 			fileRecord,
+			modelValue,
+			url,
 		};
 	},
 });

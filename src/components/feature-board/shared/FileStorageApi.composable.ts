@@ -1,9 +1,9 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
-	FileRecordResponse as FileRecord,
 	FileRecordParentType,
 	FileRecordResponse,
+	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
@@ -52,7 +52,7 @@ export const useFileStorageApi = (
 	};
 
 	const rename = async (
-		fileRecordId: FileRecord["id"],
+		fileRecordId: FileRecordResponse["id"],
 		params: RenameFileParams
 	): Promise<FileRecordResponse | void> => {
 		try {
@@ -68,8 +68,36 @@ export const useFileStorageApi = (
 		businessError.value = error;
 	};
 
+	const fetchFileRecursively = async (
+		waitTime = 10000,
+		waitTimeMax = 50000,
+		refreshTimer = 0
+	): Promise<FileRecordResponse | undefined> => {
+		let fileRecord: FileRecordResponse | undefined;
+
+		const result = await fetchFiles();
+		if (result) {
+			fileRecord = result[0];
+			if (
+				fileRecord?.securityCheckStatus === FileRecordScanStatus.PENDING &&
+				refreshTimer <= waitTimeMax
+			) {
+				refreshTimer = refreshTimer + waitTime;
+				await new Promise((resolve) => setTimeout(resolve, waitTime));
+				fileRecord = await fetchFileRecursively(
+					waitTime,
+					waitTimeMax,
+					refreshTimer
+				);
+			}
+		}
+
+		return fileRecord;
+	};
+
 	return {
 		fetchFiles,
+		fetchFileRecursively,
 		rename,
 		upload,
 		businessError,

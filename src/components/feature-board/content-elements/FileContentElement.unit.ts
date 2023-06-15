@@ -1,13 +1,13 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
+import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
+import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { shallowMount } from "@vue/test-utils";
 import { AnyContentElement } from "../types/ContentElement";
-import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import FileContentElement from "./FileContentElement.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import FileContentElement from "./FileContentElement.vue";
-import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
 jest.mock("../shared/FileStorageApi.composable");
 jest.mock("../shared/SelectedFile.composable");
 
@@ -158,7 +158,7 @@ describe("FileContentElement", () => {
 				expect(fileContentElement.exists()).toBe(true);
 			});
 
-			it("should render FileContentElementDisplay component", async () => {
+			it.only("should render FileContentElementDisplay component", async () => {
 				const { wrapper } = setup(false);
 
 				await wrapper.vm.$nextTick();
