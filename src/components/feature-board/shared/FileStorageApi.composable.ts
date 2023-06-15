@@ -3,7 +3,6 @@ import {
 	FileApiInterface,
 	FileRecordResponse as FileRecord,
 	FileRecordParentType,
-	FileRecordResponse,
 	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
@@ -12,7 +11,7 @@ import { BusinessError } from "@/store/types/commons";
 import { $axios } from "@/utils/api";
 import { downloadFile } from "@/utils/fileHelper";
 import { createSharedComposable } from "@vueuse/core";
-import { Ref, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
 export const useFileStorageApi = createSharedComposable(() => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
