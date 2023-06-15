@@ -1,9 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatSize, mdiUpload } from "@mdi/js";
-import { AddCardElement } from "../state/CardState.composable";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { useSelectedFile } from "./SelectedFile.composable";
 import { ref } from "vue";
+import { AddCardElement } from "../state/CardState.composable";
+import { useSelectedFile } from "./SelectedFile.composable";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const { isDialogOpen, closeDialog, elementTypeOptions } =

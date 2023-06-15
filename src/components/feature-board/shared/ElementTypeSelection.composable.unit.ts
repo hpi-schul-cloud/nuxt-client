@@ -1,9 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { useElementTypeSelection } from "./ElementTypeSelection.composable";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
-import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
+import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
+import { mdiFormatSize, mdiUpload } from "@mdi/js";
+import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("./FileStorageApi.composable");
 jest.mock("./SelectedFile.composable");
@@ -165,6 +165,36 @@ describe("ElementTypeSelection Composable", () => {
 
 			askType();
 			expect(isDialogOpen.value).toBe(true);
+		});
+	});
+
+	describe("onFileElementClick", () => {
+		const setup = () => {
+			const addElementMock = jest.fn();
+			setupFileStorageApiMock({});
+			setupSharedElementTypeSelectionMock({});
+
+			return { addElementMock };
+		};
+
+		it("should set isFilePickerOpen to true", () => {
+			const { addElementMock } = setup();
+			const { isFilePickerOpen, onFileElementClick } =
+				useElementTypeSelection(addElementMock);
+
+			onFileElementClick();
+
+			expect(isFilePickerOpen.value).toBe(true);
+		});
+
+		it("should set isDialogOpen to false", () => {
+			const { addElementMock } = setup();
+			const { onFileElementClick, isDialogOpen } =
+				useElementTypeSelection(addElementMock);
+
+			onFileElementClick();
+
+			expect(isDialogOpen.value).toBe(false);
 		});
 	});
 });
