@@ -53,7 +53,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { getFile, fetchFileRecursively, newFileForParent } =
+		const { getFile, fetchFileRecursively, refreshFile, newFileForParent } =
 			useFileStorageApi();
 
 		const fileRecordModel = ref<FileRecordResponse>();
@@ -80,9 +80,15 @@ export default defineComponent({
 				parentId.value = props.element.id;
 				fileRecordModel.value = getFile(parentId.value);
 
-				if (!fileRecordModel.value || isPending.value) {
-					await fetchFileRecursively(
-						fileRecordModel,
+				if (!fileRecordModel.value) {
+					fileRecordModel.value = await refreshFile(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
+				}
+
+				if (isPending.value) {
+					fileRecordModel.value = await fetchFileRecursively(
 						parentId.value,
 						FileRecordParentType.BOARDNODES
 					);

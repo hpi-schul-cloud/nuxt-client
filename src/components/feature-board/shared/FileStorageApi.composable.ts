@@ -117,24 +117,21 @@ export const useFileStorageApi = createSharedComposable(() => {
 	};
 
 	const fetchFileRecursively = async (
-		fileRecordModel: Ref<FileRecordResponse | undefined>,
 		parentId: string,
 		parentType: FileRecordParentType,
 		waitTime = 10000,
 		waitTimeMax = 50000,
 		refreshTimer = 0
 	) => {
-		fileRecordModel.value = await refreshFile(parentId, parentType);
+		let result = await refreshFile(parentId, parentType);
 
 		if (
-			fileRecordModel.value?.securityCheckStatus ===
-				FileRecordScanStatus.PENDING &&
+			result?.securityCheckStatus === FileRecordScanStatus.PENDING &&
 			refreshTimer <= waitTimeMax
 		) {
 			refreshTimer = refreshTimer + waitTime;
 			await new Promise((resolve) => setTimeout(resolve, waitTime));
-			await fetchFileRecursively(
-				fileRecordModel,
+			result = await fetchFileRecursively(
 				parentId,
 				parentType,
 				waitTime,
@@ -142,6 +139,8 @@ export const useFileStorageApi = createSharedComposable(() => {
 				refreshTimer
 			);
 		}
+
+		return result;
 	};
 
 	return {
