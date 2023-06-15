@@ -14,6 +14,7 @@ import {
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { Board } from "../types/Board";
+import { CardMove } from "../types/DragAndDrop";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -56,6 +57,8 @@ describe("BoardState.composable", () => {
 			createColumnCall: jest.fn(),
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
+			moveCardCall: jest.fn(),
+			updateColumnTitleCall: jest.fn(),
 		};
 		mockedUseBoardApi.mockReturnValue(
 			mockedBoardApiCalls as ReturnType<typeof useBoardApi>
@@ -186,7 +189,23 @@ describe("BoardState.composable", () => {
 		});
 	});
 
-	describe("createColumnWithCard", () => {});
+	describe("createColumnWithCard", () => {
+		it("should generate and show error when newColumn id is undefined", async () => {
+			const { createColumnWithCard, board } = setup();
+			board.value = testBoard;
+
+			await createColumnWithCard();
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"create",
+				"boardColumn"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
+	});
+
 	describe("deleteCard", () => {
 		it("should not call deleteCardCall when board value is undefined", async () => {
 			const { deleteCard, board } = setup();
@@ -266,7 +285,10 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
 		});
 	});
-	describe("extractCard", () => {});
+
+	describe("extractCard", () => {
+		test.todo("should extract card");
+	});
 
 	describe("fetchBoard", () => {
 		it("should fetch board on mount", async () => {
@@ -299,14 +321,90 @@ describe("BoardState.composable", () => {
 
 			expect(isLoading.value).toStrictEqual(false);
 		});
+
+		test.todo("should generate and show error when there is an error code");
 	});
 
-	describe("moveCard", () => {});
-	describe("moveColumn", () => {});
-	describe("updateColumnTitle", () => {});
-	describe("addCard", () => {});
-	describe("extractCard", () => {});
-	describe("getColumnId", () => {});
-	describe("getColumnIndex", () => {});
-	describe("showErrorAndReload", () => {});
+	describe("moveCard", () => {
+		it("should not call moveCardCall when board value is undefined", async () => {
+			const cardPayload: CardMove = {
+				removedIndex: 2,
+				addedIndex: 1,
+				payload: card,
+			};
+			const { moveCard, board } = setup();
+			board.value = undefined;
+
+			await moveCard(cardPayload);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+		});
+
+		test.todo("should generate and show error when there is an error code");
+	});
+
+	describe("moveColumn", () => {
+		test.todo("should call moveColumnCall");
+		test.todo("should not call moveColumnCall when board value is undefined");
+		test.todo("should generate and show error when there is an error code");
+	});
+
+	describe("updateColumnTitle", () => {
+		it("should not call updateColumnTitleCall when board value is undefined", async () => {
+			const { updateColumnTitle, board } = setup();
+			board.value = undefined;
+
+			await updateColumnTitle(column.id, "newTitle");
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
+		});
+
+		it("should call updateColumnTitleCall", async () => {
+			const { updateColumnTitle, board } = setup();
+			const newTitle = "newTitle";
+			board.value = testBoard;
+
+			await updateColumnTitle(column.id, newTitle);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateColumnTitleCall).toHaveBeenCalledWith(
+				column.id,
+				newTitle
+			);
+		});
+
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			const { updateColumnTitle, board } = setup();
+			board.value = testBoard;
+
+			await updateColumnTitle(column.id, "newTitle");
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"update"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
+	});
+
+	describe("addCard", () => {
+		test.todo("should add card");
+	});
+
+	describe("getColumnId", () => {
+		test.todo("should get column id");
+	});
+
+	describe("getColumnIndex", () => {
+		test.todo("should get column index");
+	});
+
+	describe("showErrorAndReload", () => {
+		test.todo("should not show failure when board value undefined");
+		test.todo("should show failure and fetch board");
+	});
 });
