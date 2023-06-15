@@ -1,7 +1,5 @@
 <template>
-	<div>
-		<v-file-input v-show="false" ref="inputRef" v-model="modelFile" />
-	</div>
+	<v-file-input v-show="false" ref="inputRef" @change="onFileChange" />
 </template>
 
 <script lang="ts">
@@ -17,7 +15,6 @@ export default defineComponent({
 	emits: ["update:file"],
 	setup(props, { emit }) {
 		const inputRef = ref();
-		const modelFile = ref();
 		const isFilePickerOpen = useVModel(props, "isFilePickerOpen", emit);
 
 		onMounted(() => {
@@ -30,21 +27,20 @@ export default defineComponent({
 			() => props.isFilePickerOpen,
 			(newValue: boolean) => {
 				if (newValue) {
+					inputRef.value.$refs.input.value = "";
 					inputRef.value.$refs.input.click();
 					isFilePickerOpen.value = false;
 				}
 			}
 		);
 
-		watch(modelFile, (newValue) => {
-			if (newValue) {
-				emit("update:file", newValue);
-			}
-		});
+		const onFileChange = (file: File) => {
+			emit("update:file", file);
+		};
 
 		return {
 			inputRef,
-			modelFile,
+			onFileChange,
 		};
 	},
 });
