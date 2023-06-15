@@ -8,10 +8,12 @@ import NotifierModule from "@/store/notifier";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import {
 	boardResponseFactory,
+	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { Board } from "../types/Board";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -30,8 +32,9 @@ describe("BoardState.composable", () => {
 	let mockedBoardApiCalls: Partial<ReturnType<typeof useBoardApi>>;
 	let setEditModeId: jest.Mock;
 
-	const column = columnResponseFactory.build();
-	const testBoard = boardResponseFactory.build({ columns: [column] });
+	const card = cardSkeletonResponseFactory.build();
+	const column = columnResponseFactory.build({ cards: [card] });
+	let testBoard: Board;
 
 	const setup = (boardId = "123123") => {
 		return mountComposable(() => useBoardState(boardId), {
@@ -41,6 +44,7 @@ describe("BoardState.composable", () => {
 	};
 
 	beforeEach(() => {
+		testBoard = boardResponseFactory.build({ columns: [column] });
 		const boardControllerGetBoardSkeleton = jest
 			.fn()
 			.mockResolvedValue({ data: testBoard });
@@ -50,6 +54,8 @@ describe("BoardState.composable", () => {
 		mockedBoardApiCalls = {
 			createCardCall: jest.fn(),
 			createColumnCall: jest.fn(),
+			deleteCardCall: jest.fn(),
+			deleteColumnCall: jest.fn(),
 		};
 		mockedUseBoardApi.mockReturnValue(
 			mockedBoardApiCalls as ReturnType<typeof useBoardApi>
@@ -58,6 +64,7 @@ describe("BoardState.composable", () => {
 		mockedBoardNotifierCalls = {
 			generateErrorText: jest.fn(),
 			showFailure: jest.fn(),
+			isErrorCode: jest.fn(),
 		};
 		mockedUseBoardNotifier.mockReturnValue(
 			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
@@ -123,6 +130,7 @@ describe("BoardState.composable", () => {
 			expect(setEditModeId).toHaveBeenCalledWith(newCardId);
 		});
 	});
+
 	describe("createColumn", () => {
 		it("should call createColumnCall", async () => {
 			const { createColumn, board } = setup();
@@ -179,8 +187,85 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("createColumnWithCard", () => {});
-	describe("deleteCard", () => {});
-	describe("deleteColumn", () => {});
+	describe("deleteCard", () => {
+		it("should not call deleteCardCall when board value is undefined", async () => {
+			const { deleteCard, board } = setup();
+			board.value = undefined;
+
+			await deleteCard(card.cardId);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteCardCall).not.toHaveBeenCalled();
+		});
+
+		it("should call deleteCardCall", async () => {
+			const { deleteCard, board } = setup();
+			board.value = testBoard;
+
+			await deleteCard(card.cardId);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
+				card.cardId
+			);
+		});
+
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			const { deleteCard, board } = setup();
+			board.value = testBoard;
+
+			await deleteCard(card.cardId);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"delete",
+				"boardCard"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
+	});
+
+	describe("deleteColumn", () => {
+		it("should not call deleteColumnCall when board value is undefined", async () => {
+			const { deleteColumn, board } = setup();
+			board.value = undefined;
+
+			await deleteColumn(card.cardId);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
+		});
+
+		it("should call deleteColumnCall", async () => {
+			const { deleteColumn, board } = setup();
+			board.value = testBoard;
+
+			await deleteColumn(column.id);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
+				column.id
+			);
+		});
+
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			const { deleteColumn, board } = setup();
+			board.value = testBoard;
+
+			await deleteColumn(column.id);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"delete",
+				"boardColumn"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
+	});
 	describe("extractCard", () => {});
 
 	describe("fetchBoard", () => {
