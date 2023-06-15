@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 
 export default defineComponent({
@@ -19,13 +19,11 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const fileRecordSize = ref(props.fileRecord.size);
-
 		const fileSize = computed(() => {
 			const units = ["B", "KB", "MB", "GB", "TB"];
 			const threshold = 1024;
 
-			let convertedSize = fileRecordSize.value;
+			let convertedSize = props.fileRecord.size;
 			let unit = units[0];
 			let power = 1;
 
@@ -40,11 +38,9 @@ export default defineComponent({
 			return humanReadableFileSize;
 		});
 
-		const fileName = ref(props.fileRecord.name);
-
 		const fileExtension = computed(() => {
-			return fileName.value
-				.substring(fileName.value.lastIndexOf(".") + 1)
+			return props.fileRecord.name
+				.substring(props.fileRecord.name.lastIndexOf(".") + 1)
 				.toUpperCase();
 		});
 
