@@ -7,9 +7,8 @@
 				:fileRecord="fileRecordModel"
 			/>
 
-			<div tabindex="0" @keydown.up.down="onKeydownArrow">
+			<div v-if="isEditMode" tabindex="0" @keydown.up.down="onKeydownArrow">
 				<FileContentElementEdit
-					v-if="isEditMode"
 					:caption="modelValue.caption"
 					:fileRecord="fileRecordModel"
 					:isFirstElement="isFirstElement"
