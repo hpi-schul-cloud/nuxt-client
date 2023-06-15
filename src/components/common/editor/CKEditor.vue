@@ -9,6 +9,7 @@
 		@input="handleInput"
 		@focus="handleFocus"
 		@blur="handleBlur"
+		@ready="addCustomEventListeners"
 	/>
 </template>
 
@@ -27,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input", "focus", "blur"],
+	emits: ["input", "focus", "blur", "delete"],
 	props: {
 		value: {
 			type: String,
@@ -52,6 +53,8 @@ export default defineComponent({
 		const ck = ref(null);
 		const content = ref(props.value);
 		const language = i18n.locale;
+
+		let charCount = 0;
 
 		const toolbarItems = [];
 		toolbarItems["simple"] = [
@@ -117,6 +120,7 @@ export default defineComponent({
 			"Table",
 			"TableToolbar",
 			"Underline",
+			"WordCount",
 		];
 
 		watch(
@@ -224,6 +228,11 @@ export default defineComponent({
 					},
 				],
 			},
+			wordCount: {
+				onUpdate: (stats) => {
+					charCount = stats.characters;
+				},
+			},
 			language: language,
 			placeholder: props.placeholder,
 		};
@@ -236,6 +245,21 @@ export default defineComponent({
 			setTimeout(() => emit("blur"), blurDelay);
 		};
 
+		// https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
+		const addCustomEventListeners = (editor) => {
+			if (!editor) return;
+			editor.editing.view.document.on(
+				"delete",
+				() => {
+					if (charCount <= 0) {
+						// console.log("delete element now...");
+						emit("delete");
+					}
+				},
+				{ priority: "high" }
+			);
+		};
+
 		return {
 			ck,
 			content,
@@ -244,6 +268,7 @@ export default defineComponent({
 			handleInput,
 			handleFocus,
 			handleBlur,
+			addCustomEventListeners,
 		};
 	},
 });
@@ -251,6 +276,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
+@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 // TODO move all style to ckbuild
 .ck-blurred {

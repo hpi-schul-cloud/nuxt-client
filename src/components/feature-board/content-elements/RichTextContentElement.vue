@@ -11,6 +11,7 @@
 			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
+			@delete:element="onDeleteElement"
 		/>
 	</div>
 </template>
@@ -21,6 +22,7 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
+import { DeleteElementEventPayload } from "../types/ContentElement";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -35,9 +37,21 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup(props) {
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		return { modelValue, isAutoFocus };
+
+		const onDeleteElement = () => {
+			emit("delete:element", {
+				elementId: props.element.id,
+				name: "",
+			} as DeleteElementEventPayload);
+		};
+
+		return {
+			modelValue,
+			isAutoFocus,
+			onDeleteElement,
+		};
 	},
 });
 </script>

@@ -6,6 +6,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
+				@delete:element="onDeleteElement"
 			/>
 			<FileContentElement
 				v-else-if="isFileElementResponse(element)"
