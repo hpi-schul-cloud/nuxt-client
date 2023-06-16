@@ -9,14 +9,15 @@ import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
-import {
-	contextExternalToolsModule,
-	externalToolsModule,
-} from "../../../store";
+import { contextExternalToolsModule } from "@/store";
 
 describe("RoomExternalToolOverview", () => {
+	let el: HTMLDivElement;
+
 	const getWrapper = (tools: ExternalToolDisplayData[]) => {
-		document.body.setAttribute("data-app", "true");
+		el = document.createElement("div");
+		el.setAttribute("data-app", "true");
+		document.body.appendChild(el);
 
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
@@ -51,6 +52,9 @@ describe("RoomExternalToolOverview", () => {
 				},
 				propsData: {
 					roomId: "testRoolId",
+				},
+				stubs: {
+					VDialog: true,
 				},
 			}
 		);
@@ -155,10 +159,9 @@ describe("RoomExternalToolOverview", () => {
 				name: "room-external-tool-card",
 			});
 			await card.trigger("delete");
-			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
-			const deleteCard = wrapper.find(".v-dialog--active");
+			const deleteDialog = wrapper.find('[data-testId="delete-dialog"]');
 
-			const confirmBtn = deleteCard.find('[data-testid="dialog-confirm"]');
+			const confirmBtn = deleteDialog.find('[data-testId="dialog-confirm"]');
 			await confirmBtn.trigger("click");
 
 			expect(
