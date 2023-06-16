@@ -1,8 +1,11 @@
 import { I18N_KEY } from "@/utils/inject";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { MountOptions, shallowMount } from "@vue/test-utils";
+import { AnyContentElement } from "../types/ContentElement";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { fileElementResponse } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
