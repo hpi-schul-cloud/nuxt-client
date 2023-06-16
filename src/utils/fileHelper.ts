@@ -51,7 +51,10 @@ export function downloadFile(
 	}
 }
 
-export function convertFileSizeToHumanReadable(fileSize: number): string {
+export function convertFileSizeToHumanReadable(
+	fileSize: number,
+	numberOfDigits: number
+): string {
 	const units = ["B", "KB", "MB", "GB", "TB"];
 	const threshold = 1024;
 
@@ -65,7 +68,8 @@ export function convertFileSizeToHumanReadable(fileSize: number): string {
 		power++;
 	}
 
-	const humanReadableFileSize = convertedSize.toFixed(2) + " " + unit;
+	const humanReadableFileSize =
+		convertedSize.toFixed(numberOfDigits) + " " + unit;
 
 	return humanReadableFileSize;
 }
