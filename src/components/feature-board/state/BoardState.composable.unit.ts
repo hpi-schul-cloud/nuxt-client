@@ -29,6 +29,7 @@ const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("BoardState.composable", () => {
 	let mockServerApi: any;
+	let boardControllerGetBoardSkeleton: any;
 	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: Partial<ReturnType<typeof useBoardApi>>;
 	let setEditModeId: jest.Mock;
@@ -46,7 +47,7 @@ describe("BoardState.composable", () => {
 
 	beforeEach(() => {
 		testBoard = boardResponseFactory.build({ columns: [column] });
-		const boardControllerGetBoardSkeleton = jest
+		boardControllerGetBoardSkeleton = jest
 			.fn()
 			.mockResolvedValue({ data: testBoard });
 		mockServerApi = { boardControllerGetBoardSkeleton };
@@ -355,7 +356,22 @@ describe("BoardState.composable", () => {
 			expect(isLoading.value).toStrictEqual(false);
 		});
 
-		test.todo("should generate and show error when there is an error code");
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			boardControllerGetBoardSkeleton.mockResolvedValue({ data: undefined });
+
+			const { fetchBoard } = setup();
+
+			await fetchBoard(testBoard.id);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"read",
+				"board"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
 	});
 
 	describe("moveCard", () => {
@@ -374,7 +390,48 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 		});
 
-		test.todo("should generate and show error when there is an error code");
+		it("should call moveCardCall ", async () => {
+			const cardPayload: CardMove = {
+				removedIndex: 2,
+				addedIndex: 1,
+				payload: card,
+				columnId: column.id,
+			};
+
+			const { moveCard, board } = setup();
+			board.value = testBoard;
+
+			await moveCard(cardPayload);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
+				card.cardId,
+				cardPayload.columnId,
+				cardPayload.addedIndex
+			);
+		});
+
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			const cardPayload: CardMove = {
+				removedIndex: 2,
+				addedIndex: 1,
+				payload: card,
+				columnId: column.id,
+			};
+
+			const { moveCard, board } = setup();
+			board.value = testBoard;
+
+			await moveCard(cardPayload);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"update"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
 	});
 
 	describe("moveColumn", () => {
@@ -437,11 +494,12 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("updateColumnTitle", () => {
+		const NEW_TITLE = "newTitle";
 		it("should not call updateColumnTitleCall when board value is undefined", async () => {
 			const { updateColumnTitle, board } = setup();
 			board.value = undefined;
 
-			await updateColumnTitle(column.id, "newTitle");
+			await updateColumnTitle(column.id, NEW_TITLE);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
@@ -449,15 +507,14 @@ describe("BoardState.composable", () => {
 
 		it("should call updateColumnTitleCall", async () => {
 			const { updateColumnTitle, board } = setup();
-			const newTitle = "newTitle";
 			board.value = testBoard;
 
-			await updateColumnTitle(column.id, newTitle);
+			await updateColumnTitle(column.id, NEW_TITLE);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateColumnTitleCall).toHaveBeenCalledWith(
 				column.id,
-				newTitle
+				NEW_TITLE
 			);
 		});
 
@@ -466,7 +523,7 @@ describe("BoardState.composable", () => {
 			const { updateColumnTitle, board } = setup();
 			board.value = testBoard;
 
-			await updateColumnTitle(column.id, "newTitle");
+			await updateColumnTitle(column.id, NEW_TITLE);
 			await nextTick();
 
 			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
