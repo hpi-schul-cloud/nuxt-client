@@ -12,9 +12,9 @@ describe("ElementTypeSelection Composable", () => {
 	describe("onElementClick", () => {
 		describe("when element is created successfully", () => {
 			const setup = () => {
-				setupFileStorageApiMock({});
-				setupSharedElementTypeSelectionMock({});
-				setupSelectedFileMock({});
+				setupFileStorageApiMock();
+				setupSharedElementTypeSelectionMock();
+				setupSelectedFileMock();
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
@@ -71,7 +71,7 @@ describe("ElementTypeSelection Composable", () => {
 				const element = { id: "test" };
 				const addElementMock = jest.fn().mockResolvedValueOnce(element);
 				const file = new File([], "test");
-				setupSharedElementTypeSelectionMock({});
+				setupSharedElementTypeSelectionMock();
 				const { setSelectedFile } = setupSelectedFileMock({});
 
 				return { addElementMock, file, setSelectedFile };
@@ -103,8 +103,8 @@ describe("ElementTypeSelection Composable", () => {
 				const error = new Error("Test error");
 				const addElementMock = jest.fn().mockRejectedValueOnce(error);
 				const file = new File([], "test");
-				const { upload } = setupFileStorageApiMock({});
-				setupSelectedFileMock({});
+				const { upload } = setupFileStorageApiMock();
+				setupSelectedFileMock();
 
 				return { addElementMock, file, upload, error };
 			};
@@ -124,9 +124,9 @@ describe("ElementTypeSelection Composable", () => {
 		const setup = () => {
 			const addElementMock = jest.fn();
 			const { elementTypeOptions, isDialogOpen } =
-				setupSharedElementTypeSelectionMock({});
-			setupFileStorageApiMock({});
-			setupSelectedFileMock({});
+				setupSharedElementTypeSelectionMock();
+			setupFileStorageApiMock();
+			setupSelectedFileMock();
 
 			return { elementTypeOptions, addElementMock, isDialogOpen };
 		};
@@ -171,8 +171,8 @@ describe("ElementTypeSelection Composable", () => {
 	describe("onFileElementClick", () => {
 		const setup = () => {
 			const addElementMock = jest.fn();
-			setupFileStorageApiMock({});
-			setupSharedElementTypeSelectionMock({});
+			setupFileStorageApiMock();
+			setupSharedElementTypeSelectionMock();
 
 			return { addElementMock };
 		};
@@ -205,8 +205,8 @@ describe("ElementTypeSelection Composable", () => {
 			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
-			setupFileStorageApiMock({});
-			setupSelectedFileMock({});
+			setupFileStorageApiMock();
+			setupSelectedFileMock();
 
 			return { elementTypeOptions, addElementMock, closeDialogMock };
 		};

@@ -1,12 +1,12 @@
 import { useSharedElementTypeSelection } from "@/components/feature-board/shared/SharedElementTypeSelection.composable";
-import { Ref, ref } from "vue";
 import { jest } from "@jest/globals";
+import { Ref, ref } from "vue";
 
 interface Props {
 	closeDialogMock?: jest.Mock;
 }
 
-export const setupSharedElementTypeSelectionMock = (props: Props) => {
+export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const { closeDialogMock } = props;
 	const mockedSharedElementTypeSelection = jest.mocked(
 		useSharedElementTypeSelection

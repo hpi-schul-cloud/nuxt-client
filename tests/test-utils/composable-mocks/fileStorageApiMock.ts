@@ -12,7 +12,7 @@ interface Props {
 	refreshFileMock?: jest.Mock;
 }
 
-export const setupFileStorageApiMock = (props: Props) => {
+export const setupFileStorageApiMock = (props: Props = {}) => {
 	const {
 		fetchFilesMock,
 		fetchFileRecursivelyMock,

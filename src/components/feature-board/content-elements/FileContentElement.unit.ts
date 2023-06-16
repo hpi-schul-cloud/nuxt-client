@@ -115,8 +115,8 @@ describe("FileContentElement", () => {
 			const element = fileElementResponse.build();
 			document.body.setAttribute("data-app", "true");
 
-			setupFileStorageApiMock({});
-			setupSelectedFileMock({});
+			setupFileStorageApiMock();
+			setupSelectedFileMock();
 
 			const { wrapper } = getWrapper({ element, isEditMode: true });
 
@@ -143,7 +143,7 @@ describe("FileContentElement", () => {
 			const { fetchFiles } = setupFileStorageApiMock({
 				fetchFilesMock,
 			});
-			setupSelectedFileMock({});
+			setupSelectedFileMock();
 
 			const { wrapper } = getWrapper({ element, isEditMode });
 
