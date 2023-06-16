@@ -114,7 +114,7 @@ export const useBoardState = (id: string) => {
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
 		if (column) {
-			const cardIndex = column?.cards.findIndex(
+			const cardIndex = column.cards.findIndex(
 				(card) => card.cardId === cardId
 			);
 			if (cardIndex > -1) {
