@@ -135,3 +135,7 @@ export const getID = (resource) => {
 	}
 	return null;
 };
+
+export const delay = async (ms) => {
+	await new Promise((resolve) => setTimeout(resolve, ms));
+};
