@@ -3,15 +3,15 @@
 		<div v-if="fileRecordModel">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileName="fileRecordModel.name"
+				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
-				@update:caption="($event) => (modelValue.caption = $event)"
+				:fileName="fileRecordModel.name"
+				:url="url"
 			></FileContentElementEdit>
+			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -21,16 +21,29 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, watch, ref, onMounted } from "vue";
+import {
+	computed,
+	defineComponent,
+	PropType,
+	watch,
+	ref,
+	onMounted,
+} from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
+import {
+	FileRecordParentType,
+	FileRecordResponse,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
+		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
 	},
@@ -40,10 +53,27 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
+		const { getFile, fetchFileRecursively, refreshFile, newFileForParent } =
+			useFileStorageApi();
 
 		const fileRecordModel = ref<FileRecordResponse>();
 		const parentId = ref<string>("");
+
+		const isBlocked = computed(
+			() =>
+				fileRecordModel.value?.securityCheckStatus ===
+				FileRecordScanStatus.BLOCKED
+		);
+
+		const isPending = computed(
+			() =>
+				fileRecordModel.value?.securityCheckStatus ===
+				FileRecordScanStatus.PENDING
+		);
+
+		const url = computed(() =>
+			!isBlocked.value ? fileRecordModel.value?.url : ""
+		);
 
 		onMounted(() => {
 			(async () => {
@@ -51,19 +81,41 @@ export default defineComponent({
 				fileRecordModel.value = getFile(parentId.value);
 
 				if (!fileRecordModel.value) {
-					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-					fileRecordModel.value = getFile(parentId.value);
+					fileRecordModel.value = await refreshFile(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
+				}
+
+				if (isPending.value) {
+					fileRecordModel.value = await fetchFileRecursively(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
 				}
 			})();
 		});
 
-		watch(newFileForParent, (newValue) => {
+		watch(newFileForParent, async (newValue) => {
 			if (newValue === parentId.value) {
 				fileRecordModel.value = getFile(parentId.value);
+
+				if (isPending.value) {
+					fileRecordModel.value = await fetchFileRecursively(
+						parentId.value,
+						FileRecordParentType.BOARDNODES
+					);
+				}
 			}
 		});
 
-		return { modelValue, isAutoFocus, fileRecordModel };
+		return {
+			isAutoFocus,
+			isBlocked,
+			fileRecordModel,
+			modelValue,
+			url,
+		};
 	},
 });
 </script>
