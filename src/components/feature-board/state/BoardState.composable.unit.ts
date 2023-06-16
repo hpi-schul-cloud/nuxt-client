@@ -534,11 +534,23 @@ describe("BoardState.composable", () => {
 		});
 	});
 
-	describe("addCard", () => {
-		test.todo("should add card");
-	});
-
 	describe("getColumnId", () => {
-		test.todo("should get column id");
+		it("should get column id", () => {
+			const { getColumnId, board } = setup();
+			board.value = testBoard;
+
+			const result = getColumnId(0);
+
+			expect(result).toEqual(column.id);
+		});
+
+		it("should return undefined if board is not set", () => {
+			const { getColumnId, board } = setup();
+			board.value = undefined;
+
+			const result = getColumnId(0);
+
+			expect(result).toEqual(undefined);
+		});
 	});
 });
