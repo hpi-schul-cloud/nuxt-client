@@ -6,8 +6,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { computed, defineComponent } from "vue";
 import {
 	convertFileSizeToHumanReadable,
 	getFileExtension,
@@ -16,19 +15,23 @@ import {
 export default defineComponent({
 	name: "FileContentElementChips",
 	props: {
-		fileRecord: {
-			type: Object as PropType<FileRecordResponse>,
+		fileRecordSize: {
+			type: Number,
+			required: true,
+		},
+		fileRecordName: {
+			type: String,
 			required: true,
 		},
 	},
 
 	setup(props) {
 		const fileSize = computed(() =>
-			convertFileSizeToHumanReadable(props.fileRecord.size)
+			convertFileSizeToHumanReadable(props.fileRecordSize)
 		);
 
 		const fileExtension = computed(() =>
-			getFileExtension(props.fileRecord.name)
+			getFileExtension(props.fileRecordName)
 		);
 
 		return {

@@ -12,7 +12,10 @@
 				:fileRecord="fileRecordModel"
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
-			<FileContentElementChips :fileRecord="fileRecordModel" />
+			<FileContentElementChips
+				:fileRecordSize="fileRecordModel.size"
+				:fileRecordName="fileRecordModel.name"
+			/>
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
