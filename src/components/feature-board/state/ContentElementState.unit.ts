@@ -4,6 +4,9 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
+
+jest.mock("../shared/InlineEditInteractionHandler.composable");
 
 const notifierModule = createModuleMocks(NotifierModule);
 const TEST_ELEMENT: RichTextElementResponse = {
@@ -19,13 +22,6 @@ const TEST_ELEMENT: RichTextElementResponse = {
 	},
 };
 
-const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
-	return mountComposable(() => useContentElementState(options), {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-		notifierModule,
-	});
-};
-
 /**
  * Call this function during test to mock a CardHostInteraction targeting the Hosting Component
  */
@@ -39,6 +35,12 @@ const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 // }));
 
 describe("useContentElementState composable", () => {
+	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
+		return mountComposable(() => useContentElementState(options), {
+			[I18N_KEY as symbol]: { t: (key: string) => key },
+			notifierModule,
+		});
+	};
 	it("should unwrap element model data", async () => {
 		const { modelValue } = setup();
 
