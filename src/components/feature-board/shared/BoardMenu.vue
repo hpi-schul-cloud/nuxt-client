@@ -2,10 +2,7 @@
 	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
-				color="black"
-				small
 				text
-				dark
 				icon
 				v-bind="attrs"
 				v-on="on"
@@ -15,9 +12,18 @@
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
-					<template v-if="scope === 'board'">Board-Menu</template>
-					<template v-if="scope === 'column'">Column-Menu</template>
-					<template v-if="scope === 'card'">Card-Menu</template>
+					<template v-if="scope === 'board'">{{
+						$t("components.board.menu.board")
+					}}</template>
+					<template v-if="scope === 'column'">{{
+						$t("components.board.menu.column")
+					}}</template>
+					<template v-if="scope === 'card'">{{
+						$t("components.board.menu.card")
+					}}</template>
+					<template v-if="scope === 'element'">{{
+						$t("components.board.menu.element")
+					}}</template>
 				</span>
 			</VBtn>
 		</template>
@@ -35,7 +41,7 @@ export default defineComponent({
 	name: "BoardMenu",
 	props: {
 		scope: {
-			type: String as PropType<"card" | "column" | "board">,
+			type: String as PropType<"element" | "card" | "column" | "board">,
 			required: true,
 		},
 	},

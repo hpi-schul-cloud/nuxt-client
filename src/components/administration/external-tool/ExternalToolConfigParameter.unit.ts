@@ -4,6 +4,7 @@ import ExternalToolConfigParameter from "@/components/administration/external-to
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import { toolParameterFactory } from "@@/tests/test-utils/factory";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;
@@ -16,7 +17,7 @@ describe("ExternalToolConfigParameter", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				value: parameter,
@@ -27,22 +28,9 @@ describe("ExternalToolConfigParameter", () => {
 	describe("inject", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
+				expect(() => {
 					shallowMount(ExternalToolConfigParameter as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
+				}).toThrow();
 			});
 		});
 	});
