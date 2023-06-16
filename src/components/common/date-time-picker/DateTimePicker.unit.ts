@@ -1,7 +1,8 @@
 import Vue from "vue";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import DateTimePicker from "@/components/date-time-picker/DateTimePicker.vue";
+import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 type DateTimePickerProps = {
 	dateTime: string;
@@ -23,7 +24,7 @@ describe("@components/date-time-picker/DateTimePicker", () => {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
 	};

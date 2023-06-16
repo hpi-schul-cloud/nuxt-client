@@ -1,14 +1,15 @@
-import Vuetify from "vuetify";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskItemStudent from "./TaskItemStudent";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import TasksModule from "@/store/tasks";
-import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import TasksModule from "@/store/tasks";
+import { I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import Vuetify from "vuetify";
+import TaskItemStudent from "./TaskItemStudent";
 
 const {
 	tasks,
@@ -45,7 +46,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 				tasksModule: tasksModuleMock,
 				copyModule: copyModuleMock,
 				notifierModule: notifierModuleMock,
-				i18n: { t: (key) => key },
+				[I18N_KEY]: { t: (key) => key },
 			},
 			vuetify,
 			propsData: props,
@@ -181,9 +182,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			});
 			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
 
-			expect(taskLabel.element.textContent).toStrictEqual(
-				"Mathe - Beta-Aufgabe"
-			);
+			expect(taskLabel.text()).toStrictEqual("Mathe - Beta-Aufgabe");
 		});
 
 		it("Should display due date label", () => {

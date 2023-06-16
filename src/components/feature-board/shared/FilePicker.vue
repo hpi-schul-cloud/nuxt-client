@@ -1,30 +1,51 @@
 <template>
-	<v-file-input v-show="false" ref="inputRef" v-model="file" />
+	<div>
+		<v-file-input v-show="false" ref="inputRef" v-model="modelFile" />
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
-import { useFilePicker } from "./FilePicker.composable";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "FilePicker",
 	components: {},
-	props: {},
-	setup() {
-		const { isFilePickerOpen, triggerFilePicker } = useFilePicker();
+	props: {
+		isFilePickerOpen: {
+			type: Boolean,
+			required: true,
+		},
+	},
+	emits: ["update:file", "update:isFilePickerOpen"],
+	setup(props, { emit }) {
 		const inputRef = ref();
-		const file = ref();
+		const modelFile = ref();
 
-		watch(isFilePickerOpen, (newValue: boolean) => {
+		onMounted(() => {
+			inputRef.value.$refs.input.onclick = (e: Event) => {
+				e.stopPropagation();
+			};
+		});
+
+		watch(
+			() => props.isFilePickerOpen,
+			(newValue: boolean) => {
+				if (newValue) {
+					inputRef.value.$refs.input.click();
+					emit("update:isFilePickerOpen");
+				}
+			}
+		);
+
+		watch(modelFile, (newValue) => {
 			if (newValue) {
-				inputRef.value.$refs.input.click();
-				triggerFilePicker();
+				emit("update:file", newValue);
 			}
 		});
 
 		return {
 			inputRef,
-			file,
+			modelFile,
 		};
 	},
 });

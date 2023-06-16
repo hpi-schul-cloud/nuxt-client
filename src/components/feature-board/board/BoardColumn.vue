@@ -10,6 +10,7 @@
 			@delete:column="onColumnDelete"
 			@move:column-keyboard="onMoveColumnKeyboard"
 			@update:title="onUpdateTitle"
+			class="pl-2"
 		></BoardColumnHeader>
 		<Container
 			group-name="cards"
@@ -20,10 +21,11 @@
 			:lock-axis="lockAxis"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
+			class="scrollable-column pr-1 -mt-3"
 		>
 			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
 				<CardHost
-					class="my-3"
+					class="my-3 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
@@ -39,9 +41,9 @@
 </template>
 
 <script lang="ts">
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
@@ -81,7 +83,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
@@ -145,7 +147,7 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {
@@ -170,5 +172,33 @@ export default defineComponent({
 <style>
 .elevate-transition {
 	transition: box-shadow 150ms all;
+}
+</style>
+<style scoped>
+.scrollable-column {
+	overflow-y: auto;
+	max-height: 75vh;
+}
+
+/* width */
+.scrollable-column::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+.scrollable-column::-webkit-scrollbar-track {
+	background: white;
+	border: none;
+}
+
+/* Handle */
+.scrollable-column::-webkit-scrollbar-thumb {
+	background: var(--v-secondary-lighten1);
+	border-radius: 5px;
+}
+
+/* Handle on hover */
+.scrollable-column::-webkit-scrollbar-thumb:hover {
+	background: var(--v-secondary-base);
 }
 </style>

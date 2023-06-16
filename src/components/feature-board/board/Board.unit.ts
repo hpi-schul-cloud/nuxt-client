@@ -7,94 +7,11 @@ import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board, BoardPermissionsTypes } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-
-const MOCK_BOARD_ONE_COLUMN: Board = {
-	columns: [
-		{
-			id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
-			title: "Col1",
-			cards: [
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
-					height: 200,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
-					height: 250,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
-					height: 220,
-				},
-			],
-			timestamps: {
-				createdAt: new Date().toString(),
-				lastUpdatedAt: new Date().toString(),
-			},
-		},
-	],
-	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
-	title: "MyFirstBoard!",
-	timestamps: {
-		lastUpdatedAt: new Date().toString(),
-		createdAt: new Date().toString(),
-	},
-};
-
-const MOCK_BOARD_TWO_COLUMNS: Board = {
-	columns: [
-		{
-			id: "989b0ff2-ad1e-11ed-afa1-0242ac120003",
-			title: "Col1",
-			cards: [
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120004",
-					height: 200,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120005",
-					height: 250,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120006",
-					height: 220,
-				},
-			],
-			timestamps: {
-				createdAt: new Date().toString(),
-				lastUpdatedAt: new Date().toString(),
-			},
-		},
-		{
-			id: "989b0ff2-ad1e-11ed-afa1-0242ac120001",
-			title: "Col2",
-			cards: [
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120204",
-					height: 300,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120305",
-					height: 350,
-				},
-				{
-					cardId: "989b0ff2-ad1e-11ed-afa1-0242ac120406",
-					height: 320,
-				},
-			],
-			timestamps: {
-				createdAt: new Date().toString(),
-				lastUpdatedAt: new Date().toString(),
-			},
-		},
-	],
-	id: "989b0ff2-ad1e-11ed-afa1-0242ac120002",
-	title: "MyFirstBoard!",
-	timestamps: {
-		lastUpdatedAt: new Date().toString(),
-		createdAt: new Date().toString(),
-	},
-};
+import {
+	boardResponseFactory,
+	columnResponseFactory,
+	cardSkeletonResponseFactory,
+} from "@@/tests/test-utils/factory";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -138,6 +55,12 @@ const fetchBoardMock = jest.fn();
 describe("Board", () => {
 	let wrapper: Wrapper<Vue>;
 
+	const cards = cardSkeletonResponseFactory.buildList(3);
+	const oneColumn = columnResponseFactory.build({ cards });
+	const boardWithOneColumn = boardResponseFactory.build({
+		columns: [oneColumn],
+	});
+
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
@@ -146,7 +69,7 @@ describe("Board", () => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 		mockedUseBoardState.mockReturnValue({
-			board: ref<Board | undefined>(board ?? MOCK_BOARD_ONE_COLUMN),
+			board: ref<Board | undefined>(board ?? boardWithOneColumn),
 			isLoading: ref(isLoading ?? false),
 			createCard: createCardMock,
 			createColumn: createColumnMock,
@@ -164,22 +87,25 @@ describe("Board", () => {
 			...defaultPermissions,
 			...options?.permissions,
 		});
+		const boardId = board?.id ?? boardWithOneColumn.id;
 		wrapper = shallowMount(BoardVue, {
 			...createComponentMocks({}),
 			mocks: {
 				$router,
 				$route,
 			},
+			propsData: { boardId },
 		});
 	};
 
 	describe("when component is mounted", () => {
 		it("should call 'useBoardState' composable", () => {
 			setup();
+
 			expect(mockedUseBoardState).toHaveBeenCalled();
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			expect(wrapper.vm.board).toStrictEqual(MOCK_BOARD_ONE_COLUMN);
+			expect(wrapper.vm.board).toStrictEqual(boardWithOneColumn);
 		});
 
 		it("should be found in the dom", () => {
@@ -198,7 +124,12 @@ describe("Board", () => {
 		});
 
 		it("should fetch board from store and render two columns", () => {
-			setup({ board: MOCK_BOARD_TWO_COLUMNS });
+			const twoColumns = columnResponseFactory.buildList(2, { cards });
+			const boardWithTwoColumns = boardResponseFactory.build({
+				columns: twoColumns,
+			});
+			setup({ board: boardWithTwoColumns });
+
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
 		});
 

@@ -1,7 +1,8 @@
 import Vue from "vue";
 import { MountOptions, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CkEditor from "@/components/editor/CKEditor.vue";
+import CkEditor from "@/components/common/editor/CKEditor.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 type CkEditorProps = {
 	value?: string;
@@ -34,7 +35,7 @@ describe("@/components/editor/CKEditor", () => {
 			}),
 			propsData: props,
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
 	};

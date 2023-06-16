@@ -9,12 +9,12 @@
 			<VCard
 				ref="cardHost"
 				:height="isLoading ? height : 'auto'"
-				class="w-100 transition-swing"
+				class="transition-swing"
 				:class="{ 'drag-disabled': isEditMode }"
 				outlined
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : 0"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
@@ -53,12 +53,17 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<FilePicker />
+		<FilePicker
+			@update:file="onFileSelect"
+			:isFilePickerOpen="isFilePickerOpen"
+			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -66,8 +71,7 @@ import {
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
@@ -100,7 +104,7 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
@@ -120,9 +124,9 @@ export default defineComponent({
 		const onTryDelete = async () => {
 			const message =
 				i18n
-					?.t("components.cardHost.deletionModal.confirmation", {
+					.t("components.cardHost.deletionModal.confirmation", {
 						title: card.value?.title ? `"${card.value.title}"` : "",
-						type: i18n?.t("components.boardCard").toString(),
+						type: i18n.t("components.boardCard").toString(),
 					})
 					.toString() ?? "";
 
@@ -134,20 +138,21 @@ export default defineComponent({
 			}
 		};
 
-		const onAddElement = async () => {
-			const { getCreateFn } = useElementTypeSelection();
+		const { askType, createFileElement, isFilePickerOpen } =
+			useElementTypeSelection(addElement);
 
-			const createElement = await getCreateFn();
-			if (createElement) {
-				await createElement(addElement);
-			}
+		const onAddElement = () => {
+			askType();
+		};
 
-			startEditMode();
+		const onFileSelect = async (file: File) => {
+			await createFileElement(file);
 		};
 
 		const onStartEditMode = () => {
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			stopEditMode();
 		};
@@ -180,6 +185,8 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
+			onFileSelect,
+			isFilePickerOpen,
 		};
 	},
 });
@@ -195,5 +202,17 @@ export default defineComponent({
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+</style>
+
+<style>
+.v-card:focus::before {
+	opacity: 0;
+}
+
+.v-card:focus,
+.v-card:focus-within {
+	outline: 2px solid var(--v-secondary-base);
+	outline-offset: 0;
 }
 </style>

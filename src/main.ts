@@ -10,7 +10,6 @@ import {
 	envConfigModule,
 	externalToolsModule,
 	filePathsModule,
-	filesPOCModule,
 	finishedTasksModule,
 	importUsersModule,
 	loadingStateModule,
@@ -29,9 +28,9 @@ import {
 import Vue from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
+import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import store from "./plugins/store";
 
 Vue.config.productionTip = false;
 
@@ -67,6 +66,13 @@ Vue.mixin({
 	},
 });
 
+import VueDOMPurifyHTML from "vue-dompurify-html";
+import htmlConfig from "@/components/common/render-html/config";
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: htmlConfig,
+});
+
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";
@@ -75,8 +81,9 @@ import "@/plugins/polyfills";
 import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { initializeAxios } from "./utils/api";
 import { handleApplicationError } from "./plugins/application-error-handler";
+import { initializeAxios } from "./utils/api";
+import { I18N_KEY } from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -125,7 +132,6 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			envConfigModule,
 			externalToolsModule,
 			filePathsModule,
-			filesPOCModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
@@ -140,7 +146,7 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			i18n,
+			[I18N_KEY as symbol]: i18n,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

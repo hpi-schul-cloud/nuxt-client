@@ -30,12 +30,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, computed } from "vue";
-import VueI18n from "vue-i18n";
-import DatePicker from "@/components/date-time-picker/DatePicker.vue";
-import TimePicker from "@/components/date-time-picker/TimePicker.vue";
-import { mdiCalendarClock } from "@mdi/js";
+import DatePicker from "@/components/common/date-time-picker/DatePicker.vue";
+import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
 import { isToday } from "@/plugins/datetime";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { mdiCalendarClock } from "@mdi/js";
+import { computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -61,10 +61,7 @@ export default defineComponent({
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const locale = i18n.locale;
 

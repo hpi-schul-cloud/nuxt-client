@@ -10,6 +10,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomOverview from "./RoomOverview.page.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 const mockRoomStoreData = [
 	{
@@ -154,7 +155,7 @@ const getWrapper = (
 			copyModule: copyModuleMock,
 			loadingStateModule: loadingStateModuleMock,
 			notifierModule: notifierModuleMock,
-			i18n: { t: (key) => key },
+			[I18N_KEY]: { t: (key) => key },
 		},
 		propsData: {
 			role: "student",

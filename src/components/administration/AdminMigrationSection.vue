@@ -3,22 +3,25 @@
 		<h2 class="text-h4 mb-10">
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
-		<p
-			v-html="t('components.administration.adminMigrationSection.description')"
-		></p>
+		<RenderHTML
+			:html="t('components.administration.adminMigrationSection.description')"
+			component="p"
+		/>
 		<div v-if="!oauthMigration.oauthMigrationPossible">
 			<v-alert light prominent text type="info">
-				<span
-					v-html="t('components.administration.adminMigrationSection.infoText')"
+				<RenderHTML
+					:html="t('components.administration.adminMigrationSection.infoText')"
+					component="span"
 				/>
 			</v-alert>
 		</div>
 		<div v-else>
 			<v-alert light prominent text type="info">
-				<span
-					v-html="
+				<RenderHTML
+					:html="
 						t('components.administration.adminMigrationSection.migrationActive')
 					"
+					component="span"
 				/>
 			</v-alert>
 		</div>
@@ -39,7 +42,6 @@
 				)
 			}}
 		</v-btn>
-
 		<v-btn
 			v-if="isShowEndButton"
 			class="my-5 button-end"
@@ -55,7 +57,6 @@
 				)
 			}}
 		</v-btn>
-
 		<v-switch
 			v-show="isShowMandatorySwitch"
 			:label="
@@ -72,13 +73,12 @@
 			class="ml-1"
 			data-testid="migration-mandatory-switch"
 			@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
-		></v-switch>
-
-		<p
+		/>
+		<RenderHTML
 			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
-			v-html="
+			:html="
 				t(finalFinishText, {
 					date: dayjs(oauthMigration.oauthMigrationFinished).format(
 						'DD.MM.YYYY'
@@ -92,27 +92,31 @@
 					),
 				})
 			"
-		></p>
-
+			component="p"
+		/>
 		<migration-warning-card
 			value="start"
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
 			@set="setMigration(true, false)"
-		></migration-warning-card>
-
+		/>
 		<migration-warning-card
 			value="end"
 			v-if="isShowEndWarning"
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
-		></migration-warning-card>
+		/>
 	</div>
 </template>
 
 <script lang="ts">
+import { MigrationBody } from "@/serverApi/v3";
+import SchoolsModule from "@/store/schools";
+import { OauthMigration, School } from "@/store/types/schools";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
@@ -123,20 +127,18 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
-import { MigrationBody } from "@/serverApi/v3";
-import dayjs from "dayjs";
-import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
 	components: {
 		MigrationWarningCard,
+		RenderHTML,
 	},
 	setup() {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {

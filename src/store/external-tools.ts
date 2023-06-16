@@ -2,7 +2,6 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
-	ToolConfigurationScope,
 	ToolConfigurationTemplate,
 } from "./external-tool";
 import { $axios } from "@/utils/api";
@@ -180,7 +179,6 @@ export default class ExternalToolsModule extends VuexModule {
 			if (authModule.getUser?.schoolId) {
 				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
 					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
-						ToolConfigurationScope.school,
 						authModule.getUser.schoolId
 					);
 

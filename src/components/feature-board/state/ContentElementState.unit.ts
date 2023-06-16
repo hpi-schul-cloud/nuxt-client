@@ -1,9 +1,6 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useContentElementState } from "./ContentElementState.composable";
-
-let wrapper: Wrapper<Vue>;
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
@@ -29,22 +26,6 @@ const TEST_ELEMENT: RichTextElementResponse = {
 // 		return {};
 // 	},
 // }));
-
-const mountComposable = <R>(composable: () => R): R => {
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
 
 describe("useContentElementState composable", () => {
 	it("should unwrap element model data", async () => {

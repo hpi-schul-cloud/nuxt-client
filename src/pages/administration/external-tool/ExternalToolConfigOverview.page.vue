@@ -1,11 +1,11 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tool.title')"
+		:headline="$t('pages.tool.title').toString()"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<p v-html="$t('pages.tool.description')"></p>
-		<v-spacer class="mt-10"></v-spacer>
+		<RenderHTML :html="$t('pages.tool.description').toString()" component="p" />
+		<v-spacer class="mt-10" />
 		<v-select
 			:label="$t('pages.tool.select.label')"
 			item-title="name"
@@ -31,9 +31,7 @@
 			</template>
 		</v-select>
 		<template v-if="toolTemplate && toolTemplate.parameters.length > 0">
-			<external-tool-config-settings
-				v-model="toolTemplate"
-			></external-tool-config-settings>
+			<external-tool-config-settings v-model="toolTemplate" />
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
@@ -68,40 +66,41 @@
 </template>
 
 <script lang="ts">
-import VueI18n from "vue-i18n";
-import VueRouter from "vue-router";
+import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	onMounted,
-	ref,
-	Ref,
-} from "vue";
-import { BusinessError } from "@/store/types/commons";
 import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
 	ToolParameter,
 } from "@/store/external-tool";
-import { useRouter } from "vue-router/composables";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import ExternalToolConfigSettings from "@/components/administration/external-tool/ExternalToolConfigSettings.vue";
 import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
-import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
+import { BusinessError } from "@/store/types/commons";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ComputedRef,
+	Ref,
+	computed,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+} from "vue";
+import VueRouter from "vue-router";
+import { useRouter } from "vue-router/composables";
+import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigOverview",
 	components: {
 		DefaultWireframe,
 		ExternalToolConfigSettings,
 		ExternalToolSelectionRow,
+		RenderHTML,
 	},
 	props: {
 		configId: {
@@ -109,7 +108,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
 		if (!i18n || !externalToolsModule) {
