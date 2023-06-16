@@ -1,7 +1,7 @@
 <template>
 	<v-chip-group>
 		<v-chip class="ma-2" small disabled>{{ fileExtension }}</v-chip>
-		<v-chip class="ma-2" small disabled> {{ fileSize }} </v-chip>
+		<v-chip class="ma-2" small disabled> {{ humanReadableFileSize }} </v-chip>
 	</v-chip-group>
 </template>
 
@@ -15,27 +15,25 @@ import {
 export default defineComponent({
 	name: "FileContentElementChips",
 	props: {
-		fileRecordSize: {
+		fileSize: {
 			type: Number,
 			required: true,
 		},
-		fileRecordName: {
+		fileName: {
 			type: String,
 			required: true,
 		},
 	},
 
 	setup(props) {
-		const fileSize = computed(() =>
-			convertFileSizeToHumanReadable(props.fileRecordSize)
+		const humanReadableFileSize = computed(() =>
+			convertFileSizeToHumanReadable(props.fileSize)
 		);
 
-		const fileExtension = computed(() =>
-			getFileExtension(props.fileRecordName)
-		);
+		const fileExtension = computed(() => getFileExtension(props.fileName));
 
 		return {
-			fileSize,
+			humanReadableFileSize,
 			fileExtension,
 		};
 	},

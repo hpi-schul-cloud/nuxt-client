@@ -13,8 +13,8 @@
 				@update:caption="($event) => (modelValue.caption = $event)"
 			></FileContentElementEdit>
 			<FileContentElementChips
-				:fileRecordSize="fileRecordModel.size"
-				:fileRecordName="fileRecordModel.name"
+				:fileSize="fileRecordModel.size"
+				:fileName="fileRecordModel.name"
 			/>
 		</div>
 		<v-card-text v-else>
