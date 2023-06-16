@@ -288,7 +288,7 @@ export const routes: Array<RouteConfig> = [
 		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 	{
-		path: `/h5p/editor/:id(${REGEX_H5P_ID})`,
+		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
 		component: () => import("../pages/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		//beforeEnter: createPermissionGuard(["H5P"]),
