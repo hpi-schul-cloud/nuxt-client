@@ -426,6 +426,7 @@ describe("FileContentElement", () => {
 		it("should emit delete:element event", async () => {
 			const { wrapper, fileRecordResponse, element } = setup(true);
 			await nextTick();
+			await wrapper.setData({ fileRecordModel: fileRecordResponse });
 
 			const childComponent = wrapper.findComponent(FileContentElementEdit);
 			childComponent.vm.$emit("delete:element");
