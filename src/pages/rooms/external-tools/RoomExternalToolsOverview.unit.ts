@@ -1,12 +1,12 @@
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
-import { ExternalToolDisplayData } from "../../../store/external-tool/external-tool-display-data";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
-import { externalToolDisplayDataFactory } from "../../../../tests/test-utils/factory/externalToolDisplayDataFactory";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
 

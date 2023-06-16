@@ -6,6 +6,8 @@ import flushPromises from "flush-promises";
 import Vue from "vue";
 import {
 	businessErrorFactory,
+	contextExternalToolTemplateListItemFactory,
+	externalToolDisplayDataFactory,
 	toolConfigurationFactory,
 	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
@@ -14,8 +16,8 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "@/store/context-external-tool";
-import { contextExternalToolTemplateListItemFactory } from "../../../tests/test-utils/factory/contextExternalToolTemplateListItemFactory";
-import { SchoolToolConfigurationTemplate } from "@/store/external-tool/school-tool-configuration-template";
+import { ToolConfigurationTemplate } from "@/store/external-tool";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -31,18 +33,20 @@ describe("ContextExternalToolConfiguration", () => {
 
 	const getWrapper = async (
 		getters: Partial<ExternalToolsModule> = {},
+		Contextgetters: Partial<ContextExternalToolsModule> = {},
 		propsData: { contextId: string; contextType: ToolContextType }
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory.build()],
+			getContextExternalToolTemplates: [
+				contextExternalToolTemplateListItemFactory.build(),
+			],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
 		contextExternalToolsModule = createModuleMocks(ContextExternalToolsModule, {
-			getSchoolToolConfigurations: [
-				contextExternalToolTemplateListItemFactory.build(),
-			],
+			getExternalToolDisplayDataList: [externalToolDisplayDataFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
@@ -69,12 +73,15 @@ describe("ContextExternalToolConfiguration", () => {
 			{
 				...createComponentMocks({
 					i18n: true,
+					mocks: {
+						$t: (key: string): string => key,
+					},
 				}),
 				provide: {
-					i18n: { t: (key: string) => key },
 					externalToolsModule,
 					contextExternalToolsModule,
 					roomsModule,
+					[I18N_KEY as symbol]: { t: (key: string) => key },
 				},
 				propsData: {
 					...propsData,
@@ -94,113 +101,154 @@ describe("ContextExternalToolConfiguration", () => {
 	};
 
 	describe("basic functions", () => {
-		it("should render component", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
-			expect(
-				wrapper.findComponent(ContextExternalToolConfiguration).exists()
-			).toBe(true);
+		describe("when loaded", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
+
+				return { wrapper };
+			};
+			it("should render component", async () => {
+				const { wrapper } = await setup();
+
+				expect(
+					wrapper.findComponent(ContextExternalToolConfiguration).exists()
+				).toBe(true);
+			});
 		});
 	});
 
 	describe("t", () => {
-		it("should return translation", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
-			const testKey = "testKey";
+		describe("when known translation key is given", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
+				const testKey = "testKey";
 
-			const result: string = wrapper.vm.t(testKey);
+				return { wrapper, testKey };
+			};
+			it("should return translation", async () => {
+				const { wrapper, testKey } = await setup();
 
-			expect(result).toEqual(testKey);
+				const result: string = wrapper.vm.t(testKey);
+
+				expect(result).toEqual(testKey);
+			});
 		});
 
-		it("should return 'unknown translation-key'", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
-			const testKey = 123;
+		describe("when known translation key is given", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
+				const testKey = 123;
 
-			const result: string = wrapper.vm.t(testKey);
+				return { wrapper, testKey };
+			};
+			it("should return 'unknown translation-key'", async () => {
+				const { wrapper, testKey } = await setup();
 
-			expect(result.includes("unknown translation-key:")).toBeTruthy();
+				const result: string = wrapper.vm.t(testKey);
+
+				expect(result.includes("unknown translation-key:")).toBeTruthy();
+			});
 		});
 	});
 
 	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
+		describe("when page is loaded", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
+				return { wrapper };
+			};
+			it("should render static breadcrumbs", async () => {
+				const { wrapper } = await setup();
 
-			expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
-			expect(breadcrumbs.at(1).text()).toEqual("Mathematik");
+				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
+
+				expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
+				expect(breadcrumbs.at(1).text()).toEqual("Mathematik");
+			});
 		});
 	});
 
 	describe("title", () => {
-		it("should render title", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
-			expect(wrapper.find(".wireframe-header").text()).toContain(
-				wrapper.vm.$i18n.t("pages.tool.context.title")
-			);
+		describe("when page is loaded", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
+
+				return { wrapper };
+			};
+			it("should render title", async () => {
+				const { wrapper } = await setup();
+
+				expect(wrapper.find(".wireframe-header").text()).toContain(
+					wrapper.vm.$i18n.t("pages.tool.context.title")
+				);
+			});
 		});
 	});
 
 	describe("select", () => {
 		describe("when creating a new configuration", () => {
-			const openSelect = async (wrapper: Wrapper<any>) => {
-				await wrapper
-					.find('[data-testid="configuration-select"]')
-					.trigger("click");
-				await wrapper
-					.find(".menuable__content__active")
-					.findAll(".v-list-item")
-					.at(0)
-					.trigger("click");
-				await Vue.nextTick();
-			};
-
-			it("should display name and logo of an tool configuration in selection list", async () => {
+			const setup = async () => {
 				const name = "nameForSelect";
+				const id = "expectedToolId";
+
 				const { wrapper } = await getWrapper(
 					{
-						getSchoolToolConfigurations: [
-							contextExternalToolTemplateListItemFactory.build({
-								name,
-							}),
+						getContextExternalToolTemplates: [
+							contextExternalToolTemplateListItemFactory.build({ name, id }),
 						],
 					},
+					{},
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
 
-				await openSelect(wrapper);
+				const openSelect = async (wrapper: Wrapper<any>) => {
+					await wrapper
+						.find('[data-testid="configuration-select"]')
+						.trigger("click");
+					await wrapper
+						.find(".menuable__content__active")
+						.findAll(".v-list-item")
+						.at(0)
+						.trigger("click");
+					await Vue.nextTick();
+				};
 
+				return { wrapper, openSelect, name, id };
+			};
+
+			it("should display name and logo of an tool configuration in selection list", async () => {
+				const { wrapper, openSelect, name } = await setup();
+
+				await openSelect(wrapper);
 				const selectionRow = wrapper.find(".row");
+
 				expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
 				expect(selectionRow.find("span").text().includes(name));
 			});
 
 			it("should load template when tool configuration was changed", async () => {
-				const id = "expectedToolId";
-				const { wrapper } = await getWrapper(
-					{
-						getSchoolToolConfigurations: [
-							contextExternalToolTemplateListItemFactory.build({ id }),
-						],
-					},
-					{ contextId: "contextId", contextType: ToolContextType.COURSE }
-				);
+				const { wrapper, openSelect, id } = await setup();
 
 				await openSelect(wrapper);
 
@@ -212,60 +260,73 @@ describe("ContextExternalToolConfiguration", () => {
 	});
 
 	describe("cancel button", () => {
-		it("should change page when cancel button was clicked", async () => {
-			const { wrapper } = await getWrapper(
-				{},
-				{ contextId: "contextId", contextType: ToolContextType.COURSE }
-			);
+		describe(" when cancel button was clicked", () => {
+			const setup = async () => {
+				const { wrapper } = await getWrapper(
+					{},
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
+				);
 
-			await wrapper.find('[data-testid="cancel-button"]').trigger("click");
+				return { wrapper };
+			};
+			it("should change page", async () => {
+				const { wrapper } = await setup();
 
-			expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-				path: "/rooms/contextId",
+				await wrapper.find('[data-testid="cancel-button"]').trigger("click");
+
+				expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+					path: "/rooms/contextId",
+				});
 			});
 		});
 	});
 
 	describe("save button", () => {
-		describe("when creating a new configuration", () => {
-			const openSelect = async (wrapper: Wrapper<any>) => {
-				await wrapper
-					.find('[data-testid="configuration-select"]')
-					.trigger("click");
-				await wrapper
-					.find(".menuable__content__active")
-					.findAll(".v-list-item")
-					.at(0)
-					.trigger("click");
-				await Vue.nextTick();
-			};
-			it("should call store action to save tool", async () => {
-				const id = "expectedToolId";
+		describe("when creating a correct new configuration", () => {
+			const setup = async () => {
 				const { wrapper } = await getWrapper(
 					{
-						getSchoolToolConfigurations: [
-							contextExternalToolTemplateListItemFactory.build({ id }),
+						getContextExternalToolTemplates: [
+							contextExternalToolTemplateListItemFactory.build(),
 						],
+						getBusinessError: businessErrorFactory.build({
+							message: undefined,
+						}),
 					},
-					{
-						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
-					}
+					{},
+					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
+
 				externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
 					toolConfigurationTemplateFactory.build()
 				);
+				const openSelect = async (wrapper: Wrapper<any>) => {
+					await wrapper
+						.find('[data-testid="configuration-select"]')
+						.trigger("click");
+					await wrapper
+						.find(".menuable__content__active")
+						.findAll(".v-list-item")
+						.at(0)
+						.trigger("click");
+					await Vue.nextTick();
+				};
+
+				return { wrapper, openSelect };
+			};
+			it("should call store action to save tool", async () => {
+				const { wrapper, openSelect } = await setup();
 
 				await openSelect(wrapper);
-				const schoolToolTemplate: SchoolToolConfigurationTemplate = {
-					schoolToolId: "schoolToolId",
-					...wrapper.vm.toolTemplate,
-				};
+				const toolTemplate: ToolConfigurationTemplate = wrapper.vm.toolTemplate; //TODO N21-575 payload ins setup
 				const payload = {
-					toolTemplate: schoolToolTemplate,
+					toolTemplate: toolTemplate,
+					schoolToolId: "schoolToolId",
 					contextId: "contextId",
 					contextType: ToolContextType.COURSE,
 				};
+
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.trigger("click");
 
@@ -275,17 +336,12 @@ describe("ContextExternalToolConfiguration", () => {
 			});
 
 			it("should redirect back to context page when there is no error", async () => {
-				const { wrapper } = await getWrapper(
-					{
-						getBusinessError: businessErrorFactory.build({
-							message: undefined,
-						}),
-					},
-					{ contextId: "contextId", contextType: ToolContextType.COURSE }
-				);
+				const { wrapper, openSelect } = await setup();
 
+				await openSelect(wrapper);
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.trigger("click");
+				await Vue.nextTick();
 
 				expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
 					path: "/rooms/contextId",
@@ -294,16 +350,24 @@ describe("ContextExternalToolConfiguration", () => {
 					},
 				});
 			});
+		});
 
-			it("should display alert when server side error on save occurred", async () => {
+		describe("when creating a falsy new configuration", () => {
+			const setup = async () => {
 				const { wrapper } = await getWrapper(
 					{
 						getBusinessError: businessErrorFactory.build({
 							message: "someErrorOccurred",
 						}),
 					},
+					{},
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
+
+				return { wrapper };
+			};
+			it("should display alert when server side error on save occurred", async () => {
+				const { wrapper } = await setup();
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.trigger("click");
