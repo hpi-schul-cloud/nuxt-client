@@ -1,13 +1,13 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item>
+		<v-list-item :href="url" download>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
 
 			<v-list-item-content>
 				<v-list-item-title style="color: var(--v-primary-base)">{{
-					fileRecord.name
+					fileName
 				}}</v-list-item-title>
 			</v-list-item-content>
 
@@ -38,12 +38,11 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { defineComponent, PropType } from "vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import {
+	mdiAlertCircle,
 	mdiFileDocumentOutline,
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
@@ -54,26 +53,24 @@ export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		caption: {
+		fileName: {
 			type: String,
 			required: true,
 		},
-		fileRecord: {
-			type: Object as PropType<FileRecordResponse>,
+		url: {
+			type: String,
 			required: true,
 		},
 	},
 	emits: ["delete:element", "update:caption"],
 	setup(props, { emit }) {
-		const modelCaption = useVModel(props, "caption", emit);
-
 		const onDelete = () => {
 			emit("delete:element");
 		};
 
 		return {
+			mdiAlertCircle,
 			mdiFileDocumentOutline,
-			modelCaption,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,

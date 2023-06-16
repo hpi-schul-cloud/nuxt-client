@@ -1,6 +1,6 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiFormatSize, mdiUpload } from "@mdi/js";
+import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useFileStorageApi } from "./FileStorageApi.composable";
@@ -39,13 +39,13 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 
 	const options = [
 		{
-			icon: mdiFormatSize,
+			icon: mdiFormatText,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
 			action: createTextElement,
 			testId: "create-element-text",
 		},
 		{
-			icon: mdiUpload,
+			icon: mdiTrayArrowUp,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: openFilePicker,
 			testId: "create-element-file",
