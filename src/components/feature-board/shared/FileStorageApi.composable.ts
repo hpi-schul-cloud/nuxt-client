@@ -9,6 +9,7 @@ import {
 import { authModule } from "@/store/store-accessor";
 import { BusinessError } from "@/store/types/commons";
 import { $axios } from "@/utils/api";
+import { delay } from "@/utils/helpers";
 import { ref } from "vue";
 
 export const useFileStorageApi = (
@@ -73,17 +74,17 @@ export const useFileStorageApi = (
 		refreshTimer = 0
 	): Promise<FileRecordResponse | undefined> => {
 		if (
-			fileRecord.value &&
+			!fileRecord.value ||
 			fileRecord.value?.securityCheckStatus !== FileRecordScanStatus.PENDING
 		) {
 			return;
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, waitTime));
+		await delay(waitTime);
 
 		await fetchFile();
 
-		if (refreshTimer <= waitTimeMax) {
+		if (refreshTimer < waitTimeMax) {
 			refreshTimer = refreshTimer + waitTime;
 
 			await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
