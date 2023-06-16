@@ -20,19 +20,18 @@
 </template>
 
 <script lang="ts">
+import {
+	FileRecordParentType,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, ref, onMounted, computed } from "vue";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useFileStorageApi } from "../shared/FileStorageApi.composable";
+import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import {
-	FileRecordParentType,
-	FileRecordResponse,
-	FileRecordScanStatus,
-} from "@/fileStorageApi/v3";
-import { useSelectedFile } from "../shared/SelectedFile.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -47,21 +46,13 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, upload, fetchFileRecursively } = useFileStorageApi(
-			props.element.id,
-			FileRecordParentType.BOARDNODES
-		);
+		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
+			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
-		const fileRecord = ref<FileRecordResponse>();
 
 		const isBlocked = computed(
 			() =>
 				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
-		);
-
-		const isPending = computed(
-			() =>
-				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.PENDING
 		);
 
 		const url = computed(() => (!isBlocked.value ? fileRecord.value?.url : ""));
@@ -80,12 +71,10 @@ export default defineComponent({
 
 		const tryUpload = async (file: File) => {
 			try {
-				const uploadedFileRecord = await upload(file);
-				if (uploadedFileRecord) {
-					fileRecord.value = uploadedFileRecord;
-					setSelectedFile();
-					await checkSecurityStatus();
-				}
+				await upload(file);
+
+				setSelectedFile();
+				await fetchPendingFileRecursively();
 			} catch (error) {
 				//Remove element
 				setSelectedFile();
@@ -93,20 +82,8 @@ export default defineComponent({
 		};
 
 		const getFileRecord = async () => {
-			if (!fileRecord.value) {
-				const fileRecords = await fetchFiles();
-
-				if (fileRecords) {
-					fileRecord.value = fileRecords[0];
-					await checkSecurityStatus();
-				}
-			}
-		};
-
-		const checkSecurityStatus = async () => {
-			if (isPending.value) {
-				fileRecord.value = await fetchFileRecursively();
-			}
+			await fetchFile();
+			await fetchPendingFileRecursively();
 		};
 
 		return {

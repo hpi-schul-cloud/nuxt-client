@@ -1,12 +1,13 @@
 import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { jest } from "@jest/globals";
 import { ref } from "vue";
 
 interface Props {
 	uploadMock?: jest.Mock;
-	fetchFilesMock?: jest.Mock;
-	fetchFileRecursivelyMock?: jest.Mock;
+	fetchFileMock?: jest.Mock;
+	fetchPendingFileRecursivelyMock?: jest.Mock;
 	renameMock?: jest.Mock;
 	getFileMock?: jest.Mock;
 	refreshFileMock?: jest.Mock;
@@ -14,17 +15,19 @@ interface Props {
 
 export const setupFileStorageApiMock = (props: Props = {}) => {
 	const {
-		fetchFilesMock,
-		fetchFileRecursivelyMock,
+		fetchFileMock,
+		fetchPendingFileRecursivelyMock,
 		renameMock,
 		uploadMock,
 		getFileMock,
 		refreshFileMock,
 	} = props;
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
+	const fileRecord = ref<FileRecordResponse>();
 
-	const fetchFiles = fetchFilesMock ?? jest.fn();
-	const fetchFileRecursively = fetchFileRecursivelyMock ?? jest.fn();
+	const fetchFile = fetchFileMock ?? jest.fn();
+	const fetchPendingFileRecursively =
+		fetchPendingFileRecursivelyMock ?? jest.fn();
 	const rename = renameMock ?? jest.fn();
 	const upload = uploadMock ?? jest.fn();
 	const getFile = getFileMock ?? jest.fn();
@@ -36,13 +39,14 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 	});
 
 	const mocks = {
-		fetchFiles,
-		fetchFileRecursively,
+		fetchFile,
+		fetchPendingFileRecursively,
 		rename,
 		upload,
 		getFile,
 		refreshFile,
 		businessError,
+		fileRecord,
 	};
 
 	mockedFileStorageApi.mockReturnValue(mocks);

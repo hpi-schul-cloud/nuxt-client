@@ -16,26 +16,25 @@ export const useFileStorageApi = (
 	parentType: FileRecordParentType
 ) => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
+	const fileRecord = ref<FileRecordResponse>();
 
 	const businessError = ref<BusinessError>({
 		statusCode: "",
 		message: "",
 	});
 
-	const fetchFiles = async (): Promise<FileRecordResponse[] | undefined> => {
+	const fetchFile = async (): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
-			return response.data.data;
+			fileRecord.value = response.data.data[0];
 		} catch (error) {
 			setBusinessError(error as BusinessError);
 		}
 	};
 
-	const upload = async (
-		file: File
-	): Promise<FileRecordResponse | undefined> => {
+	const upload = async (file: File): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.upload(
@@ -45,7 +44,7 @@ export const useFileStorageApi = (
 				file
 			);
 
-			return response.data;
+			fileRecord.value = response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
 		}
@@ -54,11 +53,11 @@ export const useFileStorageApi = (
 	const rename = async (
 		fileRecordId: FileRecordResponse["id"],
 		params: RenameFileParams
-	): Promise<FileRecordResponse | void> => {
+	): Promise<void> => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			return response.data;
+			fileRecord.value = response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
 		}
@@ -68,38 +67,35 @@ export const useFileStorageApi = (
 		businessError.value = error;
 	};
 
-	const fetchFileRecursively = async (
+	const fetchPendingFileRecursively = async (
 		waitTime = 10000,
 		waitTimeMax = 50000,
 		refreshTimer = 0
 	): Promise<FileRecordResponse | undefined> => {
-		let fileRecord: FileRecordResponse | undefined;
-
-		await new Promise((resolve) => setTimeout(resolve, waitTime));
-		const result = await fetchFiles();
-		if (result) {
-			fileRecord = result[0];
-			if (
-				fileRecord?.securityCheckStatus === FileRecordScanStatus.PENDING &&
-				refreshTimer <= waitTimeMax
-			) {
-				refreshTimer = refreshTimer + waitTime;
-				fileRecord = await fetchFileRecursively(
-					waitTime,
-					waitTimeMax,
-					refreshTimer
-				);
-			}
+		if (
+			fileRecord.value &&
+			fileRecord.value?.securityCheckStatus !== FileRecordScanStatus.PENDING
+		) {
+			return;
 		}
 
-		return fileRecord;
+		await new Promise((resolve) => setTimeout(resolve, waitTime));
+
+		await fetchFile();
+
+		if (refreshTimer <= waitTimeMax) {
+			refreshTimer = refreshTimer + waitTime;
+
+			await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
+		}
 	};
 
 	return {
-		fetchFiles,
-		fetchFileRecursively,
+		fetchFile,
+		fetchPendingFileRecursively,
 		rename,
 		upload,
 		businessError,
+		fileRecord,
 	};
 };
