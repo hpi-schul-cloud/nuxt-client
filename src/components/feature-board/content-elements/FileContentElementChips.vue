@@ -1,7 +1,7 @@
 <template>
 	<v-chip-group>
-		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
-		<v-chip class="ma-2" small> {{ fileSize }} </v-chip>
+		<v-chip class="ma-2" small disabled>{{ fileExtension }}</v-chip>
+		<v-chip class="ma-2" small disabled> {{ fileSize }} </v-chip>
 	</v-chip-group>
 </template>
 
@@ -41,3 +41,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.v-chip {
+	opacity: 1;
+}
+</style>
