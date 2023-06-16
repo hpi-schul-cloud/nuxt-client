@@ -9,6 +9,10 @@ import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
+import {
+	contextExternalToolsModule,
+	externalToolsModule,
+} from "../../../store";
 
 describe("RoomExternalToolOverview", () => {
 	const getWrapper = (tools: ExternalToolDisplayData[]) => {
@@ -131,7 +135,68 @@ describe("RoomExternalToolOverview", () => {
 		});
 	});
 
-	//TODO N21-575 test deleting a tool
+	describe("when clicking on confirm button of delete dialog", () => {
+		const setup = async () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const { wrapper } = getWrapper([tool]);
+
+			return {
+				tool,
+				wrapper,
+			};
+		};
+
+		it("should call delete function of store", async () => {
+			const { wrapper, tool } = await setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.trigger("delete");
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
+			const deleteCard = wrapper.find(".v-dialog--active");
+
+			const confirmBtn = deleteCard.find('[data-testid="dialog-confirm"]');
+			await confirmBtn.trigger("click");
+
+			expect(
+				contextExternalToolsModule.deleteContextExternalTool
+			).toHaveBeenCalledWith(tool.id);
+			expect(deleteDialog.isVisible()).toEqual(false);
+		});
+	});
+
+	describe("when clicking on cancel button of delete dialog", () => {
+		const setup = async () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const { wrapper } = getWrapper([tool]);
+
+			return {
+				tool,
+				wrapper,
+			};
+		};
+		it("should close dialog", async () => {
+			const { wrapper } = await setup();
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.trigger("delete");
+			const deleteDialog = wrapper.find("[data-testId=delete-dialog]");
+
+			const cancelBtn = wrapper.find("[data-testId=dialog-cancel]");
+			await cancelBtn.trigger("click");
+
+			expect(
+				contextExternalToolsModule.deleteContextExternalTool
+			).not.toHaveBeenCalled();
+			expect(deleteDialog.isVisible()).toEqual(false);
+		});
+	});
 
 	describe("when clicking on a tool", () => {
 		const setup = () => {
