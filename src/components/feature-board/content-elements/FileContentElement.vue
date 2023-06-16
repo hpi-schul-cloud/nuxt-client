@@ -82,7 +82,9 @@ export default defineComponent({
 		);
 
 		const url = computed(() =>
-			!isBlocked.value ? fileRecordModel.value?.url : ""
+			!isBlocked.value && fileRecordModel.value?.url
+				? fileRecordModel.value?.url
+				: ""
 		);
 
 		onMounted(() => {
@@ -121,7 +123,7 @@ export default defineComponent({
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			event.preventDefault();
-			emit("move-keyboard:edit", props.element.id, event);
+			emit("move-keyboard:edit", event);
 		};
 
 		const onMoveFileEditDown = () => {

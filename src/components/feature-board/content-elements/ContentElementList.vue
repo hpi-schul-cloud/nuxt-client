@@ -1,6 +1,6 @@
 <template>
 	<VCardText>
-		<template v-for="element in elements">
+		<template v-for="(element, index) in elements">
 			<RichTextContentElement
 				v-if="isRichTextElementResponse(element)"
 				:key="element.id"
@@ -15,9 +15,9 @@
 				:isFirstElement="isFirstElement(element.id)"
 				:isLastElement="isLastElement(element.id)"
 				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard"
-				@move-down:edit="onMoveElementDown(element.id)"
-				@move-up:edit="onMoveElementUp(element.id)"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
 			/>
 		</template>
 	</VCardText>
@@ -31,6 +31,7 @@ import {
 } from "@/serverApi/v3";
 import { computed, defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
+import { ElementMove } from "../types/DragAndDrop";
 import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
@@ -64,16 +65,38 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onMoveElementDown = (elementId: string) => {
-			emit("move-down:element", elementId);
+		const onMoveElementDown = (
+			elementIndex: number,
+			element: AnyContentElement
+		) => {
+			const elementMove: ElementMove = {
+				elementIndex,
+				payload: element.id,
+			};
+			emit("move-down:element", elementMove);
 		};
 
-		const onMoveElementUp = (elementId: string) => {
-			emit("move-up:element", elementId);
+		const onMoveElementUp = (
+			elementIndex: number,
+			element: AnyContentElement
+		) => {
+			const elementMove: ElementMove = {
+				elementIndex,
+				payload: element.id,
+			};
+			emit("move-up:element", elementMove);
 		};
 
-		const onMoveElementKeyboard = (elementId: string, event: KeyboardEvent) => {
-			emit("move-keyboard:element", elementId, event.code);
+		const onMoveElementKeyboard = (
+			elementIndex: number,
+			element: AnyContentElement,
+			event: KeyboardEvent
+		) => {
+			const elementMove: ElementMove = {
+				elementIndex,
+				payload: element.id,
+			};
+			emit("move-keyboard:element", elementMove, event.code);
 		};
 
 		const hasMultipleElements = computed(() => props.elements.length > 1);

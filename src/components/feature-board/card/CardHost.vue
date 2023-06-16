@@ -88,7 +88,11 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { DragAndDropKey, verticalCursorKeys } from "../types/DragAndDrop";
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "CardHost",
@@ -168,22 +172,22 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onMoveContentElementDown = async (elementId: string) =>
-			await moveElementDown(elementId);
+		const onMoveContentElementDown = async (payload: ElementMove) =>
+			await moveElementDown(payload);
 
-		const onMoveContentElementUp = async (elementId: string) =>
-			await moveElementUp(elementId);
+		const onMoveContentElementUp = async (payload: ElementMove) =>
+			await moveElementUp(payload);
 
 		const onMoveContentElementKeyboard = async (
-			elementId: string,
+			payload: ElementMove,
 			keyString: DragAndDropKey
 		) => {
 			if (verticalCursorKeys.includes(keyString)) {
 				const change = keyString === "ArrowUp" ? -1 : +1;
 				if (change === -1) {
-					await moveElementUp(elementId);
+					await moveElementUp(payload);
 				} else if (change === +1) {
-					await moveElementDown(elementId);
+					await moveElementDown(payload);
 				}
 			}
 		};

@@ -6,11 +6,15 @@ import {
 	useFocusWithin,
 } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
+import { AnyContentElement } from "../types/ContentElement";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
+import { FileElementResponse } from "@/serverApi/v3";
 
 export const useBoardFocusHandler = (
-	id: MaybeComputedRef<BoardColumn["id"] | BoardCard["id"]>,
+	id: MaybeComputedRef<
+		BoardColumn["id"] | BoardCard["id"] | FileElementResponse["id"]
+	>,
 	element: Ref<HTMLElement | undefined>
 ) => {
 	const { focused: isFocused } = useFocus(element);
@@ -52,12 +56,14 @@ export const useBoardFocusHandler = (
 };
 
 const useSharedFocusedId = createSharedComposable(() => {
-	const focusedId = ref<BoardColumn["id"] | BoardCard["id"] | undefined>(
-		undefined
-	);
+	const focusedId = ref<
+		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"] | undefined
+	>(undefined);
 
 	const announceFocusReceived = (
-		id: MaybeComputedRef<BoardColumn["id"] | BoardCard["id"]>
+		id: MaybeComputedRef<
+			BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
+		>
 	) => {
 		if (focusedId.value === id.valueOf()) {
 			return;
