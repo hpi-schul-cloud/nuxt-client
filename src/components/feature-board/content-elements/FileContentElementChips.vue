@@ -30,7 +30,9 @@ export default defineComponent({
 			convertFileSizeToHumanReadable(props.fileSize, 2)
 		);
 
-		const fileExtension = computed(() => getFileExtension(props.fileName));
+		const fileExtension = computed(() =>
+			getFileExtension(props.fileName).toUpperCase()
+		);
 
 		return {
 			humanReadableFileSize,

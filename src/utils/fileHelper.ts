@@ -75,7 +75,7 @@ export function convertFileSizeToHumanReadable(
 }
 
 export function getFileExtension(fileName: string): string {
-	const ext = fileName.substring(fileName.lastIndexOf(".") + 1).toUpperCase();
+	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 	return ext;
 }
