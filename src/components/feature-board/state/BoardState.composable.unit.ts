@@ -14,7 +14,7 @@ import {
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { Board } from "../types/Board";
-import { CardMove } from "../types/DragAndDrop";
+import { CardMove, ColumnMove } from "../types/DragAndDrop";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -37,7 +37,7 @@ describe("BoardState.composable", () => {
 	const column = columnResponseFactory.build({ cards: [card] });
 	let testBoard: Board;
 
-	const setup = (boardId = "123123") => {
+	const setup = (boardId = testBoard.id) => {
 		return mountComposable(() => useBoardState(boardId), {
 			[I18N_KEY as symbol]: { t: (key: string) => key },
 			notifierModule,
@@ -58,6 +58,7 @@ describe("BoardState.composable", () => {
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
+			moveColumnCall: jest.fn(),
 			updateColumnTitleCall: jest.fn(),
 		};
 		mockedUseBoardApi.mockReturnValue(
@@ -217,7 +218,7 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
 		});
 
-		it("should call moveCard with correct moveCardPayload", async () => {
+		it("should call moveCardCall", async () => {
 			const movingCard = cardSkeletonResponseFactory.build();
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall = jest
@@ -377,9 +378,62 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("moveColumn", () => {
-		test.todo("should call moveColumnCall");
-		test.todo("should not call moveColumnCall when board value is undefined");
-		test.todo("should generate and show error when there is an error code");
+		it("should not call moveColumnCall when board value is undefined", async () => {
+			const movingColumn = columnResponseFactory.build();
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				payload: movingColumn.id,
+			};
+			const { moveColumn, board } = setup();
+			board.value = undefined;
+
+			await moveColumn(payload);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.moveColumnCall).not.toHaveBeenCalled();
+		});
+
+		it("should call moveColumnCall", async () => {
+			const movingColumn = columnResponseFactory.build();
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				payload: movingColumn.id,
+			};
+			const { moveColumn, board } = setup();
+			board.value = testBoard;
+
+			await moveColumn(payload);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
+				payload.payload,
+				board.value.id,
+				payload.addedIndex
+			);
+		});
+
+		it("should generate and show error when there is an error code", async () => {
+			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
+			const movingColumn = columnResponseFactory.build();
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				payload: movingColumn.id,
+			};
+			const { moveColumn, board } = setup();
+			board.value = testBoard;
+
+			await moveColumn(payload);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
+				"update"
+			);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
 	});
 
 	describe("updateColumnTitle", () => {
@@ -429,14 +483,5 @@ describe("BoardState.composable", () => {
 
 	describe("getColumnId", () => {
 		test.todo("should get column id");
-	});
-
-	describe("getColumnIndex", () => {
-		test.todo("should get column index");
-	});
-
-	describe("showErrorAndReload", () => {
-		test.todo("should not show failure when board value undefined");
-		test.todo("should show failure and fetch board");
 	});
 });
