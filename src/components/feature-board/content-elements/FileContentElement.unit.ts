@@ -6,8 +6,10 @@ import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecor
 import { shallowMount } from "@vue/test-utils";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 jest.mock("../shared/FileStorageApi.composable");
 jest.mock("../shared/SelectedFile.composable");
 
@@ -33,18 +35,19 @@ describe("FileContentElement", () => {
 
 			const fileRecordResponse = fileRecordResponseFactory.build();
 			const file = new File([], "test");
-
-			const uploadMock = jest.fn().mockResolvedValueOnce(fileRecordResponse);
 			const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-
-			const { upload } = setupFileStorageApiMock({ uploadMock });
 			const { setSelectedFile } = setupSelectedFileMock({
 				getSelectedFileMock,
 			});
 
+			const uploadMock = jest.fn().mockImplementationOnce(() => {
+				fileRecord.value = fileRecordResponse;
+			});
+			const { upload, fileRecord } = setupFileStorageApiMock({ uploadMock });
+
 			const { wrapper } = getWrapper({ element, isEditMode });
 
-			return { wrapper, upload, setSelectedFile, file };
+			return { wrapper, upload, fileRecord, setSelectedFile, file };
 		};
 
 		describe("when component is not in edit mode", () => {
@@ -137,17 +140,17 @@ describe("FileContentElement", () => {
 			document.body.setAttribute("data-app", "true");
 
 			const fileRecordResponse = fileRecordResponseFactory.build();
-			const fetchFilesMock = jest
-				.fn()
-				.mockReturnValueOnce([fileRecordResponse]);
-			const { fetchFiles } = setupFileStorageApiMock({
-				fetchFilesMock,
+			const fetchFileMock = jest.fn().mockImplementationOnce(() => {
+				fileRecord.value = fileRecordResponse;
+			});
+			const { fetchFile, fileRecord } = setupFileStorageApiMock({
+				fetchFileMock,
 			});
 			setupSelectedFileMock();
 
 			const { wrapper } = getWrapper({ element, isEditMode });
 
-			return { wrapper, fetchFiles };
+			return { wrapper, fetchFile };
 		};
 
 		describe("when component is not in edit mode", () => {
@@ -158,7 +161,7 @@ describe("FileContentElement", () => {
 				expect(fileContentElement.exists()).toBe(true);
 			});
 
-			it.only("should render FileContentElementDisplay component", async () => {
+			it("should render FileContentElementDisplay component", async () => {
 				const { wrapper } = setup(false);
 
 				await wrapper.vm.$nextTick();
@@ -170,13 +173,13 @@ describe("FileContentElement", () => {
 				expect(fileContentElementDisplay.exists()).toBe(true);
 			});
 
-			it("should call fetchFiles", async () => {
-				const { wrapper, fetchFiles } = setup(false);
+			it("should call fetchFile", async () => {
+				const { wrapper, fetchFile } = setup(false);
 
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
 
-				expect(fetchFiles).toHaveBeenCalledTimes(1);
+				expect(fetchFile).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -196,6 +199,100 @@ describe("FileContentElement", () => {
 					FileContentElementEdit
 				);
 				expect(fileContentElementEdit.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("when a virus is detected", () => {
+		const setup = (isEditMode: boolean) => {
+			const element = fileElementResponse.build();
+			document.body.setAttribute("data-app", "true");
+
+			const fileRecordResponse = fileRecordResponseFactory.build({
+				securityCheckStatus: FileRecordScanStatus.BLOCKED,
+			});
+			const fetchFileMock = jest.fn().mockImplementationOnce(() => {
+				fileRecord.value = fileRecordResponse;
+			});
+			const { fileRecord } = setupFileStorageApiMock({
+				fetchFileMock,
+			});
+			setupSelectedFileMock();
+
+			const { wrapper } = getWrapper({ element, isEditMode });
+
+			return { wrapper, fileRecordResponse };
+		};
+
+		describe("when component is not in edit mode", () => {
+			it("should hand over correct file name to FileContentElementDisplay", async () => {
+				const { wrapper, fileRecordResponse } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const fileName = wrapper
+					.findComponent(FileContentElementDisplay)
+					.props("fileName");
+
+				expect(fileName).toBe(fileRecordResponse.name);
+			});
+
+			it("should hand over empty url to FileContentElementDisplay", async () => {
+				const { wrapper } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const url = wrapper
+					.findComponent(FileContentElementDisplay)
+					.props("url");
+
+				expect(url).toBe("");
+			});
+
+			it("should render FileContentElementAlert component", async () => {
+				const { wrapper } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const fileContentElementAlert = wrapper.findComponent(
+					FileContentElementAlert
+				);
+				expect(fileContentElementAlert.exists()).toBe(true);
+			});
+		});
+
+		describe("when component is in edit mode", () => {
+			it("should hand over correct file name to FileContentElementEdit", async () => {
+				const { wrapper, fileRecordResponse } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const fileName = wrapper
+					.findComponent(FileContentElementEdit)
+					.props("fileName");
+
+				expect(fileName).toBe(fileRecordResponse.name);
+			});
+
+			it("should hand over empty url to FileContentElementEdit", async () => {
+				const { wrapper } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const url = wrapper.findComponent(FileContentElementEdit).props("url");
+
+				expect(url).toBe("");
+			});
+
+			it("should render FileContentElementAlert component", async () => {
+				const { wrapper } = setup(true);
+
+				await wrapper.vm.$nextTick();
+
+				const fileContentElementAlert = wrapper.findComponent(
+					FileContentElementAlert
+				);
+				expect(fileContentElementAlert.exists()).toBe(true);
 			});
 		});
 	});
