@@ -1,14 +1,14 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecordModel">
+		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:fileName="fileRecordModel.name"
+				:fileName="fileRecord.name"
 				:url="url"
 			></FileContentElementDisplay>
 			<div v-if="isEditMode" tabindex="0" @keydown.up.down="onKeydownArrow">
 				<FileContentElementEdit
-					:fileName="fileRecordModel.name"
+					:fileName="fileRecord.name"
 					:url="url"
 					:isFirstElement="isFirstElement"
 					:isLastElement="isLastElement"
@@ -26,25 +26,18 @@
 </template>
 
 <script lang="ts">
-import { FileElementResponse } from "@/serverApi/v3";
 import {
-	computed,
-	defineComponent,
-	PropType,
-	watch,
-	ref,
-	onMounted,
-} from "vue";
+	FileRecordParentType,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
+import { FileElementResponse } from "@/serverApi/v3";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useFileStorageApi } from "../shared/FileStorageApi.composable";
+import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import {
-	FileRecordParentType,
-	FileRecordResponse,
-	FileRecordScanStatus,
-} from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -63,63 +56,47 @@ export default defineComponent({
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { getFile, fetchFileRecursively, refreshFile, newFileForParent } =
-			useFileStorageApi();
-
-		const fileRecordModel = ref<FileRecordResponse>();
-		const parentId = ref<string>("");
+		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
+			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
+		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 
 		const isBlocked = computed(
 			() =>
-				fileRecordModel.value?.securityCheckStatus ===
-				FileRecordScanStatus.BLOCKED
-		);
-
-		const isPending = computed(
-			() =>
-				fileRecordModel.value?.securityCheckStatus ===
-				FileRecordScanStatus.PENDING
+				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
 		);
 
 		const url = computed(() =>
-			!isBlocked.value && fileRecordModel.value?.url
-				? fileRecordModel.value?.url
-				: ""
+			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
 		);
 
 		onMounted(() => {
 			(async () => {
-				parentId.value = props.element.id;
-				fileRecordModel.value = getFile(parentId.value);
+				const file = getSelectedFile();
 
-				if (!fileRecordModel.value) {
-					fileRecordModel.value = await refreshFile(
-						parentId.value,
-						FileRecordParentType.BOARDNODES
-					);
-				}
-
-				if (isPending.value) {
-					fileRecordModel.value = await fetchFileRecursively(
-						parentId.value,
-						FileRecordParentType.BOARDNODES
-					);
+				if (file) {
+					await tryUpload(file);
+				} else {
+					await getFileRecord();
 				}
 			})();
 		});
 
-		watch(newFileForParent, async (newValue) => {
-			if (newValue === parentId.value) {
-				fileRecordModel.value = getFile(parentId.value);
+		const tryUpload = async (file: File) => {
+			try {
+				await upload(file);
 
-				if (isPending.value) {
-					fileRecordModel.value = await fetchFileRecursively(
-						parentId.value,
-						FileRecordParentType.BOARDNODES
-					);
-				}
+				setSelectedFile();
+				await fetchPendingFileRecursively();
+			} catch (error) {
+				//Remove element
+				setSelectedFile();
 			}
-		});
+		};
+
+		const getFileRecord = async () => {
+			await fetchFile();
+			await fetchPendingFileRecursively();
+		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			event.preventDefault();
@@ -136,7 +113,7 @@ export default defineComponent({
 		return {
 			isAutoFocus,
 			isBlocked,
-			fileRecordModel,
+			fileRecord,
 			modelValue,
 			onKeydownArrow,
 			onMoveFileEditDown,
