@@ -197,4 +197,72 @@ describe("ElementTypeSelection Composable", () => {
 			expect(isDialogOpen.value).toBe(false);
 		});
 	});
+
+	describe("elementTypeOptions actions", () => {
+		const setup = () => {
+			const addElementMock = jest.fn();
+			const closeDialogMock = jest.fn();
+			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
+				closeDialogMock,
+			});
+			setupFileStorageApiMock({});
+			setupSelectedFileMock({});
+
+			return { elementTypeOptions, addElementMock, closeDialogMock };
+		};
+
+		describe("when the first action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType } = useElementTypeSelection(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[0].action;
+				await action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(ContentElementType.RichText);
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useElementTypeSelection(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[0].action;
+				await action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+
+		describe("when the second action is called", () => {
+			it("should set isFilePickerOpen to true", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType, isFilePickerOpen } =
+					useElementTypeSelection(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[1].action;
+				await action();
+
+				expect(isFilePickerOpen.value).toBe(true);
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useElementTypeSelection(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[1].action;
+				await action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+	});
 });
