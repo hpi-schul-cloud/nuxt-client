@@ -1,4 +1,4 @@
-import { convertFileSizeToHumanReadable } from "./fileHelper";
+import { convertFileSizeToHumanReadable, getFileExtension } from "./fileHelper";
 
 describe("fileHelper", () => {
 	describe("convertFileSizeToHumanReadable", () => {
@@ -41,6 +41,32 @@ describe("fileHelper", () => {
 				const result = convertFileSizeToHumanReadable(666666, 3);
 
 				expect(result).toEqual("651,041 KB");
+			});
+		});
+	});
+
+	describe("getFileExtension", () => {
+		describe("when input string contains one dot", () => {
+			it("should return the part of the input string behing the last dot", () => {
+				const result = getFileExtension("test.ext");
+
+				expect(result).toEqual("ext");
+			});
+		});
+
+		describe("when input string contains several dots", () => {
+			it("should return the part of the input string behing the last dot", () => {
+				const result = getFileExtension("test.test.test.ext");
+
+				expect(result).toEqual("ext");
+			});
+		});
+
+		describe("when input string contains no dot", () => {
+			it("should return the input string", () => {
+				const result = getFileExtension("test");
+
+				expect(result).toEqual("test");
 			});
 		});
 	});
