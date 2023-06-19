@@ -17,6 +17,8 @@ const setup = (cardId = "123123") => {
 		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 	});
 };
+import { boardCardFactory } from "@@/tests/test-utils/factory";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
@@ -38,7 +40,8 @@ describe("CardState composable", () => {
 		mockedBoardApiCalls = {
 			updateCardTitle: jest.fn(),
 			createColumnCall: jest.fn(),
-			createElement: jest.fn().mockReturnValue({ id: "test-id" }),
+			createElementCall: jest.fn().mockReturnValue({ id: "test-id" }),
+			deleteElementCall: jest.fn(),
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
@@ -86,13 +89,7 @@ describe("CardState composable", () => {
 	});
 
 	describe("updateTitle", () => {
-		const boardCard: BoardCard = {
-			id: `cardid`,
-			height: 200,
-			title: "old Title",
-			elements: [],
-			visibility: { publishedAt: new Date().toUTCString() },
-		};
+		const boardCard = boardCardFactory.build();
 
 		it("should call updateCardTitle", async () => {
 			const { updateTitle, card } = setup(boardCard.id);
@@ -153,22 +150,16 @@ describe("CardState composable", () => {
 
 	describe("deleteCard", () => {
 		it("should call deleteCard", async () => {
-			const testCard = {
-				id: `cardid`,
-				height: 200,
-				title: "old Title",
-				elements: [],
-				visibility: { publishedAt: new Date().toUTCString() },
-			};
+			const boardCard = boardCardFactory.build();
 
-			const { deleteCard, card } = setup(testCard.id);
-			card.value = testCard;
+			const { deleteCard, card } = setup(boardCard.id);
+			card.value = boardCard;
 
 			await deleteCard();
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
-				testCard.id
+				boardCard.id
 			);
 		});
 
@@ -275,16 +266,10 @@ describe("CardState composable", () => {
 
 	describe("addElement", () => {
 		it("should call addElement", async () => {
-			const testCard = {
-				id: `cardid`,
-				height: 200,
-				title: "old Title",
-				elements: [],
-				visibility: { publishedAt: new Date().toUTCString() },
-			};
+			const boardCard = boardCardFactory.build();
 
-			const { addElement, card } = setup(testCard.id);
-			card.value = testCard;
+			const { addElement, card } = setup(boardCard.id);
+			card.value = boardCard;
 
 			const elementType: CreateContentElementBody = {
 				type: ContentElementType.RichText,
@@ -293,11 +278,11 @@ describe("CardState composable", () => {
 			await addElement(elementType.type);
 			await nextTick();
 
-			expect(mockedBoardApiCalls.createElement).toHaveBeenCalledWith(
-				testCard.id,
+			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalledWith(
+				boardCard.id,
 				elementType
 			);
-			expect(testCard.elements).toHaveLength(1);
+			expect(boardCard.elements).toHaveLength(1);
 		});
 
 		it("should not call addElement when card value is undefined", async () => {
@@ -311,11 +296,11 @@ describe("CardState composable", () => {
 			await addElement(elementType.type);
 			await nextTick();
 
-			expect(mockedBoardApiCalls.createElement).not.toHaveBeenCalled();
+			expect(mockedBoardApiCalls.createElementCall).not.toHaveBeenCalled();
 		});
 
 		it("should not add element when api response has error", async () => {
-			mockedBoardApiCalls.createElement = jest
+			mockedBoardApiCalls.createElementCall = jest
 				.fn()
 				.mockResolvedValue({ status: 300 });
 
@@ -338,6 +323,80 @@ describe("CardState composable", () => {
 			await nextTick();
 
 			expect(testCard.elements).toHaveLength(0);
+		});
+	});
+
+	describe("deleteElement", () => {
+		describe("when card state is undefined", () => {
+			const setup = () => {
+				const { deleteElement, card } = mountComposable(
+					() => useCardState("cardid"),
+					{
+						[I18N_KEY as symbol]: { t: (key: string) => key },
+						[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+					}
+				);
+				card.value = undefined;
+
+				return { deleteElement };
+			};
+
+			it("should not call deleteElement", async () => {
+				const { deleteElement } = setup();
+
+				await deleteElement("elementid");
+
+				expect(mockedBoardApiCalls.deleteElementCall).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when card state is defined", () => {
+			const setup = () => {
+				const { deleteElement, card } = mountComposable(
+					() => useCardState("cardid"),
+					{
+						[I18N_KEY as symbol]: { t: (key: string) => key },
+						[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+					}
+				);
+				const fileElementResponse = fileElementResponseFactory.build();
+				const fileElementResponse2 = fileElementResponseFactory.build();
+
+				const boardCard = boardCardFactory.build({
+					elements: [fileElementResponse, fileElementResponse2],
+				});
+				card.value = boardCard;
+
+				return {
+					deleteElement,
+					card,
+					fileElementResponse,
+					fileElementResponse2,
+				};
+			};
+
+			it("should call deleteElement", async () => {
+				const { deleteElement, fileElementResponse } = setup();
+
+				await deleteElement(fileElementResponse.id);
+
+				expect(mockedBoardApiCalls.deleteElementCall).toHaveBeenCalledWith(
+					fileElementResponse.id
+				);
+			});
+
+			it("should remove element from card", async () => {
+				const {
+					deleteElement,
+					card,
+					fileElementResponse,
+					fileElementResponse2,
+				} = setup();
+
+				await deleteElement(fileElementResponse.id);
+
+				expect(card.value?.elements).toEqual([fileElementResponse2]);
+			});
 		});
 	});
 });

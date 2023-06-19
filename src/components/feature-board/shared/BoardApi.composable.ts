@@ -89,7 +89,7 @@ export const useBoardApi = () => {
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
-	const createElement = async (
+	const createElementCall = async (
 		cardId: string,
 		params: CreateContentElementBody
 	): AxiosPromise<AnyContentElement> => {
@@ -99,6 +99,11 @@ export const useBoardApi = () => {
 	const deleteCardCall = async (cardId: string): Promise<number> => {
 		const response = await cardsApi.cardControllerDeleteCard(cardId);
 		return response.status;
+	};
+
+	const deleteElementCall = async (elementId: string) => {
+		const response = await elementApi.elementControllerDeleteElement(elementId);
+		return response;
 	};
 
 	const deleteColumnCall = async (columnId: string): Promise<number> => {
@@ -115,7 +120,7 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
-			await createElement(createdCard.data.id, {
+			await createElementCall(createdCard.data.id, {
 				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
@@ -148,7 +153,8 @@ export const useBoardApi = () => {
 
 	return {
 		createColumnCall,
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,

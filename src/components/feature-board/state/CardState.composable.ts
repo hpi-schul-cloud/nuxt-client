@@ -19,7 +19,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		updateCardHeightCall,
 		updateCardTitle,
@@ -77,7 +78,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const response = await createElement(cardState.card.id, { type });
+		const response = await createElementCall(cardState.card.id, { type });
 		if (isErrorCode(response.status)) {
 			await showErrorAndReload(generateErrorText("create", "boardElement"));
 			return;
@@ -93,6 +94,23 @@ export const useCardState = (id: BoardCard["id"]) => {
 		await fetchCard(cardState.card.id);
 	};
 
+	const deleteElement = async (elementId: string) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		await deleteElementCall(elementId);
+		extractElement(elementId);
+	};
+
+	const extractElement = (elementId: string): void => {
+		const index = cardState.card?.elements.findIndex((e) => e.id === elementId);
+
+		if (index !== undefined && index > -1) {
+			cardState.card?.elements.splice(index, 1);
+		}
+	};
+
 	onMounted(() => fetchCard(id));
 
 	return {
@@ -101,6 +119,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		fetchCard,
 		updateCardHeight,
 		updateTitle,
+		deleteElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};
