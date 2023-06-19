@@ -176,13 +176,13 @@ export default defineComponent({
 			payload: ElementMove,
 			keyString: DragAndDropKey
 		) => {
-			if (verticalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowUp" ? -1 : +1;
-				if (change === -1) {
-					await moveElementUp(payload);
-				} else if (change === +1) {
-					await moveElementDown(payload);
-				}
+			if (!verticalCursorKeys.includes(keyString)) {
+				return;
+			}
+			if (keyString === "ArrowUp") {
+				await moveElementUp(payload);
+			} else if (keyString === "ArrowDown") {
+				await moveElementDown(payload);
 			}
 		};
 
