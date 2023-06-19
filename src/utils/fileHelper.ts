@@ -18,7 +18,7 @@ export async function dataUrlToFile(
 
 export function convertFileSizeToHumanReadable(
 	fileSize: number,
-	numberOfDigits = 2
+	maximumFractionDigits = 2
 ): string {
 	const units = ["B", "KB", "MB", "GB"];
 	const threshold = 1024;
@@ -34,8 +34,7 @@ export function convertFileSizeToHumanReadable(
 	}
 
 	const localeString = convertedSize.toLocaleString("de-DE", {
-		minimumFractionDigits: numberOfDigits,
-		maximumFractionDigits: numberOfDigits,
+		maximumFractionDigits,
 	});
 
 	const humanReadableFileSize = localeString + " " + unit;
