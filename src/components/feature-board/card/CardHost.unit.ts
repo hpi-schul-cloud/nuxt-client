@@ -1,18 +1,22 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useCardState } from "../state/CardState.composable";
 import { BoardPermissionsTypes } from "../types/Board";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
 
 jest.mock("../shared/BoardPermissions.composable");
+jest.mock("../state/CardState.composable");
+jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedUseCardState = jest.mocked(useCardState);
 
 const defaultPermissions = {
 	hasDeletePermission: true,
@@ -38,14 +42,6 @@ const CARD_WITH_FILE_ELEMENT: BoardCard = {
 	elements: [fileElementResponseFactory.build()],
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
-
-jest.mock("../state/CardState.composable");
-const mockedUseCardState = jest.mocked(useCardState);
-
-jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
-const mockedDeleteBoardNodeConfirmation = jest.mocked(
-	useDeleteBoardNodeConfirmation
-);
 
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
@@ -75,11 +71,8 @@ describe("CardHost", () => {
 		});
 
 		const onDeleteElement = jest.fn();
-		const isDeleteDialogOpen = ref(false);
-		mockedDeleteBoardNodeConfirmation.mockReturnValue({
-			askDeleteBoardNodeConfirmation: jest.fn(),
-			isDeleteDialogOpen: isDeleteDialogOpen,
-		});
+
+		setupDeleteBoardNodeConfirmationMock();
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
