@@ -163,6 +163,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.content {
+	margin-top: var(--space-xl-3);
+}
+
 .editor-iframe {
 	height: 100%;
 	width: 100%;
@@ -171,10 +175,6 @@ export default defineComponent({
 	overflow: auto;
 	display: block;
 	margin: auto;
-}
-
-.inline {
-	min-height: calc(100vh - calc(64 * var(--border-width-bold)));
 }
 
 .column-layout {
