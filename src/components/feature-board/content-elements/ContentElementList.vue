@@ -12,8 +12,8 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				:isFirstElement="isFirstElement(element.id)"
-				:isLastElement="isLastElement(element.id)"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
@@ -101,41 +101,24 @@ export default defineComponent({
 
 		const hasMultipleElements = computed(() => props.elements.length > 1);
 
-		const isFirstElement = (elementId: string) => {
-			const elementIndex = props.elements.findIndex(
-				(element: AnyContentElement) => element.id === elementId
-			);
+		const firstElementId = computed<Element["id"] | null>(() =>
+			props.elements.length > 0 ? props.elements[0].id : null
+		);
 
-			if (elementIndex === -1) {
-				return false;
-			}
-
-			const isFirstElement = elementIndex === 0;
-			return isFirstElement;
-		};
-
-		const isLastElement = (elementId: string) => {
-			const elementIndex = props.elements.findIndex(
-				(element: AnyContentElement) => element.id === elementId
-			);
-
-			if (elementIndex === -1) {
-				return false;
-			}
-
+		const lastElementId = computed<Element["id"] | null>(() => {
 			const lastElementIndex = props.elements.length - 1;
-
-			const isLastElement = elementIndex === lastElementIndex;
-			return isLastElement;
-		};
+			return props.elements.length > 0
+				? props.elements[lastElementIndex].id
+				: null;
+		});
 
 		return {
 			ContentElementType,
+			firstElementId,
 			hasMultipleElements,
 			isFileElementResponse,
-			isFirstElement,
-			isLastElement,
 			isRichTextElementResponse,
+			lastElementId,
 			onMoveElementDown,
 			onMoveElementUp,
 			onMoveElementKeyboard,
