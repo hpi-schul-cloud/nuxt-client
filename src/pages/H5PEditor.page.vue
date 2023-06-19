@@ -14,18 +14,26 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<v-btn role="button" color="primary" @click="validateParams">Save</v-btn>
-			<iframe
-				v-if="!loading"
-				v-h5pResize="{ heightCalculationMethod: 'taggedElement' }"
-				ref="iframe"
-				:src="iframeSrc"
-				class="editor-iframe"
-				allowfullscreen
-				title="H5PEditor"
-				v-on:valid-params="onValidParams"
-				v-on:invalid-params="onInvalidParams"
-			></iframe>
+			<div v-if="!loading" class="column-layout">
+				<iframe
+					v-h5pResize="{ heightCalculationMethod: 'taggedElement' }"
+					ref="iframe"
+					:src="iframeSrc"
+					class="editor-iframe"
+					allowfullscreen
+					title="H5PEditor"
+					v-on:valid-params="onValidParams"
+					v-on:invalid-params="onInvalidParams"
+				></iframe>
+				<v-btn
+					role="button"
+					class="save-button"
+					color="primary"
+					@click="validateParams"
+				>
+					{{ $t("common.actions.save") }}
+				</v-btn>
+			</div>
 			<div v-else class="d-flex justify-center align-center min-height-screen">
 				<v-progress-circular indeterminate color="secondary" size="115" />
 			</div>
@@ -38,7 +46,8 @@ import { notifierModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mdiChevronLeft } from "@mdi/js";
 import { iframeResizer } from "iframe-resizer";
-import { defineComponent, ref } from "vue";
+import { defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
 import { useRoute, useRouter } from "vue-router/composables";
 
 type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
@@ -49,11 +58,25 @@ type ParamsInvalidEvent = CustomEvent<string>;
 export default defineComponent({
 	name: "H5PEditor",
 	setup() {
-		const iframe = ref<HTMLIFrameElement>();
+		const i18n = inject<VueI18n | undefined>("i18n");
+
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
+		const t = (key: string, values?: VueI18n.Values | undefined): string => {
+			const translateResult = i18n.t(key, values);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
 
 		const route = useRoute();
-
 		const router = useRouter();
+
+		const iframe = ref<HTMLIFrameElement>();
 
 		const contentId = route.params?.id ?? "";
 		const isInline = !!route.query?.inline;
@@ -65,10 +88,8 @@ export default defineComponent({
 		}
 
 		function onInvalidParams(event: ParamsInvalidEvent) {
-			console.error(event.detail);
-
 			notifierModule.show({
-				text: "Invalid",
+				text: t("common.validation.invalid"),
 				status: "error",
 				timeout: 10000,
 			});
@@ -98,7 +119,7 @@ export default defineComponent({
 				});
 			} catch (err) {
 				notifierModule.show({
-					text: "Could not save?",
+					text: t("common.validation.invalid"),
 					status: "error",
 					timeout: 10000,
 				});
@@ -111,6 +132,10 @@ export default defineComponent({
 			}
 		}
 
+		function goBack() {
+			window.close();
+		}
+
 		return {
 			iframe,
 			loading: false,
@@ -121,7 +146,7 @@ export default defineComponent({
 			onValidParams,
 			onInvalidParams,
 			validateParams,
-			goBack: () => console.log("BACK"),
+			goBack,
 		};
 	},
 	directives: {
@@ -150,5 +175,11 @@ export default defineComponent({
 
 .inline {
 	min-height: calc(100vh - calc(64 * var(--border-width-bold)));
+}
+
+.column-layout {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 </style>
