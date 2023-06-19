@@ -1,21 +1,21 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecordModel">
+		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileName="fileRecord.name"
+				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
-				@update:caption="($event) => (modelValue.caption = $event)"
+				:fileName="fileRecord.name"
+				:url="url"
 			></FileContentElementEdit>
 			<FileContentElementChips
 				:fileSize="fileRecordModel.size"
 				:fileName="fileRecordModel.name"
 			/>
+			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -24,18 +24,25 @@
 </template>
 
 <script lang="ts">
+import {
+	FileRecordParentType,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, watch, ref, onMounted } from "vue";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useFileStorageApi } from "../shared/FileStorageApi.composable";
+import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
-import FileContentElementChips from "./FileContentElementChips.vue";
+
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
+		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
 		FileContentElementChips,
@@ -46,30 +53,53 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
+		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
+			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
+		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 
-		const fileRecordModel = ref<FileRecordResponse>();
-		const parentId = ref<string>("");
+		const isBlocked = computed(
+			() =>
+				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
+		);
+
+		const url = computed(() => (!isBlocked.value ? fileRecord.value?.url : ""));
 
 		onMounted(() => {
 			(async () => {
-				parentId.value = props.element.id;
-				fileRecordModel.value = getFile(parentId.value);
+				const file = getSelectedFile();
 
-				if (!fileRecordModel.value) {
-					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-					fileRecordModel.value = getFile(parentId.value);
+				if (file) {
+					await tryUpload(file);
+				} else {
+					await getFileRecord();
 				}
 			})();
 		});
 
-		watch(newFileForParent, (newValue) => {
-			if (newValue === parentId.value) {
-				fileRecordModel.value = getFile(parentId.value);
-			}
-		});
+		const tryUpload = async (file: File) => {
+			try {
+				await upload(file);
 
-		return { modelValue, isAutoFocus, fileRecordModel };
+				setSelectedFile();
+				await fetchPendingFileRecursively();
+			} catch (error) {
+				//Remove element
+				setSelectedFile();
+			}
+		};
+
+		const getFileRecord = async () => {
+			await fetchFile();
+			await fetchPendingFileRecursively();
+		};
+
+		return {
+			isAutoFocus,
+			isBlocked,
+			fileRecord,
+			modelValue,
+			url,
+		};
 	},
 });
 </script>
