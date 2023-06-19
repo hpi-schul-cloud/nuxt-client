@@ -20,7 +20,7 @@
 					ref="iframe"
 					:src="iframeSrc"
 					class="editor-iframe"
-					allowfullscreen
+					allow="fullscreen"
 					title="H5PEditor"
 					v-on:valid-params="onValidParams"
 					v-on:invalid-params="onInvalidParams"
