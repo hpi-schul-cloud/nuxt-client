@@ -7,34 +7,6 @@ jest.mock(
 );
 
 describe("DeleteBoardNodeConfirmation composable", () => {
-	const setup = (isConfirmed: boolean) => {
-		const deleteElement = jest.fn();
-		const data = {
-			elementId: "elementId",
-			name: "name",
-		};
-
-		const { onDeleteElement, askDeleteBoardNodeConfirmation } = mountComposable(
-			() => useDeleteBoardNodeConfirmation(),
-			{
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-			}
-		);
-
-		const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
-		const { askConfirmation } = setupDeleteConfirmationMock({
-			askConfirmationMock,
-		});
-
-		return {
-			deleteElement,
-			askDeleteBoardNodeConfirmation,
-			askConfirmation,
-			onDeleteElement,
-			data,
-		};
-	};
-
 	describe("askDeleteBoardNodeConfirmation", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";

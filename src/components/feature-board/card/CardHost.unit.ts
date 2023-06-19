@@ -109,7 +109,7 @@ describe("CardHost", () => {
 				expect(contentElementList.exists()).toBe(true);
 			});
 
-			it("should propagate deleteElement function to ContentElementList'", () => {
+			it("should propagate deleteElement function to ContentElementList", () => {
 				const { deleteElementMock } = setup({ card: CARD_WITH_FILE_ELEMENT });
 
 				const contentElementList = wrapper.findComponent(ContentElementList);
