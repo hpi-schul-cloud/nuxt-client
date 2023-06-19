@@ -4,7 +4,6 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 
 jest.mock("../shared/InlineEditInteractionHandler.composable");
 
