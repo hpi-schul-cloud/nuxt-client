@@ -6,7 +6,6 @@ import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { notifierModule } from "@/store";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 

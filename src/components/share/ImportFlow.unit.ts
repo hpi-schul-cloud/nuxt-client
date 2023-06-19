@@ -20,13 +20,13 @@ import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
 	let loadingStateModuleMock: LoadingStateModule;
-	let notifierModuleMock: NotifierModule;
 	let copyResultResponse: CopyApiResponse | undefined = undefined;
+	const notifierModule = createModuleMocks(NotifierModule);
 
 	const token = "ACoolToken";
 	const course = {
@@ -42,7 +42,6 @@ describe("@components/share/ImportFlow", () => {
 			}),
 			provide: {
 				copyModule: copyModuleMock,
-				notifierModule: notifierModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
@@ -66,7 +65,6 @@ describe("@components/share/ImportFlow", () => {
 			getCopyResult: copyResultResponse,
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		notifierModuleMock = createModuleMocks(NotifierModule);
 		setupStores({ rooms: RoomsModule });
 		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
 	});
@@ -95,7 +93,7 @@ describe("@components/share/ImportFlow", () => {
 				mountComponent();
 				await Vue.nextTick();
 
-				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+				expect(notifierModule.show).toHaveBeenCalledWith(
 					expect.objectContaining({
 						text: "components.molecules.import.options.failure.invalidToken",
 					})
@@ -108,7 +106,7 @@ describe("@components/share/ImportFlow", () => {
 				mountComponent();
 				await Vue.nextTick();
 
-				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+				expect(notifierModule.show).toHaveBeenCalledWith(
 					expect.objectContaining({
 						text: "components.molecules.import.options.failure.permissionError",
 					})
@@ -303,7 +301,7 @@ describe("@components/share/ImportFlow", () => {
 						.findComponent(vCustomDialog);
 					await dialog.vm.$emit("dialog-confirmed");
 
-					expect(notifierModuleMock.show).toHaveBeenCalledWith(
+					expect(notifierModule.show).toHaveBeenCalledWith(
 						expect.objectContaining({ status: "error" })
 					);
 				});
