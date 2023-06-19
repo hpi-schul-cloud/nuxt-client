@@ -1,7 +1,7 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useContentElementState } from "./ContentElementState.composable";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 
@@ -37,7 +37,7 @@ describe("useContentElementState composable", () => {
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
 			[I18N_KEY as symbol]: { t: (key: string) => key },
-			notifierModule,
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 		});
 	};
 	it("should unwrap element model data", async () => {

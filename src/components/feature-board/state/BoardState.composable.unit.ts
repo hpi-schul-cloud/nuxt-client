@@ -57,7 +57,7 @@ describe("BoardState.composable", () => {
 
 		mockedBoardApiCalls = {
 			createCardCall: jest.fn(),
-			createColumnCall: jest.fn(),
+			createColumnCall: jest.fn().mockReturnValue({ id: "test-id" }),
 			deleteCardCall: jest.fn(),
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
@@ -150,6 +150,7 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should generate and show error when newColumn id is undefined", async () => {
+			mockedBoardApiCalls.createColumnCall = jest.fn().mockReturnValue({});
 			const { createColumn, board } = setup();
 			board.value = testBoard;
 
@@ -204,6 +205,7 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should generate and show error when newColumn id is undefined", async () => {
+			mockedBoardApiCalls.createColumnCall = jest.fn().mockReturnValue({});
 			const { createColumnWithCard, board } = setup();
 			board.value = testBoard;
 

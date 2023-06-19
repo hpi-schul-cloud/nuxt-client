@@ -44,8 +44,8 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	const updateElement = async (payload: T["content"]) => {
 		console.log("update element", { ...payload });
-		const response = await updateElementCall(props.element);
-		if (isErrorCode(response.status)) {
+		const status = await updateElementCall(props.element);
+		if (isErrorCode(status)) {
 			showFailure(generateErrorText("update", "boardElement"));
 		}
 	};

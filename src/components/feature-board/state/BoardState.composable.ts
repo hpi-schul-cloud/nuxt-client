@@ -46,7 +46,7 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumnCall(board.value.id);
-		if (!newColumn?.id) {
+		if (!newColumn.id) {
 			const errorText = generateErrorText("create", "boardColumn");
 			await showErrorAndReload(errorText);
 			return;
@@ -78,9 +78,9 @@ export const useBoardState = (id: string) => {
 
 	const deleteCard = async (id: string) => {
 		if (board.value === undefined) return;
-		const response = await deleteCardCall(id);
+		const status = await deleteCardCall(id);
 
-		if (isErrorCode(response?.status)) {
+		if (isErrorCode(status)) {
 			const errorText = generateErrorText("delete", "boardCard");
 			await showErrorAndReload(errorText);
 			return;
@@ -95,9 +95,9 @@ export const useBoardState = (id: string) => {
 		if (columnIndex < 0) {
 			return;
 		}
-		const response = await deleteColumnCall(id);
+		const status = await deleteColumnCall(id);
 
-		if (isErrorCode(response?.status)) {
+		if (isErrorCode(status)) {
 			const errorText = generateErrorText("delete", "boardColumn");
 			await showErrorAndReload(errorText);
 			return;
@@ -133,15 +133,15 @@ export const useBoardState = (id: string) => {
 		isLoading.value = true;
 		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
 
-		const response = (await boardsApi.boardControllerGetBoardSkeleton(id)).data;
+		const response = await boardsApi.boardControllerGetBoardSkeleton(id);
 
-		if (!response?.id) {
+		if (isErrorCode(response.status)) {
 			const errorText = generateErrorText("read", "board");
 			showFailure(errorText);
 			return;
 		}
 
-		board.value = { ...response, id };
+		board.value = { ...response.data, id };
 		isLoading.value = false;
 	};
 
@@ -170,12 +170,12 @@ export const useBoardState = (id: string) => {
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
-			const response = await moveCardCall(
+			const status = await moveCardCall(
 				payload.cardId,
 				targetColumnId,
 				addedIndex
 			);
-			if (isErrorCode(response?.status)) {
+			if (isErrorCode(status)) {
 				const errorText = generateErrorText("update");
 				await showErrorAndReload(errorText);
 				return;
@@ -196,13 +196,13 @@ export const useBoardState = (id: string) => {
 		 */
 		await nextTick();
 		board.value.columns.splice(addedIndex, 0, element);
-		const response = await moveColumnCall(
+		const status = await moveColumnCall(
 			payload.payload,
 			board.value.id,
 			addedIndex
 		);
 
-		if (isErrorCode(response?.status)) {
+		if (isErrorCode(status)) {
 			const errorText = generateErrorText("update");
 			await showErrorAndReload(errorText);
 		}
@@ -211,9 +211,9 @@ export const useBoardState = (id: string) => {
 	const updateColumnTitle = async (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
 
-		const response = await updateColumnTitleCall(columnId, newTitle);
+		const status = await updateColumnTitleCall(columnId, newTitle);
 
-		if (isErrorCode(response?.status)) {
+		if (isErrorCode(status)) {
 			const errorText = generateErrorText("update");
 			await showErrorAndReload(errorText);
 			return;

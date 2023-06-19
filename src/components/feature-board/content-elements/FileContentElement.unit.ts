@@ -1,4 +1,4 @@
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
@@ -19,9 +19,6 @@ jest.mock("../shared/FileStorageApi.composable");
 jest.mock("../shared/SelectedFile.composable");
 
 describe("FileContentElement", () => {
-	const i18n = {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-	};
 	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
 		element: AnyContentElement;
@@ -31,7 +28,10 @@ describe("FileContentElement", () => {
 
 		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
-			provide: { ...i18n, notifierModule },
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+			},
 			propsData: props,
 		});
 

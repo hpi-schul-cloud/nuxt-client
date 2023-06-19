@@ -41,8 +41,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const response = await updateCardTitle(cardState.card.id, newTitle);
-		if (isErrorCode(response?.status)) {
+		const status = await updateCardTitle(cardState.card.id, newTitle);
+		if (isErrorCode(status)) {
 			await showErrorAndReload(generateErrorText("update"));
 			return;
 		}
@@ -52,8 +52,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 	const deleteCard = async () => {
 		if (cardState.card === undefined) return;
 
-		const response = await deleteCardCall(cardState.card.id);
-		if (isErrorCode(response?.status)) {
+		const status = await deleteCardCall(cardState.card.id);
+		if (isErrorCode(status)) {
 			await showErrorAndReload(generateErrorText("delete", "boardCard"));
 		}
 	};
@@ -65,8 +65,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card.height === newHeight) {
 			return;
 		}
-		const response = await updateCardHeightCall(cardState.card.id, newHeight);
-		if (isErrorCode(response?.status)) {
+		const status = await updateCardHeightCall(cardState.card.id, newHeight);
+		if (isErrorCode(status)) {
 			await showErrorAndReload(generateErrorText("update"));
 			return;
 		}
@@ -77,14 +77,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const result = await createElement(cardState.card.id, { type });
-		if (!result.id) {
+		const response = await createElement(cardState.card.id, { type });
+		if (isErrorCode(response.status)) {
 			await showErrorAndReload(generateErrorText("create", "boardElement"));
 			return;
 		}
-		cardState.card.elements.push(result as unknown as AnyContentElement);
+		cardState.card.elements.push(response.data as unknown as AnyContentElement);
 
-		return result;
+		return response.data;
 	};
 
 	const showErrorAndReload = async (errorText: string | undefined) => {

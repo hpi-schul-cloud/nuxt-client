@@ -5,7 +5,7 @@ import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { useCardState } from "./CardState.composable";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 
@@ -14,7 +14,7 @@ const notifierModule = createModuleMocks(NotifierModule);
 const setup = (cardId = "123123") => {
 	return mountComposable(() => useCardState(cardId), {
 		[I18N_KEY as symbol]: { t: (key: string) => key },
-		notifierModule,
+		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 	});
 };
 

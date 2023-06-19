@@ -1,6 +1,6 @@
 import { useBoardNotifier } from "./BoardNotifications.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 
@@ -9,7 +9,7 @@ const notifierModule = createModuleMocks(NotifierModule);
 const setup = () => {
 	return mountComposable(() => useBoardNotifier(), {
 		[I18N_KEY as symbol]: { t: (key: string) => key },
-		notifierModule,
+		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 	});
 };
 

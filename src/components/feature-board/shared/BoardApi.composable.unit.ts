@@ -22,20 +22,20 @@ const mockApi = {
 	boardControllerCreateColumn: jest
 		.fn()
 		.mockImplementation(() => createColumnResponseMock),
-	cardControllerUpdateCardHeight: jest.fn(),
-	cardControllerUpdateCardTitle: jest.fn(),
-	columnControllerUpdateColumnTitle: jest.fn(),
-	elementControllerUpdateElement: jest.fn(),
+	cardControllerUpdateCardHeight: jest.fn().mockReturnValue({ status: 200 }),
+	cardControllerUpdateCardTitle: jest.fn().mockReturnValue({ status: 200 }),
+	columnControllerUpdateColumnTitle: jest.fn().mockReturnValue({ status: 200 }),
+	elementControllerUpdateElement: jest.fn().mockReturnValue({ status: 200 }),
 	cardControllerCreateElement: jest
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
-	cardControllerDeleteCard: jest.fn(),
-	columnControllerDeleteColumn: jest.fn(),
+	cardControllerDeleteCard: jest.fn().mockReturnValue({ status: 200 }),
+	columnControllerDeleteColumn: jest.fn().mockReturnValue({ status: 200 }),
 	columnControllerCreateCard: jest
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
-	cardControllerMoveCard: jest.fn(),
-	columnControllerMoveColumn: jest.fn(),
+	cardControllerMoveCard: jest.fn().mockReturnValue({ status: 200 }),
+	columnControllerMoveColumn: jest.fn().mockReturnValue({ status: 200 }),
 };
 
 jest

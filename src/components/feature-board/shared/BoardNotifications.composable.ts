@@ -1,7 +1,5 @@
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { inject } from "vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import NotifierModule from "@/store/notifier";
+import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 type ErrorTypes = "create" | "read" | "update" | "delete";
 type BoardObjectTypes = "board" | "boardColumn" | "boardCard" | "boardElement";
@@ -9,10 +7,10 @@ type BoardObjectTypes = "board" | "boardColumn" | "boardCard" | "boardElement";
 export const useBoardNotifier = () => {
 	const i18n = injectStrict(I18N_KEY);
 
-	const notifierModule = inject<NotifierModule>("notifierModule");
+	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const showSuccess = (text: string | undefined) => {
-		notifierModule?.show({
+		notifierModule.show({
 			text,
 			status: "success",
 			autoClose: true,
@@ -20,7 +18,7 @@ export const useBoardNotifier = () => {
 	};
 
 	const showFailure = (text: string | undefined) => {
-		notifierModule?.show({
+		notifierModule.show({
 			text,
 			status: "error",
 			timeout: 10000,
@@ -28,7 +26,7 @@ export const useBoardNotifier = () => {
 	};
 
 	const showInfo = (text: string | undefined) => {
-		notifierModule?.show({
+		notifierModule.show({
 			text,
 			status: "info",
 			autoClose: true,
@@ -40,7 +38,7 @@ export const useBoardNotifier = () => {
 		status: "success" | "error" | "warning" | "info",
 		timeout = 5000
 	) => {
-		notifierModule?.show({
+		notifierModule.show({
 			text,
 			status,
 			timeout,
@@ -67,11 +65,11 @@ export const useBoardNotifier = () => {
 
 		return boardObjectType
 			? i18n
-					?.t(errorKey, {
+					.t(errorKey, {
 						type: i18n?.t(`components.${boardObjectType}`),
 					})
 					.toString()
-			: i18n?.t(errorKey).toString();
+			: i18n.t(errorKey).toString();
 	};
 
 	return {
