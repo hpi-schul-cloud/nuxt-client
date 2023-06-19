@@ -7,6 +7,56 @@ jest.mock(
 );
 
 describe("DeleteBoardNodeConfirmation composable", () => {
+	const setup = (isConfirmed: boolean) => {
+		const deleteElement = jest.fn();
+		const data = {
+			elementId: "elementId",
+			name: "name",
+		};
+
+		const { onDeleteElement, askDeleteBoardNodeConfirmation } = mountComposable(
+			() => useDeleteBoardNodeConfirmation(),
+			{
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			}
+		);
+
+		const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
+		const { askConfirmation } = setupDeleteConfirmationMock({
+			askConfirmationMock,
+		});
+
+		return {
+			deleteElement,
+			askDeleteBoardNodeConfirmation,
+			askConfirmation,
+			onDeleteElement,
+			data,
+		};
+	};
+
+	describe("onDeleteElement", () => {
+		describe("when askDeleteBoardNodeConfirmation returns true", () => {
+			it("should call deleteElement", async () => {
+				const { onDeleteElement, deleteElement, data } = setup(true);
+
+				await onDeleteElement(data);
+
+				expect(deleteElement).toHaveBeenCalledWith(data.elementId);
+			});
+		});
+
+		describe("when askDeleteBoardNodeConfirmation returns false", () => {
+			it("should not call deleteElement", async () => {
+				const { onDeleteElement, deleteElement, data } = setup(false);
+
+				await onDeleteElement(data);
+
+				expect(deleteElement).not.toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("askDeleteBoardNodeConfirmation", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";

@@ -1,13 +1,11 @@
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { deleteElementEventPayloadFactory } from "@@/tests/test-utils/factory";
-import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import FileContentElement from "./FileContentElement.vue";
-import RichTextContentElementComponent from "./RichTextContentElement.vue";
+import RichTextContentElement from "./RichTextContentElement.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -16,22 +14,34 @@ describe("ContentElementList", () => {
 		elements: AnyContentElement[];
 		isEditMode: boolean;
 	}) => {
+		const deleteElementMock = jest.fn();
+
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(ContentElementList as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: props,
+			propsData: { ...props, deleteElement: deleteElementMock },
 		});
+
+		return { deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ elements: [], isEditMode: false });
+			setup({
+				elements: [],
+				isEditMode: false,
+			});
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
+
 		it.each([
 			{
 				elementType: ContentElementType.RichText,
-				component: RichTextContentElementComponent,
+				component: RichTextContentElement,
+			},
+			{
+				elementType: ContentElementType.File,
+				component: FileContentElement,
 			},
 		])(
 			"should render elements based on type %s",
@@ -43,42 +53,47 @@ describe("ContentElementList", () => {
 				expect(wrapper.findComponent(component).exists()).toBe(true);
 			}
 		);
-		it("should propagate isEditMode to child elements", () => {
-			const isEditModeResult = true;
 
-			setup({
+		it.each([
+			{
+				elementType: ContentElementType.RichText,
+				component: RichTextContentElement,
+			},
+			{
+				elementType: ContentElementType.File,
+				component: FileContentElement,
+			},
+		])(
+			"should propagate isEditMode to child elements",
+			({ elementType, component }) => {
+				const isEditModeResult = true;
+
+				setup({
+					elements: [{ type: elementType } as AnyContentElement],
+					isEditMode: isEditModeResult,
+				});
+
+				const childComponent = wrapper.findComponent(component);
+
+				expect(childComponent.exists()).toBe(true);
+				expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
+			}
+		);
+
+		it("should propagate deleteElement function to file elements", () => {
+			const { deleteElementMock } = setup({
 				elements: [
 					{
-						type: ContentElementType.RichText,
-					} as RichTextElementResponse,
+						type: ContentElementType.File,
+					} as FileElementResponse,
 				],
-				isEditMode: isEditModeResult,
-			});
-
-			const childComponent = wrapper.findComponent(ContentElementList);
-
-			expect(childComponent.exists()).toBe(true);
-			expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
-		});
-	});
-
-	describe("when delete:element is emitted by FileContentElement", () => {
-		it("should emit delete:element event", () => {
-			const fileElementResponse = fileElementResponseFactory.build();
-			setup({
-				elements: [fileElementResponse],
 				isEditMode: true,
 			});
 
 			const childComponent = wrapper.findComponent(FileContentElement);
-			const deleteElementEventPayload =
-				deleteElementEventPayloadFactory.build();
-			childComponent.vm.$emit("delete:element", deleteElementEventPayload);
 
-			expect(wrapper.emitted("delete:element")?.length).toBe(1);
-			expect(wrapper.emitted("delete:element")?.[0]).toEqual([
-				deleteElementEventPayload,
-			]);
+			expect(childComponent.exists()).toBe(true);
+			expect(childComponent.props("deleteElement")).toBe(deleteElementMock);
 		});
 	});
 });
