@@ -53,7 +53,7 @@ export function downloadFile(
 
 export function convertFileSizeToHumanReadable(
 	fileSize: number,
-	numberOfDigits: number
+	numberOfDigits = 2
 ): string {
 	const units = ["B", "KB", "MB", "GB", "TB"];
 	const threshold = 1024;

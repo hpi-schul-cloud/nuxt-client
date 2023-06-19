@@ -27,7 +27,7 @@ export default defineComponent({
 
 	setup(props) {
 		const humanReadableFileSize = computed(() =>
-			convertFileSizeToHumanReadable(props.fileSize, 2)
+			convertFileSizeToHumanReadable(props.fileSize)
 		);
 
 		const fileExtension = computed(() =>
