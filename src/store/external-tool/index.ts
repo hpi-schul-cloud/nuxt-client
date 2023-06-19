@@ -6,6 +6,8 @@ export * from "./external-tool-display-data";
 export * from "./tool-context-type.enum";
 export * from "./tool-parameter-scope.enum";
 export * from "./tool-configuration-template";
+export * from "./school-external-tool-status.enum";
+export * from "./school-external-tool";
 export * from "./tool-configuration-list-item";
 export * from "./tool-parameter-location.enum";
 export * from "./school-external-tool-status.enum";
