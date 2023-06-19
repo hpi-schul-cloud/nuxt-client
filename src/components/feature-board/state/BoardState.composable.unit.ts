@@ -13,10 +13,8 @@ import {
 } from "@@/tests/test-utils/factory";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { Board } from "../types/Board";
+import { Board, BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
-import { BoardColumn } from "../types/Board";
-import { BoardSkeletonCard } from "../types/Board";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
