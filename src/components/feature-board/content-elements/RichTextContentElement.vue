@@ -56,6 +56,7 @@ export default defineComponent({
 	.ck.ck-editor__editable_inline > :first-child {
 		margin-top: 0;
 	}
+
 	.ck-content {
 		& > :first-child {
 			margin-top: 0;
@@ -69,7 +70,7 @@ export default defineComponent({
 			line-height: 24px;
 			letter-spacing: 0.15px;
 			margin-bottom: 0.5rem;
-			margin-top: 1.5rem;
+			margin-top: 20px;
 		}
 
 		h5 {
@@ -80,7 +81,7 @@ export default defineComponent({
 			line-height: 20px;
 			letter-spacing: 0.1px;
 			margin-bottom: 0.5rem;
-			margin-top: 1.5rem;
+			margin-top: 20px;
 		}
 
 		p,
@@ -92,6 +93,11 @@ export default defineComponent({
 			font-size: 14px;
 			line-height: 20px;
 			letter-spacing: 0.02px;
+			margin-bottom: 8px;
+		}
+
+		ul {
+			list-style-type: circle;
 		}
 	}
 }
