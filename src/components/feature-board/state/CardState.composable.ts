@@ -1,5 +1,5 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { nextTick, onMounted, reactive, toRef } from "vue";
+import { onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";

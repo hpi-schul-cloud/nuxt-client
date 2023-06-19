@@ -1,13 +1,13 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { del } from "vue";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { deleteElementEventPayloadFactory } from "@@/tests/test-utils/factory";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import RichTextContentElementComponent from "./RichTextContentElement.vue";
-import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import FileContentElement from "./FileContentElement.vue";
-import { deleteElementEventPayloadFactory } from "@@/tests/test-utils/factory";
+import RichTextContentElementComponent from "./RichTextContentElement.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
