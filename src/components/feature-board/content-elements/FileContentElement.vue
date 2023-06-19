@@ -6,17 +6,18 @@
 				:fileName="fileRecord.name"
 				:url="url"
 			></FileContentElementDisplay>
-			<div v-if="isEditMode" tabindex="0" @keydown.up.down="onKeydownArrow">
-				<FileContentElementEdit
-					:fileName="fileRecord.name"
-					:url="url"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-				/>
-			</div>
+			<FileContentElementEdit
+				v-if="isEditMode"
+				:fileName="fileRecord.name"
+				:fileId="$props.element.id"
+				:url="url"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@move-keyboard:element="onMoveFileEditKeyboard"
+			/>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
@@ -98,11 +99,6 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			event.preventDefault();
-			emit("move-keyboard:edit", event);
-		};
-
 		const onMoveFileEditDown = () => {
 			emit("move-down:edit");
 		};
@@ -110,14 +106,17 @@ export default defineComponent({
 		const onMoveFileEditUp = () => {
 			emit("move-up:edit");
 		};
+		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
+			emit("move-keyboard:edit", event);
+		};
 		return {
 			isAutoFocus,
 			isBlocked,
 			fileRecord,
 			modelValue,
-			onKeydownArrow,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
+			onMoveFileEditKeyboard,
 			url,
 		};
 	},

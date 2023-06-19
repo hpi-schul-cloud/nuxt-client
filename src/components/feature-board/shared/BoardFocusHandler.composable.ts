@@ -9,11 +9,10 @@ import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
-import { FileElementResponse } from "@/serverApi/v3";
 
 export const useBoardFocusHandler = (
 	id: MaybeComputedRef<
-		BoardColumn["id"] | BoardCard["id"] | FileElementResponse["id"]
+		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
 	>,
 	element: Ref<HTMLElement | undefined>
 ) => {
