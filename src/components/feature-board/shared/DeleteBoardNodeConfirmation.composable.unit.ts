@@ -7,76 +7,135 @@ jest.mock(
 );
 
 describe("DeleteBoardNodeConfirmation composable", () => {
-	const setup = (isConfirmed: boolean) => {
-		const deleteElement = jest.fn();
-		const data = {
-			elementId: "elementId",
-			name: "name",
-		};
-
-		const { onDeleteElement, askDeleteBoardNodeConfirmation } = mountComposable(
-			() => useDeleteBoardNodeConfirmation(deleteElement),
-			{
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-			}
-		);
-
-		const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
-		const { askConfirmation } = setupDeleteConfirmationMock({
-			askConfirmationMock,
-		});
-
-		return {
-			deleteElement,
-			askDeleteBoardNodeConfirmation,
-			askConfirmation,
-			onDeleteElement,
-			data,
-		};
-	};
-
-	describe("onDeleteElement", () => {
-		describe("when askDeleteBoardNodeConfirmation returns true", () => {
-			it("should call deleteElement", async () => {
-				const { onDeleteElement, deleteElement, data } = setup(true);
-
-				await onDeleteElement(data);
-
-				expect(deleteElement).toHaveBeenCalledWith(data.elementId);
-			});
-		});
-
-		describe("when askDeleteBoardNodeConfirmation returns false", () => {
-			it("should not call deleteElement", async () => {
-				const { onDeleteElement, deleteElement, data } = setup(false);
-
-				await onDeleteElement(data);
-
-				expect(deleteElement).not.toHaveBeenCalled();
-			});
-		});
-	});
-
 	describe("askDeleteBoardNodeConfirmation", () => {
-		it("should call askConfirmation", async () => {
-			const { askDeleteBoardNodeConfirmation, askConfirmation } = setup(true);
+		const setup = (isConfirmed: boolean) => {
+			const title = "title";
+			const titleString = `"${title}"`;
+			const type = "boardElement";
+			const typeString = `components.${type}`;
+			const titleTranslationKey =
+				"components.cardHost.deletionModal.confirmation";
+			const data = {
+				elementId: "elementId",
+				name: "name",
+			};
+			const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
+			const { askConfirmation } = setupDeleteConfirmationMock({
+				askConfirmationMock,
+			});
 
-			await askDeleteBoardNodeConfirmation("name", "boardElement");
+			const translateMock = jest.fn().mockImplementation((key: string) => key);
 
-			expect(askConfirmation).toHaveBeenCalledWith({
-				message: "components.cardHost.deletionModal.confirmation",
+			const { onDeleteElement, askDeleteBoardNodeConfirmation } =
+				mountComposable(() => useDeleteBoardNodeConfirmation(), {
+					[I18N_KEY as symbol]: { t: translateMock },
+				});
+
+			return {
+				askDeleteBoardNodeConfirmation,
+				askConfirmation,
+				onDeleteElement,
+				data,
+				translateMock,
+				type,
+				typeString,
+				title,
+				titleString,
+				titleTranslationKey,
+			};
+		};
+
+		beforeEach(() => {
+			jest.clearAllMocks();
+		});
+
+		describe("when title is defined", () => {
+			it("should call translate functions", async () => {
+				const {
+					askDeleteBoardNodeConfirmation,
+					translateMock,
+					type,
+					typeString,
+					title,
+					titleString,
+					titleTranslationKey,
+				} = setup(true);
+
+				await askDeleteBoardNodeConfirmation(title, type);
+
+				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
+				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
+					title: titleString,
+					type: typeString,
+				});
+			});
+
+			it("should call askConfirmation", async () => {
+				const {
+					askDeleteBoardNodeConfirmation,
+					askConfirmation,
+					title,
+					type,
+					titleTranslationKey,
+				} = setup(true);
+
+				await askDeleteBoardNodeConfirmation(title, type);
+
+				expect(askConfirmation).toHaveBeenCalledWith({
+					message: titleTranslationKey,
+				});
+			});
+
+			it("should return result", async () => {
+				const { askDeleteBoardNodeConfirmation, title, type } = setup(true);
+
+				const result = await askDeleteBoardNodeConfirmation(title, type);
+
+				expect(result).toBe(true);
 			});
 		});
 
-		it("should return result", async () => {
-			const { askDeleteBoardNodeConfirmation } = setup(true);
+		describe("when title is undefined", () => {
+			it("should call translate functions", async () => {
+				const {
+					askDeleteBoardNodeConfirmation,
+					translateMock,
+					type,
+					typeString,
+					titleTranslationKey,
+				} = setup(true);
 
-			const result = await askDeleteBoardNodeConfirmation(
-				"name",
-				"boardElement"
-			);
+				await askDeleteBoardNodeConfirmation("", type);
 
-			expect(result).toBe(true);
+				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
+				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
+					title: "",
+					type: typeString,
+				});
+			});
+
+			it("should call askConfirmation", async () => {
+				const {
+					askDeleteBoardNodeConfirmation,
+					askConfirmation,
+					type,
+					titleTranslationKey,
+				} = setup(true);
+
+				await askDeleteBoardNodeConfirmation("", type);
+
+				expect(askConfirmation).toHaveBeenCalledWith({
+					message: titleTranslationKey,
+				});
+			});
+
+			it("should return result", async () => {
+				const { askDeleteBoardNodeConfirmation, type } = setup(true);
+
+				const result = await askDeleteBoardNodeConfirmation("", type);
+
+				expect(result).toBe(true);
+			});
 		});
 	});
 });

@@ -9,13 +9,15 @@ export const useDeleteBoardNodeConfirmation = () => {
 		title: string | undefined,
 		type: "boardCard" | "boardElement"
 	) => {
-		const message =
-			i18n
-				.t("components.cardHost.deletionModal.confirmation", {
-					title: title ? `"${title}"` : "",
-					type: i18n.t(`components.${type}`).toString(),
-				})
-				.toString() ?? "";
+		const titleString = title ? `"${title}"` : "";
+		const typeString = i18n.t(`components.${type}`).toString();
+
+		const message = i18n
+			.t("components.cardHost.deletionModal.confirmation", {
+				title: titleString,
+				type: typeString,
+			})
+			.toString();
 
 		const shouldDelete = await askConfirmation({ message });
 
