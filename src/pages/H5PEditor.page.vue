@@ -14,18 +14,17 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<v-btn role="button" color="secondary">Cancel</v-btn>
-			<v-btn role="button" color="primary" @click="validateAndSave">Save</v-btn>
+			<v-btn role="button" color="primary" @click="validateParams">Save</v-btn>
 			<iframe
 				v-if="!loading"
-				v-h5pResize
+				v-h5pResize="{ heightCalculationMethod: 'taggedElement' }"
 				ref="iframe"
 				:src="iframeSrc"
 				class="editor-iframe"
 				allowfullscreen
 				title="H5PEditor"
-				v-on:message="onMessage"
-				v-on:validated-params="onValidatedParams"
+				v-on:valid-params="onValidParams"
+				v-on:invalid-params="onInvalidParams"
 			></iframe>
 			<div v-else class="d-flex justify-center align-center min-height-screen">
 				<v-progress-circular indeterminate color="secondary" size="115" />
@@ -35,14 +34,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { notifierModule } from "@/store";
+import { $axios } from "@/utils/api";
 import { mdiChevronLeft } from "@mdi/js";
+import { iframeResizer } from "iframe-resizer";
+import { defineComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
 
-import { iframeResizer } from "iframe-resizer";
-import { $axios } from "@/utils/api";
-
 type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
+
+type ParamsValidEvent = CustomEvent;
+type ParamsInvalidEvent = CustomEvent<string>;
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -58,12 +60,21 @@ export default defineComponent({
 
 		const iframeSrc = `${window.location.origin}/api/v3/h5p-editor/edit/${contentId}`;
 
-		function onMessage(event: MessageEvent) {
-			// ToDo
-			console.log(event);
+		function notifyParent(event: CustomEvent) {
+			window.dispatchEvent(event);
 		}
 
-		async function onValidatedParams(event: CustomEvent) {
+		function onInvalidParams(event: ParamsInvalidEvent) {
+			console.error(event.detail);
+
+			notifierModule.show({
+				text: "Invalid",
+				status: "error",
+				timeout: 10000,
+			});
+		}
+
+		async function onValidParams(event: ParamsValidEvent) {
 			try {
 				const response = await $axios.post<{
 					id: string;
@@ -75,8 +86,8 @@ export default defineComponent({
 					metadata: { title, mainLibrary },
 				} = response.data;
 
-				window.dispatchEvent(
-					new CustomEvent("add-content", {
+				notifyParent(
+					new CustomEvent("save-content", {
 						detail: { contentId: id, title, contentType: mainLibrary },
 					})
 				);
@@ -86,11 +97,15 @@ export default defineComponent({
 					query: route.query,
 				});
 			} catch (err) {
-				console.error(err);
+				notifierModule.show({
+					text: "Could not save?",
+					status: "error",
+					timeout: 10000,
+				});
 			}
 		}
 
-		function validateAndSave() {
+		function validateParams() {
 			if (iframe.value) {
 				iframe.value.contentWindow?.postMessage("validate-params");
 			}
@@ -103,9 +118,9 @@ export default defineComponent({
 			scriptSrc: "#",
 			mdiChevronLeft,
 			isInline,
-			onMessage,
-			onValidatedParams,
-			validateAndSave,
+			onValidParams,
+			onInvalidParams,
+			validateParams,
 			goBack: () => console.log("BACK"),
 		};
 	},
@@ -134,6 +149,6 @@ export default defineComponent({
 }
 
 .inline {
-	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
+	min-height: calc(100vh - calc(64 * var(--border-width-bold)));
 }
 </style>
