@@ -145,7 +145,7 @@ export default {
 	min-height: 100vh;
 
 	&.inline {
-		display: inline;
+		grid-template-columns: 0 1fr;
 	}
 
 	@include breakpoint(tablet) {
