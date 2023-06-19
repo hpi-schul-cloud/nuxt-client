@@ -31,7 +31,6 @@ import {
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import {
-	ContextExternalToolTemplateListItem,
 	ToolContextType,
 	ExternalToolDisplayData,
 } from "@/store/external-tool";
@@ -83,7 +82,7 @@ describe("useExternalToolUtils", () => {
 
 		const contextToolResponse: ContextExternalToolResponse = {
 			id: "id",
-			contextToolName: "contextToolName",
+			displayName: "displayName",
 			contextId: "contextId",
 			schoolToolId: "schoolToolId",
 			toolVersion: 1,
@@ -145,7 +144,7 @@ describe("useExternalToolUtils", () => {
 		const contextExternalToolPostParams: ContextExternalToolPostParams = {
 			contextId: "contextId",
 			parameters: [customParameterEntryParam],
-			contextToolName: "contextToolName",
+			displayName: "displayName",
 			contextType: "course",
 			schoolToolId: "toolId",
 			toolVersion: 0,
@@ -242,7 +241,7 @@ describe("useExternalToolUtils", () => {
 					expect.objectContaining<ExternalToolDisplayData[]>([
 						{
 							id: contextToolResponse.id,
-							name: "Toolname",
+							name: "displayName",
 							logoUrl: undefined,
 							openInNewTab: true,
 						},
@@ -371,7 +370,7 @@ describe("useExternalToolUtils", () => {
 				expect.objectContaining<ContextExternalToolPostParams>({
 					contextId: "contextId",
 					toolVersion: template.version,
-					schoolToolId: template.id,
+					schoolToolId: "schoolToolId",
 					parameters: [],
 					contextType: "course",
 				})

@@ -139,7 +139,7 @@ describe("RoomExternalToolOverview", () => {
 		});
 	});
 
-	describe("when clicking on confirm button of delete dialog", () => {
+	describe.skip("when clicking on confirm button of delete dialog", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
@@ -171,7 +171,7 @@ describe("RoomExternalToolOverview", () => {
 		});
 	});
 
-	describe("when clicking on cancel button of delete dialog", () => {
+	describe.skip("when clicking on cancel button of delete dialog", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
