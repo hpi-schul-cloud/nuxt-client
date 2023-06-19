@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="d-flex w-100 justify-center button-background pb-4 pt-2 pr-12 text-center sticky"
+		style="height: 4rem"
 		ref="sticky"
 	>
 		<VBtn
@@ -10,7 +11,7 @@
 			class="white"
 			icon
 			large
-			v-show="!isEditMode"
+			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
 			<span class="d-sr-only">Add Card</span>
