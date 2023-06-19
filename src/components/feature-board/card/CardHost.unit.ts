@@ -2,7 +2,6 @@ import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useCardState } from "../state/CardState.composable";
@@ -64,9 +63,10 @@ describe("CardHost", () => {
 		});
 
 		const onDeleteElement = jest.fn();
+		const isDeleteDialogOpen = ref(false);
 		mockedDeleteBoardNodeConfirmation.mockReturnValue({
-			onDeleteElement,
 			askDeleteBoardNodeConfirmation: jest.fn(),
+			isDeleteDialogOpen: isDeleteDialogOpen,
 		});
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
@@ -100,15 +100,6 @@ describe("CardHost", () => {
 					false
 				);
 			});
-		});
-	});
-
-	describe("when ContentElementList emits delete:element", () => {
-		it("should call onDeleteElement", () => {
-			const { onDeleteElement } = setup({ card: CARD_WITHOUT_ELEMENTS });
-
-			wrapper.findComponent(ContentElementList).vm.$emit("delete:element");
-			expect(onDeleteElement).toHaveBeenCalledTimes(1);
 		});
 	});
 
