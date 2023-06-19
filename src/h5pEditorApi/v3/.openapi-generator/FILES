@@ -9,3 +9,4 @@ git_push.sh
 index.ts
 models/api-validation-error.ts
 models/index.ts
+models/post-h5-pcontent-create-params.ts

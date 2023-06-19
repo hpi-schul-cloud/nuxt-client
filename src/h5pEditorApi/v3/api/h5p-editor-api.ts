@@ -22,12 +22,213 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
 import { ApiValidationError } from '../models';
+// @ts-ignore
+import { PostH5PContentCreateParams } from '../models';
 /**
  * H5pEditorApi - axios parameter creator
  * @export
  */
 export const H5pEditorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {PostH5PContentCreateParams} postH5PContentCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerCreateOrSaveH5pContent: async (language: string, contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'language' is not null or undefined
+            assertParamExists('h5PEditorControllerCreateOrSaveH5pContent', 'language', language)
+            // verify required parameter 'contentId' is not null or undefined
+            assertParamExists('h5PEditorControllerCreateOrSaveH5pContent', 'contentId', contentId)
+            // verify required parameter 'postH5PContentCreateParams' is not null or undefined
+            assertParamExists('h5PEditorControllerCreateOrSaveH5pContent', 'postH5PContentCreateParams', postH5PContentCreateParams)
+            const localVarPath = `/h5p-editor/edit/{contentId}`
+                .replace(`{${"language"}}`, encodeURIComponent(String(language)))
+                .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postH5PContentCreateParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerDeleteH5pContent: async (language: string, contentId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'language' is not null or undefined
+            assertParamExists('h5PEditorControllerDeleteH5pContent', 'language', language)
+            // verify required parameter 'contentId' is not null or undefined
+            assertParamExists('h5PEditorControllerDeleteH5pContent', 'contentId', contentId)
+            const localVarPath = `/h5p-editor/delete/{contentId}`
+                .replace(`{${"language"}}`, encodeURIComponent(String(language)))
+                .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetAjax: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/h5p-editor/ajax`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetContentFile: async (id: string, file: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('h5PEditorControllerGetContentFile', 'id', id)
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('h5PEditorControllerGetContentFile', 'file', file)
+            const localVarPath = `/h5p-editor/content/{id}/{file}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"file"}}`, encodeURIComponent(String(file)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetContentParameters: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('h5PEditorControllerGetContentParameters', 'id', id)
+            const localVarPath = `/h5p-editor/params/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Return dummy HTML for testing
@@ -64,12 +265,19 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/h5p-editor/{contentId}/play`;
+        h5PEditorControllerGetH5PEditor: async (language: string, contentId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'language' is not null or undefined
+            assertParamExists('h5PEditorControllerGetH5PEditor', 'language', language)
+            // verify required parameter 'contentId' is not null or undefined
+            assertParamExists('h5PEditorControllerGetH5PEditor', 'contentId', contentId)
+            const localVarPath = `/h5p-editor/edit/{contentId}`
+                .replace(`{${"language"}}`, encodeURIComponent(String(language)))
+                .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -78,6 +286,159 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
             }
 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} ubername 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetLibraryFile: async (ubername: string, file: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ubername' is not null or undefined
+            assertParamExists('h5PEditorControllerGetLibraryFile', 'ubername', ubername)
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('h5PEditorControllerGetLibraryFile', 'file', file)
+            const localVarPath = `/h5p-editor/libraries/{ubername}/{file}`
+                .replace(`{${"ubername"}}`, encodeURIComponent(String(ubername)))
+                .replace(`{${"file"}}`, encodeURIComponent(String(file)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetPlayer: async (language: string, contentId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'language' is not null or undefined
+            assertParamExists('h5PEditorControllerGetPlayer', 'language', language)
+            // verify required parameter 'contentId' is not null or undefined
+            assertParamExists('h5PEditorControllerGetPlayer', 'contentId', contentId)
+            const localVarPath = `/h5p-editor/play/{contentId}`
+                .replace(`{${"language"}}`, encodeURIComponent(String(language)))
+                .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetTemporaryFile: async (file: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('h5PEditorControllerGetTemporaryFile', 'file', file)
+            const localVarPath = `/h5p-editor/temp-files/{file}`
+                .replace(`{${"file"}}`, encodeURIComponent(String(file)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerPostAjax: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/h5p-editor/ajax`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -108,6 +469,59 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {PostH5PContentCreateParams} postH5PContentCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerCreateOrSaveH5pContent(language: string, contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerCreateOrSaveH5pContent(language, contentId, postH5PContentCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerDeleteH5pContent(language, contentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetAjax(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetAjax(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetContentFile(id: string, file: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetContentFile(id, file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetContentParameters(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetContentParameters(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -118,12 +532,55 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetPlayer(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetPlayer(options);
+        async h5PEditorControllerGetH5PEditor(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetH5PEditor(language, contentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} ubername 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetLibraryFile(ubername, file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetPlayer(language, contentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetTemporaryFile(file: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetTemporaryFile(file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerPostAjax(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerPostAjax(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -138,6 +595,54 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {PostH5PContentCreateParams} postH5PContentCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerCreateOrSaveH5pContent(language: string, contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerCreateOrSaveH5pContent(language, contentId, postH5PContentCreateParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.h5PEditorControllerDeleteH5pContent(language, contentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetAjax(options?: any): AxiosPromise<object> {
+            return localVarFp.h5PEditorControllerGetAjax(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetContentFile(id: string, file: string, options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerGetContentFile(id, file, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerGetContentParameters(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Return dummy HTML for testing
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -147,12 +652,51 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer(options?: any): AxiosPromise<string> {
-            return localVarFp.h5PEditorControllerGetPlayer(options).then((request) => request(axios, basePath));
+        h5PEditorControllerGetH5PEditor(language: string, contentId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.h5PEditorControllerGetH5PEditor(language, contentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} ubername 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerGetLibraryFile(ubername, file, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Return dummy HTML for testing
+         * @param {string} language 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetTemporaryFile(file: string, options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerGetTemporaryFile(file, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerPostAjax(options?: any): AxiosPromise<object> {
+            return localVarFp.h5PEditorControllerPostAjax(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -165,6 +709,54 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
 export interface H5pEditorApiInterface {
     /**
      * 
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {PostH5PContentCreateParams} postH5PContentCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerCreateOrSaveH5pContent(language: string, contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetAjax(options?: any): AxiosPromise<object>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetContentFile(id: string, file: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Return dummy HTML for testing
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -174,12 +766,51 @@ export interface H5pEditorApiInterface {
 
     /**
      * 
-     * @summary Return dummy HTML for testing
+     * @param {string} language 
+     * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetPlayer(options?: any): AxiosPromise<string>;
+    h5PEditorControllerGetH5PEditor(language: string, contentId: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @param {string} ubername 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Return dummy HTML for testing
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetTemporaryFile(file: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerPostAjax(options?: any): AxiosPromise<object>;
 
 }
 
@@ -190,6 +821,64 @@ export interface H5pEditorApiInterface {
  * @extends {BaseAPI}
  */
 export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
+    /**
+     * 
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {PostH5PContentCreateParams} postH5PContentCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerCreateOrSaveH5pContent(language: string, contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerCreateOrSaveH5pContent(language, contentId, postH5PContentCreateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerDeleteH5pContent(language, contentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetAjax(options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetAjax(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetContentFile(id: string, file: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetContentFile(id, file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetContentParameters(id: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetContentParameters(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Return dummy HTML for testing
@@ -203,12 +892,59 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
 
     /**
      * 
-     * @summary Return dummy HTML for testing
+     * @param {string} language 
+     * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetPlayer(options?: any) {
-        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetPlayer(options).then((request) => request(this.axios, this.basePath));
+    public h5PEditorControllerGetH5PEditor(language: string, contentId: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetH5PEditor(language, contentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} ubername 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetLibraryFile(ubername, file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Return dummy HTML for testing
+     * @param {string} language 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetTemporaryFile(file: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetTemporaryFile(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerPostAjax(options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerPostAjax(options).then((request) => request(this.axios, this.basePath));
     }
 }
