@@ -35,74 +35,148 @@ describe("FileContentElement", () => {
 	};
 
 	describe("when file needs to be uploaded", () => {
-		const setup = (isEditMode: boolean) => {
-			const element = fileElementResponseFactory.build();
-			document.body.setAttribute("data-app", "true");
+		describe("when upload is successful", () => {
+			const setup = (isEditMode: boolean) => {
+				const element = fileElementResponseFactory.build();
+				document.body.setAttribute("data-app", "true");
 
-			const fileRecordResponse = fileRecordResponseFactory.build();
-			const file = new File([], "test");
-			const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-			const { setSelectedFile } = setupSelectedFileMock({
-				getSelectedFileMock,
-			});
+				const fileRecordResponse = fileRecordResponseFactory.build();
+				const file = new File([], "test");
+				const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
+				const { setSelectedFile } = setupSelectedFileMock({
+					getSelectedFileMock,
+				});
 
-			const uploadMock = jest.fn().mockImplementationOnce(() => {
-				fileRecord.value = fileRecordResponse;
-			});
-			const { upload, fileRecord } = setupFileStorageApiMock({ uploadMock });
+				const uploadMock = jest.fn().mockImplementationOnce(() => {
+					fileRecord.value = fileRecordResponse;
+				});
+				const { upload, fileRecord } = setupFileStorageApiMock({ uploadMock });
 
-			const askDeleteBoardNodeConfirmationMock = jest.fn();
-			setupDeleteBoardNodeConfirmationMock({
-				askDeleteBoardNodeConfirmationMock,
-			});
+				const askDeleteBoardNodeConfirmationMock = jest.fn();
+				setupDeleteBoardNodeConfirmationMock({
+					askDeleteBoardNodeConfirmationMock,
+				});
 
-			const { wrapper, deleteElementMock } = getWrapper({
-				element,
-				isEditMode,
-			});
+				const { wrapper, deleteElementMock } = getWrapper({
+					element,
+					isEditMode,
+				});
 
-			return {
-				wrapper,
-				upload,
-				fileRecord,
-				setSelectedFile,
-				file,
-				deleteElementMock,
+				return {
+					wrapper,
+					upload,
+					fileRecord,
+					setSelectedFile,
+					file,
+					deleteElementMock,
+				};
 			};
-		};
 
-		describe("when component is not in edit mode", () => {
-			it("should be found in dom", () => {
-				const { wrapper } = setup(false);
+			describe("when component is not in edit mode", () => {
+				it("should be found in dom", () => {
+					const { wrapper } = setup(false);
 
-				const fileContentElement = wrapper.findComponent(FileContentElement);
-				expect(fileContentElement.exists()).toBe(true);
+					const fileContentElement = wrapper.findComponent(FileContentElement);
+					expect(fileContentElement.exists()).toBe(true);
+				});
+
+				it("should render FileContentElementDisplay component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					const fileContentElementDisplay = wrapper.findComponent(
+						FileContentElementDisplay
+					);
+					expect(fileContentElementDisplay.exists()).toBe(true);
+				});
+
+				it("should call upload", async () => {
+					const { wrapper, upload, file } = setup(false);
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					expect(upload).toHaveBeenCalledTimes(1);
+					expect(upload).toHaveBeenCalledWith(file);
+				});
+
+				it("should set selected file to undefined", async () => {
+					const { wrapper, setSelectedFile } = setup(false);
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					expect(setSelectedFile).toHaveBeenCalledTimes(1);
+					expect(setSelectedFile).toHaveBeenCalledWith();
+				});
 			});
 
-			it("should render FileContentElementDisplay component", async () => {
-				const { wrapper } = setup(false);
+			describe("when component is in edit mode", () => {
+				it("should be found in dom", () => {
+					const { wrapper } = setup(true);
+					expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
+				});
+
+				it("should render FileContentElementEdit component", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					const fileContentElementEdit = wrapper.findComponent(
+						FileContentElementEdit
+					);
+					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+			});
+		});
+
+		describe("when upload throws error", () => {
+			const setup = (isEditMode: boolean) => {
+				const element = fileElementResponseFactory.build();
+				document.body.setAttribute("data-app", "true");
+
+				const file = new File([], "test");
+				const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
+				const { setSelectedFile } = setupSelectedFileMock({
+					getSelectedFileMock,
+				});
+
+				const error = new Error("test");
+				const uploadMock = jest.fn().mockRejectedValueOnce(error);
+				setupFileStorageApiMock({ uploadMock });
+
+				const askDeleteBoardNodeConfirmationMock = jest.fn();
+				setupDeleteBoardNodeConfirmationMock({
+					askDeleteBoardNodeConfirmationMock,
+				});
+
+				const { wrapper, deleteElementMock } = getWrapper({
+					element,
+					isEditMode,
+				});
+
+				return {
+					wrapper,
+					setSelectedFile,
+					deleteElementMock,
+				};
+			};
+
+			it("should call deleteElement", async () => {
+				const { wrapper, deleteElementMock } = setup(false);
 
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
 
-				const fileContentElementDisplay = wrapper.findComponent(
-					FileContentElementDisplay
-				);
-				expect(fileContentElementDisplay.exists()).toBe(true);
+				expect(deleteElementMock).toHaveBeenCalledTimes(1);
 			});
 
-			it("should call upload", async () => {
-				const { wrapper, upload, file } = setup(false);
-
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-
-				expect(upload).toHaveBeenCalledTimes(1);
-				expect(upload).toHaveBeenCalledWith(file);
-			});
-
-			it("should set selected file to undefined", async () => {
+			it("should call setSelectedFile", async () => {
 				const { wrapper, setSelectedFile } = setup(false);
 
 				await wrapper.vm.$nextTick();
@@ -110,26 +184,6 @@ describe("FileContentElement", () => {
 
 				expect(setSelectedFile).toHaveBeenCalledTimes(1);
 				expect(setSelectedFile).toHaveBeenCalledWith();
-			});
-		});
-
-		describe("when component is in edit mode", () => {
-			it("should be found in dom", () => {
-				const { wrapper } = setup(true);
-				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
-			});
-
-			it("should render FileContentElementEdit component", async () => {
-				const { wrapper } = setup(true);
-
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-
-				const fileContentElementEdit = wrapper.findComponent(
-					FileContentElementEdit
-				);
-				expect(fileContentElementEdit.exists()).toBe(true);
 			});
 		});
 	});

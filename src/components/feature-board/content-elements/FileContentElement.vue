@@ -27,13 +27,13 @@ import {
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -83,8 +83,8 @@ export default defineComponent({
 				setSelectedFile();
 				await fetchPendingFileRecursively();
 			} catch (error) {
-				await deleteFileElement();
 				setSelectedFile();
+				await deleteFileElement();
 			}
 		};
 
