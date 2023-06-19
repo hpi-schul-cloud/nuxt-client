@@ -202,7 +202,7 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 		const onCancel = async () => {
-			await router.push({ path: contextRoute });
+			await router.push({ path: contextRoute, query: { tab: "tools" } });
 		};
 
 		const onSaveTool = async () => {
