@@ -75,7 +75,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const error = { message: "WRONG ID", statusCode: "400" };
+				const error = new Error("error");
 
 				const listMock = jest.fn().mockRejectedValueOnce(error);
 				setupFileStorageFactoryMock({ listMock });
@@ -83,14 +83,14 @@ describe("FileStorageApi Composable", () => {
 				return { parentId, parentType, error };
 			};
 
-			it("should set BusinessError", async () => {
+			it("should set BusinessError and pass error", async () => {
 				const { error, parentId, parentType } = setup();
 				const { fetchFile, businessError } = useFileStorageApi(
 					parentId,
 					parentType
 				);
 
-				await fetchFile();
+				await expect(fetchFile()).rejects.toThrow(error);
 
 				expect(businessError.value).toBe(error);
 			});
@@ -152,7 +152,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const error = { message: "WRONG ID", statusCode: "400" };
+				const error = new Error("error");
 				const file = new File([""], "filename");
 
 				const uploadMock = jest.fn().mockRejectedValueOnce(error);
@@ -161,14 +161,14 @@ describe("FileStorageApi Composable", () => {
 				return { parentId, parentType, error, file };
 			};
 
-			it("should set BusinessError", async () => {
+			it("should set BusinessError and pass error", async () => {
 				const { error, parentId, parentType, file } = setup();
 				const { upload, businessError } = useFileStorageApi(
 					parentId,
 					parentType
 				);
 
-				await upload(file);
+				await expect(upload(file)).rejects.toThrow(error);
 
 				expect(businessError.value).toBe(error);
 			});
@@ -240,7 +240,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const error = { message: "WRONG NAME", statusCode: "400" };
+				const error = new Error("error");
 				const renameFileParams = {
 					fileName: "new-file-name.txt",
 				};
@@ -252,14 +252,14 @@ describe("FileStorageApi Composable", () => {
 				return { error, renameFileParams, parentId, parentType };
 			};
 
-			it("should set BusinessError", async () => {
+			it("should set BusinessError and pass error", async () => {
 				const { error, renameFileParams, parentId, parentType } = setup();
 				const { rename, businessError } = useFileStorageApi(
 					parentId,
 					parentType
 				);
 
-				await rename("dfgdfg", renameFileParams);
+				await expect(rename("dfgdfg", renameFileParams)).rejects.toThrow(error);
 
 				expect(businessError.value).toBe(error);
 			});
@@ -491,6 +491,49 @@ describe("FileStorageApi Composable", () => {
 				await fetchPendingFileRecursively();
 
 				expect(fileRecord.value).toBe(fileRecordResponse);
+			});
+		});
+
+		describe("when fileApiFactory.list returns error", () => {
+			const setup = async () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponse = fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+				});
+				const response = {
+					data: { data: [fileRecordResponse] },
+				};
+				const error = new Error("error");
+
+				jest.mocked(delay).mockResolvedValueOnce();
+
+				const { fileApiFactory } = setupFileStorageFactoryMock({});
+
+				fileApiFactory.list
+					.mockResolvedValueOnce(response)
+					.mockRejectedValueOnce(error);
+
+				const { fetchPendingFileRecursively, fetchFile } = useFileStorageApi(
+					parentId,
+					parentType
+				);
+				await fetchFile();
+				fileApiFactory.list.mockClear();
+
+				return {
+					fileApiFactory,
+					fetchPendingFileRecursively,
+				};
+			};
+
+			it("should call FileApiFactory.list 1 time", async () => {
+				const { fileApiFactory, fetchPendingFileRecursively } = await setup();
+
+				await fetchPendingFileRecursively();
+
+				expect(fileApiFactory.list).toBeCalledTimes(1);
 			});
 		});
 	});
