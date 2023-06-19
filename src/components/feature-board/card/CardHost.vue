@@ -1,65 +1,62 @@
 <template>
-	<div>
-		<CardHostInteractionHandler
-			:isEditMode="isEditMode"
-			@start-edit-mode="onStartEditMode"
-			@end-edit-mode="onEndEditMode"
-			@move:card-keyboard="onMoveCardKeyboard"
+	<CardHostInteractionHandler
+		:isEditMode="isEditMode"
+		@start-edit-mode="onStartEditMode"
+		@end-edit-mode="onEndEditMode"
+		@move:card-keyboard="onMoveCardKeyboard"
+	>
+		<VCard
+			ref="cardHost"
+			:height="isLoading ? height : 'auto'"
+			class="transition-swing"
+			:class="{ 'drag-disabled': isEditMode }"
+			outlined
+			tabindex="0"
+			min-height="120px"
+			:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+			:id="cardId"
+			:ripple="false"
+			:hover="isHovered"
 		>
-			<VCard
-				ref="cardHost"
-				:height="isLoading ? height : 'auto'"
-				class="transition-swing"
-				:class="{ 'drag-disabled': isEditMode }"
-				outlined
-				tabindex="0"
-				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-				:id="cardId"
-				:ripple="false"
-				:hover="isHovered"
-			>
-				<template v-if="isLoading">
-					<CardSkeleton :height="height" />
-				</template>
-				<template v-if="!isLoading && card">
-					<CardTitle
-						:isEditMode="isEditMode"
-						:value="card.title"
-						scope="card"
-						@update:value="onUpdateCardTitle"
-					>
-					</CardTitle>
+			<template v-if="isLoading">
+				<CardSkeleton :height="height" />
+			</template>
+			<template v-if="!isLoading && card">
+				<CardTitle
+					:isEditMode="isEditMode"
+					:value="card.title"
+					scope="card"
+					@update:value="onUpdateCardTitle"
+				>
+				</CardTitle>
 
-					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu v-if="hasDeletePermission" scope="card">
-							<BoardMenuAction @click="onDeleteCard">
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
-								{{ $t("components.board.action.delete") }}
-							</BoardMenuAction>
-						</BoardMenu>
-					</div>
+				<div class="board-menu" :class="boardMenuClasses">
+					<BoardMenu v-if="hasDeletePermission" scope="card">
+						<BoardMenuAction @click="onDeleteCard">
+							<VIcon>
+								{{ mdiTrashCanOutline }}
+							</VIcon>
+							{{ $t("components.board.action.delete") }}
+						</BoardMenuAction>
+					</BoardMenu>
+				</div>
 
-					<ContentElementList
-						:elements="card.elements"
-						:isEditMode="isEditMode"
-						@delete:element="onDeleteElement"
-					></ContentElementList>
-					<CardAddElementMenu
-						@add-element="onAddElement"
-						v-if="isEditMode"
-					></CardAddElementMenu>
-				</template>
-			</VCard>
-		</CardHostInteractionHandler>
+				<ContentElementList
+					:elements="card.elements"
+					:isEditMode="isEditMode"
+					@delete:element="onDeleteElement"
+				></ContentElementList>
+				<CardAddElementMenu
+					@add-element="onAddElement"
+					v-if="isEditMode"
+				></CardAddElementMenu>
+			</template>
+		</VCard>
 		<FilePicker
 			@update:file="onFileSelect"
-			:isFilePickerOpen="isFilePickerOpen"
-			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+			:isFilePickerOpen.sync="isFilePickerOpen"
 		/>
-	</div>
+	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
@@ -123,6 +120,9 @@ export default defineComponent({
 		const { onDeleteElement, askDeleteBoardNodeConfirmation } =
 			useDeleteBoardNodeConfirmation(deleteElement);
 
+		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
+			useElementTypeSelection(addElement);
+
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
@@ -139,15 +139,8 @@ export default defineComponent({
 			}
 		};
 
-		const { askType, createFileElement, isFilePickerOpen } =
-			useElementTypeSelection(addElement);
-
 		const onAddElement = () => {
 			askType();
-		};
-
-		const onFileSelect = async (file: File) => {
-			await createFileElement(file);
 		};
 
 		const onStartEditMode = () => {
@@ -155,7 +148,9 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			stopEditMode();
+			if (!isDialogOpen.value) {
+				stopEditMode();
+			}
 		};
 
 		const boardMenuClasses = computed(() => {

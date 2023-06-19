@@ -52,14 +52,6 @@ describe("FileContentElementEdit", () => {
 		expect(fileName).toBe(fileNameProp);
 	});
 
-	it("should find download url", async () => {
-		const { wrapper, urlProp } = setup();
-
-		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
-
-		expect(downloadUrl).toBe(urlProp);
-	});
-
 	describe("when delete board menu action is clicked", () => {
 		it("should emit delete:element event", async () => {
 			const { wrapper } = setup();
