@@ -44,11 +44,6 @@ import { ToolContextType } from "./external-tool";
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
 
-	beforeEach(() => {
-		module = new ExternalToolsModule({});
-		setupStores({ authModule: AuthModule });
-	});
-
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
@@ -247,6 +242,9 @@ describe("ExternalToolsModule", () => {
 		const schoolId = "schoolId";
 		const toolId = "toolId";
 
+		module = new ExternalToolsModule({});
+		setupStores({ authModule: AuthModule });
+
 		const schoolExternalTool: SchoolExternalTool =
 			schoolExternalToolFactory.build({
 				name: "Test",
@@ -294,8 +292,8 @@ describe("ExternalToolsModule", () => {
 			toolConfigurationTemplateFactory.build();
 
 		const payload = {
-			contextType: ToolContextType.COURSE,
 			contextId: "contextId",
+			contextType: ToolContextType.COURSE,
 		};
 
 		return {
@@ -1183,9 +1181,9 @@ describe("ExternalToolsModule", () => {
 
 		describe("loadAvailableToolConfigurationsForContext is called", () => {
 			describe("when no error occurs", () => {
-				const { toolApiMock } = mockToolApi();
-				const { payload } = setup();
 				it("should call toolApi.toolConfigurationControllerGetAvailableToolsForContext", async () => {
+					const { toolApiMock } = mockToolApi();
+					const { payload } = setup();
 					await module.loadAvailableToolConfigurationsForContext(payload);
 
 					expect(
@@ -1194,6 +1192,8 @@ describe("ExternalToolsModule", () => {
 				});
 
 				it("should call set SchoolToolConfiguration", async () => {
+					const { toolApiMock } = mockToolApi();
+					const { payload } = setup();
 					const schoolToolConfigurationListItems: ContextExternalToolTemplateListItem[] =
 						[
 							{
@@ -1243,10 +1243,10 @@ describe("ExternalToolsModule", () => {
 				});
 
 				describe("when an error occurs", () => {
-					const { axiosError, axiosErrorResponse } = setupWithAuth();
-					const { toolApiMock } = mockToolApi();
-					const { payload } = setup();
 					it("should set the businessError", async () => {
+						const { axiosError, axiosErrorResponse } = setupWithAuth();
+						const { toolApiMock } = mockToolApi();
+						const { payload } = setup();
 						toolApiMock.toolConfigurationControllerGetAvailableToolsForContext.mockRejectedValue(
 							axiosError
 						);
