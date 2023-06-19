@@ -20,7 +20,7 @@ export function convertFileSizeToHumanReadable(
 	fileSize: number,
 	numberOfDigits = 2
 ): string {
-	const units = ["B", "KB", "MB", "GB", "TB"];
+	const units = ["B", "KB", "MB", "GB"];
 	const threshold = 1024;
 
 	let convertedSize = fileSize;
