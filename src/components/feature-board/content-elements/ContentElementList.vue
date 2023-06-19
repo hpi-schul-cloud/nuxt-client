@@ -15,6 +15,7 @@
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
+				:deleteElement="deleteElement"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
@@ -48,6 +49,10 @@ export default defineComponent({
 		},
 		isEditMode: {
 			type: Boolean,
+			required: true,
+		},
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
 			required: true,
 		},
 	},

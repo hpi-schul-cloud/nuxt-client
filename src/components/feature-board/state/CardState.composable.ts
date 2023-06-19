@@ -20,7 +20,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		moveElementCall,
 		updateCardHeightCall,
@@ -67,7 +68,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const result = await createElement(cardState.card.id, { type });
+		const result = await createElementCall(cardState.card.id, { type });
 
 		cardState.card.elements.push(result as unknown as AnyContentElement);
 
@@ -128,6 +129,15 @@ export const useCardState = (id: BoardCard["id"]) => {
 		await moveElementCall(payload, cardState.card.id, elementIndex - 1);
 	};
 
+	const deleteElement = async (elementId: string) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		await deleteElementCall(elementId);
+		extractElement(elementId);
+	};
+
 	onMounted(() => fetchCard(id));
 
 	return {
@@ -138,6 +148,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		addElement,
 		moveElementDown,
 		moveElementUp,
+		deleteElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};

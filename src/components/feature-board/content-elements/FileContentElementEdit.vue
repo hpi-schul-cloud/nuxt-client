@@ -1,7 +1,7 @@
 <template>
 	<div ref="fileContentElement" tabindex="0" @keydown.up.down="onKeydownArrow">
 		<v-list flat class="py-0">
-			<v-list-item :href="url" download>
+			<v-list-item>
 				<v-list-item-icon class="mr-2">
 					<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 				</v-list-item-icon>
@@ -32,7 +32,7 @@
 							</VIcon>
 							{{ $t("components.board.action.moveDown") }}
 						</BoardMenuAction>
-						<BoardMenuAction>
+						<BoardMenuAction @click="onDelete">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
 							</VIcon>
@@ -79,6 +79,7 @@ export default defineComponent({
 		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
+		"delete:element",
 		"update:caption",
 		"move-down:element",
 		"move-up:element",
@@ -100,6 +101,10 @@ export default defineComponent({
 			emit("move-up:element");
 		};
 
+		const onDelete = () => {
+			emit("delete:element");
+		};
+
 		return {
 			fileContentElement,
 			mdiAlertCircle,
@@ -110,6 +115,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
+			onDelete,
 		};
 	},
 });

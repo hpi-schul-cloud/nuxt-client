@@ -2,11 +2,11 @@
 	<VMenu offset-y attach left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
-				text
-				icon
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
+				:class="{ 'grey lighten-3': hasBackground }"
+				icon
 				@dblclick.stop="() => {}"
 				@keydown.left.right.up.down.stop="() => {}"
 			>
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 
 import { mdiDotsVertical } from "@mdi/js";
 export default defineComponent({
@@ -45,8 +45,13 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	setup(props) {
+		const hasBackground = computed<boolean>(
+			() => props.scope === "element" || props.scope === "card"
+		);
+
 		return {
+			hasBackground,
 			mdiDotsVertical,
 		};
 	},

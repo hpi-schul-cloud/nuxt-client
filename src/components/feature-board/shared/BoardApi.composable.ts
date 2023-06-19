@@ -58,13 +58,17 @@ export const useBoardApi = () => {
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
-	const createElement = async (
+	const createElementCall = async (
 		cardId: string,
 		params: CreateContentElementBody
 	) => {
 		const result = await cardsApi.cardControllerCreateElement(cardId, params);
 
 		return result.data;
+	};
+
+	const deleteElementCall = async (elementId: string) => {
+		await elementApi.elementControllerDeleteElement(elementId);
 	};
 
 	const deleteCardCall = async (cardId: string) => {
@@ -80,7 +84,7 @@ export const useBoardApi = () => {
 			columnId
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id, {
+			await createElementCall(createdCard.data.id, {
 				type: ContentElementType.RichText,
 			});
 			return createdCard.data.id;
@@ -122,7 +126,8 @@ export const useBoardApi = () => {
 
 	return {
 		createColumnCall,
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,

@@ -19,6 +19,7 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			:lock-axis="lockAxis"
+			:drag-begin-delay="200"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -182,7 +183,7 @@ export default defineComponent({
 
 /* width */
 .scrollable-column::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
 
 /* Track */
@@ -193,12 +194,16 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
-	background: var(--v-secondary-lighten1);
+	background-color: transparent;
+	border-radius: 5px;
+}
+.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
+	background-color: var(--v-secondary-lighten1);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base);
+	background: var(--v-secondary-base) !important;
 }
 </style>

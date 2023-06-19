@@ -32,7 +32,7 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction @click="onTryDelete">
+						<BoardMenuAction @click="onDeleteCard">
 							<VIcon>
 								{{ mdiTrashCanOutline }}
 							</VIcon>
@@ -44,6 +44,7 @@
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
+					:deleteElement="deleteElement"
 					@move-down:element="onMoveContentElementDown"
 					@move-up:element="onMoveContentElementUp"
 					@move-keyboard:element="onMoveContentElementKeyboard"
@@ -62,8 +63,6 @@
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -76,6 +75,8 @@ import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
@@ -84,7 +85,6 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	DragAndDropKey,
 	ElementMove,
@@ -109,7 +109,6 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
@@ -121,12 +120,16 @@ export default defineComponent({
 			addElement,
 			moveElementDown,
 			moveElementUp,
+			deleteElement,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
+		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
+			useDeleteBoardNodeConfirmation();
+
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
 
@@ -135,18 +138,12 @@ export default defineComponent({
 		};
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 
-		const onTryDelete = async () => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						title: card.value?.title ? `"${card.value.title}"` : "",
-						type: i18n.t("components.boardCard").toString(),
-					})
-					.toString() ?? "";
+		const onDeleteCard = async () => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				card.value?.title,
+				"boardCard"
+			);
 
-			const { askConfirmation } = useDeleteConfirmation();
-
-			const shouldDelete = await askConfirmation({ message });
 			if (shouldDelete) {
 				emit("delete:card", card.value?.id);
 			}
@@ -161,7 +158,7 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value) {
+			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
 			}
 		};
@@ -207,8 +204,9 @@ export default defineComponent({
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
-			onTryDelete,
+			onDeleteCard,
 			onAddElement,
+			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			onMoveContentElementDown,
@@ -227,8 +225,8 @@ export default defineComponent({
 <style scoped>
 .board-menu {
 	position: absolute;
-	top: 10px;
-	right: 5px;
+	top: 0.25rem;
+	right: 0.25rem;
 	z-index: 1;
 }
 .hidden {

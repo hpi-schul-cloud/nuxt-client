@@ -1,15 +1,25 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+import {
+	boardCardFactory,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils/factory";
+import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue, { ref } from "vue";
+import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useCardState } from "../state/CardState.composable";
+import { BoardPermissionsTypes } from "../types/Board";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsTypes } from "../types/Board";
-import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
+jest.mock("../state/CardState.composable");
+jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedUseCardState = jest.mocked(useCardState);
 
 const defaultPermissions = {
 	hasDeletePermission: true,
@@ -20,16 +30,11 @@ const CARD_SKELETON: BoardCardSkeleton = {
 	cardId: "0123456789abcdef00067000",
 };
 
-const CARD_WITHOUT_ELEMENTS: BoardCard = {
-	id: "0123456789abcdef00067000",
-	title: "Empty Card",
-	height: 200,
-	elements: [],
-	visibility: { publishedAt: "2022-01-01 20:00:00" },
-};
+const CARD_WITHOUT_ELEMENTS: BoardCard = boardCardFactory.build();
 
-jest.mock("../state/CardState.composable");
-const mockedUseCardState = jest.mocked(useCardState);
+const CARD_WITH_FILE_ELEMENT: BoardCard = boardCardFactory.build({
+	elements: [fileElementResponseFactory.build()],
+});
 
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
@@ -41,6 +46,8 @@ describe("CardHost", () => {
 	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
+
+		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
 			fetchCard: jest.fn(),
 			updateTitle: jest.fn(),
@@ -49,6 +56,7 @@ describe("CardHost", () => {
 			addElement: jest.fn(),
 			moveElementDown: jest.fn(),
 			moveElementUp: jest.fn(),
+			deleteElement: deleteElementMock,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
@@ -57,6 +65,10 @@ describe("CardHost", () => {
 			...options?.permissions,
 		});
 
+		const onDeleteElement = jest.fn();
+
+		setupDeleteBoardNodeConfirmationMock();
+
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
@@ -64,6 +76,8 @@ describe("CardHost", () => {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
+
+		return { onDeleteElement, deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
@@ -84,6 +98,26 @@ describe("CardHost", () => {
 				setup({ card: CARD_WITHOUT_ELEMENTS });
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
+				);
+			});
+		});
+
+		describe("'ContentElementList' component", () => {
+			it("should be found in dom", () => {
+				setup({ card: CARD_WITH_FILE_ELEMENT });
+
+				const contentElementList = wrapper.findComponent(ContentElementList);
+
+				expect(contentElementList.exists()).toBe(true);
+			});
+
+			it("should propagate deleteElement function to ContentElementList", () => {
+				const { deleteElementMock } = setup({ card: CARD_WITH_FILE_ELEMENT });
+
+				const contentElementList = wrapper.findComponent(ContentElementList);
+
+				expect(contentElementList.props("deleteElement")).toBe(
+					deleteElementMock
 				);
 			});
 		});
