@@ -1,8 +1,11 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
-import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import {
+	boardCardFactory,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils/factory";
+import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -27,21 +30,11 @@ const CARD_SKELETON: BoardCardSkeleton = {
 	cardId: "0123456789abcdef00067000",
 };
 
-const CARD_WITHOUT_ELEMENTS: BoardCard = {
-	id: "0123456789abcdef00067000",
-	title: "Empty Card",
-	height: 200,
-	elements: [],
-	visibility: { publishedAt: "2022-01-01 20:00:00" },
-};
+const CARD_WITHOUT_ELEMENTS: BoardCard = boardCardFactory.build();
 
-const CARD_WITH_FILE_ELEMENT: BoardCard = {
-	id: "0123456789abcdef00067000",
-	title: "Card with file element",
-	height: 200,
+const CARD_WITH_FILE_ELEMENT: BoardCard = boardCardFactory.build({
 	elements: [fileElementResponseFactory.build()],
-	visibility: { publishedAt: "2022-01-01 20:00:00" },
-};
+});
 
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;

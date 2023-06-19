@@ -4,6 +4,7 @@ export * from "./businessErrorFactory";
 export * from "./cardSkeletonResponseFactory";
 export * from "./columnResponseFactory";
 export * from "./courseMetadataResponseFactory";
+export * from "./fileElementResponseFactory";
 export * from "./schoolExternalToolFactory";
 export * from "./singleColumnBoardResponseFactory";
 export * from "./taskCardResponseFactory";
