@@ -5,7 +5,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const {
 	tasksTeacher,
@@ -43,7 +43,7 @@ const getWrapper = (props, options) => {
 		provide: {
 			tasksModule: tasksModuleMock,
 			copyModule: copyModuleMock,
-			notifierModule: notifierModuleMock,
+			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 			[I18N_KEY]: { t: (key) => key },
 		},
 		propsData: props,
@@ -132,11 +132,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			});
 
 			describe("when teacher is a subtitution teacher", () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
 				it("should add 'substitution' to the course label", () => {
+					const wrapper = getWrapper({
+						task: drafts[1],
+					});
+
 					const taskLabel = wrapper.find("[data-testid='task-label']");
 
 					expect(taskLabel.exists()).toBe(true);
@@ -148,19 +148,24 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			});
 		});
 
-		const wrapper = getWrapper({
-			task: drafts[0],
-		});
-
 		it("should set isDraft to true", () => {
+			const wrapper = getWrapper({
+				task: drafts[0],
+			});
 			expect(wrapper.vm.isDraft).toBe(true);
 		});
 
 		it("should compute correct avatar icon value", () => {
+			const wrapper = getWrapper({
+				task: drafts[0],
+			});
 			expect(wrapper.vm.avatarIcon).toStrictEqual("$taskDraft");
 		});
 
 		it("should not show task status", () => {
+			const wrapper = getWrapper({
+				task: drafts[0],
+			});
 			expect(wrapper.find("[data-testid='task-status']").exists()).toBe(false);
 			expect(wrapper.vm.showTaskStatus).toBe(false);
 		});
@@ -180,11 +185,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 
 		describe("when teacher is a subtitution teacher", () => {
-			const wrapper = getWrapper({
-				task: dueDateTasksTeacher[0],
-			});
-
 			it("should add 'substitution' to the course label", () => {
+				const wrapper = getWrapper({
+					task: dueDateTasksTeacher[0],
+				});
+
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);
@@ -193,34 +198,44 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			});
 		});
 
-		const wrapper = getWrapper({
-			task: tasksTeacher[0],
-		});
-
 		it("should set isDraft to true", () => {
+			const wrapper = getWrapper({
+				task: tasksTeacher[0],
+			});
 			expect(wrapper.vm.isDraft).toBe(false);
 		});
 
 		it("should compute correct avatar icon value", () => {
+			const wrapper = getWrapper({
+				task: tasksTeacher[0],
+			});
 			expect(wrapper.vm.avatarIcon).toStrictEqual("$taskOpenFilled");
 		});
 	});
 
 	describe("when a task is planned", () => {
-		const wrapper = getWrapper({
-			task: plannedTask,
-		});
-
 		it("should set isPlanned to true", () => {
+			const wrapper = getWrapper({
+				task: plannedTask,
+			});
+
 			expect(wrapper.vm.isPlanned).toBe(true);
 		});
 
 		it("should not show task status", () => {
+			const wrapper = getWrapper({
+				task: plannedTask,
+			});
+
 			expect(wrapper.find("[data-testid='task-status']").exists()).toBe(false);
 			expect(wrapper.vm.showTaskStatus).toBe(false);
 		});
 
 		it("should show planned label", () => {
+			const wrapper = getWrapper({
+				task: plannedTask,
+			});
+
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
@@ -230,11 +245,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when a task is without due date", () => {
-		const wrapper = getWrapper({
-			task: noDueDateTasksTeacher[0],
-		});
-
 		it("should show correct due date label", () => {
+			const wrapper = getWrapper({
+				task: noDueDateTasksTeacher[0],
+			});
+
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
@@ -244,11 +259,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when a task has a due date", () => {
-		const wrapper = getWrapper({
-			task: dueDateTasksTeacher[0],
-		});
-
 		it("should show correct due date label", () => {
+			const wrapper = getWrapper({
+				task: dueDateTasksTeacher[0],
+			});
+
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
@@ -260,11 +275,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when a task has a topic", () => {
-		const wrapper = getWrapper({
-			task: dueDateTasksTeacher[0],
-		});
-
 		it("should show correct topic label", () => {
+			const wrapper = getWrapper({
+				task: dueDateTasksTeacher[0],
+			});
+
 			const topicLabel = wrapper.find("[data-testid='task-topic']");
 
 			expect(topicLabel.exists()).toBe(true);
@@ -274,11 +289,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when a task has an unpublished lesson", () => {
-		const wrapper = getWrapper({
-			task: dueDateTasksTeacher[4],
-		});
-
 		it("should show unpublished lesson info", () => {
+			const wrapper = getWrapper({
+				task: dueDateTasksTeacher[4],
+			});
+
 			const lessonChipLarge = wrapper.find(
 				"[data-testid='task-lesson-chip-large']"
 			);
@@ -298,11 +313,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when a task has no topic", () => {
-		const wrapper = getWrapper({
-			task: dueDateTasksTeacher[1],
-		});
-
 		it("should show correct topic label", () => {
+			const wrapper = getWrapper({
+				task: dueDateTasksTeacher[1],
+			});
+
 			const topicLabel = wrapper.find("[data-testid='task-topic']");
 
 			expect(topicLabel.exists()).toBe(false);
@@ -380,11 +395,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	describe("when task is a beta task", () => {
-		const wrapper = getWrapper({
-			task: betaTask,
-		});
-
 		it("should have correct combined label for beta task", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.text()).toStrictEqual(
@@ -393,6 +408,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 
 		it("should redirect to beta task page", async () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+
 			const taskCard = wrapper.findComponent({ name: "v-list-item" });
 			await taskCard.trigger("click");
 			expect(mockRouter.push).toHaveBeenCalledTimes(1);
@@ -403,11 +422,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 		});
 
 		describe("when teacher is a subtitution teacher", () => {
-			const wrapper = getWrapper({
-				task: substitutionBetaTask,
-			});
-
 			it("should add 'substitution' to the course label", () => {
+				const wrapper = getWrapper({
+					task: substitutionBetaTask,
+				});
+
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);

@@ -7,7 +7,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
@@ -19,7 +19,7 @@ describe("@/components/share/ShareModal", () => {
 				i18n: true,
 			}),
 			provide: {
-				notifierModule: {
+				[NOTIFIER_MODULE_KEY as symbol]: {
 					show: showMock,
 				},
 				shareModule: shareModuleMock,
