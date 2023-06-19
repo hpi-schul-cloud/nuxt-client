@@ -83,7 +83,7 @@ export default defineComponent({
 				setSelectedFile();
 				await fetchPendingFileRecursively();
 			} catch (error) {
-				props.deleteElement(props.element.id);
+				await deleteFileElement();
 				setSelectedFile();
 			}
 		};
@@ -100,8 +100,12 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				props.deleteElement(props.element.id);
+				await deleteFileElement();
 			}
+		};
+
+		const deleteFileElement = () => {
+			return props.deleteElement(props.element.id);
 		};
 
 		return {
