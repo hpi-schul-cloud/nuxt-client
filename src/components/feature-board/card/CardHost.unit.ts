@@ -1,7 +1,9 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
+import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useCardState } from "../state/CardState.composable";
@@ -29,6 +31,14 @@ const CARD_WITHOUT_ELEMENTS: BoardCard = {
 	visibility: { publishedAt: "2022-01-01 20:00:00" },
 };
 
+const CARD_WITH_FILE_ELEMENT: BoardCard = {
+	id: "0123456789abcdef00067000",
+	title: "Card with file element",
+	height: 200,
+	elements: [fileElementResponseFactory.build()],
+	visibility: { publishedAt: "2022-01-01 20:00:00" },
+};
+
 jest.mock("../state/CardState.composable");
 const mockedUseCardState = jest.mocked(useCardState);
 
@@ -47,13 +57,15 @@ describe("CardHost", () => {
 	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
+
+		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
 			fetchCard: jest.fn(),
 			updateTitle: jest.fn(),
 			deleteCard: jest.fn(),
 			updateCardHeight: jest.fn(),
 			addElement: jest.fn(),
-			deleteElement: jest.fn(),
+			deleteElement: deleteElementMock,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
@@ -77,7 +89,7 @@ describe("CardHost", () => {
 			},
 		});
 
-		return { onDeleteElement };
+		return { onDeleteElement, deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
@@ -98,6 +110,26 @@ describe("CardHost", () => {
 				setup({ card: CARD_WITHOUT_ELEMENTS });
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
+				);
+			});
+		});
+
+		describe("'ContentElementList' component", () => {
+			it("should be found in dom", () => {
+				setup({ card: CARD_WITH_FILE_ELEMENT });
+
+				const contentElementList = wrapper.findComponent(ContentElementList);
+
+				expect(contentElementList.exists()).toBe(true);
+			});
+
+			it("should propagate deleteElement function to ContentElementList'", () => {
+				const { deleteElementMock } = setup({ card: CARD_WITH_FILE_ELEMENT });
+
+				const contentElementList = wrapper.findComponent(ContentElementList);
+
+				expect(contentElementList.props("deleteElement")).toBe(
+					deleteElementMock
 				);
 			});
 		});
