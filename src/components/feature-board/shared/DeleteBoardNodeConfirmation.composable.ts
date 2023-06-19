@@ -6,6 +6,7 @@ export const useDeleteBoardNodeConfirmation = (
 	deleteElement: (elementId: string) => Promise<void>
 ) => {
 	const i18n = injectStrict(I18N_KEY);
+	const { askConfirmation, isDialogOpen } = useDeleteConfirmation();
 
 	const onDeleteElement = async (data: DeleteElementEventPayload) => {
 		const { elementId, name } = data;
@@ -31,8 +32,6 @@ export const useDeleteBoardNodeConfirmation = (
 				})
 				.toString() ?? "";
 
-		const { askConfirmation } = useDeleteConfirmation();
-
 		const shouldDelete = await askConfirmation({ message });
 
 		return shouldDelete;
@@ -41,5 +40,6 @@ export const useDeleteBoardNodeConfirmation = (
 	return {
 		onDeleteElement,
 		askDeleteBoardNodeConfirmation,
+		isDeleteDialogOpen: isDialogOpen,
 	};
 };

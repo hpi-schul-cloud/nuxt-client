@@ -117,8 +117,11 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { onDeleteElement, askDeleteBoardNodeConfirmation } =
-			useDeleteBoardNodeConfirmation(deleteElement);
+		const {
+			onDeleteElement,
+			askDeleteBoardNodeConfirmation,
+			isDeleteDialogOpen,
+		} = useDeleteBoardNodeConfirmation(deleteElement);
 
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
@@ -148,7 +151,7 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value) {
+			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
 			}
 		};
