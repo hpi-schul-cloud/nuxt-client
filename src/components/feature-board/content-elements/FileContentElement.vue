@@ -12,8 +12,8 @@
 				:url="url"
 			></FileContentElementEdit>
 			<FileContentElementChips
-				:fileSize="fileRecordModel.size"
-				:fileName="fileRecordModel.name"
+				:fileSize="fileRecord.size"
+				:fileName="fileRecord.name"
 			/>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
@@ -37,7 +37,6 @@ import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-
 
 export default defineComponent({
 	name: "FileContentElement",
