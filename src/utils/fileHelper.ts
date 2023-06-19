@@ -68,8 +68,12 @@ export function convertFileSizeToHumanReadable(
 		power++;
 	}
 
-	const humanReadableFileSize =
-		convertedSize.toFixed(numberOfDigits) + " " + unit;
+	const localeString = convertedSize.toLocaleString("de-DE", {
+		minimumFractionDigits: numberOfDigits,
+		maximumFractionDigits: numberOfDigits,
+	});
+
+	const humanReadableFileSize = localeString + " " + unit;
 
 	return humanReadableFileSize;
 }
