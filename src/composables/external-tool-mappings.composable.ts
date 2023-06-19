@@ -101,7 +101,7 @@ export function useExternalToolMappings() {
 	): ExternalToolDisplayData => {
 		return {
 			id: toolResponse.id,
-			name: toolResponse.contextToolName || "Toolname",
+			name: toolResponse.displayName || "Toolname",
 			logoUrl: undefined,
 			openInNewTab: true,
 		};
