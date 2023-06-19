@@ -30,10 +30,10 @@ import { PropType, computed, defineComponent, onMounted } from "vue";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
-import { DeleteElementEventPayload } from "../types/ContentElement";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -45,13 +45,17 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
+			required: true,
+		},
 	},
-	emits: ["delete:element"],
-	setup(props, { emit }) {
+	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
+		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
 		const isBlocked = computed(
 			() =>
@@ -79,7 +83,7 @@ export default defineComponent({
 				setSelectedFile();
 				await fetchPendingFileRecursively();
 			} catch (error) {
-				//Remove element
+				props.deleteElement(props.element.id);
 				setSelectedFile();
 			}
 		};
@@ -89,11 +93,15 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
-		const onDeleteElement = (): void => {
-			emit("delete:element", {
-				elementId: props.element.id,
-				name: fileRecord.value?.name,
-			} as DeleteElementEventPayload);
+		const onDeleteElement = async (): Promise<void> => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				fileRecord.value?.name,
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				props.deleteElement(props.element.id);
+			}
 		};
 
 		return {

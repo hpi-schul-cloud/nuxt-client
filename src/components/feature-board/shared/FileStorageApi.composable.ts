@@ -48,6 +48,7 @@ export const useFileStorageApi = (
 			fileRecord.value = response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
+			throw error;
 		}
 	};
 

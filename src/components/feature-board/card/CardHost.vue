@@ -44,7 +44,7 @@
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
-					@delete:element="onDeleteElement"
+					:deleteElement="deleteElement"
 				></ContentElementList>
 				<CardAddElementMenu
 					@add-element="onAddElement"
@@ -117,11 +117,8 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const {
-			onDeleteElement,
-			askDeleteBoardNodeConfirmation,
-			isDeleteDialogOpen,
-		} = useDeleteBoardNodeConfirmation(deleteElement);
+		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
+			useDeleteBoardNodeConfirmation();
 
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
@@ -179,7 +176,7 @@ export default defineComponent({
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
-			onDeleteElement,
+			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			cardHost,

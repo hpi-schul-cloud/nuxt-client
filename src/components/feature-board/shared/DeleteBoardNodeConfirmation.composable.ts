@@ -1,24 +1,9 @@
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { DeleteElementEventPayload } from "../types/ContentElement";
 
-export const useDeleteBoardNodeConfirmation = (
-	deleteElement: (elementId: string) => Promise<void>
-) => {
+export const useDeleteBoardNodeConfirmation = () => {
 	const i18n = injectStrict(I18N_KEY);
 	const { askConfirmation, isDialogOpen } = useDeleteConfirmation();
-
-	const onDeleteElement = async (data: DeleteElementEventPayload) => {
-		const { elementId, name } = data;
-		const shouldDelete = await askDeleteBoardNodeConfirmation(
-			name,
-			"boardElement"
-		);
-
-		if (shouldDelete) {
-			await deleteElement(elementId);
-		}
-	};
 
 	const askDeleteBoardNodeConfirmation = async (
 		title: string | undefined,
@@ -38,7 +23,6 @@ export const useDeleteBoardNodeConfirmation = (
 	};
 
 	return {
-		onDeleteElement,
 		askDeleteBoardNodeConfirmation,
 		isDeleteDialogOpen: isDialogOpen,
 	};

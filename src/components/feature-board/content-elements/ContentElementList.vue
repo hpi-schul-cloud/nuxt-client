@@ -12,7 +12,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				@delete:element="onDeleteElement"
+				:deleteElement="deleteElement"
 			/>
 		</template>
 	</VCardText>
@@ -25,10 +25,7 @@ import {
 	RichTextElementResponse,
 } from "@/serverApi/v3";
 import { defineComponent, PropType } from "vue";
-import {
-	AnyContentElement,
-	DeleteElementEventPayload,
-} from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 
@@ -47,9 +44,12 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
+			required: true,
+		},
 	},
-	emits: ["delete:element"],
-	setup(props, { emit }) {
+	setup() {
 		const isRichTextElementResponse = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
@@ -62,15 +62,10 @@ export default defineComponent({
 			return element.type === ContentElementType.File;
 		};
 
-		const onDeleteElement = (data: DeleteElementEventPayload): void => {
-			emit("delete:element", data);
-		};
-
 		return {
 			ContentElementType,
 			isRichTextElementResponse,
 			isFileElementResponse,
-			onDeleteElement,
 		};
 	},
 });

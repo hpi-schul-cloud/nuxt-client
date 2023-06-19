@@ -4,5 +4,5 @@ export type AnyContentElement = RichTextElementResponse | FileElementResponse;
 
 export type DeleteElementEventPayload = {
 	elementId: string;
-	name: string;
+	name?: string;
 };
