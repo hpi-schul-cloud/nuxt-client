@@ -141,7 +141,7 @@ export default {
 		"side footer";
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: 0 1fr;
-	// overflow: hidden;
+	overflow: hidden;
 	max-width: 100%;
 	min-height: 100vh;
 
