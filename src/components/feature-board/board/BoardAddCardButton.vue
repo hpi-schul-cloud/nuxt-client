@@ -1,15 +1,16 @@
 <template>
 	<div
-		class="d-flex w-100 justify-center button-background pb-4 pt-2 text-center sticky"
+		class="d-flex w-100 justify-center button-background pb-4 pt-2 pr-12 text-center sticky"
 		ref="sticky"
 	>
 		<VBtn
 			@click.stop="onAddCard"
 			@dblclick.stop="() => {}"
-			elevation="0"
-			outlined
+			elevation="6"
+			class="white"
 			icon
 			large
+			v-show="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
 			<span class="d-sr-only">Add Card</span>
@@ -19,16 +20,21 @@
 
 <script lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 
 export default defineComponent({
 	name: "BoardAddCardButton",
 	emits: ["add-card"],
 	setup(props, { emit }) {
+		const { editModeId } = useSharedEditMode();
 		const onAddCard = () => emit("add-card");
+
+		const isEditMode = computed(() => editModeId.value !== undefined);
 		return {
 			mdiPlus,
 			onAddCard,
+			isEditMode,
 		};
 	},
 });

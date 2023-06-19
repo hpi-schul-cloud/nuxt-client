@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<VDivider></VDivider>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"

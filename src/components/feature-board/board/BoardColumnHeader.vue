@@ -20,7 +20,7 @@
 					@update:value="onUpdateTitle"
 					class="w-100"
 				></BoardAnyTitleInput>
-				<div class="pt-2">
+				<div>
 					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">
 							<VIcon>

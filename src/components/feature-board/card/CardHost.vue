@@ -195,8 +195,8 @@ export default defineComponent({
 <style scoped>
 .board-menu {
 	position: absolute;
-	top: 10px;
-	right: 5px;
+	top: 0.25rem;
+	right: 0.25rem;
 	z-index: 1;
 }
 .hidden {
