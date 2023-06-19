@@ -12,6 +12,9 @@ import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import NotifierModule from "@/store/notifier";
+import { createModuleMocks } from "@/utils/mock-store-module";
+jest.mock("../shared/InlineEditInteractionHandler.composable");
 jest.mock("../shared/FileStorageApi.composable");
 jest.mock("../shared/SelectedFile.composable");
 
@@ -19,6 +22,7 @@ describe("FileContentElement", () => {
 	const i18n = {
 		[I18N_KEY as symbol]: { t: (key: string) => key },
 	};
+	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
@@ -27,7 +31,7 @@ describe("FileContentElement", () => {
 
 		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
-			provide: { ...i18n },
+			provide: { ...i18n, notifierModule },
 			propsData: props,
 		});
 
