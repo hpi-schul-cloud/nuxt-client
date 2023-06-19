@@ -63,37 +63,33 @@ export default defineComponent({
 		}
 
 		h4 {
-			font-family: "PT Sans";
-			font-style: normal;
-			font-weight: 700;
-			font-size: 16px;
-			line-height: 24px;
-			letter-spacing: 0.15px;
-			margin-bottom: 0.5rem;
-			margin-top: 20px;
+			font-family: var(--font-primary);
+			font-weight: var(--font-weight-bold);
+			font-size: var(--text-md);
+			line-height: var(--space-lg);
+			margin-bottom: var(--space-xs);
+			margin-top: var(--space-md-2);
 		}
 
 		h5 {
-			font-family: "PT Sans";
-			font-style: normal;
-			font-weight: 700;
+			font-family: var(--font-primary);
+			font-weight: var(--font-weight-bold);
 			font-size: 14px;
-			line-height: 20px;
+			line-height: var(--space-md-2);
 			letter-spacing: 0.1px;
-			margin-bottom: 0.5rem;
-			margin-top: 20px;
+			margin-bottom: var(--space-xs);
+			margin-top: var(--space-md-2); //
 		}
 
 		p,
 		ul,
 		ol {
-			font-family: "PT Sans";
-			font-style: normal;
-			font-weight: 400;
+			font-family: var(--font-primary);
+			font-weight: var(--font-weight-normal);
 			font-size: 14px;
-			line-height: 20px;
+			line-height: var(--space-md-2);
 			letter-spacing: 0.02px;
-			margin-bottom: 8px;
+			margin-bottom: var(--space-xs);
 		}
 
 		ul {
