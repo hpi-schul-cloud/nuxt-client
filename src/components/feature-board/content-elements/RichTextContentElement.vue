@@ -53,6 +53,9 @@ export default defineComponent({
 }
 
 ::v-deep {
+	.ck.ck-editor__editable_inline > :first-child {
+		margin-top: 0;
+	}
 	.ck-content {
 		& > :first-child {
 			margin-top: 0;

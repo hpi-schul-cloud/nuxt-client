@@ -89,7 +89,9 @@ describe("FilePicker", () => {
 		it("should emit update:fileOpen", async () => {
 			const { wrapper, file } = setup();
 
-			await wrapper.setData({ modelFile: file });
+			const input = wrapper.findComponent({ ref: "inputRef" });
+			// this also triggers the "change event"
+			await input.setData({ internalValue: file });
 			await nextTick();
 
 			expect(wrapper.emitted("update:file")).toHaveLength(1);

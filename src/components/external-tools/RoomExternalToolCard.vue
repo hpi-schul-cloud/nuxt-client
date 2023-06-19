@@ -36,15 +36,15 @@
 </template>
 
 <script lang="ts">
+import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiPencilOutline,
 	mdiPuzzleOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { defineComponent, inject, PropType } from "vue";
-import VueI18n from "vue-i18n";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
+import { PropType, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -61,9 +61,9 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 
-		const t = (key: string): string => i18n?.tc(key, 0) || key;
+		const t = (key: string): string => i18n.tc(key, 0) || key;
 
 		const defaultToolIcon = mdiPuzzleOutline;
 

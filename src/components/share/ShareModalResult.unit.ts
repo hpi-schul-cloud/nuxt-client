@@ -3,6 +3,7 @@ import { mount, MountOptions } from "@vue/test-utils";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("@/components/share/ShareModalResult", () => {
 	const getWrapper = (attrs = {}) => {
@@ -11,7 +12,7 @@ describe("@/components/share/ShareModalResult", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

@@ -122,15 +122,16 @@
 </template>
 
 <script>
-import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
+import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import ImportFlow from "@/components/share/ImportFlow.vue";
+import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
+import { I18N_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 
 // eslint-disable-next-line vue/require-direct-export
 export default {
@@ -143,7 +144,10 @@ export default {
 		vCustomSwitch,
 		ImportFlow,
 	},
-	inject: ["notifierModule", "i18n"],
+	inject: {
+		notifierModule: { from: "notifierModule" },
+		i18n: { from: I18N_KEY },
+	},
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -381,7 +385,7 @@ export default {
 		},
 		showImportSuccess(name) {
 			this.notifierModule?.show({
-				text: this.i18n?.t("components.molecules.import.options.success", {
+				text: this.i18n.t("components.molecules.import.options.success", {
 					name,
 				}),
 				status: "success",
