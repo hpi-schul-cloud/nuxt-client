@@ -135,7 +135,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		await deleteElementCall(elementId);
-		extractElement(elementId);
+		await extractElement(elementId);
 	};
 
 	onMounted(() => fetchCard(id));
