@@ -101,9 +101,9 @@ export const useBoardApi = () => {
 		return response.status;
 	};
 
-	const deleteElementCall = async (elementId: string) => {
+	const deleteElementCall = async (elementId: string): Promise<number> => {
 		const response = await elementApi.elementControllerDeleteElement(elementId);
-		return response;
+		return response.status;
 	};
 
 	const deleteColumnCall = async (columnId: string): Promise<number> => {

@@ -99,7 +99,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		await deleteElementCall(elementId);
+		const status = await deleteElementCall(elementId);
+		if (isErrorCode(status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		extractElement(elementId);
 	};
 
