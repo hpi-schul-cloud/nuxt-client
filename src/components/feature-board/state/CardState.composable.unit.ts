@@ -337,19 +337,6 @@ describe("CardState composable", () => {
 
 	describe("deleteElement", () => {
 		describe("when card state is undefined", () => {
-			const setup = () => {
-				const { deleteElement, card } = mountComposable(
-					() => useCardState("cardid"),
-					{
-						[I18N_KEY as symbol]: { t: (key: string) => key },
-						[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-					}
-				);
-				card.value = undefined;
-
-				return { deleteElement };
-			};
-
 			it("should not call deleteElement", async () => {
 				const { deleteElement } = setup();
 
@@ -360,32 +347,11 @@ describe("CardState composable", () => {
 		});
 
 		describe("when card state is defined", () => {
-			const setup = () => {
-				const { deleteElement, card } = mountComposable(
-					() => useCardState("cardid"),
-					{
-						[I18N_KEY as symbol]: { t: (key: string) => key },
-						[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-					}
-				);
-				const fileElementResponse = fileElementResponseFactory.build();
-				const fileElementResponse2 = fileElementResponseFactory.build();
-				const boardCard = boardCardFactory.build({
-					elements: [fileElementResponse, fileElementResponse2],
-				});
-				card.value = boardCard;
-
-				return {
-					deleteElement,
-					card,
-					fileElementResponse,
-					fileElementResponse2,
-				};
-			};
-
 			it("should call deleteElement", async () => {
-				const { deleteElement, fileElementResponse } = setup();
-
+				const { deleteElement, card } = setup();
+				const testCard = boardCardFactory.build();
+				const fileElementResponse = fileElementResponseFactory.build();
+				card.value = testCard;
 				await deleteElement(fileElementResponse.id);
 
 				expect(mockedBoardApiCalls.deleteElementCall).toHaveBeenCalledWith(
@@ -394,12 +360,19 @@ describe("CardState composable", () => {
 			});
 
 			it("should remove element from card", async () => {
-				const {
-					deleteElement,
-					card,
-					fileElementResponse,
-					fileElementResponse2,
-				} = setup();
+				const { deleteElement, card } = setup();
+				const fileElementResponse = fileElementResponseFactory.build();
+				const fileElementResponse2 = fileElementResponseFactory.build();
+				const testCard = {
+					id: "cardId 2",
+					height: 200,
+					title: "title 2",
+					elements: [fileElementResponse, fileElementResponse2],
+					visibility: {
+						publishedAt: "Tue, 20 Jun 2023 14:15:05 GMT",
+					},
+				};
+				card.value = testCard;
 
 				await deleteElement(fileElementResponse.id);
 
@@ -410,11 +383,14 @@ describe("CardState composable", () => {
 				mockedBoardApiCalls.deleteElementCall = jest
 					.fn()
 					.mockResolvedValue({ status: 300 });
+				const testCard = boardCardFactory.build();
+
 				mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
-
-				const { deleteElement, fileElementResponse } = setup();
-
+				const fileElementResponse = fileElementResponseFactory.build();
+				const { deleteElement, card } = setup();
+				card.value = testCard;
 				await deleteElement(fileElementResponse.id);
+				await nextTick();
 
 				expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
 					"update"
