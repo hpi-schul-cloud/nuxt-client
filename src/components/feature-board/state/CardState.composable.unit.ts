@@ -1,13 +1,12 @@
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
+import { boardCardFactory } from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
-import { useCardState } from "./CardState.composable";
-import { boardCardFactory } from "@@/tests/test-utils/factory";
-import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { ElementMove } from "../types/DragAndDrop";
+import { useCardState } from "./CardState.composable";
 
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
@@ -212,7 +211,7 @@ describe("CardState composable", () => {
 			it("should not call moveElement", async () => {
 				const { moveElementDown } = setup();
 
-				await moveElementDown("elementid");
+				await moveElementDown({ elementIndex: 0, payload: "elementid" });
 
 				expect(mockedBoardApiCalls.moveElementCall).not.toHaveBeenCalled();
 			});
