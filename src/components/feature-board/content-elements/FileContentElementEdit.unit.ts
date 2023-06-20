@@ -1,5 +1,7 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 
 describe("FileContentElementEdit", () => {
@@ -15,6 +17,9 @@ describe("FileContentElementEdit", () => {
 		const wrapper = shallowMount(FileContentElementEdit, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			},
 		});
 
 		return {
@@ -47,11 +52,20 @@ describe("FileContentElementEdit", () => {
 		expect(fileName).toBe(fileNameProp);
 	});
 
-	it("should find download url", async () => {
-		const { wrapper, urlProp } = setup();
+	describe("when delete board menu action is clicked", () => {
+		it("should emit delete:element event", async () => {
+			const { wrapper } = setup();
 
-		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
+			const deleteTranslation = wrapper.vm.$t(
+				"components.board.action.delete"
+			) as string;
+			const childComponent = wrapper
+				.findAllComponents(BoardMenuAction)
+				.filter((c) => c.text().includes(deleteTranslation))
+				.at(0);
+			childComponent.vm.$emit("click");
 
-		expect(downloadUrl).toBe(urlProp);
+			expect(wrapper.emitted("delete:element")?.length).toBe(1);
+		});
 	});
 });
