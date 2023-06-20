@@ -1,12 +1,13 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 
 describe("FileContentElementEdit", () => {
 	const setupProps = () => ({
-		caption: "Test Caption",
-		fileRecord: fileRecordResponseFactory.build(),
+		fileName: "file-record #1.txt",
+		url: "1/file-record #1.txt",
 	});
 
 	const setup = () => {
@@ -16,12 +17,15 @@ describe("FileContentElementEdit", () => {
 		const wrapper = shallowMount(FileContentElementEdit, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			},
 		});
 
 		return {
 			wrapper,
-			captionProp: propsData.caption,
-			fileRecordProp: propsData.fileRecord,
+			fileNameProp: propsData.fileName,
+			urlProp: propsData.url,
 		};
 	};
 
@@ -30,14 +34,6 @@ describe("FileContentElementEdit", () => {
 
 		const fileContentElement = wrapper.findComponent(FileContentElementEdit);
 		expect(fileContentElement.exists()).toBe(true);
-	});
-
-	it.skip("should find download url", async () => {
-		const { wrapper, fileRecordProp } = setup();
-
-		const downloadUrl = wrapper.find("v-list-item-stub").attributes("href");
-
-		expect(downloadUrl).toBe(fileRecordProp.url);
 	});
 
 	it("should display icon", async () => {
@@ -49,10 +45,27 @@ describe("FileContentElementEdit", () => {
 	});
 
 	it("should find file name", async () => {
-		const { wrapper, fileRecordProp } = setup();
+		const { wrapper, fileNameProp } = setup();
 
 		const fileName = wrapper.find("v-list-item-title-stub").text();
 
-		expect(fileName).toBe(fileRecordProp.name);
+		expect(fileName).toBe(fileNameProp);
+	});
+
+	describe("when delete board menu action is clicked", () => {
+		it("should emit delete:element event", async () => {
+			const { wrapper } = setup();
+
+			const deleteTranslation = wrapper.vm.$t(
+				"components.board.action.delete"
+			) as string;
+			const childComponent = wrapper
+				.findAllComponents(BoardMenuAction)
+				.filter((c) => c.text().includes(deleteTranslation))
+				.at(0);
+			childComponent.vm.$emit("click");
+
+			expect(wrapper.emitted("delete:element")?.length).toBe(1);
+		});
 	});
 });

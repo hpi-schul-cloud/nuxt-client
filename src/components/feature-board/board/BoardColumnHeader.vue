@@ -11,17 +11,16 @@
 			tabindex="0"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start justify-space-between py-2 pl-1">
+			<div class="d-flex align-start py-2 pl-2">
+				<BoardAnyTitleInput
+					:value="title"
+					scope="column"
+					:isEditMode="isEditMode"
+					:placeholder="titlePlaceholder"
+					@update:value="onUpdateTitle"
+					class="w-100"
+				></BoardAnyTitleInput>
 				<div>
-					<BoardAnyTitleInput
-						:value="title"
-						scope="column"
-						:isEditMode="isEditMode"
-						:placeholder="titlePlaceholder"
-						@update:value="onUpdateTitle"
-					></BoardAnyTitleInput>
-				</div>
-				<div class="pt-2">
 					<BoardMenu v-if="hasDeletePermission" scope="column">
 						<BoardMenuAction @click="onTryDelete">
 							<VIcon>

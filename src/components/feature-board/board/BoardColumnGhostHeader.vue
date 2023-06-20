@@ -46,6 +46,6 @@ export default defineComponent({
 }
 
 .transition-divider {
-	transition: all 150ms;
+	transition: all ease-in 150ms;
 }
 </style>
