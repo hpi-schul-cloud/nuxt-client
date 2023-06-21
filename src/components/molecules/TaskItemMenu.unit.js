@@ -11,7 +11,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import TaskItemMenu from "./TaskItemMenu";
 import { mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { tasksTeacher } = mocks;
 
@@ -41,7 +41,7 @@ const getWrapper = (props, options = {}) => {
 			tasksModule: tasksModuleMock,
 			copyModule: copyModuleMock,
 			loadingStateModule: loadingStateModuleMock,
-			notifierModule: notifierModuleMock,
+			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 			[I18N_KEY]: { t: (key) => key },
 		},
 		...options,

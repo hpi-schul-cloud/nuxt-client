@@ -1,29 +1,29 @@
 import ShareModule from "@/store/share";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { MountOptions, mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import NotifierModule from "@/store/notifier";
+import Vue from "vue";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
-	const showMock = jest.fn();
+	let notifierModuleMock: NotifierModule;
 
 	const getWrapper = (attrs = { propsData: { type: "courses" } }) => {
-		const wrapper = mount(ShareModal, {
+		const wrapper = mount(ShareModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
-				notifierModule: {
-					show: showMock,
-				},
 				shareModule: shareModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 			},
 			...attrs,
 		});
@@ -41,6 +41,8 @@ describe("@/components/share/ShareModal", () => {
 			createShareUrl: jest.fn(),
 			resetShareFlow: jest.fn(),
 		});
+
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("should start with step 1", () => {
@@ -114,6 +116,6 @@ describe("@/components/share/ShareModal", () => {
 		const form = wrapper.findComponent(ShareModalResult);
 
 		form.vm.$emit("copied");
-		expect(showMock).toHaveBeenCalled();
+		expect(notifierModuleMock.show).toHaveBeenCalled();
 	});
 });

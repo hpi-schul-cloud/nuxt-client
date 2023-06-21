@@ -13,7 +13,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import Vue from "vue";
 import ShareModule from "@/store/share";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -40,7 +40,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				copyModule: copyModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				notifierModule: notifierModuleMock,
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 				shareModule: shareModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
