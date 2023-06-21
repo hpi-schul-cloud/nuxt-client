@@ -1,5 +1,8 @@
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
-import { boardCardFactory } from "@@/tests/test-utils/factory";
+import {
+	boardCardFactory,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
@@ -217,48 +220,43 @@ describe("CardState composable", () => {
 			});
 		});
 
-		/* describe("when card state is defined", () => {
+		describe("when card state is defined", () => {
 			const setup = () => {
 				const { moveElementDown, card } = mountComposable(() =>
-					useCardState("cardid")
+					useCardState("cardId1")
 				);
+
+				const boardCard = boardCardFactory.build();
+
+				card.value = boardCard;
+
 				const fileElementResponse = fileElementResponseFactory.build();
+
 				const fileElementResponse2 = fileElementResponseFactory.build();
 
-				const boardCard = boardCardFactory.build({
-					elements: [fileElementResponse, fileElementResponse2],
-				});
-				const moveElementPayload: ElementMove = {
-					elementIndex: 0,
-					payload: "elementId",
-				};
-				card.value = boardCard;
-				const expectedPayload = {
-					elementId: "elementId",
-					toCardId: card.value.id,
-					toPosition: moveElementPayload.elementIndex + 1,
-				};
+				card.value.elements = [fileElementResponse, fileElementResponse2];
 
 				return {
 					card,
-					expectedPayload,
 					fileElementResponse,
 					fileElementResponse2,
 					moveElementDown,
-					moveElementPayload,
 				};
 			};
 
 			it("should call moveElement", async () => {
-				const { expectedPayload, moveElementDown, moveElementPayload } =
-					setup();
+				const { card, fileElementResponse, moveElementDown } = setup();
 
-				await moveElementDown(moveElementPayload);
+				await moveElementDown({
+					elementIndex: 0,
+
+					payload: fileElementResponse.id,
+				});
 
 				expect(mockedBoardApiCalls.moveElementCall).toHaveBeenCalledWith(
-					expectedPayload.elementId,
-					expectedPayload.toCardId,
-					expectedPayload.toPosition
+					fileElementResponse.id,
+					card.value?.id,
+					0
 				);
 			});
 
@@ -266,19 +264,22 @@ describe("CardState composable", () => {
 				const {
 					card,
 					moveElementDown,
-					moveElementPayload,
+
 					fileElementResponse,
 					fileElementResponse2,
 				} = setup();
 
-				await moveElementDown(moveElementPayload);
+				await moveElementDown({
+					elementIndex: 0,
+					payload: fileElementResponse.id,
+				});
 
 				expect(card.value?.elements).toEqual([
 					fileElementResponse2,
 					fileElementResponse,
 				]);
 			});
-		}); */
+		});
 	});
 
 	describe("deleteElement", () => {
@@ -301,7 +302,7 @@ describe("CardState composable", () => {
 			});
 		});
 
-		/* describe("when card state is defined", () => {
+		describe("when card state is defined", () => {
 			const setup = () => {
 				const { deleteElement, card } = mountComposable(() =>
 					useCardState("cardid")
@@ -344,6 +345,6 @@ describe("CardState composable", () => {
 
 				expect(card.value?.elements).toEqual([fileElementResponse2]);
 			});
-		}); */
+		});
 	});
 });

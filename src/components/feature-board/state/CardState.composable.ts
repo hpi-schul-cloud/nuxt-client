@@ -75,22 +75,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		return result;
 	};
 
-	const extractElement = async (
-		elementId: string
-	): Promise<AnyContentElement | undefined> => {
-		if (cardState.card === undefined) return;
+	const extractElement = (elementId: string): void => {
+		const index = cardState.card?.elements.findIndex((e) => e.id === elementId);
 
-		const elementIndex = cardState.card.elements.findIndex(
-			(element: AnyContentElement) => element.id === elementId
-		);
-		if (elementIndex > -1) {
-			const extractedElements = cardState.card.elements.splice(elementIndex, 1);
-			/**
-			 * refreshes the board to force rerendering in tracked v-for
-			 * to maintain focus when moving cards by keyboard
-			 */
-			await nextTick();
-			return extractedElements[0];
+		if (index !== undefined && index > -1) {
+			cardState.card?.elements.splice(index, 1);
 		}
 	};
 
@@ -106,10 +95,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		const element = await extractElement(payload);
-		if (element) {
-			cardState.card.elements.splice(elementIndex + 1, 0, element);
-		}
+		const element = cardState.card.elements.filter(
+			(element) => element.id === payload
+		)[0];
+
+		cardState.card.elements.splice(elementIndex, 1);
+		await nextTick();
+		cardState.card.elements.splice(elementIndex + 1, 0, element);
+
 		await moveElementCall(payload, cardState.card.id, elementIndex + 1);
 	};
 
@@ -122,10 +115,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		const element = await extractElement(payload);
-		if (element) {
-			cardState.card.elements.splice(elementIndex - 1, 0, element);
-		}
+		const element = cardState.card.elements.filter(
+			(element) => element.id === payload
+		)[0];
+
+		cardState.card.elements.splice(elementIndex, 1);
+		await nextTick();
+		cardState.card.elements.splice(elementIndex - 1, 0, element);
+
 		await moveElementCall(payload, cardState.card.id, elementIndex - 1);
 	};
 
@@ -135,7 +132,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		await deleteElementCall(elementId);
-		await extractElement(elementId);
+		extractElement(elementId);
 	};
 
 	onMounted(() => fetchCard(id));
