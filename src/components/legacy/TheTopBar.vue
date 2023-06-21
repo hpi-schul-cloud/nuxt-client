@@ -68,7 +68,7 @@
 				<img
 					v-if="school && school.logo_dataUrl"
 					class="school-logo"
-          v-bind:src="school.logo_dataUrl"
+					v-bind:src="school.logo_dataUrl"
 					:alt="school.name"
 				/>
 				<popup-icon-initials
