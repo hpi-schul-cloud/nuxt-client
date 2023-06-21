@@ -2,7 +2,7 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { ref, watch } from "vue";
@@ -27,7 +27,7 @@ describe("copy composable", () => {
 
 		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
 			copyModule: copyModuleMock,
-			notifierModule: notifierModuleMock,
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 			loadingStateModule: loadingStateModuleMock,
 			[I18N_KEY as symbol]: i18n,
 		});

@@ -28,7 +28,7 @@
 import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
@@ -57,7 +57,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const copyModule = inject("copyModule");
-		const notifier = inject("notifierModule");
+		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 		const loadingStateModule = inject("loadingStateModule");
 
 		const parentName = ref("");
@@ -97,7 +97,7 @@ export default defineComponent({
 		// notifiers
 
 		const showFailureBackend = (name) => {
-			notifier?.show({
+			notifier.show({
 				text: i18n.t(
 					"components.molecules.import.options.failure.backendError",
 					{ name }
@@ -109,7 +109,7 @@ export default defineComponent({
 		};
 
 		const showFailureInvalidToken = () => {
-			notifier?.show({
+			notifier.show({
 				text: i18n.t(
 					"components.molecules.import.options.failure.invalidToken"
 				),
@@ -120,7 +120,7 @@ export default defineComponent({
 		};
 
 		const showFailurePermission = () => {
-			notifier?.show({
+			notifier.show({
 				text: i18n.t(
 					"components.molecules.import.options.failure.permissionError"
 				),

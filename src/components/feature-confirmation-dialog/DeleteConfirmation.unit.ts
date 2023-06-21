@@ -3,6 +3,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
 import DeleteConfirmation from "./DeleteConfirmation.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("./delete-confirmation.composable");
 const mockedUseInternalDeleteConfirmation = jest.mocked(
@@ -30,7 +31,7 @@ describe(DeleteConfirmation.name, () => {
 		const wrapper = shallowMount(DeleteConfirmation as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				isDeleteModalOpen: options?.isDeleteModalOpen ?? true,
