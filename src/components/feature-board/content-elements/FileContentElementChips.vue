@@ -1,8 +1,8 @@
 <template>
-	<v-chip-group>
-		<v-chip class="ma-2" small disabled>{{ fileExtension }}</v-chip>
-		<v-chip class="ma-2" small disabled> {{ humanReadableFileSize }} </v-chip>
-	</v-chip-group>
+	<div>
+		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
+		<v-chip class="ma-2" small> {{ humanReadableFileSize }} </v-chip>
+	</div>
 </template>
 
 <script lang="ts">
@@ -41,9 +41,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.v-chip {
-	opacity: 1;
-}
-</style>
