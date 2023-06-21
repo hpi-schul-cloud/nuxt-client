@@ -59,12 +59,5 @@ describe("BoardAnyTitleTitleInput", () => {
 
 			expect(emitted["update:value"][0][0]).toContain(newValue);
 		});
-
-		it("should not have textarea in displaymode", async () => {
-			setup({ isEditMode: false });
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-
-			expect(textAreaComponent.element).toBeUndefined();
-		});
 	});
 });

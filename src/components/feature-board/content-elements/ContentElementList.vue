@@ -13,6 +13,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
+				:deleteElement="deleteElement"
 			/>
 		</template>
 	</VCardText>
@@ -42,6 +43,10 @@ export default defineComponent({
 		},
 		isEditMode: {
 			type: Boolean,
+			required: true,
+		},
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
 			required: true,
 		},
 	},
