@@ -145,7 +145,7 @@ describe("RoomExternalToolOverview", () => {
 
 			await card.trigger("click");
 
-			expect(externalToolsModule.getToolLaunchData).toHaveBeenCalledWith(
+			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
 				tool.id
 			);
 		});

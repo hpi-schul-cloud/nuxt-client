@@ -79,26 +79,27 @@ import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCa
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import ExternalToolsModule from "@/store/external-tools";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
 	components: { RoomExternalToolCard, RenderHTML },
 	setup() {
-		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
-		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
-			inject<ContextExternalToolsModule>("contextExternalToolsModule");
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
+		const authModule: AuthModule = injectStrict<AuthModule>("authModule");
+		const contextExternalToolsModule: ContextExternalToolsModule =
+			injectStrict<ContextExternalToolsModule>("contextExternalToolsModule");
+		const externalToolsModule: ExternalToolsModule =
+			injectStrict<ExternalToolsModule>("externalToolsModule");
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
-			() => contextExternalToolsModule?.getContextExternalTools || []
+			() => contextExternalToolsModule.getContextExternalTools || []
 		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
@@ -135,7 +136,7 @@ export default defineComponent({
 
 		const launchTool = async (contextToolId: string) => {
 			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule?.getToolLaunchData(contextToolId);
+				await externalToolsModule.loadToolLaunchData(contextToolId);
 
 			switch (launchToolResponse?.method) {
 				case ToolLaunchRequestResponseMethodEnum.Get:
@@ -180,11 +181,8 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const canEdit: ComputedRef<boolean> = computed(
-			() =>
-				!!authModule?.getUserPermissions.includes(
-					"CONTEXT_TOOL_ADMIN".toLowerCase()
-				)
+		const canEdit: ComputedRef<boolean> = computed(() =>
+			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
 		);
 
 		return {

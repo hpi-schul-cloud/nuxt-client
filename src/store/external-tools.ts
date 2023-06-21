@@ -93,7 +93,7 @@ export default class ExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async getToolLaunchData(
+	async loadToolLaunchData(
 		contextExternalToolId: string
 	): Promise<ToolLaunchRequestResponse | undefined> {
 		try {

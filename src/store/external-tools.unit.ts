@@ -22,10 +22,10 @@ import {
 	schoolExternalToolFactory,
 	toolConfigurationFactory,
 	toolConfigurationTemplateFactory,
+	toolLaunchRequestResponeFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { toolLaunchRequestResponeFactory } from "../../tests/test-utils/factory/toolLaunchRequestResponeFactory";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
@@ -434,7 +434,7 @@ describe("ExternalToolsModule", () => {
 			};
 		};
 
-		describe("getToolLaunchData is called", () => {
+		describe("loadToolLaunchData is called", () => {
 			describe("when receiving an api response", () => {
 				const setup = () => {
 					const mockResponse: ToolLaunchRequestResponse =
@@ -455,7 +455,7 @@ describe("ExternalToolsModule", () => {
 				it("should call the api", async () => {
 					const { toolApiMock } = setup();
 
-					await module.getToolLaunchData("contextToolId");
+					await module.loadToolLaunchData("contextToolId");
 
 					expect(
 						toolApiMock.toolLaunchControllerGetToolLaunchRequest
@@ -466,7 +466,7 @@ describe("ExternalToolsModule", () => {
 					const { mockResponse } = setup();
 
 					const response: ToolLaunchRequestResponse | undefined =
-						await module.getToolLaunchData("contextToolId");
+						await module.loadToolLaunchData("contextToolId");
 
 					expect(response).toEqual(mockResponse);
 				});
@@ -491,7 +491,7 @@ describe("ExternalToolsModule", () => {
 				it("should store an error", async () => {
 					const { error } = setup();
 
-					await module.getToolLaunchData("contextToolId");
+					await module.loadToolLaunchData("contextToolId");
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error,
