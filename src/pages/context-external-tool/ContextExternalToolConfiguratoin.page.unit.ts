@@ -283,6 +283,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
 					path: "/rooms/contextId",
+					query: { tab: "tools" },
 				});
 			});
 		});
