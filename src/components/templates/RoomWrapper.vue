@@ -10,8 +10,8 @@
 		<template slot="header">
 			<slot name="header"></slot>
 		</template>
-		<template v-if="isLoading">
-			<v-container fluid class="px-0"
+		<template>
+			<v-container fluid class="px-0" v-show="isLoading"
 				><v-skeleton-loader
 					ref="skeleton-loader"
 					type="date-picker-days"
@@ -19,17 +19,18 @@
 				/>
 			</v-container>
 		</template>
-		<template v-else-if="isEmptyState">
+		<template>
 			<v-custom-empty-state
+				v-show="!isLoading && isEmptyState"
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>
 		</template>
-		<template v-else>
+		<div v-show="!isLoading && !isEmptyState">
 			<slot name="page-content"></slot>
-		</template>
+		</div>
 		<import-modal
 			v-model="importDialog.isOpen"
 			class="import-modal"
@@ -40,11 +41,11 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, roomsModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { authModule, envConfigModule, roomsModule } from "@/store";
+import { mdiCloudDownload, mdiPlus, mdiSchool } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export

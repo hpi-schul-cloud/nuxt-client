@@ -101,7 +101,6 @@
 				</div>
 			</div>
 			<room-modal
-				ref="roomModal"
 				v-model="groupDialog.isOpen"
 				aria-describedby="folder open"
 				:group-data="groupDialog.groupData"
@@ -109,8 +108,7 @@
 				:draggable="allowDragging"
 				tabindex="0"
 				@drag-from-group="dragFromGroup"
-			>
-			</room-modal>
+			/>
 			<import-flow
 				:is-active="isImportMode"
 				:token="importToken"

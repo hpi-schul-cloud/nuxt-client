@@ -3,29 +3,19 @@
 		ref="customDialog"
 		:is-open="isOpen"
 		class="room-dialog"
-		@dialog-closed="$emit('dialog-closed', false)"
+		@dialog-closed="$emit('update:isOpen', false)"
 	>
 		<div slot="title" class="room-title">
 			<v-text-field
-				v-show="roomNameEditMode"
-				ref="roomNameInput"
 				v-model="data.title"
 				dense
+				flat
+				solo
 				:aria-label="$t('common.labels.title')"
-				:append-icon="mdiKeyboardReturn"
 				@blur="onUpdateRoomName"
-				@keyup.enter="onRoomNameInputEnter"
-			></v-text-field>
-			<h2
-				v-show="!roomNameEditMode"
-				class="text-h4 my-2"
-				tabindex="0"
-				@click="onEditRoom"
-				@focus="onEditRoom"
-			>
-				{{ data.title }}
-				<v-icon>{{ mdiPencilOutline }}</v-icon>
-			</h2>
+				@focus="onFocus"
+				@keyup.enter="onUpdateRoomName"
+			/>
 		</div>
 		<template slot="content">
 			<room-avatar-iterator
@@ -41,12 +31,12 @@
 	</vCustomDialog>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import { roomsModule } from "@/store";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { roomsModule } from "@/store";
+import Vue from "vue";
 
-import { mdiPencilOutline, mdiKeyboardReturn } from "@mdi/js";
+import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -56,7 +46,7 @@ export default Vue.extend({
 	},
 	model: {
 		prop: "isOpen",
-		event: "dialog-closed",
+		event: "update:isOpen",
 	},
 	props: {
 		isOpen: {
@@ -100,23 +90,19 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		async onEditRoom() {
+		onFocus() {
 			this.roomNameEditMode = true;
-			await Vue.nextTick();
-			if (this.$refs?.roomNameInput instanceof HTMLElement) {
-				this.$refs?.roomNameInput?.focus();
+		},
+		async onUpdateRoomName(event: Event) {
+			if (this.roomNameEditMode) {
+				this.roomNameEditMode = false;
+				await roomsModule.update(this.data);
 			}
-		},
-		onUpdateRoomName() {
-			roomsModule.update(this.data);
-			this.roomNameEditMode = false;
-		},
-		/*
-			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
-			@keyup.enter="$event.target.blur" results in Illegal invocation error
-		*/
-		onRoomNameInputEnter(event: FocusEvent) {
-			if (event.target instanceof HTMLElement) {
+
+			if (
+				event instanceof KeyboardEvent &&
+				event.target instanceof HTMLElement
+			) {
 				event.target.blur();
 			}
 		},
