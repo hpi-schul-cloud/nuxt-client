@@ -34,9 +34,8 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import Vue from "vue";
-
 import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
+import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -56,10 +55,6 @@ export default Vue.extend({
 		groupData: {
 			type: Object,
 			default: () => ({}),
-		},
-		avatarSize: {
-			type: String,
-			required: true,
 		},
 		itemSize: {
 			type: String,
