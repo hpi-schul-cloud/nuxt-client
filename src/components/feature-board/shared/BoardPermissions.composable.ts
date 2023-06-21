@@ -4,6 +4,7 @@ import { BoardPermissionsTypes } from "../types/Board";
 
 const boardPermissions = (): BoardPermissionsTypes => {
 	const permissions = authModule?.getUserPermissions || [];
+	const userRoles = authModule?.getUserRoles || [];
 
 	return {
 		hasMovePermission: permissions.includes("course_create"),
@@ -11,6 +12,7 @@ const boardPermissions = (): BoardPermissionsTypes => {
 		hasCreateColumnPermission: permissions.includes("course_create"),
 		hasEditPermission: permissions.includes("course_edit"),
 		hasDeletePermission: permissions.includes("course_remove"),
+		isTeacher: userRoles.includes("teacher"),
 	};
 };
 

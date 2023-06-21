@@ -16,4 +16,5 @@ export type BoardPermissionsTypes = {
 	hasCreateColumnPermission?: boolean;
 	hasEditPermission?: boolean;
 	hasDeletePermission?: boolean;
+	isTeacher?: boolean;
 };

@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
@@ -12,6 +12,9 @@ import {
 	columnResponseFactory,
 	cardSkeletonResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -60,6 +63,7 @@ describe("Board", () => {
 	const boardWithOneColumn = boardResponseFactory.build({
 		columns: [oneColumn],
 	});
+	const notifierModule = createModuleMocks(NotifierModule);
 
 	const setup = (options?: {
 		board?: Board;
@@ -88,11 +92,15 @@ describe("Board", () => {
 			...options?.permissions,
 		});
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		wrapper = shallowMount(BoardVue, {
+		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			mocks: {
 				$router,
 				$route,
+			},
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
 			propsData: { boardId },
 		});
