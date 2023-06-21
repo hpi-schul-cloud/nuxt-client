@@ -1,5 +1,11 @@
 <template>
-	<v-card class="mb-4" elevation="0" outlined dense>
+	<v-card
+		class="mb-4"
+		data-testid="board-file-element"
+		elevation="0"
+		outlined
+		dense
+	>
 		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
@@ -15,7 +21,10 @@
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
-			<v-progress-linear indeterminate></v-progress-linear>
+			<v-progress-linear
+				data-testid="board-file-element-progress-bar"
+				indeterminate
+			></v-progress-linear>
 		</v-card-text>
 	</v-card>
 </template>

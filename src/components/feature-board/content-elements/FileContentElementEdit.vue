@@ -1,35 +1,45 @@
 <template>
-	<v-list flat class="py-0">
+	<v-list flat class="py-0" data-testid="board-file-element-edit">
 		<v-list-item class="grey lighten-2">
 			<v-list-item-icon class="mr-2">
-				<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
+				<v-icon data-testid="board-file-element-edit-file-icon" x-large>{{
+					mdiFileDocumentOutline
+				}}</v-icon>
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<v-list-item-title>{{ fileName }}</v-list-item-title>
+				<v-list-item-title data-testid="board-file-element-edit-file-name">{{
+					fileName
+				}}</v-list-item-title>
 			</v-list-item-content>
 
 			<v-list-item-icon>
 				<BoardMenu scope="element">
-					<BoardMenuAction>
+					<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
 						<VIcon>
 							{{ mdiArrowCollapseUp }}
 						</VIcon>
 						{{ $t("components.board.action.moveUp") }}
 					</BoardMenuAction>
-					<BoardMenuAction>
+					<BoardMenuAction data-testid="board-file-element-edit-menu-move-down">
 						<VIcon>
 							{{ mdiArrowCollapseDown }}
 						</VIcon>
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
-					<BoardMenuAction @click="onDownload">
+					<BoardMenuAction
+						data-testid="board-file-element-edit-menu-download"
+						@click="onDownload"
+					>
 						<VIcon>
 							{{ mdiTrayArrowDown }}
 						</VIcon>
 						{{ $t("components.board.action.download") }}
 					</BoardMenuAction>
-					<BoardMenuAction @click="onDelete">
+					<BoardMenuAction
+						data-testid="board-file-element-edit-menu-delete"
+						@click="onDelete"
+					>
 						<VIcon>
 							{{ mdiTrashCanOutline }}
 						</VIcon>

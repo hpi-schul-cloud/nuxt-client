@@ -1,5 +1,5 @@
 <template>
-	<VListItem @click.prevent="onClick">
+	<VListItem data-testid="board-menu-action" @click.prevent="onClick">
 		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
