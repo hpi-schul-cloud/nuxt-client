@@ -82,6 +82,10 @@ describe("CardState composable", () => {
 		};
 	});
 
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	describe("fetchCard", () => {
 		it("should fetch card on mount", async () => {
 			const cardId = "123124";
@@ -365,32 +369,18 @@ describe("CardState composable", () => {
 		});
 
 		describe("when card state is defined", () => {
-			const setup = () => {
-				const { moveElementDown, card } = mountComposable(() =>
-					useCardState("cardId1")
-				);
-
-				const boardCard = boardCardFactory.build();
-
-				card.value = boardCard;
-
-				const fileElementResponse = fileElementResponseFactory.build();
-
-				const fileElementResponse2 = fileElementResponseFactory.build();
-
-				card.value.elements = [fileElementResponse, fileElementResponse2];
-
-				return {
-					card,
-					fileElementResponse,
-					fileElementResponse2,
-					moveElementDown,
-				};
-			};
+			const fileElementResponse = fileElementResponseFactory.build();
+			const fileElementResponse2 = fileElementResponseFactory.build();
 
 			it("should call moveElement", async () => {
-				const { card, fileElementResponse, moveElementDown } = setup();
-
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
 				await moveElementDown({
 					elementIndex: 0,
 
@@ -400,28 +390,30 @@ describe("CardState composable", () => {
 				expect(mockedBoardApiCalls.moveElementCall).toHaveBeenCalledWith(
 					fileElementResponse.id,
 					card.value?.id,
-					0
+					1
 				);
 			});
 
 			it("should move element correctly", async () => {
-				const {
-					card,
-					moveElementDown,
-
-					fileElementResponse,
-					fileElementResponse2,
-				} = setup();
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
 
 				await moveElementDown({
 					elementIndex: 0,
 					payload: fileElementResponse.id,
 				});
-
-				expect(card.value?.elements).toEqual([
-					fileElementResponse2,
-					fileElementResponse,
-				]);
+				expect(card.value?.elements[0].id).toStrictEqual(
+					"fileElementResponse2"
+				);
+				expect(card.value?.elements[1].id).toStrictEqual(
+					"fileElementResponse1"
+				);
 			});
 		});
 	});
