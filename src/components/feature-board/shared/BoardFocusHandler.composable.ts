@@ -15,8 +15,13 @@ import { BoardCard } from "../types/Card";
  *
  * **Example:** A Card can receive focus again after being moved from one column to the next.
  *
- * @param id The ID that is used to track this element
- * @param element TemplateRef of the focusable element
+ * @param id The ID that is used to track this element.
+ *
+ * **Example:** A CardID
+ *
+ * @param element TemplateRef of the focusable element.
+ *
+ * **Example:** The VCard representing a Card on the board.
  * @see https://vuejs.org/guide/essentials/template-refs.html
  */
 export const useBoardFocusHandler = (
@@ -62,15 +67,15 @@ export const useBoardFocusHandler = (
 		/**
 		 * If the observed element is focused.
 		 *
-		 * Setting this value to true focuses the element.
+		 * Setting this value manually to true focuses the element.
 		 */
 		isFocused,
 		/**
-		 * is a child of the observed element focused
+		 * A child of the observed element is focused.
 		 */
 		isFocusWithin,
 		/**
-		 * Merges isFocused and isFocusWithin
+		 * Element isFocused or isFocusWithin.
 		 */
 		isFocusContained,
 	};
