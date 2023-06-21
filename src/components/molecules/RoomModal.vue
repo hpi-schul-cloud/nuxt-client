@@ -12,9 +12,9 @@
 				flat
 				solo
 				:aria-label="$t('common.labels.title')"
-				@blur="onUpdateRoomName"
+				@blur="onBlur"
 				@focus="onFocus"
-				@keyup.enter="onUpdateRoomName"
+				@keyup.enter="onEnterInput"
 			/>
 		</div>
 		<template slot="content">
@@ -90,21 +90,24 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		onFocus() {
-			this.roomNameEditMode = true;
-		},
-		async onUpdateRoomName(event: Event) {
+		async updateCourseGroupName() {
 			if (this.roomNameEditMode) {
 				this.roomNameEditMode = false;
 				await roomsModule.update(this.data);
 			}
-
-			if (
-				event instanceof KeyboardEvent &&
-				event.target instanceof HTMLElement
-			) {
+		},
+		onFocus() {
+			this.roomNameEditMode = true;
+		},
+		async onBlur() {
+			await this.updateCourseGroupName();
+		},
+		async onEnterInput(event: KeyboardEvent) {
+			if (event.target instanceof HTMLElement) {
 				event.target.blur();
 			}
+
+			await this.updateCourseGroupName();
 		},
 	},
 });
