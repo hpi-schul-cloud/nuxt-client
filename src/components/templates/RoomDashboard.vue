@@ -83,6 +83,17 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
+				<RoomBoardCard
+					v-if="item.type === cardTypes.ColumnBoard"
+					:ref="`item_${index}`"
+					:key-drag="isDragging"
+					:drag-in-progress="dragInProgress"
+					:column-board-item="item.content"
+					:course-data="{
+						courseName: roomData.title,
+						courseId: roomData.roomId,
+					}"
+				></RoomBoardCard>
 				<room-task-card
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
