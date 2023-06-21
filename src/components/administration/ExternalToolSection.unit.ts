@@ -60,7 +60,7 @@ describe("ExternalToolSection", () => {
 				expect(() =>
 					shallowMount(ExternalToolSection, {
 						provide: {
-							i18n: { t: (key: string) => key },
+							[I18N_KEY as symbol]: { t: (key: string) => key },
 						},
 					})
 				).toThrow();

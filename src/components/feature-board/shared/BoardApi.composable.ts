@@ -8,9 +8,11 @@ import {
 	CreateContentElementBody,
 	FileElementContent,
 	RichTextElementContent,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
+import { AxiosPromise } from "axios";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -23,21 +25,51 @@ export const useBoardApi = () => {
 		return response.data;
 	};
 
-	const updateCardHeightCall = async (id: string, height: number) => {
-		await cardsApi.cardControllerUpdateCardHeight(id, { height });
+	const updateCardHeightCall = async (
+		id: string,
+		height: number
+	): Promise<number> => {
+		const response = await cardsApi.cardControllerUpdateCardHeight(id, {
+			height,
+		});
+
+		return response.status;
 	};
 
-	const updateCardTitle = async (id: string, title: string) => {
-		await cardsApi.cardControllerUpdateCardTitle(id, { title });
+	const updateCardTitle = async (
+		id: string,
+		title: string
+	): Promise<number> => {
+		const response = await cardsApi.cardControllerUpdateCardTitle(id, {
+			title,
+		});
+		return response.status;
 	};
 
-	const updateColumnTitleCall = async (id: string, title: string) => {
-		await boardColumnApi.columnControllerUpdateColumnTitle(id, { title });
+	const updateColumnTitleCall = async (
+		id: string,
+		title: string
+	): Promise<number> => {
+		const response = await boardColumnApi.columnControllerUpdateColumnTitle(
+			id,
+			{
+				title,
+			}
+		);
+		return response.status;
 	};
 
-	const updateElementCall = async (element: AnyContentElement) => {
+	const updateElementCall = async (
+		element: AnyContentElement
+	): Promise<number> => {
 		const data = generateDataProp(element);
-		await elementApi.elementControllerUpdateElement(element.id, { data });
+		const response = await elementApi.elementControllerUpdateElement(
+			element.id,
+			{
+				data,
+			}
+		);
+		return response.status;
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
@@ -61,32 +93,39 @@ export const useBoardApi = () => {
 	const createElementCall = async (
 		cardId: string,
 		params: CreateContentElementBody
-	) => {
-		const result = await cardsApi.cardControllerCreateElement(cardId, params);
-
-		return result.data;
+	): AxiosPromise<AnyContentElement> => {
+		return await cardsApi.cardControllerCreateElement(cardId, params);
 	};
 
-	const deleteElementCall = async (elementId: string) => {
-		await elementApi.elementControllerDeleteElement(elementId);
+	const deleteCardCall = async (cardId: string): Promise<number> => {
+		const response = await cardsApi.cardControllerDeleteCard(cardId);
+		return response.status;
 	};
 
-	const deleteCardCall = async (cardId: string) => {
-		await cardsApi.cardControllerDeleteCard(cardId);
+	const deleteElementCall = async (elementId: string): Promise<number> => {
+		const response = await elementApi.elementControllerDeleteElement(elementId);
+		return response.status;
 	};
 
-	const deleteColumnCall = async (columnId: string) => {
-		await boardColumnApi.columnControllerDeleteColumn(columnId);
-	};
-
-	const createCardCall = async (columnId: string) => {
-		const createdCard = await boardColumnApi.columnControllerCreateCard(
+	const deleteColumnCall = async (columnId: string): Promise<number> => {
+		const response = await boardColumnApi.columnControllerDeleteColumn(
 			columnId
 		);
+		return response.status;
+	};
+
+	const createCardCall = async (
+		columnId: string
+	): Promise<string | undefined> => {
+		const createdCard = await boardColumnApi.columnControllerCreateCard(
+			columnId,
+			{
+				requiredEmptyElements: [
+					CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+				],
+			}
+		);
 		if (createdCard.data.id) {
-			await createElementCall(createdCard.data.id, {
-				type: ContentElementType.RichText,
-			});
 			return createdCard.data.id;
 		}
 	};
@@ -95,22 +134,24 @@ export const useBoardApi = () => {
 		cardId: string,
 		toColumnId: string,
 		toPosition: number
-	) => {
-		await cardsApi.cardControllerMoveCard(cardId, {
+	): Promise<number> => {
+		const response = await cardsApi.cardControllerMoveCard(cardId, {
 			toColumnId,
 			toPosition,
 		});
+		return response.status;
 	};
 
 	const moveColumnCall = async (
 		columnId: string,
 		toBoardId: string,
 		toPosition: number
-	) => {
-		await boardColumnApi.columnControllerMoveColumn(columnId, {
+	): Promise<number> => {
+		const response = await boardColumnApi.columnControllerMoveColumn(columnId, {
 			toBoardId,
 			toPosition,
 		});
+		return response.status;
 	};
 
 	return {
