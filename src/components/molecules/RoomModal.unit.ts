@@ -255,7 +255,7 @@ describe("RoomModal", () => {
 		});
 	});
 
-	describe("when vuetify modal emits dialog-closed", () => {
+	describe("when vCustomDialog emits dialog-closed", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({ isOpen: true });
 
@@ -265,7 +265,7 @@ describe("RoomModal", () => {
 			return { wrapper };
 		};
 
-		it("should emit event if vuetify modal is closed", async () => {
+		it("should emit 'update:isOpen", async () => {
 			const { wrapper } = setup();
 
 			// save in var so that check if undefined works
