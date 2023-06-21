@@ -225,8 +225,8 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = await dataUrlToFile(this.school.logo_dataUrl, "logo");
+			if (this.school.logo_data) {
+				schoolCopy.logo = this.school.logo_data;
 			}
 			this.localSchool = schoolCopy;
 		},
@@ -269,9 +269,9 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+				updatedSchool.logo_data = this.localSchool.logo;
 			} else {
-				updatedSchool.logo_dataUrl = "";
+				updatedSchool.logo_data = null;
 			}
 			schoolsModule.update(updatedSchool);
 		},
