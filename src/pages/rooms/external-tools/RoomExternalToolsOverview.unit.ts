@@ -9,7 +9,6 @@ import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
-import { contextExternalToolsModule } from "@/store";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
@@ -52,9 +51,6 @@ describe("RoomExternalToolOverview", () => {
 				},
 				propsData: {
 					roomId: "testRoolId",
-				},
-				stubs: {
-					VDialog: true,
 				},
 			}
 		);
@@ -121,44 +117,45 @@ describe("RoomExternalToolOverview", () => {
 
 			return {
 				wrapper,
+				tool,
 			};
 		};
 
 		it("should open the delete dialog", async () => {
-			const { wrapper } = setup();
+			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
 			});
 
-			await card.trigger("delete");
+			await card.vm.$emit("delete", tool);
 
 			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
 
-			expect(deleteDialog.isVisible()).toEqual(true);
+			expect(deleteDialog.element.childNodes.length).toBeGreaterThanOrEqual(1);
 		});
 	});
 
-	describe.skip("when clicking on confirm button of delete dialog", () => {
+	describe("when clicking on confirm button of delete dialog", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper } = getWrapper([tool]);
+			const { wrapper, contextExternalToolsModule } = getWrapper([tool]);
 
 			return {
 				tool,
 				wrapper,
+				contextExternalToolsModule,
 			};
 		};
 
 		it("should call delete function of store", async () => {
-			const { wrapper, tool } = await setup();
+			const { wrapper, tool, contextExternalToolsModule } = await setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-			await card.trigger("delete");
+			const card = wrapper.find('[data-testId="external-tool-card-0"]');
+			await card.vm.$emit("delete", tool);
+
 			const deleteDialog = wrapper.find('[data-testId="delete-dialog"]');
 
 			const confirmBtn = deleteDialog.find('[data-testId="dialog-confirm"]');
@@ -167,28 +164,32 @@ describe("RoomExternalToolOverview", () => {
 			expect(
 				contextExternalToolsModule.deleteContextExternalTool
 			).toHaveBeenCalledWith(tool.id);
-			expect(deleteDialog.isVisible()).toEqual(false);
+			expect(deleteDialog.element.childNodes.length).toEqual(0);
 		});
 	});
 
-	describe.skip("when clicking on cancel button of delete dialog", () => {
+	describe("when clicking on cancel button of delete dialog", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper } = getWrapper([tool]);
+			const { wrapper, contextExternalToolsModule } = getWrapper([tool]);
 
 			return {
 				tool,
 				wrapper,
+				contextExternalToolsModule,
 			};
 		};
+
 		it("should close dialog", async () => {
-			const { wrapper } = await setup();
+			const { wrapper, tool, contextExternalToolsModule } = await setup();
+
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
 			});
-			await card.trigger("delete");
+			await card.vm.$emit("delete", tool);
+
 			const deleteDialog = wrapper.find("[data-testId=delete-dialog]");
 
 			const cancelBtn = wrapper.find("[data-testId=dialog-cancel]");
@@ -197,7 +198,7 @@ describe("RoomExternalToolOverview", () => {
 			expect(
 				contextExternalToolsModule.deleteContextExternalTool
 			).not.toHaveBeenCalled();
-			expect(deleteDialog.isVisible()).toEqual(false);
+			expect(deleteDialog.element.childNodes.length).toEqual(0);
 		});
 	});
 

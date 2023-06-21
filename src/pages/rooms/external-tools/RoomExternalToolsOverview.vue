@@ -23,6 +23,7 @@
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@click="onClickTool"
+			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
 
 		<v-dialog
