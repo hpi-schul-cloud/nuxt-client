@@ -10,8 +10,8 @@
 		<template slot="header">
 			<slot name="header"></slot>
 		</template>
-		<template>
-			<v-container fluid class="px-0" v-show="isLoading"
+		<template v-if="isLoading">
+			<v-container fluid class="px-0"
 				><v-skeleton-loader
 					ref="skeleton-loader"
 					type="date-picker-days"
@@ -19,18 +19,17 @@
 				/>
 			</v-container>
 		</template>
-		<template>
+		<template v-else-if="isEmptyState">
 			<v-custom-empty-state
-				v-show="!isLoading && isEmptyState"
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>
 		</template>
-		<div v-show="!isLoading && !isEmptyState">
+		<template v-else>
 			<slot name="page-content"></slot>
-		</div>
+		</template>
 		<import-modal
 			v-model="importDialog.isOpen"
 			class="import-modal"
