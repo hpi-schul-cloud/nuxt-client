@@ -1,14 +1,12 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item>
+		<v-list-item class="grey lighten-2">
 			<v-list-item-icon class="mr-2">
-				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
+				<v-icon x-large>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<v-list-item-title style="color: var(--v-primary-base)">{{
-					fileName
-				}}</v-list-item-title>
+				<v-list-item-title>{{ fileName }}</v-list-item-title>
 			</v-list-item-content>
 
 			<v-list-item-icon>
@@ -25,6 +23,12 @@
 						</VIcon>
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
+					<BoardMenuAction @click="onDownload">
+						<VIcon>
+							{{ mdiTrayArrowDown }}
+						</VIcon>
+						{{ $t("components.board.action.download") }}
+					</BoardMenuAction>
 					<BoardMenuAction @click="onDelete">
 						<VIcon>
 							{{ mdiTrashCanOutline }}
@@ -38,16 +42,18 @@
 </template>
 
 <script lang="ts">
+import { downloadFile } from "@/utils/fileHelper";
+import {
+	mdiAlertCircle,
+	mdiArrowCollapseDown,
+	mdiArrowCollapseUp,
+	mdiFileDocumentOutline,
+	mdiTrashCanOutline,
+	mdiTrayArrowDown,
+} from "@mdi/js";
 import { defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import {
-	mdiAlertCircle,
-	mdiFileDocumentOutline,
-	mdiArrowCollapseUp,
-	mdiArrowCollapseDown,
-	mdiTrashCanOutline,
-} from "@mdi/js";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
@@ -67,6 +73,9 @@ export default defineComponent({
 		const onDelete = () => {
 			emit("delete:element");
 		};
+		const onDownload = async () => {
+			await downloadFile(props.url, props.fileName);
+		};
 
 		return {
 			mdiAlertCircle,
@@ -74,7 +83,9 @@ export default defineComponent({
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
+			mdiTrayArrowDown,
 			onDelete,
+			onDownload,
 		};
 	},
 });
