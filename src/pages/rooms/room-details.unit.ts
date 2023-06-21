@@ -16,9 +16,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
-import { provide } from "vue";
-import VueI18n from "vue-i18n";
-import RoomDashboard from "../../components/templates/RoomDashboard.vue";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 
 const mockData = {
