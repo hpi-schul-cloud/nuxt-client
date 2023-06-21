@@ -27,7 +27,7 @@
 						@move-element="moveByKeyboard"
 						@on-drag="isDragging = !isDragging"
 						@tab-pressed="isDragging = false"
-					></RoomBoardCard>
+					/>
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
@@ -93,7 +93,7 @@
 						courseName: roomData.title,
 						courseId: roomData.roomId,
 					}"
-				></RoomBoardCard>
+				/>
 				<room-task-card
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
