@@ -10,6 +10,7 @@ import { shallowMount } from "@vue/test-utils";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
@@ -273,6 +274,16 @@ describe("FileContentElement", () => {
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 
+				it("should display the file info chips component", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const chips = wrapper.findComponent(FileContentElementChips);
+
+					expect(chips.exists()).toBe(true);
+				});
+
 				it("should call fetchFile", async () => {
 					const { wrapper, fetchFile } = setup(false);
 
@@ -299,6 +310,16 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should display the file info chips component", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const chips = wrapper.findComponent(FileContentElementChips);
+
+					expect(chips.exists()).toBe(true);
 				});
 
 				it("should call deleteElement function when it receives delete:element event from child", async () => {
