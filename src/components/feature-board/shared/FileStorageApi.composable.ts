@@ -32,6 +32,7 @@ export const useFileStorageApi = (
 			fileRecord.value = response.data.data[0];
 		} catch (error) {
 			setBusinessError(error as BusinessError);
+			throw error;
 		}
 	};
 
@@ -48,6 +49,7 @@ export const useFileStorageApi = (
 			fileRecord.value = response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
+			throw error;
 		}
 	};
 
@@ -61,6 +63,7 @@ export const useFileStorageApi = (
 			fileRecord.value = response.data;
 		} catch (error) {
 			setBusinessError(error as BusinessError);
+			throw error;
 		}
 	};
 
@@ -79,15 +82,18 @@ export const useFileStorageApi = (
 		) {
 			return;
 		}
+		try {
+			await delay(waitTime);
 
-		await delay(waitTime);
+			await fetchFile();
 
-		await fetchFile();
+			if (refreshTimer < waitTimeMax) {
+				refreshTimer = refreshTimer + waitTime;
 
-		if (refreshTimer < waitTimeMax) {
-			refreshTimer = refreshTimer + waitTime;
-
-			await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
+				await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
+			}
+		} catch (error) {
+			return;
 		}
 	};
 

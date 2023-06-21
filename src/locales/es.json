@@ -813,6 +813,7 @@
 	"components.molecules.TaskItemMenu.confirmDelete.text": "¿Estás seguro de que deseas eliminar la tarea \"{taskTitle}\"?",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.cardElement.deleteElement": "Suprimir elemento",
+	"components.cardElement.deletionModal.confirmation": "¿Eliminar {type}?",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.fileElement.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.richTextElement": "Elemento texto",

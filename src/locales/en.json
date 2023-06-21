@@ -797,6 +797,7 @@
 	"components.molecules.TaskItemMenu.confirmDelete.text": "Are you sure, you want to delete task \"{taskTitle}\"?",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Created",
 	"components.cardElement.deleteElement": "Delete element",
+	"components.cardElement.deletionModal.confirmation": "Delete {type}?",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.fileElement.virusDetected": "File has been locked due to a suspected virus.",
 	"components.cardElement.richTextElement": "Text element",

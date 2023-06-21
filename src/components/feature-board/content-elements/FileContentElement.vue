@@ -10,6 +10,7 @@
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
+				@delete:element="onDeleteElement"
 			></FileContentElementEdit>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
@@ -26,6 +27,7 @@ import {
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
@@ -43,12 +45,17 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
+			required: true,
+		},
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
+		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
 		const isBlocked = computed(
 			() =>
@@ -76,8 +83,8 @@ export default defineComponent({
 				setSelectedFile();
 				await fetchPendingFileRecursively();
 			} catch (error) {
-				//Remove element
 				setSelectedFile();
+				await deleteFileElement();
 			}
 		};
 
@@ -86,7 +93,23 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
+		const onDeleteElement = async (): Promise<void> => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				fileRecord.value?.name,
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				await deleteFileElement();
+			}
+		};
+
+		const deleteFileElement = () => {
+			return props.deleteElement(props.element.id);
+		};
+
 		return {
+			onDeleteElement,
 			isAutoFocus,
 			isBlocked,
 			fileRecord,

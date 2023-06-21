@@ -8,6 +8,7 @@ import {
 	CreateContentElementBody,
 	FileElementContent,
 	RichTextElementContent,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
@@ -58,13 +59,17 @@ export const useBoardApi = () => {
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
-	const createElement = async (
+	const createElementCall = async (
 		cardId: string,
 		params: CreateContentElementBody
 	) => {
 		const result = await cardsApi.cardControllerCreateElement(cardId, params);
 
 		return result.data;
+	};
+
+	const deleteElementCall = async (elementId: string) => {
+		await elementApi.elementControllerDeleteElement(elementId);
 	};
 
 	const deleteCardCall = async (cardId: string) => {
@@ -77,12 +82,14 @@ export const useBoardApi = () => {
 
 	const createCardCall = async (columnId: string) => {
 		const createdCard = await boardColumnApi.columnControllerCreateCard(
-			columnId
+			columnId,
+			{
+				requiredEmptyElements: [
+					CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+				],
+			}
 		);
 		if (createdCard.data.id) {
-			createElement(createdCard.data.id, {
-				type: ContentElementType.RichText,
-			});
 			return createdCard.data.id;
 		}
 	};
@@ -111,7 +118,8 @@ export const useBoardApi = () => {
 
 	return {
 		createColumnCall,
-		createElement,
+		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,

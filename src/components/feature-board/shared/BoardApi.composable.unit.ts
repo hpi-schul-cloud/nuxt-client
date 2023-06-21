@@ -30,6 +30,7 @@ const mockApi = {
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
 	cardControllerDeleteCard: jest.fn(),
+	elementControllerDeleteElement: jest.fn(),
 	columnControllerDeleteColumn: jest.fn(),
 	columnControllerCreateCard: jest
 		.fn()
@@ -181,12 +182,12 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
-	describe("createElement", () => {
+	describe("createElementCall", () => {
 		it("should call cardControllerCreateElement api", async () => {
-			const { createElement } = useBoardApi();
+			const { createElementCall } = useBoardApi();
 			const PAYLOAD = "card-id";
 
-			await createElement(PAYLOAD, {
+			await createElementCall(PAYLOAD, {
 				type: ContentElementType.RichText,
 			});
 			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(
@@ -218,13 +219,33 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("deleteElementCall", () => {
+		it("should call elementControllerDeleteElement api", async () => {
+			const { deleteElementCall } = useBoardApi();
+			const PAYLOAD = "element-id";
+
+			await deleteElementCall(PAYLOAD);
+			expect(mockApi.elementControllerDeleteElement).toHaveBeenCalledWith(
+				PAYLOAD
+			);
+		});
+	});
+
 	describe("createCardCall", () => {
-		it("should call columnControllerDeleteColumn api", async () => {
+		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
 			const PAYLOAD = "column-id";
+			const INITIAL_ELEMENTS = {
+				requiredEmptyElements: [
+					serverApi.CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+				],
+			};
 
 			await createCardCall(PAYLOAD);
-			expect(mockApi.columnControllerCreateCard).toHaveBeenCalledWith(PAYLOAD);
+			expect(mockApi.columnControllerCreateCard).toHaveBeenCalledWith(
+				PAYLOAD,
+				INITIAL_ELEMENTS
+			);
 		});
 	});
 
