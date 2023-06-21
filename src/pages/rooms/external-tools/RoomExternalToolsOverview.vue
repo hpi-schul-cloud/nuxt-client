@@ -86,17 +86,22 @@ import {
 } from "@/serverApi/v3";
 import ExternalToolsModule from "@/store/external-tools";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import { injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	injectStrict,
+} from "@/utils/inject";
 
 export default defineComponent({
 	name: "RoomExternalToolOverview",
 	components: { RoomExternalToolCard, RenderHTML },
 	setup() {
-		const authModule: AuthModule = injectStrict<AuthModule>("authModule");
+		const authModule: AuthModule = injectStrict<AuthModule>(AUTH_MODULE);
 		const contextExternalToolsModule: ContextExternalToolsModule =
-			injectStrict<ContextExternalToolsModule>("contextExternalToolsModule");
+			injectStrict<ContextExternalToolsModule>(CONTEXT_EXTERNAL_TOOLS_MODULE);
 		const externalToolsModule: ExternalToolsModule =
-			injectStrict<ExternalToolsModule>("externalToolsModule");
+			injectStrict<ExternalToolsModule>(EXTERNAL_TOOLS_MODULE);
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
 			() => contextExternalToolsModule.getContextExternalTools || []

@@ -8,7 +8,12 @@ import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+} from "@/utils/inject";
 
 describe("RoomExternalToolOverview", () => {
 	const getWrapper = (tools: ContextExternalTool[]) => {
@@ -35,10 +40,10 @@ describe("RoomExternalToolOverview", () => {
 				},
 			}),
 			provide: {
-				authModule,
-				contextExternalToolsModule,
-				externalToolsModule,
-				[I18N_KEY as symbol]: {
+				[AUTH_MODULE.valueOf()]: authModule,
+				[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
+				[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
+				[I18N_KEY.valueOf()]: {
 					tc: (key: string): string => key,
 				},
 			},
