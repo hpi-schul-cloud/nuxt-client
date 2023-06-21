@@ -1,6 +1,6 @@
 <template>
 	<v-list flat class="py-0">
-		<v-list-item :href="url" download>
+		<v-list-item>
 			<v-list-item-icon class="mr-2">
 				<v-icon>{{ mdiFileDocumentOutline }}</v-icon>
 			</v-list-item-icon>
@@ -25,7 +25,7 @@
 						</VIcon>
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
-					<BoardMenuAction>
+					<BoardMenuAction @click="onDelete">
 						<VIcon>
 							{{ mdiTrashCanOutline }}
 						</VIcon>
@@ -62,13 +62,19 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	emits: ["delete:element", "update:caption"],
+	setup(props, { emit }) {
+		const onDelete = () => {
+			emit("delete:element");
+		};
+
 		return {
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
+			onDelete,
 		};
 	},
 });
