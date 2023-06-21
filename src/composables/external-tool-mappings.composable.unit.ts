@@ -54,7 +54,6 @@ describe("useExternalToolUtils", () => {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
 			mapContextExternalToolResponse,
-			mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
@@ -80,27 +79,7 @@ describe("useExternalToolUtils", () => {
 			data: [toolResponse],
 		};
 
-		const contextToolResponse: ContextExternalToolResponse = {
-			id: "id",
-			displayName: "displayName",
-			contextId: "contextId",
-			schoolToolId: "schoolToolId",
-			toolVersion: 1,
-			parameters: [
-				{
-					name: "name",
-					value: "value",
-				},
-			],
-			contextType: ContextExternalToolResponseContextTypeEnum.Course,
-			logoUrl: "logoUrl",
-		};
-
-		const contextListResponse: ContextExternalToolSearchListResponse = {
-			data: [contextToolResponse],
-		};
-
-		const schoolExternaToolItem: SchoolExternalToolItem = {
+		const schoolExternalToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
 			status: SchoolExternalToolStatus.Latest,
@@ -152,14 +131,11 @@ describe("useExternalToolUtils", () => {
 
 		return {
 			listResponse,
-			contextListResponse,
 			toolResponse,
-			contextToolResponse,
-			schoolExternaToolItem,
+			schoolExternalToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
 			mapContextExternalToolResponse,
-			mapContextExternalToolSearchListResponseToExternalToolDisplayData,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
@@ -211,6 +187,38 @@ describe("useExternalToolUtils", () => {
 
 	describe("mapContextExternalToolSearchListResponseToExternalToolDisplayData is called", () => {
 		describe("when maps the response", () => {
+			const setup = () => {
+				const {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+				} = useExternalToolMappings();
+
+				const contextToolResponse: ContextExternalToolResponse = {
+					id: "id",
+					displayName: "displayName",
+					contextId: "contextId",
+					schoolToolId: "schoolToolId",
+					toolVersion: 1,
+					parameters: [
+						{
+							name: "name",
+							value: "value",
+						},
+					],
+					contextType: ContextExternalToolResponseContextTypeEnum.Course,
+					logoUrl: "logoUrl",
+				};
+
+				const contextListResponse: ContextExternalToolSearchListResponse = {
+					data: [contextToolResponse],
+				};
+
+				return {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+					contextListResponse,
+					contextToolResponse,
+				};
+			};
+
 			it("should return a contextExternalTool array", () => {
 				const {
 					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
