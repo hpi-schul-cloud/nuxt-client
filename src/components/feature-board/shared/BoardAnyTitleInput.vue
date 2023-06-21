@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<VTextarea
-			v-if="scope === 'card'"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -17,52 +16,6 @@
 			role="heading"
 			:aria-level="ariaLevel"
 		></VTextarea>
-
-		<VTextarea
-			v-if="scope === 'column'"
-			hide-details="auto"
-			v-model="modelValue"
-			solo
-			dense
-			:rows="1"
-			auto-grow
-			flat
-			class="mx-n3 mb-n2"
-			:placeholder="$t('common.labels.title').toString()"
-			:style="{ 'pointer-events': isEditMode ? 'auto' : 'none' }"
-			background-color="transparent"
-			ref="titleInput"
-			:readonly="!isEditMode"
-			role="heading"
-			:aria-level="ariaLevel"
-		></VTextarea>
-		<!-- :aria-hidden="!isEditMode" -->
-
-		<VTextarea
-			v-if="scope === 'board'"
-			hide-details="auto"
-			v-model="modelValue"
-			solo
-			dense
-			:rows="1"
-			auto-grow
-			flat
-			class="mx-n3 mb-n2"
-			:placeholder="$t('common.labels.title').toString()"
-			background-color="transparent"
-			ref="titleInput"
-			:readonly="!isEditMode"
-			role="heading"
-			:aria-level="ariaLevel"
-		></VTextarea>
-		<div
-			class="d-sr-only"
-			role="heading"
-			:aria-level="ariaLevel"
-			:aria-hidden="isEditMode"
-		>
-			{{ modelValue }}
-		</div>
 	</div>
 </template>
 
