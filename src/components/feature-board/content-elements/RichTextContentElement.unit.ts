@@ -5,6 +5,9 @@ import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("../shared/InlineEditInteractionHandler.composable");
 
@@ -24,6 +27,7 @@ const deleteElementMock = jest.fn();
 
 describe("RichTextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
+	const notifierModule = createModuleMocks(NotifierModule);
 
 	const setup = (props: {
 		element: RichTextElementResponse;
@@ -35,6 +39,11 @@ describe("RichTextContentElement", () => {
 			{
 				...createComponentMocks({}),
 				propsData: { ...props, deleteElement: deleteElementMock },
+				provide: {
+					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+				},
+				
 			}
 		);
 	};
