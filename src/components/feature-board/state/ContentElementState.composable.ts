@@ -3,6 +3,7 @@ import { ref, toRef, unref, watch } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 import { AnyContentElement } from "../types/ContentElement";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -21,6 +22,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
 	const { updateElementCall } = useBoardApi();
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	watchDebounced(
 		modelValue.value,
@@ -42,7 +44,10 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	const updateElement = async (payload: T["content"]) => {
 		console.log("update element", { ...payload });
-		await updateElementCall(props.element);
+		const status = await updateElementCall(props.element);
+		if (isErrorCode(status)) {
+			showFailure(generateErrorText("update", "boardElement"));
+		}
 	};
 
 	return {
