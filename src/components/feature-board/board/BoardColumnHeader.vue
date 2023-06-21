@@ -28,7 +28,7 @@
 					</BoardMenuAction>
 				</BoardMenu>
 			</div>
-			<VDivider color="black"></VDivider>
+			<VDivider aria-hidden="true" color="black"></VDivider>
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
