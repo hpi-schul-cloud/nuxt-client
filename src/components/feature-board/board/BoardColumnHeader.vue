@@ -7,11 +7,10 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-2': isFocused }"
-			tabindex="0"
+			:class="{ 'grey lighten-2': isFocusContained }"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start py-2 pl-2">
+			<div class="d-flex align-start py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"
@@ -20,16 +19,14 @@
 					@update:value="onUpdateTitle"
 					class="w-100"
 				></BoardAnyTitleInput>
-				<div>
-					<BoardMenu v-if="hasDeletePermission" scope="column">
-						<BoardMenuAction @click="onTryDelete">
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
-					</BoardMenu>
-				</div>
+				<BoardMenu v-if="hasDeletePermission" scope="column">
+					<BoardMenuAction @click="onTryDelete">
+						<VIcon>
+							{{ mdiTrashCanOutline }}
+						</VIcon>
+						{{ $t("components.board.action.delete") }}
+					</BoardMenuAction>
+				</BoardMenu>
 			</div>
 			<VDivider color="black"></VDivider>
 		</div>
@@ -81,7 +78,10 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref(undefined);
-		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
+		const { isFocusContained } = useBoardFocusHandler(
+			props.columnId,
+			columnHeader
+		);
 		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
@@ -121,7 +121,7 @@ export default defineComponent({
 		return {
 			columnHeader,
 			isEditMode,
-			isFocused,
+			isFocusContained,
 			isDeleteModalOpen,
 			hasDeletePermission,
 			mdiTrashCanOutline,

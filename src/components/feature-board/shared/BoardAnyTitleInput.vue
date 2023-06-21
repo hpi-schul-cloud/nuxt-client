@@ -14,7 +14,8 @@
 			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
-			:aria-hidden="!isEditMode"
+			role="heading"
+			:aria-level="ariaLevel"
 		></VTextarea>
 
 		<VTextarea
@@ -32,8 +33,10 @@
 			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
-			:aria-hidden="!isEditMode"
+			role="heading"
+			:aria-level="ariaLevel"
 		></VTextarea>
+		<!-- :aria-hidden="!isEditMode" -->
 
 		<VTextarea
 			v-if="scope === 'board'"
@@ -49,7 +52,8 @@
 			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
-			:aria-hidden="!isEditMode"
+			role="heading"
+			:aria-level="ariaLevel"
 		></VTextarea>
 		<div
 			class="d-sr-only"
