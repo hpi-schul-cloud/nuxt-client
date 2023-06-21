@@ -111,6 +111,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper };
 			};
+
 			it("should render component", async () => {
 				const { wrapper } = await setup();
 
@@ -133,6 +134,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper, testKey };
 			};
+
 			it("should return translation", async () => {
 				const { wrapper, testKey } = await setup();
 
@@ -153,6 +155,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper, testKey };
 			};
+
 			it("should return 'unknown translation-key'", async () => {
 				const { wrapper, testKey } = await setup();
 
@@ -174,6 +177,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper };
 			};
+
 			it("should render static breadcrumbs", async () => {
 				const { wrapper } = await setup();
 
@@ -196,6 +200,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper };
 			};
+
 			it("should render title", async () => {
 				const { wrapper } = await setup();
 
@@ -270,6 +275,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper };
 			};
+
 			it("should change page", async () => {
 				const { wrapper } = await setup();
 
@@ -315,6 +321,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper, openSelect };
 			};
+
 			it("should call store action to save tool", async () => {
 				const { wrapper, openSelect } = await setup();
 
@@ -366,6 +373,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				return { wrapper };
 			};
+
 			it("should display alert when server side error on save occurred", async () => {
 				const { wrapper } = await setup();
 

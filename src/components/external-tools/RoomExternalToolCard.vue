@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
-import { ExternalToolDisplayData } from "../../store/external-tool/external-tool-display-data";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiPencilOutline,

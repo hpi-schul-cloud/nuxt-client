@@ -1,8 +1,8 @@
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
-import { ExternalToolDisplayData } from "../../store/external-tool/external-tool-display-data";
-import { externalToolDisplayDataFactory } from "../../../tests/test-utils/factory/externalToolDisplayDataFactory";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import { I18N_KEY } from "@/utils/inject";
 
