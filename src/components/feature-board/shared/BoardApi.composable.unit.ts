@@ -232,12 +232,20 @@ describe("BoardApi.composable", () => {
 	});
 
 	describe("createCardCall", () => {
-		it("should call columnControllerDeleteColumn api", async () => {
+		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
 			const PAYLOAD = "column-id";
+			const INITIAL_ELEMENTS = {
+				requiredEmptyElements: [
+					serverApi.CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+				],
+			};
 
 			await createCardCall(PAYLOAD);
-			expect(mockApi.columnControllerCreateCard).toHaveBeenCalledWith(PAYLOAD);
+			expect(mockApi.columnControllerCreateCard).toHaveBeenCalledWith(
+				PAYLOAD,
+				INITIAL_ELEMENTS
+			);
 		});
 	});
 
