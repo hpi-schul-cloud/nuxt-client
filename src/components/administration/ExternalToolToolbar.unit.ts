@@ -1,6 +1,7 @@
 import { mount, Wrapper } from "@vue/test-utils";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolToolbar", () => {
 	let wrapper: Wrapper<any>;
@@ -12,7 +13,7 @@ describe("ExternalToolToolbar", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 		});
 	};

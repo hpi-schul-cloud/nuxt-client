@@ -5,6 +5,7 @@ import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -17,7 +18,6 @@ export type AddCardElement = (
 
 export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
-
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
 		createElementCall,
@@ -27,11 +27,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardHeightCall,
 		updateCardTitle,
 	} = useBoardApi();
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
+			const errorText = generateErrorText("read", "boardCard");
+			showFailure(errorText);
 			console.error(error);
 		}
 		cardState.isLoading = false;
@@ -41,16 +44,21 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		await updateCardTitle(cardState.card.id, newTitle);
+		const status = await updateCardTitle(cardState.card.id, newTitle);
+		if (isErrorCode(status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		cardState.card.title = newTitle;
 	};
 
 	const deleteCard = async () => {
-		if (cardState.card === undefined) {
-			return;
-		}
+		if (cardState.card === undefined) return;
 
-		await deleteCardCall(cardState.card.id);
+		const status = await deleteCardCall(cardState.card.id);
+		if (isErrorCode(status)) {
+			await showErrorAndReload(generateErrorText("delete", "boardCard"));
+		}
 	};
 
 	const updateCardHeight = async (newHeight: number) => {
@@ -60,7 +68,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card.height === newHeight) {
 			return;
 		}
-		await updateCardHeightCall(cardState.card.id, newHeight);
+		const status = await updateCardHeightCall(cardState.card.id, newHeight);
+		if (isErrorCode(status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		cardState.card.height = newHeight;
 	};
 
@@ -68,11 +80,20 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const result = await createElementCall(cardState.card.id, { type });
+		const response = await createElementCall(cardState.card.id, { type });
+		if (isErrorCode(response.status)) {
+			await showErrorAndReload(generateErrorText("create", "boardElement"));
+			return;
+		}
+		cardState.card.elements.push(response.data as unknown as AnyContentElement);
 
-		cardState.card.elements.push(result as unknown as AnyContentElement);
+		return response.data;
+	};
 
-		return result;
+	const showErrorAndReload = async (errorText: string | undefined) => {
+		if (cardState.card === undefined) return;
+		showFailure(errorText);
+		await fetchCard(cardState.card.id);
 	};
 
 	const extractElement = (elementId: string): void => {
@@ -131,20 +152,24 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		await deleteElementCall(elementId);
+		const status = await deleteElementCall(elementId);
+		if (isErrorCode(status)) {
+			await showErrorAndReload(generateErrorText("update"));
+			return;
+		}
 		extractElement(elementId);
 	};
 
 	onMounted(() => fetchCard(id));
 
 	return {
-		fetchCard,
-		updateTitle,
-		deleteCard,
-		updateCardHeight,
 		addElement,
 		moveElementDown,
 		moveElementUp,
+		deleteCard,
+		fetchCard,
+		updateCardHeight,
+		updateTitle,
 		deleteElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
