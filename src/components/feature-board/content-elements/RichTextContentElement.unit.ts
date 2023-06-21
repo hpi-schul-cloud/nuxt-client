@@ -20,6 +20,7 @@ const TEST_ELEMENT: RichTextElementResponse = {
 		lastUpdatedAt: new Date().toISOString(),
 	},
 };
+const deleteElementMock = jest.fn();
 
 describe("RichTextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
@@ -33,21 +34,27 @@ describe("RichTextContentElement", () => {
 			RichTextContentElementComponent as MountOptions<Vue>,
 			{
 				...createComponentMocks({}),
-				propsData: props,
+				propsData: { ...props, deleteElement: deleteElementMock },
 			}
 		);
 	};
 
 	describe("when component is mounted", () => {
 		it("should render display if isEditMode is false", () => {
-			setup({ element: TEST_ELEMENT, isEditMode: false });
+			setup({
+				element: TEST_ELEMENT,
+				isEditMode: false,
+			});
 			expect(
 				wrapper.findComponent(RichTextContentElementDisplayComponent).exists()
 			).toBe(true);
 		});
 
 		it("should render edit if isEditMode is true", () => {
-			setup({ element: TEST_ELEMENT, isEditMode: true });
+			setup({
+				element: TEST_ELEMENT,
+				isEditMode: true,
+			});
 			expect(
 				wrapper.findComponent(RichTextContentElementEditComponent).exists()
 			).toBe(true);
