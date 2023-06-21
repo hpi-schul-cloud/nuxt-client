@@ -160,6 +160,7 @@
 import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
+	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -170,7 +171,6 @@ import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
