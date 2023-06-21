@@ -35,11 +35,11 @@ export default defineComponent({
 			type: Object as PropType<RichTextElementResponse>,
 			required: true,
 		},
+		isEditMode: { type: Boolean, required: true },
 		deleteElement: {
 			type: Function as PropType<(elementId: string) => Promise<void>>,
 			required: true,
 		},
-		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
