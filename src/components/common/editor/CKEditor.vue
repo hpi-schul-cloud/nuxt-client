@@ -251,8 +251,7 @@ export default defineComponent({
 			editor.editing.view.document.on(
 				"delete",
 				() => {
-					if (charCount <= 0) {
-						// console.log("delete element now...");
+					if (charCount === 0) {
 						emit("delete");
 					}
 				},
