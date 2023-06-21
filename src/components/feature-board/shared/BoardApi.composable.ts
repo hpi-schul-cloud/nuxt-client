@@ -90,9 +90,6 @@ export const useBoardApi = () => {
 			}
 		);
 		if (createdCard.data.id) {
-			await createElementCall(createdCard.data.id, {
-				type: ContentElementType.RichText,
-			});
 			return createdCard.data.id;
 		}
 	};
