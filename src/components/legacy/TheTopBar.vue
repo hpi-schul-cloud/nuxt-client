@@ -66,9 +66,9 @@
 					{{ school.name }}
 				</div>
 				<img
-					v-if="school && school.logo_data"
+					v-if="school && school.logo_dataUrl"
 					class="school-logo"
-					:src="school.logo_data"
+          v-bind:src="school.logo_dataUrl"
 					:alt="school.name"
 				/>
 				<popup-icon-initials
