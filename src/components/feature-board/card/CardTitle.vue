@@ -45,6 +45,6 @@ export default defineComponent({
 
 <style scoped>
 .text-break-word {
-	word-wrap: break-word;
+	word-break: break-word;
 }
 </style>
