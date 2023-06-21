@@ -43,7 +43,6 @@ describe("RichTextContentElement", () => {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 				},
-				
 			}
 		);
 	};
