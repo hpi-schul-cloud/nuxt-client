@@ -1,8 +1,8 @@
 import { createSharedComposable } from "@vueuse/core";
 import { authModule } from "@/store";
-import { BoardPermissionsTypes } from "../types/Board";
+import { BoardPermissionChecks } from "../types/Permissions";
 
-const boardPermissions = (): BoardPermissionsTypes => {
+const boardPermissions = (): BoardPermissionChecks => {
 	const permissions = authModule?.getUserPermissions || [];
 	const userRoles = authModule?.getUserRoles || [];
 

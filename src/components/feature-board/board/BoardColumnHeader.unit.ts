@@ -5,15 +5,15 @@ import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsTypes } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
-const defaultPermissions = {
-	hasDeletePermission: true,
-};
 jest.mock("../shared/EditMode.composable");
 
 describe("BoardColumnHeader", () => {
@@ -21,7 +21,9 @@ describe("BoardColumnHeader", () => {
 
 	const mockedUseEditMode = jest.mocked(useEditMode);
 
-	const setup = (options?: { permissions?: BoardPermissionsTypes }) => {
+	const setup = (options?: {
+		permissions?: Partial<BoardPermissionChecks>;
+	}) => {
 		document.body.setAttribute("data-app", "true");
 		const isEditMode = computed(() => true);
 		mockedUseEditMode.mockReturnValue({

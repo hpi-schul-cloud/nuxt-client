@@ -5,7 +5,11 @@ import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
-import { Board, BoardPermissionsTypes } from "../types/Board";
+import { Board } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	boardResponseFactory,
@@ -41,15 +45,6 @@ const $route: Route = {
 
 const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
 
-const defaultPermissions = {
-	hasMovePermission: true,
-	hasCreateCardPermission: true,
-	hasCreateColumnPermission: true,
-	hasDeletePermission: true,
-	hasEditPermission: true,
-	isTeacher: true,
-};
-
 const createCardMock = jest.fn();
 const createColumnMock = jest.fn();
 const createColumnWithCardMock = jest.fn();
@@ -74,7 +69,7 @@ describe("Board", () => {
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsTypes;
+		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
