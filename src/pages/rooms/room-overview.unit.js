@@ -456,7 +456,7 @@ describe("@/pages/RoomOverview", () => {
 		});
 
 		const roomModal = wrapper.findComponent(RoomModal);
-		await roomModal.vm.$emit(
+		roomModal.vm.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);
