@@ -1,6 +1,6 @@
 <template>
 	<v-alert
-		class="mb-0 rounded-0"
+		class="mb-0 py-4 rounded-0"
 		color="error"
 		data-testid="board-file-element-alert"
 		dense
