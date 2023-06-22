@@ -281,7 +281,7 @@ describe("FileContentElement", () => {
 				});
 
 				it("should display the file info chips component", async () => {
-					const { wrapper } = setup(true);
+					const { wrapper } = setup(false);
 
 					await wrapper.vm.$nextTick();
 
