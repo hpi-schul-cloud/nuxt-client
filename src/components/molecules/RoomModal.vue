@@ -15,6 +15,7 @@
 				@blur="onBlur"
 				@focus="onFocus"
 				@keyup.enter="onEnterInput"
+				:append-icon="mdiPencilOutline"
 			/>
 		</div>
 		<template slot="content">
@@ -34,7 +35,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
+import { mdiPencilOutline } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -68,7 +69,6 @@ export default Vue.extend({
 		return {
 			roomNameEditMode: false,
 			mdiPencilOutline,
-			mdiKeyboardReturn,
 			data: {
 				id: "",
 				title: "",
@@ -107,3 +107,9 @@ export default Vue.extend({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.room-title {
+	width: 100%;
+}
+</style>
