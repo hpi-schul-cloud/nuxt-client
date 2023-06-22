@@ -5,7 +5,7 @@
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
-				:class="{ 'grey lighten-3': hasBackground }"
+				:class="{ white: hasBackground }"
 				icon
 				@dblclick.stop="() => {}"
 				@keydown.left.right.up.down.stop="() => {}"
