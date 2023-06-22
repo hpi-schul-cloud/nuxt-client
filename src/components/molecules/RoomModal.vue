@@ -11,7 +11,7 @@
 				dense
 				flat
 				solo
-				:aria-label="$t('common.labels.title')"
+				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				@blur="onBlur"
 				@focus="onFocus"
 				@keyup.enter="onEnterInput"
