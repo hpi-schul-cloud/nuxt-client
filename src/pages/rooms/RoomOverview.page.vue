@@ -132,7 +132,7 @@ import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -147,7 +147,7 @@ export default {
 		ImportFlow,
 	},
 	inject: {
-		notifierModule: { from: "notifierModule" },
+		notifierModule: { from: NOTIFIER_MODULE_KEY },
 		i18n: { from: I18N_KEY },
 	},
 	layout: "defaultVuetify",

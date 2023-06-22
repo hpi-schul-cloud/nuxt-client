@@ -1,5 +1,5 @@
 <template>
-	<VCardTitle class="d-block" v-if="isEditMode || value !== ''">
+	<VCardTitle class="d-block text-break-word" v-if="isEditMode || value !== ''">
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
@@ -42,3 +42,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

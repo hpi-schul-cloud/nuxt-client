@@ -6,9 +6,9 @@
 	>
 		<div
 			data-testid="event-handle"
-			@keydown.left.right="onKeydownArrow"
-			@keydown.enter="onKeydownEnter"
-			@keydown.tab="onKeydownTab"
+			@keydown.left.right.capture="onKeydownArrow"
+			@keydown.enter.capture="onKeydownEnter"
+			@keydown.tab.capture="onKeydownTab"
 		>
 			<slot></slot>
 		</div>
