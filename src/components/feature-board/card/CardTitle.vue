@@ -4,6 +4,7 @@
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
+			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 		></BoardAnyTitleInput>

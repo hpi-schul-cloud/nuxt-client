@@ -9,7 +9,7 @@
 			auto-grow
 			flat
 			class="mx-n3 mb-n2"
-			:placeholder="$t('common.labels.title').toString()"
+			:placeholder="placeholder"
 			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
