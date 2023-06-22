@@ -41,14 +41,19 @@ export const useBoardFocusHandler = (
 	const { announceFocusReceived, focusedId } = useSharedFocusedId();
 
 	/**
-	 * Listen to 'focusin' allows the also register focus events contained within the observed elements.
+	 * Listen to 'focusin' event allows to also register focus events contained within the observed elements.
 	 * This way we can keep track of focus events of child-elements.
 	 */
-	const cleanupFocusListener = useEventListener(element, "focusin", () => {
-		if (id?.valueOf()) {
-			announceFocusReceived(id);
+	const cleanupFocusListener = useEventListener(
+		element,
+		"focusin",
+		(event: FocusEvent) => {
+			if (id?.valueOf()) {
+				event.stopPropagation();
+				announceFocusReceived(id);
+			}
 		}
-	});
+	);
 
 	onMounted(async () => {
 		await trySetFocus();
