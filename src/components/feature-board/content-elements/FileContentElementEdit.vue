@@ -14,21 +14,28 @@
 			<v-list-item-icon>
 				<BoardMenu scope="element">
 					<BoardMenuAction>
-						<VIcon>
-							{{ mdiArrowCollapseUp }}
-						</VIcon>
+						<template #icon>
+							<VIcon>
+								{{ mdiArrowCollapseUp }}
+							</VIcon>
+						</template>
 						{{ $t("components.board.action.moveUp") }}
 					</BoardMenuAction>
 					<BoardMenuAction>
-						<VIcon>
-							{{ mdiArrowCollapseDown }}
-						</VIcon>
+						<template #icon
+							><VIcon>
+								{{ mdiArrowCollapseDown }}
+							</VIcon>
+						</template>
+
 						{{ $t("components.board.action.moveDown") }}
 					</BoardMenuAction>
 					<BoardMenuAction @click="onDelete">
-						<VIcon>
-							{{ mdiTrashCanOutline }}
-						</VIcon>
+						<template #icon
+							><VIcon>
+								{{ mdiTrashCanOutline }}
+							</VIcon>
+						</template>
 						{{ $t("components.board.action.delete") }}
 					</BoardMenuAction>
 				</BoardMenu>

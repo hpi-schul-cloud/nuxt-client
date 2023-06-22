@@ -11,7 +11,6 @@
 					:lock-axis="lockAxis"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="placeholderOptions"
-					:drag-begin-delay="200"
 					@drop="onDropColumn"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
