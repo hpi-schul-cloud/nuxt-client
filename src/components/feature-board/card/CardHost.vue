@@ -27,6 +27,7 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
+					@enter="onHitEnterCardTitle"
 				>
 				</CardTitle>
 
@@ -166,6 +167,11 @@ export default defineComponent({
 			{ debounce: 500, maxWait: 2000 }
 		);
 
+		const onHitEnterCardTitle = () => {
+			// TODO open element select for now
+			askType();
+		};
+
 		return {
 			boardMenuClasses,
 			isLoading,
@@ -184,6 +190,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			onFileSelect,
 			isFilePickerOpen,
+			onHitEnterCardTitle,
 		};
 	},
 });
