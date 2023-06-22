@@ -33,7 +33,7 @@ export function convertFileSizeToHumanReadable(
 		power++;
 	}
 
-	const localeString = convertedSize.toLocaleString("de-DE", {
+	const localeString = convertedSize.toLocaleString(window.navigator.language, {
 		maximumFractionDigits,
 	});
 
