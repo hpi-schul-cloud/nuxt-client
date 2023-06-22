@@ -28,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input", "focus", "blur", "delete"],
+	emits: ["input", "focus", "blur", "delete", "ready"],
 	props: {
 		value: {
 			type: String,
@@ -248,15 +248,13 @@ export default defineComponent({
 		// https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
 		const addCustomEventListeners = (editor) => {
 			if (!editor) return;
-			editor.editing.view.document.on(
-				"delete",
-				() => {
-					if (charCount === 0) {
-						emit("delete");
-					}
-				},
-				{ priority: "high" }
-			);
+
+			emit("ready");
+			editor.editing.view.document.on("delete", () => {
+				if (charCount === 0) {
+					emit("delete");
+				}
+			});
 		};
 
 		return {
