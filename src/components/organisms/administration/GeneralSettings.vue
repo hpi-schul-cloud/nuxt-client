@@ -156,7 +156,7 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
-import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
+import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { mapActions } from "vuex";
 
@@ -232,7 +232,6 @@ export default {
 		},
 		printDate,
 		toBase64,
-		dataUrlToFile,
 		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			const newPermissions = {
@@ -269,7 +268,7 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+				updatedSchool.logo_dataUrl = this.localSchool.logo;
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
