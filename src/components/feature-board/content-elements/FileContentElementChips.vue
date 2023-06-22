@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<v-chip class="ma-2" small>{{ fileExtension }}</v-chip>
-		<v-chip class="ma-2" small> {{ humanReadableFileSize }} </v-chip>
+	<div class="ma-2">
+		<v-chip class="mr-2" small>{{ fileExtension }}</v-chip>
+		<v-chip class="mr-2" small>{{ humanReadableFileSize }}</v-chip>
 	</div>
 </template>
 
