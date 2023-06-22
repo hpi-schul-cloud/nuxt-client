@@ -1,16 +1,17 @@
+import RoomModal from "@/components/molecules/RoomModal";
 import { authModule, roomsModule } from "@/store";
 import AuthModule from "@/store/auth";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import CopyModule from "@/store/copy";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomOverview from "./RoomOverview.page.vue";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const mockRoomStoreData = [
 	{
@@ -256,9 +257,9 @@ describe("@/pages/RoomOverview", () => {
 		await wrapper.vm.$nextTick();
 		const customDialog = wrapper.find(".room-dialog");
 		await wrapper.vm.$nextTick();
-		const headline = customDialog.find("h2");
+		const input = customDialog.find("input");
 		expect(customDialog.vm.isOpen).toBe(true);
-		expect(headline.element.innerHTML).toContain("Fourth");
+		expect(input.element.value).toBe("Fourth");
 	});
 
 	it("should call the necessary methods for positioning while the page loading", async () => {
@@ -454,7 +455,8 @@ describe("@/pages/RoomOverview", () => {
 			},
 		});
 
-		await wrapper.vm.$refs.roomModal.$emit(
+		const roomModal = wrapper.findComponent(RoomModal);
+		await roomModal.vm.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);
