@@ -28,7 +28,7 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList data-testid="board-menu">
+		<VList>
 			<slot></slot>
 		</VList>
 	</VMenu>

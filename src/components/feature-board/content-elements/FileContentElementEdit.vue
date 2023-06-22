@@ -1,8 +1,8 @@
 <template>
 	<v-list flat class="py-0" data-testid="board-file-element-edit">
-		<v-list-item class="grey lighten-2">
-			<v-list-item-icon class="mr-2">
-				<v-icon data-testid="board-file-element-edit-file-icon" x-large>{{
+		<v-list-item class="px-2 grey lighten-2">
+			<v-list-item-icon class="my-2 mr-2">
+				<v-icon data-testid="board-file-element-edit-file-icon" large>{{
 					mdiFileDocumentOutline
 				}}</v-icon>
 			</v-list-item-icon>
@@ -13,7 +13,7 @@
 				}}</v-list-item-title>
 			</v-list-item-content>
 
-			<v-list-item-icon>
+			<v-list-item-icon class="my-2 ml-2">
 				<BoardMenu scope="element">
 					<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
 						<VIcon>
