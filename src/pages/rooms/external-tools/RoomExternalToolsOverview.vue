@@ -97,11 +97,13 @@ export default defineComponent({
 	name: "RoomExternalToolOverview",
 	components: { RoomExternalToolCard, RenderHTML },
 	setup() {
-		const authModule: AuthModule = injectStrict<AuthModule>(AUTH_MODULE);
-		const contextExternalToolsModule: ContextExternalToolsModule =
-			injectStrict<ContextExternalToolsModule>(CONTEXT_EXTERNAL_TOOLS_MODULE);
-		const externalToolsModule: ExternalToolsModule =
-			injectStrict<ExternalToolsModule>(EXTERNAL_TOOLS_MODULE);
+		const authModule = injectStrict<AuthModule>(AUTH_MODULE);
+		const contextExternalToolsModule = injectStrict<ContextExternalToolsModule>(
+			CONTEXT_EXTERNAL_TOOLS_MODULE
+		);
+		const externalToolsModule = injectStrict<ExternalToolsModule>(
+			EXTERNAL_TOOLS_MODULE
+		);
 
 		const tools: ComputedRef<ContextExternalTool[]> = computed(
 			() => contextExternalToolsModule.getContextExternalTools || []
