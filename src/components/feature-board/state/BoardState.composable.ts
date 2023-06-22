@@ -6,6 +6,10 @@ import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import {
+	useBoardFocusHandler,
+	useSharedFocusedId,
+} from "../shared/BoardFocusHandler.composable";
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
@@ -31,6 +35,9 @@ export const useBoardState = (id: string) => {
 			await showErrorAndReload(errorText);
 			return;
 		}
+
+		const { announceFocusReceived } = useSharedFocusedId();
+		announceFocusReceived(newCardId);
 
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.id === columnId
