@@ -132,5 +132,27 @@ describe("@/components/editor/CKEditor", () => {
 			const emitted = wrapper.emitted();
 			expect(emitted["blur"]).toHaveLength(1);
 		});
+
+		it("should emit delete on delete event and empty text", async () => {
+			setup();
+
+			// due to not accessing the editor instance in test setup, we test here with implementation details
+			expect(wrapper.vm.charCount).toEqual(0);
+			wrapper.vm.handleDelete();
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+			expect(emitted["delete"]).toHaveLength(1);
+		});
+
+		it("should not emit delete on delete event and non-empty text", async () => {
+			setup();
+
+			await wrapper.setData({ charCount: 1 });
+			expect(wrapper.vm.charCount).toEqual(1);
+			wrapper.vm.handleDelete();
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+			expect(emitted["delete"]).toBeUndefined();
+		});
 	});
 });

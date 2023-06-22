@@ -6,10 +6,10 @@
 		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
-		@input="handleInput"
-		@focus="handleFocus"
 		@blur="handleBlur"
-		@ready="addCustomEventListeners"
+		@focus="handleFocus"
+		@input="handleInput"
+		@ready="handleReady"
 	/>
 </template>
 
@@ -53,8 +53,7 @@ export default defineComponent({
 		const ck = ref(null);
 		const content = ref(props.value);
 		const language = i18n.locale;
-
-		let charCount = 0;
+		const charCount = ref(0);
 
 		const toolbarItems = [];
 		toolbarItems["simple"] = [
@@ -230,7 +229,7 @@ export default defineComponent({
 			},
 			wordCount: {
 				onUpdate: (stats) => {
-					charCount = stats.characters;
+					charCount.value = stats.characters;
 				},
 			},
 			language: language,
@@ -245,16 +244,18 @@ export default defineComponent({
 			setTimeout(() => emit("blur"), blurDelay);
 		};
 
-		// https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
-		const addCustomEventListeners = (editor) => {
-			if (!editor) return;
+		const handleDelete = () => {
+			if (charCount.value === 0) {
+				emit("delete");
+			}
+		};
 
+		const handleReady = (editor) => {
 			emit("ready");
-			editor.editing.view.document.on("delete", () => {
-				if (charCount === 0) {
-					emit("delete");
-				}
-			});
+
+			// attach additional event listener not provided by vue wrapper itself
+			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
+			editor.editing.view.document.on("delete", handleDelete);
 		};
 
 		return {
@@ -262,10 +263,12 @@ export default defineComponent({
 			content,
 			CustomCKEditor,
 			config,
-			handleInput,
-			handleFocus,
+			charCount,
 			handleBlur,
-			addCustomEventListeners,
+			handleFocus,
+			handleInput,
+			handleDelete,
+			handleReady,
 		};
 	},
 });
