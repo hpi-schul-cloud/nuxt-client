@@ -4880,6 +4880,16 @@ export interface VideoConferenceOptionsResponse {
  * @export
  * @enum {string}
  */
+export enum VideoConferenceScope {
+    Course = 'course',
+    Event = 'event'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum VideoConferenceStateResponse {
     NotStarted = 'NOT_STARTED',
     Running = 'RUNNING',
@@ -15911,12 +15921,12 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
         /**
          * Use this endpoint to end a running video conference.
          * @summary Ends a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerEnd: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerEnd', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -15953,12 +15963,12 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
         /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerInfo: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerInfo', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -15995,12 +16005,12 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
         /**
          * Use this endpoint to get a link to join an existing video conference. The conference must be running.
          * @summary Creates a join link for a video conference, if it has started.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerJoin: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerJoin: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerJoin', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -16037,13 +16047,13 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
         /**
          * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
          * @summary Creates the video conference, if it has not started yet.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerStart: async (scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerStart: async (scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerStart', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -16227,49 +16237,49 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
         /**
          * Use this endpoint to end a running video conference.
          * @summary Ends a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerEnd(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
+        async videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerInfo(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Use this endpoint to get a link to join an existing video conference. The conference must be running.
          * @summary Creates a join link for a video conference, if it has started.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerJoin(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceJoinResponse>> {
+        async videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceJoinResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerJoin(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
          * @summary Creates the video conference, if it has not started yet.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerStart(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -16323,46 +16333,46 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
         /**
          * Use this endpoint to end a running video conference.
          * @summary Ends a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<void> {
+        videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void> {
             return localVarFp.videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
+        videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
             return localVarFp.videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
          * Use this endpoint to get a link to join an existing video conference. The conference must be running.
          * @summary Creates a join link for a video conference, if it has started.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerJoin(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse> {
+        videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse> {
             return localVarFp.videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
          * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
          * @summary Creates the video conference, if it has not started yet.
-         * @param {string} scope 
+         * @param {VideoConferenceScope} scope 
          * @param {string} scopeId 
          * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerStart(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void> {
+        videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void> {
             return localVarFp.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16411,47 +16421,47 @@ export interface VideoConferenceApiInterface {
     /**
      * Use this endpoint to end a running video conference.
      * @summary Ends a running video conference.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<void>;
+    videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void>;
 
     /**
      * Use this endpoint to get information about a running video conference.
      * @summary Returns information about a running video conference.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
+    videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
 
     /**
      * Use this endpoint to get a link to join an existing video conference. The conference must be running.
      * @summary Creates a join link for a video conference, if it has started.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerJoin(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse>;
+    videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse>;
 
     /**
      * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
      * @summary Creates the video conference, if it has not started yet.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerStart(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void>;
+    videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -16499,53 +16509,53 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
     /**
      * Use this endpoint to end a running video conference.
      * @summary Ends a running video conference.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerEnd(scope: string, scopeId: string, options?: any) {
+    public videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Use this endpoint to get information about a running video conference.
      * @summary Returns information about a running video conference.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerInfo(scope: string, scopeId: string, options?: any) {
+    public videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Use this endpoint to get a link to join an existing video conference. The conference must be running.
      * @summary Creates a join link for a video conference, if it has started.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerJoin(scope: string, scopeId: string, options?: any) {
+    public videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
      * @summary Creates the video conference, if it has not started yet.
-     * @param {string} scope 
+     * @param {VideoConferenceScope} scope 
      * @param {string} scopeId 
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerStart(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
+    public videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
