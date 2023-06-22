@@ -28,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input", "focus", "blur", "delete", "ready"],
+	emits: ["ready", "focus", "input", "blur", "delete"],
 	props: {
 		value: {
 			type: String,
