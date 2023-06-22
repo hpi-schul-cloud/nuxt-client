@@ -12985,6 +12985,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -13678,6 +13679,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -13870,6 +13872,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Lists all available tools that can be added for a given context
          * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -14044,6 +14047,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
 export interface ToolApiInterface {
     /**
      * 
+     * @summary Lists all available tools that can be added for a given context
      * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -14218,6 +14222,7 @@ export interface ToolApiInterface {
 export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
+     * @summary Lists all available tools that can be added for a given context
      * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -15463,6 +15468,72 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerRestartMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user-login-migrations/restart`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerStartMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user-login-migrations/start`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15493,6 +15564,24 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerRestartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerRestartMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerStartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerStartMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -15521,6 +15610,22 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
         userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void> {
             return localVarFp.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerRestartMigration(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerStartMigration(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -15547,6 +15652,22 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
 
 }
 
@@ -15577,6 +15698,26 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerRestartMigration(options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerRestartMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerStartMigration(options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerStartMigration(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
