@@ -15,12 +15,16 @@ import {
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+jest.mock("../shared/BoardNotifications.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 const $route: Route = {
 	params: {
@@ -43,6 +47,7 @@ const defaultPermissions = {
 	hasCreateColumnPermission: true,
 	hasDeletePermission: true,
 	hasEditPermission: true,
+	isTeacher: true,
 };
 
 const createCardMock = jest.fn();
@@ -64,6 +69,7 @@ describe("Board", () => {
 		columns: [oneColumn],
 	});
 	const notifierModule = createModuleMocks(NotifierModule);
+	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
 
 	const setup = (options?: {
 		board?: Board;
@@ -91,6 +97,7 @@ describe("Board", () => {
 			...defaultPermissions,
 			...options?.permissions,
 		});
+
 		const boardId = board?.id ?? boardWithOneColumn.id;
 		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
@@ -107,6 +114,12 @@ describe("Board", () => {
 	};
 
 	describe("when component is mounted", () => {
+		mockedBoardNotifierCalls = {
+			showInfo: jest.fn(),
+		};
+		mockedUseBoardNotifier.mockReturnValue(
+			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
+		);
 		it("should call 'useBoardState' composable", () => {
 			setup();
 
@@ -139,6 +152,23 @@ describe("Board", () => {
 			setup({ board: boardWithTwoColumns });
 
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
+		});
+
+		describe("Info message for teacher", () => {
+			afterEach(() => {
+				jest.clearAllMocks();
+			});
+
+			it("should call the board notifier when the user is teacher", () => {
+				setup();
+				expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalled();
+			});
+
+			it("should not call the board notifier when the user is not a teacher", async () => {
+				defaultPermissions.isTeacher = false;
+				setup();
+				expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+			});
 		});
 
 		describe("BoardColumnGhost component", () => {
