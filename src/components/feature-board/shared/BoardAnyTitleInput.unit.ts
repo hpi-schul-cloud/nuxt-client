@@ -59,5 +59,19 @@ describe("BoardAnyTitleTitleInput", () => {
 
 			expect(emitted["update:value"][0][0]).toContain(newValue);
 		});
+
+		it("should emit enter on hitting 'enter' key", async () => {
+			setup({ isEditMode: true });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			textAreaComponent.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "Enter",
+				})
+			);
+			const emitted = wrapper.emitted();
+
+			expect(emitted["enter"]).toHaveLength(1);
+		});
 	});
 });

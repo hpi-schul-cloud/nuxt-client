@@ -15,6 +15,7 @@
 			:readonly="!isEditMode"
 			role="heading"
 			:aria-level="ariaLevel"
+			@keydown.prevent.enter="onEnter"
 		></VTextarea>
 	</div>
 </template>
@@ -46,7 +47,7 @@ export default defineComponent({
 			required: false,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
@@ -88,12 +89,17 @@ export default defineComponent({
 			}
 		});
 
+		const onEnter = () => {
+			emit("enter");
+		};
+
 		return {
 			ariaLevel,
 			fontSize,
 			modelValue,
 			titleInput,
 			hasValue,
+			onEnter,
 		};
 	},
 });
