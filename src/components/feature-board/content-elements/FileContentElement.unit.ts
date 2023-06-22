@@ -1,34 +1,40 @@
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
-import { I18N_KEY } from "@/utils/inject";
+import NotifierModule from "@/store/notifier";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { shallowMount } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
+import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+jest.mock("../shared/InlineEditInteractionHandler.composable");
 jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
 jest.mock("../shared/FileStorageApi.composable");
 jest.mock("../shared/SelectedFile.composable");
 
 describe("FileContentElement", () => {
+	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
 	}) => {
 		const deleteElementMock = jest.fn();
 
-		const wrapper = shallowMount(FileContentElement, {
+		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
-			propsData: { ...props, deleteElement: deleteElementMock },
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
+			propsData: { ...props, deleteElement: deleteElementMock },
 		});
 
 		return { wrapper, deleteElementMock };
