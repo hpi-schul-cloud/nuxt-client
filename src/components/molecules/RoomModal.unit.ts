@@ -116,19 +116,6 @@ describe("RoomModal", () => {
 				return { storeRoomUpdateMock, newTitle, wrapper };
 			};
 
-			it("should let input emit blur", async () => {
-				const { wrapper } = await setup();
-
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-
-				const titleInput = wrapper
-					.findComponent({ name: "v-text-field" })
-					.find("input");
-
-				expect(titleInput.element).not.toBe(document.activeElement);
-			});
-
 			it("should change name on enter", async () => {
 				const { storeRoomUpdateMock, newTitle } = await setup();
 

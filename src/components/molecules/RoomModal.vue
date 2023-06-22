@@ -97,11 +97,7 @@ export default Vue.extend({
 		async onBlur() {
 			await this.updateCourseGroupName();
 		},
-		async onEnterInput(event: KeyboardEvent) {
-			if (event.target instanceof HTMLElement) {
-				event.target.blur();
-			}
-
+		async onEnterInput() {
 			await this.updateCourseGroupName();
 		},
 	},
