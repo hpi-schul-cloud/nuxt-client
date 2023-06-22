@@ -80,6 +80,19 @@ describe("@/components/editor/CKEditor", () => {
 	});
 
 	describe("events", () => {
+		it("should emit ready on editor ready", async () => {
+			setup();
+
+			const ck = wrapper.findComponent({
+				ref: "ck",
+			});
+			ck.vm.$emit("ready", {});
+			await wrapper.vm.$nextTick();
+
+			const emitted = wrapper.emitted();
+			expect(emitted["ready"]).toHaveLength(1);
+		});
+
 		it("should emit input on content changes", async () => {
 			setup();
 
