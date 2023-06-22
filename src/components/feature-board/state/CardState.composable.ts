@@ -96,14 +96,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		await fetchCard(cardState.card.id);
 	};
 
-	const extractElement = (elementId: string): void => {
-		const index = cardState.card?.elements.findIndex((e) => e.id === elementId);
-
-		if (index !== undefined && index > -1) {
-			cardState.card?.elements.splice(index, 1);
-		}
-	};
-
 	const moveElementDown = async (elementPayload: ElementMove) => {
 		if (cardState.card === undefined) {
 			return;
@@ -158,6 +150,14 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 		extractElement(elementId);
+	};
+
+	const extractElement = (elementId: string): void => {
+		const index = cardState.card?.elements.findIndex((e) => e.id === elementId);
+
+		if (index !== undefined && index > -1) {
+			cardState.card?.elements.splice(index, 1);
+		}
 	};
 
 	onMounted(() => fetchCard(id));
