@@ -9,6 +9,7 @@
 			v-if="isEditMode"
 			class="rich_text offset"
 			:autofocus="isAutoFocus"
+			:focus="focusOnCreateRef"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 		/>
@@ -34,10 +35,13 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		focusOnCreate: { type: Boolean },
 	},
 	setup(props) {
-		const { modelValue, isAutoFocus } = useContentElementState(props);
-		return { modelValue, isAutoFocus };
+		const { modelValue, isAutoFocus, focusOnCreateRef } =
+			useContentElementState(props);
+
+		return { modelValue, isAutoFocus, focusOnCreateRef };
 	},
 });
 </script>

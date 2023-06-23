@@ -3,6 +3,7 @@
 		<ck-editor
 			v-model="modelValue"
 			@focus="onFocus"
+			:focus="focus"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
@@ -27,6 +28,7 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		focus: { type: Boolean },
 	},
 	emits: ["update:value"],
 	setup(props, { emit }) {
