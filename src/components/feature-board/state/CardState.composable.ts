@@ -75,7 +75,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 	};
 
 	const addElement = async (
-		type: ContentElementType = ContentElementType.RichText
+		type: ContentElementType,
+		focusOnCreate?: boolean
 	) => {
 		if (cardState.card === undefined) {
 			return;
@@ -85,6 +86,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await showErrorAndReload(generateErrorText("create", "boardElement"));
 			return;
 		}
+
+		if (type === ContentElementType.RichText && focusOnCreate) {
+			response.data = { ...response.data, focusOnCreate: true };
+		}
+
 		cardState.card.elements.push(response.data as unknown as AnyContentElement);
 
 		return response.data;
