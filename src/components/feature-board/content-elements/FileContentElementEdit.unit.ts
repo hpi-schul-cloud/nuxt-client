@@ -149,7 +149,7 @@ describe("FileContentElementEdit", () => {
 			});
 		});
 
-		describe("when its at the beginning or end of the content elements list", () => {
+		describe("when element is at the beginning of the content elements list", () => {
 			const firstElementSetupProps = () => ({
 				isFirstElement: true,
 				isLastElement: false,
@@ -187,6 +187,48 @@ describe("FileContentElementEdit", () => {
 
 				expect(boardMenuActionsComponents.length).toStrictEqual(2);
 				expect(firstAction.text()).toContain(moveDownTranslation);
+				expect(secondAction.text()).toContain(deleteTranslation);
+			});
+		});
+
+		describe("when element is at the end of the content elements list", () => {
+			const firstElementSetupProps = () => ({
+				isFirstElement: false,
+				isLastElement: true,
+				hasMultipleElements: true,
+			});
+
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
+
+				const propsData = firstElementSetupProps();
+				const wrapper = shallowMount(FileContentElementEdit, {
+					...createComponentMocks({ i18n: true }),
+					propsData,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+			it("should show show only limited board menu items", () => {
+				const { wrapper } = setup();
+
+				const moveUpTranslation = wrapper.vm.$t(
+					"components.board.action.moveUp"
+				) as string;
+				const deleteTranslation = wrapper.vm.$t(
+					"components.board.action.delete"
+				) as string;
+
+				const boardMenuActionsComponents =
+					wrapper.findAllComponents(BoardMenuAction);
+
+				const firstAction = boardMenuActionsComponents.at(0);
+				const secondAction = boardMenuActionsComponents.at(1);
+
+				expect(boardMenuActionsComponents.length).toStrictEqual(2);
+				expect(firstAction.text()).toContain(moveUpTranslation);
 				expect(secondAction.text()).toContain(deleteTranslation);
 			});
 		});
