@@ -48,16 +48,13 @@ describe("FileContentElementDisplay", () => {
 		expect(fileName).toBe(fileNameProp);
 	});
 
-	it("should find download button", async () => {
+	it("should find download url", async () => {
 		const { wrapper, urlProp } = setup();
 
-		const downloadButton = wrapper.find("v-btn-stub");
-		const downloadIcon = wrapper.find("v-icon-stub");
+		const downloadLink = wrapper.find("a");
 
-		expect(downloadButton.exists()).toBe(true);
-		expect(downloadButton.attributes("href")).toBe(urlProp);
-		expect(downloadButton.attributes("download")).toBe("");
-		expect(downloadButton.attributes("icon")).toBe("true");
-		expect(downloadIcon.exists()).toBe(true);
+		expect(downloadLink.exists()).toBe(true);
+		expect(downloadLink.attributes("href")).toBe(urlProp);
+		expect(downloadLink.attributes("download")).toBe("");
 	});
 });
