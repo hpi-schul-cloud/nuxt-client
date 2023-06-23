@@ -15,36 +15,16 @@
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<v-list-item-title data-testid="board-file-element-display-file-name">{{
-					fileName
-				}}</v-list-item-title>
-			</v-list-item-content>
-
-			<v-list-item-icon class="my-2 ml-2">
-				<v-btn
-					data-testid="board-file-element-display-download-button"
-					download
-					:href="url"
-					icon
-					:ripple="false"
-					@dblclick.stop="() => {}"
-					@keydown.left.right.up.down.stop="() => {}"
+				<v-list-item-title data-testid="board-file-element-display-file-name"
+					><a download :href="url">{{ fileName }}</a></v-list-item-title
 				>
-					<v-icon data-testid="board-file-element-display-download-icon">{{
-						mdiTrayArrowDown
-					}}</v-icon>
-				</v-btn>
-			</v-list-item-icon>
+			</v-list-item-content>
 		</v-list-item>
 	</v-list>
 </template>
 
 <script lang="ts">
-import {
-	mdiAlertCircle,
-	mdiFileDocumentOutline,
-	mdiTrayArrowDown,
-} from "@mdi/js";
+import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -61,9 +41,7 @@ export default defineComponent({
 	},
 	setup() {
 		return {
-			mdiAlertCircle,
 			mdiFileDocumentOutline,
-			mdiTrayArrowDown,
 		};
 	},
 });
