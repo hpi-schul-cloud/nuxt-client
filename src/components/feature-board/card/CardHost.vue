@@ -69,6 +69,7 @@ import {
 	watchDebounced,
 } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
+import { ContentElementType } from "@/serverApi/v3";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
@@ -167,8 +168,8 @@ export default defineComponent({
 			{ debounce: 500, maxWait: 2000 }
 		);
 
-		const onHitEnterCardTitle = () => {
-			addElement();
+		const onHitEnterCardTitle = async () => {
+			await addElement(ContentElementType.RichText, true);
 		};
 
 		return {
