@@ -1,17 +1,18 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	boardResponseFactory,
+	cardSkeletonResponseFactory,
+	columnResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import BoardVue from "./Board.vue";
-import BoardColumnVue from "./BoardColumn.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board, BoardPermissionsTypes } from "../types/Board";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import {
-	boardResponseFactory,
-	columnResponseFactory,
-	cardSkeletonResponseFactory,
-} from "@@/tests/test-utils/factory";
+import BoardVue from "./Board.vue";
+import BoardColumnVue from "./BoardColumn.vue";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -89,12 +90,15 @@ describe("Board", () => {
 		});
 		const boardId = board?.id ?? boardWithOneColumn.id;
 		wrapper = shallowMount(BoardVue, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
 			mocks: {
 				$router,
 				$route,
 			},
 			propsData: { boardId },
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+			},
 		});
 	};
 
