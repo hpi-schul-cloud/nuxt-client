@@ -74,7 +74,9 @@ export const useCardState = (id: BoardCard["id"]) => {
 		cardState.card.height = newHeight;
 	};
 
-	const addElement = async (type: ContentElementType) => {
+	const addElement = async (
+		type: ContentElementType = ContentElementType.RichText
+	) => {
 		if (cardState.card === undefined) {
 			return;
 		}
