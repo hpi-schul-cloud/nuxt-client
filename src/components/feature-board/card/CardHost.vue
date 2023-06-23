@@ -168,8 +168,7 @@ export default defineComponent({
 		);
 
 		const onHitEnterCardTitle = () => {
-			// TODO open element select for now
-			askType();
+			addElement();
 		};
 
 		return {
