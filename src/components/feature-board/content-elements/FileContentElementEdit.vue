@@ -2,9 +2,12 @@
 	<v-list flat class="py-0 rounded-b-0" data-testid="board-file-element-edit">
 		<v-list-item class="px-2 grey lighten-3">
 			<v-list-item-icon class="my-2 mr-2">
-				<v-icon data-testid="board-file-element-edit-file-icon" large>{{
-					mdiFileDocumentOutline
-				}}</v-icon>
+				<v-icon
+					color="#8a9199"
+					data-testid="board-file-element-edit-file-icon"
+					large
+					>{{ mdiFileDocumentOutline }}</v-icon
+				>
 			</v-list-item-icon>
 
 			<v-list-item-content>
