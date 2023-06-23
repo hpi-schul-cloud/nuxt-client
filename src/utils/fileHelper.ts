@@ -1,3 +1,5 @@
+import { authModule } from "@/store";
+
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -33,7 +35,7 @@ export function convertFileSizeToHumanReadable(
 		power++;
 	}
 
-	const localeString = convertedSize.toLocaleString(window.navigator.language, {
+	const localeString = convertedSize.toLocaleString(authModule.getLocale, {
 		maximumFractionDigits,
 	});
 
