@@ -1,5 +1,5 @@
 <template>
-	<div class="ma-2">
+	<div class="pa-2">
 		<v-chip class="mr-2" small>{{ fileExtension }}</v-chip>
 		<v-chip class="mr-2" small>{{ humanReadableFileSize }}</v-chip>
 	</div>
