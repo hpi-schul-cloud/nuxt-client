@@ -50,6 +50,8 @@ import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute, useRouter } from "vue-router/composables";
 
+import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+
 type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
 
 type ParamsValidEvent = CustomEvent;
@@ -78,10 +80,14 @@ export default defineComponent({
 
 		const iframe = ref<HTMLIFrameElement>();
 
-		const contentId = route.params?.id ?? "";
+		const contentId = route.params?.id;
 		const isInline = !!route.query?.inline;
 
-		const iframeSrc = `${window.location.origin}/api/v3/h5p-editor/edit/${contentId}`;
+		const iframeSrc = `${window.location.origin}/api/v3/h5p-editor/edit/${
+			contentId ?? ""
+		}`;
+
+		const h5pEditorApi = H5pEditorApiFactory(undefined, "/v3", $axios);
 
 		function notifyParent(event: CustomEvent) {
 			window.dispatchEvent(event);
@@ -97,26 +103,44 @@ export default defineComponent({
 
 		async function onValidParams(event: ParamsValidEvent) {
 			try {
-				const response = await $axios.post<{
-					id: string;
-					metadata: { title: string; mainLibrary: string };
-				}>(`/v3/h5p-editor/edit/${contentId}`, event.detail);
+				if (contentId) {
+					// Save content
+					const { data } = await h5pEditorApi.h5PEditorControllerSaveH5pContent(
+						contentId,
+						event.detail
+					);
 
-				const {
-					id,
-					metadata: { title, mainLibrary },
-				} = response.data;
+					notifyParent(
+						new CustomEvent("save-content", {
+							detail: {
+								contentId: data.id,
+								title: data.metadata.title,
+								contentType: data.metadata.mainLibrary,
+							},
+						})
+					);
+				} else {
+					// Create content
+					const { data } =
+						await h5pEditorApi.h5PEditorControllerCreateH5pContent(
+							event.detail
+						);
 
-				notifyParent(
-					new CustomEvent("save-content", {
-						detail: { contentId: id, title, contentType: mainLibrary },
-					})
-				);
+					notifyParent(
+						new CustomEvent("save-content", {
+							detail: {
+								contentId: data.id,
+								title: data.metadata.title,
+								contentType: data.metadata.mainLibrary,
+							},
+						})
+					);
 
-				router.replace({
-					path: `/h5p/editor/${id}`,
-					query: route.query,
-				});
+					router.replace({
+						path: `/h5p/editor/${data.id}`,
+						query: route.query,
+					});
+				}
 			} catch (err) {
 				notifierModule.show({
 					text: t("common.validation.invalid"),

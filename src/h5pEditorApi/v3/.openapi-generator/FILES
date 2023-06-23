@@ -8,5 +8,7 @@ configuration.ts
 git_push.sh
 index.ts
 models/api-validation-error.ts
+models/h5-pcontent-metadata.ts
+models/h5-psave-response.ts
 models/index.ts
 models/post-h5-pcontent-create-params.ts
