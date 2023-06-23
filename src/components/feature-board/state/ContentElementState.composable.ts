@@ -9,6 +9,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	props: {
 		element: T;
 		isEditMode: boolean;
+		focusOnCreate?: boolean;
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
@@ -20,6 +21,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	const isAutoFocus = ref<boolean>(false);
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
+	const focusOnCreateRef = ref<boolean>(props.focusOnCreate || false);
 
 	const { updateElementCall } = useBoardApi();
 	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
@@ -39,6 +41,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 				return;
 			}
 			isAutoFocus.value = false;
+			focusOnCreateRef.value = false;
 		}
 	);
 
@@ -61,5 +64,10 @@ export const useContentElementState = <T extends AnyContentElement>(
 		 * Resets to false when leaving edit-mode.
 		 */
 		isAutoFocus,
+		/**
+		 * Will be set to true when the element should receive focus after creation.
+		 * Resets to false when leaving edit-mode and stays false when switching back into edit-mode
+		 */
+		focusOnCreateRef,
 	};
 };
