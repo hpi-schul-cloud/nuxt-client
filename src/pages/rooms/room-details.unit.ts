@@ -16,8 +16,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
-import { provide } from "vue";
-import VueI18n from "vue-i18n";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 
 const mockData = {
@@ -135,12 +133,17 @@ const getWrapper: any = () => {
 			$router,
 			$route,
 		},
-		setup() {
-			provide("copyModule", copyModuleMock);
-			provide("loadingStateModule", loadingStateModuleMock);
-			provide(NOTIFIER_MODULE_KEY, notifierModuleMock);
-			provide(I18N_KEY, { t: (key: string) => key } as VueI18n);
-			provide("shareModule", shareModuleMock);
+		provide: {
+			copyModule: copyModuleMock,
+			loadingStateModule: loadingStateModuleMock,
+			notifierModule: notifierModuleMock,
+			shareModule: shareModuleMock,
+			[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+		},
+		stubs: {
+			RoomExternalToolOverview: true,
+			RoomDashboard: true,
 		},
 	});
 };
