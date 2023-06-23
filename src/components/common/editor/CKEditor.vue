@@ -6,9 +6,10 @@
 		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
-		@input="handleInput"
-		@focus="handleFocus"
 		@blur="handleBlur"
+		@focus="handleFocus"
+		@ready="handleReady"
+		@input="handleInput"
 	/>
 </template>
 
@@ -27,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input", "focus", "blur"],
+	emits: ["ready", "focus", "input", "blur"],
 	props: {
 		value: {
 			type: String,
@@ -45,11 +46,15 @@ export default defineComponent({
 		disabled: {
 			type: Boolean,
 		},
+		focus: {
+			type: Boolean,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 
 		const ck = ref(null);
+
 		const content = ref(props.value);
 		const language = i18n.locale;
 
@@ -236,14 +241,23 @@ export default defineComponent({
 			setTimeout(() => emit("blur"), blurDelay);
 		};
 
+		const handleReady = (editor) => {
+			emit("ready");
+
+			if (props.focus) {
+				editor.editing.view.focus();
+			}
+		};
+
 		return {
 			ck,
 			content,
 			CustomCKEditor,
 			config,
-			handleInput,
-			handleFocus,
 			handleBlur,
+			handleFocus,
+			handleInput,
+			handleReady,
 		};
 	},
 });
