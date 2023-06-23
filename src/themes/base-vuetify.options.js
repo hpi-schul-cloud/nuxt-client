@@ -11,7 +11,7 @@ export default {
 				primary: {
 					base: "#9e292b",
 					darken1: "#800416",
-					light: "#f5eaea",
+					lighten: "#f5eaea",
 				},
 				secondary: {
 					base: "#54616e",

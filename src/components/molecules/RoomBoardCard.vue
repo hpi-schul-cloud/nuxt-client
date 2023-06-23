@@ -4,7 +4,7 @@
 		hover
 		tabindex="0"
 		role="button"
-		color="var(--v-primary-light)"
+		color="var(--v-primary-lighten)"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
