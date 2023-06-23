@@ -1,6 +1,6 @@
 <template>
 	<v-alert
-		class="mb-0 py-4 rounded-0"
+		class="mb-0 py-4 rounded-t-0"
 		color="error"
 		data-testid="board-file-element-alert"
 		dense
@@ -8,7 +8,9 @@
 		text
 		variant="tonal"
 	>
-		{{ $t("components.cardElement.fileElement.virusDetected") }}
+		<div class="alert_text">
+			{{ $t("components.cardElement.fileElement.virusDetected") }}
+		</div>
 	</v-alert>
 </template>
 
@@ -23,3 +25,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.alert_text {
+	color: var(--v-black-base) !important;
+}
+</style>

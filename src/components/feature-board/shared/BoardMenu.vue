@@ -47,9 +47,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const hasBackground = computed<boolean>(
-			() => props.scope === "element" || props.scope === "card"
-		);
+		const hasBackground = computed<boolean>(() => props.scope === "card");
 
 		return {
 			hasBackground,
