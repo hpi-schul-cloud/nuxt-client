@@ -6,6 +6,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
+				:focusOnCreate="element.focusOnCreate"
 			/>
 			<FileContentElement
 				v-else-if="isFileElementResponse(element)"
