@@ -43,8 +43,10 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
-import { defineComponent } from "vue";
+import { AncestorEntityType } from "@/serverApi/v3";
+import { defineComponent, watch } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
@@ -85,6 +87,12 @@ export default defineComponent({
 			moveColumn,
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
+
+		const { createBreadcrumbsFor } = useSharedBoardBreadcrumbs();
+
+		watch(board, async () => {
+			await createBreadcrumbsFor(props.boardId, AncestorEntityType.Columnboard);
+		});
 
 		useBodyScrolling();
 

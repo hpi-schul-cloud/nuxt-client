@@ -1,46 +1,81 @@
+import { $axios } from "@/utils/api";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { createSharedComposable } from "@vueuse/core";
+import { ref, Ref } from "vue";
+import VueI18n from "vue-i18n";
+import {
+	AncestorEntityType,
+	AncestorListApiFactory,
+	AncestorResponse,
+	AncestorResponseTypeEnum,
+} from "../../../serverApi/v3/api";
 
-type BoardBreadcrumbsData = {
-	courseName: string | undefined;
-	courseUrl: string;
-	boardName: string | undefined;
-};
-
-type BoardBreadcrumbs = {
+type BoardBreadcrumb = {
 	text: string | undefined;
 	to?: string;
 	disabled?: boolean;
 };
 
-const boardBreadCrumbsData: BoardBreadcrumbsData = {
-	courseName: "",
-	courseUrl: "/rooms-overview",
-	boardName: "",
+const useBoardBreadcrumbs = () => {
+	const i18n: VueI18n = injectStrict<VueI18n>(I18N_KEY);
+	const ancestorListApi = AncestorListApiFactory(undefined, "/v3", $axios);
+	const breadcrumbs: Ref<BoardBreadcrumb[]> = ref([]);
+
+	const createBreadcrumbsFor = async (id: string, type: AncestorEntityType) => {
+		const response = await ancestorListApi.ancestorListControllerGetAncestorsOf(
+			id,
+			type
+		);
+		if (response.data) {
+			const ancestors = response.data;
+			breadcrumbs.value = convertAncestorsToBreadCrumbs(ancestors);
+		}
+	};
+
+	const convertAncestorsToBreadCrumbs = (ancestors: AncestorResponse[]) => {
+		ancestors.pop(); // remove child-entity itself from answer
+		const breadcrumbs = ancestors.flatMap(mapToBreadCrumb);
+		return breadcrumbs;
+	};
+
+	const mapToBreadCrumb = (ancestor: AncestorResponse): BoardBreadcrumb[] => {
+		switch (ancestor.type) {
+			case AncestorResponseTypeEnum.Columnboard:
+				return mapColumnBoard(ancestor);
+			case AncestorResponseTypeEnum.Course:
+				return mapCourse(ancestor);
+			default:
+				return [];
+		}
+	};
+
+	const mapColumnBoard = (ancestor: AncestorResponse): BoardBreadcrumb[] => {
+		return [
+			{
+				text: ancestor.text ?? i18n.t("components.board").toString(),
+				to: `/rooms/${ancestor.id}/board`,
+			},
+		];
+	};
+
+	const mapCourse = (ancestor: AncestorResponse): BoardBreadcrumb[] => {
+		return [
+			{
+				text: i18n.t("pages.courses.index.title").toString(),
+				to: "/rooms-overview",
+			},
+			{
+				text: ancestor.text ?? i18n.t("common.labels.course").toString(),
+				to: `/rooms/${ancestor.id}`,
+			},
+		];
+	};
+
+	return {
+		createBreadcrumbsFor,
+		breadcrumbs,
+	};
 };
 
-export const setBoardBreadcrumbs = (
-	courseName: string | undefined,
-	courseUrl: string,
-	boardName: string | undefined
-) => {
-	boardBreadCrumbsData.courseName = courseName;
-	boardBreadCrumbsData.courseUrl = courseUrl;
-	boardBreadCrumbsData.boardName = boardName;
-};
-
-export const useBoardBreadcrumbs = (): BoardBreadcrumbs[] => {
-	const i18n = injectStrict(I18N_KEY);
-	return [
-		{
-			text:
-				boardBreadCrumbsData.courseName ||
-				i18n.t("pages.courses.index.title").toString(),
-			to: boardBreadCrumbsData.courseUrl,
-		},
-		{
-			text:
-				boardBreadCrumbsData.boardName || i18n.t("components.board").toString(),
-			disabled: true,
-		},
-	];
-};
+export const useSharedBoardBreadcrumbs =
+	createSharedComposable(useBoardBreadcrumbs);
