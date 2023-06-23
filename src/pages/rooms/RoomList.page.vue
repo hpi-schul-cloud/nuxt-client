@@ -30,7 +30,7 @@
 						solo
 						:label="$t('pages.rooms.index.search.label')"
 						:append-icon="mdiMagnify"
-						:aria-label="$t('common.labels.search')"
+						:aria-label="$t('pages.rooms.index.search.label')"
 					>
 					</v-text-field>
 				</div>
