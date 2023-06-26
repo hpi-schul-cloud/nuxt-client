@@ -116,7 +116,6 @@ export default defineComponent({
 	},
 	emits: [
 		"delete:element",
-		"update:caption",
 		"move-down:element",
 		"move-up:element",
 		"move-keyboard:element",
