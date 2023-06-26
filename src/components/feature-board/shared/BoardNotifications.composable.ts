@@ -25,11 +25,11 @@ export const useBoardNotifier = () => {
 		});
 	};
 
-	const showInfo = (text: string | undefined) => {
+	const showInfo = (text: string | undefined, autoClose = true) => {
 		notifierModule.show({
 			text,
 			status: "info",
-			autoClose: true,
+			autoClose,
 		});
 	};
 

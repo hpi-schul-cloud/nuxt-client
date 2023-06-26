@@ -26,39 +26,32 @@
 			</v-list-item>
 		</v-list>
 		<div class="d-flex align-center grey lighten-3 pr-2 rounded-tr-sm">
-			<BoardMenu scope="element">
-				<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
-					<VIcon>
-						{{ mdiArrowCollapseUp }}
-					</VIcon>
-					{{ $t("components.board.action.moveUp") }}
-				</BoardMenuAction>
-				<BoardMenuAction data-testid="board-file-element-edit-menu-move-down">
-					<VIcon>
-						{{ mdiArrowCollapseDown }}
-					</VIcon>
-					{{ $t("components.board.action.moveDown") }}
-				</BoardMenuAction>
-				<BoardMenuAction
-					v-if="!isBlocked"
-					data-testid="board-file-element-edit-menu-download"
-					@click="onDownload"
-				>
-					<VIcon>
-						{{ mdiTrayArrowDown }}
-					</VIcon>
-					{{ $t("components.board.action.download") }}
-				</BoardMenuAction>
-				<BoardMenuAction
-					data-testid="board-file-element-edit-menu-delete"
-					@click="onDelete"
-				>
-					<VIcon>
-						{{ mdiTrashCanOutline }}
-					</VIcon>
-					{{ $t("components.board.action.delete") }}
-				</BoardMenuAction>
-			</BoardMenu>
+        <BoardMenu scope="element">
+          <BoardMenuAction
+            v-if="hasMultipleElements && !isFirstElement"
+            @click="onMoveElementUp"
+          >
+            <VIcon>
+              {{ mdiArrowCollapseUp }}
+            </VIcon>
+            {{ $t("components.board.action.moveUp") }}
+          </BoardMenuAction>
+          <BoardMenuAction
+            v-if="hasMultipleElements && !isLastElement"
+            @click="onMoveElementDown"
+          >
+            <VIcon>
+              {{ mdiArrowCollapseDown }}
+            </VIcon>
+            {{ $t("components.board.action.moveDown") }}
+          </BoardMenuAction>
+          <BoardMenuAction @click="onDelete">
+            <VIcon>
+              {{ mdiTrashCanOutline }}
+            </VIcon>
+            {{ $t("components.board.action.delete") }}
+          </BoardMenuAction>
+        </BoardMenu>
 		</div>
 	</div>
 </template>
@@ -67,8 +60,8 @@
 import { downloadFile } from "@/utils/fileHelper";
 import {
 	mdiAlertCircle,
-	mdiArrowCollapseDown,
 	mdiArrowCollapseUp,
+	mdiArrowCollapseDown,
 	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
 	mdiTrayArrowDown,
@@ -76,11 +69,16 @@ import {
 import { defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
+		fileId: {
+			type: String,
+			required: true,
+		},
 		fileName: {
 			type: String,
 			required: true,
@@ -93,9 +91,33 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: ["delete:element", "update:caption"],
+	emits: [
+		"delete:element",
+		"update:caption",
+		"move-down:element",
+		"move-up:element",
+		"move-keyboard:element",
+	],
 	setup(props, { emit }) {
+		const fileContentElement = ref(undefined);
+		useBoardFocusHandler(props.fileId, fileContentElement);
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			event.preventDefault();
+			emit("move-keyboard:element", event);
+		};
+
+		const onMoveElementDown = async () => {
+			emit("move-down:element");
+		};
+
+		const onMoveElementUp = async () => {
+			emit("move-up:element");
+		};
+
 		const onDelete = () => {
 			emit("delete:element");
 		};
@@ -104,12 +126,16 @@ export default defineComponent({
 		};
 
 		return {
+			fileContentElement,
 			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
 			mdiTrayArrowDown,
+			onKeydownArrow,
+			onMoveElementDown,
+			onMoveElementUp,
 			onDelete,
 			onDownload,
 		};

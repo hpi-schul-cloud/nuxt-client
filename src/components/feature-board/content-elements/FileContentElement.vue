@@ -16,10 +16,17 @@
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
+				:fileId="$props.element.id"
 				:url="url"
 				:isBlocked="isBlocked"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@move-keyboard:element="onMoveFileEditKeyboard"
 				@delete:element="onDeleteElement"
-			></FileContentElementEdit>
+			/>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
@@ -56,12 +63,16 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 		deleteElement: {
 			type: Function as PropType<(elementId: string) => Promise<void>>,
 			required: true,
 		},
 	},
-	setup(props) {
+	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
@@ -106,6 +117,17 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
+		const onMoveFileEditDown = () => {
+			emit("move-down:edit");
+		};
+
+		const onMoveFileEditUp = () => {
+			emit("move-up:edit");
+		};
+		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
+			emit("move-keyboard:edit", event);
+		};
+
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteBoardNodeConfirmation(
 				fileRecord.value?.name,
@@ -120,13 +142,15 @@ export default defineComponent({
 		const deleteFileElement = () => {
 			return props.deleteElement(props.element.id);
 		};
-
 		return {
 			onDeleteElement,
 			isAutoFocus,
 			isBlocked,
 			fileRecord,
 			modelValue,
+			onMoveFileEditDown,
+			onMoveFileEditUp,
+			onMoveFileEditKeyboard,
 			url,
 		};
 	},
