@@ -16,7 +16,9 @@
 
 			<v-list-item-content>
 				<v-list-item-title data-testid="board-file-element-display-file-name"
-					><a download :href="url">{{ fileName }}</a></v-list-item-title
+					><a :download="fileName" :href="url">{{
+						fileName
+					}}</a></v-list-item-title
 				>
 			</v-list-item-content>
 		</v-list-item>

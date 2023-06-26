@@ -49,12 +49,12 @@ describe("FileContentElementDisplay", () => {
 	});
 
 	it("should find download url", async () => {
-		const { wrapper, urlProp } = setup();
+		const { wrapper, urlProp, fileNameProp } = setup();
 
 		const downloadLink = wrapper.find("a");
 
 		expect(downloadLink.exists()).toBe(true);
 		expect(downloadLink.attributes("href")).toBe(urlProp);
-		expect(downloadLink.attributes("download")).toBe("");
+		expect(downloadLink.attributes("download")).toBe(fileNameProp);
 	});
 });
