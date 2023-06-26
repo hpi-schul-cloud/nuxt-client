@@ -1,62 +1,64 @@
 <template>
-	<v-list
-		flat
-		class="py-0 rounded-b-0"
-		data-testid="board-file-element-display"
-	>
-		<v-list-item class="px-2 grey lighten-3">
-			<v-list-item-icon class="my-2 mr-2">
-				<v-icon
-					class="deco-icon--text"
-					data-testid="board-file-element-display-file-icon"
-					large
-					>{{ mdiFileDocumentOutline }}</v-icon
-				>
-			</v-list-item-icon>
-
-			<v-list-item-content>
-				<v-list-item-title v-if="!isBlocked"
-					><a
-						data-testid="board-file-element-display-file-name-link"
-						:download="fileName"
-						:href="url"
-						>{{ fileName }}</a
-					>
-				</v-list-item-title>
-				<v-list-item-title
-					v-else
-					data-testid="board-file-element-display-file-name"
-				>
-					{{ fileName }}
-				</v-list-item-title>
-			</v-list-item-content>
-		</v-list-item>
-	</v-list>
+	<ImageDisplay
+		v-if="isImage"
+		:url="fileRecord.url"
+		:fileName="fileRecord.name"
+		:isEditMode="isEditMode"
+		@delete:element="onDeleteElement"
+	/>
+	<DefaultFileDisplay
+		v-else
+		:fileRecord="fileRecord"
+		:isEditMode="isEditMode"
+		@delete:element="onDeleteElement"
+	/>
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline } from "@mdi/js";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
+import {
+	mdiAlertCircle,
+	mdiArrowCollapseDown,
+	mdiArrowCollapseUp,
+	mdiFileDocumentOutline,
+	mdiTrashCanOutline,
+	mdiTrayArrowDown,
+} from "@mdi/js";
 import { defineComponent } from "vue";
+import DefaultFileDisplay from "./DefaultFileDisplay.vue";
+import { useFileType } from "./FileType.composable";
+import ImageDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({
-	name: "FileContentElementDisplay",
+	name: "FileDisplay",
+	components: { DefaultFileDisplay, ImageDisplay },
 	props: {
-		fileName: {
-			type: String,
+		fileRecord: {
+			type: Object as () => FileRecordResponse,
 			required: true,
 		},
-		isBlocked: {
+		isEditMode: {
 			type: Boolean,
 			required: true,
 		},
-		url: {
-			type: String,
-			required: true,
-		},
 	},
-	setup() {
+	emits: ["delete:element", "update:caption"],
+	setup(props, { emit }) {
+		const onDeleteElement = () => {
+			emit("delete:element");
+		};
+
+		const { isImage } = useFileType(props.fileRecord.mimeType);
+
 		return {
+			mdiAlertCircle,
 			mdiFileDocumentOutline,
+			mdiArrowCollapseUp,
+			mdiArrowCollapseDown,
+			mdiTrashCanOutline,
+			mdiTrayArrowDown,
+			onDeleteElement,
+			isImage,
 		};
 	},
 });

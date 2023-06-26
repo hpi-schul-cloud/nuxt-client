@@ -12,11 +12,11 @@
 
 			<v-list-item-content>
 				<v-list-item-title data-testid="board-file-element-edit-file-name">{{
-					fileName
+					fileRecord.name
 				}}</v-list-item-title>
 			</v-list-item-content>
 
-			<v-list-item-icon class="my-2 ml-2">
+			<v-list-item-icon class="my-2 ml-2" v-if="isEditMode">
 				<BoardMenu scope="element">
 					<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
 						<VIcon>
@@ -56,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { downloadFile } from "@/utils/fileHelper";
 import {
 	mdiAlertCircle,
@@ -70,19 +71,15 @@ import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 
 export default defineComponent({
-	name: "FileContentElementEdit",
+	name: "DefaultFileDisplay",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		fileName: {
-			type: String,
+		fileRecord: {
+			type: Object as () => FileRecordResponse,
 			required: true,
 		},
-		isBlocked: {
+		isEditMode: {
 			type: Boolean,
-			required: true,
-		},
-		url: {
-			type: String,
 			required: true,
 		},
 	},
@@ -92,7 +89,7 @@ export default defineComponent({
 			emit("delete:element");
 		};
 		const onDownload = async () => {
-			await downloadFile(props.url, props.fileName);
+			await downloadFile(props.fileRecord.url, props.fileRecord.name);
 		};
 
 		return {

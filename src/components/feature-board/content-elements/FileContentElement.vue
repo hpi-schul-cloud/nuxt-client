@@ -8,18 +8,10 @@
 	>
 		<div v-if="fileRecord">
 			<FileContentElementDisplay
-				v-if="!isEditMode"
-				:fileName="fileRecord.name"
-				:url="url"
-				:isBlocked="isBlocked"
-			></FileContentElementDisplay>
-			<FileContentElementEdit
-				v-if="isEditMode"
-				:fileName="fileRecord.name"
-				:url="url"
-				:isBlocked="isBlocked"
+				:fileRecord="fileRecord"
+				:isEditMode="isEditMode"
 				@delete:element="onDeleteElement"
-			></FileContentElementEdit>
+			/>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
@@ -37,21 +29,19 @@ import {
 	FileRecordScanStatus,
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, computed, defineComponent, onMounted } from "vue";
+import { computed, defineComponent, onMounted, PropType } from "vue";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
-import FileContentElementEdit from "./FileContentElementEdit.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
 		FileContentElementAlert,
 		FileContentElementDisplay,
-		FileContentElementEdit,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
