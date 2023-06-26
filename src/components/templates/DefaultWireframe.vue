@@ -1,11 +1,11 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky" :aria-label="ariaLabel">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
-			></v-custom-breadcrumbs>
-			<div v-else class="breadcrumbs-placeholder"></div>
+			/>
+			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
 				<h1 class="text-h3">
 					{{ headline }}
@@ -23,7 +23,7 @@
 						class="wireframe-fab"
 						:aria-label="fabItems.ariaLabel"
 						v-on="$listeners"
-					></v-custom-fab>
+					/>
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border"></div>
@@ -35,10 +35,11 @@
 			}"
 			class="main-content"
 		>
-			<slot></slot>
+			<slot />
 		</v-container>
 	</v-container>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
@@ -68,10 +69,6 @@ export default defineComponent({
 			type: Object,
 			required: false,
 			default: null,
-		},
-		ariaLabel: {
-			type: String,
-			default: "",
 		},
 	},
 	computed: {

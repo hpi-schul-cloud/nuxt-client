@@ -4,7 +4,6 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
-		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
