@@ -232,7 +232,7 @@ export default defineComponent({
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
-					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
+					to: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
 				tabs.push({

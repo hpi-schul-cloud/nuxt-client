@@ -227,6 +227,12 @@ describe("ContextExternalToolConfiguration", () => {
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
 
+				const payload = {
+					toolId: id,
+					contextType: wrapper.vm.contextType,
+					contextId: wrapper.vm.contextId,
+				};
+
 				const openSelect = async (wrapper: Wrapper<any>) => {
 					await wrapper
 						.find('[data-testid="configuration-select"]')
@@ -239,7 +245,7 @@ describe("ContextExternalToolConfiguration", () => {
 					await Vue.nextTick();
 				};
 
-				return { wrapper, openSelect, name, id };
+				return { wrapper, openSelect, name, payload };
 			};
 
 			it("should display name and logo of an tool configuration in selection list", async () => {
@@ -253,13 +259,13 @@ describe("ContextExternalToolConfiguration", () => {
 			});
 
 			it("should load template when tool configuration was changed", async () => {
-				const { wrapper, openSelect, id } = await setup();
+				const { wrapper, openSelect, payload } = await setup();
 
 				await openSelect(wrapper);
 
 				expect(
-					externalToolsModule.loadToolConfigurationTemplateFromExternalTool
-				).toHaveBeenCalledWith(id);
+					externalToolsModule.loadContextToolConfigurationTemplateFromExternalTool
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 	});
@@ -305,7 +311,7 @@ describe("ContextExternalToolConfiguration", () => {
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
 
-				externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+				externalToolsModule.loadContextToolConfigurationTemplateFromExternalTool.mockResolvedValue(
 					toolConfigurationTemplateFactory.build()
 				);
 				const openSelect = async (wrapper: Wrapper<any>) => {

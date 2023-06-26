@@ -379,4 +379,39 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setLoading(false);
 		}
 	}
+
+	@Action
+	async loadContextToolConfigurationTemplateFromExternalTool(payload: {
+		toolId: string;
+		contextId: string;
+		contextType: ToolContextType;
+	}): Promise<ToolConfigurationTemplate | undefined> {
+		try {
+			this.setLoading(true);
+			this.resetBusinessError();
+			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
+				await this.toolApi.toolConfigurationControllerGetExternalToolForContext(
+					payload.toolId,
+					payload.contextType,
+					payload.contextId
+				);
+			const toolConfigurationTemplate: ToolConfigurationTemplate =
+				useExternalToolMappings().mapExternalToolConfigurationTemplateResponse(
+					configTemplate.data
+				);
+			this.setLoading(false);
+
+			return toolConfigurationTemplate;
+		} catch (error: any) {
+			console.log(
+				`Some error occurred while loading tool configuration template for external tool with id ${payload.toolId}: ${error}`
+			);
+			this.setBusinessError({
+				...error,
+				statusCode: error?.response?.status,
+				message: error?.response?.data.message,
+			});
+			this.setLoading(false);
+		}
+	}
 }

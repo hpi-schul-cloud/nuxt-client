@@ -3,7 +3,7 @@
 		<div
 			v-if="tools.length === 0"
 			class="mt-16 text-center"
-			data-testId="tools-empty-state"
+			data-testid="tools-empty-state"
 		>
 			<v-custom-empty-state
 				ref="tools-empty-state"

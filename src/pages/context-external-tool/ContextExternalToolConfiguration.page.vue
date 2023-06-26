@@ -195,8 +195,12 @@ export default defineComponent({
 			selectedTool: ContextExternalToolTemplateListItem
 		) => {
 			toolTemplate.value =
-				await externalToolsModule?.loadToolConfigurationTemplateFromExternalTool(
-					selectedTool.id
+				await externalToolsModule?.loadContextToolConfigurationTemplateFromExternalTool(
+					{
+						toolId: selectedTool.id,
+						contextType: props.contextType,
+						contextId: props.contextId,
+					}
 				);
 		};
 
