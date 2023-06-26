@@ -58,9 +58,9 @@ describe("FileContentElementEdit", () => {
 		it("should emit delete:element event", async () => {
 			const { wrapper } = setup();
 
-			const deleteTranslation = wrapper.vm.$t(
-				"components.board.action.delete"
-			) as string;
+			const deleteTranslation = wrapper.vm
+				.$t("components.board.action.delete")
+				.toString();
 			const childComponent = wrapper
 				.findAllComponents(BoardMenuAction)
 				.filter((c) => c.text().includes(deleteTranslation))

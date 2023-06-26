@@ -8,7 +8,7 @@
 		text
 		variant="tonal"
 	>
-		<div class="alert_text">
+		<div class="black--text">
 			{{ $t("components.cardElement.fileElement.virusDetected") }}
 		</div>
 	</v-alert>
@@ -25,9 +25,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.alert_text {
-	color: var(--v-black-base) !important;
-}
-</style>
