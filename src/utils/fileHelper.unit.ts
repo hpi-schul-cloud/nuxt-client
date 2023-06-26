@@ -2,19 +2,26 @@ import { downloadFile } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
-		it("should download the file", () => {
+		const setup = () => {
 			const url = "test-url";
 			const fileName = "test-file.ext";
 			const link = {
+				...document.createElement("a"),
 				href: "",
 				download: "",
 				click: jest.fn(),
-			} as any;
+			};
 			const createElementSpy = jest
 				.spyOn(document, "createElement")
 				.mockImplementation(() => link);
 			document.body.appendChild = jest.fn();
 			document.body.removeChild = jest.fn();
+
+			return { url, fileName, link, createElementSpy };
+		};
+
+		it("should download the file", () => {
+			const { url, fileName, link, createElementSpy } = setup();
 
 			downloadFile(url, fileName);
 
