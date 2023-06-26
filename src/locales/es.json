@@ -825,7 +825,7 @@
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
 	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.delete": "Eliminar",
-	"components.board.action.moveUp": "Ascender",
+	"components.board.action.moveUp": "Levantar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",

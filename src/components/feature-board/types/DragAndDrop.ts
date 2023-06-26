@@ -1,4 +1,5 @@
 import { BoardColumn, BoardSkeletonCard } from "./Board";
+import { AnyContentElement } from "./ContentElement";
 
 export interface CardMove {
 	removedIndex: number | null;
@@ -12,6 +13,11 @@ export interface ColumnMove {
 	addedIndex: number;
 	removedIndex: number;
 	payload: BoardColumn["id"];
+}
+
+export interface ElementMove {
+	elementIndex: number;
+	payload: AnyContentElement["id"];
 }
 
 export type DragAndDropKey =
