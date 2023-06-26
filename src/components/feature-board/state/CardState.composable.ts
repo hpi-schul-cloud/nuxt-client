@@ -1,4 +1,4 @@
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
 import { onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
@@ -81,7 +81,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const response = await createElementCall(cardState.card.id, { type });
+		const params: CreateContentElementBody = { type };
+		if (focusOnCreate) {
+			params.toPosition = 0;
+		}
+		const response = await createElementCall(cardState.card.id, params);
 		if (isErrorCode(response.status)) {
 			await showErrorAndReload(generateErrorText("create", "boardElement"));
 			return;
@@ -91,7 +95,17 @@ export const useCardState = (id: BoardCard["id"]) => {
 			response.data = { ...response.data, focusOnCreate: true };
 		}
 
-		cardState.card.elements.push(response.data as unknown as AnyContentElement);
+		if (focusOnCreate) {
+			cardState.card.elements.splice(
+				0,
+				0,
+				response.data as unknown as AnyContentElement
+			);
+		} else {
+			cardState.card.elements.push(
+				response.data as unknown as AnyContentElement
+			);
+		}
 
 		return response.data;
 	};
