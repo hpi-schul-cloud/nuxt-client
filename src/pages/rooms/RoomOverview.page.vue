@@ -12,7 +12,8 @@
 						small
 						to="/rooms-list"
 						data-testid="go-to-all-courses"
-						>{{ $t("pages.rooms.index.courses.all") }}
+					>
+						{{ $t("pages.rooms.index.courses.all") }}
 					</v-btn>
 				</div>
 				<div class="toggle-div">
@@ -21,6 +22,7 @@
 						v-model="allowDragging"
 						class="enable-disable"
 						:label="$t('pages.rooms.index.courses.arrangeCourses')"
+						:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
 					/>
 				</div>
 			</div>
@@ -37,8 +39,7 @@
 					:append-icon="mdiMagnify"
 					:aria-label="$t('pages.rooms.index.search.label')"
 					data-testid="search-field"
-				>
-				</v-text-field>
+				/>
 				<div
 					v-for="(row, rowIndex) in dimensions.rowCount"
 					:key="rowIndex"
@@ -56,7 +57,7 @@
 								:ref="`${rowIndex}-${colIndex}`"
 								:size="dimensions.cellWidth"
 								@drop="setDropElement({ x: colIndex, y: rowIndex })"
-							></vRoomEmptyAvatar>
+							/>
 
 							<vRoomGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
@@ -70,8 +71,7 @@
 								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend="onDragend"
 								@drop="addGroupElements({ x: colIndex, y: rowIndex })"
-							>
-							</vRoomGroupAvatar>
+							/>
 							<vRoomAvatar
 								v-else
 								:ref="`${rowIndex}-${colIndex}`"
@@ -83,7 +83,7 @@
 								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend="onDragend"
 								@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-							></vRoomAvatar>
+							/>
 						</template>
 						<template v-else>
 							<vRoomEmptyAvatar
@@ -91,7 +91,7 @@
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
 								@drop="setDropElement({ x: colIndex, y: rowIndex })"
-							></vRoomEmptyAvatar>
+							/>
 						</template>
 					</div>
 				</div>
@@ -112,7 +112,7 @@
 				:token="importToken"
 				:courses="courses"
 				@success="onImportSuccess"
-			></import-flow>
+			/>
 		</template>
 	</room-wrapper>
 </template>
@@ -129,7 +129,6 @@ import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
 
-// eslint-disable-next-line vue/require-direct-export
 export default {
 	components: {
 		RoomWrapper,
