@@ -825,6 +825,7 @@
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.element": "Element settings",
+	"components.board.alert.info.teacher": "This board is visible to all course participants.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

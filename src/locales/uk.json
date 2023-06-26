@@ -319,6 +319,7 @@
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.element": "Налаштування елемента",
+	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",

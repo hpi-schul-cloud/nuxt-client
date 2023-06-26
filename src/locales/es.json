@@ -841,6 +841,7 @@
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.element": "Configuración del elemento",
+	"components.board.alert.info.teacher": "Este tablero es visible para todos los participantes en el curso.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
