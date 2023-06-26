@@ -34,7 +34,7 @@ export const useBoardBreadcrumbs = (): BoardBreadcrumbs[] => {
 		{
 			text:
 				boardBreadCrumbsData.courseName ||
-				i18n.t("pages.courses.index.title").toString(),
+				i18n.t("common.words.courses").toString(),
 			to: boardBreadCrumbsData.courseUrl,
 		},
 		{

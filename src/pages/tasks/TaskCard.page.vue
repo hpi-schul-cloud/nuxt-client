@@ -258,7 +258,7 @@ export default defineComponent({
 				isLoading.value = false;
 				breadcrumbs.value.push(
 					{
-						text: i18n.t("pages.courses.index.title"),
+						text: i18n.t("common.words.courses"),
 						to: {
 							name: "rooms-overview",
 						},
@@ -295,7 +295,7 @@ export default defineComponent({
 
 				breadcrumbs.value.push(
 					{
-						text: i18n.t("pages.courses.index.title"),
+						text: i18n.t("common.words.courses"),
 						to: {
 							name: "rooms-overview",
 						},

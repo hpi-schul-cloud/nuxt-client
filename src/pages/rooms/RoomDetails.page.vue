@@ -193,7 +193,7 @@ export default defineComponent({
 			},
 			breadcrumbs: [
 				{
-					text: this.$t("pages.courses.index.title"),
+					text: this.$t("common.words.courses"),
 					to: "/rooms-overview",
 				},
 			],

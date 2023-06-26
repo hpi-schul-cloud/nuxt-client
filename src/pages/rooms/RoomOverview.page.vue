@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
-				{{ $t("pages.courses.index.courses.active") }}
+				{{ $t("pages.rooms.index.courses.active") }}
 			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -12,7 +12,7 @@
 						small
 						to="/rooms-list"
 						data-testid="go-to-all-courses"
-						>{{ $t("pages.courses.index.courses.all") }}
+						>{{ $t("pages.rooms.index.courses.all") }}
 					</v-btn>
 				</div>
 				<div class="toggle-div">
@@ -20,7 +20,7 @@
 						v-if="isTouchDevice"
 						v-model="allowDragging"
 						class="enable-disable"
-						:label="$t('pages.courses.index.courses.arrangeCourses')"
+						:label="$t('pages.rooms.index.courses.arrangeCourses')"
 					/>
 				</div>
 			</div>
@@ -406,7 +406,7 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.courses.index.courses.active")} - ${
+		document.title = `${this.$t("pages.rooms.index.courses.active")} - ${
 			this.$theme.short_name
 		}`;
 	},
