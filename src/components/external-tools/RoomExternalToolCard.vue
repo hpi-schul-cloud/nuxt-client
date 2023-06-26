@@ -14,6 +14,7 @@
 				contain
 				data-testid="tool-card-logo"
 				:alt="$t('pages.rooms.tools.logo')"
+				crossorigin="anonymous"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>
@@ -44,7 +45,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { PropType, defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
