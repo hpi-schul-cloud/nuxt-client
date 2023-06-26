@@ -1,11 +1,14 @@
 <template>
 	<div
+		ref="fileContentElement"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
 		class="d-flex align-stretch rounded-t-sm"
 		data-testid="board-file-element-edit"
 	>
 		<v-list
 			flat
-			class="grey lighten-3 px-0 py-0 rounded-tl-sm"
+			class="flex-grow-1 flex-shrink-0 grey lighten-3 px-0 py-0 rounded-tl-sm"
 			max-width="calc(100% - 44px)"
 		>
 			<v-list-item class="pr-2">
@@ -25,33 +28,50 @@
 				</v-list-item-content>
 			</v-list-item>
 		</v-list>
-		<div class="d-flex align-center grey lighten-3 pr-2 rounded-tr-sm">
-        <BoardMenu scope="element">
-          <BoardMenuAction
-            v-if="hasMultipleElements && !isFirstElement"
-            @click="onMoveElementUp"
-          >
-            <VIcon>
-              {{ mdiArrowCollapseUp }}
-            </VIcon>
-            {{ $t("components.board.action.moveUp") }}
-          </BoardMenuAction>
-          <BoardMenuAction
-            v-if="hasMultipleElements && !isLastElement"
-            @click="onMoveElementDown"
-          >
-            <VIcon>
-              {{ mdiArrowCollapseDown }}
-            </VIcon>
-            {{ $t("components.board.action.moveDown") }}
-          </BoardMenuAction>
-          <BoardMenuAction @click="onDelete">
-            <VIcon>
-              {{ mdiTrashCanOutline }}
-            </VIcon>
-            {{ $t("components.board.action.delete") }}
-          </BoardMenuAction>
-        </BoardMenu>
+		<div
+			class="d-flex flex-grow-0 flex-shrink-0 align-center grey lighten-3 pr-2 rounded-tr-sm"
+		>
+			<BoardMenu scope="element">
+				<BoardMenuAction
+					v-if="hasMultipleElements && !isFirstElement"
+					data-testid="board-file-element-edit-menu-move-up"
+					@click="onMoveElementUp"
+				>
+					<VIcon>
+						{{ mdiArrowCollapseUp }}
+					</VIcon>
+					{{ $t("components.board.action.moveUp") }}
+				</BoardMenuAction>
+				<BoardMenuAction
+					v-if="hasMultipleElements && !isLastElement"
+					data-testid="board-file-element-edit-menu-move-down"
+					@click="onMoveElementDown"
+				>
+					<VIcon>
+						{{ mdiArrowCollapseDown }}
+					</VIcon>
+					{{ $t("components.board.action.moveDown") }}
+				</BoardMenuAction>
+				<BoardMenuAction
+					v-if="!isBlocked"
+					data-testid="board-file-element-edit-menu-download"
+					@click="onDownload"
+				>
+					<VIcon>
+						{{ mdiTrayArrowDown }}
+					</VIcon>
+					{{ $t("components.board.action.download") }}
+				</BoardMenuAction>
+				<BoardMenuAction
+					data-testid="board-file-element-edit-menu-delete"
+					@click="onDelete"
+				>
+					<VIcon>
+						{{ mdiTrashCanOutline }}
+					</VIcon>
+					{{ $t("components.board.action.delete") }}
+				</BoardMenuAction>
+			</BoardMenu>
 		</div>
 	</div>
 </template>
@@ -59,17 +79,16 @@
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import {
-	mdiAlertCircle,
-	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
+	mdiArrowCollapseUp,
 	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
 	mdiTrayArrowDown,
 } from "@mdi/js";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
@@ -127,7 +146,6 @@ export default defineComponent({
 
 		return {
 			fileContentElement,
-			mdiAlertCircle,
 			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
@@ -142,12 +160,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.board-menu {
-	position: absolute;
-	top: 0.25rem;
-	right: 0.25rem;
-	z-index: 1;
-}
-</style>
