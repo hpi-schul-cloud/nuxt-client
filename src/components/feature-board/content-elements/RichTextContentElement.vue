@@ -37,7 +37,11 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		return { modelValue, isAutoFocus };
+
+		return {
+			modelValue,
+			isAutoFocus,
+		};
 	},
 });
 </script>
