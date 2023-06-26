@@ -36,5 +36,12 @@ export default {
 	grid-area: content;
 	width: inherit;
 	max-width: 100vw;
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
 }
 </style>
