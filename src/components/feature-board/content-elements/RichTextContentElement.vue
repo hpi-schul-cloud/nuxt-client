@@ -7,7 +7,7 @@
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
-			class="rich_text offset"
+			class="rich_text"
 			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
