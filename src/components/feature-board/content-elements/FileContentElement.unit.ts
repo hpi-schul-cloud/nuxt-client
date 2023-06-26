@@ -279,6 +279,18 @@ describe("FileContentElement", () => {
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 
+				it("should hand over isBlocked property as false", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const isBlocked = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("isBlocked");
+
+					expect(isBlocked).toBe(false);
+				});
+
 				it("should call fetchFile", async () => {
 					const { wrapper, fetchFile } = setup(false);
 
@@ -305,6 +317,18 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should hand over isBlocked property as false", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const isBlocked = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("isBlocked");
+
+					expect(isBlocked).toBe(false);
 				});
 
 				it("should call deleteElement function when it receives delete:element event from child", async () => {
@@ -358,6 +382,18 @@ describe("FileContentElement", () => {
 					expect(url).toBe("");
 				});
 
+				it("should hand over isBlocked property as true", async () => {
+					const { wrapper } = setup(false, FileRecordScanStatus.BLOCKED);
+
+					await wrapper.vm.$nextTick();
+
+					const isBlocked = wrapper
+						.findComponent(FileContentElementDisplay)
+						.props("isBlocked");
+
+					expect(isBlocked).toBe(true);
+				});
+
 				it("should render FileContentElementAlert component", async () => {
 					const { wrapper } = setup(false, FileRecordScanStatus.BLOCKED);
 
@@ -396,6 +432,18 @@ describe("FileContentElement", () => {
 						.props("url");
 
 					expect(url).toBe("");
+				});
+
+				it("should hand over isBlocked property as true", async () => {
+					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
+
+					await wrapper.vm.$nextTick();
+
+					const isBlocked = wrapper
+						.findComponent(FileContentElementEdit)
+						.props("isBlocked");
+
+					expect(isBlocked).toBe(true);
 				});
 
 				it("should render FileContentElementAlert component", async () => {

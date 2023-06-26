@@ -15,11 +15,20 @@
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<v-list-item-title data-testid="board-file-element-display-file-name"
-					><a :download="fileName" :href="url">{{
-						fileName
-					}}</a></v-list-item-title
+				<v-list-item-title v-if="!isBlocked"
+					><a
+						data-testid="board-file-element-display-file-name-link"
+						:download="fileName"
+						:href="url"
+						>{{ fileName }}</a
+					>
+				</v-list-item-title>
+				<v-list-item-title
+					v-else
+					data-testid="board-file-element-display-file-name"
 				>
+					{{ fileName }}
+				</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
 	</v-list>
@@ -34,6 +43,10 @@ export default defineComponent({
 	props: {
 		fileName: {
 			type: String,
+			required: true,
+		},
+		isBlocked: {
+			type: Boolean,
 			required: true,
 		},
 		url: {

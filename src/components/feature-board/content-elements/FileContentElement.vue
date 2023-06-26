@@ -11,11 +11,13 @@
 				v-if="!isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
+				:isBlocked="isBlocked"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
+				:isBlocked="isBlocked"
 				@delete:element="onDeleteElement"
 			></FileContentElementEdit>
 			<FileContentElementAlert v-if="isBlocked" />
@@ -71,7 +73,9 @@ export default defineComponent({
 				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
 		);
 
-		const url = computed(() => (!isBlocked.value ? fileRecord.value?.url : ""));
+		const url = computed(() =>
+			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
+		);
 
 		onMounted(() => {
 			(async () => {
