@@ -10,7 +10,10 @@ import Vue, { ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useCardState } from "../state/CardState.composable";
-import { BoardPermissionsTypes } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
 
@@ -20,10 +23,6 @@ jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
 
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const mockedUseCardState = jest.mocked(useCardState);
-
-const defaultPermissions = {
-	hasDeletePermission: true,
-};
 
 const CARD_SKELETON: BoardCardSkeleton = {
 	height: 200,
@@ -42,7 +41,7 @@ describe("CardHost", () => {
 	const setup = (options?: {
 		card: BoardCard;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsTypes;
+		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
