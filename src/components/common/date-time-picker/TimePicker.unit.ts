@@ -2,6 +2,7 @@ import Vue from "vue";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
+import { I18N_KEY } from "@/utils/inject";
 
 type TimePickerProps = {
 	time: string;
@@ -30,7 +31,7 @@ describe("@components/date-time-picker/TimePicker", () => {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			attachTo: "#root",
 		});

@@ -19,6 +19,7 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			:lock-axis="lockAxis"
+			:drag-begin-delay="200"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -41,9 +42,9 @@
 </template>
 
 <script lang="ts">
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
@@ -83,7 +84,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
@@ -147,7 +148,7 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {
@@ -182,7 +183,7 @@ export default defineComponent({
 
 /* width */
 .scrollable-column::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
 
 /* Track */
@@ -193,12 +194,16 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
-	background: var(--v-secondary-lighten1);
+	background-color: transparent;
+	border-radius: 5px;
+}
+.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
+	background-color: var(--v-secondary-lighten1);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base);
+	background: var(--v-secondary-base) !important;
 }
 </style>

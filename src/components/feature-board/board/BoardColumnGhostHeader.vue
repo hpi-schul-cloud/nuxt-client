@@ -1,6 +1,6 @@
 <template>
 	<div class="mb-4 pt-1" ref="headerRef">
-		<div class="d-flex align-start justify-space-between py-2 mb-1">
+		<div class="d-flex align-start justify-space-between pt-2 mb-1">
 			<VBtn
 				elevation="0"
 				text
@@ -46,6 +46,6 @@ export default defineComponent({
 }
 
 .transition-divider {
-	transition: all 150ms;
+	transition: all ease-in 150ms;
 }
 </style>

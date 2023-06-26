@@ -1,10 +1,13 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useContentElementState } from "./ContentElementState.composable";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
-let wrapper: Wrapper<Vue>;
+jest.mock("../shared/InlineEditInteractionHandler.composable");
 
+const notifierModule = createModuleMocks(NotifierModule);
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
 	type: ContentElementType.RichText,
@@ -30,35 +33,21 @@ const TEST_ELEMENT: RichTextElementResponse = {
 // 	},
 // }));
 
-const mountComposable = <R>(composable: () => R): R => {
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
-
 describe("useContentElementState composable", () => {
+	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
+		return mountComposable(() => useContentElementState(options), {
+			[I18N_KEY as symbol]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+		});
+	};
 	it("should unwrap element model data", async () => {
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
-		);
+		const { modelValue } = setup();
 
 		expect(modelValue.value).toStrictEqual(TEST_ELEMENT.content);
 	});
 
 	it.skip("should set isAutoFocus on element interaction", async () => {
-		const { isAutoFocus } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
-		);
+		const { isAutoFocus } = setup();
 
 		expect(isAutoFocus.value).toStrictEqual(false);
 		// mockCardHostInteraction();
@@ -67,9 +56,7 @@ describe("useContentElementState composable", () => {
 
 	it("should call saving function after debounced change of modelValue", async () => {
 		jest.useFakeTimers();
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: true, element: TEST_ELEMENT })
-		);
+		const { modelValue } = setup({ isEditMode: true, element: TEST_ELEMENT });
 
 		const updatedModel: RichTextElementResponse["content"] = {
 			...TEST_ELEMENT.content,

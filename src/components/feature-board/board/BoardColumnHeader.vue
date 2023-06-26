@@ -7,41 +7,37 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-2': isFocused }"
-			tabindex="0"
+			:class="{ 'grey lighten-2': isFocusContained }"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start justify-space-between py-2 pl-1">
-				<div>
-					<BoardAnyTitleInput
-						:value="title"
-						scope="column"
-						:isEditMode="isEditMode"
-						:placeholder="titlePlaceholder"
-						@update:value="onUpdateTitle"
-					></BoardAnyTitleInput>
-				</div>
-				<div class="pt-2">
-					<BoardMenu v-if="hasDeletePermission" scope="column">
-						<BoardMenuAction @click="onTryDelete">
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
-					</BoardMenu>
-				</div>
+			<div class="d-flex align-start py-2 px-2">
+				<BoardAnyTitleInput
+					:value="title"
+					scope="column"
+					:isEditMode="isEditMode"
+					:placeholder="titlePlaceholder"
+					@update:value="onUpdateTitle"
+					class="w-100"
+				></BoardAnyTitleInput>
+				<BoardMenu v-if="hasDeletePermission" scope="column">
+					<BoardMenuAction @click="onTryDelete">
+						<VIcon>
+							{{ mdiTrashCanOutline }}
+						</VIcon>
+						{{ $t("components.board.action.delete") }}
+					</BoardMenuAction>
+				</BoardMenu>
 			</div>
-			<VDivider color="black"></VDivider>
+			<VDivider aria-hidden="true" color="black"></VDivider>
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
 
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
@@ -74,7 +70,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.columnId
 		);
@@ -82,7 +78,10 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref(undefined);
-		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
+		const { isFocusContained } = useBoardFocusHandler(
+			props.columnId,
+			columnHeader
+		);
 		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
@@ -97,9 +96,9 @@ export default defineComponent({
 		const onTryDelete = async () => {
 			const message =
 				i18n
-					?.t("components.cardHost.deletionModal.confirmation", {
+					.t("components.cardHost.deletionModal.confirmation", {
 						title: props.title ? `"${props.title}"` : "",
-						type: i18n?.t("components.boardColumn").toString(),
+						type: i18n.t("components.boardColumn").toString(),
 					})
 					.toString() ?? "";
 
@@ -122,7 +121,7 @@ export default defineComponent({
 		return {
 			columnHeader,
 			isEditMode,
-			isFocused,
+			isFocusContained,
 			isDeleteModalOpen,
 			hasDeletePermission,
 			mdiTrashCanOutline,

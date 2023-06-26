@@ -1,14 +1,14 @@
-import Vuetify from "vuetify";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskItemStudent from "./TaskItemStudent";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import TasksModule from "@/store/tasks";
-import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import TasksModule from "@/store/tasks";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import TaskItemStudent from "./TaskItemStudent";
 
 const {
 	tasks,
@@ -18,43 +18,40 @@ const {
 	betaTask,
 } = mocks;
 
-describe("@/components/molecules/TaskItemStudent", () => {
-	let vuetify;
-	let tasksModuleMock;
-	let copyModuleMock;
-	let notifierModuleMock;
+let tasksModuleMock;
+let copyModuleMock;
+let notifierModuleMock;
 
+const mockRouter = {
+	push: jest.fn(),
+};
+
+const getWrapper = (props, options) => {
+	return mount(TaskItemStudent, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
+		provide: {
+			tasksModule: tasksModuleMock,
+			copyModule: copyModuleMock,
+			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
+			[I18N_KEY]: { t: (key) => key },
+		},
+		propsData: props,
+		...options,
+		mocks: {
+			$router: mockRouter,
+		},
+	});
+};
+
+describe("@/components/molecules/TaskItemStudent", () => {
 	beforeEach(() => {
-		vuetify = new Vuetify();
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
-
-	const mockRouter = {
-		push: jest.fn(),
-	};
-
-	const getWrapper = (props, options) => {
-		return mount(TaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			provide: {
-				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
-				notifierModule: notifierModuleMock,
-				i18n: { t: (key) => key },
-			},
-			vuetify,
-			propsData: props,
-			...options,
-			mocks: {
-				$router: mockRouter,
-			},
-		});
-	};
 
 	it("Should direct user to legacy task details page", () => {
 		const { location } = window;

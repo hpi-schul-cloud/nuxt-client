@@ -19,6 +19,7 @@ import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const $route = {
 	query: {
@@ -86,11 +87,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				copyModule: copyModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				notifierModule: notifierModuleMock,
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 				shareModule: shareModuleMock,
 				authModule: authModuleMock,
 				envConfigModule: envConfigModuleMock,
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

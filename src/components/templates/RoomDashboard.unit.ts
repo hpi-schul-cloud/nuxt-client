@@ -13,6 +13,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Envs } from "@/store/types/env-config";
 import ShareModule from "@/store/share";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const mockData = {
 	roomId: "123",
@@ -116,9 +117,10 @@ const getWrapper = (props: object, options?: object) => {
 			i18n: true,
 		}),
 		provide: {
-			i18n: { t: (key: string) => key },
-			notifierModule: notifierModuleMock,
+			[I18N_KEY as symbol]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 			shareModule: shareModuleMock,
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,

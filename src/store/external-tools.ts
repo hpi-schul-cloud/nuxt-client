@@ -2,7 +2,6 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
-	ToolConfigurationScope,
 	ToolConfigurationTemplate,
 } from "./external-tool";
 import { $axios } from "@/utils/api";
@@ -15,9 +14,10 @@ import {
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolConfigurationListResponse,
+	ToolLaunchRequestResponse,
 } from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 @Module({
 	name: "externalToolsModule",
@@ -93,6 +93,36 @@ export default class ExternalToolsModule extends VuexModule {
 	}
 
 	@Action
+	async loadToolLaunchData(
+		contextExternalToolId: string
+	): Promise<ToolLaunchRequestResponse | undefined> {
+		try {
+			this.setLoading(true);
+
+			const resp: AxiosResponse<ToolLaunchRequestResponse> =
+				await this.toolApi.toolLaunchControllerGetToolLaunchRequest(
+					contextExternalToolId
+				);
+
+			this.setLoading(false);
+
+			return resp.data;
+		} catch (error: unknown) {
+			console.log(`Some error occurred while launching tool: ${error}`);
+
+			if (error instanceof AxiosError) {
+				this.setBusinessError({
+					error,
+					statusCode: error?.response?.status ?? 500,
+					message: error?.response?.data.message ?? "",
+				});
+			}
+
+			this.setLoading(false);
+		}
+	}
+
+	@Action
 	async loadSchoolExternalTools(): Promise<void> {
 		try {
 			this.setLoading(true);
@@ -149,7 +179,6 @@ export default class ExternalToolsModule extends VuexModule {
 			if (authModule.getUser?.schoolId) {
 				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
 					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
-						ToolConfigurationScope.school,
 						authModule.getUser.schoolId
 					);
 

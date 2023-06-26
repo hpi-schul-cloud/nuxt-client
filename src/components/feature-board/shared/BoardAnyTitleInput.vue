@@ -1,7 +1,6 @@
 <template>
-	<div class="d-flex flex-grow-1">
+	<div>
 		<VTextarea
-			v-if="isEditMode"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -9,31 +8,22 @@
 			:rows="1"
 			auto-grow
 			flat
-			class="ml-n3 mb-0 w-full"
+			class="mx-n3 mb-n2"
 			:placeholder="$t('common.labels.title').toString()"
 			background-color="transparent"
-			tabindex="0"
-			:autofocus="true"
-		></VTextarea>
-		<div
-			v-else-if="value && value !== ''"
-			:aria-level="ariaLevel"
+			ref="titleInput"
+			:readonly="!isEditMode"
 			role="heading"
-			class="heading"
-		>
-			{{ value }}
-		</div>
-		<div v-else class="heading blue-grey--text darken-1">
-			{{ placeholder }}
-		</div>
+			:aria-level="ariaLevel"
+		></VTextarea>
 	</div>
 </template>
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType } from "vue";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -60,11 +50,17 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
+		const titleInput = ref<HTMLInputElement | null>(null);
 
 		useInlineEditInteractionHandler(() => {
 			if (!hasEditPermission) return;
-			document.getSelection()?.collapseToEnd();
+			if (titleInput.value === null) return;
+			titleInput.value.focus();
 		});
+
+		const hasValue = computed<boolean>(
+			() => props.value !== "" && !!props.value
+		);
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
@@ -96,23 +92,37 @@ export default defineComponent({
 			ariaLevel,
 			fontSize,
 			modelValue,
+			titleInput,
+			hasValue,
 		};
 	},
 });
 </script>
 
 <style scoped>
-:deep(textarea) {
-	font-size: v-bind(fontSize);
-}
-.heading {
-	font-size: v-bind(fontSize);
-	margin-top: 10px;
-	letter-spacing: normal;
-	padding-right: 15px;
+:deep(div.v-input__slot) {
+	padding: 0;
 }
 
-.heading:focus {
-	outline: none;
+:deep(textarea) {
+	font-size: v-bind(fontSize);
+	background: transparent !important;
+}
+:deep(input) {
+	font-size: v-bind(fontSize);
+}
+:deep(textarea[readonly]) {
+	cursor: pointer;
+}
+
+/** Edge */
+:deep(textarea)::-ms-input-placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
+}
+/** Other common browsers */
+:deep(textarea)::placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
 }
 </style>

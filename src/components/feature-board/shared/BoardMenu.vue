@@ -2,19 +2,28 @@
 	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
-				text
-				icon
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
+				:class="{ 'grey lighten-3': hasBackground }"
+				icon
 				@dblclick.stop="() => {}"
 				@keydown.left.right.up.down.stop="() => {}"
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 				<span class="d-sr-only">
-					<template v-if="scope === 'board'">Board-Menu</template>
-					<template v-if="scope === 'column'">Column-Menu</template>
-					<template v-if="scope === 'card'">Card-Menu</template>
+					<template v-if="scope === 'board'">{{
+						$t("components.board.menu.board")
+					}}</template>
+					<template v-if="scope === 'column'">{{
+						$t("components.board.menu.column")
+					}}</template>
+					<template v-if="scope === 'card'">{{
+						$t("components.board.menu.card")
+					}}</template>
+					<template v-if="scope === 'element'">{{
+						$t("components.board.menu.element")
+					}}</template>
 				</span>
 			</VBtn>
 		</template>
@@ -25,19 +34,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 
 import { mdiDotsVertical } from "@mdi/js";
 export default defineComponent({
 	name: "BoardMenu",
 	props: {
 		scope: {
-			type: String as PropType<"card" | "column" | "board">,
+			type: String as PropType<"element" | "card" | "column" | "board">,
 			required: true,
 		},
 	},
-	setup() {
+	setup(props) {
+		const hasBackground = computed<boolean>(
+			() => props.scope === "element" || props.scope === "card"
+		);
+
 		return {
+			hasBackground,
 			mdiDotsVertical,
 		};
 	},
