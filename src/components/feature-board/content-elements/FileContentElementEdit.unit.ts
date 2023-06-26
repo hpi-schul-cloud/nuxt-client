@@ -7,13 +7,13 @@ import FileContentElementEdit from "./FileContentElementEdit.vue";
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementEdit", () => {
-	const setupProps = (isBlocked: boolean | undefined = undefined) => ({
+	const setupProps = (isBlocked?: boolean) => ({
 		fileName: "file-record #1.txt",
 		url: "1/file-record #1.txt",
 		isBlocked: isBlocked ?? false,
 	});
 
-	const setup = (isBlocked: boolean | undefined = undefined) => {
+	const setup = (isBlocked?: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = setupProps(isBlocked);
