@@ -137,11 +137,13 @@ import {
 	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiPlus,
+	mdiPuzzleOutline,
 	mdiShareVariantOutline,
 	mdiTrayArrowDown,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
+import RoomExternalToolsOverview from "./external-tools/RoomExternalToolsOverview.vue";
 
 export default defineComponent({
 	setup() {
@@ -230,13 +232,7 @@ export default defineComponent({
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
-					to: {
-						name: "context-external-tool-configuration",
-						params: {
-							contextId: this.courseId,
-							contextType: "course",
-						},
-					},
+					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
 				tabs.push({
@@ -255,7 +251,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.tabLabel.toolsOld"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "old-tools-tab",
-					href: ` / courses /${this.roomData.roomId}/?activeTab=tools`,
+					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
 				});
 			}
 

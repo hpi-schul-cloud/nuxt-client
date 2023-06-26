@@ -99,9 +99,9 @@ export default class ContextExternalToolsModule extends VuexModule {
 
 			this.setLoading(false);
 		} catch (error: any) {
-			/*console.log(
+			console.log(
 				`Some error occurred while saving contextExternalTool for schoolExternalTool with id ${payload.toolTemplate.id}: ${error}`
-			);*/
+			);
 			this.setBusinessError({
 				...error,
 				statusCode: error?.response?.status,

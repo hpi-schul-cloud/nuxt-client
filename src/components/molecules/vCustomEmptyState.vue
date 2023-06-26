@@ -1262,6 +1262,7 @@ export default {
 					"topics-empty-state",
 					"rooms-empty-state",
 					"tasks-empty-state",
+					"tools-empty-state",
 				].includes(value);
 			},
 		},

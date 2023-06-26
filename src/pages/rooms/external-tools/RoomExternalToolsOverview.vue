@@ -178,9 +178,9 @@ export default defineComponent({
 		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
 			if (toolLaunch.openNewTab) {
 				window.open(toolLaunch.url, "_blank");
-			} else {
-				window.location.href = toolLaunch.url;
+				return;
 			}
+			window.location.href = toolLaunch.url;
 		};
 
 		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
