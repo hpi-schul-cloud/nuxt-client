@@ -10,7 +10,6 @@ import { bulkConsent } from "@/store/bulkConsent";
 import calendar from "@/store/calendar";
 import classes from "@/store/classes";
 import consentVersions from "@/store/consent-versions";
-import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
 import termsAndConditions from "@/store/terms-and-conditions";
@@ -37,7 +36,6 @@ export default new Store({
 		calendar,
 		classes,
 		"consent-versions": consentVersions,
-		courses,
 		"ldap-config": ldapConfig,
 		lessons,
 		"terms-and-conditions": termsAndConditions,

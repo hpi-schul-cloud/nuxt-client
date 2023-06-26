@@ -53,10 +53,6 @@ export default Vue.extend({
 		ImportModal,
 	},
 	props: {
-		headerAriaLabel: {
-			type: String,
-			default: "",
-		},
 		hasRooms: {
 			type: Boolean,
 			required: true,

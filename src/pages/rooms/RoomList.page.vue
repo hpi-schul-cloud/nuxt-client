@@ -1,8 +1,5 @@
 <template>
-	<room-wrapper
-		:header-aria-label="$t('pages.courses.index.courses.all')"
-		:has-rooms="hasRooms"
-	>
+	<room-wrapper :has-rooms="hasRooms">
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
 				{{ $t("pages.courses.index.courses.all") }}
