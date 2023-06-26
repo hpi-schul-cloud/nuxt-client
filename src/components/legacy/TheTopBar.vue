@@ -66,10 +66,10 @@
 					{{ school.name }}
 				</div>
 				<img
-						v-if="school && school.logo"
-						class="school-logo"
-						v-bind:src="school.logo"
-						:alt="school.name"
+					v-if="school && school.logo"
+					class="school-logo"
+					v-bind:src="school.logo"
+					:alt="school.name"
 				/>
 				<v-img
 					v-if="school && school.logo_dataUrl"

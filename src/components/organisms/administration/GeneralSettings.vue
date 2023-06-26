@@ -268,7 +268,9 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo).replace('data:image/jpeg;base64,', '');
+				updatedSchool.logo_dataUrl = await toBase64(
+					this.localSchool.logo
+				).replace("data:image/jpeg;base64,", "");
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
