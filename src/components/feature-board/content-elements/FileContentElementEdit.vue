@@ -3,7 +3,7 @@
 		<v-list-item class="px-2 grey lighten-3">
 			<v-list-item-icon class="my-2 mr-2">
 				<v-icon
-					color="#8a9199"
+					class="deco-icon--text"
 					data-testid="board-file-element-edit-file-icon"
 					large
 					>{{ mdiFileDocumentOutline }}</v-icon
