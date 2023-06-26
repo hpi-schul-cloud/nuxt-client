@@ -1,5 +1,5 @@
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -9,6 +9,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
+import { businessErrorFactory } from "@@/tests/test-utils/factory";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
@@ -26,26 +27,24 @@ describe("RoomExternalToolOverview", () => {
 			ContextExternalToolsModule,
 			{
 				getExternalToolDisplayDataList: tools,
+				getBusinessError: businessErrorFactory.build(),
 			}
 		);
 
 		const externalToolsModule = createModuleMocks(ExternalToolsModule);
 
-		const wrapper: Wrapper<Vue> = mount(
+		const wrapper: Wrapper<any> = mount(
 			RoomExternalToolsOverview as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
-					mocks: {
-						$t: (key: string): string => key,
-					},
 				}),
 				provide: {
 					authModule,
 					contextExternalToolsModule,
 					externalToolsModule,
 					[I18N_KEY as symbol]: {
-						$t: (key: string): string => key,
+						t: (key: string): string => key,
 						tc: (key: string): string => key,
 					},
 				},
@@ -65,6 +64,42 @@ describe("RoomExternalToolOverview", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("t", () => {
+		describe("when known translation key is given", () => {
+			const setup = async () => {
+				const { wrapper } = getWrapper([]);
+				const testKey = "testKey";
+
+				return { wrapper, testKey };
+			};
+
+			it("should return translation", async () => {
+				const { wrapper, testKey } = await setup();
+
+				const result: string = wrapper.vm.t(testKey);
+
+				expect(result).toEqual(testKey);
+			});
+		});
+
+		describe("when known translation key is given", () => {
+			const setup = async () => {
+				const { wrapper } = getWrapper([]);
+				const testKey = 123;
+
+				return { wrapper, testKey };
+			};
+
+			it("should return 'unknown translation-key'", async () => {
+				const { wrapper, testKey } = await setup();
+
+				const result: string = wrapper.vm.t(testKey);
+
+				expect(result.includes("unknown translation-key:")).toBeTruthy();
+			});
+		});
 	});
 
 	describe("when no tools are in the list", () => {
@@ -228,6 +263,29 @@ describe("RoomExternalToolOverview", () => {
 			expect(externalToolsModule.getToolLaunchData).toHaveBeenCalledWith(
 				tool.id
 			);
+		});
+	});
+
+	describe("when an error occurred", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const { wrapper, externalToolsModule } = getWrapper([tool]);
+
+			return {
+				wrapper,
+				externalToolsModule,
+				tool,
+			};
+		};
+
+		it("should display the error in the alert", () => {
+			const { wrapper } = setup();
+
+			const alert = wrapper.findComponent({ name: "v-alert" });
+
+			expect(alert.exists()).toBe(true);
 		});
 	});
 });

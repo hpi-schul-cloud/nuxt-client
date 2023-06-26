@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tool.context.title')"
+		:headline="t('pages.tool.context.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
@@ -38,7 +38,7 @@
 			type="error"
 			data-testId="context-tool-error"
 		>
-			{{ $t(getTranslationKey(apiError)) }}
+			{{ t(getTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn
@@ -48,7 +48,7 @@
 				@click="onCancel"
 				data-testId="cancel-button"
 			>
-				{{ $t("common.actions.cancel") }}
+				{{ t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
 				class="mr-2"
@@ -58,7 +58,7 @@
 				@click="onSaveTool"
 				data-testId="save-button"
 			>
-				{{ $t("pages.tool.addBtn.label") }}
+				{{ t("pages.tool.addBtn.label") }}
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -71,8 +71,8 @@ import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	onMounted,
 	inject,
+	onMounted,
 	PropType,
 	ref,
 	Ref,
@@ -90,7 +90,7 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import ContextExternalToolsModule from "@/store/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -119,6 +119,7 @@ export default defineComponent({
 			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
+		// TODO: use inject strict and remove ? after module usages. adapt refs to get a module and not undefined
 
 		onMounted(async () => {
 			await externalToolsModule?.loadAvailableToolConfigurationsForContext({
@@ -188,7 +189,7 @@ export default defineComponent({
 		);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(
-			() => externalToolsModule?.getBusinessError
+			() => contextExternalToolsModule?.getBusinessError
 		);
 
 		const onSelectTemplate = async (

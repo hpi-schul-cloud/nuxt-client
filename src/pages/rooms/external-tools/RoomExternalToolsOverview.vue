@@ -8,11 +8,22 @@
 			<v-custom-empty-state
 				ref="tools-empty-state"
 				image="tools-empty-state"
-				:title="$t('pages.rooms.tools.emptyState')"
+				:title="t('pages.rooms.tools.emptyState')"
 				class="mt-16"
 				imgHeight="200px"
 			/>
 		</div>
+
+		<v-alert
+			v-if="apiError.message"
+			light
+			prominent
+			text
+			type="error"
+			data-testId="context-tool-error"
+		>
+			{{ apiError.message }}
+		</v-alert>
 
 		<room-external-tool-card
 			v-for="(tool, index) in tools"
@@ -41,9 +52,9 @@
 					<RenderHTML
 						class="text-md mt-2"
 						:html="
-							$t('pages.rooms.tools.deleteDialog.content', {
+							t('pages.rooms.tools.deleteDialog.content', {
 								itemName: getItemToDeleteName,
-							}).toString()
+							})
 						"
 						component="p"
 					/>
@@ -76,7 +87,7 @@
 <script lang="ts">
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import {
@@ -95,6 +106,9 @@ import {
 import ExternalToolsModule from "@/store/external-tools";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { BusinessError } from "@/store/types/commons";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "RoomExternalToolsOverview",
@@ -111,6 +125,7 @@ export default defineComponent({
 			inject<ContextExternalToolsModule>("contextExternalToolsModule");
 		const externalToolsModule: ExternalToolsModule | undefined =
 			inject<ExternalToolsModule>("externalToolsModule");
+		const i18n: VueI18n = injectStrict(I18N_KEY);
 
 		onMounted(async () => {
 			await contextExternalToolsModule?.loadExternalToolDisplayData({
@@ -118,6 +133,15 @@ export default defineComponent({
 				contextType: ToolContextType.COURSE,
 			});
 		});
+
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
+		const t = (key: string, values?: VueI18n.Values | undefined) => {
+			const translateResult = i18n.t(key, values);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
 
 		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
 			() => contextExternalToolsModule?.getExternalToolDisplayDataList || []
@@ -213,7 +237,12 @@ export default defineComponent({
 				)
 		);
 
+		const apiError: ComputedRef<BusinessError | undefined> = computed(
+			() => contextExternalToolsModule?.getBusinessError
+		);
+
 		return {
+			t,
 			tools,
 			canEdit,
 			itemToDelete,
@@ -224,6 +253,7 @@ export default defineComponent({
 			onDeleteTool,
 			onClickTool,
 			onEditTool,
+			apiError,
 		};
 	},
 });

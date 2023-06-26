@@ -16,9 +16,11 @@ import {
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
+	ExternalToolDisplayData,
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationTemplate,
+	ToolContextType,
 	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
@@ -30,10 +32,6 @@ import {
 	toolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import {
-	ToolContextType,
-	ExternalToolDisplayData,
-} from "@/store/external-tool";
 
 jest.mock("@/store/store-accessor", () => ({
 	externalToolsModule: {
@@ -260,6 +258,13 @@ describe("useExternalToolUtils", () => {
 	});
 
 	describe("getTranslationKey", () => {
+		it("should return original message when key is undefined", () => {
+			const { getTranslationKey } = setup();
+
+			const translationKey: string | undefined = getTranslationKey(undefined);
+			expect(translationKey).toBeUndefined();
+		});
+
 		it("should return translation key when message was found", () => {
 			const { getTranslationKey } = setup();
 			const error: BusinessError = {
@@ -267,7 +272,7 @@ describe("useExternalToolUtils", () => {
 				message: "tool_param_duplicate: Some validationError was thrown",
 			};
 
-			const translationKey = getTranslationKey(error);
+			const translationKey: string | undefined = getTranslationKey(error);
 			expect(translationKey).toEqual(
 				"pages.tool.apiError.tool_param_duplicate"
 			);
@@ -280,7 +285,7 @@ describe("useExternalToolUtils", () => {
 				message: "some_error: which is not defined in map",
 			};
 
-			const translationKey = getTranslationKey(error);
+			const translationKey: string | undefined = getTranslationKey(error);
 			expect(translationKey).toEqual(error.message);
 		});
 	});

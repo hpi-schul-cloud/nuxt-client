@@ -1,5 +1,7 @@
 import {
 	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -10,14 +12,14 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	SchoolToolConfigurationEntryResponse,
 	SchoolToolConfigurationListResponse,
 	ToolConfigurationEntryResponse,
-	SchoolToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
-	ContextExternalToolSearchListResponse,
-	ContextExternalToolResponse,
 } from "@/serverApi/v3";
 import {
+	ContextExternalToolTemplateListItem,
+	ExternalToolDisplayData,
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
@@ -29,10 +31,6 @@ import {
 } from "@/store/external-tool";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
-import {
-	ContextExternalToolTemplateListItem,
-	ExternalToolDisplayData,
-} from "@/store/external-tool";
 
 const ResponseStatusMapping: Record<
 	SchoolExternalToolResponseStatusEnum,
@@ -247,7 +245,13 @@ export function useExternalToolMappings() {
 		});
 	};
 
-	const getTranslationKey = (businessError: BusinessError) => {
+	const getTranslationKey = (
+		businessError: BusinessError | undefined
+	): undefined | string => {
+		if (!businessError) {
+			return undefined;
+		}
+
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
 		).find(([key]) => businessError.message.startsWith(key))?.[1];

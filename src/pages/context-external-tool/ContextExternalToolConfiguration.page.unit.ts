@@ -15,7 +15,7 @@ import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
-import ContextExternalToolsModule from "@/store/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ToolConfigurationTemplate } from "@/store/external-tool";
 import { I18N_KEY } from "@/utils/inject";
 
@@ -73,9 +73,6 @@ describe("ContextExternalToolConfiguration", () => {
 			{
 				...createComponentMocks({
 					i18n: true,
-					mocks: {
-						$t: (key: string): string => key,
-					},
 				}),
 				provide: {
 					externalToolsModule,
@@ -205,7 +202,7 @@ describe("ContextExternalToolConfiguration", () => {
 				const { wrapper } = await setup();
 
 				expect(wrapper.find(".wireframe-header").text()).toContain(
-					wrapper.vm.$i18n.t("pages.tool.context.title")
+					"pages.tool.context.title"
 				);
 			});
 		});

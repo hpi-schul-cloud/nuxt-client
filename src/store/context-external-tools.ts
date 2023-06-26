@@ -1,5 +1,9 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { ExternalToolDisplayData, ToolContextType } from "./external-tool";
+import {
+	ExternalToolDisplayData,
+	ToolConfigurationTemplate,
+	ToolContextType,
+} from "./external-tool";
 import { AxiosResponse } from "axios";
 import {
 	ContextExternalToolPostParams,
@@ -10,7 +14,6 @@ import {
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { BusinessError } from "./types/commons";
 import { $axios } from "@/utils/api";
-import { ToolConfigurationTemplate } from "./external-tool";
 
 @Module({
 	name: "contextExternalToolsModule",
@@ -35,11 +38,11 @@ export default class ContextExternalToolsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getExternalToolDisplayDataList() {
+	get getExternalToolDisplayDataList(): ExternalToolDisplayData[] {
 		return this.externalToolDisplayDataList;
 	}
 
-	get getBusinessError() {
+	get getBusinessError(): BusinessError {
 		return this.businessError;
 	}
 
