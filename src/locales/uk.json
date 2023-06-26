@@ -448,6 +448,7 @@
 	"global.topbar.loggedOut.actions.blog": "Блог",
 	"global.topbar.loggedOut.actions.faq": "Запитання й відповіді",
 	"global.topbar.loggedOut.actions.steps": "Перші кроки",
+	"global.topbar.mobileMenu.ariaLabel": "Навігація сторінкою",
 	"mixins.typeMeta.types.default": "Вміст",
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",

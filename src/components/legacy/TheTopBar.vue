@@ -13,6 +13,8 @@
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-test-id="top-menu-btn"
+				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
+				role="menu"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<v-icon>{{ mdiMenu }}</v-icon>

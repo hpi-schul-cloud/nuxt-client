@@ -273,6 +273,7 @@
 	"global.sidebar.tasks": "Tasks",
 	"global.sidebar.teacher": "Teachers",
 	"global.sidebar.teams": "Teams",
+	"global.topbar.mobileMenu.ariaLabel": "Page navigation",
 	"global.topbar.initials.currentUser": "Current user",
 	"global.topbar.actions.alerts": "Status alert",
 	"global.topbar.actions.contactSupport": "Contact",
