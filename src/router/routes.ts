@@ -278,7 +278,7 @@ export const routes: Array<RouteConfig> = [
 			import(
 				"@/pages/context-external-tool/ContextExternalToolConfiguration.page.vue"
 			),
-		name: "ContextExternalToolConfiguration",
+		name: "context-external-tool-configuration",
 		beforeEnter: Multiguard([
 			createPermissionGuard(["context_tool_admin"]),
 			validateQueryParameters({
