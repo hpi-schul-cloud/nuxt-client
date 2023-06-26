@@ -54,6 +54,7 @@
 				:value="selectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
+				:aria-label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
