@@ -20,7 +20,7 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction>
+					<BoardMenuAction @click.stop="onStartEditMode">
 						<VIcon>
 							{{ mdiPencilOutline }}
 						</VIcon>
@@ -84,7 +84,7 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref(undefined);
-		const { isFocusContained } = useBoardFocusHandler(
+		const { isFocusContained, isFocused } = useBoardFocusHandler(
 			props.columnId,
 			columnHeader
 		);

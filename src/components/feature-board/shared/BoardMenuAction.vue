@@ -1,5 +1,5 @@
 <template>
-	<VListItem @click.prevent="onClick">
+	<VListItem @click.prevent="onClick($event)">
 		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
@@ -8,7 +8,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "BoardMenuAction",
 	setup(props, { emit }) {
-		const onClick = () => emit("click");
+		const onClick = ($event: MouseEvent) => emit("click", $event);
 		return {
 			onClick,
 		};
