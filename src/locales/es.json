@@ -760,7 +760,7 @@
 	"pages.courses.index.courses.arrangeCourses": "Organizar cursos",
 	"pages.courses.index.title": "Cursos",
 	"pages.courses.new.btn_new": "Crear",
-	"pages.courses.new.title": "Crear nuevo curso",
+
 	"pages.files.headline": "Archivos",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -877,6 +877,7 @@
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.add.betatask": "Nuevo beta tarea",
 	"pages.rooms.fab.import.course": "Importar curso",
+	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.importCourse.step_1.text": "Información",
 	"pages.rooms.importCourse.step_2.text": "Pega el código",
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",

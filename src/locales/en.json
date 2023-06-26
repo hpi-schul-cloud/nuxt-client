@@ -849,7 +849,7 @@
 	"pages.courses.index.courses.arrangeCourses": "Arrange courses",
 	"pages.courses.index.title": "Courses",
 	"pages.courses.new.btn_new": "Create",
-	"pages.courses.new.title": "Create new course",
+
 	"pages.impressum.title": "Imprint",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "In which state would you like to log in?",
@@ -882,6 +882,7 @@
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.add.betatask": "New beta task",
 	"pages.rooms.fab.import.course": "Import course",
+	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Paste the code",
 	"pages.rooms.importCourse.step_3.text": "Course name",
