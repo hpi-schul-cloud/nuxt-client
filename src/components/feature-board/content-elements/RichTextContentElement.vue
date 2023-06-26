@@ -43,42 +43,42 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.offset {
-	margin-left: -0.6em;
-}
-
 .rich_text {
 	color: rgba(0, 0, 0, 0.87);
 	font-size: 1rem;
 }
 
 ::v-deep {
-	.ck.ck-editor__editable_inline > :first-child {
+	.ck.ck-editor__editable_inline {
+		padding: 0;
+	}
+	.ck-content > :first-child {
 		margin-top: 0;
 	}
 
-	.ck-content {
-		& > :first-child {
-			margin-top: 0;
-		}
+	.ck.ck-editor__editable_inline > :last-child {
+		margin-bottom: var(--space-xs);
+	}
 
+	.ck-content {
 		h4 {
-			font-family: var(--font-primary);
+			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
-			font-size: var(--text-md);
-			line-height: var(--space-lg);
+			font-size: var(--heading-6);
+			line-height: var(--line-height-md);
+			letter-spacing: 0.2px;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
 		}
 
 		h5 {
-			font-family: var(--font-primary);
+			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
-			font-size: 14px;
-			line-height: var(--space-md-2);
-			letter-spacing: 0.1px;
+			font-size: var(--text-md);
+			line-height: var(--line-height-lg);
+			letter-spacing: 0.25px;
 			margin-bottom: var(--space-xs);
-			margin-top: var(--space-md-2); //
+			margin-top: var(--space-md-2);
 		}
 
 		p,
@@ -86,9 +86,8 @@ export default defineComponent({
 		ol {
 			font-family: var(--font-primary);
 			font-weight: var(--font-weight-normal);
-			font-size: 14px;
-			line-height: var(--space-md-2);
-			letter-spacing: 0.02px;
+			font-size: var(--text-md);
+			line-height: var(--line-height-lg);
 			margin-bottom: var(--space-xs);
 		}
 
