@@ -171,7 +171,10 @@ export default defineComponent({
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean | undefined> = computed(
-			() => !hasData.value || externalToolsModule?.getLoading
+			() =>
+				!hasData.value ||
+				externalToolsModule?.getLoading ||
+				contextExternalToolsModule?.getLoading
 		);
 
 		const configurationItems: ComputedRef<

@@ -5,7 +5,7 @@ export interface ContextExternalTool {
 	id: string;
 	schoolToolId: string;
 	contextId: string;
-	contextType: ContextExternalToolResponseContextTypeEnum; //ToolContextType;
+	contextType: ContextExternalToolResponseContextTypeEnum;
 	parameters: ToolParameterEntry[];
 	toolVersion: number;
 	displayName?: string;
