@@ -6,11 +6,12 @@ interface DeleteConfirmationOptions {
 }
 
 export const useDeleteConfirmation = () => {
+	const { askInternal, isDialogOpen } = useInternalDeleteConfirmation();
+
 	const askConfirmation = async (
 		data: DeleteConfirmationOptions
 	): Promise<boolean> => {
 		const promise = new Promise<boolean>((resolve) => {
-			const { askInternal } = useInternalDeleteConfirmation();
 			askInternal(data, resolve);
 		});
 		return promise;
@@ -18,6 +19,7 @@ export const useDeleteConfirmation = () => {
 
 	return {
 		askConfirmation,
+		isDialogOpen,
 	};
 };
 
