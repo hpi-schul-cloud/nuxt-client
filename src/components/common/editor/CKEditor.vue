@@ -255,7 +255,14 @@ export default defineComponent({
 
 			// attach additional event listener not provided by vue wrapper itself
 			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
-			editor.editing.view.document.on("delete", handleDelete);
+			editor.editing.view.document.on("keydown", (evt, data) => {
+				if (
+					data.domEvent.key === "Backspace" ||
+					data.domEvent.key === "Delete"
+				) {
+					handleDelete();
+				}
+			});
 		};
 
 		return {
