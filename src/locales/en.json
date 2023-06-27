@@ -808,6 +808,7 @@
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",
 	"components.cardHost.deletionModal.confirmation": "Delete {type} {title}?",
+	"components.board.action.addCard": "Add card",
 	"components.board.action.delete": "Delete",
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.moveDown": "Move down",
