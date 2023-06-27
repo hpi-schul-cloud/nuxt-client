@@ -24,18 +24,16 @@
 </template>
 
 <script lang="ts">
-import {
-	FileRecordParentType,
-	FileRecordScanStatus,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { computed, defineComponent, onMounted, PropType } from "vue";
+import { defineComponent, onMounted, PropType } from "vue";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
+import { useFileRecord } from "./FileRecord.composable";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -58,14 +56,7 @@ export default defineComponent({
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlocked = computed(
-			() =>
-				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
-		);
-
-		const url = computed(() =>
-			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
-		);
+		const { isBlocked } = useFileRecord(fileRecord.value);
 
 		onMounted(() => {
 			(async () => {
@@ -117,7 +108,6 @@ export default defineComponent({
 			isBlocked,
 			fileRecord,
 			modelValue,
-			url,
 		};
 	},
 });

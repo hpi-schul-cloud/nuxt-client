@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { FileRecordResponse, FileRecordScanStatus } from "@/fileStorageApi/v3";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { downloadFile } from "@/utils/fileHelper";
 import {
 	mdiAlertCircle,
@@ -45,9 +45,10 @@ import {
 	mdiTrashCanOutline,
 	mdiTrayArrowDown,
 } from "@mdi/js";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useFileRecord } from "./FileRecord.composable";
 
 export default defineComponent({
 	name: "FileContentElementMenu",
@@ -63,13 +64,10 @@ export default defineComponent({
 		const onDelete = () => {
 			emit("delete:element");
 		};
+		const { url, isBlocked } = useFileRecord(props.fileRecord);
 		const onDownload = async () => {
-			await downloadFile(props.fileRecord.url, props.fileRecord.name);
+			await downloadFile(url.value, props.fileRecord.name);
 		};
-		const isBlocked = computed(
-			() =>
-				props.fileRecord.securityCheckStatus === FileRecordScanStatus.BLOCKED
-		);
 
 		return {
 			mdiAlertCircle,

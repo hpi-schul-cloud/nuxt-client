@@ -25,7 +25,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import DefaultFileDisplay from "./DefaultFileDisplay.vue";
-import { useFileType } from "./FileType.composable";
+import { useFileRecord } from "./FileRecord.composable";
 import ImageDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({
@@ -47,7 +47,7 @@ export default defineComponent({
 			emit("delete:element");
 		};
 
-		const { isImage } = useFileType(props.fileRecord.mimeType);
+		const { isImage } = useFileRecord(props.fileRecord);
 
 		return {
 			mdiAlertCircle,
