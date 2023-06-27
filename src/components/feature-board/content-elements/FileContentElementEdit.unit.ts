@@ -204,6 +204,9 @@ describe("FileContentElementEdit", () => {
 			const moveDownTranslation = wrapper.vm.$t(
 				"components.board.action.moveDown"
 			) as string;
+			const downloadTranslation = wrapper.vm.$t(
+				"components.board.action.download"
+			) as string;
 			const deleteTranslation = wrapper.vm.$t(
 				"components.board.action.delete"
 			) as string;
@@ -214,11 +217,13 @@ describe("FileContentElementEdit", () => {
 			const firstAction = boardMenuActionsComponents.at(0);
 			const secondAction = boardMenuActionsComponents.at(1);
 			const thirdAction = boardMenuActionsComponents.at(2);
+			const fourthAction = boardMenuActionsComponents.at(3);
 
-			expect(boardMenuActionsComponents.length).toStrictEqual(3);
+			expect(boardMenuActionsComponents.length).toStrictEqual(4);
 			expect(firstAction.text()).toContain(moveUpTranslation);
 			expect(secondAction.text()).toContain(moveDownTranslation);
-			expect(thirdAction.text()).toContain(deleteTranslation);
+			expect(thirdAction.text()).toContain(downloadTranslation);
+			expect(fourthAction.text()).toContain(deleteTranslation);
 		});
 
 		describe("when move up menu action is clicked", () => {
@@ -281,6 +286,9 @@ describe("FileContentElementEdit", () => {
 				const moveDownTranslation = wrapper.vm.$t(
 					"components.board.action.moveDown"
 				) as string;
+				const downloadTranslation = wrapper.vm.$t(
+					"components.board.action.download"
+				) as string;
 				const deleteTranslation = wrapper.vm.$t(
 					"components.board.action.delete"
 				) as string;
@@ -290,10 +298,12 @@ describe("FileContentElementEdit", () => {
 
 				const firstAction = boardMenuActionsComponents.at(0);
 				const secondAction = boardMenuActionsComponents.at(1);
+				const thirdAction = boardMenuActionsComponents.at(2);
 
-				expect(boardMenuActionsComponents.length).toStrictEqual(2);
+				expect(boardMenuActionsComponents.length).toStrictEqual(3);
 				expect(firstAction.text()).toContain(moveDownTranslation);
-				expect(secondAction.text()).toContain(deleteTranslation);
+				expect(secondAction.text()).toContain(downloadTranslation);
+				expect(thirdAction.text()).toContain(deleteTranslation);
 			});
 		});
 
@@ -323,6 +333,9 @@ describe("FileContentElementEdit", () => {
 				const moveUpTranslation = wrapper.vm.$t(
 					"components.board.action.moveUp"
 				) as string;
+				const downloadTranslation = wrapper.vm.$t(
+					"components.board.action.download"
+				) as string;
 				const deleteTranslation = wrapper.vm.$t(
 					"components.board.action.delete"
 				) as string;
@@ -332,10 +345,12 @@ describe("FileContentElementEdit", () => {
 
 				const firstAction = boardMenuActionsComponents.at(0);
 				const secondAction = boardMenuActionsComponents.at(1);
+				const thirdAction = boardMenuActionsComponents.at(2);
 
-				expect(boardMenuActionsComponents.length).toStrictEqual(2);
+				expect(boardMenuActionsComponents.length).toStrictEqual(3);
 				expect(firstAction.text()).toContain(moveUpTranslation);
-				expect(secondAction.text()).toContain(deleteTranslation);
+				expect(secondAction.text()).toContain(downloadTranslation);
+				expect(thirdAction.text()).toContain(deleteTranslation);
 			});
 		});
 	});
@@ -363,6 +378,9 @@ describe("FileContentElementEdit", () => {
 		it("should only show one board menu item", () => {
 			const { wrapper } = setup();
 
+			const downloadTranslation = wrapper.vm.$t(
+				"components.board.action.download"
+			) as string;
 			const deleteTranslation = wrapper.vm.$t(
 				"components.board.action.delete"
 			) as string;
@@ -370,10 +388,12 @@ describe("FileContentElementEdit", () => {
 			const boardMenuActionsComponents =
 				wrapper.findAllComponents(BoardMenuAction);
 
-			const action = boardMenuActionsComponents.at(0);
+			const firstAction = boardMenuActionsComponents.at(0);
+			const secondAction = boardMenuActionsComponents.at(1);
 
-			expect(boardMenuActionsComponents.length).toStrictEqual(1);
-			expect(action.text()).toContain(deleteTranslation);
+			expect(boardMenuActionsComponents.length).toStrictEqual(2);
+			expect(firstAction.text()).toContain(downloadTranslation);
+			expect(secondAction.text()).toContain(deleteTranslation);
 		});
 	});
 });
