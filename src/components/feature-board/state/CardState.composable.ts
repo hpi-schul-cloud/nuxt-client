@@ -76,13 +76,13 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	const addElement = async (
 		type: ContentElementType,
-		focusOnCreate?: boolean
+		atTopOfList?: boolean
 	) => {
 		if (cardState.card === undefined) {
 			return;
 		}
 		const params: CreateContentElementBody = { type };
-		if (focusOnCreate) {
+		if (atTopOfList) {
 			params.toPosition = 0;
 		}
 		const response = await createElementCall(cardState.card.id, params);
@@ -91,11 +91,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		if (type === ContentElementType.RichText && focusOnCreate) {
+		if (atTopOfList) {
 			response.data = { ...response.data, focusOnCreate: true };
-		}
-
-		if (focusOnCreate) {
 			cardState.card.elements.splice(
 				0,
 				0,
@@ -108,6 +105,10 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		return response.data;
+	};
+
+	const addTextElement = async () => {
+		return await addElement(ContentElementType.RichText, true);
 	};
 
 	const showErrorAndReload = async (errorText: string | undefined) => {
@@ -146,6 +147,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardHeight,
 		updateTitle,
 		deleteElement,
+		addTextElement,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};
