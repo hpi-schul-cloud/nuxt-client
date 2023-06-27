@@ -39,7 +39,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-
 		const { focusedId } = useSharedFocusedId();
 		const isFocused = focusedId.value === props.element.id;
 

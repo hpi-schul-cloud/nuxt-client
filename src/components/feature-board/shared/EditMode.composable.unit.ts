@@ -1,5 +1,6 @@
 import { useEditMode } from "./EditMode.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardPermissionChecks } from "../types/Permissions";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
@@ -10,7 +11,7 @@ describe("EditMode.composable", () => {
 	const setup = (hasEditPermission: boolean) => {
 		mockedUseBoardPermissions.mockReturnValue({
 			hasEditPermission,
-		});
+		} as BoardPermissionChecks);
 		return useEditMode(fakeId);
 	};
 
