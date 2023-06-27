@@ -7968,12 +7968,15 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.1.0' | '1.3.0', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'version', version)
             const localVarPath = `/courses/{courseId}/export`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7990,6 +7993,10 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (version !== undefined) {
+                localVarQueryParameter['version'] = version;
+            }
 
 
     
@@ -8095,11 +8102,12 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, options);
+        async courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -8136,11 +8144,12 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerExportCourse(courseId, options).then((request) => request(axios, basePath));
+        courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8173,11 +8182,12 @@ export interface CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8210,12 +8220,13 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

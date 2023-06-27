@@ -35,6 +35,7 @@ const mockApi = {
 	columnControllerCreateCard: jest
 		.fn()
 		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
+	elementControllerMoveElement: jest.fn(),
 	cardControllerMoveCard: jest.fn().mockReturnValue({ status: 204 }),
 	columnControllerMoveColumn: jest.fn().mockReturnValue({ status: 204 }),
 };
@@ -292,6 +293,31 @@ describe("BoardApi.composable", () => {
 			);
 			expect(mockApi.columnControllerMoveColumn).toHaveBeenCalledWith(
 				PAYLOAD.columnId,
+				{
+					...PAYLOAD.position,
+				}
+			);
+		});
+	});
+
+	describe("moveElementCall", () => {
+		it("should call elementControllerMoveElement api", async () => {
+			const { moveElementCall } = useBoardApi();
+			const PAYLOAD = {
+				elementId: "element-id",
+				position: {
+					toCardId: "card-id",
+					toPosition: 3,
+				},
+			};
+
+			await moveElementCall(
+				PAYLOAD.elementId,
+				PAYLOAD.position.toCardId,
+				PAYLOAD.position.toPosition
+			);
+			expect(mockApi.elementControllerMoveElement).toHaveBeenCalledWith(
+				PAYLOAD.elementId,
 				{
 					...PAYLOAD.position,
 				}

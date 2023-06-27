@@ -53,6 +53,8 @@ describe("CardHost", () => {
 			deleteCard: jest.fn(),
 			updateCardHeight: jest.fn(),
 			addElement: jest.fn(),
+			moveElementDown: jest.fn(),
+			moveElementUp: jest.fn(),
 			deleteElement: deleteElementMock,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
