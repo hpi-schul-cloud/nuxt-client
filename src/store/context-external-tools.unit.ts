@@ -17,7 +17,7 @@ import { User } from "./types/auth";
 import { BusinessError } from "./types/commons";
 import { ToolContextType } from "./external-tool";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import ContextExternalToolsModule from "./context-external-tool";
+import ContextExternalToolsModule from "./context-external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory";
 import { ExternalToolDisplayData } from "./external-tool";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
