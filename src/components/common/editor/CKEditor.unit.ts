@@ -141,7 +141,7 @@ describe("@/components/editor/CKEditor", () => {
 			wrapper.vm.handleDelete();
 			await wrapper.vm.$nextTick();
 			const emitted = wrapper.emitted();
-			expect(emitted["delete"]).toHaveLength(1);
+			expect(emitted["keyboard:delete"]).toHaveLength(1);
 		});
 
 		it("should not emit delete on delete event and non-empty text", async () => {
@@ -152,7 +152,7 @@ describe("@/components/editor/CKEditor", () => {
 			wrapper.vm.handleDelete();
 			await wrapper.vm.$nextTick();
 			const emitted = wrapper.emitted();
-			expect(emitted["delete"]).toBeUndefined();
+			expect(emitted["keyboard:delete"]).toBeUndefined();
 		});
 	});
 });

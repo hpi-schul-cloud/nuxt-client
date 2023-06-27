@@ -3,7 +3,7 @@
 		<ck-editor
 			v-model="modelValue"
 			@focus="onFocus"
-			@delete="onDelete"
+			@keyboard:delete="onDelete"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"

@@ -28,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["ready", "focus", "input", "blur", "delete"],
+	emits: ["ready", "focus", "input", "blur", "keyboard:delete"],
 	props: {
 		value: {
 			type: String,
@@ -246,7 +246,7 @@ export default defineComponent({
 
 		const handleDelete = () => {
 			if (charCount.value === 0) {
-				emit("delete");
+				emit("keyboard:delete");
 			}
 		};
 
