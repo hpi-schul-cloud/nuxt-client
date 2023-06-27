@@ -1,4 +1,3 @@
-
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
