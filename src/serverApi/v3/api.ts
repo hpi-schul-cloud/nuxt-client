@@ -111,51 +111,6 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
- * @enum {string}
- */
-export enum AncestorEntityType {
-    Course = 'course',
-    Columnboard = 'columnboard'
-}
-
-/**
- * 
- * @export
- * @interface AncestorResponse
- */
-export interface AncestorResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof AncestorResponse
-     */
-    type: AncestorResponseTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof AncestorResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AncestorResponse
-     */
-    text?: string | null;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum AncestorResponseTypeEnum {
-    Course = 'course',
-    Columnboard = 'columnboard'
-}
-
-/**
- * 
- * @export
  * @interface ApiValidationError
  */
 export interface ApiValidationError {
@@ -212,6 +167,25 @@ export interface BasicToolConfigParams {
 /**
  * 
  * @export
+ * @interface BoardContextResponse
+ */
+export interface BoardContextResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardContextResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {BoardExternalReferenceType}
+     * @memberof BoardContextResponse
+     */
+    type: BoardExternalReferenceType;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -237,6 +211,15 @@ export enum BoardElementResponseTypeEnum {
     Task = 'task',
     Lesson = 'lesson',
     ColumnBoard = 'column-board'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum BoardExternalReferenceType {
+    Course = 'course'
 }
 
 /**
@@ -5497,141 +5480,6 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
 
 
 /**
- * AncestorListApi - axios parameter creator
- * @export
- */
-export const AncestorListApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get list of ancestors (parent and parent-of-parent and ...) for a specific entity. Useful for e.g. breadcrumbs.
-         * @param {string} entityId The id of the entity.
-         * @param {AncestorEntityType} entityType The type of the entity.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ancestorListControllerGetAncestorsOf: async (entityId: string, entityType: AncestorEntityType, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'entityId' is not null or undefined
-            assertParamExists('ancestorListControllerGetAncestorsOf', 'entityId', entityId)
-            // verify required parameter 'entityType' is not null or undefined
-            assertParamExists('ancestorListControllerGetAncestorsOf', 'entityType', entityType)
-            const localVarPath = `/ancestor-list/{entityType}/{entityId}`
-                .replace(`{${"entityId"}}`, encodeURIComponent(String(entityId)))
-                .replace(`{${"entityType"}}`, encodeURIComponent(String(entityType)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AncestorListApi - functional programming interface
- * @export
- */
-export const AncestorListApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AncestorListApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Get list of ancestors (parent and parent-of-parent and ...) for a specific entity. Useful for e.g. breadcrumbs.
-         * @param {string} entityId The id of the entity.
-         * @param {AncestorEntityType} entityType The type of the entity.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ancestorListControllerGetAncestorsOf(entityId: string, entityType: AncestorEntityType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AncestorResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ancestorListControllerGetAncestorsOf(entityId, entityType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * AncestorListApi - factory interface
- * @export
- */
-export const AncestorListApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AncestorListApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Get list of ancestors (parent and parent-of-parent and ...) for a specific entity. Useful for e.g. breadcrumbs.
-         * @param {string} entityId The id of the entity.
-         * @param {AncestorEntityType} entityType The type of the entity.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ancestorListControllerGetAncestorsOf(entityId: string, entityType: AncestorEntityType, options?: any): AxiosPromise<Array<AncestorResponse>> {
-            return localVarFp.ancestorListControllerGetAncestorsOf(entityId, entityType, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AncestorListApi - interface
- * @export
- * @interface AncestorListApi
- */
-export interface AncestorListApiInterface {
-    /**
-     * 
-     * @summary Get list of ancestors (parent and parent-of-parent and ...) for a specific entity. Useful for e.g. breadcrumbs.
-     * @param {string} entityId The id of the entity.
-     * @param {AncestorEntityType} entityType The type of the entity.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AncestorListApiInterface
-     */
-    ancestorListControllerGetAncestorsOf(entityId: string, entityType: AncestorEntityType, options?: any): AxiosPromise<Array<AncestorResponse>>;
-
-}
-
-/**
- * AncestorListApi - object-oriented interface
- * @export
- * @class AncestorListApi
- * @extends {BaseAPI}
- */
-export class AncestorListApi extends BaseAPI implements AncestorListApiInterface {
-    /**
-     * 
-     * @summary Get list of ancestors (parent and parent-of-parent and ...) for a specific entity. Useful for e.g. breadcrumbs.
-     * @param {string} entityId The id of the entity.
-     * @param {AncestorEntityType} entityType The type of the entity.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AncestorListApi
-     */
-    public ancestorListControllerGetAncestorsOf(entityId: string, entityType: AncestorEntityType, options?: any) {
-        return AncestorListApiFp(this.configuration).ancestorListControllerGetAncestorsOf(entityId, entityType, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
  * AuthenticationApi - axios parameter creator
  * @export
  */
@@ -5960,7 +5808,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5998,7 +5846,45 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerGetBoardContext: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerGetBoardContext', 'boardId', boardId)
+            const localVarPath = `/boards/{boardId}/context`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6036,7 +5922,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6101,7 +5987,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6112,7 +5998,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerGetBoardContext(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardContextResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerGetBoardContext(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6123,7 +6020,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6155,7 +6052,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6165,7 +6062,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse> {
+            return localVarFp.boardControllerGetBoardContext(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6175,7 +6082,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6205,7 +6112,7 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Delete a single board.
+     * @summary Delete a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6215,7 +6122,17 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Get the skeleton of a a single board.
+     * @summary Get the context of a board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse>;
+
+    /**
+     * 
+     * @summary Get the skeleton of a a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6225,7 +6142,7 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Update the title of a single board.
+     * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -6257,7 +6174,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Delete a single board.
+     * @summary Delete a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6269,7 +6186,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Get the skeleton of a a single board.
+     * @summary Get the context of a board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerGetBoardContext(boardId: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerGetBoardContext(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the skeleton of a a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6281,7 +6210,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Update the title of a single board.
+     * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.

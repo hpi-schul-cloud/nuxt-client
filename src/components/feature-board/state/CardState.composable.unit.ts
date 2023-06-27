@@ -11,6 +11,7 @@ import NotifierModule from "@/store/notifier";
 import { boardCardFactory } from "@@/tests/test-utils/factory";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -32,7 +33,7 @@ const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("CardState composable", () => {
 	let fetchMock: jest.Mock;
-	let mockedBoardApiCalls: ReturnType<typeof useBoardApi>;
+	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
@@ -43,20 +44,8 @@ describe("CardState composable", () => {
 			fetchCard: fetchMock,
 		});
 
-		mockedBoardApiCalls = {
-			updateCardTitle: jest.fn(),
-			createColumnCall: jest.fn(),
-			createElementCall: jest.fn().mockReturnValue({ id: "test-id" }),
-			deleteElementCall: jest.fn(),
-			deleteCardCall: jest.fn(),
-			deleteColumnCall: jest.fn(),
-			moveCardCall: jest.fn(),
-			moveColumnCall: jest.fn(),
-			updateCardHeightCall: jest.fn(),
-			updateColumnTitleCall: jest.fn(),
-			updateElementCall: jest.fn(),
-			createCardCall: jest.fn(),
-		};
+		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
 		mockedBoardNotifierCalls = {

@@ -1,30 +1,14 @@
 import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock } from "@golevelup/ts-jest";
-import * as axios from "axios";
-import * as serverApi from "../../../serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3/api";
 import {
-	AncestorEntityType,
-	AncestorListApiInterface,
-	AncestorResponseTypeEnum,
-} from "../../../serverApi/v3/api";
+	BoardApiInterface,
+	BoardExternalReferenceType,
+	CoursesApiInterface,
+} from "@/serverApi/v3/api";
 import { useSharedBoardBreadcrumbs } from "./BoardBreadcrumbs.composable";
-
-const mockApiFunction = (values: Partial<axios.AxiosResponse>) => {
-	return jest.fn(async () => mockAxiosResponse(values));
-};
-
-const mockAxiosResponse = (values: Partial<axios.AxiosResponse>) => {
-	const response = {
-		data: [],
-		status: 200,
-		statusText: "",
-		headers: createMock<axios.AxiosResponseHeaders>(),
-		config: { headers: createMock<axios.AxiosHeaders>() },
-		...values,
-	};
-	return response;
-};
+import { mockAxiosResponse } from "@@/tests/test-utils/mockAxiosResponse";
 
 /**
  * hint: this is difficult to test, as we are testing a shared composable (and all mocked return values need to be set before mounting the composable... but the composable is a singleton... due to being a shared composable...)
@@ -34,38 +18,49 @@ describe("BoardBreadcrumbs.composable", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("when course is provided", () => {
-		it.only("should return the course- and course-overview- page", async () => {
-			const mockAncestorListApi: AncestorListApiInterface = {
-				ancestorListControllerGetAncestorsOf: mockApiFunction({
-					data: [
-						{
-							text: "myCourse",
-							id: "courseId",
-							type: AncestorResponseTypeEnum.Course,
-						},
-						{
-							text: "myColumnBoard",
-							id: "columnId",
-							type: AncestorResponseTypeEnum.Columnboard,
-						},
-					],
-				}),
-			};
+	describe("when board context exists", () => {
+		const setup = () => {
+			const boardApi = createMock<BoardApiInterface>();
+			boardApi.boardControllerGetBoardContext.mockResolvedValue(
+				mockAxiosResponse({
+					data: {
+						id: "courseId",
+						type: BoardExternalReferenceType.Course,
+					},
+				})
+			);
+			jest.spyOn(serverApi, "BoardApiFactory").mockReturnValueOnce(boardApi);
+
+			const coursesApi = createMock<CoursesApiInterface>();
+			coursesApi.courseControllerGetCourse.mockResolvedValue(
+				mockAxiosResponse({
+					data: {
+						id: "courseId",
+						title: "Course #1",
+					},
+				})
+			);
 
 			jest
-				.spyOn(serverApi, "AncestorListApiFactory")
-				.mockReturnValueOnce(mockAncestorListApi);
+				.spyOn(serverApi, "CoursesApiFactory")
+				.mockReturnValueOnce(coursesApi);
 
-			const { createBreadcrumbsFor, breadcrumbs } = mountComposable(
+			const { createBreadcrumbs, breadcrumbs } = mountComposable(
 				() => useSharedBoardBreadcrumbs(),
 				{
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 				}
 			);
+
+			return { createBreadcrumbs, breadcrumbs };
+		};
+
+		it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
+			const { createBreadcrumbs, breadcrumbs } = setup();
+
 			const fakeId = "abc123";
 
-			await createBreadcrumbsFor(fakeId, AncestorEntityType.Columnboard);
+			await createBreadcrumbs(fakeId);
 
 			expect(breadcrumbs.value).toHaveLength(2);
 		});
