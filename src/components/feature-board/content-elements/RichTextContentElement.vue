@@ -7,7 +7,6 @@
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
-			ref="textEdit"
 			class="rich_text offset"
 			:autofocus="isAutoFocus"
 			:focus="isFocused"
