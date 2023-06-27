@@ -66,16 +66,12 @@
 					{{ school.name }}
 				</div>
 				<img
-					v-if="school && school.logo"
+					v-if="logo"
 					class="school-logo"
-					v-bind:src="school.logo"
+					:src="logo"
+					ref="image"
 					:alt="school.name"
-				/>
-				<v-img
-					v-if="school && school.logo_dataUrl"
-					class="school-logo"
-					v-bind:src="school.logo_dataUrl"
-					:alt="school.name"
+					@load="loaded"
 				/>
 				<popup-icon-initials
 					v-if="user"
@@ -132,8 +128,8 @@ import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
 import {
 	mdiArrowCollapse,
 	mdiArrowExpand,
-	mdiMenu,
 	mdiHelpCircle,
+	mdiMenu,
 } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -173,6 +169,7 @@ export default defineComponent({
 			mdiArrowExpand,
 			mdiMenu,
 			mdiHelpCircle,
+			logo: null,
 		};
 	},
 	computed: {
@@ -202,6 +199,37 @@ export default defineComponent({
 	methods: {
 		sendEvent(eventName) {
 			this.$emit("action", eventName);
+		},
+		loaded() {
+			if (this.logo) URL.revokeObjectURL(this.logo);
+		},
+
+		loadLogoImg() {
+			if (this.school && this.school.logo_dataUrl) {
+				const logoBase64 = this.school.logo_dataUrl.replace(
+					/^data:image\/[a-z]+;base64,/,
+					""
+				);
+				const byteString = window.atob(logoBase64);
+				const arrayBuffer = new ArrayBuffer(byteString.length);
+				const int8Array = new Uint8Array(arrayBuffer);
+				for (let i = 0; i < byteString.length; i++) {
+					int8Array[i] = byteString.charCodeAt(i);
+				}
+				return new Blob([int8Array], { type: "mimeString" });
+			}
+		},
+	},
+
+	watch: {
+		src: {
+			immediate: true,
+			handler(src) {
+				if (!src) {
+					this.logo = URL.createObjectURL(this.loadLogoImg());
+					console.log(this.logo);
+				}
+			},
 		},
 	},
 });
