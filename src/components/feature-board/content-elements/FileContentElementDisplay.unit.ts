@@ -45,8 +45,6 @@ describe("FileContentElementDisplay", () => {
 		it("should find file name", () => {
 			const { wrapper, fileNameProp } = setup();
 
-			console.log(wrapper.overview());
-
 			const fileName = wrapper.find("a").text();
 
 			expect(fileName).toBe(fileNameProp);
