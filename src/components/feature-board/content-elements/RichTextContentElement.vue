@@ -46,14 +46,16 @@ export default defineComponent({
 .rich_text {
 	color: rgba(0, 0, 0, 0.87);
 	font-size: 1rem;
+	padding: 0.05px; // prevent margin collapse
 }
 
 ::v-deep {
 	.ck.ck-editor__editable_inline {
 		padding: 0;
 	}
-	.ck-content > :first-child {
-		margin-top: 0;
+
+	.ck.ck-editor__editable_inline > :first-child {
+		margin-top: var(--space-md-2);
 	}
 
 	.ck.ck-editor__editable_inline > :last-child {
