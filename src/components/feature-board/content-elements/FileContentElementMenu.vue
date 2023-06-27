@@ -1,12 +1,20 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isFirstElement"
+			data-testid="board-file-element-edit-menu-move-up"
+			@click="onMoveElementUp"
+		>
 			<VIcon>
 				{{ mdiArrowCollapseUp }}
 			</VIcon>
 			{{ $t("components.board.action.moveUp") }}
 		</BoardMenuAction>
-		<BoardMenuAction data-testid="board-file-element-edit-menu-move-down">
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isLastElement"
+			data-testid="board-file-element-edit-menu-move-down"
+			@click="onMoveElementDown"
+		>
 			<VIcon>
 				{{ mdiArrowCollapseDown }}
 			</VIcon>
@@ -58,15 +66,37 @@ export default defineComponent({
 			type: Object as () => FileRecordResponse,
 			required: true,
 		},
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: ["delete:element"],
+	emits: [
+		"delete:element",
+		"move-keyboard:element",
+		"move-down:element",
+		"move-up:element",
+	],
 	setup(props, { emit }) {
-		const onDelete = () => {
-			emit("delete:element");
-		};
 		const { url, isBlocked } = useFileRecord(props.fileRecord);
 		const onDownload = async () => {
 			await downloadFile(url.value, props.fileRecord.name);
+		};
+
+		const onDelete = () => {
+			emit("delete:element");
+		};
+
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			event.preventDefault();
+			emit("move-keyboard:element", event);
+		};
+
+		const onMoveElementDown = async () => {
+			emit("move-down:element");
+		};
+
+		const onMoveElementUp = async () => {
+			emit("move-up:element");
 		};
 
 		return {
@@ -79,6 +109,9 @@ export default defineComponent({
 			onDelete,
 			onDownload,
 			isBlocked,
+			onKeydownArrow,
+			onMoveElementDown,
+			onMoveElementUp,
 		};
 	},
 });

@@ -45,6 +45,9 @@
 					:elements="card.elements"
 					:isEditMode="isEditMode"
 					:deleteElement="deleteElement"
+					@move-down:element="onMoveContentElementDown"
+					@move-up:element="onMoveContentElementUp"
+					@move-keyboard:element="onMoveContentElementKeyboard"
 				></ContentElementList>
 				<CardAddElementMenu
 					@add-element="onAddElement"
@@ -70,6 +73,7 @@ import {
 import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { useBoardMenu } from "../shared/BoardMenu.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -78,6 +82,11 @@ import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "../types/DragAndDrop";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
@@ -110,6 +119,8 @@ export default defineComponent({
 			updateTitle,
 			updateCardHeight,
 			addElement,
+			moveElementDown,
+			moveElementUp,
 			deleteElement,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
@@ -122,6 +133,8 @@ export default defineComponent({
 
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
+
+		const { isMenuOpen } = useBoardMenu();
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -148,8 +161,32 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
+			if (
+				!isDialogOpen.value &&
+				!isDeleteDialogOpen.value &&
+				!isMenuOpen.value
+			) {
 				stopEditMode();
+			}
+		};
+
+		const onMoveContentElementDown = async (payload: ElementMove) =>
+			await moveElementDown(payload);
+
+		const onMoveContentElementUp = async (payload: ElementMove) =>
+			await moveElementUp(payload);
+
+		const onMoveContentElementKeyboard = async (
+			payload: ElementMove,
+			keyString: DragAndDropKey
+		) => {
+			if (!verticalCursorKeys.includes(keyString)) {
+				return;
+			}
+			if (keyString === "ArrowUp") {
+				await moveElementUp(payload);
+			} else if (keyString === "ArrowDown") {
+				await moveElementDown(payload);
 			}
 		};
 
@@ -179,6 +216,9 @@ export default defineComponent({
 			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
+			onMoveContentElementDown,
+			onMoveContentElementUp,
+			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,

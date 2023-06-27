@@ -399,7 +399,7 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
 				await expect(
-					roomModule.downloadImsccCourse()
+					roomModule.downloadImsccCourse("1.1.0")
 				).resolves.not.toBeDefined();
 
 				spy.mockRestore();
@@ -416,7 +416,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await roomModule.downloadImsccCourse();
+				await roomModule.downloadImsccCourse("1.1.0");
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
