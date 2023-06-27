@@ -10,6 +10,8 @@ import AuthModule from "@/store/auth";
 import {
 	businessErrorFactory,
 	toolConfigurationTemplateFactory,
+	contextExternalToolFactory,
+	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
@@ -18,9 +20,7 @@ import { BusinessError } from "./types/commons";
 import { ToolContextType } from "./external-tool";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import ContextExternalToolsModule from "./context-external-tools";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory";
 import { ExternalToolDisplayData } from "./external-tool";
-import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import { ContextExternalTool } from "./external-tool/context-external-tool";
 
 describe("ContextExternalToolsModule", () => {
