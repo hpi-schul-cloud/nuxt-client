@@ -17,7 +17,10 @@
 			</v-list-item-content>
 
 			<v-list-item-icon class="my-2 ml-2" v-if="isEditMode">
-				<FileContentElementMenu :file-record="fileRecord" />
+				<FileContentElementMenu
+					:file-record="fileRecord"
+					@delete:element="onDelete"
+				/>
 			</v-list-item-icon>
 		</v-list-item>
 	</v-list>

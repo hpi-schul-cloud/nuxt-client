@@ -1,7 +1,13 @@
 <template>
 	<div>
-		<img :src="fileRecord.url" :alt="fileRecord.name" />
-		<FileContentElementMenu :file-record="fileRecord" v-if="isEditMode" />
+		<v-img :src="fileRecord.url" :alt="fileRecord.name" />
+		<div class="menu">
+			<FileContentElementMenu
+				:file-record="fileRecord"
+				v-if="isEditMode"
+				@delete:element="onDelete"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -49,3 +55,11 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.menu {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+}
+</style>
