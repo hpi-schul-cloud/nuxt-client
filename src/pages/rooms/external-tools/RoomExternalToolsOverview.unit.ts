@@ -8,7 +8,12 @@ import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+} from "@/utils/inject";
 import { businessErrorFactory } from "@@/tests/test-utils/factory";
 
 describe("RoomExternalToolOverview", () => {
@@ -33,26 +38,25 @@ describe("RoomExternalToolOverview", () => {
 
 		const externalToolsModule = createModuleMocks(ExternalToolsModule);
 
-		const wrapper: Wrapper<any> = mount(
-			RoomExternalToolsOverview as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				provide: {
-					authModule,
-					contextExternalToolsModule,
-					externalToolsModule,
-					[I18N_KEY as symbol]: {
-						t: (key: string): string => key,
-						tc: (key: string): string => key,
-					},
+		const wrapper: Wrapper<any> = mount(RoomExternalToolsOverview as MountOptions<Vue>, {
+			...createComponentMocks({
+				i18n: true,
+				mocks: {
+					$t: (key: string): string => key,
 				},
-				propsData: {
-					roomId: "testRoolId",
+			}),
+			provide: {
+				[AUTH_MODULE.valueOf()]: authModule,
+				[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
+				[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
+				[I18N_KEY.valueOf()]: {
+					tc: (key: string): string => key,
 				},
-			}
-		);
+			},
+			propsData: {
+				roomId: "testRoolId",
+			},
+		});
 
 		return {
 			wrapper,
@@ -260,7 +264,7 @@ describe("RoomExternalToolOverview", () => {
 
 			await card.trigger("click");
 
-			expect(externalToolsModule.getToolLaunchData).toHaveBeenCalledWith(
+			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
 				tool.id
 			);
 		});
@@ -286,6 +290,34 @@ describe("RoomExternalToolOverview", () => {
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
 			expect(alert.exists()).toBe(true);
+		});
+	});
+
+	describe("when clicking on a tool", () => {
+		const setup = () => {
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
+
+			const { wrapper, externalToolsModule } = getWrapper([tool]);
+
+			return {
+				wrapper,
+				externalToolsModule,
+				tool,
+			};
+		};
+
+		it("should fetch the launch data", async () => {
+			const { wrapper, externalToolsModule, tool } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+
+			await card.trigger("click");
+
+			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
+				tool.id
+			);
 		});
 	});
 });

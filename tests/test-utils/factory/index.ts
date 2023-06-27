@@ -1,5 +1,6 @@
 export * from "./taskResponseFactory";
 export * from "./boardCardFactory";
+export * from "./taskResponseFactory";
 export * from "./boardResponseFactory";
 export * from "./businessErrorFactory";
 export * from "./toolParameterFactory";

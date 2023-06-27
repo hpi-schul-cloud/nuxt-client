@@ -17,7 +17,7 @@ import {
 	ToolConfigurationListResponse,
 	SchoolToolConfigurationListResponse,
 	ToolLaunchRequestResponse,
-} from "@/serverApi/v3";
+} from "../serverApi/v3";
 import { BusinessError } from "./types/commons";
 import { AxiosError, AxiosResponse } from "axios";
 import { ToolContextType } from "./external-tool";
@@ -103,8 +103,15 @@ export default class ExternalToolsModule extends VuexModule {
 		this.toolConfigurations = [...toolConfigurations];
 	}
 
+	@Mutation
+	setContextExternalToolTemplates(
+	contextExternalToolTemplates: ContextExternalToolTemplateListItem[]
+	): void {
+		this.contextExternalToolTemplates = [...contextExternalToolTemplates];
+	}
+
 	@Action
-	async getToolLaunchData(
+	async loadToolLaunchData(
 		contextExternalToolId: string
 	): Promise<ToolLaunchRequestResponse | undefined> {
 		try {
@@ -131,13 +138,6 @@ export default class ExternalToolsModule extends VuexModule {
 
 			this.setLoading(false);
 		}
-	}
-
-	@Mutation
-	setContextExternalToolTemplates(
-		contextExternalToolTemplates: ContextExternalToolTemplateListItem[]
-	): void {
-		this.contextExternalToolTemplates = [...contextExternalToolTemplates];
 	}
 
 	@Action
