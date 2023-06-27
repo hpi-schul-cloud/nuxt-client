@@ -18,10 +18,10 @@ export async function dataUrlToFile(
 	return new File([blob], fileName, { type: "image/png" });
 }
 
-export function convertFileSizeToHumanReadable(
-	fileSize: number,
-	maximumFractionDigits = 2
-): string {
+export function convertFileSize(fileSize: number): {
+	convertedSize: number;
+	unit: string;
+} {
 	const units = ["B", "KB", "MB", "GB"];
 	const threshold = 1024;
 
@@ -35,13 +35,7 @@ export function convertFileSizeToHumanReadable(
 		power++;
 	}
 
-	const localeString = convertedSize.toLocaleString(authModule.getLocale, {
-		maximumFractionDigits,
-	});
-
-	const humanReadableFileSize = localeString + " " + unit;
-
-	return humanReadableFileSize;
+	return { convertedSize, unit };
 }
 
 export function getFileExtension(fileName: string): string {

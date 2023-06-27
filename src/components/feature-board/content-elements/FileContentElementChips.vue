@@ -7,10 +7,8 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import {
-	convertFileSizeToHumanReadable,
-	getFileExtension,
-} from "@/utils/fileHelper";
+import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "FileContentElementChips",
@@ -26,9 +24,13 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const humanReadableFileSize = computed(() =>
-			convertFileSizeToHumanReadable(props.fileSize)
-		);
+		const i18n = injectStrict(I18N_KEY);
+		const humanReadableFileSize = computed(() => {
+			const { convertedSize, unit } = convertFileSize(props.fileSize);
+			const localizedFileSize = i18n.n(convertedSize);
+			const localString = localizedFileSize + " " + unit;
+			return localString;
+		});
 
 		const fileExtension = computed(() =>
 			getFileExtension(props.fileName).toUpperCase()
