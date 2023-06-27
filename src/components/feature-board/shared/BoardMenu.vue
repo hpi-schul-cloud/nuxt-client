@@ -8,6 +8,7 @@
 				:ripple="false"
 				:class="{ 'grey lighten-3': hasBackground }"
 				icon
+				@click="onClick"
 				@dblclick.stop="() => {}"
 				@keydown.left.right.up.down.stop="() => {}"
 			>
@@ -28,14 +29,15 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList>
+		<VList v-click-outside="onClickOutside">
 			<slot></slot>
 		</VList>
 	</VMenu>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, nextTick, PropType } from "vue";
+import { useBoardMenu } from "./BoardMenu.composable";
 
 import { mdiDotsVertical } from "@mdi/js";
 export default defineComponent({
@@ -47,11 +49,21 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const { isMenuOpen } = useBoardMenu();
 		const hasBackground = computed<boolean>(() => props.scope === "card");
+		const onClick = () => {
+			isMenuOpen.value = true;
+		};
+		const onClickOutside = async () => {
+			await nextTick();
+			isMenuOpen.value = false;
+		};
 
 		return {
 			hasBackground,
 			mdiDotsVertical,
+			onClick,
+			onClickOutside,
 		};
 	},
 });

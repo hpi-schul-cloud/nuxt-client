@@ -73,6 +73,7 @@ import {
 import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { useBoardMenu } from "../shared/BoardMenu.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -81,15 +82,15 @@ import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardTitle from "./CardTitle.vue";
 import {
 	DragAndDropKey,
 	ElementMove,
 	verticalCursorKeys,
 } from "../types/DragAndDrop";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import CardTitle from "./CardTitle.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -133,6 +134,8 @@ export default defineComponent({
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
 
+		const { isMenuOpen } = useBoardMenu();
+
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
@@ -158,7 +161,11 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
+			if (
+				!isDialogOpen.value &&
+				!isDeleteDialogOpen.value &&
+				!isMenuOpen.value
+			) {
 				stopEditMode();
 			}
 		};

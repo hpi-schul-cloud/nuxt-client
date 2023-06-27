@@ -3,12 +3,22 @@
 		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
+
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
+import { useBoardMenu } from "./BoardMenu.composable";
+
 export default defineComponent({
 	name: "BoardMenuAction",
 	setup(props, { emit }) {
-		const onClick = () => emit("click");
+		const { isMenuOpen } = useBoardMenu();
+
+		const onClick = async () => {
+			emit("click");
+			await nextTick();
+			isMenuOpen.value = false;
+		};
+
 		return {
 			onClick,
 		};
