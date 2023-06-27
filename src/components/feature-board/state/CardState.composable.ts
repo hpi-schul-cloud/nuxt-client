@@ -5,6 +5,7 @@ import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -25,6 +26,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardHeightCall,
 		updateCardTitle,
 	} = useBoardApi();
+	const { announceFocusReceived } = useSharedFocusedId();
+
 	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
@@ -76,13 +79,13 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	const addElement = async (
 		type: ContentElementType,
-		atTopOfList?: boolean
+		atFirstPosition?: boolean
 	) => {
 		if (cardState.card === undefined) {
 			return;
 		}
 		const params: CreateContentElementBody = { type };
-		if (atTopOfList) {
+		if (atFirstPosition) {
 			params.toPosition = 0;
 		}
 		const response = await createElementCall(cardState.card.id, params);
@@ -91,8 +94,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return;
 		}
 
-		if (atTopOfList) {
-			response.data = { ...response.data, focusOnCreate: true };
+		if (atFirstPosition) {
+			announceFocusReceived(response.data.id);
 			cardState.card.elements.splice(
 				0,
 				0,
@@ -107,7 +110,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		return response.data;
 	};
 
-	const addTextElement = async () => {
+	const addTextAfterTitle = async () => {
 		return await addElement(ContentElementType.RichText, true);
 	};
 
@@ -147,7 +150,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardHeight,
 		updateTitle,
 		deleteElement,
-		addTextElement,
+		addTextAfterTitle,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
 	};

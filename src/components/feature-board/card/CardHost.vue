@@ -27,7 +27,7 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
-					@enter="addTextElement"
+					@enter="addTextAfterTitle"
 				>
 				</CardTitle>
 
@@ -112,7 +112,7 @@ export default defineComponent({
 			updateCardHeight,
 			addElement,
 			deleteElement,
-			addTextElement,
+			addTextAfterTitle,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -186,7 +186,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			onFileSelect,
 			isFilePickerOpen,
-			addTextElement,
+			addTextAfterTitle,
 		};
 	},
 });

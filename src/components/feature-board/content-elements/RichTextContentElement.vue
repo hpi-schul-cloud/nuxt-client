@@ -7,9 +7,10 @@
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
+			ref="textEdit"
 			class="rich_text offset"
 			:autofocus="isAutoFocus"
-			:focus="focusOnCreateRef"
+			:focus="isFocused"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 		/>
@@ -22,6 +23,7 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
+import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -35,13 +37,14 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		focusOnCreate: { type: Boolean },
 	},
 	setup(props) {
-		const { modelValue, isAutoFocus, focusOnCreateRef } =
-			useContentElementState(props);
+		const { modelValue, isAutoFocus } = useContentElementState(props);
 
-		return { modelValue, isAutoFocus, focusOnCreateRef };
+		const { focusedId } = useSharedFocusedId();
+		const isFocused = focusedId.value === props.element.id;
+
+		return { modelValue, isAutoFocus, isFocused };
 	},
 });
 </script>

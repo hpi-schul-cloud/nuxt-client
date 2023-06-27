@@ -81,7 +81,7 @@ export const useBoardFocusHandler = (
 	};
 };
 
-const useSharedFocusedId = createSharedComposable(() => {
+export const useSharedFocusedId = createSharedComposable(() => {
 	const focusedId = ref<BoardColumn["id"] | BoardCard["id"] | undefined>(
 		undefined
 	);
