@@ -29,7 +29,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardTitle,
 	} = useBoardApi();
 	const { announceFocusReceived } = useSharedFocusedId();
-
 	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
