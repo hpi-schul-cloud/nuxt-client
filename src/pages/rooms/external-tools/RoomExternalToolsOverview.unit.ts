@@ -8,12 +8,7 @@ import Vue from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import {
-	AUTH_MODULE,
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
-	EXTERNAL_TOOLS_MODULE,
-	I18N_KEY,
-} from "@/utils/inject";
+import { I18N_KEY } from "@/utils/inject";
 import { businessErrorFactory } from "@@/tests/test-utils/factory";
 
 describe("RoomExternalToolOverview", () => {
@@ -38,25 +33,26 @@ describe("RoomExternalToolOverview", () => {
 
 		const externalToolsModule = createModuleMocks(ExternalToolsModule);
 
-		const wrapper: Wrapper<any> = mount(RoomExternalToolsOverview as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-				mocks: {
-					$t: (key: string): string => key,
+		const wrapper: Wrapper<any> = mount(
+			RoomExternalToolsOverview as MountOptions<Vue>,
+			{
+				...createComponentMocks({
+					i18n: true,
+				}),
+				provide: {
+					authModule,
+					contextExternalToolsModule,
+					externalToolsModule,
+					[I18N_KEY.valueOf()]: {
+						tc: (key: string): string => key,
+						t: (key: string) => key,
+					},
 				},
-			}),
-			provide: {
-				[AUTH_MODULE.valueOf()]: authModule,
-				[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
-				[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
-				[I18N_KEY.valueOf()]: {
-					tc: (key: string): string => key,
+				propsData: {
+					roomId: "testRoolId",
 				},
-			},
-			propsData: {
-				roomId: "testRoolId",
-			},
-		});
+			}
+		);
 
 		return {
 			wrapper,
@@ -295,7 +291,8 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when clicking on a tool", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = contextExternalToolFactory.build();
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
 
 			const { wrapper, externalToolsModule } = getWrapper([tool]);
 

@@ -7,7 +7,7 @@ export const contextExternalToolFactory = Factory.define<ContextExternalTool>(
 		id: "id",
 		schoolToolId: "schoolToolId",
 		contextId: "contextId",
-		contextType: ContextExternalToolResponseContextTypeEnum.Course, //ToolContextType.COURSE,
+		contextType: ContextExternalToolResponseContextTypeEnum.Course,
 		parameters: [],
 		toolVersion: 1,
 	})

@@ -87,26 +87,28 @@
 <script lang="ts">
 import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { computed, ComputedRef, defineComponent, ref, Ref, onMounted } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
-import ExternalToolsModule from "@/store/external-tools";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 import VueI18n from "vue-i18n";
-import {
-	AUTH_MODULE,
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
-	EXTERNAL_TOOLS_MODULE,
-	injectStrict,
-	I18N_KEY,
-} from "@/utils/inject";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import ContextExternalToolsModule from "../../../store/context-external-tools";
+import ExternalToolsModule from "../../../store/external-tools";
 
 export default defineComponent({
 	name: "RoomExternalToolsOverview",
@@ -118,13 +120,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const authModule = injectStrict<AuthModule>(AUTH_MODULE);
-		const contextExternalToolsModule = injectStrict<ContextExternalToolsModule>(
-			CONTEXT_EXTERNAL_TOOLS_MODULE
-		);
-		const externalToolsModule = injectStrict<ExternalToolsModule>(
-			EXTERNAL_TOOLS_MODULE
-		);
+		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
+			inject<ContextExternalToolsModule>("contextExternalToolsModule");
+		const externalToolsModule: ExternalToolsModule | undefined =
+			inject<ExternalToolsModule>("externalToolsModule");
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 
 		onMounted(async () => {
@@ -144,7 +144,7 @@ export default defineComponent({
 		};
 
 		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
-			() => contextExternalToolsModule.getExternalToolDisplayDataList || []
+			() => contextExternalToolsModule?.getExternalToolDisplayDataList || []
 		);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
@@ -185,7 +185,7 @@ export default defineComponent({
 
 		const launchTool = async (contextToolId: string) => {
 			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(contextToolId);
+				await externalToolsModule?.loadToolLaunchData(contextToolId);
 
 			switch (launchToolResponse?.method) {
 				case ToolLaunchRequestResponseMethodEnum.Get:
@@ -230,31 +230,11 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
-			const form: HTMLFormElement = document.createElement("form");
-			form.method = "POST";
-			form.action = toolLaunch.url;
-			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
-
-			const payload = JSON.parse(toolLaunch.payload || "{}");
-
-			for (const key in payload) {
-				if (Object.prototype.hasOwnProperty.call(payload, key)) {
-					const hiddenField = document.createElement("input");
-					hiddenField.type = "hidden";
-					hiddenField.name = key;
-					hiddenField.value = payload[key];
-
-					form.appendChild(hiddenField);
-				}
-			}
-
-			document.body.appendChild(form);
-			form.submit();
-		};
-
-		const canEdit: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
+		const canEdit: ComputedRef<boolean> = computed(
+			() =>
+				!!authModule?.getUserPermissions.includes(
+					"CONTEXT_TOOL_ADMIN".toLowerCase()
+				)
 		);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(

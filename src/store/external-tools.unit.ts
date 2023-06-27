@@ -28,7 +28,6 @@ import {
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { toolLaunchRequestResponeFactory } from "@@/tests/test-utils/factory/toolLaunchRequestResponeFactory";
 import {
 	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
