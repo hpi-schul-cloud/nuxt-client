@@ -2,6 +2,7 @@ import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { contextExternalToolFactory } from "@@/tests/test-utils/factory/contextExternalToolFactory";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import { I18N_KEY } from "@/utils/inject";
 
@@ -40,10 +41,7 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has a name", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -64,11 +62,9 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has a logoUrl", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-				logoUrl: "mockLogoUrl",
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build({
+				logoUrl: "logoUrl",
+			});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -89,10 +85,9 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool has no logoUrl", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build({
+				logoUrl: undefined,
+			});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -113,11 +108,9 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool is opened in a new tab", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
+			const tool: ContextExternalTool = contextExternalToolFactory.build({
 				openInNewTab: true,
-				logoUrl: "mockLogoUrl",
-			};
+			});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -138,11 +131,9 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the tool is in the same window", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
+			const tool: ContextExternalTool = contextExternalToolFactory.build({
 				openInNewTab: false,
-				logoUrl: "mockLogoUrl",
-			};
+			});
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -163,11 +154,7 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user clicks the card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-				logoUrl: "mockLogoUrl",
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -188,11 +175,7 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user can edit the tool card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-				logoUrl: "mockLogoUrl",
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
 
@@ -271,11 +254,7 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user cannot edit the tool card", () => {
 		const setup = () => {
-			const tool: ContextExternalTool = {
-				name: "mockName",
-				openInNewTab: true,
-				logoUrl: "mockLogoUrl",
-			};
+			const tool: ContextExternalTool = contextExternalToolFactory.build();
 
 			const wrapper: Wrapper<Vue> = getWrapper(tool, false);
 
