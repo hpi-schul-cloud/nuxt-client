@@ -419,10 +419,6 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		if (this.$route.query && this.$route.query.tab) {
-			this.setActiveTab(this.$route.query.tab);
-		}
-
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
 			courseId: this.courseId,
@@ -502,16 +498,15 @@ export default defineComponent({
 		},
 	},
 	watch: {
-		tabIndex(newIndex) {
-			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.replace({
-					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
-				});
-			}
+		$route(to, from) {
+			this.tabIndex = parseInt(to.query.activeTab, 10) || 0;
 		},
 	},
 	mounted() {
 		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
+		if (this.$route.query?.tab) {
+			this.setActiveTab(this.$route.query.tab);
+		}
 	},
 });
 </script>

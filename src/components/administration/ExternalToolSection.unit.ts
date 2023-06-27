@@ -3,7 +3,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { SchoolExternalToolStatus } from "@/store/external-tool";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
@@ -136,7 +136,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: firstToolName,
-						status: SchoolExternalToolStatus.Latest,
+						status: ToolConfigurationStatus.Latest,
 						version: 1,
 					},
 					{
@@ -144,7 +144,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: secondToolName,
-						status: SchoolExternalToolStatus.Outdated,
+						status: ToolConfigurationStatus.Outdated,
 						version: 1,
 					},
 				],
@@ -237,7 +237,7 @@ describe("ExternalToolSection", () => {
 									toolId: "toolId",
 									parameters: [],
 									name: "firstToolName",
-									status: SchoolExternalToolStatus.Latest,
+									status: ToolConfigurationStatus.Latest,
 									version: 1,
 								},
 							],
@@ -302,7 +302,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: SchoolExternalToolStatus.Latest,
+					status: ToolConfigurationStatus.Latest,
 					outdated: false,
 				};
 

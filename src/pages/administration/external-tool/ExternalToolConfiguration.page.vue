@@ -140,7 +140,7 @@ export default defineComponent({
 			},
 		];
 
-		const { getTranslationKey } = useExternalToolMappings();
+		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean> = computed(
@@ -257,7 +257,7 @@ export default defineComponent({
 		return {
 			t,
 			breadcrumbs,
-			getTranslationKey,
+			getBusinessErrorTranslationKey,
 			loading,
 			configurationItems,
 			selectedItem,
