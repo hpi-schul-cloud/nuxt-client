@@ -14094,7 +14094,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ToolReferenceListResponse>>> {
+        async toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetToolReferences(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14300,7 +14300,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ToolReferenceListResponse>> {
+        toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse> {
             return localVarFp.toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14498,7 +14498,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ToolReferenceListResponse>>;
+    toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse>;
 
     /**
      * 
