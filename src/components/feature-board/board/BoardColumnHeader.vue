@@ -20,7 +20,7 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction @click.stop="onStartEditMode">
+					<BoardMenuAction @click="onStartEditMode">
 						<VIcon>
 							{{ mdiPencilOutline }}
 						</VIcon>
