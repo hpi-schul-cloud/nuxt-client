@@ -17,39 +17,7 @@
 			</v-list-item-content>
 
 			<v-list-item-icon class="my-2 ml-2" v-if="isEditMode">
-				<BoardMenu scope="element">
-					<BoardMenuAction data-testid="board-file-element-edit-menu-move-up">
-						<VIcon>
-							{{ mdiArrowCollapseUp }}
-						</VIcon>
-						{{ $t("components.board.action.moveUp") }}
-					</BoardMenuAction>
-					<BoardMenuAction data-testid="board-file-element-edit-menu-move-down">
-						<VIcon>
-							{{ mdiArrowCollapseDown }}
-						</VIcon>
-						{{ $t("components.board.action.moveDown") }}
-					</BoardMenuAction>
-					<BoardMenuAction
-						v-if="!isBlocked"
-						data-testid="board-file-element-edit-menu-download"
-						@click="onDownload"
-					>
-						<VIcon>
-							{{ mdiTrayArrowDown }}
-						</VIcon>
-						{{ $t("components.board.action.download") }}
-					</BoardMenuAction>
-					<BoardMenuAction
-						data-testid="board-file-element-edit-menu-delete"
-						@click="onDelete"
-					>
-						<VIcon>
-							{{ mdiTrashCanOutline }}
-						</VIcon>
-						{{ $t("components.board.action.delete") }}
-					</BoardMenuAction>
-				</BoardMenu>
+				<FileContentElementMenu :file-record="fileRecord" />
 			</v-list-item-icon>
 		</v-list-item>
 	</v-list>
@@ -67,12 +35,11 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
 	name: "DefaultFileDisplay",
-	components: { BoardMenu, BoardMenuAction },
+	components: { FileContentElementMenu },
 	props: {
 		fileRecord: {
 			type: Object as () => FileRecordResponse,

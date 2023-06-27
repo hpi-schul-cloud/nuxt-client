@@ -1,18 +1,12 @@
 <template>
 	<div>
-		<img :src="url" :alt="fileName" />
-		<BoardMenu v-if="isEditMode" scope="element">
-			<BoardMenuAction @click="onDelete">
-				<VIcon>
-					{{ mdiTrashCanOutline }}
-				</VIcon>
-				{{ $t("components.board.action.delete") }}
-			</BoardMenuAction>
-		</BoardMenu>
+		<img :src="fileRecord.url" :alt="fileRecord.name" />
+		<FileContentElementMenu :file-record="fileRecord" v-if="isEditMode" />
 	</div>
 </template>
 
 <script lang="ts">
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import {
 	mdiAlertCircle,
 	mdiArrowCollapseDown,
@@ -22,19 +16,14 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
 	name: "ImageFileDisplay",
-	components: { BoardMenu, BoardMenuAction },
+	components: { FileContentElementMenu },
 	props: {
-		fileName: {
-			type: String,
-			required: true,
-		},
-		url: {
-			type: String,
+		fileRecord: {
+			type: Object as () => FileRecordResponse,
 			required: true,
 		},
 		isEditMode: {

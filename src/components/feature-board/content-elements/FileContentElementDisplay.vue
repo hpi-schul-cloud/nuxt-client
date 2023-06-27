@@ -1,8 +1,7 @@
 <template>
 	<ImageDisplay
 		v-if="isImage"
-		:url="fileRecord.url"
-		:fileName="fileRecord.name"
+		:fileRecord="fileRecord"
 		:isEditMode="isEditMode"
 		@delete:element="onDeleteElement"
 	/>
