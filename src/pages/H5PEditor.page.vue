@@ -14,7 +14,7 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<div v-if="!loading" class="column-layout">
+			<div v-if="!!iframeSrc" class="column-layout">
 				<iframe
 					v-h5pResize="{ heightCalculationMethod: 'taggedElement' }"
 					ref="iframe"
@@ -46,11 +46,14 @@ import { notifierModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mdiChevronLeft } from "@mdi/js";
 import { iframeResizer } from "iframe-resizer";
-import { defineComponent, inject, ref } from "vue";
+import { defineComponent, inject, onMounted, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute, useRouter } from "vue-router/composables";
 
-import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+import {
+	H5pEditorApiFactory,
+	H5pEditorApiAxiosParamCreator,
+} from "@/h5pEditorApi/v3";
 
 type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
 
@@ -83,11 +86,17 @@ export default defineComponent({
 		const contentId = route.params?.id;
 		const isInline = !!route.query?.inline;
 
-		const iframeSrc = `${window.location.origin}/api/v3/h5p-editor/edit/${
-			contentId ?? ""
-		}`;
+		const BASE_PATH = "/v3";
+		const h5pEditorApi = H5pEditorApiFactory(undefined, BASE_PATH, $axios);
 
-		const h5pEditorApi = H5pEditorApiFactory(undefined, "/v3", $axios);
+		const iframeSrc = ref<string | undefined>();
+		onMounted(() => {
+			H5pEditorApiAxiosParamCreator()
+				.h5PEditorControllerGetH5PEditor(contentId)
+				.then(({ url }) => {
+					iframeSrc.value = $axios.defaults.baseURL + BASE_PATH + url;
+				});
+		});
 
 		function notifyParent(event: CustomEvent) {
 			window.dispatchEvent(event);
@@ -162,7 +171,6 @@ export default defineComponent({
 
 		return {
 			iframe,
-			loading: false,
 			iframeSrc,
 			scriptSrc: "#",
 			mdiChevronLeft,
