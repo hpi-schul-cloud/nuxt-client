@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
@@ -40,7 +40,9 @@ export default defineComponent({
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { focusedId } = useSharedFocusedId();
-		const isFocused = focusedId.value === props.element.id;
+		const isFocused = computed(() => {
+			return focusedId.value === props.element.id;
+		});
 
 		return { modelValue, isAutoFocus, isFocused };
 	},
