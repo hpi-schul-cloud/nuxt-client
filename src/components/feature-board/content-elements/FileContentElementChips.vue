@@ -25,12 +25,13 @@ export default defineComponent({
 
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
+
 		const humanReadableFileSize = computed(() => {
 			const { convertedSize, unit } = convertFileSize(props.fileSize);
-			const convertedSizeFixed = Number(convertedSize.toFixed(2));
-			const localizedFileSize = i18n.n(convertedSizeFixed);
-			const localString = localizedFileSize + " " + unit;
-			return localString;
+			const localizedFileSize = i18n.n(convertedSize, "fileSize");
+			const localizedString = localizedFileSize + " " + unit;
+
+			return localizedString;
 		});
 
 		const fileExtension = computed(() =>
