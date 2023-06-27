@@ -84,7 +84,7 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref(undefined);
-		const { isFocusContained, isFocused } = useBoardFocusHandler(
+		const { isFocusContained } = useBoardFocusHandler(
 			props.columnId,
 			columnHeader
 		);
