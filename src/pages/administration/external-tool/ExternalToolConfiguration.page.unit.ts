@@ -9,7 +9,7 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
-import ExternalToolConfigOverviewPage from "./ExternalToolConfigOverview.page.vue";
+import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
@@ -18,7 +18,7 @@ import {
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { I18N_KEY } from "@/utils/inject";
 
-describe("ExternalToolConfigOverview", () => {
+describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	jest
@@ -57,7 +57,7 @@ describe("ExternalToolConfigOverview", () => {
 		);
 
 		const wrapper: Wrapper<any> = mount(
-			ExternalToolConfigOverviewPage as MountOptions<Vue>,
+			ExternalToolConfiguration as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
@@ -88,9 +88,9 @@ describe("ExternalToolConfigOverview", () => {
 	describe("basic functions", () => {
 		it("should render component", async () => {
 			const { wrapper } = await setup();
-			expect(
-				wrapper.findComponent(ExternalToolConfigOverviewPage).exists()
-			).toBe(true);
+			expect(wrapper.findComponent(ExternalToolConfiguration).exists()).toBe(
+				true
+			);
 		});
 	});
 
@@ -99,7 +99,7 @@ describe("ExternalToolConfigOverview", () => {
 			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
 			try {
-				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
+				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
 						[I18N_KEY as symbol]: { t: (key: string) => key },
 					},
@@ -115,7 +115,7 @@ describe("ExternalToolConfigOverview", () => {
 
 		it("should throw an error when i18n injection fails", () => {
 			expect(() => {
-				shallowMount(ExternalToolConfigOverviewPage as MountOptions<Vue>, {
+				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
 					provide: {
 						externalToolsModule,
 					},
