@@ -176,7 +176,7 @@ export default defineComponent({
 		};
 
 		const onEditTool = () => {
-			console.log("Edit Tool");
+			// TODO N21-XXXX implement onEditTool
 		};
 
 		const onClickTool = async (tool: ExternalToolDisplayData) => {
