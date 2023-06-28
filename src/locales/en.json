@@ -897,6 +897,7 @@
 	"pages.rooms.importCourse.importErrorButton": "Okay, understood",
 	"pages.rooms.allRooms.emptyState.title": "Currently, there are no courses here.",
 	"pages.rooms.currentRooms.emptyState.title": "Currently, there are no courses here.",
+	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.room.teacher.emptyState": "Add learning content such as assignments or topics to the course and then sort them.",
 	"pages.room.student.emptyState": "Learning content such as topics or tasks appear here.",
 	"pages.room.lessonCard.aria": "{itemType}, link, {itemName}, press enter to open",
