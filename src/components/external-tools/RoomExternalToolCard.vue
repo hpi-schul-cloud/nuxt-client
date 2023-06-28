@@ -14,6 +14,7 @@
 				contain
 				data-testid="tool-card-logo"
 				:alt="$t('pages.rooms.tools.logo')"
+				crossorigin="anonymous"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>
@@ -37,14 +38,14 @@
 
 <script lang="ts">
 import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiPencilOutline,
 	mdiPuzzleOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { PropType, defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -52,7 +53,7 @@ export default defineComponent({
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
-			type: Object as PropType<ContextExternalTool>,
+			type: Object as PropType<ExternalToolDisplayData>,
 			required: true,
 		},
 		canEdit: {

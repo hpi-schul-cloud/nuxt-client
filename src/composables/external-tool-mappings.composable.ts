@@ -1,4 +1,7 @@
 import {
+	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -9,10 +12,14 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	SchoolToolConfigurationEntryResponse,
+	SchoolToolConfigurationListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
 } from "@/serverApi/v3";
 import {
+	ContextExternalToolTemplateListItem,
+	ExternalToolDisplayData,
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
@@ -22,6 +29,7 @@ import {
 	ToolParameterScope,
 	ToolParameterType,
 } from "@/store/external-tool";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 
 const ResponseStatusMapping: Record<
@@ -64,9 +72,9 @@ const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
 	ToolParameterScope
 > = {
+	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
-	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
@@ -78,6 +86,25 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 ]);
 
 export function useExternalToolMappings() {
+	const mapContextExternalToolSearchListResponseToExternalToolDisplayData = (
+		response: ContextExternalToolSearchListResponse
+	): ExternalToolDisplayData[] => {
+		return response.data.map((toolResponse: ContextExternalToolResponse) =>
+			mapContextExternalToolResponse(toolResponse)
+		);
+	};
+
+	const mapContextExternalToolResponse = (
+		toolResponse: ContextExternalToolResponse
+	): ExternalToolDisplayData => {
+		return {
+			id: toolResponse.id,
+			name: toolResponse.displayName || "Toolname",
+			logoUrl: undefined,
+			openInNewTab: true,
+		};
+	};
+
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -141,6 +168,17 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapSchoolToolConfigurationEntryResponse = (
+		resp: SchoolToolConfigurationEntryResponse
+	): ContextExternalToolTemplateListItem => {
+		return {
+			id: resp.id,
+			name: resp.name,
+			logoUrl: resp.logoUrl,
+			schoolToolId: resp.schoolToolId,
+		};
+	};
+
 	const mapToolConfigurationListResponse = (
 		resp: ToolConfigurationListResponse
 	): ToolConfigurationListItem[] => {
@@ -149,6 +187,18 @@ export function useExternalToolMappings() {
 				entryResp: ToolConfigurationEntryResponse
 			): ToolConfigurationListItem => {
 				return mapToolConfigurationEntryResponse(entryResp);
+			}
+		);
+	};
+
+	const mapSchoolToolConfigurationListResponse = (
+		resp: SchoolToolConfigurationListResponse
+	): ContextExternalToolTemplateListItem[] => {
+		return resp.data.map(
+			(
+				entryResp: SchoolToolConfigurationEntryResponse
+			): ContextExternalToolTemplateListItem => {
+				return mapSchoolToolConfigurationEntryResponse(entryResp);
 			}
 		);
 	};
@@ -167,6 +217,23 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapToolConfigurationTemplateToContextExternalToolPostParams = (
+		template: ToolConfigurationTemplate,
+		schoolToolId: string,
+		contextId: string,
+		contextType: ToolContextType
+	): ContextExternalToolPostParams => {
+		return {
+			schoolToolId: schoolToolId,
+			contextId,
+			contextType,
+			toolVersion: template.version,
+			parameters: mapToolParametersToCustomParameterEntryParams(
+				template.parameters
+			),
+		};
+	};
+
 	const mapToolParametersToCustomParameterEntryParams = (
 		params: ToolParameter[]
 	) => {
@@ -178,7 +245,13 @@ export function useExternalToolMappings() {
 		});
 	};
 
-	const getTranslationKey = (businessError: BusinessError) => {
+	const getTranslationKey = (
+		businessError: BusinessError | undefined
+	): undefined | string => {
+		if (!businessError) {
+			return undefined;
+		}
+
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
 		).find(([key]) => businessError.message.startsWith(key))?.[1];
@@ -190,11 +263,15 @@ export function useExternalToolMappings() {
 	};
 
 	return {
+		mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+		mapContextExternalToolResponse,
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
+		mapSchoolToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+		mapToolConfigurationTemplateToContextExternalToolPostParams,
 		getTranslationKey,
 	};
 }

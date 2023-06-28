@@ -1,4 +1,8 @@
 import {
+	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ContextExternalToolResponseContextTypeEnum,
+	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -12,9 +16,11 @@ import {
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
+	ExternalToolDisplayData,
 	SchoolExternalTool,
 	SchoolExternalToolStatus,
 	ToolConfigurationTemplate,
+	ToolContextType,
 	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
@@ -45,9 +51,11 @@ describe("useExternalToolUtils", () => {
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
+			mapContextExternalToolResponse,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+			mapToolConfigurationTemplateToContextExternalToolPostParams,
 		} = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
@@ -64,11 +72,12 @@ describe("useExternalToolUtils", () => {
 			],
 			status: SchoolExternalToolResponseStatusEnum.Latest,
 		};
+
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
 
-		const schoolExternaToolItem: SchoolExternalToolItem = {
+		const schoolExternalToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
 			status: SchoolExternalToolStatus.Latest,
@@ -87,6 +96,7 @@ describe("useExternalToolUtils", () => {
 			regexComment: "regexComment",
 			isOptional: true,
 		};
+
 		const toolConfigurationTemplateResponse: ExternalToolConfigurationTemplateResponse =
 			{
 				id: "id",
@@ -100,6 +110,7 @@ describe("useExternalToolUtils", () => {
 			name: "name",
 			value: "value",
 		};
+
 		const schoolExternalToolPostParam: SchoolExternalToolPostParams = {
 			schoolId: "schoolId",
 			toolId: "toolId",
@@ -107,18 +118,30 @@ describe("useExternalToolUtils", () => {
 			parameters: [customParameterEntryParam],
 		};
 
+		const contextExternalToolPostParams: ContextExternalToolPostParams = {
+			contextId: "contextId",
+			parameters: [customParameterEntryParam],
+			displayName: "displayName",
+			contextType: "course",
+			schoolToolId: "toolId",
+			toolVersion: 0,
+		};
+
 		return {
 			listResponse,
 			toolResponse,
-			schoolExternaToolItem,
+			schoolExternalToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
+			mapContextExternalToolResponse,
 			getTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
 			customParameterResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
+			mapToolConfigurationTemplateToContextExternalToolPostParams,
 			schoolExternalToolPostParam,
+			contextExternalToolPostParams,
 		};
 	};
 
@@ -160,7 +183,88 @@ describe("useExternalToolUtils", () => {
 		});
 	});
 
+	describe("mapContextExternalToolSearchListResponseToExternalToolDisplayData is called", () => {
+		describe("when maps the response", () => {
+			const setup = () => {
+				const {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+				} = useExternalToolMappings();
+
+				const contextToolResponse: ContextExternalToolResponse = {
+					id: "id",
+					displayName: "displayName",
+					contextId: "contextId",
+					schoolToolId: "schoolToolId",
+					toolVersion: 1,
+					parameters: [
+						{
+							name: "name",
+							value: "value",
+						},
+					],
+					contextType: ContextExternalToolResponseContextTypeEnum.Course,
+					logoUrl: "logoUrl",
+				};
+
+				const contextListResponse: ContextExternalToolSearchListResponse = {
+					data: [contextToolResponse],
+				};
+
+				return {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+					contextListResponse,
+					contextToolResponse,
+				};
+			};
+
+			it("should return a contextExternalTool array", () => {
+				const {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+					contextListResponse,
+				} = setup();
+
+				const contextExternalTools: ExternalToolDisplayData[] =
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
+						contextListResponse
+					);
+
+				expect(Array.isArray(contextExternalTools)).toBeTruthy();
+			});
+
+			it("should map the response correctly", () => {
+				const {
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
+					contextListResponse,
+					contextToolResponse,
+				} = setup();
+
+				const contextExternalTools: ExternalToolDisplayData[] =
+					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
+						contextListResponse
+					);
+
+				expect(contextExternalTools).toEqual(
+					expect.objectContaining<ExternalToolDisplayData[]>([
+						{
+							id: contextToolResponse.id,
+							name: "displayName",
+							logoUrl: undefined,
+							openInNewTab: true,
+						},
+					])
+				);
+			});
+		});
+	});
+
 	describe("getTranslationKey", () => {
+		it("should return original message when key is undefined", () => {
+			const { getTranslationKey } = setup();
+
+			const translationKey: string | undefined = getTranslationKey(undefined);
+			expect(translationKey).toBeUndefined();
+		});
+
 		it("should return translation key when message was found", () => {
 			const { getTranslationKey } = setup();
 			const error: BusinessError = {
@@ -168,7 +272,7 @@ describe("useExternalToolUtils", () => {
 				message: "tool_param_duplicate: Some validationError was thrown",
 			};
 
-			const translationKey = getTranslationKey(error);
+			const translationKey: string | undefined = getTranslationKey(error);
 			expect(translationKey).toEqual(
 				"pages.tool.apiError.tool_param_duplicate"
 			);
@@ -181,7 +285,7 @@ describe("useExternalToolUtils", () => {
 				message: "some_error: which is not defined in map",
 			};
 
-			const translationKey = getTranslationKey(error);
+			const translationKey: string | undefined = getTranslationKey(error);
 			expect(translationKey).toEqual(error.message);
 		});
 	});
@@ -255,6 +359,33 @@ describe("useExternalToolUtils", () => {
 							value: "testValue",
 						},
 					]),
+				})
+			);
+		});
+	});
+
+	describe("mapToolConfigurationTemplateToContextExternalToolPostParams", () => {
+		it("should return contextExternalToolPostParams", () => {
+			const { mapToolConfigurationTemplateToContextExternalToolPostParams } =
+				setup();
+			const template: ToolConfigurationTemplate =
+				toolConfigurationTemplateFactory.build();
+
+			const contextExternalToolPostParams: ContextExternalToolPostParams =
+				mapToolConfigurationTemplateToContextExternalToolPostParams(
+					template,
+					"schoolToolId",
+					"contextId",
+					ToolContextType.COURSE
+				);
+
+			expect(contextExternalToolPostParams).toEqual(
+				expect.objectContaining<ContextExternalToolPostParams>({
+					contextId: "contextId",
+					toolVersion: template.version,
+					schoolToolId: "schoolToolId",
+					parameters: [],
+					contextType: "course",
 				})
 			);
 		});

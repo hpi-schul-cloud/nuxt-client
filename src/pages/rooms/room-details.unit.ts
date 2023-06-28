@@ -17,6 +17,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomExternalToolsOverview from "@/pages/rooms/external-tools/RoomExternalToolsOverview.vue";
 
 const mockData = {
 	roomId: "123",
@@ -142,7 +143,6 @@ const getWrapper: any = () => {
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 		},
 		stubs: {
-			RoomExternalToolOverview: true,
 			RoomDashboard: true,
 		},
 	});
@@ -502,6 +502,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 
@@ -514,7 +515,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
 				await toolsTab.trigger("click");
 
-				const toolsContent = wrapper.find('[data-testid="room-content"]');
+				const toolsContent = wrapper.findComponent(RoomExternalToolsOverview);
 
 				expect(toolsContent.exists()).toBe(true);
 			});
