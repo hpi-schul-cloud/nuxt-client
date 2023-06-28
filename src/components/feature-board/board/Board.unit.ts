@@ -1,23 +1,34 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useBoardState } from "../state/BoardState.composable";
-import { Board, BoardPermissionsTypes } from "../types/Board";
+import { Board } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	boardResponseFactory,
 	columnResponseFactory,
 	cardSkeletonResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+jest.mock("../shared/BoardNotifications.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 const $route: Route = {
 	params: {
@@ -33,14 +44,6 @@ const $route: Route = {
 } as Route;
 
 const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
-
-const defaultPermissions = {
-	hasMovePermission: true,
-	hasCreateCardPermission: true,
-	hasCreateColumnPermission: true,
-	hasDeletePermission: true,
-	hasEditPermission: true,
-};
 
 const createCardMock = jest.fn();
 const createColumnMock = jest.fn();
@@ -60,11 +63,13 @@ describe("Board", () => {
 	const boardWithOneColumn = boardResponseFactory.build({
 		columns: [oneColumn],
 	});
+	const notifierModule = createModuleMocks(NotifierModule);
+	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
 
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsTypes;
+		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
@@ -87,18 +92,29 @@ describe("Board", () => {
 			...defaultPermissions,
 			...options?.permissions,
 		});
+
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		wrapper = shallowMount(BoardVue, {
+		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			mocks: {
 				$router,
 				$route,
+			},
+			provide: {
+				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
 			propsData: { boardId },
 		});
 	};
 
 	describe("when component is mounted", () => {
+		mockedBoardNotifierCalls = {
+			showInfo: jest.fn(),
+		};
+		mockedUseBoardNotifier.mockReturnValue(
+			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
+		);
 		it("should call 'useBoardState' composable", () => {
 			setup();
 
@@ -131,6 +147,23 @@ describe("Board", () => {
 			setup({ board: boardWithTwoColumns });
 
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
+		});
+
+		describe("Info message for teacher", () => {
+			afterEach(() => {
+				jest.clearAllMocks();
+			});
+
+			it("should call the board notifier when the user is teacher", () => {
+				setup();
+				expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalled();
+			});
+
+			it("should not call the board notifier when the user is not a teacher", async () => {
+				defaultPermissions.isTeacher = false;
+				setup();
+				expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+			});
 		});
 
 		describe("BoardColumnGhost component", () => {
