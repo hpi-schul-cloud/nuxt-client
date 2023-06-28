@@ -149,8 +149,6 @@
 	"components.administration.adminMigrationSection.startWarningCard.title": "Do you really want to start the account migration to moin.schule now?",
 	"components.administration.externalToolsSection.header": "External Tools",
 	"components.administration.externalToolsSection.table.header.status": "Status",
-	"components.administration.externalToolsSection.table.header.status.latest": "Latest",
-	"components.administration.externalToolsSection.table.header.status.outdated": "Outdated",
 	"components.administration.externalToolsSection.action.add": "Add External Tool",
 	"components.administration.externalToolsSection.dialog.title": "Remove External Tool",
 	"components.administration.externalToolsSection.dialog.content": "Would you like to remove the External Tool <b>{itemName}</b> from your school? </br></br> If you remove the external tool from your school, it will be removed from all courses in your school. The tool can no longer be used.",
@@ -550,6 +548,9 @@
 	"components.molecules.import.tasks.label": "Task",
 	"components.molecules.import.tasks.options.selectCourse.infoText": "Please select the course into which you would like to import the task.",
 	"components.molecules.import.tasks.options.selectCourse": "Select course",
+	"components.externalTools.status.latest": "Latest",
+	"components.externalTools.status.outdated": "Outdated",
+	"components.externalTools.status.unknown": "Unknown",
 	"pages.administration.printQr.emptyUser": "The selected user(s) have already been registered",
 	"pages.administration.printQr.error": "The registration links could not be generated",
 	"pages.administration.remove.error": "Failed to delete users",
@@ -975,6 +976,7 @@
 	"pages.files.title": "Files",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.tool.description": "The school-specific parameters for the External Tool are configured here.\nAfter saving the configuration, the Tool is available inside the school.<br><br>\nDeleting a configuration removes the Tool from the school.<br><br>\nMore information can be found in our <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Help section on External Tools</a>.",
+	"pages.tool.context.description": "After saving the selection, the tool is available within the course.<br><br>\nMore information can be found in our <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Help section on External Tools</a>.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.select.label": "Tool selection",
 	"pages.tool.addBtn.label": "Add Tool",
@@ -983,5 +985,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_param_required": "This Tool requires a parameter value that was not included. Please add the value.",
 	"pages.tool.apiError.tool_param_type_mismatch": "The type of a parameter does not match the requested type. Please contact support.",
-	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value."
+	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
+	"pages.tool.context.title": "Adding External Tools"
 }

@@ -149,8 +149,6 @@
 	"components.administration.adminMigrationSection.startWarningCard.title": "Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
 	"components.administration.externalToolsSection.header": "Externe Tools",
 	"components.administration.externalToolsSection.table.header.status": "Status",
-	"components.administration.externalToolsSection.table.header.status.latest": "Aktuell",
-	"components.administration.externalToolsSection.table.header.status.outdated": "Veraltet",
 	"components.administration.externalToolsSection.action.add": "Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.dialog.title": "Externes Tool entfernen?",
 	"components.administration.externalToolsSection.dialog.content": "Möchten Sie das externe Tool <b>{itemName}</b> von Ihrer Schule entfernen? </br></br> Wenn Sie das externe Tool von Ihrer Schule entfernen, wird es aus allen Kursen Ihrer Schule entfernt. Die Nutzung des Tools ist nicht mehr möglich.",
@@ -552,6 +550,9 @@
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.options.selectCourse.infoText": "Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
+	"components.externalTools.status.latest": "Aktuell",
+	"components.externalTools.status.outdated": "Veraltet",
+	"components.externalTools.status.unknown": "Unbekannt",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
@@ -975,6 +976,7 @@
 	"pages.files.title": "Dateien",
 	"pages.tool.title": "Konfiguration Externer Tools",
 	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
+	"pages.tool.context.description": "Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.select.label": "Tool Auswahl",
 	"pages.tool.addBtn.label": "Tool hinzufügen",
@@ -983,5 +985,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_param_required": "Für dieses Tool wird ein Parameterwert benötigt, der nicht mit angegeben wurde. Bitte den Wert hinzufügen.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren."
+	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren.",
+	"pages.tool.context.title": "Hinzufügen Externer Tools"
 }
