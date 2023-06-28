@@ -38,7 +38,7 @@
 			type="error"
 			data-testId="context-tool-error"
 		>
-			{{ t(getTranslationKey(apiError)) }}
+			{{ t(getBusinessErrorTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn

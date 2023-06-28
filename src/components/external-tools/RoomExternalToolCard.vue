@@ -14,7 +14,6 @@
 				contain
 				data-testId="tool-card-logo"
 				:alt="t('pages.rooms.tools.logo')"
-				crossorigin="anonymous"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>

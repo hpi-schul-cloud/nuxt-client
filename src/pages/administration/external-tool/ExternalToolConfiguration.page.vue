@@ -35,7 +35,7 @@
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ t(getTranslationKey(apiError)) }}
+			{{ t(getBusinessErrorTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn

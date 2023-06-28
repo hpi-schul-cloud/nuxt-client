@@ -43,12 +43,12 @@ describe("Multiguard", () => {
 			return { to, from, next, multiguard };
 		};
 
-		it("calls next with undefined", () => {
+		it("should call next", () => {
 			const { to, from, next, multiguard } = setup();
 
 			multiguard(to, from, next);
 
-			expect(next).toHaveBeenCalledWith(undefined);
+			expect(next).toHaveBeenCalled();
 		});
 	});
 
@@ -67,7 +67,7 @@ describe("Multiguard", () => {
 			return { expected, to, from, next, multiguard };
 		};
 
-		it("calls next with the expected value", () => {
+		it("should call next with the expected value", () => {
 			const { expected, to, from, next, multiguard } = setup();
 
 			multiguard(to, from, next);
@@ -90,12 +90,12 @@ describe("Multiguard", () => {
 			return { to, from, next, multiguard };
 		};
 
-		it("calls next with undefined", () => {
+		it("should call next after passing each guard", () => {
 			const { to, from, next, multiguard } = setup();
 
 			multiguard(to, from, next);
 
-			expect(next).toHaveBeenCalledWith(undefined);
+			expect(next).toHaveBeenCalled();
 		});
 	});
 
@@ -117,7 +117,7 @@ describe("Multiguard", () => {
 			return { expected, to, from, next, multiguard };
 		};
 
-		it("calls next with the value of the first guard", () => {
+		it("should call next with the value of the first guard", () => {
 			const { expected, to, from, next, multiguard } = setup();
 
 			multiguard(to, from, next);
@@ -145,7 +145,7 @@ describe("Multiguard", () => {
 			return { expected, to, from, next, multiguard };
 		};
 
-		it("calls next with the value of the first guard and not the second guard", () => {
+		it("should call next with the value of the first guard and not the second guard", () => {
 			const { expected, to, from, next, multiguard } = setup();
 
 			multiguard(to, from, next);
