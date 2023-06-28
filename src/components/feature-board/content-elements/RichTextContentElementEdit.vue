@@ -2,7 +2,7 @@
 	<div class="cursor-text">
 		<ck-editor
 			v-model="modelValue"
-			:focus="focus"
+			:autofocus="autofocus"
 			mode="simple"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
@@ -29,7 +29,6 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		focus: { type: Boolean },
 	},
 	emits: ["update:value", "delete:element"],
 	setup(props, { emit }) {

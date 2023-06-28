@@ -46,7 +46,7 @@ export default defineComponent({
 		disabled: {
 			type: Boolean,
 		},
-		focus: {
+		autofocus: {
 			type: Boolean,
 		},
 	},
@@ -54,7 +54,6 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const ck = ref(null);
-
 		const content = ref(props.value);
 		const language = i18n.locale;
 		const charCount = ref(0);
@@ -342,7 +341,7 @@ export default defineComponent({
 		const handleReady = (editor) => {
 			emit("ready");
 
-			if (props.focus) {
+			if (props.autofocus) {
 				editor.editing.view.focus();
 			}
 

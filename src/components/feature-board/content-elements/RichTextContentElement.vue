@@ -9,7 +9,6 @@
 			v-if="isEditMode"
 			class="rich_text offset"
 			:autofocus="isAutoFocus"
-			:focus="isFocused"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 			@delete:element="onDeleteElement"
@@ -18,12 +17,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
+import { defineComponent, PropType } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 
 export default defineComponent({
@@ -46,11 +44,6 @@ export default defineComponent({
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
-		const { focusedId } = useSharedFocusedId();
-
-		const isFocused = computed(() => {
-			return focusedId.value === props.element.id;
-		});
 
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteBoardNodeConfirmation(
@@ -70,7 +63,6 @@ export default defineComponent({
 		return {
 			modelValue,
 			isAutoFocus,
-			isFocused,
 			onDeleteElement,
 		};
 	},
