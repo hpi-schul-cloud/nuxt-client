@@ -51,15 +51,6 @@ export const Multiguard = function (guards: Guard[]): Guard {
 	}
 
 	return (to: Route, from: Route, next: NextFunction) => {
-		let isNextCalled = false;
-		const wrappedNext: NextFunction = (nextArg) => {
-			isNextCalled = true;
-			next(nextArg);
-		};
-		evaluateGuards(guards, to, from, wrappedNext);
-
-		if (!isNextCalled) {
-			next();
-		}
+		evaluateGuards(guards, to, from, next);
 	};
 };
