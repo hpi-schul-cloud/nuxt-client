@@ -81,8 +81,15 @@ export default defineComponent({
 		padding: 0;
 	}
 
-	.ck.ck-editor__editable_inline > :first-child {
+	.ck.ck-editor__editable_inline h4:first-of-type,
+	.ck.ck-editor__editable_inline h5:first-of-type {
 		margin-top: var(--space-md-2);
+	}
+
+	.ck.ck-editor__editable_inline p,
+	.ck.ck-editor__editable_inline ol,
+	.ck.ck-editor__editable_inline ul {
+		margin-top: 0;
 	}
 
 	.ck.ck-editor__editable_inline > :last-child {
@@ -118,10 +125,6 @@ export default defineComponent({
 			font-size: var(--text-md);
 			line-height: var(--line-height-lg);
 			margin-bottom: var(--space-xs);
-
-			&:first-of-type {
-				margin-top: var(--space-md-2);
-			}
 		}
 
 		ul {
