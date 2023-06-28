@@ -1,18 +1,18 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.tool.title').toString()"
+		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<RenderHTML :html="$t('pages.tool.description').toString()" component="p" />
+		<RenderHTML :html="t('pages.tool.description')" component="p" />
 		<v-spacer class="mt-10" />
 		<v-select
-			:label="$t('pages.tool.select.label')"
+			:label="t('pages.tool.select.label')"
 			item-title="name"
 			item-value="id"
 			:items="configurationItems"
 			v-model="selectedItem"
-			:no-data-text="$t('common.nodata')"
+			:no-data-text="t('common.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
@@ -35,7 +35,7 @@
 		</template>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ $t(getTranslationKey(apiError)) }}
+			{{ t(getTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn
@@ -45,7 +45,7 @@
 				@click="onCancel"
 				data-testId="cancel-button"
 			>
-				{{ $t("common.actions.cancel") }}
+				{{ t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
 				class="mr-2"
@@ -57,8 +57,8 @@
 			>
 				{{
 					isInEditMode
-						? $t("pages.tool.editBtn.label")
-						: $t("pages.tool.addBtn.label")
+						? t("pages.tool.editBtn.label")
+						: t("pages.tool.addBtn.label")
 				}}
 			</v-btn>
 		</v-row>
@@ -82,12 +82,12 @@ import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
-	ComputedRef,
-	Ref,
 	computed,
+	ComputedRef,
 	defineComponent,
 	inject,
 	onMounted,
+	Ref,
 	ref,
 } from "vue";
 import VueRouter from "vue-router";
@@ -95,7 +95,7 @@ import { useRouter } from "vue-router/composables";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 export default defineComponent({
-	name: "ExternalToolConfigOverview",
+	name: "ExternalToolConfiguration",
 	components: {
 		DefaultWireframe,
 		ExternalToolConfigSettings,
@@ -165,6 +165,7 @@ export default defineComponent({
 			});
 		const selectedItem: Ref<ToolConfigurationListItem | undefined> = ref();
 
+		// TODO N21-904 use SchoolExternalToolTemplate as a type for the list and the selected template so we don't have to load another template
 		const toolTemplate: Ref<ToolConfigurationTemplate | undefined> = ref();
 		const parametersValid: ComputedRef<boolean> = computed(
 			() => !!toolTemplate.value

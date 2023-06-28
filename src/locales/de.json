@@ -17,7 +17,8 @@
 	"common.actions.share": "Teilen",
 	"common.actions.shareCourse": "Kurskopie teilen",
 	"common.actions.scrollToTop": "Nach oben scrollen",
-	"common.actions.download": "Herunterladen",
+	"common.actions.download.v1.1": "Herunterladen (CC v1.1)",
+	"common.actions.download.v1.3": "Herunterladen (CC v1.3)",
 	"common.actions.logout": "Abmelden",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.updateAt": "Aktualisiert:",
@@ -826,6 +827,7 @@
 	"components.board.menu.column": "Spalten-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.alert.info.teacher": "Dieses Board ist sichtbar für alle Kursteilnehmenden.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
@@ -973,6 +975,7 @@
 	"pages.files.title": "Dateien",
 	"pages.tool.title": "Konfiguration Externer Tools",
 	"pages.tool.description": "Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert.\nNach dem Speichern der Konfiguration ist das Tool Innerhalb der Schule verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool der Schule wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
+	"pages.tool.context.description": "Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.select.label": "Tool Auswahl",
 	"pages.tool.addBtn.label": "Tool hinzufügen",
@@ -981,5 +984,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_param_required": "Für dieses Tool wird ein Parameterwert benötigt, der nicht mit angegeben wurde. Bitte den Wert hinzufügen.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren."
+	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren.",
+	"pages.tool.context.title": "Hinzufügen Externer Tools"
 }

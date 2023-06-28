@@ -11,7 +11,8 @@
 	"common.actions.import": "Importar",
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.ok": "Aceptar",
-	"common.actions.download": "Descargar",
+	"common.actions.download.v1.1": "Descargar (CC v1.1)",
+	"common.actions.download.v1.3": "Descargar (CC v1.3)",
 	"common.actions.logout": "Desconectar",
 	"common.action.publish": "Publicar",
 	"common.actions.remove": "Eliminar",
@@ -824,7 +825,7 @@
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
 	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.delete": "Eliminar",
-	"components.board.action.moveUp": "Ascender",
+	"components.board.action.moveUp": "Levantar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
@@ -840,6 +841,7 @@
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.element": "Configuración del elemento",
+	"components.board.alert.info.teacher": "Este tablero es visible para todos los participantes en el curso.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
@@ -968,6 +970,7 @@
 	"pages.files.title": "Archivos",
 	"pages.tool.title": "Configuración de Herramientas Externas",
 	"pages.tool.description": "Aquí se configuran los parámetros específicos de la escuela para la herramienta externa.\nUna vez guardada la configuración, la herramienta estará disponible en la escuela.<br><br>\nAl borrar una configuración, la herramienta vuelve a desaparecer de la escuela.<br><br>\nEncontrará más información en nuestra <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Sección de ayuda sobre herramientas externas</a>.",
+	"pages.tool.context.description": "Después de guardar la selección, la herramienta está disponible dentro del curso.<br><br>\nEncontrará más información en nuestra <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Sección de ayuda sobre herramientas externas</a>.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.select.label": "Selección de Herramientas",
 	"pages.tool.addBtn.label": "Agregar Herramienta",
@@ -976,5 +979,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
 	"pages.tool.apiError.tool_param_required": "Esta Herramienta requiere un valor de parámetro que no se ha incluido. Por favor, añada el valor.",
 	"pages.tool.apiError.tool_param_type_mismatch": "El tipo de un parámetro no coincide con el tipo solicitado. Póngase en contacto con el soporte.",
-	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor."
+	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor.",
+	"pages.tool.context.title": "Adición de herramientas externas"
 }

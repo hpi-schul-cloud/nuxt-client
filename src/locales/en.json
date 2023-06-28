@@ -17,7 +17,8 @@
 	"common.actions.share": "Share",
 	"common.actions.shareCourse": "Share course copy",
 	"common.actions.scrollToTop": "Scroll up",
-	"common.actions.download": "Download",
+	"common.actions.download.v1.1": "Download (CC v1.1)",
+	"common.actions.download.v1.3": "Download (CC v1.3)",
 	"common.actions.logout": "Logout",
 	"common.labels.admin": "",
 	"common.labels.updateAt": "Updated:",
@@ -824,6 +825,7 @@
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.element": "Element settings",
+	"components.board.alert.info.teacher": "This board is visible to all course participants.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",
@@ -973,6 +975,7 @@
 	"pages.files.title": "Files",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.tool.description": "The school-specific parameters for the External Tool are configured here.\nAfter saving the configuration, the Tool is available inside the school.<br><br>\nDeleting a configuration removes the Tool from the school.<br><br>\nMore information can be found in our <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Help section on External Tools</a>.",
+	"pages.tool.context.description": "After saving the selection, the tool is available within the course.<br><br>\nMore information can be found in our <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Help section on External Tools</a>.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.select.label": "Tool selection",
 	"pages.tool.addBtn.label": "Add Tool",
@@ -981,5 +984,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_param_required": "This Tool requires a parameter value that was not included. Please add the value.",
 	"pages.tool.apiError.tool_param_type_mismatch": "The type of a parameter does not match the requested type. Please contact support.",
-	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value."
+	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
+	"pages.tool.context.title": "Adding External Tools"
 }
