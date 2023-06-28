@@ -61,7 +61,7 @@ export default defineComponent({
 			"|",
 			"bold",
 			"italic",
-			"fontBackgroundColor",
+			"highlight",
 			"|",
 			"link",
 			"bulletedList",
@@ -102,7 +102,6 @@ export default defineComponent({
 			"BlockQuote",
 			"Bold",
 			"Code",
-			"Font",
 			"Heading",
 			"Highlight",
 			"HorizontalLine",
@@ -158,72 +157,88 @@ export default defineComponent({
 			highlight: {
 				options: [
 					{
-						model: "yellowMarker",
-						class: "marker-yellow",
-						title: "Yellow Marker",
-						color: "var(--ck-highlight-marker-yellow)",
+						model: "marker1",
+						class: "marker-1",
+						title: "Marker 1",
+						color: "#d4d6d9",
 						type: "marker",
 					},
 					{
-						model: "greenMarker",
-						class: "marker-green",
-						title: "Green marker",
-						color: "var(--ck-highlight-marker-green)",
+						model: "marker2",
+						class: "marker-2",
+						title: "Marker 2",
+						color: "#dbd4d1",
 						type: "marker",
 					},
 					{
-						model: "pinkMarker",
-						class: "marker-pink",
-						title: "Pink marker",
-						color: "var(--ck-highlight-marker-pink)",
+						model: "marker3",
+						class: "marker-3",
+						title: "Marker 3",
+						color: "#f3d9c3",
 						type: "marker",
 					},
 					{
-						model: "blueMarker",
-						class: "marker-blue",
-						title: "Blue marker",
-						color: "var(--ck-highlight-marker-blue)",
+						model: "marker4",
+						class: "marker-4",
+						title: "Marker 4",
+						color: "#dddbc8",
 						type: "marker",
 					},
-				],
-			},
-			fontBackgroundColor: {
-				colors: [
 					{
-						color: "#D4D6D9",
+						model: "marker5",
+						class: "marker-5",
+						title: "Marker 5",
+						color: "#d8e3ce",
+						type: "marker",
 					},
 					{
-						color: "#DBD4D1",
+						model: "marker6",
+						class: "marker-6",
+						title: "Marker 6",
+						color: "#c3e1de",
+						type: "marker",
 					},
 					{
-						color: "#F3D9C3",
+						model: "marker7",
+						class: "marker-7",
+						title: "Marker 7",
+						color: "#c3e0f2",
+						type: "marker",
 					},
 					{
-						color: "#DDDBC8",
+						model: "marker8",
+						class: "marker-8",
+						title: "Marker 8",
+						color: "#cdd3f6",
+						type: "marker",
 					},
 					{
-						color: "#D8E3CE",
+						model: "marker9",
+						class: "marker-9",
+						title: "Marker 9",
+						color: "#e2cbe6",
+						type: "marker",
 					},
 					{
-						color: "#C3E1DE",
+						model: "marker10",
+						class: "marker-10",
+						title: "Marker 10",
+						color: "#eec3f5",
+						type: "marker",
 					},
 					{
-						color: "#C3E0F2",
+						model: "marker11",
+						class: "marker-11",
+						title: "Marker 11",
+						color: "#f2d0db",
+						type: "marker",
 					},
 					{
-						color: "#CDD3F6",
-					},
-					{
-						color: "#E2CBE6",
-					},
-					{
-						color: "#EEC3F5",
-					},
-					{
-						color: "#F2D0DB",
-					},
-					{
-						color: "#EEC3C3",
+						model: "marker12",
+						class: "marker-13",
+						title: "Marker 12",
+						color: "#eec3c3",
+						type: "marker",
 					},
 				],
 			},
@@ -285,6 +300,44 @@ export default defineComponent({
 @import "katex/dist/katex.min.css";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
+.ck-content {
+	.marker-1 {
+		background-color: #d4d6d9;
+	}
+	.marker-2 {
+		background-color: #dbd4d1;
+	}
+	.marker-3 {
+		background-color: #f3d9c3;
+	}
+	.marker-4 {
+		background-color: #dddbc8;
+	}
+	.marker-5 {
+		background-color: #d8e3ce;
+	}
+	.marker-6 {
+		background-color: #c3e1de;
+	}
+	.marker-7 {
+		background-color: #c3e0f2;
+	}
+	.marker-8 {
+		background-color: #cdd3f6;
+	}
+	.marker-9 {
+		background-color: #e2cbe6;
+	}
+	.marker-10 {
+		background-color: #eec3f5;
+	}
+	.marker-11 {
+		background-color: #f2d0db;
+	}
+	.marker-12 {
+		background-color: #eec3c3;
+	}
+}
 // TODO move all style to ckbuild
 .ck-blurred {
 	border: none !important;
