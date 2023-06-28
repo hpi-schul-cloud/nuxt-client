@@ -1,8 +1,7 @@
 import { Route, RouteConfig } from "vue-router";
-import Multiguard from "vue-router-multiguard";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
-import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import {
 	isMongoId,
 	isOfficialSchoolNumber,

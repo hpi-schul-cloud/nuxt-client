@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@ckeditor/ckeditor5-vue2": "^3.0.1",
-		"@hpi-schul-cloud/ckeditor": "0.3.1",
+		"@hpi-schul-cloud/ckeditor": "0.3.3",
 		"@mdi/js": "^7.0.96",
 		"@types/vuelidate": "^0.7.16",
 		"@vueuse/components": "^9.13.0",
@@ -37,7 +37,6 @@
 		"vue-i18n": "^8.26.3",
 		"vue-mq": "^1.0.1",
 		"vue-router": "^3.6.5",
-		"vue-router-multiguard": "^1.0.3",
 		"vue-smooth-dnd": "^0.8.1",
 		"vuedraggable": "^2.24.3",
 		"vuelidate": "^0.7.7",
