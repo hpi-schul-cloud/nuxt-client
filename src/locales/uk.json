@@ -1000,6 +1000,7 @@
 	"pages.files.title": "файли",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.tool.description": "\nТут налаштовуються спеціальні параметри школи для зовнішнього інструменту.\n\nПісля збереження конфігурації інструмент Inside School стає доступним.<br><br>\n\nВидалення конфігурації знову видаляє інструмент зі школи.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Довідковий центр зовнішніх інструментів</a>.",
+	"pages.tool.context.description": "Після збереження вибору інструмент доступний у межах курсу.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Довідковий центр зовнішніх інструментів</a>.",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.select.label": "вибір інструменту",
 	"pages.tool.addBtn.label": "додати інструмент",
@@ -1008,5 +1009,6 @@
 	"pages.tool.apiError.tool_version_mismatch": "Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_param_required": "Цей інструмент вимагає значення параметра, яке не вказано. Будь ласка, додайте значення.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
-	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення."
+	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення.",
+	"pages.tool.context.title": "Додавання зовнішніх інструментів"
 }
