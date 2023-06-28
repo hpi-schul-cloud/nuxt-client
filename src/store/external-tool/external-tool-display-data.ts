@@ -3,7 +3,7 @@ import { ToolConfigurationStatus } from "@/store/external-tool/tool-configuratio
 export type ExternalToolDisplayData = {
 	id: string;
 	name: string;
-	logoUrl?: string | null;
+	logoUrl?: string;
 	openInNewTab: boolean;
 	status: ToolConfigurationStatus;
 };

@@ -99,7 +99,7 @@ export function useExternalToolMappings() {
 		return response.data.map(
 			(toolReference: ToolReferenceResponse): ExternalToolDisplayData => ({
 				id: toolReference.contextToolId,
-				logoUrl: toolReference.logoUrl,
+				logoUrl: toolReference.logoUrl ?? undefined,
 				name: toolReference.displayName,
 				openInNewTab: toolReference.openInNewTab,
 				status: ToolConfigurationStatusMapping[toolReference.status],
