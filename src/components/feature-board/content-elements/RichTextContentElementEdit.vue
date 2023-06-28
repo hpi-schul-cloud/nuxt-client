@@ -3,6 +3,7 @@
 		<ck-editor
 			v-model="modelValue"
 			@focus="onFocus"
+			@keyboard:delete="onDelete"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
@@ -28,7 +29,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "delete:element"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
@@ -44,7 +45,11 @@ export default defineComponent({
 			}
 		};
 
-		return { modelValue, onFocus };
+		const onDelete = () => {
+			emit("delete:element");
+		};
+
+		return { modelValue, onFocus, onDelete };
 	},
 });
 </script>
