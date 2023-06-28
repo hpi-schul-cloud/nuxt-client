@@ -38,7 +38,7 @@
 			type="error"
 			data-testId="context-tool-error"
 		>
-			{{ t(getTranslationKey(apiError)) }}
+			{{ t(getBusinessErrorTranslationKey(apiError)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn
@@ -167,7 +167,7 @@ export default defineComponent({
 			return crumbs;
 		});
 
-		const { getTranslationKey } = useExternalToolMappings();
+		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean | undefined> = computed(
@@ -237,7 +237,7 @@ export default defineComponent({
 			t,
 			courseTitle,
 			breadcrumbs,
-			getTranslationKey,
+			getBusinessErrorTranslationKey,
 			loading,
 			configurationItems,
 			selectedItem,

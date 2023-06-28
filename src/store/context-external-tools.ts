@@ -7,10 +7,10 @@ import {
 import { AxiosResponse } from "axios";
 import {
 	ContextExternalToolPostParams,
-	ContextExternalToolSearchListResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-} from "../serverApi/v3";
+	ToolReferenceListResponse,
+} from "@/serverApi/v3";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { BusinessError } from "./types/commons";
 import { $axios } from "@/utils/api";
@@ -123,16 +123,17 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setLoading(true);
 			this.resetBusinessError();
 
-			const tools: AxiosResponse<ContextExternalToolSearchListResponse> =
-				await this.toolApi.toolContextControllerGetContextExternalToolsForContext(
+			const response: AxiosResponse<ToolReferenceListResponse> =
+				await this.toolApi.toolControllerGetToolReferences(
 					payload.contextId,
 					payload.contextType
 				);
 
-			const mapped =
-				useExternalToolMappings().mapContextExternalToolSearchListResponseToExternalToolDisplayData(
-					tools.data
+			const mapped: ExternalToolDisplayData[] =
+				useExternalToolMappings().mapToolReferencesToExternalToolDisplayData(
+					response.data
 				);
+
 			this.setContextExternalTools(mapped);
 
 			this.setLoading(false);
