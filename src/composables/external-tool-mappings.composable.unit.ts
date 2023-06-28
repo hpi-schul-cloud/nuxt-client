@@ -416,7 +416,7 @@ describe("useExternalToolUtils", () => {
 				};
 			};
 
-			it("should return latest translation key", () => {
+			it("should return outdated translation key", () => {
 				const { getStatusTranslationKey, status } = setup();
 
 				const translationKey: string = getStatusTranslationKey(status);

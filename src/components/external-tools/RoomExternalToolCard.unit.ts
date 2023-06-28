@@ -110,7 +110,7 @@ describe("RoomExternalToolCard", () => {
 		});
 	});
 
-	describe("when the tool status is available", () => {
+	describe("tool status", () => {
 		describe("when tool status is outdated", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
