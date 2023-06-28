@@ -12,6 +12,7 @@
 			:focus="isFocused"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
+			@delete:element="onDeleteElement"
 		/>
 	</div>
 </template>
@@ -23,6 +24,7 @@ import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -36,15 +38,41 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
+			required: true,
+		},
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
+    const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 		const { focusedId } = useSharedFocusedId();
+    
 		const isFocused = computed(() => {
 			return focusedId.value === props.element.id;
 		});
 
-		return { modelValue, isAutoFocus, isFocused };
+		const onDeleteElement = async (): Promise<void> => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				"",
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				await deleteRichTextElement();
+			}
+		};
+
+		const deleteRichTextElement = () => {
+			return props.deleteElement(props.element.id);
+		};
+
+		return {
+			modelValue,
+			isAutoFocus,
+      isFocused,
+			onDeleteElement,
+		};
 	},
 });
 </script>

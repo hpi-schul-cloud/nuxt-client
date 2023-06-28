@@ -66,7 +66,7 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have all plugins available in simple mode", () => {
 		setup({ mode: "simple" });
-		expect(wrapper.vm.config.plugins).toHaveLength(21);
+		expect(wrapper.vm.config.plugins).toHaveLength(22);
 	});
 
 	it("should have all toolbar items in regular mode", () => {
@@ -76,10 +76,23 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have all plugins available in regular mode", () => {
 		setup({ mode: "regular" });
-		expect(wrapper.vm.config.plugins).toHaveLength(21);
+		expect(wrapper.vm.config.plugins).toHaveLength(22);
 	});
 
 	describe("events", () => {
+		it("should emit ready on editor ready", async () => {
+			setup();
+
+			const ck = wrapper.findComponent({
+				ref: "ck",
+			});
+			ck.vm.$emit("ready", {});
+			await wrapper.vm.$nextTick();
+
+			const emitted = wrapper.emitted();
+			expect(emitted["ready"]).toHaveLength(1);
+		});
+
 		it("should emit input on content changes", async () => {
 			setup();
 
@@ -118,6 +131,28 @@ describe("@/components/editor/CKEditor", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["blur"]).toHaveLength(1);
+		});
+
+		it("should emit delete on delete event and empty text", async () => {
+			setup();
+
+			// due to not accessing the editor instance in test setup, we test here with implementation details
+			expect(wrapper.vm.charCount).toEqual(0);
+			wrapper.vm.handleDelete();
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+			expect(emitted["keyboard:delete"]).toHaveLength(1);
+		});
+
+		it("should not emit delete on delete event and non-empty text", async () => {
+			setup();
+
+			await wrapper.setData({ charCount: 1 });
+			expect(wrapper.vm.charCount).toEqual(1);
+			wrapper.vm.handleDelete();
+			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted();
+			expect(emitted["keyboard:delete"]).toBeUndefined();
 		});
 	});
 });

@@ -8,8 +8,8 @@
 		:disabled="disabled"
 		@blur="handleBlur"
 		@focus="handleFocus"
-		@ready="handleReady"
 		@input="handleInput"
+		@ready="handleReady"
 	/>
 </template>
 
@@ -28,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["ready", "focus", "input", "blur"],
+	emits: ["ready", "focus", "input", "blur", "keyboard:delete"],
 	props: {
 		value: {
 			type: String,
@@ -57,6 +57,7 @@ export default defineComponent({
 
 		const content = ref(props.value);
 		const language = i18n.locale;
+		const charCount = ref(0);
 
 		const toolbarItems = [];
 		toolbarItems["simple"] = [
@@ -123,6 +124,7 @@ export default defineComponent({
 			"Table",
 			"TableToolbar",
 			"Underline",
+			"WordCount",
 		];
 
 		watch(
@@ -314,6 +316,11 @@ export default defineComponent({
 			// 		},
 			// 	],
 			// },
+			wordCount: {
+				onUpdate: (stats) => {
+					charCount.value = stats.characters;
+				},
+			},
 			language: language,
 			placeholder: props.placeholder,
 		};
@@ -326,12 +333,29 @@ export default defineComponent({
 			setTimeout(() => emit("blur"), blurDelay);
 		};
 
+		const handleDelete = () => {
+			if (charCount.value === 0) {
+				emit("keyboard:delete");
+			}
+		};
+
 		const handleReady = (editor) => {
 			emit("ready");
-
-			if (props.focus) {
+      
+      if (props.focus) {
 				editor.editing.view.focus();
 			}
+      
+			// attach additional event listener not provided by vue wrapper itself
+			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
+			editor.editing.view.document.on("keydown", (evt, data) => {
+				if (
+					data.domEvent.key === "Backspace" ||
+					data.domEvent.key === "Delete"
+				) {
+					handleDelete();
+				}
+			});
 		};
 
 		return {
@@ -339,9 +363,11 @@ export default defineComponent({
 			content,
 			CustomCKEditor,
 			config,
+			charCount,
 			handleBlur,
 			handleFocus,
 			handleInput,
+			handleDelete,
 			handleReady,
 		};
 	},
@@ -350,6 +376,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
+@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 .ck-content {
 	.marker-1 {
