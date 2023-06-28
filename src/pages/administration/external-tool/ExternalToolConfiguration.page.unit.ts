@@ -4,17 +4,17 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
 import flushPromises from "flush-promises";
 import Vue from "vue";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
+import {
+	businessErrorFactory,
+	schoolExternalToolFactory,
+	toolConfigurationFactory,
+	toolConfigurationTemplateFactory,
+} from "@@/tests/test-utils/factory";
 import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
-import {
-	businessErrorFactory,
-	schoolExternalToolFactory,
-	toolConfigurationFactory,
-} from "@@/tests/test-utils/factory";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { I18N_KEY } from "@/utils/inject";
 
@@ -25,7 +25,7 @@ describe("ExternalToolConfiguration", () => {
 		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 		.mockReturnValue({
 			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getTranslationKey: () => "",
+			getBusinessErrorTranslationKey: () => "",
 		});
 
 	const setup = async (
