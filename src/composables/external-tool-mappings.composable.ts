@@ -63,7 +63,6 @@ const ToolParamScopeMapping: Record<
 	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
-	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
