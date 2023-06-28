@@ -95,7 +95,7 @@ export default defineComponent({
 			font-weight: var(--font-weight-bold);
 			font-size: var(--heading-6);
 			line-height: var(--line-height-md);
-			letter-spacing: 0.2px;
+			letter-spacing: 0.01em;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
 		}
@@ -105,7 +105,7 @@ export default defineComponent({
 			font-weight: var(--font-weight-bold);
 			font-size: var(--text-md);
 			line-height: var(--line-height-lg);
-			letter-spacing: 0.25px;
+			letter-spacing: 0.015em;
 			margin-bottom: var(--space-xs);
 			margin-top: var(--space-md-2);
 		}
