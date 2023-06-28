@@ -341,11 +341,11 @@ export default defineComponent({
 
 		const handleReady = (editor) => {
 			emit("ready");
-      
-      if (props.focus) {
+
+			if (props.focus) {
 				editor.editing.view.focus();
 			}
-      
+
 			// attach additional event listener not provided by vue wrapper itself
 			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
 			editor.editing.view.document.on("keydown", (evt, data) => {

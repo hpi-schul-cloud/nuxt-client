@@ -45,9 +45,9 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-    const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
+		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 		const { focusedId } = useSharedFocusedId();
-    
+
 		const isFocused = computed(() => {
 			return focusedId.value === props.element.id;
 		});
@@ -70,7 +70,7 @@ export default defineComponent({
 		return {
 			modelValue,
 			isAutoFocus,
-      isFocused,
+			isFocused,
 			onDeleteElement,
 		};
 	},
