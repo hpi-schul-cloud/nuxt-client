@@ -91,6 +91,7 @@ export default defineComponent({
 			font-size: var(--text-md);
 			line-height: var(--line-height-lg);
 			margin-bottom: var(--space-xs);
+			margin-top: var(--space-md-2);
 		}
 
 		ul {
