@@ -177,10 +177,10 @@ describe("ExternalToolSection", () => {
 				const secondRow = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.latest"
+					"components.externalTools.status.latest"
 				);
 				expect(secondRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.outdated"
+					"components.externalTools.status.outdated"
 				);
 			});
 
