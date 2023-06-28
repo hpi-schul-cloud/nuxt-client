@@ -8,7 +8,7 @@ import {
 	CoursesApiInterface,
 } from "@/serverApi/v3/api";
 import { useSharedBoardBreadcrumbs } from "./BoardBreadcrumbs.composable";
-import { mockAxiosResponse } from "@@/tests/test-utils/mockAxiosResponse";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 
 /**
  * hint: this is difficult to test, as we are testing a shared composable (and all mocked return values need to be set before mounting the composable... but the composable is a singleton... due to being a shared composable...)
@@ -22,7 +22,7 @@ describe("BoardBreadcrumbs.composable", () => {
 		const setup = () => {
 			const boardApi = createMock<BoardApiInterface>();
 			boardApi.boardControllerGetBoardContext.mockResolvedValue(
-				mockAxiosResponse({
+				mockApiResponse({
 					data: {
 						id: "courseId",
 						type: BoardExternalReferenceType.Course,
@@ -33,7 +33,7 @@ describe("BoardBreadcrumbs.composable", () => {
 
 			const coursesApi = createMock<CoursesApiInterface>();
 			coursesApi.courseControllerGetCourse.mockResolvedValue(
-				mockAxiosResponse({
+				mockApiResponse({
 					data: {
 						id: "courseId",
 						title: "Course #1",
