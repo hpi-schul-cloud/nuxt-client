@@ -157,6 +157,17 @@ export const useBoardApi = () => {
 		return response.status;
 	};
 
+	const moveElementCall = async (
+		elementId: string,
+		toCardId: string,
+		toPosition: number
+	) => {
+		await elementApi.elementControllerMoveElement(elementId, {
+			toCardId,
+			toPosition,
+		});
+	};
+
 	type ContextInfo = { id: string; name: string };
 
 	const getContextInfo = async (
@@ -189,6 +200,7 @@ export const useBoardApi = () => {
 		deleteColumnCall,
 		moveCardCall,
 		moveColumnCall,
+		moveElementCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,

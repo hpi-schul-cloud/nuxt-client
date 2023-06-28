@@ -162,14 +162,14 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async downloadImsccCourse(): Promise<void> {
+	async downloadImsccCourse(version: "1.1.0" | "1.3.0"): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
 				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, {
+			).courseControllerExportCourse(this.roomData.roomId, version, {
 				responseType: "blob",
 			});
 			const link = document.createElement("a");

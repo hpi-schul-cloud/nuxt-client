@@ -4482,6 +4482,67 @@ export enum ToolLaunchRequestResponseMethodEnum {
 /**
  * 
  * @export
+ * @interface ToolReferenceListResponse
+ */
+export interface ToolReferenceListResponse {
+    /**
+     * 
+     * @type {Array<ToolReferenceResponse>}
+     * @memberof ToolReferenceListResponse
+     */
+    data: Array<ToolReferenceResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface ToolReferenceResponse
+ */
+export interface ToolReferenceResponse {
+    /**
+     * The id of the tool in the context
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    contextToolId: string;
+    /**
+     * The url of the logo of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    logoUrl?: string | null;
+    /**
+     * The display name of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    displayName: string;
+    /**
+     * Whether the tool should be opened in a new tab
+     * @type {boolean}
+     * @memberof ToolReferenceResponse
+     */
+    openInNewTab: boolean;
+    /**
+     * The status of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    status: ToolReferenceResponseStatusEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ToolReferenceResponseStatusEnum {
+    Latest = 'Latest',
+    Outdated = 'Outdated',
+    Unknown = 'Unknown'
+}
+
+/**
+ * 
+ * @export
  * @interface UpdateFlagParams
  */
 export interface UpdateFlagParams {
@@ -8016,12 +8077,15 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.1.0' | '1.3.0', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'version', version)
             const localVarPath = `/courses/{courseId}/export`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8038,6 +8102,10 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (version !== undefined) {
+                localVarQueryParameter['version'] = version;
+            }
 
 
     
@@ -8143,11 +8211,12 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, options);
+        async courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -8184,11 +8253,12 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerExportCourse(courseId, options).then((request) => request(axios, basePath));
+        courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8221,11 +8291,12 @@ export interface CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8258,12 +8329,13 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13579,6 +13651,48 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetToolReferences: async (contextId: string, contextType: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextId' is not null or undefined
+            assertParamExists('toolControllerGetToolReferences', 'contextId', contextId)
+            // verify required parameter 'contextType' is not null or undefined
+            assertParamExists('toolControllerGetToolReferences', 'contextType', contextType)
+            const localVarPath = `/tools/references/{contextType}/{contextId}`
+                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
+                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} toolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
@@ -13976,6 +14090,18 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ToolReferenceListResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetToolReferences(contextId, contextType, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} toolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
@@ -14159,6 +14285,17 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ToolReferenceListResponse>> {
+            return localVarFp.toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} toolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
@@ -14331,6 +14468,17 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerGetExternalTool(toolId: string, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @summary Get Tool References
+     * @param {string} contextId 
+     * @param {string} contextType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ToolReferenceListResponse>>;
 
     /**
      * 
@@ -14525,6 +14673,19 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerGetExternalTool(toolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolControllerGetExternalTool(toolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Tool References
+     * @param {string} contextId 
+     * @param {string} contextType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetToolReferences(contextId: string, contextType: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
