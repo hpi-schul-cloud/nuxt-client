@@ -32,9 +32,9 @@
 		<div class="mx-auto"></div>
 		<div v-if="canEdit" class="ml-1 my-auto">
 			<room-dot-menu
-				class="menu"
 				:menu-items="menuItems"
 				data-testId="tool-card-menu"
+				:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
 			/>
 		</div>
 	</v-card>

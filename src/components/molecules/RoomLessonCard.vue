@@ -25,6 +25,7 @@
 					<room-dot-menu
 						:menu-items="moreActionsMenuItems[role]"
 						data-testid="content-card-lesson-menu"
+						:aria-label="t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>

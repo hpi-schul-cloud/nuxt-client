@@ -44,6 +44,7 @@
 						<room-dot-menu
 							:menu-items="moreActionsMenuItems[role]"
 							data-testid="content-card-task-menu"
+							:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
 						/>
 					</div>
 				</div>
