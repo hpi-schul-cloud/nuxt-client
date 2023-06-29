@@ -10,12 +10,13 @@
 				v-model="data.title"
 				dense
 				flat
-				solo
 				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
 				@blur="onBlur"
 				@keyup.enter="onEnterInput"
-				:append-icon="mdiPencilOutline"
+				@click:append="onEnterInput"
+				@focus="onFocus"
+				:append-icon="isInputFocused ? mdiKeyboardReturn : mdiPencilOutline"
 			/>
 		</div>
 		<template slot="content">
@@ -35,7 +36,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import { mdiPencilOutline } from "@mdi/js";
+import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -67,8 +68,9 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			roomNameEditMode: false,
+			isInputFocused: false,
 			mdiPencilOutline,
+			mdiKeyboardReturn,
 			data: {
 				id: "",
 				title: "",
@@ -88,8 +90,12 @@ export default Vue.extend({
 		async updateCourseGroupName() {
 			await roomsModule.update(this.data);
 		},
+		async onFocus() {
+			this.isInputFocused = true;
+		},
 
 		async onBlur() {
+			this.isInputFocused = false;
 			await this.updateCourseGroupName();
 		},
 		async onEnterInput() {
