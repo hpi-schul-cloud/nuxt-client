@@ -1,5 +1,6 @@
 <template>
-	<VListItem @click="onClick($event)" @keydown.enter="onClick($event)">
+	<VListItem @click.prevent="onClick">
+		<VListItemIcon class="mr-2"><slot name="icon"></slot></VListItemIcon>
 		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
