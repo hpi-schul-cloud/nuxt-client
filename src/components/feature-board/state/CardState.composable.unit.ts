@@ -1,15 +1,18 @@
 import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
+import {
+	boardCardFactory,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
+import { ElementMove } from "../types/DragAndDrop";
 import { useCardState } from "./CardState.composable";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-import { boardCardFactory } from "@@/tests/test-utils/factory";
-import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
@@ -52,6 +55,7 @@ describe("CardState composable", () => {
 			deleteColumnCall: jest.fn(),
 			moveCardCall: jest.fn(),
 			moveColumnCall: jest.fn(),
+			moveElementCall: jest.fn(),
 			updateCardHeightCall: jest.fn(),
 			updateColumnTitleCall: jest.fn(),
 			updateElementCall: jest.fn(),
@@ -76,6 +80,10 @@ describe("CardState composable", () => {
 			showFailure: jest.fn(),
 			isErrorCode: jest.fn(),
 		};
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
 	});
 
 	describe("fetchCard", () => {
@@ -332,6 +340,157 @@ describe("CardState composable", () => {
 				"boardElement"
 			);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
+		});
+	});
+
+	describe("moveElementDown", () => {
+		describe("when card state is undefined", () => {
+			const setup = () => {
+				const { moveElementDown, card } = mountComposable(() =>
+					useCardState("cardid")
+				);
+
+				const moveElementPayload: ElementMove = {
+					elementIndex: 0,
+					payload: "elementId",
+				};
+				card.value = undefined;
+
+				return { moveElementDown, moveElementPayload };
+			};
+
+			it("should not call moveElement", async () => {
+				const { moveElementDown, moveElementPayload } = setup();
+
+				await moveElementDown(moveElementPayload);
+
+				expect(mockedBoardApiCalls.moveElementCall).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when card state is defined", () => {
+			const fileElementResponse = fileElementResponseFactory.build();
+			const fileElementResponse2 = fileElementResponseFactory.build();
+
+			it("should call moveElement", async () => {
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
+				await moveElementDown({
+					elementIndex: 0,
+
+					payload: fileElementResponse.id,
+				});
+
+				expect(mockedBoardApiCalls.moveElementCall).toHaveBeenCalledWith(
+					fileElementResponse.id,
+					card.value?.id,
+					1
+				);
+			});
+
+			it("should move element correctly", async () => {
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
+
+				await moveElementDown({
+					elementIndex: 0,
+					payload: fileElementResponse.id,
+				});
+				expect(card.value?.elements[0].id).toStrictEqual(
+					fileElementResponse2.id
+				);
+				expect(card.value?.elements[1].id).toStrictEqual(
+					fileElementResponse.id
+				);
+			});
+		});
+	});
+
+	describe("moveElementUp", () => {
+		describe("when card state is undefined", () => {
+			const setup = () => {
+				const { moveElementUp, card } = mountComposable(() =>
+					useCardState("cardid")
+				);
+
+				const moveElementPayload: ElementMove = {
+					elementIndex: 1,
+					payload: "elementId",
+				};
+				card.value = undefined;
+
+				return { moveElementUp, moveElementPayload };
+			};
+
+			it("should not call moveElement", async () => {
+				const { moveElementUp, moveElementPayload } = setup();
+
+				await moveElementUp(moveElementPayload);
+
+				expect(mockedBoardApiCalls.moveElementCall).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when card state is defined", () => {
+			const fileElementResponse = fileElementResponseFactory.build();
+			const fileElementResponse2 = fileElementResponseFactory.build();
+
+			it("should call moveElement", async () => {
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementUp } = setup();
+				card.value = boardCard;
+
+				await moveElementUp({
+					elementIndex: 1,
+
+					payload: fileElementResponse.id,
+				});
+
+				expect(mockedBoardApiCalls.moveElementCall).toHaveBeenCalledWith(
+					fileElementResponse.id,
+					card.value?.id,
+					0
+				);
+			});
+
+			it("should move element correctly", async () => {
+				const boardCard = boardCardFactory.build();
+				boardCard.elements.push(fileElementResponse);
+				boardCard.elements.push(fileElementResponse2);
+				mockedUseSharedCardRequestPool.mockReturnValue({
+					fetchCard: jest.fn().mockReturnValue(boardCard),
+				});
+				const { card, moveElementUp } = setup();
+				card.value = boardCard;
+
+				await moveElementUp({
+					elementIndex: 1,
+					payload: fileElementResponse2.id,
+				});
+				expect(card.value?.elements[0].id).toStrictEqual(
+					fileElementResponse2.id
+				);
+				expect(card.value?.elements[1].id).toStrictEqual(
+					fileElementResponse.id
+				);
+			});
 		});
 	});
 

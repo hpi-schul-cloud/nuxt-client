@@ -6,6 +6,7 @@ import {
 	useFocusWithin,
 } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
+import { AnyContentElement } from "../types/ContentElement";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
 
@@ -25,7 +26,9 @@ import { BoardCard } from "../types/Card";
  * @see https://vuejs.org/guide/essentials/template-refs.html
  */
 export const useBoardFocusHandler = (
-	id: MaybeComputedRef<BoardColumn["id"] | BoardCard["id"]>,
+	id: MaybeComputedRef<
+		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
+	>,
 	element: Ref<HTMLElement | undefined>
 ) => {
 	const { focused: isFocused } = useFocus(element);
@@ -38,14 +41,19 @@ export const useBoardFocusHandler = (
 	const { announceFocusReceived, focusedId } = useSharedFocusedId();
 
 	/**
-	 * Listen to 'focusin' allows the also register focus events contained within the observed elements.
+	 * Listen to 'focusin' event allows to also register focus events contained within the observed elements.
 	 * This way we can keep track of focus events of child-elements.
 	 */
-	const cleanupFocusListener = useEventListener(element, "focusin", () => {
-		if (id?.valueOf()) {
-			announceFocusReceived(id);
+	const cleanupFocusListener = useEventListener(
+		element,
+		"focusin",
+		(event: FocusEvent) => {
+			if (id?.valueOf()) {
+				event.stopPropagation();
+				announceFocusReceived(id);
+			}
 		}
-	});
+	);
 
 	onMounted(async () => {
 		await trySetFocus();
@@ -81,13 +89,15 @@ export const useBoardFocusHandler = (
 	};
 };
 
-export const useSharedFocusedId = createSharedComposable(() => {
-	const focusedId = ref<BoardColumn["id"] | BoardCard["id"] | undefined>(
-		undefined
-	);
+const useSharedFocusedId = createSharedComposable(() => {
+	const focusedId = ref<
+		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"] | undefined
+	>(undefined);
 
 	const announceFocusReceived = (
-		id: MaybeComputedRef<BoardColumn["id"] | BoardCard["id"]>
+		id: MaybeComputedRef<
+			BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
+		>
 	) => {
 		if (focusedId.value === id.valueOf()) {
 			return;

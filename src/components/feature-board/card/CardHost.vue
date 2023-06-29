@@ -47,6 +47,9 @@
 					:elements="card.elements"
 					:isEditMode="isEditMode"
 					:deleteElement="deleteElement"
+					@move-down:element="onMoveContentElementDown"
+					@move-up:element="onMoveContentElementUp"
+					@move-keyboard:element="onMoveContentElementKeyboard"
 				></ContentElementList>
 				<CardAddElementMenu
 					@add-element="onAddElement"
@@ -84,6 +87,11 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "CardHost",
@@ -112,6 +120,8 @@ export default defineComponent({
 			updateTitle,
 			updateCardHeight,
 			addElement,
+			moveElementDown,
+			moveElementUp,
 			deleteElement,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
@@ -155,6 +165,26 @@ export default defineComponent({
 			}
 		};
 
+		const onMoveContentElementDown = async (payload: ElementMove) =>
+			await moveElementDown(payload);
+
+		const onMoveContentElementUp = async (payload: ElementMove) =>
+			await moveElementUp(payload);
+
+		const onMoveContentElementKeyboard = async (
+			payload: ElementMove,
+			keyString: DragAndDropKey
+		) => {
+			if (!verticalCursorKeys.includes(keyString)) {
+				return;
+			}
+			if (keyString === "ArrowUp") {
+				await moveElementUp(payload);
+			} else if (keyString === "ArrowDown") {
+				await moveElementDown(payload);
+			}
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -181,6 +211,9 @@ export default defineComponent({
 			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
+			onMoveContentElementDown,
+			onMoveContentElementUp,
+			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,

@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -57,6 +57,8 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 export default defineComponent({
 	name: "Board",
@@ -72,6 +74,9 @@ export default defineComponent({
 		boardId: { type: String, required: true },
 	},
 	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
+		const { showInfo } = useBoardNotifier();
+
 		const {
 			board,
 			createCard,
@@ -93,6 +98,7 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasDeletePermission,
 			hasEditPermission,
+			isTeacher,
 		} = useBoardPermissions();
 
 		const lockAxis = hasMovePermission ? "x" : "x,y";
@@ -149,6 +155,14 @@ export default defineComponent({
 		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
+		onMounted(() => {
+			if (isTeacher) {
+				showInfo(
+					i18n.t("components.board.alert.info.teacher").toString(),
+					false
+				);
+			}
+		});
 
 		return {
 			board,
