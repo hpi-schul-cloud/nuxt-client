@@ -2,14 +2,11 @@ import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import {
-	useBoardFocusHandler,
-	useSharedFocusedId,
-} from "../shared/BoardFocusHandler.composable";
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
