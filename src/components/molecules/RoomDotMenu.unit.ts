@@ -1,5 +1,5 @@
 import { mount, MountOptions } from "@vue/test-utils";
-import MoreItemMenu from "./MoreItemMenu.vue";
+import RoomDotMenu from "./RoomDotMenu.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
@@ -16,7 +16,7 @@ const testProps = {
 };
 
 const getWrapper: any = (props: object, options?: object) => {
-	return mount(MoreItemMenu as MountOptions<Vue>, {
+	return mount(RoomDotMenu as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -25,7 +25,7 @@ const getWrapper: any = (props: object, options?: object) => {
 	});
 };
 
-describe("@/components/molecules/MoreItemMenu", () => {
+describe("@/components/molecules/RoomDotMenu", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 	});

@@ -41,9 +41,8 @@
 						{{ cardTitle(task.dueDate) }}
 					</div>
 					<div class="dot-menu-section">
-						<more-item-menu
+						<room-dot-menu
 							:menu-items="moreActionsMenuItems[role]"
-							:show="true"
 							data-testid="content-card-task-menu"
 						/>
 					</div>
@@ -101,8 +100,8 @@
 					text
 					@click.stop="action.action"
 				>
-					{{ action.name }}</v-btn
-				>
+					{{ action.name }}
+				</v-btn>
 			</v-card-actions>
 		</template>
 	</v-card>
@@ -110,7 +109,7 @@
 
 <script>
 import { fromNow } from "@/plugins/datetime";
-import MoreItemMenu from "./MoreItemMenu";
+import RoomDotMenu from "./RoomDotMenu";
 import {
 	mdiPencilOutline,
 	mdiFormatListChecks,
@@ -129,7 +128,7 @@ import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { MoreItemMenu, VCustomChipTimeRemaining, RenderHTML },
+	components: { RoomDotMenu, VCustomChipTimeRemaining, RenderHTML },
 	props: {
 		task: {
 			type: Object,

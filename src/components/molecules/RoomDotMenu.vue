@@ -10,7 +10,6 @@
 	>
 		<template #activator="{ on, attrs }">
 			<v-btn
-				v-show="show"
 				v-bind="attrs"
 				class="three-dot-button"
 				icon
@@ -47,10 +46,6 @@ export default {
 	props: {
 		menuItems: {
 			type: Array,
-			required: true,
-		},
-		show: {
-			type: Boolean,
 			required: true,
 		},
 		nudgeRight: {

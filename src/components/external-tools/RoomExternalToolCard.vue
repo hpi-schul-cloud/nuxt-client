@@ -31,10 +31,9 @@
 		</span>
 		<div class="mx-auto"></div>
 		<div v-if="canEdit" class="ml-1 my-auto">
-			<more-item-menu
+			<room-dot-menu
 				class="menu"
 				:menu-items="menuItems"
-				:show="true"
 				data-testId="tool-card-menu"
 			/>
 		</div>
@@ -42,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
+import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
@@ -56,7 +55,7 @@ import { ToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { MoreItemMenu },
+	components: { RoomDotMenu },
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
