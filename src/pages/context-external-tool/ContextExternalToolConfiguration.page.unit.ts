@@ -28,7 +28,7 @@ describe("ContextExternalToolConfiguration", () => {
 		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
 		.mockReturnValue({
 			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getTranslationKey: () => "",
+			getBusinessErrorTranslationKey: () => "",
 		});
 
 	const getWrapper = async (

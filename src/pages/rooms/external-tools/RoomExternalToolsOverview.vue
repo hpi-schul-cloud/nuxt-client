@@ -13,7 +13,6 @@
 				imgHeight="200px"
 			/>
 		</div>
-
 		<v-alert
 			v-if="apiError.message"
 			light
@@ -36,6 +35,12 @@
 			@click="onClickTool"
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
+
+		<v-progress-linear
+			:active="loading"
+			data-testId="progress-bar"
+			indeterminate
+		></v-progress-linear>
 
 		<v-dialog
 			v-model="isDeleteDialogOpen"
@@ -107,8 +112,8 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 import VueI18n from "vue-i18n";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import ContextExternalToolsModule from "../../../store/context-external-tools";
-import ExternalToolsModule from "../../../store/external-tools";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import ExternalToolsModule from "@/store/external-tools";
 
 export default defineComponent({
 	name: "RoomExternalToolsOverview",
@@ -241,7 +246,12 @@ export default defineComponent({
 			() => contextExternalToolsModule?.getBusinessError
 		);
 
+		const loading: ComputedRef<boolean | undefined> = computed(
+			() => contextExternalToolsModule?.getLoading
+		);
+
 		return {
+			loading,
 			t,
 			tools,
 			canEdit,
