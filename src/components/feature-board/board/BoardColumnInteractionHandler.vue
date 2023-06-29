@@ -7,8 +7,8 @@
 		<div
 			data-testid="event-handle"
 			@keydown.left.right.capture="onKeydownArrow"
-			@keydown.enter.capture="onKeydownEnter"
 			@keydown.tab.capture="onKeydownTab"
+			@keydown.enter.capture="onKeydownEnter"
 		>
 			<slot></slot>
 		</div>
@@ -43,10 +43,14 @@ export default defineComponent({
 		};
 
 		const onKeydownEnter = (event: KeyboardEvent) => {
+			if (event.target instanceof HTMLButtonElement) {
+				/**
+				 * Do not handle key-events on buttons (mainly the BoardMenu) within the column header
+				 */
+				return;
+			}
 			if (!props.isEditMode) {
 				emit("start-edit-mode");
-				event.stopPropagation();
-				event.stopImmediatePropagation();
 				event.preventDefault();
 			}
 		};

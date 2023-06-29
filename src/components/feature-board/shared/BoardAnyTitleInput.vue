@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -50,13 +50,27 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<HTMLInputElement | null>(null);
+		const titleInput = ref<HTMLTextAreaElement | null>(null);
 
 		useInlineEditInteractionHandler(() => {
+			setFocusOnEdit();
+		});
+
+		const setFocusOnEdit = async () => {
 			if (!hasEditPermission) return;
 			if (titleInput.value === null) return;
 			titleInput.value.focus();
-		});
+		};
+
+		watch(
+			() => props.isEditMode,
+			(newVal, oldVal) => {
+				if (props.scope !== "column") return;
+				if (newVal && !oldVal) {
+					setFocusOnEdit();
+				}
+			}
+		);
 
 		const hasValue = computed<boolean>(
 			() => props.value !== "" && !!props.value
