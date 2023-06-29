@@ -7,10 +7,10 @@ import {
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
-import { BusinessError } from "@/store/types/commons";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToApiResponseError } from "@/utils/api";
 import { delay } from "@/utils/helpers";
 import { ref } from "vue";
+import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export const useFileStorageApi = (
 	parentId: string,
@@ -18,11 +18,7 @@ export const useFileStorageApi = (
 ) => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const fileRecord = ref<FileRecordResponse>();
-
-	const businessError = ref<BusinessError>({
-		statusCode: "",
-		message: "",
-	});
+	const { showErrorFromResponse } = useFileStorageNotifier();
 
 	const fetchFile = async (): Promise<void> => {
 		try {
@@ -31,7 +27,7 @@ export const useFileStorageApi = (
 
 			fileRecord.value = response.data.data[0];
 		} catch (error) {
-			setBusinessError(error as BusinessError);
+			showError(error);
 			throw error;
 		}
 	};
@@ -48,7 +44,7 @@ export const useFileStorageApi = (
 
 			fileRecord.value = response.data;
 		} catch (error) {
-			setBusinessError(error as BusinessError);
+			showError(error);
 			throw error;
 		}
 	};
@@ -62,13 +58,9 @@ export const useFileStorageApi = (
 
 			fileRecord.value = response.data;
 		} catch (error) {
-			setBusinessError(error as BusinessError);
+			showError(error);
 			throw error;
 		}
-	};
-
-	const setBusinessError = (error: BusinessError): void => {
-		businessError.value = error;
 	};
 
 	const fetchPendingFileRecursively = async (
@@ -97,12 +89,15 @@ export const useFileStorageApi = (
 		}
 	};
 
+	const showError = (error: unknown) => {
+		showErrorFromResponse(mapAxiosErrorToApiResponseError(error));
+	};
+
 	return {
 		fetchFile,
 		fetchPendingFileRecursively,
 		rename,
 		upload,
-		businessError,
 		fileRecord,
 	};
 };

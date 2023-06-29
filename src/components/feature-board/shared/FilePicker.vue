@@ -5,6 +5,7 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
+import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export default defineComponent({
 	name: "FilePicker",
@@ -16,6 +17,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const isFilePickerOpen = useVModel(props, "isFilePickerOpen", emit);
+		const { showFileTooBigError, getMaxFileSize } = useFileStorageNotifier();
 
 		onMounted(() => {
 			inputRef.value.$refs.input.onclick = (e: Event) => {
@@ -35,7 +37,11 @@ export default defineComponent({
 		);
 
 		const onFileChange = (file: File) => {
-			emit("update:file", file);
+			if (file.size > getMaxFileSize()) {
+				showFileTooBigError();
+			} else {
+				emit("update:file", file);
+			}
 		};
 
 		return {
