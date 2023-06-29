@@ -90,10 +90,9 @@ export default Vue.extend({
 		async updateCourseGroupName() {
 			await roomsModule.update(this.data);
 		},
-		async onFocus() {
+		onFocus() {
 			this.isInputFocused = true;
 		},
-
 		async onBlur() {
 			this.isInputFocused = false;
 			await this.updateCourseGroupName();
