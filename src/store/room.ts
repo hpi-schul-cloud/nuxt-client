@@ -16,6 +16,7 @@ import {
 import { $axios } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
+import { Course } from "./types/room";
 
 @Module({
 	name: "roomModule",
@@ -45,6 +46,25 @@ export default class RoomModule extends VuexModule {
 
 	private get lessonApi(): LessonApiInterface {
 		return LessonApiFactory(undefined, "/v3", $axios);
+	}
+
+	@Action
+	async getCourse(courseId: string): Promise<Course | null> {
+		this.setLoading(true);
+
+		try {
+			const { data } = await $axios.get(`/v1/courses/${courseId}`);
+
+			this.setLoading(false);
+
+			return data;
+		} catch (error: any) {
+			this.setError(error);
+
+			this.setLoading(false);
+		}
+
+		return null;
 	}
 
 	@Action

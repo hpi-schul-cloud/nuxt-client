@@ -987,5 +987,10 @@
 	"pages.tool.apiError.tool_param_required": "Für dieses Tool wird ein Parameterwert benötigt, der nicht mit angegeben wurde. Bitte den Wert hinzufügen.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren.",
-	"pages.tool.context.title": "Hinzufügen Externer Tools"
+	"pages.tool.context.title": "Hinzufügen Externer Tools",
+	"pages.videoConference.title": "Video Konferenzen mit BBB",
+	"pages.videoConference.action.refresh": "Videokonferenzstatus aktualisieren",
+	"pages.videoConference.status.running": "läuft",
+	"pages.videoConference.status.not_running": "nicht gestartet",
+	"pages.videoConference.status.noPermission": "nicht berechtigt"
 }

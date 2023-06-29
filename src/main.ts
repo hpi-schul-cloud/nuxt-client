@@ -83,7 +83,14 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -124,13 +131,15 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 			accountsModule,
 			applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
-			contextExternalToolsModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
 			envConfigModule,
 			externalToolsModule,
+			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
@@ -138,6 +147,7 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 			newsModule,
 			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			roomModule,
+			[ROOM_MODULE.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
