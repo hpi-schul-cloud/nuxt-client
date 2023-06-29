@@ -1,5 +1,5 @@
-import { SchoolExternalToolStatus } from "./school-external-tool-status.enum";
 import { ToolParameterEntry } from "./tool-parameter-entry";
+import { ToolConfigurationStatus } from "@/store/external-tool/tool-configuration-status.enum";
 
 export interface SchoolExternalTool {
 	id: string;
@@ -10,7 +10,7 @@ export interface SchoolExternalTool {
 
 	parameters: ToolParameterEntry[];
 
-	status: SchoolExternalToolStatus;
+	status: ToolConfigurationStatus;
 
 	version?: number;
 }

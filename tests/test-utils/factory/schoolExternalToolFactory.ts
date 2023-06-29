@@ -1,7 +1,7 @@
 import { Factory } from "fishery";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
+	ToolConfigurationStatus,
 } from "@/store/external-tool";
 
 export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
@@ -10,7 +10,7 @@ export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 		toolId: "toolId",
 		name: "name",
 		parameters: [],
-		status: SchoolExternalToolStatus.Latest,
+		status: ToolConfigurationStatus.Latest,
 		version: 1,
 	})
 );

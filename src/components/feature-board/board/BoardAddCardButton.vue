@@ -14,7 +14,7 @@
 			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
-			<span class="d-sr-only">Add Card</span>
+			<span class="d-sr-only">{{ $t("components.board.action.addCard") }}</span>
 		</VBtn>
 	</div>
 </template>
