@@ -300,6 +300,7 @@
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
 	"components.cardHost.deletionModal.confirmation": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.moveDown": "Рухатися вниз",
