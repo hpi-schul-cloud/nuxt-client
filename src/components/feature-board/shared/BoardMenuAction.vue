@@ -9,7 +9,8 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "BoardMenuAction",
 	setup(props, { emit }) {
-		const onClick = () => emit("click");
+		const onClick = ($event: Event) => emit("click", $event);
+
 		return {
 			onClick,
 		};

@@ -235,6 +235,18 @@ export default defineComponent({
 	transition: opacity 200ms;
 	opacity: 0;
 }
+
+::v-deep .v-card__text > :first-child > .ck-content > :first-child {
+	margin-top: 0px;
+}
+
+::v-deep
+	.v-card__text
+	> :first-child
+	.ck.ck-editor__editable_inline
+	> :first-child {
+	margin-top: 0px;
+}
 </style>
 
 <style>

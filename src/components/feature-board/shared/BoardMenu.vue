@@ -8,6 +8,7 @@
 				:class="{ white: hasBackground }"
 				icon
 				@dblclick.stop="() => {}"
+				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
