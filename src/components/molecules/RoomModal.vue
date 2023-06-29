@@ -14,7 +14,6 @@
 				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
 				@blur="onBlur"
-				@focus="onFocus"
 				@keyup.enter="onEnterInput"
 				:append-icon="mdiPencilOutline"
 			/>
@@ -87,14 +86,9 @@ export default Vue.extend({
 	},
 	methods: {
 		async updateCourseGroupName() {
-			if (this.roomNameEditMode) {
-				this.roomNameEditMode = false;
-				await roomsModule.update(this.data);
-			}
+			await roomsModule.update(this.data);
 		},
-		onFocus() {
-			this.roomNameEditMode = true;
-		},
+
 		async onBlur() {
 			await this.updateCourseGroupName();
 		},
