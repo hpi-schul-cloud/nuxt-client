@@ -1,8 +1,5 @@
 import {
 	ContextExternalToolPostParams,
-	ContextExternalToolResponse,
-	ContextExternalToolResponseContextTypeEnum,
-	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -13,12 +10,15 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	ToolReferenceListResponse,
+	ToolReferenceResponse,
+	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
 	ExternalToolDisplayData,
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
+	ToolConfigurationStatus,
 	ToolConfigurationTemplate,
 	ToolContextType,
 	ToolParameter,
@@ -51,8 +51,7 @@ describe("useExternalToolUtils", () => {
 		const {
 			mapSchoolExternalToolResponse,
 			mapSchoolExternalToolSearchListResponse,
-			mapContextExternalToolResponse,
-			getTranslationKey,
+			getBusinessErrorTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 			mapToolConfigurationTemplateToContextExternalToolPostParams,
@@ -80,7 +79,7 @@ describe("useExternalToolUtils", () => {
 		const schoolExternalToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: SchoolExternalToolStatus.Latest,
+			status: ToolConfigurationStatus.Latest,
 			outdated: false,
 		};
 
@@ -133,8 +132,7 @@ describe("useExternalToolUtils", () => {
 			schoolExternalToolItem,
 			mapSchoolExternalToolSearchListResponse,
 			mapSchoolExternalToolResponse,
-			mapContextExternalToolResponse,
-			getTranslationKey,
+			getBusinessErrorTranslationKey,
 			mapExternalToolConfigurationTemplateResponse,
 			toolConfigurationTemplateResponse,
 			customParameterResponse,
@@ -175,7 +173,7 @@ describe("useExternalToolUtils", () => {
 							name: toolResponse.name,
 							parameters: toolResponse.parameters,
 							version: toolResponse.toolVersion,
-							status: SchoolExternalToolStatus.Latest,
+							status: ToolConfigurationStatus.Latest,
 						},
 					])
 				);
@@ -183,73 +181,61 @@ describe("useExternalToolUtils", () => {
 		});
 	});
 
-	describe("mapContextExternalToolSearchListResponseToExternalToolDisplayData is called", () => {
+	describe("mapToolReferencesToExternalToolDisplayData is called", () => {
 		describe("when maps the response", () => {
 			const setup = () => {
-				const {
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
-				} = useExternalToolMappings();
+				const { mapToolReferencesToExternalToolDisplayData } =
+					useExternalToolMappings();
 
-				const contextToolResponse: ContextExternalToolResponse = {
-					id: "id",
-					displayName: "displayName",
-					contextId: "contextId",
-					schoolToolId: "schoolToolId",
-					toolVersion: 1,
-					parameters: [
-						{
-							name: "name",
-							value: "value",
-						},
-					],
-					contextType: ContextExternalToolResponseContextTypeEnum.Course,
+				const toolReferenceResponse: ToolReferenceResponse = {
+					contextToolId: "id",
 					logoUrl: "logoUrl",
+					displayName: "displayName",
+					openInNewTab: true,
+					status: ToolReferenceResponseStatusEnum.Latest,
 				};
 
-				const contextListResponse: ContextExternalToolSearchListResponse = {
-					data: [contextToolResponse],
+				const toolReferenceListResponse: ToolReferenceListResponse = {
+					data: [toolReferenceResponse],
 				};
 
 				return {
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
-					contextListResponse,
-					contextToolResponse,
+					mapToolReferencesToExternalToolDisplayData,
+					toolReferenceListResponse,
+					toolReferenceResponse,
 				};
 			};
 
 			it("should return a contextExternalTool array", () => {
 				const {
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
-					contextListResponse,
+					mapToolReferencesToExternalToolDisplayData,
+					toolReferenceListResponse,
 				} = setup();
 
 				const contextExternalTools: ExternalToolDisplayData[] =
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
-						contextListResponse
-					);
+					mapToolReferencesToExternalToolDisplayData(toolReferenceListResponse);
 
 				expect(Array.isArray(contextExternalTools)).toBeTruthy();
 			});
 
 			it("should map the response correctly", () => {
 				const {
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData,
-					contextListResponse,
-					contextToolResponse,
+					mapToolReferencesToExternalToolDisplayData,
+					toolReferenceListResponse,
+					toolReferenceResponse,
 				} = setup();
 
 				const contextExternalTools: ExternalToolDisplayData[] =
-					mapContextExternalToolSearchListResponseToExternalToolDisplayData(
-						contextListResponse
-					);
+					mapToolReferencesToExternalToolDisplayData(toolReferenceListResponse);
 
 				expect(contextExternalTools).toEqual(
 					expect.objectContaining<ExternalToolDisplayData[]>([
 						{
-							id: contextToolResponse.id,
-							name: "displayName",
-							logoUrl: undefined,
-							openInNewTab: true,
+							id: toolReferenceResponse.contextToolId,
+							name: toolReferenceResponse.displayName,
+							logoUrl: toolReferenceResponse.logoUrl,
+							openInNewTab: toolReferenceResponse.openInNewTab,
+							status: ToolConfigurationStatus.Latest,
 						},
 					])
 				);
@@ -257,35 +243,38 @@ describe("useExternalToolUtils", () => {
 		});
 	});
 
-	describe("getTranslationKey", () => {
+	describe("getBusinessErrorTranslationKey", () => {
 		it("should return original message when key is undefined", () => {
-			const { getTranslationKey } = setup();
+			const { getBusinessErrorTranslationKey } = setup();
 
-			const translationKey: string | undefined = getTranslationKey(undefined);
+			const translationKey: string | undefined =
+				getBusinessErrorTranslationKey(undefined);
 			expect(translationKey).toBeUndefined();
 		});
 
 		it("should return translation key when message was found", () => {
-			const { getTranslationKey } = setup();
+			const { getBusinessErrorTranslationKey } = setup();
 			const error: BusinessError = {
 				statusCode: "400",
 				message: "tool_param_duplicate: Some validationError was thrown",
 			};
 
-			const translationKey: string | undefined = getTranslationKey(error);
+			const translationKey: string | undefined =
+				getBusinessErrorTranslationKey(error);
 			expect(translationKey).toEqual(
 				"pages.tool.apiError.tool_param_duplicate"
 			);
 		});
 
 		it("should return original message when key was not found", () => {
-			const { getTranslationKey } = setup();
+			const { getBusinessErrorTranslationKey } = setup();
 			const error: BusinessError = {
 				statusCode: "400",
 				message: "some_error: which is not defined in map",
 			};
 
-			const translationKey: string | undefined = getTranslationKey(error);
+			const translationKey: string | undefined =
+				getBusinessErrorTranslationKey(error);
 			expect(translationKey).toEqual(error.message);
 		});
 	});
@@ -388,6 +377,77 @@ describe("useExternalToolUtils", () => {
 					contextType: "course",
 				})
 			);
+		});
+	});
+
+	describe("getStatusTranslationKey", () => {
+		describe("when status is Latest", () => {
+			const setup = () => {
+				const { getStatusTranslationKey } = useExternalToolMappings();
+
+				const status = ToolConfigurationStatus.Latest;
+
+				return {
+					getStatusTranslationKey,
+					status,
+				};
+			};
+
+			it("should return latest translation key", () => {
+				const { getStatusTranslationKey, status } = setup();
+
+				const translationKey: string = getStatusTranslationKey(status);
+
+				expect(translationKey).toEqual(
+					"components.externalTools.status.latest"
+				);
+			});
+		});
+
+		describe("when status is Outdated", () => {
+			const setup = () => {
+				const { getStatusTranslationKey } = useExternalToolMappings();
+
+				const status = ToolConfigurationStatus.Outdated;
+
+				return {
+					getStatusTranslationKey,
+					status,
+				};
+			};
+
+			it("should return outdated translation key", () => {
+				const { getStatusTranslationKey, status } = setup();
+
+				const translationKey: string = getStatusTranslationKey(status);
+
+				expect(translationKey).toEqual(
+					"components.externalTools.status.outdated"
+				);
+			});
+		});
+
+		describe("when status is Unknown", () => {
+			const setup = () => {
+				const { getStatusTranslationKey } = useExternalToolMappings();
+
+				const status = ToolConfigurationStatus.Unknown;
+
+				return {
+					getStatusTranslationKey,
+					status,
+				};
+			};
+
+			it("should return latest translation key", () => {
+				const { getStatusTranslationKey, status } = setup();
+
+				const translationKey: string = getStatusTranslationKey(status);
+
+				expect(translationKey).toEqual(
+					"components.externalTools.status.unknown"
+				);
+			});
 		});
 	});
 });

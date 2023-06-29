@@ -28,6 +28,7 @@ describe("RoomExternalToolOverview", () => {
 			{
 				getExternalToolDisplayDataList: tools,
 				getBusinessError: businessErrorFactory.build(),
+				getLoading: true,
 			}
 		);
 
@@ -117,6 +118,24 @@ describe("RoomExternalToolOverview", () => {
 			expect(wrapper.findComponent({ ref: "tools-empty-state" }).exists()).toBe(
 				true
 			);
+		});
+	});
+
+	describe("when the tools are loading", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper([]);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display progressbar", () => {
+			const { wrapper } = setup();
+
+			const progressbar = wrapper.find('[data-testId="progress-bar"]');
+
+			expect(progressbar.exists()).toBeTruthy();
 		});
 	});
 

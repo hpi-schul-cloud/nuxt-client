@@ -31,15 +31,15 @@ import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
 	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
+	ToolConfigurationStatus,
 	ToolConfigurationTemplate,
+	ToolContextType,
 	ToolParameter,
 } from "./external-tool";
 import ExternalToolsModule from "./external-tools";
 import { User } from "./types/auth";
 import { BusinessError } from "./types/commons";
-import { ToolContextType } from "./external-tool";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -266,13 +266,13 @@ describe("ExternalToolsModule", () => {
 		const schoolExternalTool: SchoolExternalTool =
 			schoolExternalToolFactory.build({
 				name: "Test",
-				status: SchoolExternalToolStatus.Latest,
+				status: ToolConfigurationStatus.Latest,
 			});
 		const schoolExternalTools: SchoolExternalTool[] = [
 			schoolExternalTool,
 			schoolExternalToolFactory.build({
 				name: "Test2",
-				status: SchoolExternalToolStatus.Outdated,
+				status: ToolConfigurationStatus.Outdated,
 			}),
 		];
 		module.setSchoolExternalTools(schoolExternalTools);
@@ -415,7 +415,7 @@ describe("ExternalToolsModule", () => {
 				module.setSchoolExternalTools([
 					schoolExternalToolFactory.build({
 						name: expectedName,
-						status: SchoolExternalToolStatus.Latest,
+						status: ToolConfigurationStatus.Latest,
 					}),
 				]);
 
@@ -665,7 +665,7 @@ describe("ExternalToolsModule", () => {
 						schoolExternalToolFactory.build({
 							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
-							status: SchoolExternalToolStatus.Latest,
+							status: ToolConfigurationStatus.Latest,
 							version: searchListResponse.data[0].toolVersion,
 						}),
 					]);
@@ -1188,7 +1188,7 @@ describe("ExternalToolsModule", () => {
 					expect(result).toEqual<SchoolExternalTool>({
 						id: mockResponse.id,
 						name: mockResponse.name,
-						status: SchoolExternalToolStatus.Unknown,
+						status: ToolConfigurationStatus.Unknown,
 						version: mockResponse.toolVersion,
 						toolId: mockResponse.toolId,
 						parameters: mockResponse.parameters,
