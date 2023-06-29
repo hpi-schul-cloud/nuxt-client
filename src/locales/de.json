@@ -898,6 +898,7 @@
 	"pages.rooms.importCourse.importErrorButton": "Okay, verstanden",
 	"pages.rooms.allRooms.emptyState.title": "Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.currentRooms.emptyState.title": "Aktuell gibt es hier noch keine Kurse.",
+	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.room.teacher.emptyState": "Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
 	"pages.room.student.emptyState": "Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.lessonCard.aria": "{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",

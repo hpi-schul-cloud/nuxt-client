@@ -929,6 +929,7 @@
 	"pages.rooms.title": "Пошук курсу",
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
+	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.tasks.emptyStateOnFilter.title": "Немає завдань",
 	"pages.tasks.finished.emptyState.title": "Наразі у вас немає завершених завдань.",
 	"pages.tasks.labels.due": "Термін",
