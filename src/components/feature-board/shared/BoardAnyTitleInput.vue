@@ -116,10 +116,11 @@ export default defineComponent({
 <style scoped>
 :deep(div.v-input__slot) {
 	padding: 0;
+	font-family: var(--font-accent);
 }
 
 :deep(textarea) {
-	font-size: v-bind(fontSize);
+	font-size: var(--heading-5);
 	background: transparent !important;
 }
 :deep(input) {
