@@ -3,29 +3,21 @@
 		ref="customDialog"
 		:is-open="isOpen"
 		class="room-dialog"
-		@dialog-closed="$emit('dialog-closed', false)"
+		@dialog-closed="$emit('update:isOpen', false)"
 	>
 		<div slot="title" class="room-title">
 			<v-text-field
-				v-show="roomNameEditMode"
-				ref="roomNameInput"
 				v-model="data.title"
 				dense
-				:aria-label="$t('common.labels.title')"
-				:append-icon="mdiKeyboardReturn"
-				@blur="onUpdateRoomName"
-				@keyup.enter="onRoomNameInputEnter"
-			></v-text-field>
-			<h2
-				v-show="!roomNameEditMode"
-				class="text-h4 my-2"
-				tabindex="0"
-				@click="onEditRoom"
-				@focus="onEditRoom"
-			>
-				{{ data.title }}
-				<v-icon>{{ mdiPencilOutline }}</v-icon>
-			</h2>
+				flat
+				solo
+				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+				@blur="onBlur"
+				@focus="onFocus"
+				@keyup.enter="onEnterInput"
+				:append-icon="mdiPencilOutline"
+			/>
 		</div>
 		<template slot="content">
 			<room-avatar-iterator
@@ -41,12 +33,11 @@
 	</vCustomDialog>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import { roomsModule } from "@/store";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
-
-import { mdiPencilOutline, mdiKeyboardReturn } from "@mdi/js";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { roomsModule } from "@/store";
+import { mdiPencilOutline } from "@mdi/js";
+import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -56,7 +47,7 @@ export default Vue.extend({
 	},
 	model: {
 		prop: "isOpen",
-		event: "dialog-closed",
+		event: "update:isOpen",
 	},
 	props: {
 		isOpen: {
@@ -66,10 +57,6 @@ export default Vue.extend({
 		groupData: {
 			type: Object,
 			default: () => ({}),
-		},
-		avatarSize: {
-			type: String,
-			required: true,
 		},
 		itemSize: {
 			type: String,
@@ -83,7 +70,6 @@ export default Vue.extend({
 		return {
 			roomNameEditMode: false,
 			mdiPencilOutline,
-			mdiKeyboardReturn,
 			data: {
 				id: "",
 				title: "",
@@ -100,26 +86,27 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		async onEditRoom() {
+		async updateCourseGroupName() {
+			if (this.roomNameEditMode) {
+				this.roomNameEditMode = false;
+				await roomsModule.update(this.data);
+			}
+		},
+		onFocus() {
 			this.roomNameEditMode = true;
-			await Vue.nextTick();
-			if (this.$refs?.roomNameInput instanceof HTMLElement) {
-				this.$refs?.roomNameInput?.focus();
-			}
 		},
-		onUpdateRoomName() {
-			roomsModule.update(this.data);
-			this.roomNameEditMode = false;
+		async onBlur() {
+			await this.updateCourseGroupName();
 		},
-		/*
-			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
-			@keyup.enter="$event.target.blur" results in Illegal invocation error
-		*/
-		onRoomNameInputEnter(event: FocusEvent) {
-			if (event.target instanceof HTMLElement) {
-				event.target.blur();
-			}
+		async onEnterInput() {
+			await this.updateCourseGroupName();
 		},
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.room-title {
+	width: 100%;
+}
+</style>
