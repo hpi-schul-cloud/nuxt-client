@@ -195,9 +195,7 @@ export default {
 		},
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
-				const name = this.$t(
-					`pages.account.index.user.locale.longName.${lang}`
-				);
+				const name = this.$t(`common.words.languages.${lang}`);
 				return { name, abbreveation: lang };
 			});
 		},

@@ -83,9 +83,7 @@ export default {
 		},
 		buildLanguageItem(language) {
 			const longName = this.$t(`global.topbar.language.longName.${language}`);
-			const translatedName = this.$t(
-				`pages.account.index.user.locale.longName.${language}`
-			);
+			const translatedName = this.$t(`common.words.languages.${language}`);
 			const icon =
 				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
 			return { language, longName, translatedName, icon };

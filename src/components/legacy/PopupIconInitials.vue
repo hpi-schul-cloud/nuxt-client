@@ -6,9 +6,11 @@
 			data-testid="initials"
 			role="menu"
 			:title="`${firstName} ${lastName} (${userRole})`"
-			:aria-label="`${$t(
-				'global.topbar.initials.currentUser'
-			)} ${firstName} ${lastName} ${userRole}`"
+			:aria-label="
+				$t('global.topbar.userMenu.ariaLabel', {
+					userName: `${firstName} ${lastName} (${userRole})`,
+				})
+			"
 			@click="popup"
 		>
 			<div class="icon">{{ initials }}</div>
