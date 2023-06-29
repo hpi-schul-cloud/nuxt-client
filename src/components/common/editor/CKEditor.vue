@@ -136,6 +136,9 @@ export default defineComponent({
 			toolbar: {
 				items: toolbarItems[props.mode],
 			},
+			link: {
+				defaultProtocol: "//",
+			},
 			plugins: plugins,
 			heading: {
 				options: [
