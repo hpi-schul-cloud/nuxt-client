@@ -158,7 +158,6 @@ import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
 import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
-import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -219,7 +218,6 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
-		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
