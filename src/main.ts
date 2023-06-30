@@ -24,6 +24,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -90,6 +91,7 @@ import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE,
+	VIDEO_CONFERENCE_MODULE,
 } from "./utils/inject";
 
 (async () => {
@@ -157,6 +159,7 @@ import {
 			tasksModule,
 			userLoginMigrationModule,
 			[I18N_KEY as symbol]: i18n,
+			[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

@@ -2,9 +2,7 @@
 	<v-card
 		class="card"
 		max-width="100%"
-		:aria-label="
-			t('pages.videoConference.title') + ` (${videoConferenceStatusText})`
-		"
+		:aria-label="videoConferenceTitle"
 		hover
 		@click="onClick"
 	>
@@ -17,28 +15,31 @@
 				:alt="$t('pages.rooms.tools.logo')"
 			/>
 		</div>
-		<h5 class="title my-auto">{{ t("pages.videoConference.title") }}</h5>
+		<h5 v-if="isRunning && hasPermission" class="card-title my-auto">
+			{{ videoConferenceTitle }}
+		</h5>
+		<span v-else class="card-title my-auto">
+			{{ videoConferenceTitle }}
+		</span>
 		<div class="mx-auto"></div>
-		<div v-if="hasPermission" class="ml-1 my-auto">
-			<div v-if="isRunning">
-				<div class="pulsating-dot"></div>
-			</div>
-			<div v-else class="ml-1 my-auto">
-				<v-btn
-					icon
-					:aria-label="t('pages.videoConference.action.refresh')"
-					@click.stop="refreshVideoConferenceStatus"
-				>
-					<v-icon :class="{ spin: isRefreshing }">{{ mdiReload }}</v-icon>
-				</v-btn>
-			</div>
+		<div class="ml-1 my-auto">
+			<div v-if="isRunning && hasPermission" class="pulsating-dot"></div>
+			<v-btn
+				v-else
+				icon
+				:aria-label="t('pages.videoConference.action.refresh')"
+				@click.stop="refreshVideoConferenceStatus"
+			>
+				<v-icon v-if="isRefreshing" class="spin">{{ mdiLoading }}</v-icon>
+				<v-icon v-else>{{ mdiReload }}</v-icon>
+			</v-btn>
 		</div>
 	</v-card>
 </template>
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiReload } from "@mdi/js";
+import { mdiReload, mdiLoading } from "@mdi/js";
 import { defineComponent, ComputedRef, computed } from "vue";
 
 export default defineComponent({
@@ -80,13 +81,13 @@ export default defineComponent({
 			}
 		});
 
-		const videoConferenceStatusText: ComputedRef<string> = computed(() => {
+		const videoConferenceTitle: ComputedRef<string> = computed(() => {
 			if (!props.hasPermission) {
-				return t("pages.videoConference.status.noPermission");
+				return t("pages.videoConference.title.noPermission");
 			} else if (props.isRunning) {
-				return t("pages.videoConference.status.running");
+				return t("pages.videoConference.title.running");
 			} else {
-				return t("pages.videoConference.status.not_running");
+				return t("pages.videoConference.title.notStarted");
 			}
 		});
 
@@ -94,9 +95,10 @@ export default defineComponent({
 			t,
 			onClick,
 			mdiReload,
+			mdiLoading,
 			logoUrl,
 			refreshVideoConferenceStatus,
-			videoConferenceStatusText,
+			videoConferenceTitle,
 		};
 	},
 });
@@ -110,7 +112,7 @@ export default defineComponent({
 	padding: 16px;
 }
 
-.title {
+.card-title {
 	overflow: hidden;
 	max-height: 100%;
 }

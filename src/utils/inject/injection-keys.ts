@@ -5,6 +5,7 @@ import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import ExternalToolsModule from "@/store/external-tools";
 import RoomModule from "@/store/room";
+import VideoConferenceModule from "@/store/video-conference";
 
 export const I18N_KEY: InjectionKey<VueI18n> = Symbol("i18n");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
@@ -16,3 +17,5 @@ export const EXTERNAL_TOOLS_MODULE: InjectionKey<ExternalToolsModule> = Symbol(
 export const CONTEXT_EXTERNAL_TOOLS_MODULE: InjectionKey<ContextExternalToolsModule> =
 	Symbol("contextExternalToolsModule");
 export const ROOM_MODULE: InjectionKey<RoomModule> = Symbol("roomModule");
+export const VIDEO_CONFERENCE_MODULE: InjectionKey<VideoConferenceModule> =
+	Symbol("videoConferenceModule");

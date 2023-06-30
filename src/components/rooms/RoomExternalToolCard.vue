@@ -16,7 +16,7 @@
 				:alt="t('pages.rooms.tools.logo')"
 			/>
 		</div>
-		<h5 class="title my-auto">{{ tool.name }}</h5>
+		<h5 class="card-title my-auto">{{ tool.name }}</h5>
 		<span
 			v-if="tool.openInNewTab"
 			class="ml-1 my-auto no-wrap"
@@ -125,7 +125,7 @@ export default defineComponent({
 	padding: 16px;
 }
 
-.title {
+.card-title {
 	overflow: hidden;
 	max-height: 100%;
 }

@@ -1013,5 +1013,9 @@
 	"pages.tool.apiError.tool_param_required": "Цей інструмент вимагає значення параметра, яке не вказано. Будь ласка, додайте значення.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення.",
-	"pages.tool.context.title": "Додавання зовнішніх інструментів"
+	"pages.tool.context.title": "Додавання зовнішніх інструментів",
+	"pages.videoConference.title.running": "Відеоконференція BigBlueButton",
+	"pages.videoConference.title.notStarted": "Відеоконференція ще не почалася",
+	"pages.videoConference.title.noPermission": "Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї",
+	"pages.videoConference.action.refresh": "Оновити статус відеоконференції"
 }

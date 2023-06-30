@@ -1,11 +1,11 @@
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "../../../tests/test-utils/componentMocks";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
-import { ExternalToolDisplayData } from "../../store/external-tool/external-tool-display-data";
-import { externalToolDisplayDataFactory } from "../../../tests/test-utils/factory/externalToolDisplayDataFactory";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { I18N_KEY } from "../../utils/inject";
-import { ToolConfigurationStatus } from "../../store/external-tool";
+import { I18N_KEY } from "@/utils/inject";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 
 describe("RoomExternalToolCard", () => {
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
@@ -16,17 +16,13 @@ describe("RoomExternalToolCard", () => {
 			{
 				...createComponentMocks({
 					i18n: true,
-					mocks: {
-						$t: (key: string): string => key,
-					},
 				}),
 				propsData: {
 					tool,
 					canEdit,
 				},
 				provide: {
-					[I18N_KEY as symbol]: {
-						$t: (key: string): string => key,
+					[I18N_KEY.valueOf()]: {
 						tc: (key: string): string => key,
 					},
 				},

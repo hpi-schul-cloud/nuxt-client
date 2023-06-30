@@ -1,34 +1,5 @@
 <template>
-	<div class="centered-container">
-		<div
-			v-if="tools.length === 0 && !isVideoConferenceAvailable"
-			class="mt-16 text-center"
-			data-testid="tools-empty-state"
-		>
-			<v-custom-empty-state
-				ref="tools-empty-state"
-				image="tools-empty-state"
-				:title="t('pages.rooms.tools.emptyState')"
-				class="mt-16"
-				imgHeight="200px"
-			/>
-		</div>
-		<v-alert
-			v-if="apiError && apiError.message"
-			light
-			prominent
-			text
-			type="error"
-			data-testId="context-tool-error"
-		>
-			{{ apiError.message }}
-		</v-alert>
-
-		<video-conference-section
-			v-if="isVideoConferenceAvailable"
-			class="mb-4"
-		></video-conference-section>
-
+	<div>
 		<room-external-tool-card
 			v-for="(tool, index) in tools"
 			:key="index"
@@ -40,12 +11,6 @@
 			@click="onClickTool"
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
-
-		<v-progress-linear
-			:active="loading"
-			data-testId="progress-bar"
-			indeterminate
-		></v-progress-linear>
 
 		<v-dialog
 			v-model="isDeleteDialogOpen"
@@ -96,79 +61,57 @@
 
 <script lang="ts">
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import { BusinessError } from "@/store/types/commons";
-import { Course, CourseFeatures } from "@/store/types/room";
+import ExternalToolsModule from "@/store/external-tools";
 import {
 	AUTH_MODULE,
 	CONTEXT_EXTERNAL_TOOLS_MODULE,
 	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
 	injectStrict,
-	ROOM_MODULE,
 } from "@/utils/inject";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	onMounted,
+	PropType,
 	ref,
 	Ref,
 } from "vue";
 import VueI18n from "vue-i18n";
-import VideoConferenceSection from "../video-conference/VideoConferenceSection.vue";
 
 export default defineComponent({
-	name: "RoomExternalToolsOverview",
+	name: "RoomExternalToolsSection",
 	components: {
-		VideoConferenceSection,
 		RoomExternalToolCard,
 		RenderHTML,
-		VCustomEmptyState,
 	},
 	props: {
-		roomId: {
-			type: String,
+		tools: {
+			type: Array as PropType<ExternalToolDisplayData[]>,
 			required: true,
 		},
 	},
-	setup(props) {
-		const contextExternalToolsModule = injectStrict(
+	setup() {
+		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE
 		);
-		const externalToolsModule = injectStrict(EXTERNAL_TOOLS_MODULE);
-		const i18n = injectStrict(I18N_KEY);
-		const authModule = injectStrict(AUTH_MODULE);
-		const roomModule = injectStrict(ROOM_MODULE);
-
-		const course: Ref<Course | null> = ref(null);
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE
+		);
+		const i18n: VueI18n = injectStrict(I18N_KEY);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined) => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
-
-		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
-			return (
-				course.value?.features?.includes(CourseFeatures.VIDEOCONFERENCE) ??
-				false
-			);
-		});
-
-		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
-			() => contextExternalToolsModule.getExternalToolDisplayDataList
-		);
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values) || key;
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -177,14 +120,6 @@ export default defineComponent({
 		const getItemToDeleteName: ComputedRef<string> = computed(
 			() => itemToDelete.value?.name || "???"
 		);
-
-		onMounted(async () => {
-			await contextExternalToolsModule.loadExternalToolDisplayData({
-				contextId: props.roomId,
-				contextType: ToolContextType.COURSE,
-			});
-			course.value = await roomModule.getCourse(props.roomId);
-		});
 
 		const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 			itemToDelete.value = tool;
@@ -265,18 +200,8 @@ export default defineComponent({
 			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
 		);
 
-		const apiError: ComputedRef<BusinessError> = computed(
-			() => contextExternalToolsModule.getBusinessError
-		);
-
-		const loading: ComputedRef<boolean> = computed(
-			() => contextExternalToolsModule.getLoading
-		);
-
 		return {
-			loading,
 			t,
-			tools,
 			canEdit,
 			itemToDelete,
 			getItemToDeleteName,
@@ -286,16 +211,7 @@ export default defineComponent({
 			onDeleteTool,
 			onClickTool,
 			onEditTool,
-			apiError,
-			isVideoConferenceAvailable,
 		};
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.centered-container {
-	max-width: var(--size-content-width-max);
-	margin: 0 auto;
-}
-</style>
