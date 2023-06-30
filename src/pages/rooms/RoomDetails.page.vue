@@ -42,7 +42,7 @@
 						:href="tabItem.href"
 						:data-testid="tabItem.dataTestId"
 					>
-						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }} </v-icon>
+						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
 						<span class="d-none d-sm-inline">
 							{{ tabItem.label }}
 						</span>
@@ -57,6 +57,7 @@
 				:is="getCurrentComponent"
 				:room-data-object="roomData"
 				:role="dashBoardRole"
+				:roomId="courseId"
 				@copy-board-element="onCopyBoardElement"
 				data-testid="room-content"
 			/>
@@ -231,6 +232,7 @@ export default defineComponent({
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
+					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
 				tabs.push({
@@ -379,14 +381,25 @@ export default defineComponent({
 					dataTestId: "title-menu-share",
 				});
 			}
+
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse(),
-					name: this.$t("common.actions.download"),
-					dataTestId: "title-menu-imscc-download",
+					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
+					name: this.$t("common.actions.download.v1.1"),
+					dataTestId: "title-menu-imscc-download-v1.1",
 				});
 			}
+
+			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+				items.push({
+					icon: this.icons.mdiTrayArrowDown,
+					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
+					name: this.$t("common.actions.download.v1.3"),
+					dataTestId: "title-menu-imscc-download-v1.3",
+				});
+			}
+
 			return items;
 		},
 		copyResultModalStatus() {

@@ -1,9 +1,10 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { onMounted, reactive, toRef } from "vue";
+import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
+import { ElementMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 declare type CardState = {
@@ -22,6 +23,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		createElementCall,
 		deleteElementCall,
 		deleteCardCall,
+		moveElementCall,
 		updateCardHeightCall,
 		updateCardTitle,
 	} = useBoardApi();
@@ -94,6 +96,49 @@ export const useCardState = (id: BoardCard["id"]) => {
 		await fetchCard(cardState.card.id);
 	};
 
+	const moveElementDown = async (elementPayload: ElementMove) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		const { elementIndex, payload } = elementPayload;
+		if (
+			elementIndex === cardState.card.elements.length - 1 ||
+			elementIndex === -1
+		) {
+			return;
+		}
+
+		const element = cardState.card.elements.filter(
+			(element) => element.id === payload
+		)[0];
+
+		cardState.card.elements.splice(elementIndex, 1);
+		await nextTick();
+		cardState.card.elements.splice(elementIndex + 1, 0, element);
+
+		await moveElementCall(payload, cardState.card.id, elementIndex + 1);
+	};
+
+	const moveElementUp = async (elementPayload: ElementMove) => {
+		if (cardState.card === undefined) {
+			return;
+		}
+		const { elementIndex, payload } = elementPayload;
+		if (elementIndex <= 0) {
+			return;
+		}
+
+		const element = cardState.card.elements.filter(
+			(element) => element.id === payload
+		)[0];
+
+		cardState.card.elements.splice(elementIndex, 1);
+		await nextTick();
+		cardState.card.elements.splice(elementIndex - 1, 0, element);
+
+		await moveElementCall(payload, cardState.card.id, elementIndex - 1);
+	};
+
 	const deleteElement = async (elementId: string) => {
 		if (cardState.card === undefined) {
 			return;
@@ -119,6 +164,8 @@ export const useCardState = (id: BoardCard["id"]) => {
 
 	return {
 		addElement,
+		moveElementDown,
+		moveElementUp,
 		deleteCard,
 		fetchCard,
 		updateCardHeight,

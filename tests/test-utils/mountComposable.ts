@@ -1,10 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
 import { defineComponent, provide } from "vue";
 
-export const mountComposable = (
-	composable: () => unknown,
+export const mountComposable = <T>(
+	composable: () => T,
 	providers: Record<string | symbol, unknown> = {}
-) => {
+): T => {
 	const ParentComponent = defineComponent({
 		setup() {
 			for (const [key, mockFn] of Object.entries(providers)) {

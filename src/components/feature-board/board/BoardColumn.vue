@@ -19,7 +19,6 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			:lock-axis="lockAxis"
-			:drag-begin-delay="200"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -47,8 +46,8 @@ import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,

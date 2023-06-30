@@ -31,6 +31,7 @@ import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -41,6 +42,7 @@ export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
 export let collaborativeFilesModule: CollaborativeFilesModule;
 export let contentModule: ContentModule;
+export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
 export let externalToolsModule: ExternalToolsModule;
@@ -68,6 +70,7 @@ export function initializeStores(store: Store<any>): void {
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
+	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	externalToolsModule = getModule(ExternalToolsModule, store);
@@ -98,6 +101,7 @@ export const modules = {
 	autoLogoutModule: AutoLogoutModule,
 	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
+	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
 	externalToolsModule: ExternalToolsModule,

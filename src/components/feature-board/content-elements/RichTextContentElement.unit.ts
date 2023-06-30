@@ -8,7 +8,8 @@ import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vu
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-
+import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
 jest.mock("../shared/InlineEditInteractionHandler.composable");
 
 const TEST_ELEMENT: RichTextElementResponse = {
@@ -23,6 +24,7 @@ const TEST_ELEMENT: RichTextElementResponse = {
 		lastUpdatedAt: new Date().toISOString(),
 	},
 };
+const deleteElementMock = jest.fn();
 
 describe("RichTextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
@@ -33,32 +35,63 @@ describe("RichTextContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
+
+		const askDeleteBoardNodeConfirmationMock = jest
+			.fn()
+			.mockReturnValueOnce(true);
+		setupDeleteBoardNodeConfirmationMock({
+			askDeleteBoardNodeConfirmationMock,
+		});
+
 		wrapper = shallowMount(
 			RichTextContentElementComponent as MountOptions<Vue>,
 			{
 				...createComponentMocks({}),
+				propsData: { ...props, deleteElement: deleteElementMock },
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 				},
-				propsData: props,
 			}
 		);
 	};
 
 	describe("when component is mounted", () => {
 		it("should render display if isEditMode is false", () => {
-			setup({ element: TEST_ELEMENT, isEditMode: false });
+			setup({
+				element: TEST_ELEMENT,
+				isEditMode: false,
+			});
 			expect(
 				wrapper.findComponent(RichTextContentElementDisplayComponent).exists()
 			).toBe(true);
 		});
 
 		it("should render edit if isEditMode is true", () => {
-			setup({ element: TEST_ELEMENT, isEditMode: true });
+			setup({
+				element: TEST_ELEMENT,
+				isEditMode: true,
+			});
 			expect(
 				wrapper.findComponent(RichTextContentElementEditComponent).exists()
 			).toBe(true);
+		});
+
+		it("should call deleteElement when it receives delete:element event from edit component", async () => {
+			setup({
+				element: TEST_ELEMENT,
+				isEditMode: true,
+			});
+
+			const richTextContentElementEditComponent = wrapper.findComponent(
+				RichTextContentElementEditComponent
+			);
+			richTextContentElementEditComponent.vm.$emit("delete:element");
+
+			await wrapper.vm.$nextTick();
+
+			expect(deleteElementMock).toHaveBeenCalledTimes(1);
+			expect(deleteElementMock).toHaveBeenCalledWith(TEST_ELEMENT.id);
 		});
 	});
 });

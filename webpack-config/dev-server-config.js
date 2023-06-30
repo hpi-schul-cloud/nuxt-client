@@ -73,6 +73,7 @@ const createDevServerConfig = () => {
 
 			return middlewares;
 		},
+		allowedHosts: "all",
 	};
 
 	return devServerConfig;
