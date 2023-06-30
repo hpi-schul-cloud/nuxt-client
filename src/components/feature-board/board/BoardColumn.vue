@@ -44,7 +44,7 @@
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
-import { Container, Draggable } from "vue-smooth-dnd";
+import { Container, Draggable } from "vue-dndrop";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";

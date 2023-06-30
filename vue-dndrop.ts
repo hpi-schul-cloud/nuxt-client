@@ -1,4 +1,4 @@
-declare module "vue-smooth-dnd" {
+declare module "vue-dndrop" {
 	import Vue from "vue";
 
 	type Payload = unknown;
