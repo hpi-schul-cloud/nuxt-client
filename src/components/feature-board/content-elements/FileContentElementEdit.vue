@@ -10,7 +10,7 @@
 	>
 		<v-list-item-icon class="my-2 mr-2">
 			<v-icon
-				class="deco-icon--text"
+				class="grey--text"
 				data-testid="board-file-element-edit-file-icon"
 				large
 				>{{ mdiFileDocumentOutline }}</v-icon

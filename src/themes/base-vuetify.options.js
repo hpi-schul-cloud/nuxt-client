@@ -45,9 +45,6 @@ export default {
 				"beta-task": {
 					base: "#196C9E",
 				},
-				"deco-icon": {
-					base: "#8a9199",
-				},
 			},
 		},
 	},
