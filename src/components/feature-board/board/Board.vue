@@ -13,6 +13,7 @@
 					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 					:non-drag-area-selector="'.drag-disabled'"
+					:drag-begin-delay="dragBeginDelay"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
@@ -62,6 +63,8 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
+import { useMediaQuery } from "@vueuse/core";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 
 export default defineComponent({
 	name: "Board",
@@ -97,6 +100,13 @@ export default defineComponent({
 		} = useBoardState(props.boardId);
 
 		useBodyScrolling();
+
+		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
+		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
+
+		const dragBeginDelay = computed<number>(() =>
+			isTablet || isMobile ? 300 : 0
+		);
 
 		const {
 			hasMovePermission,
@@ -190,6 +200,7 @@ export default defineComponent({
 			placeholderOptions,
 			lockAxis,
 			isEditMode,
+			dragBeginDelay,
 			getColumnId,
 			onTouchEnd,
 			onCreateCard,

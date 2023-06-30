@@ -19,6 +19,7 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			:lock-axis="lockAxis"
+			:drag-begin-delay="dragBeginDelay"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -41,8 +42,9 @@
 </template>
 
 <script lang="ts">
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
@@ -98,6 +100,12 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
+		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
+		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
+
+		const dragBeginDelay = computed<number>(() =>
+			isTablet || isMobile ? 300 : 0
+		);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -164,6 +172,7 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 			getChildPayload,
+			dragBeginDelay,
 		};
 	},
 });
