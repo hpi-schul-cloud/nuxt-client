@@ -6,7 +6,6 @@
 			<div class="topbar">
 				<the-top-bar
 					v-if="!isInline"
-					:title="pageTitle"
 					:fullscreen-mode="fullscreenMode"
 					:expanded-menu="expandedMenu"
 					:user="user"
@@ -50,7 +49,6 @@ export default {
 	mixins: [toastsFromQueryString],
 	data() {
 		return {
-			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
 		};
@@ -103,15 +101,6 @@ export default {
 
 		isInline() {
 			return !!this.$route.query.inline;
-		},
-	},
-	watch: {
-		$route: function (to) {
-			try {
-				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
-			} catch {
-				this.pageTitle = to.name;
-			}
 		},
 	},
 	methods: {
