@@ -21,15 +21,19 @@
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuAction @click="onStartEditMode">
-						<VIcon>
-							{{ mdiPencilOutline }}
-						</VIcon>
+						<template #icon>
+							<VIcon>
+								{{ mdiPencilOutline }}
+							</VIcon>
+						</template>
 						{{ $t("common.actions.edit") }}
 					</BoardMenuAction>
 					<BoardMenuAction @click="onTryDelete">
-						<VIcon>
-							{{ mdiTrashCanOutline }}
-						</VIcon>
+						<template #icon>
+							<VIcon>
+								{{ mdiTrashCanOutline }}
+							</VIcon>
+						</template>
 						{{ $t("components.board.action.delete") }}
 					</BoardMenuAction>
 				</BoardMenu>
