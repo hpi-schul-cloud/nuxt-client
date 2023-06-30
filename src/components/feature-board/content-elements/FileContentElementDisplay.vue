@@ -1,37 +1,36 @@
 <template>
-	<v-list
-		flat
-		class="py-0 rounded-b-0"
+	<v-list-item
+		class="grey lighten-3 px-2 rounded-t-sm"
 		data-testid="board-file-element-display"
+		inactive
+		:ripple="false"
 	>
-		<v-list-item class="px-2 grey lighten-3">
-			<v-list-item-icon class="my-2 mr-2">
-				<v-icon
-					class="deco-icon--text"
-					data-testid="board-file-element-display-file-icon"
-					large
-					>{{ mdiFileDocumentOutline }}</v-icon
-				>
-			</v-list-item-icon>
+		<v-list-item-icon class="my-2 mr-2">
+			<v-icon
+				class="deco-icon--text"
+				data-testid="board-file-element-display-file-icon"
+				large
+				>{{ mdiFileDocumentOutline }}</v-icon
+			>
+		</v-list-item-icon>
 
-			<v-list-item-content>
-				<v-list-item-title v-if="!isBlocked"
-					><a
-						data-testid="board-file-element-display-file-name-link"
-						:download="fileName"
-						:href="url"
-						>{{ fileName }}</a
-					>
-				</v-list-item-title>
-				<v-list-item-title
-					v-else
-					data-testid="board-file-element-display-file-name"
-				>
-					{{ fileName }}
-				</v-list-item-title>
-			</v-list-item-content>
-		</v-list-item>
-	</v-list>
+		<v-list-item-content>
+			<a
+				v-if="!isBlocked"
+				class="subtitle-1 d-inline-block text-truncate"
+				data-testid="board-file-element-display-file-name-link"
+				:download="fileName"
+				:href="url"
+				>{{ fileName }}</a
+			>
+			<span
+				v-else
+				class="subtitle-1 d-inline-block text-truncate"
+				data-testid="board-file-element-display-file-name"
+				>{{ fileName }}</span
+			>
+		</v-list-item-content>
+	</v-list-item>
 </template>
 
 <script lang="ts">
