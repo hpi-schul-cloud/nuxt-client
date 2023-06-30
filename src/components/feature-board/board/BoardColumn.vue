@@ -19,7 +19,7 @@
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
 			:lock-axis="lockAxis"
-			:drag-begin-delay="dragBeginDelay"
+			:drag-begin-delay="isDesktop ? 0 : 300"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -100,12 +100,7 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
-		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
-		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
-
-		const dragBeginDelay = computed<number>(() =>
-			isTablet || isMobile ? 300 : 0
-		);
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -172,7 +167,7 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 			getChildPayload,
-			dragBeginDelay,
+			isDesktop,
 		};
 	},
 });

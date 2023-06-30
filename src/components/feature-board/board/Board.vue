@@ -13,7 +13,7 @@
 					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 					:non-drag-area-selector="'.drag-disabled'"
-					:drag-begin-delay="dragBeginDelay"
+					:drag-begin-delay="isDesktop ? 0 : 300"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
@@ -101,12 +101,7 @@ export default defineComponent({
 
 		useBodyScrolling();
 
-		const isTablet = useMediaQuery(DeviceMediaQuery.Tablet);
-		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
-
-		const dragBeginDelay = computed<number>(() =>
-			isTablet || isMobile ? 300 : 0
-		);
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const {
 			hasMovePermission,
@@ -200,7 +195,7 @@ export default defineComponent({
 			placeholderOptions,
 			lockAxis,
 			isEditMode,
-			dragBeginDelay,
+			isDesktop,
 			getColumnId,
 			onTouchEnd,
 			onCreateCard,
