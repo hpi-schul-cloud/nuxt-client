@@ -3,7 +3,7 @@
 		<div class="ml-1">
 			<h1>{{ $t("pages.room.boardCard.label.courseBoard") }}</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1 ml-n4">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
@@ -131,6 +131,17 @@ export default defineComponent({
 			if (hasMovePermission) await moveColumn(columnPayload);
 		};
 
+		/**
+		 * These classes should be removed automatically by vue-smooth-dnd.
+		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
+		 */
+		const onTouchEnd = () => {
+			document.body.classList.remove(
+				"smooth-dnd-no-user-select",
+				"smooth-dnd-disable-touch-action"
+			);
+		};
+
 		const onMoveColumnKeyboard = async (
 			columnIndex: number,
 			columnId: string,
@@ -174,6 +185,7 @@ export default defineComponent({
 			placeholderOptions,
 			lockAxis,
 			getColumnId,
+			onTouchEnd,
 			onCreateCard,
 			onCreateColumn,
 			onCreateColumnWithCard,
