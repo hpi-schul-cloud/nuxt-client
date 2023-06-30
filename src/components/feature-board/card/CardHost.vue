@@ -33,9 +33,11 @@
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction @click="onDeleteCard">
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
+							<template #icon>
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
+							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
 					</BoardMenu>
@@ -239,6 +241,18 @@ export default defineComponent({
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+
+::v-deep .v-card__text > :first-child > .ck-content > :first-child {
+	margin-top: 0px;
+}
+
+::v-deep
+	.v-card__text
+	> :first-child
+	.ck.ck-editor__editable_inline
+	> :first-child {
+	margin-top: 0px;
 }
 </style>
 

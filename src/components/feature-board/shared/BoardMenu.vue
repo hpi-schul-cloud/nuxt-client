@@ -6,10 +6,11 @@
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
-				:class="{ 'grey lighten-3': hasBackground }"
+				:class="{ white: hasBackground }"
 				icon
 				@click="onClick"
 				@dblclick.stop="() => {}"
+				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>

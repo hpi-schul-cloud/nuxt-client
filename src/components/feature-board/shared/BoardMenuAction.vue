@@ -1,5 +1,6 @@
 <template>
 	<VListItem data-testid="board-menu-action" @click.prevent="onClick">
+		<VListItemIcon class="mr-2"><slot name="icon"></slot></VListItemIcon>
 		<VListItemTitle><slot></slot></VListItemTitle>
 	</VListItem>
 </template>
@@ -13,8 +14,8 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { isMenuOpen } = useBoardMenu();
 
-		const onClick = async () => {
-			emit("click");
+		const onClick = async ($event: Event) => {
+			emit("click", $event);
 			await nextTick();
 			isMenuOpen.value = false;
 		};

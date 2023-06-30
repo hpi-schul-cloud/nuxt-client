@@ -812,6 +812,7 @@
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement.validation.maxLength": "Der Titel darf nur {maxLength} Zeichen lang sein.",
 	"components.cardHost.deletionModal.confirmation": "{type} {title} wirklich löschen?",
+	"components.board.action.addCard": "Karte hinzufügen",
 	"components.board.action.delete": "Löschen",
 	"components.board.action.download": "Herunterladen",
 	"components.board.action.moveUp": "Nach oben verschieben",
