@@ -142,8 +142,8 @@ export default defineComponent({
 		 */
 		const onTouchEnd = () => {
 			document.body.classList.remove(
-				"dndrop-no-user-select",
-				"dndrop-disable-touch-action"
+				"smooth-dnd-no-user-select",
+				"smooth-dnd-disable-touch-action"
 			);
 		};
 
