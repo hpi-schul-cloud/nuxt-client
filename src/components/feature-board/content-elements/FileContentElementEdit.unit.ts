@@ -223,8 +223,6 @@ describe("FileContentElementEdit", () => {
 			const boardMenuActionsComponents =
 				wrapper.findAllComponents(BoardMenuAction);
 
-			console.log(wrapper.overview());
-
 			const firstAction = boardMenuActionsComponents.at(0);
 			const secondAction = boardMenuActionsComponents.at(1);
 			const thirdAction = boardMenuActionsComponents.at(2);
