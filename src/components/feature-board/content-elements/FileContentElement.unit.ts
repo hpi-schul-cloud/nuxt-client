@@ -279,16 +279,16 @@ describe("FileContentElement", () => {
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 
-				it("should hand over isBlocked property as false", async () => {
+				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(false);
 
 					await wrapper.vm.$nextTick();
 
-					const isBlocked = wrapper
+					const isDownloadAllowed = wrapper
 						.findComponent(FileContentElementDisplay)
-						.props("isBlocked");
+						.props("isDownloadAllowed");
 
-					expect(isBlocked).toBe(false);
+					expect(isDownloadAllowed).toBe(true);
 				});
 
 				it("should call fetchFile", async () => {
@@ -319,16 +319,16 @@ describe("FileContentElement", () => {
 					expect(fileContentElementEdit.exists()).toBe(true);
 				});
 
-				it("should hand over isBlocked property as false", async () => {
+				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(true);
 
 					await wrapper.vm.$nextTick();
 
-					const isBlocked = wrapper
+					const isDownloadAllowed = wrapper
 						.findComponent(FileContentElementEdit)
-						.props("isBlocked");
+						.props("isDownloadAllowed");
 
-					expect(isBlocked).toBe(false);
+					expect(isDownloadAllowed).toBe(true);
 				});
 
 				it("should call deleteElement function when it receives delete:element event from child", async () => {
@@ -382,16 +382,16 @@ describe("FileContentElement", () => {
 					expect(url).toBe("");
 				});
 
-				it("should hand over isBlocked property as true", async () => {
+				it("should hand over isDownloadAllowed property as false", async () => {
 					const { wrapper } = setup(false, FileRecordScanStatus.BLOCKED);
 
 					await wrapper.vm.$nextTick();
 
-					const isBlocked = wrapper
+					const isDownloadAllowed = wrapper
 						.findComponent(FileContentElementDisplay)
-						.props("isBlocked");
+						.props("isDownloadAllowed");
 
-					expect(isBlocked).toBe(true);
+					expect(isDownloadAllowed).toBe(false);
 				});
 
 				it("should render FileContentElementAlert component", async () => {
@@ -434,16 +434,16 @@ describe("FileContentElement", () => {
 					expect(url).toBe("");
 				});
 
-				it("should hand over isBlocked property as true", async () => {
+				it("should hand over isDownloadAllowed property as false", async () => {
 					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
 
 					await wrapper.vm.$nextTick();
 
-					const isBlocked = wrapper
+					const isDownloadAllowed = wrapper
 						.findComponent(FileContentElementEdit)
-						.props("isBlocked");
+						.props("isDownloadAllowed");
 
-					expect(isBlocked).toBe(true);
+					expect(isDownloadAllowed).toBe(false);
 				});
 
 				it("should render FileContentElementAlert component", async () => {

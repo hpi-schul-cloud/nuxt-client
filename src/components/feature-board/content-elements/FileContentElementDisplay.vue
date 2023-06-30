@@ -16,7 +16,7 @@
 
 		<v-list-item-content>
 			<a
-				v-if="!isBlocked"
+				v-if="isDownloadAllowed"
 				class="subtitle-1 d-inline-block text-truncate"
 				data-testid="board-file-element-display-file-name-link"
 				:download="fileName"
@@ -44,7 +44,7 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		isBlocked: {
+		isDownloadAllowed: {
 			type: Boolean,
 			required: true,
 		},

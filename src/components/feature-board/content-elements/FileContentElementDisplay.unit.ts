@@ -3,16 +3,16 @@ import { shallowMount } from "@vue/test-utils";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 
 describe("FileContentElementDisplay", () => {
-	const setupProps = (isBlocked: boolean | undefined = undefined) => ({
+	const setupProps = (isDownloadAllowed?: boolean) => ({
 		fileName: "file-record #1.txt",
 		url: "1/file-record #1.txt",
-		isBlocked: isBlocked ?? false,
+		isDownloadAllowed: isDownloadAllowed ?? true,
 	});
 
-	const setup = (isBlocked: boolean | undefined = undefined) => {
+	const setup = (isDownloadAllowed?: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = setupProps(isBlocked);
+		const propsData = setupProps(isDownloadAllowed);
 
 		const wrapper = shallowMount(FileContentElementDisplay, {
 			...createComponentMocks({ i18n: true }),
@@ -41,7 +41,7 @@ describe("FileContentElementDisplay", () => {
 		expect(fileIcon.exists()).toBe(true);
 	});
 
-	describe("when file is NOT blocked", () => {
+	describe("when download is allowed", () => {
 		it("should find file name", () => {
 			const { wrapper, fileNameProp } = setup();
 
@@ -61,17 +61,17 @@ describe("FileContentElementDisplay", () => {
 		});
 	});
 
-	describe("when file is blocked", () => {
+	describe("when download is NOT allowed", () => {
 		it("should find file name", () => {
-			const { wrapper, fileNameProp } = setup(true);
+			const { wrapper, fileNameProp } = setup(false);
 
-			const fileName = wrapper.find("v-list-item-title-stub").text();
+			const fileName = wrapper.find("span").text();
 
 			expect(fileName).toBe(fileNameProp);
 		});
 
 		it("should NOT find download url", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup(false);
 
 			const downloadLink = wrapper.find("a");
 

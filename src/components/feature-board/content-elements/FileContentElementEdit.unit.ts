@@ -7,16 +7,20 @@ import FileContentElementEdit from "./FileContentElementEdit.vue";
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementEdit", () => {
-	const setupProps = (isBlocked?: boolean) => ({
+	const setupProps = (isDownloadAllowed?: boolean) => ({
+		fileId: "file-id #1",
 		fileName: "file-record #1.txt",
 		url: "1/file-record #1.txt",
-		isBlocked: isBlocked ?? false,
+		isDownloadAllowed: isDownloadAllowed ?? true,
+		isFirstElement: false,
+		isLastElement: false,
+		hasMultipleElements: false,
 	});
 
-	const setup = (isBlocked?: boolean) => {
+	const setup = (isDownloadAllowed?: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = setupProps(isBlocked);
+		const propsData = setupProps(isDownloadAllowed);
 		const wrapper = shallowMount(FileContentElementEdit, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
@@ -29,7 +33,7 @@ describe("FileContentElementEdit", () => {
 			wrapper,
 			fileNameProp: propsData.fileName,
 			urlProp: propsData.url,
-			isBlockedProp: propsData.isBlocked,
+			isDownloadAllowedProp: propsData.isDownloadAllowed,
 		};
 	};
 
@@ -51,14 +55,14 @@ describe("FileContentElementEdit", () => {
 	it("should find file name", async () => {
 		const { wrapper, fileNameProp } = setup();
 
-		const fileName = wrapper.find("v-list-item-title-stub").text();
+		const fileName = wrapper.find("span").text();
 
 		expect(fileName).toBe(fileNameProp);
 	});
 
-	describe("when file is blocked", () => {
+	describe("when download is NOT allowed", () => {
 		it("should find delete board menu action", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup(false);
 
 			const deleteTranslation = wrapper.vm
 				.$t("components.board.action.delete")
@@ -72,11 +76,11 @@ describe("FileContentElementEdit", () => {
 		});
 
 		it("should NOT find download board menu action", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup(false);
 
-			const downloadTranslation = wrapper.vm.$t(
-				"components.board.action.download"
-			) as string;
+			const downloadTranslation = wrapper.vm
+				.$t("components.board.action.download")
+				.toString();
 			const childComponents = wrapper
 				.findAllComponents(BoardMenuAction)
 				.filter((c) => c.text().includes(downloadTranslation));
@@ -85,7 +89,7 @@ describe("FileContentElementEdit", () => {
 		});
 	});
 
-	describe("when file is NOT blocked", () => {
+	describe("when download is allowed", () => {
 		it("should find delete board menu action", () => {
 			const { wrapper } = setup();
 
@@ -103,9 +107,9 @@ describe("FileContentElementEdit", () => {
 		it("should find download board menu action", () => {
 			const { wrapper } = setup();
 
-			const downloadTranslation = wrapper.vm.$t(
-				"components.board.action.download"
-			) as string;
+			const downloadTranslation = wrapper.vm
+				.$t("components.board.action.download")
+				.toString();
 			const childComponent = wrapper
 				.findAllComponents(BoardMenuAction)
 				.filter((c) => c.text().includes(downloadTranslation))
@@ -159,9 +163,9 @@ describe("FileContentElementEdit", () => {
 			it("should download file", async () => {
 				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
 
-				const downloadTranslation = wrapper.vm.$t(
-					"components.board.action.download"
-				) as string;
+				const downloadTranslation = wrapper.vm
+					.$t("components.board.action.download")
+					.toString();
 				const childComponent = wrapper
 					.findAllComponents(BoardMenuAction)
 					.filter((c) => c.text().includes(downloadTranslation))
@@ -177,6 +181,10 @@ describe("FileContentElementEdit", () => {
 
 	describe("when multiple elements are present", () => {
 		const multipleElementsSetupProps = () => ({
+			fileId: "file-id #1",
+			fileName: "file-record #1.txt",
+			url: "1/file-record #1.txt",
+			isDownloadAllowed: true,
 			isFirstElement: false,
 			isLastElement: false,
 			hasMultipleElements: true,
@@ -195,24 +203,27 @@ describe("FileContentElementEdit", () => {
 				wrapper,
 			};
 		};
+
 		it("should show all board menu items", () => {
 			const { wrapper } = setup();
 
-			const moveUpTranslation = wrapper.vm.$t(
-				"components.board.action.moveUp"
-			) as string;
-			const moveDownTranslation = wrapper.vm.$t(
-				"components.board.action.moveDown"
-			) as string;
-			const downloadTranslation = wrapper.vm.$t(
-				"components.board.action.download"
-			) as string;
-			const deleteTranslation = wrapper.vm.$t(
-				"components.board.action.delete"
-			) as string;
+			const moveUpTranslation = wrapper.vm
+				.$t("components.board.action.moveUp")
+				.toString();
+			const moveDownTranslation = wrapper.vm
+				.$t("components.board.action.moveDown")
+				.toString();
+			const downloadTranslation = wrapper.vm
+				.$t("components.board.action.download")
+				.toString();
+			const deleteTranslation = wrapper.vm
+				.$t("components.board.action.delete")
+				.toString();
 
 			const boardMenuActionsComponents =
 				wrapper.findAllComponents(BoardMenuAction);
+
+			console.log(wrapper.overview());
 
 			const firstAction = boardMenuActionsComponents.at(0);
 			const secondAction = boardMenuActionsComponents.at(1);
@@ -230,9 +241,9 @@ describe("FileContentElementEdit", () => {
 			it("should emit move-up:element event", async () => {
 				const { wrapper } = setup();
 
-				const moveUpTranslation = wrapper.vm.$t(
-					"components.board.action.moveUp"
-				) as string;
+				const moveUpTranslation = wrapper.vm
+					.$t("components.board.action.moveUp")
+					.toString();
 				const childComponent = wrapper
 					.findAllComponents(BoardMenuAction)
 					.filter((c) => c.text().includes(moveUpTranslation))
@@ -247,9 +258,9 @@ describe("FileContentElementEdit", () => {
 			it("should emit move-down:element event", async () => {
 				const { wrapper } = setup();
 
-				const moveDownTranslation = wrapper.vm.$t(
-					"components.board.action.moveDown"
-				) as string;
+				const moveDownTranslation = wrapper.vm
+					.$t("components.board.action.moveDown")
+					.toString();
 				const childComponent = wrapper
 					.findAllComponents(BoardMenuAction)
 					.filter((c) => c.text().includes(moveDownTranslation))
@@ -262,6 +273,10 @@ describe("FileContentElementEdit", () => {
 
 		describe("when element is at the beginning of the content elements list", () => {
 			const firstElementSetupProps = () => ({
+				fileId: "file-id #1",
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
 				isFirstElement: true,
 				isLastElement: false,
 				hasMultipleElements: true,
@@ -280,18 +295,19 @@ describe("FileContentElementEdit", () => {
 					wrapper,
 				};
 			};
+
 			it("should show show only limited board menu items", () => {
 				const { wrapper } = setup();
 
-				const moveDownTranslation = wrapper.vm.$t(
-					"components.board.action.moveDown"
-				) as string;
-				const downloadTranslation = wrapper.vm.$t(
-					"components.board.action.download"
-				) as string;
-				const deleteTranslation = wrapper.vm.$t(
-					"components.board.action.delete"
-				) as string;
+				const moveDownTranslation = wrapper.vm
+					.$t("components.board.action.moveDown")
+					.toString();
+				const downloadTranslation = wrapper.vm
+					.$t("components.board.action.download")
+					.toString();
+				const deleteTranslation = wrapper.vm
+					.$t("components.board.action.delete")
+					.toString();
 
 				const boardMenuActionsComponents =
 					wrapper.findAllComponents(BoardMenuAction);
@@ -308,7 +324,11 @@ describe("FileContentElementEdit", () => {
 		});
 
 		describe("when element is at the end of the content elements list", () => {
-			const firstElementSetupProps = () => ({
+			const lastElementSetupProps = () => ({
+				fileId: "file-id #1",
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
 				isFirstElement: false,
 				isLastElement: true,
 				hasMultipleElements: true,
@@ -317,7 +337,7 @@ describe("FileContentElementEdit", () => {
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
-				const propsData = firstElementSetupProps();
+				const propsData = lastElementSetupProps();
 				const wrapper = shallowMount(FileContentElementEdit, {
 					...createComponentMocks({ i18n: true }),
 					propsData,
@@ -330,15 +350,15 @@ describe("FileContentElementEdit", () => {
 			it("should show show only limited board menu items", () => {
 				const { wrapper } = setup();
 
-				const moveUpTranslation = wrapper.vm.$t(
-					"components.board.action.moveUp"
-				) as string;
-				const downloadTranslation = wrapper.vm.$t(
-					"components.board.action.download"
-				) as string;
-				const deleteTranslation = wrapper.vm.$t(
-					"components.board.action.delete"
-				) as string;
+				const moveUpTranslation = wrapper.vm
+					.$t("components.board.action.moveUp")
+					.toString();
+				const downloadTranslation = wrapper.vm
+					.$t("components.board.action.download")
+					.toString();
+				const deleteTranslation = wrapper.vm
+					.$t("components.board.action.delete")
+					.toString();
 
 				const boardMenuActionsComponents =
 					wrapper.findAllComponents(BoardMenuAction);
@@ -357,6 +377,10 @@ describe("FileContentElementEdit", () => {
 
 	describe("when only a single element is present", () => {
 		const singleElementSetupProps = () => ({
+			fileId: "file-id #1",
+			fileName: "file-record #1.txt",
+			url: "1/file-record #1.txt",
+			isDownloadAllowed: true,
 			isFirstElement: false,
 			isLastElement: false,
 			hasMultipleElements: false,
@@ -378,12 +402,12 @@ describe("FileContentElementEdit", () => {
 		it("should only show one board menu item", () => {
 			const { wrapper } = setup();
 
-			const downloadTranslation = wrapper.vm.$t(
-				"components.board.action.download"
-			) as string;
-			const deleteTranslation = wrapper.vm.$t(
-				"components.board.action.delete"
-			) as string;
+			const downloadTranslation = wrapper.vm
+				.$t("components.board.action.download")
+				.toString();
+			const deleteTranslation = wrapper.vm
+				.$t("components.board.action.delete")
+				.toString();
 
 			const boardMenuActionsComponents =
 				wrapper.findAllComponents(BoardMenuAction);

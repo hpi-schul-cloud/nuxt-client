@@ -11,14 +11,14 @@
 				v-if="!isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
-				:isBlocked="isBlocked"
+				:isDownloadAllowed="!isBlockedByVirusScan"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
 				:fileId="$props.element.id"
 				:url="url"
-				:isBlocked="isBlocked"
+				:isDownloadAllowed="!isBlockedByVirusScan"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -27,7 +27,7 @@
 				@move-keyboard:element="onMoveFileEditKeyboard"
 				@delete:element="onDeleteElement"
 			/>
-			<FileContentElementAlert v-if="isBlocked" />
+			<FileContentElementAlert v-if="isBlockedByVirusScan" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear
@@ -79,13 +79,15 @@ export default defineComponent({
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlocked = computed(
+		const isBlockedByVirusScan = computed(
 			() =>
 				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
 		);
 
 		const url = computed(() =>
-			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
+			!isBlockedByVirusScan.value && fileRecord.value?.url
+				? fileRecord.value?.url
+				: ""
 		);
 
 		onMounted(() => {
@@ -145,7 +147,7 @@ export default defineComponent({
 		return {
 			onDeleteElement,
 			isAutoFocus,
-			isBlocked,
+			isBlockedByVirusScan,
 			fileRecord,
 			modelValue,
 			onMoveFileEditDown,

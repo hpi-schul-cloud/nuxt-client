@@ -51,7 +51,7 @@
 				{{ $t("components.board.action.moveDown") }}
 			</BoardMenuAction>
 			<BoardMenuAction
-				v-if="!isBlocked"
+				v-if="isDownloadAllowed"
 				data-testid="board-file-element-edit-menu-download"
 				@click="onDownload"
 			>
@@ -103,7 +103,7 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		isBlocked: {
+		isDownloadAllowed: {
 			type: Boolean,
 			required: true,
 		},
