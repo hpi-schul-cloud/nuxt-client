@@ -22,9 +22,10 @@
 
 <script>
 import {
+	mdiChatOutline,
 	mdiFileQuestionOutline,
 	mdiFileCertificateOutline,
-	mdiChatOutline,
+	mdiGiftOutline,
 } from "@mdi/js";
 
 export default {
@@ -41,6 +42,12 @@ export default {
 					label: this.$t("global.topbar.actions.contactSupport"),
 					icon: mdiChatOutline,
 					action: "/help/contact",
+					target: "_self",
+				},
+				{
+					label: this.$t("global.topbar.actions.releaseNotes"),
+					icon: mdiGiftOutline,
+					action: "/help/releases",
 					target: "_self",
 				},
 				{
