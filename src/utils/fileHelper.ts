@@ -1,5 +1,3 @@
-import { authModule } from "@/store";
-
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
