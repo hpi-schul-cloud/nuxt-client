@@ -1,26 +1,30 @@
 <template>
-	<ul class="dropdown-menu px-0">
-		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
-			<span class="core">
-				<svg role="img" class="menu-item__icon">
-					<path :d="menuItem.icon"></path>
-				</svg>
-
-				<base-link
-					:href="menuItem.action"
-					:target="menuItem.target"
-					class="link"
-					:title="menuItem.label"
-					:aria-label="menuItem.label"
-				>
-					{{ menuItem.label }}
-				</base-link>
-			</span>
-		</li>
-	</ul>
+	<v-list class="pa-0 menu-width">
+		<template v-for="(item, index) in menuItems">
+			<v-list-item
+				:key="item.label"
+				:href="item.action"
+				:target="item.target"
+				:ripple="false"
+				class="mb-0"
+			>
+				<v-list-item-icon class="ma-3 ml-0">
+					<v-icon color="primary">{{ item.icon }}</v-icon>
+				</v-list-item-icon>
+				<v-list-item-content>
+					<v-list-item-title class="primary--text link">
+						{{ item.label }}
+					</v-list-item-title>
+				</v-list-item-content>
+			</v-list-item>
+			<v-divider v-if="index !== menuItems.length - 1" :key="index" />
+		</template>
+	</v-list>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiChatOutline,
 	mdiFileQuestionOutline,
@@ -28,96 +32,57 @@ import {
 	mdiGiftOutline,
 } from "@mdi/js";
 
-export default {
-	computed: {
-		menuItems() {
-			return [
-				{
-					label: this.$t("global.topbar.actions.helpSection"),
-					icon: mdiFileQuestionOutline,
-					action: "/help",
-					target: "_self",
-				},
-				{
-					label: this.$t("global.topbar.actions.contactSupport"),
-					icon: mdiChatOutline,
-					action: "/help/contact",
-					target: "_self",
-				},
-				{
-					label: this.$t("global.topbar.actions.releaseNotes"),
-					icon: mdiGiftOutline,
-					action: "/help/releases",
-					target: "_self",
-				},
-				{
-					label: this.$t("global.topbar.actions.training"),
-					icon: mdiFileCertificateOutline,
-					action: "https://www.lernen.cloud/",
-					target: "_blank",
-				},
-			];
-		},
+export default defineComponent({
+	name: "HelpDropdown",
+	setup() {
+		const i18n = injectStrict(I18N_KEY);
+
+		const menuItems = [
+			{
+				label: i18n.t("global.topbar.actions.helpSection"),
+				icon: mdiFileQuestionOutline,
+				action: "/help",
+				target: "_self",
+			},
+			{
+				label: i18n.t("global.topbar.actions.contactSupport"),
+				icon: mdiChatOutline,
+				action: "/help/contact",
+				target: "_self",
+			},
+			{
+				label: i18n.t("global.topbar.actions.releaseNotes"),
+				icon: mdiGiftOutline,
+				action: "/help/releases",
+				target: "_self",
+			},
+			{
+				label: i18n.t("global.topbar.actions.training"),
+				icon: mdiFileCertificateOutline,
+				action: "https://www.lernen.cloud/",
+				target: "_blank",
+			},
+		];
+
+		return {
+			menuItems,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
-.dropdown-menu {
-	float: left;
-	width: 261px;
-	min-width: 10rem;
-	text-align: left;
-	list-style-type: none;
+.link {
+	padding-left: var(--space-sm); // space in legacy client 8px;
+	text-transform: uppercase;
+	&:hover,
+	&:focus {
+		text-decoration: underline;
+	}
 }
 
-.menu-item {
-	--hover-color: #f5f5f5;
-
-	position: relative;
-	display: block;
-	padding: var(--space-sm) var(--space-sm);
-	font-size: var(--text-md); // text size in legacy client 14px;
-	text-align: inherit;
-	background-color: var(--v-white-base);
-	border-bottom: 1px solid map-get($grey, lighten-2);
-
-	&:first-child {
-		border-top-left-radius: var(--radius-sm);
-		border-top-right-radius: var(--radius-sm);
-	}
-
-	&:last-child {
-		border: none;
-		border-radius: var(--radius-sm);
-	}
-
-	&:hover {
-		background-color: var(--hover-color);
-	}
-
-	.core {
-		display: flex;
-		align-items: center;
-	}
-
-	.core:hover {
-		fill: var(--v-primary-darken1);
-	}
-
-	.link {
-		padding-left: var(--space-sm); // space in legacy client 8px;
-		text-transform: uppercase;
-		&:hover,
-		&:focus {
-			text-decoration: underline;
-		}
-	}
-
-	.menu-item__icon {
-		fill: var(--v-primary-base);
-		height: 24px;
-		width: 24px;
-	}
+.menu-width {
+	width: 261px;
+	min-width: 10rem;
 }
 </style>

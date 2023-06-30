@@ -22,11 +22,10 @@
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
-					source="material"
-					icon="report_problem"
+					:icon="mdiAlert"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
-					:fill="statusAlertColor"
+					:color="statusAlertColor"
 					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
@@ -46,8 +45,7 @@
 				</v-btn>
 				<popup-icon
 					class="item"
-					source="material"
-					icon="qrcode"
+					:icon="mdiQrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
 					data-test-id="qr-code-btn"
@@ -56,8 +54,7 @@
 				</popup-icon>
 				<popup-icon
 					class="item"
-					source="material"
-					icon="help_area_outline"
+					:icon="mdiHelpCircleOutline"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
@@ -129,7 +126,9 @@ import {
 	mdiArrowCollapse,
 	mdiArrowExpand,
 	mdiMenu,
-	mdiHelpCircle,
+	mdiHelpCircleOutline,
+	mdiQrcode,
+	mdiAlert,
 } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -168,7 +167,9 @@ export default defineComponent({
 			mdiArrowCollapse,
 			mdiArrowExpand,
 			mdiMenu,
-			mdiHelpCircle,
+			mdiHelpCircleOutline,
+			mdiQrcode,
+			mdiAlert,
 		};
 	},
 	computed: {

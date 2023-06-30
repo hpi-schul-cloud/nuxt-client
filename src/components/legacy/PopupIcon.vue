@@ -1,14 +1,14 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
 		<v-btn icon class="icon-button" @click="popup">
-			<base-icon :source="source" :icon="icon" :fill="fill" />
+			<v-icon :color="color">{{ icon }}</v-icon>
 		</v-btn>
 		<div
 			ref="popupContent"
 			class="popup-content"
 			:class="{ visible, 'expand-to-left': expandToLeft, centered }"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</div>
 </template>
@@ -16,15 +16,11 @@
 <script>
 export default {
 	props: {
-		source: {
-			type: String,
-			required: true,
-		},
 		icon: {
 			type: String,
 			required: true,
 		},
-		fill: {
+		color: {
 			type: String,
 			default: "var(--v-secondary-darken1)",
 		},
