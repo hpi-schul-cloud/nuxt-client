@@ -95,22 +95,10 @@ export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		fileId: {
-			type: String,
-			required: true,
-		},
-		fileName: {
-			type: String,
-			required: true,
-		},
-		isDownloadAllowed: {
-			type: Boolean,
-			required: true,
-		},
-		url: {
-			type: String,
-			required: true,
-		},
+		fileId: { type: String, required: true },
+		fileName: { type: String, required: true },
+		isDownloadAllowed: { type: Boolean, required: true },
+		url: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },

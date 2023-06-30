@@ -40,18 +40,9 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "FileContentElementDisplay",
 	props: {
-		fileName: {
-			type: String,
-			required: true,
-		},
-		isDownloadAllowed: {
-			type: Boolean,
-			required: true,
-		},
-		url: {
-			type: String,
-			required: true,
-		},
+		fileName: { type: String, required: true },
+		isDownloadAllowed: { type: Boolean, required: true },
+		url: { type: String, required: true },
 	},
 	setup() {
 		return {
