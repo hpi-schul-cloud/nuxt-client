@@ -26,8 +26,7 @@ describe("@/components/legacy/BaseIcon", () => {
 			}),
 			propsData: testProps,
 		});
-		expect(wrapper.find(".material-icon").exists()).toBe(true);
-		expect(wrapper.find("svg").exists()).toBe(true);
+		expect(wrapper.find(".v-icon").exists()).toBe(true);
 	});
 
 	it("it pops up when it is clicked", async () => {
