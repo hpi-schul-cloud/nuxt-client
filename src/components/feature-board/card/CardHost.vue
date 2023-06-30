@@ -33,9 +33,11 @@
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction @click="onDeleteCard">
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
+							<template #icon>
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
+							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
 					</BoardMenu>
