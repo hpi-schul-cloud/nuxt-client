@@ -287,6 +287,7 @@
 	"global.topbar.language.longName.es": "Español",
 	"global.topbar.language.longName.uk": "Український",
 	"global.topbar.language.selectedLanguage": "Idioma seleccionado",
+	"global.topbar.language.select": "Selección de idioma",
 	"global.topbar.loggedOut.actions.blog": "Blog",
 	"global.topbar.loggedOut.actions.faq": "Preguntas frecuentes",
 	"global.topbar.loggedOut.actions.steps": "Primeros pasos",

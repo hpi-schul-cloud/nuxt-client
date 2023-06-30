@@ -450,6 +450,7 @@
 	"global.topbar.language.longName.es": "Español",
 	"global.topbar.language.longName.uk": "Український",
 	"global.topbar.language.selectedLanguage": "Вибрана мова",
+	"global.topbar.language.select": "Вибір мови",
 	"global.topbar.settings": "Параметри",
 	"global.topbar.loggedOut.actions.blog": "Блог",
 	"global.topbar.loggedOut.actions.faq": "Запитання й відповіді",

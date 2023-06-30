@@ -5,7 +5,11 @@
 			class="icon-button"
 			data-testid="initials"
 			role="menu"
-			:title="`${firstName} ${lastName} (${userRole})`"
+			:title="
+				$t('global.topbar.userMenu.ariaLabel', {
+					userName: `${firstName} ${lastName} (${userRole})`,
+				})
+			"
 			:aria-label="
 				$t('global.topbar.userMenu.ariaLabel', {
 					userName: `${firstName} ${lastName} (${userRole})`,

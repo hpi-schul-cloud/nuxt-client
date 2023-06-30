@@ -64,14 +64,14 @@
 				>
 					<help-dropdown />
 				</popup-icon>
-				<div v-if="school" class="school-name item">
+				<div v-if="school" class="school-name item" tabindex="0">
 					{{ school.name }}
 				</div>
 				<img
 					v-if="school && school.logo_dataUrl"
 					class="school-logo"
 					:src="school.logo_dataUrl"
-					:alt="school.name"
+					alt=""
 				/>
 				<popup-icon-initials
 					v-if="user"
