@@ -23,11 +23,7 @@
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
 		>
-			<Draggable
-				class="overflow-visible"
-				v-for="(card, index) in column.cards"
-				:key="card.cardId"
-			>
+			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
 				<CardHost
 					class="my-3 mx-2"
 					:card-id="card.cardId"
