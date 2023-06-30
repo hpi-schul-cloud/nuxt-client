@@ -15,7 +15,7 @@
 			:readonly="!isEditMode"
 			role="heading"
 			:aria-level="ariaLevel"
-			@keydown.prevent.enter="onEnter"
+			@keydown.enter="onEnter"
 		></VTextarea>
 	</div>
 </template>
@@ -25,6 +25,7 @@ import { useVModel } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { VTextarea } from "vuetify/lib";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -51,16 +52,23 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<HTMLTextAreaElement | null>(null);
+		const titleInput = ref<InstanceType<typeof VTextarea> | null>(null);
 
 		useInlineEditInteractionHandler(() => {
 			setFocusOnEdit();
 		});
 
+		const textarea = computed(() => {
+			if (titleInput.value === null) return;
+
+			return titleInput.value.$refs.input as HTMLTextAreaElement;
+		});
+
 		const setFocusOnEdit = async () => {
 			if (!hasEditPermission) return;
-			if (titleInput.value === null) return;
-			titleInput.value.focus();
+			if (!textarea.value) return;
+
+			textarea.value.focus();
 		};
 
 		watch(
@@ -103,8 +111,14 @@ export default defineComponent({
 			}
 		});
 
-		const onEnter = () => {
-			emit("enter");
+		const onEnter = ($event: KeyboardEvent) => {
+			if (props.scope !== "card") return;
+			if (!textarea.value) return;
+
+			if (modelValue.value.length === textarea.value.selectionStart) {
+				$event.preventDefault();
+				emit("enter");
+			}
 		};
 
 		return {
