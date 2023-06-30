@@ -12,11 +12,9 @@
 				flat
 				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				@blur="onBlur"
 				@keyup.enter="onEnterInput"
-				@click:append="onEnterInput"
-				@focus="onFocus"
-				:append-icon="isInputFocused ? mdiKeyboardReturn : mdiPencilOutline"
 			/>
 		</div>
 		<template slot="content">
@@ -68,7 +66,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			isInputFocused: false,
 			mdiPencilOutline,
 			mdiKeyboardReturn,
 			data: {
@@ -90,11 +87,7 @@ export default Vue.extend({
 		async updateCourseGroupName() {
 			await roomsModule.update(this.data);
 		},
-		onFocus() {
-			this.isInputFocused = true;
-		},
 		async onBlur() {
-			this.isInputFocused = false;
 			await this.updateCourseGroupName();
 		},
 		async onEnterInput() {
