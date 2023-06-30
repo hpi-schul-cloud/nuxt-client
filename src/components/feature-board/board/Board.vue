@@ -45,7 +45,7 @@
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { computed, defineComponent, onMounted } from "vue";
-import { Container, Draggable } from "vue-dndrop";
+import { Container, Draggable } from "vue-smooth-dnd";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";

@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { Container } from "vue-dndrop";
+import { Container } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {

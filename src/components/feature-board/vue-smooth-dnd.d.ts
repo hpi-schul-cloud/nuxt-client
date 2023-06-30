@@ -1,1 +1,1 @@
-declare module "vue-dndrop";
+declare module "vue-smooth-dnd";

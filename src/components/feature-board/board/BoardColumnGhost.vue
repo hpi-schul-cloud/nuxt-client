@@ -26,7 +26,7 @@
 <script lang="ts">
 import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { Container } from "vue-dndrop";
+import { Container } from "vue-smooth-dnd";
 import { cardDropPlaceholderOptions, CardMove } from "../types/DragAndDrop";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
