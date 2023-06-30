@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref, watch } from "vue";
+import { computed, defineComponent, PropType, ref, watch, nextTick } from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -64,10 +64,11 @@ export default defineComponent({
 
 		watch(
 			() => props.isEditMode,
-			(newVal, oldVal) => {
+			async (newVal, oldVal) => {
 				if (props.scope !== "column") return;
 				if (newVal && !oldVal) {
-					setFocusOnEdit();
+					await nextTick();
+					await setFocusOnEdit();
 				}
 			}
 		);
