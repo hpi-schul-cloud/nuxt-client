@@ -13,15 +13,8 @@
 				imgHeight="200px"
 			/>
 		</div>
-		<v-alert
-			v-if="apiError.message"
-			light
-			prominent
-			text
-			type="error"
-			data-testId="context-tool-error"
-		>
-			{{ apiError.message }}
+		<v-alert v-if="apiError.message" light prominent text type="error">
+			{{ t(getBusinessErrorTranslationKey(apiError)) }}
 		</v-alert>
 
 		<room-external-tool-card
@@ -41,6 +34,18 @@
 			data-testId="progress-bar"
 			indeterminate
 		></v-progress-linear>
+
+		<v-custom-dialog
+			:is-open="isErrorDialogOpen"
+			:has-buttons="true"
+			:buttons="['close']"
+			data-testId="error-dialog"
+			@dialog-closed="onCloseErrorDialog"
+		>
+			<h2 slot="title" class="text-h4 my-2 text-break-word">
+				{{ t(getBusinessErrorTranslationKey(launchError)) }}
+			</h2>
+		</v-custom-dialog>
 
 		<v-dialog
 			v-model="isDeleteDialogOpen"
@@ -114,10 +119,17 @@ import VueI18n from "vue-i18n";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import ExternalToolsModule from "@/store/external-tools";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsOverview",
-	components: { RoomExternalToolCard, RenderHTML, VCustomEmptyState },
+	components: {
+		VCustomDialog,
+		RoomExternalToolCard,
+		RenderHTML,
+		VCustomEmptyState,
+	},
 	props: {
 		roomId: {
 			type: String,
@@ -250,9 +262,24 @@ export default defineComponent({
 			() => contextExternalToolsModule?.getLoading
 		);
 
+		const launchError: ComputedRef<BusinessError | undefined> = computed(
+			() => externalToolsModule?.getBusinessError
+		);
+
+		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
+
+		const isErrorDialogOpen: ComputedRef<boolean> = computed(
+			() => launchError.value?.error !== undefined
+		);
+
+		const onCloseErrorDialog = () => {
+			externalToolsModule?.resetBusinessError();
+		};
+
 		return {
 			loading,
 			t,
+			getBusinessErrorTranslationKey,
 			tools,
 			canEdit,
 			itemToDelete,
@@ -264,6 +291,9 @@ export default defineComponent({
 			onClickTool,
 			onEditTool,
 			apiError,
+			isErrorDialogOpen,
+			launchError,
+			onCloseErrorDialog,
 		};
 	},
 });
@@ -273,5 +303,9 @@ export default defineComponent({
 .centered-container {
 	max-width: var(--size-content-width-max);
 	margin: 0 auto;
+}
+
+.text-break-word {
+	word-break: break-word;
 }
 </style>
