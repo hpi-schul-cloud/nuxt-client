@@ -28,6 +28,7 @@ describe("@/utils/fileHelper", () => {
 			expect(createElementSpy).toBeCalledWith("a");
 			expect(link.href).toEqual(url);
 			expect(link.download).toEqual(fileName);
+			expect(link.hidden).toBe(true);
 			expect(document.body.appendChild).toBeCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toBeCalledWith(link);
