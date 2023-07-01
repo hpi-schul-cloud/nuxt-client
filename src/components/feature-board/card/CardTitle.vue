@@ -1,9 +1,13 @@
 <template>
-	<VCardTitle class="d-block text-break-word" v-if="isEditMode || value !== ''">
+	<VCardTitle
+		class="d-block text-break-word pb-2"
+		v-if="isEditMode || value !== ''"
+	>
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
+			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 		></BoardAnyTitleInput>

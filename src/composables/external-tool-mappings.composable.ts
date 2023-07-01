@@ -1,4 +1,5 @@
 import {
+	ContextExternalToolPostParams,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -7,34 +8,29 @@ import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	SchoolToolConfigurationEntryResponse,
+	SchoolToolConfigurationListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
+	ToolReferenceListResponse,
+	ToolReferenceResponse,
+	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
 import {
+	ContextExternalToolTemplateListItem,
+	ExternalToolDisplayData,
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
+	ToolConfigurationStatus,
 	ToolConfigurationTemplate,
 	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
 } from "@/store/external-tool";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
-
-const ResponseStatusMapping: Record<
-	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolStatus
-> = {
-	[SchoolExternalToolResponseStatusEnum.Latest]:
-		SchoolExternalToolStatus.Latest,
-	[SchoolExternalToolResponseStatusEnum.Outdated]:
-		SchoolExternalToolStatus.Outdated,
-	[SchoolExternalToolResponseStatusEnum.Unknown]:
-		SchoolExternalToolStatus.Unknown,
-};
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -64,9 +60,9 @@ const ToolParamScopeMapping: Record<
 	CustomParameterResponseScopeEnum,
 	ToolParameterScope
 > = {
+	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
-	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
 };
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
@@ -77,7 +73,40 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
 
+const ToolConfigurationStatusMapping: Record<
+	ToolReferenceResponseStatusEnum,
+	ToolConfigurationStatus
+> = {
+	[ToolReferenceResponseStatusEnum.Latest]: ToolConfigurationStatus.Latest,
+	[ToolReferenceResponseStatusEnum.Outdated]: ToolConfigurationStatus.Outdated,
+	[ToolReferenceResponseStatusEnum.Unknown]: ToolConfigurationStatus.Unknown,
+};
+
+export const ToolConfigurationStatusTranslationMapping: Record<
+	ToolConfigurationStatus,
+	string
+> = {
+	[ToolConfigurationStatus.Latest]: "components.externalTools.status.latest",
+	[ToolConfigurationStatus.Outdated]:
+		"components.externalTools.status.outdated",
+	[ToolConfigurationStatus.Unknown]: "components.externalTools.status.unknown",
+};
+
 export function useExternalToolMappings() {
+	const mapToolReferencesToExternalToolDisplayData = (
+		response: ToolReferenceListResponse
+	): ExternalToolDisplayData[] => {
+		return response.data.map(
+			(toolReference: ToolReferenceResponse): ExternalToolDisplayData => ({
+				id: toolReference.contextToolId,
+				logoUrl: toolReference.logoUrl,
+				name: toolReference.displayName,
+				openInNewTab: toolReference.openInNewTab,
+				status: ToolConfigurationStatusMapping[toolReference.status],
+			})
+		);
+	};
+
 	const mapSchoolExternalToolSearchListResponse = (
 		response: SchoolExternalToolSearchListResponse
 	): SchoolExternalTool[] => {
@@ -95,7 +124,7 @@ export function useExternalToolMappings() {
 			name: toolResponse.name,
 			parameters: toolResponse.parameters,
 			version: toolResponse.toolVersion,
-			status: ResponseStatusMapping[toolResponse.status],
+			status: ToolConfigurationStatusMapping[toolResponse.status],
 		};
 	};
 
@@ -141,6 +170,17 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapSchoolToolConfigurationEntryResponse = (
+		resp: SchoolToolConfigurationEntryResponse
+	): ContextExternalToolTemplateListItem => {
+		return {
+			id: resp.id,
+			name: resp.name,
+			logoUrl: resp.logoUrl,
+			schoolToolId: resp.schoolToolId,
+		};
+	};
+
 	const mapToolConfigurationListResponse = (
 		resp: ToolConfigurationListResponse
 	): ToolConfigurationListItem[] => {
@@ -149,6 +189,18 @@ export function useExternalToolMappings() {
 				entryResp: ToolConfigurationEntryResponse
 			): ToolConfigurationListItem => {
 				return mapToolConfigurationEntryResponse(entryResp);
+			}
+		);
+	};
+
+	const mapSchoolToolConfigurationListResponse = (
+		resp: SchoolToolConfigurationListResponse
+	): ContextExternalToolTemplateListItem[] => {
+		return resp.data.map(
+			(
+				entryResp: SchoolToolConfigurationEntryResponse
+			): ContextExternalToolTemplateListItem => {
+				return mapSchoolToolConfigurationEntryResponse(entryResp);
 			}
 		);
 	};
@@ -167,6 +219,23 @@ export function useExternalToolMappings() {
 		};
 	};
 
+	const mapToolConfigurationTemplateToContextExternalToolPostParams = (
+		template: ToolConfigurationTemplate,
+		schoolToolId: string,
+		contextId: string,
+		contextType: ToolContextType
+	): ContextExternalToolPostParams => {
+		return {
+			schoolToolId: schoolToolId,
+			contextId,
+			contextType,
+			toolVersion: template.version,
+			parameters: mapToolParametersToCustomParameterEntryParams(
+				template.parameters
+			),
+		};
+	};
+
 	const mapToolParametersToCustomParameterEntryParams = (
 		params: ToolParameter[]
 	) => {
@@ -178,7 +247,13 @@ export function useExternalToolMappings() {
 		});
 	};
 
-	const getTranslationKey = (businessError: BusinessError) => {
+	const getBusinessErrorTranslationKey = (
+		businessError: BusinessError | undefined
+	): undefined | string => {
+		if (!businessError) {
+			return undefined;
+		}
+
 		const translationKey = Array.from(
 			BusinessErrorMessageTranslationKeyMap.entries()
 		).find(([key]) => businessError.message.startsWith(key))?.[1];
@@ -189,12 +264,31 @@ export function useExternalToolMappings() {
 		return businessError.message;
 	};
 
+	const getStatusTranslationKey = (
+		toolStatus: ToolConfigurationStatus
+	): string => {
+		const translationKey: string | undefined =
+			ToolConfigurationStatusTranslationMapping[toolStatus];
+
+		if (!translationKey) {
+			return ToolConfigurationStatusTranslationMapping[
+				ToolConfigurationStatus.Unknown
+			];
+		}
+
+		return translationKey;
+	};
+
 	return {
+		mapToolReferencesToExternalToolDisplayData,
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
 		mapToolConfigurationListResponse,
+		mapSchoolToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
-		getTranslationKey,
+		mapToolConfigurationTemplateToContextExternalToolPostParams,
+		getBusinessErrorTranslationKey,
+		getStatusTranslationKey,
 	};
 }
