@@ -81,7 +81,7 @@ import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import SchoolsModule from "@/store/schools";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
@@ -106,8 +106,7 @@ export default defineComponent({
 			inject<SchoolsModule>("schoolsModule");
 		const privacyPolicyModule: PrivacyPolicyModule | undefined =
 			inject<PrivacyPolicyModule>("privacyPolicyModule");
-		const notifierModule: NotifierModule | undefined =
-			inject<NotifierModule>("notifierModule");
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const i18n = injectStrict(I18N_KEY);
 
 		if (!notifierModule || !schoolsModule || !privacyPolicyModule || !i18n) {

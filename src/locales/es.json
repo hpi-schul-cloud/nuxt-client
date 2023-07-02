@@ -11,6 +11,7 @@
 	"common.actions.import": "Importar",
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.ok": "Aceptar",
+	"common.actions.download": "Descargar",
 	"common.actions.download.v1.1": "Descargar (CC v1.1)",
 	"common.actions.download.v1.3": "Descargar (CC v1.3)",
 	"common.actions.logout": "Desconectar",

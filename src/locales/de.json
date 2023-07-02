@@ -17,6 +17,7 @@
 	"common.actions.share": "Teilen",
 	"common.actions.shareCourse": "Kurskopie teilen",
 	"common.actions.scrollToTop": "Nach oben scrollen",
+	"common.actions.download": "Herunterladen",
 	"common.actions.download.v1.1": "Herunterladen (CC v1.1)",
 	"common.actions.download.v1.3": "Herunterladen (CC v1.3)",
 	"common.actions.logout": "Abmelden",

@@ -17,6 +17,7 @@
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCourse": "Копія котирування акцій",
 	"common.actions.scrollToTop": "Прокрутити вгору",
+	"common.actions.download": "Завантажити",
 	"common.actions.download.v1.1": "Завантажити (CC v1.1)",
 	"common.actions.download.v1.3": "Завантажити (CC v1.3)",
 	"common.actions.logout": "Вийти з аккаунта",
