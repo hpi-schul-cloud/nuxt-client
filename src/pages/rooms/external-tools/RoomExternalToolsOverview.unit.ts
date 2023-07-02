@@ -10,11 +10,16 @@ import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/exte
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import { I18N_KEY } from "@/utils/inject";
 import { businessErrorFactory } from "@@/tests/test-utils/factory";
+import { AxiosError } from "axios";
+import { BusinessError } from "@/store/types/commons";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
 
-	const getWrapper = (tools: ExternalToolDisplayData[]) => {
+	const getWrapper = (
+		tools: ExternalToolDisplayData[],
+		error: BusinessError = businessErrorFactory.build()
+	) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
@@ -32,7 +37,9 @@ describe("RoomExternalToolOverview", () => {
 			}
 		);
 
-		const externalToolsModule = createModuleMocks(ExternalToolsModule);
+		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+			getBusinessError: error,
+		});
 
 		const wrapper: Wrapper<any> = mount(
 			RoomExternalToolsOverview as MountOptions<Vue>,
@@ -334,6 +341,61 @@ describe("RoomExternalToolOverview", () => {
 			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
 				tool.id
 			);
+		});
+	});
+
+	describe("when click on a outdated tool", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const error: BusinessError = businessErrorFactory.build({
+				error: new AxiosError("this error is expected"),
+			});
+
+			const { wrapper } = getWrapper([tool], error);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display a dialog", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.vm.$emit("click");
+
+			const dialog = wrapper.find('[data-testId="error-dialog"]');
+
+			expect(dialog.exists()).toBeTruthy();
+			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
+		});
+	});
+
+	describe("when click on a latest tool", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const { wrapper } = getWrapper([tool]);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should not display a dialog", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.vm.$emit("click");
+
+			expect(wrapper.vm.isErrorDialogOpen).toBeFalsy();
 		});
 	});
 });

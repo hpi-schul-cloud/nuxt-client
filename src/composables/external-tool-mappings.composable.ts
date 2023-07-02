@@ -71,6 +71,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_required", "pages.tool.apiError.tool_param_required"],
 	["tool_param_type_mismatch", "pages.tool.apiError.tool_param_type_mismatch"],
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
+	["TOOL_STATUS_OUTDATED", "pages.tool.apiError.tool_launch_outdated"],
 ]);
 
 const ToolConfigurationStatusMapping: Record<
