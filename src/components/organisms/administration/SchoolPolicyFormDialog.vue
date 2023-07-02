@@ -17,6 +17,7 @@
 				<v-file-input
 					ref="input-file"
 					class="input-file mb-2"
+					data-testid="input-file"
 					v-model="file"
 					dense
 					accept="application/pdf"
@@ -31,10 +32,14 @@
 					"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
-					@blur="onChange"
+					@blur="onBlur"
 				>
 					<template v-slot:append>
-						<v-icon v-if="!isValid && isTouched" color="var(--v-error-base)">
+						<v-icon
+							v-if="!isValid && isTouched"
+							color="var(--v-error-base)"
+							data-testid="warning-icon"
+						>
 							{{ mdiAlert }}
 						</v-icon>
 					</template>
@@ -42,7 +47,13 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<div class="button-section button-right">
-						<v-btn class="dialog-closed" depressed text @click="cancel">
+						<v-btn
+							class="dialog-closed"
+							depressed
+							text
+							@click="cancel"
+							data-testid="cancel-button"
+						>
 							{{ t("pages.administration.school.index.schoolPolicy.cancel") }}
 						</v-btn>
 						<v-btn
@@ -52,6 +63,7 @@
 							depressed
 							:disabled="!isValid"
 							@click.prevent="submit"
+							data-testid="submit-button"
 						>
 							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
 							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
@@ -131,7 +143,7 @@ export default defineComponent({
 				),
 		};
 
-		const onChange = () => {
+		const onBlur = () => {
 			isTouched.value = true;
 		};
 
@@ -178,7 +190,7 @@ export default defineComponent({
 			mdiAlert,
 			cancel,
 			submit,
-			onChange,
+			onBlur,
 			isValid,
 			isTouched,
 			policyForm,

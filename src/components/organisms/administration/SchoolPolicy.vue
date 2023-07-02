@@ -19,8 +19,9 @@
 				v-if="status === 'pending'"
 				indeterminate
 				class="mb-6"
+				data-testid="progress-bar"
 			></v-progress-linear>
-			<v-list-item v-else two-line dense class="mb-6">
+			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
 				<v-list-item-icon>
 					<v-icon>{{ pdfIcon }}</v-icon>
 				</v-list-item-icon>
