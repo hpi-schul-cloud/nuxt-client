@@ -1,41 +1,40 @@
 <template>
 	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
 		<h4 class="text-h4 mt-0" slot="title">
-			{{ $t("common.words.privacyPolicy") }}
+			{{ t("common.words.privacyPolicy") }}
 		</h4>
 		<template slot="content">
-			<v-form>
+			<v-form ref="policyForm" v-model="isValid">
 				<v-alert light text type="info" class="mb-10">
 					<div class="replace-alert-text">
 						{{
-							$t(
+							t(
 								"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent"
 							)
 						}}
 					</div>
 				</v-alert>
 				<v-file-input
+					ref="input-file"
 					class="input-file mb-2"
 					v-model="file"
 					dense
 					accept="application/pdf"
-					truncate-length="60"
+					truncate-length="30"
 					:label="
-						$t(
+						t(
 							'pages.administration.school.index.schoolPolicy.labels.uploadFile'
 						)
 					"
 					:hint="
-						$t(
-							'pages.administration.school.index.schoolPolicy.hints.uploadFile'
-						)
+						t('pages.administration.school.index.schoolPolicy.hints.uploadFile')
 					"
 					:persistent-hint="true"
-					:error-messages="fileErrors"
-					@change="$v.file.$touch"
+					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
+					@blur="onChange"
 				>
 					<template v-slot:append>
-						<v-icon v-if="$v.$error" color="var(--v-error-base)">
+						<v-icon v-if="!isValid && isTouched" color="var(--v-error-base)">
 							{{ mdiAlert }}
 						</v-icon>
 					</template>
@@ -44,17 +43,18 @@
 					<v-spacer></v-spacer>
 					<div class="button-section button-right">
 						<v-btn class="dialog-closed" depressed text @click="cancel">
-							{{ $t("pages.administration.school.index.schoolPolicy.cancel") }}
+							{{ t("pages.administration.school.index.schoolPolicy.cancel") }}
 						</v-btn>
 						<v-btn
 							class="icon-button dialog-confirmed px-6"
+							type="submit"
 							color="primary"
 							depressed
-							:disabled="!file || $v.$error"
+							:disabled="!isValid"
 							@click.prevent="submit"
 						>
 							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
-							{{ $t("pages.administration.school.index.schoolPolicy.replace") }}
+							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
 						</v-btn>
 					</div>
 				</v-card-actions>
@@ -63,104 +63,129 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { schoolsModule, notifierModule, privacyPolicyModule } from "@/store";
-import { required } from "vuelidate/lib/validators";
-import { maxSize, mustBePdf } from "@/utils/fileUploadValidators";
-import { currentDate } from "@/plugins/datetime";
-import { toBase64 } from "@/utils/fileHelper.ts";
+import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import SchoolsModule from "@/store/schools";
+import PrivacyPolicyModule from "@/store/privacy-policy";
+import NotifierModule from "@/store/notifier";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import VueI18n from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
+import { School } from "@/store/types/schools";
+import { currentDate } from "@/plugins/datetime";
+import { toBase64 } from "@/utils/fileHelper";
+import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 
-export default {
+export default defineComponent({
+	name: "SchoolPolicyFormDialog",
 	components: {
 		vCustomDialog,
 	},
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
-	},
+	emits: ["close"],
 	props: {
 		isOpen: {
 			type: Boolean,
 			required: true,
 		},
 	},
-	validations: {
-		file: { required, mustBePdf, maxSize: maxSize(4194304) },
-	},
-	data() {
-		return {
-			file: null,
-			mdiAlert,
-			mdiFileReplaceOutline,
+	setup(props, { emit }) {
+		const schoolsModule: SchoolsModule | undefined =
+			inject<SchoolsModule>("schoolsModule");
+		const privacyPolicyModule: PrivacyPolicyModule | undefined =
+			inject<PrivacyPolicyModule>("privacyPolicyModule");
+		const notifierModule: NotifierModule | undefined =
+			inject<NotifierModule>("notifierModule");
+		const i18n = injectStrict(I18N_KEY);
+
+		if (!notifierModule || !schoolsModule || !privacyPolicyModule || !i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		const t = (key: string, values?: VueI18n.Values | undefined): string => {
+			const translateResult = i18n.t(key, values);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
 		};
-	},
-	computed: {
-		school: () => schoolsModule.getSchool,
-		fileErrors() {
-			const errors = [];
-			if (!this.$v.file.$dirty) return errors;
-			!this.$v.file.required &&
-				errors.push(this.$t("common.validation.required"));
-			!this.$v.file.mustBePdf &&
-				errors.push(
-					this.$t(
-						"pages.administration.school.index.schoolPolicy.validation.notPdf"
-					)
-				);
-			!this.$v.file.maxSize &&
-				errors.push(
-					this.$t(
-						"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
-					)
-				);
 
-			return errors;
-		},
-	},
-	methods: {
-		currentDate,
-		toBase64,
-		resetForm() {
-			this.$v.$reset();
-			this.file = null;
-		},
-		cancel() {
-			this.resetForm();
-			this.$emit("dialog-closed", false);
-		},
-		async submit() {
-			this.$v.$touch();
+		const policyForm: Ref = ref(null);
+		const isValid: Ref<boolean> = ref(false);
+		const isTouched: Ref<boolean> = ref(false);
+		const file: Ref<File | null> = ref(null);
 
-			if (!this.$v.$error) {
-				const newConsentVersion = {
-					schoolId: this.school.id,
-					title: this.$tc(
-						"pages.administration.school.index.schoolPolicy.fileName"
-					),
+		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+
+		const rules = {
+			required: (value: string) => !!value || t("common.validation.required"),
+			mustBePdf: (value: File) =>
+				!value ||
+				value.type === "application/pdf" ||
+				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
+			maxSize: (bytes: number) => (value: File) =>
+				!value ||
+				value.size <= bytes ||
+				t(
+					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
+				),
+		};
+
+		const onChange = () => {
+			isTouched.value = true;
+		};
+
+		const resetForm = () => {
+			policyForm.value.reset();
+			isValid.value = false;
+			isTouched.value = false;
+		};
+
+		const cancel = () => {
+			resetForm();
+			emit("close");
+		};
+
+		const submit = async () => {
+			if (isValid.value) {
+				const newConsentVersion: CreateConsentVersionPayload = {
+					schoolId: school.value.id,
+					title: t("pages.administration.school.index.schoolPolicy.fileName"),
 					consentText: "",
 					consentTypes: ["privacy"],
-					publishedAt: currentDate(),
-					consentData: await toBase64(this.file),
+					publishedAt: currentDate().toString(),
+					consentData: (await toBase64(file.value as File)) as string,
 				};
 
-				this.$emit("dialog-closed", false);
+				emit("close");
 				await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
 
 				notifierModule.show({
-					text: this.$tc(
-						"pages.administration.school.index.schoolPolicy.success"
-					),
+					text: t("pages.administration.school.index.schoolPolicy.success"),
 					status: "success",
 					timeout: 10000,
 				});
 
-				this.resetForm();
+				resetForm();
 			}
-		},
+		};
+
+		return {
+			t,
+			file,
+			rules,
+			mdiFileReplaceOutline,
+			mdiAlert,
+			cancel,
+			submit,
+			onChange,
+			isValid,
+			isTouched,
+			policyForm,
+			school,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

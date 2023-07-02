@@ -19,6 +19,7 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
+import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
@@ -31,7 +32,6 @@ import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
