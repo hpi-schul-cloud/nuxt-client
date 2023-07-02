@@ -1,17 +1,25 @@
 <template>
 	<v-card class="mb-4" elevation="0" outlined dense>
-		<div v-if="fileRecordModel">
+		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
+				:fileName="fileRecord.name"
+				:url="url"
 			></FileContentElementDisplay>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:caption="modelValue.caption"
-				:fileRecord="fileRecordModel"
-				@update:caption="($event) => (modelValue.caption = $event)"
-			></FileContentElementEdit>
+				:fileName="fileRecord.name"
+				:fileId="$props.element.id"
+				:url="url"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@move-keyboard:element="onMoveFileEditKeyboard"
+				@delete:element="onDeleteElement"
+			/>
+			<FileContentElementAlert v-if="isBlocked" />
 		</div>
 		<v-card-text v-else>
 			<v-progress-linear indeterminate></v-progress-linear>
@@ -20,50 +28,120 @@
 </template>
 
 <script lang="ts">
+import {
+	FileRecordParentType,
+	FileRecordScanStatus,
+} from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType, watch, ref, onMounted } from "vue";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
+import { useFileStorageApi } from "../shared/FileStorageApi.composable";
+import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
+import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useFileStorageApi } from "../shared/FileStorageApi.composable";
-import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
+		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
+		deleteElement: {
+			type: Function as PropType<(elementId: string) => Promise<void>>,
+			required: true,
+		},
 	},
-	setup(props) {
+	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFiles, getFile, newFileForParent } = useFileStorageApi();
+		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
+			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
+		const { setSelectedFile, getSelectedFile } = useSelectedFile();
+		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const fileRecordModel = ref<FileRecordResponse>();
-		const parentId = ref<string>("");
+		const isBlocked = computed(
+			() =>
+				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
+		);
+
+		const url = computed(() =>
+			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
+		);
 
 		onMounted(() => {
 			(async () => {
-				parentId.value = props.element.id;
-				fileRecordModel.value = getFile(parentId.value);
+				const file = getSelectedFile();
 
-				if (!fileRecordModel.value) {
-					await fetchFiles(parentId.value, FileRecordParentType.BOARDNODES);
-					fileRecordModel.value = getFile(parentId.value);
+				if (file) {
+					await tryUpload(file);
+				} else {
+					await getFileRecord();
 				}
 			})();
 		});
 
-		watch(newFileForParent, (newValue) => {
-			if (newValue === parentId.value) {
-				fileRecordModel.value = getFile(parentId.value);
-			}
-		});
+		const tryUpload = async (file: File) => {
+			try {
+				await upload(file);
 
-		return { modelValue, isAutoFocus, fileRecordModel };
+				setSelectedFile();
+				await fetchPendingFileRecursively();
+			} catch (error) {
+				setSelectedFile();
+				await deleteFileElement();
+			}
+		};
+
+		const getFileRecord = async () => {
+			await fetchFile();
+			await fetchPendingFileRecursively();
+		};
+
+		const onMoveFileEditDown = () => {
+			emit("move-down:edit");
+		};
+
+		const onMoveFileEditUp = () => {
+			emit("move-up:edit");
+		};
+		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
+			emit("move-keyboard:edit", event);
+		};
+
+		const onDeleteElement = async (): Promise<void> => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				fileRecord.value?.name,
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				await deleteFileElement();
+			}
+		};
+
+		const deleteFileElement = () => {
+			return props.deleteElement(props.element.id);
+		};
+		return {
+			onDeleteElement,
+			isAutoFocus,
+			isBlocked,
+			fileRecord,
+			modelValue,
+			onMoveFileEditDown,
+			onMoveFileEditUp,
+			onMoveFileEditKeyboard,
+			url,
+		};
 	},
 });
 </script>

@@ -3,7 +3,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { SchoolExternalToolStatus } from "@/store/external-tool";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
@@ -60,7 +60,7 @@ describe("ExternalToolSection", () => {
 				expect(() =>
 					shallowMount(ExternalToolSection, {
 						provide: {
-							i18n: { t: (key: string) => key },
+							[I18N_KEY as symbol]: { t: (key: string) => key },
 						},
 					})
 				).toThrow();
@@ -136,7 +136,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: firstToolName,
-						status: SchoolExternalToolStatus.Latest,
+						status: ToolConfigurationStatus.Latest,
 						version: 1,
 					},
 					{
@@ -144,7 +144,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: secondToolName,
-						status: SchoolExternalToolStatus.Outdated,
+						status: ToolConfigurationStatus.Outdated,
 						version: 1,
 					},
 				],
@@ -177,10 +177,10 @@ describe("ExternalToolSection", () => {
 				const secondRow = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.latest"
+					"components.externalTools.status.latest"
 				);
 				expect(secondRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.outdated"
+					"components.externalTools.status.outdated"
 				);
 			});
 
@@ -237,7 +237,7 @@ describe("ExternalToolSection", () => {
 									toolId: "toolId",
 									parameters: [],
 									name: "firstToolName",
-									status: SchoolExternalToolStatus.Latest,
+									status: ToolConfigurationStatus.Latest,
 									version: 1,
 								},
 							],
@@ -302,7 +302,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: SchoolExternalToolStatus.Latest,
+					status: ToolConfigurationStatus.Latest,
 					outdated: false,
 				};
 

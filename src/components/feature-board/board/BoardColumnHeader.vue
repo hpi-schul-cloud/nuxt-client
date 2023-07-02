@@ -7,32 +7,38 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-2': isFocused }"
-			tabindex="0"
+			:class="{ 'grey lighten-2': isFocusContained }"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start justify-space-between py-2 pl-1">
-				<div>
-					<BoardAnyTitleInput
-						:value="title"
-						scope="column"
-						:isEditMode="isEditMode"
-						:placeholder="titlePlaceholder"
-						@update:value="onUpdateTitle"
-					></BoardAnyTitleInput>
-				</div>
-				<div class="pt-2">
-					<BoardMenu v-if="hasDeletePermission" scope="column">
-						<BoardMenuAction @click="onTryDelete">
+			<div class="d-flex align-start py-2 px-2">
+				<BoardAnyTitleInput
+					:value="title"
+					scope="column"
+					:isEditMode="isEditMode"
+					:placeholder="titlePlaceholder"
+					@update:value="onUpdateTitle"
+					class="w-100"
+				></BoardAnyTitleInput>
+				<BoardMenu v-if="hasDeletePermission" scope="column">
+					<BoardMenuAction @click="onStartEditMode">
+						<template #icon>
+							<VIcon>
+								{{ mdiPencilOutline }}
+							</VIcon>
+						</template>
+						{{ $t("common.actions.edit") }}
+					</BoardMenuAction>
+					<BoardMenuAction @click="onTryDelete">
+						<template #icon>
 							<VIcon>
 								{{ mdiTrashCanOutline }}
 							</VIcon>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
-					</BoardMenu>
-				</div>
+						</template>
+						{{ $t("components.board.action.delete") }}
+					</BoardMenuAction>
+				</BoardMenu>
 			</div>
-			<VDivider color="black"></VDivider>
+			<VDivider aria-hidden="true" color="black"></VDivider>
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
@@ -40,7 +46,7 @@
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiTrashCanOutline } from "@mdi/js";
+import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
 import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
@@ -82,7 +88,10 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref(undefined);
-		const { isFocused } = useBoardFocusHandler(props.columnId, columnHeader);
+		const { isFocusContained } = useBoardFocusHandler(
+			props.columnId,
+			columnHeader
+		);
 		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
@@ -122,10 +131,11 @@ export default defineComponent({
 		return {
 			columnHeader,
 			isEditMode,
-			isFocused,
+			isFocusContained,
 			isDeleteModalOpen,
 			hasDeletePermission,
 			mdiTrashCanOutline,
+			mdiPencilOutline,
 			onStartEditMode,
 			onEndEditMode,
 			onTryDelete,

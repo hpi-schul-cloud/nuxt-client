@@ -1,69 +1,70 @@
 <template>
-	<div>
-		<CardHostInteractionHandler
-			:isEditMode="isEditMode"
-			@start-edit-mode="onStartEditMode"
-			@end-edit-mode="onEndEditMode"
-			@move:card-keyboard="onMoveCardKeyboard"
+	<CardHostInteractionHandler
+		:isEditMode="isEditMode"
+		@start-edit-mode="onStartEditMode"
+		@end-edit-mode="onEndEditMode"
+		@move:card-keyboard="onMoveCardKeyboard"
+	>
+		<VCard
+			ref="cardHost"
+			:height="isLoading ? height : 'auto'"
+			class="transition-swing"
+			:class="{ 'drag-disabled': isEditMode }"
+			outlined
+			tabindex="0"
+			min-height="120px"
+			:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+			:id="cardId"
+			:ripple="false"
+			:hover="isHovered"
 		>
-			<VCard
-				ref="cardHost"
-				:height="isLoading ? height : 'auto'"
-				class="transition-swing"
-				:class="{ 'drag-disabled': isEditMode }"
-				outlined
-				tabindex="0"
-				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-				:id="cardId"
-				:ripple="false"
-				:hover="isHovered"
-			>
-				<template v-if="isLoading">
-					<CardSkeleton :height="height" />
-				</template>
-				<template v-if="!isLoading && card">
-					<CardTitle
-						:isEditMode="isEditMode"
-						:value="card.title"
-						scope="card"
-						@update:value="onUpdateCardTitle"
-					>
-					</CardTitle>
+			<template v-if="isLoading">
+				<CardSkeleton :height="height" />
+			</template>
+			<template v-if="!isLoading && card">
+				<CardTitle
+					:isEditMode="isEditMode"
+					:value="card.title"
+					scope="card"
+					@update:value="onUpdateCardTitle"
+				>
+				</CardTitle>
 
-					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu v-if="hasDeletePermission" scope="card">
-							<BoardMenuAction @click="onTryDelete">
+				<div class="board-menu" :class="boardMenuClasses">
+					<BoardMenu v-if="hasDeletePermission" scope="card">
+						<BoardMenuAction @click="onDeleteCard">
+							<template #icon>
 								<VIcon>
 									{{ mdiTrashCanOutline }}
 								</VIcon>
-								{{ $t("components.board.action.delete") }}
-							</BoardMenuAction>
-						</BoardMenu>
-					</div>
+							</template>
+							{{ $t("components.board.action.delete") }}
+						</BoardMenuAction>
+					</BoardMenu>
+				</div>
 
-					<ContentElementList
-						:elements="card.elements"
-						:isEditMode="isEditMode"
-					></ContentElementList>
-					<CardAddElementMenu
-						@add-element="onAddElement"
-						v-if="isEditMode"
-					></CardAddElementMenu>
-				</template>
-			</VCard>
-		</CardHostInteractionHandler>
+				<ContentElementList
+					:elements="card.elements"
+					:isEditMode="isEditMode"
+					:deleteElement="deleteElement"
+					@move-down:element="onMoveContentElementDown"
+					@move-up:element="onMoveContentElementUp"
+					@move-keyboard:element="onMoveContentElementKeyboard"
+				></ContentElementList>
+				<CardAddElementMenu
+					@add-element="onAddElement"
+					v-if="isEditMode"
+				></CardAddElementMenu>
+			</template>
+		</VCard>
 		<FilePicker
 			@update:file="onFileSelect"
-			:isFilePickerOpen="isFilePickerOpen"
-			@update:isFilePickerOpen="() => (isFilePickerOpen = false)"
+			:isFilePickerOpen.sync="isFilePickerOpen"
 		/>
-	</div>
+	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
@@ -76,6 +77,8 @@ import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
@@ -84,7 +87,11 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "../types/DragAndDrop";
 
 export default defineComponent({
 	name: "CardHost",
@@ -104,49 +111,48 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
 		const cardHost = ref(undefined);
 		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
 		const isHovered = useElementHover(cardHost);
-		const { isLoading, card, updateTitle, updateCardHeight, addElement } =
-			useCardState(props.cardId);
+		const {
+			isLoading,
+			card,
+			updateTitle,
+			updateCardHeight,
+			addElement,
+			moveElementDown,
+			moveElementUp,
+			deleteElement,
+		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
+		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
+			useDeleteBoardNodeConfirmation();
+
+		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
+			useElementTypeSelection(addElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
 
-		const onTryDelete = async () => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						title: card.value?.title ? `"${card.value.title}"` : "",
-						type: i18n.t("components.boardCard").toString(),
-					})
-					.toString() ?? "";
+		const onDeleteCard = async () => {
+			const shouldDelete = await askDeleteBoardNodeConfirmation(
+				card.value?.title,
+				"boardCard"
+			);
 
-			const { askConfirmation } = useDeleteConfirmation();
-
-			const shouldDelete = await askConfirmation({ message });
 			if (shouldDelete) {
 				emit("delete:card", card.value?.id);
 			}
 		};
 
-		const { askType, createFileElement, isFilePickerOpen } =
-			useElementTypeSelection(addElement);
-
 		const onAddElement = () => {
 			askType();
-		};
-
-		const onFileSelect = async (file: File) => {
-			await createFileElement(file);
 		};
 
 		const onStartEditMode = () => {
@@ -154,7 +160,29 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			stopEditMode();
+			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
+				stopEditMode();
+			}
+		};
+
+		const onMoveContentElementDown = async (payload: ElementMove) =>
+			await moveElementDown(payload);
+
+		const onMoveContentElementUp = async (payload: ElementMove) =>
+			await moveElementUp(payload);
+
+		const onMoveContentElementKeyboard = async (
+			payload: ElementMove,
+			keyString: DragAndDropKey
+		) => {
+			if (!verticalCursorKeys.includes(keyString)) {
+				return;
+			}
+			if (keyString === "ArrowUp") {
+				await moveElementUp(payload);
+			} else if (keyString === "ArrowDown") {
+				await moveElementDown(payload);
+			}
 		};
 
 		const boardMenuClasses = computed(() => {
@@ -178,10 +206,14 @@ export default defineComponent({
 			isHovered,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
-			onTryDelete,
+			onDeleteCard,
 			onAddElement,
+			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
+			onMoveContentElementDown,
+			onMoveContentElementUp,
+			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
@@ -195,13 +227,25 @@ export default defineComponent({
 <style scoped>
 .board-menu {
 	position: absolute;
-	top: 10px;
-	right: 5px;
+	top: 0.25rem;
+	right: 0.25rem;
 	z-index: 1;
 }
 .hidden {
 	transition: opacity 200ms;
 	opacity: 0;
+}
+
+::v-deep .v-card__text > :first-child > .ck-content > :first-child {
+	margin-top: 0px;
+}
+
+::v-deep
+	.v-card__text
+	> :first-child
+	.ck.ck-editor__editable_inline
+	> :first-child {
+	margin-top: 0px;
 }
 </style>
 

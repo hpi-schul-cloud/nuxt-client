@@ -2,45 +2,60 @@ import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
 
-const {
-	createColumnCall,
-	deleteCardCall,
-	deleteColumnCall,
-	moveCardCall,
-	moveColumnCall,
-	updateColumnTitleCall,
-	createCardCall,
-} = useBoardApi();
-
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const {
+		createColumnCall,
+		deleteCardCall,
+		deleteColumnCall,
+		moveCardCall,
+		moveColumnCall,
+		updateColumnTitleCall,
+		createCardCall,
+	} = useBoardApi();
 	const { setEditModeId } = useSharedEditMode();
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const createCard = async (columnId: string) => {
 		if (board.value === undefined) return;
 
 		const newCardId = await createCardCall(columnId);
-		if (newCardId) {
-			const columnIndex = board.value.columns.findIndex(
-				(column) => column.id === columnId
-			);
-			board.value.columns[columnIndex].cards.push({
-				cardId: newCardId,
-				height: 120,
-			});
-			setEditModeId(newCardId);
+		if (!newCardId) {
+			const errorText = generateErrorText("create", "boardCard");
+			await showErrorAndReload(errorText);
+			return;
 		}
+
+		const { announceFocusReceived } = useSharedFocusedId();
+		announceFocusReceived(newCardId);
+
+		const columnIndex = board.value.columns.findIndex(
+			(column) => column.id === columnId
+		);
+		board.value.columns[columnIndex].cards.push({
+			cardId: newCardId,
+			height: 120,
+		});
+		setEditModeId(newCardId);
 	};
 
 	const createColumn = async () => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumnCall(board.value.id);
+		if (!newColumn.id) {
+			const errorText = generateErrorText("create", "boardColumn");
+			await showErrorAndReload(errorText);
+			return;
+		}
+
 		setEditModeId(newColumn.id);
 		await fetchBoard(board.value.id);
 
@@ -51,20 +66,29 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const newColumn = await createColumn();
-
-		if (newColumn) {
-			const moveCardPayload: CardMove = {
-				addedIndex: 0,
-				removedIndex: null,
-				columnId: newColumn.id,
-				payload: { cardId: movingCardId, height: 100 },
-			};
-			await moveCard(moveCardPayload);
+		if (!newColumn?.id) {
+			const errorText = generateErrorText("create", "boardColumn");
+			await showErrorAndReload(errorText);
+			return;
 		}
+		const moveCardPayload: CardMove = {
+			addedIndex: 0,
+			removedIndex: null,
+			columnId: newColumn.id,
+			payload: { cardId: movingCardId, height: 100 },
+		};
+		await moveCard(moveCardPayload);
 	};
 
 	const deleteCard = async (id: string) => {
-		await deleteCardCall(id);
+		if (board.value === undefined) return;
+		const status = await deleteCardCall(id);
+
+		if (isErrorCode(status)) {
+			const errorText = generateErrorText("delete", "boardCard");
+			await showErrorAndReload(errorText);
+			return;
+		}
 		await extractCard(id);
 	};
 
@@ -72,10 +96,17 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		const columnIndex = getColumnIndex(id);
-		if (columnIndex > -1) {
-			await deleteColumnCall(id);
-			board.value.columns.splice(columnIndex, 1);
+		if (columnIndex < 0) {
+			return;
 		}
+		const status = await deleteColumnCall(id);
+
+		if (isErrorCode(status)) {
+			const errorText = generateErrorText("delete", "boardColumn");
+			await showErrorAndReload(errorText);
+			return;
+		}
+		board.value.columns.splice(columnIndex, 1);
 	};
 
 	const extractCard = async (
@@ -87,7 +118,7 @@ export const useBoardState = (id: string) => {
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
 		if (column) {
-			const cardIndex = column?.cards.findIndex(
+			const cardIndex = column.cards.findIndex(
 				(card) => card.cardId === cardId
 			);
 			if (cardIndex > -1) {
@@ -105,10 +136,16 @@ export const useBoardState = (id: string) => {
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
 		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
-		board.value = {
-			...(await boardsApi.boardControllerGetBoardSkeleton(id)).data,
-			id,
-		};
+
+		const response = await boardsApi.boardControllerGetBoardSkeleton(id);
+
+		if (isErrorCode(response.status)) {
+			const errorText = generateErrorText("read", "board");
+			showFailure(errorText);
+			return;
+		}
+
+		board.value = { ...response.data, id };
 		isLoading.value = false;
 	};
 
@@ -137,7 +174,16 @@ export const useBoardState = (id: string) => {
 			if (card) {
 				addCard(card, targetColumnId, addedIndex);
 			}
-			await moveCardCall(payload.cardId, targetColumnId, addedIndex);
+			const status = await moveCardCall(
+				payload.cardId,
+				targetColumnId,
+				addedIndex
+			);
+			if (isErrorCode(status)) {
+				const errorText = generateErrorText("update");
+				await showErrorAndReload(errorText);
+				return;
+			}
 		}
 	};
 
@@ -154,13 +200,29 @@ export const useBoardState = (id: string) => {
 		 */
 		await nextTick();
 		board.value.columns.splice(addedIndex, 0, element);
-		await moveColumnCall(payload.payload, board.value.id, addedIndex);
+		const status = await moveColumnCall(
+			payload.payload,
+			board.value.id,
+			addedIndex
+		);
+
+		if (isErrorCode(status)) {
+			const errorText = generateErrorText("update");
+			await showErrorAndReload(errorText);
+		}
 	};
 
 	const updateColumnTitle = async (columnId: string, newTitle: string) => {
 		if (board.value === undefined) return;
 
-		await updateColumnTitleCall(columnId, newTitle);
+		const status = await updateColumnTitleCall(columnId, newTitle);
+
+		if (isErrorCode(status)) {
+			const errorText = generateErrorText("update");
+			await showErrorAndReload(errorText);
+			return;
+		}
+
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex > -1) {
 			board.value.columns[columnIndex].title = newTitle;
@@ -193,6 +255,13 @@ export const useBoardState = (id: string) => {
 			(c) => c.id === columnId
 		);
 		return columnIndex;
+	};
+
+	const showErrorAndReload = async (errorText: string | undefined) => {
+		if (board.value === undefined) return;
+
+		showFailure(errorText);
+		await fetchBoard(board?.value.id);
 	};
 
 	onMounted(() => fetchBoard(id));

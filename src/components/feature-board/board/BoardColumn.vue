@@ -46,8 +46,8 @@ import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -182,7 +182,7 @@ export default defineComponent({
 
 /* width */
 .scrollable-column::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
 
 /* Track */
@@ -193,12 +193,16 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
-	background: var(--v-secondary-lighten1);
+	background-color: transparent;
+	border-radius: 5px;
+}
+.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
+	background-color: var(--v-secondary-lighten1);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base);
+	background: var(--v-secondary-base) !important;
 }
 </style>

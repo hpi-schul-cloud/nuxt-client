@@ -1,12 +1,13 @@
 <template>
 	<VCardTitle
-		class="d-flex align-start justify-space-between"
+		class="d-block text-break-word pb-2"
 		v-if="isEditMode || value !== ''"
 	>
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
+			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 		></BoardAnyTitleInput>
@@ -45,3 +46,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

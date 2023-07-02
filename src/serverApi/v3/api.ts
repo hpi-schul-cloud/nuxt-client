@@ -647,7 +647,7 @@ export interface ContextExternalToolPostParams {
      * @type {string}
      * @memberof ContextExternalToolPostParams
      */
-    contextToolName: string;
+    displayName?: string;
     /**
      * 
      * @type {Array<CustomParameterEntryParam>}
@@ -696,7 +696,7 @@ export interface ContextExternalToolResponse {
      * @type {string}
      * @memberof ContextExternalToolResponse
      */
-    contextToolName?: string;
+    displayName?: string;
     /**
      * 
      * @type {Array<CustomParameterEntryResponse>}
@@ -709,6 +709,12 @@ export interface ContextExternalToolResponse {
      * @memberof ContextExternalToolResponse
      */
     toolVersion: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolResponse
+     */
+    logoUrl?: string;
 }
 
 /**
@@ -935,6 +941,30 @@ export interface CourseResponse {
      */
     students?: Array<UsersList>;
 }
+/**
+ * 
+ * @export
+ * @interface CreateCardBodyParams
+ */
+export interface CreateCardBodyParams {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateCardBodyParams
+     */
+    requiredEmptyElements?: Array<CreateCardBodyParamsRequiredEmptyElementsEnum>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
+    File = 'file',
+    RichText = 'richText',
+    Task = 'task'
+}
+
 /**
  * 
  * @export
@@ -1401,55 +1431,49 @@ export interface ExternalToolConfigurationTemplateResponse {
 /**
  * 
  * @export
- * @interface ExternalToolPostParams
+ * @interface ExternalToolCreateParams
  */
-export interface ExternalToolPostParams {
+export interface ExternalToolCreateParams {
     /**
      * 
      * @type {string}
-     * @memberof ExternalToolPostParams
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     url?: string;
     /**
      * 
      * @type {string}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     logoUrl?: string;
     /**
      * 
-     * @type {BasicToolConfigParams | Lti11ToolConfigParams | Oauth2ToolConfigParams}
-     * @memberof ExternalToolPostParams
+     * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
+     * @memberof ExternalToolCreateParams
      */
-    config: BasicToolConfigParams | Lti11ToolConfigParams | Oauth2ToolConfigParams;
+    config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
     /**
      * 
      * @type {Array<CustomParameterPostParams>}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     parameters?: Array<CustomParameterPostParams>;
     /**
      * 
      * @type {boolean}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     isHidden: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof ExternalToolPostParams
+     * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
 }
@@ -1544,6 +1568,61 @@ export interface ExternalToolSearchListResponse {
      * @memberof ExternalToolSearchListResponse
      */
     limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolUpdateParams
+ */
+export interface ExternalToolUpdateParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    logoUrl?: string;
+    /**
+     * 
+     * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
+     * @memberof ExternalToolUpdateParams
+     */
+    config: BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams;
+    /**
+     * 
+     * @type {Array<CustomParameterPostParams>}
+     * @memberof ExternalToolUpdateParams
+     */
+    parameters?: Array<CustomParameterPostParams>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolUpdateParams
+     */
+    isHidden: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolUpdateParams
+     */
+    openNewTab: boolean;
 }
 /**
  * 
@@ -1937,104 +2016,98 @@ export interface LoginResponse {
 /**
  * 
  * @export
- * @interface Lti11LaunchResponse
+ * @interface Lti11ToolConfigCreateParams
  */
-export interface Lti11LaunchResponse {
+export interface Lti11ToolConfigCreateParams {
     /**
      * 
      * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_signature: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_consumer_key: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_nonce: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_signature_method: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_timestamp: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_version: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_token?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11LaunchResponse
-     */
-    oauth_body_hash?: string;
-}
-/**
- * 
- * @export
- * @interface Lti11ToolConfigParams
- */
-export interface Lti11ToolConfigParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
     type: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
     baseUrl: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
     key: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
-    secret?: string;
+    secret: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
     resource_link_id?: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
      */
     lti_message_type: string;
     /**
      * 
      * @type {string}
-     * @memberof Lti11ToolConfigParams
+     * @memberof Lti11ToolConfigCreateParams
+     */
+    privacy_permission: string;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11ToolConfigUpdateParams
+ */
+export interface Lti11ToolConfigUpdateParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    secret?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    resource_link_id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
      */
     privacy_permission: string;
 }
@@ -2428,61 +2501,122 @@ export interface Oauth2MigrationParams {
 /**
  * 
  * @export
- * @interface Oauth2ToolConfigParams
+ * @interface Oauth2ToolConfigCreateParams
  */
-export interface Oauth2ToolConfigParams {
+export interface Oauth2ToolConfigCreateParams {
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     type: string;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     baseUrl: string;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     clientId: string;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
-    clientSecret?: string;
+    clientSecret: string;
     /**
      * 
      * @type {boolean}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     skipConsent: boolean;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     frontchannelLogoutUri?: string;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     scope?: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
      */
     redirectUris: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof Oauth2ToolConfigParams
+     * @memberof Oauth2ToolConfigCreateParams
+     */
+    tokenEndpointAuthMethod: string;
+}
+/**
+ * 
+ * @export
+ * @interface Oauth2ToolConfigUpdateParams
+ */
+export interface Oauth2ToolConfigUpdateParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    clientId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    clientSecret?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    skipConsent: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    frontchannelLogoutUri?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    scope?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Oauth2ToolConfigUpdateParams
+     */
+    redirectUris: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ToolConfigUpdateParams
      */
     tokenEndpointAuthMethod: string;
 }
@@ -3483,6 +3617,50 @@ export interface SchoolInfoResponse {
 /**
  * 
  * @export
+ * @interface SchoolToolConfigurationEntryResponse
+ */
+export interface SchoolToolConfigurationEntryResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    logoUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolToolConfigurationEntryResponse
+     */
+    schoolToolId: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolToolConfigurationListResponse
+ */
+export interface SchoolToolConfigurationListResponse {
+    /**
+     * 
+     * @type {Array<SchoolToolConfigurationEntryResponse>}
+     * @memberof SchoolToolConfigurationListResponse
+     */
+    data: Array<SchoolToolConfigurationEntryResponse>;
+}
+/**
+ * 
+ * @export
  * @interface SetHeightBodyParams
  */
 export interface SetHeightBodyParams {
@@ -4326,6 +4504,67 @@ export enum ToolLaunchRequestResponseMethodEnum {
 /**
  * 
  * @export
+ * @interface ToolReferenceListResponse
+ */
+export interface ToolReferenceListResponse {
+    /**
+     * 
+     * @type {Array<ToolReferenceResponse>}
+     * @memberof ToolReferenceListResponse
+     */
+    data: Array<ToolReferenceResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface ToolReferenceResponse
+ */
+export interface ToolReferenceResponse {
+    /**
+     * The id of the tool in the context
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    contextToolId: string;
+    /**
+     * The url of the logo of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    logoUrl?: string;
+    /**
+     * The display name of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    displayName: string;
+    /**
+     * Whether the tool should be opened in a new tab
+     * @type {boolean}
+     * @memberof ToolReferenceResponse
+     */
+    openInNewTab: boolean;
+    /**
+     * The status of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    status: ToolReferenceResponseStatusEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ToolReferenceResponseStatusEnum {
+    Latest = 'Latest',
+    Outdated = 'Outdated',
+    Unknown = 'Unknown'
+}
+
+/**
+ * 
+ * @export
  * @interface UpdateFlagParams
  */
 export interface UpdateFlagParams {
@@ -4398,6 +4637,19 @@ export interface UserInfoResponse {
      * @memberof UserInfoResponse
      */
     lastName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserLoginMigrationMandatoryParams
+ */
+export interface UserLoginMigrationMandatoryParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserLoginMigrationMandatoryParams
+     */
+    mandatory: boolean;
 }
 /**
  * 
@@ -4653,6 +4905,84 @@ export interface VideoConferenceCreateParams {
      */
     moderatorMustApproveJoinRequests: boolean;
 }
+/**
+ * 
+ * @export
+ * @interface VideoConferenceInfoResponse
+ */
+export interface VideoConferenceInfoResponse {
+    /**
+     * 
+     * @type {VideoConferenceStateResponse}
+     * @memberof VideoConferenceInfoResponse
+     */
+    state: VideoConferenceStateResponse;
+    /**
+     * The options for the video conference.
+     * @type {VideoConferenceOptionsResponse}
+     * @memberof VideoConferenceInfoResponse
+     */
+    options: VideoConferenceOptionsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface VideoConferenceJoinResponse
+ */
+export interface VideoConferenceJoinResponse {
+    /**
+     * The URL to join the video conference.
+     * @type {string}
+     * @memberof VideoConferenceJoinResponse
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoConferenceOptionsResponse
+ */
+export interface VideoConferenceOptionsResponse {
+    /**
+     * Every attendee joins muted
+     * @type {boolean}
+     * @memberof VideoConferenceOptionsResponse
+     */
+    everyAttendeeJoinsMuted: boolean;
+    /**
+     * Every attendee joins as a moderator
+     * @type {boolean}
+     * @memberof VideoConferenceOptionsResponse
+     */
+    everybodyJoinsAsModerator: boolean;
+    /**
+     * Moderator must approve join requests
+     * @type {boolean}
+     * @memberof VideoConferenceOptionsResponse
+     */
+    moderatorMustApproveJoinRequests: boolean;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum VideoConferenceScope {
+    Course = 'course',
+    Event = 'event'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum VideoConferenceStateResponse {
+    NotStarted = 'NOT_STARTED',
+    Running = 'RUNNING',
+    Finished = 'FINISHED'
+}
+
 /**
  * 
  * @export
@@ -6493,10 +6823,11 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * 
          * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
+         * @param {CreateCardBodyParams} [createCardBodyParams] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCreateCard: async (columnId: string, options: any = {}): Promise<RequestArgs> => {
+        columnControllerCreateCard: async (columnId: string, createCardBodyParams?: CreateCardBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerCreateCard', 'columnId', columnId)
             const localVarPath = `/columns/{columnId}/cards`
@@ -6518,9 +6849,12 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createCardBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6667,11 +7001,12 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * 
          * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
+         * @param {CreateCardBodyParams} [createCardBodyParams] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerCreateCard(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCreateCard(columnId, options);
+        async columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCreateCard(columnId, createCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -6723,11 +7058,12 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * 
          * @summary Create a new card on a column.
          * @param {string} columnId The id of the column.
+         * @param {CreateCardBodyParams} [createCardBodyParams] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCreateCard(columnId: string, options?: any): AxiosPromise<CardResponse> {
-            return localVarFp.columnControllerCreateCard(columnId, options).then((request) => request(axios, basePath));
+        columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): AxiosPromise<CardResponse> {
+            return localVarFp.columnControllerCreateCard(columnId, createCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6774,11 +7110,12 @@ export interface BoardColumnApiInterface {
      * 
      * @summary Create a new card on a column.
      * @param {string} columnId The id of the column.
+     * @param {CreateCardBodyParams} [createCardBodyParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardColumnApiInterface
      */
-    columnControllerCreateCard(columnId: string, options?: any): AxiosPromise<CardResponse>;
+    columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): AxiosPromise<CardResponse>;
 
     /**
      * 
@@ -6825,12 +7162,13 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * 
      * @summary Create a new card on a column.
      * @param {string} columnId The id of the column.
+     * @param {CreateCardBodyParams} [createCardBodyParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardColumnApi
      */
-    public columnControllerCreateCard(columnId: string, options?: any) {
-        return BoardColumnApiFp(this.configuration).columnControllerCreateCard(columnId, options).then((request) => request(this.axios, this.basePath));
+    public columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any) {
+        return BoardColumnApiFp(this.configuration).columnControllerCreateCard(columnId, createCardBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7693,12 +8031,15 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.1.0' | '1.3.0', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'version', version)
             const localVarPath = `/courses/{courseId}/export`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7715,6 +8056,10 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (version !== undefined) {
+                localVarQueryParameter['version'] = version;
+            }
 
 
     
@@ -7820,11 +8165,12 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, options);
+        async courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -7861,11 +8207,12 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} courseId The id of the course
+         * @param {'1.1.0' | '1.3.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerExportCourse(courseId, options).then((request) => request(axios, basePath));
+        courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -7898,11 +8245,12 @@ export interface CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -7935,12 +8283,13 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
+     * @param {'1.1.0' | '1.3.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12849,18 +13198,101 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {string} scope 
+         * @summary Lists all available tools that can be added for a given context
+         * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForSchool: async (scope: string, id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'scope' is not null or undefined
-            assertParamExists('toolConfigurationControllerGetAvailableToolsForSchool', 'scope', scope)
+        toolConfigurationControllerGetAvailableToolsForContext: async (context: any, id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'context' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetAvailableToolsForContext', 'context', context)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetAvailableToolsForContext', 'id', id)
+            const localVarPath = `/tools/available/{context}/{id}`
+                .replace(`{${"context"}}`, encodeURIComponent(String(context)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetAvailableToolsForSchool: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('toolConfigurationControllerGetAvailableToolsForSchool', 'id', id)
-            const localVarPath = `/tools/available/{scope}/{id}`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
+            const localVarPath = `/tools/available/school/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {any} context 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetExternalToolForContext: async (toolId: string, context: any, id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'toolId' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetExternalToolForContext', 'toolId', toolId)
+            // verify required parameter 'context' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetExternalToolForContext', 'context', context)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetExternalToolForContext', 'id', id)
+            const localVarPath = `/tools/{toolId}/{context}/{id}/configuration`
+                .replace(`{${"toolId"}}`, encodeURIComponent(String(toolId)))
+                .replace(`{${"context"}}`, encodeURIComponent(String(context)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13047,13 +13479,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolCreateParams} externalToolCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerCreateExternalTool: async (externalToolPostParams: ExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'externalToolPostParams' is not null or undefined
-            assertParamExists('toolControllerCreateExternalTool', 'externalToolPostParams', externalToolPostParams)
+        toolControllerCreateExternalTool: async (externalToolCreateParams: ExternalToolCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolCreateParams' is not null or undefined
+            assertParamExists('toolControllerCreateExternalTool', 'externalToolCreateParams', externalToolCreateParams)
             const localVarPath = `/tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13077,7 +13509,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(externalToolPostParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(externalToolCreateParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13123,7 +13555,8 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -13131,7 +13564,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool: async (name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options: any = {}): Promise<RequestArgs> => {
+        toolControllerFindExternalTool: async (name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13150,6 +13583,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (name !== undefined) {
                 localVarQueryParameter['name'] = name;
+            }
+
+            if (clientId !== undefined) {
+                localVarQueryParameter['clientId'] = clientId;
             }
 
             if (skip !== undefined) {
@@ -13218,18 +13655,20 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} toolId 
-         * @param {string} courseId 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetLti11LaunchParameters: async (toolId: string, courseId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'toolId' is not null or undefined
-            assertParamExists('toolControllerGetLti11LaunchParameters', 'toolId', toolId)
-            // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('toolControllerGetLti11LaunchParameters', 'courseId', courseId)
-            const localVarPath = `/tools/lti11/{toolId}/launch`
-                .replace(`{${"toolId"}}`, encodeURIComponent(String(toolId)));
+        toolControllerGetToolReferences: async (contextId: string, contextType: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextId' is not null or undefined
+            assertParamExists('toolControllerGetToolReferences', 'contextId', contextId)
+            // verify required parameter 'contextType' is not null or undefined
+            assertParamExists('toolControllerGetToolReferences', 'contextType', contextType)
+            const localVarPath = `/tools/references/{contextType}/{contextId}`
+                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
+                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13245,10 +13684,6 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (courseId !== undefined) {
-                localVarQueryParameter['courseId'] = courseId;
-            }
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -13263,15 +13698,15 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {string} toolId 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerUpdateExternalTool: async (toolId: string, externalToolPostParams: ExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+        toolControllerUpdateExternalTool: async (toolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'toolId' is not null or undefined
             assertParamExists('toolControllerUpdateExternalTool', 'toolId', toolId)
-            // verify required parameter 'externalToolPostParams' is not null or undefined
-            assertParamExists('toolControllerUpdateExternalTool', 'externalToolPostParams', externalToolPostParams)
+            // verify required parameter 'externalToolUpdateParams' is not null or undefined
+            assertParamExists('toolControllerUpdateExternalTool', 'externalToolUpdateParams', externalToolUpdateParams)
             const localVarPath = `/tools/{toolId}`
                 .replace(`{${"toolId"}}`, encodeURIComponent(String(toolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13296,7 +13731,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(externalToolPostParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(externalToolUpdateParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13549,13 +13984,36 @@ export const ToolApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} scope 
+         * @summary Lists all available tools that can be added for a given context
+         * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetAvailableToolsForSchool(scope: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolConfigurationListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForSchool(scope, id, options);
+        async toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolToolConfigurationListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForContext(context, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerGetAvailableToolsForSchool(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolConfigurationListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForSchool(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {any} context 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerGetExternalToolForContext(toolId: string, context: any, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolConfigurationTemplateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetExternalToolForContext(toolId, context, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13598,18 +14056,18 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ContextExternalToolSearchListResponse>>> {
+        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolCreateParams} externalToolCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerCreateExternalTool(externalToolPostParams: ExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerCreateExternalTool(externalToolPostParams, options);
+        async toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerCreateExternalTool(externalToolCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13624,7 +14082,8 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -13632,8 +14091,8 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options);
+        async toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13648,24 +14107,25 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} toolId 
-         * @param {string} courseId 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Lti11LaunchResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetLti11LaunchParameters(toolId, courseId, options);
+        async toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetToolReferences(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {string} toolId 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerUpdateExternalTool(toolId, externalToolPostParams, options);
+        async toolControllerUpdateExternalTool(toolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerUpdateExternalTool(toolId, externalToolUpdateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13742,13 +14202,34 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {string} scope 
+         * @summary Lists all available tools that can be added for a given context
+         * @param {any} context 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForSchool(scope: string, id: string, options?: any): AxiosPromise<ToolConfigurationListResponse> {
-            return localVarFp.toolConfigurationControllerGetAvailableToolsForSchool(scope, id, options).then((request) => request(axios, basePath));
+        toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<SchoolToolConfigurationListResponse> {
+            return localVarFp.toolConfigurationControllerGetAvailableToolsForContext(context, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetAvailableToolsForSchool(id: string, options?: any): AxiosPromise<ToolConfigurationListResponse> {
+            return localVarFp.toolConfigurationControllerGetAvailableToolsForSchool(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} toolId 
+         * @param {any} context 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetExternalToolForContext(toolId: string, context: any, id: string, options?: any): AxiosPromise<ExternalToolConfigurationTemplateResponse> {
+            return localVarFp.toolConfigurationControllerGetExternalToolForContext(toolId, context, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13787,17 +14268,17 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ContextExternalToolSearchListResponse>> {
+        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse> {
             return localVarFp.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolCreateParams} externalToolCreateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerCreateExternalTool(externalToolPostParams: ExternalToolPostParams, options?: any): AxiosPromise<ExternalToolResponse> {
-            return localVarFp.toolControllerCreateExternalTool(externalToolPostParams, options).then((request) => request(axios, basePath));
+        toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+            return localVarFp.toolControllerCreateExternalTool(externalToolCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13810,7 +14291,8 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -13818,8 +14300,8 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse> {
-            return localVarFp.toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse> {
+            return localVarFp.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13832,23 +14314,24 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {string} toolId 
-         * @param {string} courseId 
+         * @summary Get Tool References
+         * @param {string} contextId 
+         * @param {string} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): AxiosPromise<Lti11LaunchResponse> {
-            return localVarFp.toolControllerGetLti11LaunchParameters(toolId, courseId, options).then((request) => request(axios, basePath));
+        toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse> {
+            return localVarFp.toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} toolId 
-         * @param {ExternalToolPostParams} externalToolPostParams 
+         * @param {ExternalToolUpdateParams} externalToolUpdateParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any): AxiosPromise<ExternalToolResponse> {
-            return localVarFp.toolControllerUpdateExternalTool(toolId, externalToolPostParams, options).then((request) => request(axios, basePath));
+        toolControllerUpdateExternalTool(toolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+            return localVarFp.toolControllerUpdateExternalTool(toolId, externalToolUpdateParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13917,13 +14400,34 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
 export interface ToolApiInterface {
     /**
      * 
-     * @param {string} scope 
+     * @summary Lists all available tools that can be added for a given context
+     * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetAvailableToolsForSchool(scope: string, id: string, options?: any): AxiosPromise<ToolConfigurationListResponse>;
+    toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any): AxiosPromise<SchoolToolConfigurationListResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerGetAvailableToolsForSchool(id: string, options?: any): AxiosPromise<ToolConfigurationListResponse>;
+
+    /**
+     * 
+     * @param {string} toolId 
+     * @param {any} context 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerGetExternalToolForContext(toolId: string, context: any, id: string, options?: any): AxiosPromise<ExternalToolConfigurationTemplateResponse>;
 
     /**
      * 
@@ -13963,16 +14467,16 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<Array<ContextExternalToolSearchListResponse>>;
+    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse>;
 
     /**
      * 
-     * @param {ExternalToolPostParams} externalToolPostParams 
+     * @param {ExternalToolCreateParams} externalToolCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerCreateExternalTool(externalToolPostParams: ExternalToolPostParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -13985,7 +14489,8 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @param {string} [name] 
+     * @param {string} [name] Name of the external tool
+     * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -13994,7 +14499,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+    toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
 
     /**
      * 
@@ -14007,23 +14512,24 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @param {string} toolId 
-     * @param {string} courseId 
+     * @summary Get Tool References
+     * @param {string} contextId 
+     * @param {string} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any): AxiosPromise<Lti11LaunchResponse>;
+    toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse>;
 
     /**
      * 
      * @param {string} toolId 
-     * @param {ExternalToolPostParams} externalToolPostParams 
+     * @param {ExternalToolUpdateParams} externalToolUpdateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerUpdateExternalTool(toolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -14092,14 +14598,39 @@ export interface ToolApiInterface {
 export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
-     * @param {string} scope 
+     * @summary Lists all available tools that can be added for a given context
+     * @param {any} context 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolConfigurationControllerGetAvailableToolsForSchool(scope: string, id: string, options?: any) {
-        return ToolApiFp(this.configuration).toolConfigurationControllerGetAvailableToolsForSchool(scope, id, options).then((request) => request(this.axios, this.basePath));
+    public toolConfigurationControllerGetAvailableToolsForContext(context: any, id: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetAvailableToolsForContext(context, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerGetAvailableToolsForSchool(id: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetAvailableToolsForSchool(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} toolId 
+     * @param {any} context 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerGetExternalToolForContext(toolId: string, context: any, id: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetExternalToolForContext(toolId, context, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14152,13 +14683,13 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @param {ExternalToolPostParams} externalToolPostParams 
+     * @param {ExternalToolCreateParams} externalToolCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerCreateExternalTool(externalToolPostParams: ExternalToolPostParams, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerCreateExternalTool(externalToolPostParams, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerCreateExternalTool(externalToolCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14174,7 +14705,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @param {string} [name] 
+     * @param {string} [name] Name of the external tool
+     * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -14183,8 +14715,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
-        return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
+        return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14200,26 +14732,27 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @param {string} toolId 
-     * @param {string} courseId 
+     * @summary Get Tool References
+     * @param {string} contextId 
+     * @param {string} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerGetLti11LaunchParameters(toolId: string, courseId: string, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerGetLti11LaunchParameters(toolId, courseId, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerGetToolReferences(contextId: string, contextType: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} toolId 
-     * @param {ExternalToolPostParams} externalToolPostParams 
+     * @param {ExternalToolUpdateParams} externalToolUpdateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerUpdateExternalTool(toolId: string, externalToolPostParams: ExternalToolPostParams, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(toolId, externalToolPostParams, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerUpdateExternalTool(toolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(toolId, externalToolUpdateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15338,6 +15871,111 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerRestartMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user-login-migrations/restart`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerSetMigrationMandatory: async (userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userLoginMigrationMandatoryParams' is not null or undefined
+            assertParamExists('userLoginMigrationControllerSetMigrationMandatory', 'userLoginMigrationMandatoryParams', userLoginMigrationMandatoryParams)
+            const localVarPath = `/user-login-migrations/mandatory`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userLoginMigrationMandatoryParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerStartMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user-login-migrations/start`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15368,6 +16006,34 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerRestartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerRestartMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerStartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerStartMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -15396,6 +16062,31 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
         userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void> {
             return localVarFp.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerRestartMigration(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerStartMigration(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -15422,6 +16113,31 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
 
 }
 
@@ -15452,6 +16168,37 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerRestartMigration(options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerRestartMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerStartMigration(options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerStartMigration(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -15606,6 +16353,180 @@ export class UserMigrationApi extends BaseAPI implements UserMigrationApiInterfa
 export const VideoConferenceApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Use this endpoint to end a running video conference.
+         * @summary Ends a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerEnd: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'scope' is not null or undefined
+            assertParamExists('videoConferenceControllerEnd', 'scope', scope)
+            // verify required parameter 'scopeId' is not null or undefined
+            assertParamExists('videoConferenceControllerEnd', 'scopeId', scopeId)
+            const localVarPath = `/videoconference2/{scope}/{scopeId}/end`
+                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
+                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this endpoint to get information about a running video conference.
+         * @summary Returns information about a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerInfo: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'scope' is not null or undefined
+            assertParamExists('videoConferenceControllerInfo', 'scope', scope)
+            // verify required parameter 'scopeId' is not null or undefined
+            assertParamExists('videoConferenceControllerInfo', 'scopeId', scopeId)
+            const localVarPath = `/videoconference2/{scope}/{scopeId}/info`
+                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
+                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this endpoint to get a link to join an existing video conference. The conference must be running.
+         * @summary Creates a join link for a video conference, if it has started.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerJoin: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'scope' is not null or undefined
+            assertParamExists('videoConferenceControllerJoin', 'scope', scope)
+            // verify required parameter 'scopeId' is not null or undefined
+            assertParamExists('videoConferenceControllerJoin', 'scopeId', scopeId)
+            const localVarPath = `/videoconference2/{scope}/{scopeId}/join`
+                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
+                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
+         * @summary Creates the video conference, if it has not started yet.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerStart: async (scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'scope' is not null or undefined
+            assertParamExists('videoConferenceControllerStart', 'scope', scope)
+            // verify required parameter 'scopeId' is not null or undefined
+            assertParamExists('videoConferenceControllerStart', 'scopeId', scopeId)
+            // verify required parameter 'videoConferenceCreateParams' is not null or undefined
+            assertParamExists('videoConferenceControllerStart', 'videoConferenceCreateParams', videoConferenceCreateParams)
+            const localVarPath = `/videoconference2/{scope}/{scopeId}/start`
+                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
+                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(videoConferenceCreateParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Creates a join link for a video conference and creates the video conference, if it has not started yet.
          * @param {string} scope 
@@ -15614,13 +16535,13 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerCreateAndJoin: async (scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerCreateAndJoin: async (scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
-            assertParamExists('videoConferenceControllerCreateAndJoin', 'scope', scope)
+            assertParamExists('videoConferenceDeprecatedControllerCreateAndJoin', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
-            assertParamExists('videoConferenceControllerCreateAndJoin', 'scopeId', scopeId)
+            assertParamExists('videoConferenceDeprecatedControllerCreateAndJoin', 'scopeId', scopeId)
             // verify required parameter 'videoConferenceCreateParams' is not null or undefined
-            assertParamExists('videoConferenceControllerCreateAndJoin', 'videoConferenceCreateParams', videoConferenceCreateParams)
+            assertParamExists('videoConferenceDeprecatedControllerCreateAndJoin', 'videoConferenceCreateParams', videoConferenceCreateParams)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
                 .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
                 .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
@@ -15661,11 +16582,11 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerEnd: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
-            assertParamExists('videoConferenceControllerEnd', 'scope', scope)
+            assertParamExists('videoConferenceDeprecatedControllerEnd', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
-            assertParamExists('videoConferenceControllerEnd', 'scopeId', scopeId)
+            assertParamExists('videoConferenceDeprecatedControllerEnd', 'scopeId', scopeId)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
                 .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
                 .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
@@ -15703,11 +16624,11 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerInfo: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
-            assertParamExists('videoConferenceControllerInfo', 'scope', scope)
+            assertParamExists('videoConferenceDeprecatedControllerInfo', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
-            assertParamExists('videoConferenceControllerInfo', 'scopeId', scopeId)
+            assertParamExists('videoConferenceDeprecatedControllerInfo', 'scopeId', scopeId)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
                 .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
                 .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
@@ -15748,6 +16669,55 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = VideoConferenceApiAxiosParamCreator(configuration)
     return {
         /**
+         * Use this endpoint to end a running video conference.
+         * @summary Ends a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerEnd(scope, scopeId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this endpoint to get information about a running video conference.
+         * @summary Returns information about a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerInfo(scope, scopeId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this endpoint to get a link to join an existing video conference. The conference must be running.
+         * @summary Creates a join link for a video conference, if it has started.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceJoinResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerJoin(scope, scopeId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
+         * @summary Creates the video conference, if it has not started yet.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @summary Creates a join link for a video conference and creates the video conference, if it has not started yet.
          * @param {string} scope 
@@ -15756,8 +16726,8 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options);
+        async videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -15768,8 +16738,8 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerEnd(scope, scopeId, options);
+        async videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerEnd(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -15780,8 +16750,8 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerInfo(scope, scopeId, options);
+        async videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerInfo(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -15795,6 +16765,51 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
     const localVarFp = VideoConferenceApiFp(configuration)
     return {
         /**
+         * Use this endpoint to end a running video conference.
+         * @summary Ends a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this endpoint to get information about a running video conference.
+         * @summary Returns information about a running video conference.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
+            return localVarFp.videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this endpoint to get a link to join an existing video conference. The conference must be running.
+         * @summary Creates a join link for a video conference, if it has started.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse> {
+            return localVarFp.videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
+         * @summary Creates the video conference, if it has not started yet.
+         * @param {VideoConferenceScope} scope 
+         * @param {string} scopeId 
+         * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void> {
+            return localVarFp.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Creates a join link for a video conference and creates the video conference, if it has not started yet.
          * @param {string} scope 
@@ -15803,8 +16818,8 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object> {
-            return localVarFp.videoConferenceControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
+        videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object> {
+            return localVarFp.videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15814,8 +16829,8 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
-            return localVarFp.videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
+        videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
+            return localVarFp.videoConferenceDeprecatedControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15825,8 +16840,8 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
-            return localVarFp.videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
+        videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
+            return localVarFp.videoConferenceDeprecatedControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15838,6 +16853,51 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
  */
 export interface VideoConferenceApiInterface {
     /**
+     * Use this endpoint to end a running video conference.
+     * @summary Ends a running video conference.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApiInterface
+     */
+    videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * Use this endpoint to get information about a running video conference.
+     * @summary Returns information about a running video conference.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApiInterface
+     */
+    videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
+
+    /**
+     * Use this endpoint to get a link to join an existing video conference. The conference must be running.
+     * @summary Creates a join link for a video conference, if it has started.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApiInterface
+     */
+    videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse>;
+
+    /**
+     * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
+     * @summary Creates the video conference, if it has not started yet.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApiInterface
+     */
+    videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void>;
+
+    /**
      * 
      * @summary Creates a join link for a video conference and creates the video conference, if it has not started yet.
      * @param {string} scope 
@@ -15847,7 +16907,7 @@ export interface VideoConferenceApiInterface {
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -15858,7 +16918,7 @@ export interface VideoConferenceApiInterface {
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -15869,7 +16929,7 @@ export interface VideoConferenceApiInterface {
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
 
 }
 
@@ -15881,6 +16941,59 @@ export interface VideoConferenceApiInterface {
  */
 export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInterface {
     /**
+     * Use this endpoint to end a running video conference.
+     * @summary Ends a running video conference.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApi
+     */
+    public videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this endpoint to get information about a running video conference.
+     * @summary Returns information about a running video conference.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApi
+     */
+    public videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this endpoint to get a link to join an existing video conference. The conference must be running.
+     * @summary Creates a join link for a video conference, if it has started.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApi
+     */
+    public videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
+     * @summary Creates the video conference, if it has not started yet.
+     * @param {VideoConferenceScope} scope 
+     * @param {string} scopeId 
+     * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoConferenceApi
+     */
+    public videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Creates a join link for a video conference and creates the video conference, if it has not started yet.
      * @param {string} scope 
@@ -15890,8 +17003,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
-        return VideoConferenceApiFp(this.configuration).videoConferenceControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
+    public videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15903,8 +17016,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerEnd(scope: string, scopeId: string, options?: any) {
-        return VideoConferenceApiFp(this.configuration).videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
+    public videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15916,8 +17029,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @throws {RequiredError}
      * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerInfo(scope: string, scopeId: string, options?: any) {
-        return VideoConferenceApiFp(this.configuration).videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
+    public videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any) {
+        return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

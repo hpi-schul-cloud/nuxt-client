@@ -3,23 +3,22 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { BoardPermissionsTypes } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
 jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
-const defaultPermissions = {
-	hasEditPermission: true,
-};
-
 describe("BoardAnyTitleTitleInput", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (options: {
 		isEditMode: boolean;
-		permissions?: BoardPermissionsTypes;
+		permissions?: BoardPermissionChecks;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
@@ -58,13 +57,6 @@ describe("BoardAnyTitleTitleInput", () => {
 			}
 
 			expect(emitted["update:value"][0][0]).toContain(newValue);
-		});
-
-		it("should not have textarea in displaymode", async () => {
-			setup({ isEditMode: false });
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-
-			expect(textAreaComponent.element).toBeUndefined();
 		});
 	});
 });
