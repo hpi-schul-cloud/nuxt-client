@@ -7,7 +7,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import NotifierModule from "@/store/notifier";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 describe("SchoolPolicyFormDialog", () => {
 	let notifierModule: jest.Mocked<NotifierModule>;
@@ -50,9 +50,9 @@ describe("SchoolPolicyFormDialog", () => {
 				}),
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 					schoolsModule,
 					privacyPolicyModule,
-					notifierModule,
 				},
 				propsData: mockProps,
 			}
