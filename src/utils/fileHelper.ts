@@ -27,6 +27,7 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.appendChild(link);
 	link.click();
 	document.body.removeChild(link);
+}
 
 export function convertFileSize(fileSize: number): {
 	convertedSize: number;
