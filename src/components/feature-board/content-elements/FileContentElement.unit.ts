@@ -322,7 +322,7 @@ describe("FileContentElement", () => {
 
 					expect(chips.exists()).toBe(true);
 				});
-        
+
 				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(false);
 
@@ -372,7 +372,7 @@ describe("FileContentElement", () => {
 
 					expect(chips.exists()).toBe(true);
 				});
-        
+
 				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(true);
 
@@ -435,7 +435,7 @@ describe("FileContentElement", () => {
 
 					expect(url).toBe("");
 				});
-        
+
 				it("should render FileContentElementChips component", async () => {
 					const { wrapper } = setup(false);
 
@@ -509,7 +509,7 @@ describe("FileContentElement", () => {
 					);
 					expect(FileContentElementChip.exists()).toBe(true);
 				});
-          
+
 				it("should hand over isDownloadAllowed property as false", async () => {
 					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
 

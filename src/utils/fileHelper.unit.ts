@@ -32,9 +32,9 @@ describe("@/utils/fileHelper", () => {
 			expect(document.body.appendChild).toBeCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toBeCalledWith(link);
-    });
+		});
 	});
-  
+
 	describe("convertFileSize", () => {
 		describe("when file size is < 1024 B", () => {
 			it("should return file size in B and unit", () => {
