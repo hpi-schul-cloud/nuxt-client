@@ -1,21 +1,26 @@
+import Vue from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import StatusAlertsModule from "@/store/status-alerts";
 import { statusAlertsModule, authModule } from "@/store";
-import TheTopBar from "./TheTopBar";
+import { I18N_KEY } from "@/utils/inject";
+import TheTopBar from "./TheTopBar.vue";
 
-let authModuleMock;
-let envConfigModuleMock;
+let envConfigModuleMock: EnvConfigModule;
+let authModuleMock: AuthModule;
 
-const getWrapper = (props, options) => {
-	return mount(TheTopBar, {
+const getWrapper = (props?: object, options?: object) => {
+	return mount(TheTopBar as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		provide: {
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 			authModule: authModuleMock,
 			envConfigModule: envConfigModuleMock,
 		},
@@ -34,13 +39,14 @@ describe("@/components/legacy/TheTopBar", () => {
 	});
 
 	describe("when user is logged in with no status alerts", () => {
-		let wrapper;
+		let wrapper: Wrapper<Vue>;
 
 		beforeEach(() => {
 			jest
 				.spyOn(statusAlertsModule, "fetchStatusAlerts")
 				.mockImplementation(() => {
 					statusAlertsModule.setStatusAlerts([]);
+					return Promise.resolve();
 				});
 
 			wrapper = getWrapper({
@@ -80,18 +86,18 @@ describe("@/components/legacy/TheTopBar", () => {
 				.spyOn(statusAlertsModule, "fetchStatusAlerts")
 				.mockImplementation(() => {
 					statusAlertsModule.setStatusAlerts(mockStatusAlerts);
+					return Promise.resolve();
 				});
 
 			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 
 			expect(fetchStatusAlertsSpy).toHaveBeenCalled();
-			expect(wrapper.vm.showStatusAlertIcon).toStrictEqual(true);
 
 			expect(
 				wrapper.findAll('[data-test-id="status-alerts-icon"]')
 			).toHaveLength(1);
-			expect(wrapper.findAll(".v-list-item")).toHaveLength(
+			expect(wrapper.findAll(".alert-item")).toHaveLength(
 				mockStatusAlerts.length
 			);
 		});
@@ -107,7 +113,7 @@ describe("@/components/legacy/TheTopBar", () => {
 			expect(expandBtn.exists()).toBe(true);
 
 			await expandBtn.trigger("click");
-			expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
+			expect(wrapper.emitted("fullscreen")).toHaveLength(1);
 		});
 
 		it("should emit fullcreen event", async () => {
@@ -119,7 +125,7 @@ describe("@/components/legacy/TheTopBar", () => {
 			expect(collapseBtn.exists()).toBe(true);
 
 			await collapseBtn.trigger("click");
-			expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
+			expect(wrapper.emitted("fullscreen")).toHaveLength(1);
 		});
 	});
 
@@ -127,6 +133,31 @@ describe("@/components/legacy/TheTopBar", () => {
 		authModule.setUser({
 			permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
 			roles: [{ name: "administrator" }],
+			__v: 0,
+			_id: "asdf",
+			id: "asdf",
+			firstName: "Arthur",
+			lastName: "Dent",
+			email: "arthur.dent@hitchhiker.org",
+			updatedAt: "",
+			birthday: "",
+			createdAt: "",
+			preferences: {},
+			schoolId: "",
+			emailSearchValues: [],
+			firstNameSearchValues: [],
+			lastNameSearchValues: [],
+			consent: {},
+			forcePasswordChange: false,
+			language: "",
+			fullName: "",
+			avatarInitials: "",
+			avatarBackgroundColor: "",
+			age: 0,
+			displayName: "",
+			accountId: "",
+			schoolName: "",
+			externallyManaged: false,
 		});
 		authModule.setAccessToken("asdf");
 		authModuleMock = createModuleMocks(AuthModule, {
@@ -152,6 +183,6 @@ describe("@/components/legacy/TheTopBar", () => {
 		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
 
 		await logoutBtn.trigger("click");
-		expect(wrapper.emitted("action")[0]).toStrictEqual(["logout"]);
+		expect(wrapper.emitted("logout")).toHaveLength(1);
 	});
 });

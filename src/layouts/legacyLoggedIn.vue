@@ -30,7 +30,7 @@
 
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import TheTopBar from "@/components/legacy/TheTopBar";
+import TheTopBar from "@/components/legacy/topbar/TheTopBar";
 import TheSidebar from "@/components/legacy/TheSidebar";
 import TheFooter from "@/components/legacy/TheFooter";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
