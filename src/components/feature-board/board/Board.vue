@@ -3,22 +3,23 @@
 		<div class="ml-1">
 			<h1>{{ $t("pages.room.boardCard.label.courseBoard") }}</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1 ml-n4">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					:lock-axis="lockAxis"
+					lock-axis="x"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 					:non-drag-area-selector="'.drag-disabled'"
+					:drag-begin-delay="isDesktop ? 0 : 300"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
 							:column="column"
 							:index="index"
-							:class="{ 'drag-disabled': isEditMode }"
+							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -63,6 +64,8 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { useMediaQuery } from "@vueuse/core";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 
 export default defineComponent({
 	components: {
@@ -104,6 +107,8 @@ export default defineComponent({
 
 		useBodyScrolling();
 
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
+
 		const {
 			hasMovePermission,
 			hasCreateCardPermission,
@@ -113,10 +118,7 @@ export default defineComponent({
 			isTeacher,
 		} = useBoardPermissions();
 
-		const lockAxis = hasMovePermission ? "x" : "x,y";
-		const placeholderOptions = hasMovePermission
-			? columnDropPlaceholderOptions
-			: null;
+		const placeholderOptions = columnDropPlaceholderOptions;
 
 		const onCreateCard = async (columnId: string) => {
 			if (hasCreateCardPermission) await createCard(columnId);
@@ -140,6 +142,17 @@ export default defineComponent({
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
 			if (hasMovePermission) await moveColumn(columnPayload);
+		};
+
+		/**
+		 * These classes should be removed automatically by vue-smooth-dnd.
+		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
+		 */
+		const onTouchEnd = () => {
+			document.body.classList.remove(
+				"smooth-dnd-no-user-select",
+				"smooth-dnd-disable-touch-action"
+			);
 		};
 
 		const onMoveColumnKeyboard = async (
@@ -183,9 +196,10 @@ export default defineComponent({
 			hasCreateCardPermission,
 			hasCreateColumnPermission,
 			placeholderOptions,
-			lockAxis,
 			isEditMode,
+			isDesktop,
 			getColumnId,
+			onTouchEnd,
 			onCreateCard,
 			onCreateColumn,
 			onCreateColumnWithCard,

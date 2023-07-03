@@ -197,11 +197,11 @@ describe("Board", () => {
 		});
 
 		describe("when user is not permitted to move", () => {
-			it("should set lock-axis to 'x,y'", () => {
+			it("should set drag-disabled", () => {
 				setup({ permissions: { hasMovePermission: false } });
 
 				const dndContainer = wrapper.findComponent({ name: "Container" });
-				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
+				expect(dndContainer.element.outerHTML).toContain(".drag-disabled");
 			});
 		});
 
