@@ -31,6 +31,58 @@ describe("fileHelper", () => {
 		});
 	});
 
+	describe("when file size is at the limits of B range", () => {
+		it("should return file size 0 B if file size is negative", () => {
+			const result = convertFileSize(-1);
+			expect(result).toEqual({ convertedSize: 0, unit: "B" });
+		});
+		it("should return file size 0 B", () => {
+			const result = convertFileSize(0);
+			expect(result).toEqual({ convertedSize: 0, unit: "B" });
+		});
+		it("should return file size 1023 B", () => {
+			const result = convertFileSize(1023);
+			expect(result).toEqual({ convertedSize: 1023, unit: "B" });
+		});
+	});
+
+	describe("when file size is at the limits of KB range", () => {
+		it("should return file size 1 KB", () => {
+			const result = convertFileSize(1024);
+			expect(result).toEqual({ convertedSize: 1, unit: "KB" });
+		});
+		it("should return file size 1024 and unit", () => {
+			const result = convertFileSize(1048575);
+			expect(result).toEqual({ convertedSize: 1023.9990234375, unit: "KB" });
+		});
+	});
+
+	describe("when file size is at the limits of MB range", () => {
+		it("should return file size 1 MB", () => {
+			const result = convertFileSize(1048576);
+			expect(result).toEqual({ convertedSize: 1, unit: "MB" });
+		});
+		it("should return file size 1024 MB", () => {
+			const result = convertFileSize(1073741823);
+			expect(result).toEqual({ convertedSize: 1023.9999990463257, unit: "MB" });
+		});
+	});
+
+	describe("when file size is at the limits of GB range", () => {
+		it("should return file size 1 GB", () => {
+			const result = convertFileSize(1073741824);
+			expect(result).toEqual({ convertedSize: 1, unit: "GB" });
+		});
+		it("should return file size 1024 GB", () => {
+			const result = convertFileSize(1099511627775);
+			expect(result).toEqual({ convertedSize: 1023.9999999990687, unit: "GB" });
+		});
+		it("should return file size >= 1024 GB", () => {
+			const result = convertFileSize(1099511627776);
+			expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
+		});
+	});
+
 	describe("getFileExtension", () => {
 		describe("when input string contains one dot", () => {
 			it("should return the part of the input string behing the last dot", () => {

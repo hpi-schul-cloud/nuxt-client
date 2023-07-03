@@ -23,11 +23,11 @@ export function convertFileSize(fileSize: number): {
 	const units = ["B", "KB", "MB", "GB"];
 	const threshold = 1024;
 
-	let convertedSize = fileSize;
+	let convertedSize = fileSize < 0 ? 0 : fileSize;
 	let unit = units[0];
 	let power = 1;
 
-	while (convertedSize >= threshold && units.length >= power) {
+	while (convertedSize >= threshold && units.length > power) {
 		convertedSize /= threshold;
 		unit = units[power];
 		power++;

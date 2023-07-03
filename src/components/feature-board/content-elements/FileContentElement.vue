@@ -19,7 +19,7 @@
 				@move-keyboard:element="onMoveFileEditKeyboard"
 				@delete:element="onDeleteElement"
 			/>
-      <FileContentElementChips
+			<FileContentElementChips
 				:fileSize="fileRecord.size"
 				:fileName="fileRecord.name"
 			/>
