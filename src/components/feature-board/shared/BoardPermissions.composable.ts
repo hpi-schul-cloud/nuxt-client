@@ -13,6 +13,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasEditPermission: permissions.includes("course_edit"),
 		hasDeletePermission: permissions.includes("course_remove"),
 		isTeacher: userRoles.includes("teacher"),
+		isStudent: userRoles.includes("student"),
 	};
 };
 

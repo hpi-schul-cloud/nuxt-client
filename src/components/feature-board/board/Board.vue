@@ -8,7 +8,7 @@
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					:lock-axis="lockAxis"
+					lock-axis="x"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
@@ -19,7 +19,7 @@
 						<BoardColumn
 							:column="column"
 							:index="index"
-							:class="{ 'drag-disabled': isEditMode }"
+							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -112,10 +112,7 @@ export default defineComponent({
 			isTeacher,
 		} = useBoardPermissions();
 
-		const lockAxis = hasMovePermission ? "x" : "x,y";
-		const placeholderOptions = hasMovePermission
-			? columnDropPlaceholderOptions
-			: null;
+		const placeholderOptions = columnDropPlaceholderOptions;
 
 		const onCreateCard = async (columnId: string) => {
 			if (hasCreateCardPermission) await createCard(columnId);
@@ -193,7 +190,6 @@ export default defineComponent({
 			hasCreateCardPermission,
 			hasCreateColumnPermission,
 			placeholderOptions,
-			lockAxis,
 			isEditMode,
 			isDesktop,
 			getColumnId,

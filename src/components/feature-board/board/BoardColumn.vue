@@ -18,7 +18,6 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
-			:lock-axis="lockAxis"
 			:drag-begin-delay="isDesktop ? 0 : 300"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
@@ -29,6 +28,7 @@
 					class="my-3 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
+					:class="{ 'drag-disabled': !hasMovePermission }"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
 					@delete:card="onDeleteCard"
 				/>
@@ -89,7 +89,6 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
-		const lockAxis = hasMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -157,7 +156,7 @@ export default defineComponent({
 			cardDropPlaceholderOptions,
 			colWidth,
 			hasCreateColumnPermission,
-			lockAxis,
+			hasMovePermission,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
