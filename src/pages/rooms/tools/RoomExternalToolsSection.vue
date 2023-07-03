@@ -12,6 +12,18 @@
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
 
+		<v-custom-dialog
+				:is-open="isErrorDialogOpen"
+				:has-buttons="true"
+				:buttons="['close']"
+				data-testId="error-dialog"
+				@dialog-closed="onCloseErrorDialog"
+		>
+			<h2 slot="title" class="text-h4 my-2 text-break-word">
+				{{ t(getBusinessErrorTranslationKey(launchError)) }}
+			</h2>
+		</v-custom-dialog>
+
 		<v-dialog
 			v-model="isDeleteDialogOpen"
 			max-width="450"
@@ -86,10 +98,14 @@ import {
 	Ref,
 } from "vue";
 import VueI18n from "vue-i18n";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { BusinessError } from "@/store/types/commons";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
 	components: {
+		VCustomDialog,
 		RoomExternalToolCard,
 		RenderHTML,
 	},
@@ -200,8 +216,23 @@ export default defineComponent({
 			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
 		);
 
+		const launchError: ComputedRef<BusinessError | undefined> = computed(
+			() => externalToolsModule.getBusinessError
+		);
+
+		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
+
+		const isErrorDialogOpen: ComputedRef<boolean> = computed(
+			() => launchError.value?.error !== undefined
+		);
+
+		const onCloseErrorDialog = () => {
+			externalToolsModule.resetBusinessError();
+		};
+
 		return {
 			t,
+			getBusinessErrorTranslationKey,
 			canEdit,
 			itemToDelete,
 			getItemToDeleteName,
@@ -211,7 +242,16 @@ export default defineComponent({
 			onDeleteTool,
 			onClickTool,
 			onEditTool,
+			isErrorDialogOpen,
+			launchError,
+			onCloseErrorDialog,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

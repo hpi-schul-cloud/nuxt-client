@@ -5,18 +5,16 @@
 		class="room-dialog"
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
-		<div slot="title" class="room-title">
+		<div slot="title" class="pt-2 room-title">
 			<v-text-field
 				v-model="data.title"
 				dense
 				flat
-				solo
 				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 				@blur="onBlur"
-				@focus="onFocus"
 				@keyup.enter="onEnterInput"
-				:append-icon="mdiPencilOutline"
 			/>
 		</div>
 		<template slot="content">
@@ -36,7 +34,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import { mdiPencilOutline } from "@mdi/js";
+import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -68,8 +66,8 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			roomNameEditMode: false,
 			mdiPencilOutline,
+			mdiKeyboardReturn,
 			data: {
 				id: "",
 				title: "",
@@ -87,13 +85,7 @@ export default Vue.extend({
 	},
 	methods: {
 		async updateCourseGroupName() {
-			if (this.roomNameEditMode) {
-				this.roomNameEditMode = false;
-				await roomsModule.update(this.data);
-			}
-		},
-		onFocus() {
-			this.roomNameEditMode = true;
+			await roomsModule.update(this.data);
 		},
 		async onBlur() {
 			await this.updateCourseGroupName();
