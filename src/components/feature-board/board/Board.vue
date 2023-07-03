@@ -51,13 +51,14 @@ import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
 	CardMove,
-	columnDropPlaceholderOptions,
 	ColumnMove,
 	DragAndDropKey,
+	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
