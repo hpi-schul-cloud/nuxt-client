@@ -22,7 +22,6 @@ import { useContentElementState } from "../state/ContentElementState.composable"
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -43,21 +42,9 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
 		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
-				"",
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				await deleteRichTextElement();
-			}
-		};
-
-		const deleteRichTextElement = () => {
-			return props.deleteElement(props.element.id);
+			props.deleteElement(props.element.id);
 		};
 
 		return {
