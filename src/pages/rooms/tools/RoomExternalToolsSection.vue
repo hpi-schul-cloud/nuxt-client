@@ -13,11 +13,11 @@
 		></room-external-tool-card>
 
 		<v-custom-dialog
-				:is-open="isErrorDialogOpen"
-				:has-buttons="true"
-				:buttons="['close']"
-				data-testId="error-dialog"
-				@dialog-closed="onCloseErrorDialog"
+			:is-open="isErrorDialogOpen"
+			:has-buttons="true"
+			:buttons="['close']"
+			data-testId="error-dialog"
+			@dialog-closed="onCloseErrorDialog"
 		>
 			<h2 slot="title" class="text-h4 my-2 text-break-word">
 				{{ t(getBusinessErrorTranslationKey(launchError)) }}

@@ -12,7 +12,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
-import { I18N_KEY } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -35,7 +35,7 @@ describe("ExternalToolConfigSettings", () => {
 				}),
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
-					externalToolsModule,
+					[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 				},
 				propsData: {
 					value: template,

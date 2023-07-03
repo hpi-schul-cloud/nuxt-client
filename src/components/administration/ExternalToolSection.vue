@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2 class="text-h4 mb-10">
-			{{ $t("components.administration.externalToolsSection.header") }}
+			{{ t("components.administration.externalToolsSection.header") }}
 		</h2>
 		<v-data-table
 			:disable-pagination="true"
@@ -9,8 +9,8 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="$t('common.loading.text')"
-			:no-data-text="$t('common.nodata')"
+			:loading-text="t('common.loading.text')"
+			:no-data-text="t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
 				<span :class="getColor(item)">
@@ -35,7 +35,7 @@
 			depressed
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
-			{{ $t("components.administration.externalToolsSection.action.add") }}
+			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
 		<v-dialog v-model="isDeleteDialogOpen" max-width="450">
@@ -43,7 +43,7 @@
 				<v-card-title>
 					<h2 class="text-h4 my-2">
 						{{
-							$t("components.administration.externalToolsSection.dialog.title")
+							t("components.administration.externalToolsSection.dialog.title")
 						}}
 					</h2>
 				</v-card-title>
@@ -51,10 +51,10 @@
 					<RenderHTML
 						class="text-md mt-2"
 						:html="
-							$t(
+							t(
 								'components.administration.externalToolsSection.dialog.content',
 								{ itemName: getItemName }
-							).toString()
+							)
 						"
 						component="p"
 					/>
@@ -68,7 +68,7 @@
 						text
 						@click="onCloseDeleteDialog"
 					>
-						{{ $t("common.actions.cancel") }}
+						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						data-testId="dialog-confirm"
@@ -77,7 +77,7 @@
 						depressed
 						@click="onDeleteTool"
 					>
-						{{ $t("common.actions.confirm") }}
+						{{ t("common.actions.confirm") }}
 					</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -88,13 +88,12 @@
 <script lang="ts">
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ExternalToolsModule from "@/store/external-tools";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE, I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	ComputedRef,
 	Ref,
 	computed,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
 } from "vue";
@@ -111,11 +110,9 @@ export default defineComponent({
 	setup() {
 		const router: VueRouter = useRouter();
 		const i18n = injectStrict(I18N_KEY);
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
-		if (!externalToolsModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE
+		);
 
 		onMounted(async () => {
 			await externalToolsModule.loadSchoolExternalTools();

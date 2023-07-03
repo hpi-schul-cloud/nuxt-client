@@ -1,10 +1,10 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";
-import { I18N_KEY } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -24,7 +24,7 @@ describe("ExternalToolSection", () => {
 			}),
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
-				externalToolsModule,
+				[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			},
 		});
 
@@ -35,36 +35,6 @@ describe("ExternalToolSection", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(ExternalToolSection).exists()).toBeTruthy();
-		});
-	});
-
-	describe("inject is called", () => {
-		describe("when i18n injection fails", () => {
-			it("should throw an error", () => {
-				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-					getSchoolExternalTools: [],
-				});
-
-				expect(() => {
-					shallowMount(ExternalToolSection, {
-						provide: {
-							externalToolsModule,
-						},
-					});
-				}).toThrow();
-			});
-		});
-
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				expect(() =>
-					shallowMount(ExternalToolSection, {
-						provide: {
-							[I18N_KEY as symbol]: { t: (key: string) => key },
-						},
-					})
-				).toThrow();
-			});
 		});
 	});
 

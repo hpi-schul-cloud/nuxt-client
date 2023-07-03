@@ -5,6 +5,7 @@
 		:aria-label="videoConferenceTitle"
 		hover
 		@click="onClick"
+		data-testId="vc-card"
 	>
 		<div class="logo-container">
 			<v-img
@@ -29,6 +30,7 @@
 				icon
 				:aria-label="t('pages.videoConference.action.refresh')"
 				@click.stop="refreshVideoConferenceStatus"
+				data-testId="refresh-btn"
 			>
 				<v-icon v-if="isRefreshing" class="spin">{{ mdiLoading }}</v-icon>
 				<v-icon v-else>{{ mdiReload }}</v-icon>

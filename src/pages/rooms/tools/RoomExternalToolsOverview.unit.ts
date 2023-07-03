@@ -1,59 +1,60 @@
-import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import flushPromises from "flush-promises";
 import Vue from "vue";
-import ExternalToolsModule from "@/store/external-tools";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
+import RoomModule from "@/store/room";
+import { courseFactory } from "@@/tests/test-utils/factory/courseFactory";
+import { CourseFeatures } from "@/store/types/room";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+	ROOM_MODULE,
+} from "@/utils/inject";
 import { businessErrorFactory } from "@@/tests/test-utils/factory";
-import { AxiosError } from "axios";
-import { BusinessError } from "@/store/types/commons";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
 
 	const getWrapper = (
 		tools: ExternalToolDisplayData[],
-		error: BusinessError = businessErrorFactory.build()
+		contextExternalToolsModuleGetter?: Partial<ContextExternalToolsModule>
 	) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
-
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
-		});
 
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule,
 			{
 				getExternalToolDisplayDataList: tools,
 				getBusinessError: businessErrorFactory.build(),
-				getLoading: true,
+				getLoading: false,
+				...contextExternalToolsModuleGetter,
 			}
 		);
 
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getBusinessError: error,
+		const roomModule = createModuleMocks(RoomModule, {
+			getLoading: false,
 		});
 
-		const wrapper: Wrapper<any> = mount(
+		roomModule.getCourse.mockResolvedValue(null);
+
+		const wrapper: Wrapper<any> = shallowMount(
 			RoomExternalToolsOverview as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
 				}),
 				provide: {
-					authModule,
-					contextExternalToolsModule,
-					externalToolsModule,
+					[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
+					[ROOM_MODULE.valueOf()]: roomModule,
 					[I18N_KEY.valueOf()]: {
 						tc: (key: string): string => key,
-						t: (key: string) => key,
 					},
 				},
 				propsData: {
@@ -64,9 +65,8 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			externalToolsModule,
-			authModule,
 			contextExternalToolsModule,
+			roomModule,
 		};
 	};
 
@@ -74,43 +74,7 @@ describe("RoomExternalToolOverview", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("t", () => {
-		describe("when known translation key is given", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper([]);
-				const testKey = "testKey";
-
-				return { wrapper, testKey };
-			};
-
-			it("should return translation", async () => {
-				const { wrapper, testKey } = await setup();
-
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result).toEqual(testKey);
-			});
-		});
-
-		describe("when known translation key is given", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper([]);
-				const testKey = 123;
-
-				return { wrapper, testKey };
-			};
-
-			it("should return 'unknown translation-key'", async () => {
-				const { wrapper, testKey } = await setup();
-
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result.includes("unknown translation-key:")).toBeTruthy();
-			});
-		});
-	});
-
-	describe("when no tools are in the list", () => {
+	describe("when no tools or no videoconference is in the list", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper([]);
 
@@ -130,7 +94,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when the tools are loading", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper([]);
+			const { wrapper } = getWrapper([], {
+				getLoading: true,
+			});
 
 			return {
 				wrapper,
@@ -142,153 +108,7 @@ describe("RoomExternalToolOverview", () => {
 
 			const progressbar = wrapper.find('[data-testId="progress-bar"]');
 
-			expect(progressbar.exists()).toBeTruthy();
-		});
-	});
-
-	describe("when there are tools in the list", () => {
-		const setup = () => {
-			const tools: ExternalToolDisplayData[] =
-				externalToolDisplayDataFactory.buildList(2);
-
-			const { wrapper } = getWrapper(tools);
-
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display the tools", () => {
-			const { wrapper } = setup();
-
-			const cards = wrapper.findAllComponents({
-				name: "room-external-tool-card",
-			});
-
-			expect(cards.length).toEqual(2);
-		});
-	});
-
-	describe("when clicking the delete button on a tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper } = getWrapper([tool]);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should open the delete dialog", async () => {
-			const { wrapper, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-
-			await card.vm.$emit("delete", tool);
-
-			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
-
-			expect(deleteDialog.element.childNodes.length).toBeGreaterThanOrEqual(1);
-		});
-	});
-
-	describe("when clicking on confirm button of delete dialog", () => {
-		const setup = async () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper, contextExternalToolsModule } = getWrapper([tool]);
-
-			return {
-				tool,
-				wrapper,
-				contextExternalToolsModule,
-			};
-		};
-
-		it("should call delete function of store", async () => {
-			const { wrapper, tool, contextExternalToolsModule } = await setup();
-
-			const card = wrapper.find('[data-testId="external-tool-card-0"]');
-			await card.vm.$emit("delete", tool);
-
-			const deleteDialog = wrapper.find('[data-testId="delete-dialog"]');
-
-			const confirmBtn = deleteDialog.find('[data-testId="dialog-confirm"]');
-			await confirmBtn.trigger("click");
-
-			expect(
-				contextExternalToolsModule.deleteContextExternalTool
-			).toHaveBeenCalledWith(tool.id);
-			expect(deleteDialog.element.childNodes.length).toEqual(0);
-		});
-	});
-
-	describe("when clicking on cancel button of delete dialog", () => {
-		const setup = async () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper, contextExternalToolsModule } = getWrapper([tool]);
-
-			return {
-				tool,
-				wrapper,
-				contextExternalToolsModule,
-			};
-		};
-
-		it("should close dialog", async () => {
-			const { wrapper, tool, contextExternalToolsModule } = await setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-			await card.vm.$emit("delete", tool);
-
-			const deleteDialog = wrapper.find("[data-testId=delete-dialog]");
-
-			const cancelBtn = wrapper.find("[data-testId=dialog-cancel]");
-			await cancelBtn.trigger("click");
-
-			expect(
-				contextExternalToolsModule.deleteContextExternalTool
-			).not.toHaveBeenCalled();
-			expect(deleteDialog.element.childNodes.length).toEqual(0);
-		});
-	});
-
-	describe("when clicking on a tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper, externalToolsModule } = getWrapper([tool]);
-
-			return {
-				wrapper,
-				externalToolsModule,
-				tool,
-			};
-		};
-
-		it("should fetch the launch data", async () => {
-			const { wrapper, externalToolsModule, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-
-			await card.trigger("click");
-
-			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
-				tool.id
-			);
+			expect(progressbar.props("active")).toEqual(true);
 		});
 	});
 
@@ -297,11 +117,12 @@ describe("RoomExternalToolOverview", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper, externalToolsModule } = getWrapper([tool]);
+			const { wrapper } = getWrapper([tool], {
+				getBusinessError: businessErrorFactory.build({ error: new Error() }),
+			});
 
 			return {
 				wrapper,
-				externalToolsModule,
 				tool,
 			};
 		};
@@ -311,91 +132,53 @@ describe("RoomExternalToolOverview", () => {
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
-			expect(alert.exists()).toBe(true);
+			expect(alert.exists()).toEqual(true);
 		});
 	});
 
-	describe("when clicking on a tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+	describe("when video conferences are enabled", () => {
+		const setup = async () => {
+			const { wrapper, roomModule } = getWrapper([]);
 
-			const { wrapper, externalToolsModule } = getWrapper([tool]);
-
-			return {
-				wrapper,
-				externalToolsModule,
-				tool,
-			};
-		};
-
-		it("should fetch the launch data", async () => {
-			const { wrapper, externalToolsModule, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-
-			await card.trigger("click");
-
-			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
-				tool.id
+			roomModule.getCourse.mockResolvedValue(
+				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
-		});
-	});
 
-	describe("when click on a outdated tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const error: BusinessError = businessErrorFactory.build({
-				error: new AxiosError("this error is expected"),
-			});
-
-			const { wrapper } = getWrapper([tool], error);
+			await flushPromises();
 
 			return {
 				wrapper,
 			};
 		};
 
-		it("should display a dialog", async () => {
-			const { wrapper } = setup();
+		it("should display the video conference section", async () => {
+			const { wrapper } = await setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+			const vcSection = wrapper.findComponent({
+				name: "room-video-conference-section",
 			});
-			await card.vm.$emit("click");
 
-			const dialog = wrapper.find('[data-testId="error-dialog"]');
-
-			expect(dialog.exists()).toBeTruthy();
-			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
+			expect(vcSection.exists()).toEqual(true);
 		});
 	});
 
-	describe("when click on a latest tool", () => {
+	describe("when video conferences are disabled", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper } = getWrapper([tool]);
+			const { wrapper } = getWrapper([]);
 
 			return {
 				wrapper,
 			};
 		};
 
-		it("should not display a dialog", async () => {
+		it("should display the video conference section", () => {
 			const { wrapper } = setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+			const vcSection = wrapper.findComponent({
+				name: "room-video-conference-section",
 			});
-			await card.vm.$emit("click");
 
-			expect(wrapper.vm.isErrorDialogOpen).toBeFalsy();
+			expect(vcSection.exists()).toEqual(false);
 		});
 	});
 });

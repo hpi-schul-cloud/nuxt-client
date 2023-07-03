@@ -130,7 +130,12 @@ import { Ref, computed, defineComponent, inject, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
 
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	I18N_KEY,
+	injectStrict,
+	ROOM_MODULE,
+} from "@/utils/inject";
 
 interface VForm extends HTMLFormElement {
 	validate(): boolean;
@@ -150,22 +155,15 @@ export default defineComponent({
 		const router = useRouter();
 
 		const i18n = injectStrict(I18N_KEY);
-		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
-		const roomModule: RoomModule | undefined = inject<RoomModule>("roomModule");
+		const authModule: AuthModule = injectStrict(AUTH_MODULE);
+		const roomModule: RoomModule = injectStrict(ROOM_MODULE);
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		const taskCardModule: TaskCardModule | undefined =
 			inject<TaskCardModule>("taskCardModule");
-		if (
-			!i18n ||
-			!authModule ||
-			!roomsModule ||
-			!roomModule ||
-			!schoolsModule ||
-			!taskCardModule
-		) {
+		if (!roomModule || !schoolsModule || !taskCardModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const t = (key: string) => {
