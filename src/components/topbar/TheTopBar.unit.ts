@@ -30,7 +30,7 @@ const getWrapper = (props?: object, options?: object) => {
 	});
 };
 
-describe("@/components/legacy/TheTopBar", () => {
+describe("@/components/topbar/TheTopBar", () => {
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,

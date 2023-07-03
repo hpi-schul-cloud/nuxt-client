@@ -7,7 +7,7 @@ const testProps = {
 	centered: true,
 };
 
-describe("@/components/legacy/BaseIcon", () => {
+describe("@/components/topbar/PopupIcon", () => {
 	it(
 		...rendersSlotContent(PopupIcon, ["default"], {
 			...createComponentMocks({

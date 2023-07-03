@@ -12,7 +12,7 @@ const getWrapper = (props, options) => {
 	});
 };
 
-describe("@/components/legacy/PopupIconInitials", () => {
+describe("@/components/topbar/PopupIconInitials", () => {
 	it("computes the initals from first- and lastname", () => {
 		const wrapper = getWrapper({
 			firstName: "Max",

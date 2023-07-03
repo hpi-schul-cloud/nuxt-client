@@ -6,7 +6,7 @@ import { mount, Wrapper } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
 import Vue from "vue";
 
-describe("@/components/templates/LanguageMenu", () => {
+describe("@/components/topbar/LanguageMenu", () => {
 	let envConfigModuleMock: EnvConfigModule;
 	let authModuleMock: AuthModule;
 

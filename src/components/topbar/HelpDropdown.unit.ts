@@ -13,7 +13,7 @@ const menuItems = [
 	},
 ];
 
-describe("@/components/legacy/HelpDropdown", () => {
+describe("@/components/topbar/HelpDropdown", () => {
 	it("shows a list of menu items", () => {
 		const wrapper = mount(HelpDropdown as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
