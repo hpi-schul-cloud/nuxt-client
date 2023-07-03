@@ -9,6 +9,7 @@ import {
 	FileElementContent,
 	RichTextElementContent,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	CoursesApiFactory,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
@@ -19,6 +20,8 @@ export const useBoardApi = () => {
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
+
+	const courseApi = CoursesApiFactory(undefined, "/v3", $axios);
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -165,6 +168,30 @@ export const useBoardApi = () => {
 		});
 	};
 
+	type ContextInfo = { id: string; name: string };
+
+	const getContextInfo = async (
+		boardId: string
+	): Promise<ContextInfo | undefined> => {
+		const contextResponse = await boardApi.boardControllerGetBoardContext(
+			boardId
+		);
+		if (contextResponse.status !== 200) {
+			return undefined;
+		}
+		const context = contextResponse.data;
+		const courseResponse = await courseApi.courseControllerGetCourse(
+			context.id
+		);
+		if (courseResponse.status !== 200) {
+			return undefined;
+		}
+		return {
+			id: courseResponse.data.id,
+			name: courseResponse.data.title,
+		};
+	};
+
 	return {
 		createColumnCall,
 		createElementCall,
@@ -179,5 +206,6 @@ export const useBoardApi = () => {
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,
+		getContextInfo,
 	};
 };

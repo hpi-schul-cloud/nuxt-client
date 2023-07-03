@@ -358,7 +358,10 @@ describe("FileStorageApi Composable", () => {
 
 				const { fileApiFactory } = setupFileStorageFactoryMock({});
 
-				jest.mocked(delay).mockResolvedValueOnce().mockResolvedValueOnce();
+				jest
+					.mocked(delay)
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null);
 
 				fileApiFactory.list
 					.mockResolvedValueOnce(responsePending)
@@ -435,12 +438,12 @@ describe("FileStorageApi Composable", () => {
 
 				jest
 					.mocked(delay)
-					.mockResolvedValueOnce()
-					.mockResolvedValueOnce()
-					.mockResolvedValueOnce()
-					.mockResolvedValueOnce()
-					.mockResolvedValueOnce()
-					.mockResolvedValueOnce();
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null)
+					.mockResolvedValueOnce(null);
 
 				const { fileApiFactory } = setupFileStorageFactoryMock({});
 				fileApiFactory.list
@@ -507,7 +510,7 @@ describe("FileStorageApi Composable", () => {
 				};
 				const error = new Error("error");
 
-				jest.mocked(delay).mockResolvedValueOnce();
+				jest.mocked(delay).mockResolvedValueOnce(null);
 
 				const { fileApiFactory } = setupFileStorageFactoryMock({});
 
