@@ -56,7 +56,7 @@ export default defineComponent({
 			setFocusOnEdit();
 		});
 
-		const setFocusOnEdit = async () => {
+		const setFocusOnEdit = () => {
 			if (!hasEditPermission) return;
 			if (titleInput.value === null) return;
 			titleInput.value.focus();
@@ -68,7 +68,7 @@ export default defineComponent({
 				if (props.scope !== "column") return;
 				if (newVal && !oldVal) {
 					await nextTick();
-					await setFocusOnEdit();
+					setFocusOnEdit();
 				}
 			}
 		);
