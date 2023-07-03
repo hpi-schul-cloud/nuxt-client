@@ -10,7 +10,7 @@ const menuQrCode = {
 
 describe("@/components/topbar/MenuQrCode", () => {
 	it("generates an qrCode with print icon button", () => {
-		const wrapper = shallowMount(MenuQrCode, {
+		const wrapper = shallowMount(MenuQrCode as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			propsData: { url: "testUrl" },
 		});

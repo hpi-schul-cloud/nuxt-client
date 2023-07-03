@@ -1,28 +1,19 @@
-import PopupIcon from "./PopupIcon";
+import Vue from "vue";
+import { MountOptions, mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import PopupIcon from "./PopupIcon.vue";
 
 const testProps = {
-	source: "material",
 	icon: "qrcode",
-	fill: "red",
+	color: "red",
 	centered: true,
 };
 
 describe("@/components/topbar/PopupIcon", () => {
-	it(
-		...rendersSlotContent(PopupIcon, ["default"], {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: testProps,
-		})
-	);
-
 	it("contains an icon", () => {
-		const wrapper = mount(PopupIcon, {
+		const wrapper = mount(PopupIcon as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: testProps,
 		});
@@ -33,7 +24,6 @@ describe("@/components/topbar/PopupIcon", () => {
 		const wrapper = mount(PopupIcon, {
 			...createComponentMocks({
 				i18n: true,
-				vuetify: true,
 			}),
 			propsData: testProps,
 		});

@@ -13,8 +13,10 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
+export default defineComponent({
+	name: "PopupIcon",
 	props: {
 		icon: {
 			type: String,
@@ -28,26 +30,36 @@ export default {
 			type: Boolean,
 		},
 	},
-	data() {
+	setup() {
+		const visible = ref(false);
+		const expandToLeft = ref(false);
+		const popupContent = ref<HTMLDivElement | null>(null);
+
+		onMounted(() => {
+			if (popupContent.value !== null) {
+				expandToLeft.value =
+					popupContent.value.getBoundingClientRect().right >
+					window.innerWidth + 10;
+			}
+		});
+
+		const popup = () => {
+			visible.value = !visible.value;
+		};
+
+		const removePopup = () => {
+			visible.value = false;
+		};
+
 		return {
-			visible: false,
-			expandToLeft: false,
+			visible,
+			expandToLeft,
+			popupContent,
+			popup,
+			removePopup,
 		};
 	},
-	mounted() {
-		this.expandToLeft =
-			this.$refs.popupContent.getBoundingClientRect().right >
-			window.innerWidth + 10;
-	},
-	methods: {
-		popup() {
-			this.visible = !this.visible;
-		},
-		removePopup() {
-			this.visible = false;
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
