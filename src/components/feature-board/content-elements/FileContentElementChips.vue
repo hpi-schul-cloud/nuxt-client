@@ -1,14 +1,18 @@
 <template>
 	<div class="pa-2">
-		<v-chip class="mr-2" small disabled>{{ fileExtension }}</v-chip>
-		<v-chip class="mr-2" small disabled>{{ humanReadableFileSize }}</v-chip>
+		<v-chip class="grey lighten-3 mr-2" disabled small>{{
+			fileExtension
+		}}</v-chip>
+		<v-chip class="grey lighten-3 mr-2" disabled small>{{
+			humanReadableFileSize
+		}}</v-chip>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
 import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileContentElementChips",
