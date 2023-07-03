@@ -115,7 +115,7 @@ export default defineComponent({
 			if (props.scope !== "card") return;
 			if (!textarea.value) return;
 
-			if (modelValue.value.length === textarea.value.selectionStart) {
+			if (textarea.value.value.length === textarea.value.selectionStart) {
 				$event.preventDefault();
 				emit("enter");
 			}
