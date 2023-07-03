@@ -2,13 +2,20 @@ import { delay } from "./helpers";
 
 describe("helpers", () => {
 	describe("delay", () => {
-		it("should wait for the specified amount of time", async () => {
-			const start = Date.now();
+		test("should not resolve until timeout has passed", async () => {
+			jest.useFakeTimers();
+			const spy = jest.fn();
+			delay(100).then(spy);
 
-			await delay(100);
+			// not resolved after half time
+			jest.advanceTimersByTime(50);
+			await Promise.resolve();
+			expect(spy).not.toHaveBeenCalled();
 
-			const end = Date.now();
-			expect(end - start).toBeGreaterThanOrEqual(100);
+			// resolved after full time
+			jest.advanceTimersByTime(50);
+			await Promise.resolve();
+			expect(spy).toHaveBeenCalled();
 		});
 
 		it("should return a promise", () => {
