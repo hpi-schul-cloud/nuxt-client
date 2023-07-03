@@ -1,4 +1,7 @@
-import MenuQrCode from "./MenuQrCode";
+import Vue from "vue";
+import { MountOptions, shallowMount, mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import MenuQrCode from "./MenuQrCode.vue";
 
 const menuQrCode = {
 	components: { MenuQrCode },
