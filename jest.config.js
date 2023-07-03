@@ -21,7 +21,7 @@ module.exports = {
 		"<rootDir>/src/components/**/*.{js,ts,vue}",
 		"<rootDir>/src/pages/**/*.{js,vue}",
 		"<rootDir>/src/mixins/**/*.js",
-		"<rootDir>/src/plugins/**/*.js",
+		"<rootDir>/src/plugins/**/*.(js|ts)",
 		"<rootDir>/src/store/**/*.(js|ts)",
 		"<rootDir>/src/utils/**/*.js",
 		// Exclude
