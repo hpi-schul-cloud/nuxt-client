@@ -100,7 +100,6 @@ describe("RoomModal", () => {
 		describe("when enter is pressed", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
-				await wrapper.setData({ roomNameEditMode: true });
 
 				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 				const titleInput = wrapper
@@ -131,19 +130,52 @@ describe("RoomModal", () => {
 				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
 				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
+		});
 
-			it("should set roomNameEditMode to false", async () => {
-				const { wrapper } = await setup();
+		describe("when enter is pressed two times ", () => {
+			const setup = async () => {
+				const { wrapper } = getWrapper({ isOpen: true });
 
-				expect(wrapper.vm.$data.roomNameEditMode).toBeFalsy();
+				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
+				const titleInput = wrapper
+					.findComponent({ name: "v-text-field" })
+					.find("input");
+
+				const newTitle = "changed title";
+				await titleInput.setValue(newTitle);
+
+				await titleInput.trigger("keyup.enter");
+				await wrapper.vm.$nextTick();
+
+				const newTitle2 = "changed title again";
+				await titleInput.setValue(newTitle2);
+
+				await titleInput.trigger("keyup.enter");
+				await wrapper.vm.$nextTick();
+
+				return { storeRoomUpdateMock, newTitle2, wrapper };
+			};
+
+			it("should change name on second enter again", async () => {
+				const { storeRoomUpdateMock, newTitle2 } = await setup();
+
+				const expectedGroupData = {
+					id: "",
+					title: newTitle2,
+					shortTitle: "",
+					displayColor: "",
+					xPosition: -1,
+					yPosition: -1,
+				};
+
+				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(2);
+				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 
 		describe("when course group name input emits blur", () => {
-			const setup = async (props: { roomNameEditMode: boolean }) => {
-				const { roomNameEditMode } = props;
+			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
-				await wrapper.setData({ roomNameEditMode });
 
 				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
 				const titleInput = wrapper
@@ -158,60 +190,19 @@ describe("RoomModal", () => {
 				return { storeRoomUpdateMock, newTitle, wrapper };
 			};
 
-			describe("when roomNameEditMode is false", () => {
-				it("should not change name on blur", async () => {
-					const { storeRoomUpdateMock } = await setup({
-						roomNameEditMode: false,
-					});
+			it("should change name on blur", async () => {
+				const { storeRoomUpdateMock, newTitle } = await setup();
+				const expectedGroupData = {
+					id: "",
+					title: newTitle,
+					shortTitle: "",
+					displayColor: "",
+					xPosition: -1,
+					yPosition: -1,
+				};
 
-					expect(storeRoomUpdateMock).not.toHaveBeenCalled();
-				});
-			});
-
-			describe("when roomNameEditMode is true", () => {
-				it("should change name on blur", async () => {
-					const { storeRoomUpdateMock, newTitle } = await setup({
-						roomNameEditMode: true,
-					});
-					const expectedGroupData = {
-						id: "",
-						title: newTitle,
-						shortTitle: "",
-						displayColor: "",
-						xPosition: -1,
-						yPosition: -1,
-					};
-
-					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-					expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
-				});
-
-				it("should set roomNameEditMode to false", async () => {
-					const { wrapper } = await setup({ roomNameEditMode: true });
-
-					expect(wrapper.vm.$data.roomNameEditMode).toBeFalsy();
-				});
-			});
-		});
-
-		describe("when course group name input emits focus", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: true });
-				await wrapper.setData({ roomNameEditMode: false });
-
-				const titleInput = wrapper
-					.findComponent({ name: "v-text-field" })
-					.find("input");
-
-				await titleInput.trigger("focus");
-				await wrapper.vm.$nextTick();
-
-				return { wrapper };
-			};
-
-			it("should set roomNameEditMode to true", async () => {
-				const { wrapper } = await setup();
-				expect(wrapper.vm.$data.roomNameEditMode).toBeTruthy();
+				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
+				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 

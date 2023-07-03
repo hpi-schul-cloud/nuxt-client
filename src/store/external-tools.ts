@@ -4,6 +4,7 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationListItem,
 	ToolConfigurationTemplate,
+	ToolContextType,
 } from "./external-tool";
 import { $axios } from "@/utils/api";
 import { authModule } from "@/store";
@@ -12,15 +13,14 @@ import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
+	SchoolToolConfigurationListResponse,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolConfigurationListResponse,
-	SchoolToolConfigurationListResponse,
 	ToolLaunchRequestResponse,
-} from "../serverApi/v3";
+} from "@/serverApi/v3";
 import { BusinessError } from "./types/commons";
 import { AxiosError, AxiosResponse } from "axios";
-import { ToolContextType } from "./external-tool";
 
 @Module({
 	name: "externalToolsModule",
@@ -127,12 +127,11 @@ export default class ExternalToolsModule extends VuexModule {
 			return resp.data;
 		} catch (error: unknown) {
 			console.log(`Some error occurred while launching tool: ${error}`);
-
 			if (error instanceof AxiosError) {
 				this.setBusinessError({
 					error,
 					statusCode: error?.response?.status ?? 500,
-					message: error?.response?.data.message ?? "",
+					message: error?.response?.data.type ?? "",
 				});
 			}
 
