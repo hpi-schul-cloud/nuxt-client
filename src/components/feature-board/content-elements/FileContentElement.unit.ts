@@ -13,6 +13,7 @@ import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 jest.mock("../shared/InlineEditInteractionHandler.composable");
@@ -118,6 +119,17 @@ describe("FileContentElement", () => {
 					expect(setSelectedFile).toHaveBeenCalledTimes(1);
 					expect(setSelectedFile).toHaveBeenCalledWith();
 				});
+
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
+				});
 			});
 
 			describe("when component is in edit mode", () => {
@@ -137,6 +149,17 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
 				});
 			});
 		});
@@ -190,6 +213,17 @@ describe("FileContentElement", () => {
 
 				expect(setSelectedFile).toHaveBeenCalledTimes(1);
 				expect(setSelectedFile).toHaveBeenCalledWith();
+			});
+
+			it("should not render FileContentElementChips component", async () => {
+				const { wrapper } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const FileContentElementChip = wrapper.findComponent(
+					FileContentElementChips
+				);
+				expect(FileContentElementChip.exists()).toBe(false);
 			});
 		});
 	});
@@ -279,6 +313,16 @@ describe("FileContentElement", () => {
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const chips = wrapper.findComponent(FileContentElementChips);
+
+					expect(chips.exists()).toBe(true);
+				});
+        
 				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(false);
 
@@ -319,6 +363,16 @@ describe("FileContentElement", () => {
 					expect(fileContentElementEdit.exists()).toBe(true);
 				});
 
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.vm.$nextTick();
+
+					const chips = wrapper.findComponent(FileContentElementChips);
+
+					expect(chips.exists()).toBe(true);
+				});
+        
 				it("should hand over isDownloadAllowed property as true", async () => {
 					const { wrapper } = setup(true);
 
@@ -381,6 +435,17 @@ describe("FileContentElement", () => {
 
 					expect(url).toBe("");
 				});
+        
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
+				});
 
 				it("should hand over isDownloadAllowed property as false", async () => {
 					const { wrapper } = setup(false, FileRecordScanStatus.BLOCKED);
@@ -434,6 +499,17 @@ describe("FileContentElement", () => {
 					expect(url).toBe("");
 				});
 
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
+				});
+          
 				it("should hand over isDownloadAllowed property as false", async () => {
 					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
 

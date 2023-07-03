@@ -45,10 +45,14 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
-import { computed, defineComponent, onMounted } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { computed, defineComponent, onMounted, watch } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
@@ -60,14 +64,10 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useMediaQuery } from "@vueuse/core";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 
 export default defineComponent({
-	name: "Board",
 	components: {
 		BoardColumn,
 		Container,
@@ -98,6 +98,12 @@ export default defineComponent({
 			moveColumn,
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
+
+		const { createBreadcrumbs } = useSharedBoardBreadcrumbs();
+
+		watch(board, async () => {
+			await createBreadcrumbs(props.boardId);
+		});
 
 		useBodyScrolling();
 
