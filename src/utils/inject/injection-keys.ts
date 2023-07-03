@@ -1,6 +1,6 @@
 import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import ExternalToolsModule from "@/store/external-tools";
 import { InjectionKey } from "vue";
 import VueI18n from "vue-i18n";

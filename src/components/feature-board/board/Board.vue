@@ -11,13 +11,14 @@
 					:lock-axis="lockAxis"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="placeholderOptions"
-					:drag-begin-delay="200"
 					@drop="onDropColumn"
+					:non-drag-area-selector="'.drag-disabled'"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
 							:column="column"
 							:index="index"
+							:class="{ 'drag-disabled': isEditMode }"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -44,7 +45,7 @@
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { defineComponent, onMounted, watch } from "vue";
+import { computed, defineComponent, onMounted, watch } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
@@ -63,7 +64,6 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 
 export default defineComponent({
-	name: "Board",
 	components: {
 		BoardColumn,
 		Container,
@@ -78,6 +78,9 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const { showInfo } = useBoardNotifier();
+
+		const { editModeId } = useSharedEditMode();
+		const isEditMode = computed(() => editModeId.value !== undefined);
 
 		const {
 			board,
@@ -180,6 +183,7 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			placeholderOptions,
 			lockAxis,
+			isEditMode,
 			getColumnId,
 			onCreateCard,
 			onCreateColumn,

@@ -31,7 +31,7 @@ import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import ContextExternalToolsModule from "./context-external-tool";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
