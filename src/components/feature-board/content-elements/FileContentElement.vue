@@ -5,7 +5,7 @@
 				v-if="!isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
-			></FileContentElementDisplay>
+			/>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
@@ -18,6 +18,10 @@
 				@move-up:element="onMoveFileEditUp"
 				@move-keyboard:element="onMoveFileEditKeyboard"
 				@delete:element="onDeleteElement"
+			/>
+			<FileContentElementChips
+				:fileSize="fileRecord.size"
+				:fileName="fileRecord.name"
 			/>
 			<FileContentElementAlert v-if="isBlocked" />
 		</div>
@@ -39,6 +43,7 @@ import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 
@@ -48,6 +53,7 @@ export default defineComponent({
 		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
+		FileContentElementChips,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },

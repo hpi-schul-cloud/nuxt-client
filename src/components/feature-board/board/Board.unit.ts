@@ -1,25 +1,25 @@
+import NotifierModule from "@/store/notifier";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import {
+	boardResponseFactory,
+	cardSkeletonResponseFactory,
+	columnResponseFactory,
+} from "@@/tests/test-utils/factory";
+import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import BoardVue from "./Board.vue";
-import BoardColumnVue from "./BoardColumn.vue";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBoardState } from "../state/BoardState.composable";
 import { Board } from "../types/Board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "../types/Permissions";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import {
-	boardResponseFactory,
-	columnResponseFactory,
-	cardSkeletonResponseFactory,
-} from "@@/tests/test-utils/factory";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import BoardVue from "./Board.vue";
+import BoardColumnVue from "./BoardColumn.vue";
 
 jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -94,17 +94,17 @@ describe("Board", () => {
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		wrapper = shallowMount(BoardVue, {
+			...createComponentMocks({ i18n: true }),
 			mocks: {
 				$router,
 				$route,
 			},
+			propsData: { boardId },
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 			},
-			propsData: { boardId },
 		});
 	};
 
