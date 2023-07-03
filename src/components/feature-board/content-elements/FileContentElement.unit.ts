@@ -119,6 +119,17 @@ describe("FileContentElement", () => {
 					expect(setSelectedFile).toHaveBeenCalledTimes(1);
 					expect(setSelectedFile).toHaveBeenCalledWith();
 				});
+
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
+				});
 			});
 
 			describe("when component is in edit mode", () => {
@@ -138,6 +149,17 @@ describe("FileContentElement", () => {
 						FileContentElementEdit
 					);
 					expect(fileContentElementEdit.exists()).toBe(true);
+				});
+
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
 				});
 			});
 		});
@@ -191,6 +213,17 @@ describe("FileContentElement", () => {
 
 				expect(setSelectedFile).toHaveBeenCalledTimes(1);
 				expect(setSelectedFile).toHaveBeenCalledWith();
+			});
+
+			it("should not render FileContentElementChips component", async () => {
+				const { wrapper } = setup(false);
+
+				await wrapper.vm.$nextTick();
+
+				const FileContentElementChip = wrapper.findComponent(
+					FileContentElementChips
+				);
+				expect(FileContentElementChip.exists()).toBe(false);
 			});
 		});
 	});
@@ -379,6 +412,17 @@ describe("FileContentElement", () => {
 					expect(url).toBe("");
 				});
 
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
+				});
+
 				it("should render FileContentElementAlert component", async () => {
 					const { wrapper } = setup(false, FileRecordScanStatus.BLOCKED);
 
@@ -417,6 +461,17 @@ describe("FileContentElement", () => {
 						.props("url");
 
 					expect(url).toBe("");
+				});
+
+				it("should render FileContentElementChips component", async () => {
+					const { wrapper } = setup(true, FileRecordScanStatus.BLOCKED);
+
+					await wrapper.vm.$nextTick();
+
+					const FileContentElementChip = wrapper.findComponent(
+						FileContentElementChips
+					);
+					expect(FileContentElementChip.exists()).toBe(true);
 				});
 
 				it("should render FileContentElementAlert component", async () => {
