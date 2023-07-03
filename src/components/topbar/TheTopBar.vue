@@ -118,12 +118,12 @@ import { defineComponent, PropType, onMounted, computed } from "vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { User } from "@/store/types/auth";
 import { statusAlertsModule } from "@/store";
-import PopupIcon from "@/components/legacy/PopupIcon.vue";
-import PopupIconInitials from "@/components/legacy/PopupIconInitials.vue";
-import HelpDropdown from "@/components/legacy/topbar/HelpDropdown.vue";
-import MenuQrCode from "@/components/legacy/MenuQrCode.vue";
-import StatusAlerts from "@/components/molecules/StatusAlerts.vue";
-import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
+import PopupIcon from "@/components/topbar/PopupIcon.vue";
+import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
+import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
+import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
+import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
+import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
 import {
 	mdiArrowCollapse,
 	mdiArrowExpand,
