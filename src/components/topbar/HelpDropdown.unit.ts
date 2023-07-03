@@ -4,15 +4,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { I18N_KEY } from "@/utils/inject";
 import HelpDropdown from "./HelpDropdown.vue";
 
-const menuItems = [
-	{
-		label: "Test",
-		icon: "question-circle",
-		action: "/test",
-		target: "_self",
-	},
-];
-
 describe("@/components/topbar/HelpDropdown", () => {
 	it("shows a list of menu items", () => {
 		const wrapper = mount(HelpDropdown as MountOptions<Vue>, {
@@ -20,13 +11,8 @@ describe("@/components/topbar/HelpDropdown", () => {
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
-			data() {
-				return {
-					menuItems,
-				};
-			},
 		});
 
-		expect(wrapper.findAll(".link")).toHaveLength(1);
+		expect(wrapper.findAll(".link")).toHaveLength(4);
 	});
 });
