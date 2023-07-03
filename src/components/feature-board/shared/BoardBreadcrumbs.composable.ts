@@ -1,46 +1,48 @@
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { createSharedComposable } from "@vueuse/core";
+import { ref, Ref } from "vue";
+import VueI18n from "vue-i18n";
+import { useBoardApi } from "./BoardApi.composable";
 
-type BoardBreadcrumbsData = {
-	courseName: string | undefined;
-	courseUrl: string;
-	boardName: string | undefined;
-};
-
-type BoardBreadcrumbs = {
+export type BoardBreadcrumb = {
 	text: string | undefined;
 	to?: string;
 	disabled?: boolean;
 };
 
-const boardBreadCrumbsData: BoardBreadcrumbsData = {
-	courseName: "",
-	courseUrl: "/rooms-overview",
-	boardName: "",
+const useBoardBreadcrumbs = () => {
+	const i18n: VueI18n = injectStrict(I18N_KEY);
+
+	const { getContextInfo } = useBoardApi();
+
+	const breadcrumbs: Ref<BoardBreadcrumb[]> = ref([]);
+
+	const createBreadcrumbs = async (
+		id: string
+	): Promise<Ref<BoardBreadcrumb[]>> => {
+		const contextInfo = await getContextInfo(id);
+
+		breadcrumbs.value = contextInfo
+			? [
+					{
+						text: i18n.t("common.words.courses").toString(),
+						to: "/rooms-overview",
+					},
+					{
+						text: contextInfo.name ?? i18n.t("common.labels.course").toString(),
+						to: `/rooms/${contextInfo.id}`,
+					},
+			  ]
+			: [];
+
+		return breadcrumbs;
+	};
+
+	return {
+		createBreadcrumbs,
+		breadcrumbs,
+	};
 };
 
-export const setBoardBreadcrumbs = (
-	courseName: string | undefined,
-	courseUrl: string,
-	boardName: string | undefined
-) => {
-	boardBreadCrumbsData.courseName = courseName;
-	boardBreadCrumbsData.courseUrl = courseUrl;
-	boardBreadCrumbsData.boardName = boardName;
-};
-
-export const useBoardBreadcrumbs = (): BoardBreadcrumbs[] => {
-	const i18n = injectStrict(I18N_KEY);
-	return [
-		{
-			text:
-				boardBreadCrumbsData.courseName ||
-				i18n.t("common.words.courses").toString(),
-			to: boardBreadCrumbsData.courseUrl,
-		},
-		{
-			text:
-				boardBreadCrumbsData.boardName || i18n.t("components.board").toString(),
-			disabled: true,
-		},
-	];
-};
+export const useSharedBoardBreadcrumbs =
+	createSharedComposable(useBoardBreadcrumbs);

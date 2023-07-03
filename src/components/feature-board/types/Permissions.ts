@@ -5,13 +5,15 @@ export type BoardPermissionChecks = {
 	hasEditPermission: boolean;
 	hasDeletePermission: boolean;
 	isTeacher: boolean;
+	isStudent: boolean;
 };
 
-export const defaultPermissions = {
+export const defaultPermissions: BoardPermissionChecks = {
 	hasMovePermission: true,
 	hasCreateCardPermission: true,
 	hasCreateColumnPermission: true,
 	hasDeletePermission: true,
 	hasEditPermission: true,
 	isTeacher: true,
+	isStudent: false,
 };
