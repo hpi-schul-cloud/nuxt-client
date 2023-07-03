@@ -136,6 +136,6 @@ export const getID = (resource) => {
 	return null;
 };
 
-export const delay = async (ms) => {
-	await new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 };
