@@ -28,8 +28,11 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, computed } from "vue";
+
+export default defineComponent({
+	name: "PopupIconInitials",
 	props: {
 		firstName: {
 			type: String,
@@ -44,25 +47,29 @@ export default {
 			default: "",
 		},
 	},
-	data() {
+	setup(props) {
+		const visible = ref(false);
+
+		const initials = computed(() => {
+			return props.firstName.slice(0, 1) + props.lastName.slice(0, 1);
+		});
+
+		const popup = () => {
+			visible.value = !visible.value;
+		};
+
+		const removePopup = () => {
+			visible.value = false;
+		};
+
 		return {
-			visible: false,
+			visible,
+			initials,
+			popup,
+			removePopup,
 		};
 	},
-	computed: {
-		initials() {
-			return this.firstName.slice(0, 1) + this.lastName.slice(0, 1);
-		},
-	},
-	methods: {
-		popup() {
-			this.visible = !this.visible;
-		},
-		removePopup() {
-			this.visible = false;
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
