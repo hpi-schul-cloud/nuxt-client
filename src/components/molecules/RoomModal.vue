@@ -5,7 +5,7 @@
 		class="room-dialog"
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
-		<div slot="title" class="room-title">
+		<div slot="title" class="pt-2 room-title">
 			<v-text-field
 				v-model="data.title"
 				dense
