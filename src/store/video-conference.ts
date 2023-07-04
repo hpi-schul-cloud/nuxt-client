@@ -3,6 +3,7 @@ import {
 	VideoConferenceApiInterface,
 	VideoConferenceInfoResponse,
 	VideoConferenceScope,
+	VideoConferenceStateResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
@@ -11,6 +12,13 @@ import {
 	VideoConferenceInfo,
 	VideoConferenceState,
 } from "./types/video-conference";
+
+const videoConferenceStateMapping: Partial<
+	Record<VideoConferenceStateResponse, VideoConferenceState>
+> = {
+	[VideoConferenceStateResponse.Running]: VideoConferenceState.RUNNING,
+	[VideoConferenceStateResponse.NotStarted]: VideoConferenceState.NOT_STARTED,
+};
 
 @Module({
 	name: "videoConferenceModule",
@@ -75,7 +83,9 @@ export default class VideoConferenceModule extends VuexModule {
 				);
 
 			const mapped: VideoConferenceInfo = {
-				state: response.data.state as unknown as VideoConferenceState, // TODO
+				state:
+					videoConferenceStateMapping[response.data.state] ??
+					VideoConferenceState.UNKNOWN,
 				options: response.data.options,
 			};
 
