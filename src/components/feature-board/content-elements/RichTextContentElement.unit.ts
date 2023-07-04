@@ -8,8 +8,6 @@ import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vu
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
-jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
 jest.mock("../shared/InlineEditInteractionHandler.composable");
 
 const TEST_ELEMENT: RichTextElementResponse = {
@@ -35,13 +33,6 @@ describe("RichTextContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
-
-		const askDeleteBoardNodeConfirmationMock = jest
-			.fn()
-			.mockReturnValueOnce(true);
-		setupDeleteBoardNodeConfirmationMock({
-			askDeleteBoardNodeConfirmationMock,
-		});
 
 		wrapper = shallowMount(
 			RichTextContentElementComponent as MountOptions<Vue>,
