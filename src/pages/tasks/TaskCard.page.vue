@@ -163,7 +163,7 @@ export default defineComponent({
 			inject<SchoolsModule>("schoolsModule");
 		const taskCardModule: TaskCardModule | undefined =
 			inject<TaskCardModule>("taskCardModule");
-		if (!roomModule || !schoolsModule || !taskCardModule) {
+		if (!roomsModule || !schoolsModule || !taskCardModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 		const t = (key: string) => {
