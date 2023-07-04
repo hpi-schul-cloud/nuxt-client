@@ -930,7 +930,7 @@
 	"pages.tool.editBtn.label": "Actualizar Herramientas",
 	"pages.tool.apiError.tool_param_duplicate": "Esta Herramienta tiene al menos un parámetro duplicado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_version_mismatch": "La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
-	"pages.tool.apiError.tool_param_required": "Esta Herramienta requiere un valor de parámetro que no se ha incluido. Por favor, añada el valor.",
+	"pages.tool.apiError.tool_param_required": "Aún faltan entradas para parámetros obligatorios para la configuración de esta herramienta. Introduzca los valores que faltan.",
 	"pages.tool.apiError.tool_param_type_mismatch": "El tipo de un parámetro no coincide con el tipo solicitado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor.",
 	"pages.tool.apiError.tool_launch_outdated": "La configuración de la herramienta está desactualizada debido a un cambio de versión. ¡La herramienta no se puede iniciar!",

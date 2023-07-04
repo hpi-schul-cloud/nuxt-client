@@ -935,7 +935,7 @@
 	"pages.tool.editBtn.label": "Update Tool",
 	"pages.tool.apiError.tool_param_duplicate": "This Tool has at least one duplicate parameter. Please contact support.",
 	"pages.tool.apiError.tool_version_mismatch": "The version of this Tool used is out of date. Please update the version.",
-	"pages.tool.apiError.tool_param_required": "This Tool requires a parameter value that was not included. Please add the value.",
+	"pages.tool.apiError.tool_param_required": "Inputs for mandatory parameters are still missing for the configuration of this tool. Please enter the missing values.",
 	"pages.tool.apiError.tool_param_type_mismatch": "The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
 	"pages.tool.apiError.tool_launch_outdated": "The tool configuration is out of date due to a version change. The tool cannot be started!",
