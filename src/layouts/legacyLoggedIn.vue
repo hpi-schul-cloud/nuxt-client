@@ -1,12 +1,11 @@
 <template>
-	<!-- default template = loggedin view -->
 	<div>
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<the-top-bar
 					v-if="!isInline"
-					:fullscreen-mode="fullscreenMode"
+					:fullscreen-mode="fullScreenMode"
 					:expanded-menu="expandedMenu"
 					:user="user"
 					:school="school"
@@ -14,7 +13,7 @@
 				/>
 			</div>
 			<the-sidebar
-				v-if="!fullscreenMode && !isInline"
+				v-if="!fullScreenMode && !isInline"
 				class="sidebar"
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
@@ -23,22 +22,27 @@
 			<keep-alive>
 				<autoLogoutWarning />
 			</keep-alive>
-			<the-footer v-if="!fullscreenMode" class="footer" />
+			<the-footer v-if="!fullScreenMode" class="footer" />
 		</div>
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed } from "vue";
+import { useRoute } from "vue-router/composables";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import TheTopBar from "@/components/topbar/TheTopBar";
-import TheSidebar from "@/components/legacy/TheSidebar";
-import TheFooter from "@/components/legacy/TheFooter";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
-import getSidebarItems from "@/utils/sidebar-base-items";
+import getSidebarItems, {
+	SidebarCategoryItem,
+	SidebarItem,
+} from "@/utils/sidebar-base-items";
 import toastsFromQueryString from "@/mixins/toastsFromQueryString";
+import TheTopBar from "@/components/topbar/TheTopBar.vue";
+import TheSidebar from "@/components/legacy/TheSidebar.vue";
+import TheFooter from "@/components/legacy/TheFooter.vue";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
 
-export default {
+export default defineComponent({
 	components: {
 		TheTopBar,
 		TheSidebar,
@@ -47,46 +51,69 @@ export default {
 		SkipLinks,
 	},
 	mixins: [toastsFromQueryString],
-	data() {
-		return {
-			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
-			expandedMenu: false,
+	setup() {
+		const route = useRoute();
+		const expandedMenu = ref(false);
+		const fullScreenMode = ref(sessionStorage.getItem("fullscreen") === "true");
+
+		const handleTopAction = (event: string) => {
+			if (event === "logout") {
+				authModule.logout();
+			}
+			if (event === "fullscreen") {
+				fullScreenMode.value = !fullScreenMode.value;
+			}
+			if (event === "expandMenu") {
+				expandedMenu.value = !expandedMenu.value;
+			}
 		};
-	},
-	computed: {
-		user() {
+
+		const user = computed(() => {
 			return authModule.getUser;
-		},
-		school() {
+		});
+		const school = computed(() => {
 			return schoolsModule.getSchool;
-		},
-		authenticated() {
+		});
+		const authenticated = computed(() => {
 			return authModule.getAuthenticated;
-		},
-		topBarActions() {
-			return [...this.topbarBaseActions];
-		},
-		sidebarItems() {
+		});
+		const style = computed(() => {
+			return fullScreenMode.value ? "display: inherit;" : "";
+		});
+		const isInline = computed(() => {
+			return !!route.query.inline;
+		});
+
+		const sidebarItems = computed(() => {
 			let sidebarItems = getSidebarItems(
 				envConfigModule.getNewSchoolAdminPageAsDefault
 			);
 
+			const isSidebarCategoryItem = (
+				item: SidebarItem | SidebarCategoryItem
+			) => {
+				return (item as SidebarCategoryItem).children !== undefined;
+			};
+
 			sidebarItems = sidebarItems.filter((item) => {
 				// Check permissions for all children
-				if ((item.children || []).length >= 1) {
-					item.children = item.children.filter(
-						(child) =>
-							!child.permission ||
-							this.user?.permissions?.includes?.(child.permission)
-					);
+				if (isSidebarCategoryItem(item)) {
+					const sidebarCategoryItem = item as SidebarCategoryItem;
+					if (sidebarCategoryItem.children.length >= 1) {
+						sidebarCategoryItem.children = sidebarCategoryItem.children.filter(
+							(child) =>
+								!child.permission ||
+								user.value?.permissions?.includes?.(child.permission)
+						);
+					}
 				}
 
-				const hasRequiredPermission = this.user?.permissions?.includes?.(
-					item.permission
-				);
-				const hasExcludedPermission = this.user?.permissions?.includes?.(
-					item.excludedPermission
-				);
+				const hasRequiredPermission = item.permission
+					? user.value?.permissions?.includes?.(item.permission)
+					: false;
+				const hasExcludedPermission = item.excludedPermission
+					? user.value?.permissions?.includes?.(item.excludedPermission)
+					: false;
 
 				return (
 					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
@@ -94,29 +121,21 @@ export default {
 			});
 
 			return sidebarItems;
-		},
-		style() {
-			return this.fullscreenMode ? "display: inherit;" : "";
-		},
+		});
 
-		isInline() {
-			return !!this.$route.query.inline;
-		},
+		return {
+			fullScreenMode,
+			expandedMenu,
+			handleTopAction,
+			user,
+			school,
+			authenticated,
+			style,
+			isInline,
+			sidebarItems,
+		};
 	},
-	methods: {
-		handleTopAction(event) {
-			if (event === "logout") {
-				authModule.logout();
-			}
-			if (event === "fullscreen") {
-				this.fullscreenMode = !this.fullscreenMode;
-			}
-			if (event === "expandMenu") {
-				this.expandedMenu = !this.expandedMenu;
-			}
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

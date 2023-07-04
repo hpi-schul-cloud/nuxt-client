@@ -113,7 +113,12 @@ describe("@/components/topbar/TheTopBar", () => {
 			expect(expandBtn.exists()).toBe(true);
 
 			await expandBtn.trigger("click");
-			expect(wrapper.emitted("fullscreen")).toHaveLength(1);
+
+			expect(wrapper.emitted("action")).toBeTruthy();
+			expect(wrapper.emitted("action")).toHaveLength(1);
+			const action = wrapper.emitted("action") as any[][];
+
+			expect(action[0]).toStrictEqual(["fullscreen"]);
 		});
 
 		it("should emit fullcreen event", async () => {
@@ -125,7 +130,12 @@ describe("@/components/topbar/TheTopBar", () => {
 			expect(collapseBtn.exists()).toBe(true);
 
 			await collapseBtn.trigger("click");
-			expect(wrapper.emitted("fullscreen")).toHaveLength(1);
+
+			expect(wrapper.emitted("action")).toBeTruthy();
+			expect(wrapper.emitted("action")).toHaveLength(1);
+			const action = wrapper.emitted("action") as any[][];
+
+			expect(action[0]).toStrictEqual(["fullscreen"]);
 		});
 	});
 
@@ -183,6 +193,11 @@ describe("@/components/topbar/TheTopBar", () => {
 		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
 
 		await logoutBtn.trigger("click");
-		expect(wrapper.emitted("logout")).toHaveLength(1);
+
+		expect(wrapper.emitted("action")).toBeTruthy();
+		expect(wrapper.emitted("action")).toHaveLength(1);
+		const action = wrapper.emitted("action") as any[][];
+
+		expect(action[0]).toStrictEqual(["logout"]);
 	});
 });

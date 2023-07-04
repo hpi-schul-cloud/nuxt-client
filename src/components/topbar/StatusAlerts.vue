@@ -49,7 +49,6 @@ import { defineComponent } from "vue";
 import { printDateTime, fromNow } from "../../plugins/datetime";
 import { mdiAlertCircle, mdiInformation } from "@mdi/js";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "StatusAlerts",
 	props: {
