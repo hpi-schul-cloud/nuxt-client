@@ -1,15 +1,22 @@
-import { envConfigModule } from "@/store";
-import { ApiResponseError } from "@/store/types/commons";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { Values } from "vue-i18n";
-import { useBoardNotifier } from "./BoardNotifications.composable";
 
 export const useFileStorageNotifier = () => {
 	const i18n = injectStrict(I18N_KEY);
-	const { showFailure } = useBoardNotifier();
+	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-	const getMaxFileSize = (): number => {
-		return envConfigModule.getMaxFileSize;
+	const showFailure = (text: string | undefined) => {
+		notifierModule.show({
+			text,
+			status: "error",
+			timeout: 10000,
+		});
 	};
 
 	const showForbiddenError = () => {
@@ -43,7 +50,7 @@ export const useFileStorageNotifier = () => {
 	const showFileTooBigError = () => {
 		const message = getMessageString(
 			"components.board.notifications.errors.fileToBig",
-			{ maxFileSizeInGb: getMaxFileSize() }
+			{ maxFileSizeInGb: envConfigModule.getMaxFileSize }
 		);
 
 		showFailure(message);
@@ -53,35 +60,11 @@ export const useFileStorageNotifier = () => {
 		return i18n.t(i18nKey, props).toString();
 	};
 
-	const showErrorFromResponse = (error: ApiResponseError): void => {
-		const { message } = error;
-
-		showErrorByMessage(message);
-	};
-
-	const showErrorByMessage = (message: string) => {
-		switch (message) {
-			case "FILE_TOO_BIG":
-				showFileTooBigError();
-				break;
-			case "FILE_NAME_EXISTS":
-				showFileExistsError();
-				break;
-			case "Unauthorized":
-				showUnauthorizedError();
-				break;
-			case "Forbidden":
-				showForbiddenError();
-				break;
-			default:
-				showInternalServerError();
-				break;
-		}
-	};
-
 	return {
-		showErrorFromResponse,
-		getMaxFileSize,
 		showFileTooBigError,
+		showForbiddenError,
+		showUnauthorizedError,
+		showInternalServerError,
+		showFileExistsError,
 	};
 };

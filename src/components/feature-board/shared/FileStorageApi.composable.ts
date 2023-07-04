@@ -7,10 +7,21 @@ import {
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
-import { $axios, mapAxiosErrorToApiResponseError } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { delay } from "@/utils/helpers";
 import { ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+
+export enum ErrorType {
+	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
+	FILE_NOT_FOUND = "FILE_NOT_FOUND",
+	FILE_NAME_EXISTS = "FILE_NAME_EXISTS",
+	FILE_NAME_EMPTY = "FILE_NAME_EMPTY",
+	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
+	FILE_TOO_BIG = "FILE_TOO_BIG",
+	Unauthorized = "Unauthorized",
+	Forbidden = "Forbidden",
+}
 
 export const useFileStorageApi = (
 	parentId: string,
@@ -18,7 +29,13 @@ export const useFileStorageApi = (
 ) => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const fileRecord = ref<FileRecordResponse>();
-	const { showErrorFromResponse } = useFileStorageNotifier();
+	const {
+		showFileTooBigError,
+		showForbiddenError,
+		showUnauthorizedError,
+		showInternalServerError,
+		showFileExistsError,
+	} = useFileStorageNotifier();
 
 	const fetchFile = async (): Promise<void> => {
 		try {
@@ -90,7 +107,30 @@ export const useFileStorageApi = (
 	};
 
 	const showError = (error: unknown) => {
-		showErrorFromResponse(mapAxiosErrorToApiResponseError(error));
+		const responseError = mapAxiosErrorToResponseError(error);
+		const { message } = responseError;
+
+		showMessageByType(message);
+	};
+
+	const showMessageByType = (message: ErrorType | string) => {
+		switch (message) {
+			case ErrorType.FILE_TOO_BIG:
+				showFileTooBigError();
+				break;
+			case ErrorType.FILE_NAME_EXISTS:
+				showFileExistsError();
+				break;
+			case ErrorType.Unauthorized:
+				showUnauthorizedError();
+				break;
+			case ErrorType.Forbidden:
+				showForbiddenError();
+				break;
+			default:
+				showInternalServerError();
+				break;
+		}
 	};
 
 	return {
