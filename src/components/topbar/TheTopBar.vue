@@ -171,8 +171,10 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const fullscreen = ref(props.fullscreenMode);
 
-		onMounted(async () => {
-			await statusAlertsModule.fetchStatusAlerts();
+		onMounted(() => {
+			(async () => {
+				await statusAlertsModule.fetchStatusAlerts();
+			})();
 		});
 
 		watch(
