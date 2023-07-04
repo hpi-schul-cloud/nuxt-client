@@ -7,7 +7,6 @@ import {
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { MigrationLinks } from "./types/user-login-migration";
 import {
 	VideoConferenceInfo,
 	VideoConferenceState,

@@ -21,7 +21,6 @@ import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE,
 	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
-	ROOM_MODULE,
 } from "@/utils/inject";
 
 describe("ContextExternalToolConfiguration", () => {

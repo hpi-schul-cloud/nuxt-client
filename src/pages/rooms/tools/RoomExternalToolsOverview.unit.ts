@@ -7,7 +7,7 @@ import flushPromises from "flush-promises";
 import Vue from "vue";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomModule from "@/store/room";
-import { courseFactory } from "@@/tests/test-utils/factory/courseFactory";
+import { courseFactory } from "@@/tests/test-utils/factory";
 import { CourseFeatures } from "@/store/types/room";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import {

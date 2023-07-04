@@ -1,5 +1,12 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { VideoConferenceApiInterface } from "@/serverApi/v3/api";
+import {
+	VideoConferenceApiInterface,
+	VideoConferenceScope,
+} from "@/serverApi/v3/api";
+import {
+	videoConferenceInfoFactory,
+	videoConferenceInfoResponseFactory,
+} from "@@/tests/test-utils/factory";
 import {
 	VideoConferenceInfo,
 	VideoConferenceState,
@@ -18,7 +25,9 @@ describe("VideoConferenceModule", () => {
 	});
 
 	const mockApi = () => {
-		const apiMock: Partial<VideoConferenceApiInterface> = {};
+		const apiMock = {
+			videoConferenceControllerInfo: jest.fn(),
+		};
 
 		jest
 			.spyOn(serverApi, "VideoConferenceApiFactory")
@@ -86,19 +95,72 @@ describe("VideoConferenceModule", () => {
 
 			describe("when setting an error", () => {
 				it("should return the error", () => {
-					const info: VideoConferenceInfo = {
+					const info: VideoConferenceInfo = videoConferenceInfoFactory.build({
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: true,
 							moderatorMustApproveJoinRequests: true,
 							everybodyJoinsAsModerator: true,
 						},
-					};
+					});
 
 					module.setVideoConferenceInfo(info);
 
 					expect(module.getVideoConferenceInfo).toEqual(info);
 				});
+			});
+		});
+	});
+
+	describe("fetchVideoConferenceInfo", () => {
+		describe("when the api returns a response", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const response = videoConferenceInfoResponseFactory.build();
+				const state = videoConferenceInfoFactory.build();
+
+				apiMock.videoConferenceControllerInfo.mockResolvedValue(response);
+
+				return {
+					state,
+				};
+			};
+
+			it("should update the stores video conference info", async () => {
+				const { state } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getVideoConferenceInfo).toEqual(state);
+			});
+		});
+
+		describe("when the api returns an error", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const error = new Error();
+
+				apiMock.videoConferenceControllerInfo.mockRejectedValue(error);
+
+				return {
+					error,
+				};
+			};
+
+			it("should update the stores error", async () => {
+				const { error } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getError).toEqual(error);
 			});
 		});
 	});

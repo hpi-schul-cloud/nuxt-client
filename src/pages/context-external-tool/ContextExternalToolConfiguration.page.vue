@@ -96,7 +96,6 @@ import {
 	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
 	injectStrict,
-	ROOM_MODULE,
 } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export

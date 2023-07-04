@@ -1,5 +1,5 @@
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
 import flushPromises from "flush-promises";
