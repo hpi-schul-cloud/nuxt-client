@@ -44,7 +44,7 @@ export default defineComponent({
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 
 		const onDeleteElement = async (): Promise<void> => {
-			props.deleteElement(props.element.id);
+			await props.deleteElement(props.element.id);
 		};
 
 		return {
