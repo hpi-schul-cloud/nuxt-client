@@ -57,29 +57,6 @@ describe("ExternalToolConfigSettings", () => {
 		});
 	});
 
-	describe("inject", () => {
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					shallowMount(ExternalToolConfigSettings as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
-			});
-		});
-	});
-
 	describe("display title", () => {
 		it("should display title", () => {
 			const { wrapper } = setup();

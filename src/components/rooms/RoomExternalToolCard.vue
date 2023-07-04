@@ -67,7 +67,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 
-		const t = (key: string): string => i18n.tc(key, 0) || key;
+		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
 			emit("click", props.tool);

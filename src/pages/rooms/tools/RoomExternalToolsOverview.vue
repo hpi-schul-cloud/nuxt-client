@@ -89,7 +89,7 @@ export default defineComponent({
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values) || key;
+			i18n.tc(key, 0, values);
 
 		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 			return (

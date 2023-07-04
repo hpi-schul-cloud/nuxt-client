@@ -97,6 +97,7 @@ import {
 	onMounted,
 	ref,
 } from "vue";
+import VueI18n from "vue-i18n";
 import { default as VueRouter } from "vue-router";
 import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
@@ -119,13 +120,8 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 
