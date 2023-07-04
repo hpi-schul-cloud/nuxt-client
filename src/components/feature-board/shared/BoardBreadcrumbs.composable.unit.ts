@@ -5,7 +5,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import {
 	BoardApiInterface,
 	BoardExternalReferenceType,
-	CoursesApiInterface,
+	RoomsApiInterface,
 } from "@/serverApi/v3/api";
 import { useSharedBoardBreadcrumbs } from "./BoardBreadcrumbs.composable";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
@@ -31,19 +31,20 @@ describe("BoardBreadcrumbs.composable", () => {
 			);
 			jest.spyOn(serverApi, "BoardApiFactory").mockReturnValueOnce(boardApi);
 
-			const coursesApi = createMock<CoursesApiInterface>();
-			coursesApi.courseControllerGetCourse.mockResolvedValue(
+			const roomApi = createMock<RoomsApiInterface>();
+			roomApi.roomsControllerGetRoomBoard.mockResolvedValue(
 				mockApiResponse({
 					data: {
 						id: "courseId",
 						title: "Course #1",
+						roomId: "roomId",
+						displayColor: "#F0F0F0",
+						elements: [],
 					},
 				})
 			);
 
-			jest
-				.spyOn(serverApi, "CoursesApiFactory")
-				.mockReturnValueOnce(coursesApi);
+			jest.spyOn(serverApi, "RoomsApiFactory").mockReturnValueOnce(roomApi);
 
 			const { createBreadcrumbs, breadcrumbs } = mountComposable(
 				() => useSharedBoardBreadcrumbs(),
