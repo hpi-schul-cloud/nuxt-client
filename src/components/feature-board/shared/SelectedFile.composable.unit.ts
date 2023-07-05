@@ -18,7 +18,7 @@ const setupMountComposable = () => {
 
 describe("SelectedFile.composable", () => {
 	afterEach(() => {
-		//jest.resetAllMocks();
+		jest.resetAllMocks();
 	});
 
 	describe("when file size correctly", () => {
@@ -43,8 +43,9 @@ describe("SelectedFile.composable", () => {
 			setup();
 			const { setSelectedFile, getSelectedFile } = setupMountComposable();
 
-			setSelectedFile();
+			const result = setSelectedFile();
 
+			expect(result).toBe(true);
 			expect(getSelectedFile()).toBe(undefined);
 		});
 	});
@@ -59,8 +60,8 @@ describe("SelectedFile.composable", () => {
 		};
 
 		it("should not set selectedFile and return false", () => {
-			const { setSelectedFile, getSelectedFile } = setupMountComposable();
 			const { file } = setup();
+			const { setSelectedFile, getSelectedFile } = setupMountComposable();
 
 			const result = setSelectedFile(file);
 
@@ -72,9 +73,10 @@ describe("SelectedFile.composable", () => {
 			const { file, showFileTooBigError } = setup();
 			const { setSelectedFile } = setupMountComposable();
 
-			setSelectedFile(file);
+			const result = setSelectedFile(file);
 
-			expect(showFileTooBigError).toBeCalled();
+			expect(result).toBe(false);
+			expect(showFileTooBigError).toBeCalledTimes(1);
 		});
 	});
 });

@@ -8,7 +8,6 @@ interface Props {
 	fetchFileMock?: jest.Mock;
 	fetchPendingFileRecursivelyMock?: jest.Mock;
 	renameMock?: jest.Mock;
-	getFileMock?: jest.Mock;
 }
 
 export const setupFileStorageApiMock = (props: Props = {}) => {

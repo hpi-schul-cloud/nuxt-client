@@ -2,7 +2,6 @@ import { useFileStorageNotifier } from "@/components/feature-board/shared/FileSt
 import { jest } from "@jest/globals";
 
 interface Props {
-	getMaxFileSizeMock?: () => number;
 	showFileTooBigErrorMock?: () => void;
 	showForbiddenErrorMock?: () => void;
 	showUnauthorizedErrorMock?: () => void;
@@ -12,7 +11,6 @@ interface Props {
 
 export const setupFileStorageNotifier = (props: Props = {}) => {
 	const {
-		getMaxFileSizeMock,
 		showFileTooBigErrorMock,
 		showForbiddenErrorMock,
 		showUnauthorizedErrorMock,
@@ -22,7 +20,6 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 
 	const mockedSelectedFile = jest.mocked(useFileStorageNotifier);
 
-	const getMaxFileSize = getMaxFileSizeMock ?? jest.fn();
 	const showFileTooBigError = showFileTooBigErrorMock ?? jest.fn();
 	const showForbiddenError = showForbiddenErrorMock ?? jest.fn();
 	const showUnauthorizedError = showUnauthorizedErrorMock ?? jest.fn();
@@ -30,7 +27,6 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 	const showFileExistsError = showFileExistsErrorMock ?? jest.fn();
 
 	const mocks = {
-		getMaxFileSize,
 		showFileTooBigError,
 		showForbiddenError,
 		showUnauthorizedError,
