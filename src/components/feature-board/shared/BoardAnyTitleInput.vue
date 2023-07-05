@@ -21,7 +21,15 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref, watch, nextTick } from "vue";
+import {
+	computed,
+	defineComponent,
+	PropType,
+	ref,
+	watch,
+	nextTick,
+	onMounted,
+} from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -45,6 +53,9 @@ export default defineComponent({
 			default: "",
 			required: false,
 		},
+		forceTitleFocus: {
+			type: Boolean,
+		},
 	},
 	emits: ["update:value"],
 	setup(props, { emit }) {
@@ -61,11 +72,14 @@ export default defineComponent({
 			if (titleInput.value === null) return;
 			titleInput.value.focus();
 		};
+		onMounted(() => {
+			if (props.forceTitleFocus) setFocusOnEdit();
+		});
 
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column") return;
+				if (props.scope !== "column" && !props.forceTitleFocus) return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					setFocusOnEdit();
