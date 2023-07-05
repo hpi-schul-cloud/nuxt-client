@@ -13,7 +13,7 @@ import { User } from "./types/auth";
 import { Course } from "./types/room";
 
 let receivedRequests: any[] = [];
-const getRequestReturn: any = {};
+let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -46,11 +46,11 @@ describe("room module", () => {
 			authModule: AuthModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
+		receivedRequests = [];
+		getRequestReturn = undefined;
 	});
+
 	describe("actions", () => {
-		beforeEach(() => {
-			receivedRequests = [];
-		});
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
@@ -67,16 +67,9 @@ describe("room module", () => {
 
 					const course: Course = courseFactory.build();
 
-					initializeAxios({
-						get: async (path: string) => {
-							receivedRequests.push({ path });
-							if (path === "/v1/courses/courseId") {
-								return Promise.resolve({
-									data: course,
-								});
-							}
-						},
-					} as AxiosInstance);
+					getRequestReturn = Promise.resolve({
+						data: course,
+					});
 
 					return {
 						roomModule,
@@ -109,14 +102,7 @@ describe("room module", () => {
 
 					const error: AxiosError = new AxiosError();
 
-					initializeAxios({
-						get: async (path: string) => {
-							receivedRequests.push({ path });
-							if (path === "/v1/courses/courseId") {
-								return Promise.reject(error);
-							}
-						},
-					} as AxiosInstance);
+					getRequestReturn = Promise.reject(error);
 
 					return {
 						roomModule,
@@ -205,10 +191,6 @@ describe("room module", () => {
 		});
 
 		describe("confirmImportLesson", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				const roomModule = new RoomModule({});
 				const confirmImportLessonSpy = jest.spyOn(
@@ -332,10 +314,6 @@ describe("room module", () => {
 		});
 
 		describe("deleteLesson", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
 					lessonControllerDelete: jest.fn(),
@@ -376,10 +354,6 @@ describe("room module", () => {
 		});
 
 		describe("createCourseShareToken", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				(() => {
 					initializeAxios({
@@ -513,7 +487,6 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
-				receivedRequests = [];
 				authModule.setUser({ id: "testUser" } as User);
 			});
 
@@ -663,7 +636,6 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
-				receivedRequests = [];
 				authModule.setUser({ id: "testUser" } as User);
 			});
 
