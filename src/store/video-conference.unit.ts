@@ -2,11 +2,13 @@ import * as serverApi from "@/serverApi/v3/api";
 import {
 	VideoConferenceApiInterface,
 	VideoConferenceScope,
+	VideoConferenceStateResponse,
 } from "@/serverApi/v3/api";
 import {
 	videoConferenceInfoFactory,
 	videoConferenceInfoResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { AxiosError } from "axios";
 import {
 	VideoConferenceInfo,
 	VideoConferenceState,
@@ -117,10 +119,16 @@ describe("VideoConferenceModule", () => {
 			const setup = () => {
 				const { apiMock } = mockApi();
 
-				const response = videoConferenceInfoResponseFactory.build();
-				const state = videoConferenceInfoFactory.build();
+				const response = videoConferenceInfoResponseFactory.build({
+					state: VideoConferenceStateResponse.Running,
+				});
+				const state = videoConferenceInfoFactory.build({
+					state: VideoConferenceState.RUNNING,
+				});
 
-				apiMock.videoConferenceControllerInfo.mockResolvedValue(response);
+				apiMock.videoConferenceControllerInfo.mockResolvedValue({
+					data: response,
+				});
 
 				return {
 					state,
@@ -143,7 +151,7 @@ describe("VideoConferenceModule", () => {
 			const setup = () => {
 				const { apiMock } = mockApi();
 
-				const error = new Error();
+				const error = new AxiosError();
 
 				apiMock.videoConferenceControllerInfo.mockRejectedValue(error);
 
