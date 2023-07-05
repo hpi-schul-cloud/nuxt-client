@@ -31,8 +31,6 @@ describe("@/components/legacy/TheTopBar", () => {
 			authModule: AuthModule,
 			statusAlertsModule: StatusAlertsModule,
 		});
-		global.URL.createObjectURL = jest.fn();
-		global.URL.revokeObjectURL = jest.fn();
 	});
 
 	describe("when user is logged in with no status alerts", () => {

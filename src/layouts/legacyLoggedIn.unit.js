@@ -40,8 +40,6 @@ envConfigModule.setEnvs({
 
 describe("legacyLoggedIn", () => {
 	it("should mark active links", () => {
-		global.URL.createObjectURL = jest.fn();
-		global.URL.revokeObjectURL = jest.fn();
 		const wrapper = mount(legacyLoggedIn, {
 			...createComponentMocks({ i18n: true }),
 			mocks: {
