@@ -4,8 +4,8 @@ import {
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
-	contextExternalToolsModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
@@ -66,8 +66,8 @@ Vue.mixin({
 	},
 });
 
-import VueDOMPurifyHTML from "vue-dompurify-html";
 import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -83,7 +83,11 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -129,7 +133,7 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 			contentModule,
 			contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
+			[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
 			externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
