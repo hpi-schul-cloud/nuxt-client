@@ -1,16 +1,16 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue, { Ref, computed, ref } from "vue";
+import Vue, { computed, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import {
@@ -29,7 +29,6 @@ jest.mock("../state/CardState.composable");
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const mockedEditMode = jest.mocked(useEditMode);
-const mockedElementTypeSelection = jest.mocked(useElementTypeSelection);
 const mockedUseCardState = jest.mocked(useCardState);
 
 const CARD_SKELETON: BoardCardSkeleton = {
@@ -75,42 +74,7 @@ describe("CardHost", () => {
 			stopEditMode: stopEditModeMock,
 		});
 
-		const createTextElementMock = jest.fn();
-		const createFileElementMock = jest.fn();
-		const elementTypeOptionsMock: Ref<
-			{
-				icon: string;
-				label: string;
-				action: () => void;
-				testId: string;
-			}[]
-		> = ref([
-			{
-				icon: "action1-icon",
-				label: "action1-label",
-				action: createTextElementMock,
-				testId: "action1-id",
-			},
-			{
-				icon: "action2-icon",
-				label: "action2-label",
-				action: createFileElementMock,
-				testId: "action2-id",
-			},
-		]);
-		const askTypeMock = jest.fn();
-		const onFileSelectMock = jest.fn();
-		const isFilePickerOpenMock = ref(false);
-		const isDialogOpenMock = ref(false);
-		mockedElementTypeSelection.mockReturnValue({
-			askType: askTypeMock,
-			isDialogOpen: isDialogOpenMock,
-			elementTypeOptions: elementTypeOptionsMock,
-			onElementClick: jest.fn(),
-			onFileElementClick: jest.fn(),
-			onFileSelect: onFileSelectMock,
-			isFilePickerOpen: isFilePickerOpenMock,
-		});
+		setupElementTypeSelectionMock();
 
 		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
