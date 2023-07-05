@@ -92,6 +92,7 @@ import {
 	ElementMove,
 	verticalCursorKeys,
 } from "../types/DragAndDrop";
+
 export default defineComponent({
 	name: "CardHost",
 	components: {
