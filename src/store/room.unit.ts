@@ -1,14 +1,16 @@
+import { courseFactory } from "@@/tests/test-utils/factory";
 import RoomModule from "./room";
-import * as serverApi from "../serverApi/v3/api";
-import { initializeAxios } from "../utils/api";
+import * as serverApi from "@/serverApi/v3/api";
+import { initializeAxios } from "@/utils/api";
 import AuthModule from "@/store/auth";
 import ApplicationErrorModule from "@/store/application-error";
 import setupStores from "@@/tests/test-utils/setupStores";
 
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import { authModule, applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { User } from "./types/auth";
+import { Course } from "./types/room";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -57,6 +59,91 @@ describe("room module", () => {
 			roomsControllerPatchElementVisibility: jest.fn(),
 			roomsControllerPatchOrderingOfElements: jest.fn(),
 		};
+
+		describe("fetchCourse", () => {
+			describe("when the api returns a response", () => {
+				const setup = () => {
+					const roomModule = new RoomModule({});
+
+					const course: Course = courseFactory.build();
+
+					initializeAxios({
+						get: async (path: string) => {
+							receivedRequests.push({ path });
+							if (path === "/v1/courses/courseId") {
+								return Promise.resolve({
+									data: course,
+								});
+							}
+						},
+					} as AxiosInstance);
+
+					return {
+						roomModule,
+						course,
+					};
+				};
+
+				it("should call backend", async () => {
+					const { roomModule } = setup();
+
+					await roomModule.fetchCourse("courseId");
+
+					expect(receivedRequests[0].path).toEqual("/v1/courses/courseId");
+				});
+
+				it("should return a course", async () => {
+					const { roomModule, course } = setup();
+
+					const result: Course | null = await roomModule.fetchCourse(
+						"courseId"
+					);
+
+					expect(result).toEqual(course);
+				});
+			});
+
+			describe("when the api returns an error", () => {
+				const setup = () => {
+					const roomModule = new RoomModule({});
+
+					const error: AxiosError = new AxiosError();
+
+					initializeAxios({
+						get: async (path: string) => {
+							receivedRequests.push({ path });
+							if (path === "/v1/courses/courseId") {
+								return Promise.reject(error);
+							}
+						},
+					} as AxiosInstance);
+
+					return {
+						roomModule,
+						error,
+					};
+				};
+
+				it("should set an error", async () => {
+					const { roomModule, error } = setup();
+
+					await roomModule.fetchCourse("courseId");
+
+					expect(roomModule.getError).toEqual(error);
+				});
+
+				it("should return null", async () => {
+					const { roomModule } = setup();
+
+					const result: Course | null = await roomModule.fetchCourse(
+						"courseId"
+					);
+
+					expect(result).toBeNull();
+				});
+			});
+		});
+
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest

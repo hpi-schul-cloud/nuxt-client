@@ -108,7 +108,7 @@ export default defineComponent({
 				contextType: ToolContextType.COURSE,
 			});
 
-			course.value = await roomModule.getCourse(props.roomId);
+			course.value = await roomModule.fetchCourse(props.roomId);
 		});
 
 		const apiError: ComputedRef<BusinessError> = computed(

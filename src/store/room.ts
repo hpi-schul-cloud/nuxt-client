@@ -12,8 +12,8 @@ import {
 	RoomsApiInterface,
 	TaskApiFactory,
 	TaskApiInterface,
-} from "../serverApi/v3/api";
-import { $axios } from "../utils/api";
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
@@ -49,7 +49,7 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async getCourse(courseId: string): Promise<Course | null> {
+	async fetchCourse(courseId: string): Promise<Course | null> {
 		this.setLoading(true);
 
 		try {

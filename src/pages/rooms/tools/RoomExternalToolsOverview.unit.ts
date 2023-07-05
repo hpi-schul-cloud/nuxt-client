@@ -42,7 +42,7 @@ describe("RoomExternalToolOverview", () => {
 			getLoading: false,
 		});
 
-		roomModule.getCourse.mockResolvedValue(null);
+		roomModule.fetchCourse.mockResolvedValue(null);
 
 		const wrapper: Wrapper<any> = shallowMount(
 			RoomExternalToolsOverview as MountOptions<Vue>,
@@ -140,7 +140,7 @@ describe("RoomExternalToolOverview", () => {
 		const setup = async () => {
 			const { wrapper, roomModule } = getWrapper([]);
 
-			roomModule.getCourse.mockResolvedValue(
+			roomModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
