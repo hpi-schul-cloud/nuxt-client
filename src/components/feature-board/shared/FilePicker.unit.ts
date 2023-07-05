@@ -4,6 +4,10 @@ import Vue, { nextTick } from "vue";
 import FilePicker from "./FilePicker.vue";
 
 describe("FilePicker", () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	describe("when isFilePickerOpen is false", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
@@ -12,6 +16,7 @@ describe("FilePicker", () => {
 				...createComponentMocks({}),
 				propsData: {
 					isFilePickerOpen: false,
+					maxFileSizeInByte: 100,
 				},
 			});
 
@@ -34,6 +39,7 @@ describe("FilePicker", () => {
 				attachTo: document.body,
 				propsData: {
 					isFilePickerOpen: false,
+					maxFileSizeInByte: 100,
 				},
 			});
 
@@ -71,30 +77,33 @@ describe("FilePicker", () => {
 	});
 
 	describe("when file is selected", () => {
-		const setup = () => {
-			document.body.setAttribute("data-app", "true");
+		describe("when file size possible", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-			const wrapper = mount(FilePicker as MountOptions<Vue>, {
-				...createComponentMocks({}),
-				attachTo: document.body,
-				propsData: {
-					isFilePickerOpen: false,
-				},
+				const wrapper = mount(FilePicker as MountOptions<Vue>, {
+					...createComponentMocks({}),
+					attachTo: document.body,
+					propsData: {
+						isFilePickerOpen: false,
+						maxFileSizeInByte: 100000,
+					},
+				});
+				const file = new File([""], "filename", { type: "text/plain" });
+
+				return { wrapper, file };
+			};
+
+			it("should emit update:fileOpen", async () => {
+				const { wrapper, file } = setup();
+
+				const input = wrapper.findComponent({ ref: "inputRef" });
+				// this also triggers the "change event"
+				await input.setData({ internalValue: file });
+				await nextTick();
+
+				expect(wrapper.emitted("update:file")).toHaveLength(1);
 			});
-			const file = new File([""], "filename", { type: "text/plain" });
-
-			return { wrapper, file };
-		};
-
-		it("should emit update:fileOpen", async () => {
-			const { wrapper, file } = setup();
-
-			const input = wrapper.findComponent({ ref: "inputRef" });
-			// this also triggers the "change event"
-			await input.setData({ internalValue: file });
-			await nextTick();
-
-			expect(wrapper.emitted("update:file")).toHaveLength(1);
 		});
 	});
 });
