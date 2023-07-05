@@ -98,6 +98,7 @@ export default defineComponent({
 			if (!hasEditPermission) return;
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			if (!hasEditPermission) return;
 			stopEditMode();
