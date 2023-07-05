@@ -5,9 +5,12 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Vue from "vue";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import RoomModule from "@/store/room";
-import { courseFactory } from "@@/tests/test-utils/factory";
+import {
+	courseFactory,
+	businessErrorFactory,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils/factory";
 import { CourseFeatures } from "@/store/types/room";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import {
@@ -15,7 +18,6 @@ import {
 	I18N_KEY,
 	ROOM_MODULE,
 } from "@/utils/inject";
-import { businessErrorFactory } from "@@/tests/test-utils/factory";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
