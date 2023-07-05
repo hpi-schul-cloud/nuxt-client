@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import Board from "@/components/feature-board/board/Board.vue";
-import { useBoardBreadcrumbs } from "@/components/feature-board/shared/BoardBreadcrumbs.composable";
+import { useSharedBoardBreadcrumbs } from "@/components/feature-board/shared/BoardBreadcrumbs.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import Theme from "@/theme.config";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -20,7 +20,7 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const route = useRoute();
 		const boardId = route.params?.id;
-		const breadcrumbs = useBoardBreadcrumbs();
+		const { breadcrumbs } = useSharedBoardBreadcrumbs();
 
 		useTitle(`${i18n.t("components.board")} -  ${Theme.name}`);
 
