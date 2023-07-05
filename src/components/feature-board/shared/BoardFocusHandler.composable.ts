@@ -9,6 +9,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
@@ -29,8 +30,12 @@ export const useBoardFocusHandler = (
 	id: MaybeComputedRef<
 		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
 	>,
-	element: Ref<HTMLElement | undefined>
+	element: Ref<HTMLElement | undefined>,
+	onFocusCallback?: () => void | undefined
 ) => {
+	useInlineEditInteractionHandler(
+		onFocusCallback !== undefined ? onFocusCallback : () => {}
+	);
 	const { focused: isFocused } = useFocus(element);
 	const { focused: isFocusWithin } = useFocusWithin(element);
 

@@ -12,11 +12,8 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
-	useInlineEditInteractionHandler(() => {
-		isAutoFocus.value = true;
-	});
 	const elementRef = toRef(props, "element");
-	const isEditModeRef = toRef(props, "isEditMode");
+	// const isEditModeRef = toRef(props, "isEditMode");
 
 	const isAutoFocus = ref<boolean>(false);
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
@@ -32,18 +29,17 @@ export const useContentElementState = <T extends AnyContentElement>(
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
 
-	watch(
-		() => isEditModeRef.value,
-		(newValue, oldValue) => {
-			if (newValue || !oldValue) {
-				return;
-			}
-			isAutoFocus.value = false;
-		}
-	);
+	// watch(
+	// 	() => isEditModeRef.value,
+	// 	(newValue, oldValue) => {
+	// 		if (newValue || !oldValue) {
+	// 			return;
+	// 		}
+	// 		isAutoFocus.value = false;
+	// 	}
+	// );
 
 	const updateElement = async (payload: T["content"]) => {
-		console.log("update element", { ...payload });
 		const status = await updateElementCall(props.element);
 		if (isErrorCode(status)) {
 			showFailure(generateErrorText("update", "boardElement"));
@@ -60,6 +56,6 @@ export const useContentElementState = <T extends AnyContentElement>(
 		 * Will be set to true when the element should receive focus after switching to edit-mode.
 		 * Resets to false when leaving edit-mode.
 		 */
-		isAutoFocus,
+		// isAutoFocus,
 	};
 };
