@@ -9,16 +9,14 @@ import Vue from "vue";
 import { Container } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardPermissionsTypes } from "../types/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
-
-const defaultPermissions = {
-	hasMovePermission: true,
-	hasCreateColumnPermission: true,
-};
 
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
@@ -28,7 +26,9 @@ describe("BoardColumn", () => {
 		cards,
 	});
 
-	const setup = (options?: { permissions?: BoardPermissionsTypes }) => {
+	const setup = (options?: {
+		permissions?: Partial<BoardPermissionChecks>;
+	}) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -114,11 +114,11 @@ describe("BoardColumn", () => {
 
 	describe("user permissions", () => {
 		describe("when user is not permitted to move a column", () => {
-			it("should set lock-axis to 'x,y", () => {
+			it("should set drag-disabled", () => {
 				setup({ permissions: { hasMovePermission: false } });
 
 				const dndContainer = wrapper.findComponent({ name: "Container" });
-				expect(dndContainer.element.outerHTML).toContain('lockaxis="x,y"');
+				expect(dndContainer.element.outerHTML).toContain(".drag-disabled");
 			});
 		});
 		describe("when user is not permitted to create a card", () => {

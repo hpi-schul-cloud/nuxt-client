@@ -9,6 +9,7 @@ import {
 	FileElementContent,
 	RichTextElementContent,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	RoomsApiFactory,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
@@ -19,6 +20,8 @@ export const useBoardApi = () => {
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
+
+	const roomApi = RoomsApiFactory(undefined, "/v3", $axios);
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -154,6 +157,40 @@ export const useBoardApi = () => {
 		return response.status;
 	};
 
+	const moveElementCall = async (
+		elementId: string,
+		toCardId: string,
+		toPosition: number
+	) => {
+		await elementApi.elementControllerMoveElement(elementId, {
+			toCardId,
+			toPosition,
+		});
+	};
+
+	type ContextInfo = { id: string; name: string };
+
+	const getContextInfo = async (
+		boardId: string
+	): Promise<ContextInfo | undefined> => {
+		const contextResponse = await boardApi.boardControllerGetBoardContext(
+			boardId
+		);
+		if (contextResponse.status !== 200) {
+			return undefined;
+		}
+		const context = contextResponse.data;
+		const roomResponse = await roomApi.roomsControllerGetRoomBoard(context.id);
+
+		if (roomResponse.status !== 200) {
+			return undefined;
+		}
+		return {
+			id: roomResponse.data.roomId,
+			name: roomResponse.data.title,
+		};
+	};
+
 	return {
 		createColumnCall,
 		createElementCall,
@@ -162,10 +199,12 @@ export const useBoardApi = () => {
 		deleteColumnCall,
 		moveCardCall,
 		moveColumnCall,
+		moveElementCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,
+		getContextInfo,
 	};
 };

@@ -18,8 +18,7 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
-			:lock-axis="lockAxis"
-			:drag-begin-delay="200"
+			:drag-begin-delay="isDesktop ? 0 : 300"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -29,6 +28,7 @@
 					class="my-3 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
+					:class="{ 'drag-disabled': !hasMovePermission }"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
 					@delete:card="onDeleteCard"
 				/>
@@ -42,13 +42,14 @@
 </template>
 
 <script lang="ts">
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -88,7 +89,6 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
-		const lockAxis = hasMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -99,6 +99,7 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -155,7 +156,7 @@ export default defineComponent({
 			cardDropPlaceholderOptions,
 			colWidth,
 			hasCreateColumnPermission,
-			lockAxis,
+			hasMovePermission,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -165,6 +166,7 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 			getChildPayload,
+			isDesktop,
 		};
 	},
 });
