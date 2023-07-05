@@ -60,8 +60,7 @@ describe("FileStorageApi Composable", () => {
 				};
 				const listMock = jest.fn().mockResolvedValueOnce(response);
 				const { fileApiFactory } = setupFileStorageFactoryMock({ listMock });
-				const { getMaxFileSize, showFileTooBigError } =
-					setupFileStorageNotifier();
+				const { showFileTooBigError } = setupFileStorageNotifier();
 
 				return {
 					parentId,
@@ -69,7 +68,6 @@ describe("FileStorageApi Composable", () => {
 					fileRecordResponse,
 					response,
 					fileApiFactory,
-					getMaxFileSize,
 					showFileTooBigError,
 				};
 			};
