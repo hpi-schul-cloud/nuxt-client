@@ -75,7 +75,6 @@ import {
 import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import { useBoardMenu } from "../shared/BoardMenu.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -136,8 +135,6 @@ export default defineComponent({
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
 
-		const { isMenuOpen } = useBoardMenu();
-
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
@@ -163,11 +160,7 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (
-				!isDialogOpen.value &&
-				!isDeleteDialogOpen.value &&
-				!isMenuOpen.value
-			) {
+			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
 			}
 		};

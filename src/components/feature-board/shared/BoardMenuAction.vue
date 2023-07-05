@@ -10,20 +10,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick } from "vue";
-import { useBoardMenu } from "./BoardMenu.composable";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "BoardMenuAction",
 	setup(props, { emit }) {
-		const { isMenuOpen } = useBoardMenu();
-
-		const onClick = async ($event: Event) => {
-			emit("click", $event);
-			await nextTick();
-			isMenuOpen.value = false;
-		};
-
+		const onClick = ($event: Event) => emit("click", $event);
 		return {
 			onClick,
 		};
