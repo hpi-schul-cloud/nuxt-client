@@ -51,3 +51,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+a:focus {
+	outline: none;
+}
+</style>
