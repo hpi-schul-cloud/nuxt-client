@@ -1,4 +1,3 @@
-import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
 import {
@@ -6,22 +5,31 @@ import {
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import Vue, { Ref, computed, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useEditMode } from "../shared/EditMode.composable";
+import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import { useCardState } from "../state/CardState.composable";
+import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "../types/Permissions";
-import { BoardCard, BoardCardSkeleton } from "../types/Card";
 import CardHost from "./CardHost.vue";
 
+jest.mock("../shared/BoardFocusHandler.composable");
 jest.mock("../shared/BoardPermissions.composable");
-jest.mock("../state/CardState.composable");
 jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+jest.mock("../shared/EditMode.composable");
+jest.mock("../shared/ElementTypeSelection.composable");
+jest.mock("../state/CardState.composable");
 
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedEditMode = jest.mocked(useEditMode);
+const mockedElementTypeSelection = jest.mocked(useElementTypeSelection);
 const mockedUseCardState = jest.mocked(useCardState);
 
 const CARD_SKELETON: BoardCardSkeleton = {
@@ -46,6 +54,64 @@ describe("CardHost", () => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 
+		const isFocusContainedMock = computed(() => true);
+		mockedBoardFocusHandler.mockReturnValue({
+			isFocusContained: isFocusContainedMock,
+			isFocused: computed(() => true),
+			isFocusWithin: computed(() => true),
+		});
+
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
+		});
+
+		const isEditModeMock = computed(() => true);
+		const startEditModeMock = jest.fn();
+		const stopEditModeMock = jest.fn();
+		mockedEditMode.mockReturnValue({
+			isEditMode: isEditModeMock,
+			startEditMode: startEditModeMock,
+			stopEditMode: stopEditModeMock,
+		});
+
+		const createTextElementMock = jest.fn();
+		const createFileElementMock = jest.fn();
+		const elementTypeOptionsMock: Ref<
+			{
+				icon: string;
+				label: string;
+				action: () => void;
+				testId: string;
+			}[]
+		> = ref([
+			{
+				icon: "action1-icon",
+				label: "action1-label",
+				action: createTextElementMock,
+				testId: "action1-id",
+			},
+			{
+				icon: "action2-icon",
+				label: "action2-label",
+				action: createFileElementMock,
+				testId: "action2-id",
+			},
+		]);
+		const askTypeMock = jest.fn();
+		const onFileSelectMock = jest.fn();
+		const isFilePickerOpenMock = ref(false);
+		const isDialogOpenMock = ref(false);
+		mockedElementTypeSelection.mockReturnValue({
+			askType: askTypeMock,
+			isDialogOpen: isDialogOpenMock,
+			elementTypeOptions: elementTypeOptionsMock,
+			onElementClick: jest.fn(),
+			onFileElementClick: jest.fn(),
+			onFileSelect: onFileSelectMock,
+			isFilePickerOpen: isFilePickerOpenMock,
+		});
+
 		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
 			fetchCard: jest.fn(),
@@ -59,24 +125,15 @@ describe("CardHost", () => {
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
-		});
-
-		const onDeleteElement = jest.fn();
 
 		setupDeleteBoardNodeConfirmationMock();
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
-			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-			},
 		});
 
-		return { onDeleteElement, deleteElementMock };
+		return { deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
