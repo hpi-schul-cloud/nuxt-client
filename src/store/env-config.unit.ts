@@ -209,6 +209,12 @@ describe("env-config module", () => {
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
 		});
 
+		it("getMaxFileSize should get 0 if FILES_STORAGE__MAX_FILE_SIZE is not defined", () => {
+			const envConfigModule = new EnvConfigModule({});
+			expect(envConfigModule.env.FILES_STORAGE__MAX_FILE_SIZE).toBe(0);
+			expect(envConfigModule.getMaxFileSize).toStrictEqual(0);
+		});
+
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
