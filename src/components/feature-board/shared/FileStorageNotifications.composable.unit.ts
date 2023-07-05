@@ -1,9 +1,9 @@
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import {
-    ENV_CONFIG_MODULE_KEY,
-    I18N_KEY,
-    NOTIFIER_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
@@ -12,6 +12,7 @@ import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 const maxFileSize = 100;
 const i18nModule = {
 	t: jest.fn().mockImplementation((key: string) => key),
+	n: jest.fn().mockImplementation((key: number) => key),
 };
 const notifierModule = createModuleMocks(NotifierModule);
 const configModule = createModuleMocks(EnvConfigModule, {
@@ -155,7 +156,7 @@ describe("FileStorageNotifier.composable", () => {
 	describe("when showFileTooBigError called", () => {
 		const setup = () => {
 			const i18nKey = "components.board.notifications.errors.fileToBig";
-			const props = { maxFileSizeInGb: maxFileSize };
+			const props = { maxFileSizeWithUnit: `${maxFileSize} B` };
 
 			return { i18nKey, props };
 		};

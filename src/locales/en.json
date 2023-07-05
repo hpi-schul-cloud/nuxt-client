@@ -824,7 +824,7 @@
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"components.board.notifications.errors.fileToBig": "The attached file exceeds the maximum permitted size of {maxFileSizeInGb} GB.",
+	"components.board.notifications.errors.fileToBig": "The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.fileNameExists": "A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable": "The file service is currently not available.",
 	"components.board.menu.board": "Board settings",

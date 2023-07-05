@@ -1,3 +1,4 @@
+import { convertFileSize } from "@/utils/fileHelper";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
@@ -48,9 +49,14 @@ export const useFileStorageNotifier = () => {
 	};
 
 	const showFileTooBigError = () => {
+		const { convertedSize, unit } = convertFileSize(
+			envConfigModule.getMaxFileSize
+		);
+		const localizedFileSize = i18n.n(convertedSize, "fileSize");
+
 		const message = getMessageString(
 			"components.board.notifications.errors.fileToBig",
-			{ maxFileSizeInGb: envConfigModule.getMaxFileSize }
+			{ maxFileSizeWithUnit: `${localizedFileSize} ${unit}` }
 		);
 
 		showFailure(message);
