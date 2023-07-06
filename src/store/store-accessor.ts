@@ -32,6 +32,7 @@ import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import VideoConferenceModule from "./video-conference";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -61,6 +62,7 @@ export let systemsModule: SystemsModule;
 export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
+export let videoConferenceModule: VideoConferenceModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -89,6 +91,7 @@ export function initializeStores(store: Store<any>): void {
 	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
+	videoConferenceModule = getModule(VideoConferenceModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -120,4 +123,5 @@ export const modules = {
 	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
+	videoConferenceModule: VideoConferenceModule,
 };

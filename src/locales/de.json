@@ -993,5 +993,9 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters stimmt nicht mit seinem regulärem Ausdruck überein. Bitte den Wert korrigieren.",
 	"pages.tool.apiError.tool_launch_outdated": "Die Konfiguration des Tools ist wegen Versionsänderung veraltet. Das Tool kann nicht gestartet werden!",
-	"pages.tool.context.title": "Hinzufügen Externer Tools"
+	"pages.tool.context.title": "Hinzufügen Externer Tools",
+	"pages.videoConference.title.running": "Videokonferenz BigBlueButton",
+	"pages.videoConference.title.notStarted": "Videokonferenz wurde noch nicht gestartet",
+	"pages.videoConference.title.noPermission": "Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen",
+	"pages.videoConference.action.refresh": "Videokonferenzstatus aktualisieren"
 }
