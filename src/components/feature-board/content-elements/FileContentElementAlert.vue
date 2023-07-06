@@ -1,13 +1,16 @@
 <template>
 	<v-alert
-		class="mb-0 rounded-0"
+		class="mb-0 py-4 rounded-t-0"
+		color="error"
+		data-testid="board-file-element-alert"
 		dense
-		icon="$error"
+		icon="$warning"
 		text
-		type="error"
 		variant="tonal"
 	>
-		{{ $t("components.cardElement.fileElement.virusDetected") }}
+		<div class="black--text">
+			{{ $t("components.cardElement.fileElement.virusDetected") }}
+		</div>
 	</v-alert>
 </template>
 
