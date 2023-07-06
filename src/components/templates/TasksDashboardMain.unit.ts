@@ -11,15 +11,19 @@ import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const $route = {
 	query: {
@@ -90,7 +94,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 				shareModule: shareModuleMock,
 				authModule: authModuleMock,
-				envConfigModule: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
