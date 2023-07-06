@@ -6,7 +6,7 @@
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { AUTH_MODULE, I18N_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, inject, onMounted, ref } from "vue";
 
@@ -14,12 +14,8 @@ export default defineComponent({
 	components: { TasksDashboardMain },
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
-		const authModule = inject<AuthModule | undefined>("authModule");
+		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 		const tasksModule = inject<TasksModule | undefined>("tasksModule");
-
-		if (authModule === undefined) {
-			throw new Error("authModule Module undefined"); // NUXT_REMOVAL use application error
-		}
 
 		if (tasksModule === undefined) {
 			throw new Error("tasksModule Module undefined"); // NUXT_REMOVAL use application error

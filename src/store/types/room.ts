@@ -27,6 +27,23 @@ export type Task = {
 	updatedAt: string;
 };
 
+export type Course = {
+	id: string;
+	name: string;
+	schoolId: string;
+	description?: string;
+	classIds: string[];
+	teacherIds: string[];
+	substitutionIds: string[];
+	ltiToolIds: string[];
+	color: string;
+	features?: CourseFeatures[];
+};
+
+export enum CourseFeatures {
+	VIDEOCONFERENCE = "videoconference",
+}
+
 export type RoomData = {
 	roomId: string;
 	title: string;

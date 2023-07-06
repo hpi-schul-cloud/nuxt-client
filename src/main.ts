@@ -4,8 +4,8 @@ import {
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
-	contextExternalToolsModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
@@ -15,6 +15,7 @@ import {
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -24,6 +25,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -66,8 +68,8 @@ Vue.mixin({
 	},
 });
 
-import VueDOMPurifyHTML from "vue-dompurify-html";
 import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -83,10 +85,17 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios, setupApiErrorHandlers } from "./utils/api";
+
 import {
 	APPLICATION_ERROR_KEY,
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE,
+	VIDEO_CONFERENCE_MODULE,
 } from "./utils/inject";
 
 (async () => {
@@ -129,20 +138,23 @@ import {
 			accountsModule,
 			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
-			contextExternalToolsModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
 			envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			roomModule,
+			privacyPolicyModule,
+			[ROOM_MODULE.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
@@ -152,6 +164,7 @@ import {
 			tasksModule,
 			userLoginMigrationModule,
 			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

@@ -16,9 +16,6 @@ describe("RoomExternalToolCard", () => {
 			{
 				...createComponentMocks({
 					i18n: true,
-					mocks: {
-						$t: (key: string): string => key,
-					},
 				}),
 				propsData: {
 					tool,
