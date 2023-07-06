@@ -82,14 +82,19 @@ import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
-import { initializeAxios } from "./utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
+import { initializeAxios, setupApiErrorHandlers } from "./utils/api";
+import {
+	APPLICATION_ERROR_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
 		`${window.location.origin}/runtime.config.json`
 	);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
+	setupApiErrorHandlers(axios);
 
 	initializeAxios(axios);
 
@@ -122,7 +127,7 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 		// NUXT_REMOVAL get rid of store DI
 		provide: {
 			accountsModule,
-			applicationErrorModule,
+			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,

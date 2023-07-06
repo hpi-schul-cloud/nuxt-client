@@ -4,6 +4,7 @@ import ContextExternalToolsModule from "@/store/context-external-tools";
 import ExternalToolsModule from "@/store/external-tools";
 import { InjectionKey } from "vue";
 import VueI18n from "vue-i18n";
+import ApplicationErrorModule from "@/store/application-error";
 
 export const I18N_KEY: InjectionKey<VueI18n> = Symbol("i18n");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
@@ -14,3 +15,5 @@ export const EXTERNAL_TOOLS_MODULE: InjectionKey<ExternalToolsModule> = Symbol(
 );
 export const CONTEXT_EXTERNAL_TOOLS_MODULE: InjectionKey<ContextExternalToolsModule> =
 	Symbol("contextExternalToolsModule");
+export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =
+	Symbol("applicationError");

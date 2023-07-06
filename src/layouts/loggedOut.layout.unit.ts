@@ -8,6 +8,7 @@ import { mount, Wrapper } from "@vue/test-utils";
 import VueRouter from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 import Vue from "vue";
+import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 
 describe("loggedOutLayout", () => {
 	const mountComponent = (attrs = {}) => {
@@ -36,7 +37,7 @@ describe("loggedOutLayout", () => {
 			},
 			provide: {
 				envConfigModule: envConfigModuleMock,
-				applicationErrorModule: applicationErrorModuleMock,
+				[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
 			},
 			router,
 			...attrs,
