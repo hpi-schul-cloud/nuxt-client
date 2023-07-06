@@ -643,7 +643,7 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    SubmissionContainer = 'submissionContainer'
 }
 
 /**
@@ -990,7 +990,7 @@ export interface CreateCardBodyParams {
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    SubmissionContainer = 'submissionContainer'
 }
 
 /**
@@ -1383,10 +1383,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | TaskElementContentBody}
+     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | TaskElementContentBody;
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
 }
 /**
  * 
@@ -3891,6 +3891,38 @@ export interface SingleColumnBoardResponse {
 /**
  * 
  * @export
+ * @interface SubmissionContainerContentBody
+ */
+export interface SubmissionContainerContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof SubmissionContainerContentBody
+     */
+    dueDate: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionContainerElementContentBody
+ */
+export interface SubmissionContainerElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof SubmissionContainerElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {SubmissionContainerContentBody}
+     * @memberof SubmissionContainerElementContentBody
+     */
+    content: SubmissionContainerContentBody;
+}
+/**
+ * 
+ * @export
  * @interface SubmissionStatusListResponse
  */
 export interface SubmissionStatusListResponse {
@@ -4077,19 +4109,6 @@ export interface TaskCardResponse {
 /**
  * 
  * @export
- * @interface TaskContentBody
- */
-export interface TaskContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskContentBody
-     */
-    dueDate: string;
-}
-/**
- * 
- * @export
  * @interface TaskCopyApiParams
  */
 export interface TaskCopyApiParams {
@@ -4154,25 +4173,6 @@ export interface TaskCreateParams {
      * @memberof TaskCreateParams
      */
     dueDate?: string;
-}
-/**
- * 
- * @export
- * @interface TaskElementContentBody
- */
-export interface TaskElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TaskElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TaskContentBody}
-     * @memberof TaskElementContentBody
-     */
-    content: TaskContentBody;
 }
 /**
  * 
