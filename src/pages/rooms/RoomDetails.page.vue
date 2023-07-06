@@ -143,7 +143,7 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import RoomExternalToolsOverview from "./external-tools/RoomExternalToolsOverview.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 export default defineComponent({
 	setup() {

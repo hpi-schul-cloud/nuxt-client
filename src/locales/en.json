@@ -993,5 +993,9 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
 	"pages.tool.apiError.tool_launch_outdated": "The tool configuration is out of date due to a version change. The tool cannot be started!",
-	"pages.tool.context.title": "Adding External Tools"
+	"pages.tool.context.title": "Adding External Tools",
+	"pages.videoConference.title.running": "Video conference BigBlueButton",
+	"pages.videoConference.title.notStarted": "Video conference has not yet started",
+	"pages.videoConference.title.noPermission": "The video conference hasn't started yet or you don't have permission to join it",
+	"pages.videoConference.action.refresh": "Update video conference status"
 }
