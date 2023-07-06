@@ -111,11 +111,16 @@ export default defineComponent({
 			}
 		});
 
+		const titleLength = () => {
+			if (!textarea.value) return;
+			return textarea.value.value.length;
+		};
+
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
 			if (!textarea.value) return;
 
-			if (textarea.value.value.length === textarea.value.selectionStart) {
+			if (titleLength() === textarea.value.selectionStart) {
 				$event.preventDefault();
 				emit("enter");
 			}
@@ -128,6 +133,7 @@ export default defineComponent({
 			titleInput,
 			hasValue,
 			onEnter,
+			titleLength,
 		};
 	},
 });
