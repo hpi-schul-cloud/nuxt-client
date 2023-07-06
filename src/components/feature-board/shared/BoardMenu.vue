@@ -1,7 +1,8 @@
 <template>
-	<VMenu offset-y attach left min-width="250">
+	<VMenu offset-y left min-width="250">
 		<template v-slot:activator="{ on, attrs }">
 			<VBtn
+				data-testid="board-menu-button"
 				v-bind="attrs"
 				v-on="on"
 				:ripple="false"
@@ -11,8 +12,8 @@
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
-				<VIcon>{{ mdiDotsVertical }}</VIcon>
-				<span class="d-sr-only">
+				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
+				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
 					<template v-if="scope === 'board'">{{
 						$t("components.board.menu.board")
 					}}</template>
@@ -47,9 +48,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const hasBackground = computed<boolean>(
-			() => props.scope === "element" || props.scope === "card"
-		);
+		const hasBackground = computed<boolean>(() => props.scope === "card");
 
 		return {
 			hasBackground,

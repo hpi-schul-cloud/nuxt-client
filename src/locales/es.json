@@ -833,6 +833,7 @@
 	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.addCard": "Añadir tarjeta",
 	"components.board.action.delete": "Eliminar",
+	"components.board.action.download": "Descargar",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board": "tablero",
@@ -845,6 +846,9 @@
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
+	"components.board.notifications.errors.fileToBig": "Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileNameExists": "Ya existe un archivo con este nombre.",
+	"components.board.notifications.errors.fileServiceNotAvailable": "El servicio de archivos no está disponible actualmente.",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.card": "Configuración de la tarjeta",
@@ -989,5 +993,9 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "El tipo de un parámetro no coincide con el tipo solicitado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor.",
 	"pages.tool.apiError.tool_launch_outdated": "La configuración de la herramienta está desactualizada debido a un cambio de versión. ¡La herramienta no se puede iniciar!",
-	"pages.tool.context.title": "Adición de herramientas externas"
+	"pages.tool.context.title": "Adición de herramientas externas",
+	"pages.videoConference.title.running": "Videoconferencia BigBlueButton",
+	"pages.videoConference.title.notStarted": "La videoconferencia aún no ha comenzado",
+	"pages.videoConference.title.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte",
+	"pages.videoConference.action.refresh": "Actualizar el estado de la videoconferencia"
 }

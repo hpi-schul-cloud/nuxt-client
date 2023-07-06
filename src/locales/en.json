@@ -816,6 +816,7 @@
 	"components.cardHost.deletionModal.confirmation": "Delete {type} {title}?",
 	"components.board.action.addCard": "Add card",
 	"components.board.action.delete": "Delete",
+	"components.board.action.download": "Download",
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.moveDown": "Move down",
 	"components.board": "Board",
@@ -828,6 +829,9 @@
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
+	"components.board.notifications.errors.fileToBig": "The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileNameExists": "A file with this name already exists.",
+	"components.board.notifications.errors.fileServiceNotAvailable": "The file service is currently not available.",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.card": "Card settings",
@@ -993,5 +997,9 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
 	"pages.tool.apiError.tool_launch_outdated": "The tool configuration is out of date due to a version change. The tool cannot be started!",
-	"pages.tool.context.title": "Adding External Tools"
+	"pages.tool.context.title": "Adding External Tools",
+	"pages.videoConference.title.running": "Video conference BigBlueButton",
+	"pages.videoConference.title.notStarted": "Video conference has not yet started",
+	"pages.videoConference.title.noPermission": "The video conference hasn't started yet or you don't have permission to join it",
+	"pages.videoConference.action.refresh": "Update video conference status"
 }
