@@ -4,8 +4,8 @@ import {
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
-	contextExternalToolsModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
@@ -67,8 +67,8 @@ Vue.mixin({
 	},
 });
 
-import VueDOMPurifyHTML from "vue-dompurify-html";
 import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -87,6 +87,7 @@ import { initializeAxios } from "./utils/api";
 import {
 	AUTH_MODULE,
 	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	ENV_CONFIG_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -138,7 +139,7 @@ import {
 			contentModule,
 			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
