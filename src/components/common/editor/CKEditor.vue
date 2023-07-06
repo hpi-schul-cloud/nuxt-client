@@ -117,7 +117,6 @@ export default defineComponent({
 			"Superscript",
 			"Table",
 			"TableToolbar",
-			"Underline",
 			"WordCount",
 		];
 
