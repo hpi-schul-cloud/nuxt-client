@@ -25,7 +25,7 @@ describe("RoomExternalToolCard", () => {
 					canEdit,
 				},
 				provide: {
-					[I18N_KEY as symbol]: {
+					[I18N_KEY.valueOf()]: {
 						$t: (key: string): string => key,
 						tc: (key: string): string => key,
 					},

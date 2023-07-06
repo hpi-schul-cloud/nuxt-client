@@ -40,9 +40,9 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				copyModule: copyModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				shareModule: shareModuleMock,
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

@@ -23,7 +23,7 @@ describe("ExternalToolSection", () => {
 				i18n: true,
 			}),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				externalToolsModule,
 			},
 		});
@@ -60,7 +60,7 @@ describe("ExternalToolSection", () => {
 				expect(() =>
 					shallowMount(ExternalToolSection, {
 						provide: {
-							[I18N_KEY as symbol]: { t: (key: string) => key },
+							[I18N_KEY.valueOf()]: { t: (key: string) => key },
 						},
 					})
 				).toThrow();

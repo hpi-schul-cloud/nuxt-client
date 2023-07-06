@@ -141,7 +141,7 @@ import {
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			roomModule,
 			roomsModule,
 			schoolsModule,
@@ -151,7 +151,7 @@ import {
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			[I18N_KEY as symbol]: i18n,
+			[I18N_KEY.valueOf()]: i18n,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

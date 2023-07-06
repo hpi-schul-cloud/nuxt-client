@@ -31,7 +31,7 @@ describe("FileContentElementChips", () => {
 				fileName,
 			},
 			provide: {
-				[I18N_KEY as symbol]: {
+				[I18N_KEY.valueOf()]: {
 					n: (size: number, format: string) => size.toString() + format,
 				},
 				authModule: authModuleMock,
