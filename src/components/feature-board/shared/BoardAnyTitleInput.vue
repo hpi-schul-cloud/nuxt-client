@@ -67,7 +67,6 @@ export default defineComponent({
 		const setFocusOnEdit = () => {
 			if (!hasEditPermission) return;
 			if (!textarea.value) return;
-
 			textarea.value.focus();
 		};
 
