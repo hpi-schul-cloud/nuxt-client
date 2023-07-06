@@ -828,6 +828,7 @@
 	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.addCard": "Añadir tarjeta",
 	"components.board.action.delete": "Eliminar",
+	"components.board.action.download": "Descargar",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board": "tablero",
