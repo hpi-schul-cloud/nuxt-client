@@ -1,7 +1,7 @@
 import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import { I18N_KEY } from "@/utils/inject";
+import { AUTH_MODULE, I18N_KEY } from "@/utils/inject";
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = jest.fn();
@@ -9,7 +9,7 @@ describe("TaskOverview", () => {
 		return shallowMount(TaskOverview, {
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
-				authModule: {
+				[AUTH_MODULE.valueOf()]: {
 					getUserRoles: [userRole],
 				},
 				tasksModule: {

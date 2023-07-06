@@ -17,7 +17,11 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ToolConfigurationTemplate } from "@/store/external-tool";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+} from "@/utils/inject";
 
 describe("ContextExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -75,10 +79,10 @@ describe("ContextExternalToolConfiguration", () => {
 					i18n: true,
 				}),
 				provide: {
-					externalToolsModule,
-					contextExternalToolsModule,
-					roomsModule,
+					[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
+					[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 					[I18N_KEY as symbol]: { t: (key: string) => key },
+					roomsModule,
 				},
 				propsData: {
 					...propsData,
