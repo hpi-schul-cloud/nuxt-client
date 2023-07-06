@@ -302,6 +302,7 @@
 	"components.cardHost.deletionModal.confirmation": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
 	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
+	"components.board.action.download": "Завантажити",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board": "Дошка",
@@ -314,6 +315,9 @@
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
+	"components.board.notifications.errors.fileToBig": "Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileNameExists": "Файл з такою назвою вже існує.",
+	"components.board.notifications.errors.fileServiceNotAvailable": "Файловий сервіс наразі недоступний.",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.card": "Налаштування картки",
@@ -1015,5 +1019,9 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex": "Значення параметра не відповідає його регулярному виразу. Виправте значення.",
 	"pages.tool.apiError.tool_launch_outdated": "Конфігурація інструменту застаріла через зміну версії. Інструмент неможливо запустити!",
-	"pages.tool.context.title": "Додавання зовнішніх інструментів"
+	"pages.tool.context.title": "Додавання зовнішніх інструментів",
+	"pages.videoConference.title.running": "Відеоконференція BigBlueButton",
+	"pages.videoConference.title.notStarted": "Відеоконференція ще не почалася",
+	"pages.videoConference.title.noPermission": "Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї",
+	"pages.videoConference.action.refresh": "Оновити статус відеоконференції"
 }
