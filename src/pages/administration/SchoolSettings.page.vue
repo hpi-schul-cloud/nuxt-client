@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";

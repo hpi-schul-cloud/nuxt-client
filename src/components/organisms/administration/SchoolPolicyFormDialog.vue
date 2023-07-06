@@ -80,7 +80,6 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import SchoolsModule from "@/store/schools";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import NotifierModule from "@/store/notifier";
 import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
