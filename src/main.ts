@@ -133,7 +133,6 @@ import {
 			contentModule,
 			contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
 			[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
 			externalToolsModule,
 			filePathsModule,

@@ -21,6 +21,7 @@
 import NavigationBar from "@/components/legacy/NavigationBar";
 import TheFooter from "@/components/legacy/TheFooter";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 
 export default {
 	name: "LoggedOutLayout",
@@ -31,7 +32,7 @@ export default {
 		TheFooter,
 	},
 
-	inject: ["envConfigModule"],
+	inject: { envConfigModule: { from: ENV_CONFIG_MODULE_KEY } },
 
 	computed: {
 		ghostBaseUrl() {
