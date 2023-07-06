@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
@@ -18,6 +18,7 @@ describe("BoardAnyTitleTitleInput", () => {
 
 	const setup = (options: {
 		isEditMode: boolean;
+		scope: "card" | "column" | "board";
 		permissions?: BoardPermissionChecks;
 	}) => {
 		document.body.setAttribute("data-app", "true");
@@ -26,12 +27,12 @@ describe("BoardAnyTitleTitleInput", () => {
 			...options?.permissions,
 		});
 
-		wrapper = shallowMount(BoardAnyTitleInput as MountOptions<Vue>, {
+		wrapper = mount(BoardAnyTitleInput as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
 				value: "props value",
 				isEditMode: options.isEditMode,
-				scope: "card",
+				scope: options.scope,
 			},
 			provide: {
 				CARD_HOST_INTERACTION_EVENT: undefined,
@@ -41,12 +42,12 @@ describe("BoardAnyTitleTitleInput", () => {
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ isEditMode: false });
+			setup({ isEditMode: false, scope: "card" });
 			expect(wrapper).toBeDefined();
 		});
 
 		it("should emit if value changes", async () => {
-			setup({ isEditMode: true });
+			setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			textAreaComponent.vm.$emit("input", "new title");
@@ -59,8 +60,8 @@ describe("BoardAnyTitleTitleInput", () => {
 			expect(emitted["update:value"][0][0]).toContain(newValue);
 		});
 
-		it.skip("should emit enter on hitting 'enter' key", async () => {
-			setup({ isEditMode: true });
+		it("should emit enter on hitting 'enter' key in card title", async () => {
+			setup({ isEditMode: true, scope: "card" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			textAreaComponent.vm.$emit(
 				"keydown",
@@ -71,6 +72,20 @@ describe("BoardAnyTitleTitleInput", () => {
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toHaveLength(1);
+		});
+
+		it("should not emit enter on hitting 'enter' key in column title", async () => {
+			setup({ isEditMode: true, scope: "column" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			textAreaComponent.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "Enter",
+				})
+			);
+			const emitted = wrapper.emitted();
+
+			expect(emitted["enter"]).toBe(undefined);
 		});
 	});
 });
