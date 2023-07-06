@@ -152,7 +152,6 @@ import {
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			privacyPolicyModule,
 			[ROOM_MODULE.valueOf()]: roomModule,
-			roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
