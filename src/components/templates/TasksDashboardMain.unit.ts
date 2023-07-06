@@ -94,7 +94,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 				shareModule: shareModuleMock,
 				authModule: authModuleMock,
-				[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,

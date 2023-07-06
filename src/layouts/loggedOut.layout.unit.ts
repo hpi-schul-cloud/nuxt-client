@@ -36,7 +36,7 @@ describe("loggedOutLayout", () => {
 				},
 			},
 			provide: {
-				[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				applicationErrorModule: applicationErrorModuleMock,
 			},
 			router,

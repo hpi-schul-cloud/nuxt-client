@@ -1,10 +1,11 @@
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
-import LanguageMenu from "./LanguageMenu.vue";
 import Vue from "vue";
+import LanguageMenu from "./LanguageMenu.vue";
 
 describe("@/components/templates/LanguageMenu", () => {
 	let envConfigModuleMock: EnvConfigModule;
@@ -17,7 +18,7 @@ describe("@/components/templates/LanguageMenu", () => {
 			}),
 			provide: {
 				authModule: authModuleMock,
-				envConfigModule: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModuleMock,
 			},
 			...attrs,
 		});

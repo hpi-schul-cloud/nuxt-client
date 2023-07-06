@@ -1,10 +1,11 @@
+import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import EnvConfigModule from "@/store/env-config";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 
 describe("UserLoginMigrationError", () => {
@@ -44,7 +45,7 @@ describe("UserLoginMigrationError", () => {
 				}),
 				provide: {
 					systemsModule,
-					envConfigModule,
+					[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
 				},
 				propsData: props,
 				mocks: {
