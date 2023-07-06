@@ -1,7 +1,5 @@
 import {
 	ContextExternalToolPostParams,
-	ContextExternalToolResponse,
-	ContextExternalToolSearchListResponse,
 	CustomParameterEntryParam,
 	CustomParameterResponse,
 	CustomParameterResponseLocationEnum,
@@ -10,19 +8,21 @@ import {
 	ExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 	SchoolToolConfigurationEntryResponse,
 	SchoolToolConfigurationListResponse,
 	ToolConfigurationEntryResponse,
 	ToolConfigurationListResponse,
+	ToolReferenceListResponse,
+	ToolReferenceResponse,
+	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
 import {
 	ContextExternalToolTemplateListItem,
 	ExternalToolDisplayData,
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
+	ToolConfigurationStatus,
 	ToolConfigurationTemplate,
 	ToolParameter,
 	ToolParameterLocation,
@@ -31,18 +31,6 @@ import {
 } from "@/store/external-tool";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
-
-const ResponseStatusMapping: Record<
-	SchoolExternalToolResponseStatusEnum,
-	SchoolExternalToolStatus
-> = {
-	[SchoolExternalToolResponseStatusEnum.Latest]:
-		SchoolExternalToolStatus.Latest,
-	[SchoolExternalToolResponseStatusEnum.Outdated]:
-		SchoolExternalToolStatus.Outdated,
-	[SchoolExternalToolResponseStatusEnum.Unknown]:
-		SchoolExternalToolStatus.Unknown,
-};
 
 const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -83,26 +71,41 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_required", "pages.tool.apiError.tool_param_required"],
 	["tool_param_type_mismatch", "pages.tool.apiError.tool_param_type_mismatch"],
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
+	["TOOL_STATUS_OUTDATED", "pages.tool.apiError.tool_launch_outdated"],
 ]);
 
-export function useExternalToolMappings() {
-	const mapContextExternalToolSearchListResponseToExternalToolDisplayData = (
-		response: ContextExternalToolSearchListResponse
-	): ExternalToolDisplayData[] => {
-		return response.data.map((toolResponse: ContextExternalToolResponse) =>
-			mapContextExternalToolResponse(toolResponse)
-		);
-	};
+const ToolConfigurationStatusMapping: Record<
+	ToolReferenceResponseStatusEnum,
+	ToolConfigurationStatus
+> = {
+	[ToolReferenceResponseStatusEnum.Latest]: ToolConfigurationStatus.Latest,
+	[ToolReferenceResponseStatusEnum.Outdated]: ToolConfigurationStatus.Outdated,
+	[ToolReferenceResponseStatusEnum.Unknown]: ToolConfigurationStatus.Unknown,
+};
 
-	const mapContextExternalToolResponse = (
-		toolResponse: ContextExternalToolResponse
-	): ExternalToolDisplayData => {
-		return {
-			id: toolResponse.id,
-			name: toolResponse.displayName || "Toolname",
-			logoUrl: undefined,
-			openInNewTab: true,
-		};
+export const ToolConfigurationStatusTranslationMapping: Record<
+	ToolConfigurationStatus,
+	string
+> = {
+	[ToolConfigurationStatus.Latest]: "components.externalTools.status.latest",
+	[ToolConfigurationStatus.Outdated]:
+		"components.externalTools.status.outdated",
+	[ToolConfigurationStatus.Unknown]: "components.externalTools.status.unknown",
+};
+
+export function useExternalToolMappings() {
+	const mapToolReferencesToExternalToolDisplayData = (
+		response: ToolReferenceListResponse
+	): ExternalToolDisplayData[] => {
+		return response.data.map(
+			(toolReference: ToolReferenceResponse): ExternalToolDisplayData => ({
+				id: toolReference.contextToolId,
+				logoUrl: toolReference.logoUrl,
+				name: toolReference.displayName,
+				openInNewTab: toolReference.openInNewTab,
+				status: ToolConfigurationStatusMapping[toolReference.status],
+			})
+		);
 	};
 
 	const mapSchoolExternalToolSearchListResponse = (
@@ -122,7 +125,7 @@ export function useExternalToolMappings() {
 			name: toolResponse.name,
 			parameters: toolResponse.parameters,
 			version: toolResponse.toolVersion,
-			status: ResponseStatusMapping[toolResponse.status],
+			status: ToolConfigurationStatusMapping[toolResponse.status],
 		};
 	};
 
@@ -245,7 +248,7 @@ export function useExternalToolMappings() {
 		});
 	};
 
-	const getTranslationKey = (
+	const getBusinessErrorTranslationKey = (
 		businessError: BusinessError | undefined
 	): undefined | string => {
 		if (!businessError) {
@@ -262,9 +265,23 @@ export function useExternalToolMappings() {
 		return businessError.message;
 	};
 
+	const getStatusTranslationKey = (
+		toolStatus: ToolConfigurationStatus
+	): string => {
+		const translationKey: string | undefined =
+			ToolConfigurationStatusTranslationMapping[toolStatus];
+
+		if (!translationKey) {
+			return ToolConfigurationStatusTranslationMapping[
+				ToolConfigurationStatus.Unknown
+			];
+		}
+
+		return translationKey;
+	};
+
 	return {
-		mapContextExternalToolSearchListResponseToExternalToolDisplayData,
-		mapContextExternalToolResponse,
+		mapToolReferencesToExternalToolDisplayData,
 		mapSchoolExternalToolSearchListResponse,
 		mapSchoolExternalToolResponse,
 		mapExternalToolConfigurationTemplateResponse,
@@ -272,6 +289,7 @@ export function useExternalToolMappings() {
 		mapSchoolToolConfigurationListResponse,
 		mapToolConfigurationTemplateToSchoolExternalToolPostParams,
 		mapToolConfigurationTemplateToContextExternalToolPostParams,
-		getTranslationKey,
+		getBusinessErrorTranslationKey,
+		getStatusTranslationKey,
 	};
 }

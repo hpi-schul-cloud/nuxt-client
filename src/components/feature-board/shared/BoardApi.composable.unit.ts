@@ -1,8 +1,6 @@
 import { ContentElementType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
-import { initializeAxios } from "@/utils/api";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import * as axios from "axios";
 import { AnyContentElement } from "../types/ContentElement";
 import { useBoardApi } from "./BoardApi.composable";
 
@@ -52,12 +50,6 @@ jest
 jest
 	.spyOn(serverApi, "BoardElementApiFactory")
 	.mockReturnValue(mockApi as unknown as serverApi.BoardElementApiInterface);
-
-initializeAxios({
-	request: async (_: string) => ({
-		data: "some data",
-	}),
-} as axios.AxiosInstance);
 
 describe("BoardApi.composable", () => {
 	afterEach(() => {

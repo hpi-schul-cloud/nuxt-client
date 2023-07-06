@@ -7,7 +7,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolStatus } from "@/store/external-tool/school-external-tool-status.enum";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 
 const externalToolsModuleMock = () => {
 	return {
@@ -54,7 +54,7 @@ describe("useSchoolExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: SchoolExternalToolStatus.Latest,
+			status: ToolConfigurationStatus.Latest,
 			outdated: false,
 		};
 

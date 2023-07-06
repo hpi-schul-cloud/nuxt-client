@@ -167,6 +167,25 @@ export interface BasicToolConfigParams {
 /**
  * 
  * @export
+ * @interface BoardContextResponse
+ */
+export interface BoardContextResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardContextResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {BoardExternalReferenceType}
+     * @memberof BoardContextResponse
+     */
+    type: BoardExternalReferenceType;
+}
+/**
+ * 
+ * @export
  * @interface BoardElementResponse
  */
 export interface BoardElementResponse {
@@ -192,6 +211,15 @@ export enum BoardElementResponseTypeEnum {
     Task = 'task',
     Lesson = 'lesson',
     ColumnBoard = 'column-board'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum BoardExternalReferenceType {
+    Course = 'course'
 }
 
 /**
@@ -615,7 +643,7 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    SubmissionContainer = 'submissionContainer'
 }
 
 /**
@@ -962,7 +990,7 @@ export interface CreateCardBodyParams {
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
     RichText = 'richText',
-    Task = 'task'
+    SubmissionContainer = 'submissionContainer'
 }
 
 /**
@@ -1349,10 +1377,10 @@ export interface DashboardResponse {
 export interface ElementContentUpdateBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | TaskElementContentBody}
+     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
      * @memberof ElementContentUpdateBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | TaskElementContentBody;
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
 }
 /**
  * 
@@ -3857,6 +3885,38 @@ export interface SingleColumnBoardResponse {
 /**
  * 
  * @export
+ * @interface SubmissionContainerContentBody
+ */
+export interface SubmissionContainerContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof SubmissionContainerContentBody
+     */
+    dueDate: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionContainerElementContentBody
+ */
+export interface SubmissionContainerElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof SubmissionContainerElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {SubmissionContainerContentBody}
+     * @memberof SubmissionContainerElementContentBody
+     */
+    content: SubmissionContainerContentBody;
+}
+/**
+ * 
+ * @export
  * @interface SubmissionStatusListResponse
  */
 export interface SubmissionStatusListResponse {
@@ -4043,19 +4103,6 @@ export interface TaskCardResponse {
 /**
  * 
  * @export
- * @interface TaskContentBody
- */
-export interface TaskContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskContentBody
-     */
-    dueDate: string;
-}
-/**
- * 
- * @export
  * @interface TaskCopyApiParams
  */
 export interface TaskCopyApiParams {
@@ -4120,25 +4167,6 @@ export interface TaskCreateParams {
      * @memberof TaskCreateParams
      */
     dueDate?: string;
-}
-/**
- * 
- * @export
- * @interface TaskElementContentBody
- */
-export interface TaskElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof TaskElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TaskContentBody}
-     * @memberof TaskElementContentBody
-     */
-    content: TaskContentBody;
 }
 /**
  * 
@@ -4531,7 +4559,7 @@ export interface ToolReferenceResponse {
      * @type {string}
      * @memberof ToolReferenceResponse
      */
-    logoUrl?: string | null;
+    logoUrl?: string;
     /**
      * The display name of the tool
      * @type {string}
@@ -4637,6 +4665,19 @@ export interface UserInfoResponse {
      * @memberof UserInfoResponse
      */
     lastName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserLoginMigrationMandatoryParams
+ */
+export interface UserLoginMigrationMandatoryParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserLoginMigrationMandatoryParams
+     */
+    mandatory: boolean;
 }
 /**
  * 
@@ -5891,7 +5932,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5929,7 +5970,45 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerGetBoardContext: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerGetBoardContext', 'boardId', boardId)
+            const localVarPath = `/boards/{boardId}/context`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5967,7 +6046,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6032,7 +6111,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6043,7 +6122,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerGetBoardContext(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardContextResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerGetBoardContext(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6054,7 +6144,7 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6086,7 +6176,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Delete a single board.
+         * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6096,7 +6186,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Get the skeleton of a a single board.
+         * @summary Get the context of a board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse> {
+            return localVarFp.boardControllerGetBoardContext(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the skeleton of a a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6106,7 +6206,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Update the title of a single board.
+         * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
@@ -6136,7 +6236,7 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Delete a single board.
+     * @summary Delete a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6146,7 +6246,17 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Get the skeleton of a a single board.
+     * @summary Get the context of a board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse>;
+
+    /**
+     * 
+     * @summary Get the skeleton of a a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6156,7 +6266,7 @@ export interface BoardApiInterface {
 
     /**
      * 
-     * @summary Update the title of a single board.
+     * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -6188,7 +6298,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Delete a single board.
+     * @summary Delete a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6200,7 +6310,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Get the skeleton of a a single board.
+     * @summary Get the context of a board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerGetBoardContext(boardId: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerGetBoardContext(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the skeleton of a a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6212,7 +6334,7 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
 
     /**
      * 
-     * @summary Update the title of a single board.
+     * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
@@ -13542,7 +13664,8 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -13550,7 +13673,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool: async (name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options: any = {}): Promise<RequestArgs> => {
+        toolControllerFindExternalTool: async (name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13569,6 +13692,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (name !== undefined) {
                 localVarQueryParameter['name'] = name;
+            }
+
+            if (clientId !== undefined) {
+                localVarQueryParameter['clientId'] = clientId;
             }
 
             if (skip !== undefined) {
@@ -14064,7 +14191,8 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -14072,8 +14200,8 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options);
+        async toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14272,7 +14400,8 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {string} [name] 
+         * @param {string} [name] Name of the external tool
+         * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -14280,8 +14409,8 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse> {
-            return localVarFp.toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse> {
+            return localVarFp.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14469,7 +14598,8 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @param {string} [name] 
+     * @param {string} [name] Name of the external tool
+     * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -14478,7 +14608,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+    toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
 
     /**
      * 
@@ -14684,7 +14814,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @param {string} [name] 
+     * @param {string} [name] Name of the external tool
+     * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -14693,8 +14824,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerFindExternalTool(name?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
-        return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
+        return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15884,6 +16015,45 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerSetMigrationMandatory: async (userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userLoginMigrationMandatoryParams' is not null or undefined
+            assertParamExists('userLoginMigrationControllerSetMigrationMandatory', 'userLoginMigrationMandatoryParams', userLoginMigrationMandatoryParams)
+            const localVarPath = `/user-login-migrations/mandatory`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userLoginMigrationMandatoryParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15956,6 +16126,16 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16001,6 +16181,15 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse> {
+            return localVarFp.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16041,6 +16230,15 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
      * 
@@ -16089,6 +16287,17 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerRestartMigration(options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerRestartMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

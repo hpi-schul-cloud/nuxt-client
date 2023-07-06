@@ -1,27 +1,26 @@
 import {
 	ApiValidationError,
 	ContextExternalToolPostParams,
-	ContextExternalToolSearchListResponse,
 	ToolApiInterface,
+	ToolReferenceListResponse,
+	ToolReferenceResponse,
+	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import {
 	businessErrorFactory,
-	toolConfigurationTemplateFactory,
-	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
+	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { User } from "./types/auth";
 import { BusinessError } from "./types/commons";
-import { ToolContextType } from "./external-tool";
+import { ExternalToolDisplayData, ToolContextType } from "./external-tool";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import ContextExternalToolsModule from "./context-external-tools";
-import { ExternalToolDisplayData } from "./external-tool";
-import { ContextExternalTool } from "./external-tool/context-external-tool";
 
 describe("ContextExternalToolsModule", () => {
 	let module: ContextExternalToolsModule;
@@ -40,6 +39,7 @@ describe("ContextExternalToolsModule", () => {
 			toolContextControllerCreateContextExternalTool: jest.fn(),
 			toolContextControllerDeleteContextExternalTool: jest.fn(),
 			toolContextControllerGetContextExternalToolsForContext: jest.fn(),
+			toolControllerGetToolReferences: jest.fn(),
 		};
 		jest
 			.spyOn(serverApi, "ToolApiFactory")
@@ -431,7 +431,7 @@ describe("ContextExternalToolsModule", () => {
 					const setLoadingSpy = jest.spyOn(module, "setLoading");
 					const setBusinessSpy = jest.spyOn(module, "setBusinessError");
 
-					toolApiMock.toolContextControllerGetContextExternalToolsForContext.mockRejectedValue(
+					toolApiMock.toolControllerGetToolReferences.mockRejectedValue(
 						axiosError
 					);
 
@@ -477,25 +477,29 @@ describe("ContextExternalToolsModule", () => {
 					setupWithAuth();
 					const { toolApiMock } = mockToolApi();
 
-					const contextExternalTool: ContextExternalTool =
-						contextExternalToolFactory.build({ id: "toolId" });
-					const externalToolDisplayData: ExternalToolDisplayData =
-						externalToolDisplayDataFactory.build({
-							id: "toolId",
-							openInNewTab: true,
-							logoUrl: undefined,
-							name: "Toolname",
-						});
-
-					const searchListResponse: ContextExternalToolSearchListResponse = {
-						data: [contextExternalTool],
+					const toolReferenceResponse: ToolReferenceResponse = {
+						contextToolId: "toolId",
+						displayName: "toolName",
+						logoUrl: undefined,
+						openInNewTab: true,
+						status: ToolReferenceResponseStatusEnum.Latest,
 					};
 
-					toolApiMock.toolContextControllerGetContextExternalToolsForContext.mockResolvedValue(
-						{
-							data: searchListResponse,
-						}
-					);
+					const toolReferenceListResponse: ToolReferenceListResponse = {
+						data: [toolReferenceResponse],
+					};
+
+					toolApiMock.toolControllerGetToolReferences.mockResolvedValue({
+						data: toolReferenceListResponse,
+					});
+
+					const externalToolDisplayData: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							id: toolReferenceResponse.contextToolId,
+							openInNewTab: toolReferenceResponse.openInNewTab,
+							logoUrl: toolReferenceResponse.logoUrl,
+							name: toolReferenceResponse.displayName,
+						});
 
 					const setContextExternalToolsSpy = jest.spyOn(
 						module,
@@ -504,11 +508,12 @@ describe("ContextExternalToolsModule", () => {
 
 					return {
 						toolApiMock,
-						searchListResponse,
+						toolReferenceResponse,
 						setContextExternalToolsSpy,
 						externalToolDisplayData,
 					};
 				};
+
 				it("should call the toolApi.toolContextControllerGetContextExternalToolsForContext", async () => {
 					const { toolApiMock } = setup();
 
@@ -518,7 +523,7 @@ describe("ContextExternalToolsModule", () => {
 					});
 
 					expect(
-						toolApiMock.toolContextControllerGetContextExternalToolsForContext
+						toolApiMock.toolControllerGetToolReferences
 					).toHaveBeenCalledWith("contextId", ToolContextType.COURSE);
 				});
 

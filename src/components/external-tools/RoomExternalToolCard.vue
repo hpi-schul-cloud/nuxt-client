@@ -12,25 +12,30 @@
 				class="mx-auto logo"
 				:src="tool.logoUrl"
 				contain
-				data-testid="tool-card-logo"
-				:alt="$t('pages.rooms.tools.logo')"
-				crossorigin="anonymous"
+				data-testId="tool-card-logo"
+				:alt="t('pages.rooms.tools.logo')"
 			/>
 		</div>
 		<h5 class="title my-auto">{{ tool.name }}</h5>
 		<span
 			v-if="tool.openInNewTab"
 			class="ml-1 my-auto no-wrap"
-			data-testid="tool-card-new-tab-text"
-			>({{ $t("pages.rooms.tools.newTab") }})</span
+			data-testId="tool-card-new-tab-text"
+			>({{ t("pages.rooms.tools.newTab") }})</span
 		>
+		<span
+			v-if="isToolOutdated"
+			class="ml-1 my-auto no-wrap"
+			data-testId="tool-card-status-text"
+			><b>({{ getStatusText() }})</b>
+		</span>
 		<div class="mx-auto"></div>
 		<div v-if="canEdit" class="ml-1 my-auto">
 			<more-item-menu
 				class="menu"
 				:menu-items="menuItems"
 				:show="true"
-				data-testid="tool-card-menu"
+				data-testId="tool-card-menu"
 			/>
 		</div>
 	</v-card>
@@ -45,7 +50,9 @@ import {
 	mdiPuzzleOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { defineComponent, PropType } from "vue";
+import { computed, ComputedRef, defineComponent, PropType } from "vue";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -95,10 +102,23 @@ export default defineComponent({
 			},
 		];
 
+		const { getStatusTranslationKey } = useExternalToolMappings();
+
+		const getStatusText = (): string => {
+			return t(getStatusTranslationKey(props.tool.status));
+		};
+
+		const isToolOutdated: ComputedRef = computed(
+			() => props.tool.status === ToolConfigurationStatus.Outdated
+		);
+
 		return {
+			t,
 			handleClick,
 			menuItems,
 			defaultToolIcon,
+			getStatusText,
+			isToolOutdated,
 		};
 	},
 });

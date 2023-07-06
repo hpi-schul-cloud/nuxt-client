@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="d-flex w-100 justify-center button-background pb-4 pt-2 pr-12 text-center sticky"
+		class="d-flex w-100 justify-center button-background pb-4 pt-2 pr-6 text-center sticky"
 		style="height: 4rem"
 		ref="sticky"
 	>
@@ -14,7 +14,7 @@
 			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
-			<span class="d-sr-only">Add Card</span>
+			<span class="d-sr-only">{{ $t("components.board.action.addCard") }}</span>
 		</VBtn>
 	</div>
 </template>
@@ -55,6 +55,6 @@ export default defineComponent({
 		rgba(255, 255, 255, 1) 50%,
 		rgba(255, 255, 255, 0) 100%
 	);
-	width: 400px;
+	width: 380px;
 }
 </style>

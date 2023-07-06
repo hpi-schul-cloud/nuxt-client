@@ -153,6 +153,9 @@ export default defineComponent({
 					},
 				],
 			},
+			link: {
+				defaultProtocol: "//",
+			},
 			highlight: {
 				options: [
 					{
