@@ -9,7 +9,6 @@ import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
 import calendar from "@/store/calendar";
 import classes from "@/store/classes";
-import consentVersions from "@/store/consent-versions";
 import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
@@ -36,7 +35,6 @@ export default new Store({
 		bulkConsent,
 		calendar,
 		classes,
-		"consent-versions": consentVersions,
 		courses,
 		"ldap-config": ldapConfig,
 		lessons,
