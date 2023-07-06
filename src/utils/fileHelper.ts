@@ -16,6 +16,19 @@ export async function dataUrlToFile(
 	return new File([blob], fileName, { type: "image/png" });
 }
 
+export function downloadFile(url: string, fileName: string) {
+	const link = document.createElement("a");
+	link.href = url;
+	link.download = fileName;
+	link.hidden = true;
+	// This functionality adds a hidden <a> element to the page,
+	// fires its click event and removes it afterwards, as it is
+	// no longer needed and should not clutter the page any further.
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
+
 export function convertFileSize(fileSize: number): {
 	convertedSize: number;
 	unit: string;

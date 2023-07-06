@@ -1,16 +1,24 @@
 <template>
-	<v-card class="mb-4" elevation="0" outlined dense>
+	<v-card
+		class="mb-4"
+		data-testid="board-file-element"
+		elevation="0"
+		outlined
+		dense
+	>
 		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
+				:isDownloadAllowed="!isBlockedByVirusScan"
 			/>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
 				:fileId="$props.element.id"
 				:url="url"
+				:isDownloadAllowed="!isBlockedByVirusScan"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -23,10 +31,13 @@
 				:fileSize="fileRecord.size"
 				:fileName="fileRecord.name"
 			/>
-			<FileContentElementAlert v-if="isBlocked" />
+			<FileContentElementAlert v-if="isBlockedByVirusScan" />
 		</div>
 		<v-card-text v-else>
-			<v-progress-linear indeterminate></v-progress-linear>
+			<v-progress-linear
+				data-testid="board-file-element-progress-bar"
+				indeterminate
+			></v-progress-linear>
 		</v-card-text>
 	</v-card>
 </template>
@@ -74,13 +85,15 @@ export default defineComponent({
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlocked = computed(
+		const isBlockedByVirusScan = computed(
 			() =>
 				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
 		);
 
 		const url = computed(() =>
-			!isBlocked.value && fileRecord.value?.url ? fileRecord.value?.url : ""
+			!isBlockedByVirusScan.value && fileRecord.value?.url
+				? fileRecord.value?.url
+				: ""
 		);
 
 		onMounted(() => {
@@ -140,7 +153,7 @@ export default defineComponent({
 		return {
 			onDeleteElement,
 			isAutoFocus,
-			isBlocked,
+			isBlockedByVirusScan,
 			fileRecord,
 			modelValue,
 			onMoveFileEditDown,
