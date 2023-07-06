@@ -55,46 +55,47 @@ export default defineComponent({
 		const language = i18n.locale;
 		const charCount = ref(0);
 
-		const toolbarItems = [];
-		toolbarItems["simple"] = [
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"highlight",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"removeFormat",
-		];
-		toolbarItems["regular"] = [
-			"undo",
-			"redo",
-			"|",
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"underline",
-			"strikethrough",
-			"highlight",
-			"fontBackgroundColor",
-			"code",
-			"superscript",
-			"subscript",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"math",
-			"horizontalLine",
-			"|",
-			"blockQuote",
-			"insertTable",
-			"specialCharacters",
-			"removeFormat",
-		];
+		const toolbarItems = {
+			simple: [
+				"heading",
+				"|",
+				"bold",
+				"italic",
+				"highlight",
+				"|",
+				"link",
+				"bulletedList",
+				"numberedList",
+				"removeFormat",
+			],
+			regular: [
+				"undo",
+				"redo",
+				"|",
+				"heading",
+				"|",
+				"bold",
+				"italic",
+				"underline",
+				"strikethrough",
+				"highlight",
+				"fontBackgroundColor",
+				"code",
+				"superscript",
+				"subscript",
+				"|",
+				"link",
+				"bulletedList",
+				"numberedList",
+				"math",
+				"horizontalLine",
+				"|",
+				"blockQuote",
+				"insertTable",
+				"specialCharacters",
+				"removeFormat",
+			],
+		};
 
 		const plugins = [
 			"Autoformat",
@@ -214,34 +215,6 @@ export default defineComponent({
 						color: "#cdd3f6",
 						type: "marker",
 					},
-					{
-						model: "marker9",
-						class: "marker-9",
-						title: "Marker 9",
-						color: "#e2cbe6",
-						type: "marker",
-					},
-					{
-						model: "marker10",
-						class: "marker-10",
-						title: "Marker 10",
-						color: "#eec3f5",
-						type: "marker",
-					},
-					{
-						model: "marker11",
-						class: "marker-11",
-						title: "Marker 11",
-						color: "#f2d0db",
-						type: "marker",
-					},
-					{
-						model: "marker12",
-						class: "marker-13",
-						title: "Marker 12",
-						color: "#eec3c3",
-						type: "marker",
-					},
 				],
 			},
 			wordCount: {
@@ -326,18 +299,6 @@ export default defineComponent({
 	}
 	.marker-8 {
 		background-color: #cdd3f6;
-	}
-	.marker-9 {
-		background-color: #e2cbe6;
-	}
-	.marker-10 {
-		background-color: #eec3f5;
-	}
-	.marker-11 {
-		background-color: #f2d0db;
-	}
-	.marker-12 {
-		background-color: #eec3c3;
 	}
 }
 // TODO move all style to ckbuild
