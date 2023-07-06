@@ -7,8 +7,8 @@
 			</h2>
 			<p>
 				Ministerium für Bildung, Jugend und Sport des Landes Brandenburg<br />
-				Vertreten durch die Ministerin für Bildung, Jugend und Sport Britta
-				Ernst<br />
+				Vertreten durch die Minister für Bildung, Jugend und Sport Steffen
+				Freiberg<br />
 				Anschrift: Heinrich-Mann-Allee 107, 14473 Potsdam
 			</p>
 			<p>Inhaltlich verantwortlich im Sinne von § 18 Absatz 2 MStV:</p>
