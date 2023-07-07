@@ -15,6 +15,7 @@ import {
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -24,6 +25,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -84,9 +86,14 @@ import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
 import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
 	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE,
+	VIDEO_CONFERENCE_MODULE,
 } from "./utils/inject";
 
 (async () => {
@@ -128,20 +135,22 @@ import {
 			accountsModule,
 			applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
-			contextExternalToolsModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-			roomModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			privacyPolicyModule,
+			[ROOM_MODULE.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
@@ -150,7 +159,8 @@ import {
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			[I18N_KEY as symbol]: i18n,
+			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

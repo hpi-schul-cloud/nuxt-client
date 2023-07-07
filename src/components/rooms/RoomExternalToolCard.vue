@@ -2,7 +2,7 @@
 	<v-card
 		class="card"
 		max-width="100%"
-		aria-label="ariaLabel"
+		:aria-label="tool.name"
 		hover
 		@click="handleClick"
 	>
@@ -16,7 +16,7 @@
 				:alt="t('pages.rooms.tools.logo')"
 			/>
 		</div>
-		<h5 class="title my-auto">{{ tool.name }}</h5>
+		<h5 class="card-title my-auto">{{ tool.name }}</h5>
 		<span
 			v-if="tool.openInNewTab"
 			class="ml-1 my-auto no-wrap"
@@ -45,11 +45,7 @@
 import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import {
-	mdiPencilOutline,
-	mdiPuzzleOutline,
-	mdiTrashCanOutline,
-} from "@mdi/js";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { ToolConfigurationStatus } from "@/store/external-tool";
@@ -71,9 +67,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 
-		const t = (key: string): string => i18n.tc(key, 0) || key;
-
-		const defaultToolIcon = mdiPuzzleOutline;
+		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
 			emit("click", props.tool);
@@ -116,7 +110,6 @@ export default defineComponent({
 			t,
 			handleClick,
 			menuItems,
-			defaultToolIcon,
 			getStatusText,
 			isToolOutdated,
 		};
@@ -132,7 +125,7 @@ export default defineComponent({
 	padding: 16px;
 }
 
-.title {
+.card-title {
 	overflow: hidden;
 	max-height: 100%;
 }
