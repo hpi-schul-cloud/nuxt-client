@@ -17,7 +17,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
-import RoomExternalToolsOverview from "@/pages/rooms/external-tools/RoomExternalToolsOverview.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 const mockData = {
 	roomId: "123",

@@ -1,22 +1,5 @@
 <template>
-	<div class="centered-container">
-		<div
-			v-if="tools.length === 0"
-			class="mt-16 text-center"
-			data-testid="tools-empty-state"
-		>
-			<v-custom-empty-state
-				ref="tools-empty-state"
-				image="tools-empty-state"
-				:title="t('pages.rooms.tools.emptyState')"
-				class="mt-16"
-				imgHeight="200px"
-			/>
-		</div>
-		<v-alert v-if="apiError.message" light prominent text type="error">
-			{{ t(getBusinessErrorTranslationKey(apiError)) }}
-		</v-alert>
-
+	<div>
 		<room-external-tool-card
 			v-for="(tool, index) in tools"
 			:key="index"
@@ -28,12 +11,6 @@
 			@click="onClickTool"
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
-
-		<v-progress-linear
-			:active="loading"
-			data-testId="progress-bar"
-			indeterminate
-		></v-progress-linear>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -95,74 +72,62 @@
 </template>
 
 <script lang="ts">
-import RoomExternalToolCard from "@/components/external-tools/RoomExternalToolCard.vue";
-import AuthModule from "@/store/auth";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	onMounted,
-	ref,
-	Ref,
-} from "vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import {
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import { BusinessError } from "@/store/types/commons";
-import VueI18n from "vue-i18n";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import ExternalToolsModule from "@/store/external-tools";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	PropType,
+	ref,
+	Ref,
+} from "vue";
+import VueI18n from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { BusinessError } from "@/store/types/commons";
 
 export default defineComponent({
-	name: "RoomExternalToolsOverview",
+	name: "RoomExternalToolsSection",
 	components: {
 		VCustomDialog,
 		RoomExternalToolCard,
 		RenderHTML,
-		VCustomEmptyState,
 	},
 	props: {
-		roomId: {
-			type: String,
+		tools: {
+			type: Array as PropType<ExternalToolDisplayData[]>,
 			required: true,
 		},
 	},
-	setup(props) {
-		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
-		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
-			inject<ContextExternalToolsModule>("contextExternalToolsModule");
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
+	setup() {
+		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
+			CONTEXT_EXTERNAL_TOOLS_MODULE
+		);
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE
+		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
-
-		onMounted(async () => {
-			await contextExternalToolsModule?.loadExternalToolDisplayData({
-				contextId: props.roomId,
-				contextType: ToolContextType.COURSE,
-			});
-		});
+		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined) => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
-
-		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
-			() => contextExternalToolsModule?.getExternalToolDisplayDataList || []
-		);
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -184,7 +149,7 @@ export default defineComponent({
 
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
-				await contextExternalToolsModule?.deleteContextExternalTool(
+				await contextExternalToolsModule.deleteContextExternalTool(
 					itemToDelete.value.id
 				);
 			}
@@ -202,7 +167,7 @@ export default defineComponent({
 
 		const launchTool = async (contextToolId: string) => {
 			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule?.loadToolLaunchData(contextToolId);
+				await externalToolsModule.loadToolLaunchData(contextToolId);
 
 			switch (launchToolResponse?.method) {
 				case ToolLaunchRequestResponseMethodEnum.Get:
@@ -247,23 +212,12 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const canEdit: ComputedRef<boolean> = computed(
-			() =>
-				!!authModule?.getUserPermissions.includes(
-					"CONTEXT_TOOL_ADMIN".toLowerCase()
-				)
-		);
-
-		const apiError: ComputedRef<BusinessError | undefined> = computed(
-			() => contextExternalToolsModule?.getBusinessError
-		);
-
-		const loading: ComputedRef<boolean | undefined> = computed(
-			() => contextExternalToolsModule?.getLoading
+		const canEdit: ComputedRef<boolean> = computed(() =>
+			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
 		);
 
 		const launchError: ComputedRef<BusinessError | undefined> = computed(
-			() => externalToolsModule?.getBusinessError
+			() => externalToolsModule.getBusinessError
 		);
 
 		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
@@ -273,14 +227,12 @@ export default defineComponent({
 		);
 
 		const onCloseErrorDialog = () => {
-			externalToolsModule?.resetBusinessError();
+			externalToolsModule.resetBusinessError();
 		};
 
 		return {
-			loading,
 			t,
 			getBusinessErrorTranslationKey,
-			tools,
 			canEdit,
 			itemToDelete,
 			getItemToDeleteName,
@@ -290,7 +242,6 @@ export default defineComponent({
 			onDeleteTool,
 			onClickTool,
 			onEditTool,
-			apiError,
 			isErrorDialogOpen,
 			launchError,
 			onCloseErrorDialog,
@@ -300,11 +251,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.centered-container {
-	max-width: var(--size-content-width-max);
-	margin: 0 auto;
-}
-
 .text-break-word {
 	word-break: break-word;
 }
