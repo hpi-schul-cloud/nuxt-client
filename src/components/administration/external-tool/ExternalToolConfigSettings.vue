@@ -16,13 +16,13 @@ import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	PropType,
 	ref,
 	Ref,
 } from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
+import { EXTERNAL_TOOLS_MODULE, injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -35,11 +35,9 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
-		if (!externalToolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE
+		);
 
 		const template: Ref<ToolConfigurationTemplate> = ref(props.value);
 
