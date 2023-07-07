@@ -7,7 +7,7 @@
 			</h2>
 			<p>
 				Ministerium für Bildung, Jugend und Sport des Landes Brandenburg<br />
-				Vertreten durch die Minister für Bildung, Jugend und Sport Steffen
+				Vertreten durch den Minister für Bildung, Jugend und Sport Steffen
 				Freiberg<br />
 				Anschrift: Heinrich-Mann-Allee 107, 14473 Potsdam
 			</p>
