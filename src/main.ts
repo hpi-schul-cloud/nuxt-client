@@ -4,8 +4,8 @@ import {
 	authModule,
 	autoLogoutModule,
 	collaborativeFilesModule,
-	contextExternalToolsModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
@@ -15,6 +15,7 @@ import {
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -24,6 +25,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -66,8 +68,8 @@ Vue.mixin({
 	},
 });
 
-import VueDOMPurifyHTML from "vue-dompurify-html";
 import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -83,7 +85,16 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE,
+	VIDEO_CONFERENCE_MODULE,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -124,20 +135,23 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 			accountsModule,
 			applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
-			contextExternalToolsModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
 			envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-			roomModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			privacyPolicyModule,
+			[ROOM_MODULE.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
@@ -146,7 +160,8 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "./utils/inject";
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			[I18N_KEY as symbol]: i18n,
+			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

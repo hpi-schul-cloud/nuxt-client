@@ -4,6 +4,13 @@ export type BusinessError = {
 	error?: object | ApiValidationError;
 };
 
+export type ApiResponseError = {
+	code: number;
+	type: string;
+	title: string;
+	message: string;
+};
+
 export type ApiValidationError = {
 	code: number;
 	type: string;

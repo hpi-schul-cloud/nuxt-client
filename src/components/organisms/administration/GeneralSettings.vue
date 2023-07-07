@@ -156,9 +156,8 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
-import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
+import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
-import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -219,20 +218,18 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
-		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = await dataUrlToFile(this.school.logo_dataUrl, "logo");
+				schoolCopy.logo = this.school.logo_dataUrl;
 			}
 			this.localSchool = schoolCopy;
 		},
 		printDate,
 		toBase64,
-		dataUrlToFile,
 		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			const newPermissions = {
