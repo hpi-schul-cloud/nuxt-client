@@ -1,19 +1,22 @@
 import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMigrationConsent.page.vue";
+import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
-import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
 import {
 	MigrationLinks,
 	MigrationPageOrigin,
 } from "@/store/types/user-login-migration";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import UserLoginMigrationModule from "@/store/user-login-migration";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import Vue from "vue";
 
 describe("UserLoginMigrationConsent", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
+	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
 	const setup = async (props: object) => {
 		document.body.setAttribute("data-app", "true");
@@ -38,6 +41,7 @@ describe("UserLoginMigrationConsent", () => {
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getMigrationLinks: migrationLinksMock,
 		});
+		envConfigModule = createModuleMocks(EnvConfigModule);
 
 		const wrapper: Wrapper<Vue> = mount(
 			UserLoginMigrationConsent as MountOptions<Vue>,
@@ -48,6 +52,7 @@ describe("UserLoginMigrationConsent", () => {
 				provide: {
 					systemsModule,
 					userLoginMigrationModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				propsData: props,
 				mocks: {

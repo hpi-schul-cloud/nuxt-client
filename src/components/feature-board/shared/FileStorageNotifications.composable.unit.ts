@@ -23,7 +23,7 @@ const setupMountComposable = () => {
 	return mountComposable(() => useFileStorageNotifier(), {
 		[I18N_KEY as symbol]: i18nModule,
 		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-		[ENV_CONFIG_MODULE_KEY as symbol]: configModule,
+		[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
 	});
 };
 
