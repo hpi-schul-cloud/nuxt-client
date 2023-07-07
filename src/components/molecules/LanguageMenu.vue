@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
 
 export default {
@@ -51,7 +52,10 @@ export default {
 			menuVisible: false,
 		};
 	},
-	inject: ["authModule", "envConfigModule"],
+	inject: {
+		authModule: { from: "authModule" },
+		envConfigModule: { from: ENV_CONFIG_MODULE_KEY },
+	},
 	computed: {
 		availableItems: {
 			get() {
