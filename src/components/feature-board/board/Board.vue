@@ -46,7 +46,7 @@
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { computed, defineComponent, onMounted, watch } from "vue";
+import { computed, defineComponent, onMounted, watch, onUnmounted } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
@@ -81,7 +81,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-		const { showInfo } = useBoardNotifier();
+		const { showInfo, resetNotifier } = useBoardNotifier();
 
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
@@ -187,6 +187,10 @@ export default defineComponent({
 					false
 				);
 			}
+		});
+
+		onUnmounted(() => {
+			resetNotifier();
 		});
 
 		return {
