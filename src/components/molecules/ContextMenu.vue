@@ -23,11 +23,9 @@
 				@keydown.down.prevent="focusNext(index)"
 			>
 				<span class="context-menu__button-icon">
-					<base-icon
-						v-if="action.icon"
-						:source="action['icon-source'] || 'material'"
-						:icon="action.icon"
-					/>
+					<v-icon v-if="action.icon" class="material-icon">{{
+						action.icon
+					}}</v-icon>
 				</span>
 				<div
 					:class="{

@@ -2,28 +2,16 @@
 	<div class="admin-table-legend section">
 		<span v-if="showIcons" data-testid="legend-icons">
 			<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
-			<div class="consent-icon">
+			<ul class="consent-icon">
 				<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
-					<span v-if="icon.style">
-						<base-icon
-							source="material"
-							:icon="icon.icon"
-							:color="icon.color"
-							:style="icon.style"
-						/>
-						{{ icon.label }}
-					</span>
-
-					<span v-else>
-						<base-icon
-							source="material"
-							:icon="icon.icon"
-							:color="icon.color"
-						/>
+					<v-icon class="material-icon" :color="icon.color">{{
+						icon.icon
+					}}</v-icon>
+					<span>
 						{{ icon.label }}
 					</span>
 				</li>
-			</div>
+			</ul>
 		</span>
 
 		<span v-if="showExternalSyncHint" class="wrapper">
@@ -105,6 +93,7 @@ $vertically-center: auto 0;
 	justify-content: left;
 	margin-top: var(--space-sm);
 	margin-bottom: var(--space-xl);
+	padding-left: 0;
 
 	> li {
 		list-style: none;
