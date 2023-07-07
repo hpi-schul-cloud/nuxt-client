@@ -45,7 +45,7 @@ describe("UserLoginMigrationError", () => {
 				}),
 				provide: {
 					systemsModule,
-					[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				propsData: props,
 				mocks: {

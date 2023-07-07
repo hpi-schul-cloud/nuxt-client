@@ -18,7 +18,7 @@ describe("@/components/templates/LanguageMenu", () => {
 			}),
 			provide: {
 				authModule: authModuleMock,
-				[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			...attrs,
 		});
