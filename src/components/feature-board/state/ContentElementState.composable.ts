@@ -1,7 +1,9 @@
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref, watch } from "vue";
-import { useCardHostInteractionHandler } from "../CardHostInteractionHandler.composable";
+import { useBoardApi } from "../shared/BoardApi.composable";
+import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 import { AnyContentElement } from "../types/ContentElement";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -10,7 +12,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
-	useCardHostInteractionHandler(() => {
+	useInlineEditInteractionHandler(() => {
 		isAutoFocus.value = true;
 	});
 	const elementRef = toRef(props, "element");
@@ -19,10 +21,13 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const isAutoFocus = ref<boolean>(false);
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
+	const { updateElementCall } = useBoardApi();
+	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
+
 	watchDebounced(
 		modelValue.value,
-		(modelValue) => {
-			updateElement(unref(modelValue));
+		async (modelValue) => {
+			await updateElement(unref(modelValue));
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
@@ -37,8 +42,12 @@ export const useContentElementState = <T extends AnyContentElement>(
 		}
 	);
 
-	const updateElement = (payload: T["content"]) => {
+	const updateElement = async (payload: T["content"]) => {
 		console.log("update element", { ...payload });
+		const status = await updateElementCall(props.element);
+		if (isErrorCode(status)) {
+			showFailure(generateErrorText("update", "boardElement"));
+		}
 	};
 
 	return {

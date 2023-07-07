@@ -1,14 +1,14 @@
-import Vuetify from "vuetify";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskItemStudent from "./TaskItemStudent";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import TasksModule from "@/store/tasks";
-import CopyModule from "@/store/copy";
-import NotifierModule from "@/store/notifier";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
+import CopyModule from "@/store/copy";
+import NotifierModule from "@/store/notifier";
+import TasksModule from "@/store/tasks";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import TaskItemStudent from "./TaskItemStudent";
 
 const {
 	tasks,
@@ -18,43 +18,40 @@ const {
 	betaTask,
 } = mocks;
 
-describe("@/components/molecules/TaskItemStudent", () => {
-	let vuetify;
-	let tasksModuleMock;
-	let copyModuleMock;
-	let notifierModuleMock;
+let tasksModuleMock;
+let copyModuleMock;
+let notifierModuleMock;
 
+const mockRouter = {
+	push: jest.fn(),
+};
+
+const getWrapper = (props, options) => {
+	return mount(TaskItemStudent, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
+		provide: {
+			tasksModule: tasksModuleMock,
+			copyModule: copyModuleMock,
+			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
+			[I18N_KEY]: { t: (key) => key },
+		},
+		propsData: props,
+		...options,
+		mocks: {
+			$router: mockRouter,
+		},
+	});
+};
+
+describe("@/components/molecules/TaskItemStudent", () => {
 	beforeEach(() => {
-		vuetify = new Vuetify();
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
-
-	const mockRouter = {
-		push: jest.fn(),
-	};
-
-	const getWrapper = (props, options) => {
-		return mount(TaskItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			provide: {
-				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
-				notifierModule: notifierModuleMock,
-				i18n: { t: (key) => key },
-			},
-			vuetify,
-			propsData: props,
-			...options,
-			mocks: {
-				$router: mockRouter,
-			},
-		});
-	};
 
 	it("Should direct user to legacy task details page", () => {
 		const { location } = window;
@@ -65,17 +62,17 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		expect(location.pathname).toStrictEqual(`/homework/${tasks[0].id}`);
 	});
 
-	it("Should display no due date label if task has no duedate", () => {
+	it("Should display no due date label if task has no dueDate", () => {
 		const wrapper = getWrapper({ task: openTasksWithoutDueDate[0] });
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
 		expect(dueDateLabel.text()).toBe("");
 	});
 
-	it("Should display due date label if task has duedate", () => {
+	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC(tasks[0].duedate);
+		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
 			"pages.tasks.labels.due"
 		)} ${convertedDueDate}`;
@@ -93,7 +90,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeToDueDate,
+			dueDate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 			status: {
@@ -118,7 +115,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeToDueDate,
+			dueDate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 			status: {
@@ -147,7 +144,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		wrapper.vm.$vuetify.breakpoint.xsOnly = true;
 
-		const convertedDueDate = dateFromUTC(tasks[0].duedate);
+		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
 			"pages.tasks.labels.due"
 		)} ${convertedDueDate}`;
@@ -179,20 +176,31 @@ describe("@/components/molecules/TaskItemStudent", () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
-
 			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
-			expect(taskLabel.element.textContent).toStrictEqual(
-				"Mathe - Beta-Aufgabe"
-			);
+
+			expect(taskLabel.text()).toStrictEqual("Mathe - Beta-Aufgabe");
+		});
+
+		it("Should display due date label", () => {
+			const wrapper = getWrapper({
+				task: betaTask,
+			});
+			const convertedDueDate = dateTimeFromUTC(betaTask.dueDate);
+			const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
+				"pages.tasks.labels.due"
+			)} ${convertedDueDate}`;
+
+			const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+			expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
 		});
 
 		it("should redirect to beta task page", async () => {
 			const wrapper = getWrapper({
 				task: betaTask,
 			});
-
 			const taskCard = wrapper.findComponent({ name: "v-list-item" });
 			await taskCard.trigger("click");
+
 			expect(mockRouter.push).toHaveBeenCalledTimes(1);
 			expect(mockRouter.push).toHaveBeenCalledWith({
 				name: "beta-task-view-edit",

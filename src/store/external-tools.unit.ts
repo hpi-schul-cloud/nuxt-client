@@ -4,8 +4,11 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
+	SchoolToolConfigurationEntryResponse,
+	SchoolToolConfigurationListResponse,
 	ToolApiInterface,
 	ToolConfigurationEntryResponse,
+	ToolLaunchRequestResponse,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import {
@@ -20,16 +23,18 @@ import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
 	toolConfigurationFactory,
+	toolConfigurationTemplateFactory,
+	toolLaunchRequestResponeFactory,
 } from "@@/tests/test-utils/factory";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
+	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
-	SchoolExternalToolStatus,
 	ToolConfigurationListItem,
-	ToolConfigurationScope,
+	ToolConfigurationStatus,
 	ToolConfigurationTemplate,
+	ToolContextType,
 	ToolParameter,
 } from "./external-tool";
 import ExternalToolsModule from "./external-tools";
@@ -39,11 +44,6 @@ import { BusinessError } from "./types/commons";
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
 
-	beforeEach(() => {
-		module = new ExternalToolsModule({});
-		setupStores({ authModule: AuthModule });
-	});
-
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
@@ -52,6 +52,7 @@ describe("ExternalToolsModule", () => {
 		error: Error | undefined = undefined,
 		schoolExternalToolMock: Partial<SchoolExternalToolResponse> = {},
 		toolConfigurationEntryMock: Partial<ToolConfigurationEntryResponse> = {},
+		schoolToolConfigurationEntryMock: Partial<SchoolToolConfigurationEntryResponse> = {},
 		externalToolConfigurationTemplateResponseMock: Partial<ExternalToolConfigurationTemplateResponse> = {}
 	) => {
 		const searchListResponse: SchoolExternalToolSearchListResponse = {
@@ -109,6 +110,7 @@ describe("ExternalToolsModule", () => {
 				},
 			],
 		};
+
 		const toolConfigurationControllerGetAvailableToolsForSchool = jest.fn(
 			async () => {
 				if (error) {
@@ -117,6 +119,36 @@ describe("ExternalToolsModule", () => {
 				return Promise.resolve({
 					data: {
 						...toolConfigurationListResponse,
+					},
+					status: 200,
+					statusText: "OK",
+					headers: {},
+					config: {},
+				});
+			}
+		);
+
+		const schoolToolConfigurationListResponse: SchoolToolConfigurationListResponse =
+			{
+				data: [
+					{
+						id: "id",
+						name: "name",
+						logoUrl: "logoUrl",
+						schoolToolId: "schoolToolId",
+						...schoolToolConfigurationEntryMock,
+					},
+				],
+			};
+
+		const toolConfigurationControllerGetAvailableToolsForContext = jest.fn(
+			async () => {
+				if (error) {
+					throw error;
+				}
+				return Promise.resolve({
+					data: {
+						...schoolToolConfigurationListResponse,
 					},
 					status: 200,
 					statusText: "OK",
@@ -169,14 +201,48 @@ describe("ExternalToolsModule", () => {
 			});
 		});
 
+		const toolContextControllerCreateContextExternalTool = jest.fn(async () => {
+			if (error) {
+				throw error;
+			}
+			return Promise.resolve({
+				data: undefined,
+				status: 201,
+				statusText: "Created",
+				headers: {},
+				config: {},
+			});
+		});
+
+		const toolConfigurationControllerGetExternalToolForContext = jest.fn(
+			async () => {
+				if (error) {
+					throw error;
+				}
+				return Promise.resolve({
+					data: {
+						...externalToolConfigurationTemplateResponse,
+					},
+					status: 200,
+					statusText: "OK",
+					headers: {},
+					config: {},
+				});
+			}
+		);
+
 		const toolApiMock = {
 			toolSchoolControllerGetSchoolExternalTools,
 			toolSchoolControllerDeleteSchoolExternalTool,
 			toolSchoolControllerCreateSchoolExternalTool,
+			toolContextControllerCreateContextExternalTool,
 			toolConfigurationControllerGetAvailableToolsForSchool,
+			toolConfigurationControllerGetAvailableToolsForContext,
 			toolConfigurationControllerGetExternalToolForScope,
+			toolConfigurationControllerGetExternalToolForContext,
 			toolSchoolControllerUpdateSchoolExternalTool: jest.fn(),
 			toolSchoolControllerGetSchoolExternalTool: jest.fn(),
+			toolLaunchControllerGetToolLaunchRequest: jest.fn(),
 		};
 		jest
 			.spyOn(serverApi, "ToolApiFactory")
@@ -194,29 +260,29 @@ describe("ExternalToolsModule", () => {
 		const schoolId = "schoolId";
 		const toolId = "toolId";
 
-		const schoolExternalTool: SchoolExternalTool = schoolExternalToolFactory({
-			name: "Test",
-			status: SchoolExternalToolStatus.Latest,
-			id: "testId",
-			version: 1,
-		});
+		module = new ExternalToolsModule({});
+		setupStores({ authModule: AuthModule });
+
+		const schoolExternalTool: SchoolExternalTool =
+			schoolExternalToolFactory.build({
+				name: "Test",
+				status: ToolConfigurationStatus.Latest,
+			});
 		const schoolExternalTools: SchoolExternalTool[] = [
 			schoolExternalTool,
-			schoolExternalToolFactory({
+			schoolExternalToolFactory.build({
 				name: "Test2",
-				status: SchoolExternalToolStatus.Outdated,
-				id: "testId2",
-				version: 1,
+				status: ToolConfigurationStatus.Outdated,
 			}),
 		];
 		module.setSchoolExternalTools(schoolExternalTools);
 
 		const toolConfiguration: ToolConfigurationListItem =
-			toolConfigurationFactory();
+			toolConfigurationFactory.build();
 		const toolConfigurations: ToolConfigurationListItem[] = [toolConfiguration];
 		module.setToolConfigurations(toolConfigurations);
 
-		const businessError: BusinessError = businessErrorFactory();
+		const businessError: BusinessError = businessErrorFactory.build();
 		module.setBusinessError(businessError);
 
 		const axiosErrorResponse: AxiosResponse<ApiValidationError> = {
@@ -241,7 +307,12 @@ describe("ExternalToolsModule", () => {
 		);
 
 		const toolConfigurationTemplate: ToolConfigurationTemplate =
-			toolConfigurationTemplateFactory();
+			toolConfigurationTemplateFactory.build();
+
+		const payload = {
+			contextId: "contextId",
+			contextType: ToolContextType.COURSE,
+		};
 
 		return {
 			schoolId,
@@ -254,6 +325,7 @@ describe("ExternalToolsModule", () => {
 			axiosErrorResponse,
 			toolId,
 			toolConfigurationTemplate,
+			payload,
 		};
 	};
 
@@ -341,11 +413,9 @@ describe("ExternalToolsModule", () => {
 				const expectedName = "NewTool";
 
 				module.setSchoolExternalTools([
-					schoolExternalToolFactory({
-						id: "id",
+					schoolExternalToolFactory.build({
 						name: expectedName,
-						status: SchoolExternalToolStatus.Latest,
-						version: 1,
+						status: ToolConfigurationStatus.Latest,
 					}),
 				]);
 
@@ -372,9 +442,11 @@ describe("ExternalToolsModule", () => {
 		describe("setBusinessError is called", () => {
 			it("should set the given businessError to the state", () => {
 				setup();
-				const expectedBusinessError: BusinessError = businessErrorFactory({
-					message: "expectedMessage",
-				});
+				const expectedBusinessError: BusinessError = businessErrorFactory.build(
+					{
+						message: "expectedMessage",
+					}
+				);
 				module.setBusinessError(expectedBusinessError);
 
 				expect(module.getBusinessError).toEqual(
@@ -386,7 +458,7 @@ describe("ExternalToolsModule", () => {
 		describe("resetBusinessError is called", () => {
 			it("should reset the business error state", () => {
 				setup();
-				module.setBusinessError(businessErrorFactory());
+				module.setBusinessError(businessErrorFactory.build());
 
 				module.resetBusinessError();
 
@@ -404,7 +476,7 @@ describe("ExternalToolsModule", () => {
 			it("should set the given toolConfigurations array to the state", () => {
 				setup();
 				const expectedToolConfiguration: ToolConfigurationListItem =
-					toolConfigurationFactory();
+					toolConfigurationFactory.build();
 				module.setToolConfigurations([expectedToolConfiguration]);
 
 				expect(module.getToolConfigurations).toEqual(
@@ -434,6 +506,74 @@ describe("ExternalToolsModule", () => {
 				toolConfigurationTemplate,
 			};
 		};
+
+		describe("loadToolLaunchData is called", () => {
+			describe("when receiving an api response", () => {
+				const setup = () => {
+					const mockResponse: ToolLaunchRequestResponse =
+						toolLaunchRequestResponeFactory.build();
+
+					const { toolApiMock } = mockToolApi();
+
+					toolApiMock.toolLaunchControllerGetToolLaunchRequest.mockResolvedValue(
+						{ data: mockResponse }
+					);
+
+					return {
+						toolApiMock,
+						mockResponse,
+					};
+				};
+
+				it("should call the api", async () => {
+					const { toolApiMock } = setup();
+
+					await module.loadToolLaunchData("contextToolId");
+
+					expect(
+						toolApiMock.toolLaunchControllerGetToolLaunchRequest
+					).toHaveBeenCalledWith("contextToolId");
+				});
+
+				it("should return a response", async () => {
+					const { mockResponse } = setup();
+
+					const response: ToolLaunchRequestResponse | undefined =
+						await module.loadToolLaunchData("contextToolId");
+
+					expect(response).toEqual(mockResponse);
+				});
+			});
+
+			describe("when receiving an error response", () => {
+				const setup = () => {
+					const { toolApiMock } = mockToolApi();
+
+					const error: AxiosError = new AxiosError("Api Error");
+
+					toolApiMock.toolLaunchControllerGetToolLaunchRequest.mockRejectedValue(
+						error
+					);
+
+					return {
+						toolApiMock,
+						error,
+					};
+				};
+
+				it("should store an error", async () => {
+					const { error } = setup();
+
+					await module.loadToolLaunchData("contextToolId");
+
+					expect(module.getBusinessError).toEqual<BusinessError>({
+						error,
+						statusCode: 500,
+						message: "",
+					});
+				});
+			});
+		});
 
 		describe("loadSchoolExternalTools is called", () => {
 			describe("when loading", () => {
@@ -522,10 +662,10 @@ describe("ExternalToolsModule", () => {
 					await module.loadSchoolExternalTools();
 
 					expect(setSchoolExternalToolsSpy).toHaveBeenCalledWith([
-						schoolExternalToolFactory({
+						schoolExternalToolFactory.build({
 							id: searchListResponse.data[0].id,
 							name: searchListResponse.data[0].name,
-							status: SchoolExternalToolStatus.Latest,
+							status: ToolConfigurationStatus.Latest,
 							version: searchListResponse.data[0].toolVersion,
 						}),
 					]);
@@ -665,7 +805,7 @@ describe("ExternalToolsModule", () => {
 
 					expect(
 						toolApiMock.toolConfigurationControllerGetAvailableToolsForSchool
-					).toHaveBeenCalledWith(ToolConfigurationScope.school, schoolId);
+					).toHaveBeenCalledWith(schoolId);
 				});
 
 				it("should call mapToolConfigurationListResponse", async () => {
@@ -701,7 +841,7 @@ describe("ExternalToolsModule", () => {
 					await module.loadAvailableToolConfigurations();
 
 					expect(setToolConfigurationsSpy).toHaveBeenCalledWith([
-						toolConfigurationFactory({
+						toolConfigurationFactory.build({
 							id: toolConfigurationListResponse.data[0].id,
 							name: toolConfigurationListResponse.data[0].name,
 							logoUrl: toolConfigurationListResponse.data[0].logoUrl,
@@ -907,7 +1047,7 @@ describe("ExternalToolsModule", () => {
 					const { axiosError, axiosErrorResponse } = setupWithAuth();
 					const { toolApiMock } = mockToolApi();
 					const toolTemplate: ToolConfigurationTemplate =
-						toolConfigurationTemplateFactory();
+						toolConfigurationTemplateFactory.build();
 
 					toolApiMock.toolSchoolControllerUpdateSchoolExternalTool.mockRejectedValue(
 						axiosError
@@ -1048,11 +1188,317 @@ describe("ExternalToolsModule", () => {
 					expect(result).toEqual<SchoolExternalTool>({
 						id: mockResponse.id,
 						name: mockResponse.name,
-						status: SchoolExternalToolStatus.Unknown,
+						status: ToolConfigurationStatus.Unknown,
 						version: mockResponse.toolVersion,
 						toolId: mockResponse.toolId,
 						parameters: mockResponse.parameters,
 					});
+				});
+			});
+		});
+
+		describe("loadAvailableToolConfigurationsForContext is called", () => {
+			describe("when no error occurs", () => {
+				const setup = () => {
+					const payload = {
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { toolApiMock } = mockToolApi();
+
+					const schoolToolConfigurationListItems: ContextExternalToolTemplateListItem[] =
+						[
+							{
+								schoolToolId: "schoolToolId",
+								name: "toolName",
+								id: "id",
+								logoUrl: "logoUrl",
+							},
+						];
+
+					const mockResponse: SchoolToolConfigurationListResponse = {
+						data: [
+							{
+								name: "toolName",
+								logoUrl: "logoUrl",
+								id: "id",
+								schoolToolId: "schoolToolId",
+							},
+						],
+					};
+
+					toolApiMock.toolConfigurationControllerGetAvailableToolsForContext.mockResolvedValue(
+						{
+							data: mockResponse,
+							status: 200,
+							statusText: "OK",
+							headers: {},
+							config: {},
+						}
+					);
+
+					jest
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
+						.mockReturnValue({
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
+							mapSchoolToolConfigurationListResponse: () =>
+								schoolToolConfigurationListItems,
+						});
+
+					return { payload, toolApiMock, schoolToolConfigurationListItems };
+				};
+
+				it("should call toolApi.toolConfigurationControllerGetAvailableToolsForContext", async () => {
+					const { payload, toolApiMock } = setup();
+
+					await module.loadAvailableToolConfigurationsForContext(payload);
+
+					expect(
+						toolApiMock.toolConfigurationControllerGetAvailableToolsForContext
+					).toHaveBeenCalledWith(payload.contextType, payload.contextId);
+				});
+
+				it("should call set SchoolToolConfiguration", async () => {
+					const { payload, schoolToolConfigurationListItems } = setup();
+
+					await module.loadAvailableToolConfigurationsForContext(payload);
+
+					expect(module.getContextExternalToolTemplates).toEqual([
+						{
+							schoolToolId: schoolToolConfigurationListItems[0].schoolToolId,
+							name: schoolToolConfigurationListItems[0].name,
+							id: schoolToolConfigurationListItems[0].id,
+							logoUrl: schoolToolConfigurationListItems[0].logoUrl,
+						},
+					]);
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const payload = {
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { toolApiMock } = mockToolApi();
+
+					const { axiosError, axiosErrorResponse } = setupWithAuth();
+
+					toolApiMock.toolConfigurationControllerGetAvailableToolsForContext.mockRejectedValue(
+						axiosError
+					);
+
+					return { payload, axiosError, axiosErrorResponse };
+				};
+
+				it("should set the businessError", async () => {
+					const { payload, axiosError, axiosErrorResponse } = setup();
+
+					await module.loadAvailableToolConfigurationsForContext(payload);
+
+					expect(module.getBusinessError).toEqual<BusinessError>({
+						...axiosError,
+						statusCode: axiosErrorResponse.data.code,
+						message: axiosErrorResponse.data.message,
+					});
+				});
+			});
+		});
+
+		describe("loadContextToolConfigurationTemplateFromExternalTool is called", () => {
+			describe("when loading", () => {
+				const setup = () => {
+					module = new ExternalToolsModule({});
+
+					const payload = {
+						toolId: "toolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { toolApiMock } = mockToolApi();
+
+					const setLoadingSpy = jest.spyOn(module, "setLoading");
+
+					return { payload, toolApiMock, setLoadingSpy };
+				};
+
+				it("should set loading to true and after operation to false", async () => {
+					const { payload, setLoadingSpy } = setup();
+
+					await module.loadContextToolConfigurationTemplateFromExternalTool(
+						payload
+					);
+
+					expect(setLoadingSpy).toHaveBeenCalledWith(true);
+					expect(setLoadingSpy).toHaveBeenCalledWith(false);
+					expect(module.getLoading).toBeFalsy();
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const payload = {
+						toolId: "toolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { axiosError, axiosErrorResponse } = setupWithAuth();
+
+					const { toolApiMock } = mockToolApi(axiosError);
+
+					const setLoadingSpy = jest.spyOn(module, "setLoading");
+					const setBusinessSpy = jest.spyOn(module, "setBusinessError");
+
+					return {
+						payload,
+						toolApiMock,
+						axiosError,
+						axiosErrorResponse,
+						setLoadingSpy,
+						setBusinessSpy,
+					};
+				};
+
+				it("should set loading to false", async () => {
+					const { setLoadingSpy, payload } = setup();
+
+					const func = async () =>
+						await module.loadContextToolConfigurationTemplateFromExternalTool(
+							payload
+						);
+
+					await expect(func()).toEqual(Promise.resolve());
+					expect(setLoadingSpy).toHaveBeenCalledWith(false);
+					expect(module.getLoading).toBeFalsy();
+				});
+
+				it("should set the businessError", async () => {
+					const { axiosError, axiosErrorResponse, payload, setBusinessSpy } =
+						setup();
+
+					const func = async () =>
+						await module.loadContextToolConfigurationTemplateFromExternalTool(
+							payload
+						);
+
+					await expect(func()).toEqual(Promise.resolve());
+					expect(setBusinessSpy).toHaveBeenCalledWith({
+						...axiosError,
+						statusCode: axiosErrorResponse.data.code,
+						message: axiosErrorResponse.data.message,
+					});
+				});
+			});
+
+			describe("when no error occurs", () => {
+				const setup = () => {
+					module = new ExternalToolsModule({});
+
+					const payload = {
+						toolId: "toolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { toolApiMock, externalToolConfigurationTemplateResponse } =
+						mockToolApi();
+
+					const mapExternalToolConfigurationTemplateResponseMock = jest
+						.fn()
+						.mockReturnValue([{ id: "toolId" }]);
+					jest
+						.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
+						.mockReturnValue({
+							...useExternalToolUtilsComposable.useExternalToolMappings(),
+							mapExternalToolConfigurationTemplateResponse:
+								mapExternalToolConfigurationTemplateResponseMock,
+						});
+
+					return {
+						payload,
+						toolApiMock,
+						externalToolConfigurationTemplateResponse,
+						mapExternalToolConfigurationTemplateResponseMock,
+					};
+				};
+
+				it("should call the toolApi.toolConfigurationControllerGetExternalToolForContext", async () => {
+					const { payload, toolApiMock } = setup();
+
+					await module.loadContextToolConfigurationTemplateFromExternalTool(
+						payload
+					);
+
+					expect(
+						toolApiMock.toolConfigurationControllerGetExternalToolForContext
+					).toHaveBeenCalledWith(
+						payload.toolId,
+						payload.contextType,
+						payload.contextId
+					);
+				});
+
+				it("should call mapExternalToolConfigurationTemplateResponse", async () => {
+					const {
+						payload,
+						mapExternalToolConfigurationTemplateResponseMock,
+						externalToolConfigurationTemplateResponse,
+					} = setup();
+
+					await module.loadContextToolConfigurationTemplateFromExternalTool(
+						payload
+					);
+
+					expect(
+						mapExternalToolConfigurationTemplateResponseMock
+					).toHaveBeenCalledWith(externalToolConfigurationTemplateResponse);
+				});
+			});
+
+			describe("when mapper is not mocked", () => {
+				const setup = () => {
+					module = new ExternalToolsModule({});
+
+					const payload = {
+						toolId: "toolId",
+						contextId: "contextId",
+						contextType: ToolContextType.COURSE,
+					};
+
+					const { externalToolConfigurationTemplateResponse } = mockToolApi();
+
+					return {
+						payload,
+						externalToolConfigurationTemplateResponse,
+					};
+				};
+
+				it("should return a toolConfigurationTemplate", async () => {
+					const { payload, externalToolConfigurationTemplateResponse } =
+						setup();
+
+					const toolConfigurationTemplate:
+						| ToolConfigurationTemplate
+						| undefined =
+						await module.loadContextToolConfigurationTemplateFromExternalTool(
+							payload
+						);
+
+					expect(toolConfigurationTemplate).toEqual(
+						expect.objectContaining<Partial<ToolConfigurationTemplate>>({
+							id: externalToolConfigurationTemplateResponse.id,
+							parameters: expect.arrayContaining<ToolParameter>([
+								{
+									name: externalToolConfigurationTemplateResponse.parameters[0]
+										.name,
+								} as ToolParameter,
+							]),
+						})
+					);
 				});
 			});
 		});

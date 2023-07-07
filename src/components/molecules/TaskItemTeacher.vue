@@ -18,12 +18,37 @@
 				</v-list-item-avatar>
 				<v-list-item-content>
 					<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
-						<span class="text-truncate" data-testid="taskSubtitle">{{
-							taskLabel
-						}}</span>
+						<span class="text-truncate" data-testid="taskSubtitle">
+							{{ taskLabel }}
+						</span>
 					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
+					<v-list-item-subtitle
+						class="hidden-sm-and-up text--primary text-wrap"
+					>
+						<i18n
+							path="components.molecules.TaskItemTeacher.betaTask.status"
+							data-testid="task-status-small"
+						>
+							<template #submitted>{{ task.status.submitted }}</template>
+							<template #max>{{ task.status.maxSubmissions }}</template>
+						</i18n>
+					</v-list-item-subtitle>
 				</v-list-item-content>
+				<section v-if="showTaskStatus" data-testid="task-status">
+					<v-list-item-action class="hidden-xs-only">
+						<v-list-item-subtitle>
+							{{
+								$t("components.molecules.TaskItemTeacher.betaTask.completed")
+							}}
+						</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskSubmitted">
+							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						</v-list-item-title>
+					</v-list-item-action>
+				</section>
 			</template>
 			<template v-else>
 				<v-list-item-avatar>
@@ -31,16 +56,19 @@
 						class="fill"
 						:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
 						:color="iconColor"
-						>{{ avatarIcon }}</v-icon
 					>
+						{{ avatarIcon }}
+					</v-icon>
 				</v-list-item-avatar>
 				<v-list-item-content :class="hasUnpublishedLesson ? 'opacity-0-5' : ''">
 					<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
-						<span class="text-truncate" data-testid="taskSubtitle">{{
-							taskLabel
-						}}</span>
+						<span class="text-truncate" data-testid="taskSubtitle">
+							{{ taskLabel }}
+						</span>
 					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
 					<v-list-item-subtitle
 						v-if="topic && currentBreakpoint !== 'xs'"
 						data-testid="task-topic"
@@ -77,9 +105,11 @@
 					data-testid="task-lesson-chip-large"
 					class="hidden-xs-only mr-8 pl-4"
 				>
-					<v-chip small>{{
-						$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
-					}}</v-chip>
+					<v-chip small>
+						{{
+							$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
+						}}
+					</v-chip>
 				</section>
 				<section
 					v-else-if="showTaskStatus"
@@ -87,19 +117,19 @@
 					class="mr-8"
 				>
 					<v-list-item-action class="hidden-xs-only pl-4">
-						<v-list-item-subtitle>{{
-							$t("components.molecules.TaskItemTeacher.submitted")
-						}}</v-list-item-subtitle>
+						<v-list-item-subtitle>
+							{{ $t("components.molecules.TaskItemTeacher.submitted") }}
+						</v-list-item-subtitle>
 						<v-list-item-title data-testid="taskSubmitted">
 							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
 						</v-list-item-title>
 					</v-list-item-action>
 					<v-list-item-action class="hidden-xs-only">
-						<v-list-item-subtitle>{{
-							$t("components.molecules.TaskItemTeacher.graded")
-						}}</v-list-item-subtitle>
-						<v-list-item-title data-testid="taskGraded"
-							>{{ task.status.graded }}
+						<v-list-item-subtitle>
+							{{ $t("components.molecules.TaskItemTeacher.graded") }}
+						</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskGraded">
+							{{ task.status.graded }}
 						</v-list-item-title>
 					</v-list-item-action>
 				</section>
@@ -184,7 +214,7 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		taskLabel() {
-			const { createdAt, duedate, availableDate } = this.task;
+			const { createdAt, dueDate, availableDate } = this.task;
 
 			const labelText = this.isBetaTask
 				? `${this.courseName} - ${this.$t(
@@ -216,9 +246,9 @@ export default {
 				);
 			}
 
-			if (duedate) {
+			if (dueDate) {
 				return labelText.concat(
-					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(duedate)}`
+					` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`
 				);
 			}
 

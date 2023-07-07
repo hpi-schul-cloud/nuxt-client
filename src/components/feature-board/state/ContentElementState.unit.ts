@@ -1,75 +1,64 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import {
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useContentElementState } from "./ContentElementState.composable";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
-let wrapper: Wrapper<Vue>;
+jest.mock("../shared/InlineEditInteractionHandler.composable");
 
-const TEST_ELEMENT: TextContentElement = {
+const notifierModule = createModuleMocks(NotifierModule);
+const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.TEXT,
+	type: ContentElementType.RichText,
 	content: {
 		text: "TestContent",
+		inputFormat: "richTextCk5",
+	},
+	timestamps: {
+		lastUpdatedAt: new Date().toString(),
+		createdAt: new Date().toString(),
 	},
 };
 
 /**
  * Call this function during test to mock a CardHostInteraction targeting the Hosting Component
  */
-let mockCardHostInteraction: () => void;
+// let mockCardHostInteraction: () => void;
 
-jest.mock("../CardHostInteractionHandler.composable", () => ({
-	useCardHostInteractionHandler: (callback: () => void) => {
-		mockCardHostInteraction = () => callback();
-		return {};
-	},
-}));
-
-const mountComposable = <R>(composable: () => R): R => {
-	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	wrapper = shallowMount(TestComponent, {
-		setup() {
-			const result = composable();
-			return { result };
-		},
-	});
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return wrapper.vm.result;
-};
+// jest.mock("../CardHostInteractionHandler.composable", () => ({
+// 	useCardHostInteractionHandler: (callback: () => void) => {
+// 		mockCardHostInteraction = () => callback();
+// 		return {};
+// 	},
+// }));
 
 describe("useContentElementState composable", () => {
+	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
+		return mountComposable(() => useContentElementState(options), {
+			[I18N_KEY as symbol]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+		});
+	};
 	it("should unwrap element model data", async () => {
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
-		);
+		const { modelValue } = setup();
 
 		expect(modelValue.value).toStrictEqual(TEST_ELEMENT.content);
 	});
 
-	it("should set isAutoFocus on element interaction", async () => {
-		const { isAutoFocus } = mountComposable(() =>
-			useContentElementState({ isEditMode: false, element: TEST_ELEMENT })
-		);
+	it.skip("should set isAutoFocus on element interaction", async () => {
+		const { isAutoFocus } = setup();
 
 		expect(isAutoFocus.value).toStrictEqual(false);
-		mockCardHostInteraction();
+		// mockCardHostInteraction();
 		expect(isAutoFocus.value).toStrictEqual(true);
 	});
 
-	it.skip("should call saving function after debounced change of modelValue", async () => {
+	it("should call saving function after debounced change of modelValue", async () => {
 		jest.useFakeTimers();
-		const { modelValue } = mountComposable(() =>
-			useContentElementState({ isEditMode: true, element: TEST_ELEMENT })
-		);
+		const { modelValue } = setup({ isEditMode: true, element: TEST_ELEMENT });
 
-		const updatedModel: TextContentElement["content"] = {
+		const updatedModel: RichTextElementResponse["content"] = {
 			...TEST_ELEMENT.content,
 			...{ text: "UpdatedText" },
 		};

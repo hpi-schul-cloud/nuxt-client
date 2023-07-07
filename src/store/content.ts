@@ -69,6 +69,7 @@ const initialState = () => ({
 		title: "",
 		type: "",
 	},
+	tags: [],
 	status: null,
 	notificationModal: null,
 });

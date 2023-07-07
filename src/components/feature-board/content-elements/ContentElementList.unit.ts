@@ -1,13 +1,11 @@
+import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import {
-	AnyContentElement,
-	ContentElementType,
-	TextContentElement,
-} from "../types/ContentElement";
+import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import TextContentElementComponent from "./TextContentElement.vue";
+import FileContentElement from "./FileContentElement.vue";
+import RichTextContentElement from "./RichTextContentElement.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -16,22 +14,34 @@ describe("ContentElementList", () => {
 		elements: AnyContentElement[];
 		isEditMode: boolean;
 	}) => {
+		const deleteElementMock = jest.fn();
+
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(ContentElementList as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: props,
+			propsData: { ...props, deleteElement: deleteElementMock },
 		});
+
+		return { deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ elements: [], isEditMode: false });
+			setup({
+				elements: [],
+				isEditMode: false,
+			});
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
+
 		it.each([
 			{
-				elementType: ContentElementType.TEXT,
-				component: TextContentElementComponent,
+				elementType: ContentElementType.RichText,
+				component: RichTextContentElement,
+			},
+			{
+				elementType: ContentElementType.File,
+				component: FileContentElement,
 			},
 		])(
 			"should render elements based on type %s",
@@ -43,18 +53,47 @@ describe("ContentElementList", () => {
 				expect(wrapper.findComponent(component).exists()).toBe(true);
 			}
 		);
-		it("should propagate isEditMode to child elements", () => {
-			const isEditModeResult = true;
 
-			setup({
-				elements: [{ type: ContentElementType.TEXT } as TextContentElement],
-				isEditMode: isEditModeResult,
+		it.each([
+			{
+				elementType: ContentElementType.RichText,
+				component: RichTextContentElement,
+			},
+			{
+				elementType: ContentElementType.File,
+				component: FileContentElement,
+			},
+		])(
+			"should propagate isEditMode to child elements",
+			({ elementType, component }) => {
+				const isEditModeResult = true;
+
+				setup({
+					elements: [{ type: elementType } as AnyContentElement],
+					isEditMode: isEditModeResult,
+				});
+
+				const childComponent = wrapper.findComponent(component);
+
+				expect(childComponent.exists()).toBe(true);
+				expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
+			}
+		);
+
+		it("should propagate deleteElement function to file elements", () => {
+			const { deleteElementMock } = setup({
+				elements: [
+					{
+						type: ContentElementType.File,
+					} as FileElementResponse,
+				],
+				isEditMode: true,
 			});
 
-			const childComponent = wrapper.findComponent(ContentElementList);
+			const childComponent = wrapper.findComponent(FileContentElement);
 
 			expect(childComponent.exists()).toBe(true);
-			expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
+			expect(childComponent.props("deleteElement")).toBe(deleteElementMock);
 		});
 	});
 });

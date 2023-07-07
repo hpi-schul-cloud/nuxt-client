@@ -4,11 +4,12 @@ import ExternalToolConfigParameter from "@/components/administration/external-to
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import { toolParameterFactory } from "@@/tests/test-utils/factory";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;
 
-	const setup = (parameter: ToolParameter = toolParameterFactory()) => {
+	const setup = (parameter: ToolParameter = toolParameterFactory.build()) => {
 		document.body.setAttribute("data-app", "true");
 
 		wrapper = mount(ExternalToolConfigParameter as MountOptions<Vue>, {
@@ -16,7 +17,7 @@ describe("ExternalToolConfigParameter", () => {
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			propsData: {
 				value: parameter,
@@ -27,22 +28,9 @@ describe("ExternalToolConfigParameter", () => {
 	describe("inject", () => {
 		describe("when i18n injection fails", () => {
 			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
+				expect(() => {
 					shallowMount(ExternalToolConfigParameter as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
+				}).toThrow();
 			});
 		});
 	});
@@ -59,13 +47,13 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type boolean", () => {
 		it("should render a tri state select", () => {
-			setup(toolParameterFactory({ type: ToolParameterType.Boolean }));
+			setup(toolParameterFactory.build({ type: ToolParameterType.Boolean }));
 
 			expect(wrapper.find(".v-select__slot"));
 		});
 
 		it("should use default selectItem when parameter value is undefined", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Boolean,
 				value: undefined,
 			});
@@ -79,7 +67,7 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should watch selectItem and emit event when select input value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Boolean,
 			});
 			setup(parameter);
@@ -93,13 +81,13 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type string", () => {
 		it("should render a text-field", () => {
-			setup(toolParameterFactory({ type: ToolParameterType.String }));
+			setup(toolParameterFactory.build({ type: ToolParameterType.String }));
 
 			expect(wrapper.find(".v-text-field__slot"));
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.String,
 			});
 			setup(parameter);
@@ -115,7 +103,7 @@ describe("ExternalToolConfigParameter", () => {
 
 	describe("when parameter has type number", () => {
 		it("should render a text-field with type number", () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Number,
 			});
 			setup(parameter);
@@ -127,7 +115,7 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory({
+			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Number,
 			});
 			setup(parameter);

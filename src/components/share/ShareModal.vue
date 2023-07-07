@@ -20,9 +20,7 @@
 						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 					>
 						<div class="mx-2">
-							<v-icon class="blue--text text--darken-1">{{
-								mdiInformation
-							}}</v-icon>
+							<v-icon color="info">{{ mdiInformation }}</v-icon>
 						</div>
 						<div>
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
@@ -53,9 +51,10 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -74,11 +73,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = inject("i18n");
-		const notifier = inject("notifierModule");
+		const i18n = injectStrict(I18N_KEY);
+		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const t = (key) => {
-			const translateResult = i18n?.t(key);
+			const translateResult = i18n.t(key);
 			if (typeof translateResult === "string") {
 				return translateResult;
 			}
@@ -132,7 +131,7 @@ export default defineComponent({
 			shareModule.resetShareFlow();
 		};
 		const onCopy = () => {
-			notifier?.show({
+			notifier.show({
 				text: t("common.words.copiedToClipboard"),
 				status: "success",
 				timeout: 10000,

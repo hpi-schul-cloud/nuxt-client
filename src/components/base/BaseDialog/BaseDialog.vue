@@ -103,7 +103,7 @@ export default {
 		currentIconColor() {
 			return this.iconColor
 				? this.iconColor
-				: `var(--color-${this.actionDesign})`;
+				: `var(--v-${this.actionDesign}-base)`;
 		},
 	},
 	methods: {

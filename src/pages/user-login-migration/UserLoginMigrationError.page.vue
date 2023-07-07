@@ -2,34 +2,36 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/migration_error.svg"
-			:alt="$t('pages.userMigration.error.img.alt')"
+			:alt="$t('pages.userMigration.error.img.alt').toString()"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
-			<p
+			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
-				v-html="
+				:html="
 					$t('pages.userMigration.error.description', {
 						targetSystem: getSystemName(targetSystem),
 						instance: this.$theme.name,
 						supportLink,
 					})
 				"
-			></p>
-			<p
+				component="p"
+			/>
+			<RenderHTML
 				data-testId="text-schoolnumber-mismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
-				v-html="
+				:html="
 					$t('pages.userMigration.error.schoolNumberMismatch', {
 						targetSystem: getSystemName(targetSystem),
 						targetSchoolNumber,
 						sourceSchoolNumber,
 					})
 				"
-			></p>
+				component="p"
+			/>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
@@ -38,26 +40,24 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import SystemsModule from "@/store/systems";
+import { System } from "@/store/types/system";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	computed,
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
 	inject,
 	onMounted,
 	ref,
-	Ref,
 } from "vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
+	component: { RenderHTML },
 	props: {
-		sourceSystem: {
-			type: String,
-			required: true,
-		},
 		targetSystem: {
 			type: String,
 			required: true,
@@ -74,8 +74,7 @@ export default defineComponent({
 	setup(props) {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -95,12 +94,11 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(() =>
-			envConfigModule?.getAccessibilityReportEmail
-				? `mailto:${
-						envConfigModule.getAccessibilityReportEmail
-				  }?subject=${getSubject()}`
-				: ""
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
 		);
 
 		onMounted(async () => {

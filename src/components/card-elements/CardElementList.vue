@@ -1,5 +1,9 @@
 <template>
 	<div v-if="editMode">
+		<add-card-element
+			data-testid="add-element-before-btn"
+			@click="addElementBefore()"
+		/>
 		<draggable
 			ref="draggable"
 			v-model="elements"
@@ -26,7 +30,10 @@
 				:editMode="true"
 			/>
 		</draggable>
-		<add-card-element @click="addElementAfter()" />
+		<add-card-element
+			data-testid="add-element-after-btn"
+			@click="addElementAfter()"
+		/>
 		<v-custom-dialog
 			ref="delete-dialog"
 			v-model="deleteDialog.isOpen"
@@ -59,14 +66,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from "vue";
-import VueI18n from "vue-i18n";
-import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import AddCardElement from "@/components/card-elements/AddCardElement.vue";
-import { CardElementComponentEnum } from "@/store/types/card-element";
-import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
+import CardElementWrapper from "@/components/card-elements/CardElementWrapper.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useDrag } from "@/composables/drag";
+import { CardElementResponseCardElementTypeEnum } from "@/serverApi/v3";
+import { CardElementComponentEnum } from "@/store/types/card-element";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { defineComponent, ref } from "vue";
 import draggable from "vuedraggable";
 
 export default defineComponent({
@@ -89,15 +96,27 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const elements = ref(props.value);
 
 		const addElementAfter = (index: number = elements.value.length) => {
 			elements.value.splice(index + 1, 0, {
+				id: "",
+				type: CardElementResponseCardElementTypeEnum.RichText,
+				model: "",
+				props: {
+					component: CardElementComponentEnum.RichText,
+					placeholder: i18n.t(
+						"components.cardElement.richTextElement.placeholder"
+					) as string,
+					editable: true,
+				},
+			});
+		};
+
+		const addElementBefore = () => {
+			elements.value.unshift({
 				id: "",
 				type: CardElementResponseCardElementTypeEnum.RichText,
 				model: "",
@@ -135,6 +154,7 @@ export default defineComponent({
 		return {
 			elements,
 			addElementAfter,
+			addElementBefore,
 			deleteDialog,
 			deleteElement,
 			openDeleteDialog,
@@ -151,7 +171,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .chosen,
 .drag {
-	border: solid thin var(--v-grey-lighten1);
+	border: solid thin map-get($grey, lighten-3);
 	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
 		0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
 	opacity: 1 !important;

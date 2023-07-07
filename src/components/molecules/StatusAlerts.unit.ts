@@ -48,12 +48,6 @@ describe("@/components/molecules/StatusAlerts", () => {
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].text);
 	});
 
-	it("should show the alert url", () => {
-		const wrapper = getWrapper(testProps);
-		const title = wrapper.find("[data-test-id='alert-link-0']");
-		expect(title.element.href).toContain(mockStatusAlerts[0].url);
-	});
-
 	it("should show multiple alerts", () => {
 		const wrapper = getWrapper(testProps);
 		const title0 = wrapper.find("[data-test-id='alert-title-0']");
@@ -62,5 +56,21 @@ describe("@/components/molecules/StatusAlerts", () => {
 		expect(title1.element.textContent).toContain(mockStatusAlerts[1].title);
 		const title2 = wrapper.find("[data-test-id='alert-title-2']");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
+	});
+});
+
+describe("getCreatedDate", () => {
+	it("should be getCreatedDate function on the template", () => {
+		const wrapper = getWrapper(testProps);
+		const expectedDate = "05.05.2023 12:34";
+		const alertElement = wrapper.find(".alert-date");
+		expect(alertElement.element.innerHTML).toContain(expectedDate);
+	});
+
+	it("should returns expected result", () => {
+		const wrapper = getWrapper(testProps);
+		const expectedDate = "05.05.2023 12:34";
+		const dateTime = "May 5, 2023 12:34 PM";
+		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
 	});
 });

@@ -17,35 +17,55 @@
 					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 				</v-list-item-avatar>
 				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">{{
-						taskLabel
-					}}</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
-					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-				</v-list-item-content>
-			</template>
-			<template v-else>
-				<v-list-item-avatar>
-					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-				</v-list-item-avatar>
-				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">{{
-						taskLabel
-					}}</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
 						class="subtitle-2"
 						data-test-id="dueDateLabel"
-						v-text="dueDateLabel"
-					/>
+					>
+						{{ dueDateLabel }}
+					</v-list-item-action-text>
 					<v-spacer />
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"
 						:type="taskState"
-						:due-date="task.duedate"
+						:due-date="task.dueDate"
+						:shorten-unit="$vuetify.breakpoint.xsOnly"
+					/>
+				</v-list-item-action>
+			</template>
+			<template v-else>
+				<v-list-item-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-list-item-avatar>
+				<v-list-item-content>
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
+					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+				</v-list-item-content>
+				<v-list-item-action>
+					<v-list-item-action-text
+						class="subtitle-2"
+						data-test-id="dueDateLabel"
+					>
+						{{ dueDateLabel }}
+					</v-list-item-action-text>
+					<v-spacer />
+					<v-custom-chip-time-remaining
+						v-if="taskState === 'warning'"
+						:type="taskState"
+						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.breakpoint.xsOnly"
 					/>
 				</v-list-item-action>
@@ -102,13 +122,13 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.duedate, "hours");
+			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
 			if (timeDiff === null) {
 				return false;
 			} else return timeDiff <= 24;
 		},
 		isOverDue() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			return dueDate && new Date(dueDate) < new Date();
 		},
 		isGradedButMissed() {
@@ -156,7 +176,7 @@ export default {
 				: "";
 		},
 		dueDateLabel() {
-			const dueDate = this.task.duedate;
+			const dueDate = this.task.dueDate;
 			const convertedDueDate = this.$vuetify.breakpoint.xsOnly
 				? dateFromUTC(dueDate)
 				: dateTimeFromUTC(dueDate);

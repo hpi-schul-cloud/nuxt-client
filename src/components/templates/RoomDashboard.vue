@@ -14,6 +14,20 @@
 				@end="endDragging"
 			>
 				<div v-for="(item, index) of roomData.elements" :key="index">
+					<RoomBoardCard
+						v-if="item.type === cardTypes.ColumnBoard"
+						:ref="`item_${index}`"
+						:key-drag="isDragging"
+						:drag-in-progress="dragInProgress"
+						:column-board-item="item.content"
+						:course-data="{
+							courseName: roomData.title,
+							courseId: roomData.roomId,
+						}"
+						@move-element="moveByKeyboard"
+						@on-drag="isDragging = !isDragging"
+						@tab-pressed="isDragging = false"
+					/>
 					<room-task-card
 						v-if="item.type === cardTypes.Task"
 						:ref="`item_${index}`"
@@ -69,6 +83,17 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
+				<RoomBoardCard
+					v-if="item.type === cardTypes.ColumnBoard"
+					:ref="`item_${index}`"
+					:key-drag="isDragging"
+					:drag-in-progress="dragInProgress"
+					:column-board-item="item.content"
+					:course-data="{
+						courseName: roomData.title,
+						courseId: roomData.roomId,
+					}"
+				/>
 				<room-task-card
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
@@ -146,20 +171,21 @@
 import {
 	BoardElementResponseTypeEnum,
 	ImportUserResponseRoleNamesEnum,
+	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import topicsEmptyStateImage from "@/assets/img/empty-state/topics-empty-state.svg";
+import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 
 export default {
 	components: {
+		RoomBoardCard,
 		RoomTaskCard,
 		RoomLessonCard,
 		vCustomDialog,
@@ -212,7 +238,7 @@ export default {
 		},
 		roomIsEmpty: () => roomModule.roomIsEmpty,
 		emptyState() {
-			const image = topicsEmptyStateImage;
+			const image = "topics-empty-state";
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
 			const maxHeight = "200px";
 			return {

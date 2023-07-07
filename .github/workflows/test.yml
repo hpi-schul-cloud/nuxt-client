@@ -29,6 +29,19 @@ jobs:
         run: npm run test:unit:ci
         env:
           NODE_OPTIONS: "--unhandled-rejections=warn"
+      - name: SonarCloud upload coverage
+        uses: SonarSource/sonarcloud-github-action@v1.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        with:
+          args: >
+            -Dsonar.sources=.
+            -Dsonar.organization=schulcloud-verbund
+            -Dsonar.projectKey=hpi-schul-cloud_nuxt-client
+            -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
+            -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts
+            -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
   lint:
     strategy:
       matrix:

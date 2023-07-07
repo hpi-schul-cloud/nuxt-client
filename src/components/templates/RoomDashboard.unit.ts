@@ -13,6 +13,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Envs } from "@/store/types/env-config";
 import ShareModule from "@/store/share";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const mockData = {
 	roomId: "123",
@@ -36,7 +37,7 @@ const mockData = {
 					isFinished: false,
 				},
 				availableDate: "2017-09-20T11:00:00.000Z",
-				duedate: "2300-09-28T13:00:00.000Z",
+				dueDate: "2300-09-28T13:00:00.000Z",
 				displayColor: "#54616e",
 				description: "",
 			},
@@ -58,7 +59,7 @@ const mockData = {
 					isFinished: false,
 				},
 				availableDate: "2017-09-28T12:00:00.000Z",
-				duedate: "2300-06-28T13:00:00.000Z",
+				dueDate: "2300-06-28T13:00:00.000Z",
 				displayColor: "#54616e",
 				description: "",
 			},
@@ -85,6 +86,16 @@ const mockData = {
 				hidden: false,
 			},
 		},
+		{
+			type: "column-board",
+			content: {
+				id: "column-board-id",
+				title: "title",
+				published: false,
+				createdAt: "2023-05-31T15:34:59.276Z",
+				updatedAt: "2023-05-31T15:34:59.276Z",
+			},
+		},
 	],
 };
 
@@ -106,8 +117,10 @@ const getWrapper = (props: object, options?: object) => {
 			i18n: true,
 		}),
 		provide: {
-			notifierModule: notifierModuleMock,
+			[I18N_KEY as symbol]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
 			shareModule: shareModuleMock,
+			[I18N_KEY as symbol]: { t: (key: string) => key },
 		},
 		propsData: props,
 		...options,
@@ -133,6 +146,13 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 			expect(wrapper.vm.roomData).toStrictEqual(mockData);
 			expect(wrapper.vm.role).toStrictEqual("teacher");
+		});
+
+		it("should list board card", async () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			const boardCard = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			expect(boardCard).toHaveLength(1);
 		});
 
 		it("should list task cards", async () => {

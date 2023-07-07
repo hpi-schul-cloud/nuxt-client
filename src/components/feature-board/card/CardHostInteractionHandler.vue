@@ -1,24 +1,27 @@
 <template>
-	<OnClickOutside @trigger="onClickOutside">
+	<InlineEditInteractionHandler
+		:isEditMode="isEditMode"
+		@start-edit-mode="onStartEditMode"
+		@end-edit-mode="onEndEditMode"
+	>
 		<div
 			data-testid="event-handle"
-			@dblclick.prevent.stop="onDoubleClick"
-			@keydown.escape.capture.stop="onKeydownEscape"
 			@keydown.up.down.left.right="onKeydownArrow"
+			@keydown.enter="onKeydownEnter"
 		>
 			<slot></slot>
 		</div>
-	</OnClickOutside>
+	</InlineEditInteractionHandler>
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, shallowRef } from "vue";
+import { defineComponent } from "vue";
+import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 
-import { OnClickOutside } from "@vueuse/components";
 export default defineComponent({
 	name: "CardHostInteractionHandler",
 	components: {
-		OnClickOutside,
+		InlineEditInteractionHandler,
 	},
 	props: {
 		isEditMode: {
@@ -26,38 +29,33 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["start-edit-mode", "end-edit-mode", "move-card-keyboard"],
+	emits: ["start-edit-mode", "end-edit-mode", "move:card-keyboard"],
 	setup(props, { emit }) {
-		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
-		provide("CARD_HOST_INTERACTION_EVENT", interactionEvent);
-		const onClickOutside = () => {
-			if (props.isEditMode) {
-				emit("end-edit-mode");
-			}
+		const onStartEditMode = () => {
+			emit("start-edit-mode");
 		};
-
-		const onDoubleClick = (event: MouseEvent) => {
-			if (!props.isEditMode) {
-				interactionEvent.value = { x: event.x, y: event.y };
-				emit("start-edit-mode");
-			}
-		};
-		const onKeydownEscape = () => {
-			if (props.isEditMode) {
-				emit("end-edit-mode");
-			}
+		const onEndEditMode = () => {
+			emit("end-edit-mode");
 		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (!props.isEditMode) {
-				emit("move-card-keyboard", event);
+				event.preventDefault();
+				emit("move:card-keyboard", event);
+			}
+		};
+		const onKeydownEnter = (event: KeyboardEvent) => {
+			if (!props.isEditMode) {
+				emit("start-edit-mode");
+				event.stopPropagation();
+				event.stopImmediatePropagation();
+				event.preventDefault();
 			}
 		};
 		return {
-			onClickOutside,
-			onDoubleClick,
-			onKeydownEscape,
+			onStartEditMode,
+			onEndEditMode,
 			onKeydownArrow,
-			interactionEvent,
+			onKeydownEnter,
 		};
 	},
 });

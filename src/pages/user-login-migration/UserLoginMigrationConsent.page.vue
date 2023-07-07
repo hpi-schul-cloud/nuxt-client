@@ -2,23 +2,52 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img
 			src="@/assets/img/migration/move.svg"
-			:alt="$t('pages.userMigration.consent.img.alt')"
+			:alt="$t('pages.userMigration.consent.img.alt').toString()"
 		/>
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>
 		<div>
-			<p
+			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
-				v-html="
+				:html="
 					$t(migrationDescription, {
 						targetSystem: getSystemName(targetSystem),
 						startMigration: $t('pages.userMigration.button.startMigration'),
-					})
+					}).toString()
 				"
-			></p>
-			<div class="d-flex flex-wrap justify-center mt-8">
+				component="p"
+			/>
+			<div
+				v-if="isNewLoginFlowEnabled"
+				class="d-flex flex-wrap justify-center mt-8"
+			>
+				<v-btn
+					class="mx-8 mb-8"
+					depressed
+					data-testId="btn-cancel"
+					:to="canSkipMigration ? '/dashboard' : '/logout'"
+				>
+					{{
+						$t(
+							canSkipMigration
+								? "pages.userMigration.button.skip"
+								: "common.actions.logout"
+						)
+					}}
+				</v-btn>
+				<v-btn
+					class="mx-8 mb-8"
+					color="primary"
+					depressed
+					data-testId="btn-proceed"
+					:href="`/login/oauth2/${targetSystem}?migration=true`"
+				>
+					{{ $t("pages.userMigration.button.startMigration") }}
+				</v-btn>
+			</div>
+			<div v-else class="d-flex flex-wrap justify-center mt-8">
 				<v-btn
 					class="mx-8 mb-8"
 					depressed
@@ -48,27 +77,29 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import SystemsModule from "@/store/systems";
-import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	computed,
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
 	inject,
 	onMounted,
-	Ref,
 	ref,
 } from "vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
+	components: { RenderHTML },
 	props: {
 		sourceSystem: {
 			type: String,
-			required: true,
 		},
 		targetSystem: {
 			type: String,
@@ -76,7 +107,6 @@ export default defineComponent({
 		},
 		origin: {
 			type: String,
-			required: true,
 		},
 		mandatory: {
 			type: Boolean,
@@ -87,6 +117,7 @@ export default defineComponent({
 			inject<SystemsModule>("systemsModule");
 		const userMigrationModule: UserLoginMigrationModule | undefined =
 			inject<UserLoginMigrationModule>("userLoginMigrationModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -95,6 +126,8 @@ export default defineComponent({
 				)?.name ?? ""
 			);
 		};
+
+		const isNewLoginFlowEnabled = !!envConfigModule.getClientUserLoginMigration;
 
 		const proceedLink: ComputedRef<string | undefined> = computed(
 			() => userMigrationModule?.getMigrationLinks.proceedLink
@@ -106,7 +139,10 @@ export default defineComponent({
 		let pageType: MigrationPageOrigin;
 		let migrationDescription: string;
 		let canSkipMigration = false;
-		if (props.origin === props.sourceSystem) {
+		if (props.origin === props.targetSystem) {
+			pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
+			migrationDescription = "pages.userMigration.description.fromTarget";
+		} else {
 			pageType = props.mandatory
 				? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY
 				: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM;
@@ -114,20 +150,19 @@ export default defineComponent({
 				? "pages.userMigration.description.fromSourceMandatory"
 				: "pages.userMigration.description.fromSource";
 			canSkipMigration = !props.mandatory;
-		} else {
-			pageType = MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
-			migrationDescription = "pages.userMigration.description.fromTarget";
 		}
 
 		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
-			await userMigrationModule?.fetchMigrationLinks({
-				pageType,
-				sourceSystem: props.sourceSystem,
-				targetSystem: props.targetSystem,
-			});
+			if (!isNewLoginFlowEnabled && props.sourceSystem) {
+				await userMigrationModule?.fetchMigrationLinks({
+					pageType,
+					sourceSystem: props.sourceSystem,
+					targetSystem: props.targetSystem,
+				});
+			}
 			isLoading.value = false;
 		});
 
@@ -138,6 +173,7 @@ export default defineComponent({
 			proceedLink,
 			cancelLink,
 			getSystemName,
+			isNewLoginFlowEnabled,
 		};
 	},
 });

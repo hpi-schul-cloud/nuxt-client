@@ -34,18 +34,14 @@
 			<v-divider class="my-sm-6 my-md-8"></v-divider>
 			<v-row>
 				<v-col>
-					<general-settings></general-settings>
-					<school-policies
-						v-if="schoolPolicyEnabled && hasSchoolEditPermission"
-					></school-policies>
-					<admin-migration-section
-						v-if="isOauthMigrationEnabled"
-					></admin-migration-section>
+					<general-settings />
+					<school-policy v-if="schoolPolicyEnabled" />
+					<admin-migration-section v-if="isOauthMigrationEnabled" />
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>
-					<auth-systems v-else :systems="systems"></auth-systems>
-					<external-tools-section></external-tools-section>
+					<auth-systems v-else :systems="systems" />
+					<external-tools-section />
 				</v-col>
 			</v-row>
 		</div>
@@ -53,10 +49,10 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
-import SchoolPolicies from "@/components/organisms/administration/SchoolPolicies";
+import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
 import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection";
@@ -66,7 +62,7 @@ export default {
 		ExternalToolsSection,
 		AdminMigrationSection,
 		GeneralSettings,
-		SchoolPolicies,
+		SchoolPolicy,
 		AuthSystems,
 		DefaultWireframe,
 	},
@@ -105,9 +101,6 @@ export default {
 			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
-		},
-		hasSchoolEditPermission: () => {
-			return authModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {

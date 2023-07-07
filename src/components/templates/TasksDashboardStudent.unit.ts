@@ -12,6 +12,7 @@ import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
@@ -33,8 +34,8 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 				copyModule: copyModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				notifierModule: notifierModuleMock,
-				i18n: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -66,6 +67,7 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
+		notifierModuleMock = createModuleMocks(NotifierModule);
 
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],

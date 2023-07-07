@@ -2,6 +2,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import {
 	ToolConfigurationTemplate,
+	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -10,14 +11,15 @@ import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory/toolConfigurationTemplateFactory";
+import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
+import { EXTERNAL_TOOLS_MODULE, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	const setup = (
 		getter: Partial<ExternalToolsModule> = {},
-		template: ToolConfigurationTemplate = toolConfigurationTemplateFactory()
+		template: ToolConfigurationTemplate = toolConfigurationTemplateFactory.build()
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
@@ -32,8 +34,8 @@ describe("ExternalToolConfigSettings", () => {
 					i18n: true,
 				}),
 				provide: {
-					i18n: { t: (key: string) => key },
-					externalToolsModule,
+					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 				},
 				propsData: {
 					value: template,
@@ -52,29 +54,6 @@ describe("ExternalToolConfigSettings", () => {
 			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(
 				true
 			);
-		});
-	});
-
-	describe("inject", () => {
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					shallowMount(ExternalToolConfigSettings as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
-			});
 		});
 	});
 
@@ -113,13 +92,14 @@ describe("ExternalToolConfigSettings", () => {
 	describe("parameters", () => {
 		const setupTemplate = (): ToolConfigurationTemplate => {
 			const template: ToolConfigurationTemplate =
-				toolConfigurationTemplateFactory();
-			const param1 = {
+				toolConfigurationTemplateFactory.build();
+			const param1: ToolParameter = {
 				name: "Parameter1",
+				displayName: "Parameter 1",
 				type: ToolParameterType.String,
 				isOptional: false,
 				scope: ToolParameterScope.School,
-				location: ToolParameterLocation.Path,
+				location: ToolParameterLocation.PATH,
 			};
 			template.parameters = [param1, { ...param1, name: "Param2" }];
 			return template;

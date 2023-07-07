@@ -65,13 +65,13 @@
 					</v-btn>
 					<base-icon
 						v-if="hasError"
-						source="custom"
+						source="material"
 						icon="warning"
 						fill="var(--v-error-base)"
 					/>
 					<base-icon
 						v-if="success"
-						source="custom"
+						source="material"
 						icon="success"
 						fill="var(--v-success-base)"
 					/>
@@ -94,7 +94,7 @@
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
 import uidMixin from "@/mixins/uid";
-import { mdiEyeOff, mdiEye } from "@mdi/js";
+import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
 
 export const supportedTypes = [
 	"email",
@@ -139,8 +139,8 @@ export default {
 	},
 	data() {
 		return {
-			mdiEyeOff,
-			mdiEye,
+			mdiEyeOffOutline,
+			mdiEyeOutline,
 			hasFocus: false,
 			passwordVisible: false,
 			minDate: inputRangeDate(-100, "y"),
@@ -169,7 +169,7 @@ export default {
 			);
 		},
 		visibilityIcon() {
-			return this.passwordVisible ? mdiEye : mdiEyeOff;
+			return this.passwordVisible ? mdiEyeOutline : mdiEyeOffOutline;
 		},
 	},
 	methods: {
@@ -247,8 +247,8 @@ export default {
 	}
 
 	&.disabled {
-		color: var(--v-grey-base);
-		border-bottom-color: var(--v-grey-base);
+		color: map-get($grey, base);
+		border-bottom-color: map-get($grey, base);
 	}
 
 	.info-line {
@@ -292,7 +292,6 @@ export default {
 				padding: 0;
 				margin: 0;
 				line-height: 100%;
-				color: var(--color-text);
 				cursor: text;
 				background: transparent;
 				border: none;
@@ -305,7 +304,7 @@ export default {
 					background-color: transparent;
 
 					&::placeholder {
-						color: var(--v-grey-base);
+						color: map-get($grey, base);
 					}
 				}
 			}
@@ -314,24 +313,25 @@ export default {
 }
 
 .pwd-toggle {
-	color: var(--v-grey-base);
+	color: map-get($grey, base);
 	border-radius: var(--radius-round);
 
 	&:hover {
-		color: var(--v-grey-darken3);
+		color: map-get($grey, darken-3);
 	}
 
 	&:focus {
-		color: var(--v-grey-darken3);
+		color: map-get($grey, darken-3);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--v-white-base), 0 0 0 6px var(--v-grey-darken3);
+		box-shadow: 0 0 0 3px var(--v-white-base),
+			0 0 0 6px map-get($grey, darken-3);
 	}
 }
 
 .base-input-info {
 	display: block;
 	font-size: var(--text-xs);
-	color: var(--v-grey-base);
+	color: map-get($grey, base);
 }
 
 .base-input-info.base-input-error {

@@ -10,6 +10,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { tasks } = mocks;
 
@@ -29,8 +30,8 @@ describe("@/components/organisms/TasksList", () => {
 				copyModule: copyModuleMock,
 				tasksModule: tasksModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
-				notifierModule: notifierModuleMock,
-				i18n: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
 			...attrs,
 		});
@@ -127,10 +128,10 @@ describe("@/components/organisms/TasksList", () => {
 			if (
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				tasks[index].duedate === null ||
+				tasks[index].dueDate === null ||
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				tasks[index].duedate === undefined
+				tasks[index].dueDate === undefined
 			)
 				expect(dateLabel.text()).toBe("");
 			else expect(dateLabel.text()).toContain("Abgabe ");

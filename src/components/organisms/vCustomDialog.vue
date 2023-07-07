@@ -61,7 +61,7 @@
 						data-testId="dialog-close"
 						depressed
 						outlined
-						@click="$emit('dialog-closed', false)"
+						@click="closeDialog"
 					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
@@ -126,13 +126,16 @@ export default {
 			this.$emit("dialog-canceled");
 			this.$emit("dialog-closed", false);
 		},
+		closeDialog(event) {
+			this.$emit("dialog-closed", false, event);
+		},
 		checkButtons(buttonName) {
 			return this.buttons.some((button) => button == buttonName);
 		},
 	},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .button-left {
 	width: 25%;
 	text-align: left;
@@ -142,5 +145,12 @@ export default {
 	display: inline-block;
 	width: 75%;
 	text-align: right;
+}
+.button-section {
+	margin-bottom: calc(var(--space-base-vuetify) * 2);
+}
+
+.button-section > button {
+	margin-left: calc(var(--space-base-vuetify) * 2);
 }
 </style>

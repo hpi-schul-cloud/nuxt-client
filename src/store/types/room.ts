@@ -12,7 +12,7 @@ export type Task = {
 	name: string;
 	description?: string;
 	availableDate?: string;
-	duedate?: string;
+	dueDate?: string;
 	courseName: string;
 	displayColor?: string;
 	status?: {
@@ -26,6 +26,23 @@ export type Task = {
 	createdAt: string;
 	updatedAt: string;
 };
+
+export type Course = {
+	id: string;
+	name: string;
+	schoolId: string;
+	description?: string;
+	classIds: string[];
+	teacherIds: string[];
+	substitutionIds: string[];
+	ltiToolIds: string[];
+	color: string;
+	features?: CourseFeatures[];
+};
+
+export enum CourseFeatures {
+	VIDEOCONFERENCE = "videoconference",
+}
 
 export type RoomData = {
 	roomId: string;

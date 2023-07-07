@@ -1,10 +1,11 @@
+import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import EnvConfigModule from "@/store/env-config";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 
 describe("UserLoginMigrationError", () => {
@@ -44,7 +45,7 @@ describe("UserLoginMigrationError", () => {
 				}),
 				provide: {
 					systemsModule,
-					envConfigModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				propsData: props,
 				mocks: {
@@ -85,9 +86,9 @@ describe("UserLoginMigrationError", () => {
 					targetSystem: "targetSystemId",
 				});
 
-				const descriptionText: string = wrapper
+				const descriptionText = wrapper
 					.find("[data-testId=text-description]")
-					.text();
+					.attributes().html;
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
@@ -118,7 +119,7 @@ describe("UserLoginMigrationError", () => {
 
 				const schoolNumberMismatchText: string = wrapper
 					.find("[data-testId=text-schoolnumber-mismatch]")
-					.text();
+					.attributes().html;
 
 				expect(schoolNumberMismatchText).toEqual(
 					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
@@ -136,7 +137,7 @@ describe("UserLoginMigrationError", () => {
 
 			const descriptionText: string = wrapper
 				.find("[data-testId=text-description]")
-				.text();
+				.attributes().html;
 
 			expect(descriptionText).toEqual(
 				'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"}'

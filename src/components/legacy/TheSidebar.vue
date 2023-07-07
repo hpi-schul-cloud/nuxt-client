@@ -37,7 +37,7 @@
 							<base-icon
 								v-if="route.icon"
 								:icon="route.icon"
-								:source="route.source || 'fa'"
+								:source="route.source || DEFAULT_ICON_SOURCE"
 								:fill="
 									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'
@@ -68,7 +68,7 @@
 								<base-icon
 									v-if="child.icon"
 									:icon="child.icon"
-									:source="child.source || 'fa'"
+									:source="child.source || DEFAULT_ICON_SOURCE"
 									:fill="
 										isActive(child.title)
 											? 'var(--v-primary-base)'
@@ -112,6 +112,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const DEFAULT_ICON_SOURCE = "material";
 		const activeItem = ref("");
 		const activeParent = ref("");
 
@@ -150,6 +151,7 @@ export default defineComponent({
 		};
 
 		return {
+			DEFAULT_ICON_SOURCE,
 			isActive,
 			isChildActive,
 		};
@@ -159,7 +161,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-
 @import "@/styles/mixins";
 
 @keyframes menu-expand {
@@ -182,7 +183,7 @@ export default defineComponent({
 	height: calc(100vh - 55px);
 	overflow-y: auto;
 	background-color: var(--v-white-base);
-	box-shadow: 0 5px 5px var(--v-grey-lighten1);
+	box-shadow: 0 5px 5px map-get($grey, lighten-3);
 	transition: display 2s;
 
 	&.expanded {
@@ -200,7 +201,7 @@ export default defineComponent({
 		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
-		border-right: 1px solid var(--v-grey-lighten1);
+		border-right: 1px solid map-get($grey, lighten-3);
 		border-bottom: none;
 	}
 
@@ -276,7 +277,7 @@ export default defineComponent({
 					align-items: center;
 					min-width: 80px;
 					height: 100%;
-					padding: 0 20px;
+					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
 					color: var(--v-secondary-base);
@@ -299,7 +300,7 @@ export default defineComponent({
 
 						@include breakpoint(desktop) {
 							display: initial;
-							margin-top: 4px;
+							margin-top: 2px;
 						}
 					}
 
@@ -312,7 +313,7 @@ export default defineComponent({
 				&.active {
 					color: var(--v-primary-base);
 					cursor: pointer;
-					background-color: var(--v-grey-lighten1);
+					background-color: map-get($grey, lighten-3);
 				}
 
 				&.active .list-content,
@@ -326,22 +327,14 @@ export default defineComponent({
 </style>
 <style lang="scss">
 .sidebar .contents .list .list-item .list-content .icon {
-	width: 25px;
-	margin-right: 6px;
+	width: 24px;
+	height: 24px;
+	margin-right: 8px;
 	vertical-align: middle;
 
 	.v-icon {
-		width: 25px;
-		height: 19px;
-
-		&.custom-icon {
-			height: 18px;
-		}
-	}
-
-	svg {
-		width: 25px;
-		height: 20px;
+		width: 24px;
+		height: 24px;
 	}
 }
 </style>

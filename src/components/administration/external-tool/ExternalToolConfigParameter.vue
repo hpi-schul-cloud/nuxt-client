@@ -9,6 +9,8 @@
 			<v-text-field
 				v-model="parameter.value"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				:rules="validateParameter(parameter)"
 				validate-on-blur
 				:data-testId="parameter.name"
@@ -18,6 +20,8 @@
 			<v-select
 				v-model="selectItem"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				:rules="validateParameter(parameter)"
 				:data-testId="parameter.name"
 				:items="booleanSelectItems"
@@ -29,6 +33,8 @@
 			<v-text-field
 				v-model="parameter.value"
 				:label="getLabelText()"
+				:hint="parameter.description"
+				persistent-hint
 				type="number"
 				:rules="validateParameter(parameter)"
 				validate-on-blur
@@ -39,13 +45,14 @@
 </template>
 
 <script lang="ts">
-import { useExternalToolValidation } from "./external-tool-validation.composable";
-import VueI18n from "vue-i18n";
-import { defineComponent, inject, PropType, ref, Ref, watch } from "vue";
 import {
 	ToolParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { PropType, Ref, defineComponent, ref, watch } from "vue";
+import VueI18n from "vue-i18n";
+import { useExternalToolValidation } from "./external-tool-validation.composable";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -57,10 +64,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const i18n = injectStrict(I18N_KEY);
 
 		const parameter: Ref<ToolParameter> = ref(props.value);
 
@@ -77,9 +81,9 @@ export default defineComponent({
 
 		const getLabelText = (): string => {
 			if (parameter.value.isOptional) {
-				return parameter.value.name;
+				return parameter.value.displayName;
 			}
-			return `${parameter.value.name} *`;
+			return `${parameter.value.displayName} *`;
 		};
 
 		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);

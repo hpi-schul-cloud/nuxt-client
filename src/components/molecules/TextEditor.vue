@@ -270,7 +270,7 @@ export default {
 <style lang="scss" scoped>
 .menubar {
 	padding-bottom: var(--space-xs-2);
-	border-bottom: 1px solid var(--v-grey-base);
+	border-bottom: 1px solid map-get($grey, base);
 }
 
 .editor__content {
@@ -288,7 +288,7 @@ export default {
 	::v-deep *.is-empty:first-child::before {
 		float: left;
 		height: 0;
-		color: var(--v-grey-base);
+		color: map-get($grey, base);
 		pointer-events: none;
 		content: attr(data-empty-text);
 	}

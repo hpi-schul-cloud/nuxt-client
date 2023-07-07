@@ -1,5 +1,4 @@
 import customIcons from "@/components/icons/custom";
-import colors from "vuetify/lib/util/colors";
 
 export default {
 	theme: {
@@ -12,6 +11,7 @@ export default {
 				primary: {
 					base: "#9e292b",
 					darken1: "#800416",
+					lighten: "#f5eaea",
 				},
 				secondary: {
 					base: "#54616e",
@@ -26,13 +26,6 @@ export default {
 				},
 				white: {
 					base: "#ffffff",
-				},
-				grey: {
-					base: colors.grey.base,
-					lighten1: colors.grey.lighten3,
-					lighten2: colors.grey.lighten2,
-					darken1: colors.grey.darken1,
-					darken3: colors.grey.darken3,
 				},
 				info: {
 					base: "#0a7ac9",
@@ -56,7 +49,7 @@ export default {
 		},
 	},
 	icons: {
-		iconfont: "fa4",
+		iconfont: "mdiSvg",
 		values: {
 			// NUXT_REMOVAL Do we really have to register all these icons
 			// This here is only to supplement the Vuetify Icons.

@@ -5,16 +5,17 @@ import {
 	autoLogoutModule,
 	collaborativeFilesModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
 	filePathsModule,
-	filesPOCModule,
 	finishedTasksModule,
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -24,13 +25,14 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
+import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import store from "./plugins/store";
 
 Vue.config.productionTip = false;
 
@@ -66,6 +68,13 @@ Vue.mixin({
 	},
 });
 
+import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: htmlConfig,
+});
+
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";
@@ -74,8 +83,18 @@ import "@/plugins/polyfills";
 import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { initializeAxios } from "./utils/api";
 import { handleApplicationError } from "./plugins/application-error-handler";
+import { initializeAxios } from "./utils/api";
+import {
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE,
+	VIDEO_CONFERENCE_MODULE,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -116,20 +135,22 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			accountsModule,
 			applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
 			filePathsModule,
-			filesPOCModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			notifierModule,
-			roomModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			privacyPolicyModule,
+			[ROOM_MODULE.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
@@ -138,7 +159,8 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			i18n,
+			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

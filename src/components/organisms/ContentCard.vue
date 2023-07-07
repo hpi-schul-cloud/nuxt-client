@@ -83,6 +83,7 @@ export default {
 	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => ({}) },
+		renderer: { type: Object, default: () => ({}) },
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
 		selectable: { type: Boolean },
@@ -268,7 +269,7 @@ export default {
 
 	&__separator {
 		margin: 0 var(--space-xs-4);
-		border-top: 1px solid var(--v-grey-base);
+		border-top: 1px solid map-get($grey, base);
 	}
 
 	&__content {

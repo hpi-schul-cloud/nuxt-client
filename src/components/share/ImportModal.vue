@@ -19,9 +19,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon class="blue--text text--darken-1">{{
-							mdiInformation
-						}}</v-icon>
+						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
 					<div>
 						{{
@@ -42,8 +40,9 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, reactive, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -58,11 +57,11 @@ export default defineComponent({
 		parentType: { type: String, required: true },
 	},
 	setup(props, { emit }) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-			required: (value) => !!value || i18n?.t("common.validation.required"),
+			required: (value) => !!value || i18n.t("common.validation.required"),
 		});
 
 		const newName = computed({
