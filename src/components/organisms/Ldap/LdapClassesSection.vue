@@ -27,11 +27,7 @@
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					icon="account_tree"
-					:fill="classesActivatedColor"
-				/>
+				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -50,7 +46,9 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="class" :fill="classesActivatedColor" />
+				<v-icon :color="classesActivatedColor" class="custom-icon"
+					>$class</v-icon
+				>
 			</template>
 		</base-input>
 		<base-input
@@ -68,11 +66,7 @@
 			"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					icon="team_outline"
-					:fill="classesActivatedColor"
-				/>
+				<v-icon :color="classesActivatedColor">$mdiAccountGroupOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
