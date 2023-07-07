@@ -47,10 +47,10 @@ import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
-	ROOM_MODULE,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -80,10 +80,10 @@ export default defineComponent({
 	},
 	setup(props) {
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
-		const roomModule: RoomModule = injectStrict(ROOM_MODULE);
+		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const course: Ref<Course | null> = ref(null);
 

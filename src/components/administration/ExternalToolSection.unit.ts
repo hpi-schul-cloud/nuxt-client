@@ -5,7 +5,7 @@ import { i18nMock } from "@@/tests/test-utils/i18nMock";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";
-import { EXTERNAL_TOOLS_MODULE, I18N_KEY } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -25,7 +25,7 @@ describe("ExternalToolSection", () => {
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
-				[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
+				[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			},
 		});
 
