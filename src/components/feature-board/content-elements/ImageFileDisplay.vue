@@ -1,13 +1,13 @@
 <template>
 	<v-list-item
-		class="grey lighten-3 px-2 rounded-t-sm"
+		class="grey lighten-3 px-0 rounded-t-sm"
 		inactive
 		ref="fileContentElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<v-img :src="url" :alt="fileName" />
+		<v-img class="rounded-t-sm" :src="url" :alt="fileName" />
 		<div v-if="isEditMode" class="menu">
 			<FileContentElementMenu
 				:fileName="fileName"
