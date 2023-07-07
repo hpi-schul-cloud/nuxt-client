@@ -24,6 +24,7 @@ import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
+import filePdfOutline from "./file-pdf-outline.vue";
 import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
 import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
 import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
@@ -48,6 +49,9 @@ const customIcons = {
 	},
 	dBildungscloud: {
 		component: dBildungscloud,
+	},
+	file_pdf_outline: {
+		component: filePdfOutline,
 	},
 	folder_open_courses_outline: {
 		component: folderOpenCoursesOutline,
