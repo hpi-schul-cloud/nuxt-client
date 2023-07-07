@@ -12,7 +12,7 @@ const configModule = createModuleMocks(EnvConfigModule, {
 
 const setupMountComposable = () => {
 	return mountComposable(() => useSelectedFile(), {
-		[ENV_CONFIG_MODULE_KEY as symbol]: configModule,
+		[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
 	});
 };
 
