@@ -4,11 +4,9 @@ const {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
-} = require("../src/router/server-route");
-const {
 	isTldrawClient,
 	isTldrawServer,
-} = require("../src/router/tldraw-route");
+} = require("../src/router/server-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
