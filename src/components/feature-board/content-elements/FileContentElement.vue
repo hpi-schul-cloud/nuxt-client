@@ -7,26 +7,44 @@
 		dense
 	>
 		<div v-if="fileRecord">
-			<FileContentElementDisplay
-				v-if="!isEditMode"
-				:fileName="fileRecord.name"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-			/>
-			<FileContentElementEdit
-				v-if="isEditMode"
-				:fileName="fileRecord.name"
-				:fileId="$props.element.id"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@move-keyboard:element="onMoveFileEditKeyboard"
-				@delete:element="onDeleteElement"
-			/>
+			<div v-if="isImage">
+				<ImageFileDisplay
+					:fileId="$props.element.id"
+					:fileName="fileRecord.name"
+					:url="fileRecord.url"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:isEditMode="isEditMode"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@move-keyboard:element="onMoveFileEditKeyboard"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+			<div v-else>
+				<FileContentElementDisplay
+					v-if="!isImage && !isEditMode"
+					:fileName="fileRecord.name"
+					:url="url"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+				/>
+				<FileContentElementEdit
+					v-if="!isImage && isEditMode"
+					:fileName="fileRecord.name"
+					:fileId="$props.element.id"
+					:url="url"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@move-keyboard:element="onMoveFileEditKeyboard"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
 			<FileContentElementChips
 				:fileSize="fileRecord.size"
 				:fileName="fileRecord.name"
@@ -43,12 +61,9 @@
 </template>
 
 <script lang="ts">
-import {
-	FileRecordParentType,
-	FileRecordScanStatus,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, computed, defineComponent, onMounted } from "vue";
+import { PropType, defineComponent, onMounted } from "vue";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
@@ -57,6 +72,8 @@ import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import { useFileRecord } from "./FileRecord.composable";
+import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -65,6 +82,7 @@ export default defineComponent({
 		FileContentElementDisplay,
 		FileContentElementEdit,
 		FileContentElementChips,
+		ImageFileDisplay,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
@@ -85,16 +103,7 @@ export default defineComponent({
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlockedByVirusScan = computed(
-			() =>
-				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
-		);
-
-		const url = computed(() =>
-			!isBlockedByVirusScan.value && fileRecord.value?.url
-				? fileRecord.value?.url
-				: ""
-		);
+		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
 		onMounted(() => {
 			(async () => {
@@ -151,15 +160,16 @@ export default defineComponent({
 			return props.deleteElement(props.element.id);
 		};
 		return {
-			onDeleteElement,
+			fileRecord,
 			isAutoFocus,
 			isBlockedByVirusScan,
-			fileRecord,
+			isImage,
 			modelValue,
+			url,
+			onDeleteElement,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
 			onMoveFileEditKeyboard,
-			url,
 		};
 	},
 });
