@@ -25,13 +25,13 @@
 			</div>
 			<div v-else>
 				<FileContentElementDisplay
-					v-if="!isImage && !isEditMode"
+					v-if="!isEditMode"
 					:fileName="fileRecord.name"
 					:url="url"
 					:isDownloadAllowed="!isBlockedByVirusScan"
 				/>
 				<FileContentElementEdit
-					v-if="!isImage && isEditMode"
+					v-if="isEditMode"
 					:fileName="fileRecord.name"
 					:fileId="$props.element.id"
 					:url="url"

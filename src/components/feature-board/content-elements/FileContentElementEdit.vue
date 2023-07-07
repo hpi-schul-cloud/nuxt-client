@@ -25,60 +25,22 @@
 			>
 		</v-list-item-content>
 
-		<BoardMenu scope="element">
-			<BoardMenuAction
-				v-if="hasMultipleElements && !isFirstElement"
-				data-testid="board-file-element-edit-menu-move-up"
-				@click="onMoveElementUp"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiArrowCollapseUp }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.moveUp") }}
-			</BoardMenuAction>
-			<BoardMenuAction
-				v-if="hasMultipleElements && !isLastElement"
-				data-testid="board-file-element-edit-menu-move-down"
-				@click="onMoveElementDown"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiArrowCollapseDown }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.moveDown") }}
-			</BoardMenuAction>
-			<BoardMenuAction
-				v-if="isDownloadAllowed"
-				data-testid="board-file-element-edit-menu-download"
-				@click="onDownload"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiTrayArrowDown }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.download") }}
-			</BoardMenuAction>
-			<BoardMenuAction
-				data-testid="board-file-element-edit-menu-delete"
-				@click="onDelete"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiTrashCanOutline }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.delete") }}
-			</BoardMenuAction>
-		</BoardMenu>
+		<FileContentElementMenu
+			:fileName="fileName"
+			:isDownloadAllowed="isDownloadAllowed"
+			:url="url"
+			:isFirstElement="isFirstElement"
+			:isLastElement="isLastElement"
+			:hasMultipleElements="hasMultipleElements"
+			@move-down:element="onMoveElementDown"
+			@move-up:element="onMoveElementUp"
+			@move-keyboard:element="onKeydownArrow"
+			@delete:element="onDeleteElement"
+		/>
 	</v-list-item>
 </template>
 
 <script lang="ts">
-import { downloadFile } from "@/utils/fileHelper";
 import {
 	mdiArrowCollapseDown,
 	mdiArrowCollapseUp,
@@ -88,12 +50,11 @@ import {
 } from "@mdi/js";
 import { defineComponent, ref } from "vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
-	components: { BoardMenu, BoardMenuAction },
+	components: { FileContentElementMenu },
 	props: {
 		fileId: { type: String, required: true },
 		fileName: { type: String, required: true },
@@ -118,20 +79,16 @@ export default defineComponent({
 			emit("move-keyboard:element", event);
 		};
 
-		const onMoveElementDown = async () => {
+		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
 
-		const onMoveElementUp = async () => {
+		const onMoveElementUp = () => {
 			emit("move-up:element");
 		};
 
-		const onDelete = () => {
+		const onDeleteElement = () => {
 			emit("delete:element");
-		};
-
-		const onDownload = async () => {
-			await downloadFile(props.url, props.fileName);
 		};
 
 		return {
@@ -144,8 +101,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
-			onDelete,
-			onDownload,
+			onDeleteElement,
 		};
 	},
 });
