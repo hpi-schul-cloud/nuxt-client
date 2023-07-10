@@ -143,7 +143,6 @@ import {
 			contentModule,
 			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			filePathsModule,

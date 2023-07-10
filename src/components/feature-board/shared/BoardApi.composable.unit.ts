@@ -1,57 +1,29 @@
 import { ContentElementType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
+import { ApplicationError } from "@/store/types/application-error";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AnyContentElement } from "../types/ContentElement";
 import { useBoardApi } from "./BoardApi.composable";
 
-jest.mock("axios");
-
-const createColumnResponseMock = {
-	id: "columnId",
-	title: "columnTitle",
-	cards: [],
-	timestamps: {
-		lastUpdatedAt: "",
-		createdAt: "",
-		deletedAt: "",
-	},
-};
-const mockApi = {
-	boardControllerCreateColumn: jest
-		.fn()
-		.mockImplementation(() => createColumnResponseMock),
-	cardControllerUpdateCardHeight: jest.fn().mockReturnValue({ status: 204 }),
-	cardControllerUpdateCardTitle: jest.fn().mockReturnValue({ status: 204 }),
-	columnControllerUpdateColumnTitle: jest.fn().mockReturnValue({ status: 204 }),
-	elementControllerUpdateElement: jest.fn().mockReturnValue({ status: 204 }),
-	cardControllerCreateElement: jest
-		.fn()
-		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
-	cardControllerDeleteCard: jest.fn().mockReturnValue({ status: 204 }),
-	elementControllerDeleteElement: jest.fn().mockReturnValue({ status: 204 }),
-	columnControllerDeleteColumn: jest.fn().mockReturnValue({ status: 204 }),
-	columnControllerCreateCard: jest
-		.fn()
-		.mockImplementation(() => ({ data: { ...createColumnResponseMock } })),
-	elementControllerMoveElement: jest.fn(),
-	cardControllerMoveCard: jest.fn().mockReturnValue({ status: 204 }),
-	columnControllerMoveColumn: jest.fn().mockReturnValue({ status: 204 }),
-};
-
-jest
-	.spyOn(serverApi, "BoardApiFactory")
-	.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
-jest
-	.spyOn(serverApi, "BoardCardApiFactory")
-	.mockReturnValue(mockApi as unknown as serverApi.BoardCardApiInterface);
-jest
-	.spyOn(serverApi, "BoardColumnApiFactory")
-	.mockReturnValue(mockApi as unknown as serverApi.BoardColumnApiInterface);
-jest
-	.spyOn(serverApi, "BoardElementApiFactory")
-	.mockReturnValue(mockApi as unknown as serverApi.BoardElementApiInterface);
+let boardApi: DeepMocked<serverApi.BoardApiInterface>;
+let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
+let cardApi: DeepMocked<serverApi.BoardCardApiInterface>;
+let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
 
 describe("BoardApi.composable", () => {
+	beforeEach(() => {
+		boardApi = createMock<serverApi.BoardApiInterface>();
+		columnApi = createMock<serverApi.BoardColumnApiInterface>();
+		cardApi = createMock<serverApi.BoardCardApiInterface>();
+		elementApi = createMock<serverApi.BoardElementApiInterface>();
+
+		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
+		jest.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
+		jest.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
+		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
+	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -59,12 +31,34 @@ describe("BoardApi.composable", () => {
 	describe("createColumnCall", () => {
 		it("should call boardControllerCreateColumn api", async () => {
 			const { createColumnCall } = useBoardApi();
-			const BOARD_ID = "test-board-id";
+			const boardId = "test-board-id";
 
-			await createColumnCall(BOARD_ID);
-			expect(mockApi.boardControllerCreateColumn).toHaveBeenCalledWith(
-				BOARD_ID
+			await createColumnCall(boardId);
+			expect(boardApi.boardControllerCreateColumn).toHaveBeenCalledWith(
+				boardId
 			);
+		});
+	});
+
+	describe("fetchBoardCall", () => {
+		it("should call boardControllerGetBoardSkeleton api", async () => {
+			const { fetchBoardCall } = useBoardApi();
+			const boardId = "test-board-id";
+
+			await fetchBoardCall(boardId);
+
+			expect(boardApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
+				boardId
+			);
+		});
+
+		it("should throw an application error on failure", async () => {
+			const { fetchBoardCall } = useBoardApi();
+			const boardId = "test-board-id";
+
+			boardApi.boardControllerGetBoardSkeleton.mockRejectedValue(new Error());
+
+			await expect(fetchBoardCall(boardId)).rejects.toThrow(ApplicationError);
 		});
 	});
 
@@ -77,7 +71,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateCardHeightCall(PAYLOAD.id, PAYLOAD.height);
-			expect(mockApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(
+			expect(cardApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ height: PAYLOAD.height }
 			);
@@ -93,7 +87,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateCardTitle(PAYLOAD.id, PAYLOAD.title);
-			expect(mockApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(
+			expect(cardApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ title: PAYLOAD.title }
 			);
@@ -109,7 +103,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateColumnTitleCall(PAYLOAD.id, PAYLOAD.title);
-			expect(mockApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(
+			expect(columnApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ title: PAYLOAD.title }
 			);
@@ -135,7 +129,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateElementCall(PAYLOAD);
-			expect(mockApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ data }
 			);
@@ -157,7 +151,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateElementCall(PAYLOAD);
-			expect(mockApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
 				PAYLOAD.id,
 				{ data }
 			);
@@ -183,7 +177,7 @@ describe("BoardApi.composable", () => {
 			await createElementCall(PAYLOAD, {
 				type: ContentElementType.RichText,
 			});
-			expect(mockApi.cardControllerCreateElement).toHaveBeenCalledWith(
+			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(
 				PAYLOAD,
 				{ type: ContentElementType.RichText }
 			);
@@ -196,7 +190,7 @@ describe("BoardApi.composable", () => {
 			const PAYLOAD = "card-id";
 
 			await deleteCardCall(PAYLOAD);
-			expect(mockApi.cardControllerDeleteCard).toHaveBeenCalledWith(PAYLOAD);
+			expect(cardApi.cardControllerDeleteCard).toHaveBeenCalledWith(PAYLOAD);
 		});
 	});
 
@@ -206,7 +200,7 @@ describe("BoardApi.composable", () => {
 			const PAYLOAD = "column-id";
 
 			await deleteColumnCall(PAYLOAD);
-			expect(mockApi.columnControllerDeleteColumn).toHaveBeenCalledWith(
+			expect(columnApi.columnControllerDeleteColumn).toHaveBeenCalledWith(
 				PAYLOAD
 			);
 		});
@@ -218,7 +212,7 @@ describe("BoardApi.composable", () => {
 			const PAYLOAD = "element-id";
 
 			await deleteElementCall(PAYLOAD);
-			expect(mockApi.elementControllerDeleteElement).toHaveBeenCalledWith(
+			expect(elementApi.elementControllerDeleteElement).toHaveBeenCalledWith(
 				PAYLOAD
 			);
 		});
@@ -235,7 +229,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await createCardCall(PAYLOAD);
-			expect(mockApi.columnControllerCreateCard).toHaveBeenCalledWith(
+			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(
 				PAYLOAD,
 				INITIAL_ELEMENTS
 			);
@@ -258,7 +252,7 @@ describe("BoardApi.composable", () => {
 				PAYLOAD.position.toColumnId,
 				PAYLOAD.position.toPosition
 			);
-			expect(mockApi.cardControllerMoveCard).toHaveBeenCalledWith(
+			expect(cardApi.cardControllerMoveCard).toHaveBeenCalledWith(
 				PAYLOAD.cardId,
 				{
 					...PAYLOAD.position,
@@ -283,7 +277,7 @@ describe("BoardApi.composable", () => {
 				PAYLOAD.position.toBoardId,
 				PAYLOAD.position.toPosition
 			);
-			expect(mockApi.columnControllerMoveColumn).toHaveBeenCalledWith(
+			expect(columnApi.columnControllerMoveColumn).toHaveBeenCalledWith(
 				PAYLOAD.columnId,
 				{
 					...PAYLOAD.position,
@@ -308,7 +302,7 @@ describe("BoardApi.composable", () => {
 				PAYLOAD.position.toCardId,
 				PAYLOAD.position.toPosition
 			);
-			expect(mockApi.elementControllerMoveElement).toHaveBeenCalledWith(
+			expect(elementApi.elementControllerMoveElement).toHaveBeenCalledWith(
 				PAYLOAD.elementId,
 				{
 					...PAYLOAD.position,

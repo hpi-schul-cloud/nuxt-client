@@ -1,7 +1,6 @@
 import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { nextTick, ref } from "vue";
-import * as serverApi from "../../../serverApi/v3/api";
 import { useBoardState } from "./BoardState.composable";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
@@ -15,6 +14,7 @@ import { useSharedEditMode } from "../shared/EditMode.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -28,10 +28,8 @@ jest.mock("../shared/BoardNotifications.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("BoardState.composable", () => {
-	let mockServerApi: any;
-	let boardControllerGetBoardSkeleton: any;
 	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
-	let mockedBoardApiCalls: Partial<ReturnType<typeof useBoardApi>>;
+	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let setEditModeId: jest.Mock;
 
 	let testBoard: Board;
@@ -49,24 +47,11 @@ describe("BoardState.composable", () => {
 		card = cardSkeletonResponseFactory.build();
 		column = columnResponseFactory.build({ cards: [card] });
 		testBoard = boardResponseFactory.build({ columns: [column] });
-		boardControllerGetBoardSkeleton = jest
-			.fn()
-			.mockResolvedValue({ data: testBoard });
-		mockServerApi = { boardControllerGetBoardSkeleton };
-		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(mockServerApi);
 
-		mockedBoardApiCalls = {
-			createCardCall: jest.fn(),
-			createColumnCall: jest.fn().mockReturnValue({ id: "test-id" }),
-			deleteCardCall: jest.fn(),
-			deleteColumnCall: jest.fn(),
-			moveCardCall: jest.fn(),
-			moveColumnCall: jest.fn(),
-			updateColumnTitleCall: jest.fn(),
-		};
-		mockedUseBoardApi.mockReturnValue(
-			mockedBoardApiCalls as ReturnType<typeof useBoardApi>
-		);
+		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
+
+		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
 		mockedBoardNotifierCalls = {
 			generateErrorText: jest.fn(),
@@ -84,6 +69,10 @@ describe("BoardState.composable", () => {
 		});
 	});
 
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	describe("createCard", () => {
 		it("should not call createCardCall when board value is undefined", async () => {
 			const { createCard, board } = setup();
@@ -98,6 +87,8 @@ describe("BoardState.composable", () => {
 		it("should generate and show error when newCardId is undefined", async () => {
 			const { createCard, board } = setup();
 			board.value = testBoard;
+
+			mockedBoardApiCalls.createCardCall.mockResolvedValue(undefined);
 
 			await createCard(column.id);
 			await nextTick();
@@ -357,20 +348,16 @@ describe("BoardState.composable", () => {
 			const boardId = "123124";
 			setup(boardId);
 
-			expect(
-				mockServerApi.boardControllerGetBoardSkeleton
-			).toHaveBeenCalledWith(boardId);
+			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardId);
 		});
 
 		it("should return fetch function that updates board", async () => {
-			const boardId2 = "a1b1c1";
 			const { fetchBoard, board } = setup();
 
-			const fetchPromise = fetchBoard(boardId2);
-			await fetchPromise;
+			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
+			await fetchBoard(testBoard.id);
 
-			expect(board.value).toBeDefined();
-			expect(board.value?.id).toBe(boardId2);
+			expect(board.value).toEqual(testBoard);
 		});
 
 		it("should return isLoading which reflects pending api calls", async () => {
@@ -382,23 +369,6 @@ describe("BoardState.composable", () => {
 			await nextTick();
 
 			expect(isLoading.value).toStrictEqual(false);
-		});
-
-		it("should generate and show error when there is an error code", async () => {
-			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
-			boardControllerGetBoardSkeleton.mockResolvedValue({ data: undefined });
-
-			const { fetchBoard } = setup();
-
-			await fetchBoard(testBoard.id);
-			await nextTick();
-
-			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
-				"read",
-				"board"
-			);
-
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
 		});
 	});
 

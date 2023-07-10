@@ -97,6 +97,16 @@ describe("BoardNotifications.composable", () => {
 		});
 	});
 
+	describe("@resetNotifier method", () => {
+		it("should call the notifier module", () => {
+			const { resetNotifier } = setup();
+			resetNotifier();
+
+			expect(notifierModule.setNotifier).toHaveBeenCalled();
+			expect(notifierModule.setNotifier).toHaveBeenCalledWith(undefined);
+		});
+	});
+
 	describe("@generateErrorText", () => {
 		it("should return i18n keys", () => {
 			const { generateErrorText } = setup();
