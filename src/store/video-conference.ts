@@ -2,6 +2,7 @@ import {
 	VideoConferenceApiFactory,
 	VideoConferenceApiInterface,
 	VideoConferenceInfoResponse,
+	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@/serverApi/v3";
@@ -10,6 +11,7 @@ import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	VideoConferenceInfo,
+	VideoConferenceOptions,
 	VideoConferenceState,
 } from "./types/video-conference";
 
@@ -95,5 +97,28 @@ export default class VideoConferenceModule extends VuexModule {
 		}
 
 		this.setLoading(false);
+	}
+
+	@Action
+	async joinVideoConference(params: {
+		scope: VideoConferenceScope;
+		scopeId: string;
+	}) {
+		this.setLoading(true);
+
+		try {
+			const response: AxiosResponse<VideoConferenceJoinResponse> =
+				await this.videoConferenceApi.videoConferenceControllerJoin(
+					params.scope,
+					params.scopeId
+				);
+
+			this.setLoading(false);
+
+			return response.data;
+		} catch (error: unknown) {
+			this.setError(error);
+			this.setLoading(false);
+		}
 	}
 }
