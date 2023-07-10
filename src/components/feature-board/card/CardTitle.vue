@@ -10,7 +10,6 @@
 			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
-			:forcedTitleFocus="forcedTitleFocus"
 		></BoardAnyTitleInput>
 	</VCardTitle>
 </template>
@@ -32,9 +31,6 @@ export default defineComponent({
 			required: true,
 		},
 		isFocused: {
-			type: Boolean,
-		},
-		forcedTitleFocus: {
 			type: Boolean,
 		},
 	},

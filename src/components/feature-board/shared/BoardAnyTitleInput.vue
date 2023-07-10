@@ -53,7 +53,7 @@ export default defineComponent({
 			default: "",
 			required: false,
 		},
-		forcedTitleFocus: {
+		isFocused: {
 			type: Boolean,
 		},
 	},
@@ -73,13 +73,13 @@ export default defineComponent({
 			titleInput.value.focus();
 		};
 		onMounted(() => {
-			if (props.forcedTitleFocus) setFocusOnEdit();
+			if (props.isFocused) setFocusOnEdit();
 		});
 
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column" && !props.forcedTitleFocus) return;
+				if (props.scope !== "column" && !props.isFocused) return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					setFocusOnEdit();

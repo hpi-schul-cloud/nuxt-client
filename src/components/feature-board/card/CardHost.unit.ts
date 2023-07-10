@@ -187,11 +187,11 @@ describe("CardHost", () => {
 					name: "BoardMenuAction",
 				});
 				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
-				expect(cardTitle.props("forcedTitleFocus")).toBe(false);
+				expect(cardTitle.props("isFocused")).toBe(false);
 
 				menuItems.wrappers[0].vm.$emit("click");
 				await nextTick();
-				expect(cardTitle.props("forcedTitleFocus")).toBe(true);
+				expect(cardTitle.props("isFocused")).toBe(true);
 			});
 		});
 	});

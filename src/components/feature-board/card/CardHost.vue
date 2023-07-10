@@ -27,7 +27,7 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
-					:forcedTitleFocus="forcedTitleFocus"
+					:isFocused="forcedTitleFocus"
 				>
 				</CardTitle>
 
