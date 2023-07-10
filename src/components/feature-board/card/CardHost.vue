@@ -27,7 +27,7 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
-					:isFocused="forcedTitleFocus"
+					:isFocused="shouldFocusTitle"
 				>
 				</CardTitle>
 
@@ -164,11 +164,11 @@ export default defineComponent({
 			askType();
 		};
 
-		const forcedTitleFocus = ref<boolean>(false);
+		const shouldFocusTitle = ref<boolean>(false);
 
 		const onStartEditModeByMenu = () => {
+			shouldFocusTitle.value = true;
 			startEditMode();
-			forcedTitleFocus.value = true;
 		};
 		const onStartEditMode = () => {
 			startEditMode();
@@ -177,7 +177,7 @@ export default defineComponent({
 		const onEndEditMode = () => {
 			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
-				forcedTitleFocus.value = false;
+				shouldFocusTitle.value = false;
 			}
 		};
 
@@ -220,7 +220,7 @@ export default defineComponent({
 			card,
 			hasDeletePermission,
 			isHovered,
-			forcedTitleFocus,
+			shouldFocusTitle,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,
