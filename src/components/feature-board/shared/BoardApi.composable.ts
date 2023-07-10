@@ -5,7 +5,7 @@ import {
 	BoardElementApiFactory,
 	ColumnResponse,
 	ContentElementType,
-	CreateContentElementBody,
+	CreateContentElementBodyParams,
 	FileElementContent,
 	RichTextElementContent,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
@@ -95,7 +95,7 @@ export const useBoardApi = () => {
 
 	const createElementCall = async (
 		cardId: string,
-		params: CreateContentElementBody
+		params: CreateContentElementBodyParams
 	): AxiosPromise<AnyContentElement> => {
 		return await cardsApi.cardControllerCreateElement(cardId, params);
 	};
