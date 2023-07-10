@@ -9,11 +9,6 @@ import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
 import calendar from "@/store/calendar";
 import classes from "@/store/classes";
-<<<<<<< HEAD
-import consentVersions from "@/store/consent-versions";
-=======
-import courses from "@/store/courses";
->>>>>>> b9402ed524afccb36d9d6fd58711901431cd6a05
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
 import termsAndConditions from "@/store/terms-and-conditions";
@@ -39,11 +34,6 @@ export default new Store({
 		bulkConsent,
 		calendar,
 		classes,
-<<<<<<< HEAD
-		"consent-versions": consentVersions,
-=======
-		courses,
->>>>>>> b9402ed524afccb36d9d6fd58711901431cd6a05
 		"ldap-config": ldapConfig,
 		lessons,
 		"terms-and-conditions": termsAndConditions,
