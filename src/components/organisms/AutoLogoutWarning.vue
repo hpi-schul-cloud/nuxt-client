@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active="true" @onBackdropClick="extendSession">
+	<base-modal :active="active" @onBackdropClick="extendSession">
 		<template #body>
 			<div class="wrapper">
 				<img
