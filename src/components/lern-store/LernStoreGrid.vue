@@ -3,16 +3,14 @@
 		<slot />
 	</div>
 </template>
-<script>
+
+<script lang="ts">
 export default {
 	props: {
 		columnWidth: {
 			type: String,
 			default: "15rem",
 		},
-	},
-	data() {
-		return {};
 	},
 	computed: {
 		col() {
