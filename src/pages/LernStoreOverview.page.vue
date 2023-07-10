@@ -47,7 +47,7 @@
 							</div>
 						</span>
 						<!-- search query not empty and there are results -->
-						<base-grid
+						<lern-store-grid
 							v-if="searchQuery.length > 1"
 							column-width="14rem"
 							data-testid="lernStoreCardsContainer"
@@ -59,7 +59,7 @@
 								:inline="isInline"
 								:resource="resource"
 							/>
-						</base-grid>
+						</lern-store-grid>
 					</div>
 				</transition>
 			</div>
@@ -81,7 +81,7 @@ import ContentSearchbar from "@/components/molecules/ContentSearchbar";
 import ContentCard from "@/components/organisms/ContentCard";
 import ContentEmptyState from "@/components/molecules/ContentEmptyState";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
-import BaseGrid from "@/components/base/BaseGrid";
+import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft } from "@mdi/js";
@@ -91,7 +91,7 @@ export default {
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
-		BaseGrid,
+		LernStoreGrid,
 		ContentInitialState,
 		ContentEduSharingFooter,
 	},

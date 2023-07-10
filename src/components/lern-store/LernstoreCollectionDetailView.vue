@@ -84,7 +84,7 @@
 						</h4>
 						<transition name="fade">
 							<div class="content__container">
-								<base-grid
+								<lern-store-grid
 									v-if="elements.data && elements.data.length"
 									column-width="14rem"
 									class="cards"
@@ -96,7 +96,7 @@
 										:selectable="true"
 										:resource="element"
 									/>
-								</base-grid>
+								</lern-store-grid>
 							</div>
 						</transition>
 					</div>
