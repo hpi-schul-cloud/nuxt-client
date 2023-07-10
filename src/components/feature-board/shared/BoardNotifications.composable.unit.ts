@@ -90,10 +90,20 @@ describe("BoardNotifications.composable", () => {
 				status: "warning",
 				timeout: 5000,
 			};
-			showCustomNotifier(expectedCallObject.text, expectedCallObject.status);
+			showCustomNotifier(expectedCallObject.text, "warning");
 
 			expect(notifierModule.show).toHaveBeenCalled();
 			expect(notifierModule.show).toHaveBeenCalledWith(expectedCallObject);
+		});
+	});
+
+	describe("@resetNotifier method", () => {
+		it("should call the notifier module", () => {
+			const { resetNotifier } = setup();
+			resetNotifier();
+
+			expect(notifierModule.setNotifier).toHaveBeenCalled();
+			expect(notifierModule.setNotifier).toHaveBeenCalledWith(undefined);
 		});
 	});
 

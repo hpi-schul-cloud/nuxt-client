@@ -1,13 +1,12 @@
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import { authModule, statusAlertsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import StatusAlertsModule from "@/store/status-alerts";
-import { statusAlertsModule, authModule } from "@/store";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import setupStores from "@@/tests/test-utils/setupStores";
 import TheTopBar from "./TheTopBar";
 
 let authModuleMock;
-let envConfigModuleMock;
 
 const getWrapper = (props, options) => {
 	return mount(TheTopBar, {
@@ -15,10 +14,6 @@ const getWrapper = (props, options) => {
 			i18n: true,
 			vuetify: true,
 		}),
-		provide: {
-			authModule: authModuleMock,
-			envConfigModule: envConfigModuleMock,
-		},
 		propsData: props,
 		attachTo: document.body,
 		...options,

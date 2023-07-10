@@ -71,6 +71,7 @@
 					v-if="school && school.logo_dataUrl"
 					class="school-logo"
 					:src="school.logo_dataUrl"
+					ref="image"
 					:alt="school.name"
 				/>
 				<popup-icon-initials
@@ -128,8 +129,8 @@ import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
 import {
 	mdiArrowCollapse,
 	mdiArrowExpand,
-	mdiMenu,
 	mdiHelpCircle,
+	mdiMenu,
 } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -169,6 +170,7 @@ export default defineComponent({
 			mdiArrowExpand,
 			mdiMenu,
 			mdiHelpCircle,
+			logo: null,
 		};
 	},
 	computed: {

@@ -25,11 +25,11 @@ export const useBoardNotifier = () => {
 		});
 	};
 
-	const showInfo = (text: string | undefined) => {
+	const showInfo = (text: string | undefined, autoClose = true) => {
 		notifierModule.show({
 			text,
 			status: "info",
-			autoClose: true,
+			autoClose,
 		});
 	};
 
@@ -43,6 +43,10 @@ export const useBoardNotifier = () => {
 			status,
 			timeout,
 		});
+	};
+
+	const resetNotifier = () => {
+		notifierModule.setNotifier(undefined);
 	};
 
 	const isErrorCode = (statusCode: HttpStatusCode) => {
@@ -75,6 +79,7 @@ export const useBoardNotifier = () => {
 	return {
 		generateErrorText,
 		isErrorCode,
+		resetNotifier,
 		showCustomNotifier,
 		showFailure,
 		showInfo,

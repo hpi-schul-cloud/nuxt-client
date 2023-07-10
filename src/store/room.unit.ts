@@ -1,17 +1,19 @@
+import { courseFactory } from "@@/tests/test-utils/factory";
 import RoomModule from "./room";
-import * as serverApi from "../serverApi/v3/api";
-import { initializeAxios } from "../utils/api";
+import * as serverApi from "@/serverApi/v3/api";
+import { initializeAxios } from "@/utils/api";
 import AuthModule from "@/store/auth";
 import ApplicationErrorModule from "@/store/application-error";
 import setupStores from "@@/tests/test-utils/setupStores";
 
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import { authModule, applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { User } from "./types/auth";
+import { Course } from "./types/room";
 
 let receivedRequests: any[] = [];
-const getRequestReturn: any = {};
+let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -44,11 +46,11 @@ describe("room module", () => {
 			authModule: AuthModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
+		receivedRequests = [];
+		getRequestReturn = undefined;
 	});
+
 	describe("actions", () => {
-		beforeEach(() => {
-			receivedRequests = [];
-		});
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
@@ -57,6 +59,77 @@ describe("room module", () => {
 			roomsControllerPatchElementVisibility: jest.fn(),
 			roomsControllerPatchOrderingOfElements: jest.fn(),
 		};
+
+		describe("fetchCourse", () => {
+			describe("when the api returns a response", () => {
+				const setup = () => {
+					const roomModule = new RoomModule({});
+
+					const course: Course = courseFactory.build();
+
+					getRequestReturn = Promise.resolve({
+						data: course,
+					});
+
+					return {
+						roomModule,
+						course,
+					};
+				};
+
+				it("should call backend", async () => {
+					const { roomModule } = setup();
+
+					await roomModule.fetchCourse("courseId");
+
+					expect(receivedRequests[0].path).toEqual("/v1/courses/courseId");
+				});
+
+				it("should return a course", async () => {
+					const { roomModule, course } = setup();
+
+					const result: Course | null = await roomModule.fetchCourse(
+						"courseId"
+					);
+
+					expect(result).toEqual(course);
+				});
+			});
+
+			describe("when the api returns an error", () => {
+				const setup = () => {
+					const roomModule = new RoomModule({});
+
+					const error: AxiosError = new AxiosError();
+
+					getRequestReturn = Promise.reject(error);
+
+					return {
+						roomModule,
+						error,
+					};
+				};
+
+				it("should set an error", async () => {
+					const { roomModule, error } = setup();
+
+					await roomModule.fetchCourse("courseId");
+
+					expect(roomModule.getError).toEqual(error);
+				});
+
+				it("should return null", async () => {
+					const { roomModule } = setup();
+
+					const result: Course | null = await roomModule.fetchCourse(
+						"courseId"
+					);
+
+					expect(result).toBeNull();
+				});
+			});
+		});
+
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest
@@ -118,10 +191,6 @@ describe("room module", () => {
 		});
 
 		describe("confirmImportLesson", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				const roomModule = new RoomModule({});
 				const confirmImportLessonSpy = jest.spyOn(
@@ -245,10 +314,6 @@ describe("room module", () => {
 		});
 
 		describe("deleteLesson", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
 					lessonControllerDelete: jest.fn(),
@@ -289,10 +354,6 @@ describe("room module", () => {
 		});
 
 		describe("createCourseShareToken", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			it("should call the backend", async () => {
 				(() => {
 					initializeAxios({
@@ -399,7 +460,7 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
 				await expect(
-					roomModule.downloadImsccCourse()
+					roomModule.downloadImsccCourse("1.1.0")
 				).resolves.not.toBeDefined();
 
 				spy.mockRestore();
@@ -416,7 +477,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await roomModule.downloadImsccCourse();
+				await roomModule.downloadImsccCourse("1.1.0");
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
@@ -426,7 +487,6 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
-				receivedRequests = [];
 				authModule.setUser({ id: "testUser" } as User);
 			});
 
@@ -576,7 +636,6 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
-				receivedRequests = [];
 				authModule.setUser({ id: "testUser" } as User);
 			});
 

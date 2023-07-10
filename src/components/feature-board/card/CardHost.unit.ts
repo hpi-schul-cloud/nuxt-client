@@ -1,29 +1,35 @@
-import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import Vue, { computed, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
-import { BoardPermissionsTypes } from "../types/Board";
 import { BoardCard, BoardCardSkeleton } from "../types/Card";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "../types/Permissions";
 import CardHost from "./CardHost.vue";
 
+jest.mock("../shared/BoardFocusHandler.composable");
 jest.mock("../shared/BoardPermissions.composable");
-jest.mock("../state/CardState.composable");
 jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+jest.mock("../shared/EditMode.composable");
+jest.mock("../shared/ElementTypeSelection.composable");
+jest.mock("../state/CardState.composable");
 
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedEditMode = jest.mocked(useEditMode);
 const mockedUseCardState = jest.mocked(useCardState);
-
-const defaultPermissions = {
-	hasDeletePermission: true,
-};
 
 const CARD_SKELETON: BoardCardSkeleton = {
 	height: 200,
@@ -42,10 +48,33 @@ describe("CardHost", () => {
 	const setup = (options?: {
 		card: BoardCard;
 		isLoading?: boolean;
-		permissions?: BoardPermissionsTypes;
+		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
 		const { card, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
+
+		const isFocusContainedMock = computed(() => true);
+		mockedBoardFocusHandler.mockReturnValue({
+			isFocusContained: isFocusContainedMock,
+			isFocused: computed(() => true),
+			isFocusWithin: computed(() => true),
+		});
+
+		mockedUserPermissions.mockReturnValue({
+			...defaultPermissions,
+			...options?.permissions,
+		});
+
+		const isEditModeMock = computed(() => true);
+		const startEditModeMock = jest.fn();
+		const stopEditModeMock = jest.fn();
+		mockedEditMode.mockReturnValue({
+			isEditMode: isEditModeMock,
+			startEditMode: startEditModeMock,
+			stopEditMode: stopEditModeMock,
+		});
+
+		setupElementTypeSelectionMock();
 
 		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
@@ -54,28 +83,21 @@ describe("CardHost", () => {
 			deleteCard: jest.fn(),
 			updateCardHeight: jest.fn(),
 			addElement: jest.fn(),
+			moveElementDown: jest.fn(),
+			moveElementUp: jest.fn(),
 			deleteElement: deleteElementMock,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
 		});
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
-		});
-
-		const onDeleteElement = jest.fn();
 
 		setupDeleteBoardNodeConfirmationMock();
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
-			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-			},
 		});
 
-		return { onDeleteElement, deleteElementMock };
+		return { deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {

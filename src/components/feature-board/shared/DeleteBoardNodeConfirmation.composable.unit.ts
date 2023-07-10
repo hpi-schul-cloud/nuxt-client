@@ -11,7 +11,7 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";
 			const titleString = `"${title}"`;
-			const type = "boardElement";
+			const type: "boardCard" | "boardElement" = "boardElement";
 			const typeString = `components.${type}`;
 			const titleTranslationKey =
 				"components.cardHost.deletionModal.confirmation";
@@ -26,15 +26,16 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 
 			const translateMock = jest.fn().mockImplementation((key: string) => key);
 
-			const { onDeleteElement, askDeleteBoardNodeConfirmation } =
-				mountComposable(() => useDeleteBoardNodeConfirmation(), {
+			const { askDeleteBoardNodeConfirmation } = mountComposable(
+				() => useDeleteBoardNodeConfirmation(),
+				{
 					[I18N_KEY as symbol]: { t: translateMock },
-				});
+				}
+			);
 
 			return {
 				askDeleteBoardNodeConfirmation,
 				askConfirmation,
-				onDeleteElement,
 				data,
 				translateMock,
 				type,

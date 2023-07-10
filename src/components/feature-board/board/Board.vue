@@ -3,21 +3,23 @@
 		<div class="ml-1">
 			<h1>{{ $t("pages.room.boardCard.label.courseBoard") }}</h1>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1 ml-n4">
+		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
 				<Container
 					orientation="horizontal"
 					group-name="columns"
-					:lock-axis="lockAxis"
+					lock-axis="x"
 					:get-child-payload="getColumnId"
 					:drop-placeholder="placeholderOptions"
-					:drag-begin-delay="200"
 					@drop="onDropColumn"
+					:non-drag-area-selector="'.drag-disabled'"
+					:drag-begin-delay="isDesktop ? 0 : 300"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
 							:column="column"
 							:index="index"
+							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -43,10 +45,14 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
-import { defineComponent } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { computed, defineComponent, onMounted, watch, onUnmounted } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
+import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
@@ -58,9 +64,10 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { useMediaQuery } from "@vueuse/core";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 
 export default defineComponent({
-	name: "Board",
 	components: {
 		BoardColumn,
 		Container,
@@ -73,6 +80,12 @@ export default defineComponent({
 		boardId: { type: String, required: true },
 	},
 	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
+		const { showInfo, resetNotifier } = useBoardNotifier();
+
+		const { editModeId } = useSharedEditMode();
+		const isEditMode = computed(() => editModeId.value !== undefined);
+
 		const {
 			board,
 			createCard,
@@ -86,7 +99,15 @@ export default defineComponent({
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
 
+		const { createBreadcrumbs } = useSharedBoardBreadcrumbs();
+
+		watch(board, async () => {
+			await createBreadcrumbs(props.boardId);
+		});
+
 		useBodyScrolling();
+
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const {
 			hasMovePermission,
@@ -94,12 +115,10 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasDeletePermission,
 			hasEditPermission,
+			isTeacher,
 		} = useBoardPermissions();
 
-		const lockAxis = hasMovePermission ? "x" : "x,y";
-		const placeholderOptions = hasMovePermission
-			? columnDropPlaceholderOptions
-			: null;
+		const placeholderOptions = columnDropPlaceholderOptions;
 
 		const onCreateCard = async (columnId: string) => {
 			if (hasCreateCardPermission) await createCard(columnId);
@@ -123,6 +142,17 @@ export default defineComponent({
 
 		const onDropColumn = async (columnPayload: ColumnMove) => {
 			if (hasMovePermission) await moveColumn(columnPayload);
+		};
+
+		/**
+		 * These classes should be removed automatically by vue-smooth-dnd.
+		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
+		 */
+		const onTouchEnd = () => {
+			document.body.classList.remove(
+				"smooth-dnd-no-user-select",
+				"smooth-dnd-disable-touch-action"
+			);
 		};
 
 		const onMoveColumnKeyboard = async (
@@ -150,6 +180,18 @@ export default defineComponent({
 		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
+		onMounted(() => {
+			if (isTeacher) {
+				showInfo(
+					i18n.t("components.board.alert.info.teacher").toString(),
+					false
+				);
+			}
+		});
+
+		onUnmounted(() => {
+			resetNotifier();
+		});
 
 		return {
 			board,
@@ -158,8 +200,10 @@ export default defineComponent({
 			hasCreateCardPermission,
 			hasCreateColumnPermission,
 			placeholderOptions,
-			lockAxis,
+			isEditMode,
+			isDesktop,
 			getColumnId,
+			onTouchEnd,
 			onCreateCard,
 			onCreateColumn,
 			onCreateColumnWithCard,

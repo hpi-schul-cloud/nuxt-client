@@ -1,21 +1,43 @@
 <template>
-	<v-card class="mb-4" elevation="0" outlined dense>
+	<v-card
+		class="mb-4"
+		data-testid="board-file-element"
+		elevation="0"
+		outlined
+		dense
+	>
 		<div v-if="fileRecord">
 			<FileContentElementDisplay
 				v-if="!isEditMode"
 				:fileName="fileRecord.name"
 				:url="url"
-			></FileContentElementDisplay>
+				:isDownloadAllowed="!isBlockedByVirusScan"
+			/>
 			<FileContentElementEdit
 				v-if="isEditMode"
 				:fileName="fileRecord.name"
+				:fileId="$props.element.id"
 				:url="url"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@move-keyboard:element="onMoveFileEditKeyboard"
 				@delete:element="onDeleteElement"
-			></FileContentElementEdit>
-			<FileContentElementAlert v-if="isBlocked" />
+			/>
+			<FileContentElementChips
+				:fileSize="fileRecord.size"
+				:fileName="fileRecord.name"
+			/>
+			<FileContentElementAlert v-if="isBlockedByVirusScan" />
 		</div>
 		<v-card-text v-else>
-			<v-progress-linear indeterminate></v-progress-linear>
+			<v-progress-linear
+				data-testid="board-file-element-progress-bar"
+				indeterminate
+			></v-progress-linear>
 		</v-card-text>
 	</v-card>
 </template>
@@ -32,6 +54,7 @@ import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 
@@ -41,28 +64,37 @@ export default defineComponent({
 		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
+		FileContentElementChips,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 		deleteElement: {
 			type: Function as PropType<(elementId: string) => Promise<void>>,
 			required: true,
 		},
 	},
-	setup(props) {
+	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	setup(props, { emit }) {
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlocked = computed(
+		const isBlockedByVirusScan = computed(
 			() =>
 				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
 		);
 
-		const url = computed(() => (!isBlocked.value ? fileRecord.value?.url : ""));
+		const url = computed(() =>
+			!isBlockedByVirusScan.value && fileRecord.value?.url
+				? fileRecord.value?.url
+				: ""
+		);
 
 		onMounted(() => {
 			(async () => {
@@ -93,6 +125,17 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
+		const onMoveFileEditDown = () => {
+			emit("move-down:edit");
+		};
+
+		const onMoveFileEditUp = () => {
+			emit("move-up:edit");
+		};
+		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
+			emit("move-keyboard:edit", event);
+		};
+
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteBoardNodeConfirmation(
 				fileRecord.value?.name,
@@ -107,13 +150,15 @@ export default defineComponent({
 		const deleteFileElement = () => {
 			return props.deleteElement(props.element.id);
 		};
-
 		return {
 			onDeleteElement,
 			isAutoFocus,
-			isBlocked,
+			isBlockedByVirusScan,
 			fileRecord,
 			modelValue,
+			onMoveFileEditDown,
+			onMoveFileEditUp,
+			onMoveFileEditKeyboard,
 			url,
 		};
 	},

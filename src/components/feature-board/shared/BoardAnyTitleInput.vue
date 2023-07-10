@@ -9,7 +9,7 @@
 			auto-grow
 			flat
 			class="mx-n3 mb-n2"
-			:placeholder="$t('common.labels.title').toString()"
+			:placeholder="placeholder"
 			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch, nextTick } from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -50,13 +50,28 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<HTMLInputElement | null>(null);
+		const titleInput = ref<HTMLTextAreaElement | null>(null);
 
 		useInlineEditInteractionHandler(() => {
+			setFocusOnEdit();
+		});
+
+		const setFocusOnEdit = () => {
 			if (!hasEditPermission) return;
 			if (titleInput.value === null) return;
 			titleInput.value.focus();
-		});
+		};
+
+		watch(
+			() => props.isEditMode,
+			async (newVal, oldVal) => {
+				if (props.scope !== "column") return;
+				if (newVal && !oldVal) {
+					await nextTick();
+					setFocusOnEdit();
+				}
+			}
+		);
 
 		const hasValue = computed<boolean>(
 			() => props.value !== "" && !!props.value
@@ -102,10 +117,11 @@ export default defineComponent({
 <style scoped>
 :deep(div.v-input__slot) {
 	padding: 0;
+	font-family: var(--font-accent);
 }
 
 :deep(textarea) {
-	font-size: v-bind(fontSize);
+	font-size: var(--heading-5);
 	background: transparent !important;
 }
 :deep(input) {
