@@ -25,14 +25,6 @@
 </template>
 
 <script lang="ts">
-import {
-	mdiAlertCircle,
-	mdiArrowCollapseDown,
-	mdiArrowCollapseUp,
-	mdiFileDocumentOutline,
-	mdiTrashCanOutline,
-	mdiTrayArrowDown,
-} from "@mdi/js";
 import { defineComponent, ref } from "vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
@@ -82,12 +74,6 @@ export default defineComponent({
 
 		return {
 			fileContentElement,
-			mdiAlertCircle,
-			mdiFileDocumentOutline,
-			mdiArrowCollapseUp,
-			mdiArrowCollapseDown,
-			mdiTrashCanOutline,
-			mdiTrayArrowDown,
 			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
