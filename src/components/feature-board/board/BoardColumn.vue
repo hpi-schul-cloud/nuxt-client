@@ -178,6 +178,7 @@ export default defineComponent({
 }
 .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
 	overflow: visible;
+	margin-bottom: 1.5rem;
 }
 </style>
 <style scoped>
