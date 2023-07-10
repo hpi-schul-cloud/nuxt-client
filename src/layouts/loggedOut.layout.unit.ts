@@ -1,13 +1,14 @@
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
 import VueRouter from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
-import Vue from "vue";
 
 describe("loggedOutLayout", () => {
 	const mountComponent = (attrs = {}) => {
@@ -35,7 +36,7 @@ describe("loggedOutLayout", () => {
 				},
 			},
 			provide: {
-				envConfigModule: envConfigModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				applicationErrorModule: applicationErrorModuleMock,
 			},
 			router,
