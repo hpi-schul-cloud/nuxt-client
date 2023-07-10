@@ -12,7 +12,7 @@
 			>
 				<span class="description">{{ s.name }} </span>
 				<span v-show="index < currentStep">
-					<base-icon source="material" icon="check" />
+					<v-icon class="material-icon">$mdiCheck</v-icon>
 				</span>
 			</li>
 		</ul>

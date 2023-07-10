@@ -68,8 +68,6 @@ const materialIcons = {
 	"mdi-course_outline": mdiSchoolOutline,
 	"mdi-dashboard_outline": mdiViewGridOutline,
 	"mdi-done_all": mdiCheckAll,
-	"mdi-email_check": mdiEmailCheckOutline,
-	"mdi-email_error": mdiEmailRemoveOutline,
 	"mdi-error": mdiAlertCircle,
 	"mdi-event": mdiCalendar,
 	"mdi-favorite": mdiHeart,
@@ -128,6 +126,8 @@ const materialIcons = {
 	mdiQrcode,
 	mdiShieldAccountVariantOutline,
 	mdiTune,
+	mdiEmailCheckOutline,
+	mdiEmailRemoveOutline,
 };
 
 export default materialIcons;
