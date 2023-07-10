@@ -142,6 +142,14 @@ const materialIcons = {
 	mdiFormatListBulleted,
 	mdiFormatListNumbered,
 	mdiImage,
+	mdiViewGridOutline,
+	mdiSchoolOutline,
+	mdiFormatListChecks,
+	mdiFolderOpenOutline,
+	mdiNewspaperVariantOutline,
+	mdiCalendarOutline,
+	mdiPuzzleOutline,
+	mdiCogOutline,
 };
 
 export default materialIcons;

@@ -34,7 +34,17 @@
 							:href="route.href"
 							:no-styles="true"
 						>
-							<base-icon
+							<v-icon
+								v-if="route.icon"
+								class="icon"
+								:color="
+									isActive(route.title) || isChildActive(route.title)
+										? 'var(--v-primary-base)'
+										: 'var(--v-secondary-base)'
+								"
+								>{{ route.icon }}</v-icon
+							>
+							<!-- <base-icon
 								v-if="route.icon"
 								:icon="route.icon"
 								:source="route.source || DEFAULT_ICON_SOURCE"
@@ -44,7 +54,7 @@
 										: 'var(--v-secondary-base)'
 								"
 								class="icon"
-							/>
+							/> -->
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -331,6 +341,7 @@ export default defineComponent({
 	height: 24px;
 	margin-right: 8px;
 	vertical-align: middle;
+	fill: currentColor;
 
 	.v-icon {
 		width: 24px;

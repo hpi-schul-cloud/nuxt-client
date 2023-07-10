@@ -31,14 +31,14 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
-		icon: "dashboard_outline",
+		icon: "$mdiViewGridOutline",
 		testId: "Übersicht",
 		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
 		title: "global.sidebar.courses",
 		to: "/rooms-overview",
-		icon: "course_outline",
+		icon: "$mdiSchoolOutline",
 		testId: "Course-Overview",
 		activeForUrls: [
 			"^/rooms-overview($|/.*)",
@@ -49,7 +49,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.teams",
 		href: "/teams",
-		icon: "team_outline",
+		icon: "$mdiAccountGroupOutline",
 		permission: "TEAMS_ENABLED",
 		testId: "Teams",
 		activeForUrls: ["^/teams($|/.*)"],
@@ -57,7 +57,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "task",
+		icon: "$mdiFormatListChecks",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -65,7 +65,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "task",
+		icon: "$mdiFormatListChecks",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -74,13 +74,13 @@ const getSidebarItems = (
 		title: "global.sidebar.files-old",
 		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
-		icon: "file_open_outline",
+		icon: "$mdiFolderOpenOutline",
 		testId: "Meine Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.filesPersonal",
-				icon: "folder_open_user_outline",
+				icon: "$folder_open_user_outline",
 				source: "custom",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
@@ -88,7 +88,7 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "folder_open_courses_outline",
+				icon: "$folder_open_courses_outline",
 				source: "custom",
 				href: "/files/courses/",
 				testId: "Kurse",
@@ -97,7 +97,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
-				icon: "folder_open_teams_outline",
+				icon: "$folder_open_teams_outline",
 				source: "custom",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
@@ -117,28 +117,28 @@ const getSidebarItems = (
 		title: "global.sidebar.files",
 		permission: "COLLABORATIVE_FILES",
 		href: "/cfiles",
-		icon: "file_open_outline",
+		icon: "$mdiFolderOpenOutline",
 		testId: "Dateien",
 		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",
 		href: "/news",
-		icon: "news_outline",
+		icon: "$mdiNewspaperVariantOutline",
 		testId: "Neuigkeiten",
 		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
-		icon: "calendar_outline",
+		icon: "$mdiCalendarOutline",
 		testId: "Termine",
 		activeForUrls: ["^/calendar($|/.*)"],
 	},
 	{
 		title: "common.words.lernstore",
 		to: "/content",
-		icon: "lernstore_outline",
+		icon: "$lernstore_outline",
 		source: "custom",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
@@ -147,7 +147,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.addons",
 		href: "/addons",
-		icon: "puzzle_outline",
+		icon: "$mdiPuzzleOutline",
 		permission: "ADDONS_ENABLED",
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
@@ -155,7 +155,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "setting_outline",
+		icon: "$mdiCogOutline",
 		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
