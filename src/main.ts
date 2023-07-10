@@ -84,7 +84,7 @@ import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
-import { initializeAxios, setupApiErrorHandlers } from "./utils/api";
+import { initializeAxios } from "./utils/api";
 
 import {
 	APPLICATION_ERROR_KEY,
@@ -103,7 +103,6 @@ import {
 		`${window.location.origin}/runtime.config.json`
 	);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
-	setupApiErrorHandlers(axios);
 
 	initializeAxios(axios);
 

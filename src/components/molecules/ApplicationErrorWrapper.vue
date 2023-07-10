@@ -6,6 +6,16 @@
 				:error-text="translatedErrorMessage"
 				data-testid="error-content"
 			/>
+			<v-btn
+				class="mt-4"
+				color="primary"
+				depressed
+				ref="btn-back"
+				data-testid="btn-back"
+				href="/dashboard"
+			>
+				{{ $t("error.action.back") }}
+			</v-btn>
 		</div>
 		<slot v-else></slot>
 	</div>
