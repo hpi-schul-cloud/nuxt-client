@@ -222,26 +222,22 @@
 			</section>
 
 			<section v-if="currentStep === 3">
-				<base-content-container>
-					<h4 class="centered">
-						{{ successMessage }}
-					</h4>
-					<img
-						class="mb--md"
-						:src="image"
-						:alt="
-							$t(
-								'pages.administration.students.consent.steps.success.image.alt'
-							)
-						"
-					/>
+				<h4 class="centered">
+					{{ successMessage }}
+				</h4>
+				<img
+					class="mb--md"
+					:src="image"
+					:alt="
+						$t('pages.administration.students.consent.steps.success.image.alt')
+					"
+				/>
 
-					<div class="d-flex justify-end">
-						<v-btn color="primary" outlined @click="success">{{
-							$t("pages.administration.students.consent.steps.success.back")
-						}}</v-btn>
-					</div>
-				</base-content-container>
+				<div class="d-flex justify-end">
+					<v-btn color="primary" outlined @click="success">{{
+						$t("pages.administration.students.consent.steps.success.back")
+					}}</v-btn>
+				</div>
 			</section>
 
 			<base-modal :active.sync="cancelWarning">
