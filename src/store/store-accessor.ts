@@ -19,6 +19,7 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
+import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
@@ -53,6 +54,7 @@ export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
+export let privacyPolicyModule: PrivacyPolicyModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
@@ -82,6 +84,7 @@ export function initializeStores(store: Store<any>): void {
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
+	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
@@ -114,6 +117,7 @@ export const modules = {
 	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
 	notifierModule: NotifierModule,
+	privacyPolicyModule: PrivacyPolicyModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,

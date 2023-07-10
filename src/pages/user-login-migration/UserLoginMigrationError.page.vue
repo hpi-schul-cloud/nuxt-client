@@ -40,19 +40,19 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import SystemsModule from "@/store/systems";
+import { System } from "@/store/types/system";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	computed,
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
 	inject,
 	onMounted,
 	ref,
-	Ref,
 } from "vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import EnvConfigModule from "@/store/env-config";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -74,8 +74,7 @@ export default defineComponent({
 	setup(props) {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -95,12 +94,11 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(() =>
-			envConfigModule?.getAccessibilityReportEmail
-				? `mailto:${
-						envConfigModule.getAccessibilityReportEmail
-				  }?subject=${getSubject()}`
-				: ""
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
 		);
 
 		onMounted(async () => {
