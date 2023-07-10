@@ -45,15 +45,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import { printDateTime, fromNow } from "../../plugins/datetime";
 import { mdiAlertCircle, mdiInformation } from "@mdi/js";
+import { StatusAlert } from "@/store/types/status-alert";
 
 export default defineComponent({
 	name: "StatusAlerts",
 	props: {
 		statusAlerts: {
-			type: Array,
+			type: Array as PropType<StatusAlert[]>,
 			default: () => [],
 		},
 	},

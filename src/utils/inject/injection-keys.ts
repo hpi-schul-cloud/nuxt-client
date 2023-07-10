@@ -7,6 +7,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import RoomModule from "@/store/room";
 import VideoConferenceModule from "@/store/video-conference";
+import StatusAlertsModule from "@/store/status-alerts";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -22,3 +23,5 @@ export const CONTEXT_EXTERNAL_TOOLS_MODULE: InjectionKey<ContextExternalToolsMod
 export const ROOM_MODULE: InjectionKey<RoomModule> = Symbol("roomModule");
 export const VIDEO_CONFERENCE_MODULE: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
+export const STATUS_ALERTS_MODULE: InjectionKey<StatusAlertsModule> =
+	Symbol("statusAlertsModule");
