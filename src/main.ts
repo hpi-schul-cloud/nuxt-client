@@ -94,6 +94,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE,
 	VIDEO_CONFERENCE_MODULE,
+	STATUS_ALERTS_MODULE,
 } from "./utils/inject";
 
 (async () => {
@@ -154,7 +155,7 @@ import {
 			roomsModule,
 			schoolsModule,
 			shareModule,
-			statusAlertsModule,
+			[STATUS_ALERTS_MODULE.valueOf()]: statusAlertsModule,
 			systemsModule,
 			taskCardModule,
 			tasksModule,
