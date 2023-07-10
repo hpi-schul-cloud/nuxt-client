@@ -2,10 +2,7 @@
 	<v-list-item
 		class="grey lighten-3 px-0 rounded-t-sm"
 		inactive
-		ref="fileContentElement"
 		:ripple="false"
-		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
 	>
 		<v-img class="rounded-t-sm" :src="url" :alt="fileName" />
 		<div v-if="isEditMode" class="menu">
@@ -25,8 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { defineComponent } from "vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
@@ -46,20 +42,9 @@ export default defineComponent({
 		"delete:element",
 		"move-down:element",
 		"move-up:element",
-		"move-keyboard:element",
 		"update:caption",
 	],
 	setup(props, { emit }) {
-		const fileContentElement = ref(undefined);
-		useBoardFocusHandler(props.fileId, fileContentElement);
-
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			if (props.isEditMode) {
-				event.preventDefault();
-				emit("move-keyboard:element", event);
-			}
-		};
-
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -73,8 +58,6 @@ export default defineComponent({
 		};
 
 		return {
-			fileContentElement,
-			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

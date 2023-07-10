@@ -3,10 +3,7 @@
 		class="grey lighten-3 px-2 rounded-t-sm"
 		data-testid="board-file-element-edit"
 		inactive
-		ref="fileContentElement"
 		:ripple="false"
-		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
 	>
 		<v-list-item-icon class="my-2 mr-2">
 			<v-icon
@@ -41,8 +38,7 @@
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { defineComponent, ref } from "vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { defineComponent } from "vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
@@ -57,21 +53,8 @@ export default defineComponent({
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"move-keyboard:element",
-	],
+	emits: ["delete:element", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
-		const fileContentElement = ref(undefined);
-		useBoardFocusHandler(props.fileId, fileContentElement);
-
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			event.preventDefault();
-			emit("move-keyboard:element", event);
-		};
-
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -85,9 +68,7 @@ export default defineComponent({
 		};
 
 		return {
-			fileContentElement,
 			mdiFileDocumentOutline,
-			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

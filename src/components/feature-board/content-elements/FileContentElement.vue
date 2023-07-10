@@ -2,9 +2,12 @@
 	<v-card
 		class="mb-4"
 		data-testid="board-file-element"
+		dense
 		elevation="0"
 		outlined
-		dense
+		ref="fileContentElement"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
 	>
 		<div v-if="fileRecord">
 			<div v-if="isImage">
@@ -19,7 +22,6 @@
 					:hasMultipleElements="hasMultipleElements"
 					@move-down:element="onMoveFileEditDown"
 					@move-up:element="onMoveFileEditUp"
-					@move-keyboard:element="onMoveFileEditKeyboard"
 					@delete:element="onDeleteElement"
 				/>
 			</div>
@@ -41,7 +43,6 @@
 					:hasMultipleElements="hasMultipleElements"
 					@move-down:element="onMoveFileEditDown"
 					@move-up:element="onMoveFileEditUp"
-					@move-keyboard:element="onMoveFileEditKeyboard"
 					@delete:element="onDeleteElement"
 				/>
 			</div>
@@ -63,7 +64,8 @@
 <script lang="ts">
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, defineComponent, onMounted } from "vue";
+import { PropType, defineComponent, onMounted, ref } from "vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
@@ -97,6 +99,9 @@ export default defineComponent({
 	},
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
+		const fileContentElement = ref(undefined);
+		useBoardFocusHandler(props.element.id, fileContentElement);
+
 		const { modelValue, isAutoFocus } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
@@ -134,15 +139,19 @@ export default defineComponent({
 			await fetchPendingFileRecursively();
 		};
 
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:edit", event);
+			}
+		};
+
 		const onMoveFileEditDown = () => {
 			emit("move-down:edit");
 		};
 
 		const onMoveFileEditUp = () => {
 			emit("move-up:edit");
-		};
-		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
-			emit("move-keyboard:edit", event);
 		};
 
 		const onDeleteElement = async (): Promise<void> => {
@@ -160,6 +169,7 @@ export default defineComponent({
 			return props.deleteElement(props.element.id);
 		};
 		return {
+			fileContentElement,
 			fileRecord,
 			isAutoFocus,
 			isBlockedByVirusScan,
@@ -167,9 +177,9 @@ export default defineComponent({
 			modelValue,
 			url,
 			onDeleteElement,
+			onKeydownArrow,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
-			onMoveFileEditKeyboard,
 		};
 	},
 });
