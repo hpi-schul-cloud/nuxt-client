@@ -160,59 +160,59 @@ export default defineComponent({
 			highlight: {
 				options: [
 					{
-						model: "marker1",
-						class: "marker-1",
-						title: "Marker 1",
-						color: "#d4d6d9",
+						model: "dullPinkMarker",
+						class: "marker-dull-pink",
+						title: i18n.t("components.edtitor.highlight.dullPink").toString(),
+						color: "#f2d0db",
 						type: "marker",
 					},
 					{
-						model: "marker2",
-						class: "marker-2",
-						title: "Marker 2",
-						color: "#dbd4d1",
+						model: "pinkMarker",
+						class: "marker-pink",
+						title: "Pink marker",
+						color: "#fc7899",
 						type: "marker",
 					},
 					{
-						model: "marker3",
-						class: "marker-3",
-						title: "Marker 3",
+						model: "dullYellowMarker",
+						class: "marker-dull-yellow",
+						title: i18n.t("components.edtitor.highlight.dullYellow").toString(),
 						color: "#f3d9c3",
 						type: "marker",
 					},
 					{
-						model: "marker4",
-						class: "marker-4",
-						title: "Marker 4",
-						color: "#dddbc8",
+						model: "yellowMarker",
+						class: "marker-yellow",
+						title: "Yellow marker",
+						color: "#fdfd77",
 						type: "marker",
 					},
 					{
-						model: "marker5",
-						class: "marker-5",
-						title: "Marker 5",
-						color: "#d8e3ce",
-						type: "marker",
-					},
-					{
-						model: "marker6",
-						class: "marker-6",
-						title: "Marker 6",
-						color: "#c3e1de",
-						type: "marker",
-					},
-					{
-						model: "marker7",
-						class: "marker-7",
-						title: "Marker 7",
+						model: "dullBlueMarker",
+						class: "marker-dull-blue",
+						title: i18n.t("components.edtitor.highlight.dullBlue").toString(),
 						color: "#c3e0f2",
 						type: "marker",
 					},
 					{
-						model: "marker8",
-						class: "marker-8",
-						title: "Marker 8",
-						color: "#cdd3f6",
+						model: "blueMarker",
+						class: "marker-blue",
+						title: "Blue marker",
+						color: "#72ccfd",
+						type: "marker",
+					},
+					{
+						model: "dullGreenMarker",
+						class: "marker-dull-green",
+						title: i18n.t("components.edtitor.highlight.dullGreen").toString(),
+						color: "#d8e3ce",
+						type: "marker",
+					},
+					{
+						model: "greenMarker",
+						class: "marker-green",
+						title: "Green marker",
+						color: "#62f962",
 						type: "marker",
 					},
 				],
@@ -276,32 +276,20 @@ export default defineComponent({
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 .ck-content {
-	.marker-1 {
-		background-color: #d4d6d9;
+	.marker-dull-pink {
+		background-color: #f2d0db;
 	}
-	.marker-2 {
-		background-color: #dbd4d1;
-	}
-	.marker-3 {
+	.marker-dull-yellow {
 		background-color: #f3d9c3;
 	}
-	.marker-4 {
-		background-color: #dddbc8;
-	}
-	.marker-5 {
-		background-color: #d8e3ce;
-	}
-	.marker-6 {
-		background-color: #c3e1de;
-	}
-	.marker-7 {
+	.marker-dull-blue {
 		background-color: #c3e0f2;
 	}
-	.marker-8 {
-		background-color: #cdd3f6;
+	.marker-dull-green {
+		background-color: #d8e3ce;
 	}
 }
-// TODO move all style to ckbuild
+
 .ck-blurred {
 	border: none !important;
 }
