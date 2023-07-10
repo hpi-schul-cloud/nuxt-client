@@ -170,7 +170,7 @@ export default defineComponent({
 						model: "pinkMarker",
 						class: "marker-pink",
 						title: "Pink marker",
-						color: "#fc7899",
+						color: "var(--ck-highlight-marker-pink)",
 						type: "marker",
 					},
 					{
@@ -184,7 +184,7 @@ export default defineComponent({
 						model: "yellowMarker",
 						class: "marker-yellow",
 						title: "Yellow marker",
-						color: "#fdfd77",
+						color: "var(--ck-highlight-marker-yellow)",
 						type: "marker",
 					},
 					{
@@ -198,7 +198,7 @@ export default defineComponent({
 						model: "blueMarker",
 						class: "marker-blue",
 						title: "Blue marker",
-						color: "#72ccfd",
+						color: "var(--ck-highlight-marker-blue)",
 						type: "marker",
 					},
 					{
@@ -212,7 +212,7 @@ export default defineComponent({
 						model: "greenMarker",
 						class: "marker-green",
 						title: "Green marker",
-						color: "#62f962",
+						color: "var(--ck-highlight-marker-green)",
 						type: "marker",
 					},
 				],
