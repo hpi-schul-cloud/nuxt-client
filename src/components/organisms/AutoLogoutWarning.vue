@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active="active" @onBackdropClick="extendSession">
+	<base-modal :active="true" @onBackdropClick="extendSession">
 		<template #body>
 			<div class="wrapper">
 				<img
@@ -12,17 +12,16 @@
 			</div>
 		</template>
 		<template #footer>
-			<center-slot class="mb--md">
+			<div class="d-flex justify-center align-center mb-4">
 				<v-btn color="primary" depressed @click="extendSession">
 					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
 				</v-btn>
-			</center-slot>
+			</div>
 		</template>
 	</base-modal>
 </template>
 
 <script>
-import CenterSlot from "@/components/atoms/CenterSlot";
 import { autoLogoutModule, notifierModule } from "@/store";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
@@ -34,7 +33,6 @@ const toast = {
 
 export default {
 	components: {
-		CenterSlot,
 		RenderHTML,
 	},
 	computed: {
