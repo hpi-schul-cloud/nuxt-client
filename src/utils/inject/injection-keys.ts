@@ -14,14 +14,13 @@ export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 export const I18N_KEY: InjectionKey<VueI18n> = Symbol("i18n");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 	Symbol("notifierModule");
-export const AUTH_MODULE: InjectionKey<AuthModule> = Symbol("authModule");
-export const EXTERNAL_TOOLS_MODULE: InjectionKey<ExternalToolsModule> = Symbol(
-	"externalToolsModule"
-);
-export const CONTEXT_EXTERNAL_TOOLS_MODULE: InjectionKey<ContextExternalToolsModule> =
+export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
+export const EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ExternalToolsModule> =
+	Symbol("externalToolsModule");
+export const CONTEXT_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ContextExternalToolsModule> =
 	Symbol("contextExternalToolsModule");
-export const ROOM_MODULE: InjectionKey<RoomModule> = Symbol("roomModule");
-export const VIDEO_CONFERENCE_MODULE: InjectionKey<VideoConferenceModule> =
+export const ROOM_MODULE_KEY: InjectionKey<RoomModule> = Symbol("roomModule");
+export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
-export const STATUS_ALERTS_MODULE: InjectionKey<StatusAlertsModule> =
+export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> =
 	Symbol("statusAlertsModule");
