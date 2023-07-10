@@ -34,7 +34,6 @@
 			:hasMultipleElements="hasMultipleElements"
 			@move-down:element="onMoveElementDown"
 			@move-up:element="onMoveElementUp"
-			@move-keyboard:element="onKeydownArrow"
 			@delete:element="onDeleteElement"
 		/>
 	</v-list-item>
