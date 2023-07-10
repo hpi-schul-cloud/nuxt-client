@@ -184,7 +184,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-				expect(breadcrumbs.at(0).text()).toEqual("pages.courses.index.title");
+				expect(breadcrumbs.at(0).text()).toEqual("common.words.courses");
 				expect(breadcrumbs.at(1).text()).toEqual("Mathematik");
 			});
 		});

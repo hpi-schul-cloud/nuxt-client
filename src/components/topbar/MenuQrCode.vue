@@ -1,6 +1,6 @@
 <template>
 	<div class="pa-4">
-		<base-qr-code ref="qrcode" :url="url" />
+		<base-qr-code ref="qrCode" :url="url" />
 		<div class="pb-2">
 			{{ $t("components.legacy.MenuQrCode.qrHintText") }}
 		</div>
@@ -11,28 +11,36 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref } from "vue";
 import { mdiPrinter } from "@mdi/js";
 
-export default {
+export default defineComponent({
+	name: "MenuQrCode",
 	props: {
 		url: {
 			type: String,
 			default: window.location.href,
 		},
 	},
-	data() {
+	setup() {
+		const qrCode = ref<HTMLDivElement | null>(null);
+
+		const openPrintMenu = () => {
+			const win = window.open();
+
+			if (qrCode.value !== null) {
+				win?.document.write(qrCode.value.innerHTML);
+				win?.print();
+				win?.close();
+			}
+		};
+
 		return {
 			mdiPrinter,
+			qrCode,
+			openPrintMenu,
 		};
 	},
-	methods: {
-		openPrintMenu: function () {
-			const win = window.open();
-			win.document.write(this.$refs.qrcode.$el.innerHTML);
-			win.print();
-			win.close();
-		},
-	},
-};
+});
 </script>

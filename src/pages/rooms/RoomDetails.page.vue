@@ -12,11 +12,11 @@
 					{{ roomData.title }}
 				</div>
 				<div class="course-title pa-2 pb-1">
-					<more-item-menu
+					<room-dot-menu
 						:menu-items="headlineMenuItems"
-						:show="true"
 						nudge-right="120"
 						data-testid="title-menu"
+						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import MoreItemMenu from "@/components/molecules/MoreItemMenu";
+import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
@@ -164,7 +164,7 @@ export default defineComponent({
 		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
-		MoreItemMenu,
+		RoomDotMenu,
 		vCustomDialog,
 		CopyResultModal,
 		ShareModal,

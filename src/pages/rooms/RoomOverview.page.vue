@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<room-wrapper
-			:header-aria-label="sectionAriaLabel"
 			:has-rooms="hasCurrentRooms"
 			:has-import-token="!!importToken"
 		>
@@ -206,11 +205,6 @@ export default {
 		},
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
-		},
-		sectionAriaLabel() {
-			return this.$t("pages.rooms.headerSection.ariaLabel", {
-				itemCount: this.rooms.length,
-			});
 		},
 		isImportMode() {
 			return this.$route.query.import !== undefined;
