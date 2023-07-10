@@ -61,7 +61,6 @@ import {
 } from "@mdi/js";
 
 const materialIcons = {
-	"mdi-admin_panel_settings": mdiShieldAccountVariantOutline,
 	"mdi-calendar_outline": mdiCalendarOutline,
 	"mdi-check_box_outline_blank": mdiCheckboxBlankOutline,
 	"mdi-check_box": mdiCheckboxOutline,
@@ -108,12 +107,16 @@ const materialIcons = {
 	mdiCardAccountDetailsOutline,
 	mdiCheck,
 	mdiCheckAll,
+	mdiCheckCircle,
 	mdiCheckCircleOutline,
 	mdiClose,
 	mdiDeleteOutline,
 	mdiDnsOutline,
 	mdiEmailOutline,
 	mdiFileTreeOutline,
+	mdiFolder,
+	mdiFolderAccount,
+	mdiHeart,
 	mdiLockOutline,
 	mdiMagnify,
 	mdiMenuDown,

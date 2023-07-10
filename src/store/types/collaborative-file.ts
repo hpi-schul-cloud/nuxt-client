@@ -9,10 +9,10 @@ export enum CollaborativeFileType {
 
 // styleclass
 export enum FileIcon {
-	FAVORITE = "favorite",
+	FAVORITE = "$mdiHeart",
 	FILE = "insert_drive_file",
-	FOLDER = "folder",
-	SHARED_FOLDER = "folder_shared",
+	FOLDER = "$mdiFolder",
+	SHARED_FOLDER = "$mdiFolderAccount",
 	UNKNOWN = "unknown",
 }
 
