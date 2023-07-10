@@ -62,8 +62,10 @@ export default defineComponent({
 		useBoardFocusHandler(props.fileId, fileContentElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
-			event.preventDefault();
-			emit("move-keyboard:element", event);
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:element", event);
+			}
 		};
 
 		const onMoveElementDown = () => {
