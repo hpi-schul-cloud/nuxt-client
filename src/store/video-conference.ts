@@ -11,7 +11,6 @@ import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	VideoConferenceInfo,
-	VideoConferenceOptions,
 	VideoConferenceState,
 } from "./types/video-conference";
 

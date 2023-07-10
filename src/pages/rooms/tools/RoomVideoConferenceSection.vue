@@ -107,7 +107,6 @@ export default defineComponent({
 				videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
 				canJoin.value
 			) {
-				// TODO N21-942: join meeting
 				await joinVideoConference();
 			}
 		};
