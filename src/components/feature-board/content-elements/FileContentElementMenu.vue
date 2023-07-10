@@ -67,22 +67,13 @@ export default defineComponent({
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-keyboard:element",
-		"move-down:element",
-		"move-up:element",
-	],
+	emits: ["delete:element", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
-		const onDownload = async () => {
-			await downloadFile(props.url, props.fileName);
-		};
 		const onDelete = () => {
 			emit("delete:element");
 		};
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			event.preventDefault();
-			emit("move-keyboard:element", event);
+		const onDownload = async () => {
+			await downloadFile(props.url, props.fileName);
 		};
 		const onMoveElementDown = () => {
 			emit("move-down:element");
@@ -99,7 +90,6 @@ export default defineComponent({
 			mdiTrayArrowDown,
 			onDelete,
 			onDownload,
-			onKeydownArrow,
 			onMoveElementDown,
 			onMoveElementUp,
 		};

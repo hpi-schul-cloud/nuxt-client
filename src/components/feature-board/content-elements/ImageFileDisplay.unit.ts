@@ -142,5 +142,32 @@ describe("ImageFileDisplay", () => {
 
 			expect(hasMultipleElements).toBe(hasMultipleElementsProp);
 		});
+
+		it("should forward delete:element from FileContentElementMenu", () => {
+			const { wrapper } = setup(true);
+			const menu = wrapper.findComponent(FileContentElementMenu);
+
+			menu.vm.$emit("delete:element");
+
+			expect(wrapper.emitted("delete:element")).toHaveLength(1);
+		});
+
+		it("should forward move-down:element from FileContentElementMenu", () => {
+			const { wrapper } = setup(true);
+			const menu = wrapper.findComponent(FileContentElementMenu);
+
+			menu.vm.$emit("move-down:element");
+
+			expect(wrapper.emitted("move-down:element")).toHaveLength(1);
+		});
+
+		it("should forward move-down:up from FileContentElementMenu", () => {
+			const { wrapper } = setup(true);
+			const menu = wrapper.findComponent(FileContentElementMenu);
+
+			menu.vm.$emit("move-up:element");
+
+			expect(wrapper.emitted("move-up:element")).toHaveLength(1);
+		});
 	});
 });
