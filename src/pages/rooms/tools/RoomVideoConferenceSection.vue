@@ -26,7 +26,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE,
 	injectStrict,
-	VIDEO_CONFERENCE_MODULE,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 
@@ -42,7 +42,7 @@ export default defineComponent({
 	setup(props) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
-			VIDEO_CONFERENCE_MODULE
+			VIDEO_CONFERENCE_MODULE_KEY
 		);
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(

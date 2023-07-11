@@ -84,8 +84,8 @@ import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-dis
 import ExternalToolsModule from "@/store/external-tools";
 import {
 	AUTH_MODULE,
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
-	EXTERNAL_TOOLS_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
@@ -117,10 +117,10 @@ export default defineComponent({
 	},
 	setup() {
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE
+			EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE);
