@@ -5,19 +5,25 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent, computed } from "vue";
+
+export default defineComponent({
 	props: {
 		columnWidth: {
 			type: String,
 			default: "15rem",
 		},
 	},
-	computed: {
-		col() {
-			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));`;
-		},
+	setup(props) {
+		const col = computed(() => {
+			return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
+		});
+
+		return {
+			col,
+		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
