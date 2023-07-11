@@ -6,6 +6,7 @@
 		elevation="0"
 		outlined
 		ref="fileContentElement"
+		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
@@ -159,6 +160,11 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
+				// we need to set "deletedSince" in order to stop
+				// "fetchPendingFileRecursively"
+				if (fileRecord.value) {
+					fileRecord.value.deletedSince = Date.now().toString();
+				}
 				await deleteFileElement();
 			}
 		};

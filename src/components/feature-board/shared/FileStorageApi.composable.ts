@@ -94,12 +94,18 @@ export const useFileStorageApi = (
 		try {
 			await delay(waitTime);
 
-			await fetchFile();
+			if (!fileRecord.value?.deletedSince) {
+				await fetchFile();
 
-			if (refreshTimer < waitTimeMax) {
-				refreshTimer = refreshTimer + waitTime;
+				if (refreshTimer < waitTimeMax) {
+					refreshTimer = refreshTimer + waitTime;
 
-				await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
+					await fetchPendingFileRecursively(
+						waitTime,
+						waitTimeMax,
+						refreshTimer
+					);
+				}
 			}
 		} catch (error) {
 			return;
