@@ -20,8 +20,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const setup = (cardId = "123123") => {
 	return mountComposable(() => useCardState(cardId), {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+		[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 
