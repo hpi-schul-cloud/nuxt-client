@@ -130,7 +130,6 @@ import {
 	injectStrict,
 } from "@/utils/inject";
 import { User } from "@/store/types/auth";
-// import { statusAlertsModule } from "@/store";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
 import HelpDropdown from "@/components/topbar/HelpDropdown.vue";

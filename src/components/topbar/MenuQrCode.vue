@@ -2,11 +2,11 @@
 	<div class="pa-4">
 		<base-qr-code ref="qrCode" :url="url" />
 		<div class="pb-2">
-			{{ $t("components.legacy.MenuQrCode.qrHintText") }}
+			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
 		<v-btn outlined color="secondary" @click="openPrintMenu">
 			<v-icon left>{{ mdiPrinter }}</v-icon>
-			{{ $t("components.legacy.MenuQrCode.print") }}
+			{{ $t("global.topbar.MenuQrCode.print") }}
 		</v-btn>
 	</div>
 </template>
