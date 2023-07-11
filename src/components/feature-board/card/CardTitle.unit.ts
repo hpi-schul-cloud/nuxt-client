@@ -6,7 +6,6 @@ import CardTitle from "./CardTitle.vue";
 const componentProps = {
 	value: "props value",
 	isFocused: true,
-	forcedTitleFocus: false,
 };
 
 describe(CardTitle.name, () => {
