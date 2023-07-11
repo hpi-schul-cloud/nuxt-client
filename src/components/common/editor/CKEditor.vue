@@ -165,7 +165,7 @@ export default defineComponent({
 					{
 						model: "dullPinkMarker",
 						class: "marker-dull-pink",
-						title: i18n.t("components.edtitor.highlight.dullPink").toString(),
+						title: i18n.t("components.editor.highlight.dullPink").toString(),
 						color: "#f2d0db",
 						type: "marker",
 					},
@@ -179,7 +179,7 @@ export default defineComponent({
 					{
 						model: "dullYellowMarker",
 						class: "marker-dull-yellow",
-						title: i18n.t("components.edtitor.highlight.dullYellow").toString(),
+						title: i18n.t("components.editor.highlight.dullYellow").toString(),
 						color: "#f3d9c3",
 						type: "marker",
 					},
@@ -193,7 +193,7 @@ export default defineComponent({
 					{
 						model: "dullBlueMarker",
 						class: "marker-dull-blue",
-						title: i18n.t("components.edtitor.highlight.dullBlue").toString(),
+						title: i18n.t("components.editor.highlight.dullBlue").toString(),
 						color: "#c3e0f2",
 						type: "marker",
 					},
@@ -207,7 +207,7 @@ export default defineComponent({
 					{
 						model: "dullGreenMarker",
 						class: "marker-dull-green",
-						title: i18n.t("components.edtitor.highlight.dullGreen").toString(),
+						title: i18n.t("components.editor.highlight.dullGreen").toString(),
 						color: "#d8e3ce",
 						type: "marker",
 					},
