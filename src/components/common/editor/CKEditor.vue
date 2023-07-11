@@ -166,7 +166,7 @@ export default defineComponent({
 						model: "dullPinkMarker",
 						class: "marker-dull-pink",
 						title: i18n.t("components.editor.highlight.dullPink").toString(),
-						color: "#f2d0db",
+						color: "var(--ck-highlight-marker-dull-pink)",
 						type: "marker",
 					},
 					{
@@ -180,7 +180,7 @@ export default defineComponent({
 						model: "dullYellowMarker",
 						class: "marker-dull-yellow",
 						title: i18n.t("components.editor.highlight.dullYellow").toString(),
-						color: "#f3d9c3",
+						color: "var(--ck-highlight-marker-dull-yellow)",
 						type: "marker",
 					},
 					{
@@ -194,7 +194,7 @@ export default defineComponent({
 						model: "dullBlueMarker",
 						class: "marker-dull-blue",
 						title: i18n.t("components.editor.highlight.dullBlue").toString(),
-						color: "#c3e0f2",
+						color: "var(--ck-highlight-marker-dull-blue)",
 						type: "marker",
 					},
 					{
@@ -208,7 +208,7 @@ export default defineComponent({
 						model: "dullGreenMarker",
 						class: "marker-dull-green",
 						title: i18n.t("components.editor.highlight.dullGreen").toString(),
-						color: "#d8e3ce",
+						color: "var(--ck-highlight-marker-dull-green)",
 						type: "marker",
 					},
 					{
@@ -282,18 +282,25 @@ export default defineComponent({
 @import "katex/dist/katex.min.css";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
+:root {
+	--ck-highlight-marker-dull-blue: hsl(203, 64%, 86%);
+	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
+	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
+	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
+}
+
 .ck-content {
 	.marker-dull-pink {
-		background-color: #f2d0db;
+		background-color: var(--ck-highlight-marker-dull-pink);
 	}
 	.marker-dull-yellow {
-		background-color: #f3d9c3;
+		background-color: var(--ck-highlight-marker-dull-yellow);
 	}
 	.marker-dull-blue {
-		background-color: #c3e0f2;
+		background-color: var(--ck-highlight-marker-dull-blue);
 	}
 	.marker-dull-green {
-		background-color: #d8e3ce;
+		background-color: var(--ck-highlight-marker-dull-green);
 	}
 }
 
