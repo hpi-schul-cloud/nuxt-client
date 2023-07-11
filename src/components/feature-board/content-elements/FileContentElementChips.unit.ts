@@ -1,16 +1,11 @@
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
+import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import FileContentElementChips from "./FileContentElementChips.vue";
-import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementChips", () => {
-	let authModuleMock: AuthModule;
-	let envConfigModuleMock: EnvConfigModule;
-
 	const setup = () => {
 		const fileSize = 3800;
 		const fileName = "pic.jpeg";
@@ -31,11 +26,9 @@ describe("FileContentElementChips", () => {
 				fileName,
 			},
 			provide: {
-				[I18N_KEY as symbol]: {
+				[I18N_KEY.valueOf()]: {
 					n: (size: number, format: string) => size.toString() + format,
 				},
-				authModule: authModuleMock,
-				envConfigModule: envConfigModuleMock,
 			},
 		});
 
