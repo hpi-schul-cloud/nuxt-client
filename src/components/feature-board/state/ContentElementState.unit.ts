@@ -36,8 +36,8 @@ const TEST_ELEMENT: RichTextElementResponse = {
 describe("useContentElementState composable", () => {
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
-			[I18N_KEY as symbol]: { t: (key: string) => key },
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+			[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 		});
 	};
 	it("should unwrap element model data", async () => {

@@ -5,7 +5,7 @@ import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import { I18N_KEY } from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, I18N_KEY } from "@/utils/inject";
 
 describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
@@ -31,11 +31,14 @@ describe("@pages/Error.page.vue", () => {
 		return shallowMount(ErrorPage, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				applicationErrorModule: createModuleMocks(ApplicationErrorModule, {
-					getStatusCode: statusCode,
-					getTranslationKey: translationKey,
-				}),
-				[I18N_KEY as symbol]: {
+				[APPLICATION_ERROR_KEY.valueOf()]: createModuleMocks(
+					ApplicationErrorModule,
+					{
+						getStatusCode: statusCode,
+						getTranslationKey: translationKey,
+					}
+				),
+				[I18N_KEY.valueOf()]: {
 					t: (key: string) => "translated_" + key,
 					tc: (key: string) => "translated_" + key,
 				},

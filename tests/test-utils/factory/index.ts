@@ -23,3 +23,4 @@ export * from "./contextExternalToolTemplateListItemFactory";
 export * from "./courseFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceInfoFactory";
+export * from "./videoConferenceJoinResponseFactory";
