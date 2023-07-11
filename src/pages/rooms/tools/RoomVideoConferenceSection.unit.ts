@@ -408,4 +408,49 @@ describe("RoomVideoConferenceSection", () => {
 			});
 		});
 	});
+
+	describe("when the video conference card requests a click", () => {
+		describe("when the video conference is running", () => {
+			const setup = () => {
+				const { wrapper, videoConferenceModule } = getWrapper(
+					{
+						roomId: "roomId",
+					},
+					["join_meeting"],
+					false,
+					{
+						getVideoConferenceInfo: {
+							state: VideoConferenceState.RUNNING,
+							options: {
+								everyAttendeeJoinsMuted: false,
+								moderatorMustApproveJoinRequests: false,
+								everybodyJoinsAsModerator: false,
+							},
+						},
+						getLoading: true,
+					}
+				);
+
+				return {
+					wrapper,
+					videoConferenceModule,
+				};
+			};
+
+			it("should call joinVideoConference", async () => {
+				const { wrapper, videoConferenceModule } = setup();
+
+				const card = wrapper.findComponent({
+					name: "room-video-conference-card",
+				});
+
+				await card.vm.$emit("click");
+
+				expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+					scope: VideoConferenceScope.Course,
+					scopeId: "roomId",
+				});
+			});
+		});
+	});
 });
