@@ -92,8 +92,8 @@ import ExternalToolSelectionRow from "../administration/external-tool/ExternalTo
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
-	EXTERNAL_TOOLS_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
@@ -119,10 +119,10 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE
+			EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const roomsModule: RoomsModule | undefined = inject("roomsModule");
 

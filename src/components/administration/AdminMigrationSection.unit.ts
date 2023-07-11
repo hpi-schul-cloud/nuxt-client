@@ -30,7 +30,7 @@ describe("AdminMigrationSection", () => {
 				i18n: true,
 			}),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				schoolsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
@@ -53,7 +53,7 @@ describe("AdminMigrationSection", () => {
 			expect(() =>
 				shallowMount(AdminMigrationSection, {
 					provide: {
-						[I18N_KEY as symbol]: { t: (key: string) => key },
+						[I18N_KEY.valueOf()]: { t: (key: string) => key },
 					},
 				})
 			).toThrow();

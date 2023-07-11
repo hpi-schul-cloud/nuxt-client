@@ -3,10 +3,12 @@ import {
 	VideoConferenceApiInterface,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
+	VideoConferenceJoinResponse,
 } from "@/serverApi/v3/api";
 import {
 	videoConferenceInfoFactory,
 	videoConferenceInfoResponseFactory,
+	videoConferenceJoinResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { AxiosError } from "axios";
 import {
@@ -29,6 +31,7 @@ describe("VideoConferenceModule", () => {
 	const mockApi = () => {
 		const apiMock = {
 			videoConferenceControllerInfo: jest.fn(),
+			videoConferenceControllerJoin: jest.fn(),
 		};
 
 		jest
@@ -164,6 +167,64 @@ describe("VideoConferenceModule", () => {
 				const { error } = setup();
 
 				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+		});
+	});
+
+	describe("joinVideoConference", () => {
+		describe("when the api returns a response", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const mockResponse: VideoConferenceJoinResponse =
+					videoConferenceJoinResponseFactory.build({
+						url: "VideoConferenceUrl",
+					});
+
+				apiMock.videoConferenceControllerJoin.mockResolvedValue({
+					data: mockResponse,
+				});
+
+				return {
+					mockResponse,
+				};
+			};
+
+			it("should return a response", async () => {
+				const { mockResponse } = setup();
+
+				const response: VideoConferenceJoinResponse | undefined =
+					await module.joinVideoConference({
+						scopeId: "scopeId",
+						scope: VideoConferenceScope.Course,
+					});
+
+				expect(response).toEqual(mockResponse);
+			});
+		});
+
+		describe("when the api returns an error", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const error = new AxiosError();
+
+				apiMock.videoConferenceControllerJoin.mockRejectedValue(error);
+
+				return {
+					error,
+				};
+			};
+
+			it("should update the stores error", async () => {
+				const { error } = setup();
+
+				await module.joinVideoConference({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
 				});

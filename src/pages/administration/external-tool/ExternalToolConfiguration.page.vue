@@ -80,7 +80,11 @@ import {
 import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
-import { EXTERNAL_TOOLS_MODULE, I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import {
 	computed,
 	ComputedRef,
@@ -109,7 +113,7 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE
+			EXTERNAL_TOOLS_MODULE_KEY
 		);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
