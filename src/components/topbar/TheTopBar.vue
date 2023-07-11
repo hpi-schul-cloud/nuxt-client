@@ -124,7 +124,11 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { I18N_KEY, STATUS_ALERTS_MODULE, injectStrict } from "@/utils/inject";
+import {
+	I18N_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { User } from "@/store/types/auth";
 // import { statusAlertsModule } from "@/store";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
@@ -171,7 +175,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
-		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE);
+		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 		const fullscreen = ref(props.fullscreenMode);
 
 		onMounted(() => {

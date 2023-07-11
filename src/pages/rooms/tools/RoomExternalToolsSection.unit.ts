@@ -3,7 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { AxiosError } from "axios";
 import Vue from "vue";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
@@ -53,7 +53,7 @@ describe("RoomExternalToolsSection", () => {
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
-					[AUTH_MODULE.valueOf()]: authModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			}
 		);

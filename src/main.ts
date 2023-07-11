@@ -88,7 +88,7 @@ import { initializeAxios } from "./utils/api";
 
 import {
 	APPLICATION_ERROR_KEY,
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
@@ -138,7 +138,7 @@ import {
 			accountsModule,
 			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
-			[AUTH_MODULE.valueOf()]: authModule,
+			[AUTH_MODULE_KEY.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,

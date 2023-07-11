@@ -4,16 +4,14 @@ import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import AuthModule from "@/store/auth";
-// import EnvConfigModule from "@/store/env-config";
 import StatusAlertsModule from "@/store/status-alerts";
-// import { statusAlertsModule, authModule } from "@/store";
-import { I18N_KEY, AUTH_MODULE, STATUS_ALERTS_MODULE } from "@/utils/inject";
+import {
+	I18N_KEY,
+	AUTH_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+} from "@/utils/inject";
 import TheTopBar from "./TheTopBar.vue";
 import { StatusAlert } from "@/store/types/status-alert";
-
-// let envConfigModuleMock: EnvConfigModule;
-// let authModuleMock: AuthModule;
-// let statusAlertsModuleMock: StatusAlertsModule;
 
 const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 	const authModule = createModuleMocks(AuthModule, {
@@ -33,10 +31,8 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 		}),
 		provide: {
 			[I18N_KEY as symbol]: { t: (key: string) => key },
-			[AUTH_MODULE.valueOf()]: authModule,
-			[STATUS_ALERTS_MODULE.valueOf()]: statusAlertsModule,
-			// envConfigModule: envConfigModuleMock,
-			// statusAlertsModule: statusAlertsModuleMock,
+			[AUTH_MODULE_KEY.valueOf()]: authModule,
+			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 		},
 		propsData: props,
 		attachTo: document.body,
@@ -44,24 +40,10 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 };
 
 describe("@/components/topbar/TheTopBar", () => {
-	// beforeEach(() => {
-	// 	setupStores({
-	// 		authModule: AuthModule,
-	// 		statusAlertsModule: StatusAlertsModule,
-	// 	});
-	// });
-
 	describe("when user is logged in with no status alerts", () => {
 		let wrapper: Wrapper<Vue>;
 
 		beforeEach(() => {
-			// 	jest
-			// 		.spyOn(statusAlertsModule, "fetchStatusAlerts")
-			// 		.mockImplementation(() => {
-			// 			statusAlertsModule.setStatusAlerts([]);
-			// 			return Promise.resolve();
-			// 		});
-
 			wrapper = getWrapper({
 				user: {
 					firstName: "Arthur",
@@ -95,13 +77,6 @@ describe("@/components/topbar/TheTopBar", () => {
 
 	describe("when status alerts exist", () => {
 		it("should render status alerts icon", async () => {
-			// const fetchStatusAlertsSpy = jest
-			// 	.spyOn(statusAlertsModule, "fetchStatusAlerts")
-			// 	.mockImplementation(() => {
-			// 		statusAlertsModule.setStatusAlerts(mockStatusAlerts);
-			// 		return Promise.resolve();
-			// 	});
-
 			const wrapper = getWrapper(
 				{
 					user: {
@@ -116,8 +91,6 @@ describe("@/components/topbar/TheTopBar", () => {
 				mockStatusAlerts
 			);
 			await wrapper.vm.$nextTick();
-
-			// expect(fetchStatusAlertsSpy).toHaveBeenCalled();
 
 			expect(
 				wrapper.findAll('[data-test-id="status-alerts-icon"]')

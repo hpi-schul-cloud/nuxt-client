@@ -131,7 +131,7 @@ import { useRoute, useRouter } from "vue-router/composables";
 
 import { ApiValidationError, ErrorDetails } from "@/store/types/commons";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
@@ -155,7 +155,7 @@ export default defineComponent({
 		const router = useRouter();
 
 		const i18n = injectStrict(I18N_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import { authModule, envConfigModule, filePathsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
@@ -11,7 +12,7 @@ import StatusAlertsModule from "@/store/status-alerts";
 import setupStores from "@@/tests/test-utils/setupStores";
 import legacyLoggedIn from "./legacyLoggedIn.vue";
 import { Envs } from "@/store/types/env-config";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 
 const $route = {
 	query: {
@@ -28,7 +29,6 @@ setupStores({
 	envConfigModule: EnvConfigModule,
 	filePathsModule: FilePathsModule,
 	schoolsModule: SchoolsModule,
-	statusAlertsModule: StatusAlertsModule,
 });
 
 authModule.setUser({
@@ -70,10 +70,15 @@ envConfigModule.setEnvs({
 
 describe("legacyLoggedIn", () => {
 	it("should mark active links", () => {
+		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
+			getStatusAlerts: [],
+		});
+
 		const wrapper = mount(legacyLoggedIn as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			},
 			mocks: {
 				$theme: {
