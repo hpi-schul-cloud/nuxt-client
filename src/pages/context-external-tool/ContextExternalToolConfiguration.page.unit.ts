@@ -18,8 +18,8 @@ import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ToolConfigurationTemplate } from "@/store/external-tool";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
-	EXTERNAL_TOOLS_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 } from "@/utils/inject";
 
@@ -79,8 +79,9 @@ describe("ContextExternalToolConfiguration", () => {
 					i18n: true,
 				}),
 				provide: {
-					[EXTERNAL_TOOLS_MODULE.valueOf()]: externalToolsModule,
-					[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						contextExternalToolsModule,
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					roomsModule,
 				},

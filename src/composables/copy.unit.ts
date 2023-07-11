@@ -27,9 +27,9 @@ describe("copy composable", () => {
 
 		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
 			copyModule: copyModuleMock,
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			loadingStateModule: loadingStateModuleMock,
-			[I18N_KEY as symbol]: i18n,
+			[I18N_KEY.valueOf()]: i18n,
 		});
 
 		return {

@@ -77,7 +77,6 @@
 			<v-row>
 				<v-col class="d-flex">
 					<v-file-input
-						v-model="localSchool.logo"
 						class="school-logo"
 						:label="
 							$t(
@@ -86,6 +85,7 @@
 						"
 						dense
 						prepend-icon=""
+						@change="onLogoChange"
 					></v-file-input>
 				</v-col>
 			</v-row>
@@ -241,6 +241,13 @@ export default {
 		onUpdateFeatureSettings(value, settingName) {
 			this.localSchool.features[settingName] = value;
 		},
+		async onLogoChange(logo) {
+			if (logo) {
+				this.localSchool.logo = await toBase64(logo);
+			} else {
+				this.localSchool.logo = null;
+			}
+		},
 		async save() {
 			const updatedSchool = {
 				id: this.localSchool.id,
@@ -264,7 +271,7 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+				updatedSchool.logo_dataUrl = this.localSchool.logo;
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}

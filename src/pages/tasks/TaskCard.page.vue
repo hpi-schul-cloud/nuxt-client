@@ -134,7 +134,7 @@ import {
 	AUTH_MODULE,
 	I18N_KEY,
 	injectStrict,
-	ROOM_MODULE,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 
 interface VForm extends HTMLFormElement {
@@ -156,7 +156,7 @@ export default defineComponent({
 
 		const i18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE);
-		const roomModule: RoomModule = injectStrict(ROOM_MODULE);
+		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 		const roomsModule: RoomsModule | undefined =
 			inject<RoomsModule>("roomsModule");
 		const schoolsModule: SchoolsModule | undefined =

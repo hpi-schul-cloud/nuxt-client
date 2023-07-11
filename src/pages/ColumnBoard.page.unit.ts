@@ -16,7 +16,7 @@ describe("@pages/ColumnBoard.page.vue", () => {
 		return shallowMount(ColumnBoardPage, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 			mocks: { $router, $route },
 		});

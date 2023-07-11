@@ -22,8 +22,8 @@ describe("@/components/share/ShareModal", () => {
 			}),
 			provide: {
 				shareModule: shareModuleMock,
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 			...attrs,
 		});
