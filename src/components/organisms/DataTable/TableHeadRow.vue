@@ -41,11 +41,7 @@
 							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
 						</v-btn>
 					</span>
-					<info-box
-						v-if="isConsentNecessary"
-						class="info-box"
-						:active.sync="infoBoxActive"
-					>
+					<info-box v-if="true" class="info-box" :active.sync="infoBoxActive">
 						<template #header>{{
 							$t("pages.administration.students.infobox.headline")
 						}}</template>
@@ -203,6 +199,7 @@
 						'is-sortable': column.sortable,
 					}"
 					class="th-wrap"
+					:aria-label="ariaLabel(column)"
 					@click.stop="sort(column)"
 				>
 					<div class="tooltip">
@@ -297,6 +294,23 @@ export default {
 		},
 	},
 	methods: {
+		ariaLabel(column) {
+			const sortOrderText =
+				this.sortOrder === "asc"
+					? `, ${this.$t(
+							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc"
+					  )}`
+					: `, ${this.$t(
+							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc"
+					  )}`;
+
+			const sortableText = column.sortable
+				? `, ${this.$t(
+						"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting"
+				  )}`
+				: "";
+			return column.label + sortOrderText + sortableText;
+		},
 		invertSortOrder(currentOrder) {
 			return currentOrder === "desc" ? "asc" : "desc";
 		},
