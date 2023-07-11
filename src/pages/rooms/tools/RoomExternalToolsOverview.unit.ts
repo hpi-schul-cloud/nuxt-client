@@ -14,9 +14,9 @@ import {
 import { CourseFeatures } from "@/store/types/room";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
-	ROOM_MODULE,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 
 describe("RoomExternalToolOverview", () => {
@@ -53,8 +53,9 @@ describe("RoomExternalToolOverview", () => {
 					i18n: true,
 				}),
 				provide: {
-					[CONTEXT_EXTERNAL_TOOLS_MODULE.valueOf()]: contextExternalToolsModule,
-					[ROOM_MODULE.valueOf()]: roomModule,
+					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						contextExternalToolsModule,
+					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 					[I18N_KEY.valueOf()]: {
 						tc: (key: string): string => key,
 					},

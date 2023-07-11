@@ -5,10 +5,10 @@ import Vue from "vue";
 
 let $axios: AxiosInstance;
 
-export function initializeAxios(axios: AxiosInstance) {
+export const initializeAxios = (axios: AxiosInstance) => {
 	$axios = axios;
 	Vue.prototype.$axios = axios;
-}
+};
 
 export const mapAxiosErrorToResponseError = (
 	error: unknown

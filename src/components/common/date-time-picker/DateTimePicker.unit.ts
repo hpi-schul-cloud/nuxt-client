@@ -24,7 +24,7 @@ describe("@components/date-time-picker/DateTimePicker", () => {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 		});
 	};
