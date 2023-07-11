@@ -46,6 +46,9 @@ export default defineComponent({
 		disabled: {
 			type: Boolean,
 		},
+		autofocus: {
+			type: Boolean,
+		},
 	},
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
@@ -255,6 +258,10 @@ export default defineComponent({
 
 		const handleReady = (editor) => {
 			emit("ready");
+
+			if (props.autofocus) {
+				editor.editing.view.focus();
+			}
 
 			// attach additional event listener not provided by vue wrapper itself
 			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
