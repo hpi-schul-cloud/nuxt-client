@@ -10,10 +10,12 @@ import {
 	RichTextElementContent,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	RoomsApiFactory,
+	BoardResponse,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AnyContentElement } from "../types/ContentElement";
 import { AxiosPromise } from "axios";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -22,6 +24,17 @@ export const useBoardApi = () => {
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
 	const roomApi = RoomsApiFactory(undefined, "/v3", $axios);
+
+	const fetchBoardCall = async (id: string): Promise<BoardResponse> => {
+		try {
+			const response = await boardApi.boardControllerGetBoardSkeleton(id);
+			return response.data;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+
+			throw createApplicationError(responseError.code);
+		}
+	};
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
@@ -192,6 +205,7 @@ export const useBoardApi = () => {
 	};
 
 	return {
+		fetchBoardCall,
 		createColumnCall,
 		createElementCall,
 		deleteElementCall,

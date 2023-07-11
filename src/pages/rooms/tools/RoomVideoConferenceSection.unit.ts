@@ -1,7 +1,11 @@
 import AuthModule from "@/store/auth";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
-import { AUTH_MODULE, I18N_KEY, VIDEO_CONFERENCE_MODULE } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	I18N_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
@@ -50,7 +54,7 @@ describe("RoomVideoConferenceSection", () => {
 						tc: (key: string): string => key,
 					},
 					[AUTH_MODULE.valueOf()]: authModule,
-					[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
+					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 				},
 			}
 		);

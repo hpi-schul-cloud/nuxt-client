@@ -1,5 +1,3 @@
-import { BoardApiFactory } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
 import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
@@ -12,6 +10,7 @@ export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const {
+		fetchBoardCall,
 		createColumnCall,
 		deleteCardCall,
 		deleteColumnCall,
@@ -135,17 +134,9 @@ export const useBoardState = (id: string) => {
 
 	const fetchBoard = async (id: string): Promise<void> => {
 		isLoading.value = true;
-		const boardsApi = BoardApiFactory(undefined, "/v3", $axios);
 
-		const response = await boardsApi.boardControllerGetBoardSkeleton(id);
+		board.value = await fetchBoardCall(id);
 
-		if (isErrorCode(response.status)) {
-			const errorText = generateErrorText("read", "board");
-			showFailure(errorText);
-			return;
-		}
-
-		board.value = { ...response.data, id };
 		isLoading.value = false;
 	};
 
