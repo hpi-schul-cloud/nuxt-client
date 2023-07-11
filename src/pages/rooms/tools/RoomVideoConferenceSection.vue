@@ -13,7 +13,10 @@
 
 <script lang="ts">
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
-import { VideoConferenceScope } from "@/serverApi/v3";
+import {
+	VideoConferenceJoinResponse,
+	VideoConferenceScope,
+} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import {
 	VideoConferenceInfo,
@@ -23,7 +26,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE,
 	injectStrict,
-	VIDEO_CONFERENCE_MODULE,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 
@@ -39,7 +42,7 @@ export default defineComponent({
 	setup(props) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
-			VIDEO_CONFERENCE_MODULE
+			VIDEO_CONFERENCE_MODULE_KEY
 		);
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
@@ -91,7 +94,7 @@ export default defineComponent({
 			});
 		};
 
-		const onClick = () => {
+		const onClick = async () => {
 			if (
 				videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED &&
 				canStart.value
@@ -104,8 +107,19 @@ export default defineComponent({
 				videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
 				canJoin.value
 			) {
-				// TODO N21-942: join meeting
-				return;
+				await joinVideoConference();
+			}
+		};
+
+		const joinVideoConference = async () => {
+			const videoConferenceUrl: VideoConferenceJoinResponse | undefined =
+				await videoConferenceModule.joinVideoConference({
+					scope: VideoConferenceScope.Course,
+					scopeId: props.roomId,
+				});
+
+			if (videoConferenceUrl) {
+				window.open(videoConferenceUrl.url, "_blank");
 			}
 		};
 

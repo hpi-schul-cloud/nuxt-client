@@ -1,3 +1,4 @@
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
 import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
@@ -95,6 +96,9 @@ describe("CardHost", () => {
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
+			provide: {
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			},
 		});
 
 		return { deleteElementMock };
