@@ -36,12 +36,21 @@
 							class="info-button"
 							style="background-color: transparent"
 							design="info text icon"
+							:aria-label="
+								$t(
+									'pages.administration.students.infobox.registrationOnly.headline'
+								)
+							"
 							@click="infoBoxActive = !infoBoxActive"
 						>
 							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
 						</v-btn>
 					</span>
-					<info-box v-if="true" class="info-box" :active.sync="infoBoxActive">
+					<info-box
+						v-if="isConsentNecessary"
+						class="info-box"
+						:active.sync="infoBoxActive"
+					>
 						<template #header>{{
 							$t("pages.administration.students.infobox.headline")
 						}}</template>
