@@ -1,7 +1,6 @@
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
-	source?: "material" | "custom";
 	testId: string;
 	permission?: string;
 	excludedPermission?: string;
@@ -81,7 +80,6 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.filesPersonal",
 				icon: "$folder_open_user_outline",
-				source: "custom",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
 				activeForUrls: ["^/files/my($|/.*)"],
@@ -89,7 +87,6 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.courses",
 				icon: "$folder_open_courses_outline",
-				source: "custom",
 				href: "/files/courses/",
 				testId: "Kurse",
 				activeForUrls: ["^/files/courses($|/.*)"],
@@ -98,15 +95,13 @@ const getSidebarItems = (
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
 				icon: "$folder_open_teams_outline",
-				source: "custom",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.filesShared",
-				icon: "folder_open_shared_outline",
-				source: "custom",
+				icon: "$folder_open_shared_outline",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
 				activeForUrls: ["^/files/shared($|/.*)"],
@@ -139,7 +134,6 @@ const getSidebarItems = (
 		title: "common.words.lernstore",
 		to: "/content",
 		icon: "$lernstore_outline",
-		source: "custom",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
 		activeForUrls: ["^/content($|/.*)"],
@@ -163,7 +157,7 @@ const getSidebarItems = (
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "students_outline",
+				icon: "$mdiAccountSchoolOutline",
 				to: "/administration/students",
 				permission: "STUDENT_LIST",
 				testId: "Schüler:innen",
@@ -171,16 +165,14 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "teacher",
-				source: "custom",
+				icon: "$teacher",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "class",
-				source: "custom",
+				icon: "$class",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
@@ -190,44 +182,42 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "setting_outline",
+		icon: "$mdiCogOutline",
 		permission: "ADMIN_VIEW",
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "students_outline",
+				icon: "$mdiAccountSchoolOutline",
 				to: "/administration/students",
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "teacher",
-				source: "custom",
+				icon: "$teacher",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "course_outline",
+				icon: "$mdiSchoolOutline",
 				href: "/administration/courses",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "class",
-				source: "custom",
+				icon: "$class",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
-				icon: "team_outline",
+				icon: "$mdiAccountGroupOutline",
 				href: "/administration/teams",
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
@@ -235,8 +225,7 @@ const getSidebarItems = (
 			isNewSchoolAdminPageDefault
 				? {
 						title: "global.sidebar.school",
-						icon: "school_outline",
-						source: "custom",
+						icon: "$school_outline",
 						to: "/administration/school-settings",
 						testId: "Schule",
 						activeForUrls: [
@@ -246,8 +235,7 @@ const getSidebarItems = (
 				  }
 				: {
 						title: "global.sidebar.school",
-						icon: "school_outline",
-						source: "custom",
+						icon: "$school_outline",
 						href: "/administration/school",
 						testId: "Schule",
 						activeForUrls: [
@@ -260,7 +248,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.helpArea",
 		href: "/help",
-		icon: "help_area_outline",
+		icon: "$mdiHelpCircleOutline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
 	},

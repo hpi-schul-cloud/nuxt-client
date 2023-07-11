@@ -44,17 +44,6 @@
 								"
 								>{{ route.icon }}</v-icon
 							>
-							<!-- <base-icon
-								v-if="route.icon"
-								:icon="route.icon"
-								:source="route.source || DEFAULT_ICON_SOURCE"
-								:fill="
-									isActive(route.title) || isChildActive(route.title)
-										? 'var(--v-primary-base)'
-										: 'var(--v-secondary-base)'
-								"
-								class="icon"
-							/> -->
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -75,17 +64,16 @@
 								:href="child.href"
 								:no-styles="true"
 							>
-								<base-icon
+								<v-icon
 									v-if="child.icon"
-									:icon="child.icon"
-									:source="child.source || DEFAULT_ICON_SOURCE"
-									:fill="
+									class="icon"
+									:color="
 										isActive(child.title)
 											? 'var(--v-primary-base)'
 											: 'var(--v-secondary-base)'
 									"
-									class="icon"
-								/>
+									>{{ child.icon }}</v-icon
+								>
 								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
@@ -99,14 +87,13 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import baseLink from "@/components/base/BaseLink.vue";
-import baseIcon from "@/components/base/BaseIcon.vue";
 import { SidebarItem } from "@/utils/sidebar-base-items";
 import { useRoute } from "vue-router/composables";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TheSidebar",
-	components: { baseLink, baseIcon },
+	components: { baseLink },
 	props: {
 		routes: {
 			type: Array,
@@ -122,7 +109,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const DEFAULT_ICON_SOURCE = "material";
 		const activeItem = ref("");
 		const activeParent = ref("");
 
@@ -161,7 +147,6 @@ export default defineComponent({
 		};
 
 		return {
-			DEFAULT_ICON_SOURCE,
 			isActive,
 			isChildActive,
 		};
