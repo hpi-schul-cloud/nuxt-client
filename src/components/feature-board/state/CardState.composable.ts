@@ -1,4 +1,7 @@
-import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	CreateContentElementBodyParams,
+} from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
@@ -85,7 +88,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
-		const params: CreateContentElementBody = { type };
+		const params: CreateContentElementBodyParams = { type };
 		if (atFirstPosition) {
 			params.toPosition = 0;
 		}
