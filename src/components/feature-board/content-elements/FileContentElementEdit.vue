@@ -45,7 +45,6 @@ export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { FileContentElementMenu },
 	props: {
-		fileId: { type: String, required: true },
 		fileName: { type: String, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },

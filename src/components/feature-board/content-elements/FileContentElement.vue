@@ -12,10 +12,9 @@
 		<div v-if="fileRecord">
 			<div v-if="isImage">
 				<ImageFileDisplay
-					:fileId="$props.element.id"
 					:fileName="fileRecord.name"
-					:url="fileRecord.url"
 					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="fileRecord.url"
 					:isEditMode="isEditMode"
 					:isFirstElement="isFirstElement"
 					:isLastElement="isLastElement"
@@ -35,9 +34,8 @@
 				<FileContentElementEdit
 					v-if="isEditMode"
 					:fileName="fileRecord.name"
-					:fileId="$props.element.id"
-					:url="url"
 					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="url"
 					:isFirstElement="isFirstElement"
 					:isLastElement="isLastElement"
 					:hasMultipleElements="hasMultipleElements"
