@@ -15,13 +15,12 @@
 				data-test-id="top-menu-btn"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<v-icon>{{ mdiMenu }}</v-icon>
+				<v-icon>$mdiMenu</v-icon>
 			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
-					source="material"
-					icon="report_problem"
+					icon="$mdiAlert"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:fill="statusAlertColor"
@@ -40,12 +39,11 @@
 					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
-					<v-icon>{{ mdiArrowExpand }}</v-icon>
+					<v-icon>$mdiArrowExpand</v-icon>
 				</v-btn>
 				<popup-icon
 					class="item"
-					source="material"
-					icon="qrcode"
+					icon="$mdiQrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
 					data-test-id="qr-code-btn"
@@ -54,8 +52,7 @@
 				</popup-icon>
 				<popup-icon
 					class="item"
-					source="material"
-					icon="help_area_outline"
+					icon="$mdiHelpCircleOutline"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
@@ -110,7 +107,7 @@
 			class="fullscreen-button-active"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<v-icon>{{ mdiArrowCollapse }}</v-icon>
+			<v-icon>$mdiArrowCollapse</v-icon>
 		</v-btn>
 	</div>
 </template>
@@ -124,12 +121,6 @@ import HelpDropdown from "@/components/legacy/HelpDropdown";
 import MenuQrCode from "@/components/legacy/MenuQrCode";
 import StatusAlerts from "@/components/molecules/StatusAlerts";
 import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
-import {
-	mdiArrowCollapse,
-	mdiArrowExpand,
-	mdiHelpCircle,
-	mdiMenu,
-} from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -164,10 +155,6 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			mdiArrowCollapse,
-			mdiArrowExpand,
-			mdiMenu,
-			mdiHelpCircle,
 			logo: null,
 		};
 	},

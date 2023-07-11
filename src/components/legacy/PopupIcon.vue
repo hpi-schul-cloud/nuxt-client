@@ -1,7 +1,7 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
 		<v-btn icon class="icon-button" @click="popup">
-			<base-icon :source="source" :icon="icon" :fill="fill" />
+			<v-icon :color="fill">{{ icon }}</v-icon>
 		</v-btn>
 		<div
 			ref="popupContent"
