@@ -1,7 +1,11 @@
 import AuthModule from "@/store/auth";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
-import { AUTH_MODULE, I18N_KEY, VIDEO_CONFERENCE_MODULE } from "@/utils/inject";
+import {
+	AUTH_MODULE,
+	I18N_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
@@ -50,7 +54,7 @@ describe("RoomVideoConferenceSection", () => {
 						tc: (key: string): string => key,
 					},
 					[AUTH_MODULE.valueOf()]: authModule,
-					[VIDEO_CONFERENCE_MODULE.valueOf()]: videoConferenceModule,
+					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 				},
 			}
 		);
@@ -401,6 +405,51 @@ describe("RoomVideoConferenceSection", () => {
 			).toHaveBeenCalledWith({
 				scope: VideoConferenceScope.Course,
 				scopeId: "roomId",
+			});
+		});
+	});
+
+	describe("when the video conference card requests a click", () => {
+		describe("when the video conference is running", () => {
+			const setup = () => {
+				const { wrapper, videoConferenceModule } = getWrapper(
+					{
+						roomId: "roomId",
+					},
+					["join_meeting"],
+					false,
+					{
+						getVideoConferenceInfo: {
+							state: VideoConferenceState.RUNNING,
+							options: {
+								everyAttendeeJoinsMuted: false,
+								moderatorMustApproveJoinRequests: false,
+								everybodyJoinsAsModerator: false,
+							},
+						},
+						getLoading: true,
+					}
+				);
+
+				return {
+					wrapper,
+					videoConferenceModule,
+				};
+			};
+
+			it("should call joinVideoConference", async () => {
+				const { wrapper, videoConferenceModule } = setup();
+
+				const card = wrapper.findComponent({
+					name: "room-video-conference-card",
+				});
+
+				await card.vm.$emit("click");
+
+				expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+					scope: VideoConferenceScope.Course,
+					scopeId: "roomId",
+				});
 			});
 		});
 	});

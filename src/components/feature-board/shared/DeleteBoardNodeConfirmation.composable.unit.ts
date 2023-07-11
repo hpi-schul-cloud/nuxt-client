@@ -29,7 +29,7 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 			const { askDeleteBoardNodeConfirmation } = mountComposable(
 				() => useDeleteBoardNodeConfirmation(),
 				{
-					[I18N_KEY as symbol]: { t: translateMock },
+					[I18N_KEY.valueOf()]: { t: translateMock },
 				}
 			);
 

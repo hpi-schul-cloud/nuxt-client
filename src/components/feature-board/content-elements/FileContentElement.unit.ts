@@ -32,8 +32,8 @@ describe("FileContentElement", () => {
 		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 			propsData: { ...props, deleteElement: deleteElementMock },
 		});
