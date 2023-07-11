@@ -8,6 +8,55 @@
 			@click="onClick"
 			@refresh="onRefresh"
 		></room-video-conference-card>
+
+		<v-dialog
+			v-model="isConfigurationDialogOpen"
+			max-width="450"
+			data-testId="videoconference-config-dialog"
+		>
+			<v-card :ripple="false">
+				<v-card-title>
+					<h2 class="text-h4 my-2">
+						{{ $t("pages.rooms.tools.configureVideoconferenceDialog.title") }}
+					</h2>
+				</v-card-title>
+				<v-card-text class="text--primary">
+					<RenderHTML
+						class="text-md mt-2"
+						:html="
+							t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+						"
+						component="p"
+					/>
+					<v-switch>
+						<template v-slot:label>
+							{{
+								$t("pages.rooms.tools.configureVideoconferenceDialog.content")
+							}}
+						</template>
+					</v-switch>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						data-testId="dialog-cancel"
+						depressed
+						text
+						@click="onCloseConfigurationDialog"
+					>
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						data-testId="dialog-confirm"
+						class="px-6"
+						color="primary"
+						depressed
+					>
+						{{ $t("common.actions.create") }}
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
@@ -25,11 +74,19 @@ import {
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE,
 } from "@/utils/inject";
-import { computed, ComputedRef, defineComponent, onMounted } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
+import RenderHTML from "../../../components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
-	components: { RoomVideoConferenceCard },
+	components: { RenderHTML, RoomVideoConferenceCard },
 	props: {
 		roomId: {
 			type: String,
@@ -73,6 +130,12 @@ export default defineComponent({
 			return canJoin.value || canStart.value;
 		});
 
+		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+
+		const onCloseConfigurationDialog = () => {
+			isConfigurationDialogOpen.value = false;
+		};
+
 		onMounted(async () => {
 			await videoConferenceModule.fetchVideoConferenceInfo({
 				scope: VideoConferenceScope.Course,
@@ -97,6 +160,9 @@ export default defineComponent({
 				canStart.value
 			) {
 				// TODO N21-882: open start dialog
+				const onConfigurationDiaolog = () => {
+					isConfigurationDialogOpen.value = true;
+				};
 				return;
 			}
 
@@ -115,6 +181,8 @@ export default defineComponent({
 			isRefreshing,
 			onClick,
 			onRefresh,
+			isConfigurationDialogOpen,
+			onCloseConfigurationDialog,
 		};
 	},
 });
