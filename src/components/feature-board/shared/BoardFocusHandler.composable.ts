@@ -11,6 +11,24 @@ import { BoardColumn } from "../types/Board";
 import { BoardCard } from "../types/Card";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
+declare type FocusableId =
+	| BoardColumn["id"]
+	| BoardCard["id"]
+	| AnyContentElement["id"];
+
+declare type GlobalUsageReturn = {
+	setFocus: (id: FocusableId) => void;
+	isAnythingFocused: Ref<boolean>;
+};
+declare type LocalUsageReturn = {
+	isFocused: Ref<boolean>;
+	isFocusWithin: Ref<boolean>;
+	isFocusContained: Ref<boolean>;
+};
+/**
+ * Use this composable to force focus on a focusable element on the Board.
+ */
+export function useBoardFocusHandler(): GlobalUsageReturn;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
  * Also keeps track of focus of child-elements.
@@ -26,16 +44,16 @@ import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.
  * **Example:** The VCard representing a Card on the board.
  * @see https://vuejs.org/guide/essentials/template-refs.html
  */
-export const useBoardFocusHandler = (
-	id: MaybeComputedRef<
-		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
-	>,
+export function useBoardFocusHandler(
+	id: MaybeComputedRef<FocusableId>,
 	element: Ref<HTMLElement | undefined>,
-	onFocusCallback?: () => void | undefined
-) => {
-	useInlineEditInteractionHandler(
-		onFocusCallback !== undefined ? onFocusCallback : () => {}
-	);
+	onFocusReceived?: () => void
+): LocalUsageReturn;
+export function useBoardFocusHandler(
+	id?: MaybeComputedRef<FocusableId>,
+	element?: Ref<HTMLElement | undefined>,
+	onFocusReceived?: () => void
+): GlobalUsageReturn & LocalUsageReturn {
 	const { focused: isFocused } = useFocus(element);
 	const { focused: isFocusWithin } = useFocusWithin(element);
 
@@ -43,10 +61,12 @@ export const useBoardFocusHandler = (
 		() => isFocused.value || isFocusWithin.value
 	);
 
-	const { announceFocusReceived, focusedId } = useSharedFocusedId();
+	const { setFocus, focusedId } = useSharedFocusedId();
+
+	const isAnythingFocused = ref(focusedId.value !== undefined);
 
 	/**
-	 * Listen to 'focusin' event allows to also register focus events contained within the observed elements.
+	 * Listening to 'focusin' event allows to also register focus events contained within the observed elements.
 	 * This way we can keep track of focus events of child-elements.
 	 */
 	const cleanupFocusListener = useEventListener(
@@ -55,26 +75,29 @@ export const useBoardFocusHandler = (
 		(event: FocusEvent) => {
 			if (id?.valueOf()) {
 				event.stopPropagation();
-				announceFocusReceived(id);
+				setFocus(id);
 			}
 		}
 	);
 
 	onMounted(async () => {
-		await trySetFocus();
+		await regainFocus();
 	});
 
-	onUnmounted(() => {
-		cleanupFocusListener();
-	});
-
-	const trySetFocus = async () => {
+	const regainFocus = async () => {
 		if (id !== focusedId.value) {
 			return;
 		}
 		await nextTick();
 		isFocused.value = true;
+		if (onFocusReceived !== undefined) onFocusReceived();
 	};
+
+	useInlineEditInteractionHandler(regainFocus);
+
+	onUnmounted(() => {
+		cleanupFocusListener();
+	});
 
 	return {
 		/**
@@ -91,19 +114,23 @@ export const useBoardFocusHandler = (
 		 * Element isFocused or isFocusWithin.
 		 */
 		isFocusContained,
+		/**
+		 * If any BoardContent is focused at the moment
+		 */
+		isAnythingFocused,
+		/**
+		 * Set Focus for a given ID
+		 */
+		setFocus,
 	};
-};
+}
 
-export const useSharedFocusedId = createSharedComposable(() => {
-	const focusedId = ref<
-		BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"] | undefined
-	>(undefined);
+// const useBoardFocusHandlerComposable =
 
-	const announceFocusReceived = (
-		id: MaybeComputedRef<
-			BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"]
-		>
-	) => {
+const useSharedFocusedId = createSharedComposable(() => {
+	const focusedId = ref<FocusableId | undefined>(undefined);
+
+	const setFocus = (id: MaybeComputedRef<FocusableId>) => {
 		if (focusedId.value === id.valueOf()) {
 			return;
 		}
@@ -112,6 +139,6 @@ export const useSharedFocusedId = createSharedComposable(() => {
 
 	return {
 		focusedId,
-		announceFocusReceived,
+		setFocus,
 	};
 });

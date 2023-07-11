@@ -52,8 +52,9 @@ export default defineComponent({
 		const { hasEditPermission } = useBoardPermissions();
 		const titleInput = ref<HTMLTextAreaElement | null>(null);
 
-		useInlineEditInteractionHandler(() => {
+		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
+			await nextTick();
 		});
 
 		const setFocusOnEdit = () => {

@@ -15,7 +15,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const elementRef = toRef(props, "element");
 	// const isEditModeRef = toRef(props, "isEditMode");
 
-	const isAutoFocus = ref<boolean>(false);
+	// const isAutoFocus = ref<boolean>(false);
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
 	const { updateElementCall } = useBoardApi();

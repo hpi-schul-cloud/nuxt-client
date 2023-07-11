@@ -8,7 +8,6 @@
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			class="rich_text"
-			:autofocus="isAutoFocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 			@delete:element="onDeleteElement"
@@ -49,7 +48,6 @@ export default defineComponent({
 
 		return {
 			modelValue,
-			isAutoFocus,
 			onDeleteElement,
 		};
 	},

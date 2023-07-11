@@ -68,7 +68,7 @@ export default defineComponent({
 	},
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
-		const { modelValue, isAutoFocus } = useContentElementState(props);
+		const { modelValue } = useContentElementState(props);
 		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
 			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
@@ -139,7 +139,6 @@ export default defineComponent({
 		};
 		return {
 			onDeleteElement,
-			isAutoFocus,
 			isBlocked,
 			fileRecord,
 			modelValue,

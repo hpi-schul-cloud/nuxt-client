@@ -2,7 +2,7 @@ import { BoardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
-import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardSkeletonCard } from "../types/Board";
@@ -33,8 +33,8 @@ export const useBoardState = (id: string) => {
 			return;
 		}
 
-		const { announceFocusReceived } = useSharedFocusedId();
-		announceFocusReceived(newCardId);
+		const { setFocus } = useBoardFocusHandler();
+		setFocus(newCardId);
 
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.id === columnId

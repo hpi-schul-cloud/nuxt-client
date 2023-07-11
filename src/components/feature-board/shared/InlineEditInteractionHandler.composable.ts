@@ -1,13 +1,24 @@
 import { useCurrentElement, useElementBounding } from "@vueuse/core";
-import { inject, onMounted, Ref, watch } from "vue";
+import { inject, onMounted, ref, Ref, watch } from "vue";
 import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
 
 export const useInlineEditInteractionHandler = (
-	onFocusCallback: (interactionBoundary: { x: number; y: number }) => void
+	onFocusCallback: (interactionBoundary: {
+		x: number;
+		y: number;
+	}) => Promise<void>
 ) => {
-	const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(
-		InlineEditInteractionEvent
+	let interactionEvent: Ref<{ x: number; y: number } | undefined> | undefined =
+		undefined;
+
+	interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(
+		InlineEditInteractionEvent,
+		/**
+		 * If the Composable is not included as a child of an InlineEditInteractionEvent component no events will be received
+		 */
+		ref(undefined)
 	);
+
 	const elementHost = useCurrentElement<HTMLElement>();
 	const { top, right, bottom, left } = useElementBounding(elementHost);
 
@@ -15,7 +26,7 @@ export const useInlineEditInteractionHandler = (
 		if (interactionEvent === undefined) {
 			return;
 		}
-		watch(interactionEvent, (interactionBoundary) => {
+		watch(interactionEvent, async (interactionBoundary) => {
 			if (!interactionBoundary) {
 				return;
 			}
@@ -30,7 +41,7 @@ export const useInlineEditInteractionHandler = (
 					interactionBoundary
 				)
 			) {
-				onFocusCallback(interactionBoundary);
+				await onFocusCallback(interactionBoundary);
 			}
 		});
 	});
