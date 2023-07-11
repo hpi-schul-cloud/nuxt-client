@@ -15,7 +15,7 @@ import {
 	courseMetadataResponseFactory,
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { AUTH_MODULE, I18N_KEY, ROOM_MODULE } from "@/utils/inject";
+import { AUTH_MODULE, I18N_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 
 const routes = [
 	{
@@ -97,7 +97,7 @@ const getWrapper = (
 			[AUTH_MODULE.valueOf()]: createModuleMocks(AuthModule, {
 				getUserPermissions: [userPermission],
 			}),
-			[ROOM_MODULE.valueOf()]: createModuleMocks(RoomModule, {
+			[ROOM_MODULE_KEY.valueOf()]: createModuleMocks(RoomModule, {
 				getRoomData: mockSingleColumnBoardResponseData,
 			}),
 			roomsModule: createModuleMocks(RoomsModule, {

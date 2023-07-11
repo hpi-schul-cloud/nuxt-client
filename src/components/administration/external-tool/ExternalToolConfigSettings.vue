@@ -22,7 +22,7 @@ import {
 } from "vue";
 import ExternalToolsModule from "@/store/external-tools";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import { EXTERNAL_TOOLS_MODULE, injectStrict } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -36,7 +36,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE
+			EXTERNAL_TOOLS_MODULE_KEY
 		);
 
 		const template: Ref<ToolConfigurationTemplate> = ref(props.value);
