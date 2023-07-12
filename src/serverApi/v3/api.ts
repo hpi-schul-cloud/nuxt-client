@@ -1005,6 +1005,12 @@ export interface CreateContentElementBody {
      * @memberof CreateContentElementBody
      */
     type: ContentElementType;
+    /**
+     * to bring element to a specific position, default is last position
+     * @type {number}
+     * @memberof CreateContentElementBody
+     */
+    toPosition?: number;
 }
 /**
  * 
