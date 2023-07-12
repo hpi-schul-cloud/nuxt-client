@@ -3,7 +3,7 @@ import {
 	FileRecordScanStatus,
 } from "@/fileStorageApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { delay } from "@/utils/helpers";
+import { delayWithAbort } from "@/utils/helpers";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStorageFactoryMock";
 import { setupFileStorageNotifier } from "@@/tests/test-utils/composable-mocks/fileStorageNotifier";
@@ -460,7 +460,7 @@ describe("FileStorageApi Composable", () => {
 				const { fileApiFactory } = setupFileStorageFactoryMock({});
 
 				jest
-					.mocked(delay)
+					.mocked(delayWithAbort)
 					.mockResolvedValueOnce(null)
 					.mockResolvedValueOnce(null);
 
@@ -503,13 +503,15 @@ describe("FileStorageApi Composable", () => {
 				expect(fileApiFactory.list).toBeCalledTimes(2);
 			});
 
-			it("should call delay 2 times", async () => {
+			it("should call delayWithAbort 2 times", async () => {
 				const { fetchPendingFileRecursively } = await setup();
 
 				await fetchPendingFileRecursively();
 
-				expect(delay).toHaveBeenCalledWith(10000);
-				expect(delay).toBeCalledTimes(2);
+				expect(delayWithAbort).toHaveBeenCalledWith(10000, {
+					signal: undefined,
+				});
+				expect(delayWithAbort).toBeCalledTimes(2);
 			});
 
 			it("should set filerecord", async () => {
@@ -540,7 +542,7 @@ describe("FileStorageApi Composable", () => {
 				setupFileStorageNotifier();
 
 				jest
-					.mocked(delay)
+					.mocked(delayWithAbort)
 					.mockResolvedValueOnce(null)
 					.mockResolvedValueOnce(null)
 					.mockResolvedValueOnce(null)
@@ -616,7 +618,7 @@ describe("FileStorageApi Composable", () => {
 
 				setupFileStorageNotifier();
 
-				jest.mocked(delay).mockResolvedValueOnce(null);
+				jest.mocked(delayWithAbort).mockResolvedValueOnce(null);
 
 				const { fileApiFactory } = setupFileStorageFactoryMock({});
 
