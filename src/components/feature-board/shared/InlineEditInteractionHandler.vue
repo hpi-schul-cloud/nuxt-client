@@ -16,6 +16,7 @@ import { defineComponent, provide, shallowRef } from "vue";
 
 import { OnClickOutside } from "@vueuse/components";
 import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
+
 export default defineComponent({
 	name: "InlineEditInteractionHandler",
 	components: {
@@ -31,8 +32,16 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
-		const onClickOutside = () => {
-			if (props.isEditMode) {
+
+		const checkEventTarget = (event: MouseEvent): boolean => {
+			if (!(event.target instanceof HTMLElement)) return false;
+
+			return (event.target as HTMLElement)?.className?.includes("v-list-item");
+		};
+
+		const onClickOutside = (event: MouseEvent) => {
+			const isMenuEvent = checkEventTarget(event);
+			if (props.isEditMode && !isMenuEvent) {
 				emit("end-edit-mode");
 			}
 		};
