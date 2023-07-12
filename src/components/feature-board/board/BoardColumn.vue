@@ -176,10 +176,6 @@ export default defineComponent({
 .elevate-transition {
 	transition: box-shadow 150ms all;
 }
-.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-	overflow: visible;
-	margin-bottom: 1.5rem;
-}
 </style>
 <style scoped>
 .scrollable-column {
