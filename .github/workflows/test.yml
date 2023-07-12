@@ -41,7 +41,7 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   lint:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: npm ci
