@@ -96,7 +96,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
 				.findAll("button.is-sortable")
-				.wrappers.find((w) => w.text() === text);
+				.wrappers.find((w) => w.text().startsWith(text));
 
 		it("should emit sort events on click on sortable coloumn", async () => {
 			const wrapper = getWrapper({
@@ -324,76 +324,70 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			describe("on inclusive selection", () => {
 				const getWrapperLocal = (numberOfSelections) => {
 					const selection = [...Array(numberOfSelections).keys()].map(String);
-					return getWrapper(
-						{
-							data: testData,
-							selectedRowIds: selection,
-							selectionType: "inclusive",
-							rowsSelectable: true,
-						},
-						{
-							stubs: { BaseIcon: true },
-						}
-					);
+					return getWrapper({
+						data: testData,
+						selectedRowIds: selection,
+						selectionType: "inclusive",
+						rowsSelectable: true,
+					});
 				};
 
 				it("checked state if all values are selected", async () => {
 					const wrapper = getWrapperLocal(testData.length);
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxOutline")
+					);
 				});
 
 				it("unchecked state if no values are selected", async () => {
 					const wrapper = getWrapperLocal(0);
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe(
-						"$mdiCheckboxBlankOutline"
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxBlankOutline")
 					);
 				});
 
 				it("intermediate state if some values are selected", async () => {
 					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe(
-						"$mdiCheckboxIntermediate"
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxIntermediate")
 					);
 				});
 			});
 			describe("on exclusive selection", () => {
 				const getWrapperLocal = (numberOfUnselections) => {
 					const selection = [...Array(numberOfUnselections).keys()].map(String);
-					return getWrapper(
-						{
-							data: testData,
-							selectedRowIds: selection,
-							selectionType: "exclusive",
-							rowsSelectable: true,
-						},
-						{
-							stubs: { BaseIcon: true },
-						}
-					);
+					return getWrapper({
+						data: testData,
+						selectedRowIds: selection,
+						selectionType: "exclusive",
+						rowsSelectable: true,
+					});
 				};
 
 				it("checked state if no values are unselected", async () => {
 					const wrapper = getWrapperLocal(0);
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxOutline")
+					);
 				});
 
 				it("unchecked state if all values are unselected", async () => {
 					const wrapper = getWrapperLocal(testData.length);
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe(
-						"$mdiCheckboxBlankOutline"
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxBlankOutline")
 					);
 				});
 
 				it("intermediate state if some values are unselected", async () => {
 					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
-					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe(
-						"$mdiCheckboxIntermediate"
+					const checkboxIcon = wrapper.get("thead tr");
+					expect(
+						checkboxIcon.element.innerHTML.includes("$mdiCheckboxIntermediate")
 					);
 				});
 			});

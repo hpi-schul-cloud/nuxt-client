@@ -501,16 +501,11 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		describe("header checkbox shows", () => {
 			const getWrapperLocal = (numberOfSelections) => {
 				const selection = [...Array(numberOfSelections).keys()].map(String);
-				return getWrapper(
-					{
-						data: testData,
-						selection,
-						rowsSelectable: true,
-					},
-					{
-						stubs: { BaseIcon: true },
-					}
-				);
+				return getWrapper({
+					data: testData,
+					selection,
+					rowsSelectable: true,
+				});
 			};
 
 			it("checked state if all values are selected", async () => {

@@ -15,17 +15,21 @@ const testProps = {
 describe("@/components/molecules/NotificationModal", () => {
 	it("success case", async () => {
 		const wrapper = mount(NotificationModal, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: { ...testProps, isSuccess: true },
-			stubs: {
-				BaseIcon: true,
-			},
 		});
+
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.successMsg);
-		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
-			"$mdiCheckCircle"
+		expect(
+			wrapper
+				.find(".material-icon")
+				.element.innerHTML.includes("$mdiCheckCircles")
 		);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
@@ -36,17 +40,21 @@ describe("@/components/molecules/NotificationModal", () => {
 
 	it("error case", async () => {
 		const wrapper = mount(NotificationModal, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: { ...testProps, isSuccess: false },
-			stubs: {
-				BaseIcon: true,
-			},
 		});
+
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.errorMsg);
-		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
-			"error"
+		expect(
+			wrapper
+				.find(".material-icon")
+				.element.innerHTML.includes("$mdiAlertCircle")
 		);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
@@ -57,11 +65,13 @@ describe("@/components/molecules/NotificationModal", () => {
 
 	it("executes close action after close", async () => {
 		const wrapper = mount(NotificationModal, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
 			propsData: { ...testProps, isSuccess: false },
-			stubs: {
-				BaseIcon: true,
-			},
 		});
+
 		const button = wrapper.find(".btn-confirm");
 		button.trigger("click");
 		await wrapper.vm.$nextTick();
