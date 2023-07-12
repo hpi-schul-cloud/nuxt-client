@@ -156,7 +156,6 @@
 	"components.administration.externalToolsSection.action.add": "Agregar Herramienta Externa",
 	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
 	"components.administration.externalToolsSection.dialog.content": "¿Le gustaría eliminar la Herramienta Externa <b>{itemName}</b> de su escuela? </br></br> Si elimina la Herramienta externa de su escuela, se eliminará de todos los cursos de su escuela. La herramienta ya no se puede utilizar.",
-	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",

@@ -157,7 +157,6 @@
 	"components.administration.externalToolsSection.action.add": "Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.dialog.title": "Externes Tool entfernen?",
 	"components.administration.externalToolsSection.dialog.content": "Möchten Sie das externe Tool <b>{itemName}</b> von Ihrer Schule entfernen? </br></br> Wenn Sie das externe Tool von Ihrer Schule entfernen, wird es aus allen Kursen Ihrer Schule entfernt. Die Nutzung des Tools ist nicht mehr möglich.",
-	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
