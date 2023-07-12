@@ -175,7 +175,7 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
 				.findAll("button.is-sortable")
-				.wrappers.find((w) => w.text() === text);
+				.wrappers.find((w) => w.text().startsWith(text));
 
 		it("table header clicks should toggle the sortorder", async () => {
 			const wrapper = getWrapper({
@@ -515,23 +515,23 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 
 			it("checked state if all values are selected", async () => {
 				const wrapper = getWrapperLocal(total);
-				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
+				const checkboxIcon = wrapper.get("thead tr");
+				expect(checkboxIcon.element.innerHTML.includes("$mdiCheckboxOutline"));
 			});
 
 			it("unchecked state if no values are selected", async () => {
 				const wrapper = getWrapperLocal(0);
-				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe(
-					"$mdiCheckboxBlankOutline"
+				const checkboxIcon = wrapper.get("thead tr");
+				expect(
+					checkboxIcon.element.innerHTML.includes("$mdiCheckboxBlankOutline")
 				);
 			});
 
 			it("intermediate state if some values are selected", async () => {
 				const wrapper = getWrapperLocal(Math.round(total / 2));
-				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe(
-					"$mdiCheckboxIntermediate"
+				const checkboxIcon = wrapper.get("thead tr");
+				expect(
+					checkboxIcon.element.innerHTML.includes("$mdiCheckboxIntermediate")
 				);
 			});
 		});

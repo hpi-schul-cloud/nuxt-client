@@ -703,13 +703,12 @@ describe("students/index", () => {
 
 		expect(wrapper.vm.icons).toStrictEqual([
 			{
-				icon: "doublecheck",
+				icon: "$mdiCheckAll",
 				color: "var(--v-success-base)",
-				style: "margin: -3px 3px",
 				label: "Registrierung abgeschlossen",
 			},
 			{
-				icon: "clear",
+				icon: "$mdiClose",
 				color: "var(--v-error-base)",
 				label: "Nutzer:in angelegt",
 			},

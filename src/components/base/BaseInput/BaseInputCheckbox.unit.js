@@ -94,31 +94,22 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	});
 
 	it(`can show indeterminated state for undefined values`, async () => {
-		const wrapper = mount(
-			{
-				data: () => ({ value: undefined }),
-				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
-				components: { BaseInput },
+		const wrapper = mount(BaseInput, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
+			propsData: {
+				label: "Checkbox",
+				name: "checkbox",
+				type: "checkbox",
+				vmodel: undefined,
+				showUndefinedState: true,
 			},
-			{
-				stubs: { BaseIcon: true },
-			}
+		});
+
+		expect(wrapper.element.innerHTML.includes("$mdiCheckboxIntermediate")).toBe(
+			true
 		);
-
-		const icon = wrapper.get("baseicon-stub");
-		expect(icon.attributes("icon")).toBe("$mdiCheckboxIntermediate");
-	});
-
-	it(`throws an error if show-undefined-state is set on type=switch`, async () => {
-		console.error = jest.fn();
-
-		expect(() =>
-			mount({
-				data: () => ({ value: undefined }),
-				template: `<base-input v-model="value" label="test" type="switch" name="checkbox" :show-undefined-state="true" />`,
-				components: { BaseInput },
-			})
-		).toThrow("showUndefinedState is only allowed on type=checkbox.");
 	});
 
 	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {

@@ -42,8 +42,8 @@
 										? 'var(--v-primary-base)'
 										: 'var(--v-secondary-base)'
 								"
-								>{{ route.icon }}</v-icon
-							>
+								>{{ route.icon }}
+							</v-icon>
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -72,8 +72,8 @@
 											? 'var(--v-primary-base)'
 											: 'var(--v-secondary-base)'
 									"
-									>{{ child.icon }}</v-icon
-								>
+									>{{ child.icon }}
+								</v-icon>
 								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>

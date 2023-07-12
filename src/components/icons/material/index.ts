@@ -41,8 +41,6 @@ import {
 	mdiHeart,
 	mdiHelpCircleOutline,
 	mdiImage,
-	mdiLaunch,
-	mdiLock,
 	mdiLockOutline,
 	mdiMagnify,
 	mdiMenu,

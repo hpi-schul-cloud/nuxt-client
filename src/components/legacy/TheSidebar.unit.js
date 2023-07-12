@@ -37,7 +37,7 @@ describe("@/components/legacy/TheSidebar", () => {
 			router,
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
-		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
+		expect(wrapper.find("v-icon").exists()).toBe(true);
 	});
 
 	it("Render with more routes mixing to and href", () => {
@@ -85,7 +85,7 @@ describe("@/components/legacy/TheSidebar", () => {
 			router,
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
-		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
-		expect(wrapper.findAll("base-link-stub").at(1).text()).toBe("Status");
+		expect(wrapper.findAll("v-icon")).toHaveLength(4);
+		expect(wrapper.findAll(".side-bar-title").at(0).text()).toBe("Status");
 	});
 });

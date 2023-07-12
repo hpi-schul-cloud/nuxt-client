@@ -1,13 +1,12 @@
 import PopupIcon from "./PopupIcon";
 
 const testProps = {
-	source: "material",
 	icon: "qrcode",
 	fill: "red",
 	centered: true,
 };
 
-describe("@/components/legacy/BaseIcon", () => {
+describe("@/components/legacy/PopupIcon", () => {
 	it(
 		...rendersSlotContent(PopupIcon, ["default"], {
 			...createComponentMocks({
@@ -26,8 +25,10 @@ describe("@/components/legacy/BaseIcon", () => {
 			}),
 			propsData: testProps,
 		});
-		expect(wrapper.find(".material-icon").exists()).toBe(true);
-		expect(wrapper.find("svg").exists()).toBe(true);
+
+		const popupIcon = wrapper.find(".popup .v-icon");
+		expect(popupIcon.exists()).toBe(true);
+		expect(popupIcon.element.innerHTML).toBe(testProps.icon);
 	});
 
 	it("it pops up when it is clicked", async () => {

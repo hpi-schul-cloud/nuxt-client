@@ -16,10 +16,6 @@
 <script>
 export default {
 	props: {
-		source: {
-			type: String,
-			required: true,
-		},
 		icon: {
 			type: String,
 			required: true,

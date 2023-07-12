@@ -129,14 +129,18 @@ describe("@/components/base/BaseInputDefault", () => {
 	it("can show error icon and error message", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
 				propsData: {
 					vmodel: "",
 					type,
 					label: "test",
 					error: "error",
 				},
-				stubs: ["base-icon"],
 			});
+
 			const baseInputDefault = wrapper.findComponent(BaseInputDefault);
 			expect(baseInputDefault.vm.hasError).toBe(true);
 
@@ -149,13 +153,16 @@ describe("@/components/base/BaseInputDefault", () => {
 	it("can show success icon", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
 				propsData: {
 					vmodel: "",
 					type,
 					label: "test",
 					success: true,
 				},
-				stubs: ["base-icon"],
 			});
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 		});
