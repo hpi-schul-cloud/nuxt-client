@@ -28,6 +28,7 @@
 					scope="card"
 					@update:value="onUpdateCardTitle"
 					:isFocused="shouldFocusTitle"
+					@enter="addTextAfterTitle"
 				>
 				</CardTitle>
 
@@ -132,6 +133,7 @@ export default defineComponent({
 			moveElementDown,
 			moveElementUp,
 			deleteElement,
+			addTextAfterTitle,
 		} = useCardState(props.cardId);
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -238,6 +240,7 @@ export default defineComponent({
 			mdiPencilOutline,
 			onFileSelect,
 			isFilePickerOpen,
+			addTextAfterTitle,
 		};
 	},
 });

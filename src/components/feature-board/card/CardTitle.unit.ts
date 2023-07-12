@@ -38,5 +38,16 @@ describe(CardTitle.name, () => {
 			});
 			expect(anyTitleInput.attributes("value")).toStrictEqual("props value");
 		});
+
+		it("should bubble enter event", async () => {
+			setup({ isEditMode: true });
+			const anyTitleInput = wrapper.findComponent({
+				name: "BoardAnyTitleInput",
+			});
+			anyTitleInput.vm.$emit("enter");
+			const emitted = wrapper.emitted();
+
+			expect(emitted["enter"]).toHaveLength(1);
+		});
 	});
 });
