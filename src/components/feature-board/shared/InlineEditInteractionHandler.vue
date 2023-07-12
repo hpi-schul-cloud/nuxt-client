@@ -36,7 +36,7 @@ export default defineComponent({
 		const checkEventTarget = (event: MouseEvent): boolean => {
 			if (!(event.target instanceof HTMLElement)) return false;
 
-			return (event.target as HTMLElement)?.className?.includes("v-list-item");
+			return event.target?.className?.includes("v-list-item");
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
