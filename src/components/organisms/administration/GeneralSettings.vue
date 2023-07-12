@@ -77,7 +77,6 @@
 			<v-row>
 				<v-col class="d-flex">
 					<v-file-input
-						v-model="localSchool.logo"
 						class="school-logo"
 						:label="
 							$t(
@@ -86,6 +85,7 @@
 						"
 						dense
 						prepend-icon=""
+						@change="onLogoChange"
 					></v-file-input>
 				</v-col>
 			</v-row>
@@ -158,7 +158,6 @@ import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
-import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -219,7 +218,6 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
-		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
@@ -245,6 +243,13 @@ export default {
 		onUpdateFeatureSettings(value, settingName) {
 			this.localSchool.features[settingName] = value;
 		},
+		async onLogoChange(logo) {
+			if (logo) {
+				this.localSchool.logo = await toBase64(logo);
+			} else {
+				this.localSchool.logo = null;
+			}
+		},
 		async save() {
 			const updatedSchool = {
 				id: this.localSchool.id,
@@ -268,7 +273,7 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+				updatedSchool.logo_dataUrl = this.localSchool.logo;
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}

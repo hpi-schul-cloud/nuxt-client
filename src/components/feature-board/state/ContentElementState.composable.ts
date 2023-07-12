@@ -1,9 +1,10 @@
 import { watchDebounced } from "@vueuse/core";
-import { ref, toRef, unref, watch } from "vue";
+import { ref, toRef, unref, watch, onMounted } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useInlineEditInteractionHandler } from "../shared/InlineEditInteractionHandler.composable";
 import { AnyContentElement } from "../types/ContentElement";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -15,6 +16,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	useInlineEditInteractionHandler(() => {
 		isAutoFocus.value = true;
 	});
+	const { focusedId } = useSharedFocusedId();
 	const elementRef = toRef(props, "element");
 	const isEditModeRef = toRef(props, "isEditMode");
 
@@ -49,6 +51,12 @@ export const useContentElementState = <T extends AnyContentElement>(
 			showFailure(generateErrorText("update", "boardElement"));
 		}
 	};
+
+	onMounted(() => {
+		if (focusedId.value === props.element.id) {
+			isAutoFocus.value = true;
+		}
+	});
 
 	return {
 		/**

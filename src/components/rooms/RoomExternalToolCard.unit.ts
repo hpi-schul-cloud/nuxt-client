@@ -16,16 +16,13 @@ describe("RoomExternalToolCard", () => {
 			{
 				...createComponentMocks({
 					i18n: true,
-					mocks: {
-						$t: (key: string): string => key,
-					},
 				}),
 				propsData: {
 					tool,
 					canEdit,
 				},
 				provide: {
-					[I18N_KEY as symbol]: {
+					[I18N_KEY.valueOf()]: {
 						$t: (key: string): string => key,
 						tc: (key: string): string => key,
 					},

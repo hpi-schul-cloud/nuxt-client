@@ -20,3 +20,7 @@ export * from "./toolLaunchRequestResponeFactory";
 export * from "./singleColumnBoardResponseFactory";
 export * from "./toolConfigurationTemplateFactory";
 export * from "./contextExternalToolTemplateListItemFactory";
+export * from "./courseFactory";
+export * from "./videoConferenceInfoResponseFactory";
+export * from "./videoConferenceInfoFactory";
+export * from "./videoConferenceJoinResponseFactory";

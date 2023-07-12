@@ -20,12 +20,11 @@
 <script lang="ts">
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import Theme from "@/theme.config";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
-import { computed, defineComponent, inject, onUnmounted } from "vue";
+import { computed, defineComponent, onUnmounted } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -42,9 +41,7 @@ export default defineComponent({
 			HttpStatusCode.Forbidden,
 		];
 		const i18n = injectStrict(I18N_KEY);
-		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-			"applicationErrorModule"
-		);
+		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 		const performanceNavigation = window.performance.getEntriesByType(
 			"navigation"
 		)[0] as PerformanceNavigationTiming;
@@ -64,27 +61,23 @@ export default defineComponent({
 			storage.remove("applicationErrorStatusCode");
 			storage.remove("applicationErrorTranslationKey");
 			return {
-				statusCode: Number(applicationErrorModule?.getStatusCode),
-				translationKey: applicationErrorModule?.getTranslationKey,
+				statusCode: Number(applicationErrorModule.getStatusCode),
+				translationKey: applicationErrorModule.getTranslationKey,
 			};
 		};
-
-		if (applicationErrorModule === undefined || i18n === undefined) {
-			return;
-		}
 
 		addEventListener("pagehide", (event) => {
 			if (event.persisted) return;
 
-			if (applicationErrorModule?.getStatusCode) {
+			if (applicationErrorModule.getStatusCode) {
 				storage.set(
 					"applicationErrorStatusCode",
-					JSON.stringify(applicationErrorModule?.getStatusCode)
+					JSON.stringify(applicationErrorModule.getStatusCode)
 				);
 
 				storage.set(
 					"applicationErrorTranslationKey",
-					applicationErrorModule?.getTranslationKey
+					applicationErrorModule.getTranslationKey
 				);
 			}
 		});
@@ -125,7 +118,7 @@ export default defineComponent({
 		});
 
 		onUnmounted(() => {
-			applicationErrorModule?.resetError();
+			applicationErrorModule.resetError();
 		});
 
 		return {

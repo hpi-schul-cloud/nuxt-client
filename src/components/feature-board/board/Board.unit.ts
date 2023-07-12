@@ -7,7 +7,7 @@ import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
@@ -94,7 +94,7 @@ describe("Board", () => {
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		wrapper = shallowMount(BoardVue, {
+		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			mocks: {
 				$router,
@@ -102,8 +102,8 @@ describe("Board", () => {
 			},
 			propsData: { boardId },
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 	};
@@ -111,10 +111,12 @@ describe("Board", () => {
 	describe("when component is mounted", () => {
 		mockedBoardNotifierCalls = {
 			showInfo: jest.fn(),
+			resetNotifier: jest.fn(),
 		};
 		mockedUseBoardNotifier.mockReturnValue(
 			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
 		);
+
 		it("should call 'useBoardState' composable", () => {
 			setup();
 
@@ -188,6 +190,15 @@ describe("Board", () => {
 					expect(ghostColumnComponent.vm).not.toBeDefined();
 				});
 			});
+		});
+	});
+
+	describe("when component is unMounted", () => {
+		it("should reset the notifier message", () => {
+			setup();
+			wrapper.destroy();
+
+			expect(mockedBoardNotifierCalls.resetNotifier).toHaveBeenCalled();
 		});
 	});
 

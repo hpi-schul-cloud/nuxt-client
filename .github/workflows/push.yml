@@ -92,7 +92,6 @@ jobs:
             echo "sha=${{ github.sha }}" >> $GITHUB_OUTPUT
           fi
 
-
   deploy:
     needs:
       - build_and_push_nuxt
@@ -119,6 +118,15 @@ jobs:
     uses: hpi-schul-cloud/end-to-end-tests/.github/workflows/e2e_call.yml@main
     with:
       ref: ${{ needs.branch_meta.outputs.branch }}
+
+  cy-e2e-tests:
+    needs:
+      - branch_meta
+      - deploy
+    uses: hpi-schul-cloud/e2e-system-tests/.github/workflows/remote-trigger.yml@main
+    with:
+      ref: ${{ needs.branch_meta.outputs.branch }}
+    secrets: inherit
 
   test-successful:
     runs-on: ubuntu-latest

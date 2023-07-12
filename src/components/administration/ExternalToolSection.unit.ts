@@ -1,10 +1,11 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";
-import { I18N_KEY } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -23,8 +24,8 @@ describe("ExternalToolSection", () => {
 				i18n: true,
 			}),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				externalToolsModule,
+				[I18N_KEY.valueOf()]: i18nMock,
+				[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			},
 		});
 
@@ -38,69 +39,11 @@ describe("ExternalToolSection", () => {
 		});
 	});
 
-	describe("inject is called", () => {
-		describe("when i18n injection fails", () => {
-			it("should throw an error", () => {
-				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-					getSchoolExternalTools: [],
-				});
-
-				expect(() => {
-					shallowMount(ExternalToolSection, {
-						provide: {
-							externalToolsModule,
-						},
-					});
-				}).toThrow();
-			});
-		});
-
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				expect(() =>
-					shallowMount(ExternalToolSection, {
-						provide: {
-							[I18N_KEY as symbol]: { t: (key: string) => key },
-						},
-					})
-				).toThrow();
-			});
-		});
-	});
-
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
 				const { externalToolsModule } = setup();
 				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("t is called", () => {
-		describe("when translation key exists", () => {
-			it("should return translation", () => {
-				const { wrapper } = setup();
-				const testKey = "testKey";
-
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result).toEqual(testKey);
-			});
-		});
-
-		describe("when translation key not exists", () => {
-			it("should return unknown translation-key", () => {
-				const { wrapper } = setup();
-				const testKey = 123;
-
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result.includes("unknown translation-key:")).toBeTruthy();
 			});
 		});
 	});

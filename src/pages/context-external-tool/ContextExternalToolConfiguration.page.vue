@@ -31,7 +31,7 @@
 		</v-select>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert
-			v-if="apiError.message"
+			v-if="apiError && apiError.message"
 			light
 			prominent
 			text
@@ -91,7 +91,12 @@ import RoomsModule from "@/store/rooms";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -113,16 +118,16 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
-		const contextExternalToolsModule: ContextExternalToolsModule | undefined =
-			inject<ContextExternalToolsModule>("contextExternalToolsModule");
-		const roomsModule: RoomsModule | undefined =
-			inject<RoomsModule>("roomsModule");
-		// TODO: use inject strict and remove ? after module usages. adapt refs to get a module and not undefined
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const roomsModule: RoomsModule | undefined = inject("roomsModule");
 
 		onMounted(async () => {
-			await externalToolsModule?.loadAvailableToolConfigurationsForContext({
+			await externalToolsModule.loadAvailableToolConfigurationsForContext({
 				contextId: props.contextId,
 				contextType: props.contextType,
 			});
@@ -173,13 +178,13 @@ export default defineComponent({
 		const loading: ComputedRef<boolean | undefined> = computed(
 			() =>
 				!hasData.value ||
-				externalToolsModule?.getLoading ||
-				contextExternalToolsModule?.getLoading
+				externalToolsModule.getLoading ||
+				contextExternalToolsModule.getLoading
 		);
 
 		const configurationItems: ComputedRef<
 			ContextExternalToolTemplateListItem[] | undefined
-		> = computed(() => externalToolsModule?.getContextExternalToolTemplates);
+		> = computed(() => externalToolsModule.getContextExternalToolTemplates);
 
 		const selectedItem: Ref<ContextExternalToolTemplateListItem | undefined> =
 			ref();
@@ -192,14 +197,14 @@ export default defineComponent({
 		);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(
-			() => contextExternalToolsModule?.getBusinessError
+			() => contextExternalToolsModule.getBusinessError
 		);
 
 		const onSelectTemplate = async (
 			selectedTool: ContextExternalToolTemplateListItem
 		) => {
 			toolTemplate.value =
-				await externalToolsModule?.loadContextToolConfigurationTemplateFromExternalTool(
+				await externalToolsModule.loadContextToolConfigurationTemplateFromExternalTool(
 					{
 						toolId: selectedTool.id,
 						contextType: props.contextType,
@@ -220,7 +225,7 @@ export default defineComponent({
 				props.contextId &&
 				props.contextType
 			) {
-				await contextExternalToolsModule?.createContextExternalTool({
+				await contextExternalToolsModule.createContextExternalTool({
 					toolTemplate: toolTemplate.value,
 					schoolToolId: selectedItem.value.schoolToolId,
 					contextId: props.contextId,
@@ -228,7 +233,7 @@ export default defineComponent({
 				});
 			}
 
-			if (!externalToolsModule?.getBusinessError.message) {
+			if (!externalToolsModule.getBusinessError.message) {
 				await router.push({ path: contextRoute, query: { tab: "tools" } });
 			}
 		};

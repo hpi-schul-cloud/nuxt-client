@@ -15,6 +15,7 @@ import {
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -24,6 +25,7 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
@@ -83,10 +85,17 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { initializeAxios } from "./utils/api";
+
 import {
+	APPLICATION_ERROR_KEY,
+	AUTH_MODULE,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 
 (async () => {
@@ -126,22 +135,24 @@ import {
 		// NUXT_REMOVAL get rid of store DI
 		provide: {
 			accountsModule,
-			applicationErrorModule,
+			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
+			[AUTH_MODULE.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
-			contextExternalToolsModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			[ENV_CONFIG_MODULE_KEY as symbol]: envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-			roomModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			privacyPolicyModule,
+			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
@@ -150,7 +161,8 @@ import {
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			[I18N_KEY as symbol]: i18n,
+			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

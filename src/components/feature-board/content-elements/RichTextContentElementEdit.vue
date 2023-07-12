@@ -2,12 +2,13 @@
 	<div class="cursor-text">
 		<ck-editor
 			v-model="modelValue"
-			@focus="onFocus"
-			@keyboard:delete="onDelete"
+			:autofocus="autofocus"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
 			mode="simple"
+			@focus="onFocus"
+			@keyboard:delete="onDelete"
 		/>
 	</div>
 </template>
