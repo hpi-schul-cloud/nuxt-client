@@ -516,19 +516,23 @@ describe("@/components/organisms/DataTable/DataTable", () => {
 			it("checked state if all values are selected", async () => {
 				const wrapper = getWrapperLocal(total);
 				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe("check_box");
+				expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
 			});
 
 			it("unchecked state if no values are selected", async () => {
 				const wrapper = getWrapperLocal(0);
 				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe("check_box_outline_blank");
+				expect(checkboxIcon.attributes("icon")).toBe(
+					"$mdiCheckboxBlankOutline"
+				);
 			});
 
 			it("intermediate state if some values are selected", async () => {
 				const wrapper = getWrapperLocal(Math.round(total / 2));
 				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-				expect(checkboxIcon.attributes("icon")).toBe("indeterminate_check_box");
+				expect(checkboxIcon.attributes("icon")).toBe(
+					"$mdiCheckboxIntermediate"
+				);
 			});
 		});
 	});

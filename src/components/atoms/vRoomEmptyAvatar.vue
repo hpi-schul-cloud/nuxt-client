@@ -4,7 +4,7 @@
 			class="ma-0 badge-component"
 			bordered
 			color="var(--v-primary-base)"
-			icon="mdi-lock"
+			icon="$mdiLock"
 			overlap
 			:value="false"
 		>

@@ -340,14 +340,14 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				it("checked state if all values are selected", async () => {
 					const wrapper = getWrapperLocal(testData.length);
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe("check_box");
+					expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
 				});
 
 				it("unchecked state if no values are selected", async () => {
 					const wrapper = getWrapperLocal(0);
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
 					expect(checkboxIcon.attributes("icon")).toBe(
-						"check_box_outline_blank"
+						"$mdiCheckboxBlankOutline"
 					);
 				});
 
@@ -355,7 +355,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
 					expect(checkboxIcon.attributes("icon")).toBe(
-						"indeterminate_check_box"
+						"$mdiCheckboxIntermediate"
 					);
 				});
 			});
@@ -378,14 +378,14 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				it("checked state if no values are unselected", async () => {
 					const wrapper = getWrapperLocal(0);
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
-					expect(checkboxIcon.attributes("icon")).toBe("check_box");
+					expect(checkboxIcon.attributes("icon")).toBe("$mdiCheckboxOutline");
 				});
 
 				it("unchecked state if all values are unselected", async () => {
 					const wrapper = getWrapperLocal(testData.length);
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
 					expect(checkboxIcon.attributes("icon")).toBe(
-						"check_box_outline_blank"
+						"$mdiCheckboxBlankOutline"
 					);
 				});
 
@@ -393,7 +393,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
 					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
 					expect(checkboxIcon.attributes("icon")).toBe(
-						"indeterminate_check_box"
+						"$mdiCheckboxIntermediate"
 					);
 				});
 			});

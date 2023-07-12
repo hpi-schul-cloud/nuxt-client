@@ -14,7 +14,7 @@
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="var(--v-primary-base)"
-			icon="mdi-lock"
+			icon="$mdiLock"
 			overlap
 			:value="displayBadge"
 		>

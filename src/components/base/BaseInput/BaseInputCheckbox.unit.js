@@ -82,13 +82,13 @@ describe("@/components/base/BaseInputCheckbox", () => {
 
 				const clickTarget = wrapper.find(clickTargetSelector);
 				const icon = wrapper.get("baseicon-stub");
-				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+				expect(icon.attributes("icon")).toBe("$mdiCheckboxBlankOutline");
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("check_box");
+				expect(icon.attributes("icon")).toBe("$mdiCheckboxOutline");
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+				expect(icon.attributes("icon")).toBe("$mdiCheckboxBlankOutline");
 			})
 		);
 	});
@@ -106,7 +106,7 @@ describe("@/components/base/BaseInputCheckbox", () => {
 		);
 
 		const icon = wrapper.get("baseicon-stub");
-		expect(icon.attributes("icon")).toBe("indeterminate_check_box");
+		expect(icon.attributes("icon")).toBe("$mdiCheckboxIntermediate");
 	});
 
 	it(`throws an error if show-undefined-state is set on type=switch`, async () => {

@@ -25,7 +25,7 @@ describe("@/components/molecules/NotificationModal", () => {
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.successMsg);
 		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
-			"check_circle"
+			"$mdiCheckCircle"
 		);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(

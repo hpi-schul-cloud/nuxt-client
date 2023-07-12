@@ -629,7 +629,7 @@ export default {
 					"pages.administration.students.index.remove.confirm.btnText"
 				),
 				cancelText: this.$t("common.actions.cancel"),
-				icon: "report_problem",
+				icon: "$mdiAlert",
 				iconSource: "material",
 				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
