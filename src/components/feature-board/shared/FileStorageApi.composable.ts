@@ -8,7 +8,7 @@ import {
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { delay } from "@/utils/helpers";
+import { delayWithAbort } from "@/utils/helpers";
 import { ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -83,7 +83,8 @@ export const useFileStorageApi = (
 	const fetchPendingFileRecursively = async (
 		waitTime = 10000,
 		waitTimeMax = 50000,
-		refreshTimer = 0
+		refreshTimer = 0,
+		signal?: AbortSignal
 	): Promise<FileRecordResponse | undefined> => {
 		if (
 			!fileRecord.value ||
@@ -92,22 +93,23 @@ export const useFileStorageApi = (
 			return;
 		}
 		try {
-			await delay(waitTime);
+			await delayWithAbort(waitTime, { signal: signal });
 
-			if (!fileRecord.value?.deletedSince) {
-				await fetchFile();
+			await fetchFile();
 
-				if (refreshTimer < waitTimeMax) {
-					refreshTimer = refreshTimer + waitTime;
+			if (refreshTimer < waitTimeMax) {
+				refreshTimer = refreshTimer + waitTime;
 
-					await fetchPendingFileRecursively(
-						waitTime,
-						waitTimeMax,
-						refreshTimer
-					);
-				}
+				await fetchPendingFileRecursively(
+					waitTime,
+					waitTimeMax,
+					refreshTimer,
+					signal
+				);
 			}
 		} catch (error) {
+			// when aborting this function using signal an error is thrown,
+			// which is caught by this empty error block
 			return;
 		}
 	};

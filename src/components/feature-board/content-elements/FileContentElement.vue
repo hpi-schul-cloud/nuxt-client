@@ -109,6 +109,8 @@ export default defineComponent({
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
+		const ac = new AbortController();
+
 		onMounted(() => {
 			(async () => {
 				const file = getSelectedFile();
@@ -126,7 +128,7 @@ export default defineComponent({
 				await upload(file);
 
 				setSelectedFile();
-				await fetchPendingFileRecursively();
+				await fetchPendingFileRecursively(10000, 50000, 0, ac.signal);
 			} catch (error) {
 				setSelectedFile();
 				await deleteFileElement();
@@ -135,7 +137,7 @@ export default defineComponent({
 
 		const getFileRecord = async () => {
 			await fetchFile();
-			await fetchPendingFileRecursively();
+			await fetchPendingFileRecursively(10000, 50000, 0, ac.signal);
 		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -160,11 +162,9 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				// we need to set "deletedSince" in order to stop
-				// "fetchPendingFileRecursively"
-				if (fileRecord.value) {
-					fileRecord.value.deletedSince = Date.now().toString();
-				}
+				// abort all (possibly) running timer in
+				// fetchPendingFileRecursively
+				ac.abort();
 				await deleteFileElement();
 			}
 		};

@@ -4,10 +4,10 @@ import { jest } from "@jest/globals";
 import { ref } from "vue";
 
 interface Props {
-	uploadMock?: jest.Mock;
 	fetchFileMock?: jest.Mock;
 	fetchPendingFileRecursivelyMock?: jest.Mock;
 	renameMock?: jest.Mock;
+	uploadMock?: jest.Mock;
 }
 
 export const setupFileStorageApiMock = (props: Props = {}) => {

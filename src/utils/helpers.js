@@ -139,3 +139,18 @@ export const getID = (resource) => {
 export const delay = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const delayWithAbort = (ms, { signal } = {}) => {
+	return new Promise((resolve, reject) => {
+		const listener = () => {
+			clearTimeout(timer);
+			reject(signal.reason);
+		};
+		signal?.throwIfAborted();
+		const timer = setTimeout(() => {
+			signal?.removeEventListener("abort", listener);
+			resolve();
+		}, ms);
+		signal?.addEventListener("abort", listener);
+	});
+};
