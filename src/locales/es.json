@@ -295,7 +295,7 @@
 	"global.topbar.loggedOut.actions.faq": "Preguntas frecuentes",
 	"global.topbar.loggedOut.actions.steps": "Primeros pasos",
 	"global.topbar.mobileMenu.ariaLabel": "Navegación de la página",
-	"global.topbar.legacy.MenuQrCode.qrHintText": "Dirige a otros usuarios a este sitio",
+	"global.topbar.MenuQrCode.qrHintText": "Dirige a otros usuarios a este sitio",
 	"global.topbar.MenuQrCode.print": "Imprimir",
 	"mixins.typeMeta.types.default": "Contenido",
 	"mixins.typeMeta.types.image": "Imagen",
