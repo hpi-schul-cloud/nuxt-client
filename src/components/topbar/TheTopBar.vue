@@ -61,7 +61,7 @@
 				>
 					<help-dropdown />
 				</popup-icon>
-				<div v-if="school" class="school-name item" tabindex="0">
+				<div v-if="school" class="school-name item">
 					{{ school.name }}
 				</div>
 				<img
