@@ -996,19 +996,19 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
 /**
  * 
  * @export
- * @interface CreateContentElementBody
+ * @interface CreateContentElementBodyParams
  */
-export interface CreateContentElementBody {
+export interface CreateContentElementBodyParams {
     /**
      * 
      * @type {ContentElementType}
-     * @memberof CreateContentElementBody
+     * @memberof CreateContentElementBodyParams
      */
     type: ContentElementType;
     /**
      * to bring element to a specific position, default is last position
      * @type {number}
-     * @memberof CreateContentElementBody
+     * @memberof CreateContentElementBodyParams
      */
     toPosition?: number;
 }
@@ -1374,19 +1374,6 @@ export interface DashboardResponse {
      * @memberof DashboardResponse
      */
     gridElements: Array<DashboardGridElementResponse>;
-}
-/**
- * 
- * @export
- * @interface ElementContentUpdateBodyParams
- */
-export interface ElementContentUpdateBodyParams {
-    /**
-     * 
-     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
-     * @memberof ElementContentUpdateBodyParams
-     */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
 }
 /**
  * 
@@ -4599,6 +4586,19 @@ export enum ToolReferenceResponseStatusEnum {
 /**
  * 
  * @export
+ * @interface UpdateElementContentBodyParams
+ */
+export interface UpdateElementContentBodyParams {
+    /**
+     * 
+     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
+     * @memberof UpdateElementContentBodyParams
+     */
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+}
+/**
+ * 
+ * @export
  * @interface UpdateFlagParams
  */
 export interface UpdateFlagParams {
@@ -6363,15 +6363,15 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
-         * @param {CreateContentElementBody} createContentElementBody 
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement: async (cardId: string, createContentElementBody: CreateContentElementBody, options: any = {}): Promise<RequestArgs> => {
+        cardControllerCreateElement: async (cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cardId' is not null or undefined
             assertParamExists('cardControllerCreateElement', 'cardId', cardId)
-            // verify required parameter 'createContentElementBody' is not null or undefined
-            assertParamExists('cardControllerCreateElement', 'createContentElementBody', createContentElementBody)
+            // verify required parameter 'createContentElementBodyParams' is not null or undefined
+            assertParamExists('cardControllerCreateElement', 'createContentElementBodyParams', createContentElementBodyParams)
             const localVarPath = `/cards/{cardId}/elements`
                 .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -6396,7 +6396,7 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createContentElementBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createContentElementBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6628,12 +6628,12 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
-         * @param {CreateContentElementBody} createContentElementBody 
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBody, options);
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -6708,12 +6708,12 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
-         * @param {CreateContentElementBody} createContentElementBody 
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
-            return localVarFp.cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(axios, basePath));
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
+            return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6781,12 +6781,12 @@ export interface BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
-     * @param {CreateContentElementBody} createContentElementBody 
+     * @param {CreateContentElementBodyParams} createContentElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
 
     /**
      * 
@@ -6854,13 +6854,13 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
-     * @param {CreateContentElementBody} createContentElementBody 
+     * @param {CreateContentElementBodyParams} createContentElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardCardApi
      */
-    public cardControllerCreateElement(cardId: string, createContentElementBody: CreateContentElementBody, options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, createContentElementBody, options).then((request) => request(this.axios, this.basePath));
+    public cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -7418,15 +7418,15 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
+         * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement: async (contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options: any = {}): Promise<RequestArgs> => {
+        elementControllerUpdateElement: async (contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentElementId' is not null or undefined
             assertParamExists('elementControllerUpdateElement', 'contentElementId', contentElementId)
-            // verify required parameter 'elementContentUpdateBodyParams' is not null or undefined
-            assertParamExists('elementControllerUpdateElement', 'elementContentUpdateBodyParams', elementContentUpdateBodyParams)
+            // verify required parameter 'updateElementContentBodyParams' is not null or undefined
+            assertParamExists('elementControllerUpdateElement', 'updateElementContentBodyParams', updateElementContentBodyParams)
             const localVarPath = `/elements/{contentElementId}/content`
                 .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7451,7 +7451,7 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(elementContentUpdateBodyParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateElementContentBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7495,12 +7495,12 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
+         * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options);
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -7538,12 +7538,12 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
-         * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
+         * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options).then((request) => request(axios, basePath));
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7579,12 +7579,12 @@ export interface BoardElementApiInterface {
      * 
      * @summary Update a single content element.
      * @param {string} contentElementId The id of the element.
-     * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
+     * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any): AxiosPromise<void>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -7624,13 +7624,13 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      * 
      * @summary Update a single content element.
      * @param {string} contentElementId The id of the element.
-     * @param {ElementContentUpdateBodyParams} elementContentUpdateBodyParams 
+     * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardElementApi
      */
-    public elementControllerUpdateElement(contentElementId: string, elementContentUpdateBodyParams: ElementContentUpdateBodyParams, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerUpdateElement(contentElementId, elementContentUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
