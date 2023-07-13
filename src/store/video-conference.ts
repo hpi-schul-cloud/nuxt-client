@@ -66,6 +66,11 @@ export default class VideoConferenceModule extends VuexModule {
 	}
 
 	@Mutation
+	resetError(): void {
+		this.error = null;
+	}
+
+	@Mutation
 	setVideoConferenceInfo(videoConferenceInfo: VideoConferenceInfo): void {
 		this.videoConferenceInfo = videoConferenceInfo;
 	}
