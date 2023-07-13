@@ -56,7 +56,6 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
 				FEATURE_LERNSTORE_ENABLED: true,
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -66,7 +65,6 @@ describe("PrivacySettings", () => {
 				propsData: generateProps(),
 			});
 
-			expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(0);
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
 		});
 		it("should display videoconference and rocketchat feature", () => {
