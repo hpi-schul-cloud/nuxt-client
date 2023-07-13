@@ -88,7 +88,7 @@ describe("UserLoginMigrationError", () => {
 
 				const descriptionText = wrapper
 					.find("[data-testId=text-description]")
-					.attributes().html;
+					.text();
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
@@ -119,7 +119,7 @@ describe("UserLoginMigrationError", () => {
 
 				const schoolNumberMismatchText: string = wrapper
 					.find("[data-testId=text-schoolnumber-mismatch]")
-					.attributes().html;
+					.text();
 
 				expect(schoolNumberMismatchText).toEqual(
 					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
@@ -137,7 +137,7 @@ describe("UserLoginMigrationError", () => {
 
 			const descriptionText: string = wrapper
 				.find("[data-testId=text-description]")
-				.attributes().html;
+				.text();
 
 			expect(descriptionText).toEqual(
 				'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"}'
