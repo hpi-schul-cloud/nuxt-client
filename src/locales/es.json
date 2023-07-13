@@ -638,6 +638,7 @@
 	"pages.administration.students.new.error": "No se ha podido añadir el estudiante. Es posible que la dirección de correo electrónico ya exista.",
 	"pages.administration.students.new.success": "¡Estudiante creado correctamente!",
 	"pages.administration.students.new.title": "Añadir estudiante",
+	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
 	"pages.administration.teachers.fab.add": "Nuevo profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Eliminar profesor",

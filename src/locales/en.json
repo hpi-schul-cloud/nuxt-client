@@ -649,6 +649,7 @@
 	"pages.administration.students.new.error": "Student could not be added successfully. The e-mail address may already exist.",
 	"pages.administration.students.new.success": "Student successfully created!",
 	"pages.administration.students.new.title": "Add student",
+	"pages.administration.students.table.edit.ariaLabel": "Edit student",
 	"pages.administration.teachers.fab.add": "New teacher",
 	"pages.administration.teachers.fab.import": "Import teacher",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Delete teacher",

@@ -651,6 +651,7 @@
 	"pages.administration.students.new.error": "Schüler:in konnte nicht erfolgreich hinzugefügt werden. Möglicherweise existiert die E-Mail-Adresse bereits.",
 	"pages.administration.students.new.success": "Schüler:in erfolgreich angelegt!",
 	"pages.administration.students.new.title": "Schüler:in hinzufügen",
+	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
 	"pages.administration.teachers.fab.add": "Neue Lehrkraft",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrkraft löschen",
