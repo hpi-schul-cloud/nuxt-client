@@ -240,6 +240,7 @@ export default defineComponent({
 				scopeId: props.roomId,
 				videoConferenceOptions: videoConferenceOptions.value,
 			});
+			await joinVideoConference();
 
 			onCloseConfigurationDialog();
 		};
@@ -252,7 +253,7 @@ export default defineComponent({
 				});
 
 			if (videoConferenceUrl) {
-				window.open(videoConferenceUrl.url, "_blank");
+				window.open(videoConferenceUrl.url, "_self");
 			}
 		};
 
