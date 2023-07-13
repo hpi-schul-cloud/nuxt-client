@@ -13,6 +13,7 @@ import {
 import { AxiosError } from "axios";
 import {
 	VideoConferenceInfo,
+	VideoConferenceOptions,
 	VideoConferenceState,
 } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
@@ -32,6 +33,7 @@ describe("VideoConferenceModule", () => {
 		const apiMock = {
 			videoConferenceControllerInfo: jest.fn(),
 			videoConferenceControllerJoin: jest.fn(),
+			videoConferenceControllerStart: jest.fn(),
 		};
 
 		jest
@@ -227,6 +229,76 @@ describe("VideoConferenceModule", () => {
 				await module.joinVideoConference({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+		});
+	});
+
+	describe("startVideoConference", () => {
+		describe("when the api is called", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const videoConferenceOptions: VideoConferenceOptions = {
+					everyAttendeeJoinsMuted: false,
+					moderatorMustApproveJoinRequests: true,
+					everybodyJoinsAsModerator: false,
+				};
+
+				apiMock.videoConferenceControllerStart.mockImplementation();
+
+				return {
+					apiMock,
+					videoConferenceOptions,
+				};
+			};
+
+			it("should call apiMock.videoConferenceControllerStart)", async () => {
+				const { videoConferenceOptions, apiMock } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+					videoConferenceOptions,
+				});
+
+				expect(apiMock.videoConferenceControllerStart).toHaveBeenCalledWith(
+					VideoConferenceScope.Course,
+					"scopeId",
+					videoConferenceOptions
+				);
+			});
+		});
+
+		describe("when the api returns an error", () => {
+			const setup = () => {
+				const { apiMock } = mockApi();
+
+				const error = new AxiosError();
+
+				const videoConferenceOptions: VideoConferenceOptions = {
+					everyAttendeeJoinsMuted: false,
+					moderatorMustApproveJoinRequests: true,
+					everybodyJoinsAsModerator: false,
+				};
+
+				apiMock.videoConferenceControllerStart.mockRejectedValue(error);
+
+				return {
+					error,
+					videoConferenceOptions,
+				};
+			};
+
+			it("should update the stores error", async () => {
+				const { error, videoConferenceOptions } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+					videoConferenceOptions,
 				});
 
 				expect(module.getError).toEqual(error);
