@@ -11,30 +11,75 @@
 
 		<v-dialog
 			v-model="isConfigurationDialogOpen"
-			max-width="450"
+			max-width="480"
 			data-testId="videoconference-config-dialog"
 		>
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
-						{{ $t("pages.rooms.tools.configureVideoconferenceDialog.title") }}
+						{{
+							$t(
+								"pages.rooms.tools.configureVideoconferenceDialog.title",
+								roomName
+							)
+						}}
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
-					<RenderHTML
-						class="text-md mt-2"
-						:html="
-							t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
-						"
-						component="p"
-					/>
-					<v-switch>
-						<template v-slot:label>
-							{{
-								$t("pages.rooms.tools.configureVideoconferenceDialog.content")
-							}}
-						</template>
-					</v-switch>
+					<div class="d-flex justify-space-between">
+						<RenderHTML
+							class="text-md mt-1 mr-4"
+							:html="
+								$t(
+									'pages.rooms.tools.configureVideoconferenceDialog.text.mute'
+								).toString()
+							"
+							component="p"
+						/>
+						<v-switch
+							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
+							data-testid="everyAttendeeJoinsMuted"
+							class="my-0"
+							inset
+							dense
+						></v-switch>
+					</div>
+					<div class="d-flex justify-space-between">
+						<RenderHTML
+							class="text-md mt-1 mr-4"
+							:html="
+								$t(
+									'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+								).toString()
+							"
+							component="p"
+						/>
+						<v-switch
+							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
+							data-testid="moderatorMustApproveJoinRequests"
+							class="my-0"
+							inset
+							dense
+						></v-switch>
+					</div>
+					<div class="d-flex justify-space-between">
+						<RenderHTML
+							class="text-md mt-1 mr-4"
+							:html="
+								$t(
+									'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+								).toString()
+							"
+							component="p"
+						/>
+						<v-switch
+							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
+							data-testid="everybodyJoinsAsModerator"
+							class="my-0"
+							inset
+							dense
+						></v-switch>
+					</div>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
@@ -51,6 +96,7 @@
 						class="px-6"
 						color="primary"
 						depressed
+						@click="startVideoConference"
 					>
 						{{ $t("common.actions.create") }}
 					</v-btn>
@@ -69,6 +115,7 @@ import {
 import AuthModule from "@/store/auth";
 import {
 	VideoConferenceInfo,
+	VideoConferenceOptions,
 	VideoConferenceState,
 } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
@@ -135,9 +182,14 @@ export default defineComponent({
 
 		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-		const onCloseConfigurationDialog = () => {
-			isConfigurationDialogOpen.value = false;
-		};
+		const videoConferenceOptions: Ref<VideoConferenceOptions> = ref({
+			everyAttendeeJoinsMuted: false,
+			moderatorMustApproveJoinRequests: true,
+			everybodyJoinsAsModerator: false,
+		});
+
+		// TODO: get the roomName
+		const roomName = "RoomName";
 
 		onMounted(async () => {
 			await videoConferenceModule.fetchVideoConferenceInfo({
@@ -163,10 +215,7 @@ export default defineComponent({
 				canStart.value
 			) {
 				// TODO N21-882: open start dialog
-				const onConfigurationDiaolog = () => {
-					isConfigurationDialogOpen.value = true;
-				};
-				return;
+				openConfigurationDiaolog();
 			}
 
 			if (
@@ -175,6 +224,24 @@ export default defineComponent({
 			) {
 				await joinVideoConference();
 			}
+		};
+
+		const openConfigurationDiaolog = () => {
+			isConfigurationDialogOpen.value = true;
+		};
+
+		const onCloseConfigurationDialog = () => {
+			isConfigurationDialogOpen.value = false;
+		};
+
+		const startVideoConference = async () => {
+			await videoConferenceModule.startVideoConference({
+				scope: VideoConferenceScope.Course,
+				scopeId: props.roomId,
+				videoConferenceOptions: videoConferenceOptions.value,
+			});
+
+			onCloseConfigurationDialog();
 		};
 
 		const joinVideoConference = async () => {
@@ -190,13 +257,17 @@ export default defineComponent({
 		};
 
 		return {
+			videoConferenceInfo,
+			videoConferenceOptions,
 			hasPermission,
 			isRunning,
 			isRefreshing,
+			roomName,
 			onClick,
 			onRefresh,
 			isConfigurationDialogOpen,
 			onCloseConfigurationDialog,
+			startVideoConference,
 		};
 	},
 });

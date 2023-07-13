@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	VideoConferenceInfo,
+	VideoConferenceOptions,
 	VideoConferenceState,
 } from "./types/video-conference";
 
@@ -119,5 +120,31 @@ export default class VideoConferenceModule extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 		}
+	}
+
+	@Action
+	async startVideoConference(params: {
+		scope: VideoConferenceScope;
+		scopeId: string;
+		videoConferenceOptions: VideoConferenceOptions;
+	}): Promise<void> {
+		this.setLoading(true);
+
+		try {
+			await this.videoConferenceApi.videoConferenceControllerStart(
+				params.scope,
+				params.scopeId,
+				params.videoConferenceOptions
+			);
+
+			this.setVideoConferenceInfo({
+				state: VideoConferenceState.RUNNING,
+				options: params.videoConferenceOptions,
+			});
+		} catch (error: unknown) {
+			this.setError(error);
+		}
+
+		this.setLoading(false);
 	}
 }
