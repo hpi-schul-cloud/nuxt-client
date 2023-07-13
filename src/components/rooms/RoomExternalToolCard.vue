@@ -1,44 +1,28 @@
 <template>
-	<v-card
-		class="card"
-		max-width="100%"
-		:aria-label="tool.name"
-		hover
+	<room-base-card
+		:title="tool.name"
+		:logo-url="tool.logoUrl"
+		:open-in-new-tab="tool.openInNewTab"
 		@click="handleClick"
 	>
-		<div class="logo-container">
-			<v-img
-				v-if="tool.logoUrl"
-				class="mx-auto logo"
-				:src="tool.logoUrl"
-				contain
-				data-testId="tool-card-logo"
-				:alt="t('pages.rooms.tools.logo')"
-			/>
-		</div>
-		<h5 class="card-title my-auto">{{ tool.name }}</h5>
-		<span
-			v-if="tool.openInNewTab"
-			class="ml-1 my-auto no-wrap"
-			data-testId="tool-card-new-tab-text"
-			>({{ t("pages.rooms.tools.newTab") }})</span
-		>
-		<span
-			v-if="isToolOutdated"
-			class="ml-1 my-auto no-wrap"
-			data-testId="tool-card-status-text"
-			><b>({{ getStatusText() }})</b>
-		</span>
-		<div class="mx-auto"></div>
-		<div v-if="canEdit" class="ml-1 my-auto">
-			<more-item-menu
-				class="menu"
-				:menu-items="menuItems"
-				:show="true"
-				data-testId="tool-card-menu"
-			/>
-		</div>
-	</v-card>
+		<template v-slot:right>
+			<div v-if="canEdit" class="ml-1 my-auto">
+				<more-item-menu
+					:menu-items="menuItems"
+					:show="true"
+					data-testId="tool-card-menu"
+				/>
+			</div>
+		</template>
+		<template v-slot:footer>
+			<span
+				v-if="isToolOutdated"
+				class="ml-1 my-auto"
+				data-testId="tool-card-status-text"
+				><b>({{ getStatusText() }})</b>
+			</span>
+		</template>
+	</room-base-card>
 </template>
 
 <script lang="ts">
@@ -49,10 +33,11 @@ import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { ToolConfigurationStatus } from "@/store/external-tool";
+import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { MoreItemMenu },
+	components: { RoomBaseCard, MoreItemMenu },
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
@@ -82,12 +67,12 @@ export default defineComponent({
 		};
 
 		const menuItems = [
-			{
+			/* {
 				icon: mdiPencilOutline,
 				action: handleEdit,
 				name: t("common.actions.edit"),
 				dataTestId: "tool-edit",
-			},
+			}, */
 			{
 				icon: mdiTrashCanOutline,
 				action: handleDelete,
@@ -117,44 +102,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.card {
-	display: flex;
-	align-content: center;
-	height: 100px;
-	padding: 16px;
-}
-
-.card-title {
-	overflow: hidden;
-	max-height: 100%;
-}
-
-.logo-container {
-	margin-right: 16px;
-	max-width: 160px;
-	height: 100%;
-}
-
-@media only screen and (max-width: 749px) {
-	.logo-container {
-		max-width: 68px;
-	}
-}
-
-@media only screen and (max-width: 399px) {
-	.logo-container {
-		display: none;
-	}
-}
-
-.logo {
-	max-width: 140px;
-	height: 100%;
-	width: auto;
-}
-
-.no-wrap {
-	flex-shrink: 0;
-}
-</style>
+<style lang="scss" scoped></style>

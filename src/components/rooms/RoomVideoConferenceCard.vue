@@ -1,50 +1,50 @@
 <template>
-	<v-card
-		class="card"
-		max-width="100%"
-		:aria-label="videoConferenceTitle"
-		hover
+	<room-base-card
+		:title="videoConferenceTitle"
+		:logo-url="logoUrl"
+		test-id="vc-card"
 		@click="onClick"
-		data-testId="vc-card"
 	>
-		<div class="logo-container">
-			<v-img
-				class="mx-auto logo"
-				:src="logoUrl"
-				contain
-				data-testid="vc-card-logo"
-				:alt="$t('pages.rooms.tools.logo')"
-			/>
-		</div>
-		<h5 v-if="isRunning && hasPermission" class="card-title my-auto">
-			{{ videoConferenceTitle }}
-		</h5>
-		<span v-else class="card-title my-auto">
-			{{ videoConferenceTitle }}
-		</span>
-		<div class="mx-auto"></div>
-		<div class="ml-1 my-auto">
-			<div v-if="isRunning && hasPermission" class="pulsating-dot"></div>
-			<v-btn
-				v-else
-				icon
-				:aria-label="t('pages.videoConference.action.refresh')"
-				@click.stop="refreshVideoConferenceStatus"
-				data-testId="refresh-btn"
-			>
-				<v-icon v-if="isRefreshing" class="spin">{{ mdiLoading }}</v-icon>
-				<v-icon v-else>{{ mdiReload }}</v-icon>
-			</v-btn>
-		</div>
-	</v-card>
+		<template v-slot:right>
+			<div
+				v-if="isRunning && hasPermission"
+				class="pulsating-dot my-auto"
+			></div>
+		</template>
+		<template v-slot:footer>
+			<div v-show="!isRunning" class="mt-2">
+				<v-alert dense text class="ma-0" type="info">
+					<div class="d-flex flex-wrap gap-4">
+						<span class="flex-1">
+							Die Video Konferenz wurde noch nicht gestartet oder du hast nicht
+							die berechtigung dies zu sehen.
+						</span>
+						<v-btn
+							class="my-auto"
+							outlined
+							color="secondary"
+							:disabled="isRefreshing"
+							@click.stop="refreshVideoConferenceStatus"
+							data-testId="refresh-btn"
+							aria-label="Status aktualisieren"
+						>
+							<span>Status aktualisieren</span>
+						</v-btn>
+					</div>
+				</v-alert>
+			</div>
+		</template>
+	</room-base-card>
 </template>
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload, mdiLoading } from "@mdi/js";
 import { defineComponent, ComputedRef, computed } from "vue";
+import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
+	components: { RoomBaseCard },
 	emits: ["click", "refresh"],
 	props: {
 		isRunning: {
@@ -84,13 +84,7 @@ export default defineComponent({
 		});
 
 		const videoConferenceTitle: ComputedRef<string> = computed(() => {
-			if (!props.hasPermission) {
-				return t("pages.videoConference.title.noPermission");
-			} else if (props.isRunning) {
-				return t("pages.videoConference.title.running");
-			} else {
-				return t("pages.videoConference.title.notStarted");
-			}
+			return t("pages.videoConference.title.running");
 		});
 
 		return {
@@ -107,44 +101,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.card {
-	display: flex;
-	align-content: center;
-	height: 100px;
-	padding: 16px;
-}
-
-.card-title {
-	overflow: hidden;
-	max-height: 100%;
-}
-
-.logo-container {
-	margin-right: 16px;
-	max-width: 160px;
-	height: 100%;
-}
-
-@media only screen and (max-width: 749px) {
-	.logo-container {
-		max-width: 68px;
+.v-alert {
+	::v-deep .v-icon {
+		margin-top: auto;
+		margin-bottom: auto;
 	}
 }
 
-@media only screen and (max-width: 399px) {
-	.logo-container {
-		display: none;
-	}
+.gap-4 {
+	gap: 4px;
 }
 
-.logo {
-	max-width: 140px;
-	height: 100%;
-	width: auto;
-}
-
-.no-wrap {
-	flex-shrink: 0;
+.flex-1 {
+	flex: 1;
 }
 
 $pulseIconColor: #15ba97;
@@ -172,19 +141,6 @@ $pulseIconColor: #15ba97;
 	100% {
 		transform: scale(0.95);
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-	}
-}
-
-.spin {
-	animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
 	}
 }
 </style>
