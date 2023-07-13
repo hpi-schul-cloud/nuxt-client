@@ -668,6 +668,7 @@
 	"pages.administration.teachers.new.error": "Teacher could not be added successfully. The email address may already exist.",
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
+	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
 	"pages.administration.school.index.info": "Some settings are still on the ",
 	"pages.administration.school.index.back": "old administration page",
 	"pages.administration.school.index.title": "Manage school",

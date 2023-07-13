@@ -657,6 +657,7 @@
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor@s",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
+	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
 	"pages.administration.school.index.title": "Administrar escuela",
 	"pages.administration.school.index.error": "Ocurrió un error al cargar la escuela",
 	"pages.administration.school.index.error.gracePeriodExceeded": "El período de gracia después de finalizar la migración ha expirado",

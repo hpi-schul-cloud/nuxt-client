@@ -670,6 +670,7 @@
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
+	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
 	"pages.administration.school.index.title": "Schule verwalten",
 	"pages.administration.school.index.info": "Einige Einstellungen befinden sich noch auf der ",
 	"pages.administration.school.index.back": "alten Administrationsseite",
