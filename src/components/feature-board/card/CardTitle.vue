@@ -10,6 +10,7 @@
 			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
+			@enter="onEnter"
 		></BoardAnyTitleInput>
 	</VCardTitle>
 </template>
@@ -34,14 +35,18 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
+		const onEnter = () => {
+			emit("enter");
+		};
 
 		return {
 			modelValue,
 			onUpdateValue,
+			onEnter,
 		};
 	},
 });
