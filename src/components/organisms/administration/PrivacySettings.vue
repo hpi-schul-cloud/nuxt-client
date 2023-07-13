@@ -1,21 +1,34 @@
 <template>
-	<section
-		v-if="
-			toggleStudentVisibilityEnabled ||
-			toggleStudentLernstoreViewEnabled ||
-			rocketChatEnabled ||
-			videoConferenceEnabled
-		"
-	>
+	<section>
 		<h3 class="text-h6">
 			{{ $t("pages.administration.school.index.privacySettings") }}
 		</h3>
-		<v-row
-			v-if="toggleStudentVisibilityEnabled"
-			class="student-visibility-switch"
-		>
+		<v-row class="student-visibility-switch">
 			<v-col>
+				<v-alert
+					light
+					text
+					type="info"
+					class="mb-4"
+					v-if="!isTeacherStudentVisibilityConfigurable"
+				>
+					<div class="text-h6 text--primary mb-1">
+						{{
+							$t(
+								"pages.administration.school.index.privacySettings.longText.configurabilityInfoTitle"
+							)
+						}}
+					</div>
+					<div class="text--primary">
+						{{
+							$t(
+								"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
+							)
+						}}
+					</div>
+				</v-alert>
 				<v-custom-switch
+					:disabled="!isTeacherStudentVisibilityConfigurable"
 					:value="studentVisibility"
 					:label="
 						$t(
@@ -28,7 +41,10 @@
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
 				></v-custom-switch>
-				<p class="body-2 mb-0">
+				<p
+					class="body-2 mb-0"
+					:class="{ 'text--disabled': !isTeacherStudentVisibilityConfigurable }"
+				>
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.studentVisibility"
@@ -134,14 +150,18 @@ export default {
 	computed: {
 		toggleStudentLernstoreViewEnabled: () =>
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
-		toggleStudentVisibilityEnabled: () =>
+		isTeacherStudentVisibilityConfigurable: () =>
 			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		studentVisibility() {
-			return this.permissions.teacher
-				? this.permissions.teacher.STUDENT_LIST
-				: false;
+			if (this.isTeacherStudentVisibilityConfigurable) {
+				return this.permissions?.teacher
+					? this.permissions.teacher.STUDENT_LIST
+					: false;
+			} else {
+				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
+			}
 		},
 		lernStoreVisibility() {
 			return this.permissions.student
