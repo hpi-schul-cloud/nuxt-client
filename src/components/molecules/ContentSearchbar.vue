@@ -46,10 +46,6 @@ export default {
 			type: String,
 			default: "",
 		},
-		ariaLabel: {
-			type: String,
-			default: "Search",
-		},
 		loading: {
 			type: Boolean,
 		},
