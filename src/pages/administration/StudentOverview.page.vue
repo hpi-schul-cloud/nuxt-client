@@ -108,7 +108,6 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						role="button"
 						:aria-label="
 							$t('pages.administration.students.table.edit.ariaLabel')
 						"

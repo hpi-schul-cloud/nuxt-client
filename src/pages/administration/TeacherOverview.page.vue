@@ -96,7 +96,6 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
-						role="button"
 						:aria-label="
 							$t('pages.administration.teachers.table.edit.ariaLabel')
 						"
