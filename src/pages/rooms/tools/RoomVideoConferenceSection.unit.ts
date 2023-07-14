@@ -576,6 +576,60 @@ describe("RoomVideoConferenceSection", () => {
 			expect(switchComponent.emitted()).toBeTruthy();
 		});
 	});
+	describe("when open videoconference configuration dialog", () => {
+		const setup = () => {
+			const { wrapper, videoConferenceModule, roomModule } = getWrapper(
+				{
+					roomId: "roomId",
+				},
+				["start_meeting"],
+				false,
+				{
+					getVideoConferenceInfo: {
+						state: VideoConferenceState.NOT_STARTED,
+						options: {
+							everyAttendeeJoinsMuted: false,
+							moderatorMustApproveJoinRequests: true,
+							everybodyJoinsAsModerator: false,
+						},
+					},
+					getLoading: true,
+				}
+			);
+
+			const params = {
+				scope: VideoConferenceScope.Course,
+				scopeId: "roomId",
+			};
+
+			return {
+				wrapper,
+				videoConferenceModule,
+				params,
+				roomModule,
+			};
+		};
+
+		it("should set the roomName in dialog title", async () => {
+			const { wrapper, roomModule } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+
+			await card.vm.$emit("click");
+
+			const configurationDialog = wrapper.find(
+				'[data-testid="videoconference-config-dialog"]'
+			);
+			const cardTitle = configurationDialog.find(
+				'[data-testid="videoconference-config-dialog-title"]'
+			);
+			const title = cardTitle.element.getAttribute("html");
+
+			expect(title).toContain(roomModule.getRoomData.title);
+		});
+	});
 
 	describe("when clicking on create button of videoconference configuration dialog", () => {
 		const setup = () => {
