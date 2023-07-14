@@ -5,6 +5,20 @@
 		:open-in-new-tab="tool.openInNewTab"
 		@click="handleClick"
 	>
+		<template v-slot:under-title>
+			<div v-if="isToolOutdated" class="mt-1">
+				<v-chip
+					small
+					class="py-1"
+					color="warning lighten-1"
+					text-color="black"
+					data-testId="tool-card-status"
+				>
+					<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
+					{{ t("pages.rooms.tools.outdated") }}
+				</v-chip>
+			</div>
+		</template>
 		<template v-slot:right>
 			<div v-if="canEdit" class="ml-1 my-auto">
 				<more-item-menu
@@ -14,14 +28,6 @@
 				/>
 			</div>
 		</template>
-		<template v-slot:footer>
-			<span
-				v-if="isToolOutdated"
-				class="ml-1 my-auto"
-				data-testId="tool-card-status-text"
-				><b>({{ getStatusText() }})</b>
-			</span>
-		</template>
 	</room-base-card>
 </template>
 
@@ -29,9 +35,8 @@
 import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { mdiAlert, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { ToolConfigurationStatus } from "@/store/external-tool";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
@@ -58,9 +63,9 @@ export default defineComponent({
 			emit("click", props.tool);
 		};
 
-		const handleEdit = () => {
+		/* const handleEdit = () => {
 			emit("edit", props.tool);
-		};
+		}; */
 
 		const handleDelete = () => {
 			emit("delete", props.tool);
@@ -81,12 +86,6 @@ export default defineComponent({
 			},
 		];
 
-		const { getStatusTranslationKey } = useExternalToolMappings();
-
-		const getStatusText = (): string => {
-			return t(getStatusTranslationKey(props.tool.status));
-		};
-
 		const isToolOutdated: ComputedRef = computed(
 			() => props.tool.status === ToolConfigurationStatus.Outdated
 		);
@@ -95,11 +94,9 @@ export default defineComponent({
 			t,
 			handleClick,
 			menuItems,
-			getStatusText,
 			isToolOutdated,
+			mdiAlert,
 		};
 	},
 });
 </script>
-
-<style lang="scss" scoped></style>

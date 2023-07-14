@@ -18,17 +18,23 @@
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
 				</div>
-				<h5 class="my-auto">
-					{{ title }}
-				</h5>
-				<v-icon
-					v-if="openInNewTab"
-					class="ml-1 my-auto no-wrap"
-					data-testId="tool-card-new-tab-text"
-					>{{ mdiOpenInNew }}</v-icon
-				>
-				<div class="mx-auto"></div>
-				<slot name="right"></slot>
+				<div class="d-flex flex-column w-100">
+					<div class="d-flex">
+						<h5 class="my-auto">
+							{{ title }}
+						</h5>
+						<v-icon
+							v-if="openInNewTab"
+							class="ml-1 my-auto no-wrap"
+							data-testId="card-new-tab-icon"
+						>
+							{{ mdiOpenInNew }}
+						</v-icon>
+						<div class="mx-auto"></div>
+						<slot name="right"></slot>
+					</div>
+					<slot name="under-title"></slot>
+				</div>
 			</div>
 			<slot name="footer"></slot>
 		</div>

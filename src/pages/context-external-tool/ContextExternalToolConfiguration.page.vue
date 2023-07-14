@@ -58,7 +58,7 @@
 				@click="onSaveTool"
 				data-testId="save-button"
 			>
-				{{ t("pages.tool.addBtn.label") }}
+				{{ t("common.actions.add") }}
 			</v-btn>
 		</v-row>
 	</default-wireframe>

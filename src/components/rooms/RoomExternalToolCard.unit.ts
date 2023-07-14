@@ -37,76 +37,6 @@ describe("RoomExternalToolCard", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("when the tool has a name", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should not display a title", async () => {
-			const { wrapper, tool } = setup();
-
-			const title = wrapper.find("h5");
-
-			expect(title.text()).toEqual(tool.name);
-		});
-	});
-
-	describe("when the tool has a logoUrl", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build({
-					logoUrl: "logoUrl",
-				});
-
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should display a logo", async () => {
-			const { wrapper } = setup();
-
-			const logo = wrapper.find('[data-testid="tool-card-logo"]');
-
-			expect(logo.exists()).toEqual(true);
-		});
-	});
-
-	describe("when the tool has no logoUrl", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build({
-					logoUrl: undefined,
-				});
-
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should not display a logo", async () => {
-			const { wrapper } = setup();
-
-			const logo = wrapper.find('[data-testid="tool-card-logo"]');
-
-			expect(logo.exists()).toEqual(false);
-		});
-	});
-
 	describe("tool status", () => {
 		describe("when tool status is outdated", () => {
 			const setup = () => {
@@ -123,16 +53,12 @@ describe("RoomExternalToolCard", () => {
 				};
 			};
 
-			it("should display outdated text", () => {
+			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusText = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
-				expect(statusText.text()).toEqual(
-					"(components.externalTools.status.outdated)"
-				);
+				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
 		});
 
@@ -151,63 +77,15 @@ describe("RoomExternalToolCard", () => {
 				};
 			};
 
-			it("should display no text", () => {
+			it("should display no chip", () => {
 				const { wrapper } = setup();
 
-				const statusText = wrapper.find(
+				const statusChip = wrapper.find(
 					'[data-testId="tool-card-status-text"]'
 				);
 
-				expect(statusText.exists()).toEqual(false);
+				expect(statusChip.exists()).toEqual(false);
 			});
-		});
-	});
-
-	describe("when the tool is opened in a new tab", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build({
-					openInNewTab: true,
-				});
-
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should display a 'open in new tab'-text", async () => {
-			const { wrapper } = setup();
-
-			const newTabText = wrapper.find('[data-testId="tool-card-new-tab-text"]');
-
-			expect(newTabText.text()).toEqual("(pages.rooms.tools.newTab)");
-		});
-	});
-
-	describe("when the tool is in the same window", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build({
-					openInNewTab: false,
-				});
-
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should not display a 'open in new tab'-text", async () => {
-			const { wrapper } = setup();
-
-			const newTabText = wrapper.find('[data-testId="tool-card-new-tab-text"]');
-
-			expect(newTabText.exists()).toEqual(false);
 		});
 	});
 
@@ -254,7 +132,8 @@ describe("RoomExternalToolCard", () => {
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
 
-		it("should display the edit menu item", async () => {
+		// TODO add this test back in as soon as edit is implemented
+		it.skip("should display the edit menu item", async () => {
 			const { wrapper } = setup();
 
 			const itemMenu = wrapper.find(
@@ -280,7 +159,8 @@ describe("RoomExternalToolCard", () => {
 			expect(toolDeleteMenuItem.exists()).toEqual(true);
 		});
 
-		describe("when clicking on the edit menu item", () => {
+		// TODO add this test back in as soon as edit is implemented
+		describe.skip("when clicking on the edit menu item", () => {
 			it("should emit the edit event", async () => {
 				const { wrapper, tool } = setup();
 

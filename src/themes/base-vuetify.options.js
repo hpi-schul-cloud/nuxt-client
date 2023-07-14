@@ -37,6 +37,7 @@ export default {
 				},
 				warning: {
 					base: "#ff8311",
+					lighten1: "#fff0e2",
 				},
 				error: {
 					base: "#ff1134",

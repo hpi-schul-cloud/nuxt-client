@@ -12,6 +12,8 @@ module.exports = {
 	moduleNameMapper: {
 		"^axios$": require.resolve("axios"),
 		"^@@/(.*)$": "<rootDir>/$1",
+		"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+			"<rootDir>/tests/test-utils/mediaFileMock.js",
 	},
 
 	setupFiles: ["./tests/unit/setup.js"],

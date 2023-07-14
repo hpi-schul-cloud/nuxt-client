@@ -2,7 +2,7 @@ import AuthModule from "@/store/auth";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	I18N_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
@@ -53,7 +53,7 @@ describe("RoomVideoConferenceSection", () => {
 					[I18N_KEY.valueOf()]: {
 						tc: (key: string): string => key,
 					},
-					[AUTH_MODULE.valueOf()]: authModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 				},
 			}

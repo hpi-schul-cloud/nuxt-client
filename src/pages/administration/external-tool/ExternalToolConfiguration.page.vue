@@ -56,9 +56,7 @@
 				data-testId="save-button"
 			>
 				{{
-					isInEditMode
-						? t("pages.tool.editBtn.label")
-						: t("pages.tool.addBtn.label")
+					isInEditMode ? t("common.actions.update") : t("common.actions.add")
 				}}
 			</v-btn>
 		</v-row>

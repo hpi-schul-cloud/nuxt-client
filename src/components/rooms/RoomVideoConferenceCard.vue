@@ -1,7 +1,7 @@
 <template>
 	<room-base-card
-		:title="videoConferenceTitle"
-		:logo-url="logoUrl"
+		:title="t('pages.videoConference.title')"
+		:logo-url="logo"
 		test-id="vc-card"
 		@click="onClick"
 	>
@@ -13,11 +13,14 @@
 		</template>
 		<template v-slot:footer>
 			<div v-show="!isRunning" class="mt-2">
-				<v-alert dense text class="ma-0" type="info">
+				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">
-						<span class="flex-1">
-							Die Video Konferenz wurde noch nicht gestartet oder du hast nicht
-							die berechtigung dies zu sehen.
+						<span class="flex-1 my-auto">
+							{{
+								hasPermission
+									? t("pages.videoConference.info.notStarted")
+									: t("pages.videoConference.info.noPermission")
+							}}
 						</span>
 						<v-btn
 							class="my-auto"
@@ -26,9 +29,10 @@
 							:disabled="isRefreshing"
 							@click.stop="refreshVideoConferenceStatus"
 							data-testId="refresh-btn"
-							aria-label="Status aktualisieren"
+							:aria-label="t('pages.videoConference.action.refresh')"
 						>
-							<span>Status aktualisieren</span>
+							<v-icon dense class="mr-1">{{ mdiReload }}</v-icon>
+							{{ t("pages.videoConference.action.refresh") }}
 						</v-btn>
 					</div>
 				</v-alert>
@@ -39,7 +43,7 @@
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiReload, mdiLoading } from "@mdi/js";
+import { mdiReload } from "@mdi/js";
 import { defineComponent, ComputedRef, computed } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
@@ -73,28 +77,22 @@ export default defineComponent({
 			emit("click");
 		};
 
-		const logoUrl: ComputedRef<string> = computed(() => {
+		const logo: ComputedRef<any> = computed(() => {
 			if (!props.hasPermission) {
 				return require("@/assets/img/bbb/no_permission.png");
 			} else if (props.isRunning) {
 				return require("@/assets/img/bbb/available.png");
-			} else {
-				return require("@/assets/img/bbb/not_started.png");
 			}
-		});
 
-		const videoConferenceTitle: ComputedRef<string> = computed(() => {
-			return t("pages.videoConference.title.running");
+			return require("@/assets/img/bbb/not_started.png");
 		});
 
 		return {
 			t,
 			onClick,
 			mdiReload,
-			mdiLoading,
-			logoUrl,
+			logo,
 			refreshVideoConferenceStatus,
-			videoConferenceTitle,
 		};
 	},
 });

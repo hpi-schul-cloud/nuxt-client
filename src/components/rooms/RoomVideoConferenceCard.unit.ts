@@ -36,6 +36,28 @@ describe("RoomVideoConferenceCard", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("Title", () => {
+		const setup = () => {
+			const wrapper = getWrapper({
+				isRunning: false,
+				hasPermission: true,
+				isRefreshing: false,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display a title", () => {
+			const { wrapper } = setup();
+
+			const text = wrapper.find("h5");
+
+			expect(text.text()).toEqual("pages.videoConference.title");
+		});
+	});
+
 	describe("when the video conference is not running", () => {
 		const setup = () => {
 			const wrapper = getWrapper({
@@ -60,9 +82,11 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a description text", () => {
 			const { wrapper } = setup();
 
-			const text = wrapper.find("span");
+			const alert = wrapper.find('[data-testId="vc-info-box"]');
 
-			expect(text.text()).toEqual("pages.videoConference.title.notStarted");
+			const text = alert.find("span");
+
+			expect(text.text()).toEqual("pages.videoConference.info.notStarted");
 		});
 
 		it("should display a refresh button", () => {
@@ -93,14 +117,6 @@ describe("RoomVideoConferenceCard", () => {
 			const logo = wrapper.find('[data-testId="vc-card-logo"]');
 
 			expect(logo.exists()).toEqual(true);
-		});
-
-		it("should display a title", () => {
-			const { wrapper } = setup();
-
-			const text = wrapper.find("h5");
-
-			expect(text.text()).toEqual("pages.videoConference.title.running");
 		});
 
 		it("should display a pulsating dot", () => {
@@ -136,9 +152,11 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a description text", () => {
 			const { wrapper } = setup();
 
-			const text = wrapper.find("span");
+			const alert = wrapper.find('[data-testId="vc-info-box"]');
 
-			expect(text.text()).toEqual("pages.videoConference.title.noPermission");
+			const text = alert.find("span");
+
+			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
 		});
 
 		it("should display a refresh button", () => {
@@ -211,12 +229,12 @@ describe("RoomVideoConferenceCard", () => {
 			};
 		};
 
-		it("should display a spinning icon", async () => {
+		it("should disable the refresh button", async () => {
 			const { wrapper } = setup();
 
-			const spinner = wrapper.find(".spin");
+			const button = wrapper.find('[data-testId="refresh-btn"]');
 
-			expect(spinner.exists()).toEqual(true);
+			expect(button.attributes("disabled")).toEqual("disabled");
 		});
 	});
 });
