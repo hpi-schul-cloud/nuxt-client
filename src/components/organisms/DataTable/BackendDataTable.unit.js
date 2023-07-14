@@ -130,47 +130,41 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		});
 
 		it("should update ui if sortBy prop changes", async () => {
-			const wrapper = getWrapper(
-				{
-					data: defaultData,
-					sortBy: "firstName",
-					sortOrder: "asc",
-				},
-				{
-					stubs: { BaseIcon: true },
-				}
+			const wrapper = getWrapper({
+				data: defaultData,
+				sortBy: "firstName",
+				sortOrder: "asc",
+			});
+			let sortButton = getSortButton(wrapper, "Vorname");
+			expect(sortButton.element.innerHTML.includes("$mdiMenuUpOutline")).toBe(
+				true
 			);
-			let sortButtonIcon = getSortButton(wrapper, "Vorname").find(
-				"baseicon-stub"
-			);
-			expect(sortButtonIcon.attributes("icon")).toBe("sort_up");
 			wrapper.setProps({
 				sortBy: "address.city",
 			});
 			await wrapper.vm.$nextTick();
-			sortButtonIcon = getSortButton(wrapper, "Stadt").find("baseicon-stub");
-			expect(sortButtonIcon.attributes("icon")).toBe("sort_up");
+			sortButton = getSortButton(wrapper, "Stadt");
+			expect(sortButton.element.innerHTML.includes("$mdiMenuUpOutline")).toBe(
+				true
+			);
 		});
 		it("should update ui if sortOrder prop changes", async () => {
-			const wrapper = getWrapper(
-				{
-					data: defaultData,
-					sortBy: "firstName",
-					sortOrder: "asc",
-				},
-				{
-					stubs: { BaseIcon: true },
-				}
+			const wrapper = getWrapper({
+				data: defaultData,
+				sortBy: "firstName",
+				sortOrder: "asc",
+			});
+			const sortButton = getSortButton(wrapper, "Vorname");
+			expect(sortButton.element.innerHTML.includes("$mdiMenuUpOutline")).toBe(
+				true
 			);
-			const sortButtonIcon = getSortButton(wrapper, "Vorname").find(
-				"baseicon-stub"
-			);
-			expect(sortButtonIcon.attributes("icon")).toBe("sort_up");
 			wrapper.setProps({
 				sortOrder: "desc",
 			});
 			await wrapper.vm.$nextTick();
-			expect(sortButtonIcon.attributes("icon")).toBe("sort_down");
+			expect(sortButton.element.innerHTML.includes("$mdiMenuDownOutline")).toBe(
+				true
+			);
 		});
 	});
 
@@ -337,7 +331,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxOutline")
-					);
+					).toBe(true);
 				});
 
 				it("unchecked state if no values are selected", async () => {
@@ -345,7 +339,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxBlankOutline")
-					);
+					).toBe(true);
 				});
 
 				it("intermediate state if some values are selected", async () => {
@@ -353,7 +347,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxIntermediate")
-					);
+					).toBe(true);
 				});
 			});
 			describe("on exclusive selection", () => {
@@ -372,7 +366,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxOutline")
-					);
+					).toBe(true);
 				});
 
 				it("unchecked state if all values are unselected", async () => {
@@ -380,7 +374,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxBlankOutline")
-					);
+					).toBe(true);
 				});
 
 				it("intermediate state if some values are unselected", async () => {
@@ -388,7 +382,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					const checkboxIcon = wrapper.get("thead tr");
 					expect(
 						checkboxIcon.element.innerHTML.includes("$mdiCheckboxIntermediate")
-					);
+					).toBe(true);
 				});
 			});
 		});

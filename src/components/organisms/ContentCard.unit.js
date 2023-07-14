@@ -69,13 +69,11 @@ describe("@/components/organisms/ContentCard Collection", () => {
 		);
 	});
 	it("Renders collection icon", () => {
+		const contentTextIcon = wrapper.find(".content__text-icon");
 		expect(wrapper.find(".card-tag").exists()).toBe(true);
-		expect(wrapper.find(".content__text-icon").exists()).toBe(true);
-		expect(wrapper.find(".content__text-icon").attributes("source")).toBe(
-			"custom"
-		);
-		expect(wrapper.find(".content__text-icon").attributes("icon")).toBe(
-			"ic_collection"
+		expect(contentTextIcon.exists()).toBe(true);
+		expect(contentTextIcon.element.innerHTML.includes("$ic_collection")).toBe(
+			true
 		);
 	});
 	it("Renders title of content Card", () => {

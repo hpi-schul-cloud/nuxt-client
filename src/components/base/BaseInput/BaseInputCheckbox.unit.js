@@ -69,26 +69,27 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	it.skip(`shows checkmark only when it is checked`, async () => {
 		await Promise.all(
 			["input", "label"].map(async (clickTargetSelector) => {
-				const wrapper = mount(
-					{
-						data: () => ({ value: false }),
-						template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-						components: { BaseInput },
-					},
-					{
-						stubs: { BaseIcon: true },
-					}
-				);
+				const wrapper = mount({
+					data: () => ({ value: false }),
+					template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+					components: { BaseInput },
+				});
 
 				const clickTarget = wrapper.find(clickTargetSelector);
-				const icon = wrapper.get("baseicon-stub");
-				expect(icon.attributes("icon")).toBe("$mdiCheckboxBlankOutline");
+
+				expect(
+					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
+				).toBe(true);
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("$mdiCheckboxOutline");
+				expect(wrapper.element.innerHTML.includes("$mdiCheckboxOutline")).toBe(
+					true
+				);
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("$mdiCheckboxBlankOutline");
+				expect(
+					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
+				).toBe(true);
 			})
 		);
 	});
