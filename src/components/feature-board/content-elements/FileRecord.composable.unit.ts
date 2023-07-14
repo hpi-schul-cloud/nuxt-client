@@ -2,8 +2,7 @@ import {
 	FileRecordParentType,
 	FileRecordScanStatus,
 } from "@/fileStorageApi/v3";
-import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { ObjectIdMock, fileRecordResponseFactory } from "@@/tests/test-utils";
 import { ref } from "vue";
 import { useFileRecord } from "./FileRecord.composable";
 
