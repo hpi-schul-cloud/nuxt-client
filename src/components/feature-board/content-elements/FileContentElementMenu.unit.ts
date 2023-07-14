@@ -166,23 +166,21 @@ describe("FileContentElementMenu", () => {
 	});
 
 	describe("when multiple elements are present", () => {
-		const multipleElementsSetupProps = () => ({
-			fileId: "file-id #1",
-			fileName: "file-record #1.txt",
-			url: "1/file-record #1.txt",
-			isDownloadAllowed: true,
-			isFirstElement: false,
-			isLastElement: false,
-			hasMultipleElements: true,
-		});
-
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const propsData = multipleElementsSetupProps();
+			const multipleElementsSetupProps = {
+				fileId: "file-id #1",
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+				isFirstElement: false,
+				isLastElement: false,
+				hasMultipleElements: true,
+			};
 			const wrapper = shallowMount(FileContentElementMenu, {
 				...createComponentMocks({ i18n: true }),
-				propsData,
+				propsData: multipleElementsSetupProps,
 			});
 
 			return {
@@ -256,23 +254,21 @@ describe("FileContentElementMenu", () => {
 		});
 
 		describe("when element is at the beginning of the content elements list", () => {
-			const firstElementSetupProps = () => ({
-				fileId: "file-id #1",
-				fileName: "file-record #1.txt",
-				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
-				isFirstElement: true,
-				isLastElement: false,
-				hasMultipleElements: true,
-			});
-
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
-				const propsData = firstElementSetupProps();
+				const firstElementSetupProps = {
+					fileId: "file-id #1",
+					fileName: "file-record #1.txt",
+					url: "1/file-record #1.txt",
+					isDownloadAllowed: true,
+					isFirstElement: true,
+					isLastElement: false,
+					hasMultipleElements: true,
+				};
 				const wrapper = shallowMount(FileContentElementMenu, {
 					...createComponentMocks({ i18n: true }),
-					propsData,
+					propsData: firstElementSetupProps,
 				});
 
 				return {
@@ -308,23 +304,21 @@ describe("FileContentElementMenu", () => {
 		});
 
 		describe("when element is at the end of the content elements list", () => {
-			const lastElementSetupProps = () => ({
-				fileId: "file-id #1",
-				fileName: "file-record #1.txt",
-				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
-				isFirstElement: false,
-				isLastElement: true,
-				hasMultipleElements: true,
-			});
-
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
-				const propsData = lastElementSetupProps();
+				const lastElementSetupProps = {
+					fileId: "file-id #1",
+					fileName: "file-record #1.txt",
+					url: "1/file-record #1.txt",
+					isDownloadAllowed: true,
+					isFirstElement: false,
+					isLastElement: true,
+					hasMultipleElements: true,
+				};
 				const wrapper = shallowMount(FileContentElementMenu, {
 					...createComponentMocks({ i18n: true }),
-					propsData,
+					propsData: lastElementSetupProps,
 				});
 
 				return {
@@ -360,23 +354,21 @@ describe("FileContentElementMenu", () => {
 	});
 
 	describe("when only a single element is present", () => {
-		const singleElementSetupProps = () => ({
-			fileId: "file-id #1",
-			fileName: "file-record #1.txt",
-			url: "1/file-record #1.txt",
-			isDownloadAllowed: true,
-			isFirstElement: false,
-			isLastElement: false,
-			hasMultipleElements: false,
-		});
-
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const propsData = singleElementSetupProps();
+			const singleElementSetupProps = {
+				fileId: "file-id #1",
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+				isFirstElement: false,
+				isLastElement: false,
+				hasMultipleElements: false,
+			};
 			const wrapper = shallowMount(FileContentElementMenu, {
 				...createComponentMocks({ i18n: true }),
-				propsData,
+				propsData: singleElementSetupProps,
 			});
 
 			return {
