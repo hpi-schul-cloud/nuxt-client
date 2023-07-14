@@ -16,14 +16,16 @@
 		>
 			<v-card :ripple="false">
 				<v-card-title>
-					<h2 class="text-h4 my-2">
-						{{
-							$t(
-								"pages.rooms.tools.configureVideoconferenceDialog.title",
-								roomName
-							)
-						}}
-					</h2>
+					<RenderHTML
+						class="text-h4 my-2"
+						:html="
+							$t('pages.rooms.tools.configureVideoconferenceDialog.title', {
+								roomName: roomName,
+							}).toString()
+						"
+						component="h2"
+					/>
+					<h2 class="text-h4 my-2"></h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<div class="d-flex justify-space-between">
@@ -123,6 +125,7 @@ import {
 	AUTH_MODULE,
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -132,7 +135,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import RenderHTML from "../../../components/common/render-html/RenderHTML.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import RoomModule from "@/store/room";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -148,6 +152,9 @@ export default defineComponent({
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
+		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const roomData = roomModule.getRoomData;
+		const roomName = computed(() => roomData.title ?? "");
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
@@ -187,9 +194,6 @@ export default defineComponent({
 			moderatorMustApproveJoinRequests: true,
 			everybodyJoinsAsModerator: false,
 		});
-
-		// TODO: get the roomName
-		const roomName = "RoomName";
 
 		onMounted(async () => {
 			await videoConferenceModule.fetchVideoConferenceInfo({
@@ -263,12 +267,12 @@ export default defineComponent({
 			hasPermission,
 			isRunning,
 			isRefreshing,
-			roomName,
 			onClick,
 			onRefresh,
 			isConfigurationDialogOpen,
 			onCloseConfigurationDialog,
 			startVideoConference,
+			roomName,
 		};
 	},
 });
