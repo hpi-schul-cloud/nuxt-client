@@ -4,6 +4,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE,
 	I18N_KEY,
+	ROOM_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -12,6 +13,7 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import { VideoConferenceScope } from "@/serverApi/v3";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import RoomModule from "@/store/room";
 
 describe("RoomVideoConferenceSection", () => {
 	const getWrapper = (
@@ -40,6 +42,15 @@ describe("RoomVideoConferenceSection", () => {
 			...videoConferenceModuleGetter,
 		});
 
+		const roomModule = createModuleMocks(RoomModule, {
+			getRoomData: {
+				roomId: "roomId",
+				title: "roomName",
+				displayColor: "displayColor",
+				elements: [],
+			},
+		});
+
 		const wrapper: Wrapper<Vue> = shallowMount(
 			RoomVideoConferenceSection as MountOptions<Vue>,
 			{
@@ -55,6 +66,7 @@ describe("RoomVideoConferenceSection", () => {
 					},
 					[AUTH_MODULE.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
+					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 				},
 			}
 		);
@@ -501,6 +513,56 @@ describe("RoomVideoConferenceSection", () => {
 	});
 
 	// TODO: trigger switches
+
+	describe("when open videoconference configuration dialog", () => {
+		const setup = () => {
+			const { wrapper, videoConferenceModule } = getWrapper(
+				{
+					roomId: "roomId",
+				},
+				["start_meeting"],
+				false,
+				{
+					getVideoConferenceInfo: {
+						state: VideoConferenceState.NOT_STARTED,
+						options: {
+							everyAttendeeJoinsMuted: false,
+							moderatorMustApproveJoinRequests: true,
+							everybodyJoinsAsModerator: false,
+						},
+					},
+					getLoading: true,
+				}
+			);
+
+			const params = {
+				scope: VideoConferenceScope.Course,
+				scopeId: "roomId",
+			};
+
+			return {
+				wrapper,
+				videoConferenceModule,
+				params,
+			};
+		};
+
+		it("should set the roomname in dialog title", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+
+			await card.vm.$emit("click");
+
+			const configurationDialog = wrapper.find(
+				'[data-testid="videoconference-config-dialog"]'
+			);
+
+			expect(configurationDialog.vm.$attrs.title).toBe("roomId");
+		});
+	});
 
 	describe("when clicking on create button of videoconference configuration dialog", () => {
 		const setup = () => {
