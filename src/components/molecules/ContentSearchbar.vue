@@ -4,7 +4,7 @@
 			<input
 				ref="searchInput"
 				:value="value"
-				:aria-label="ariaLabel"
+				:aria-label="$t('pages.content.index.search.placeholder')"
 				label="search-input"
 				type="text"
 				name="search"
@@ -45,10 +45,6 @@ export default {
 		value: {
 			type: String,
 			default: "",
-		},
-		ariaLabel: {
-			type: String,
-			default: "Search",
 		},
 		loading: {
 			type: Boolean,

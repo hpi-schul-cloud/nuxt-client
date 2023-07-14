@@ -4,9 +4,9 @@
 			dense
 			role="menu"
 			:data-testid="`selected-language-${selectedItem.language}`"
-			:aria-label="`${$t('global.topbar.language.selectedLanguage')} ${
-				selectedItem.translatedName
-			}`"
+			:aria-label="`${$t('global.topbar.language.select')} ${$t(
+				'global.topbar.language.selectedLanguage'
+			)} ${selectedItem.translatedName}`"
 			@click.stop.prevent="toggleMenu"
 		>
 			<v-list-item-icon>
@@ -87,9 +87,7 @@ export default {
 		},
 		buildLanguageItem(language) {
 			const longName = this.$t(`global.topbar.language.longName.${language}`);
-			const translatedName = this.$t(
-				`pages.account.index.user.locale.longName.${language}`
-			);
+			const translatedName = this.$t(`common.words.languages.${language}`);
 			const icon =
 				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
 			return { language, longName, translatedName, icon };
