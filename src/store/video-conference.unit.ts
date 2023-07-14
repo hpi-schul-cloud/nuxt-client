@@ -82,6 +82,17 @@ describe("VideoConferenceModule", () => {
 					expect(module.getError).toEqual(error);
 				});
 			});
+
+			describe("when reseting an error", () => {
+				it("should reset the error", () => {
+					const error = new Error();
+					module.setError(error);
+
+					module.resetError();
+
+					expect(module.getError).toBeNull();
+				});
+			});
 		});
 
 		describe("VideoConferenceInfo", () => {

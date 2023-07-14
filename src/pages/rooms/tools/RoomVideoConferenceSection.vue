@@ -50,7 +50,7 @@
 						/>
 						<v-switch
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
-							data-testid="everyAttendeeJoinsMuted"
+							data-testId="everyAttendeeJoinsMuted"
 							class="my-0"
 							inset
 							dense
@@ -68,7 +68,7 @@
 						/>
 						<v-switch
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
-							data-testid="moderatorMustApproveJoinRequests"
+							data-testId="moderatorMustApproveJoinRequests"
 							class="my-0"
 							inset
 							dense
@@ -86,7 +86,7 @@
 						/>
 						<v-switch
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
-							data-testid="everybodyJoinsAsModerator"
+							data-testId="everybodyJoinsAsModerator"
 							class="my-0"
 							inset
 							dense

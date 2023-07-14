@@ -452,5 +452,167 @@ describe("RoomVideoConferenceSection", () => {
 				});
 			});
 		});
+
+		describe("when the video conference is not running", () => {
+			const setup = () => {
+				const { wrapper, videoConferenceModule } = getWrapper(
+					{
+						roomId: "roomId",
+					},
+					["start_meeting"],
+					false,
+					{
+						getVideoConferenceInfo: {
+							state: VideoConferenceState.NOT_STARTED,
+							options: {
+								everyAttendeeJoinsMuted: false,
+								moderatorMustApproveJoinRequests: false,
+								everybodyJoinsAsModerator: false,
+							},
+						},
+						getLoading: true,
+					}
+				);
+
+				return {
+					wrapper,
+					videoConferenceModule,
+				};
+			};
+
+			it("should open the videoconference configuration dialog", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({
+					name: "room-video-conference-card",
+				});
+
+				await card.vm.$emit("click");
+
+				const configurationDialog = wrapper.find(
+					'[data-testid="videoconference-config-dialog"]'
+				);
+
+				expect(
+					configurationDialog.element.childNodes.length
+				).toBeGreaterThanOrEqual(1);
+			});
+		});
+	});
+
+	// TODO: trigger switches
+
+	describe("when clicking on create button of videoconference configuration dialog", () => {
+		const setup = () => {
+			const { wrapper, videoConferenceModule } = getWrapper(
+				{
+					roomId: "roomId",
+				},
+				["start_meeting"],
+				false,
+				{
+					getVideoConferenceInfo: {
+						state: VideoConferenceState.NOT_STARTED,
+						options: {
+							everyAttendeeJoinsMuted: false,
+							moderatorMustApproveJoinRequests: true,
+							everybodyJoinsAsModerator: false,
+						},
+					},
+					getLoading: true,
+				}
+			);
+
+			const params = {
+				scope: VideoConferenceScope.Course,
+				scopeId: "roomId",
+			};
+
+			return {
+				wrapper,
+				videoConferenceModule,
+				params,
+			};
+		};
+
+		it("should call start and join videoconference function of store", async () => {
+			const { wrapper, videoConferenceModule, params } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+			await card.vm.$emit("click");
+
+			const configurationDialog = wrapper.find(
+				'[data-testId="videoconference-config-dialog"]'
+			);
+
+			const createBtn = wrapper.find('[data-testId="dialog-create"]');
+			await createBtn.vm.$emit("click");
+
+			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+				videoConferenceOptions:
+					videoConferenceModule.getVideoConferenceInfo.options,
+			});
+			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+			});
+
+			// TODO: check if dialog still exits
+		});
+	});
+
+	describe("when clicking on cancel button of videoconference configuration dialog", () => {
+		const setup = () => {
+			const { wrapper, videoConferenceModule } = getWrapper(
+				{
+					roomId: "roomId",
+				},
+				["start_meeting"],
+				false,
+				{
+					getVideoConferenceInfo: {
+						state: VideoConferenceState.NOT_STARTED,
+						options: {
+							everyAttendeeJoinsMuted: false,
+							moderatorMustApproveJoinRequests: false,
+							everybodyJoinsAsModerator: false,
+						},
+					},
+					getLoading: true,
+				}
+			);
+
+			return {
+				wrapper,
+				videoConferenceModule,
+			};
+		};
+
+		it("should close the videoconference configuration dialog", async () => {
+			const { wrapper, videoConferenceModule } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+			await card.vm.$emit("click");
+
+			const configurationDialog = wrapper.find(
+				'[data-testid="videoconference-config-dialog"]'
+			);
+
+			const cancelBtn = configurationDialog.find(
+				'[data-testid="dialog-cancel"]'
+			);
+			await cancelBtn.vm.$emit("click");
+			console.log(wrapper.html);
+
+			expect(videoConferenceModule.startVideoConference).not.toHaveBeenCalled();
+			expect(videoConferenceModule.joinVideoConference).not.toHaveBeenCalled();
+			// TODO: check if dialog still exits
+		});
 	});
 });
