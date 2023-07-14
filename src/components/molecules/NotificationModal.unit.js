@@ -29,8 +29,8 @@ describe("@/components/molecules/NotificationModal", () => {
 		expect(
 			wrapper
 				.find(".material-icon")
-				.element.innerHTML.includes("$mdiCheckCircles")
-		);
+				.element.innerHTML.includes("$mdiCheckCircle")
+		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
 				"background-color: var(--v-success-base)"
@@ -55,7 +55,7 @@ describe("@/components/molecules/NotificationModal", () => {
 			wrapper
 				.find(".material-icon")
 				.element.innerHTML.includes("$mdiAlertCircle")
-		);
+		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
 				"background-color: var(--v-error-base)"
