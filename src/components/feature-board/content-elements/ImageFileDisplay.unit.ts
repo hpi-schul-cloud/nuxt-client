@@ -20,7 +20,7 @@ describe("ImageFileDisplay", () => {
 		const propsData = setupProps();
 
 		const wrapper = shallowMount(ImageFileDisplay, {
-			propsData: { ...propsData, isEditMode: isEditMode ?? false },
+			propsData: { ...propsData, isEditMode },
 		});
 
 		return {
