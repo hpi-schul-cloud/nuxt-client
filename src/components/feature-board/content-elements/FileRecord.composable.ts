@@ -11,9 +11,10 @@ export const useFileRecord = (
 
 		const { mimeType } = fileRecord.value;
 		const result =
+			mimeType === "image/bmp" ||
+			mimeType === "image/gif" ||
 			mimeType === "image/jpeg" ||
 			mimeType === "image/png" ||
-			mimeType === "image/gif" ||
 			mimeType === "image/svg+xml";
 
 		return result;
