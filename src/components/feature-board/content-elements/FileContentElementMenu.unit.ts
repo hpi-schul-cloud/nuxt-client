@@ -4,6 +4,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
+
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementMenu", () => {
