@@ -659,7 +659,6 @@
 	"pages.administration.school.index.privacySettings.longText.lernStore": "Якщо цей прапорець не встановлено, учні не зможуть отримати доступ до Learning Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility": "Активація цієї опції має високе граничне значення згідно із законодавством про захист даних. Щоб активувати видимість усіх учнів у школі для кожного викладача, необхідно, щоб кожен учень надав свою фактичну згоду на таку обробку даних.",
 	"pages.administration.school.index.privacySettings.longText.videoConference": "Якщо у вашій школі увімкнено відеоконференцію, викладачі можуть додати інструмент для відеоконференцій до свого курсу у розділі «Інструменти», а потім запустити відеоконференцію для всіх учасників курсу. Адміністратори команд можуть активувати функцію відеоконференції у відповідній команді. Після цього керівники команд та адміністратори команд зможуть додавати та розпочинати відеоконференції для зустрічей.",
-	"pages.administration.school.index.privacySettings.longText.configurabilityInfoTitle": "Видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText": "Це загальний параметр для керування видимістю учнів для вчителів, і цей параметр може бути недоступним для редагування через загальний параметр конфігурації екземпляра.",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing": "Ваша школа зараз отримує",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Виберіть файл",

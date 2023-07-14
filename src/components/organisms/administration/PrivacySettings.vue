@@ -5,28 +5,6 @@
 		</h3>
 		<v-row class="student-visibility-switch">
 			<v-col>
-				<v-alert
-					light
-					text
-					type="info"
-					class="mb-4"
-					v-if="!isTeacherStudentVisibilityConfigurable"
-				>
-					<div class="text-h6 text--primary mb-1">
-						{{
-							$t(
-								"pages.administration.school.index.privacySettings.longText.configurabilityInfoTitle"
-							)
-						}}
-					</div>
-					<div class="text--primary">
-						{{
-							$t(
-								"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
-							)
-						}}
-					</div>
-				</v-alert>
 				<v-custom-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
 					:value="studentVisibility"
@@ -41,13 +19,17 @@
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
 				></v-custom-switch>
-				<p
-					class="body-2 mb-0"
-					:class="{ 'text--disabled': !isTeacherStudentVisibilityConfigurable }"
-				>
+				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.studentVisibility"
+						)
+					}}
+				</p>
+				<p v-else class="body-2 mb-0">
+					{{
+						$t(
+							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
 						)
 					}}
 				</p>
