@@ -1,9 +1,5 @@
 <template>
-	<v-list-item
-		class="grey lighten-3 px-0 rounded-t-sm"
-		inactive
-		:ripple="false"
-	>
+	<div>
 		<v-img class="rounded-t-sm" :src="url" :alt="fileName" />
 		<div v-if="isEditMode" class="menu">
 			<FileContentElementMenu
@@ -18,7 +14,7 @@
 				@delete:element="onDeleteElement"
 			/>
 		</div>
-	</v-list-item>
+	</div>
 </template>
 
 <script lang="ts">
