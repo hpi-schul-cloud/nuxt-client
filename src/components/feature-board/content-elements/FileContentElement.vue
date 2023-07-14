@@ -109,7 +109,7 @@ export default defineComponent({
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
-		const ac = new AbortController();
+		const abortController = new AbortController();
 
 		onMounted(() => {
 			(async () => {
@@ -128,7 +128,12 @@ export default defineComponent({
 				await upload(file);
 
 				setSelectedFile();
-				await fetchPendingFileRecursively(10000, 50000, 0, ac.signal);
+				await fetchPendingFileRecursively(
+					10000,
+					50000,
+					0,
+					abortController.signal
+				);
 			} catch (error) {
 				setSelectedFile();
 				await deleteFileElement();
@@ -137,7 +142,12 @@ export default defineComponent({
 
 		const getFileRecord = async () => {
 			await fetchFile();
-			await fetchPendingFileRecursively(10000, 50000, 0, ac.signal);
+			await fetchPendingFileRecursively(
+				10000,
+				50000,
+				0,
+				abortController.signal
+			);
 		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -164,7 +174,7 @@ export default defineComponent({
 			if (shouldDelete) {
 				// abort all (possibly) running timer in
 				// fetchPendingFileRecursively
-				ac.abort();
+				abortController.abort();
 				await deleteFileElement();
 			}
 		};
