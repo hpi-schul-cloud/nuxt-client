@@ -255,7 +255,7 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should call apiMock.videoConferenceControllerStart)", async () => {
+			it("should call apiMock.videoConferenceControllerStart", async () => {
 				const { videoConferenceOptions, apiMock } = setup();
 
 				await module.startVideoConference({

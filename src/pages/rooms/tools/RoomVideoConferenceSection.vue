@@ -9,6 +9,18 @@
 			@refresh="onRefresh"
 		></room-video-conference-card>
 
+		<v-custom-dialog
+			:is-open="isErrorDialogOpen"
+			:has-buttons="true"
+			:buttons="['close']"
+			data-testId="error-dialog"
+			@dialog-closed="onCloseErrorDialog"
+		>
+			<h2 slot="title" class="text-h4 my-2 text-break-word">
+				{{ $t("error.generic") }}
+			</h2>
+		</v-custom-dialog>
+
 		<v-dialog
 			v-model="isConfigurationDialogOpen"
 			max-width="480"
@@ -94,7 +106,7 @@
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
-						data-testId="dialog-confirm"
+						data-testId="dialog-create"
 						class="px-6"
 						color="primary"
 						depressed
@@ -135,12 +147,13 @@ import {
 	ref,
 	Ref,
 } from "vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import RoomModule from "@/store/room";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
-	components: { RenderHTML, RoomVideoConferenceCard },
+	components: { RenderHTML, RoomVideoConferenceCard, VCustomDialog },
 	props: {
 		roomId: {
 			type: String,
@@ -261,6 +274,14 @@ export default defineComponent({
 			}
 		};
 
+		const isErrorDialogOpen: ComputedRef<boolean> = computed(
+			() => videoConferenceModule.getError !== null
+		);
+
+		const onCloseErrorDialog = () => {
+			videoConferenceModule.resetError();
+		};
+
 		return {
 			videoConferenceInfo,
 			videoConferenceOptions,
@@ -272,6 +293,8 @@ export default defineComponent({
 			isConfigurationDialogOpen,
 			onCloseConfigurationDialog,
 			startVideoConference,
+			isErrorDialogOpen,
+			onCloseErrorDialog,
 			roomName,
 		};
 	},
