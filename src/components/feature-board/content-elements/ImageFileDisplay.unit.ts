@@ -34,39 +34,39 @@ describe("ImageFileDisplay", () => {
 		};
 	};
 
-	it("should be found in dom", () => {
-		const { wrapper } = setup();
-
-		const fileContentElement = wrapper.findComponent(ImageFileDisplay);
-
-		expect(fileContentElement.exists()).toBe(true);
-	});
-
-	it("should display image", () => {
-		const { wrapper } = setup();
-
-		const image = wrapper.find("v-img");
-
-		expect(image.exists()).toBe(true);
-	});
-
-	it("should have set src correctly", () => {
-		const { wrapper, urlProp } = setup();
-
-		const src = wrapper.find("v-img").attributes("src");
-
-		expect(src).toBe(urlProp);
-	});
-
-	it("should have set alt correctly", () => {
-		const { wrapper, fileNameProp } = setup();
-
-		const alt = wrapper.find("v-img").attributes("alt");
-
-		expect(alt).toBe(fileNameProp);
-	});
-
 	describe("when component is not in edit mode", () => {
+		it("should be found in dom", () => {
+			const { wrapper } = setup();
+
+			const fileContentElement = wrapper.findComponent(ImageFileDisplay);
+
+			expect(fileContentElement.exists()).toBe(true);
+		});
+
+		it("should display image", () => {
+			const { wrapper } = setup();
+
+			const image = wrapper.find("v-img");
+
+			expect(image.exists()).toBe(true);
+		});
+
+		it("should have set src correctly", () => {
+			const { wrapper, urlProp } = setup();
+
+			const src = wrapper.find("v-img").attributes("src");
+
+			expect(src).toBe(urlProp);
+		});
+
+		it("should have set alt correctly", () => {
+			const { wrapper, fileNameProp } = setup();
+
+			const alt = wrapper.find("v-img").attributes("alt");
+
+			expect(alt).toBe(fileNameProp);
+		});
+
 		it("should NOT render the FileContentElementMenu", () => {
 			const { wrapper } = setup();
 
