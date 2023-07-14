@@ -7,41 +7,43 @@ import { ref } from "vue";
 import { useFileRecord } from "./FileRecord.composable";
 
 describe("FileRecord Composable", () => {
-	const setup = () => {
-		const parentId = ObjectIdMock();
-		const parentType = FileRecordParentType.BOARDNODES;
-		const fileRecordResponse = ref(
-			fileRecordResponseFactory.build({
-				parentId,
-				parentType,
-			})
-		);
+	describe("when file record is not an image", () => {
+		const setup = () => {
+			const parentId = ObjectIdMock();
+			const parentType = FileRecordParentType.BOARDNODES;
+			const fileRecordResponse = ref(
+				fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+				})
+			);
 
-		return { fileRecordResponse };
-	};
+			return { fileRecordResponse };
+		};
 
-	it("should set isImage to be false", async () => {
-		const { fileRecordResponse } = setup();
+		it("should set isImage to be false", async () => {
+			const { fileRecordResponse } = setup();
 
-		const { isImage } = useFileRecord(fileRecordResponse);
+			const { isImage } = useFileRecord(fileRecordResponse);
 
-		expect(isImage.value).toBe(false);
-	});
+			expect(isImage.value).toBe(false);
+		});
 
-	it("should set isBlockedByVirusScan to be false", async () => {
-		const { fileRecordResponse } = setup();
+		it("should set isBlockedByVirusScan to be false", async () => {
+			const { fileRecordResponse } = setup();
 
-		const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
+			const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
 
-		expect(isBlockedByVirusScan.value).toBe(false);
-	});
+			expect(isBlockedByVirusScan.value).toBe(false);
+		});
 
-	it("should set url correctly", async () => {
-		const { fileRecordResponse } = setup();
+		it("should set url correctly", async () => {
+			const { fileRecordResponse } = setup();
 
-		const { url } = useFileRecord(fileRecordResponse);
+			const { url } = useFileRecord(fileRecordResponse);
 
-		expect(url.value).toBe(fileRecordResponse.value.url);
+			expect(url.value).toBe(fileRecordResponse.value.url);
+		});
 	});
 
 	describe("when file record is undefined", () => {
