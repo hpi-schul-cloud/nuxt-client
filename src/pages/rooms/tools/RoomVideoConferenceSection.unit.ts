@@ -75,6 +75,7 @@ describe("RoomVideoConferenceSection", () => {
 			wrapper,
 			authModule,
 			videoConferenceModule,
+			roomModule,
 		};
 	};
 
@@ -512,11 +513,9 @@ describe("RoomVideoConferenceSection", () => {
 		});
 	});
 
-	// TODO: trigger switches
-
 	describe("when open videoconference configuration dialog", () => {
 		const setup = () => {
-			const { wrapper, videoConferenceModule } = getWrapper(
+			const { wrapper, videoConferenceModule, roomModule } = getWrapper(
 				{
 					roomId: "roomId",
 				},
@@ -544,11 +543,12 @@ describe("RoomVideoConferenceSection", () => {
 				wrapper,
 				videoConferenceModule,
 				params,
+				roomModule,
 			};
 		};
 
-		it("should set the roomname in dialog title", async () => {
-			const { wrapper } = setup();
+		it("should set the roomName in dialog title", async () => {
+			const { wrapper, roomModule } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-video-conference-card",
@@ -559,8 +559,12 @@ describe("RoomVideoConferenceSection", () => {
 			const configurationDialog = wrapper.find(
 				'[data-testid="videoconference-config-dialog"]'
 			);
+			const cardTitle = configurationDialog.find(
+				'[data-testid="videoconference-config-dialog-title"]'
+			);
+			const title = cardTitle.element.getAttribute("html");
 
-			expect(configurationDialog.vm.$attrs.title).toBe("roomId");
+			expect(title).toContain(roomModule.getRoomData.title);
 		});
 	});
 

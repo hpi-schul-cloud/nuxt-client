@@ -30,6 +30,7 @@
 				<v-card-title>
 					<RenderHTML
 						class="text-h4 my-2"
+						data-testId="videoconference-config-dialog-title"
 						:html="
 							$t('pages.rooms.tools.configureVideoconferenceDialog.title', {
 								roomName: roomName,
@@ -231,7 +232,6 @@ export default defineComponent({
 				videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED &&
 				canStart.value
 			) {
-				// TODO N21-882: open start dialog
 				openConfigurationDiaolog();
 			}
 
