@@ -13,14 +13,23 @@ const testProps = {
 };
 
 describe("@/components/molecules/NotificationModal", () => {
-	it("success case", async () => {
-		const wrapper = mount(NotificationModal, {
+	let wrapper;
+
+	const setup = (isSuccess) => {
+		document.body.setAttribute("data-app", "true");
+		wrapper = mount(NotificationModal, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: { ...testProps, isSuccess: true },
+			propsData: {
+				...testProps,
+				isSuccess,
+			},
 		});
+	};
+	it("success case", async () => {
+		setup(true);
 
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
@@ -39,13 +48,7 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("error case", async () => {
-		const wrapper = mount(NotificationModal, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: { ...testProps, isSuccess: false },
-		});
+		setup(false);
 
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
@@ -64,13 +67,7 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("executes close action after close", async () => {
-		const wrapper = mount(NotificationModal, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: { ...testProps, isSuccess: false },
-		});
+		setup(false);
 
 		const button = wrapper.find(".btn-confirm");
 		button.trigger("click");

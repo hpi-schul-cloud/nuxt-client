@@ -55,10 +55,6 @@ export default {
 			type: String,
 			default: "",
 		},
-		iconSource: {
-			type: String,
-			default: "material",
-		},
 		iconColor: {
 			type: String,
 			default: undefined,

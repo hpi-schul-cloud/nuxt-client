@@ -584,7 +584,6 @@ export default {
 				),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "$mdiAlert",
-				iconSource: "material",
 				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,
