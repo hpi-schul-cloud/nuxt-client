@@ -10,11 +10,11 @@
 	>
 		<template #activator="{ on, attrs }">
 			<v-btn
-				v-show="show"
+				v-on="on"
 				v-bind="attrs"
 				class="three-dot-button"
 				icon
-				v-on="on"
+				:aria-label="ariaLabel"
 				@keydown.space.stop
 			>
 				<v-icon>{{ mdiDotsVertical }}</v-icon>
@@ -49,13 +49,13 @@ export default {
 			type: Array,
 			required: true,
 		},
-		show: {
-			type: Boolean,
-			required: true,
-		},
 		nudgeRight: {
 			type: String,
 			default: "0",
+		},
+		ariaLabel: {
+			type: String,
+			required: true,
 		},
 	},
 	data() {

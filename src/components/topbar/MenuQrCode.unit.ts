@@ -1,13 +1,16 @@
-import MenuQrCode from "./MenuQrCode";
+import Vue from "vue";
+import { MountOptions, shallowMount, mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import MenuQrCode from "./MenuQrCode.vue";
 
 const menuQrCode = {
 	components: { MenuQrCode },
 	template: `<menu-qr-code/>`,
 };
 
-describe("@/components/legacy/MenuQrCode", () => {
+describe("@/components/topbar/MenuQrCode", () => {
 	it("generates an qrCode with print icon button", () => {
-		const wrapper = shallowMount(MenuQrCode, {
+		const wrapper = shallowMount(MenuQrCode as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			propsData: { url: "testUrl" },
 		});
