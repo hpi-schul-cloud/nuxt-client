@@ -25,7 +25,7 @@ const useBoardBreadcrumbs = () => {
 		breadcrumbs.value = contextInfo
 			? [
 					{
-						text: i18n.t("pages.courses.index.title").toString(),
+						text: i18n.t("common.words.courses").toString(),
 						to: "/rooms-overview",
 					},
 					{

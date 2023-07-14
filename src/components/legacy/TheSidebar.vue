@@ -33,6 +33,7 @@
 							:to="route.to"
 							:href="route.href"
 							:no-styles="true"
+							:aria-label="$t(route.title)"
 						>
 							<base-icon
 								v-if="route.icon"
@@ -64,6 +65,7 @@
 								:to="child.to"
 								:href="child.href"
 								:no-styles="true"
+								:aria-label="$t(child.title)"
 							>
 								<base-icon
 									v-if="child.icon"
@@ -93,7 +95,6 @@ import baseIcon from "@/components/base/BaseIcon.vue";
 import { SidebarItem } from "@/utils/sidebar-base-items";
 import { useRoute } from "vue-router/composables";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "TheSidebar",
 	components: { baseLink, baseIcon },

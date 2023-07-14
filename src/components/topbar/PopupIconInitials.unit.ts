@@ -1,18 +1,19 @@
-import { mount } from "@vue/test-utils";
-import PopupIconInitials from "./PopupIconInitials";
+import Vue from "vue";
+import { MountOptions, mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import PopupIconInitials from "./PopupIconInitials.vue";
 
-const getWrapper = (props, options) => {
-	return mount(PopupIconInitials, {
+const getWrapper = (props: object, options?: object) => {
+	return mount(PopupIconInitials as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
-			vuetify: true,
 		}),
 		propsData: props,
 		...options,
 	});
 };
 
-describe("@/components/legacy/PopupIconInitials", () => {
+describe("@/components/topbar/PopupIconInitials", () => {
 	it("computes the initals from first- and lastname", () => {
 		const wrapper = getWrapper({
 			firstName: "Max",
