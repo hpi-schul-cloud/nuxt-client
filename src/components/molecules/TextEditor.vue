@@ -8,7 +8,7 @@
 					data-testid="editor_undo"
 					@click="commands.undo"
 				>
-					<base-icon source="material" icon="undo" />
+					<v-icon class="material-icon">$mdiUndo</v-icon>
 				</v-btn>
 				<v-btn
 					data-testid="editor_redo"
@@ -16,7 +16,7 @@
 					color="secondary"
 					@click="commands.redo"
 				>
-					<base-icon source="material" icon="redo" />
+					<v-icon class="material-icon">$mdiRedo</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -28,7 +28,7 @@
 					data-testid="editor_format_bold"
 					@click="commands.bold"
 				>
-					<base-icon source="material" icon="format_bold" />
+					<v-icon class="material-icon">$mdiFormatBold</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -40,7 +40,7 @@
 					data-testid="editor_format_italic"
 					@click="commands.italic"
 				>
-					<base-icon source="material" icon="format_italic" />
+					<v-icon class="material-icon">$mdiFormatItalic</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -52,7 +52,7 @@
 					data-testid="editor_format_underlined"
 					@click="commands.underline"
 				>
-					<base-icon source="material" icon="format_underlined" />
+					<v-icon class="material-icon">$mdiFormatUnderline</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -64,7 +64,7 @@
 					data-testid="editor_format_strikethrough"
 					@click="commands.strike"
 				>
-					<base-icon source="material" icon="format_strikethrough" />
+					<v-icon class="material-icon">$mdiFormatStrikethrough</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -113,7 +113,7 @@
 					:disabled="isInHeading"
 					@click="commands.bullet_list"
 				>
-					<base-icon source="material" icon="format_list_bulleted" />
+					<v-icon class="material-icon">$mdiFormatListBulleted</v-icon>
 				</v-btn>
 				<v-btn
 					color="secondary"
@@ -126,7 +126,7 @@
 					:disabled="isInHeading"
 					@click="commands.ordered_list"
 				>
-					<base-icon source="material" icon="format_list_numbered" />
+					<v-icon class="material-icon">$mdiFormatListNumbered</v-icon>
 				</v-btn>
 				<v-btn
 					data-testid="editor_add_image"
@@ -135,7 +135,7 @@
 					:disabled="isInHeading"
 					@click="showImagePrompt(commands.image)"
 				>
-					<base-icon source="material" icon="image" />
+					<v-icon class="material-icon">$mdiImage</v-icon>
 				</v-btn>
 			</div>
 		</editor-menu-bar>

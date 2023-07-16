@@ -35,17 +35,16 @@
 							:no-styles="true"
 							:aria-label="$t(route.title)"
 						>
-							<base-icon
+							<v-icon
 								v-if="route.icon"
-								:icon="route.icon"
-								:source="route.source || DEFAULT_ICON_SOURCE"
-								:fill="
+								class="icon"
+								:color="
 									isActive(route.title) || isChildActive(route.title)
 										? 'var(--v-primary-base)'
 										: 'var(--v-secondary-base)'
 								"
-								class="icon"
-							/>
+								>{{ route.icon }}
+							</v-icon>
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -67,17 +66,16 @@
 								:no-styles="true"
 								:aria-label="$t(child.title)"
 							>
-								<base-icon
+								<v-icon
 									v-if="child.icon"
-									:icon="child.icon"
-									:source="child.source || DEFAULT_ICON_SOURCE"
-									:fill="
+									class="icon"
+									:color="
 										isActive(child.title)
 											? 'var(--v-primary-base)'
 											: 'var(--v-secondary-base)'
 									"
-									class="icon"
-								/>
+									>{{ child.icon }}
+								</v-icon>
 								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
@@ -91,13 +89,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import baseLink from "@/components/base/BaseLink.vue";
-import baseIcon from "@/components/base/BaseIcon.vue";
 import { SidebarItem } from "@/utils/sidebar-base-items";
 import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
 	name: "TheSidebar",
-	components: { baseLink, baseIcon },
+	components: { baseLink },
 	props: {
 		routes: {
 			type: Array,
@@ -113,7 +110,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const DEFAULT_ICON_SOURCE = "material";
 		const activeItem = ref("");
 		const activeParent = ref("");
 
@@ -152,7 +148,6 @@ export default defineComponent({
 		};
 
 		return {
-			DEFAULT_ICON_SOURCE,
 			isActive,
 			isChildActive,
 		};
@@ -332,6 +327,7 @@ export default defineComponent({
 	height: 24px;
 	margin-right: 8px;
 	vertical-align: middle;
+	fill: currentColor;
 
 	.v-icon {
 		width: 24px;

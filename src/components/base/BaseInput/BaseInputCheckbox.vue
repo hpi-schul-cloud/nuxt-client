@@ -13,11 +13,7 @@
 			@focus="$emit('focus', $event)"
 		/>
 		<span :class="['icon-wrapper']">
-			<base-icon
-				class="icon"
-				:source="visibleIcon.source"
-				:icon="visibleIcon.name"
-			/>
+			<v-icon class="icon">{{ visibleIcon.name }}</v-icon>
 		</span>
 		<span v-if="!labelHidden" class="label">
 			{{ label }}
@@ -25,13 +21,9 @@
 	</label>
 </template>
 <script>
-import BaseIcon from "@/components/base/BaseIcon";
-export const supportedTypes = ["checkbox", "switch"];
+export const supportedTypes = ["checkbox"];
 
 export default {
-	components: {
-		BaseIcon,
-	},
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -74,22 +66,12 @@ export default {
 				: Boolean(this.vmodel);
 		},
 		visibleIcon() {
-			switch (this.type) {
-				case "switch": {
-					return this.isChecked
-						? { name: "toggle_on", source: "material" }
-						: { name: "toggle_off", source: "material" };
-				}
-				default:
-				case "checkbox": {
-					if (this.showUndefinedState && this.vmodel === undefined) {
-						return { name: "indeterminate_check_box", source: "material" };
-					}
-					return this.isChecked
-						? { name: "check_box", source: "material" }
-						: { name: "check_box_outline_blank", source: "material" };
-				}
+			if (this.showUndefinedState && this.vmodel === undefined) {
+				return { name: "$mdiCheckboxIntermediate" };
 			}
+			return this.isChecked
+				? { name: "$mdiCheckboxOutline" }
+				: { name: "$mdiCheckboxBlankOutline" };
 		},
 	},
 	created() {
@@ -160,24 +142,5 @@ label {
 
 input:focus + .icon-wrapper svg {
 	box-shadow: 0 0 0 3px currentColor;
-}
-
-// SWITCH
-.switch {
-	input + .icon-wrapper {
-		// stylelint-disable
-		margin-top: -0.5em;
-		margin-bottom: -0.5em;
-		font-size: 2em;
-		// stylelint-enable
-	}
-
-	input:checked + .icon-wrapper {
-		color: var(--v-success-base);
-	}
-
-	.label {
-		margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
-	}
 }
 </style>
