@@ -1,26 +1,28 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
 		<v-btn icon class="icon-button" @click="popup">
-			<v-icon :color="fill">{{ icon }}</v-icon>
+			<v-icon :color="color">{{ icon }}</v-icon>
 		</v-btn>
 		<div
 			ref="popupContent"
 			class="popup-content"
 			:class="{ visible, 'expand-to-left': expandToLeft, centered }"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
+export default defineComponent({
+	name: "PopupIcon",
 	props: {
 		icon: {
 			type: String,
 			required: true,
 		},
-		fill: {
+		color: {
 			type: String,
 			default: "var(--v-secondary-darken1)",
 		},
@@ -28,26 +30,36 @@ export default {
 			type: Boolean,
 		},
 	},
-	data() {
+	setup() {
+		const visible = ref(false);
+		const expandToLeft = ref(false);
+		const popupContent = ref<HTMLDivElement | null>(null);
+
+		onMounted(() => {
+			if (popupContent.value !== null) {
+				expandToLeft.value =
+					popupContent.value.getBoundingClientRect().right >
+					window.innerWidth + 10;
+			}
+		});
+
+		const popup = () => {
+			visible.value = !visible.value;
+		};
+
+		const removePopup = () => {
+			visible.value = false;
+		};
+
 		return {
-			visible: false,
-			expandToLeft: false,
+			visible,
+			expandToLeft,
+			popupContent,
+			popup,
+			removePopup,
 		};
 	},
-	mounted() {
-		this.expandToLeft =
-			this.$refs.popupContent.getBoundingClientRect().right >
-			window.innerWidth + 10;
-	},
-	methods: {
-		popup() {
-			this.visible = !this.visible;
-		},
-		removePopup() {
-			this.visible = false;
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

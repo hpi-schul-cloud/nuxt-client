@@ -1,7 +1,7 @@
 <template>
 	<div class="topbar">
 		<div
-			v-if="!fullscreenMode"
+			v-if="!fullscreen"
 			class="top-main"
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
@@ -13,6 +13,8 @@
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-test-id="top-menu-btn"
+				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
+				role="menu"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<v-icon>$mdiMenu</v-icon>
@@ -23,12 +25,12 @@
 					icon="$mdiAlert"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
-					:fill="statusAlertColor"
+					:color="statusAlertColor"
 					class="item exclamation-triangle"
 					centered
 					data-test-id="status-alerts-icon"
 				>
-					<status-alerts :status-alerts="statusAlerts"></status-alerts>
+					<StatusAlerts :status-alerts="statusAlerts" />
 				</popup-icon>
 				<v-btn
 					class="item"
@@ -67,7 +69,7 @@
 					class="school-logo"
 					:src="school.logo_dataUrl"
 					ref="image"
-					:alt="school.name"
+					alt=""
 				/>
 				<popup-icon-initials
 					v-if="user"
@@ -81,14 +83,15 @@
 						href="/account"
 						class="account-link"
 						role="menuitem"
-						:aria-label="$t('global.topbar.settings')"
-						>{{ $t("global.topbar.settings") }}</a
+						:aria-label="$t('global.topbar.settings').toString()"
 					>
+						{{ $t("global.topbar.settings") }}
+					</a>
 					<button
 						class="logout-button"
 						data-testid="logout"
 						role="menuitem"
-						:aria-label="$t('common.labels.logout')"
+						:aria-label="$t('common.labels.logout').toString()"
 						@click="sendEvent('logout')"
 					>
 						{{ $t("common.labels.logout") }}
@@ -112,17 +115,28 @@
 	</div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
-import { statusAlertsModule } from "@/store";
-import PopupIcon from "@/components/legacy/PopupIcon";
-import PopupIconInitials from "@/components/legacy/PopupIconInitials";
-import HelpDropdown from "@/components/legacy/HelpDropdown";
-import MenuQrCode from "@/components/legacy/MenuQrCode";
-import StatusAlerts from "@/components/molecules/StatusAlerts";
-import LanguageMenu from "@/components/molecules/LanguageMenu.vue";
+<script lang="ts">
+import {
+	defineComponent,
+	PropType,
+	onMounted,
+	computed,
+	ref,
+	watch,
+} from "vue";
+import {
+	I18N_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import { User } from "@/store/types/auth";
+import PopupIcon from "@/components/topbar/PopupIcon.vue";
+import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
+import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
+import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
+import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
+import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {
 		StatusAlerts,
@@ -146,46 +160,63 @@ export default defineComponent({
 			}),
 		},
 		user: {
-			type: Object,
-			validator: function (user) {
-				return !user || !(user.firstname && user.lastname && user.roles);
-			},
+			type: Object as PropType<User>,
 			default: null,
 		},
 	},
-	data() {
-		return {
-			logo: null,
+	setup(props, { emit }) {
+		const i18n = injectStrict(I18N_KEY);
+		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
+		const fullscreen = ref(props.fullscreenMode);
+
+		onMounted(() => {
+			(async () => {
+				await statusAlertsModule.fetchStatusAlerts();
+			})();
+		});
+
+		watch(
+			() => props.fullscreenMode,
+			(newValue) => {
+				fullscreen.value = newValue;
+			}
+		);
+
+		const sendEvent = (eventName: string) => {
+			emit("action", eventName);
 		};
-	},
-	computed: {
-		role() {
-			const roleName = this.user.roles.map((r) => r.name);
-			return this.$t(`common.roleName.${roleName[0]}`);
-		},
-		showStatusAlertIcon() {
-			return this.statusAlerts.length !== 0;
-		},
-		statusAlertColor() {
+
+		const role = computed(() => {
+			const roleName = props.user.roles.map((r) => r.name);
+			return i18n.t(`common.roleName.${roleName[0]}`).toString();
+		});
+
+		const statusAlerts = computed(() => {
+			return statusAlertsModule.getStatusAlerts;
+		});
+
+		const showStatusAlertIcon = computed(() => {
+			return statusAlerts.value.length !== 0;
+		});
+
+		const statusAlertColor = computed(() => {
 			const statusAlertsIncludeDanger =
-				this.statusAlerts.filter((alert) => alert.status === "danger")
+				statusAlerts.value.filter((alert) => alert.status === "danger")
 					.length !== 0;
 
 			return statusAlertsIncludeDanger
 				? "var(--v-error-base)"
 				: "var(--v-info-base)";
-		},
-		statusAlerts() {
-			return statusAlertsModule.getStatusAlerts;
-		},
-	},
-	async mounted() {
-		await statusAlertsModule.fetchStatusAlerts();
-	},
-	methods: {
-		sendEvent(eventName) {
-			this.$emit("action", eventName);
-		},
+		});
+
+		return {
+			sendEvent,
+			role,
+			statusAlerts,
+			showStatusAlertIcon,
+			statusAlertColor,
+			fullscreen,
+		};
 	},
 });
 </script>

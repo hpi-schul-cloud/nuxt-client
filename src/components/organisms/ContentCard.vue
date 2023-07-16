@@ -28,7 +28,7 @@
 							<img
 								:src="thumbnail()"
 								class="content__img-thumbnail"
-								:alt="$t('pages.content.card.img.alt')"
+								alt=""
 								role="img"
 							/>
 							<div v-show="isCollection()" class="card-tag">

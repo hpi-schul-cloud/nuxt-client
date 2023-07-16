@@ -21,12 +21,11 @@
 					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ $t("common.words.topic") }}
 				</div>
-
 				<div class="dot-menu-section">
-					<more-item-menu
+					<room-dot-menu
 						:menu-items="moreActionsMenuItems[role]"
-						:show="true"
 						data-testid="content-card-lesson-menu"
+						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
@@ -47,7 +46,6 @@
 				</div>
 			</div>
 		</v-card-text>
-
 		<v-card-actions class="pt-1" data-testid="content-card-lesson-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
@@ -58,8 +56,8 @@
 				text
 				@click.stop="action.action"
 			>
-				{{ action.name }}</v-btn
-			>
+				{{ action.name }}
+			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -72,13 +70,13 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import MoreItemMenu from "./MoreItemMenu";
+import RoomDotMenu from "./RoomDotMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { MoreItemMenu },
+	components: { RoomDotMenu },
 	props: {
 		lesson: {
 			type: Object,
