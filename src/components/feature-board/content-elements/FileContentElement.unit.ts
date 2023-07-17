@@ -30,6 +30,9 @@ describe("FileContentElement", () => {
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
+		isFirstElement: boolean;
+		isLastElement: boolean;
+		hasMultipleElements: boolean;
 	}) => {
 		const deleteElementMock = jest.fn();
 
@@ -76,6 +79,9 @@ describe("FileContentElement", () => {
 					const { wrapper, deleteElementMock } = getWrapper({
 						element,
 						isEditMode: false,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return {
@@ -163,6 +169,9 @@ describe("FileContentElement", () => {
 					const { wrapper, deleteElementMock } = getWrapper({
 						element,
 						isEditMode: false,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return {
@@ -214,6 +223,9 @@ describe("FileContentElement", () => {
 					const { wrapper } = getWrapper({
 						element,
 						isEditMode: false,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return { wrapper };
@@ -255,6 +267,9 @@ describe("FileContentElement", () => {
 					const { wrapper, deleteElementMock } = getWrapper({
 						element,
 						isEditMode: false,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return {
@@ -371,6 +386,9 @@ describe("FileContentElement", () => {
 							const { wrapper, deleteElementMock } = getWrapper({
 								element,
 								isEditMode: false,
+								isFirstElement: false,
+								isLastElement: false,
+								hasMultipleElements: false,
 							});
 
 							return {
@@ -496,6 +514,9 @@ describe("FileContentElement", () => {
 						const { wrapper, deleteElementMock } = getWrapper({
 							element,
 							isEditMode: false,
+							isFirstElement: false,
+							isLastElement: false,
+							hasMultipleElements: false,
 						});
 
 						return {
@@ -598,6 +619,9 @@ describe("FileContentElement", () => {
 							const { wrapper, deleteElementMock } = getWrapper({
 								element,
 								isEditMode: false,
+								isFirstElement: false,
+								isLastElement: false,
+								hasMultipleElements: false,
 							});
 
 							return {
@@ -725,6 +749,9 @@ describe("FileContentElement", () => {
 					const { wrapper, deleteElementMock } = getWrapper({
 						element,
 						isEditMode: true,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return {
@@ -790,6 +817,9 @@ describe("FileContentElement", () => {
 					const { wrapper, deleteElementMock } = getWrapper({
 						element,
 						isEditMode: true,
+						isFirstElement: false,
+						isLastElement: false,
+						hasMultipleElements: false,
 					});
 
 					return {
@@ -860,6 +890,9 @@ describe("FileContentElement", () => {
 						const { wrapper, deleteElementMock } = getWrapper({
 							element,
 							isEditMode: true,
+							isFirstElement: false,
+							isLastElement: false,
+							hasMultipleElements: false,
 						});
 
 						return {
@@ -961,6 +994,9 @@ describe("FileContentElement", () => {
 							const { wrapper, deleteElementMock } = getWrapper({
 								element,
 								isEditMode: true,
+								isFirstElement: false,
+								isLastElement: false,
+								hasMultipleElements: false,
 							});
 
 							return {
@@ -1086,6 +1122,9 @@ describe("FileContentElement", () => {
 						const { wrapper, deleteElementMock } = getWrapper({
 							element,
 							isEditMode: true,
+							isFirstElement: false,
+							isLastElement: false,
+							hasMultipleElements: false,
 						});
 
 						return {
@@ -1244,6 +1283,9 @@ describe("FileContentElement", () => {
 							const { wrapper, deleteElementMock } = getWrapper({
 								element,
 								isEditMode: true,
+								isFirstElement: false,
+								isLastElement: false,
+								hasMultipleElements: false,
 							});
 
 							return {
