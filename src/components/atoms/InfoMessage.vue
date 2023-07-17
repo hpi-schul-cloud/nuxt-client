@@ -1,18 +1,11 @@
 <template>
 	<div class="info-message" :class="type">
-		<base-icon
-			source="custom"
-			:icon="icon"
-			class="icon"
-			:fill="iconColor"
-		></base-icon>
+		<v-icon class="icon" :color="iconColor">{{ icon }}</v-icon>
 		<div class="message">{{ message }}</div>
 	</div>
 </template>
 <script>
-import BaseIcon from "@/components/base/BaseIcon";
 export default {
-	components: { BaseIcon },
 	props: {
 		message: {
 			type: String,
@@ -29,7 +22,7 @@ export default {
 	computed: {
 		icon() {
 			if (this.type === "bc-error") {
-				return "warning";
+				return "$mdiAlert";
 			}
 			return this.type.substring(3);
 		},

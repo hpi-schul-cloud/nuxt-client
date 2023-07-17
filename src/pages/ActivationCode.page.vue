@@ -8,11 +8,9 @@
 			@update:active="buttonHandler"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					:icon="activated ? 'email_check' : 'email_error'"
-					style="color: var(--v-secondary-base)"
-				/>
+				<v-icon class="material-icon" color="var(--v-secondary-base)">{{
+					activated ? "$mdiEmailCheckOutline" : "$mdiEmailRemoveOutline"
+				}}</v-icon>
 			</template>
 		</info-modal-full-width>
 	</section>

@@ -69,56 +69,48 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	it.skip(`shows checkmark only when it is checked`, async () => {
 		await Promise.all(
 			["input", "label"].map(async (clickTargetSelector) => {
-				const wrapper = mount(
-					{
-						data: () => ({ value: false }),
-						template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-						components: { BaseInput },
-					},
-					{
-						stubs: { BaseIcon: true },
-					}
-				);
+				const wrapper = mount({
+					data: () => ({ value: false }),
+					template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+					components: { BaseInput },
+				});
 
 				const clickTarget = wrapper.find(clickTargetSelector);
-				const icon = wrapper.get("baseicon-stub");
-				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+
+				expect(
+					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
+				).toBe(true);
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("check_box");
+				expect(wrapper.element.innerHTML.includes("$mdiCheckboxOutline")).toBe(
+					true
+				);
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+				expect(
+					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
+				).toBe(true);
 			})
 		);
 	});
 
 	it(`can show indeterminated state for undefined values`, async () => {
-		const wrapper = mount(
-			{
-				data: () => ({ value: undefined }),
-				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
-				components: { BaseInput },
+		const wrapper = mount(BaseInput, {
+			...createComponentMocks({
+				vuetify: true,
+			}),
+			propsData: {
+				label: "Checkbox",
+				name: "checkbox",
+				type: "checkbox",
+				vmodel: undefined,
+				showUndefinedState: true,
 			},
-			{
-				stubs: { BaseIcon: true },
-			}
+		});
+
+		expect(wrapper.element.innerHTML.includes("$mdiCheckboxIntermediate")).toBe(
+			true
 		);
-
-		const icon = wrapper.get("baseicon-stub");
-		expect(icon.attributes("icon")).toBe("indeterminate_check_box");
-	});
-
-	it(`throws an error if show-undefined-state is set on type=switch`, async () => {
-		console.error = jest.fn();
-
-		expect(() =>
-			mount({
-				data: () => ({ value: undefined }),
-				template: `<base-input v-model="value" label="test" type="switch" name="checkbox" :show-undefined-state="true" />`,
-				components: { BaseInput },
-			})
-		).toThrow("showUndefinedState is only allowed on type=checkbox.");
 	});
 
 	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {

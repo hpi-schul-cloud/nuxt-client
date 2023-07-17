@@ -83,7 +83,7 @@ import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import ExternalToolsModule from "@/store/external-tools";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
@@ -123,7 +123,7 @@ export default defineComponent({
 			EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>

@@ -24,7 +24,7 @@ import {
 } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
@@ -40,7 +40,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const authModule: AuthModule = injectStrict(AUTH_MODULE);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);

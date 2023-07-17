@@ -15,22 +15,22 @@
 			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="students_outline" />
+					<v-icon class="material-icon">$mdiAccountSchoolOutline</v-icon>
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="teacher" />
+					<v-icon class="custom-icon">$teacher</v-icon>
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="admin_panel_settings" />
+					<v-icon class="material-icon">$mdiShieldAccountVariantOutline</v-icon>
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="class" />
+					<v-icon class="custom-icon">$class</v-icon>
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -174,11 +174,9 @@
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
 					<template #icon>
-						<base-icon
-							source="material"
-							icon="check_circle"
-							style="color: var(--v-success-base)"
-						/>
+						<v-icon color="var(--v-success-base)" class="material-icon">
+							$mdiCheckCircle
+						</v-icon>
 					</template>
 				</modal-body-info>
 			</template>
