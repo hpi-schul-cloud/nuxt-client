@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import NotifierModule from "../../store/notifier";
+import NotifierModule from "@/store/notifier";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";

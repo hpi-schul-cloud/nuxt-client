@@ -11,7 +11,7 @@ import {
 	toolConfigurationFactory,
 	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
-import NotifierModule from "../../store/notifier";
+import NotifierModule from "@/store/notifier";
 import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";

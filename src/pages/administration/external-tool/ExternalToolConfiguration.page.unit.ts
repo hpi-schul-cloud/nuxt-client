@@ -14,7 +14,7 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
-import NotifierModule from "../../../store/notifier";
+import NotifierModule from "@/store/notifier";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import {
