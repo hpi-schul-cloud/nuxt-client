@@ -102,14 +102,14 @@ export default defineComponent({
 		useBoardFocusHandler(props.element.id, fileContentElement);
 
 		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
-			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
+		const { fetchFile, upload, fileRecord } = useFileStorageApi(
+			props.element.id,
+			FileRecordParentType.BOARDNODES
+		);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
-
-		const abortController = new AbortController();
 
 		onMounted(() => {
 			(async () => {
@@ -118,7 +118,7 @@ export default defineComponent({
 				if (file) {
 					await tryUpload(file);
 				} else {
-					await getFileRecord();
+					await fetchFile();
 				}
 			})();
 		});
@@ -128,28 +128,11 @@ export default defineComponent({
 				await upload(file);
 
 				setSelectedFile();
-				await fetchPendingFileRecursively(
-					10000,
-					50000,
-					0,
-					abortController.signal
-				);
 			} catch (error) {
 				setSelectedFile();
 				await deleteFileElement();
 			}
 		};
-
-		const getFileRecord = async () => {
-			await fetchFile();
-			await fetchPendingFileRecursively(
-				10000,
-				50000,
-				0,
-				abortController.signal
-			);
-		};
-
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -172,9 +155,6 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				// abort all (possibly) running timer in
-				// fetchPendingFileRecursively
-				abortController.abort();
 				await deleteFileElement();
 			}
 		};

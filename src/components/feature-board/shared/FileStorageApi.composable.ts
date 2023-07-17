@@ -3,12 +3,10 @@ import {
 	FileApiInterface,
 	FileRecordParentType,
 	FileRecordResponse,
-	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { delayWithAbort } from "@/utils/helpers";
 import { ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -80,50 +78,6 @@ export const useFileStorageApi = (
 		}
 	};
 
-	const fetchPendingFileRecursively = async (
-		waitTime = 10000,
-		waitTimeMax = 50000,
-		refreshTimer = 0,
-		signal?: AbortSignal
-	): Promise<FileRecordResponse | undefined> => {
-		if (
-			!fileRecord.value ||
-			fileRecord.value?.securityCheckStatus !== FileRecordScanStatus.PENDING
-		) {
-			return;
-		}
-		try {
-			await delayWithAbort(waitTime, { signal: signal });
-
-			await fetchFile();
-
-			if (refreshTimer < waitTimeMax) {
-				refreshTimer = refreshTimer + waitTime;
-
-				await fetchPendingFileRecursively(
-					waitTime,
-					waitTimeMax,
-					refreshTimer,
-					signal
-				);
-			}
-		} catch (error) {
-			if (
-				error instanceof DOMException &&
-				error.message === "signal is aborted without reason"
-			) {
-				// when aborting this function using "signal" a DOM exception
-				// "signal is aborted without reason" is thrown, which is
-				// caught by this empty error block
-			} else {
-				// we just need to throw an error here as all relevant errors
-				// should be shown by "fetchFile" itself
-				throw error;
-			}
-			return;
-		}
-	};
-
 	const showError = (error: unknown) => {
 		const responseError = mapAxiosErrorToResponseError(error);
 		const { message } = responseError;
@@ -153,7 +107,6 @@ export const useFileStorageApi = (
 
 	return {
 		fetchFile,
-		fetchPendingFileRecursively,
 		rename,
 		upload,
 		fileRecord,
