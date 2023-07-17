@@ -108,8 +108,16 @@ export const useFileStorageApi = (
 				);
 			}
 		} catch (error) {
-			// when aborting this function using signal an error is thrown,
-			// which is caught by this empty error block
+			if (
+				error instanceof DOMException &&
+				error.message === "signal is aborted without reason"
+			) {
+				// when aborting this function using signal a DOM exception
+				// "signal is aborted without reason" is thrown, which is
+				// caught by this empty error block
+			} else {
+				showError(error);
+			}
 			return;
 		}
 	};
