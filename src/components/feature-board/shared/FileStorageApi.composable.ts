@@ -112,11 +112,13 @@ export const useFileStorageApi = (
 				error instanceof DOMException &&
 				error.message === "signal is aborted without reason"
 			) {
-				// when aborting this function using signal a DOM exception
+				// when aborting this function using "signal" a DOM exception
 				// "signal is aborted without reason" is thrown, which is
 				// caught by this empty error block
 			} else {
-				showError(error);
+				// we just need to throw an error here as all relevant errors
+				// should be shown by "fetchFile" itself
+				throw error;
 			}
 			return;
 		}
