@@ -1063,6 +1063,19 @@ export enum CreateNewsParamsTargetModelEnum {
 /**
  * 
  * @export
+ * @interface CreateSubmissionItemBodyParams
+ */
+export interface CreateSubmissionItemBodyParams {
+    /**
+     * Boolean indicating whether the submission is completed.
+     * @type {boolean}
+     * @memberof CreateSubmissionItemBodyParams
+     */
+    completed: boolean;
+}
+/**
+ * 
+ * @export
  * @interface CustomParameterEntryParam
  */
 export interface CustomParameterEntryParam {
@@ -3910,6 +3923,37 @@ export interface SubmissionContainerElementContentBody {
 /**
  * 
  * @export
+ * @interface SubmissionItemResponse
+ */
+export interface SubmissionItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SubmissionItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof SubmissionItemResponse
+     */
+    timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SubmissionItemResponse
+     */
+    completed: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SubmissionItemResponse
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface SubmissionStatusListResponse
  */
 export interface SubmissionStatusListResponse {
@@ -6632,7 +6676,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6712,7 +6756,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6786,7 +6830,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 
@@ -7334,6 +7378,50 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
+         * @summary Create a new submission item in a submission container element.
+         * @param {string} contentElementId The id of the element.
+         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerCreateSubmission: async (contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contentElementId' is not null or undefined
+            assertParamExists('elementControllerCreateSubmission', 'contentElementId', contentElementId)
+            // verify required parameter 'createSubmissionItemBodyParams' is not null or undefined
+            assertParamExists('elementControllerCreateSubmission', 'createSubmissionItemBodyParams', createSubmissionItemBodyParams)
+            const localVarPath = `/elements/{contentElementId}/submissions`
+                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSubmissionItemBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
@@ -7470,6 +7558,18 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new submission item in a submission container element.
+         * @param {string} contentElementId The id of the element.
+         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
@@ -7515,6 +7615,17 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
+         * @summary Create a new submission item in a submission container element.
+         * @param {string} contentElementId The id of the element.
+         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse> {
+            return localVarFp.elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
@@ -7556,6 +7667,17 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
 export interface BoardElementApiInterface {
     /**
      * 
+     * @summary Create a new submission item in a submission container element.
+     * @param {string} contentElementId The id of the element.
+     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApiInterface
+     */
+    elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse>;
+
+    /**
+     * 
      * @summary Delete a single content element.
      * @param {string} contentElementId The id of the element.
      * @param {*} [options] Override http request option.
@@ -7595,6 +7717,19 @@ export interface BoardElementApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
+    /**
+     * 
+     * @summary Create a new submission item in a submission container element.
+     * @param {string} contentElementId The id of the element.
+     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApi
+     */
+    public elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Delete a single content element.
