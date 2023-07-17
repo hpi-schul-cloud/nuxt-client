@@ -26,6 +26,7 @@ const mockEnvs: Envs = {
 	FEATURE_CONSENT_NECESSARY: true,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
 	MIGRATION_END_GRACE_PERIOD_MS: 1,
+	FILES_STORAGE__MAX_FILE_SIZE: 0,
 };
 
 const URL = "/v1/config/app/public";
@@ -206,6 +207,12 @@ describe("env-config module", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.I18N__DEFAULT_TIMEZONE).toBe("");
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
+		});
+
+		it("getMaxFileSize should get 0 if FILES_STORAGE__MAX_FILE_SIZE is not defined", () => {
+			const envConfigModule = new EnvConfigModule({});
+			expect(envConfigModule.env.FILES_STORAGE__MAX_FILE_SIZE).toBe(0);
+			expect(envConfigModule.getMaxFileSize).toStrictEqual(0);
 		});
 
 		it("getEnv should get env", () => {

@@ -58,7 +58,7 @@ describe("FileOverview", () => {
 				$route,
 			},
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				collaborativeFilesModule,
 			},
 		});
@@ -89,7 +89,7 @@ describe("FileOverview", () => {
 			console.error = jest.fn();
 			expect(() => {
 				shallowMount(FilesOverview, {
-					provide: { [I18N_KEY as symbol]: { t: (key: string) => key } },
+					provide: { [I18N_KEY.valueOf()]: { t: (key: string) => key } },
 				});
 			}).toThrow("Injection of dependencies failed");
 		});

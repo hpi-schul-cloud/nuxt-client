@@ -1,5 +1,5 @@
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ExternalToolsModule from "@/store/external-tools";
 import flushPromises from "flush-promises";
@@ -16,7 +16,7 @@ import {
 } from "@/store/external-tool";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { I18N_KEY } from "@/utils/inject";
+import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -64,7 +64,7 @@ describe("ExternalToolConfiguration", () => {
 				}),
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
-					externalToolsModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 				propsData: {
 					...propsData,
@@ -91,36 +91,6 @@ describe("ExternalToolConfiguration", () => {
 			expect(wrapper.findComponent(ExternalToolConfiguration).exists()).toBe(
 				true
 			);
-		});
-	});
-
-	describe("inject", () => {
-		it("should throw an error when externalToolsModule injection fails", () => {
-			const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-
-			try {
-				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
-					provide: {
-						[I18N_KEY as symbol]: { t: (key: string) => key },
-					},
-				});
-			} catch (e) {
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(/injection "externalToolsModule" not found/)
-				);
-			}
-
-			consoleErrorSpy.mockRestore();
-		});
-
-		it("should throw an error when i18n injection fails", () => {
-			expect(() => {
-				shallowMount(ExternalToolConfiguration as MountOptions<Vue>, {
-					provide: {
-						externalToolsModule,
-					},
-				});
-			}).toThrow();
 		});
 	});
 

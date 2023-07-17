@@ -49,7 +49,7 @@ describe("BoardBreadcrumbs.composable", () => {
 			const { createBreadcrumbs, breadcrumbs } = mountComposable(
 				() => useSharedBoardBreadcrumbs(),
 				{
-					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				}
 			);
 

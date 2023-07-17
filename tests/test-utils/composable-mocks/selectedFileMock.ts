@@ -3,7 +3,7 @@ import { jest } from "@jest/globals";
 
 interface Props {
 	getSelectedFileMock?: () => File | undefined;
-	setSelectedFileMock?: (file?: File) => void;
+	setSelectedFileMock?: (file?: File) => boolean;
 }
 
 export const setupSelectedFileMock = (props: Props = {}) => {

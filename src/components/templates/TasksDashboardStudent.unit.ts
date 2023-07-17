@@ -34,8 +34,8 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 				copyModule: copyModuleMock,
 				finishedTasksModule: finishedTasksModuleMock,
 				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY as symbol]: notifierModuleMock,
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 			...attrs,
 		});

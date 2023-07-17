@@ -4,6 +4,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ApplicationErrorModule from "@/store/application-error";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import VueRouter from "vue-router";
+import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 
 describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 	let router: VueRouter;
@@ -19,7 +20,7 @@ describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
 		return mount(ApplicationErrorRouting, {
 			...componentOptions,
 			provide: {
-				applicationErrorModule: applicationErrorModuleMock,
+				[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
 			},
 			router,
 		});

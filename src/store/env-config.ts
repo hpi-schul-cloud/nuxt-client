@@ -42,6 +42,7 @@ export default class EnvConfigModule extends VuexModule {
 		I18N__DEFAULT_TIMEZONE: "",
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
+		FILES_STORAGE__MAX_FILE_SIZE: 0,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -150,6 +151,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getLtiToolsTabEnabled(): boolean {
 		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED ?? true;
+	}
+
+	get getMaxFileSize(): number {
+		return this.env.FILES_STORAGE__MAX_FILE_SIZE;
 	}
 
 	get getEnv(): Envs {

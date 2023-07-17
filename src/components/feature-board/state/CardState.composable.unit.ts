@@ -1,4 +1,7 @@
-import { ContentElementType, CreateContentElementBody } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	CreateContentElementBodyParams,
+} from "@/serverApi/v3";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,
@@ -20,8 +23,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const setup = (cardId = "123123") => {
 	return mountComposable(() => useCardState(cardId), {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+		[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 
@@ -281,7 +284,7 @@ describe("CardState composable", () => {
 		it("should call addElement", async () => {
 			const boardCard = boardCardFactory.build();
 			const { addElement, card } = setup(boardCard.id);
-			const elementType: CreateContentElementBody = {
+			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
 			card.value = boardCard;
@@ -297,7 +300,7 @@ describe("CardState composable", () => {
 
 		it("should not call addElement when card value is undefined", async () => {
 			const { addElement, card } = setup("test-id");
-			const elementType: CreateContentElementBody = {
+			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
 			card.value = undefined;
@@ -315,7 +318,7 @@ describe("CardState composable", () => {
 
 			const testCard = boardCardFactory.build();
 			const { addElement, card } = setup(testCard.id);
-			const elementType: CreateContentElementBody = {
+			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
 			card.value = testCard;

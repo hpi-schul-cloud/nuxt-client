@@ -66,14 +66,18 @@ describe("ElementTypeSelection Composable", () => {
 	});
 
 	describe("onFileSelect", () => {
-		describe("when element is created successfullly", () => {
+		describe("when element is created successfully", () => {
 			const setup = () => {
 				const element = { id: "test" };
 				const addElementMock = jest.fn().mockResolvedValueOnce(element);
 				const file = new File([], "test");
 				setupSharedElementTypeSelectionMock();
-				const { setSelectedFile } = setupSelectedFileMock({});
 
+				const setSelectedFileMock = jest.fn();
+				setSelectedFileMock.mockReturnValueOnce(true);
+				const { setSelectedFile } = setupSelectedFileMock({
+					setSelectedFileMock,
+				});
 				return { addElementMock, file, setSelectedFile };
 			};
 
@@ -98,23 +102,64 @@ describe("ElementTypeSelection Composable", () => {
 			});
 		});
 
+		describe("when file size to big", () => {
+			const setup = () => {
+				const element = { id: "test" };
+				const addElementMock = jest.fn().mockResolvedValueOnce(element);
+				const file = new File([], "test");
+				setupSharedElementTypeSelectionMock();
+
+				const setSelectedFileMock = jest.fn();
+				setSelectedFileMock.mockReturnValueOnce(false);
+				const { setSelectedFile } = setupSelectedFileMock({
+					setSelectedFileMock,
+				});
+				return { addElementMock, file, setSelectedFile };
+			};
+
+			it("should call setSelectedFile", async () => {
+				const { addElementMock, file, setSelectedFile } = setup();
+				const { onFileSelect } = useElementTypeSelection(addElementMock);
+
+				await onFileSelect(file);
+
+				expect(setSelectedFile).toHaveBeenCalledTimes(1);
+				expect(setSelectedFile).toBeCalledWith(file);
+			});
+
+			it("should not call addElementMock", async () => {
+				const { addElementMock, file } = setup();
+				const { onFileSelect } = useElementTypeSelection(addElementMock);
+
+				await onFileSelect(file);
+
+				expect(addElementMock).toHaveBeenCalledTimes(0);
+			});
+		});
+
 		describe("when addElement throws error", () => {
 			const setup = () => {
 				const error = new Error("Test error");
 				const addElementMock = jest.fn().mockRejectedValueOnce(error);
 				const file = new File([], "test");
 				const { upload } = setupFileStorageApiMock();
-				setupSelectedFileMock();
 
-				return { addElementMock, file, upload, error };
+				const setSelectedFileMock = jest.fn();
+				setSelectedFileMock.mockReturnValueOnce(true);
+				const { setSelectedFile } = setupSelectedFileMock({
+					setSelectedFileMock,
+				});
+
+				return { addElementMock, file, upload, setSelectedFile };
 			};
 
 			it("should pass error", async () => {
-				const { addElementMock, file, error, upload } = setup();
+				const { addElementMock, file, upload, setSelectedFile } = setup();
 				const { onFileSelect } = useElementTypeSelection(addElementMock);
 
-				await expect(onFileSelect(file)).rejects.toThrowError(error);
+				await onFileSelect(file);
 
+				expect(setSelectedFile).toBeCalledTimes(2);
 				expect(upload).toHaveBeenCalledTimes(0);
 			});
 		});

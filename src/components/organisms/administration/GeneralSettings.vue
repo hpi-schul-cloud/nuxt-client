@@ -77,7 +77,6 @@
 			<v-row>
 				<v-col class="d-flex">
 					<v-file-input
-						v-model="localSchool.logo"
 						class="school-logo"
 						:label="
 							$t(
@@ -86,6 +85,7 @@
 						"
 						dense
 						prepend-icon=""
+						@change="onLogoChange"
 					></v-file-input>
 				</v-col>
 			</v-row>
@@ -156,9 +156,8 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
-import { dataUrlToFile, toBase64 } from "@/utils/fileHelper.ts";
+import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
-import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -195,9 +194,7 @@ export default {
 		},
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
-				const name = this.$t(
-					`pages.account.index.user.locale.longName.${lang}`
-				);
+				const name = this.$t(`common.words.languages.${lang}`);
 				return { name, abbreveation: lang };
 			});
 		},
@@ -219,20 +216,18 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
-		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = await dataUrlToFile(this.school.logo_dataUrl, "logo");
+				schoolCopy.logo = this.school.logo_dataUrl;
 			}
 			this.localSchool = schoolCopy;
 		},
 		printDate,
 		toBase64,
-		dataUrlToFile,
 		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			const newPermissions = {
@@ -245,6 +240,13 @@ export default {
 		},
 		onUpdateFeatureSettings(value, settingName) {
 			this.localSchool.features[settingName] = value;
+		},
+		async onLogoChange(logo) {
+			if (logo) {
+				this.localSchool.logo = await toBase64(logo);
+			} else {
+				this.localSchool.logo = null;
+			}
 		},
 		async save() {
 			const updatedSchool = {
@@ -269,7 +271,7 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+				updatedSchool.logo_dataUrl = this.localSchool.logo;
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}

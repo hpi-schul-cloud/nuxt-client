@@ -13,7 +13,7 @@ describe("injectStrict", () => {
 					return { provider };
 				},
 				{
-					[PROVIDER_KEY as symbol]: "provided",
+					[PROVIDER_KEY.valueOf()]: "provided",
 				}
 			);
 

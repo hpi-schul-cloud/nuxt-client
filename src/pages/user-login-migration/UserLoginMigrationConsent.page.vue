@@ -77,21 +77,21 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import SystemsModule from "@/store/systems";
-import UserLoginMigrationModule from "@/store/user-login-migration";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migration";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	computed,
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
 	inject,
 	onMounted,
-	Ref,
 	ref,
 } from "vue";
-import EnvConfigModule from "@/store/env-config";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
@@ -117,8 +117,7 @@ export default defineComponent({
 			inject<SystemsModule>("systemsModule");
 		const userMigrationModule: UserLoginMigrationModule | undefined =
 			inject<UserLoginMigrationModule>("userLoginMigrationModule");
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -128,8 +127,7 @@ export default defineComponent({
 			);
 		};
 
-		const isNewLoginFlowEnabled =
-			!!envConfigModule?.getClientUserLoginMigration;
+		const isNewLoginFlowEnabled = !!envConfigModule.getClientUserLoginMigration;
 
 		const proceedLink: ComputedRef<string | undefined> = computed(
 			() => userMigrationModule?.getMigrationLinks.proceedLink

@@ -8,8 +8,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const setup = () => {
 	return mountComposable(() => useBoardNotifier(), {
-		[I18N_KEY as symbol]: { t: (key: string) => key },
-		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+		[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 
@@ -94,6 +94,16 @@ describe("BoardNotifications.composable", () => {
 
 			expect(notifierModule.show).toHaveBeenCalled();
 			expect(notifierModule.show).toHaveBeenCalledWith(expectedCallObject);
+		});
+	});
+
+	describe("@resetNotifier method", () => {
+		it("should call the notifier module", () => {
+			const { resetNotifier } = setup();
+			resetNotifier();
+
+			expect(notifierModule.setNotifier).toHaveBeenCalled();
+			expect(notifierModule.setNotifier).toHaveBeenCalledWith(undefined);
 		});
 	});
 

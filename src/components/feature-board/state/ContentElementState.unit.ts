@@ -36,22 +36,14 @@ const TEST_ELEMENT: RichTextElementResponse = {
 describe("useContentElementState composable", () => {
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
-			[I18N_KEY as symbol]: { t: (key: string) => key },
-			[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+			[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 		});
 	};
 	it("should unwrap element model data", async () => {
 		const { modelValue } = setup();
 
 		expect(modelValue.value).toStrictEqual(TEST_ELEMENT.content);
-	});
-
-	it.skip("should set isAutoFocus on element interaction", async () => {
-		const { isAutoFocus } = setup();
-
-		expect(isAutoFocus.value).toStrictEqual(false);
-		// mockCardHostInteraction();
-		expect(isAutoFocus.value).toStrictEqual(true);
 	});
 
 	it("should call saving function after debounced change of modelValue", async () => {

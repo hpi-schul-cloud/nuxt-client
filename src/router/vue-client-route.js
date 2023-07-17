@@ -44,7 +44,6 @@ const vueRoutes = [
 	`^/beta-task/${mongoId}/?$`,
 	`^/beta-task/${mongoId}/?$`,
 	`^/termsofuse/?$`,
-	`^/login-instances/?$`,
 	`^/error/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,

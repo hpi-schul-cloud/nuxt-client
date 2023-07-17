@@ -22,12 +22,17 @@
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.studentVisibility'
+						)
+					"
 					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -46,12 +51,17 @@
 							'pages.administration.school.index.privacySettings.labels.lernStore'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.lernStore'
+						)
+					"
 					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -70,12 +80,17 @@
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.chatFunction'
+						)
+					"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -89,7 +104,7 @@
 			<v-col>
 				<v-custom-switch
 					:value="features.videoconference"
-					:label="
+					:aria-label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
@@ -100,7 +115,7 @@
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(

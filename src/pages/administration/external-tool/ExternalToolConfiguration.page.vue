@@ -80,12 +80,15 @@ import {
 import { ToolParameterEntry } from "@/store/external-tool/tool-parameter-entry";
 import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
 	Ref,
 	ref,
@@ -109,11 +112,9 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
-		if (!i18n || !externalToolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE_KEY
+		);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {

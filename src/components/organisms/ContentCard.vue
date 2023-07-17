@@ -28,16 +28,14 @@
 							<img
 								:src="thumbnail()"
 								class="content__img-thumbnail"
-								:alt="$t('pages.content.card.img.alt')"
+								alt=""
 								role="img"
 							/>
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<base-icon
-									:source="getTypeIcon('text/directory').iconSource"
-									:icon="getTypeIcon('text/directory').icon"
-									class="content__text-icon"
-								/>
+								<v-icon class="custom-icon content__text-icon">
+									$ic_collection
+								</v-icon>
 							</div>
 						</div>
 					</div>

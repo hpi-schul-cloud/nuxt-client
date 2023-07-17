@@ -45,6 +45,10 @@ export const useBoardNotifier = () => {
 		});
 	};
 
+	const resetNotifier = () => {
+		notifierModule.setNotifier(undefined);
+	};
+
 	const isErrorCode = (statusCode: HttpStatusCode) => {
 		if (statusCode >= 300) return true;
 		return false;
@@ -75,6 +79,7 @@ export const useBoardNotifier = () => {
 	return {
 		generateErrorText,
 		isErrorCode,
+		resetNotifier,
 		showCustomNotifier,
 		showFailure,
 		showInfo,

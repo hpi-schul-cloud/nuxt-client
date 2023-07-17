@@ -146,15 +146,6 @@ export const routes: Array<RouteConfig> = [
 		},
 	},
 	{
-		path: "/login-instances",
-		component: () => import("@/pages/LoginInstances.page.vue"),
-		name: "login-instances",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
 		path: "/migration",
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),

@@ -35,7 +35,7 @@ describe("@/components/editor/CKEditor", () => {
 			}),
 			propsData: props,
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 		});
 	};
@@ -66,7 +66,7 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have all plugins available in simple mode", () => {
 		setup({ mode: "simple" });
-		expect(wrapper.vm.config.plugins).toHaveLength(23);
+		expect(wrapper.vm.config.plugins).toHaveLength(21);
 	});
 
 	it("should have all toolbar items in regular mode", () => {
@@ -76,7 +76,7 @@ describe("@/components/editor/CKEditor", () => {
 
 	it("should have all plugins available in regular mode", () => {
 		setup({ mode: "regular" });
-		expect(wrapper.vm.config.plugins).toHaveLength(23);
+		expect(wrapper.vm.config.plugins).toHaveLength(21);
 	});
 
 	describe("events", () => {

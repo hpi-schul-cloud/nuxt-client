@@ -31,7 +31,6 @@ module.exports = {
 		"!<rootDir>/src/pages/Imprint.page.vue",
 		"!<rootDir>/src/pages/LernStoreDetails.page.vue",
 		"!<rootDir>/src/pages/LernStoreOverview.page.vue",
-		"!<rootDir>/src/pages/LoginInstances.page.vue",
 		"!<rootDir>/src/pages/NewsCreate.page.vue",
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",

@@ -44,9 +44,9 @@
 	</v-card>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
-import EnvConfigModule from "@/store/env-config";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ComputedRef, Ref, computed, defineComponent, ref } from "vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -71,8 +71,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const type: Ref<MigrationWarningCardTypeEnum> = ref(
 			props.value as MigrationWarningCardTypeEnum
 		);
@@ -105,7 +104,7 @@ export default defineComponent({
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
 			const days: number | undefined = undefined;
-			if (envConfigModule?.getMigrationEndGracePeriod) {
+			if (envConfigModule.getMigrationEndGracePeriod) {
 				const dayInMilliSeconds = 86400000;
 				const days =
 					envConfigModule.getMigrationEndGracePeriod / dayInMilliSeconds;
