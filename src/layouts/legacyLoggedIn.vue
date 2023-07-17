@@ -2,6 +2,11 @@
 	<div>
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
+			<RenderHTML
+				class="announcement"
+				v-if="showGlobalAnnouncement"
+				:html="globalAnnouncementText"
+			/>
 			<div class="topbar">
 				<the-top-bar
 					v-if="!isInline"
@@ -41,9 +46,11 @@ import TheSidebar from "@/components/legacy/TheSidebar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	components: {
+		RenderHTML,
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
@@ -123,6 +130,22 @@ export default defineComponent({
 			return sidebarItems;
 		});
 
+		const showGlobalAnnouncement = computed(() => {
+			if (
+				envConfigModule.getEnv.GLOBAL_ANNOUNCEMENT_TEXT &&
+				envConfigModule.getEnv.GLOBAL_ANNOUNCEMENT_ROLES
+			) {
+				return user.value?.roles?.some((role) =>
+					envConfigModule.getEnv.GLOBAL_ANNOUNCEMENT_ROLES?.includes(role.name)
+				);
+			}
+			return false;
+		});
+
+		const globalAnnouncementText = computed(() => {
+			return envConfigModule.getEnv.GLOBAL_ANNOUNCEMENT_TEXT;
+		});
+
 		return {
 			fullScreenMode,
 			expandedMenu,
@@ -133,6 +156,8 @@ export default defineComponent({
 			style,
 			isInline,
 			sidebarItems,
+			showGlobalAnnouncement,
+			globalAnnouncementText,
 		};
 	},
 });
@@ -144,6 +169,7 @@ export default defineComponent({
 .page {
 	display: grid;
 	grid-template-areas:
+		"side top-announcement"
 		"side top"
 		"side content"
 		"side footer";
@@ -162,6 +188,34 @@ export default defineComponent({
 
 	@include breakpoint(desktop) {
 		grid-template-columns: var(--sidebar-width) 1fr;
+	}
+}
+
+.announcement {
+	grid-area: top-announcement;
+
+	text-align: center;
+	margin-top: 1rem !important;
+	margin-bottom: 1rem;
+	padding: 0.95rem 1.15rem;
+	border: 1px solid transparent;
+	border-radius: 0.25rem;
+	font-size: 1.1rem;
+
+	background-color: #d9edf7;
+	border-color: #0a7ac9;
+	color: #0a7ac9;
+
+	hr {
+		border-top-color: darken(#31708f, 5%);
+	}
+
+	.alert-link {
+		color: darken(#31708f, 10%);
+	}
+
+	.a {
+		text-decoration: none !important;
 	}
 }
 
