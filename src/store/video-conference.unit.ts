@@ -109,7 +109,7 @@ describe("VideoConferenceModule", () => {
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
+							moderatorMustApproveJoinRequests: true,
 							everybodyJoinsAsModerator: false,
 						},
 					});
