@@ -19,8 +19,6 @@ describe("helpers", () => {
 		});
 
 		it("should return a promise", () => {
-			jest.useFakeTimers();
-
 			expect(delay(1)).toBeInstanceOf(Promise);
 		});
 	});
