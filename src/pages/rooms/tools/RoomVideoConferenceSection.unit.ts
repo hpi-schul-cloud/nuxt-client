@@ -468,7 +468,7 @@ describe("RoomVideoConferenceSection", () => {
 
 		describe("when the video conference is not running", () => {
 			const setup = () => {
-				const { wrapper, videoConferenceModule } = getWrapper(
+				const { wrapper } = getWrapper(
 					{
 						roomId: "roomId",
 					},
@@ -489,7 +489,6 @@ describe("RoomVideoConferenceSection", () => {
 
 				return {
 					wrapper,
-					videoConferenceModule,
 				};
 			};
 
@@ -499,16 +498,13 @@ describe("RoomVideoConferenceSection", () => {
 				const card = wrapper.findComponent({
 					name: "room-video-conference-card",
 				});
-
 				await card.vm.$emit("click");
 
 				const configurationDialog = wrapper.find(
 					'[data-testid="videoconference-config-dialog"]'
 				);
 
-				expect(
-					configurationDialog.element.childNodes.length
-				).toBeGreaterThanOrEqual(1);
+				expect(configurationDialog.props("value")).toBe(true);
 			});
 		});
 	});
@@ -534,15 +530,9 @@ describe("RoomVideoConferenceSection", () => {
 				}
 			);
 
-			const params = {
-				scope: VideoConferenceScope.Course,
-				scopeId: "roomId",
-			};
-
 			return {
 				wrapper,
 				videoConferenceModule,
-				params,
 				roomModule,
 			};
 		};
@@ -609,21 +599,19 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const everyAttendeeJoinsMuted = wrapper.find(
+			const svEveryAttendeeJoinsMuted = wrapper.find(
 				'[data-testId="every-attendee-joins-muted"]'
 			);
-
-			const moderatorMustApproveJoinRequests = wrapper.find(
+			const svModeratorMustApproveJoinRequests = wrapper.find(
 				'[data-testId="moderator-must-approve-join-requests"]'
 			);
-
-			const everybodyJoinsAsModerator = wrapper.find(
+			const svEverybodyJoinsAsModerator = wrapper.find(
 				'[data-testId="everybody-joins-as-moderator"]'
 			);
 
-			await everyAttendeeJoinsMuted.vm.$emit("change", true);
-			await moderatorMustApproveJoinRequests.vm.$emit("change", true);
-			await everybodyJoinsAsModerator.vm.$emit("change", true);
+			await svEveryAttendeeJoinsMuted.vm.$emit("change", true);
+			await svModeratorMustApproveJoinRequests.vm.$emit("change", true);
+			await svEverybodyJoinsAsModerator.vm.$emit("change", true);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
 			await createBtn.vm.$emit("click");
@@ -637,32 +625,8 @@ describe("RoomVideoConferenceSection", () => {
 					everybodyJoinsAsModerator: true,
 				},
 			});
-			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
-				scope: params.scope,
-				scopeId: params.scopeId,
-			});
-
-			// TODO: check if dialog still exits
 		});
 
-		it("should call start and join videoconference function of store", async () => {
-			const { wrapper, videoConferenceModule, params } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
-			});
-			await card.vm.$emit("click");
-
-			const createBtn = wrapper.find('[data-testId="dialog-create"]');
-			await createBtn.vm.$emit("click");
-
-			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
-				scope: params.scope,
-				scopeId: params.scopeId,
-				videoConferenceOptions:
-					videoConferenceModule.getVideoConferenceInfo.options,
-			});
-		});
 		it("should call start with all options false ", async () => {
 			const { wrapper, videoConferenceModule, params } = setup();
 
@@ -671,21 +635,19 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const everyAttendeeJoinsMuted = wrapper.find(
+			const svEveryAttendeeJoinsMuted = wrapper.find(
 				'[data-testId="every-attendee-joins-muted"]'
 			);
-
-			const moderatorMustApproveJoinRequests = wrapper.find(
+			const svModeratorMustApproveJoinRequests = wrapper.find(
 				'[data-testId="moderator-must-approve-join-requests"]'
 			);
-
-			const everybodyJoinsAsModerator = wrapper.find(
+			const svEverybodyJoinsAsModerator = wrapper.find(
 				'[data-testId="everybody-joins-as-moderator"]'
 			);
 
-			await everyAttendeeJoinsMuted.vm.$emit("change", false);
-			await moderatorMustApproveJoinRequests.vm.$emit("change", false);
-			await everybodyJoinsAsModerator.vm.$emit("change", false);
+			await svEveryAttendeeJoinsMuted.vm.$emit("change", false);
+			await svModeratorMustApproveJoinRequests.vm.$emit("change", false);
+			await svEverybodyJoinsAsModerator.vm.$emit("change", false);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
 			await createBtn.vm.$emit("click");
@@ -699,8 +661,34 @@ describe("RoomVideoConferenceSection", () => {
 					everybodyJoinsAsModerator: false,
 				},
 			});
+		});
 
-			// TODO: check if dialog still exits
+		it("should call start and join videoconference function of store", async () => {
+			const { wrapper, videoConferenceModule, params } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+			await card.vm.$emit("click");
+
+			const configurationDialog = wrapper.find(
+				'[data-testid="videoconference-config-dialog"]'
+			);
+
+			const createBtn = wrapper.find('[data-testId="dialog-create"]');
+			await createBtn.vm.$emit("click");
+
+			expect(configurationDialog.props("value")).toBe(false);
+			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+				videoConferenceOptions:
+					videoConferenceModule.getVideoConferenceInfo.options,
+			});
+			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+			});
 		});
 	});
 
@@ -746,18 +734,20 @@ describe("RoomVideoConferenceSection", () => {
 			const cancelBtn = configurationDialog.find(
 				'[data-testid="dialog-cancel"]'
 			);
-			await cancelBtn.trigger("click");
+			await cancelBtn.vm.$emit("click");
 
+			expect(configurationDialog.props("value")).toBe(false);
 			expect(videoConferenceModule.startVideoConference).not.toHaveBeenCalled();
 			expect(videoConferenceModule.joinVideoConference).not.toHaveBeenCalled();
-			// TODO: check if dialog still exits
 		});
 	});
 
 	describe("when a videoconference is started or joined", () => {
 		describe("when an error occurs", () => {
 			const setup = () => {
-				const error = new Error();
+				const error = jest.fn(() => {
+					throw new Error();
+				});
 
 				const { wrapper } = getWrapper(
 					{
@@ -790,12 +780,11 @@ describe("RoomVideoConferenceSection", () => {
 				const card = wrapper.findComponent({
 					name: "room-video-conference-card",
 				});
-
 				await card.vm.$emit("click");
 
 				const dialog = wrapper.find('[data-testId="error-dialog"]');
 
-				expect(dialog.exists()).toBeTruthy();
+				expect(dialog.props("isOpen")).toBe(true);
 			});
 		});
 
@@ -826,19 +815,18 @@ describe("RoomVideoConferenceSection", () => {
 				};
 			};
 
-			it("should display no error dialog", async () => {
+			it("should not display an error dialog", async () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({
 					name: "room-video-conference-card",
 				});
-
 				await card.vm.$emit("click");
 				await wrapper.vm.$nextTick();
 
 				const dialog = wrapper.find('[data-testId="error-dialog"]');
 
-				expect(dialog.exists()).toBe(false);
+				expect(dialog.props("isOpen")).toBe(false);
 			});
 		});
 	});

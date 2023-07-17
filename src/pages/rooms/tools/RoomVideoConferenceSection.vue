@@ -252,14 +252,13 @@ export default defineComponent({
 		};
 
 		const startVideoConference = async () => {
+			onCloseConfigurationDialog();
 			await videoConferenceModule.startVideoConference({
 				scope: VideoConferenceScope.Course,
 				scopeId: props.roomId,
 				videoConferenceOptions: videoConferenceOptions.value,
 			});
 			await joinVideoConference();
-
-			onCloseConfigurationDialog();
 		};
 
 		const joinVideoConference = async () => {
