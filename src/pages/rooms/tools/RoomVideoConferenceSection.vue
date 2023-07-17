@@ -155,7 +155,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
