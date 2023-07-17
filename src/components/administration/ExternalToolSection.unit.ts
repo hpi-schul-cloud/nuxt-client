@@ -1,8 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
 import NotifierModule from "@/store/notifier";
+import Vue from "vue";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";
@@ -38,7 +40,11 @@ describe("ExternalToolSection", () => {
 			},
 		});
 
-		return { wrapper, externalToolsModule };
+		return {
+			wrapper,
+			externalToolsModule,
+			notifierModule,
+		};
 	};
 
 	describe("when component is used", () => {
@@ -131,9 +137,23 @@ describe("ExternalToolSection", () => {
 				expect(firstRow.at(1).text()).toEqual(
 					"components.externalTools.status.latest"
 				);
+				expect(
+					firstRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
+				).toEqual(mdiCheckCircle);
 				expect(secondRow.at(1).text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
+				expect(
+					secondRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
+				).toEqual(mdiRefreshCircle);
 			});
 
 			describe("when actions buttons are rendered", () => {
@@ -208,6 +228,33 @@ describe("ExternalToolSection", () => {
 						expect(
 							externalToolsModule.deleteSchoolExternalTool
 						).toHaveBeenCalled();
+					});
+
+					it("should call notifierModule.show", async () => {
+						const { wrapper, notifierModule } = setup({
+							getSchoolExternalTools: [
+								{
+									id: "testId",
+									toolId: "toolId",
+									parameters: [],
+									name: "firstToolName",
+									status: ToolConfigurationStatus.Latest,
+									version: 1,
+								},
+							],
+						});
+
+						const tableRows = wrapper.find("tbody").findAll("tr");
+
+						const firstRowButtons = tableRows.at(0).findAll("button");
+
+						const deleteButton = firstRowButtons.at(1);
+						await deleteButton.trigger("click");
+
+						const confirmButton = wrapper.find("[data-testId=dialog-confirm]");
+						await confirmButton.trigger("click");
+
+						expect(notifierModule.show).toHaveBeenCalled();
 					});
 				});
 			});

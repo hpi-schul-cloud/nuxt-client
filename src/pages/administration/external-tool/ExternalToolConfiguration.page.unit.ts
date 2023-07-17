@@ -40,7 +40,7 @@ describe("ExternalToolConfiguration", () => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory.build()],
-			getBusinessError: businessErrorFactory.build(),
+			getBusinessError: businessErrorFactory.build({ message: undefined }),
 			...getters,
 		});
 
@@ -90,6 +90,7 @@ describe("ExternalToolConfiguration", () => {
 			routerPush,
 			toolTemplate,
 			loadedSchoolExternalTool,
+			notifierModule,
 		};
 	};
 
@@ -272,15 +273,25 @@ describe("ExternalToolConfiguration", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({ message: undefined }),
-				});
+				const { wrapper, routerPush } = await setup();
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+				});
+			});
+
+			it("should display a notification when created", async () => {
+				const { wrapper, notifierModule } = await setup();
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "components.administration.externalToolsSection.notification.created",
+					status: "success",
 				});
 			});
 
@@ -317,15 +328,35 @@ describe("ExternalToolConfiguration", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({ message: undefined }),
-				});
+				const { wrapper, routerPush } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+				});
+			});
+
+			it("should display a notification when updated", async () => {
+				const { wrapper, notifierModule } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "components.administration.externalToolsSection.notification.updated",
+					status: "success",
 				});
 			});
 

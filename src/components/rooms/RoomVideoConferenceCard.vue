@@ -1,7 +1,7 @@
 <template>
 	<room-base-card
 		:title="t('pages.videoConference.title')"
-		:logo-url="logo"
+		:logo-url="logoUrl"
 		test-id="vc-card"
 		@click="onClick"
 	>
@@ -77,7 +77,7 @@ export default defineComponent({
 			emit("click");
 		};
 
-		const logo: ComputedRef<any> = computed(() => {
+		const logoUrl: ComputedRef<string> = computed(() => {
 			if (!props.hasPermission) {
 				return require("@/assets/img/bbb/no_permission.png");
 			} else if (props.isRunning) {
@@ -91,7 +91,7 @@ export default defineComponent({
 			t,
 			onClick,
 			mdiReload,
-			logo,
+			logoUrl,
 			refreshVideoConferenceStatus,
 		};
 	},

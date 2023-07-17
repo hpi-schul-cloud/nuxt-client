@@ -3,6 +3,7 @@
 		:title="tool.name"
 		:logo-url="tool.logoUrl"
 		:open-in-new-tab="tool.openInNewTab"
+		test-id="tool-card"
 		@click="handleClick"
 	>
 		<template v-slot:under-title>
@@ -63,7 +64,8 @@ export default defineComponent({
 			emit("click", props.tool);
 		};
 
-		/* const handleEdit = () => {
+		/* TODO N21-905
+		const handleEdit = () => {
 			emit("edit", props.tool);
 		}; */
 
@@ -72,7 +74,8 @@ export default defineComponent({
 		};
 
 		const menuItems = [
-			/* {
+			/* TODO N21-905
+			{
 				icon: mdiPencilOutline,
 				action: handleEdit,
 				name: t("common.actions.edit"),

@@ -90,7 +90,7 @@ describe("RoomBaseCard", () => {
 			};
 		};
 
-		it("should not display a title", async () => {
+		it("should display a title", async () => {
 			const { wrapper, title } = setup();
 
 			const titleTag = wrapper.find("h5");
