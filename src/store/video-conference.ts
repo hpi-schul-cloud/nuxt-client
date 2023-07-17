@@ -33,7 +33,7 @@ export default class VideoConferenceModule extends VuexModule {
 		options: {
 			everyAttendeeJoinsMuted: false,
 			everybodyJoinsAsModerator: false,
-			moderatorMustApproveJoinRequests: false,
+			moderatorMustApproveJoinRequests: true,
 		},
 	};
 	private loading = false;

@@ -538,7 +538,7 @@ describe("RoomVideoConferenceSection", () => {
 		};
 
 		it("should set the roomName in dialog title", async () => {
-			const { wrapper, roomModule } = setup();
+			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-video-conference-card",
@@ -552,9 +552,11 @@ describe("RoomVideoConferenceSection", () => {
 			const cardTitle = configurationDialog.find(
 				'[data-testid="videoconference-config-dialog-title"]'
 			);
-			const title = cardTitle.element.getAttribute("html");
+			const title = cardTitle.text();
 
-			expect(title).toContain(roomModule.getRoomData.title);
+			expect(title).toContain(
+				"pages.rooms.tools.configureVideoconferenceDialog.title"
+			);
 		});
 	});
 

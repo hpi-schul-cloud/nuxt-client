@@ -17,7 +17,7 @@
 			@dialog-closed="onCloseErrorDialog"
 		>
 			<h2 slot="title" class="text-h4 my-2 text-break-word">
-				{{ $t("error.generic") }}
+				{{ t("error.generic") }}
 			</h2>
 		</v-custom-dialog>
 
@@ -28,29 +28,24 @@
 		>
 			<v-card :ripple="false">
 				<v-card-title>
-					<RenderHTML
+					<h2
 						class="text-h4 my-2"
 						data-testId="videoconference-config-dialog-title"
-						:html="
-							$t('pages.rooms.tools.configureVideoconferenceDialog.title', {
+					>
+						{{
+							t("pages.rooms.tools.configureVideoconferenceDialog.title", {
 								roomName: roomName,
-							}).toString()
-						"
-						component="h2"
-					/>
-					<h2 class="text-h4 my-2"></h2>
+							})
+						}}
+					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<div class="d-flex justify-space-between">
-						<RenderHTML
-							class="text-md mt-1 mr-4"
-							:html="
-								$t(
-									'pages.rooms.tools.configureVideoconferenceDialog.text.mute'
-								).toString()
-							"
-							component="p"
-						/>
+						<p class="text-md mt-1 mr-4">
+							{{
+								t("pages.rooms.tools.configureVideoconferenceDialog.text.mute")
+							}}
+						</p>
 						<v-switch
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testId="every-attendee-joins-muted"
@@ -60,15 +55,13 @@
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
-						<RenderHTML
-							class="text-md mt-1 mr-4"
-							:html="
-								$t(
-									'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
-								).toString()
-							"
-							component="p"
-						/>
+						<p class="text-md mt-1 mr-4">
+							{{
+								t(
+									"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom"
+								)
+							}}
+						</p>
 						<v-switch
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testId="moderator-must-approve-join-requests"
@@ -78,15 +71,13 @@
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
-						<RenderHTML
-							class="text-md mt-1 mr-4"
-							:html="
-								$t(
-									'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
-								).toString()
-							"
-							component="p"
-						/>
+						<p class="text-md mt-1 mr-4">
+							{{
+								t(
+									"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission"
+								)
+							}}
+						</p>
 						<v-switch
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testId="everybody-joins-as-moderator"
@@ -139,6 +130,7 @@ import {
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE_KEY,
 	ROOM_MODULE_KEY,
+	I18N_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -149,12 +141,12 @@ import {
 	Ref,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import RoomModule from "@/store/room";
+import VueI18n from "vue-i18n";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
-	components: { RenderHTML, RoomVideoConferenceCard, VCustomDialog },
+	components: { RoomVideoConferenceCard, VCustomDialog },
 	props: {
 		roomId: {
 			type: String,
@@ -162,13 +154,17 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
-		const roomData = roomModule.getRoomData;
-		const roomName = computed(() => roomData.title ?? "");
+
+		const roomName = computed(() => roomModule.getRoomData.title ?? "");
+
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
@@ -203,7 +199,12 @@ export default defineComponent({
 
 		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-		const videoConferenceOptions: Ref<VideoConferenceOptions> = ref({
+		const videoConferenceOptions: ComputedRef<VideoConferenceOptions> =
+			computed(() => {
+				return videoConferenceModule.getVideoConferenceInfo.options;
+			});
+
+		ref({
 			everyAttendeeJoinsMuted: false,
 			moderatorMustApproveJoinRequests: true,
 			everybodyJoinsAsModerator: false,
@@ -258,6 +259,7 @@ export default defineComponent({
 				scopeId: props.roomId,
 				videoConferenceOptions: videoConferenceOptions.value,
 			});
+
 			await joinVideoConference();
 		};
 
@@ -282,6 +284,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
