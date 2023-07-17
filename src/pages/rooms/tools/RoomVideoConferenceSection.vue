@@ -204,12 +204,6 @@ export default defineComponent({
 				return videoConferenceModule.getVideoConferenceInfo.options;
 			});
 
-		ref({
-			everyAttendeeJoinsMuted: false,
-			moderatorMustApproveJoinRequests: true,
-			everybodyJoinsAsModerator: false,
-		});
-
 		onMounted(async () => {
 			await videoConferenceModule.fetchVideoConferenceInfo({
 				scope: VideoConferenceScope.Course,
