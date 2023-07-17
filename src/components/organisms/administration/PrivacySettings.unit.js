@@ -262,9 +262,6 @@ describe("PrivacySettings", () => {
 					}),
 					propsData: Object.assign(generateProps(), {
 						permissions: {
-							teacher: {
-								STUDENT_LIST: false,
-							},
 							student: {
 								LERNSTORE_VIEW: true,
 							},
@@ -289,9 +286,6 @@ describe("PrivacySettings", () => {
 					}),
 					propsData: Object.assign(generateProps(), {
 						permissions: {
-							teacher: {
-								STUDENT_LIST: true,
-							},
 							student: {
 								LERNSTORE_VIEW: false,
 							},
