@@ -84,7 +84,7 @@ describe("FileContentElement", () => {
 				};
 			};
 
-			describe("when component is not in edit mode", () => {
+			describe("when component is in view mode", () => {
 				it("should be found in dom", () => {
 					const { wrapper } = setup();
 
@@ -337,7 +337,7 @@ describe("FileContentElement", () => {
 		};
 
 		describe("when no virus is detected", () => {
-			describe("when component is not in edit mode", () => {
+			describe("when component is in view mode", () => {
 				it("should be found in dom", () => {
 					const { wrapper } = setup();
 
@@ -757,7 +757,7 @@ describe("FileContentElement", () => {
 		});
 
 		describe("when a virus is detected", () => {
-			describe("when component is not in edit mode", () => {
+			describe("when component is in view mode", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
