@@ -17,12 +17,12 @@
 				role="menu"
 				@click.native="sendEvent('expandMenu')"
 			>
-				<v-icon>{{ mdiMenu }}</v-icon>
+				<v-icon>$mdiMenu</v-icon>
 			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
-					:icon="mdiAlert"
+					icon="$mdiAlert"
 					:title="$t('global.topbar.actions.alerts')"
 					:aria-label="$t('global.topbar.actions.alerts')"
 					:color="statusAlertColor"
@@ -41,11 +41,11 @@
 					data-test-id="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
-					<v-icon>{{ mdiArrowExpand }}</v-icon>
+					<v-icon>$mdiArrowExpand</v-icon>
 				</v-btn>
 				<popup-icon
 					class="item"
-					:icon="mdiQrcode"
+					icon="$mdiQrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
 					data-test-id="qr-code-btn"
@@ -54,7 +54,7 @@
 				</popup-icon>
 				<popup-icon
 					class="item"
-					:icon="mdiHelpCircleOutline"
+					icon="$mdiHelpCircleOutline"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
 					data-test-id="help-btn"
@@ -110,7 +110,7 @@
 			class="fullscreen-button-active"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<v-icon>{{ mdiArrowCollapse }}</v-icon>
+			<v-icon>$mdiArrowCollapse</v-icon>
 		</v-btn>
 	</div>
 </template>
@@ -136,14 +136,6 @@ import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
 import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
 import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
-import {
-	mdiArrowCollapse,
-	mdiArrowExpand,
-	mdiMenu,
-	mdiHelpCircleOutline,
-	mdiQrcode,
-	mdiAlert,
-} from "@mdi/js";
 
 export default defineComponent({
 	components: {
@@ -218,12 +210,6 @@ export default defineComponent({
 		});
 
 		return {
-			mdiArrowCollapse,
-			mdiArrowExpand,
-			mdiMenu,
-			mdiHelpCircleOutline,
-			mdiQrcode,
-			mdiAlert,
 			sendEvent,
 			role,
 			statusAlerts,

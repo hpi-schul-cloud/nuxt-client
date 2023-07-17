@@ -17,7 +17,7 @@ describe("@/components/topbar/PopupIcon", () => {
 			}),
 			propsData: testProps,
 		});
-		expect(wrapper.find(".v-icon").exists()).toBe(true);
+		expect(wrapper.find(".popup .v-icon").exists()).toBe(true);
 	});
 
 	it("it pops up when it is clicked", async () => {
