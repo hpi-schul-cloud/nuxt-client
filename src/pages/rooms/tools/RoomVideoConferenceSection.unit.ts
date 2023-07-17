@@ -14,6 +14,7 @@ import Vue from "vue";
 import { VideoConferenceScope } from "@/serverApi/v3";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomModule from "@/store/room";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
 
 describe("RoomVideoConferenceSection", () => {
 	const getWrapper = (
@@ -61,9 +62,7 @@ describe("RoomVideoConferenceSection", () => {
 					...props,
 				},
 				provide: {
-					[I18N_KEY.valueOf()]: {
-						tc: (key: string): string => key,
-					},
+					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
@@ -555,7 +554,7 @@ describe("RoomVideoConferenceSection", () => {
 			const title = cardTitle.text();
 
 			expect(title).toContain(
-				"pages.rooms.tools.configureVideoconferenceDialog.title"
+				'pages.rooms.tools.configureVideoconferenceDialog.title {"roomName":"roomName"}'
 			);
 		});
 	});
