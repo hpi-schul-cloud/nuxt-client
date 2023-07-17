@@ -21,7 +21,7 @@
 			@update:vmodel="$emit('input', { ...value, userPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="account_tree" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<p class="path-hint">
@@ -39,7 +39,7 @@
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="user" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -54,7 +54,7 @@
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="user" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -69,7 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="email" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiEmailOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -85,7 +85,7 @@
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="uid" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiCardAccountDetailsOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -101,7 +101,7 @@
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="uuid" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiAccountBoxOutline</v-icon>
 			</template>
 		</base-input>
 	</div>

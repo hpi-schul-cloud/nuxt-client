@@ -17,6 +17,8 @@ import {
 	VideoConferenceState,
 } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
+import { createMock } from "@golevelup/ts-jest";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 
 describe("VideoConferenceModule", () => {
 	let module: VideoConferenceModule;
@@ -30,18 +32,21 @@ describe("VideoConferenceModule", () => {
 	});
 
 	const mockApi = () => {
-		const apiMock = {
-			videoConferenceControllerInfo: jest.fn(),
-			videoConferenceControllerJoin: jest.fn(),
-			videoConferenceControllerStart: jest.fn(),
-		};
+		const videoconferenceApi = createMock<VideoConferenceApiInterface>();
+		videoconferenceApi.videoConferenceControllerInfo.mockResolvedValue(
+			mockApiResponse({
+				data: videoConferenceInfoResponseFactory.build(),
+			})
+		);
 
 		jest
 			.spyOn(serverApi, "VideoConferenceApiFactory")
-			.mockReturnValue(apiMock as unknown as VideoConferenceApiInterface);
+			.mockReturnValue(
+				videoconferenceApi as unknown as VideoConferenceApiInterface
+			);
 
 		return {
-			apiMock,
+			videoconferenceApi,
 		};
 	};
 
@@ -133,7 +138,7 @@ describe("VideoConferenceModule", () => {
 	describe("fetchVideoConferenceInfo", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const response = videoConferenceInfoResponseFactory.build({
 					state: VideoConferenceStateResponse.Running,
@@ -142,9 +147,9 @@ describe("VideoConferenceModule", () => {
 					state: VideoConferenceState.RUNNING,
 				});
 
-				apiMock.videoConferenceControllerInfo.mockResolvedValue({
-					data: response,
-				});
+				videoconferenceApi.videoConferenceControllerInfo.mockResolvedValue(
+					mockApiResponse({ data: response })
+				);
 
 				return {
 					state,
@@ -165,11 +170,13 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const error = new AxiosError();
 
-				apiMock.videoConferenceControllerInfo.mockRejectedValue(error);
+				videoconferenceApi.videoConferenceControllerInfo.mockRejectedValue(
+					error
+				);
 
 				return {
 					error,
@@ -192,16 +199,16 @@ describe("VideoConferenceModule", () => {
 	describe("joinVideoConference", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const mockResponse: VideoConferenceJoinResponse =
 					videoConferenceJoinResponseFactory.build({
 						url: "VideoConferenceUrl",
 					});
 
-				apiMock.videoConferenceControllerJoin.mockResolvedValue({
-					data: mockResponse,
-				});
+				videoconferenceApi.videoConferenceControllerJoin.mockResolvedValue(
+					mockApiResponse({ data: mockResponse })
+				);
 
 				return {
 					mockResponse,
@@ -223,11 +230,13 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const error = new AxiosError();
 
-				apiMock.videoConferenceControllerJoin.mockRejectedValue(error);
+				videoconferenceApi.videoConferenceControllerJoin.mockRejectedValue(
+					error
+				);
 
 				return {
 					error,
@@ -250,7 +259,7 @@ describe("VideoConferenceModule", () => {
 	describe("startVideoConference", () => {
 		describe("when the api is called", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const videoConferenceOptions: VideoConferenceOptions = {
 					everyAttendeeJoinsMuted: false,
@@ -258,16 +267,16 @@ describe("VideoConferenceModule", () => {
 					everybodyJoinsAsModerator: false,
 				};
 
-				apiMock.videoConferenceControllerStart.mockImplementation();
+				videoconferenceApi.videoConferenceControllerStart.mockImplementation();
 
 				return {
-					apiMock,
+					videoconferenceApi,
 					videoConferenceOptions,
 				};
 			};
 
 			it("should call apiMock.videoConferenceControllerStart", async () => {
-				const { videoConferenceOptions, apiMock } = setup();
+				const { videoConferenceOptions, videoconferenceApi } = setup();
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
@@ -275,7 +284,9 @@ describe("VideoConferenceModule", () => {
 					videoConferenceOptions,
 				});
 
-				expect(apiMock.videoConferenceControllerStart).toHaveBeenCalledWith(
+				expect(
+					videoconferenceApi.videoConferenceControllerStart
+				).toHaveBeenCalledWith(
 					VideoConferenceScope.Course,
 					"scopeId",
 					videoConferenceOptions
@@ -285,7 +296,7 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { apiMock } = mockApi();
+				const { videoconferenceApi } = mockApi();
 
 				const error = new AxiosError();
 
@@ -295,7 +306,9 @@ describe("VideoConferenceModule", () => {
 					everybodyJoinsAsModerator: false,
 				};
 
-				apiMock.videoConferenceControllerStart.mockRejectedValue(error);
+				videoconferenceApi.videoConferenceControllerStart.mockRejectedValue(
+					error
+				);
 
 				return {
 					error,

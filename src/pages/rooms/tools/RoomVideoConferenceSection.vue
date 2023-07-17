@@ -126,7 +126,7 @@ import {
 } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE_KEY,
 	ROOM_MODULE_KEY,

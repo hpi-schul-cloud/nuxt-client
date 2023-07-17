@@ -56,7 +56,7 @@ import {
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
-	component: { RenderHTML },
+	components: { RenderHTML },
 	props: {
 		targetSystem: {
 			type: String,

@@ -13,20 +13,33 @@ const testProps = {
 };
 
 describe("@/components/molecules/NotificationModal", () => {
-	it("success case", async () => {
-		const wrapper = mount(NotificationModal, {
-			propsData: { ...testProps, isSuccess: true },
-			stubs: {
-				BaseIcon: true,
+	let wrapper;
+
+	const setup = (isSuccess) => {
+		document.body.setAttribute("data-app", "true");
+		wrapper = mount(NotificationModal, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				...testProps,
+				isSuccess,
 			},
 		});
+	};
+	it("success case", async () => {
+		setup(true);
+
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.successMsg);
-		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
-			"check_circle"
-		);
+		expect(
+			wrapper
+				.find(".material-icon")
+				.element.innerHTML.includes("$mdiCheckCircle")
+		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
 				"background-color: var(--v-success-base)"
@@ -35,19 +48,17 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("error case", async () => {
-		const wrapper = mount(NotificationModal, {
-			propsData: { ...testProps, isSuccess: false },
-			stubs: {
-				BaseIcon: true,
-			},
-		});
+		setup(false);
+
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.errorMsg);
-		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
-			"error"
-		);
+		expect(
+			wrapper
+				.find(".material-icon")
+				.element.innerHTML.includes("$mdiAlertCircle")
+		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
 				"background-color: var(--v-error-base)"
@@ -56,12 +67,8 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("executes close action after close", async () => {
-		const wrapper = mount(NotificationModal, {
-			propsData: { ...testProps, isSuccess: false },
-			stubs: {
-				BaseIcon: true,
-			},
-		});
+		setup(false);
+
 		const button = wrapper.find(".btn-confirm");
 		button.trigger("click");
 		await wrapper.vm.$nextTick();

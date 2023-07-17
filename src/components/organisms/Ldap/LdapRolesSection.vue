@@ -51,11 +51,7 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					icon="user_member"
-					:fill="ldapActivatedColor"
-				/>
+				<v-icon :color="ldapActivatedColor">$mdiAccountOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -73,11 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					icon="students_outline"
-					:fill="fillColor"
-				/>
+				<v-icon :color="fillColor">$mdiAccountSchoolOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -94,7 +86,7 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		>
 			<template #icon>
-				<base-icon source="custom" icon="teacher" :fill="fillColor" />
+				<v-icon :color="fillColor" class="custom-icon">$teacher</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -109,11 +101,7 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		>
 			<template #icon>
-				<base-icon
-					source="material"
-					icon="admin_panel_settings"
-					:fill="fillColor"
-				/>
+				<v-icon :color="fillColor">$mdiShieldAccountVariantOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -126,7 +114,7 @@
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="user_ignore" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiAccountOffOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
