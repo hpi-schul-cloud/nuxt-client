@@ -26,93 +26,120 @@ describe("helpers", () => {
 	});
 
 	describe("delayWithAbort", () => {
-		test("should not resolve until timeout has passed", async () => {
-			const abortController = new AbortController();
-			let signal = abortController.signal;
-			signal = {
-				...signal,
-				throwIfAborted: jest.fn(),
-				addEventListener: jest.fn(),
-				removeEventListener: jest.fn(),
-			};
+		describe("when function is called without signal argument", () => {
+			test("should not resolve until timeout has passed", async () => {
+				jest.useFakeTimers();
+				const thenSpy = jest.fn();
+				const catchSpy = jest.fn();
+				delayWithAbort(100).then(thenSpy).catch(catchSpy);
 
-			jest.useFakeTimers();
-			const thenSpy = jest.fn();
-			const catchSpy = jest.fn();
-			delayWithAbort(100, { signal: signal }).then(thenSpy).catch(catchSpy);
+				// not resolved after half time
+				jest.advanceTimersByTime(50);
+				await Promise.resolve();
+				expect(thenSpy).not.toHaveBeenCalled();
+				expect(catchSpy).not.toHaveBeenCalled();
 
-			// not resolved after half time
-			jest.advanceTimersByTime(50);
-			await Promise.resolve();
-			expect(thenSpy).not.toHaveBeenCalled();
-			expect(catchSpy).not.toHaveBeenCalled();
+				// resolved after full time
+				jest.advanceTimersByTime(50);
+				await Promise.resolve();
+				expect(thenSpy).toHaveBeenCalled();
+				expect(catchSpy).not.toHaveBeenCalled();
+			});
 
-			// resolved after full time
-			jest.advanceTimersByTime(50);
-			await Promise.resolve();
-			expect(thenSpy).toHaveBeenCalled();
-			expect(catchSpy).not.toHaveBeenCalled();
+			it("should return a promise", () => {
+				expect(delayWithAbort(1)).toBeInstanceOf(Promise);
+			});
 		});
 
-		it("should return a promise", () => {
-			const abortController = new AbortController();
-			let signal = abortController.signal;
-			signal = {
-				...signal,
-				throwIfAborted: jest.fn(),
-				addEventListener: jest.fn(),
-				removeEventListener: jest.fn(),
-			};
+		describe("when function is called with signal argument", () => {
+			test("should not resolve until timeout has passed", async () => {
+				const abortController = new AbortController();
+				let signal = abortController.signal;
+				signal = {
+					...signal,
+					throwIfAborted: jest.fn(),
+					addEventListener: jest.fn(),
+					removeEventListener: jest.fn(),
+				};
 
-			expect(delayWithAbort(1, { signal: signal })).toBeInstanceOf(Promise);
-		});
+				jest.useFakeTimers();
+				const thenSpy = jest.fn();
+				const catchSpy = jest.fn();
+				delayWithAbort(100, { signal: signal }).then(thenSpy).catch(catchSpy);
 
-		test("should throw an error when aborted", async () => {
-			let abortController = new AbortController();
-			abortController = { ...abortController, abort: () => signal.abort() };
+				// not resolved after half time
+				jest.advanceTimersByTime(50);
+				await Promise.resolve();
+				expect(thenSpy).not.toHaveBeenCalled();
+				expect(catchSpy).not.toHaveBeenCalled();
 
-			let signal = abortController.signal;
-			let _listener = undefined;
-			const addEventListenerMock = jest
-				.fn()
-				.mockImplementation((type, listener) => {
-					_listener = listener;
-				});
-			const removeEventListenerMock = jest
-				.fn()
-				.mockImplementation((type, listener) => {
-					_listener = undefined;
-				});
-			const abortMock = () => {
-				_listener();
-			};
-			signal = {
-				...signal,
-				throwIfAborted: jest.fn(),
-				addEventListener: addEventListenerMock,
-				removeEventListener: removeEventListenerMock,
-				abort: abortMock,
-			};
+				// resolved after full time
+				jest.advanceTimersByTime(50);
+				await Promise.resolve();
+				expect(thenSpy).toHaveBeenCalled();
+				expect(catchSpy).not.toHaveBeenCalled();
+			});
 
-			jest.useFakeTimers();
-			const thenSpy = jest.fn();
-			const catchSpy = jest.fn();
-			delayWithAbort(100, { signal: signal }).then(thenSpy).catch(catchSpy);
+			it("should return a promise", () => {
+				const abortController = new AbortController();
+				let signal = abortController.signal;
+				signal = {
+					...signal,
+					throwIfAborted: jest.fn(),
+					addEventListener: jest.fn(),
+					removeEventListener: jest.fn(),
+				};
 
-			// not resolved after half time
-			jest.advanceTimersByTime(50);
-			await Promise.resolve();
-			await jest.runAllTicks();
-			expect(thenSpy).not.toHaveBeenCalled();
-			expect(catchSpy).not.toHaveBeenCalled();
+				expect(delayWithAbort(1, { signal: signal })).toBeInstanceOf(Promise);
+			});
 
-			// abort the delay function
-			abortController.abort();
-			await Promise.resolve();
-			await jest.runAllTicks();
+			test("should throw an error when aborted", async () => {
+				let abortController = new AbortController();
+				abortController = { ...abortController, abort: () => signal.abort() };
 
-			expect(thenSpy).not.toHaveBeenCalled();
-			expect(catchSpy).toHaveBeenCalled();
+				let signal = abortController.signal;
+				let _listener = undefined;
+				const addEventListenerMock = jest
+					.fn()
+					.mockImplementation((type, listener) => {
+						_listener = listener;
+					});
+				const removeEventListenerMock = jest
+					.fn()
+					.mockImplementation((type, listener) => {
+						_listener = undefined;
+					});
+				const abortMock = () => {
+					_listener();
+				};
+				signal = {
+					...signal,
+					throwIfAborted: jest.fn(),
+					addEventListener: addEventListenerMock,
+					removeEventListener: removeEventListenerMock,
+					abort: abortMock,
+				};
+
+				jest.useFakeTimers();
+				const thenSpy = jest.fn();
+				const catchSpy = jest.fn();
+				delayWithAbort(100, { signal: signal }).then(thenSpy).catch(catchSpy);
+
+				// not resolved after half time
+				jest.advanceTimersByTime(50);
+				await Promise.resolve();
+				await jest.runAllTicks();
+				expect(thenSpy).not.toHaveBeenCalled();
+				expect(catchSpy).not.toHaveBeenCalled();
+
+				// abort the delay function
+				abortController.abort();
+				await Promise.resolve();
+				await jest.runAllTicks();
+
+				expect(thenSpy).not.toHaveBeenCalled();
+				expect(catchSpy).toHaveBeenCalled();
+			});
 		});
 	});
 });
