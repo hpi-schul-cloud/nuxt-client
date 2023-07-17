@@ -22,7 +22,7 @@
 		>
 			<h2 slot="title" class="text-h4 my-2">
 				{{
-					$t("pages.rooms.tools.outdatedDialog.title", {
+					t("pages.rooms.tools.outdatedDialog.title", {
 						toolName: selectedItemName,
 					})
 				}}
@@ -44,7 +44,7 @@
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
-						{{ $t("pages.rooms.tools.deleteDialog.title") }}
+						{{ t("pages.rooms.tools.deleteDialog.title") }}
 					</h2>
 				</v-card-title>
 				<v-card-text class="text--primary">
@@ -66,7 +66,7 @@
 						text
 						@click="onCloseDeleteDialog"
 					>
-						{{ $t("common.actions.cancel") }}
+						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						data-testId="dialog-confirm"
@@ -75,7 +75,7 @@
 						depressed
 						@click="onDeleteTool"
 					>
-						{{ $t("common.actions.confirm") }}
+						{{ t("common.actions.confirm") }}
 					</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -100,7 +100,6 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
-	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -112,7 +111,6 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomModule from "@/store/room";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -136,7 +134,6 @@ export default defineComponent({
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>

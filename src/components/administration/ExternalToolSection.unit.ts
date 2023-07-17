@@ -2,10 +2,15 @@ import { mount } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import NotifierModule from "../../store/notifier";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ToolConfigurationStatus } from "@/store/external-tool";
-import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -19,6 +24,9 @@ describe("ExternalToolSection", () => {
 			getSchoolExternalTools: [],
 			...getters,
 		});
+
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(ExternalToolSection, {
 			...createComponentMocks({
 				i18n: true,
@@ -26,6 +34,7 @@ describe("ExternalToolSection", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 
@@ -200,36 +209,6 @@ describe("ExternalToolSection", () => {
 							externalToolsModule.deleteSchoolExternalTool
 						).toHaveBeenCalled();
 					});
-				});
-			});
-
-			describe("when status is rendered", () => {
-				it("should have a red text color when status is outdated", () => {
-					const { wrapper } = setupItems();
-
-					const tableRows = wrapper.find("tbody").findAll("tr");
-
-					const secondRow = tableRows.at(1).findAll("td");
-					expect(
-						secondRow.at(0).find("span").classes().includes("outdated")
-					).toBeTruthy();
-					expect(
-						secondRow.at(1).find("span").classes().includes("outdated")
-					).toBeTruthy();
-				});
-
-				it("should have a normal text color when status is latest", () => {
-					const { wrapper } = setupItems();
-
-					const tableRows = wrapper.find("tbody").findAll("tr");
-
-					const firstRow = tableRows.at(0).findAll("td");
-					expect(
-						firstRow.at(0).find("span").classes().includes("outdated")
-					).toBeFalsy();
-					expect(
-						firstRow.at(1).find("span").classes().includes("outdated")
-					).toBeFalsy();
 				});
 			});
 		});

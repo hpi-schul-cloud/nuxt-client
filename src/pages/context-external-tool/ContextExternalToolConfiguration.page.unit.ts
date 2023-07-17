@@ -11,6 +11,7 @@ import {
 	toolConfigurationFactory,
 	toolConfigurationTemplateFactory,
 } from "@@/tests/test-utils/factory";
+import NotifierModule from "../../store/notifier";
 import ContextExternalToolConfiguration from "./ContextExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
@@ -21,6 +22,7 @@ import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 
 describe("ContextExternalToolConfiguration", () => {
@@ -41,6 +43,7 @@ describe("ContextExternalToolConfiguration", () => {
 		propsData: { contextId: string; contextType: ToolContextType }
 	) => {
 		document.body.setAttribute("data-app", "true");
+
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory.build()],
 			getContextExternalToolTemplates: [
@@ -49,11 +52,13 @@ describe("ContextExternalToolConfiguration", () => {
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
+
 		contextExternalToolsModule = createModuleMocks(ContextExternalToolsModule, {
 			getExternalToolDisplayDataList: [externalToolDisplayDataFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
 		});
+
 		roomsModule = createModuleMocks(RoomsModule, {
 			getRoomsData: [
 				{
@@ -66,6 +71,8 @@ describe("ContextExternalToolConfiguration", () => {
 				},
 			],
 		});
+
+		const notifierModule = createModuleMocks(NotifierModule);
 
 		const routerPush = jest.fn();
 		const $router = {
@@ -84,6 +91,7 @@ describe("ContextExternalToolConfiguration", () => {
 						contextExternalToolsModule,
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					roomsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: {
 					...propsData,

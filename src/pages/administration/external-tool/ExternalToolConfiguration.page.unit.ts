@@ -14,9 +14,14 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
+import NotifierModule from "../../../store/notifier";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 
 describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -37,7 +42,9 @@ describe("ExternalToolConfiguration", () => {
 			getToolConfigurations: [toolConfigurationFactory.build()],
 			getBusinessError: businessErrorFactory.build(),
 			...getters,
-		}) as jest.Mocked<ExternalToolsModule>;
+		});
+
+		const notifierModule = createModuleMocks(NotifierModule);
 
 		const routerPush = jest.fn();
 		const $router = {
@@ -65,6 +72,7 @@ describe("ExternalToolConfiguration", () => {
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: {
 					...propsData,
