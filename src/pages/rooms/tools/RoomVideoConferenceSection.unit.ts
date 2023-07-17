@@ -513,69 +513,6 @@ describe("RoomVideoConferenceSection", () => {
 		});
 	});
 
-	describe("when clicking on switch button of videoconference configuration dialog", () => {
-		const setup = () => {
-			const { wrapper, roomModule } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				["start_meeting"],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-				roomModule,
-			};
-		};
-
-		it("should trigger switch for everyAttendeeJoinsMuted", async () => {
-			const { wrapper } = setup();
-
-			const switchComponent = wrapper.find(
-				'[data-testId="everyAttendeeJoinsMuted"]'
-			);
-
-			await switchComponent.vm.$emit("click");
-
-			expect(switchComponent.emitted()).toBeTruthy();
-		});
-
-		it("should trigger switch for moderatorMustApproveJoinRequests", async () => {
-			const { wrapper } = setup();
-
-			const switchComponent = wrapper.find(
-				'[data-testId="moderatorMustApproveJoinRequests"]'
-			);
-
-			await switchComponent.vm.$emit("click");
-
-			expect(switchComponent.emitted()).toBeTruthy();
-		});
-
-		it("should trigger switch for everybodyJoinsAsModerator", async () => {
-			const { wrapper } = setup();
-
-			const switchComponent = wrapper.find(
-				'[data-testId="everybodyJoinsAsModerator"]'
-			);
-
-			await switchComponent.vm.$emit("click");
-
-			expect(switchComponent.emitted()).toBeTruthy();
-		});
-	});
 	describe("when open videoconference configuration dialog", () => {
 		const setup = () => {
 			const { wrapper, videoConferenceModule, roomModule } = getWrapper(
@@ -664,6 +601,50 @@ describe("RoomVideoConferenceSection", () => {
 			};
 		};
 
+		it("should call start with all options true ", async () => {
+			const { wrapper, videoConferenceModule, params } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+			await card.vm.$emit("click");
+
+			const everyAttendeeJoinsMuted = wrapper.find(
+				'[data-testId="every-attendee-joins-muted"]'
+			);
+
+			const moderatorMustApproveJoinRequests = wrapper.find(
+				'[data-testId="moderator-must-approve-join-requests"]'
+			);
+
+			const everybodyJoinsAsModerator = wrapper.find(
+				'[data-testId="everybody-joins-as-moderator"]'
+			);
+
+			await everyAttendeeJoinsMuted.vm.$emit("change", true);
+			await moderatorMustApproveJoinRequests.vm.$emit("change", true);
+			await everybodyJoinsAsModerator.vm.$emit("change", true);
+
+			const createBtn = wrapper.find('[data-testId="dialog-create"]');
+			await createBtn.vm.$emit("click");
+
+			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+				videoConferenceOptions: {
+					everyAttendeeJoinsMuted: true,
+					moderatorMustApproveJoinRequests: true,
+					everybodyJoinsAsModerator: true,
+				},
+			});
+			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+				scope: params.scope,
+				scopeId: params.scopeId,
+			});
+
+			// TODO: check if dialog still exits
+		});
+
 		it("should call start and join videoconference function of store", async () => {
 			const { wrapper, videoConferenceModule, params } = setup();
 
@@ -681,9 +662,42 @@ describe("RoomVideoConferenceSection", () => {
 				videoConferenceOptions:
 					videoConferenceModule.getVideoConferenceInfo.options,
 			});
-			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
+		});
+		it("should call start with all options false ", async () => {
+			const { wrapper, videoConferenceModule, params } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-video-conference-card",
+			});
+			await card.vm.$emit("click");
+
+			const everyAttendeeJoinsMuted = wrapper.find(
+				'[data-testId="every-attendee-joins-muted"]'
+			);
+
+			const moderatorMustApproveJoinRequests = wrapper.find(
+				'[data-testId="moderator-must-approve-join-requests"]'
+			);
+
+			const everybodyJoinsAsModerator = wrapper.find(
+				'[data-testId="everybody-joins-as-moderator"]'
+			);
+
+			await everyAttendeeJoinsMuted.vm.$emit("change", false);
+			await moderatorMustApproveJoinRequests.vm.$emit("change", false);
+			await everybodyJoinsAsModerator.vm.$emit("change", false);
+
+			const createBtn = wrapper.find('[data-testId="dialog-create"]');
+			await createBtn.vm.$emit("click");
+
+			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
 				scopeId: params.scopeId,
+				videoConferenceOptions: {
+					everyAttendeeJoinsMuted: false,
+					moderatorMustApproveJoinRequests: false,
+					everybodyJoinsAsModerator: false,
+				},
 			});
 
 			// TODO: check if dialog still exits
