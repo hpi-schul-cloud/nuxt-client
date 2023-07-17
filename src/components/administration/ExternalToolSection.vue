@@ -98,6 +98,7 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiRefreshCircle, mdiCheckCircle } from "@mdi/js";
 import {
@@ -112,6 +113,7 @@ import VueI18n from "vue-i18n";
 import { default as VueRouter } from "vue-router";
 import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
+import NotifierModule from "@/store/notifier";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
@@ -120,11 +122,13 @@ export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
-		const router: VueRouter = useRouter();
 		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule = injectStrict(
 			EXTERNAL_TOOLS_MODULE_KEY
 		);
+		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+		const router: VueRouter = useRouter();
 
 		onMounted(async () => {
 			await externalToolsModule.loadSchoolExternalTools();
@@ -159,6 +163,14 @@ export default defineComponent({
 					itemToDelete.value.id
 				);
 			}
+
+			notifierModule.show({
+				text: t(
+					"components.administration.externalToolsSection.notification.deleted"
+				),
+				status: "success",
+			});
+
 			onCloseDeleteDialog();
 		};
 

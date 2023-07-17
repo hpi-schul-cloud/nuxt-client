@@ -82,6 +82,7 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -93,6 +94,7 @@ import {
 } from "vue";
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
+import NotifierModule from "@/store/notifier";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 export default defineComponent({
@@ -113,6 +115,7 @@ export default defineComponent({
 		const externalToolsModule: ExternalToolsModule = injectStrict(
 			EXTERNAL_TOOLS_MODULE_KEY
 		);
+		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string) => {
@@ -202,6 +205,19 @@ export default defineComponent({
 			}
 
 			if (!externalToolsModule.getBusinessError.message) {
+				const message = isInEditMode.value
+					? t(
+							"components.administration.externalToolsSection.notification.updated"
+					  )
+					: t(
+							"components.administration.externalToolsSection.notification.created"
+					  );
+
+				notifierModule.show({
+					text: message,
+					status: "success",
+				});
+
 				await router.push({ path: schoolSetting.to });
 			}
 		};
