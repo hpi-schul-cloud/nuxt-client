@@ -25,11 +25,6 @@ describe("@/components/base/BaseDialog", () => {
 		it("iconColor Prop should override actionDesign", async () => {
 			const testColor = "lime";
 			const wrapper = await mountDialog({
-				...createComponentMocks({
-					stubs: {
-						BaseIcon: { template: "<div class='mock-icon'></div>" },
-					},
-				}),
 				propsData: {
 					active: true,
 					iconColor: testColor,

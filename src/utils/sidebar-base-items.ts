@@ -1,7 +1,6 @@
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
-	source?: "material" | "custom";
 	testId: string;
 	permission?: string;
 	excludedPermission?: string;
@@ -31,14 +30,14 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
-		icon: "dashboard_outline",
+		icon: "$mdiViewGridOutline",
 		testId: "Übersicht",
 		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
 		title: "global.sidebar.courses",
 		to: "/rooms-overview",
-		icon: "course_outline",
+		icon: "$mdiSchoolOutline",
 		testId: "Course-Overview",
 		activeForUrls: [
 			"^/rooms-overview($|/.*)",
@@ -49,7 +48,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.teams",
 		href: "/teams",
-		icon: "team_outline",
+		icon: "$mdiAccountGroupOutline",
 		permission: "TEAMS_ENABLED",
 		testId: "Teams",
 		activeForUrls: ["^/teams($|/.*)"],
@@ -57,7 +56,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "task",
+		icon: "$mdiFormatListChecks",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -65,7 +64,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
-		icon: "task",
+		icon: "$mdiFormatListChecks",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
@@ -74,22 +73,20 @@ const getSidebarItems = (
 		title: "global.sidebar.files-old",
 		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
-		icon: "file_open_outline",
+		icon: "$mdiFolderOpenOutline",
 		testId: "Meine Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.filesPersonal",
-				icon: "folder_open_user_outline",
-				source: "custom",
+				icon: "$folder_open_user_outline",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
 				activeForUrls: ["^/files/my($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "folder_open_courses_outline",
-				source: "custom",
+				icon: "$folder_open_courses_outline",
 				href: "/files/courses/",
 				testId: "Kurse",
 				activeForUrls: ["^/files/courses($|/.*)"],
@@ -97,16 +94,14 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
-				icon: "folder_open_teams_outline",
-				source: "custom",
+				icon: "$folder_open_teams_outline",
 				permission: "TEAMS_ENABLED",
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
 				title: "global.sidebar.filesShared",
-				icon: "folder_open_shared_outline",
-				source: "custom",
+				icon: "$folder_open_shared_outline",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
 				activeForUrls: ["^/files/shared($|/.*)"],
@@ -117,29 +112,28 @@ const getSidebarItems = (
 		title: "global.sidebar.files",
 		permission: "COLLABORATIVE_FILES",
 		href: "/cfiles",
-		icon: "file_open_outline",
+		icon: "$mdiFolderOpenOutline",
 		testId: "Dateien",
 		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",
 		href: "/news",
-		icon: "news_outline",
+		icon: "$mdiNewspaperVariantOutline",
 		testId: "Neuigkeiten",
 		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
-		icon: "calendar_outline",
+		icon: "$mdiCalendarOutline",
 		testId: "Termine",
 		activeForUrls: ["^/calendar($|/.*)"],
 	},
 	{
 		title: "common.words.lernstore",
 		to: "/content",
-		icon: "lernstore_outline",
-		source: "custom",
+		icon: "$lernstore_outline",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
 		activeForUrls: ["^/content($|/.*)"],
@@ -147,7 +141,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.addons",
 		href: "/addons",
-		icon: "puzzle_outline",
+		icon: "$mdiPuzzleOutline",
 		permission: "ADDONS_ENABLED",
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
@@ -155,7 +149,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "setting_outline",
+		icon: "$mdiCogOutline",
 		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
@@ -163,7 +157,7 @@ const getSidebarItems = (
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "students_outline",
+				icon: "$mdiAccountSchoolOutline",
 				to: "/administration/students",
 				permission: "STUDENT_LIST",
 				testId: "Schüler:innen",
@@ -171,16 +165,14 @@ const getSidebarItems = (
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "teacher",
-				source: "custom",
+				icon: "$teacher",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "class",
-				source: "custom",
+				icon: "$class",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
@@ -190,44 +182,42 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.management",
 		href: "/administration",
-		icon: "setting_outline",
+		icon: "$mdiCogOutline",
 		permission: "ADMIN_VIEW",
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
-				icon: "students_outline",
+				icon: "$mdiAccountSchoolOutline",
 				to: "/administration/students",
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teacher",
-				icon: "teacher",
-				source: "custom",
+				icon: "$teacher",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
 				title: "global.sidebar.courses",
-				icon: "course_outline",
+				icon: "$mdiSchoolOutline",
 				href: "/administration/courses",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
 			{
 				title: "global.sidebar.classes",
-				icon: "class",
-				source: "custom",
+				icon: "$class",
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
-				icon: "team_outline",
+				icon: "$mdiAccountGroupOutline",
 				href: "/administration/teams",
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
@@ -235,8 +225,7 @@ const getSidebarItems = (
 			isNewSchoolAdminPageDefault
 				? {
 						title: "global.sidebar.school",
-						icon: "school_outline",
-						source: "custom",
+						icon: "$school_outline",
 						to: "/administration/school-settings",
 						testId: "Schule",
 						activeForUrls: [
@@ -246,8 +235,7 @@ const getSidebarItems = (
 				  }
 				: {
 						title: "global.sidebar.school",
-						icon: "school_outline",
-						source: "custom",
+						icon: "$school_outline",
 						href: "/administration/school",
 						testId: "Schule",
 						activeForUrls: [
@@ -260,7 +248,7 @@ const getSidebarItems = (
 	{
 		title: "global.sidebar.helpArea",
 		href: "/help",
-		icon: "help_area_outline",
+		icon: "$mdiHelpCircleOutline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
 	},

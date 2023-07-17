@@ -3,7 +3,6 @@
 		ref="main"
 		headline=""
 		:full-width="isLoading"
-		:aria-label="$t('pages.courses.index.courses.all')"
 		:fab-items="fabItems"
 		@fabButtonEvent="fabClick"
 	>
@@ -47,7 +46,6 @@ import ImportModal from "@/components/molecules/ImportModal.vue";
 import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 import Vue from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		DefaultWireframe,
@@ -55,10 +53,6 @@ export default Vue.extend({
 		ImportModal,
 	},
 	props: {
-		headerAriaLabel: {
-			type: String,
-			default: "",
-		},
 		hasRooms: {
 			type: Boolean,
 			required: true,
@@ -84,7 +78,7 @@ export default Vue.extend({
 					return {
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("common.actions.create"),
+						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
 						testId: "add-course-button",
 						actions: [
 							{
@@ -111,7 +105,7 @@ export default Vue.extend({
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
-					ariaLabel: this.$t("common.actions.create"),
+					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
 					testId: "add-course-button",
 				};
 			}

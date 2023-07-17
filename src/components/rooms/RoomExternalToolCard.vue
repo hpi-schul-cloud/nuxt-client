@@ -21,10 +21,10 @@
 		</template>
 		<template v-slot:right>
 			<div v-if="canEdit" class="ml-1 my-auto">
-				<more-item-menu
+				<room-dot-menu
 					:menu-items="menuItems"
-					:show="true"
 					data-testId="tool-card-menu"
+					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
 				/>
 			</div>
 		</template>
@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import MoreItemMenu from "@/components/molecules/MoreItemMenu.vue";
+import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiAlert, mdiTrashCanOutline } from "@mdi/js";
@@ -42,7 +42,7 @@ import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { RoomBaseCard, MoreItemMenu },
+	components: { RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
