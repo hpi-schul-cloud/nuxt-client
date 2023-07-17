@@ -1,10 +1,5 @@
 <template>
-	<default-wireframe
-		ref="main"
-		:full-width="true"
-		:breadcrumbs="breadcrumbs"
-		:aria-label="title"
-	>
+	<default-wireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
 		<template slot="header">
 			<h1 class="mb--md h3">
 				{{ title }}

@@ -1,13 +1,12 @@
 <template>
 	<div>
 		<room-wrapper
-			:header-aria-label="sectionAriaLabel"
 			:has-rooms="hasCurrentRooms"
 			:has-import-token="!!importToken"
 		>
 			<template slot="header">
 				<h1 class="text-h3 pt-2">
-					{{ $t("pages.courses.index.courses.active") }}
+					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
 				<div class="mb-5 header-div">
 					<div class="btn">
@@ -17,7 +16,8 @@
 							small
 							to="/rooms-list"
 							data-testid="go-to-all-courses"
-							>{{ $t("pages.courses.index.courses.all") }}
+						>
+							{{ $t("pages.rooms.index.courses.all") }}
 						</v-btn>
 					</div>
 					<div class="toggle-div">
@@ -25,7 +25,8 @@
 							v-if="isTouchDevice"
 							v-model="allowDragging"
 							class="enable-disable"
-							:label="$t('pages.courses.index.courses.arrangeCourses')"
+							:label="$t('pages.rooms.index.courses.arrangeCourses')"
+							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
 						/>
 					</div>
 				</div>
@@ -40,10 +41,9 @@
 						rounded
 						:label="$t('pages.rooms.index.search.label')"
 						:append-icon="mdiMagnify"
-						:aria-label="$t('common.labels.search')"
+						:aria-label="$t('pages.rooms.index.search.label')"
 						data-testid="search-field"
-					>
-					</v-text-field>
+					/>
 					<div
 						v-for="(row, rowIndex) in dimensions.rowCount"
 						:key="rowIndex"
@@ -61,8 +61,7 @@
 									:ref="`${rowIndex}-${colIndex}`"
 									:size="dimensions.cellWidth"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
-								></vRoomEmptyAvatar>
-
+								/>
 								<vRoomGroupAvatar
 									v-else-if="hasGroup(rowIndex, colIndex)"
 									:ref="`${rowIndex}-${colIndex}`"
@@ -77,8 +76,7 @@
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 									@dragend="onDragend"
 									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
-								>
-								</vRoomGroupAvatar>
+								/>
 								<vRoomAvatar
 									v-else
 									:ref="`${rowIndex}-${colIndex}`"
@@ -90,7 +88,7 @@
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 									@dragend="onDragend"
 									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
-								></vRoomAvatar>
+								/>
 							</template>
 							<template v-else>
 								<vRoomEmptyAvatar
@@ -98,7 +96,7 @@
 									:size="dimensions.cellWidth"
 									:show-outline="dragging"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
-								></vRoomEmptyAvatar>
+								/>
 							</template>
 						</div>
 					</div>
@@ -108,7 +106,7 @@
 					:token="importToken"
 					:courses="courses"
 					@success="onImportSuccess"
-				></import-flow>
+				/>
 			</template>
 		</room-wrapper>
 		<room-modal
@@ -135,7 +133,6 @@ import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
 
-// eslint-disable-next-line vue/require-direct-export
 export default {
 	components: {
 		RoomWrapper,
@@ -208,11 +205,6 @@ export default {
 		},
 		isTouchDevice() {
 			return window.ontouchstart !== undefined;
-		},
-		sectionAriaLabel() {
-			return this.$t("pages.rooms.headerSection.ariaLabel", {
-				itemCount: this.rooms.length,
-			});
 		},
 		isImportMode() {
 			return this.$route.query.import !== undefined;
@@ -412,7 +404,7 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.courses.index.courses.active")} - ${
+		document.title = `${this.$t("pages.rooms.index.courses.active")} - ${
 			this.$theme.short_name
 		}`;
 	},

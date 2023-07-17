@@ -13,8 +13,11 @@
 						:label="
 							$t('components.organisms.TasksDashboardMain.filter.substitute')
 						"
+						:aria-label="
+							$t('components.organisms.TasksDashboardMain.filter.substitute')
+						"
 						@input-changed="setSubstituteFilter"
-					></v-custom-switch>
+					/>
 				</div>
 				<div v-else class="substitute-filter-placeholder"></div>
 				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
@@ -51,6 +54,7 @@
 				:value="selectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
+				:aria-label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
