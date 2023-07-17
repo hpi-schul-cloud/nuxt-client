@@ -16,6 +16,7 @@
 			min-width="200"
 			text
 			:close-icon="mdiClose"
+			:close-label="$t('common.labels.close')"
 			border="left"
 			@input="closeNotification"
 		>

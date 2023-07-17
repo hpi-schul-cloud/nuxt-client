@@ -1,11 +1,8 @@
 <template>
-	<room-wrapper
-		:header-aria-label="$t('pages.courses.index.courses.all')"
-		:has-rooms="hasRooms"
-	>
+	<room-wrapper :has-rooms="hasRooms">
 		<template slot="header">
 			<h1 class="text-h3 pt-2">
-				{{ $t("pages.courses.index.courses.all") }}
+				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -15,7 +12,7 @@
 						small
 						to="/rooms-overview"
 						data-testid="go-to-active-courses"
-						>{{ $t("pages.courses.index.courses.active") }}
+						>{{ $t("pages.rooms.index.courses.active") }}
 					</v-btn>
 				</div>
 			</div>
@@ -30,7 +27,7 @@
 						solo
 						:label="$t('pages.rooms.index.search.label')"
 						:append-icon="mdiMagnify"
-						:aria-label="$t('common.labels.search')"
+						:aria-label="$t('pages.rooms.index.search.label')"
 					>
 					</v-text-field>
 				</div>
@@ -97,7 +94,7 @@ export default Vue.extend({
 		},
 	},
 	async mounted() {
-		document.title = `${this.$t("pages.courses.index.courses.all")} - ${
+		document.title = `${this.$t("pages.rooms.index.courses.all")} - ${
 			this.$theme.short_name
 		}`;
 		await roomsModule.fetchAllElements();

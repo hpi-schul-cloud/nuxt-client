@@ -88,7 +88,7 @@ import { initializeAxios } from "./utils/api";
 
 import {
 	APPLICATION_ERROR_KEY,
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
@@ -96,6 +96,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
 } from "./utils/inject";
 
 (async () => {
@@ -137,7 +138,7 @@ import {
 			accountsModule,
 			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
-			[AUTH_MODULE.valueOf()]: authModule,
+			[AUTH_MODULE_KEY.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
@@ -156,7 +157,7 @@ import {
 			roomsModule,
 			schoolsModule,
 			shareModule,
-			statusAlertsModule,
+			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			systemsModule,
 			taskCardModule,
 			tasksModule,
