@@ -66,7 +66,7 @@ export default defineComponent({
 	position: absolute;
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.8);
-	top: 8px;
-	right: 8px;
+	top: 0.5rem;
+	right: 0.5rem;
 }
 </style>
