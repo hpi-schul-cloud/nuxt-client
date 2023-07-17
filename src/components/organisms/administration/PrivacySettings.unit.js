@@ -35,11 +35,48 @@ describe("PrivacySettings", () => {
 	});
 
 	describe("env config", () => {
+		it("should enable student visibility switch", () => {
+			envConfigModule.setEnvs({
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+			});
+
+			const wrapper = mount(PrivacySettings, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const studentVisibilitySwitch = wrapper.find(
+				`${searchStrings.studentVisibility} input`
+			);
+
+			expect(studentVisibilitySwitch.element.disabled).toBeFalsy();
+		});
+		it("should disable student visibility switch", () => {
+			envConfigModule.setEnvs({
+				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+			});
+
+			const wrapper = mount(PrivacySettings, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const studentVisibilitySwitch = wrapper.find(
+				`${searchStrings.studentVisibility} input`
+			);
+
+			expect(studentVisibilitySwitch.element.disabled).toBeTruthy();
+		});
 		it("should display permission switches", () => {
 			envConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
@@ -49,7 +86,6 @@ describe("PrivacySettings", () => {
 				propsData: generateProps(),
 			});
 
-			expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(1);
 			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(1);
 		});
 		it("should hide permission switches", () => {
@@ -101,71 +137,174 @@ describe("PrivacySettings", () => {
 		});
 	});
 	describe("default values", () => {
-		it("should be correct for permissions (1)", () => {
-			envConfigModule.setEnvs({
-				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				FEATURE_LERNSTORE_ENABLED: true,
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: Object.assign(generateProps(), {
-					permissions: {
-						teacher: {
-							STUDENT_LIST: true,
-						},
-						student: {
-							LERNSTORE_VIEW: false,
-						},
-					},
-				}),
-			});
+		describe("student visibility switch", () => {
+			describe("when configurable", () => {
+				it("should be set to true", () => {
+					envConfigModule.setEnvs({
+						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+					});
+					const wrapper = mount(PrivacySettings, {
+						...createComponentMocks({
+							i18n: true,
+							vuetify: true,
+						}),
+						propsData: Object.assign(generateProps(), {
+							permissions: {
+								teacher: {
+									STUDENT_LIST: true,
+								},
+							},
+						}),
+					});
 
-			const studentVisibilitySwitch = wrapper.find(
-				`${searchStrings.studentVisibility} input`
-			);
-			const learnStoreSwitch = wrapper.find(
-				`${searchStrings.learnStore} input`
-			);
-			expect(studentVisibilitySwitch.element.checked).toBeTruthy();
-			expect(learnStoreSwitch.element.checked).toBeFalsy();
+					const studentVisibilitySwitch = wrapper.find(
+						`${searchStrings.studentVisibility} input`
+					);
+
+					expect(studentVisibilitySwitch.element.checked).toBeTruthy();
+				});
+				it("should be set to false", () => {
+					envConfigModule.setEnvs({
+						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+					});
+					const wrapper = mount(PrivacySettings, {
+						...createComponentMocks({
+							i18n: true,
+							vuetify: true,
+						}),
+						propsData: Object.assign(generateProps(), {
+							permissions: {
+								teacher: {
+									STUDENT_LIST: false,
+								},
+							},
+						}),
+					});
+
+					const studentVisibilitySwitch = wrapper.find(
+						`${searchStrings.studentVisibility} input`
+					);
+
+					expect(studentVisibilitySwitch.element.checked).toBeFalsy();
+				});
+				it("should be set to false if no property found", () => {
+					envConfigModule.setEnvs({
+						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+					});
+					const wrapper = mount(PrivacySettings, {
+						...createComponentMocks({
+							i18n: true,
+							vuetify: true,
+						}),
+						propsData: Object.assign(generateProps(), {
+							permissions: {},
+						}),
+					});
+
+					const studentVisibilitySwitch = wrapper.find(
+						`${searchStrings.studentVisibility} input`
+					);
+
+					expect(studentVisibilitySwitch.element.checked).toBeFalsy();
+				});
+			});
+			describe("when not configurable", () => {
+				it("should be set to true", () => {
+					envConfigModule.setEnvs({
+						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: true,
+					});
+					const wrapper = mount(PrivacySettings, {
+						...createComponentMocks({
+							i18n: true,
+							vuetify: true,
+						}),
+						propsData: generateProps(),
+					});
+
+					const studentVisibilitySwitch = wrapper.find(
+						`${searchStrings.studentVisibility} input`
+					);
+
+					expect(studentVisibilitySwitch.element.checked).toBeTruthy();
+				});
+				it("should be set to false", () => {
+					envConfigModule.setEnvs({
+						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
+					});
+					const wrapper = mount(PrivacySettings, {
+						...createComponentMocks({
+							i18n: true,
+							vuetify: true,
+						}),
+						propsData: generateProps(),
+					});
+
+					const studentVisibilitySwitch = wrapper.find(
+						`${searchStrings.studentVisibility} input`
+					);
+
+					expect(studentVisibilitySwitch.element.checked).toBeFalsy();
+				});
+			});
 		});
-		it("should be correct for permissions (2)", () => {
-			envConfigModule.setEnvs({
-				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				FEATURE_LERNSTORE_ENABLED: true,
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: Object.assign(generateProps(), {
-					permissions: {
-						teacher: {
-							STUDENT_LIST: false,
+		describe("lernstore switch", () => {
+			it("should be set to true", () => {
+				envConfigModule.setEnvs({
+					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
+					FEATURE_LERNSTORE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						permissions: {
+							teacher: {
+								STUDENT_LIST: false,
+							},
+							student: {
+								LERNSTORE_VIEW: true,
+							},
 						},
-						student: {
-							LERNSTORE_VIEW: true,
-						},
-					},
-				}),
-			});
+					}),
+				});
 
-			const studentVisibilitySwitch = wrapper.find(
-				`${searchStrings.studentVisibility} input`
-			);
-			const learnStoreSwitch = wrapper.find(
-				`${searchStrings.learnStore} input`
-			);
-			expect(studentVisibilitySwitch.element.checked).toBeFalsy();
-			expect(learnStoreSwitch.element.checked).toBeTruthy();
+				const learnStoreSwitch = wrapper.find(
+					`${searchStrings.learnStore} input`
+				);
+				expect(learnStoreSwitch.element.checked).toBeTruthy();
+			});
+			it("should be set to false", () => {
+				envConfigModule.setEnvs({
+					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
+					FEATURE_LERNSTORE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						permissions: {
+							teacher: {
+								STUDENT_LIST: true,
+							},
+							student: {
+								LERNSTORE_VIEW: false,
+							},
+						},
+					}),
+				});
+
+				const learnStoreSwitch = wrapper.find(
+					`${searchStrings.learnStore} input`
+				);
+				expect(learnStoreSwitch.element.checked).toBeFalsy();
+			});
 		});
-
 		it("should be correct for non matrix features (1)", () => {
 			envConfigModule.setEnvs({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
