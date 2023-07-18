@@ -35,111 +35,152 @@ describe("PrivacySettings", () => {
 	});
 
 	describe("env config", () => {
-		it("should enable student visibility switch", () => {
-			envConfigModule.setEnvs({
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+		describe("when env var for configurability is true", () => {
+			it("should enable student visibility switch", () => {
+				envConfigModule.setEnvs({
+					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+				});
+
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const studentVisibilitySwitch = wrapper.find(
+					`${searchStrings.studentVisibility} input`
+				);
+
+				expect(studentVisibilitySwitch.element.disabled).toBeFalsy();
 			});
-
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
-
-			const studentVisibilitySwitch = wrapper.find(
-				`${searchStrings.studentVisibility} input`
-			);
-
-			expect(studentVisibilitySwitch.element.disabled).toBeFalsy();
 		});
-		it("should disable student visibility switch", () => {
-			envConfigModule.setEnvs({
-				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+		describe("when env var for configurability is false", () => {
+			it("should disable student visibility switch", () => {
+				envConfigModule.setEnvs({
+					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+				});
+
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				const studentVisibilitySwitch = wrapper.find(
+					`${searchStrings.studentVisibility} input`
+				);
+
+				expect(studentVisibilitySwitch.element.disabled).toBeTruthy();
 			});
-
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
-
-			const studentVisibilitySwitch = wrapper.find(
-				`${searchStrings.studentVisibility} input`
-			);
-
-			expect(studentVisibilitySwitch.element.disabled).toBeTruthy();
 		});
-		it("should display permission switches", () => {
-			envConfigModule.setEnvs({
-				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				FEATURE_LERNSTORE_ENABLED: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+		describe("when env vars for learn store are true", () => {
+			it("should display learn store switch", () => {
+				envConfigModule.setEnvs({
+					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
+					FEATURE_LERNSTORE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
 
-			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(1);
+				expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(1);
+			});
 		});
-		it("should hide permission switches", () => {
-			envConfigModule.setEnvs({
-				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
-				FEATURE_LERNSTORE_ENABLED: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+		describe("when env vars for learn store are false", () => {
+			it("should hide learn store switch", () => {
+				envConfigModule.setEnvs({
+					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
+					FEATURE_LERNSTORE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
 
-			expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
+				expect(wrapper.findAll(searchStrings.learnStore)).toHaveLength(0);
+			});
 		});
-		it("should display videoconference and rocketchat feature", () => {
-			envConfigModule.setEnvs({
-				FEATURE_VIDEOCONFERENCE_ENABLED: true,
-				ROCKETCHAT_SERVICE_ENABLED: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+		describe("when env var for videoconference is true", () => {
+			it("should display videoconference feature switch", () => {
+				envConfigModule.setEnvs({
+					FEATURE_VIDEOCONFERENCE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
 
-			expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(1);
-			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(1);
+				expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(1);
+			});
 		});
-		it("should hide videoconference and rocketchat feature", () => {
-			envConfigModule.setEnvs({
-				FEATURE_VIDEOCONFERENCE_ENABLED: false,
-				ROCKETCHAT_SERVICE_ENABLED: false,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+		describe("when env var for videoconference is false", () => {
+			it("should hide videoconference feature switch", () => {
+				envConfigModule.setEnvs({
+					FEATURE_VIDEOCONFERENCE_ENABLED: false,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
 
-			expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(0);
-			expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(0);
+				expect(wrapper.findAll(searchStrings.videoconference)).toHaveLength(0);
+			});
+		});
+		describe("when env var for rocketchat is true", () => {
+			it("should display rocketchat feature switch", () => {
+				envConfigModule.setEnvs({
+					ROCKETCHAT_SERVICE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(1);
+			});
+		});
+		describe("when env var for rocketchat is false", () => {
+			it("should hide rocketchat feature switch", () => {
+				envConfigModule.setEnvs({
+					ROCKETCHAT_SERVICE_ENABLED: false,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				expect(wrapper.findAll(searchStrings.rocketChat)).toHaveLength(0);
+			});
 		});
 	});
+
 	describe("default values", () => {
 		describe("student visibility switch", () => {
 			describe("when configurable", () => {
-				it("should be set to true", () => {
+				it("should be set to true based on school permission", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 					});
@@ -163,7 +204,7 @@ describe("PrivacySettings", () => {
 
 					expect(studentVisibilitySwitch.element.checked).toBeTruthy();
 				});
-				it("should be set to false", () => {
+				it("should be set to false based on school permission", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 					});
@@ -187,7 +228,7 @@ describe("PrivacySettings", () => {
 
 					expect(studentVisibilitySwitch.element.checked).toBeFalsy();
 				});
-				it("should be set to false if no property found", () => {
+				it("should be set to false if no property found on school", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 					});
@@ -209,7 +250,7 @@ describe("PrivacySettings", () => {
 				});
 			});
 			describe("when not configurable", () => {
-				it("should be set to true", () => {
+				it("should be set to true based on env var", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: true,
@@ -228,7 +269,7 @@ describe("PrivacySettings", () => {
 
 					expect(studentVisibilitySwitch.element.checked).toBeTruthy();
 				});
-				it("should be set to false", () => {
+				it("should be set to false based on env var", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
@@ -249,8 +290,8 @@ describe("PrivacySettings", () => {
 				});
 			});
 		});
-		describe("lernstore switch", () => {
-			it("should be set to true", () => {
+		describe("learn store switch", () => {
+			it("should be set to true based on school permission", () => {
 				envConfigModule.setEnvs({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 					FEATURE_LERNSTORE_ENABLED: true,
@@ -272,9 +313,10 @@ describe("PrivacySettings", () => {
 				const learnStoreSwitch = wrapper.find(
 					`${searchStrings.learnStore} input`
 				);
+
 				expect(learnStoreSwitch.element.checked).toBeTruthy();
 			});
-			it("should be set to false", () => {
+			it("should be set to false based on school permission", () => {
 				envConfigModule.setEnvs({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 					FEATURE_LERNSTORE_ENABLED: true,
@@ -296,62 +338,101 @@ describe("PrivacySettings", () => {
 				const learnStoreSwitch = wrapper.find(
 					`${searchStrings.learnStore} input`
 				);
+
 				expect(learnStoreSwitch.element.checked).toBeFalsy();
 			});
 		});
-		it("should be correct for non matrix features (1)", () => {
-			envConfigModule.setEnvs({
-				FEATURE_VIDEOCONFERENCE_ENABLED: true,
-				ROCKETCHAT_SERVICE_ENABLED: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: Object.assign(generateProps(), {
-					features: {
-						rocketChat: false,
-						videoconference: true,
-					},
-				}),
-			});
+		describe("videoconference switch", () => {
+			it("should be set to true based on school feature", () => {
+				envConfigModule.setEnvs({
+					FEATURE_VIDEOCONFERENCE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						features: {
+							videoconference: true,
+						},
+					}),
+				});
 
-			const rocketChatSwitch = wrapper.find(
-				`${searchStrings.rocketChat} input`
-			);
-			const videoconferenceSwitch = wrapper.find(
-				`${searchStrings.videoconference} input`
-			);
-			expect(rocketChatSwitch.element.checked).toBeFalsy();
-			expect(videoconferenceSwitch.element.checked).toBeTruthy();
+				const videoconferenceSwitch = wrapper.find(
+					`${searchStrings.videoconference} input`
+				);
+
+				expect(videoconferenceSwitch.element.checked).toBeTruthy();
+			});
+			it("should be set to false based on school feature", () => {
+				envConfigModule.setEnvs({
+					FEATURE_VIDEOCONFERENCE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						features: {
+							videoconference: false,
+						},
+					}),
+				});
+
+				const videoconferenceSwitch = wrapper.find(
+					`${searchStrings.videoconference} input`
+				);
+
+				expect(videoconferenceSwitch.element.checked).toBeFalsy();
+			});
 		});
-		it("should be correct for non matrix features (2)", () => {
-			envConfigModule.setEnvs({
-				FEATURE_VIDEOCONFERENCE_ENABLED: true,
-				ROCKETCHAT_SERVICE_ENABLED: true,
-			});
-			const wrapper = mount(PrivacySettings, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: Object.assign(generateProps(), {
-					features: {
-						rocketChat: true,
-						videoconference: false,
-					},
-				}),
-			});
+		describe("rocketchat switch", () => {
+			it("should be set to true based on school feature", () => {
+				envConfigModule.setEnvs({
+					ROCKETCHAT_SERVICE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						features: {
+							rocketChat: true,
+						},
+					}),
+				});
 
-			const rocketChatSwitch = wrapper.find(
-				`${searchStrings.rocketChat} input`
-			);
-			const videoconferenceSwitch = wrapper.find(
-				`${searchStrings.videoconference} input`
-			);
-			expect(rocketChatSwitch.element.checked).toBeTruthy();
-			expect(videoconferenceSwitch.element.checked).toBeFalsy();
+				const rocketChatSwitch = wrapper.find(
+					`${searchStrings.rocketChat} input`
+				);
+
+				expect(rocketChatSwitch.element.checked).toBeTruthy();
+			});
+			it("should be set to false based on school feature", () => {
+				envConfigModule.setEnvs({
+					ROCKETCHAT_SERVICE_ENABLED: true,
+				});
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: Object.assign(generateProps(), {
+						features: {
+							rocketChat: false,
+						},
+					}),
+				});
+
+				const rocketChatSwitch = wrapper.find(
+					`${searchStrings.rocketChat} input`
+				);
+
+				expect(rocketChatSwitch.element.checked).toBeFalsy();
+			});
 		});
 	});
 
