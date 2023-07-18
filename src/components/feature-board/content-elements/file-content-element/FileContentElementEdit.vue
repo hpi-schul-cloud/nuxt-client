@@ -87,9 +87,9 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent, ref } from "vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardFocusHandler } from "../../shared/BoardFocusHandler.composable";
+import BoardMenu from "../../shared/BoardMenu.vue";
+import BoardMenuAction from "../../shared/BoardMenuAction.vue";
 
 export default defineComponent({
 	name: "FileContentElementEdit",

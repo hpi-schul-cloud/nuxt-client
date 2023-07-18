@@ -10,16 +10,17 @@ import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElem
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import { AnyContentElement } from "../types/ContentElement";
+import { AnyContentElement } from "../../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-jest.mock("../shared/InlineEditInteractionHandler.composable");
-jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
-jest.mock("../shared/FileStorageApi.composable");
-jest.mock("../shared/SelectedFile.composable");
+
+jest.mock("../../shared/InlineEditInteractionHandler.composable");
+jest.mock("../../shared/DeleteBoardNodeConfirmation.composable");
+jest.mock("../../shared/FileStorageApi.composable");
+jest.mock("../../shared/SelectedFile.composable");
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
