@@ -692,6 +692,8 @@
 	"pages.administration.school.index.schoolPolicy.notUploadedYet": "Noch nicht hochgeladen",
 	"pages.administration.school.index.schoolPolicy.fileName": "Datenschutzerklärung der Schule",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent": "Die neue Datenschutzerklärung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
+	"pages.administration.school.index.schoolPolicy.edit": "Datenschutzerklärung bearbeiten",
+	"pages.administration.school.index.schoolPolicy.download": "Datenschutzerklärung herunterladen",
 	"pages.administration.school.index.authSystems.title": "Authentifizierung",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.type": "Typ",

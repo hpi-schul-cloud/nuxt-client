@@ -676,6 +676,8 @@
 	"pages.administration.school.index.schoolPolicy.notUploadedYet": "Aún no se ha cargado",
 	"pages.administration.school.index.schoolPolicy.fileName": "Política de privacidad de la escuela",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent": "La nueva política de privacidad sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
+	"pages.administration.school.index.schoolPolicy.edit": "Editar política de privacidad",
+	"pages.administration.school.index.schoolPolicy.download": "Descargar política de privacidad",
 	"pages.administration.school.index.authSystems.title": "Autenticación",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.type": "Tipo",

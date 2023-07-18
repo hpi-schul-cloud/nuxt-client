@@ -652,6 +652,8 @@
 	"pages.administration.school.index.schoolPolicy.notUploadedYet": "Ще не завантажено",
 	"pages.administration.school.index.schoolPolicy.fileName": "Політика конфіденційності школи",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent": "Нова політика конфіденційності безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
+	"pages.administration.school.index.schoolPolicy.edit": "Редагувати політику конфіденційності",
+	"pages.administration.school.index.schoolPolicy.download": "Завантажте політику конфіденційності",
 	"pages.administration.school.index.title": "Керувати школою",
 	"pages.administration.school.index.usedFileStorage": "Використовуване файлове сховище у хмарі",
 	"pages.administration.select": "вибрати",
