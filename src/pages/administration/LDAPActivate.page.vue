@@ -278,9 +278,6 @@ export default {
 		}`;
 	},
 	methods: {
-		backButtonHandler() {
-			redirectToConfigPage(this);
-		},
 		async submitButtonHandler() {
 			const { id } = this.$route.query;
 			const temporaryConfigData = { ...this.temp };
