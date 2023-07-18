@@ -314,6 +314,7 @@
 	"pages.activation._activationCode.index.error.title": "No se han podido cambiar tus datos",
 	"pages.activation._activationCode.index.success.email": "Tu dirección de correo electrónico se ha cambiado correctamente",
 	"pages.administration.index.title": "Administración",
+	"pages.administration.ldap.activate.breadcrumb": "Sincronización",
 	"pages.administration.ldap.activate.className": "Nombre",
 	"pages.administration.ldap.activate.dN": "Domain-Name",
 	"pages.administration.ldap.activate.email": "Email",

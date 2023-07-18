@@ -318,6 +318,7 @@
 	"pages.activation._activationCode.index.error.title": "Deine Daten konnten nicht geändert werden",
 	"pages.activation._activationCode.index.success.email": "Deine E-Mail-Adresse wurde erfolgreich geändert",
 	"pages.administration.index.title": "Administration",
+	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",
 	"pages.administration.ldap.activate.dN": "Domain-Name",
 	"pages.administration.ldap.activate.email": "E-mail",
