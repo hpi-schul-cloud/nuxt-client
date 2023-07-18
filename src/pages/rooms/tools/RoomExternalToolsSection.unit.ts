@@ -30,11 +30,19 @@ describe("RoomExternalToolsSection", () => {
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule
 		);
+
 		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+			getBusinessError: {
+				statusCode: "",
+				message: "",
+				error: undefined,
+			},
 			...externalToolsModuleGetter,
 		});
+
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
+			getUserRoles: ["teacher"],
 		});
 
 		const wrapper: Wrapper<any> = mount(
@@ -57,6 +65,7 @@ describe("RoomExternalToolsSection", () => {
 				},
 			}
 		);
+
 		return {
 			wrapper,
 			contextExternalToolsModule,
@@ -226,6 +235,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const error: BusinessError = businessErrorFactory.build({
 				error: new AxiosError("this error is expected"),
+				message: "TOOL_STATUS_OUTDATED this tool is outdated",
 			});
 
 			const { wrapper } = getWrapper(

@@ -13,12 +13,18 @@
 			:no-data-text="t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
-				<span :class="getColor(item)">
+				<span>
 					{{ item.name }}
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<span :class="getColor(item)">
+				<v-icon v-if="item.outdated" color="error">
+					{{ mdiRefreshCircle }}
+				</v-icon>
+				<v-icon v-else color="success">
+					{{ mdiCheckCircle }}
+				</v-icon>
+				<span>
 					{{ item.status }}
 				</span>
 			</template>
@@ -38,7 +44,7 @@
 			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog v-model="isDeleteDialogOpen" max-width="450">
+		<v-dialog v-model="isDeleteDialogOpen" max-width="360">
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
@@ -92,7 +98,9 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import { mdiRefreshCircle, mdiCheckCircle } from "@mdi/js";
 import {
 	ComputedRef,
 	Ref,
@@ -105,6 +113,7 @@ import VueI18n from "vue-i18n";
 import { default as VueRouter } from "vue-router";
 import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
+import NotifierModule from "@/store/notifier";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
@@ -113,11 +122,13 @@ export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
-		const router: VueRouter = useRouter();
 		const i18n = injectStrict(I18N_KEY);
 		const externalToolsModule: ExternalToolsModule = injectStrict(
 			EXTERNAL_TOOLS_MODULE_KEY
 		);
+		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+		const router: VueRouter = useRouter();
 
 		onMounted(async () => {
 			await externalToolsModule.loadSchoolExternalTools();
@@ -139,10 +150,6 @@ export default defineComponent({
 			return externalToolsModule.getLoading;
 		});
 
-		const getColor = (item: SchoolExternalToolItem): string => {
-			return item.outdated ? "outdated" : "";
-		};
-
 		const editTool = (item: SchoolExternalToolItem) => {
 			router.push({
 				name: "administration-tool-config-edit",
@@ -156,6 +163,14 @@ export default defineComponent({
 					itemToDelete.value.id
 				);
 			}
+
+			notifierModule.show({
+				text: t(
+					"components.administration.externalToolsSection.notification.deleted"
+				),
+				status: "success",
+			});
+
 			onCloseDeleteDialog();
 		};
 
@@ -182,7 +197,6 @@ export default defineComponent({
 			headers,
 			items,
 			isLoading,
-			getColor,
 			editTool,
 			onDeleteTool,
 			isDeleteDialogOpen,
@@ -190,6 +204,8 @@ export default defineComponent({
 			onCloseDeleteDialog,
 			itemToDelete,
 			getItemName,
+			mdiRefreshCircle,
+			mdiCheckCircle,
 		};
 	},
 });
@@ -204,9 +220,5 @@ $arrow-offset: 8px;
 
 .v-data-table ::v-deep td {
 	cursor: pointer;
-}
-
-.outdated {
-	color: var(--v-primary-base);
 }
 </style>
