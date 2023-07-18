@@ -354,7 +354,7 @@
 	"pages.administration.ldap.errors.path": "Falscher Such- oder Basispfad",
 	"pages.administration.ldap.index.buttons.reset": "Eingaben zurücksetzen",
 	"pages.administration.ldap.index.buttons.verify": "Eingaben prüfen",
-	"pages.administration.ldap.index.title": "Schulen",
+	"pages.administration.ldap.index.title": "LDAP-Konfiguration",
 	"pages.administration.ldap.index.verified": "Die Verifizierung war erfolgreich",
 	"pages.administration.ldap.save.example.class": "Beispiel Klasse",
 	"pages.administration.ldap.save.example.synchronize": "Synchronisation aktivieren",

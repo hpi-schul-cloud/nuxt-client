@@ -350,7 +350,7 @@
 	"pages.administration.ldap.errors.path": "Ruta de búsqueda o base incorrecta",
 	"pages.administration.ldap.index.buttons.reset": "Restablecer entradas",
 	"pages.administration.ldap.index.buttons.verify": "Verificar las entradas",
-	"pages.administration.ldap.index.title": "Escuelas",
+	"pages.administration.ldap.index.title": "Configuración LDAP",
 	"pages.administration.ldap.index.verified": "La verificación fue exitosa",
 	"pages.administration.ldap.save.example.class": "Ejemplo de clase",
 	"pages.administration.ldap.save.example.synchronize": "Activar la sincronización",

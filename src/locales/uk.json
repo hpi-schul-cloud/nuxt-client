@@ -520,7 +520,7 @@
 	"pages.administration.ldap.errors.path": "Неправильний пошук або базовий шлях",
 	"pages.administration.ldap.index.buttons.reset": "Скинути вхідні дані",
 	"pages.administration.ldap.index.buttons.verify": "Перевірити",
-	"pages.administration.ldap.index.title": "Школи",
+	"pages.administration.ldap.index.title": "Конфігурація LDAP",
 	"pages.administration.ldap.index.verified": "Перевірка пройшла успішно",
 	"pages.administration.ldap.save.example.class": "Приклад класу",
 	"pages.administration.ldap.save.example.synchronize": "Synchronisation aktivieren",
