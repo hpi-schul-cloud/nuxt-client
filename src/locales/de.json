@@ -670,7 +670,7 @@
 	"pages.administration.school.index.privacySettings.longText.lernStore": "Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.",
 	"pages.administration.school.index.privacySettings.longText.chatFunction": "Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren Kursen die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.videoConference": "Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.",
-	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText": "Diese Option wird für die gesamte Instanz festgelegt und ist nicht konfigurierbar. Sie steuert, ob Lehrer eine Liste aller Schüler in Ihrer Schule sehen können.",
+	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText": "Diese Option wird für die gesamte Instanz festgelegt und ist nicht konfigurierbar. Sie steuert, ob Lehrer eine Liste aller Schüler in deiner Schule sehen können.",
 	"pages.administration.school.index.usedFileStorage": "Genutzter Datei-Speicherplatz in der Cloud",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing": "Derzeit bezieht Ihre Schule",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Datei auswählen",
