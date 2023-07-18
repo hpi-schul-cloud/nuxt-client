@@ -1,57 +1,49 @@
 <template>
-	<v-card
-		class="card"
-		max-width="100%"
-		:aria-label="tool.name"
-		hover
+	<room-base-card
+		:title="tool.name"
+		:logo-url="tool.logoUrl"
+		:open-in-new-tab="tool.openInNewTab"
+		test-id="tool-card"
 		@click="handleClick"
 	>
-		<div class="logo-container">
-			<v-img
-				v-if="tool.logoUrl"
-				class="mx-auto logo"
-				:src="tool.logoUrl"
-				contain
-				data-testId="tool-card-logo"
-				:alt="t('pages.rooms.tools.logo')"
-			/>
-		</div>
-		<h5 class="card-title my-auto">{{ tool.name }}</h5>
-		<span
-			v-if="tool.openInNewTab"
-			class="ml-1 my-auto no-wrap"
-			data-testId="tool-card-new-tab-text"
-			>({{ t("pages.rooms.tools.newTab") }})</span
-		>
-		<span
-			v-if="isToolOutdated"
-			class="ml-1 my-auto no-wrap"
-			data-testId="tool-card-status-text"
-			><b>({{ getStatusText() }})</b>
-		</span>
-		<div class="mx-auto"></div>
-		<div v-if="canEdit" class="ml-1 my-auto">
-			<room-dot-menu
-				:menu-items="menuItems"
-				data-testId="tool-card-menu"
-				:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
-			/>
-		</div>
-	</v-card>
+		<template v-slot:under-title>
+			<div v-if="isToolOutdated" class="mt-1">
+				<v-chip
+					small
+					class="py-1"
+					color="warning lighten-1"
+					text-color="black"
+					data-testId="tool-card-status"
+				>
+					<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
+					{{ t("pages.rooms.tools.outdated") }}
+				</v-chip>
+			</div>
+		</template>
+		<template v-slot:right>
+			<div v-if="canEdit" class="ml-1 my-auto">
+				<room-dot-menu
+					:menu-items="menuItems"
+					data-testId="tool-card-menu"
+					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
+				/>
+			</div>
+		</template>
+	</room-base-card>
 </template>
 
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { mdiAlert, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { ToolConfigurationStatus } from "@/store/external-tool";
+import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { RoomDotMenu },
+	components: { RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "click"],
 	props: {
 		tool: {
@@ -72,21 +64,23 @@ export default defineComponent({
 			emit("click", props.tool);
 		};
 
+		/* TODO N21-905
 		const handleEdit = () => {
 			emit("edit", props.tool);
-		};
+		}; */
 
 		const handleDelete = () => {
 			emit("delete", props.tool);
 		};
 
 		const menuItems = [
+			/* TODO N21-905
 			{
 				icon: mdiPencilOutline,
 				action: handleEdit,
 				name: t("common.actions.edit"),
 				dataTestId: "tool-edit",
-			},
+			}, */
 			{
 				icon: mdiTrashCanOutline,
 				action: handleDelete,
@@ -94,12 +88,6 @@ export default defineComponent({
 				dataTestId: "tool-delete",
 			},
 		];
-
-		const { getStatusTranslationKey } = useExternalToolMappings();
-
-		const getStatusText = (): string => {
-			return t(getStatusTranslationKey(props.tool.status));
-		};
 
 		const isToolOutdated: ComputedRef = computed(
 			() => props.tool.status === ToolConfigurationStatus.Outdated
@@ -109,51 +97,9 @@ export default defineComponent({
 			t,
 			handleClick,
 			menuItems,
-			getStatusText,
 			isToolOutdated,
+			mdiAlert,
 		};
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.card {
-	display: flex;
-	align-content: center;
-	height: 100px;
-	padding: 16px;
-}
-
-.card-title {
-	overflow: hidden;
-	max-height: 100%;
-}
-
-.logo-container {
-	margin-right: 16px;
-	max-width: 160px;
-	height: 100%;
-}
-
-@media only screen and (max-width: 749px) {
-	.logo-container {
-		max-width: 68px;
-	}
-}
-
-@media only screen and (max-width: 399px) {
-	.logo-container {
-		display: none;
-	}
-}
-
-.logo {
-	max-width: 140px;
-	height: 100%;
-	width: auto;
-}
-
-.no-wrap {
-	flex-shrink: 0;
-}
-</style>
