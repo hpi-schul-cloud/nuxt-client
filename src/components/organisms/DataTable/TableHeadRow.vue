@@ -61,11 +61,8 @@
 								}}
 								<br />
 								<br />
-								<base-icon
-									source="material"
-									icon="warning"
-									color="var(--v-error-base)"
-								/>{{
+								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
 								<br />
@@ -122,11 +119,8 @@
 								{{ $t("pages.administration.students.infobox.paragraph-3") }}
 								<br />
 								<br />
-								<base-icon
-									source="material"
-									icon="warning"
-									color="var(--v-error-base)"
-								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
+								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
 					</info-box>
@@ -213,16 +207,12 @@
 							column.tooltipText
 						}}</span>
 					</div>
-					<base-icon
-						v-if="sortBy === column.field"
-						:icon="sortOrder === 'asc' ? 'sort_up' : 'sort_down'"
-						source="material"
-					/>
-					<base-icon
-						v-else-if="column.sortable"
-						icon="sort"
-						source="material"
-					/>
+					<v-icon v-if="sortBy === column.field">
+						{{
+							sortOrder === "asc" ? "$mdiMenuUpOutline" : "$mdiMenuDownOutline"
+						}}
+					</v-icon>
+					<v-icon v-else-if="column.sortable">$mdiMenuSwapOutline </v-icon>
 				</v-btn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
