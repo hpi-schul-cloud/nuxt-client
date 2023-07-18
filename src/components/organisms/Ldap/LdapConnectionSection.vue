@@ -17,7 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="dns" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiDnsOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -33,7 +33,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="account_tree" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -49,7 +49,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template #icon>
-				<base-icon source="material" icon="user" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -65,7 +65,7 @@
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 			><template #icon>
-				<base-icon source="material" icon="lock_outline" :fill="fillColor" />
+				<v-icon :color="fillColor">$mdiLockOutline</v-icon>
 			</template>
 		</base-input>
 	</div>

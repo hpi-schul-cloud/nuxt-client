@@ -3,7 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { AxiosError } from "axios";
 import Vue from "vue";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
@@ -30,11 +30,19 @@ describe("RoomExternalToolsSection", () => {
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule
 		);
+
 		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+			getBusinessError: {
+				statusCode: "",
+				message: "",
+				error: undefined,
+			},
 			...externalToolsModuleGetter,
 		});
+
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
+			getUserRoles: ["teacher"],
 		});
 
 		const wrapper: Wrapper<any> = mount(
@@ -53,10 +61,11 @@ describe("RoomExternalToolsSection", () => {
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
-					[AUTH_MODULE.valueOf()]: authModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			}
 		);
+
 		return {
 			wrapper,
 			contextExternalToolsModule,
@@ -226,6 +235,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const error: BusinessError = businessErrorFactory.build({
 				error: new AxiosError("this error is expected"),
+				message: "TOOL_STATUS_OUTDATED this tool is outdated",
 			});
 
 			const { wrapper } = getWrapper(

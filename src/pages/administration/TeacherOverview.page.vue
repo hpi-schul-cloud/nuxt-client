@@ -28,7 +28,7 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search" />
+					<v-icon>$mdiMagnify</v-icon>
 				</template>
 			</base-input>
 
@@ -66,18 +66,18 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<base-icon
+						<v-icon
 							v-if="status === 'ok'"
-							source="material"
-							icon="check"
+							class="material-icon"
 							color="var(--v-success-base)"
-						/>
-						<base-icon
+							>$mdiCheck</v-icon
+						>
+						<v-icon
 							v-else-if="status === 'missing'"
-							source="material"
-							icon="close"
+							class="material-icon"
 							color="var(--v-error-base)"
-						/>
+							>$mdiClose</v-icon
+						>
 					</span>
 				</template>
 				<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -205,13 +205,13 @@ export default {
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
 					),
-					icon: "mail_outline",
+					icon: "$mdiEmailOutline",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					icon: "qrcode",
+					icon: "$mdiQrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
 				},
@@ -219,7 +219,7 @@ export default {
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.delete"
 					),
-					icon: "delete_outline",
+					icon: "$mdiDeleteOutline",
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",
@@ -278,12 +278,12 @@ export default {
 			],
 			icons: [
 				{
-					icon: "check",
+					icon: "$mdiCheck",
 					color: "var(--v-success-base)",
 					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
-					icon: "clear",
+					icon: "$mdiClose",
 					color: "var(--v-error-base)",
 					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
@@ -586,8 +586,7 @@ export default {
 					"pages.administration.teachers.index.remove.confirm.btnText"
 				),
 				cancelText: this.$t("common.actions.cancel"),
-				icon: "report_problem",
-				iconSource: "material",
+				icon: "$mdiAlert",
 				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,
