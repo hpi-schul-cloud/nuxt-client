@@ -104,6 +104,11 @@
 			<v-col>
 				<v-custom-switch
 					:value="features.videoconference"
+					:label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.videoConference'
+						)
+					"
 					:aria-label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
