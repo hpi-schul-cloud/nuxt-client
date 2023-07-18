@@ -98,7 +98,7 @@ export default defineComponent({
 	},
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
-		const fileContentElement = ref(undefined);
+		const fileContentElement = ref();
 		useBoardFocusHandler(props.element.id, fileContentElement);
 
 		const { modelValue, isAutoFocus } = useContentElementState(props);
