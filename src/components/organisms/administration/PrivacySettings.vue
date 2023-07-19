@@ -1,21 +1,12 @@
 <template>
-	<section
-		v-if="
-			toggleStudentVisibilityEnabled ||
-			toggleStudentLernstoreViewEnabled ||
-			rocketChatEnabled ||
-			videoConferenceEnabled
-		"
-	>
+	<section>
 		<h3 class="text-h6">
 			{{ $t("pages.administration.school.index.privacySettings") }}
 		</h3>
-		<v-row
-			v-if="toggleStudentVisibilityEnabled"
-			class="student-visibility-switch"
-		>
+		<v-row class="student-visibility-switch">
 			<v-col>
 				<v-custom-switch
+					:disabled="!isTeacherStudentVisibilityConfigurable"
 					:value="studentVisibility"
 					:label="
 						$t(
@@ -33,10 +24,17 @@
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
 				/>
-				<p class="body-2 mb-0">
+				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.studentVisibility"
+						)
+					}}
+				</p>
+				<p v-else class="body-2 mb-0">
+					{{
+						$t(
+							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
 						)
 					}}
 				</p>
@@ -154,14 +152,18 @@ export default {
 	computed: {
 		toggleStudentLernstoreViewEnabled: () =>
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
-		toggleStudentVisibilityEnabled: () =>
+		isTeacherStudentVisibilityConfigurable: () =>
 			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		studentVisibility() {
-			return this.permissions.teacher
-				? this.permissions.teacher.STUDENT_LIST
-				: false;
+			if (this.isTeacherStudentVisibilityConfigurable) {
+				return this.permissions?.teacher
+					? this.permissions.teacher.STUDENT_LIST
+					: false;
+			} else {
+				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
+			}
 		},
 		lernStoreVisibility() {
 			return this.permissions.student
