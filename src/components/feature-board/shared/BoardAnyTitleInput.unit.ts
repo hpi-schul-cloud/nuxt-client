@@ -12,15 +12,28 @@ jest.mock("./InlineEditInteractionHandler.composable");
 
 jest.mock("./BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const defaultProps = {
+	value: "props value",
+	isEditMode: true,
+	scope: "card",
+	placeholder: "placeholder-text",
+	isFocused: false,
+};
 
 describe("BoardAnyTitleTitleInput", () => {
 	let wrapper: Wrapper<Vue>;
 
-	const setup = (options: {
-		isEditMode: boolean;
-		scope: "card" | "column" | "board";
-		permissions?: BoardPermissionChecks;
-	}) => {
+	const setup = (
+		props: {
+			isEditMode: boolean;
+			scope: "card" | "column" | "board";
+			placeholder?: string;
+			isFocused?: boolean;
+		},
+		options?: {
+			permissions?: BoardPermissionChecks;
+		}
+	) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -30,9 +43,8 @@ describe("BoardAnyTitleTitleInput", () => {
 		wrapper = mount(BoardAnyTitleInput as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
-				value: "props value",
-				isEditMode: options.isEditMode,
-				scope: options.scope,
+				...defaultProps,
+				...props,
 			},
 			provide: {
 				CARD_HOST_INTERACTION_EVENT: undefined,
