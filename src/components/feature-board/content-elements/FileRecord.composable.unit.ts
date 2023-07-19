@@ -81,12 +81,12 @@ describe("FileRecord Composable", () => {
 					return { fileRecordResponse };
 				};
 
-				it("should set isImage to be false", async () => {
+				it("should set isBlockedByVirusScan to be false", async () => {
 					const { fileRecordResponse } = setup();
 
-					const { isImage } = useFileRecord(fileRecordResponse);
+					const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
 
-					expect(isImage.value).toBe(false);
+					expect(isBlockedByVirusScan.value).toBe(false);
 				});
 
 				it("should set url to be empty", async () => {
