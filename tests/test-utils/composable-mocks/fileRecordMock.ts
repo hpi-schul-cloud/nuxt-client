@@ -10,7 +10,6 @@ interface Props {
 
 export const setupFileRecordMock = (props: Props = {}) => {
 	const { isImageMock, isBlockedByVirusScanMock, urlMock } = props;
-	const mockedSelectedFile = jest.mocked(useFileRecord);
 
 	const isImage = computed(() => isImageMock ?? false);
 	const isBlockedByVirusScan = computed(
@@ -24,7 +23,6 @@ export const setupFileRecordMock = (props: Props = {}) => {
 		url,
 	};
 
-	mockedSelectedFile.mockReturnValue(mocks);
-
-	return mocks;
+	const useFileRecordMock = jest.mocked(useFileRecord);
+	useFileRecordMock.mockReturnValue(mocks);
 };
