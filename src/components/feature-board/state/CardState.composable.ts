@@ -9,10 +9,7 @@ import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import {
-	useBoardFocusHandler,
-	useSharedFocusedId,
-} from "../shared/BoardFocusHandler.composable";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 
 declare type CardState = {
 	isLoading: boolean;

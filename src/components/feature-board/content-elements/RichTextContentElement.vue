@@ -8,6 +8,7 @@
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			class="rich_text"
+			:autofocus="autofocus"
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 			@delete:element="onDeleteElement"
@@ -16,11 +17,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -41,6 +43,12 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { modelValue } = useContentElementState(props);
+		const autofocus = ref(false);
+		useBoardFocusHandler(
+			props.element.id,
+			ref(null),
+			() => (autofocus.value = true)
+		);
 
 		const onDeleteElement = async (): Promise<void> => {
 			await props.deleteElement(props.element.id);
@@ -49,6 +57,7 @@ export default defineComponent({
 		return {
 			modelValue,
 			onDeleteElement,
+			autofocus,
 		};
 	},
 });

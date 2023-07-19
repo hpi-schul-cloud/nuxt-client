@@ -25,6 +25,10 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		autofocus: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	emits: ["update:value", "delete:element"],
 	setup(props, { emit }) {

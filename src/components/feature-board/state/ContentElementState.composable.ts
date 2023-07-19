@@ -1,5 +1,5 @@
 import { watchDebounced } from "@vueuse/core";
-import { onMounted, ref, toRef, unref } from "vue";
+import { ref, toRef, unref } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { AnyContentElement } from "../types/ContentElement";

@@ -110,7 +110,7 @@ export default defineComponent({
 		"move-keyboard:element",
 	],
 	setup(props, { emit }) {
-		const fileContentElement = ref(undefined);
+		const fileContentElement = ref(null);
 		useBoardFocusHandler(props.fileId, fileContentElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
