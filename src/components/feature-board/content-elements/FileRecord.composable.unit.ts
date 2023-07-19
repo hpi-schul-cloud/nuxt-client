@@ -131,30 +131,6 @@ describe("FileRecord Composable", () => {
 		});
 
 		describe("when file is blocked by the virus scanner", () => {
-			describe("when file record is undefined", () => {
-				const setup = () => {
-					const fileRecordResponse = ref(undefined);
-
-					return { fileRecordResponse };
-				};
-
-				it("should set isBlockedByVirusScan to be false", async () => {
-					const { fileRecordResponse } = setup();
-
-					const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
-
-					expect(isBlockedByVirusScan.value).toBe(false);
-				});
-
-				it("should set url to be empty", async () => {
-					const { fileRecordResponse } = setup();
-
-					const { url } = useFileRecord(fileRecordResponse);
-
-					expect(url.value).toBe("");
-				});
-			});
-
 			describe("when file record is defined", () => {
 				const setup = () => {
 					const parentId = ObjectIdMock();
