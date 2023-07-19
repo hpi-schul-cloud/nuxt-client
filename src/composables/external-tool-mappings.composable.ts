@@ -54,6 +54,8 @@ const ToolParamTypeMapping: Record<
 		ToolParameterType.AutoCoursename,
 	[CustomParameterResponseTypeEnum.AutoSchoolid]:
 		ToolParameterType.AutoSchoolid,
+	[CustomParameterResponseTypeEnum.AutoSchoolnumber]:
+		ToolParameterType.AutoSchoolnumber,
 };
 
 const ToolParamScopeMapping: Record<
