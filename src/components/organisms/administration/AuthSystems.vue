@@ -14,10 +14,22 @@
 			"
 			readonly
 			dense
-			:append-icon="getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy"
-			@click:append="copyLoginLink(0)"
 			@blur="linkCopyFinished(0)"
-		></v-text-field>
+		>
+			<template #append>
+				<v-btn
+					icon
+					@click="copyLoginLink(0)"
+					:aria-label="
+						$t('pages.administration.school.index.authSystems.copyLink')
+					"
+				>
+					<v-icon>
+						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
+					</v-icon>
+				</v-btn>
+			</template>
+		</v-text-field>
 		<v-simple-table v-if="hasSystems" class="table-system">
 			<template #default>
 				<thead>
@@ -51,14 +63,26 @@
 								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
 								readonly
 								dense
-								:append-icon="
-									getCopyStatus(system._id)
-										? iconMdiCheckCircle
-										: iconMdiContentCopy
-								"
-								@click:append="copyLoginLink(system._id)"
 								@blur="linkCopyFinished"
-							></v-text-field>
+							>
+								<template #append>
+									<v-btn
+										icon
+										@click="copyLoginLink(system._id)"
+										:aria-label="
+											$t(
+												'pages.administration.school.index.authSystems.copyLink'
+											)
+										"
+									>
+										<v-icon>{{
+											getCopyStatus(system._id)
+												? iconMdiCheckCircle
+												: iconMdiContentCopy
+										}}</v-icon>
+									</v-btn>
+								</template>
+							</v-text-field>
 						</td>
 						<td>
 							<v-btn
@@ -66,6 +90,7 @@
 								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
+								:aria-label="ariaLabels(system).edit"
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
@@ -73,6 +98,7 @@
 								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
+								:aria-label="ariaLabels(system).delete"
 								@click.stop="openConfirmDeleteDialog(system._id)"
 							>
 								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
@@ -154,24 +180,35 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
-
 		hasSystemCreatePermission: () => {
 			return authModule.getUserPermissions.includes("system_create");
 		},
-
 		hasSystemEditPermission: () => {
 			return authModule.getUserPermissions.includes("system_edit");
 		},
 	},
 	methods: {
-		// TODO - Discuss which systems are still gonna be editable in the future
+		ariaLabels(system) {
+			const systemName =
+				system.alias ||
+				this.$t("pages.administration.school.index.authSystems.title");
+
+			return {
+				edit: this.$t("pages.administration.school.index.authSystems.edit", {
+					system: systemName,
+				}),
+				delete: this.$t(
+					"pages.administration.school.index.authSystems.delete",
+					{ system: systemName }
+				),
+			};
+		},
 		isEditable(system) {
 			return system.type === "ldap" && system.ldapConfig.provider === "general";
 		},
 		isRemovable(system) {
 			return system.type !== "ldap" || system.ldapConfig.provider === "general";
 		},
-		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
 				isOpen: true,
