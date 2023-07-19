@@ -8,19 +8,19 @@ import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fi
 import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { AnyContentElement } from "@boardTypes/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import { AnyContentElement } from "../../types/ContentElement";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 
-jest.mock("../../shared/InlineEditInteractionHandler.composable");
-jest.mock("../../shared/DeleteBoardNodeConfirmation.composable");
-jest.mock("../../shared/FileStorageApi.composable");
-jest.mock("../../shared/SelectedFile.composable");
+jest.mock("@boardShared/InlineEditInteractionHandler.composable");
+jest.mock("@boardShared/DeleteBoardNodeConfirmation.composable");
+jest.mock("@boardShared/FileStorageApi.composable");
+jest.mock("@boardShared/SelectedFile.composable");
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);

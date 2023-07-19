@@ -3,6 +3,7 @@ import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import FileContentElementChips from "./FileContentElementChips.vue";
+
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementChips", () => {

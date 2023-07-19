@@ -1,9 +1,10 @@
 import { downloadFile } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import BoardMenuAction from "@boardShared/BoardMenuAction.vue";
 import { shallowMount } from "@vue/test-utils";
-import BoardMenuAction from "../../shared/BoardMenuAction.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementEdit", () => {

@@ -79,6 +79,9 @@
 
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
+import { useBoardFocusHandler } from "@boardShared/BoardFocusHandler.composable";
+import BoardMenu from "@boardShared/BoardMenu.vue";
+import BoardMenuAction from "@boardShared/BoardMenuAction.vue";
 import {
 	mdiArrowCollapseDown,
 	mdiArrowCollapseUp,
@@ -87,9 +90,6 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent, ref } from "vue";
-import { useBoardFocusHandler } from "../../shared/BoardFocusHandler.composable";
-import BoardMenu from "../../shared/BoardMenu.vue";
-import BoardMenuAction from "../../shared/BoardMenuAction.vue";
 
 export default defineComponent({
 	name: "FileContentElementEdit",

@@ -48,11 +48,11 @@ import {
 	FileRecordScanStatus,
 } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
+import { useDeleteBoardNodeConfirmation } from "@boardShared/DeleteBoardNodeConfirmation.composable";
+import { useFileStorageApi } from "@boardShared/FileStorageApi.composable";
+import { useSelectedFile } from "@boardShared/SelectedFile.composable";
+import { useContentElementState } from "@boardState/ContentElementState.composable";
 import { PropType, computed, defineComponent, onMounted } from "vue";
-import { useDeleteBoardNodeConfirmation } from "../../shared/DeleteBoardNodeConfirmation.composable";
-import { useFileStorageApi } from "../../shared/FileStorageApi.composable";
-import { useSelectedFile } from "../../shared/SelectedFile.composable";
-import { useContentElementState } from "../../state/ContentElementState.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
