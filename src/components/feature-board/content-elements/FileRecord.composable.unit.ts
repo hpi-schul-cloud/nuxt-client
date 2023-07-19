@@ -98,7 +98,7 @@ describe("FileRecord Composable", () => {
 				});
 			});
 
-			describe("when file record is not an image", () => {
+			describe("when file record is defined", () => {
 				const setup = () => {
 					const parentId = ObjectIdMock();
 					const parentType = FileRecordParentType.BOARDNODES;
@@ -128,18 +128,12 @@ describe("FileRecord Composable", () => {
 					expect(url.value).toBe(fileRecordResponse.value.url);
 				});
 			});
+		});
 
-			describe("when file is an image", () => {
+		describe("when file is blocked by the virus scanner", () => {
+			describe("when file record is undefined", () => {
 				const setup = () => {
-					const parentId = ObjectIdMock();
-					const parentType = FileRecordParentType.BOARDNODES;
-					const fileRecordResponse = ref(
-						fileRecordResponseFactory.build({
-							parentId,
-							parentType,
-							mimeType: "image/png",
-						})
-					);
+					const fileRecordResponse = ref(undefined);
 
 					return { fileRecordResponse };
 				};
@@ -152,103 +146,44 @@ describe("FileRecord Composable", () => {
 					expect(isBlockedByVirusScan.value).toBe(false);
 				});
 
-				it("should set url correctly", async () => {
+				it("should set url to be empty", async () => {
 					const { fileRecordResponse } = setup();
 
 					const { url } = useFileRecord(fileRecordResponse);
 
-					expect(url.value).toBe(fileRecordResponse.value.url);
+					expect(url.value).toBe("");
 				});
 			});
 
-			describe("when file is blocked by the virus scanner", () => {
-				describe("when file record is undefined", () => {
-					const setup = () => {
-						const fileRecordResponse = ref(undefined);
+			describe("when file record is defined", () => {
+				const setup = () => {
+					const parentId = ObjectIdMock();
+					const parentType = FileRecordParentType.BOARDNODES;
+					const fileRecordResponse = ref(
+						fileRecordResponseFactory.build({
+							parentId,
+							parentType,
+							securityCheckStatus: FileRecordScanStatus.BLOCKED,
+						})
+					);
 
-						return { fileRecordResponse };
-					};
+					return { fileRecordResponse };
+				};
 
-					it("should set isBlockedByVirusScan to be false", async () => {
-						const { fileRecordResponse } = setup();
+				it("should set isBlockedByVirusScan to be true", async () => {
+					const { fileRecordResponse } = setup();
 
-						const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
+					const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
 
-						expect(isBlockedByVirusScan.value).toBe(false);
-					});
-
-					it("should set url to be empty", async () => {
-						const { fileRecordResponse } = setup();
-
-						const { url } = useFileRecord(fileRecordResponse);
-
-						expect(url.value).toBe("");
-					});
+					expect(isBlockedByVirusScan.value).toBe(true);
 				});
 
-				describe("when file record is not an image", () => {
-					const setup = () => {
-						const parentId = ObjectIdMock();
-						const parentType = FileRecordParentType.BOARDNODES;
-						const fileRecordResponse = ref(
-							fileRecordResponseFactory.build({
-								parentId,
-								parentType,
-								securityCheckStatus: FileRecordScanStatus.BLOCKED,
-							})
-						);
+				it("should set url to be empty", async () => {
+					const { fileRecordResponse } = setup();
 
-						return { fileRecordResponse };
-					};
+					const { url } = useFileRecord(fileRecordResponse);
 
-					it("should set isBlockedByVirusScan to be true", async () => {
-						const { fileRecordResponse } = setup();
-
-						const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
-
-						expect(isBlockedByVirusScan.value).toBe(true);
-					});
-
-					it("should set url to be empty", async () => {
-						const { fileRecordResponse } = setup();
-
-						const { url } = useFileRecord(fileRecordResponse);
-
-						expect(url.value).toBe("");
-					});
-				});
-
-				describe("when file is an image", () => {
-					const setup = () => {
-						const parentId = ObjectIdMock();
-						const parentType = FileRecordParentType.BOARDNODES;
-						const fileRecordResponse = ref(
-							fileRecordResponseFactory.build({
-								parentId,
-								parentType,
-								mimeType: "image/png",
-								securityCheckStatus: FileRecordScanStatus.BLOCKED,
-							})
-						);
-
-						return { fileRecordResponse };
-					};
-
-					it("should set isBlockedByVirusScan to be true", async () => {
-						const { fileRecordResponse } = setup();
-
-						const { isBlockedByVirusScan } = useFileRecord(fileRecordResponse);
-
-						expect(isBlockedByVirusScan.value).toBe(true);
-					});
-
-					it("should set url to be empty", async () => {
-						const { fileRecordResponse } = setup();
-
-						const { url } = useFileRecord(fileRecordResponse);
-
-						expect(url.value).toBe("");
-					});
+					expect(url.value).toBe("");
 				});
 			});
 		});
