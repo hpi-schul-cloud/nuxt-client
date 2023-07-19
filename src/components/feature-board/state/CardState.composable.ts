@@ -1,8 +1,9 @@
 import {
 	ContentElementType,
 	CreateContentElementBodyParams,
+	RichTextElementResponse,
 } from "@/serverApi/v3";
-import { nextTick, onMounted, reactive, toRef } from "vue";
+import { computed, nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
@@ -114,7 +115,33 @@ export const useCardState = (id: BoardCard["id"]) => {
 		return response.data;
 	};
 
+	const hasEmptySingleRichTextElement = computed(() => {
+		if (
+			cardState.card === undefined ||
+			cardState.card.elements[0] === undefined
+		) {
+			return false;
+		}
+
+		const cardLength = cardState.card.elements.length;
+		const firstElement = cardState.card.elements[0] as RichTextElementResponse;
+
+		if (firstElement.type === ContentElementType.RichText) {
+			return cardLength === 1 && firstElement.content.text.length === 0;
+		}
+
+		return false;
+	});
+
 	const addTextAfterTitle = async () => {
+		if (cardState.card === undefined) {
+			return;
+		}
+
+		if (hasEmptySingleRichTextElement.value) {
+			await deleteElement(cardState.card.elements[0].id);
+		}
+
 		return await addElement(ContentElementType.RichText, true);
 	};
 
