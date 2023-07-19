@@ -47,29 +47,63 @@ describe("FileContentElementMenu", () => {
 	});
 
 	describe("move up and down board actions", () => {
-		describe("when multiple elements are present", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
+		const setup = () => {
+			document.body.setAttribute("data-app", "true");
 
-				const multipleElementsSetupProps = {
-					fileId: "file-id #1",
-					fileName: "file-record #1.txt",
-					url: "1/file-record #1.txt",
-					isDownloadAllowed: true,
-					isFirstElement: false,
-					isLastElement: false,
-					hasMultipleElements: true,
-				};
-				const wrapper = shallowMount(FileContentElementMenu, {
-					...createComponentMocks({ i18n: true }),
-					propsData: multipleElementsSetupProps,
-				});
-
-				return {
-					wrapper,
-				};
+			const multipleElementsSetupProps = {
+				fileId: "file-id #1",
+				fileName: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+				isFirstElement: false,
+				isLastElement: false,
+				hasMultipleElements: true,
 			};
+			const wrapper = shallowMount(FileContentElementMenu, {
+				...createComponentMocks({ i18n: true }),
+				propsData: multipleElementsSetupProps,
+			});
 
+			return {
+				wrapper,
+			};
+		};
+
+		describe("when move up menu action is clicked", () => {
+			it("should emit move-up:element event", async () => {
+				const { wrapper } = setup();
+
+				const moveUpTranslation = wrapper.vm
+					.$t("components.board.action.moveUp")
+					.toString();
+				const childComponent = wrapper
+					.findAllComponents(BoardMenuAction)
+					.filter((c) => c.text().includes(moveUpTranslation))
+					.at(0);
+				childComponent.vm.$emit("click");
+
+				expect(wrapper.emitted("move-up:element")?.length).toBe(1);
+			});
+		});
+
+		describe("when move down menu action is clicked", () => {
+			it("should emit move-down:element event", async () => {
+				const { wrapper } = setup();
+
+				const moveDownTranslation = wrapper.vm
+					.$t("components.board.action.moveDown")
+					.toString();
+				const childComponent = wrapper
+					.findAllComponents(BoardMenuAction)
+					.filter((c) => c.text().includes(moveDownTranslation))
+					.at(0);
+				childComponent.vm.$emit("click");
+
+				expect(wrapper.emitted("move-down:element")?.length).toBe(1);
+			});
+		});
+
+		describe("when multiple elements are present", () => {
 			it("should show the move up action", () => {
 				const { wrapper } = setup();
 
@@ -98,40 +132,6 @@ describe("FileContentElementMenu", () => {
 					.at(0);
 
 				expect(childComponent.exists()).toBe(true);
-			});
-
-			describe("when move up menu action is clicked", () => {
-				it("should emit move-up:element event", async () => {
-					const { wrapper } = setup();
-
-					const moveUpTranslation = wrapper.vm
-						.$t("components.board.action.moveUp")
-						.toString();
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveUpTranslation))
-						.at(0);
-					childComponent.vm.$emit("click");
-
-					expect(wrapper.emitted("move-up:element")?.length).toBe(1);
-				});
-			});
-
-			describe("when move down menu action is clicked", () => {
-				it("should emit move-down:element event", async () => {
-					const { wrapper } = setup();
-
-					const moveDownTranslation = wrapper.vm
-						.$t("components.board.action.moveDown")
-						.toString();
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveDownTranslation))
-						.at(0);
-					childComponent.vm.$emit("click");
-
-					expect(wrapper.emitted("move-down:element")?.length).toBe(1);
-				});
 			});
 
 			describe("when element is at the beginning of the content elements list", () => {
