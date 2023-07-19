@@ -27,12 +27,21 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
+					:isFocused="shouldFocusTitle"
 					@enter="addTextAfterTitle"
 				>
 				</CardTitle>
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
+						<BoardMenuAction @click="onStartEditModeByMenu">
+							<template #icon>
+								<VIcon>
+									{{ mdiPencilOutline }}
+								</VIcon>
+							</template>
+							{{ $t("common.actions.edit") }}
+						</BoardMenuAction>
 						<BoardMenuAction @click="onDeleteCard">
 							<template #icon>
 								<VIcon>
@@ -66,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { mdiTrashCanOutline } from "@mdi/js";
+import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -157,6 +166,12 @@ export default defineComponent({
 			askType();
 		};
 
+		const shouldFocusTitle = ref<boolean>(false);
+
+		const onStartEditModeByMenu = () => {
+			shouldFocusTitle.value = true;
+			startEditMode();
+		};
 		const onStartEditMode = () => {
 			startEditMode();
 		};
@@ -164,6 +179,7 @@ export default defineComponent({
 		const onEndEditMode = () => {
 			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
+				shouldFocusTitle.value = false;
 			}
 		};
 
@@ -206,12 +222,14 @@ export default defineComponent({
 			card,
 			hasDeletePermission,
 			isHovered,
+			shouldFocusTitle,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
 			deleteElement,
 			onStartEditMode,
+			onStartEditModeByMenu,
 			onEndEditMode,
 			onMoveContentElementDown,
 			onMoveContentElementUp,
@@ -219,6 +237,7 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			mdiTrashCanOutline,
+			mdiPencilOutline,
 			onFileSelect,
 			isFilePickerOpen,
 			addTextAfterTitle,
