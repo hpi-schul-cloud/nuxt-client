@@ -945,7 +945,6 @@
 	"pages.userMigration.description.fromTarget": "Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви повинні перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть \"{startMigration}\" і увійдіть за допомогою свого облікового запису {targetSystem}.",
 	"pages.userMigration.description.fromSource": "Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви можете перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть \"{startMigration}\" і увійдіть за допомогою свого облікового запису {targetSystem}.",
 	"pages.userMigration.description.fromSourceMandatory": "Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви повинні перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть \"{startMigration}\" і увійдіть за допомогою свого облікового запису {targetSystem}.",
-	"pages.userMigration.consent.img.alt": "Графіка міграції",
 	"pages.userMigration.success.img.alt": "Графік успішної міграціїc",
 	"pages.userMigration.success.title": "Успішна міграція вашої системи реєстрації",
 	"pages.userMigration.success.description": "Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
