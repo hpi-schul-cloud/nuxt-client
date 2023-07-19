@@ -160,6 +160,8 @@
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.table.header.status": "Estado",
 	"components.administration.externalToolsSection.action.add": "Agregar herramienta",
+	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
+	"components.administration.externalToolsSection.action.delete": "Eliminar herramienta",
 	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
 	"components.administration.externalToolsSection.dialog.content": "¿Le gustaría eliminar la Herramienta Externa <b>{itemName}</b> de su escuela? </br></br> Si elimina la Herramienta externa de su escuela, se eliminará de todos los cursos de su escuela. La herramienta ya no se puede utilizar.",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",

@@ -161,6 +161,8 @@
 	"components.administration.externalToolsSection.header": "Externe Tools",
 	"components.administration.externalToolsSection.table.header.status": "Status",
 	"components.administration.externalToolsSection.action.add": "Tool hinzufügen",
+	"components.administration.externalToolsSection.action.edit": "Tool bearbeiten",
+	"components.administration.externalToolsSection.action.delete": "Tool löschen",
 	"components.administration.externalToolsSection.dialog.title": "Externes Tool entfernen?",
 	"components.administration.externalToolsSection.dialog.content": "Möchten Sie das externe Tool <b>{itemName}</b> von Ihrer Schule entfernen? </br></br> Wenn Sie das externe Tool von Ihrer Schule entfernen, wird es aus allen Kursen Ihrer Schule entfernt. Die Nutzung des Tools ist nicht mehr möglich.",
 	"components.administration.externalToolsSection.notification.created": "Tool wurde erfolgreich erstellt.",

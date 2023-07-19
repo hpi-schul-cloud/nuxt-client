@@ -160,6 +160,8 @@
 	"components.administration.externalToolsSection.header": "External Tools",
 	"components.administration.externalToolsSection.table.header.status": "Status",
 	"components.administration.externalToolsSection.action.add": "Add Tool",
+	"components.administration.externalToolsSection.action.edit": "Edit Tool",
+	"components.administration.externalToolsSection.action.delete": "Delete Tool",
 	"components.administration.externalToolsSection.dialog.title": "Remove External Tool",
 	"components.administration.externalToolsSection.dialog.content": "Would you like to remove the External Tool <b>{itemName}</b> from your school? </br></br> If you remove the external tool from your school, it will be removed from all courses in your school. The tool can no longer be used.",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
