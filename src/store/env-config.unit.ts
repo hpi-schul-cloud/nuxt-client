@@ -27,6 +27,8 @@ const mockEnvs: Envs = {
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
 	MIGRATION_END_GRACE_PERIOD_MS: 1,
 	FILES_STORAGE__MAX_FILE_SIZE: 0,
+	GLOBAL_ANNOUNCEMENT_TEXT: "mockValue",
+	GLOBAL_ANNOUNCEMENT_ROLES: ["mockValue"],
 };
 
 const URL = "/v1/config/app/public";
