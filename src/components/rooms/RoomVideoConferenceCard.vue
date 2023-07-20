@@ -44,7 +44,7 @@
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload } from "@mdi/js";
-import { defineComponent, ComputedRef, computed } from "vue";
+import { ComputedRef, computed, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
@@ -79,12 +79,12 @@ export default defineComponent({
 
 		const logoUrl: ComputedRef<string> = computed(() => {
 			if (!props.hasPermission) {
-				return require("@/assets/img/bbb/no_permission.png");
+				return require("src/assets/img/bbb/no_permission.png");
 			} else if (props.isRunning) {
-				return require("@/assets/img/bbb/available.png");
+				return require("src/assets/img/bbb/available.png");
 			}
 
-			return require("@/assets/img/bbb/not_started.png");
+			return require("src/assets/img/bbb/not_started.png");
 		});
 
 		return {
