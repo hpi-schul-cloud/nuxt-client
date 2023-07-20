@@ -28,12 +28,6 @@ export interface PostH5PContentCreateParams {
     params: object;
     /**
      * 
-     * @type {object}
-     * @memberof PostH5PContentCreateParams
-     */
-    metadata: object;
-    /**
-     * 
      * @type {string}
      * @memberof PostH5PContentCreateParams
      */

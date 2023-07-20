@@ -337,6 +337,39 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetNewH5PEditor: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/h5p-editor/edit`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Return dummy HTML for testing
          * @param {string} language 
          * @param {string} contentId 
@@ -584,6 +617,15 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerGetNewH5PEditor(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetNewH5PEditor(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Return dummy HTML for testing
          * @param {string} language 
          * @param {string} contentId 
@@ -710,6 +752,14 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<string> {
+            return localVarFp.h5PEditorControllerGetNewH5PEditor(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Return dummy HTML for testing
          * @param {string} language 
          * @param {string} contentId 
@@ -828,6 +878,14 @@ export interface H5pEditorApiInterface {
      * @memberof H5pEditorApiInterface
      */
     h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -964,6 +1022,16 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      */
     public h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetLibraryFile(ubername, file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerGetNewH5PEditor(options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetNewH5PEditor(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -26,7 +26,7 @@ export interface H5PSaveResponse {
      * @type {string}
      * @memberof H5PSaveResponse
      */
-    id: string;
+    contentId: string;
     /**
      * 
      * @type {H5PContentMetadata}

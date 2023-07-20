@@ -1,44 +1,5 @@
 <template>
-	<section :class="{ inline: isInline }">
-		<v-btn
-			v-if="isInline"
-			text
-			plain
-			:ripple="false"
-			design="none"
-			class="arrow__back"
-			@click="goBack"
-		>
-			<v-icon>{{ mdiChevronLeft }}</v-icon>
-			{{ $t("pages.content.index.backToCourse") }}
-		</v-btn>
-
-		<div class="content" :class="{ inline: isInline }">
-			<div v-if="!!iframeSrc" class="column-layout">
-				<iframe
-					v-h5pResize="{ heightCalculationMethod: 'taggedElement' }"
-					ref="iframe"
-					:src="iframeSrc"
-					class="editor-iframe"
-					allow="fullscreen"
-					title="H5PEditor"
-					v-on:valid-params="onValidParams"
-					v-on:invalid-params="onInvalidParams"
-				></iframe>
-				<v-btn
-					role="button"
-					class="save-button"
-					color="primary"
-					@click="validateParams"
-				>
-					{{ $t("common.actions.save") }}
-				</v-btn>
-			</div>
-			<div v-else class="d-flex justify-center align-center min-height-screen">
-				<v-progress-circular indeterminate color="secondary" size="115" />
-			</div>
-		</div>
-	</section>
+	<H5PEditorComponent :contentId="contentId" />
 </template>
 
 <script lang="ts">
@@ -46,14 +7,13 @@ import { notifierModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mdiChevronLeft } from "@mdi/js";
 import { iframeResizer } from "iframe-resizer";
-import { defineComponent, inject, onMounted, ref } from "vue";
+import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute, useRouter } from "vue-router/composables";
 
-import {
-	H5pEditorApiFactory,
-	H5pEditorApiAxiosParamCreator,
-} from "@/h5pEditorApi/v3";
+import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+
+import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 
 type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
 
@@ -62,6 +22,9 @@ type ParamsInvalidEvent = CustomEvent<string>;
 
 export default defineComponent({
 	name: "H5PEditor",
+	components: {
+		H5PEditorComponent,
+	},
 	setup() {
 		const i18n = inject<VueI18n | undefined>("i18n");
 
@@ -90,13 +53,6 @@ export default defineComponent({
 		const h5pEditorApi = H5pEditorApiFactory(undefined, BASE_PATH, $axios);
 
 		const iframeSrc = ref<string | undefined>();
-		onMounted(() => {
-			H5pEditorApiAxiosParamCreator()
-				.h5PEditorControllerGetH5PEditor(contentId)
-				.then(({ url }) => {
-					iframeSrc.value = $axios.defaults.baseURL + BASE_PATH + url;
-				});
-		});
 
 		function notifyParent(event: CustomEvent) {
 			window.dispatchEvent(event);
@@ -122,7 +78,7 @@ export default defineComponent({
 					notifyParent(
 						new CustomEvent("save-content", {
 							detail: {
-								contentId: data.id,
+								contentId: data.contentId,
 								title: data.metadata.title,
 								contentType: data.metadata.mainLibrary,
 							},
@@ -138,7 +94,7 @@ export default defineComponent({
 					notifyParent(
 						new CustomEvent("save-content", {
 							detail: {
-								contentId: data.id,
+								contentId: data.contentId,
 								title: data.metadata.title,
 								contentType: data.metadata.mainLibrary,
 							},
@@ -146,7 +102,7 @@ export default defineComponent({
 					);
 
 					router.replace({
-						path: `/h5p/editor/${data.id}`,
+						path: `/h5p/editor/${data.contentId}`,
 						query: route.query,
 					});
 				}
@@ -170,6 +126,7 @@ export default defineComponent({
 		}
 
 		return {
+			contentId,
 			iframe,
 			iframeSrc,
 			scriptSrc: "#",
