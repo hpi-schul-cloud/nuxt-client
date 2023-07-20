@@ -1,7 +1,7 @@
 <template>
 	<vCustomDialog
 		data-testid="element-type-selection"
-		:size="320"
+		:size="426"
 		:has-buttons="true"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"

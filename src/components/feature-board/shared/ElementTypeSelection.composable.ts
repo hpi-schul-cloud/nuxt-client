@@ -1,5 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
+import {
+	mdiClipboardCheckOutline,
+	mdiFormatText,
+	mdiTrayArrowUp,
+} from "@mdi/js";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useSelectedFile } from "./SelectedFile.composable";
@@ -45,6 +49,13 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 			icon: mdiTrayArrowUp,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: onFileElementClick,
+			testId: "create-element-file",
+		},
+		{
+			icon: mdiClipboardCheckOutline,
+			label:
+				"components.elementTypeSelection.elements.submissionElement.subtitle",
+			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-file",
 		},
 	];

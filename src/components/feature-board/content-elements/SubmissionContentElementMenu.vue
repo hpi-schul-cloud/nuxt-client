@@ -1,0 +1,74 @@
+<template>
+	<BoardMenu scope="element">
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isFirstElement"
+			data-testid="board-submission-element-edit-menu-move-up"
+			@click="onMoveElementUp"
+		>
+			<VIcon>
+				{{ mdiArrowCollapseUp }}
+			</VIcon>
+			{{ $t("components.board.action.moveUp") }}
+		</BoardMenuAction>
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isLastElement"
+			data-testid="board-submission-element-edit-menu-move-down"
+			@click="onMoveElementDown"
+		>
+			<VIcon>
+				{{ mdiArrowCollapseDown }}
+			</VIcon>
+			{{ $t("components.board.action.moveDown") }}
+		</BoardMenuAction>
+		<BoardMenuAction
+			data-testid="board-submission-element-edit-menu-delete"
+			@click="onDelete"
+		>
+			<VIcon>
+				{{ mdiTrashCanOutline }}
+			</VIcon>
+			{{ $t("components.board.action.delete") }}
+		</BoardMenuAction>
+	</BoardMenu>
+</template>
+
+<script lang="ts">
+import {
+	mdiArrowCollapseDown,
+	mdiArrowCollapseUp,
+	mdiTrashCanOutline,
+} from "@mdi/js";
+import { defineComponent } from "vue";
+import BoardMenu from "../shared/BoardMenu.vue";
+import BoardMenuAction from "../shared/BoardMenuAction.vue";
+
+export default defineComponent({
+	name: "SubmissionContentElementMenu",
+	components: { BoardMenu, BoardMenuAction },
+	props: {
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
+	},
+	emits: ["delete:element", "move-down:element", "move-up:element"],
+	setup(_, { emit }) {
+		const onDelete = () => {
+			emit("delete:element");
+		};
+		const onMoveElementDown = () => {
+			emit("move-down:element");
+		};
+		const onMoveElementUp = () => {
+			emit("move-up:element");
+		};
+		return {
+			mdiArrowCollapseUp,
+			mdiArrowCollapseDown,
+			mdiTrashCanOutline,
+			onDelete,
+			onMoveElementDown,
+			onMoveElementUp,
+		};
+	},
+});
+</script>

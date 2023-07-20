@@ -21,6 +21,19 @@
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
 			/>
+			<SubmissionContentElement
+				v-else-if="isSubmissionElementResponse(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
+				:hasMultipleElements="hasMultipleElements"
+				:deleteElement="deleteElement"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
+			/>
 		</template>
 	</VCardText>
 </template>
@@ -36,12 +49,16 @@ import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
 import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
+import SubmissionContentElement, {
+	SubmissionElementResponse,
+} from "./SubmissionContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
 		FileContentElement,
 		RichTextContentElement,
+		SubmissionContentElement,
 	},
 	props: {
 		elements: {
@@ -59,16 +76,22 @@ export default defineComponent({
 	},
 	emits: ["move-down:element", "move-up:element", "move-keyboard:element"],
 	setup(props, { emit }) {
+		const isFileElementResponse = (
+			element: AnyContentElement
+		): element is FileElementResponse => {
+			return element.type === ContentElementType.File;
+		};
+
 		const isRichTextElementResponse = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
 			return element.type === ContentElementType.RichText;
 		};
 
-		const isFileElementResponse = (
+		const isSubmissionElementResponse = (
 			element: AnyContentElement
-		): element is FileElementResponse => {
-			return element.type === ContentElementType.File;
+		): element is SubmissionElementResponse => {
+			return element.type === ContentElementType.SubmissionContainer;
 		};
 
 		const onMoveElementDown = (
@@ -124,6 +147,7 @@ export default defineComponent({
 			hasMultipleElements,
 			isFileElementResponse,
 			isRichTextElementResponse,
+			isSubmissionElementResponse,
 			lastElementId,
 			onMoveElementDown,
 			onMoveElementUp,
