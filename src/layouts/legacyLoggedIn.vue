@@ -131,9 +131,6 @@ export default defineComponent({
 		});
 
 		const showGlobalAnnouncement = computed(() => {
-			console.log(envConfigModule?.getEnv.GLOBAL_ANNOUNCEMENT_TEXT);
-			console.log(envConfigModule?.getEnv.GLOBAL_ANNOUNCEMENT_ROLES);
-			console.log(user.value?.roles);
 			if (
 				envConfigModule?.getEnv.GLOBAL_ANNOUNCEMENT_TEXT &&
 				envConfigModule?.getEnv.GLOBAL_ANNOUNCEMENT_ROLES
