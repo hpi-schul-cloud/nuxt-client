@@ -231,12 +231,7 @@ export default defineComponent({
 
 		const handleInput = () => emit("input", content.value);
 		const handleFocus = () => emit("focus");
-
-		const blurDelay = 200;
-		const handleBlur = () => {
-			emit("blur");
-			// setTimeout(() => emit("blur"), blurDelay);
-		};
+		const handleBlur = () => emit("blur");
 
 		const handleDelete = () => {
 			if (charCount.value === 0) {
