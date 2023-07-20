@@ -3,12 +3,10 @@ import {
 	FileApiInterface,
 	FileRecordParentType,
 	FileRecordResponse,
-	FileRecordScanStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { delay } from "@/utils/helpers";
 import { ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -80,32 +78,6 @@ export const useFileStorageApi = (
 		}
 	};
 
-	const fetchPendingFileRecursively = async (
-		waitTime = 10000,
-		waitTimeMax = 50000,
-		refreshTimer = 0
-	): Promise<FileRecordResponse | undefined> => {
-		if (
-			!fileRecord.value ||
-			fileRecord.value?.securityCheckStatus !== FileRecordScanStatus.PENDING
-		) {
-			return;
-		}
-		try {
-			await delay(waitTime);
-
-			await fetchFile();
-
-			if (refreshTimer < waitTimeMax) {
-				refreshTimer = refreshTimer + waitTime;
-
-				await fetchPendingFileRecursively(waitTime, waitTimeMax, refreshTimer);
-			}
-		} catch (error) {
-			return;
-		}
-	};
-
 	const showError = (error: unknown) => {
 		const responseError = mapAxiosErrorToResponseError(error);
 		const { message } = responseError;
@@ -135,7 +107,6 @@ export const useFileStorageApi = (
 
 	return {
 		fetchFile,
-		fetchPendingFileRecursively,
 		rename,
 		upload,
 		fileRecord,
