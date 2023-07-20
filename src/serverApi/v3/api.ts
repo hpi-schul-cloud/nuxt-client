@@ -1278,6 +1278,7 @@ export enum CustomParameterResponseTypeEnum {
 	AutoCourseid = "auto_courseid",
 	AutoCoursename = "auto_coursename",
 	AutoSchoolid = "auto_schoolid",
+	AutoSchoolnumber = "auto_schoolnumber",
 }
 
 /**

@@ -22,7 +22,15 @@
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref, watch, nextTick } from "vue";
+import {
+	computed,
+	defineComponent,
+	PropType,
+	ref,
+	watch,
+	nextTick,
+	onMounted,
+} from "vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { VTextarea } from "vuetify/lib";
@@ -47,6 +55,9 @@ export default defineComponent({
 			default: "",
 			required: false,
 		},
+		isFocused: {
+			type: Boolean,
+		},
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
@@ -70,11 +81,14 @@ export default defineComponent({
 			if (!textarea.value) return;
 			textarea.value.focus();
 		};
+		onMounted(() => {
+			if (props.isFocused) setFocusOnEdit();
+		});
 
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column") return;
+				if (props.scope !== "column" && !props.isFocused) return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					setFocusOnEdit();
