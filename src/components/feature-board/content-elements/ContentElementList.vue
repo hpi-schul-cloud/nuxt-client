@@ -35,7 +35,7 @@ import { PropType, computed, defineComponent } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
 import RichTextContentElement from "./RichTextContentElement.vue";
-import FileContentElement from "./file-content-element/FileContentElement.vue";
+import { FileContentElement } from "./file-content-element";
 
 export default defineComponent({
 	name: "ContentElementList",
