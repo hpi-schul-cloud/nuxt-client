@@ -17,6 +17,8 @@ const specificFiles = {
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
+const termsOfUseSchoolThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+
 const globalFiles = {
 	BeschreibungDerSchulCloud: "Dokumente/Beschreibung-der-HPI-Schul-Cloud.pdf",
 	TechnischerBericht2019:
@@ -111,8 +113,7 @@ export default class FilePathsModule extends VuexModule {
 		try {
 			const theme = envConfigModule.getTheme;
 			if (theme === "thr") {
-				specificFiles.termsOfUseSchool =
-					"Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+				specificFiles.termsOfUseSchool = termsOfUseSchoolThr;
 			}
 			const baseDir =
 				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
