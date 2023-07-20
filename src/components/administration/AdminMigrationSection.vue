@@ -4,7 +4,11 @@
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
 		<RenderHTML
-			:html="t('components.administration.adminMigrationSection.description')"
+			:html="
+				t('components.administration.adminMigrationSection.description', {
+					supportLink,
+				})
+			"
 			component="p"
 		/>
 		<div v-if="!oauthMigration.oauthMigrationPossible">
@@ -130,6 +134,7 @@ import {
 import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { envConfigModule } from "@/store";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -226,6 +231,28 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
+		const schoolNumber: ComputedRef<string | undefined> = computed(
+			() => schoolsModule.getSchool.officialSchoolNumber
+		);
+		const getSubject = (): string => {
+			let subject: string = encodeURIComponent(
+				"Schule mit der Nummer: ??? soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
+			);
+
+			if (schoolNumber.value) {
+				subject = encodeURIComponent(
+					`Schule mit der Nummer: ${schoolNumber.value} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
+				);
+			}
+			return subject;
+		};
+
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
+		);
 
 		return {
 			oauthMigration,
@@ -241,6 +268,7 @@ export default defineComponent({
 			isCurrentDateAfterFinalFinish,
 			finalFinishText,
 			dayjs,
+			supportLink,
 		};
 	},
 });
