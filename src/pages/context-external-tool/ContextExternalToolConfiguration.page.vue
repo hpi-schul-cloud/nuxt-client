@@ -58,7 +58,7 @@
 				@click="onSaveTool"
 				data-testId="save-button"
 			>
-				{{ t("pages.tool.addBtn.label") }}
+				{{ t("common.actions.add") }}
 			</v-btn>
 		</v-row>
 	</default-wireframe>
@@ -88,6 +88,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ExternalToolsModule from "@/store/external-tools";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
+import NotifierModule from "@/store/notifier";
 import ExternalToolSelectionRow from "../administration/external-tool/ExternalToolSelectionRow.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import ContextExternalToolsModule from "@/store/context-external-tools";
@@ -96,6 +97,7 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -124,6 +126,7 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
+		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const roomsModule: RoomsModule | undefined = inject("roomsModule");
 
 		onMounted(async () => {
@@ -234,6 +237,15 @@ export default defineComponent({
 			}
 
 			if (!externalToolsModule.getBusinessError.message) {
+				const message = t(
+					"components.administration.externalToolsSection.notification.created"
+				);
+
+				notifierModule.show({
+					text: message,
+					status: "success",
+				});
+
 				await router.push({ path: contextRoute, query: { tab: "tools" } });
 			}
 		};

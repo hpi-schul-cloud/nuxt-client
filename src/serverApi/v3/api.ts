@@ -1272,9 +1272,10 @@ export enum CustomParameterResponseTypeEnum {
     String = 'string',
     Number = 'number',
     Boolean = 'boolean',
-    AutoCourseid = 'auto_courseid',
-    AutoCoursename = 'auto_coursename',
-    AutoSchoolid = 'auto_schoolid'
+    AutoContextid = 'auto_contextid',
+    AutoContextname = 'auto_contextname',
+    AutoSchoolid = 'auto_schoolid',
+    AutoSchoolnumber = 'auto_schoolnumber'
 }
 
 /**

@@ -14,9 +14,14 @@ import {
 	SchoolExternalTool,
 	ToolConfigurationTemplate,
 } from "@/store/external-tool";
+import NotifierModule from "@/store/notifier";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 
 describe("ExternalToolConfiguration", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -35,9 +40,11 @@ describe("ExternalToolConfiguration", () => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getToolConfigurations: [toolConfigurationFactory.build()],
-			getBusinessError: businessErrorFactory.build(),
+			getBusinessError: businessErrorFactory.build({ message: undefined }),
 			...getters,
-		}) as jest.Mocked<ExternalToolsModule>;
+		});
+
+		const notifierModule = createModuleMocks(NotifierModule);
 
 		const routerPush = jest.fn();
 		const $router = {
@@ -65,6 +72,7 @@ describe("ExternalToolConfiguration", () => {
 				provide: {
 					[I18N_KEY as symbol]: { t: (key: string) => key },
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: {
 					...propsData,
@@ -82,6 +90,7 @@ describe("ExternalToolConfiguration", () => {
 			routerPush,
 			toolTemplate,
 			loadedSchoolExternalTool,
+			notifierModule,
 		};
 	};
 
@@ -264,15 +273,25 @@ describe("ExternalToolConfiguration", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({ message: undefined }),
-				});
+				const { wrapper, routerPush } = await setup();
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+				});
+			});
+
+			it("should display a notification when created", async () => {
+				const { wrapper, notifierModule } = await setup();
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "components.administration.externalToolsSection.notification.created",
+					status: "success",
 				});
 			});
 
@@ -309,15 +328,35 @@ describe("ExternalToolConfiguration", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, routerPush } = await setup({
-					getBusinessError: businessErrorFactory.build({ message: undefined }),
-				});
+				const { wrapper, routerPush } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
 
 				const saveButton = wrapper.find('[data-testid="save-button"]');
 				await saveButton.vm.$emit("click");
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+				});
+			});
+
+			it("should display a notification when updated", async () => {
+				const { wrapper, notifierModule } = await setup(
+					{},
+					{
+						configId: "configId",
+					}
+				);
+
+				const saveButton = wrapper.find('[data-testid="save-button"]');
+				await saveButton.vm.$emit("click");
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "components.administration.externalToolsSection.notification.updated",
+					status: "success",
 				});
 			});
 
