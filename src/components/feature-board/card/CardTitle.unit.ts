@@ -3,6 +3,11 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardTitle from "./CardTitle.vue";
 
+const componentProps = {
+	value: "props value",
+	isFocused: true,
+};
+
 describe(CardTitle.name, () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -11,7 +16,7 @@ describe(CardTitle.name, () => {
 		wrapper = shallowMount(CardTitle as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: {
-				value: "props value",
+				...componentProps,
 				isEditMode: options.isEditMode,
 			},
 			provide: {
