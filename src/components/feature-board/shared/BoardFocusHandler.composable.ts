@@ -100,7 +100,6 @@ export function useBoardFocusHandler(
 	);
 
 	const isFocusedById = computed(() => {
-		// console.log("isFocusedById", id.valueOf(), focusedId);
 		return id.valueOf() === focusedId.value;
 	});
 
@@ -112,7 +111,6 @@ export function useBoardFocusHandler(
 	});
 
 	const forceFocus = async () => {
-		console.log("force focus for: ", id);
 		await nextTick();
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();

@@ -47,7 +47,6 @@ export default defineComponent({
 		const autofocus = ref(false);
 		useBoardFocusHandler(props.element.id, ref(null), () => {
 			autofocus.value = true;
-			console.log("focus received in text elem");
 		});
 
 		const onDeleteElement = async (): Promise<void> => {

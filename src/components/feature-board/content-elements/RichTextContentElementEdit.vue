@@ -47,14 +47,9 @@ export default defineComponent({
 			}
 		};
 
-		const onBlur = () => {
-			emit("blur");
-			console.log("text-element blurred");
-		};
+		const onBlur = () => emit("blur");
 
-		const onDelete = () => {
-			emit("delete:element");
-		};
+		const onDelete = () => emit("delete:element");
 
 		return { modelValue, onFocus, onDelete, onBlur };
 	},
