@@ -44,7 +44,7 @@
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload } from "@mdi/js";
-import { ComputedRef, computed, defineComponent } from "vue";
+import { defineComponent, ComputedRef, computed } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
