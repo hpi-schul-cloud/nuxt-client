@@ -62,6 +62,14 @@ export function useBoardFocusHandler(
 	FocusHandler,
 	"isFocusContained" | "isFocusWithin" | "isFocused" | "isFocusedById"
 >;
+/**
+ * Internal type to enable mocking of overloads
+ */
+export function useBoardFocusHandler(
+	id?: never,
+	element?: never,
+	onFocusReceived?: never
+): Partial<FocusHandler>;
 export function useBoardFocusHandler(
 	id?: MaybeComputedRef<FocusableId>,
 	element?: Ref<HTMLElement | null>,
