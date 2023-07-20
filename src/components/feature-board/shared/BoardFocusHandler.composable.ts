@@ -87,17 +87,19 @@ export function useBoardFocusHandler(
 		};
 	}
 
-	onMounted(async () => {
-		await regainFocus();
-	});
-
-	const regainFocus = async () => {
+	onMounted(() => {
 		if (id !== focusedId.value) {
 			return;
 		}
+		forceFocus();
+	});
+
+	const forceFocus = async () => {
+		console.log("force focus for: ", id);
 		await nextTick();
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
+			setFocus(id);
 			return;
 		}
 		isFocused.value = true;
@@ -118,7 +120,13 @@ export function useBoardFocusHandler(
 		}
 	);
 
-	useInlineEditInteractionHandler(regainFocus);
+	/**
+	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
+	 */
+	useInlineEditInteractionHandler(async () => {
+		console.log("interaction callback for: ", id);
+		await forceFocus();
+	});
 
 	onUnmounted(() => {
 		cleanupFocusListener();

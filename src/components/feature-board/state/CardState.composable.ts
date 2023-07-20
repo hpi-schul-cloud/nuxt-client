@@ -99,11 +99,12 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		if (atFirstPosition) {
-			setFocus(response.data.id);
 			cardState.card.elements.splice(0, 0, response.data);
 		} else {
 			cardState.card.elements.push(response.data);
 		}
+
+		setFocus(response.data.id);
 
 		return response.data;
 	};

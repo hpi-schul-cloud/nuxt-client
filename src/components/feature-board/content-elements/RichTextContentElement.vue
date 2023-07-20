@@ -44,11 +44,10 @@ export default defineComponent({
 	setup(props) {
 		const { modelValue } = useContentElementState(props);
 		const autofocus = ref(false);
-		useBoardFocusHandler(
-			props.element.id,
-			ref(null),
-			() => (autofocus.value = true)
-		);
+		useBoardFocusHandler(props.element.id, ref(null), () => {
+			autofocus.value = true;
+			console.log("focus received in text elem");
+		});
 
 		const onDeleteElement = async (): Promise<void> => {
 			await props.deleteElement(props.element.id);

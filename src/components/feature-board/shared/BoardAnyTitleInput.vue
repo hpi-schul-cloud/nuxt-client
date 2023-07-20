@@ -72,7 +72,6 @@ export default defineComponent({
 
 		const textarea = computed(() => {
 			if (titleInput.value === null) return;
-
 			return titleInput.value.$refs.input as HTMLTextAreaElement;
 		});
 
