@@ -234,7 +234,8 @@ export default defineComponent({
 
 		const blurDelay = 200;
 		const handleBlur = () => {
-			setTimeout(() => emit("blur"), blurDelay);
+			emit("blur");
+			// setTimeout(() => emit("blur"), blurDelay);
 		};
 
 		const handleDelete = () => {

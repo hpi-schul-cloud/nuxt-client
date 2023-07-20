@@ -58,6 +58,12 @@ const isInteractionWithinElementBoundary = (
 	},
 	interactionBoundary: { x: number; y: number }
 ) => {
+	console.log(
+		"interaction callback for at: ",
+		interactionBoundary,
+		" for element at: ",
+		elementBoundary
+	);
 	return (
 		elementBoundary.top <= interactionBoundary.y &&
 		interactionBoundary.y <= elementBoundary.bottom &&

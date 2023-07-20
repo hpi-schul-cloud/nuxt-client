@@ -20,6 +20,7 @@ declare type FocusHandler = {
 	isFocused: Ref<boolean>;
 	isFocusWithin: Ref<boolean>;
 	isFocusContained: Ref<boolean>;
+	isFocusedById: Ref<boolean>;
 	setFocus: (id: FocusableId) => void;
 	isAnythingFocused: Ref<boolean>;
 };
@@ -57,19 +58,15 @@ export function useBoardFocusHandler(
 	id: MaybeComputedRef<FocusableId>,
 	element: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
-): Pick<FocusHandler, "isFocusContained" | "isFocusWithin" | "isFocused">;
+): Pick<
+	FocusHandler,
+	"isFocusContained" | "isFocusWithin" | "isFocused" | "isFocusedById"
+>;
 export function useBoardFocusHandler(
 	id?: MaybeComputedRef<FocusableId>,
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
-	const { focused: isFocused } = useFocus(element);
-	const { focused: isFocusWithin } = useFocusWithin(element);
-
-	const isFocusContained = computed(
-		() => isFocused.value || isFocusWithin.value
-	);
-
 	const { setFocus, focusedId } = useSharedFocusedId();
 
 	const isAnythingFocused = ref(focusedId.value !== undefined);
@@ -86,6 +83,18 @@ export function useBoardFocusHandler(
 			setFocus,
 		};
 	}
+
+	const { focused: isFocused } = useFocus(element);
+	const { focused: isFocusWithin } = useFocusWithin(element);
+
+	const isFocusContained = computed(
+		() => isFocused.value || isFocusWithin.value
+	);
+
+	const isFocusedById = computed(() => {
+		// console.log("isFocusedById", id.valueOf(), focusedId);
+		return id.valueOf() === focusedId.value;
+	});
 
 	onMounted(() => {
 		if (id !== focusedId.value) {
@@ -124,7 +133,6 @@ export function useBoardFocusHandler(
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
 	useInlineEditInteractionHandler(async () => {
-		console.log("interaction callback for: ", id);
 		await forceFocus();
 	});
 
@@ -134,19 +142,24 @@ export function useBoardFocusHandler(
 
 	return {
 		/**
-		 * If the observed element is focused.
+		 * If the observed element is focused by the browser.
 		 *
 		 * Setting this value manually to true focuses the element.
 		 */
 		isFocused,
 		/**
-		 * A child of the observed element is focused.
+		 * A child of the observed element is focused by the browser.
 		 */
 		isFocusWithin,
 		/**
 		 * Element isFocused or isFocusWithin.
 		 */
 		isFocusContained,
+		/**
+		 * The element is registered as the currently focused element.
+		 * This is not concerned whether the browser is actually focusing the element or not
+		 */
+		isFocusedById,
 	};
 }
 

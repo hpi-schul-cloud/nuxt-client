@@ -12,6 +12,7 @@
 			:value="modelValue.text"
 			@update:value="($event) => (modelValue.text = $event)"
 			@delete:element="onDeleteElement"
+			@blur="() => (autofocus = false)"
 		/>
 	</div>
 </template>
