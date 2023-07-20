@@ -79,12 +79,12 @@ export default defineComponent({
 
 		const logoUrl: ComputedRef<string> = computed(() => {
 			if (!props.hasPermission) {
-				return require("src/assets/img/bbb/no_permission.png");
+				return require("@/assets/img/bbb/no_permission.png");
 			} else if (props.isRunning) {
-				return require("src/assets/img/bbb/available.png");
+				return require("@/assets/img/bbb/available.png");
 			}
 
-			return require("src/assets/img/bbb/not_started.png");
+			return require("@/assets/img/bbb/not_started.png");
 		});
 
 		return {
