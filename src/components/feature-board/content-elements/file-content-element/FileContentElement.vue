@@ -98,10 +98,10 @@ export default defineComponent({
 	},
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
-		const fileContentElement = ref();
+		const fileContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, fileContentElement);
 
-		const { modelValue, isAutoFocus } = useContentElementState(props);
+		const { modelValue } = useContentElementState(props);
 		const { fetchFile, upload, fileRecord } = useFileStorageApi(
 			props.element.id,
 			FileRecordParentType.BOARDNODES
@@ -165,7 +165,6 @@ export default defineComponent({
 		return {
 			fileContentElement,
 			fileRecord,
-			isAutoFocus,
 			isBlockedByVirusScan,
 			isImage,
 			modelValue,

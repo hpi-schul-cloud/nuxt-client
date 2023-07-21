@@ -8,6 +8,7 @@
 			"
 			mode="simple"
 			@focus="onFocus"
+			@blur="onBlur"
 			@keyboard:delete="onDelete"
 		/>
 	</div>
@@ -30,7 +31,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value", "delete:element"],
+	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
@@ -46,11 +47,11 @@ export default defineComponent({
 			}
 		};
 
-		const onDelete = () => {
-			emit("delete:element");
-		};
+		const onBlur = () => emit("blur");
 
-		return { modelValue, onFocus, onDelete };
+		const onDelete = () => emit("delete:element");
+
+		return { modelValue, onFocus, onDelete, onBlur };
 	},
 });
 </script>

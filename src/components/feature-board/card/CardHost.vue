@@ -27,14 +27,14 @@
 					:value="card.title"
 					scope="card"
 					@update:value="onUpdateCardTitle"
-					:isFocused="shouldFocusTitle"
+					:isFocused="isFocusedById"
 					@enter="addTextAfterTitle"
 				>
 				</CardTitle>
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction @click="onStartEditModeByMenu">
+						<BoardMenuAction @click="onStartEditMode">
 							<template #icon>
 								<VIcon>
 									{{ mdiPencilOutline }}
@@ -121,8 +121,11 @@ export default defineComponent({
 	},
 	emits: ["move:card-keyboard", "delete:card"],
 	setup(props, { emit }) {
-		const cardHost = ref(undefined);
-		const { isFocusContained } = useBoardFocusHandler(props.cardId, cardHost);
+		const cardHost = ref(null);
+		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
+			props.cardId,
+			cardHost
+		);
 		const isHovered = useElementHover(cardHost);
 		const {
 			isLoading,
@@ -149,7 +152,7 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
 		};
-		const onUpdateCardTitle = useDebounceFn(updateTitle, 1000);
+		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
 		const onDeleteCard = async () => {
 			const shouldDelete = await askDeleteBoardNodeConfirmation(
@@ -166,12 +169,6 @@ export default defineComponent({
 			askType();
 		};
 
-		const shouldFocusTitle = ref<boolean>(false);
-
-		const onStartEditModeByMenu = () => {
-			shouldFocusTitle.value = true;
-			startEditMode();
-		};
 		const onStartEditMode = () => {
 			startEditMode();
 		};
@@ -179,7 +176,6 @@ export default defineComponent({
 		const onEndEditMode = () => {
 			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
 				stopEditMode();
-				shouldFocusTitle.value = false;
 			}
 		};
 
@@ -222,14 +218,13 @@ export default defineComponent({
 			card,
 			hasDeletePermission,
 			isHovered,
-			shouldFocusTitle,
+			isFocusedById,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
 			deleteElement,
 			onStartEditMode,
-			onStartEditModeByMenu,
 			onEndEditMode,
 			onMoveContentElementDown,
 			onMoveContentElementUp,
@@ -257,18 +252,6 @@ export default defineComponent({
 	transition: opacity 200ms;
 	opacity: 0;
 }
-
-::v-deep .v-card__text > :first-child > .ck-content > :first-child {
-	margin-top: 0px;
-}
-
-::v-deep
-	.v-card__text
-	> :first-child
-	.ck.ck-editor__editable_inline
-	> :first-child {
-	margin-top: 0px;
-}
 </style>
 
 <style>
@@ -276,8 +259,7 @@ export default defineComponent({
 	opacity: 0;
 }
 
-.v-card:focus,
-.v-card:focus-within {
+.v-card:focus {
 	outline: 2px solid var(--v-secondary-base);
 	outline-offset: 0;
 }
