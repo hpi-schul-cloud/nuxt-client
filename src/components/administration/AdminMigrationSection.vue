@@ -4,6 +4,7 @@
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
 		<RenderHTML
+			data-testid="text-description"
 			:html="
 				t('components.administration.adminMigrationSection.description', {
 					supportLink,
@@ -119,7 +120,7 @@
 import { MigrationBody } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import dayjs from "dayjs";
 import {
 	computed,
@@ -134,7 +135,6 @@ import {
 import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import { envConfigModule } from "@/store";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -144,6 +144,7 @@ export default defineComponent({
 	},
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {
@@ -155,13 +156,8 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(
 			() => schoolsModule.getOauthMigration
