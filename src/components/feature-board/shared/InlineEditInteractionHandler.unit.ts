@@ -26,12 +26,13 @@ describe("InlineEditInteractionHandler", () => {
 
 	describe("when clicked outside", () => {
 		it("should emit 'end-edit-mode'", async () => {
+			const event = document.createEvent("MouseEvent");
 			setup();
 			wrapper.setProps({ isEditMode: true });
 			await wrapper.vm.$nextTick();
 
 			const outsideHandler = wrapper.findComponent({ name: "OnClickOutside" });
-			outsideHandler.vm.$emit("trigger");
+			outsideHandler.vm.$emit("trigger", event);
 
 			const emitted = wrapper.emitted();
 			expect(emitted["end-edit-mode"]).toBeDefined();

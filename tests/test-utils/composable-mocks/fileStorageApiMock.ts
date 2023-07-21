@@ -4,31 +4,22 @@ import { jest } from "@jest/globals";
 import { ref } from "vue";
 
 interface Props {
-	uploadMock?: jest.Mock;
 	fetchFileMock?: jest.Mock;
-	fetchPendingFileRecursivelyMock?: jest.Mock;
 	renameMock?: jest.Mock;
+	uploadMock?: jest.Mock;
 }
 
 export const setupFileStorageApiMock = (props: Props = {}) => {
-	const {
-		fetchFileMock,
-		fetchPendingFileRecursivelyMock,
-		renameMock,
-		uploadMock,
-	} = props;
+	const { fetchFileMock, renameMock, uploadMock } = props;
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
 	const fileRecord = ref<FileRecordResponse>();
 
 	const fetchFile = fetchFileMock ?? jest.fn();
-	const fetchPendingFileRecursively =
-		fetchPendingFileRecursivelyMock ?? jest.fn();
 	const rename = renameMock ?? jest.fn();
 	const upload = uploadMock ?? jest.fn();
 
 	const mocks = {
 		fetchFile,
-		fetchPendingFileRecursively,
 		rename,
 		upload,
 		fileRecord,

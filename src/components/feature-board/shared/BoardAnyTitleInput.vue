@@ -16,16 +16,25 @@
 			role="heading"
 			:aria-level="ariaLevel"
 			@keydown.enter="onEnter"
+			:tabindex="isEditMode ? 0 : -1"
 		></VTextarea>
 	</div>
 </template>
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref, watch, nextTick } from "vue";
+import {
+	computed,
+	defineComponent,
+	nextTick,
+	onMounted,
+	PropType,
+	ref,
+	watch,
+} from "vue";
+import { VTextarea } from "vuetify/lib";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
-import { VTextarea } from "vuetify/lib";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -47,6 +56,9 @@ export default defineComponent({
 			default: "",
 			required: false,
 		},
+		isFocused: {
+			type: Boolean,
+		},
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
@@ -54,26 +66,31 @@ export default defineComponent({
 		const { hasEditPermission } = useBoardPermissions();
 		const titleInput = ref<InstanceType<typeof VTextarea> | null>(null);
 
-		useInlineEditInteractionHandler(() => {
+		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
+			await nextTick();
 		});
-
-		const textarea = computed(() => {
-			if (titleInput.value === null) return;
-
-			return titleInput.value.$refs.input as HTMLTextAreaElement;
-		});
-
 		const setFocusOnEdit = () => {
 			if (!hasEditPermission) return;
 			if (!textarea.value) return;
 			textarea.value.focus();
 		};
 
+		const textarea = computed(() => {
+			if (titleInput.value === null) return null;
+			return titleInput.value.$refs.input as HTMLTextAreaElement;
+		});
+
+		// useBoardFocusHandler("klasdfhasdklf", textarea, setFocusOnEdit);
+
+		onMounted(() => {
+			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+		});
+
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column") return;
+				if (props.scope !== "column" && !props.isFocused) return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					setFocusOnEdit();

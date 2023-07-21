@@ -4,7 +4,12 @@
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
 		<RenderHTML
-			:html="t('components.administration.adminMigrationSection.description')"
+			data-testid="text-description"
+			:html="
+				t('components.administration.adminMigrationSection.description', {
+					supportLink,
+				})
+			"
 			component="p"
 		/>
 		<div v-if="!oauthMigration.oauthMigrationPossible">
@@ -115,7 +120,7 @@
 import { MigrationBody } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import dayjs from "dayjs";
 import {
 	computed,
@@ -139,6 +144,7 @@ export default defineComponent({
 	},
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {
@@ -150,13 +156,8 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(
 			() => schoolsModule.getOauthMigration
@@ -226,6 +227,25 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
+		const schoolNumber: ComputedRef<string | undefined> = computed(
+			() => schoolsModule.getSchool.officialSchoolNumber
+		);
+		const getSubject = (): string => {
+			const subject = encodeURIComponent(
+				`Schule mit der Nummer: ${
+					schoolNumber.value ?? "???"
+				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
+			);
+
+			return subject;
+		};
+
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
+		);
 
 		return {
 			oauthMigration,
@@ -241,6 +261,7 @@ export default defineComponent({
 			isCurrentDateAfterFinalFinish,
 			finalFinishText,
 			dayjs,
+			supportLink,
 		};
 	},
 });

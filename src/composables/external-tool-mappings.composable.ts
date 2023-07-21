@@ -48,12 +48,14 @@ const ToolParamTypeMapping: Record<
 	[CustomParameterResponseTypeEnum.String]: ToolParameterType.String,
 	[CustomParameterResponseTypeEnum.Boolean]: ToolParameterType.Boolean,
 	[CustomParameterResponseTypeEnum.Number]: ToolParameterType.Number,
-	[CustomParameterResponseTypeEnum.AutoCourseid]:
-		ToolParameterType.AutoCourseid,
-	[CustomParameterResponseTypeEnum.AutoCoursename]:
-		ToolParameterType.AutoCoursename,
+	[CustomParameterResponseTypeEnum.AutoContextid]:
+		ToolParameterType.AutoContextid,
+	[CustomParameterResponseTypeEnum.AutoContextname]:
+		ToolParameterType.AutoContextname,
 	[CustomParameterResponseTypeEnum.AutoSchoolid]:
 		ToolParameterType.AutoSchoolid,
+	[CustomParameterResponseTypeEnum.AutoSchoolnumber]:
+		ToolParameterType.AutoSchoolnumber,
 };
 
 const ToolParamScopeMapping: Record<

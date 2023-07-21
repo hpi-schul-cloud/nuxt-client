@@ -2,31 +2,49 @@
 	<v-card
 		class="mb-4"
 		data-testid="board-file-element"
+		dense
 		elevation="0"
 		outlined
-		dense
+		ref="fileContentElement"
+		:ripple="false"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
 	>
 		<div v-if="fileRecord">
-			<FileContentElementDisplay
-				v-if="!isEditMode"
-				:fileName="fileRecord.name"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-			/>
-			<FileContentElementEdit
-				v-if="isEditMode"
-				:fileName="fileRecord.name"
-				:fileId="$props.element.id"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@move-keyboard:element="onMoveFileEditKeyboard"
-				@delete:element="onDeleteElement"
-			/>
+			<div v-if="isImage">
+				<ImageFileDisplay
+					:fileName="fileRecord.name"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="fileRecord.url"
+					:isEditMode="isEditMode"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+			<div v-else>
+				<FileContentElementDisplay
+					v-if="!isEditMode"
+					:fileName="fileRecord.name"
+					:url="url"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+				/>
+				<FileContentElementEdit
+					v-if="isEditMode"
+					:fileName="fileRecord.name"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="url"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
 			<FileContentElementChips
 				:fileSize="fileRecord.size"
 				:fileName="fileRecord.name"
@@ -43,12 +61,10 @@
 </template>
 
 <script lang="ts">
-import {
-	FileRecordParentType,
-	FileRecordScanStatus,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, computed, defineComponent, onMounted } from "vue";
+import { PropType, defineComponent, onMounted, ref } from "vue";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { useFileStorageApi } from "../shared/FileStorageApi.composable";
 import { useSelectedFile } from "../shared/SelectedFile.composable";
@@ -57,6 +73,8 @@ import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import { useFileRecord } from "./FileRecord.composable";
+import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -65,6 +83,7 @@ export default defineComponent({
 		FileContentElementDisplay,
 		FileContentElementEdit,
 		FileContentElementChips,
+		ImageFileDisplay,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
@@ -79,22 +98,18 @@ export default defineComponent({
 	},
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
-		const { modelValue, isAutoFocus } = useContentElementState(props);
-		const { fetchFile, upload, fetchPendingFileRecursively, fileRecord } =
-			useFileStorageApi(props.element.id, FileRecordParentType.BOARDNODES);
+		const fileContentElement = ref(null);
+		useBoardFocusHandler(props.element.id, fileContentElement);
+
+		const { modelValue } = useContentElementState(props);
+		const { fetchFile, upload, fileRecord } = useFileStorageApi(
+			props.element.id,
+			FileRecordParentType.BOARDNODES
+		);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
 
-		const isBlockedByVirusScan = computed(
-			() =>
-				fileRecord.value?.securityCheckStatus === FileRecordScanStatus.BLOCKED
-		);
-
-		const url = computed(() =>
-			!isBlockedByVirusScan.value && fileRecord.value?.url
-				? fileRecord.value?.url
-				: ""
-		);
+		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
 		onMounted(() => {
 			(async () => {
@@ -103,7 +118,7 @@ export default defineComponent({
 				if (file) {
 					await tryUpload(file);
 				} else {
-					await getFileRecord();
+					await fetchFile();
 				}
 			})();
 		});
@@ -113,16 +128,16 @@ export default defineComponent({
 				await upload(file);
 
 				setSelectedFile();
-				await fetchPendingFileRecursively();
 			} catch (error) {
 				setSelectedFile();
 				await deleteFileElement();
 			}
 		};
-
-		const getFileRecord = async () => {
-			await fetchFile();
-			await fetchPendingFileRecursively();
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:edit", event);
+			}
 		};
 
 		const onMoveFileEditDown = () => {
@@ -131,9 +146,6 @@ export default defineComponent({
 
 		const onMoveFileEditUp = () => {
 			emit("move-up:edit");
-		};
-		const onMoveFileEditKeyboard = (event: KeyboardEvent) => {
-			emit("move-keyboard:edit", event);
 		};
 
 		const onDeleteElement = async (): Promise<void> => {
@@ -151,15 +163,16 @@ export default defineComponent({
 			return props.deleteElement(props.element.id);
 		};
 		return {
-			onDeleteElement,
-			isAutoFocus,
-			isBlockedByVirusScan,
+			fileContentElement,
 			fileRecord,
+			isBlockedByVirusScan,
+			isImage,
 			modelValue,
+			url,
+			onDeleteElement,
+			onKeydownArrow,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
-			onMoveFileEditKeyboard,
-			url,
 		};
 	},
 });
