@@ -231,9 +231,12 @@ export default defineComponent({
 			() => schoolsModule.getSchool.officialSchoolNumber
 		);
 		const getSubject = (): string => {
-			subject = encodeURIComponent(
-				`Schule mit der Nummer: ${schoolNumber.value ?? '???'} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
+			const subject = encodeURIComponent(
+				`Schule mit der Nummer: ${
+					schoolNumber.value ?? "???"
+				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
 			);
+
 			return subject;
 		};
 
