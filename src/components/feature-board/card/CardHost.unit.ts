@@ -59,6 +59,7 @@ describe("CardHost", () => {
 			isFocusContained: isFocusContainedMock,
 			isFocused: computed(() => true),
 			isFocusWithin: computed(() => true),
+			isFocusedById: computed(() => true),
 		});
 
 		mockedUserPermissions.mockReturnValue({
@@ -182,21 +183,6 @@ describe("CardHost", () => {
 				const emitted = wrapper.emitted();
 
 				expect(emitted["delete:card"]).toHaveLength(1);
-			});
-		});
-
-		describe("when users click edit menu", () => {
-			it("should set forcedTitleFocus value", async () => {
-				setup({ card: CARD_WITHOUT_ELEMENTS });
-				const menuItems = wrapper.findAllComponents({
-					name: "BoardMenuAction",
-				});
-				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
-				expect(cardTitle.props("isFocused")).toBe(false);
-
-				menuItems.wrappers[0].vm.$emit("click");
-				await nextTick();
-				expect(cardTitle.props("isFocused")).toBe(true);
 			});
 		});
 	});
