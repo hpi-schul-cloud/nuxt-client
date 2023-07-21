@@ -232,7 +232,7 @@ export default defineComponent({
 		);
 		const getSubject = (): string => {
 			const subject = encodeURIComponent(
-				`Schule mit der Nummer: ${
+				`Schue mit der Nummer: ${
 					schoolNumber.value ?? "???"
 				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
 			);
