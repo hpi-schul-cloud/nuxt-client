@@ -134,6 +134,7 @@ export default defineComponent({
 		const config = {
 			toolbar: {
 				items: toolbarItems[props.mode],
+				shouldNotGroupWhenFull: true,
 			},
 			plugins: plugins,
 			heading: {
