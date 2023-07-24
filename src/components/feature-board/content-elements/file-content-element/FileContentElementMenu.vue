@@ -52,6 +52,8 @@
 
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
+import BoardMenu from "@boardShared/BoardMenu.vue";
+import BoardMenuAction from "@boardShared/BoardMenuAction.vue";
 import {
 	mdiAlertCircle,
 	mdiArrowCollapseDown,
@@ -61,8 +63,6 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
 
 export default defineComponent({
 	name: "FileContentElementMenu",
