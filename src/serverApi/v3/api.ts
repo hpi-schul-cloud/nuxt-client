@@ -8584,14 +8584,14 @@ export const BoardElementApiAxiosParamCreator = function (
 		): Promise<RequestArgs> => {
 			// verify required parameter 'contentElementId' is not null or undefined
 			assertParamExists(
-				'elementControllerCreateSubmission',
-				'contentElementId',
+				"elementControllerCreateSubmission",
+				"contentElementId",
 				contentElementId
 			);
 			// verify required parameter 'createSubmissionItemBodyParams' is not null or undefined
 			assertParamExists(
-				'elementControllerCreateSubmission',
-				'createSubmissionItemBodyParams',
+				"elementControllerCreateSubmission",
+				"createSubmissionItemBodyParams",
 				createSubmissionItemBodyParams
 			);
 			const localVarPath = `/elements/{contentElementId}/submissions`.replace(
@@ -8606,7 +8606,7 @@ export const BoardElementApiAxiosParamCreator = function (
 			}
 
 			const localVarRequestOptions = {
-				method: 'POST',
+				method: "POST",
 				...baseOptions,
 				...options,
 			};
@@ -8617,7 +8617,7 @@ export const BoardElementApiAxiosParamCreator = function (
 			// http bearer authentication required
 			await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-			localVarHeaderParameter['Content-Type'] = 'application/json';
+			localVarHeaderParameter["Content-Type"] = "application/json";
 
 			setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
 			let headersFromBaseOptions =
@@ -8651,8 +8651,8 @@ export const BoardElementApiAxiosParamCreator = function (
 		): Promise<RequestArgs> => {
 			// verify required parameter 'contentElementId' is not null or undefined
 			assertParamExists(
-				'elementControllerDeleteElement',
-				'contentElementId',
+				"elementControllerDeleteElement",
+				"contentElementId",
 				contentElementId
 			);
 			const localVarPath = `/elements/{contentElementId}`.replace(
