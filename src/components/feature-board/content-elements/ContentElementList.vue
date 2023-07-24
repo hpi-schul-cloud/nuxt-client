@@ -44,14 +44,14 @@ import {
 	FileElementResponse,
 	RichTextElementResponse,
 } from "@/serverApi/v3";
-import { computed, defineComponent, PropType } from "vue";
+import { PropType, computed, defineComponent } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
-import FileContentElement from "./FileContentElement.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
 import SubmissionContentElement, {
 	SubmissionElementResponse,
 } from "./SubmissionContentElement.vue";
+import { FileContentElement } from "./file-content-element";
 
 export default defineComponent({
 	name: "ContentElementList",
