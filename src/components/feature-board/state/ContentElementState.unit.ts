@@ -46,14 +46,6 @@ describe("useContentElementState composable", () => {
 		expect(modelValue.value).toStrictEqual(TEST_ELEMENT.content);
 	});
 
-	it.skip("should set isAutoFocus on element interaction", async () => {
-		const { isAutoFocus } = setup();
-
-		expect(isAutoFocus.value).toStrictEqual(false);
-		// mockCardHostInteraction();
-		expect(isAutoFocus.value).toStrictEqual(true);
-	});
-
 	it("should call saving function after debounced change of modelValue", async () => {
 		jest.useFakeTimers();
 		const { modelValue } = setup({ isEditMode: true, element: TEST_ELEMENT });
