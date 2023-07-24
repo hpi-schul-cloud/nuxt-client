@@ -18,7 +18,10 @@
 		"types": ["webpack-env", "jest"],
 		"paths": {
 			"@/*": ["src/*"],
-			"@@/*": ["*"]
+			"@@/*": ["*"],
+			"@boardShared/*": ["src/components/feature-board/shared/*"],
+			"@boardState/*": ["src/components/feature-board/state/*"],
+			"@boardTypes/*": ["src/components/feature-board/types/*"],
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},
