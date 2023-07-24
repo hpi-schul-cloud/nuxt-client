@@ -248,10 +248,20 @@ export default defineComponent({
 
 		const startVideoConference = async () => {
 			onCloseConfigurationDialog();
+
+			const logoutUrl: URL = new URL(
+				`/rooms/${props.roomId}`,
+				window.location.origin
+			);
+			logoutUrl.searchParams.append("tab", "tools");
+
+			console.log(logoutUrl.toString());
+
 			await videoConferenceModule.startVideoConference({
 				scope: VideoConferenceScope.Course,
 				scopeId: props.roomId,
 				videoConferenceOptions: videoConferenceOptions.value,
+				logoutUrl: logoutUrl.toString(),
 			});
 
 			await joinVideoConference();
