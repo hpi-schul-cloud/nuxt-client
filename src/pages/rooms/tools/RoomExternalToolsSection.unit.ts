@@ -1,4 +1,4 @@
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { AxiosError } from "axios";
 import Vue from "vue";
@@ -225,6 +225,44 @@ describe("RoomExternalToolsSection", () => {
 			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
 				tool.id
 			);
+		});
+	});
+
+	describe("when clicking on a tool which has missing auto parameters", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const error: BusinessError = businessErrorFactory.build({
+				error: new AxiosError("this error is expected"),
+				message: "MISSING_TOOL_PARAMETER_VALUE some value is missing",
+			});
+
+			const { wrapper } = getWrapper(
+				{ tools: [tool] },
+				{
+					getBusinessError: error,
+				}
+			);
+
+			return {
+				wrapper,
+				tool,
+			};
+		};
+
+		it("should display a dialog", async () => {
+			const { wrapper, tool } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.vm.$emit("click", tool);
+
+			const dialog = wrapper.find('[data-testId="error-dialog"]');
+
+			expect(dialog.exists()).toBeTruthy();
+			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
 		});
 	});
 
