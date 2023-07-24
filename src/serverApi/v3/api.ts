@@ -5056,6 +5056,25 @@ export interface VideoConferenceCreateParams {
 /**
  *
  * @export
+ * @interface VideoConferenceInfoResponse
+ */
+export interface VideoConferenceInfoResponse {
+	/**
+	 *
+	 * @type {VideoConferenceStateResponse}
+	 * @memberof VideoConferenceInfoResponse
+	 */
+	state: VideoConferenceStateResponse;
+	/**
+	 * The options for the video conference.
+	 * @type {VideoConferenceOptionsResponse}
+	 * @memberof VideoConferenceInfoResponse
+	 */
+	options: VideoConferenceOptionsResponse;
+}
+/**
+ *
+ * @export
  * @interface VideoConferenceJoinResponse
  */
 export interface VideoConferenceJoinResponse {
@@ -23320,7 +23339,10 @@ export const VideoConferenceApiFp = function (configuration?: Configuration) {
 			scopeId: string,
 			options?: any
 		): Promise<
-			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>
+			(
+				axios?: AxiosInstance,
+				basePath?: string
+			) => AxiosPromise<VideoConferenceInfoResponse>
 		> {
 			const localVarAxiosArgs =
 				await localVarAxiosParamCreator.videoConferenceControllerInfo(
@@ -23469,7 +23491,10 @@ export const VideoConferenceApiFp = function (configuration?: Configuration) {
 			scopeId: string,
 			options?: any
 		): Promise<
-			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>
+			(
+				axios?: AxiosInstance,
+				basePath?: string
+			) => AxiosPromise<VideoConferenceInfoResponse>
 		> {
 			const localVarAxiosArgs =
 				await localVarAxiosParamCreator.videoConferenceDeprecatedControllerInfo(
@@ -23527,7 +23552,7 @@ export const VideoConferenceApiFactory = function (
 			scope: VideoConferenceScope,
 			scopeId: string,
 			options?: any
-		): AxiosPromise<object> {
+		): AxiosPromise<VideoConferenceInfoResponse> {
 			return localVarFp
 				.videoConferenceControllerInfo(scope, scopeId, options)
 				.then((request) => request(axios, basePath));
@@ -23626,7 +23651,7 @@ export const VideoConferenceApiFactory = function (
 			scope: string,
 			scopeId: string,
 			options?: any
-		): AxiosPromise<object> {
+		): AxiosPromise<VideoConferenceInfoResponse> {
 			return localVarFp
 				.videoConferenceDeprecatedControllerInfo(scope, scopeId, options)
 				.then((request) => request(axios, basePath));
@@ -23668,7 +23693,7 @@ export interface VideoConferenceApiInterface {
 		scope: VideoConferenceScope,
 		scopeId: string,
 		options?: any
-	): AxiosPromise<object>;
+	): AxiosPromise<VideoConferenceInfoResponse>;
 
 	/**
 	 * Use this endpoint to get a link to join an existing video conference. The conference must be running.
@@ -23747,7 +23772,7 @@ export interface VideoConferenceApiInterface {
 		scope: string,
 		scopeId: string,
 		options?: any
-	): AxiosPromise<object>;
+	): AxiosPromise<VideoConferenceInfoResponse>;
 }
 
 /**
