@@ -26,9 +26,10 @@
 <script lang="ts">
 import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { Container } from "vue-smooth-dnd";
-import { cardDropPlaceholderOptions, CardMove } from "../types/DragAndDrop";
+import { CardMove, cardDropPlaceholderOptions } from "../types/DragAndDrop";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Container } = require("../../ui-dndrop");
 
 export default defineComponent({
 	name: "BoardColumnGhost",

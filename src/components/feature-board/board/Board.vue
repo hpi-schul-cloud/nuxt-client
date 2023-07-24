@@ -45,9 +45,10 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { computed, defineComponent, onMounted, watch, onUnmounted } from "vue";
-import { Container, Draggable } from "vue-smooth-dnd";
+import { useMediaQuery } from "@vueuse/core";
+import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
 import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -64,8 +65,9 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useMediaQuery } from "@vueuse/core";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+// import { Container, Draggable } from "vue-smooth-dnd";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Container, Draggable } = require("../../ui-dndrop");
 
 export default defineComponent({
 	components: {

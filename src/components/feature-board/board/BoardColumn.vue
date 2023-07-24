@@ -45,20 +45,21 @@
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
-import { computed, defineComponent, PropType, ref } from "vue";
-import { Container, Draggable } from "vue-smooth-dnd";
+import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
-	cardDropPlaceholderOptions,
 	CardMove,
 	DragAndDropKey,
+	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
 } from "../types/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Container, Draggable } = require("../../ui-dndrop");
 
 export default defineComponent({
 	name: "BoardColumn",
