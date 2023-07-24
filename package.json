@@ -45,7 +45,7 @@
 	},
 	"devDependencies": {
 		"@golevelup/ts-jest": "^0.3.7",
-		"@intlify/vue-i18n-loader": "^1.1.0",
+		"@intlify/vue-i18n-loader": "^4.0.0",
 		"@openapitools/openapi-generator-cli": "^2.5.2",
 		"@types/jest": "^27.5.2",
 		"@types/object-hash": "^2.2.1",
