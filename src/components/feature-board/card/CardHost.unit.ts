@@ -7,7 +7,7 @@ import {
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue, { computed, ref } from "vue";
+import Vue, { computed, nextTick, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -59,6 +59,7 @@ describe("CardHost", () => {
 			isFocusContained: isFocusContainedMock,
 			isFocused: computed(() => true),
 			isFocusWithin: computed(() => true),
+			isFocusedById: computed(() => true),
 		});
 
 		mockedUserPermissions.mockReturnValue({
@@ -92,7 +93,11 @@ describe("CardHost", () => {
 			isLoading: ref(isLoading ?? false),
 		});
 
-		setupDeleteBoardNodeConfirmationMock();
+		const deleteCardMock = jest.fn().mockReturnValue(true);
+
+		setupDeleteBoardNodeConfirmationMock({
+			askDeleteBoardNodeConfirmationMock: deleteCardMock,
+		});
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
@@ -161,6 +166,23 @@ describe("CardHost", () => {
 				});
 
 				expect(boardMenuComponent.length).toStrictEqual(0);
+			});
+		});
+	});
+
+	describe("card menus", () => {
+		describe("when users click delete menu", () => {
+			it("should emit 'delete:card'", async () => {
+				setup({ card: CARD_WITHOUT_ELEMENTS });
+
+				const menuItems = wrapper.findAllComponents({
+					name: "BoardMenuAction",
+				});
+				menuItems.wrappers[1].vm.$emit("click");
+				await nextTick();
+				const emitted = wrapper.emitted();
+
+				expect(emitted["delete:card"]).toHaveLength(1);
 			});
 		});
 	});

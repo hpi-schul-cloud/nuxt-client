@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	VideoConferenceInfo,
+	VideoConferenceOptions,
 	VideoConferenceState,
 } from "./types/video-conference";
 
@@ -32,7 +33,7 @@ export default class VideoConferenceModule extends VuexModule {
 		options: {
 			everyAttendeeJoinsMuted: false,
 			everybodyJoinsAsModerator: false,
-			moderatorMustApproveJoinRequests: false,
+			moderatorMustApproveJoinRequests: true,
 		},
 	};
 	private loading = false;
@@ -62,6 +63,11 @@ export default class VideoConferenceModule extends VuexModule {
 	@Mutation
 	setError(error: unknown | null): void {
 		this.error = error;
+	}
+
+	@Mutation
+	resetError(): void {
+		this.error = null;
 	}
 
 	@Mutation
@@ -119,5 +125,35 @@ export default class VideoConferenceModule extends VuexModule {
 			this.setError(error);
 			this.setLoading(false);
 		}
+	}
+
+	@Action
+	async startVideoConference(params: {
+		scope: VideoConferenceScope;
+		scopeId: string;
+		videoConferenceOptions: VideoConferenceOptions;
+		logoutUrl?: string;
+	}): Promise<void> {
+		this.setLoading(true);
+
+		try {
+			await this.videoConferenceApi.videoConferenceControllerStart(
+				params.scope,
+				params.scopeId,
+				{
+					...params.videoConferenceOptions,
+					logoutUrl: params.logoutUrl,
+				}
+			);
+
+			this.setVideoConferenceInfo({
+				state: VideoConferenceState.RUNNING,
+				options: params.videoConferenceOptions,
+			});
+		} catch (error: unknown) {
+			this.setError(error);
+		}
+
+		this.setLoading(false);
 	}
 }

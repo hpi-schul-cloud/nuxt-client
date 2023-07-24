@@ -12,15 +12,15 @@
 			@click:row="click"
 		>
 			<template #[`item.icon`]="{ item }">
-				<base-icon
-					source="material"
-					:icon="item.icon.name"
-					:fill="
+				<v-icon
+					class="material-icon"
+					:color="
 						item.icon.colored
 							? 'var(--v-primary-base)'
 							: 'var(--v-secondary-base)'
 					"
-				></base-icon>
+					>{{ item.icon.name }}
+				</v-icon>
 			</template>
 			<template #[`item.lastChanged`]="{ item }"
 				>{{ timesAgo(item.lastChanged) }}

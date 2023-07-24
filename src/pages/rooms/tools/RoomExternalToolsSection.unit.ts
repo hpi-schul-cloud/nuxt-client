@@ -1,9 +1,9 @@
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { AxiosError } from "axios";
 import Vue from "vue";
 import {
-	AUTH_MODULE,
+	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
@@ -30,11 +30,19 @@ describe("RoomExternalToolsSection", () => {
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule
 		);
+
 		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
+			getBusinessError: {
+				statusCode: "",
+				message: "",
+				error: undefined,
+			},
 			...externalToolsModuleGetter,
 		});
+
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
+			getUserRoles: ["teacher"],
 		});
 
 		const wrapper: Wrapper<any> = mount(
@@ -53,10 +61,11 @@ describe("RoomExternalToolsSection", () => {
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
-					[AUTH_MODULE.valueOf()]: authModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			}
 		);
+
 		return {
 			wrapper,
 			contextExternalToolsModule,
@@ -219,6 +228,44 @@ describe("RoomExternalToolsSection", () => {
 		});
 	});
 
+	describe("when clicking on a tool which has missing auto parameters", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const error: BusinessError = businessErrorFactory.build({
+				error: new AxiosError("this error is expected"),
+				message: "MISSING_TOOL_PARAMETER_VALUE some value is missing",
+			});
+
+			const { wrapper } = getWrapper(
+				{ tools: [tool] },
+				{
+					getBusinessError: error,
+				}
+			);
+
+			return {
+				wrapper,
+				tool,
+			};
+		};
+
+		it("should display a dialog", async () => {
+			const { wrapper, tool } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+			await card.vm.$emit("click", tool);
+
+			const dialog = wrapper.find('[data-testId="error-dialog"]');
+
+			expect(dialog.exists()).toBeTruthy();
+			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
+		});
+	});
+
 	describe("when click on a outdated tool", () => {
 		const setup = () => {
 			const tool: ExternalToolDisplayData =
@@ -226,6 +273,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const error: BusinessError = businessErrorFactory.build({
 				error: new AxiosError("this error is expected"),
+				message: "TOOL_STATUS_OUTDATED this tool is outdated",
 			});
 
 			const { wrapper } = getWrapper(

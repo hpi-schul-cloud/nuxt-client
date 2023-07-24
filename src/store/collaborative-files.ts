@@ -31,7 +31,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			{
 				name: "Favorites",
 				translationKey: "pages.files.overview.favorites",
-				icon: "favorite",
+				icon: "$mdiHeart",
 				path: "/cfiles/",
 				size: 221,
 				type: CollaborativeFileType.FAVORITES,
@@ -40,7 +40,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			{
 				name: "Personal Files",
 				translationKey: "pages.files.overview.personalFiles",
-				icon: "folder",
+				icon: "$mdiFolder",
 				path: "/files/my",
 				size: 33,
 				type: CollaborativeFileType.DIRECTORY,
@@ -49,7 +49,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			{
 				name: "Course Files",
 				translationKey: "pages.files.overview.courseFiles",
-				icon: "folder_shared",
+				icon: "$mdiFolderAccount",
 				path: "/files/courses",
 				size: 1337,
 				type: CollaborativeFileType.SHARED_DIRECTORY,
@@ -58,7 +58,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			{
 				name: "Team Files",
 				translationKey: "pages.files.overview.teamFiles",
-				icon: "folder_shared",
+				icon: "$mdiFolderAccount",
 				path: "/cfiles/teams",
 				size: 33331,
 				type: CollaborativeFileType.SHARED_DIRECTORY,
@@ -67,7 +67,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			{
 				name: "Shared Files",
 				translationKey: "pages.files.overview.sharedFiles",
-				icon: "folder_shared",
+				icon: "$mdiFolderAccount",
 				path: "/files/shared",
 				size: 123123,
 				type: CollaborativeFileType.SHARED_DIRECTORY,

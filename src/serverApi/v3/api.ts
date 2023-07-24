@@ -1259,9 +1259,10 @@ export enum CustomParameterResponseTypeEnum {
     String = 'string',
     Number = 'number',
     Boolean = 'boolean',
-    AutoCourseid = 'auto_courseid',
-    AutoCoursename = 'auto_coursename',
-    AutoSchoolid = 'auto_schoolid'
+    AutoContextid = 'auto_contextid',
+    AutoContextname = 'auto_contextname',
+    AutoSchoolid = 'auto_schoolid',
+    AutoSchoolnumber = 'auto_schoolnumber'
 }
 
 /**
@@ -4925,19 +4926,25 @@ export interface VideoConferenceCreateParams {
      * @type {boolean}
      * @memberof VideoConferenceCreateParams
      */
-    everyAttendeeJoinsMuted: boolean;
+    everyAttendeeJoinsMuted?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof VideoConferenceCreateParams
      */
-    everybodyJoinsAsModerator: boolean;
+    everybodyJoinsAsModerator?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof VideoConferenceCreateParams
      */
-    moderatorMustApproveJoinRequests: boolean;
+    moderatorMustApproveJoinRequests?: boolean;
+    /**
+     * The URL that the BigBlueButton client will go to after users click the OK button on the ‘You have been logged out’ or ’This session was ended’ message. Has to be a URL from the same domain that the conference is started from.
+     * @type {string}
+     * @memberof VideoConferenceCreateParams
+     */
+    logoutUrl?: string;
 }
 /**
  * 
@@ -16865,7 +16872,7 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
+        async videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerInfo(scope, scopeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -16955,7 +16962,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
+        videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
             return localVarFp.videoConferenceDeprecatedControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
         },
     };
@@ -17044,7 +17051,7 @@ export interface VideoConferenceApiInterface {
      * @throws {RequiredError}
      * @memberof VideoConferenceApiInterface
      */
-    videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
+    videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
 
 }
 

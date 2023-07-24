@@ -220,7 +220,7 @@ export default Vue.extend({
 		},
 		async remove() {
 			this.dialogConfirm({
-				icon: "warning",
+				icon: "$mdiAlert",
 				actionDesign: "success",
 				iconColor: "var(--v-error-base)",
 				invertedDesign: true,
@@ -241,7 +241,7 @@ export default Vue.extend({
 				message: this.$t(
 					"components.organisms.FormNews.cancel.confirm.message"
 				),
-				icon: "warning",
+				icon: "$mdiAlert",
 				cancelText: this.$t(
 					"components.organisms.FormNews.cancel.confirm.cancel"
 				),

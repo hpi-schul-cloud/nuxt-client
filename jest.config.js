@@ -11,7 +11,13 @@ module.exports = {
 
 	moduleNameMapper: {
 		"^axios$": require.resolve("axios"),
+		"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+			"<rootDir>/tests/test-utils/mediaFileMock.js",
+		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@@/(.*)$": "<rootDir>/$1",
+		"^@boardShared/(.*)$": "<rootDir>/src/components/feature-board/shared/$1",
+		"^@boardState/(.*)$": "<rootDir>/src/components/feature-board/state/$1",
+		"^@boardTypes/(.*)$": "<rootDir>/src/components/feature-board/types/$1",
 	},
 
 	setupFiles: ["./tests/unit/setup.js"],

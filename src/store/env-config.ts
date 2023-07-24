@@ -106,6 +106,14 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
 
+	get getTeacherStudentVisibilityIsEnabledByDefault() {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
+	}
+
+	get getTheme() {
+		return this.env.SC_THEME;
+	}
+
 	get getVideoConferenceEnabled() {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
 	}

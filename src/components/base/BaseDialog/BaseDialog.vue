@@ -4,12 +4,7 @@
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
-						<base-icon
-							v-if="icon"
-							:source="iconSource"
-							:icon="icon"
-							:color="currentIconColor"
-						/>
+						<v-icon v-if="icon" :color="currentIconColor">{{ icon }}</v-icon>
 					</template>
 				</modal-body-info>
 			</template>
@@ -59,10 +54,6 @@ export default {
 		icon: {
 			type: String,
 			default: "",
-		},
-		iconSource: {
-			type: String,
-			default: "material",
 		},
 		iconColor: {
 			type: String,
