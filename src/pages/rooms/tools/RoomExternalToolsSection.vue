@@ -232,9 +232,11 @@ export default defineComponent({
 		};
 
 		const handleLaunchError = (tool: ExternalToolDisplayData) => {
+			const businessErrorMessage = externalToolsModule.getBusinessError.message;
+
 			if (
-				externalToolsModule.getBusinessError.message.startsWith(
-					"TOOL_STATUS_OUTDATED"
+				["TOOL_STATUS_OUTDATED", "MISSING_TOOL_PARAMETER_VALUE"].some(
+					(keyword) => businessErrorMessage.includes(keyword)
 				)
 			) {
 				selectedItem.value = tool;
