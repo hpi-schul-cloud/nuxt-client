@@ -32,7 +32,9 @@
 				role="button"
 				data-testid="course-title"
 			>
-				<span :class="avatarTextClass">{{ item.shortTitle }}</span>
+				<span :class="avatarTextClass" data-testid="course-short-title">{{
+					item.shortTitle
+				}}</span>
 			</v-avatar>
 			<div v-if="!condenseLayout" aria-hidden="true" :class="titleClasses">
 				{{ title }}
