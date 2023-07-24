@@ -255,8 +255,6 @@ export default defineComponent({
 			);
 			logoutUrl.searchParams.append("tab", "tools");
 
-			console.log(logoutUrl.toString());
-
 			await videoConferenceModule.startVideoConference({
 				scope: VideoConferenceScope.Course,
 				scopeId: props.roomId,
