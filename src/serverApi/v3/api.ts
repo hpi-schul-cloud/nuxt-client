@@ -1082,12 +1082,12 @@ export enum CreateNewsParamsTargetModelEnum {
  * @interface CreateSubmissionItemBodyParams
  */
 export interface CreateSubmissionItemBodyParams {
-    /**
-     * Boolean indicating whether the submission is completed.
-     * @type {boolean}
-     * @memberof CreateSubmissionItemBodyParams
-     */
-    completed: boolean;
+	/**
+	 * Boolean indicating whether the submission is completed.
+	 * @type {boolean}
+	 * @memberof CreateSubmissionItemBodyParams
+	 */
+	completed: boolean;
 }
 /**
  *
@@ -3927,6 +3927,19 @@ export interface SubmissionContainerContentBody {
 /**
  *
  * @export
+ * @interface SubmissionContainerElementContent
+ */
+export interface SubmissionContainerElementContent {
+	/**
+	 *
+	 * @type {string}
+	 * @memberof SubmissionContainerElementContent
+	 */
+	dueDate: string;
+}
+/**
+ *
+ * @export
  * @interface SubmissionContainerElementContentBody
  */
 export interface SubmissionContainerElementContentBody {
@@ -3946,33 +3959,64 @@ export interface SubmissionContainerElementContentBody {
 /**
  *
  * @export
+ * @interface SubmissionContainerElementResponse
+ */
+export interface SubmissionContainerElementResponse {
+	/**
+	 *
+	 * @type {string}
+	 * @memberof SubmissionContainerElementResponse
+	 */
+	id: string;
+	/**
+	 *
+	 * @type {ContentElementType}
+	 * @memberof SubmissionContainerElementResponse
+	 */
+	type: ContentElementType;
+	/**
+	 *
+	 * @type {SubmissionContainerElementContent}
+	 * @memberof SubmissionContainerElementResponse
+	 */
+	content: SubmissionContainerElementContent;
+	/**
+	 *
+	 * @type {TimestampsResponse}
+	 * @memberof SubmissionContainerElementResponse
+	 */
+	timestamps: TimestampsResponse;
+}
+/**
+ *
+ * @export
  * @interface SubmissionItemResponse
  */
 export interface SubmissionItemResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof SubmissionItemResponse
-     */
-    id: string;
-    /**
-     *
-     * @type {TimestampsResponse}
-     * @memberof SubmissionItemResponse
-     */
-    timestamps: TimestampsResponse;
-    /**
-     *
-     * @type {boolean}
-     * @memberof SubmissionItemResponse
-     */
-    completed: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof SubmissionItemResponse
-     */
-    userId: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof SubmissionItemResponse
+	 */
+	id: string;
+	/**
+	 *
+	 * @type {TimestampsResponse}
+	 * @memberof SubmissionItemResponse
+	 */
+	timestamps: TimestampsResponse;
+	/**
+	 *
+	 * @type {boolean}
+	 * @memberof SubmissionItemResponse
+	 */
+	completed: boolean;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof SubmissionItemResponse
+	 */
+	userId: string;
 }
 /**
  *
@@ -5008,25 +5052,6 @@ export interface VideoConferenceCreateParams {
 	 * @memberof VideoConferenceCreateParams
 	 */
 	moderatorMustApproveJoinRequests: boolean;
-}
-/**
- *
- * @export
- * @interface VideoConferenceInfoResponse
- */
-export interface VideoConferenceInfoResponse {
-	/**
-	 *
-	 * @type {VideoConferenceStateResponse}
-	 * @memberof VideoConferenceInfoResponse
-	 */
-	state: VideoConferenceStateResponse;
-	/**
-	 * The options for the video conference.
-	 * @type {VideoConferenceOptionsResponse}
-	 * @memberof VideoConferenceInfoResponse
-	 */
-	options: VideoConferenceOptionsResponse;
 }
 /**
  *
@@ -7452,7 +7477,11 @@ export const BoardCardApiFp = function (configuration?: Configuration) {
 			(
 				axios?: AxiosInstance,
 				basePath?: string
-			) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>
+			) => AxiosPromise<
+				| RichTextElementResponse
+				| FileElementResponse
+				| SubmissionContainerElementResponse
+			>
 		> {
 			const localVarAxiosArgs =
 				await localVarAxiosParamCreator.cardControllerCreateElement(
@@ -7627,7 +7656,11 @@ export const BoardCardApiFactory = function (
 			cardId: string,
 			createContentElementBodyParams: CreateContentElementBodyParams,
 			options?: any
-		): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+		): AxiosPromise<
+			| RichTextElementResponse
+			| FileElementResponse
+			| SubmissionContainerElementResponse
+		> {
 			return localVarFp
 				.cardControllerCreateElement(
 					cardId,
@@ -7739,7 +7772,11 @@ export interface BoardCardApiInterface {
 		cardId: string,
 		createContentElementBodyParams: CreateContentElementBodyParams,
 		options?: any
-	): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+	): AxiosPromise<
+		| RichTextElementResponse
+		| FileElementResponse
+		| SubmissionContainerElementResponse
+	>;
 
 	/**
 	 *
@@ -8528,70 +8565,106 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
  * BoardElementApi - axios parameter creator
  * @export
  */
-export const BoardElementApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         *
-         * @summary Create a new submission item in a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerCreateSubmission: async (contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerCreateSubmission', 'contentElementId', contentElementId)
-            // verify required parameter 'createSubmissionItemBodyParams' is not null or undefined
-            assertParamExists('elementControllerCreateSubmission', 'createSubmissionItemBodyParams', createSubmissionItemBodyParams)
-            const localVarPath = `/elements/{contentElementId}/submissions`
-                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
+export const BoardElementApiAxiosParamCreator = function (
+	configuration?: Configuration
+) {
+	return {
+		/**
+		 *
+		 * @summary Create a new submission item in a submission container element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerCreateSubmission: async (
+			contentElementId: string,
+			createSubmissionItemBodyParams: CreateSubmissionItemBodyParams,
+			options: any = {}
+		): Promise<RequestArgs> => {
+			// verify required parameter 'contentElementId' is not null or undefined
+			assertParamExists(
+				'elementControllerCreateSubmission',
+				'contentElementId',
+				contentElementId
+			);
+			// verify required parameter 'createSubmissionItemBodyParams' is not null or undefined
+			assertParamExists(
+				'elementControllerCreateSubmission',
+				'createSubmissionItemBodyParams',
+				createSubmissionItemBodyParams
+			);
+			const localVarPath = `/elements/{contentElementId}/submissions`.replace(
+				`{${"contentElementId"}}`,
+				encodeURIComponent(String(contentElementId))
+			);
+			// use dummy base URL string because the URL constructor only accepts absolute URLs.
+			const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+			let baseOptions;
+			if (configuration) {
+				baseOptions = configuration.baseOptions;
+			}
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
+			const localVarRequestOptions = {
+				method: 'POST',
+				...baseOptions,
+				...options,
+			};
+			const localVarHeaderParameter = {} as any;
+			const localVarQueryParameter = {} as any;
 
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+			// authentication bearer required
+			// http bearer authentication required
+			await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+			localVarHeaderParameter['Content-Type'] = 'application/json';
 
+			setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+			let headersFromBaseOptions =
+				baseOptions && baseOptions.headers ? baseOptions.headers : {};
+			localVarRequestOptions.headers = {
+				...localVarHeaderParameter,
+				...headersFromBaseOptions,
+				...options.headers,
+			};
+			localVarRequestOptions.data = serializeDataIfNeeded(
+				createSubmissionItemBodyParams,
+				localVarRequestOptions,
+				configuration
+			);
 
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createSubmissionItemBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Delete a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerDeleteElement: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerDeleteElement', 'contentElementId', contentElementId)
-            const localVarPath = `/elements/{contentElementId}`
-                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
+			return {
+				url: toPathString(localVarUrlObj),
+				options: localVarRequestOptions,
+			};
+		},
+		/**
+		 *
+		 * @summary Delete a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerDeleteElement: async (
+			contentElementId: string,
+			options: any = {}
+		): Promise<RequestArgs> => {
+			// verify required parameter 'contentElementId' is not null or undefined
+			assertParamExists(
+				'elementControllerDeleteElement',
+				'contentElementId',
+				contentElementId
+			);
+			const localVarPath = `/elements/{contentElementId}`.replace(
+				`{${"contentElementId"}}`,
+				encodeURIComponent(String(contentElementId))
+			);
+			// use dummy base URL string because the URL constructor only accepts absolute URLs.
+			const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+			let baseOptions;
+			if (configuration) {
+				baseOptions = configuration.baseOptions;
+			}
 
 			const localVarRequestOptions = {
 				method: "DELETE",
@@ -8764,110 +8837,215 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
  * BoardElementApi - functional programming interface
  * @export
  */
-export const BoardElementApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = BoardElementApiAxiosParamCreator(configuration)
-    return {
-        /**
-         *
-         * @summary Create a new submission item in a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionItemResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         *
-         * @summary Delete a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerDeleteElement(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerDeleteElement(contentElementId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         *
-         * @summary Move a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {MoveContentElementBody} moveContentElementBody
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerMoveElement(contentElementId, moveContentElementBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         *
-         * @summary Update a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {UpdateElementContentBodyParams} updateElementContentBodyParams
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
+export const BoardElementApiFp = function (configuration?: Configuration) {
+	const localVarAxiosParamCreator =
+		BoardElementApiAxiosParamCreator(configuration);
+	return {
+		/**
+		 *
+		 * @summary Create a new submission item in a submission container element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		async elementControllerCreateSubmission(
+			contentElementId: string,
+			createSubmissionItemBodyParams: CreateSubmissionItemBodyParams,
+			options?: any
+		): Promise<
+			(
+				axios?: AxiosInstance,
+				basePath?: string
+			) => AxiosPromise<SubmissionItemResponse>
+		> {
+			const localVarAxiosArgs =
+				await localVarAxiosParamCreator.elementControllerCreateSubmission(
+					contentElementId,
+					createSubmissionItemBodyParams,
+					options
+				);
+			return createRequestFunction(
+				localVarAxiosArgs,
+				globalAxios,
+				BASE_PATH,
+				configuration
+			);
+		},
+		/**
+		 *
+		 * @summary Delete a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		async elementControllerDeleteElement(
+			contentElementId: string,
+			options?: any
+		): Promise<
+			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+		> {
+			const localVarAxiosArgs =
+				await localVarAxiosParamCreator.elementControllerDeleteElement(
+					contentElementId,
+					options
+				);
+			return createRequestFunction(
+				localVarAxiosArgs,
+				globalAxios,
+				BASE_PATH,
+				configuration
+			);
+		},
+		/**
+		 *
+		 * @summary Move a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {MoveContentElementBody} moveContentElementBody
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		async elementControllerMoveElement(
+			contentElementId: string,
+			moveContentElementBody: MoveContentElementBody,
+			options?: any
+		): Promise<
+			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+		> {
+			const localVarAxiosArgs =
+				await localVarAxiosParamCreator.elementControllerMoveElement(
+					contentElementId,
+					moveContentElementBody,
+					options
+				);
+			return createRequestFunction(
+				localVarAxiosArgs,
+				globalAxios,
+				BASE_PATH,
+				configuration
+			);
+		},
+		/**
+		 *
+		 * @summary Update a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {UpdateElementContentBodyParams} updateElementContentBodyParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		async elementControllerUpdateElement(
+			contentElementId: string,
+			updateElementContentBodyParams: UpdateElementContentBodyParams,
+			options?: any
+		): Promise<
+			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+		> {
+			const localVarAxiosArgs =
+				await localVarAxiosParamCreator.elementControllerUpdateElement(
+					contentElementId,
+					updateElementContentBodyParams,
+					options
+				);
+			return createRequestFunction(
+				localVarAxiosArgs,
+				globalAxios,
+				BASE_PATH,
+				configuration
+			);
+		},
+	};
 };
 
 /**
  * BoardElementApi - factory interface
  * @export
  */
-export const BoardElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = BoardElementApiFp(configuration)
-    return {
-        /**
-         *
-         * @summary Create a new submission item in a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse> {
-            return localVarFp.elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.elementControllerDeleteElement(contentElementId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Move a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {MoveContentElementBody} moveContentElementBody
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<void> {
-            return localVarFp.elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Update a single content element.
-         * @param {string} contentElementId The id of the element.
-         * @param {UpdateElementContentBodyParams} updateElementContentBodyParams
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
-        },
-    };
+export const BoardElementApiFactory = function (
+	configuration?: Configuration,
+	basePath?: string,
+	axios?: AxiosInstance
+) {
+	const localVarFp = BoardElementApiFp(configuration);
+	return {
+		/**
+		 *
+		 * @summary Create a new submission item in a submission container element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerCreateSubmission(
+			contentElementId: string,
+			createSubmissionItemBodyParams: CreateSubmissionItemBodyParams,
+			options?: any
+		): AxiosPromise<SubmissionItemResponse> {
+			return localVarFp
+				.elementControllerCreateSubmission(
+					contentElementId,
+					createSubmissionItemBodyParams,
+					options
+				)
+				.then((request) => request(axios, basePath));
+		},
+		/**
+		 *
+		 * @summary Delete a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerDeleteElement(
+			contentElementId: string,
+			options?: any
+		): AxiosPromise<void> {
+			return localVarFp
+				.elementControllerDeleteElement(contentElementId, options)
+				.then((request) => request(axios, basePath));
+		},
+		/**
+		 *
+		 * @summary Move a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {MoveContentElementBody} moveContentElementBody
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerMoveElement(
+			contentElementId: string,
+			moveContentElementBody: MoveContentElementBody,
+			options?: any
+		): AxiosPromise<void> {
+			return localVarFp
+				.elementControllerMoveElement(
+					contentElementId,
+					moveContentElementBody,
+					options
+				)
+				.then((request) => request(axios, basePath));
+		},
+		/**
+		 *
+		 * @summary Update a single content element.
+		 * @param {string} contentElementId The id of the element.
+		 * @param {UpdateElementContentBodyParams} updateElementContentBodyParams
+		 * @param {*} [options] Override http request option.
+		 * @throws {RequiredError}
+		 */
+		elementControllerUpdateElement(
+			contentElementId: string,
+			updateElementContentBodyParams: UpdateElementContentBodyParams,
+			options?: any
+		): AxiosPromise<void> {
+			return localVarFp
+				.elementControllerUpdateElement(
+					contentElementId,
+					updateElementContentBodyParams,
+					options
+				)
+				.then((request) => request(axios, basePath));
+		},
+	};
 };
 
 /**
@@ -8876,26 +9054,33 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
  * @interface BoardElementApi
  */
 export interface BoardElementApiInterface {
-    /**
-     *
-     * @summary Create a new submission item in a submission container element.
-     * @param {string} contentElementId The id of the element.
-     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApiInterface
-     */
-    elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse>;
+	/**
+	 *
+	 * @summary Create a new submission item in a submission container element.
+	 * @param {string} contentElementId The id of the element.
+	 * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof BoardElementApiInterface
+	 */
+	elementControllerCreateSubmission(
+		contentElementId: string,
+		createSubmissionItemBodyParams: CreateSubmissionItemBodyParams,
+		options?: any
+	): AxiosPromise<SubmissionItemResponse>;
 
-    /**
-     *
-     * @summary Delete a single content element.
-     * @param {string} contentElementId The id of the element.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApiInterface
-     */
-    elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void>;
+	/**
+	 *
+	 * @summary Delete a single content element.
+	 * @param {string} contentElementId The id of the element.
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof BoardElementApiInterface
+	 */
+	elementControllerDeleteElement(
+		contentElementId: string,
+		options?: any
+	): AxiosPromise<void>;
 
 	/**
 	 *
@@ -8934,31 +9119,49 @@ export interface BoardElementApiInterface {
  * @class BoardElementApi
  * @extends {BaseAPI}
  */
-export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
-    /**
-     *
-     * @summary Create a new submission item in a submission container element.
-     * @param {string} contentElementId The id of the element.
-     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApi
-     */
-    public elementControllerCreateSubmission(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerCreateSubmission(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
+export class BoardElementApi
+	extends BaseAPI
+	implements BoardElementApiInterface
+{
+	/**
+	 *
+	 * @summary Create a new submission item in a submission container element.
+	 * @param {string} contentElementId The id of the element.
+	 * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof BoardElementApi
+	 */
+	public elementControllerCreateSubmission(
+		contentElementId: string,
+		createSubmissionItemBodyParams: CreateSubmissionItemBodyParams,
+		options?: any
+	) {
+		return BoardElementApiFp(this.configuration)
+			.elementControllerCreateSubmission(
+				contentElementId,
+				createSubmissionItemBodyParams,
+				options
+			)
+			.then((request) => request(this.axios, this.basePath));
+	}
 
-    /**
-     *
-     * @summary Delete a single content element.
-     * @param {string} contentElementId The id of the element.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApi
-     */
-    public elementControllerDeleteElement(contentElementId: string, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
-    }
+	/**
+	 *
+	 * @summary Delete a single content element.
+	 * @param {string} contentElementId The id of the element.
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 * @memberof BoardElementApi
+	 */
+	public elementControllerDeleteElement(
+		contentElementId: string,
+		options?: any
+	) {
+		return BoardElementApiFp(this.configuration)
+			.elementControllerDeleteElement(contentElementId, options)
+			.then((request) => request(this.axios, this.basePath));
+	}
 
 	/**
 	 *
@@ -23117,10 +23320,7 @@ export const VideoConferenceApiFp = function (configuration?: Configuration) {
 			scopeId: string,
 			options?: any
 		): Promise<
-			(
-				axios?: AxiosInstance,
-				basePath?: string
-			) => AxiosPromise<VideoConferenceInfoResponse>
+			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>
 		> {
 			const localVarAxiosArgs =
 				await localVarAxiosParamCreator.videoConferenceControllerInfo(
@@ -23269,10 +23469,7 @@ export const VideoConferenceApiFp = function (configuration?: Configuration) {
 			scopeId: string,
 			options?: any
 		): Promise<
-			(
-				axios?: AxiosInstance,
-				basePath?: string
-			) => AxiosPromise<VideoConferenceInfoResponse>
+			(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>
 		> {
 			const localVarAxiosArgs =
 				await localVarAxiosParamCreator.videoConferenceDeprecatedControllerInfo(
@@ -23330,7 +23527,7 @@ export const VideoConferenceApiFactory = function (
 			scope: VideoConferenceScope,
 			scopeId: string,
 			options?: any
-		): AxiosPromise<VideoConferenceInfoResponse> {
+		): AxiosPromise<object> {
 			return localVarFp
 				.videoConferenceControllerInfo(scope, scopeId, options)
 				.then((request) => request(axios, basePath));
@@ -23429,7 +23626,7 @@ export const VideoConferenceApiFactory = function (
 			scope: string,
 			scopeId: string,
 			options?: any
-		): AxiosPromise<VideoConferenceInfoResponse> {
+		): AxiosPromise<object> {
 			return localVarFp
 				.videoConferenceDeprecatedControllerInfo(scope, scopeId, options)
 				.then((request) => request(axios, basePath));
@@ -23471,7 +23668,7 @@ export interface VideoConferenceApiInterface {
 		scope: VideoConferenceScope,
 		scopeId: string,
 		options?: any
-	): AxiosPromise<VideoConferenceInfoResponse>;
+	): AxiosPromise<object>;
 
 	/**
 	 * Use this endpoint to get a link to join an existing video conference. The conference must be running.
@@ -23550,7 +23747,7 @@ export interface VideoConferenceApiInterface {
 		scope: string,
 		scopeId: string,
 		options?: any
-	): AxiosPromise<VideoConferenceInfoResponse>;
+	): AxiosPromise<object>;
 }
 
 /**
