@@ -140,7 +140,15 @@
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<v-spacer />
+			<v-btn
+				text
+				color="secondary"
+				data-testid="ldapBackButton"
+				@click="backButtonHandler"
+			>
+				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
+				{{ $t("common.actions.back") }}
+			</v-btn>
 			<v-btn
 				color="primary"
 				depressed
@@ -278,6 +286,9 @@ export default {
 		}`;
 	},
 	methods: {
+		backButtonHandler() {
+			redirectToConfigPage(this);
+		},
 		async submitButtonHandler() {
 			const { id } = this.$route.query;
 			const temporaryConfigData = { ...this.temp };
