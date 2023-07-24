@@ -5,9 +5,11 @@
 			data-testid="board-file-element-edit-menu-move-up"
 			@click="onMoveElementUp"
 		>
-			<VIcon>
-				{{ mdiArrowCollapseUp }}
-			</VIcon>
+			<template #icon>
+				<VIcon>
+					{{ mdiArrowCollapseUp }}
+				</VIcon>
+			</template>
 			{{ $t("components.board.action.moveUp") }}
 		</BoardMenuAction>
 		<BoardMenuAction
@@ -15,9 +17,11 @@
 			data-testid="board-file-element-edit-menu-move-down"
 			@click="onMoveElementDown"
 		>
-			<VIcon>
-				{{ mdiArrowCollapseDown }}
-			</VIcon>
+			<template #icon>
+				<VIcon>
+					{{ mdiArrowCollapseDown }}
+				</VIcon>
+			</template>
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
 		<BoardMenuAction
@@ -25,18 +29,22 @@
 			data-testid="board-file-element-edit-menu-download"
 			@click="onDownload"
 		>
-			<VIcon>
-				{{ mdiTrayArrowDown }}
-			</VIcon>
+			<template #icon>
+				<VIcon>
+					{{ mdiTrayArrowDown }}
+				</VIcon>
+			</template>
 			{{ $t("components.board.action.download") }}
 		</BoardMenuAction>
 		<BoardMenuAction
 			data-testid="board-file-element-edit-menu-delete"
 			@click="onDelete"
 		>
-			<VIcon>
-				{{ mdiTrashCanOutline }}
-			</VIcon>
+			<template #icon>
+				<VIcon>
+					{{ mdiTrashCanOutline }}
+				</VIcon>
+			</template>
 			{{ $t("components.board.action.delete") }}
 		</BoardMenuAction>
 	</BoardMenu>
