@@ -30,7 +30,7 @@
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
 				role="button"
-				data-testid="course-title"
+				data-testid="course-icon"
 			>
 				<span :class="avatarTextClass" data-testid="course-short-title">{{
 					item.shortTitle
