@@ -36,7 +36,12 @@
 					item.shortTitle
 				}}</span>
 			</v-avatar>
-			<div v-if="!condenseLayout" aria-hidden="true" :class="titleClasses">
+			<div
+				v-if="!condenseLayout"
+				aria-hidden="true"
+				:class="titleClasses"
+				data-testid="course-title"
+			>
 				{{ title }}
 			</div>
 		</v-badge>
