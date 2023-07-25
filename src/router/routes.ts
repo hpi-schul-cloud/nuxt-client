@@ -113,6 +113,11 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["lernstore_view"]),
 	},
 	{
+		path: "/dndtest",
+		component: () => import("@/components/ui-drag-and-drop/TestComponent.vue"),
+		name: "dndtest",
+	},
+	{
 		path: `/content/:id(${REGEX_UUID})`,
 		component: () => import("@/pages/LernStoreDetails.page.vue"),
 		name: "content-id",
