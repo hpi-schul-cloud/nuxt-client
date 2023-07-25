@@ -1,9 +1,6 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
-		<img
-			src="@/assets/img/migration/move.svg"
-			:alt="$t('pages.userMigration.consent.img.alt').toString()"
-		/>
+		<img src="@/assets/img/migration/move.svg" alt="" />
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.title") }}
 		</h1>

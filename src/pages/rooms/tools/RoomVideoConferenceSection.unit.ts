@@ -17,6 +17,8 @@ import RoomModule from "@/store/room";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
 
 describe("RoomVideoConferenceSection", () => {
+	const mockUrl = "https://mock.com";
+
 	const getWrapper = (
 		props: { roomId: string },
 		userPermissions: ("join_meeting" | "start_meeting")[],
@@ -24,6 +26,13 @@ describe("RoomVideoConferenceSection", () => {
 		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
 	) => {
 		document.body.setAttribute("data-app", "true");
+
+		Object.defineProperty(window, "location", {
+			value: {
+				origin: mockUrl,
+			},
+			writable: true, // possibility to override
+		});
 
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: userPermissions,
@@ -45,7 +54,7 @@ describe("RoomVideoConferenceSection", () => {
 
 		const roomModule = createModuleMocks(RoomModule, {
 			getRoomData: {
-				roomId: "roomId",
+				roomId: props.roomId,
 				title: "roomName",
 				displayColor: "displayColor",
 				elements: [],
@@ -561,9 +570,11 @@ describe("RoomVideoConferenceSection", () => {
 
 	describe("when clicking on create button of videoconference configuration dialog", () => {
 		const setup = () => {
+			const roomId = "roomId";
+
 			const { wrapper, videoConferenceModule } = getWrapper(
 				{
-					roomId: "roomId",
+					roomId,
 				},
 				["start_meeting"],
 				false,
@@ -582,18 +593,19 @@ describe("RoomVideoConferenceSection", () => {
 
 			const params = {
 				scope: VideoConferenceScope.Course,
-				scopeId: "roomId",
+				scopeId: roomId,
 			};
 
 			return {
 				wrapper,
 				videoConferenceModule,
 				params,
+				roomId,
 			};
 		};
 
 		it("should call start with all options true ", async () => {
-			const { wrapper, videoConferenceModule, params } = setup();
+			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-video-conference-card",
@@ -625,11 +637,12 @@ describe("RoomVideoConferenceSection", () => {
 					moderatorMustApproveJoinRequests: true,
 					everybodyJoinsAsModerator: true,
 				},
+				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 		});
 
 		it("should call start with all options false ", async () => {
-			const { wrapper, videoConferenceModule, params } = setup();
+			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-video-conference-card",
@@ -661,11 +674,12 @@ describe("RoomVideoConferenceSection", () => {
 					moderatorMustApproveJoinRequests: false,
 					everybodyJoinsAsModerator: false,
 				},
+				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 		});
 
 		it("should call start and join videoconference function of store", async () => {
-			const { wrapper, videoConferenceModule, params } = setup();
+			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-video-conference-card",
@@ -685,6 +699,7 @@ describe("RoomVideoConferenceSection", () => {
 				scopeId: params.scopeId,
 				videoConferenceOptions:
 					videoConferenceModule.getVideoConferenceInfo.options,
+				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
