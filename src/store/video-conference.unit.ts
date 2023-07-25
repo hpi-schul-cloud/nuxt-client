@@ -282,15 +282,15 @@ describe("VideoConferenceModule", () => {
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
 					videoConferenceOptions,
+					logoutUrl: "mockUrl",
 				});
 
 				expect(
 					videoconferenceApi.videoConferenceControllerStart
-				).toHaveBeenCalledWith(
-					VideoConferenceScope.Course,
-					"scopeId",
-					videoConferenceOptions
-				);
+				).toHaveBeenCalledWith(VideoConferenceScope.Course, "scopeId", {
+					...videoConferenceOptions,
+					logoutUrl: "mockUrl",
+				});
 			});
 		});
 
