@@ -107,6 +107,9 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
+						:aria-label="
+							$t('pages.administration.students.table.edit.ariaLabel')
+						"
 						data-testid="edit_student_button"
 					>
 						<v-icon size="20">$mdiPencilOutline</v-icon>

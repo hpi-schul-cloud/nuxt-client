@@ -20,7 +20,7 @@
 				indeterminate
 				class="mb-6"
 				data-testid="progress-bar"
-			></v-progress-linear>
+			/>
 			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
 				<v-list-item-icon>
 					<v-icon>{{ pdfIcon }}</v-icon>
@@ -54,8 +54,12 @@
 					data-testid="edit-button"
 					@click="isSchoolPolicyFormDialogOpen = true"
 				>
-					<v-btn icon role="button">
-						<span class="d-sr-only">{{ t("common.actions.edit") }}</span>
+					<v-btn
+						icon
+						:aria-label="
+							t('pages.administration.school.index.schoolPolicy.edit')
+						"
+					>
 						<v-icon>
 							{{ mdiPencilOutline }}
 						</v-icon>
@@ -67,8 +71,12 @@
 					data-testid="download-button"
 					@click="downloadFile"
 				>
-					<v-btn icon role="button">
-						<span class="d-sr-only">{{ t("common.actions.download") }}</span>
+					<v-btn
+						icon
+						:aria-label="
+							t('pages.administration.school.index.schoolPolicy.download')
+						"
+					>
 						<v-icon>
 							{{ mdiTrayArrowDown }}
 						</v-icon>
@@ -80,7 +88,7 @@
 				:is-open="isSchoolPolicyFormDialogOpen"
 				@close="closeDialog"
 				data-testid="form-dialog"
-			></school-policy-form-dialog>
+			/>
 		</template>
 	</section>
 </template>

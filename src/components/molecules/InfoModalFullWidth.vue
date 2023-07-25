@@ -14,21 +14,19 @@
 			</modal-body-info>
 		</template>
 		<template #footer>
-			<center-slot class="mb-4 px-4">
+			<div class="d-flex justify-center align-center mb-4 px-4">
 				<v-btn depressed block :color="design" @click="close">{{ btn }}</v-btn>
-			</center-slot>
+			</div>
 		</template>
 	</base-modal>
 </template>
 
 <script>
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import CenterSlot from "@/components/atoms/CenterSlot";
 
 export default {
 	components: {
 		ModalBodyInfo,
-		CenterSlot,
 	},
 	props: {
 		design: {

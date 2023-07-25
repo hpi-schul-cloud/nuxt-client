@@ -59,6 +59,7 @@
 						type="button"
 						data-testid="pwd-visibility-toggle"
 						class="pwd-toggle"
+						:aria-label="$t('components.base.showPassword')"
 						@click="togglePasswordVisibility"
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>

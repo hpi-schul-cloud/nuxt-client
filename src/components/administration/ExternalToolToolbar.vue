@@ -1,7 +1,13 @@
 <template>
 	<div>
-		<v-btn icon data-testId="editAction" role="button" @click="$emit('edit')">
-			<span class="d-sr-only">{{ $t("common.actions.edit") }}</span>
+		<v-btn
+			icon
+			data-testId="editAction"
+			:aria-label="
+				$t('components.administration.externalToolsSection.action.edit')
+			"
+			@click="$emit('edit')"
+		>
 			<v-icon>
 				{{ mdiPencilOutline }}
 			</v-icon>
@@ -9,10 +15,11 @@
 		<v-btn
 			icon
 			data-testId="deleteAction"
-			role="button"
+			:aria-label="
+				$t('components.administration.externalToolsSection.action.delete')
+			"
 			@click="$emit('delete')"
 		>
-			<span class="d-sr-only">{{ $t("common.actions.remove") }}</span>
 			<v-icon>
 				{{ mdiTrashCanOutline }}
 			</v-icon>
