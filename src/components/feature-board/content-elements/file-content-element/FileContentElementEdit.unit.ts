@@ -3,6 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
+
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementEdit", () => {

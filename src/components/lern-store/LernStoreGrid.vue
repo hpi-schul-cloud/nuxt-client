@@ -3,23 +3,27 @@
 		<slot />
 	</div>
 </template>
-<script>
-export default {
+
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+
+export default defineComponent({
 	props: {
 		columnWidth: {
 			type: String,
 			default: "15rem",
 		},
 	},
-	data() {
-		return {};
+	setup(props) {
+		const col = computed(() => {
+			return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
+		});
+
+		return {
+			col,
+		};
 	},
-	computed: {
-		col() {
-			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));`;
-		},
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

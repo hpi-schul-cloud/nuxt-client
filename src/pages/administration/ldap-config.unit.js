@@ -1,4 +1,6 @@
 import { default as ldapConfig } from "./LDAPConfig.page.vue";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 const mockInputData = {
 	url: "ldaps://ldap.hpi-schul-cloud.de",
@@ -20,6 +22,7 @@ const mockInputData = {
 	nameAttribute: "description",
 	participantAttribute: "member",
 };
+
 describe("ldap/config", () => {
 	const getDataStub = jest.fn();
 	const verifyDataStub = jest.fn();
@@ -60,6 +63,13 @@ describe("ldap/config", () => {
 	};
 
 	const short_name = "instance name";
+
+	beforeEach(() => {
+		document.body.setAttribute("data-app", "true");
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
 
 	it("should mount component", () => {
 		const wrapper = mount(ldapConfig, {
