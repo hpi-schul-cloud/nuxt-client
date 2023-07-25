@@ -18,6 +18,8 @@ import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { axe, toHaveNoViolations } from "jest-axe";
+expect.extend(toHaveNoViolations);
 
 const mockData = {
 	roomId: "123",
@@ -183,6 +185,18 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	it("should demonstrate this matcher`s usage", async () => {
+		const wrapper = getWrapper();
+		const results = await axe(wrapper.element, {
+			rules: {
+				// disable landmark rules when testing isolated components.
+				region: { enabled: false },
+			},
+		});
+
+		expect(results).toHaveNoViolations();
 	});
 
 	it("should fetch data", async () => {
