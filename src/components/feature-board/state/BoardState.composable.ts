@@ -213,11 +213,6 @@ export const useBoardState = (id: string) => {
 			await showErrorAndReload(errorText);
 			return;
 		}
-
-		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex > -1) {
-			board.value.columns[columnIndex].title = newTitle;
-		}
 	};
 
 	const addCard = (

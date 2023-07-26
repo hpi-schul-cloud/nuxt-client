@@ -4,12 +4,12 @@ import {
 } from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -54,7 +54,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await showErrorAndReload(generateErrorText("update"));
 			return;
 		}
-		cardState.card.title = newTitle;
 	};
 
 	const deleteCard = async () => {
