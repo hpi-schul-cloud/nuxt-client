@@ -1,5 +1,5 @@
 <template>
-	<OnClickOutside @trigger="onClickOutside">
+	<OnClickOutside @trigger="onClickOutside" :options="{ capture: false }">
 		<div
 			ref="event-handle"
 			data-testid="event-handle"
@@ -33,15 +33,13 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
-		const checkEventTarget = (event: MouseEvent): boolean => {
-			if (!(event.target instanceof HTMLElement)) return false;
-
-			return event.target?.className?.includes("v-list-item");
+		const isAllowedTarget = (event: MouseEvent): boolean => {
+			if (!(event.target instanceof HTMLElement)) return true;
+			return !event.target?.className?.includes("v-list-item");
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
-			const isMenuEvent = checkEventTarget(event);
-			if (props.isEditMode && !isMenuEvent) {
+			if (props.isEditMode && isAllowedTarget(event)) {
 				emit("end-edit-mode");
 			}
 		};
