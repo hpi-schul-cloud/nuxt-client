@@ -23,6 +23,7 @@ export const useEditMode = (id: string) => {
 
 	const stopEditMode = () => {
 		if (isEditMode.value === true) {
+			console.log("editMode stopped");
 			setEditModeId(undefined);
 		}
 	};
