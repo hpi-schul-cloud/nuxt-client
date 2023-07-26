@@ -1,4 +1,4 @@
-import { useFileRecord } from "@/components/feature-board/content-elements/FileRecord.composable";
+import { useFileRecord } from "@/components/feature-board/content-elements/file-content-element";
 import { jest } from "@jest/globals";
 import { computed } from "vue";
 
