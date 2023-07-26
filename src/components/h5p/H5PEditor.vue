@@ -3,12 +3,8 @@
 		<h5p-editor
 			ref="h5pEditorRef"
 			:content-id="contentId"
-			@saved="log"
-			@editorloaded="log"
-			@save-error="log"
-			@validation-error="log"
+			@validation-error="onValidationError"
 		></h5p-editor>
-		<button @click="save">Save</button>
 	</div>
 </template>
 
@@ -21,7 +17,10 @@ import {
 defineElements("h5p-editor");
 
 import { defineComponent, ref, watch } from "vue";
-import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+import {
+	H5pEditorApiFactory,
+	PostH5PContentCreateParams,
+} from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
 
 export default defineComponent({
@@ -32,27 +31,39 @@ export default defineComponent({
 			default: "new",
 		},
 	},
-	setup() {
+	emits: ["saved", "save-error", "load-error", "validation-error"],
+	setup(props, { emit, expose }) {
 		const h5pEditorRef = ref<H5PEditorComponent>();
 
 		const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
 
 		const loadContent = async (id?: string) => {
-			if (id) {
-				const { data } = await h5pEditorApi.h5PEditorControllerGetH5PEditor(id);
-				return data;
-			} else {
-				const { data } =
-					await h5pEditorApi.h5PEditorControllerGetNewH5PEditor();
-				return data;
+			try {
+				if (id) {
+					// Load content
+					const { data } = await h5pEditorApi.h5PEditorControllerGetH5PEditor(
+						id
+					);
+
+					return data;
+				} else {
+					// Create new editor
+					const { data } =
+						await h5pEditorApi.h5PEditorControllerGetNewH5PEditor();
+
+					return data;
+				}
+			} catch (err) {
+				emit("load-error", err);
 			}
 		};
 
 		const saveContent = async (
 			contentId: string,
-			requestBody: { library: string; params: any }
+			requestBody: PostH5PContentCreateParams
 		) => {
 			if (contentId) {
+				// Modify existing content
 				const { data } = await h5pEditorApi.h5PEditorControllerSaveH5pContent(
 					contentId,
 					requestBody
@@ -60,6 +71,7 @@ export default defineComponent({
 
 				return data;
 			} else {
+				// Save new content
 				const { data } = await h5pEditorApi.h5PEditorControllerCreateH5pContent(
 					requestBody
 				);
@@ -70,24 +82,29 @@ export default defineComponent({
 
 		watch(h5pEditorRef, (editor) => {
 			if (editor) {
+				// Attach callbacks to H5P Editor
 				editor.loadContentCallback = loadContent;
 				editor.saveContentCallback = saveContent;
 			}
 		});
 
-		function log(data: CustomEvent) {
-			console.log(`Event: ${data.type}`);
-			console.log(data.detail);
-		}
-
 		const save = () => {
-			h5pEditorRef.value?.save().then(console.log).catch(console.log);
+			if (h5pEditorRef.value) {
+				return h5pEditorRef.value.save();
+			} else {
+				throw new Error("Editor not loaded");
+			}
 		};
+
+		const onValidationError = (error: unknown) => {
+			emit("validation-error", error);
+		};
+
+		expose({ save });
 
 		return {
 			h5pEditorRef,
-			log,
-			save,
+			onValidationError,
 		};
 	},
 });

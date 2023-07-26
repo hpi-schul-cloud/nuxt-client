@@ -23,6 +23,10 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
+import { H5PEditorModelContentResponse } from '../models';
+// @ts-ignore
+import { H5PEditorModelResponse } from '../models';
+// @ts-ignore
 import { H5PSaveResponse } from '../models';
 // @ts-ignore
 import { PostH5PContentCreateParams } from '../models';
@@ -197,40 +201,6 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
             assertParamExists('h5PEditorControllerGetContentParameters', 'id', id)
             const localVarPath = `/h5p-editor/params/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Return dummy HTML for testing
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        h5PEditorControllerGetEditor: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/h5p-editor/{contentId}/edit`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -523,6 +493,40 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary H5P tries to load the users last state; unsupported
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerUserDataSink: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/h5p-editor/contentUserData/*`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -586,21 +590,11 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Return dummy HTML for testing
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async h5PEditorControllerGetEditor(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetEditor(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetH5PEditor(contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async h5PEditorControllerGetH5PEditor(contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelContentResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetH5PEditor(contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -620,7 +614,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetNewH5PEditor(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async h5PEditorControllerGetNewH5PEditor(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetNewH5PEditor(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -632,7 +626,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetPlayer(language, contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -664,6 +658,16 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          */
         async h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PSaveResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerSaveH5pContent(contentId, postH5PContentCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary H5P tries to load the users last state; unsupported
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async h5PEditorControllerUserDataSink(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerUserDataSink(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -724,20 +728,11 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Return dummy HTML for testing
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        h5PEditorControllerGetEditor(options?: any): AxiosPromise<string> {
-            return localVarFp.h5PEditorControllerGetEditor(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetH5PEditor(contentId: string, options?: any): AxiosPromise<string> {
+        h5PEditorControllerGetH5PEditor(contentId: string, options?: any): AxiosPromise<H5PEditorModelContentResponse> {
             return localVarFp.h5PEditorControllerGetH5PEditor(contentId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -755,7 +750,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<string> {
+        h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<H5PEditorModelResponse> {
             return localVarFp.h5PEditorControllerGetNewH5PEditor(options).then((request) => request(axios, basePath));
         },
         /**
@@ -766,7 +761,7 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<string> {
+        h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<object> {
             return localVarFp.h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -795,6 +790,15 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
          */
         h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<H5PSaveResponse> {
             return localVarFp.h5PEditorControllerSaveH5pContent(contentId, postH5PContentCreateParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary H5P tries to load the users last state; unsupported
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        h5PEditorControllerUserDataSink(options?: any): AxiosPromise<void> {
+            return localVarFp.h5PEditorControllerUserDataSink(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -853,21 +857,12 @@ export interface H5pEditorApiInterface {
 
     /**
      * 
-     * @summary Return dummy HTML for testing
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof H5pEditorApiInterface
-     */
-    h5PEditorControllerGetEditor(options?: any): AxiosPromise<string>;
-
-    /**
-     * 
      * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetH5PEditor(contentId: string, options?: any): AxiosPromise<string>;
+    h5PEditorControllerGetH5PEditor(contentId: string, options?: any): AxiosPromise<H5PEditorModelContentResponse>;
 
     /**
      * 
@@ -885,7 +880,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<string>;
+    h5PEditorControllerGetNewH5PEditor(options?: any): AxiosPromise<H5PEditorModelResponse>;
 
     /**
      * 
@@ -896,7 +891,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<string>;
+    h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -924,6 +919,15 @@ export interface H5pEditorApiInterface {
      * @memberof H5pEditorApiInterface
      */
     h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<H5PSaveResponse>;
+
+    /**
+     * 
+     * @summary H5P tries to load the users last state; unsupported
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    h5PEditorControllerUserDataSink(options?: any): AxiosPromise<void>;
 
 }
 
@@ -988,17 +992,6 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      */
     public h5PEditorControllerGetContentParameters(id: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetContentParameters(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Return dummy HTML for testing
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof H5pEditorApi
-     */
-    public h5PEditorControllerGetEditor(options?: any) {
-        return H5pEditorApiFp(this.configuration).h5PEditorControllerGetEditor(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1078,5 +1071,16 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      */
     public h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerSaveH5pContent(contentId, postH5PContentCreateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary H5P tries to load the users last state; unsupported
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public h5PEditorControllerUserDataSink(options?: any) {
+        return H5pEditorApiFp(this.configuration).h5PEditorControllerUserDataSink(options).then((request) => request(this.axios, this.basePath));
     }
 }

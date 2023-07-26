@@ -1,24 +1,42 @@
 <template>
-	<H5PEditorComponent :contentId="contentId" />
+	<section :class="{ inline: isInline }">
+		<v-btn
+			v-if="isInline"
+			text
+			plain
+			:ripple="false"
+			design="none"
+			class="arrow__back"
+			@click="goBack"
+		>
+			<v-icon>{{ mdiChevronLeft }}</v-icon>
+			{{ $t("pages.content.index.backToCourse") }}
+		</v-btn>
+
+		<div class="content" :class="{ inline: isInline }">
+			<div class="column-layout">
+				<H5PEditorComponent
+					ref="editorRef"
+					class="editor"
+					:contentId="contentId"
+					@load-error="loadError"
+				/>
+				<v-btn role="button" class="save-button" color="primary" @click="save">
+					{{ $t("common.actions.save") }}
+				</v-btn>
+			</div>
+		</div>
+	</section>
 </template>
 
 <script lang="ts">
 import { notifierModule } from "@/store";
-import { $axios } from "@/utils/api";
 import { mdiChevronLeft } from "@mdi/js";
-import { iframeResizer } from "iframe-resizer";
 import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
-import { useRoute, useRouter } from "vue-router/composables";
-
-import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+import { useRoute } from "vue-router/composables";
 
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-
-type IFrameResizerElement = { iFrameResizer?: { removeListeners: () => void } };
-
-type ParamsValidEvent = CustomEvent;
-type ParamsInvalidEvent = CustomEvent<string>;
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -42,38 +60,27 @@ export default defineComponent({
 		};
 
 		const route = useRoute();
-		const router = useRouter();
 
-		const iframe = ref<HTMLIFrameElement>();
+		const editorRef = ref<typeof H5PEditorComponent>();
 
 		const contentId = route.params?.id;
 		const isInline = !!route.query?.inline;
-
-		const BASE_PATH = "/v3";
-		const h5pEditorApi = H5pEditorApiFactory(undefined, BASE_PATH, $axios);
-
-		const iframeSrc = ref<string | undefined>();
 
 		function notifyParent(event: CustomEvent) {
 			window.dispatchEvent(event);
 		}
 
-		function onInvalidParams(event: ParamsInvalidEvent) {
-			notifierModule.show({
-				text: t("common.validation.invalid"),
-				status: "error",
-				timeout: 10000,
-			});
-		}
+		async function save() {
+			if (editorRef.value) {
+				try {
+					const data = await editorRef.value.save();
 
-		async function onValidParams(event: ParamsValidEvent) {
-			try {
-				if (contentId) {
-					// Save content
-					const { data } = await h5pEditorApi.h5PEditorControllerSaveH5pContent(
-						contentId,
-						event.detail
-					);
+					notifierModule.show({
+						// TODO: Success message
+						text: t("common.validation.invalid"),
+						status: "success",
+						timeout: 10000,
+					});
 
 					notifyParent(
 						new CustomEvent("save-content", {
@@ -84,40 +91,13 @@ export default defineComponent({
 							},
 						})
 					);
-				} else {
-					// Create content
-					const { data } =
-						await h5pEditorApi.h5PEditorControllerCreateH5pContent(
-							event.detail
-						);
-
-					notifyParent(
-						new CustomEvent("save-content", {
-							detail: {
-								contentId: data.contentId,
-								title: data.metadata.title,
-								contentType: data.metadata.mainLibrary,
-							},
-						})
-					);
-
-					router.replace({
-						path: `/h5p/editor/${data.contentId}`,
-						query: route.query,
+				} catch (err) {
+					notifierModule.show({
+						text: t("common.validation.invalid"),
+						status: "error",
+						timeout: 10000,
 					});
 				}
-			} catch (err) {
-				notifierModule.show({
-					text: t("common.validation.invalid"),
-					status: "error",
-					timeout: 10000,
-				});
-			}
-		}
-
-		function validateParams() {
-			if (iframe.value) {
-				iframe.value.contentWindow?.postMessage("validate-params");
 			}
 		}
 
@@ -125,28 +105,19 @@ export default defineComponent({
 			window.close();
 		}
 
+		function loadError() {
+			console.error("TODO: Error handling when player fails to load");
+		}
+
 		return {
 			contentId,
-			iframe,
-			iframeSrc,
-			scriptSrc: "#",
 			mdiChevronLeft,
 			isInline,
-			onValidParams,
-			onInvalidParams,
-			validateParams,
+			loadError,
 			goBack,
+			save,
+			editorRef,
 		};
-	},
-	directives: {
-		h5pResize: {
-			bind: function (el: HTMLElement, { value = {} }) {
-				el.addEventListener("load", () => iframeResizer(value, el));
-			},
-			unbind: function (el) {
-				(el as IFrameResizerElement).iFrameResizer?.removeListeners();
-			},
-		},
 	},
 });
 </script>
@@ -156,7 +127,7 @@ export default defineComponent({
 	margin-top: var(--space-xl-3);
 }
 
-.editor-iframe {
+.editor {
 	height: 100%;
 	width: 100%;
 	max-width: 960px;
