@@ -34,18 +34,24 @@ export default defineComponent({
 			type: String,
 		},
 	},
-	setup() {
+	emits: ["load-error"],
+	setup(_props, { emit }) {
 		const h5pPlayerRef = ref<H5PPlayerComponent>();
 		const playerInitialized = ref(false);
 
 		const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
 
 		const loadContent = async (id: string) => {
-			const { data } = await h5pEditorApi.h5PEditorControllerGetPlayer(
-				"de",
-				id
-			);
-			return data;
+			try {
+				const { data } = await h5pEditorApi.h5PEditorControllerGetPlayer(
+					"de",
+					id
+				);
+				return data;
+			} catch (err) {
+				emit("load-error", err);
+				throw err;
+			}
 		};
 
 		watch(h5pPlayerRef, (editor) => {

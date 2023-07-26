@@ -14,18 +14,17 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<H5PPlayerComponent
-				ref="playerRef"
-				:contentId="contentId"
-				@load-error="loadError"
-			/>
+			<H5PPlayerComponent :contentId="contentId" @load-error="onLoadError" />
 		</div>
 	</section>
 </template>
 
 <script lang="ts">
+import { useApplicationError } from "@/composables/application-error.composable";
+import { applicationErrorModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
-import { defineComponent, ref } from "vue";
+import { AxiosError, HttpStatusCode } from "axios";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
@@ -37,8 +36,7 @@ export default defineComponent({
 	},
 	setup() {
 		const route = useRoute();
-
-		const playerRef = ref<typeof H5PPlayerComponent>();
+		const { createApplicationError } = useApplicationError();
 
 		const contentId = route.params?.id;
 		const isInline = !!route.query?.inline;
@@ -47,17 +45,25 @@ export default defineComponent({
 			window.close();
 		}
 
-		function loadError() {
-			console.error("TODO: Error handling when player fails to load");
+		function onLoadError(err: AxiosError) {
+			const statusCode =
+				err.response?.status ?? HttpStatusCode.InternalServerError;
+
+			applicationErrorModule.setError(
+				createApplicationError(
+					statusCode in HttpStatusCode
+						? statusCode
+						: HttpStatusCode.InternalServerError
+				)
+			);
 		}
 
 		return {
 			contentId,
 			goBack,
 			isInline,
-			loadError,
+			onLoadError,
 			mdiChevronLeft,
-			playerRef,
 		};
 	},
 });
