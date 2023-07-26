@@ -167,7 +167,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getShowOutdatedUsers(): boolean {
-		return this.env.FEATURE_SHOW_OUTDATED_USERS;
+		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {

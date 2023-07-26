@@ -120,9 +120,7 @@
 					'components.administration.adminMigrationSection.showOutdatedUsers.label'
 				)
 			"
-			:true-value="true"
-			:false-value="false"
-			:input-value="featureShowOutdatedUsers"
+			v-model="school.features.showOutdatedUsers"
 			inset
 			dense
 			class="ml-1"
@@ -271,24 +269,14 @@ export default defineComponent({
 		);
 
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
-			() => {
-				console.log(envConfigModule.getShowOutdatedUsers);
-				return envConfigModule.getShowOutdatedUsers;
-			}
-		);
-
-		const featureShowOutdatedUsers: ComputedRef<boolean> = computed(
-			() => schoolsModule.getSchool.features.showOutdatedUsers
+			() => envConfigModule.getShowOutdatedUsers
 		);
 
 		const setShowOutdatedUsers = () => {
-			// const school = schoolsModule.getSchool;
-			const newSchool = school.value;
-
-			newSchool.features.showOutdatedUsers = !featureShowOutdatedUsers.value;
-
-			// schoolsModule.update({ features: school.features });
-			schoolsModule.update(newSchool);
+			schoolsModule.update({
+				id: school.value.id,
+				features: school.value.features,
+			});
 		};
 
 		return {
@@ -306,7 +294,7 @@ export default defineComponent({
 			finalFinishText,
 			dayjs,
 			supportLink,
-			featureShowOutdatedUsers,
+			school,
 			setShowOutdatedUsers,
 			globalFeatureShowOutdatedUsers,
 		};
