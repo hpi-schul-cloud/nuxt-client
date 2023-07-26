@@ -166,9 +166,9 @@ export default {
 			}
 		},
 		lernStoreVisibility() {
-			return this.permissions.student
+			return this.permissions?.student
 				? this.permissions.student.LERNSTORE_VIEW
-				: true;
+				: false;
 		},
 	},
 };
