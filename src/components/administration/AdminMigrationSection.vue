@@ -113,6 +113,29 @@
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
 		/>
+		<v-switch
+			v-if="globalFeatureShowOutdatedUsers"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.showOutdatedUsers.label'
+				)
+			"
+			:true-value="true"
+			:false-value="false"
+			:input-value="featureShowOutdatedUsers"
+			inset
+			dense
+			class="ml-1"
+			data-testid="show-outdated-users-switch"
+			@change="setShowOutdatedUsers"
+		/>
+		<p v-if="globalFeatureShowOutdatedUsers">
+			{{
+				t(
+					"components.administration.adminMigrationSection.showOutdatedUsers.description"
+				)
+			}}
+		</p>
 	</div>
 </template>
 
@@ -247,6 +270,27 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
+			() => {
+				console.log(envConfigModule.getShowOutdatedUsers);
+				return envConfigModule.getShowOutdatedUsers;
+			}
+		);
+
+		const featureShowOutdatedUsers: ComputedRef<boolean> = computed(
+			() => schoolsModule.getSchool.features.showOutdatedUsers
+		);
+
+		const setShowOutdatedUsers = () => {
+			// const school = schoolsModule.getSchool;
+			const newSchool = school.value;
+
+			newSchool.features.showOutdatedUsers = !featureShowOutdatedUsers.value;
+
+			// schoolsModule.update({ features: school.features });
+			schoolsModule.update(newSchool);
+		};
+
 		return {
 			oauthMigration,
 			setMigration,
@@ -262,6 +306,9 @@ export default defineComponent({
 			finalFinishText,
 			dayjs,
 			supportLink,
+			featureShowOutdatedUsers,
+			setShowOutdatedUsers,
+			globalFeatureShowOutdatedUsers,
 		};
 	},
 });
