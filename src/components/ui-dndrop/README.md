@@ -1,20 +1,15 @@
-<p align="center">
-  <a href="https://amendx.github.io/vue-dndrop">
-    <img src="https://user-images.githubusercontent.com/30783877/135903129-ec4df6f1-28e9-4cb2-8a06-025991c807b3.png" alt="vue-dndrop logo">
-  </a>
+<p>
+<b>Hint regarding usage in SchulCloud-Verbund-Software</b>
+</p>
+<p>
+This code was included into our project in order to be able to fix some issues.
+We should replace it with our own DragAndDrop-solution or we should fork it and put it into an independent npm-module.
 </p>
 
-<p align="center">
+# vue-dndrop
+https://amendx.github.io/vue-dndrop
+
 A Vue.js drag and drop library. ["forked" in order to fix some issues]
-</p>
-
-<p align="center">
-<a href="https://www.npmjs.com/package/vue-dndrop"><img alt="npm" src="https://img.shields.io/npm/v/vue-dndrop.svg?style=flat-square"></a>
-<img src="https://img.shields.io/npm/dt/vue-dndrop" alt="npm downloads" />
-<img src="https://img.shields.io/github/license/amendx/vue-dndrop.svg" alt="mit license" />
-<img src="https://badgen.net/github/last-commit/amendx/vue-dndrop" alt="commit" />
-<img src="https://github.com/amendx/vue-dndrop/actions/workflows/deploy.yml/badge.svg" alt="github pages" />
-</p>
 
 ## Intro
 
@@ -54,11 +49,7 @@ npm i vue-dndrop@next
 
 > This library consists on a wrapper for Vue.js components over the long missed [smooth-dnd](https://github.com/kutlugsahin/smooth-dnd) library. To make it less _importee_, all the content imported from `smooth-dnd` is now on our own library. It's all plain Javascript now.
 
-### Contributors
 
-<a href="https://github.com/amendx/vue-dndrop/contributors">
-  <img src="https://contrib.rocks/image?repo=amendx/vue-dndrop" alt=""/>
-</a>
 
 ---
 
@@ -67,10 +58,6 @@ npm i vue-dndrop@next
 Take a look at the full docs here. There's a lot of examples, details and more.
 
 - https://amendx.github.io/vue-dndrop
-
-## Example
-
-![Example](https://user-images.githubusercontent.com/30783877/135848769-bbaf7f32-81b8-4958-9f3b-5bc009b56a1d.gif)
 
 ### Vue
 
