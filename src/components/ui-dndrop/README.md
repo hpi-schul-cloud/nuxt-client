@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-A Vue.js drag and drop library.
+A Vue.js drag and drop library. ["forked" in order to fix some issues]
 </p>
 
 <p align="center">
@@ -57,7 +57,7 @@ npm i vue-dndrop@next
 ### Contributors
 
 <a href="https://github.com/amendx/vue-dndrop/contributors">
-  <img src="https://contrib.rocks/image?repo=amendx/vue-dndrop"/>
+  <img src="https://contrib.rocks/image?repo=amendx/vue-dndrop" alt=""/>
 </a>
 
 ---
