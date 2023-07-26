@@ -1,25 +1,25 @@
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import {
-	ToolConfigurationTemplate,
+	SchoolExternalToolConfigurationTemplate,
 	ToolParameter,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
-} from "@/store/external-tool";
-import ExternalToolsModule from "@/store/external-tools";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+} from "../../../store/external-tool";
+import ExternalToolsModule from "../../../store/external-tools";
+import { createModuleMocks } from "../../../utils/mock-store-module";
+import createComponentMocks from "../../../../tests/test-utils/componentMocks";
 import Vue from "vue";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
-import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { toolConfigurationTemplateFactory } from "../../../../tests/test-utils/factory";
+import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "../../../utils/inject";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
 
 	const setup = (
 		getter: Partial<ExternalToolsModule> = {},
-		template: ToolConfigurationTemplate = toolConfigurationTemplateFactory.build()
+		template: SchoolExternalToolConfigurationTemplate = toolConfigurationTemplateFactory.build()
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
@@ -90,8 +90,8 @@ describe("ExternalToolConfigSettings", () => {
 	});
 
 	describe("parameters", () => {
-		const setupTemplate = (): ToolConfigurationTemplate => {
-			const template: ToolConfigurationTemplate =
+		const setupTemplate = (): SchoolExternalToolConfigurationTemplate => {
+			const template: SchoolExternalToolConfigurationTemplate =
 				toolConfigurationTemplateFactory.build();
 			const param1: ToolParameter = {
 				name: "Parameter1",

@@ -4,7 +4,7 @@ import {
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
-} from "@/store/external-tool";
+} from "../../../store/external-tool";
 
 describe("useExternalToolValidation", () => {
 	const setup = () => {

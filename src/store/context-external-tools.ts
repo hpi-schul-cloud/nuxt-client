@@ -1,9 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationTemplate,
-	ToolContextType,
-} from "./external-tool";
+import { ExternalToolDisplayData, ToolContextType } from "./external-tool";
 import { AxiosResponse } from "axios";
 import {
 	ContextExternalToolPostParams,
@@ -12,6 +8,8 @@ import {
 	ToolReferenceListResponse,
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { ContextExternalToolSave } from "./external-tool/context-external-tool";
+import { ContextExternalToolMapper } from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
 import { $axios } from "@/utils/api";
 
@@ -80,38 +78,30 @@ export default class ContextExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async createContextExternalTool(payload: {
-		toolTemplate: ToolConfigurationTemplate;
-		schoolToolId: string;
-		contextId: string;
-		contextType: ToolContextType;
-	}): Promise<void> {
+	async createContextExternalTool(
+		contextExternalTool: ContextExternalToolSave
+	): Promise<void> {
+		this.setLoading(true);
+		this.resetBusinessError();
+
 		try {
-			this.setLoading(true);
-			this.resetBusinessError();
 			const contextExternalToolPostParams: ContextExternalToolPostParams =
-				useExternalToolMappings().mapToolConfigurationTemplateToContextExternalToolPostParams(
-					payload.toolTemplate,
-					payload.schoolToolId,
-					payload.contextId,
-					payload.contextType
+				ContextExternalToolMapper.mapToContextExternalToolPostParams(
+					contextExternalTool
 				);
+
 			await this.toolApi.toolContextControllerCreateContextExternalTool(
 				contextExternalToolPostParams
 			);
-
-			this.setLoading(false);
 		} catch (error: any) {
-			console.log(
-				`Some error occurred while saving contextExternalTool for schoolExternalTool with id ${payload.toolTemplate.id}: ${error}`
-			);
 			this.setBusinessError({
 				...error,
 				statusCode: error?.response?.status,
 				message: error?.response?.data.message,
 			});
-			this.setLoading(false);
 		}
+
+		this.setLoading(false);
 	}
 
 	@Action

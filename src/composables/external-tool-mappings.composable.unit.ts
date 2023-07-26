@@ -19,7 +19,7 @@ import {
 	ExternalToolDisplayData,
 	SchoolExternalTool,
 	ToolConfigurationStatus,
-	ToolConfigurationTemplate,
+	SchoolExternalToolConfigurationTemplate,
 	ToolContextType,
 	ToolParameter,
 	ToolParameterLocation,
@@ -287,13 +287,13 @@ describe("useExternalToolUtils", () => {
 				customParameterResponse,
 			} = setup();
 
-			const configurationTemplate: ToolConfigurationTemplate =
+			const configurationTemplate: SchoolExternalToolConfigurationTemplate =
 				mapExternalToolConfigurationTemplateResponse(
 					toolConfigurationTemplateResponse
 				);
 
 			expect(configurationTemplate).toEqual(
-				expect.objectContaining<ToolConfigurationTemplate>({
+				expect.objectContaining<SchoolExternalToolConfigurationTemplate>({
 					id: toolConfigurationTemplateResponse.id,
 					name: toolConfigurationTemplateResponse.name,
 					logoUrl: toolConfigurationTemplateResponse.logoUrl,
@@ -323,7 +323,7 @@ describe("useExternalToolUtils", () => {
 			const { mapToolConfigurationTemplateToSchoolExternalToolPostParams } =
 				setup();
 			const toolParameter = toolParameterFactory.build({ value: undefined });
-			const template: ToolConfigurationTemplate =
+			const template: SchoolExternalToolConfigurationTemplate =
 				toolConfigurationTemplateFactory.build({
 					parameters: [toolParameter, { ...toolParameter, value: "testValue" }],
 				});
@@ -357,7 +357,7 @@ describe("useExternalToolUtils", () => {
 		it("should return contextExternalToolPostParams", () => {
 			const { mapToolConfigurationTemplateToContextExternalToolPostParams } =
 				setup();
-			const template: ToolConfigurationTemplate =
+			const template: SchoolExternalToolConfigurationTemplate =
 				toolConfigurationTemplateFactory.build();
 
 			const contextExternalToolPostParams: ContextExternalToolPostParams =

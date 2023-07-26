@@ -1,10 +1,10 @@
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import ExternalToolConfigParameter from "@/components/administration/external-tool/ExternalToolConfigParameter.vue";
+import { ToolParameter, ToolParameterType } from "../../../store/external-tool";
+import createComponentMocks from "../../../../tests/test-utils/componentMocks";
+import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
 import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { toolParameterFactory } from "@@/tests/test-utils/factory";
-import { I18N_KEY } from "@/utils/inject";
+import { toolParameterFactory } from "../../../../tests/test-utils/factory";
+import { I18N_KEY } from "../../../utils/inject";
 
 describe("ExternalToolConfigParameter", () => {
 	let wrapper: Wrapper<any>;

@@ -12,7 +12,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import {
 	SchoolExternalTool,
-	ToolConfigurationTemplate,
+	SchoolExternalToolConfigurationTemplate,
 } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import ExternalToolConfiguration from "./ExternalToolConfiguration.page.vue";
@@ -39,7 +39,9 @@ describe("ExternalToolConfiguration", () => {
 	) => {
 		document.body.setAttribute("data-app", "true");
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getToolConfigurations: [toolConfigurationFactory.build()],
+			getSchoolExternalToolConfigurationTemplates: [
+				toolConfigurationFactory.build(),
+			],
 			getBusinessError: businessErrorFactory.build({ message: undefined }),
 			...getters,
 		});
@@ -51,12 +53,12 @@ describe("ExternalToolConfiguration", () => {
 			push: routerPush,
 		};
 
-		const toolTemplate: ToolConfigurationTemplate =
+		const toolTemplate: SchoolExternalToolConfigurationTemplate =
 			toolConfigurationTemplateFactory.build();
 		const loadedSchoolExternalTool: SchoolExternalTool =
 			schoolExternalToolFactory.build();
 
-		externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+		externalToolsModule.loadConfigurationTemplateForSchoolExternalTool.mockResolvedValue(
 			toolTemplate
 		);
 		externalToolsModule.loadSchoolExternalTool.mockResolvedValue(
@@ -127,7 +129,7 @@ describe("ExternalToolConfiguration", () => {
 		it("should load available tool configurations", () => {
 			setup();
 			expect(
-				externalToolsModule.loadAvailableToolConfigurations
+				externalToolsModule.loadAvailableToolsForSchool
 			).toHaveBeenCalled();
 		});
 	});
@@ -172,7 +174,7 @@ describe("ExternalToolConfiguration", () => {
 			it("should display name and logo of an tool configuration in selection list", async () => {
 				const name = "nameForSelect";
 				const { wrapper } = await setup({
-					getToolConfigurations: [
+					getSchoolExternalToolConfigurationTemplates: [
 						toolConfigurationFactory.build({
 							name,
 						}),
@@ -189,26 +191,28 @@ describe("ExternalToolConfiguration", () => {
 			it("should load template when tool configuration was changed", async () => {
 				const id = "expectedToolId";
 				const { wrapper } = await setup({
-					getToolConfigurations: [toolConfigurationFactory.build({ id })],
+					getSchoolExternalToolConfigurationTemplates: [
+						toolConfigurationFactory.build({ id }),
+					],
 				});
 
 				await openSelect(wrapper);
 
 				expect(
-					externalToolsModule.loadToolConfigurationTemplateFromExternalTool
+					externalToolsModule.loadConfigurationTemplateForSchoolExternalTool
 				).toHaveBeenCalledWith(id);
 			});
 
 			it("should set parameters valid on selection", async () => {
 				const id = "expectedToolId";
-				const toolTemplate: ToolConfigurationTemplate =
+				const toolTemplate: SchoolExternalToolConfigurationTemplate =
 					toolConfigurationTemplateFactory.build({
 						id,
 					});
 				const { wrapper } = await setup({
-					getToolConfigurations: [toolTemplate],
+					getSchoolExternalToolConfigurationTemplates: [toolTemplate],
 				});
-				externalToolsModule.loadToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+				externalToolsModule.loadConfigurationTemplateForSchoolExternalTool.mockResolvedValue(
 					toolTemplate
 				);
 

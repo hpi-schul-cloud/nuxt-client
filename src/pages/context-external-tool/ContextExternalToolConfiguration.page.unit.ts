@@ -17,7 +17,7 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import RoomsModule from "@/store/rooms";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ToolConfigurationTemplate } from "@/store/external-tool";
+import { SchoolExternalToolConfigurationTemplate } from "@/store/external-tool";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
@@ -45,8 +45,10 @@ describe("ContextExternalToolConfiguration", () => {
 		document.body.setAttribute("data-app", "true");
 
 		externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getToolConfigurations: [toolConfigurationFactory.build()],
-			getContextExternalToolTemplates: [
+			getSchoolExternalToolConfigurationTemplates: [
+				toolConfigurationFactory.build(),
+			],
+			getContextExternalToolConfigurationTemplates: [
 				contextExternalToolTemplateListItemFactory.build(),
 			],
 			getBusinessError: businessErrorFactory.build(),
@@ -229,7 +231,7 @@ describe("ContextExternalToolConfiguration", () => {
 
 				const { wrapper } = await getWrapper(
 					{
-						getContextExternalToolTemplates: [
+						getContextExternalToolConfigurationTemplates: [
 							contextExternalToolTemplateListItemFactory.build({ name, id }),
 						],
 					},
@@ -274,7 +276,7 @@ describe("ContextExternalToolConfiguration", () => {
 				await openSelect(wrapper);
 
 				expect(
-					externalToolsModule.loadContextToolConfigurationTemplateFromExternalTool
+					externalToolsModule.loadConfigurationTemplateForContextExternalTool
 				).toHaveBeenCalledWith(payload);
 			});
 		});
@@ -310,7 +312,7 @@ describe("ContextExternalToolConfiguration", () => {
 			const setup = async () => {
 				const { wrapper } = await getWrapper(
 					{
-						getContextExternalToolTemplates: [
+						getContextExternalToolConfigurationTemplates: [
 							contextExternalToolTemplateListItemFactory.build(),
 						],
 						getBusinessError: businessErrorFactory.build({
@@ -321,7 +323,7 @@ describe("ContextExternalToolConfiguration", () => {
 					{ contextId: "contextId", contextType: ToolContextType.COURSE }
 				);
 
-				externalToolsModule.loadContextToolConfigurationTemplateFromExternalTool.mockResolvedValue(
+				externalToolsModule.loadConfigurationTemplateForContextExternalTool.mockResolvedValue(
 					toolConfigurationTemplateFactory.build()
 				);
 				const openSelect = async (wrapper: Wrapper<any>) => {
@@ -343,7 +345,8 @@ describe("ContextExternalToolConfiguration", () => {
 				const { wrapper, openSelect } = await setup();
 
 				await openSelect(wrapper);
-				const toolTemplate: ToolConfigurationTemplate = wrapper.vm.toolTemplate; //TODO N21-575 payload ins setup
+				const toolTemplate: SchoolExternalToolConfigurationTemplate =
+					wrapper.vm.toolTemplate; //TODO N21-575 payload ins setup
 				const payload = {
 					toolTemplate: toolTemplate,
 					schoolToolId: "schoolToolId",

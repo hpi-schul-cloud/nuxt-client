@@ -19,7 +19,6 @@ export * from "./singleColumnBoardResponseFactory";
 export * from "./taskCardResponseFactory";
 export * from "./taskResponseFactory";
 export * from "./timestampsResponseFactory";
-export * from "./toolConfigurationFactory";
 export * from "./toolConfigurationTemplateFactory";
 export * from "./toolLaunchRequestResponeFactory";
 export * from "./toolParameterFactory";
