@@ -95,7 +95,7 @@ import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { notifierModule } from "@/store";
+import { notifierModule, envConfigModule } from "@/store";
 
 export default {
 	components: {
@@ -112,6 +112,12 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.school.index.title"),
+					href: envConfigModule.getNewSchoolAdminPageAsDefault
+						? "/administration/school-settings"
+						: "/administration/school",
 				},
 				{
 					text: this.$t("pages.administration.ldap.index.title"),

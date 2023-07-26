@@ -14,21 +14,19 @@
 			</modal-body-info>
 		</template>
 		<template #footer>
-			<center-slot class="mb--md">
+			<div class="d-flex justify-center align-items mb-4">
 				<v-btn color="primary" depressed @click="$emit('update:active', false)">
 					{{ btnText }}
 				</v-btn>
-			</center-slot>
+			</div>
 		</template>
 	</base-modal>
 </template>
 <script>
-import CenterSlot from "@/components/atoms/CenterSlot";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 export default {
 	components: {
 		ModalBodyInfo,
-		CenterSlot,
 	},
 	props: {
 		color: {
