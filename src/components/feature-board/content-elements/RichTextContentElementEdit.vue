@@ -36,11 +36,10 @@ export default defineComponent({
 		const modelValue = useVModel(props, "value", emit);
 
 		const onFocus = () => {
-			const elements = computed(() =>
-				document.getElementsByClassName("ck-balloon-panel")
-			);
+			const cdkBalloonPanelElements =
+				document.getElementsByClassName("ck-balloon-panel");
 
-			for (const element of elements.value) {
+			for (const element of cdkBalloonPanelElements) {
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 				});
