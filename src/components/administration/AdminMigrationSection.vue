@@ -127,7 +127,10 @@
 			data-testid="show-outdated-users-switch"
 			@change="setShowOutdatedUsers"
 		/>
-		<p v-if="globalFeatureShowOutdatedUsers">
+		<p
+			v-if="globalFeatureShowOutdatedUsers"
+			data-testid="show-outdated-users-description"
+		>
 			{{
 				t(
 					"components.administration.adminMigrationSection.showOutdatedUsers.description"
