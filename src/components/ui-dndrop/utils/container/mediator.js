@@ -467,6 +467,8 @@ function onMouseMove(event) {
 			draggableInfo.mousePosition.x = e.clientX;
 			draggableInfo.mousePosition.y = e.clientY;
 		}
+		draggableInfo.mousePosition.x = e.screenX;
+		draggableInfo.mousePosition.y = e.screenY;
 		translateGhost();
 		if (!handleDrag(draggableInfo)) {
 			missedDrag = true;

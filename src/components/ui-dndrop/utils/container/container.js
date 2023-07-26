@@ -20,7 +20,6 @@ import {
 	getParent,
 	getParentRelevantContainerElement,
 	hasClass,
-	listenScrollParent,
 	removeClass,
 } from "./utils";
 
@@ -527,13 +526,7 @@ function handleInsertionSizeChange({
 					const containerBeginEnd = layout.getBeginEndOfContainer();
 					containerBeginEnd.end =
 						containerBeginEnd.begin + layout.getSize(element);
-					const hasScrollBar =
-						layout.getScrollSize(element) > layout.getSize(element);
-					const containerEnd = hasScrollBar
-						? containerBeginEnd.begin +
-						  layout.getScrollSize(element) -
-						  layout.getScrollValue(element)
-						: containerBeginEnd.end;
+					const containerEnd = containerBeginEnd.end;
 					const lastDraggableEnd =
 						draggables.length > 0
 							? layout.getBeginEnd(draggables[draggables.length - 1]).end -
@@ -823,7 +816,6 @@ function Container(element) {
 		const props = getContainerProps(element, getOptions);
 		let dragHandler = getDragHandler(props);
 		const dropHandler = handleDrop(props);
-		const scrollListener = listenScrollParent(element, onScroll);
 
 		function processLastDraggableInfo() {
 			if (lastDraggableInfo !== null) {
@@ -844,7 +836,7 @@ function Container(element) {
 			}
 		}
 
-		function prepareDrag(container, relevantContainers) {
+		function prepareDrag(container) {
 			const element = container.element;
 			const draggables = props.draggables;
 			setDraggables(draggables, element);
@@ -852,16 +844,9 @@ function Container(element) {
 			draggables.forEach((p) =>
 				setAnimation(p, true, getOptions().animationDuration)
 			);
-			scrollListener.start();
-		}
-
-		function onScroll() {
-			props.layout.invalidateRects();
-			processLastDraggableInfo();
 		}
 
 		function dispose(container) {
-			scrollListener.dispose();
 			unwrapChildren(container.element);
 		}
 
@@ -895,7 +880,6 @@ function Container(element) {
 				return dragResult;
 			},
 			handleDrop(draggableInfo) {
-				scrollListener.stop();
 				if (dragResult && dragResult.dropPlaceholderContainer) {
 					element.removeChild(dragResult.dropPlaceholderContainer);
 				}

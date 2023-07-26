@@ -40,11 +40,11 @@ export const getContainerRect = (element) => {
 		top: _rect.top,
 		bottom: _rect.bottom,
 	};
-	if (hasBiggerChild(element, "x") && !isScrollingOrHidden(element, "x")) {
+	if (hasBiggerChild(element, "x")) {
 		const width = rect.right - rect.left;
 		rect.right = rect.right + element.scrollWidth - width;
 	}
-	if (hasBiggerChild(element, "y") && !isScrollingOrHidden(element, "y")) {
+	if (hasBiggerChild(element, "y")) {
 		const height = rect.bottom - rect.top;
 		rect.bottom = rect.bottom + element.scrollHeight - height;
 	}
@@ -65,24 +65,10 @@ export const getScrollingAxis = (element) => {
 	return null;
 };
 export const isScrolling = (element, axis) => {
-	const style = window.getComputedStyle(element);
-	const overflow = style.overflow;
-	const overFlowAxis = style[`overflow-${axis}`];
-	const general = overflow === "auto" || overflow === "scroll";
-	const dimensionScroll = overFlowAxis === "auto" || overFlowAxis === "scroll";
-	return general || dimensionScroll;
+	return false; //general || dimensionScroll; // <=== important
 };
 export const isScrollingOrHidden = (element, axis) => {
-	const style = window.getComputedStyle(element);
-	const overflow = style.overflow;
-	const overFlowAxis = style[`overflow-${axis}`];
-	const general =
-		overflow === "auto" || overflow === "scroll" || overflow === "hidden";
-	const dimensionScroll =
-		overFlowAxis === "auto" ||
-		overFlowAxis === "scroll" ||
-		overFlowAxis === "hidden";
-	return general || dimensionScroll;
+	return false; //general || dimensionScroll; // <==== important
 };
 export const hasBiggerChild = (element, axis) => {
 	if (axis === "x") {
@@ -91,34 +77,11 @@ export const hasBiggerChild = (element, axis) => {
 		return element.scrollHeight > element.clientHeight;
 	}
 };
-export const hasScrollBar = (element, axis) => {
-	return hasBiggerChild(element, axis) && isScrolling(element, axis);
-};
 export const getVisibleRect = (element, elementRect) => {
 	let currentElement = element;
-	let rect = elementRect || getContainerRect(element);
+	const rect = elementRect || getContainerRect(element);
 	currentElement = element.parentElement;
 	while (currentElement) {
-		if (
-			hasBiggerChild(currentElement, "x") &&
-			isScrollingOrHidden(currentElement, "x")
-		) {
-			rect = getIntersectionOnAxis(
-				rect,
-				currentElement.getBoundingClientRect(),
-				"x"
-			);
-		}
-		if (
-			hasBiggerChild(currentElement, "y") &&
-			isScrollingOrHidden(currentElement, "y")
-		) {
-			rect = getIntersectionOnAxis(
-				rect,
-				currentElement.getBoundingClientRect(),
-				"y"
-			);
-		}
 		currentElement = currentElement.parentElement;
 	}
 	return rect;
@@ -138,43 +101,6 @@ export const getParentRelevantContainerElement = (
 		current = current.parentElement;
 	}
 	return null;
-};
-export const listenScrollParent = (element, clb) => {
-	let scrollers = [];
-	setScrollers();
-	function setScrollers() {
-		let currentElement = element;
-		while (currentElement) {
-			if (
-				isScrolling(currentElement, "x") ||
-				isScrolling(currentElement, "y")
-			) {
-				scrollers.push(currentElement);
-			}
-			currentElement = currentElement.parentElement;
-		}
-	}
-	function dispose() {
-		stop();
-		scrollers = null;
-	}
-	function start() {
-		if (scrollers) {
-			scrollers.forEach((p) => p.addEventListener("scroll", clb));
-			window.addEventListener("scroll", clb);
-		}
-	}
-	function stop() {
-		if (scrollers) {
-			scrollers.forEach((p) => p.removeEventListener("scroll", clb));
-			window.removeEventListener("scroll", clb);
-		}
-	}
-	return {
-		dispose,
-		start,
-		stop,
-	};
 };
 export const hasParent = (element, parent) => {
 	let current = element;
@@ -299,5 +225,6 @@ export const getDistanceToParent = (parent, child) => {
 	return null;
 };
 export function isVisible(rect) {
-	return !(rect.bottom <= rect.top || rect.right <= rect.left);
+	return true;
+	// return !(rect.bottom <= rect.top || rect.right <= rect.left);
 }
