@@ -236,7 +236,7 @@ export default defineComponent({
 				});
 			}
 
-			if (!externalToolsModule.getBusinessError.message) {
+			if (!contextExternalToolsModule.getBusinessError.message) {
 				const message = t(
 					"components.administration.externalToolsSection.notification.created"
 				);
