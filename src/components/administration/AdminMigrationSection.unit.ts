@@ -622,8 +622,8 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("switch button for school feature showOutdatedUsers", () => {
-		describe("when FEATURE_SHOW_OUTDATED_USERS is set to false", () => {
+	describe("FEATURE_SHOW_OUTDATED_USERS", () => {
+		describe("when feature is set to false", () => {
 			it("should hide switch button and description", () => {
 				const { wrapper } = setup(
 					{},
@@ -644,7 +644,7 @@ describe("AdminMigrationSection", () => {
 			});
 		});
 
-		describe("when FEATURE_SHOW_OUTDATED_USERS is set to true", () => {
+		describe("when feature is set to true", () => {
 			it("should show switch button and description", () => {
 				const { wrapper } = setup(
 					{},
@@ -664,7 +664,9 @@ describe("AdminMigrationSection", () => {
 				expect(paragraph.exists()).toBe(true);
 			});
 		});
+	});
 
+	describe("switch button for school feature showOutdatedUsers", () => {
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup(
