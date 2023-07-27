@@ -11,7 +11,10 @@ describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = (schoolGetters: Partial<SchoolsModule> = {}) => {
+	const setup = (
+		schoolGetters: Partial<SchoolsModule> = {},
+		envConfigGetters: Partial<EnvConfigModule> = {}
+	) => {
 		document.body.setAttribute("data-app", "true");
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getOauthMigration: {
@@ -27,6 +30,7 @@ describe("AdminMigrationSection", () => {
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+			...envConfigGetters,
 		});
 
 		const wrapper: Wrapper<any> = mount(AdminMigrationSection, {
@@ -43,6 +47,7 @@ describe("AdminMigrationSection", () => {
 		return {
 			wrapper,
 			envConfigModule,
+			schoolsModule,
 		};
 	};
 
@@ -614,6 +619,71 @@ describe("AdminMigrationSection", () => {
 			const paragraph = wrapper.find(".migration-completion-date");
 
 			expect(paragraph.exists()).toBe(false);
+		});
+	});
+
+	describe("switch button for school feature showOutdatedUsers", () => {
+		describe("when FEATURE_SHOW_OUTDATED_USERS is set to false", () => {
+			it("should hide switch button and description", () => {
+				const { wrapper } = setup(
+					{},
+					{
+						getShowOutdatedUsers: false,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+				const paragraph = wrapper.find(
+					'[data-testid="show-outdated-users-description"]'
+				);
+
+				expect(switchComponent.exists()).toBe(false);
+				expect(paragraph.exists()).toBe(false);
+			});
+		});
+
+		describe("when FEATURE_SHOW_OUTDATED_USERS is set to true", () => {
+			it("should show switch button and description", () => {
+				const { wrapper } = setup(
+					{},
+					{
+						getShowOutdatedUsers: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+				const paragraph = wrapper.find(
+					'[data-testid="show-outdated-users-description"]'
+				);
+
+				expect(switchComponent.exists()).toBe(true);
+				expect(paragraph.exists()).toBe(true);
+			});
+		});
+
+		describe("when clicking switch button", () => {
+			it("should call update in schoolsModule", async () => {
+				const { wrapper, schoolsModule } = setup(
+					{},
+					{
+						getShowOutdatedUsers: true,
+					}
+				);
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+
+				await switchComponent.setChecked();
+
+				expect(schoolsModule.update).toHaveBeenCalledWith({
+					id: mockSchool.id,
+					features: { ...mockSchool.features, showOutdatedUsers: true },
+				});
+			});
 		});
 	});
 });
