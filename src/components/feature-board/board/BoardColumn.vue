@@ -59,7 +59,7 @@ import {
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container, Draggable } = require("../../ui-dndrop");
+const { Container, Draggable } = require("vue-dndrop");
 
 export default defineComponent({
 	name: "BoardColumn",

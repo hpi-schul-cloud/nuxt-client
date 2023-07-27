@@ -65,9 +65,8 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-// import { Container, Draggable } from "vue-smooth-dnd";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container, Draggable } = require("../../ui-dndrop");
+const { Container, Draggable } = require("vue-dndrop");
 
 export default defineComponent({
 	components: {
@@ -147,13 +146,13 @@ export default defineComponent({
 		};
 
 		/**
-		 * These classes should be removed automatically by vue-smooth-dnd.
+		 * These classes should be removed automatically by vue-dndrop.
 		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
 		 */
 		const onTouchEnd = () => {
 			document.body.classList.remove(
-				"smooth-dnd-no-user-select",
-				"smooth-dnd-disable-touch-action"
+				"dndrop-no-user-select",
+				"dndrop-disable-touch-action"
 			);
 		};
 

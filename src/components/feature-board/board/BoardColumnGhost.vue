@@ -29,7 +29,7 @@ import { computed, defineComponent, ref } from "vue";
 import { CardMove, cardDropPlaceholderOptions } from "../types/DragAndDrop";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container } = require("../../ui-dndrop");
+const { Container } = require("vue-dndrop");
 
 export default defineComponent({
 	name: "BoardColumnGhost",
