@@ -239,5 +239,13 @@ describe("env-config module", () => {
 				mockEnvs.FEATURE_SHOW_OUTDATED_USERS
 			);
 		});
+
+		it("getShowOutdatedUsers should not get FEATURE_SHOW_OUTDATED_USERS", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+			delete envConfigModule.env.FEATURE_SHOW_OUTDATED_USERS;
+
+			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
+		});
 	});
 });
