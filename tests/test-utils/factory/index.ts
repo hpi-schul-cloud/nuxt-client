@@ -25,3 +25,7 @@ export * from "./toolParameterFactory";
 export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";
+export * from "./schoolExternalToolConfigurationTemplate.factory";
+export * from "./contextExternalToolConfigurationTemplate.factory";
+export * from "./contextExternalToolSaveFactory";
+export * from "./toolParameterEntryFactory";

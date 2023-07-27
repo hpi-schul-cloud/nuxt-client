@@ -5,7 +5,7 @@ import { ToolConfigurationStatus } from "@/store/external-tool";
 export const externalToolDisplayDataFactory =
 	Factory.define<ExternalToolDisplayData>(({ sequence }) => ({
 		id: `schoolExternalTool${sequence}`,
-		name: "name",
+		name: `name${sequence}`,
 		openInNewTab: false,
 		status: ToolConfigurationStatus.Latest,
 	}));

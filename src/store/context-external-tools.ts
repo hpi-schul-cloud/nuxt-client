@@ -1,6 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { ExternalToolDisplayData, ToolContextType } from "./external-tool";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, isAxiosError } from "axios";
 import {
 	ContextExternalToolPostParams,
 	ToolApiFactory,
@@ -11,7 +11,7 @@ import { useExternalToolMappings } from "@/composables/external-tool-mappings.co
 import { ContextExternalToolSave } from "./external-tool/context-external-tool";
 import { ContextExternalToolMapper } from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 
 @Module({
 	name: "contextExternalToolsModule",
@@ -45,7 +45,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setContextExternalTools(
+	setExternalToolDisplayDataList(
 		externalToolDisplayData: ExternalToolDisplayData[]
 	): void {
 		this.externalToolDisplayDataList = [...externalToolDisplayData];
@@ -94,10 +94,14 @@ export default class ContextExternalToolsModule extends VuexModule {
 				contextExternalToolPostParams
 			);
 		} catch (error: any) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
 			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 
@@ -109,10 +113,10 @@ export default class ContextExternalToolsModule extends VuexModule {
 		contextId: string;
 		contextType: ToolContextType;
 	}): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
+		this.setLoading(true);
+		this.resetBusinessError();
 
+		try {
 			const response: AxiosResponse<ToolReferenceListResponse> =
 				await this.toolApi.toolControllerGetToolReferences(
 					payload.contextId,
@@ -124,41 +128,42 @@ export default class ContextExternalToolsModule extends VuexModule {
 					response.data
 				);
 
-			this.setContextExternalTools(mapped);
+			this.setExternalToolDisplayDataList(mapped);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
 
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading available tools for scope CONTEXT and contextId ${payload.contextId}: ${error}`
-			);
+			console.log(apiError);
+
 			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
-			this.setLoading(false);
 		}
+
+		this.setLoading(false);
 	}
 
 	@Action
 	async deleteContextExternalTool(toolId: string): Promise<void> {
+		this.setLoading(true);
+
 		try {
-			this.setLoading(true);
-
 			await this.toolApi.toolContextControllerDeleteContextExternalTool(toolId);
-			this.removeContextExternalTool(toolId);
 
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while deleting tool configuration with id ${toolId}: ${error}`
-			);
+			this.removeContextExternalTool(toolId);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
 			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
-			this.setLoading(false);
 		}
+
+		this.setLoading(false);
 	}
 }

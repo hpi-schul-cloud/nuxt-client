@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { SchoolExternalToolConfigurationTemplate } from "../../../store/external-tool";
+import { SchoolExternalToolConfigurationTemplate } from "@/store/external-tool";
 import {
 	computed,
 	ComputedRef,
@@ -22,9 +22,9 @@ import {
 	PropType,
 	WritableComputedRef,
 } from "vue";
-import ExternalToolsModule from "../../../store/external-tools";
+import ExternalToolsModule from "@/store/external-tools";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import { EXTERNAL_TOOLS_MODULE_KEY, injectStrict } from "../../../utils/inject";
+import { EXTERNAL_TOOLS_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

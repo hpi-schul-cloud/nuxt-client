@@ -155,6 +155,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			if (props.configId) {
+				// Loading order is important
 				await externalToolsModule.loadConfigurationTemplateForSchoolExternalTool(
 					props.configId
 				);

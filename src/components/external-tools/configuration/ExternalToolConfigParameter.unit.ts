@@ -1,63 +1,67 @@
-import { ToolParameter, ToolParameterType } from "../../../store/external-tool";
-import createComponentMocks from "../../../../tests/test-utils/componentMocks";
-import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import { mount, MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import { I18N_KEY } from "@/utils/inject";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { toolParameterFactory } from "@@/tests/test-utils/factory";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { toolParameterFactory } from "../../../../tests/test-utils/factory";
-import { I18N_KEY } from "../../../utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
 
 describe("ExternalToolConfigParameter", () => {
-	let wrapper: Wrapper<any>;
-
-	const setup = (parameter: ToolParameter = toolParameterFactory.build()) => {
+	const getWrapper = (
+		props: {
+			parameter: ToolParameter;
+			value?: string;
+		} = { parameter: toolParameterFactory.build() }
+	) => {
 		document.body.setAttribute("data-app", "true");
 
-		wrapper = mount(ExternalToolConfigParameter as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-			propsData: {
-				value: parameter,
-			},
-		});
+		const wrapper: Wrapper<Vue> = mount(
+			ExternalToolConfigParameter as MountOptions<Vue>,
+			{
+				...createComponentMocks({
+					i18n: true,
+				}),
+				provide: {
+					[I18N_KEY.valueOf()]: i18nMock,
+				},
+				propsData: {
+					...props,
+				},
+			}
+		);
+
+		return {
+			wrapper,
+		};
 	};
 
-	describe("inject", () => {
-		describe("when i18n injection fails", () => {
-			it("should throw an error", () => {
-				expect(() => {
-					shallowMount(ExternalToolConfigParameter as MountOptions<Vue>);
-				}).toThrow();
-			});
-		});
-	});
-
-	describe("when component is used", () => {
-		it("should be found in the dom", () => {
-			setup();
-
-			expect(
-				wrapper.findComponent(ExternalToolConfigParameter).exists()
-			).toBeTruthy();
-		});
-	});
-
 	describe("when parameter has type boolean", () => {
-		it("should render a tri state select", () => {
-			setup(toolParameterFactory.build({ type: ToolParameterType.Boolean }));
+		const setup = () => {
+			const parameter: ToolParameter = toolParameterFactory.build({
+				type: ToolParameterType.Boolean,
+			});
 
-			expect(wrapper.find(".v-select__slot"));
+			const { wrapper } = getWrapper({
+				parameter,
+			});
+
+			return {
+				wrapper,
+				parameter,
+			};
+		};
+
+		it("should render a tri state select", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.findComponent({ name: "v-select" }).exists()).toEqual(
+				true
+			);
 		});
 
 		it("should use default selectItem when parameter value is undefined", async () => {
-			const parameter: ToolParameter = toolParameterFactory.build({
-				type: ToolParameterType.Boolean,
-				value: undefined,
-			});
-			setup(parameter);
+			const { wrapper, parameter } = setup();
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).trigger("click");
 
@@ -67,63 +71,82 @@ describe("ExternalToolConfigParameter", () => {
 		});
 
 		it("should watch selectItem and emit event when select input value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory.build({
-				type: ToolParameterType.Boolean,
-			});
-			setup(parameter);
+			const { wrapper, parameter } = setup();
 
-			await wrapper.find(`[data-testId=${parameter.name}]`).setValue(false);
+			await wrapper.find(`[data-testId=${parameter.name}]`).setValue(true);
 
-			expect(wrapper.vm.value.value).toEqual("false");
-			expect(wrapper.emitted("updated"));
+			expect(wrapper.emitted("input")).toEqual([["true"]]);
 		});
 	});
 
 	describe("when parameter has type string", () => {
-		it("should render a text-field", () => {
-			setup(toolParameterFactory.build({ type: ToolParameterType.String }));
-
-			expect(wrapper.find(".v-text-field__slot"));
-		});
-
-		it("should emit event when parameter value changes", async () => {
+		const setup = () => {
 			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.String,
 			});
-			setup(parameter);
+
+			const { wrapper } = getWrapper({
+				parameter,
+			});
+
+			return {
+				wrapper,
+				parameter,
+			};
+		};
+
+		it("should render a text-field", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(
+				true
+			);
+		});
+
+		it("should emit event when parameter value changes", async () => {
+			const { wrapper, parameter } = setup();
 
 			await wrapper
 				.find(`[data-testId=${parameter.name}]`)
 				.setValue("newValue");
 
-			expect(wrapper.vm.value.value).toEqual("newValue");
-			expect(wrapper.emitted("updated"));
+			expect(wrapper.emitted("input")).toEqual([["newValue"]]);
 		});
 	});
 
 	describe("when parameter has type number", () => {
-		it("should render a text-field with type number", () => {
+		const setup = () => {
 			const parameter: ToolParameter = toolParameterFactory.build({
 				type: ToolParameterType.Number,
 			});
-			setup(parameter);
 
-			expect(wrapper.find(".v-text-field__slot"));
+			const { wrapper } = getWrapper({
+				parameter,
+			});
+
+			return {
+				wrapper,
+				parameter,
+			};
+		};
+
+		it("should render a text-field with type number", () => {
+			const { wrapper, parameter } = setup();
+
+			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(
+				true
+			);
 			expect(
 				wrapper.find(`[data-testId=${parameter.name}]`).attributes("type")
 			).toEqual("number");
 		});
 
 		it("should emit event when parameter value changes", async () => {
-			const parameter: ToolParameter = toolParameterFactory.build({
-				type: ToolParameterType.Number,
-			});
-			setup(parameter);
+			const { wrapper, parameter } = setup();
 
 			await wrapper.find(`[data-testId=${parameter.name}]`).setValue("1234");
 
-			expect(wrapper.vm.value.value).toEqual("1234");
-			expect(wrapper.emitted("updated"));
+			expect(wrapper.emitted("input")).toEqual([["1234"]]);
 		});
 	});
 });

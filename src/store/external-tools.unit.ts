@@ -17,16 +17,14 @@ import AuthModule from "@/store/auth";
 import {
 	businessErrorFactory,
 	schoolExternalToolFactory,
-	toolConfigurationFactory,
-	toolConfigurationTemplateFactory,
 	toolLaunchRequestResponeFactory,
 } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import {
 	ContextExternalToolTemplateListItem,
 	SchoolExternalTool,
-	ToolConfigurationListItem,
 	ToolConfigurationStatus,
 	SchoolExternalToolConfigurationTemplate,
 	ToolContextType,
@@ -39,217 +37,19 @@ import { BusinessError } from "./types/commons";
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
 
+	let apiMock: DeepMocked<ToolApiInterface>;
+
+	beforeEach(() => {
+		module = new ExternalToolsModule({});
+
+		apiMock = createMock<ToolApiInterface>();
+
+		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
+	});
+
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
-
-	const mockToolApi = (
-		error: Error | undefined = undefined,
-		schoolExternalToolMock: Partial<SchoolExternalToolResponse> = {},
-		toolConfigurationEntryMock: Partial<ToolConfigurationEntryResponse> = {},
-		schoolToolConfigurationEntryMock: Partial<SchoolToolConfigurationEntryResponse> = {},
-		externalToolConfigurationTemplateResponseMock: Partial<ExternalToolConfigurationTemplateResponse> = {}
-	) => {
-		const searchListResponse: SchoolExternalToolSearchListResponse = {
-			data: [
-				{
-					id: "id",
-					schoolId: "schoolId",
-					name: "schoolName",
-					toolId: "toolId",
-					parameters: [],
-					toolVersion: 1,
-					status: SchoolExternalToolResponseStatusEnum.Latest,
-					...schoolExternalToolMock,
-				},
-			],
-		};
-
-		const promise = Promise.resolve({
-			data: {
-				...searchListResponse,
-			},
-			status: 200,
-			statusText: "OK",
-			headers: {},
-			config: {},
-		});
-
-		const toolSchoolControllerGetSchoolExternalTools = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return promise;
-		});
-
-		const toolSchoolControllerDeleteSchoolExternalTool = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return Promise.resolve({
-				data: undefined,
-				status: 200,
-				statusText: "OK",
-				headers: {},
-				config: {},
-			});
-		});
-
-		const toolConfigurationListResponse: ToolConfigurationListResponse = {
-			data: [
-				{
-					id: "id",
-					name: "name",
-					logoUrl: "logoUrl",
-					...toolConfigurationEntryMock,
-				},
-			],
-		};
-
-		const toolConfigurationControllerGetAvailableToolsForSchool = jest.fn(
-			async () => {
-				if (error) {
-					throw error;
-				}
-				return Promise.resolve({
-					data: {
-						...toolConfigurationListResponse,
-					},
-					status: 200,
-					statusText: "OK",
-					headers: {},
-					config: {},
-				});
-			}
-		);
-
-		const schoolToolConfigurationListResponse: SchoolToolConfigurationListResponse =
-			{
-				data: [
-					{
-						id: "id",
-						name: "name",
-						logoUrl: "logoUrl",
-						schoolToolId: "schoolToolId",
-						...schoolToolConfigurationEntryMock,
-					},
-				],
-			};
-
-		const toolConfigurationControllerGetAvailableToolsForContext = jest.fn(
-			async () => {
-				if (error) {
-					throw error;
-				}
-				return Promise.resolve({
-					data: {
-						...schoolToolConfigurationListResponse,
-					},
-					status: 200,
-					statusText: "OK",
-					headers: {},
-					config: {},
-				});
-			}
-		);
-
-		const externalToolConfigurationTemplateResponse: ExternalToolConfigurationTemplateResponse =
-			{
-				id: "id",
-				name: "name",
-				logoUrl: "logoUrl",
-				version: 1,
-				parameters: [
-					{
-						name: "parameterName",
-					} as CustomParameterResponse,
-				],
-				...externalToolConfigurationTemplateResponseMock,
-			};
-		const toolConfigurationControllerGetExternalToolForScope = jest.fn(
-			async () => {
-				if (error) {
-					throw error;
-				}
-				return Promise.resolve({
-					data: {
-						...externalToolConfigurationTemplateResponse,
-					},
-					status: 200,
-					statusText: "OK",
-					headers: {},
-					config: {},
-				});
-			}
-		);
-
-		const toolSchoolControllerCreateSchoolExternalTool = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return Promise.resolve({
-				data: undefined,
-				status: 201,
-				statusText: "Created",
-				headers: {},
-				config: {},
-			});
-		});
-
-		const toolContextControllerCreateContextExternalTool = jest.fn(async () => {
-			if (error) {
-				throw error;
-			}
-			return Promise.resolve({
-				data: undefined,
-				status: 201,
-				statusText: "Created",
-				headers: {},
-				config: {},
-			});
-		});
-
-		const toolConfigurationControllerGetExternalToolForContext = jest.fn(
-			async () => {
-				if (error) {
-					throw error;
-				}
-				return Promise.resolve({
-					data: {
-						...externalToolConfigurationTemplateResponse,
-					},
-					status: 200,
-					statusText: "OK",
-					headers: {},
-					config: {},
-				});
-			}
-		);
-
-		const toolApiMock = {
-			toolSchoolControllerGetSchoolExternalTools,
-			toolSchoolControllerDeleteSchoolExternalTool,
-			toolSchoolControllerCreateSchoolExternalTool,
-			toolContextControllerCreateContextExternalTool,
-			toolConfigurationControllerGetAvailableToolsForSchool,
-			toolConfigurationControllerGetAvailableToolsForContext,
-			toolConfigurationControllerGetExternalToolForScope,
-			toolConfigurationControllerGetExternalToolForContext,
-			toolSchoolControllerUpdateSchoolExternalTool: jest.fn(),
-			toolSchoolControllerGetSchoolExternalTool: jest.fn(),
-			toolLaunchControllerGetToolLaunchRequest: jest.fn(),
-		};
-		jest
-			.spyOn(serverApi, "ToolApiFactory")
-			.mockReturnValue(toolApiMock as unknown as ToolApiInterface);
-
-		return {
-			toolApiMock,
-			searchListResponse,
-			toolConfigurationListResponse,
-			externalToolConfigurationTemplateResponse,
-		};
-	};
 
 	const setup = () => {
 		const schoolId = "schoolId";

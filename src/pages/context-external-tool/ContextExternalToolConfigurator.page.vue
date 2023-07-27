@@ -29,7 +29,6 @@ import {
 import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import {
-	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	injectStrict,
@@ -48,7 +47,6 @@ import {
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
 import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
 import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
 import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
@@ -86,7 +84,6 @@ export default defineComponent({
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const { t } = useI18n();
@@ -132,8 +129,8 @@ export default defineComponent({
 		const configuration: Ref<ContextExternalTool | undefined> = ref();
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
-			externalToolsModule.getBusinessError.message
-				? externalToolsModule.getBusinessError
+			contextExternalToolsModule.getBusinessError.message
+				? contextExternalToolsModule.getBusinessError
 				: undefined
 		);
 
@@ -146,22 +143,20 @@ export default defineComponent({
 			template: ContextExternalToolConfigurationTemplate,
 			configuredParameterValues: (string | undefined)[]
 		) => {
-			if (authModule.getUser) {
-				const contextExternalTool: ContextExternalToolSave =
-					ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
-						template,
-						configuredParameterValues,
-						props.contextId,
-						props.contextType
-					);
+			const contextExternalTool: ContextExternalToolSave =
+				ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
+					template,
+					configuredParameterValues,
+					props.contextId,
+					props.contextType
+				);
 
-				if (props.configId) {
-					// TODO Implement updating of context tools
-				} else {
-					await contextExternalToolsModule.createContextExternalTool(
-						contextExternalTool
-					);
-				}
+			if (props.configId) {
+				// TODO Implement updating of context tools
+			} else {
+				await contextExternalToolsModule.createContextExternalTool(
+					contextExternalTool
+				);
 			}
 
 			if (!apiError.value) {
@@ -184,12 +179,13 @@ export default defineComponent({
 
 		onMounted(async () => {
 			if (props.configId) {
-				//TODO Add loading of Context External Tools for updating
-				configuration.value = undefined;
-
+				// Loading order is important
 				await externalToolsModule.loadConfigurationTemplateForContextExternalTool(
 					props.configId
 				);
+
+				//TODO Add loading of Context External Tools for updating
+				configuration.value = undefined;
 			} else {
 				await externalToolsModule.loadAvailableToolsForContext({
 					contextId: props.contextId,

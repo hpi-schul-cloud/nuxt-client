@@ -18,6 +18,7 @@
 					:item="item"
 					max-height="20"
 					max-width="20"
+					data-testId=""
 				/>
 			</template>
 			<template #item="{ item }">
@@ -135,9 +136,7 @@ export default defineComponent({
 		};
 
 		const onSave = async () => {
-			if (parametersValid.value) {
-				emit("save", selectedTemplate.value, parameterConfiguration.value);
-			}
+			emit("save", selectedTemplate.value, parameterConfiguration.value);
 		};
 
 		const populateEditMode = (configuration: ConfigurationTypes) => {
@@ -172,6 +171,10 @@ export default defineComponent({
 				}
 			});
 		};
+
+		if (loadedConfiguration.value) {
+			populateEditMode(loadedConfiguration.value);
+		}
 
 		watch(loadedConfiguration, (newConfig) => {
 			if (newConfig) {

@@ -50,7 +50,7 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
-				"@/pages/administration/external-tool/SchoolExternalToolConfigurator.page.vue"
+				"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),

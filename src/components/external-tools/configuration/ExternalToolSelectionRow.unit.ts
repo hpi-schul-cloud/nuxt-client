@@ -1,6 +1,6 @@
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import createComponentMocks from "../../../../tests/test-utils/componentMocks";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("ExternalToolSelectionRow", () => {
 	let wrapper: Wrapper<any>;
