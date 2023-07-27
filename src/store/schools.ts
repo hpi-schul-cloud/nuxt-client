@@ -26,6 +26,7 @@ const SCHOOL_FEATURES: (keyof School["features"])[] = [
 	"videoconference",
 	"studentVisibility", // deprecated
 	"ldapUniventionMigrationSchool",
+	"showOutdatedUsers",
 ];
 
 function transformSchoolServerToClient(school: SchoolPayload): School {
@@ -83,6 +84,7 @@ export default class SchoolsModule extends VuexModule {
 			videoconference: false,
 			studentVisibility: false,
 			ldapUniventionMigrationSchool: false,
+			showOutdatedUsers: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},

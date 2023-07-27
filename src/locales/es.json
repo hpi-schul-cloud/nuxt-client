@@ -157,6 +157,8 @@
 	"components.administration.adminMigrationSection.startWarningCard.disagree": "Desgaje",
 	"components.administration.adminMigrationSection.startWarningCard.text": "Con el inicio de la migración, todos los estudiantes y profesores de su escuela podrán cambiar el sistema de registro a moin.schule. Los usuarios que hayan cambiado el sistema de inicio de sesión solo podrán iniciar sesión a través de moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title": "¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
+	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Mostrar cuentas de usuario obsoletas",
+	"components.administration.adminMigrationSection.showOutdatedUsers.description": "Las cuentas de estudiantes y profesores obsoletas se muestran en las listas de selección correspondientes cuando los usuarios se asignan a clases, cursos y equipos.",
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.table.header.status": "Estado",
 	"components.administration.externalToolsSection.action.add": "Agregar herramienta",
