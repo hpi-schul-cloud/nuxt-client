@@ -1,26 +1,12 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
-	ContextExternalToolTemplateListItem,
-	SchoolExternalTool,
-	ToolConfigurationListItem,
-	ToolConfigurationTemplate,
-	ToolContextType,
-} from "./external-tool";
-import { $axios } from "@/utils/api";
-import { authModule } from "@/store";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import {
-	ExternalToolConfigurationTemplateResponse,
-	SchoolExternalToolPostParams,
-	SchoolExternalToolResponse,
-	SchoolToolConfigurationListResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-	ToolConfigurationListResponse,
 	ToolLaunchRequestResponse,
 } from "@/serverApi/v3";
 import { BusinessError } from "./types/commons";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 @Module({
 	name: "externalToolsModule",
@@ -28,13 +14,6 @@ import { AxiosError, AxiosResponse } from "axios";
 	stateFactory: true,
 })
 export default class ExternalToolsModule extends VuexModule {
-	private schoolExternalTools: SchoolExternalTool[] = [];
-
-	private toolConfigurations: ToolConfigurationListItem[] = [];
-
-	private contextExternalToolTemplates: ContextExternalToolTemplateListItem[] =
-		[];
-
 	private loading = false;
 
 	private businessError: BusinessError = {
@@ -51,20 +30,13 @@ export default class ExternalToolsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getSchoolExternalTools(): SchoolExternalTool[] {
-		return this.schoolExternalTools;
-	}
-
-	get getToolConfigurations(): ToolConfigurationListItem[] {
-		return this.toolConfigurations;
-	}
-
-	get getContextExternalToolTemplates(): ContextExternalToolTemplateListItem[] {
-		return this.contextExternalToolTemplates;
-	}
-
 	get getBusinessError() {
 		return this.businessError;
+	}
+
+	@Mutation
+	setLoading(loading: boolean): void {
+		this.loading = loading;
 	}
 
 	@Mutation
@@ -81,42 +53,13 @@ export default class ExternalToolsModule extends VuexModule {
 		};
 	}
 
-	@Mutation
-	setLoading(loading: boolean): void {
-		this.loading = loading;
-	}
-
-	@Mutation
-	setSchoolExternalTools(schoolExternalTools: SchoolExternalTool[]): void {
-		this.schoolExternalTools = [...schoolExternalTools];
-	}
-
-	@Mutation
-	removeSchoolExternalTool(configId: string): void {
-		this.schoolExternalTools = this.schoolExternalTools.filter(
-			(tool: SchoolExternalTool) => tool.id !== configId
-		);
-	}
-
-	@Mutation
-	setToolConfigurations(toolConfigurations: ToolConfigurationListItem[]): void {
-		this.toolConfigurations = [...toolConfigurations];
-	}
-
-	@Mutation
-	setContextExternalToolTemplates(
-		contextExternalToolTemplates: ContextExternalToolTemplateListItem[]
-	): void {
-		this.contextExternalToolTemplates = [...contextExternalToolTemplates];
-	}
-
 	@Action
 	async loadToolLaunchData(
 		contextExternalToolId: string
 	): Promise<ToolLaunchRequestResponse | undefined> {
-		try {
-			this.setLoading(true);
+		this.setLoading(true);
 
+		try {
 			const resp: AxiosResponse<ToolLaunchRequestResponse> =
 				await this.toolApi.toolLaunchControllerGetToolLaunchRequest(
 					contextExternalToolId
@@ -126,291 +69,17 @@ export default class ExternalToolsModule extends VuexModule {
 
 			return resp.data;
 		} catch (error: unknown) {
-			console.log(`Some error occurred while launching tool: ${error}`);
-			if (error instanceof AxiosError) {
-				this.setBusinessError({
-					error,
-					statusCode: error?.response?.status ?? 500,
-					message: error?.response?.data.type ?? "",
-				});
-			}
+			const apiError = mapAxiosErrorToResponseError(error);
 
-			this.setLoading(false);
-		}
-	}
+			console.log(apiError);
 
-	@Action
-	async loadSchoolExternalTools(): Promise<void> {
-		try {
-			this.setLoading(true);
-			if (authModule.getUser?.schoolId) {
-				const resp =
-					await this.toolApi.toolSchoolControllerGetSchoolExternalTools(
-						authModule.getUser.schoolId
-					);
-				const schoolExternalTools: SchoolExternalTool[] =
-					useExternalToolMappings().mapSchoolExternalToolSearchListResponse(
-						resp.data
-					);
-				this.setSchoolExternalTools(schoolExternalTools);
-			}
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(`Some error occurred while loading tools data: ${error}`);
 			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
-			this.setLoading(false);
 		}
-	}
 
-	@Action
-	async deleteSchoolExternalTool(configId: string): Promise<void> {
-		try {
-			this.setLoading(true);
-
-			await this.toolApi.toolSchoolControllerDeleteSchoolExternalTool(configId);
-			this.removeSchoolExternalTool(configId);
-
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while deleting tool configuration with id ${configId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async loadAvailableToolConfigurations(): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			if (authModule.getUser?.schoolId) {
-				const availableTools: AxiosResponse<ToolConfigurationListResponse> =
-					await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(
-						authModule.getUser.schoolId
-					);
-
-				this.setToolConfigurations(
-					useExternalToolMappings().mapToolConfigurationListResponse(
-						availableTools.data
-					)
-				);
-			}
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading available tools for scope SCHOOL and schoolId ${authModule.getUser?.schoolId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async loadToolConfigurationTemplateFromExternalTool(
-		toolId: string
-	): Promise<ToolConfigurationTemplate | undefined> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
-				await this.toolApi.toolConfigurationControllerGetExternalToolForScope(
-					toolId
-				);
-			const toolConfigurationTemplate: ToolConfigurationTemplate =
-				useExternalToolMappings().mapExternalToolConfigurationTemplateResponse(
-					configTemplate.data
-				);
-			this.setLoading(false);
-
-			return toolConfigurationTemplate;
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading tool configuration template for external tool with id ${toolId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async createSchoolExternalTool(
-		toolTemplate: ToolConfigurationTemplate
-	): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			if (authModule.getUser?.schoolId) {
-				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-					useExternalToolMappings().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
-						toolTemplate,
-						authModule.getUser.schoolId
-					);
-
-				await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(
-					schoolExternalToolPostParams
-				);
-			}
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while saving schoolExternalTool for externalTool with id ${toolTemplate.id}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async updateSchoolExternalTool(
-		toolTemplate: ToolConfigurationTemplate
-	): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			if (authModule.getUser?.schoolId && toolTemplate.configId) {
-				const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-					useExternalToolMappings().mapToolConfigurationTemplateToSchoolExternalToolPostParams(
-						toolTemplate,
-						authModule.getUser.schoolId
-					);
-
-				await this.toolApi.toolSchoolControllerUpdateSchoolExternalTool(
-					toolTemplate.configId,
-					schoolExternalToolPostParams
-				);
-			}
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while updating schoolExternalTool with id ${toolTemplate.configId} for externalTool with id ${toolTemplate.id}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async loadSchoolExternalTool(
-		configId: string
-	): Promise<SchoolExternalTool | undefined> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-
-			const response: AxiosResponse<SchoolExternalToolResponse> =
-				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(configId);
-			const schoolExternalTool: SchoolExternalTool =
-				useExternalToolMappings().mapSchoolExternalToolResponse(response.data);
-
-			this.setLoading(false);
-
-			return schoolExternalTool;
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading schoolExternalTool with id ${configId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async loadAvailableToolConfigurationsForContext(payload: {
-		contextId: string;
-		contextType: ToolContextType;
-	}): Promise<void> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-
-			const availableTools: AxiosResponse<SchoolToolConfigurationListResponse> =
-				await this.toolApi.toolConfigurationControllerGetAvailableToolsForContext(
-					payload.contextType,
-					payload.contextId
-				);
-
-			const mapped =
-				useExternalToolMappings().mapSchoolToolConfigurationListResponse(
-					availableTools.data
-				);
-			this.setContextExternalToolTemplates(mapped);
-
-			this.setLoading(false);
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading available tools for scope CONTEXT and contextId ${payload.contextId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async loadContextToolConfigurationTemplateFromExternalTool(payload: {
-		toolId: string;
-		contextId: string;
-		contextType: ToolContextType;
-	}): Promise<ToolConfigurationTemplate | undefined> {
-		try {
-			this.setLoading(true);
-			this.resetBusinessError();
-			const configTemplate: AxiosResponse<ExternalToolConfigurationTemplateResponse> =
-				await this.toolApi.toolConfigurationControllerGetExternalToolForContext(
-					payload.toolId,
-					payload.contextType,
-					payload.contextId
-				);
-			const toolConfigurationTemplate: ToolConfigurationTemplate =
-				useExternalToolMappings().mapExternalToolConfigurationTemplateResponse(
-					configTemplate.data
-				);
-			this.setLoading(false);
-
-			return toolConfigurationTemplate;
-		} catch (error: any) {
-			console.log(
-				`Some error occurred while loading tool configuration template for external tool with id ${payload.toolId}: ${error}`
-			);
-			this.setBusinessError({
-				...error,
-				statusCode: error?.response?.status,
-				message: error?.response?.data.message,
-			});
-			this.setLoading(false);
-		}
+		this.setLoading(false);
 	}
 }

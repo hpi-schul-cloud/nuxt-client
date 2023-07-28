@@ -4,14 +4,15 @@ import { ToolParameterScope } from "@/store/external-tool/tool-parameter-scope.e
 import { ToolParameterType } from "@/store/external-tool/tool-parameter.enum";
 import { ToolParameterLocation } from "@/store/external-tool/tool-parameter-location.enum";
 
-export const toolParameterFactory = Factory.define<ToolParameter>(() => ({
-	value: undefined,
-	default: undefined,
-	scope: ToolParameterScope.School,
-	type: ToolParameterType.String,
-	location: ToolParameterLocation.PATH,
-	name: "Parameter1",
-	displayName: "Parameter 1",
-	description: "test description",
-	isOptional: true,
-}));
+export const toolParameterFactory = Factory.define<ToolParameter>(
+	({ sequence }) => ({
+		defaultValue: undefined,
+		scope: ToolParameterScope.School,
+		type: ToolParameterType.String,
+		location: ToolParameterLocation.PATH,
+		name: `parameter-${sequence}`,
+		displayName: `Parameter ${sequence}`,
+		description: "test description",
+		isOptional: true,
+	})
+);

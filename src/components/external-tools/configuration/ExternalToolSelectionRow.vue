@@ -13,13 +13,13 @@
 
 <script lang="ts">
 import { PropType } from "vue";
-import { ToolConfigurationListItem } from "@/store/external-tool";
+import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
 
 export default {
 	name: "ExternalToolSelectionRow",
 	props: {
 		item: {
-			type: Object as PropType<ToolConfigurationListItem>,
+			type: Object as PropType<ExternalToolConfigurationTemplate>,
 			required: true,
 			default: () => ({}),
 		},
