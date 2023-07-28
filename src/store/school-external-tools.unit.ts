@@ -223,6 +223,8 @@ describe("SchoolExternalToolsModule", () => {
 				const setup = () => {
 					const schoolExternalTool = schoolExternalToolFactory.build();
 
+					module.setSchoolExternalTools([schoolExternalTool]);
+
 					return {
 						schoolExternalTool,
 					};

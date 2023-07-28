@@ -2,6 +2,8 @@ import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolPostParams,
 	ToolApiInterface,
+	ToolReferenceListResponse,
+	ToolReferenceResponse,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -16,10 +18,12 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { toolReferenceResponseFactory } from "../../tests/test-utils/factory/toolReferenceResponseFactory";
 import ContextExternalToolsModule from "./context-external-tools";
 import {
 	ContextExternalToolConfigurationTemplate,
 	ExternalToolDisplayData,
+	ToolConfigurationStatus,
 	ToolContextType,
 	ToolParameterLocation,
 	ToolParameterScope,
@@ -208,9 +212,17 @@ describe("ContextExternalToolsModule", () => {
 					const contextId = "contextId";
 					const contextType = ToolContextType.COURSE;
 
+					const displayData: ToolReferenceResponse =
+						toolReferenceResponseFactory.build({ logoUrl: "logoUrl" });
+
+					apiMock.toolControllerGetToolReferences.mockResolvedValue(
+						mockApiResponse({ data: { data: [displayData] } })
+					);
+
 					return {
 						contextId,
 						contextType,
+						displayData,
 					};
 				};
 
@@ -223,6 +235,24 @@ describe("ContextExternalToolsModule", () => {
 						contextId,
 						contextType
 					);
+				});
+
+				it("should set the state", async () => {
+					const { contextId, contextType, displayData } = setup();
+
+					await module.loadExternalToolDisplayData({ contextId, contextType });
+
+					expect(module.getExternalToolDisplayDataList).toEqual<
+						ExternalToolDisplayData[]
+					>([
+						{
+							id: displayData.contextToolId,
+							name: displayData.displayName,
+							logoUrl: displayData.logoUrl,
+							status: ToolConfigurationStatus.Latest,
+							openInNewTab: displayData.openInNewTab,
+						},
+					]);
 				});
 			});
 
