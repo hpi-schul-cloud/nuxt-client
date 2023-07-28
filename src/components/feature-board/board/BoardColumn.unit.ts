@@ -14,7 +14,7 @@ import {
 } from "../types/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container } = require("../../ui-dndrop");
+const { Container } = require("vue-dndrop");
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
