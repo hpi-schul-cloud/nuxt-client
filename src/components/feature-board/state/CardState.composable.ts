@@ -53,7 +53,6 @@ export const useCardState = (id: BoardCard["id"]) => {
 		const status = await updateCardTitle(cardState.card.id, newTitle);
 		if (isErrorCode(status)) {
 			await showErrorAndReload(generateErrorText("update"));
-			return;
 		}
 	};
 

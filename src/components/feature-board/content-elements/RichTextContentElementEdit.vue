@@ -16,7 +16,7 @@
 <script lang="ts">
 import CkEditor from "@/components/common/editor/CKEditor.vue";
 import { useEventListener, useVModel } from "@vueuse/core";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -36,10 +36,10 @@ export default defineComponent({
 		const modelValue = useVModel(props, "value", emit);
 
 		const onFocus = () => {
-			const cdkBalloonPanelElements =
+			const ckBalloonPanelElements =
 				document.getElementsByClassName("ck-balloon-panel");
 
-			for (const element of cdkBalloonPanelElements) {
+			for (const element of ckBalloonPanelElements) {
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 				});

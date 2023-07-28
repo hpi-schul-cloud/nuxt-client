@@ -211,7 +211,6 @@ export const useBoardState = (id: string) => {
 		if (isErrorCode(status)) {
 			const errorText = generateErrorText("update");
 			await showErrorAndReload(errorText);
-			return;
 		}
 	};
 
