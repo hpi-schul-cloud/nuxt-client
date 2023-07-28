@@ -6,9 +6,9 @@
 			data-testid="add_filter_button"
 			@click="showMenu"
 		>
-			<base-icon source="material" icon="filter" class="filter-icon mr-2" />
+			<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
 			<span class="filter-btn mr-2"> {{ labelAdd }} </span>
-			<base-icon source="material" icon="arrow_drop_down" class="filter-icon" />
+			<v-icon class="filter-icon">$mdiMenuDown</v-icon>
 		</v-btn>
 		<context-menu
 			:show.sync="visible"

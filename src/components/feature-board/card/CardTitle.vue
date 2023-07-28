@@ -1,14 +1,16 @@
 <template>
 	<VCardTitle
-		class="d-flex align-start justify-space-between"
+		class="d-block text-break-word pb-2"
 		v-if="isEditMode || value !== ''"
 	>
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
+			:placeholder="$t('common.labels.title').toString()"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
+			@enter="onEnter"
 		></BoardAnyTitleInput>
 	</VCardTitle>
 </template>
@@ -33,15 +35,25 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
+		const onEnter = () => {
+			emit("enter");
+		};
 
 		return {
 			modelValue,
 			onUpdateValue,
+			onEnter,
 		};
 	},
 });
 </script>
+
+<style scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

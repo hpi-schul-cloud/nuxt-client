@@ -3,23 +3,55 @@ import { jest } from "@jest/globals";
 
 jest.mock("axios");
 
-export const setupFileStorageFactoryMock = () => {
+interface Props {
+	listMock?: jest.Mock;
+	copyMock?: jest.Mock;
+	renameMock?: jest.Mock;
+	copyFilesOfParentParamsMock?: jest.Mock;
+	uploadFromUrlMock?: jest.Mock;
+	uploadMock?: jest.Mock;
+	copyFileMock?: jest.Mock;
+	deleteByParentMock?: jest.Mock;
+	deleteFileMock?: jest.Mock;
+	downloadMock?: jest.Mock;
+	patchFilenameMock?: jest.Mock;
+	restoreMock?: jest.Mock;
+	restoreFileMock?: jest.Mock;
+}
+
+export const setupFileStorageFactoryMock = (props: Props) => {
+	const {
+		listMock,
+		copyMock,
+		renameMock,
+		copyFilesOfParentParamsMock,
+		uploadFromUrlMock,
+		uploadMock,
+		copyFileMock,
+		deleteByParentMock,
+		deleteFileMock,
+		downloadMock,
+		patchFilenameMock,
+		restoreMock,
+		restoreFileMock,
+	} = props;
+
 	const fileApiFactory = {
-		list: jest.fn(),
-		copy: jest.fn(),
-		rename: jest.fn(),
-		copyFilesOfParentParams: jest.fn(),
-		uploadFromUrl: jest.fn(),
-		upload: jest.fn(),
+		list: listMock ?? jest.fn(),
+		copy: copyMock ?? jest.fn(),
+		rename: renameMock ?? jest.fn(),
+		copyFilesOfParentParams: copyFilesOfParentParamsMock ?? jest.fn(),
+		uploadFromUrl: uploadFromUrlMock ?? jest.fn(),
+		upload: uploadMock ?? jest.fn(),
 
-		copyFile: jest.fn(),
-		deleteByParent: jest.fn(),
-		deleteFile: jest.fn(),
-		download: jest.fn(),
+		copyFile: copyFileMock ?? jest.fn(),
+		deleteByParent: deleteByParentMock ?? jest.fn(),
+		deleteFile: deleteFileMock ?? jest.fn(),
+		download: downloadMock ?? jest.fn(),
 
-		patchFilename: jest.fn(),
-		restore: jest.fn(),
-		restoreFile: jest.fn(),
+		patchFilename: patchFilenameMock ?? jest.fn(),
+		restore: restoreMock ?? jest.fn(),
+		restoreFile: restoreFileMock ?? jest.fn(),
 	};
 
 	jest

@@ -28,7 +28,7 @@
 				@update:vmodel="barSearch"
 			>
 				<template #icon>
-					<base-icon source="material" icon="search" />
+					<v-icon>$mdiMagnify</v-icon>
 				</template>
 			</base-input>
 
@@ -78,25 +78,24 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<base-icon
+						<v-icon
 							v-if="status === 'ok'"
-							source="material"
-							icon="doublecheck"
+							class="material-icon"
 							color="var(--v-success-base)"
-						/>
-
-						<base-icon
+							>$mdiCheckAll</v-icon
+						>
+						<v-icon
 							v-else-if="status === 'parentsAgreed'"
-							source="material"
-							icon="check"
+							class="material-icon"
 							color="var(--v-warning-base)"
-						/>
-						<base-icon
+							>$mdiCheck</v-icon
+						>
+						<v-icon
 							v-else-if="status === 'missing'"
-							source="material"
-							icon="close"
+							class="material-icon"
 							color="var(--v-error-base)"
-						/>
+							>$mdiClose</v-icon
+						>
 					</span>
 				</template>
 				<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -108,9 +107,12 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
+						:aria-label="
+							$t('pages.administration.students.table.edit.ariaLabel')
+						"
 						data-testid="edit_student_button"
 					>
-						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
+						<v-icon size="20">$mdiPencilOutline</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -142,12 +144,7 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import {
-	mdiAccountPlus,
-	mdiCloudDownload,
-	mdiPencilOutline,
-	mdiPlus,
-} from "@mdi/js";
+import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
@@ -165,10 +162,8 @@ export default {
 	},
 	data() {
 		return {
-			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudDownload,
-			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.students.index"
@@ -296,7 +291,7 @@ export default {
 						: this.$t(
 								"pages.administration.students.index.tableActions.registration"
 						  ),
-					icon: "check",
+					icon: "$mdiCheck",
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
@@ -304,13 +299,13 @@ export default {
 					label: this.$t(
 						"pages.administration.students.index.tableActions.email"
 					),
-					icon: "mail_outline",
+					icon: "$mdiEmailOutline",
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					icon: "qrcode",
+					icon: "$mdiQrcode",
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
 				},
@@ -318,7 +313,7 @@ export default {
 					label: this.$t(
 						"pages.administration.students.index.tableActions.delete"
 					),
-					icon: "delete_outline",
+					icon: "$mdiDeleteOutline",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
 					dataTestId: "delete_action",
@@ -386,15 +381,14 @@ export default {
 			const instanceBasedIcons = [];
 
 			instanceBasedIcons.push({
-				icon: "doublecheck",
+				icon: "$mdiCheckAll",
 				color: "var(--v-success-base)",
-				style: "margin: -3px 3px",
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
 
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
-					icon: "check",
+					icon: "$mdiCheck",
 					color: "var(--v-warning-base)",
 					label: this.$t(
 						"utils.adminFilter.consent.label.parentsAgreementMissing"
@@ -403,7 +397,7 @@ export default {
 			}
 
 			instanceBasedIcons.push({
-				icon: "clear",
+				icon: "$mdiClose",
 				color: "var(--v-error-base)",
 				label: this.$t("utils.adminFilter.consent.label.missing"),
 			});
@@ -419,7 +413,7 @@ export default {
 			}
 
 			return {
-				icon: mdiPlus,
+				icon: "$mdiPlus",
 				title: this.$t("common.actions.create"),
 				testId: "fab_button_students_table",
 				ariaLabel: this.$t("common.actions.create"),
@@ -638,8 +632,7 @@ export default {
 					"pages.administration.students.index.remove.confirm.btnText"
 				),
 				cancelText: this.$t("common.actions.cancel"),
-				icon: "report_problem",
-				iconSource: "material",
+				icon: "$mdiAlert",
 				iconColor: "var(--v-error-base)",
 				actionDesign: "danger",
 				onConfirm,

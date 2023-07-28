@@ -4,7 +4,6 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
-		:aria-label="roomData.title"
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
@@ -13,11 +12,11 @@
 					{{ roomData.title }}
 				</div>
 				<div class="course-title pa-2 pb-1">
-					<more-item-menu
+					<room-dot-menu
 						:menu-items="headlineMenuItems"
-						:show="true"
 						nudge-right="120"
 						data-testid="title-menu"
+						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
@@ -42,7 +41,7 @@
 						:href="tabItem.href"
 						:data-testid="tabItem.dataTestId"
 					>
-						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }} </v-icon>
+						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
 						<span class="d-none d-sm-inline">
 							{{ tabItem.label }}
 						</span>
@@ -57,6 +56,7 @@
 				:is="getCurrentComponent"
 				:room-data-object="roomData"
 				:role="dashBoardRole"
+				:roomId="courseId"
 				@copy-board-element="onCopyBoardElement"
 				data-testid="room-content"
 			/>
@@ -112,40 +112,41 @@
 </template>
 
 <script>
+import BaseQrCode from "@/components/base/BaseQrCode.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import RoomDotMenu from "@/components/molecules/RoomDotMenu";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe";
+import RoomDashboard from "@/components/templates/RoomDashboard";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
 import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import MoreItemMenu from "@/components/molecules/MoreItemMenu";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe";
-import RoomDashboard from "@/components/templates/RoomDashboard";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
-	mdiTrayArrowDown,
 	mdiEmailPlusOutline,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
+	mdiPencilOutline,
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiPencilOutline,
+	mdiTrayArrowDown,
 	mdiViewListOutline,
 } from "@mdi/js";
-import { defineComponent, inject } from "vue";
-import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import RoomExternalToolsOverview from "./external-tools/RoomExternalToolsOverview.vue";
+import { defineComponent } from "vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 export default defineComponent({
 	setup() {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isLoadingDialogOpen } = useLoadingState(
 			i18n.t("components.molecules.copyResult.title.loading")
 		);
@@ -163,7 +164,7 @@ export default defineComponent({
 		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
-		MoreItemMenu,
+		RoomDotMenu,
 		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
@@ -193,7 +194,7 @@ export default defineComponent({
 			},
 			breadcrumbs: [
 				{
-					text: this.$t("pages.courses.index.title"),
+					text: this.$t("common.words.courses"),
 					to: "/rooms-overview",
 				},
 			],
@@ -230,6 +231,7 @@ export default defineComponent({
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
+					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
 				tabs.push({
@@ -378,14 +380,25 @@ export default defineComponent({
 					dataTestId: "title-menu-share",
 				});
 			}
+
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse(),
-					name: this.$t("common.actions.download"),
-					dataTestId: "title-menu-imscc-download",
+					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
+					name: this.$t("common.actions.download.v1.1"),
+					dataTestId: "title-menu-imscc-download-v1.1",
 				});
 			}
+
+			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+				items.push({
+					icon: this.icons.mdiTrayArrowDown,
+					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
+					name: this.$t("common.actions.download.v1.3"),
+					dataTestId: "title-menu-imscc-download-v1.3",
+				});
+			}
+
 			return items;
 		},
 		copyResultModalStatus() {
@@ -495,9 +508,11 @@ export default defineComponent({
 				});
 			}
 		},
-	},
-	mounted() {
-		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
+		roomData(newRoomData, oldRoomData) {
+			if (newRoomData.title !== oldRoomData.title) {
+				document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
+			}
+		},
 	},
 });
 </script>

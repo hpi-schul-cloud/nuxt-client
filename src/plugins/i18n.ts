@@ -1,6 +1,6 @@
+import { authModule, envConfigModule } from "@/store";
 import Vue from "vue";
 import VueI18n, { LocaleMessages } from "vue-i18n";
-import { authModule, envConfigModule } from "@/store";
 
 Vue.use(VueI18n);
 
@@ -14,12 +14,34 @@ const loadLocaleMessages = (): LocaleMessages => {
 	return messages;
 };
 
+const fileSizeFormat = {
+	maximumFractionDigits: 2,
+};
+
+const numberFormats = {
+	de: {
+		fileSize: fileSizeFormat,
+	},
+	en: {
+		fileSize: fileSizeFormat,
+	},
+	es: {
+		fileSize: fileSizeFormat,
+	},
+	uk: {
+		fileSize: fileSizeFormat,
+	},
+};
+
 export const createI18n = (): VueI18n => {
-	return new VueI18n({
+	const i18n = new VueI18n({
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
 		messages: loadLocaleMessages(),
+		numberFormats,
 	});
+
+	return i18n;
 };
 
 // NUXT_REMOVAL remove $ts when refactored

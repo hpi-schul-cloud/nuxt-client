@@ -1,3 +1,4 @@
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
@@ -7,15 +8,16 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
+import { Envs } from "@/store/types/env-config";
+import { initializeAxios } from "@/utils/api";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomDetailsPage from "./RoomDetails.page.vue";
-import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
-import { Envs } from "@/store/types/env-config";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 const mockData = {
 	roomId: "123",
@@ -136,10 +138,12 @@ const getWrapper: any = () => {
 			copyModule: copyModuleMock,
 			loadingStateModule: loadingStateModuleMock,
 			notifierModule: notifierModuleMock,
-			i18n: { t: (key: string) => key },
 			shareModule: shareModuleMock,
-			authModule: undefined,
-			contextExternalToolsModule: undefined,
+			[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+		},
+		stubs: {
+			RoomDashboard: true,
 		},
 	});
 };
@@ -498,6 +502,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 
@@ -510,7 +515,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
 				await toolsTab.trigger("click");
 
-				const toolsContent = wrapper.find('[data-testid="room-content"]');
+				const toolsContent = wrapper.findComponent(RoomExternalToolsOverview);
 
 				expect(toolsContent.exists()).toBe(true);
 			});

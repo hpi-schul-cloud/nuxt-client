@@ -1,9 +1,6 @@
 <template>
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
-		<img
-			src="@/assets/img/migration/migration_error.svg"
-			:alt="$t('pages.userMigration.error.img.alt').toString()"
-		/>
+		<img src="@/assets/img/migration/migration_error.svg" alt="" />
 		<h1 class="pl-4 pr-4">
 			{{ $t("pages.userMigration.error.title") }}
 		</h1>
@@ -40,23 +37,23 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import SystemsModule from "@/store/systems";
+import { System } from "@/store/types/system";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	computed,
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
 	inject,
 	onMounted,
 	ref,
-	Ref,
 } from "vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import EnvConfigModule from "@/store/env-config";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
-	component: { RenderHTML },
+	components: { RenderHTML },
 	props: {
 		targetSystem: {
 			type: String,
@@ -74,8 +71,7 @@ export default defineComponent({
 	setup(props) {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
-		const envConfigModule: EnvConfigModule | undefined =
-			inject<EnvConfigModule>("envConfigModule");
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -95,12 +91,11 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(() =>
-			envConfigModule?.getAccessibilityReportEmail
-				? `mailto:${
-						envConfigModule.getAccessibilityReportEmail
-				  }?subject=${getSubject()}`
-				: ""
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
 		);
 
 		onMounted(async () => {

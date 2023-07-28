@@ -13,10 +13,7 @@ env:
   node: 18
 jobs:
   unit:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup node
@@ -42,24 +39,12 @@ jobs:
             -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
             -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+
   lint:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run lint
         run: npm run lint
-      - name: npm run lint:fix
-        if: failure() && matrix.os == 'ubuntu-latest'
-        run: npm run lint
-      - uses: stefanzweifel/git-auto-commit-action@ebb57560423c39cbe37e0620f5653ed953658014
-        # only run on one of the matrix builds
-        if: failure() && matrix.os == 'ubuntu-latest'
-        with:
-          commit_message: npm run lint

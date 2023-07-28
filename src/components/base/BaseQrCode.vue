@@ -1,5 +1,5 @@
 <template>
-	<div ref="qrcode" class="qrcode" />
+	<div ref="qrcode" class="qrcode" tabindex="0" />
 </template>
 
 <script>

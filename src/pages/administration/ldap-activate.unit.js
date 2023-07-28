@@ -79,28 +79,6 @@ describe("ldap/activate", () => {
 		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 
-	it("should push to router when clicking the back button", async () => {
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-				$router: { push: routerPushStub },
-				$route,
-			},
-		});
-		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
-		expect(backBtn.exists()).toBe(true);
-		backBtn.trigger("click");
-		await wrapper.vm.$nextTick();
-
-		expect(routerPushStub).toHaveBeenCalled();
-	});
-
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({
@@ -184,6 +162,7 @@ describe("ldap/activate", () => {
 					short_name,
 				},
 				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const confirmModal = wrapper.find(`[data-testid="confirmModal"]`);
@@ -206,6 +185,7 @@ describe("ldap/activate", () => {
 					short_name,
 				},
 				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 
@@ -258,13 +238,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
-				$route,
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route,
 			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
@@ -279,13 +259,13 @@ describe("ldap/activate", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
-				$router: { push: routerPushStub },
-				$route: { query: {} },
 			}),
 			mocks: {
 				$theme: {
 					short_name,
 				},
+				$router: { push: routerPushStub },
+				$route: { query: {}},
 			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);

@@ -1,9 +1,10 @@
 import { createSharedComposable } from "@vueuse/core";
 import { authModule } from "@/store";
-import { BoardPermissionsTypes } from "../types/Board";
+import { BoardPermissionChecks } from "../types/Permissions";
 
-const boardPermissions = (): BoardPermissionsTypes => {
+const boardPermissions = (): BoardPermissionChecks => {
 	const permissions = authModule?.getUserPermissions || [];
+	const userRoles = authModule?.getUserRoles || [];
 
 	return {
 		hasMovePermission: permissions.includes("course_create"),
@@ -11,6 +12,8 @@ const boardPermissions = (): BoardPermissionsTypes => {
 		hasCreateColumnPermission: permissions.includes("course_create"),
 		hasEditPermission: permissions.includes("course_edit"),
 		hasDeletePermission: permissions.includes("course_remove"),
+		isTeacher: userRoles.includes("teacher"),
+		isStudent: userRoles.includes("student"),
 	};
 };
 

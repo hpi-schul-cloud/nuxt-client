@@ -59,22 +59,15 @@
 						type="button"
 						data-testid="pwd-visibility-toggle"
 						class="pwd-toggle"
+						:aria-label="$t('components.base.showPassword')"
 						@click="togglePasswordVisibility"
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>
 					</v-btn>
-					<base-icon
-						v-if="hasError"
-						source="material"
-						icon="warning"
-						fill="var(--v-error-base)"
-					/>
-					<base-icon
-						v-if="success"
-						source="material"
-						icon="success"
-						fill="var(--v-success-base)"
-					/>
+					<v-icon v-if="hasError" color="var(--v-error-base)">$mdiAlert</v-icon>
+					<v-icon v-if="success" color="var(--v-success-base)">
+						$mdiCheckCircleOutline
+					</v-icon>
 				</div>
 			</div>
 		</div>

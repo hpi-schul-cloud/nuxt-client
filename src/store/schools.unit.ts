@@ -101,6 +101,7 @@ describe("schools module", () => {
 						studentVisibility: false,
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
+						showOutdatedUsers: false,
 					},
 				});
 				expect(setLoadingSpy.mock.calls[3][0]).toBe(false);
@@ -336,6 +337,7 @@ describe("schools module", () => {
 						studentVisibility: false,
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
+						showOutdatedUsers: false,
 					},
 				};
 				initializeAxios({
@@ -393,6 +395,7 @@ describe("schools module", () => {
 						studentVisibility: false,
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
+						showOutdatedUsers: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});

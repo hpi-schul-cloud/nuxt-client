@@ -1,16 +1,16 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
-import NotifierModule from "@/store/notifier";
-import { inject, Ref, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { injectStrict } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { Ref, inject, ref } from "vue";
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const copyModule = inject<CopyModule>("copyModule");
-	const notifierModule = inject<NotifierModule>("notifierModule");
-	const i18n = inject<VueI18n>("i18n");
+	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	const i18n = injectStrict(I18N_KEY);
 
 	const t = (key: string) => {
-		const translateResult = i18n?.t(key);
+		const translateResult = i18n.t(key);
 		if (typeof translateResult === "string") {
 			return translateResult;
 		}
@@ -28,21 +28,21 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
 	const showSuccess = () =>
-		notifierModule?.show({
+		notifierModule.show({
 			text: t("components.molecules.copyResult.successfullyCopied"),
 			status: "success",
 			timeout: 10000,
 		});
 
 	const showFailure = () =>
-		notifierModule?.show({
+		notifierModule.show({
 			text: t("components.molecules.copyResult.failedCopy"),
 			status: "error",
 			autoClose: false,
 		});
 
 	const showTimeout = () =>
-		notifierModule?.show({
+		notifierModule.show({
 			text: t("components.molecules.copyResult.timeoutCopy"),
 			status: "info",
 			autoClose: false,

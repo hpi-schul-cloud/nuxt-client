@@ -3,11 +3,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from "vue";
-import ApplicationErrorModule from "@/store/application-error";
+import { defineComponent } from "vue";
 import { watch } from "vue";
 import { useRouter } from "vue-router/composables";
-import { useApplicationError } from "@/composables/application-error.composable";
+import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
@@ -17,15 +16,8 @@ export default defineComponent({
 	name: "ApplicationErrorRouting",
 	setup() {
 		const router = useRouter();
-		const { createApplicationError } = useApplicationError();
 
-		const applicationErrorModule = inject<ApplicationErrorModule | undefined>(
-			"applicationErrorModule"
-		);
-
-		if (applicationErrorModule === undefined) {
-			throw createApplicationError(500);
-		}
+		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 
 		const routeToErrorPage = () => {
 			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"

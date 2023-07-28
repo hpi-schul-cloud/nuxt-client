@@ -1,36 +1,28 @@
 <template>
-	<section>
-		<v-btn
-			text
-			color="secondary"
-			data-testid="ldapBackButton"
-			@click="backButtonHandler"
-		>
-			<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
-			{{ $t("common.actions.back") }}
-		</v-btn>
+	<default-wireframe
+		:headline="$t('pages.administration.ldap.save.title')"
+		:breadcrumbs="breadcrumbs"
+		:full-width="false"
+	>
 		<section class="section">
-			<h1 class="h2">
-				{{ $t("pages.administration.ldap.save.title") }}
-			</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="students_outline" />
+					<v-icon class="material-icon">$mdiAccountSchoolOutline</v-icon>
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="teacher" />
+					<v-icon class="custom-icon">$teacher</v-icon>
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="admin_panel_settings" />
+					<v-icon class="material-icon">$mdiShieldAccountVariantOutline</v-icon>
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="custom" icon="class" />
+					<v-icon class="custom-icon">$class</v-icon>
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -56,7 +48,9 @@
 						</tr>
 
 						<tr v-if="verified.users.sample.firstName">
-							<td>{{ $t("pages.administration.ldap.activate.firstName") }}</td>
+							<td>
+								{{ $t("pages.administration.ldap.activate.firstName") }}
+							</td>
 							<td>{{ verified.users.sample.firstName }}</td>
 						</tr>
 
@@ -85,7 +79,9 @@
 				<div>
 					<table data-testid="ldapClassesActivateTable">
 						<tr v-if="verified.classes.sample.className">
-							<td>{{ $t("pages.administration.ldap.activate.className") }}</td>
+							<td>
+								{{ $t("pages.administration.ldap.activate.className") }}
+							</td>
 							<td>{{ verified.classes.sample.className }}</td>
 						</tr>
 						<tr v-if="verified.classes.sample.ldapDn">
@@ -174,11 +170,9 @@
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
 					<template #icon>
-						<base-icon
-							source="material"
-							icon="check_circle"
-							style="color: var(--v-success-base)"
-						/>
+						<v-icon color="var(--v-success-base)" class="material-icon">
+							$mdiCheckCircle
+						</v-icon>
 					</template>
 				</modal-body-info>
 			</template>
@@ -191,7 +185,7 @@
 				/>
 			</template>
 		</base-modal>
-	</section>
+	</default-wireframe>
 </template>
 
 <script>
@@ -204,6 +198,7 @@ import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import { mdiChevronLeft } from "@mdi/js";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -215,7 +210,13 @@ const redirectToConfigPage = (page) => {
 };
 
 export default {
-	components: { ModalBodyInfo, ModalFooterConfirm, InfoMessage, RenderHTML },
+	components: {
+		ModalBodyInfo,
+		ModalFooterConfirm,
+		InfoMessage,
+		RenderHTML,
+		DefaultWireframe,
+	},
 	data() {
 		return {
 			migrateUsersCheckbox: false,
@@ -240,6 +241,36 @@ export default {
 		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
+		},
+		ldapConfigRoute() {
+			const { id } = this.$route.query;
+			if (id) {
+				return `/administration/ldap/config?id=${id}`;
+			} else {
+				return "/administration/ldap/config";
+			}
+		},
+		breadcrumbs() {
+			return [
+				{
+					text: this.$t("pages.administration.index.title"),
+					href: "/administration/",
+				},
+				{
+					text: this.$t("pages.administration.school.index.title"),
+					href: envConfigModule.getNewSchoolAdminPageAsDefault
+						? "/administration/school-settings"
+						: "/administration/school",
+				},
+				{
+					text: this.$t("pages.administration.ldap.index.title"),
+					href: this.ldapConfigRoute,
+				},
+				{
+					text: this.$t("pages.administration.ldap.activate.breadcrumb"),
+					disabled: true,
+				},
+			];
 		},
 	},
 	created() {

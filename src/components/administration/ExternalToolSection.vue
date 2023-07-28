@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2 class="text-h4 mb-10">
-			{{ $t("components.administration.externalToolsSection.header") }}
+			{{ t("components.administration.externalToolsSection.header") }}
 		</h2>
 		<v-data-table
 			:disable-pagination="true"
@@ -9,16 +9,22 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="$t('common.loading.text')"
-			:no-data-text="$t('common.nodata')"
+			:loading-text="t('common.loading.text')"
+			:no-data-text="t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
-				<span :class="getColor(item)">
+				<span>
 					{{ item.name }}
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<span :class="getColor(item)">
+				<v-icon v-if="item.outdated" color="error">
+					{{ mdiRefreshCircle }}
+				</v-icon>
+				<v-icon v-else color="success">
+					{{ mdiCheckCircle }}
+				</v-icon>
+				<span>
 					{{ item.status }}
 				</span>
 			</template>
@@ -35,15 +41,15 @@
 			depressed
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
-			{{ $t("components.administration.externalToolsSection.action.add") }}
+			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog v-model="isDeleteDialogOpen" max-width="450">
+		<v-dialog v-model="isDeleteDialogOpen" max-width="360">
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
 						{{
-							$t("components.administration.externalToolsSection.dialog.title")
+							t("components.administration.externalToolsSection.dialog.title")
 						}}
 					</h2>
 				</v-card-title>
@@ -51,10 +57,10 @@
 					<RenderHTML
 						class="text-md mt-2"
 						:html="
-							$t(
+							t(
 								'components.administration.externalToolsSection.dialog.content',
 								{ itemName: getItemName }
-							).toString()
+							)
 						"
 						component="p"
 					/>
@@ -68,7 +74,7 @@
 						text
 						@click="onCloseDeleteDialog"
 					>
-						{{ $t("common.actions.cancel") }}
+						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						data-testId="dialog-confirm"
@@ -77,7 +83,7 @@
 						depressed
 						@click="onDeleteTool"
 					>
-						{{ $t("common.actions.confirm") }}
+						{{ t("common.actions.confirm") }}
 					</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -86,49 +92,51 @@
 </template>
 
 <script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import ExternalToolsModule from "@/store/external-tools";
 import {
-	computed,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
+import { mdiRefreshCircle, mdiCheckCircle } from "@mdi/js";
+import {
 	ComputedRef,
+	Ref,
+	computed,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
-	Ref,
 } from "vue";
 import VueI18n from "vue-i18n";
-import ExternalToolsModule from "@/store/external-tools";
 import { default as VueRouter } from "vue-router";
+import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
+import NotifierModule from "@/store/notifier";
+import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import ExternalToolToolbar from "./ExternalToolToolbar.vue";
-import { useRouter } from "vue-router/composables";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
+		const i18n = injectStrict(I18N_KEY);
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
 		const router: VueRouter = useRouter();
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
-		const externalToolsModule: ExternalToolsModule | undefined =
-			inject<ExternalToolsModule>("externalToolsModule");
-		if (!externalToolsModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
 
 		onMounted(async () => {
 			await externalToolsModule.loadSchoolExternalTools();
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 
@@ -141,10 +149,6 @@ export default defineComponent({
 		const isLoading: ComputedRef<boolean> = computed(() => {
 			return externalToolsModule.getLoading;
 		});
-
-		const getColor = (item: SchoolExternalToolItem): string => {
-			return item.outdated ? "outdated" : "";
-		};
 
 		const editTool = (item: SchoolExternalToolItem) => {
 			router.push({
@@ -159,6 +163,14 @@ export default defineComponent({
 					itemToDelete.value.id
 				);
 			}
+
+			notifierModule.show({
+				text: t(
+					"components.administration.externalToolsSection.notification.deleted"
+				),
+				status: "success",
+			});
+
 			onCloseDeleteDialog();
 		};
 
@@ -185,7 +197,6 @@ export default defineComponent({
 			headers,
 			items,
 			isLoading,
-			getColor,
 			editTool,
 			onDeleteTool,
 			isDeleteDialogOpen,
@@ -193,6 +204,8 @@ export default defineComponent({
 			onCloseDeleteDialog,
 			itemToDelete,
 			getItemName,
+			mdiRefreshCircle,
+			mdiCheckCircle,
 		};
 	},
 });
@@ -207,9 +220,5 @@ $arrow-offset: 8px;
 
 .v-data-table ::v-deep td {
 	cursor: pointer;
-}
-
-.outdated {
-	color: var(--v-primary-base);
 }
 </style>

@@ -46,7 +46,7 @@ export default defineComponent({
 		const isColumnActive = computed<boolean>(
 			() => isTitleHovered.value || focused.value || isDragPending.value
 		);
-		const colWidth = computed<number>(() => (isColumnActive.value ? 400 : 200));
+		const colWidth = computed<number>(() => (isColumnActive.value ? 340 : 200));
 
 		const onDropCard = (card: CardMove) => {
 			if (card.addedIndex === null) return;

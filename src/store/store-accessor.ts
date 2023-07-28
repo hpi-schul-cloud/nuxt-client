@@ -19,6 +19,7 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
+import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
@@ -31,6 +32,8 @@ import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import VideoConferenceModule from "./video-conference";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -41,6 +44,7 @@ export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
 export let collaborativeFilesModule: CollaborativeFilesModule;
 export let contentModule: ContentModule;
+export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
 export let externalToolsModule: ExternalToolsModule;
@@ -50,6 +54,7 @@ export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
+export let privacyPolicyModule: PrivacyPolicyModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolsModule: SchoolsModule;
@@ -59,6 +64,7 @@ export let systemsModule: SystemsModule;
 export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
+export let videoConferenceModule: VideoConferenceModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -68,6 +74,7 @@ export function initializeStores(store: Store<any>): void {
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
+	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	externalToolsModule = getModule(ExternalToolsModule, store);
@@ -77,6 +84,7 @@ export function initializeStores(store: Store<any>): void {
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
+	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
@@ -86,6 +94,7 @@ export function initializeStores(store: Store<any>): void {
 	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
+	videoConferenceModule = getModule(VideoConferenceModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -98,6 +107,7 @@ export const modules = {
 	autoLogoutModule: AutoLogoutModule,
 	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
+	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
 	externalToolsModule: ExternalToolsModule,
@@ -107,6 +117,7 @@ export const modules = {
 	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
 	notifierModule: NotifierModule,
+	privacyPolicyModule: PrivacyPolicyModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolsModule: SchoolsModule,
@@ -116,4 +127,5 @@ export const modules = {
 	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
+	videoConferenceModule: VideoConferenceModule,
 };

@@ -1,5 +1,6 @@
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 
@@ -15,6 +16,11 @@ describe("MigrationWarningCard", () => {
 					$t: (key: string): string => key,
 				},
 			}),
+			provide: {
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: {
+					getMigrationEndGracePeriod: () => 86400000,
+				},
+			},
 			propsData: {
 				value,
 			},

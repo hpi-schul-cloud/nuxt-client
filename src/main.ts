@@ -5,6 +5,7 @@ import {
 	autoLogoutModule,
 	collaborativeFilesModule,
 	contentModule,
+	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	externalToolsModule,
@@ -14,6 +15,7 @@ import {
 	loadingStateModule,
 	newsModule,
 	notifierModule,
+	privacyPolicyModule,
 	roomModule,
 	roomsModule,
 	schoolsModule,
@@ -23,13 +25,14 @@ import {
 	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
+	videoConferenceModule,
 } from "@/store";
 import Vue from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
+import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-import store from "./plugins/store";
 
 Vue.config.productionTip = false;
 
@@ -65,8 +68,8 @@ Vue.mixin({
 	},
 });
 
-import VueDOMPurifyHTML from "vue-dompurify-html";
 import htmlConfig from "@/components/common/render-html/config";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -80,8 +83,21 @@ import "@/plugins/polyfills";
 import "@/styles/global.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { initializeAxios } from "./utils/api";
 import { handleApplicationError } from "./plugins/application-error-handler";
+import { initializeAxios } from "./utils/api";
+
+import {
+	APPLICATION_ERROR_KEY,
+	AUTH_MODULE_KEY,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -120,30 +136,34 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 		// NUXT_REMOVAL get rid of store DI
 		provide: {
 			accountsModule,
-			applicationErrorModule,
+			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 			authModule,
+			[AUTH_MODULE_KEY.valueOf()]: authModule,
 			autoLogoutModule,
 			collaborativeFilesModule,
 			contentModule,
+			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
 			copyModule,
-			envConfigModule,
-			externalToolsModule,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
-			notifierModule,
-			roomModule,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			privacyPolicyModule,
+			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
 			schoolsModule,
 			shareModule,
-			statusAlertsModule,
+			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			systemsModule,
 			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
-			i18n,
+			[I18N_KEY.valueOf()]: i18n,
+			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

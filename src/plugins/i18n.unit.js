@@ -1,7 +1,7 @@
 import { authModule, envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createI18n } from "./i18n";
 
 const envs = {
@@ -36,5 +36,17 @@ describe("i18n plugin", () => {
 
 		expect(i18n.locale).toBe("fi");
 		expect(i18n.fallbackLocale).toBe("da");
+	});
+
+	it("sets the number formats for all supported languages correctly", () => {
+		authModule.setLocale("fi");
+		envConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });
+
+		const i18n = createI18n();
+
+		expect(i18n.numberFormats.de.fileSize.maximumFractionDigits).toBe(2);
+		expect(i18n.numberFormats.en.fileSize.maximumFractionDigits).toBe(2);
+		expect(i18n.numberFormats.es.fileSize.maximumFractionDigits).toBe(2);
+		expect(i18n.numberFormats.uk.fileSize.maximumFractionDigits).toBe(2);
 	});
 });
