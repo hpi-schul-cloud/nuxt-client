@@ -27,13 +27,12 @@ import {
 	SchoolExternalToolConfigurationTemplate,
 	SchoolExternalToolSave,
 } from "@/store/external-tool";
-import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import {
 	AUTH_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -50,6 +49,7 @@ import AuthModule from "@/store/auth";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 export default defineComponent({
 	components: {
@@ -63,8 +63,8 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
+		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
@@ -89,20 +89,21 @@ export default defineComponent({
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean> = computed(
-			() => !hasData.value || externalToolsModule.getLoading
+			() => !hasData.value || schoolExternalToolsModule.getLoading
 		);
 
 		const configurationTemplates: ComputedRef<
 			SchoolExternalToolConfigurationTemplate[]
 		> = computed(
-			() => externalToolsModule.getSchoolExternalToolConfigurationTemplates
+			() =>
+				schoolExternalToolsModule.getSchoolExternalToolConfigurationTemplates
 		);
 
 		const configuration: Ref<SchoolExternalTool | undefined> = ref();
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
-			externalToolsModule.getBusinessError.message
-				? externalToolsModule.getBusinessError
+			schoolExternalToolsModule.getBusinessError.message
+				? schoolExternalToolsModule.getBusinessError
 				: undefined
 		);
 
@@ -124,12 +125,12 @@ export default defineComponent({
 					);
 
 				if (props.configId) {
-					await externalToolsModule.updateSchoolExternalTool({
+					await schoolExternalToolsModule.updateSchoolExternalTool({
 						schoolExternalToolId: props.configId,
 						schoolExternalTool,
 					});
 				} else {
-					await externalToolsModule.createSchoolExternalTool(
+					await schoolExternalToolsModule.createSchoolExternalTool(
 						schoolExternalTool
 					);
 				}
@@ -156,15 +157,16 @@ export default defineComponent({
 		onMounted(async () => {
 			if (props.configId) {
 				// Loading order is important
-				await externalToolsModule.loadConfigurationTemplateForSchoolExternalTool(
+				await schoolExternalToolsModule.loadConfigurationTemplateForSchoolExternalTool(
 					props.configId
 				);
 
-				configuration.value = await externalToolsModule.loadSchoolExternalTool(
-					props.configId
-				);
+				configuration.value =
+					await schoolExternalToolsModule.loadSchoolExternalTool(
+						props.configId
+					);
 			} else if (authModule.getUser) {
-				await externalToolsModule.loadAvailableToolsForSchool(
+				await schoolExternalToolsModule.loadAvailableToolsForSchool(
 					authModule.getUser?.schoolId
 				);
 			}

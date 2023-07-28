@@ -16,13 +16,12 @@ describe("useExternalToolValidation", () => {
 			name: "ToolParameter",
 			displayName: "Tool Parameter",
 			isOptional: true,
-			value: "x",
 			type: ToolParameterType.String,
 			regexComment: "comment",
 			location: ToolParameterLocation.PATH,
 			regex: "[x]",
 			scope: ToolParameterScope.School,
-			default: undefined,
+			defaultValue: undefined,
 		};
 
 		return {
@@ -35,8 +34,10 @@ describe("useExternalToolValidation", () => {
 		it("should return true when validation passed", () => {
 			const { validateParameter, toolParameter } = setup();
 
-			const rules: (() => string | boolean)[] =
-				validateParameter(toolParameter);
+			const rules: (() => string | boolean)[] = validateParameter(
+				toolParameter,
+				undefined
+			);
 
 			expect(rules[0]()).toBeTruthy();
 		});
@@ -44,10 +45,11 @@ describe("useExternalToolValidation", () => {
 		it("should add required rule when parameter is required value is missing", () => {
 			const { validateParameter, toolParameter } = setup();
 			toolParameter.isOptional = false;
-			toolParameter.value = undefined;
 
-			const rules: (() => string | boolean)[] =
-				validateParameter(toolParameter);
+			const rules: (() => string | boolean)[] = validateParameter(
+				toolParameter,
+				undefined
+			);
 
 			const requiredRuleExists = rules.some(
 				(rule) => rule() === "common.validation.required2"
@@ -58,11 +60,12 @@ describe("useExternalToolValidation", () => {
 
 		it("should add regex rule when parameter value does not fit the regex", () => {
 			const { validateParameter, toolParameter } = setup();
-			toolParameter.value = "test";
 			toolParameter.regex = "[x]";
 
-			const rules: (() => string | boolean)[] =
-				validateParameter(toolParameter);
+			const rules: (() => string | boolean)[] = validateParameter(
+				toolParameter,
+				"test"
+			);
 
 			const regexRuleExists = rules.some(
 				(rule) => rule() === "common.validation.regex"
@@ -73,11 +76,12 @@ describe("useExternalToolValidation", () => {
 
 		it("should add number rule when parameter value does not match the parameter type", () => {
 			const { validateParameter, toolParameter } = setup();
-			toolParameter.value = "noNumber2123";
 			toolParameter.type = ToolParameterType.Number;
 
-			const rules: (() => string | boolean)[] =
-				validateParameter(toolParameter);
+			const rules: (() => string | boolean)[] = validateParameter(
+				toolParameter,
+				"noNumber2123"
+			);
 
 			const numberRuleExists = rules.some(
 				(rule) => rule() === "common.validation.number"

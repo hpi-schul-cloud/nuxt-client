@@ -1,7 +1,6 @@
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import ExternalToolsModule from "@/store/external-tools";
 import Vue from "vue";
 import {
 	businessErrorFactory,
@@ -15,12 +14,13 @@ import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.pag
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import {
 	AUTH_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { User } from "@/store/types/auth";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 describe("SchoolExternalToolConfigurator", () => {
 	jest
@@ -34,17 +34,20 @@ describe("SchoolExternalToolConfigurator", () => {
 
 	const getWrapper = (
 		propsData: { configId?: string },
-		getters: Partial<ExternalToolsModule> = {}
+		getters: Partial<SchoolExternalToolsModule> = {}
 	) => {
 		document.body.setAttribute("data-app", "true");
 
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getSchoolExternalToolConfigurationTemplates: [
-				schoolExternalToolConfigurationTemplateFactory.build(),
-			],
-			getBusinessError: businessErrorFactory.build({ message: undefined }),
-			...getters,
-		});
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule,
+			{
+				getSchoolExternalToolConfigurationTemplates: [
+					schoolExternalToolConfigurationTemplateFactory.build(),
+				],
+				getBusinessError: businessErrorFactory.build({ message: undefined }),
+				...getters,
+			}
+		);
 
 		const schoolId = "schoolId";
 		const authModule = createModuleMocks(AuthModule, {
@@ -67,7 +70,8 @@ describe("SchoolExternalToolConfigurator", () => {
 				}),
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
@@ -82,7 +86,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			externalToolsModule,
+			schoolExternalToolsModule,
 			authModule,
 			notifierModule,
 			schoolId,
@@ -120,39 +124,39 @@ describe("SchoolExternalToolConfigurator", () => {
 	describe("onMounted", () => {
 		describe("when creating a new configuration", () => {
 			it("should load the available tools for a school", async () => {
-				const { externalToolsModule, schoolId } = getWrapper({});
+				const { schoolExternalToolsModule, schoolId } = getWrapper({});
 
 				await Vue.nextTick();
 
 				expect(
-					externalToolsModule.loadAvailableToolsForSchool
+					schoolExternalToolsModule.loadAvailableToolsForSchool
 				).toHaveBeenCalledWith(schoolId);
 			});
 		});
 
 		describe("when updating an existing configuration", () => {
 			it("should load the template", async () => {
-				const { externalToolsModule } = getWrapper({
+				const { schoolExternalToolsModule } = getWrapper({
 					configId: "configId",
 				});
 
 				await Vue.nextTick();
 
 				expect(
-					externalToolsModule.loadConfigurationTemplateForSchoolExternalTool
+					schoolExternalToolsModule.loadConfigurationTemplateForSchoolExternalTool
 				).toHaveBeenCalledWith("configId");
 			});
 
 			it("should load the configuration", async () => {
-				const { externalToolsModule } = getWrapper({
+				const { schoolExternalToolsModule } = getWrapper({
 					configId: "configId",
 				});
 
 				await Vue.nextTick();
 
-				expect(externalToolsModule.loadSchoolExternalTool).toHaveBeenCalledWith(
-					"configId"
-				);
+				expect(
+					schoolExternalToolsModule.loadSchoolExternalTool
+				).toHaveBeenCalledWith("configId");
 			});
 		});
 	});
@@ -174,7 +178,7 @@ describe("SchoolExternalToolConfigurator", () => {
 			const setup = () => {
 				const template = schoolExternalToolConfigurationTemplateFactory.build();
 
-				const { wrapper, externalToolsModule, schoolId, notifierModule } =
+				const { wrapper, schoolExternalToolsModule, schoolId, notifierModule } =
 					getWrapper(
 						{},
 						{
@@ -184,7 +188,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				return {
 					wrapper,
-					externalToolsModule,
+					schoolExternalToolsModule,
 					notifierModule,
 					template,
 					schoolId,
@@ -192,14 +196,15 @@ describe("SchoolExternalToolConfigurator", () => {
 			};
 
 			it("should call store action to save tool", async () => {
-				const { wrapper, template, externalToolsModule, schoolId } = setup();
+				const { wrapper, template, schoolExternalToolsModule, schoolId } =
+					setup();
 
 				await wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
 
 				expect(
-					externalToolsModule.createSchoolExternalTool
+					schoolExternalToolsModule.createSchoolExternalTool
 				).toHaveBeenCalledWith<[SchoolExternalToolSave]>({
 					toolId: template.externalToolId,
 					version: template.version,
@@ -240,7 +245,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				const schoolExternalToolId = "configId";
 
-				const { wrapper, externalToolsModule, schoolId, notifierModule } =
+				const { wrapper, schoolExternalToolsModule, schoolId, notifierModule } =
 					getWrapper(
 						{ configId: schoolExternalToolId },
 						{
@@ -250,7 +255,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				return {
 					wrapper,
-					externalToolsModule,
+					schoolExternalToolsModule,
 					notifierModule,
 					template,
 					schoolId,
@@ -261,7 +266,7 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should call store action to update tool", async () => {
 				const {
 					wrapper,
-					externalToolsModule,
+					schoolExternalToolsModule,
 					template,
 					schoolExternalToolId,
 					schoolId,
@@ -272,7 +277,7 @@ describe("SchoolExternalToolConfigurator", () => {
 					.vm.$emit("save", template, []);
 
 				expect(
-					externalToolsModule.updateSchoolExternalTool
+					schoolExternalToolsModule.updateSchoolExternalTool
 				).toHaveBeenCalledWith<
 					[
 						{

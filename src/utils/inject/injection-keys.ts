@@ -9,6 +9,7 @@ import ContextExternalToolsModule from "@/store/context-external-tools";
 import RoomModule from "@/store/room";
 import VideoConferenceModule from "@/store/video-conference";
 import StatusAlertsModule from "@/store/status-alerts";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -18,6 +19,8 @@ export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
 export const EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ExternalToolsModule> =
 	Symbol("externalToolsModule");
+export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
+	Symbol("schoolExternalToolsModule");
 export const CONTEXT_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ContextExternalToolsModule> =
 	Symbol("contextExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =

@@ -96,14 +96,6 @@ export function useExternalToolMappings() {
 		);
 	};
 
-	const mapSchoolExternalToolSearchListResponse = (
-		response: SchoolExternalToolSearchListResponse
-	): SchoolExternalTool[] => {
-		return response.data.map((toolResponse: SchoolExternalToolResponse) =>
-			SchoolExternalToolMapper.mapToSchoolExternalTool(toolResponse)
-		);
-	};
-
 	const getBusinessErrorTranslationKey = (
 		businessError: BusinessError | undefined
 	): undefined | string => {
@@ -138,7 +130,6 @@ export function useExternalToolMappings() {
 
 	return {
 		mapToolReferencesToExternalToolDisplayData,
-		mapSchoolExternalToolSearchListResponse,
 		getBusinessErrorTranslationKey,
 		getStatusTranslationKey,
 	};

@@ -4,6 +4,7 @@ import {
 	SchoolExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
+	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { ToolConfigurationStatusMapping } from "@/composables/external-tool-mappings.composable";
 import {
@@ -38,7 +39,9 @@ export class SchoolExternalToolMapper {
 		response: SchoolExternalToolConfigurationTemplateListResponse
 	): SchoolExternalToolConfigurationTemplate[] {
 		const mapped = response.data.map((tempalte) =>
-			this.mapToSchoolExternalToolConfigurationTemplate(tempalte)
+			SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(
+				tempalte
+			)
 		);
 
 		return mapped;
@@ -95,6 +98,17 @@ export class SchoolExternalToolMapper {
 				})
 			),
 		};
+
+		return mapped;
+	}
+
+	static mapSchoolExternalToolSearchListResponse(
+		response: SchoolExternalToolSearchListResponse
+	): SchoolExternalTool[] {
+		const mapped: SchoolExternalTool[] = response.data.map(
+			(toolResponse: SchoolExternalToolResponse) =>
+				SchoolExternalToolMapper.mapToSchoolExternalTool(toolResponse)
+		);
 
 		return mapped;
 	}

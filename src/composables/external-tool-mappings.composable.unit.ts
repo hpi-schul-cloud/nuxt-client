@@ -9,17 +9,13 @@ import {
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import {
 	ExternalToolDisplayData,
-	SchoolExternalTool,
 	ToolConfigurationStatus,
 } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 
 describe("useExternalToolUtils", () => {
 	const setup = () => {
-		const {
-			mapSchoolExternalToolSearchListResponse,
-			getBusinessErrorTranslationKey,
-		} = useExternalToolMappings();
+		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
 		const toolResponse: SchoolExternalToolResponse = {
 			id: "id",
@@ -43,49 +39,9 @@ describe("useExternalToolUtils", () => {
 		return {
 			listResponse,
 			toolResponse,
-			mapSchoolExternalToolSearchListResponse,
 			getBusinessErrorTranslationKey,
 		};
 	};
-
-	describe("mapSchoolExternalToolSearchListResponse is called", () => {
-		describe("when maps the response", () => {
-			it("should return a schoolExternalTool array", () => {
-				const { mapSchoolExternalToolSearchListResponse, listResponse } =
-					setup();
-
-				const schoolExternalTools: SchoolExternalTool[] =
-					mapSchoolExternalToolSearchListResponse(listResponse);
-
-				expect(Array.isArray(schoolExternalTools)).toBeTruthy();
-			});
-
-			it("should map the response correctly", () => {
-				const {
-					mapSchoolExternalToolSearchListResponse,
-					listResponse,
-					toolResponse,
-				} = setup();
-
-				const schoolExternalTools: SchoolExternalTool[] =
-					mapSchoolExternalToolSearchListResponse(listResponse);
-
-				expect(schoolExternalTools).toEqual(
-					expect.objectContaining<SchoolExternalTool[]>([
-						{
-							id: toolResponse.id,
-							schoolId: toolResponse.schoolId,
-							toolId: toolResponse.toolId,
-							name: toolResponse.name,
-							parameters: toolResponse.parameters,
-							version: toolResponse.toolVersion,
-							status: ToolConfigurationStatus.Latest,
-						},
-					])
-				);
-			});
-		});
-	});
 
 	describe("mapToolReferencesToExternalToolDisplayData is called", () => {
 		describe("when maps the response", () => {

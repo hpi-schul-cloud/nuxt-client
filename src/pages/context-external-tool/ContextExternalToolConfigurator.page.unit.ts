@@ -3,11 +3,9 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ToolContextType } from "@/store/external-tool";
 import { ContextExternalToolSave } from "@/store/external-tool/context-external-tool";
-import ExternalToolsModule from "@/store/external-tools";
 import NotifierModule from "@/store/notifier";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
@@ -40,19 +38,15 @@ describe("ContextExternalToolConfigurator", () => {
 			contextType: ToolContextType;
 			configId?: string;
 		},
-		getters: Partial<ExternalToolsModule> = {}
+		getters: Partial<ContextExternalToolsModule> = {}
 	) => {
 		document.body.setAttribute("data-app", "true");
 
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getContextExternalToolConfigurationTemplates: [
-				contextExternalToolConfigurationTemplateFactory.build(),
-			],
-			...getters,
-		});
-
 		const contextExternalToolsModule: ContextExternalToolsModule =
 			createModuleMocks(ContextExternalToolsModule, {
+				getContextExternalToolConfigurationTemplates: [
+					contextExternalToolConfigurationTemplateFactory.build(),
+				],
 				getLoading: false,
 				getBusinessError: businessErrorFactory.build({ message: undefined }),
 				...getters,
@@ -82,7 +76,6 @@ describe("ContextExternalToolConfigurator", () => {
 				}),
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
@@ -99,7 +92,6 @@ describe("ContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			externalToolsModule,
 			contextExternalToolsModule,
 			roomModule,
 			notifierModule,
@@ -138,8 +130,8 @@ describe("ContextExternalToolConfigurator", () => {
 
 	describe("onMounted", () => {
 		describe("when creating a new configuration", () => {
-			it("should load the available tools for a school", async () => {
-				const { externalToolsModule } = getWrapper({
+			it("should load the available tools for a context", async () => {
+				const { contextExternalToolsModule } = getWrapper({
 					contextId: "contextId",
 					contextType: ToolContextType.COURSE,
 				});
@@ -147,7 +139,7 @@ describe("ContextExternalToolConfigurator", () => {
 				await Vue.nextTick();
 
 				expect(
-					externalToolsModule.loadAvailableToolsForContext
+					contextExternalToolsModule.loadAvailableToolsForContext
 				).toHaveBeenCalledWith({
 					contextId: "contextId",
 					contextType: ToolContextType.COURSE,
@@ -187,7 +179,7 @@ describe("ContextExternalToolConfigurator", () => {
 							contextType,
 						},
 						{
-							getSchoolExternalToolConfigurationTemplates: [template],
+							getContextExternalToolConfigurationTemplates: [template],
 						}
 					);
 
@@ -226,7 +218,7 @@ describe("ContextExternalToolConfigurator", () => {
 				});
 			});
 
-			it("should redirect back to school settings page when there is no error", async () => {
+			it("should redirect back to the room page", async () => {
 				const { wrapper, template, contextId } = setup();
 
 				await wrapper

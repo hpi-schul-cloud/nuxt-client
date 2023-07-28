@@ -26,11 +26,9 @@ import {
 	ContextExternalToolConfigurationTemplate,
 	ToolContextType,
 } from "@/store/external-tool";
-import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
@@ -77,9 +75,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
-		);
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
@@ -114,16 +109,14 @@ export default defineComponent({
 
 		const hasData: Ref<boolean> = ref(false);
 		const loading: ComputedRef<boolean> = computed(
-			() =>
-				!hasData.value ||
-				externalToolsModule.getLoading ||
-				contextExternalToolsModule.getLoading
+			() => !hasData.value || contextExternalToolsModule.getLoading
 		);
 
 		const configurationTemplates: ComputedRef<
 			ContextExternalToolConfigurationTemplate[]
 		> = computed(
-			() => externalToolsModule.getContextExternalToolConfigurationTemplates
+			() =>
+				contextExternalToolsModule.getContextExternalToolConfigurationTemplates
 		);
 
 		const configuration: Ref<ContextExternalTool | undefined> = ref();
@@ -180,14 +173,14 @@ export default defineComponent({
 		onMounted(async () => {
 			if (props.configId) {
 				// Loading order is important
-				await externalToolsModule.loadConfigurationTemplateForContextExternalTool(
+				await contextExternalToolsModule.loadConfigurationTemplateForContextExternalTool(
 					props.configId
 				);
 
 				//TODO Add loading of Context External Tools for updating
 				configuration.value = undefined;
 			} else {
-				await externalToolsModule.loadAvailableToolsForContext({
+				await contextExternalToolsModule.loadAvailableToolsForContext({
 					contextId: props.contextId,
 					contextType: props.contextType,
 				});

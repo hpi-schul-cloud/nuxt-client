@@ -29,3 +29,8 @@ export * from "./schoolExternalToolConfigurationTemplate.factory";
 export * from "./contextExternalToolConfigurationTemplate.factory";
 export * from "./contextExternalToolSaveFactory";
 export * from "./toolParameterEntryFactory";
+export * from "./schoolExternalToolConfigurationTemplateResponseFactory";
+export * from "./contextExternalToolConfigurationTemplateResponseFactory";
+export * from "./customParameterResponseFactory";
+export * from "./schoolExternalToolSaveFactory";
+export * from "./schoolExternalToolResponseFactory";
