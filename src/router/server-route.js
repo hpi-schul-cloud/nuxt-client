@@ -5,6 +5,10 @@ const isFileStorage = (path) => {
 	return path.startsWith("/api/v3/file");
 };
 
+const isTldrawClient = (path) => {
+	return path.startsWith("/tldraw-client");
+};
+
 /**
  * @param {string} path
  */
@@ -16,4 +20,5 @@ module.exports = {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
+	isTldrawClient,
 };

@@ -4,6 +4,7 @@ const {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
+	isTldrawClient
 } = require("../src/router/server-route");
 const url = require("url");
 
@@ -39,11 +40,20 @@ const createH5pEditorProxy = () => {
 	return h5pEditorProxy;
 };
 
+const createTldrawClientProxy = () => {
+	const clientProxy = createProxyMiddleware({
+		target: "http://localhost:3046",
+		changeOrigin: true,
+	});
+	return clientProxy;
+};
+
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
 	const fileStorageProxy = createFileStorageProxy();
 	const h5pEditorProxy = createH5pEditorProxy();
+	const tldrawClientProxy = createTldrawClientProxy();
 
 	const devServerConfig = {
 		port: 4000,
@@ -63,6 +73,8 @@ const createDevServerConfig = () => {
 						h5pEditorProxy(req, res, next);
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
+					} else if (isTldrawClient(path)) {
+						tldrawClientProxy(req, res, next);
 					} else if (isVueClient(path)) {
 						next();
 					} else {
@@ -85,4 +97,5 @@ module.exports = {
 	createDevServerConfig,
 	createFileStorageProxy,
 	createH5pEditorProxy,
+	createTldrawClientProxy,
 };

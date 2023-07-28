@@ -49,6 +49,8 @@ const vueRoutes = [
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
+	`^/tldraw/?$`,
+	`^/tldraw/${mongoId}?$`,
 ];
 
 const isVueClient = (path) => {
