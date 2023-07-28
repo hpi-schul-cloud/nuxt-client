@@ -2,22 +2,18 @@ import {
 	CustomParameterResponseLocationEnum,
 	CustomParameterResponseScopeEnum,
 	CustomParameterResponseTypeEnum,
-	SchoolExternalToolResponse,
-	SchoolExternalToolSearchListResponse,
 	ToolReferenceListResponse,
 	ToolReferenceResponse,
 	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
 import {
 	ExternalToolDisplayData,
-	SchoolExternalTool,
 	ToolConfigurationStatus,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
 } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
-import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 
 export const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,

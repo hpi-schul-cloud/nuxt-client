@@ -1,30 +1,12 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
-	ToolContextType,
-	ContextExternalToolConfigurationTemplate,
-	SchoolExternalToolSave,
-} from "./external-tool";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
-	ContextExternalToolConfigurationTemplateListResponse,
-	ContextExternalToolConfigurationTemplateResponse,
-	SchoolExternalToolConfigurationTemplateListResponse,
-	SchoolExternalToolConfigurationTemplateResponse,
-	SchoolExternalToolPostParams,
-	SchoolExternalToolResponse,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolLaunchRequestResponse,
 } from "@/serverApi/v3";
-import {
-	ContextExternalToolMapper,
-	SchoolExternalToolMapper,
-} from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 @Module({
 	name: "externalToolsModule",
