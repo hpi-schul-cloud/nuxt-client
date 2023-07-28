@@ -158,6 +158,8 @@
 	"components.administration.adminMigrationSection.startWarningCard.disagree": "Переривати",
 	"components.administration.adminMigrationSection.startWarningCard.text": "З початком міграції всі учні та вчителі вашої школи зможуть перейти з системи реєстрації на moin.schule. Користувачі, які змінили систему входу, зможуть увійти лише через moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title": "Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
+	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Показати застарілі облікові записи користувачів",
+	"components.administration.adminMigrationSection.showOutdatedUsers.description": "Застарілі облікові записи студентів і викладачів відображаються у відповідних списках вибору, коли користувачів призначають до класів, курсів і команд.",
 	"components.administration.externalToolsSection.header": "Зовнішні інструменти",
 	"components.administration.externalToolsSection.table.header.status": "статус",
 	"components.administration.externalToolsSection.action.add": "додати інструмент",
