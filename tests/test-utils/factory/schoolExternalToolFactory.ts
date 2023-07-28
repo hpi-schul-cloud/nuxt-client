@@ -7,6 +7,7 @@ import {
 export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 	({ sequence }) => ({
 		id: `schoolExternalTool${sequence}`,
+		schoolId: "schoolId",
 		toolId: "toolId",
 		name: "name",
 		parameters: [],

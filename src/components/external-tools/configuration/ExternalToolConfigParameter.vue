@@ -7,22 +7,22 @@
 			"
 		>
 			<v-text-field
-				v-model="parameter.value"
+				v-model="inputValue"
 				:label="getLabelText()"
 				:hint="parameter.description"
 				persistent-hint
-				:rules="validateParameter(parameter)"
+				:rules="validateParameter(parameter, inputValue)"
 				validate-on-blur
 				:data-testId="parameter.name"
 			></v-text-field>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
 			<v-select
-				v-model="selectItem"
+				v-model="selectedBooleanItem"
 				:label="getLabelText()"
 				:hint="parameter.description"
 				persistent-hint
-				:rules="validateParameter(parameter)"
+				:rules="validateParameter(parameter, inputValue)"
 				:data-testId="parameter.name"
 				:items="booleanSelectItems"
 				item-value="value"
@@ -31,12 +31,12 @@
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">
 			<v-text-field
-				v-model="parameter.value"
+				v-model="inputValue"
 				:label="getLabelText()"
 				:hint="parameter.description"
 				persistent-hint
 				type="number"
-				:rules="validateParameter(parameter)"
+				:rules="validateParameter(parameter, inputValue)"
 				validate-on-blur
 				:data-testId="parameter.name"
 			></v-text-field>
@@ -50,7 +50,14 @@ import {
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { PropType, Ref, defineComponent, ref, watch } from "vue";
+import {
+	computed,
+	defineComponent,
+	PropType,
+	ref,
+	Ref,
+	WritableComputedRef,
+} from "vue";
 import VueI18n from "vue-i18n";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 
@@ -58,15 +65,25 @@ import { useExternalToolValidation } from "./external-tool-validation.composable
 export default defineComponent({
 	name: "ExternalToolConfigParameter",
 	props: {
-		value: {
+		parameter: {
 			type: Object as PropType<ToolParameter>,
 			required: true,
 		},
+		value: {
+			type: String,
+		},
 	},
-	setup(props) {
+	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 
-		const parameter: Ref<ToolParameter> = ref(props.value);
+		const inputValue: WritableComputedRef<string | undefined> = computed({
+			get() {
+				return props.value;
+			},
+			set(value: string | undefined) {
+				emit("input", value);
+			},
+		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values | undefined) => {
@@ -80,16 +97,21 @@ export default defineComponent({
 		const { validateParameter } = useExternalToolValidation(t);
 
 		const getLabelText = (): string => {
-			if (parameter.value.isOptional) {
-				return parameter.value.displayName;
+			if (props.parameter.isOptional) {
+				return props.parameter.displayName;
 			}
-			return `${parameter.value.displayName} *`;
+			return `${props.parameter.displayName} *`;
 		};
 
-		const selectItem: Ref<string | null> = ref(parameter.value.value ?? null);
-		watch(selectItem, () => {
-			parameter.value.value = selectItem.value ?? undefined;
+		const selectedBooleanItem: WritableComputedRef<string | null> = computed({
+			get() {
+				return inputValue.value ?? null;
+			},
+			set(value: string | null) {
+				inputValue.value = value ?? undefined;
+			},
 		});
+
 		const booleanSelectItems: Ref = ref([
 			{
 				text: t("common.words.noChoice"),
@@ -108,11 +130,11 @@ export default defineComponent({
 		const ToolParameterType = toolParameterType;
 
 		return {
-			parameter,
+			inputValue,
 			validateParameter,
 			getLabelText,
 			ToolParameterType,
-			selectItem,
+			selectedBooleanItem,
 			booleanSelectItems,
 		};
 	},

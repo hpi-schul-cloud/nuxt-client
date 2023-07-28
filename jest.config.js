@@ -30,6 +30,8 @@ module.exports = {
 		"<rootDir>/src/plugins/**/*.(js|ts)",
 		"<rootDir>/src/store/**/*.(js|ts)",
 		"<rootDir>/src/utils/**/*.(js|ts)",
+		"<rootDir>/src/composables/**/*.(js|ts)",
+		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
 		// Exclude
 		"!<rootDir>/src/components/base/_globals.js",
 		"!<rootDir>/src/components/icons/**/*",

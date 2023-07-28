@@ -84,30 +84,29 @@ describe("AxiosInstance", () => {
 
 		describe("when response props not set correctly", () => {
 			const setup = () => {
+				mockedIsAxiosError.mockReturnValueOnce(true);
+
 				const data = "NOT_FOUND";
 				const responseError = axiosErrorFactory.build({
 					response: { data },
 				});
-				const expectedPayload = {
-					message: "NOT_FOUND",
-					code: 1,
-					title: "",
-					type: "Unknown error",
-				};
 
 				return {
 					responseError,
-					expectedPayload,
 				};
 			};
 
 			it("should return correctly payload", () => {
-				mockedIsAxiosError.mockReturnValueOnce(true);
-				const { responseError, expectedPayload } = setup();
+				const { responseError } = setup();
 
 				const result = mapAxiosErrorToResponseError(responseError);
 
-				expect(result).toStrictEqual(expectedPayload);
+				expect(result).toStrictEqual({
+					message: "NOT_FOUND",
+					code: 1,
+					title: responseError.response?.statusText,
+					type: "Unknown error",
+				});
 			});
 		});
 
