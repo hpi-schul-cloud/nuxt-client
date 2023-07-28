@@ -30,8 +30,10 @@
 </template>
 
 <script lang="ts">
-import { notifierModule } from "@/store";
+import { useApplicationError } from "@/composables/application-error.composable";
+import { applicationErrorModule, notifierModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
+import { AxiosError, HttpStatusCode } from "axios";
 import { defineComponent, inject, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute } from "vue-router/composables";
@@ -44,6 +46,8 @@ export default defineComponent({
 		H5PEditorComponent,
 	},
 	setup() {
+		const { createApplicationError } = useApplicationError();
+		// Will be replaced with new injection system in another commit
 		const i18n = inject<VueI18n | undefined>("i18n");
 
 		if (!i18n) {
@@ -76,8 +80,7 @@ export default defineComponent({
 					const data = await editorRef.value.save();
 
 					notifierModule.show({
-						// TODO: Success message
-						text: t("common.validation.invalid"),
+						text: t("pages.h5p.api.success.save"),
 						status: "success",
 						timeout: 10000,
 					});
@@ -105,8 +108,17 @@ export default defineComponent({
 			window.close();
 		}
 
-		function loadError() {
-			console.error("TODO: Error handling when player fails to load");
+		function loadError(err: AxiosError) {
+			const statusCode =
+				err.response?.status ?? HttpStatusCode.InternalServerError;
+
+			applicationErrorModule.setError(
+				createApplicationError(
+					statusCode in HttpStatusCode
+						? statusCode
+						: HttpStatusCode.InternalServerError
+				)
+			);
 		}
 
 		return {
