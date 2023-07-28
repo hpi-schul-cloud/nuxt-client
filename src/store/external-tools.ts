@@ -44,6 +44,15 @@ export default class ExternalToolsModule extends VuexModule {
 		this.businessError = businessError;
 	}
 
+	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+			error: undefined,
+		};
+	}
+
 	@Action
 	async loadToolLaunchData(
 		contextExternalToolId: string
