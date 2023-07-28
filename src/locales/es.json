@@ -837,6 +837,7 @@
 	"pages.rooms.index.search.label": "Buscar curso",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.headerSection.archived": "Archivo",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
 	"pages.rooms.tools.outdated": "Herramienta obsoleta",
 	"pages.rooms.tabLabel.toolsOld": "Herramientas",

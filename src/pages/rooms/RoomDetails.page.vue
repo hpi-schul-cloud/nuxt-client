@@ -7,11 +7,11 @@
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
-			<div class="ma-2">
+			<div class="d-flex ma-2">
 				<div class="text-h3 pb-2 course-title">
 					{{ roomData.title }}
 				</div>
-				<div class="course-title pa-2 pb-1">
+				<div>
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
 						nudge-right="120"
@@ -19,6 +19,9 @@
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
+				<v-chip v-if="roomData.isArchived" label small class="mt-1">
+					{{ $t("pages.rooms.headerSection.archived") }}
+				</v-chip>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -520,7 +523,6 @@ export default defineComponent({
 @import "~vuetify/src/styles/styles.sass";
 
 .course-title {
-	display: inline-block;
 	overflow: hidden;
 	white-space: nowrap;
 }
