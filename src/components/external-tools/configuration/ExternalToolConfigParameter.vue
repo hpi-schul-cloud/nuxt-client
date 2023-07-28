@@ -48,14 +48,14 @@
 import {
 	ToolParameter,
 	ToolParameterType as toolParameterType,
-} from "../../../store/external-tool";
-import { I18N_KEY, injectStrict } from "../../../utils/inject";
+} from "@/store/external-tool";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
-	PropType,
-	Ref,
-	defineComponent,
-	ref,
 	computed,
+	defineComponent,
+	PropType,
+	ref,
+	Ref,
 	WritableComputedRef,
 } from "vue";
 import VueI18n from "vue-i18n";
