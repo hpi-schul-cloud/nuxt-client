@@ -16,3 +16,9 @@
     kubeconfig: ~/.kube/config
     namespace: "{{ NAMESPACE }}"
     template: deployment.yml.j2
+
+- name: TldrawService
+  kubernetes.core.k8s:
+    kubeconfig: ~/.kube/config
+    namespace: "{{ NAMESPACE }}"
+    template: svc-tldraw-client.yml.j2
