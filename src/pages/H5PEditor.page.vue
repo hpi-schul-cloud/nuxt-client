@@ -39,6 +39,7 @@ import VueI18n from "vue-i18n";
 import { useRoute } from "vue-router/composables";
 
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -47,8 +48,8 @@ export default defineComponent({
 	},
 	setup() {
 		const { createApplicationError } = useApplicationError();
-		// Will be replaced with new injection system in another commit
-		const i18n = inject<VueI18n | undefined>("i18n");
+
+		const i18n = injectStrict(I18N_KEY);
 
 		if (!i18n) {
 			throw new Error("Injection of dependencies failed");
