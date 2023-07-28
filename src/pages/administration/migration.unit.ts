@@ -64,6 +64,7 @@ const schoolMock = {
 		videoconference: false,
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
+		showOutdatedUsers: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
