@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ TLDRAW_CLIENT_PORT }}
+    - port: {{ PORT_TLDRAW_CLIENT }}
       targetPort: 3046
       protocol: TCP
       name: tldraw-client
