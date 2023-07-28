@@ -137,7 +137,7 @@ export default defineComponent({
 			return {
 				toolbar: {
 					items: toolbarItems[props.mode],
-					shouldNotGroupWhenFull: ungroupToolbarItems.value,
+					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
 				plugins: plugins,
 				heading: {
@@ -266,7 +266,7 @@ export default defineComponent({
 		};
 
 		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
-		const ungroupToolbarItems = computed(() => {
+		const showFullToolbar = computed(() => {
 			return props.mode === "simple" && !isMobile.value;
 		});
 
