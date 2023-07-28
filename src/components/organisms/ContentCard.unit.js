@@ -32,9 +32,7 @@ describe("@/components/organisms/ContentCard", () => {
 		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
 			Resource.preview.url
 		);
-		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
-			"content-thumbnail"
-		);
+		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
 	});
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
@@ -64,18 +62,14 @@ describe("@/components/organisms/ContentCard Collection", () => {
 		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
 			Collection.preview.url
 		);
-		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
-			"content-thumbnail"
-		);
+		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
 	});
 	it("Renders collection icon", () => {
+		const contentTextIcon = wrapper.find(".content__text-icon");
 		expect(wrapper.find(".card-tag").exists()).toBe(true);
-		expect(wrapper.find(".content__text-icon").exists()).toBe(true);
-		expect(wrapper.find(".content__text-icon").attributes("source")).toBe(
-			"custom"
-		);
-		expect(wrapper.find(".content__text-icon").attributes("icon")).toBe(
-			"ic_collection"
+		expect(contentTextIcon.exists()).toBe(true);
+		expect(contentTextIcon.element.innerHTML.includes("$ic_collection")).toBe(
+			true
 		);
 	});
 	it("Renders title of content Card", () => {

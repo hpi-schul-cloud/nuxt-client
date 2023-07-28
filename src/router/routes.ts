@@ -1,5 +1,6 @@
 import { Layouts } from "@/layouts/types";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import {
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
@@ -10,7 +11,7 @@ import {
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
-import { validateQueryParameters } from "./guards/validate-query-parameters.guard";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -50,7 +51,7 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
-				"@/pages/administration/external-tool/ExternalToolConfigOverview.page.vue"
+				"@/pages/administration/external-tool/ExternalToolConfiguration.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
@@ -143,15 +144,6 @@ export const routes: Array<RouteConfig> = [
 		name: "imprint",
 		meta: {
 			isPublic: true,
-		},
-	},
-	{
-		path: "/login-instances",
-		component: () => import("@/pages/LoginInstances.page.vue"),
-		name: "login-instances",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	{
@@ -270,6 +262,26 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("../pages/tasks/TaskCard.page.vue"),
 		name: "beta-task-view-edit",
 		beforeEnter: createPermissionGuard(["task_card_view"]),
+	},
+	{
+		path: `/tools/context/tool-configuration`,
+		component: () =>
+			import(
+				"@/pages/context-external-tool/ContextExternalToolConfiguration.page.vue"
+			),
+		name: "context-external-tool-configuration",
+		beforeEnter: Multiguard([
+			createPermissionGuard(["context_tool_admin"]),
+			validateQueryParameters({
+				contextId: isMongoId,
+				contextType: (value: any) =>
+					Object.values(ToolContextType).includes(value),
+			}),
+		]),
+		props: (route: Route) => ({
+			contextId: route.query.contextId,
+			contextType: route.query.contextType,
+		}),
 	},
 	{
 		// deprecated?

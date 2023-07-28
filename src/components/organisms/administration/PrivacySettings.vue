@@ -1,23 +1,19 @@
 <template>
-	<section
-		v-if="
-			toggleStudentVisibilityEnabled ||
-			toggleStudentLernstoreViewEnabled ||
-			rocketChatEnabled ||
-			videoConferenceEnabled
-		"
-	>
+	<section>
 		<h3 class="text-h6">
 			{{ $t("pages.administration.school.index.privacySettings") }}
 		</h3>
-		<v-row
-			v-if="toggleStudentVisibilityEnabled"
-			class="student-visibility-switch"
-		>
+		<v-row class="student-visibility-switch">
 			<v-col>
 				<v-custom-switch
+					:disabled="!isTeacherStudentVisibilityConfigurable"
 					:value="studentVisibility"
 					:label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.studentVisibility'
+						)
+					"
+					:aria-label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
@@ -27,11 +23,18 @@
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
-				></v-custom-switch>
-				<p class="body-2 mb-0">
+				/>
+				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.studentVisibility"
+						)
+					}}
+				</p>
+				<p v-else class="body-2 mb-0">
+					{{
+						$t(
+							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
 						)
 					}}
 				</p>
@@ -46,12 +49,17 @@
 							'pages.administration.school.index.privacySettings.labels.lernStore'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.lernStore'
+						)
+					"
 					class="ml-1 mt-0"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -70,12 +78,17 @@
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.chatFunction'
+						)
+					"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
 					@input-changed="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -94,13 +107,18 @@
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
 					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.videoConference'
+						)
+					"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
 					@input-changed="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
-				></v-custom-switch>
+				/>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -134,14 +152,18 @@ export default {
 	computed: {
 		toggleStudentLernstoreViewEnabled: () =>
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
-		toggleStudentVisibilityEnabled: () =>
+		isTeacherStudentVisibilityConfigurable: () =>
 			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		studentVisibility() {
-			return this.permissions.teacher
-				? this.permissions.teacher.STUDENT_LIST
-				: false;
+			if (this.isTeacherStudentVisibilityConfigurable) {
+				return this.permissions?.teacher
+					? this.permissions.teacher.STUDENT_LIST
+					: false;
+			} else {
+				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
+			}
 		},
 		lernStoreVisibility() {
 			return this.permissions.student

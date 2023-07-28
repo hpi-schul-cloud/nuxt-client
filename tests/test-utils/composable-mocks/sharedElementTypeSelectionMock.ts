@@ -1,12 +1,12 @@
 import { useSharedElementTypeSelection } from "@/components/feature-board/shared/SharedElementTypeSelection.composable";
-import { ref } from "vue";
 import { jest } from "@jest/globals";
+import { Ref, ref } from "vue";
 
 interface Props {
 	closeDialogMock?: jest.Mock;
 }
 
-export const setupSharedElementTypeSelectionMock = (props: Props) => {
+export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const { closeDialogMock } = props;
 	const mockedSharedElementTypeSelection = jest.mocked(
 		useSharedElementTypeSelection
@@ -15,7 +15,14 @@ export const setupSharedElementTypeSelectionMock = (props: Props) => {
 	const closeDialog = closeDialogMock ?? jest.fn();
 	const isDialogOpen = ref(false);
 
-	const elementTypeOptions = ref();
+	const elementTypeOptions: Ref<
+		{
+			icon: string;
+			label: string;
+			action: () => void;
+			testId: string;
+		}[]
+	> = ref([]);
 
 	const mocks = {
 		closeDialog,

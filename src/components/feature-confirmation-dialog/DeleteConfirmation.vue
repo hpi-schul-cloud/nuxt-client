@@ -7,7 +7,7 @@
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
 	>
-		<h2 slot="title" class="text-h4 my-2">
+		<h2 slot="title" class="text-h4 my-2 text-break-word">
 			{{ message }}
 		</h2>
 	</vCustomDialog>
@@ -44,3 +44,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

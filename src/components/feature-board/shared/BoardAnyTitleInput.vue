@@ -1,7 +1,6 @@
 <template>
-	<div class="d-flex flex-grow-1">
+	<div>
 		<VTextarea
-			v-if="isEditMode"
 			hide-details="auto"
 			v-model="modelValue"
 			solo
@@ -9,31 +8,33 @@
 			:rows="1"
 			auto-grow
 			flat
-			class="ml-n3 mb-0 w-full"
-			:placeholder="$t('common.labels.title').toString()"
+			class="mx-n3 mb-n2"
+			:placeholder="placeholder"
 			background-color="transparent"
-			tabindex="0"
-			:autofocus="true"
-		></VTextarea>
-		<div
-			v-else-if="value && value !== ''"
-			:aria-level="ariaLevel"
+			ref="titleInput"
+			:readonly="!isEditMode"
 			role="heading"
-			class="heading"
-		>
-			{{ value }}
-		</div>
-		<div v-else class="heading blue-grey--text darken-1">
-			{{ placeholder }}
-		</div>
+			:aria-level="ariaLevel"
+			@keydown.enter="onEnter"
+			:tabindex="isEditMode ? 0 : -1"
+		></VTextarea>
 	</div>
 </template>
 
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, PropType } from "vue";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import {
+	computed,
+	defineComponent,
+	nextTick,
+	onMounted,
+	PropType,
+	ref,
+	watch,
+} from "vue";
+import { VTextarea } from "vuetify/lib";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -55,16 +56,51 @@ export default defineComponent({
 			default: "",
 			required: false,
 		},
+		isFocused: {
+			type: Boolean,
+		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
+		const titleInput = ref<InstanceType<typeof VTextarea> | null>(null);
 
-		useInlineEditInteractionHandler(() => {
-			if (!hasEditPermission) return;
-			document.getSelection()?.collapseToEnd();
+		useInlineEditInteractionHandler(async () => {
+			setFocusOnEdit();
+			await nextTick();
 		});
+		const setFocusOnEdit = () => {
+			if (!hasEditPermission) return;
+			if (!textarea.value) return;
+			textarea.value.focus();
+		};
+
+		const textarea = computed(() => {
+			if (titleInput.value === null) return null;
+			return titleInput.value.$refs.input as HTMLTextAreaElement;
+		});
+
+		// useBoardFocusHandler("klasdfhasdklf", textarea, setFocusOnEdit);
+
+		onMounted(() => {
+			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+		});
+
+		watch(
+			() => props.isEditMode,
+			async (newVal, oldVal) => {
+				if (props.scope !== "column" && !props.isFocused) return;
+				if (newVal && !oldVal) {
+					await nextTick();
+					setFocusOnEdit();
+				}
+			}
+		);
+
+		const hasValue = computed<boolean>(
+			() => props.value !== "" && !!props.value
+		);
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
@@ -92,27 +128,59 @@ export default defineComponent({
 			}
 		});
 
+		const titleLength = () => {
+			if (!textarea.value) return;
+			return textarea.value.value.length;
+		};
+
+		const onEnter = ($event: KeyboardEvent) => {
+			if (props.scope !== "card") return;
+			if (!textarea.value) return;
+
+			if (titleLength() === textarea.value.selectionStart) {
+				$event.preventDefault();
+				emit("enter");
+			}
+		};
+
 		return {
 			ariaLevel,
 			fontSize,
 			modelValue,
+			titleInput,
+			hasValue,
+			onEnter,
+			titleLength,
 		};
 	},
 });
 </script>
 
 <style scoped>
-:deep(textarea) {
-	font-size: v-bind(fontSize);
-}
-.heading {
-	font-size: v-bind(fontSize);
-	margin-top: 10px;
-	letter-spacing: normal;
-	padding-right: 15px;
+:deep(div.v-input__slot) {
+	padding: 0;
+	font-family: var(--font-accent);
 }
 
-.heading:focus {
-	outline: none;
+:deep(textarea) {
+	font-size: var(--heading-5);
+	background: transparent !important;
+}
+:deep(input) {
+	font-size: v-bind(fontSize);
+}
+:deep(textarea[readonly]) {
+	cursor: pointer;
+}
+
+/** Edge */
+:deep(textarea)::-ms-input-placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
+}
+/** Other common browsers */
+:deep(textarea)::placeholder {
+	color: var(--v-black) !important;
+	opacity: 1;
 }
 </style>

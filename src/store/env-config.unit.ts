@@ -26,6 +26,8 @@ const mockEnvs: Envs = {
 	FEATURE_CONSENT_NECESSARY: true,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
 	MIGRATION_END_GRACE_PERIOD_MS: 1,
+	FILES_STORAGE__MAX_FILE_SIZE: 0,
+	FEATURE_SHOW_OUTDATED_USERS: true,
 };
 
 const URL = "/v1/config/app/public";
@@ -208,6 +210,12 @@ describe("env-config module", () => {
 			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
 		});
 
+		it("getMaxFileSize should get 0 if FILES_STORAGE__MAX_FILE_SIZE is not defined", () => {
+			const envConfigModule = new EnvConfigModule({});
+			expect(envConfigModule.env.FILES_STORAGE__MAX_FILE_SIZE).toBe(0);
+			expect(envConfigModule.getMaxFileSize).toStrictEqual(0);
+		});
+
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
@@ -221,6 +229,23 @@ describe("env-config module", () => {
 			expect(envConfigModule.getMigrationEndGracePeriod).toStrictEqual(
 				mockEnvs.MIGRATION_END_GRACE_PERIOD_MS
 			);
+		});
+
+		it("getShowOutdatedUsers should get FEATURE_SHOW_OUTDATED_USERS", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getShowOutdatedUsers).toStrictEqual(
+				mockEnvs.FEATURE_SHOW_OUTDATED_USERS
+			);
+		});
+
+		it("getShowOutdatedUsers should not get FEATURE_SHOW_OUTDATED_USERS", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+			delete envConfigModule.env.FEATURE_SHOW_OUTDATED_USERS;
+
+			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
 		});
 	});
 });

@@ -2,11 +2,14 @@
 	<div class="cursor-text">
 		<ck-editor
 			v-model="modelValue"
-			@focus="onFocus"
+			:autofocus="autofocus"
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
 			mode="simple"
+			@focus="onFocus"
+			@blur="onBlur"
+			@keyboard:delete="onDelete"
 		/>
 	</div>
 </template>
@@ -28,7 +31,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value"],
+	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
@@ -44,7 +47,11 @@ export default defineComponent({
 			}
 		};
 
-		return { modelValue, onFocus };
+		const onBlur = () => emit("blur");
+
+		const onDelete = () => emit("delete:element");
+
+		return { modelValue, onFocus, onDelete, onBlur };
 	},
 });
 </script>

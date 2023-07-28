@@ -1,4 +1,5 @@
 import customIcons from "@/components/icons/custom";
+import materialIcons from "@/components/icons/material";
 
 export default {
 	theme: {
@@ -11,6 +12,7 @@ export default {
 				primary: {
 					base: "#9e292b",
 					darken1: "#800416",
+					lighten: "#f5eaea",
 				},
 				secondary: {
 					base: "#54616e",
@@ -36,6 +38,7 @@ export default {
 				},
 				warning: {
 					base: "#ff8311",
+					lighten1: "#fff0e2",
 				},
 				error: {
 					base: "#ff1134",
@@ -50,9 +53,8 @@ export default {
 	icons: {
 		iconfont: "mdiSvg",
 		values: {
-			// NUXT_REMOVAL Do we really have to register all these icons
-			// This here is only to supplement the Vuetify Icons.
 			...customIcons,
+			...materialIcons,
 		},
 	},
 };

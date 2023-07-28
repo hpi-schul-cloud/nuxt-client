@@ -6,19 +6,21 @@
 		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
-		@input="handleInput"
-		@focus="handleFocus"
 		@blur="handleBlur"
+		@focus="handleFocus"
+		@input="handleInput"
+		@ready="handleReady"
 	/>
 </template>
 
 <script>
-import { defineComponent, ref, inject, watch } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
+import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+import { defineComponent, ref, watch } from "vue";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -26,7 +28,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["input", "focus", "blur"],
+	emits: ["ready", "focus", "input", "blur", "keyboard:delete"],
 	props: {
 		value: {
 			type: String,
@@ -44,54 +46,59 @@ export default defineComponent({
 		disabled: {
 			type: Boolean,
 		},
+		autofocus: {
+			type: Boolean,
+		},
 	},
 	setup(props, { emit }) {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 
 		const ck = ref(null);
 		const content = ref(props.value);
 		const language = i18n.locale;
+		const charCount = ref(0);
 
-		const toolbarItems = [];
-		toolbarItems["simple"] = [
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"fontBackgroundColor",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"removeFormat",
-		];
-		toolbarItems["regular"] = [
-			"undo",
-			"redo",
-			"|",
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"underline",
-			"strikethrough",
-			"highlight",
-			"fontBackgroundColor",
-			"code",
-			"superscript",
-			"subscript",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"math",
-			"horizontalLine",
-			"|",
-			"blockQuote",
-			"insertTable",
-			"specialCharacters",
-			"removeFormat",
-		];
+		const toolbarItems = {
+			simple: [
+				"heading",
+				"|",
+				"bold",
+				"italic",
+				"highlight",
+				"|",
+				"link",
+				"bulletedList",
+				"numberedList",
+				"removeFormat",
+			],
+			regular: [
+				"undo",
+				"redo",
+				"|",
+				"heading",
+				"|",
+				"bold",
+				"italic",
+				"underline",
+				"strikethrough",
+				"highlight",
+				"fontBackgroundColor",
+				"code",
+				"superscript",
+				"subscript",
+				"|",
+				"link",
+				"bulletedList",
+				"numberedList",
+				"math",
+				"horizontalLine",
+				"|",
+				"blockQuote",
+				"insertTable",
+				"specialCharacters",
+				"removeFormat",
+			],
+		};
 
 		const plugins = [
 			"Autoformat",
@@ -99,7 +106,6 @@ export default defineComponent({
 			"BlockQuote",
 			"Bold",
 			"Code",
-			"Font",
 			"Heading",
 			"Highlight",
 			"HorizontalLine",
@@ -115,7 +121,7 @@ export default defineComponent({
 			"Superscript",
 			"Table",
 			"TableToolbar",
-			"Underline",
+			"WordCount",
 		];
 
 		watch(
@@ -151,20 +157,16 @@ export default defineComponent({
 					},
 				],
 			},
+			link: {
+				defaultProtocol: "//",
+			},
 			highlight: {
 				options: [
 					{
-						model: "yellowMarker",
-						class: "marker-yellow",
-						title: "Yellow Marker",
-						color: "var(--ck-highlight-marker-yellow)",
-						type: "marker",
-					},
-					{
-						model: "greenMarker",
-						class: "marker-green",
-						title: "Green marker",
-						color: "var(--ck-highlight-marker-green)",
+						model: "dullPinkMarker",
+						class: "marker-dull-pink",
+						title: i18n.t("components.editor.highlight.dullPink").toString(),
+						color: "var(--ck-highlight-marker-dull-pink)",
 						type: "marker",
 					},
 					{
@@ -175,53 +177,53 @@ export default defineComponent({
 						type: "marker",
 					},
 					{
+						model: "dullYellowMarker",
+						class: "marker-dull-yellow",
+						title: i18n.t("components.editor.highlight.dullYellow").toString(),
+						color: "var(--ck-highlight-marker-dull-yellow)",
+						type: "marker",
+					},
+					{
+						model: "yellowMarker",
+						class: "marker-yellow",
+						title: "Yellow marker",
+						color: "var(--ck-highlight-marker-yellow)",
+						type: "marker",
+					},
+					{
+						model: "dullBlueMarker",
+						class: "marker-dull-blue",
+						title: i18n.t("components.editor.highlight.dullBlue").toString(),
+						color: "var(--ck-highlight-marker-dull-blue)",
+						type: "marker",
+					},
+					{
 						model: "blueMarker",
 						class: "marker-blue",
 						title: "Blue marker",
 						color: "var(--ck-highlight-marker-blue)",
 						type: "marker",
 					},
+					{
+						model: "dullGreenMarker",
+						class: "marker-dull-green",
+						title: i18n.t("components.editor.highlight.dullGreen").toString(),
+						color: "var(--ck-highlight-marker-dull-green)",
+						type: "marker",
+					},
+					{
+						model: "greenMarker",
+						class: "marker-green",
+						title: "Green marker",
+						color: "var(--ck-highlight-marker-green)",
+						type: "marker",
+					},
 				],
 			},
-			fontBackgroundColor: {
-				colors: [
-					{
-						color: "#D4D6D9",
-					},
-					{
-						color: "#DBD4D1",
-					},
-					{
-						color: "#F3D9C3",
-					},
-					{
-						color: "#DDDBC8",
-					},
-					{
-						color: "#D8E3CE",
-					},
-					{
-						color: "#C3E1DE",
-					},
-					{
-						color: "#C3E0F2",
-					},
-					{
-						color: "#CDD3F6",
-					},
-					{
-						color: "#E2CBE6",
-					},
-					{
-						color: "#EEC3F5",
-					},
-					{
-						color: "#F2D0DB",
-					},
-					{
-						color: "#EEC3C3",
-					},
-				],
+			wordCount: {
+				onUpdate: (stats) => {
+					charCount.value = stats.characters;
+				},
 			},
 			language: language,
 			placeholder: props.placeholder,
@@ -229,10 +231,31 @@ export default defineComponent({
 
 		const handleInput = () => emit("input", content.value);
 		const handleFocus = () => emit("focus");
+		const handleBlur = () => emit("blur");
 
-		const blurDelay = 200;
-		const handleBlur = () => {
-			setTimeout(() => emit("blur"), blurDelay);
+		const handleDelete = () => {
+			if (charCount.value === 0) {
+				emit("keyboard:delete");
+			}
+		};
+
+		const handleReady = (editor) => {
+			emit("ready");
+
+			if (props.autofocus) {
+				editor.editing.view.focus();
+			}
+
+			// attach additional event listener not provided by vue wrapper itself
+			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
+			editor.editing.view.document.on("keydown", (evt, data) => {
+				if (
+					data.domEvent.key === "Backspace" ||
+					data.domEvent.key === "Delete"
+				) {
+					handleDelete();
+				}
+			});
 		};
 
 		return {
@@ -240,9 +263,12 @@ export default defineComponent({
 			content,
 			CustomCKEditor,
 			config,
-			handleInput,
-			handleFocus,
+			charCount,
 			handleBlur,
+			handleFocus,
+			handleInput,
+			handleDelete,
+			handleReady,
 		};
 	},
 });
@@ -250,8 +276,30 @@ export default defineComponent({
 
 <style lang="scss">
 @import "katex/dist/katex.min.css";
+@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
-// TODO move all style to ckbuild
+:root {
+	--ck-highlight-marker-dull-blue: hsl(203, 64%, 86%);
+	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
+	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
+	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
+}
+
+.ck-content {
+	.marker-dull-pink {
+		background-color: var(--ck-highlight-marker-dull-pink);
+	}
+	.marker-dull-yellow {
+		background-color: var(--ck-highlight-marker-dull-yellow);
+	}
+	.marker-dull-blue {
+		background-color: var(--ck-highlight-marker-dull-blue);
+	}
+	.marker-dull-green {
+		background-color: var(--ck-highlight-marker-dull-green);
+	}
+}
+
 .ck-blurred {
 	border: none !important;
 }

@@ -13,7 +13,7 @@
 			class="badge-component avatar-badge"
 			bordered
 			color="var(--v-primary-base)"
-			icon="mdi-lock"
+			icon="$mdiLock"
 			overlap
 			:value="hasNotifications"
 		>

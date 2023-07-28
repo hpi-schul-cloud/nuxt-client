@@ -1,42 +1,28 @@
 import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
-import { reactive, ref } from "vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { jest } from "@jest/globals";
-import { BusinessError } from "@/store/types/commons";
+import { ref } from "vue";
 
 interface Props {
-	uploadMock?: jest.Mock;
-	downloadMock?: jest.Mock;
-	fetchFilesMock?: jest.Mock;
+	fetchFileMock?: jest.Mock;
 	renameMock?: jest.Mock;
-	getFileMock?: jest.Mock;
+	uploadMock?: jest.Mock;
 }
 
-export const setupFileStorageApiMock = (props: Props) => {
-	const { downloadMock, fetchFilesMock, renameMock, uploadMock, getFileMock } =
-		props;
+export const setupFileStorageApiMock = (props: Props = {}) => {
+	const { fetchFileMock, renameMock, uploadMock } = props;
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
-	const download = downloadMock ?? jest.fn();
-	const fetchFiles = fetchFilesMock ?? jest.fn();
+	const fileRecord = ref<FileRecordResponse>();
+
+	const fetchFile = fetchFileMock ?? jest.fn();
 	const rename = renameMock ?? jest.fn();
 	const upload = uploadMock ?? jest.fn();
-	const getFile = getFileMock ?? jest.fn();
-
-	const businessError = ref<BusinessError>({
-		statusCode: "",
-		message: "",
-	});
-	const fileRecords = reactive({});
-	const newFileForParent = ref("");
 
 	const mocks = {
-		download,
-		fetchFiles,
+		fetchFile,
 		rename,
 		upload,
-		getFile,
-		businessError,
-		fileRecords,
-		newFileForParent,
+		fileRecord,
 	};
 
 	mockedFileStorageApi.mockReturnValue(mocks);

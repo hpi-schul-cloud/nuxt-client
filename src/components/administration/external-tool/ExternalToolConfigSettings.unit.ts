@@ -12,6 +12,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
+import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigSettings", () => {
 	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
@@ -33,8 +34,8 @@ describe("ExternalToolConfigSettings", () => {
 					i18n: true,
 				}),
 				provide: {
-					i18n: { t: (key: string) => key },
-					externalToolsModule,
+					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 				propsData: {
 					value: template,
@@ -53,29 +54,6 @@ describe("ExternalToolConfigSettings", () => {
 			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(
 				true
 			);
-		});
-	});
-
-	describe("inject", () => {
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					shallowMount(ExternalToolConfigSettings as MountOptions<Vue>);
-					// eslint-disable-next-line no-empty
-				} catch (e) {}
-
-				expect(consoleErrorSpy).toHaveBeenCalledWith(
-					expect.stringMatching(
-						/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-					)
-				);
-
-				consoleErrorSpy.mockRestore();
-			});
 		});
 	});
 

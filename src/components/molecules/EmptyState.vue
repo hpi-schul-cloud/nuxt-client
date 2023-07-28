@@ -1,7 +1,7 @@
 <template>
 	<div class="base">
 		<div class="wrapper">
-			<div class="img-container" role="presentation">
+			<div class="img-container" role="status">
 				<template v-if="image === 'emptystate-graph'">
 					<svg
 						height="200"

@@ -1,0 +1,278 @@
+<template>
+	<div>
+		<room-external-tool-card
+			v-for="(tool, index) in tools"
+			size="360"
+			:key="index"
+			class="mb-4"
+			:tool="tool"
+			:can-edit="canEdit"
+			@delete="onOpenDeleteDialog"
+			@edit="onEditTool"
+			@click="onClickTool"
+			:data-testid="`external-tool-card-${index}`"
+		></room-external-tool-card>
+
+		<v-custom-dialog
+			:is-open="isErrorDialogOpen"
+			:has-buttons="true"
+			:buttons="['close']"
+			data-testId="error-dialog"
+			@dialog-closed="onCloseErrorDialog"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{
+					t("pages.rooms.tools.outdatedDialog.title", {
+						toolName: selectedItemName,
+					})
+				}}
+			</h2>
+			<template v-slot:content>
+				<RenderHTML
+					:html="errorDialogText"
+					component="p"
+					class="text-md mt-2"
+				></RenderHTML>
+			</template>
+		</v-custom-dialog>
+
+		<v-dialog
+			v-model="isDeleteDialogOpen"
+			max-width="360"
+			data-testId="delete-dialog"
+		>
+			<v-card :ripple="false">
+				<v-card-title>
+					<h2 class="text-h4 my-2">
+						{{ t("pages.rooms.tools.deleteDialog.title") }}
+					</h2>
+				</v-card-title>
+				<v-card-text class="text--primary">
+					<RenderHTML
+						class="text-md mt-2"
+						:html="
+							t('pages.rooms.tools.deleteDialog.content', {
+								itemName: selectedItemName,
+							})
+						"
+						component="p"
+					/>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						data-testId="dialog-cancel"
+						depressed
+						text
+						@click="onCloseDeleteDialog"
+					>
+						{{ t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						data-testId="dialog-confirm"
+						class="px-6"
+						color="primary"
+						depressed
+						@click="onDeleteTool"
+					>
+						{{ t("common.actions.confirm") }}
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+	</div>
+</template>
+
+<script lang="ts">
+import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
+import {
+	ToolLaunchRequestResponse,
+	ToolLaunchRequestResponseMethodEnum,
+} from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import ExternalToolsModule from "@/store/external-tools";
+import {
+	AUTH_MODULE_KEY,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	PropType,
+	ref,
+	Ref,
+} from "vue";
+import VueI18n from "vue-i18n";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+
+export default defineComponent({
+	name: "RoomExternalToolsSection",
+	components: {
+		VCustomDialog,
+		RoomExternalToolCard,
+		RenderHTML,
+	},
+	props: {
+		tools: {
+			type: Array as PropType<ExternalToolDisplayData[]>,
+			required: true,
+		},
+	},
+	setup() {
+		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const i18n: VueI18n = injectStrict(I18N_KEY);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
+
+		const isDeleteDialogOpen: Ref<boolean> = ref(false);
+
+		const isErrorDialogOpen: Ref<boolean> = ref(false);
+
+		const selectedItem: Ref<ExternalToolDisplayData | undefined> = ref();
+
+		const selectedItemName: ComputedRef<string> = computed(
+			() => selectedItem.value?.name || "???"
+		);
+
+		const canEdit: ComputedRef<boolean> = computed(() =>
+			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
+		);
+
+		const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
+			selectedItem.value = tool;
+			isDeleteDialogOpen.value = true;
+		};
+
+		const onCloseDeleteDialog = () => {
+			selectedItem.value = undefined;
+			isDeleteDialogOpen.value = false;
+		};
+
+		const onDeleteTool = async () => {
+			if (selectedItem.value) {
+				await contextExternalToolsModule.deleteContextExternalTool(
+					selectedItem.value.id
+				);
+			}
+
+			onCloseDeleteDialog();
+		};
+
+		const onCloseErrorDialog = () => {
+			isErrorDialogOpen.value = false;
+
+			externalToolsModule.resetBusinessError();
+		};
+
+		const onEditTool = () => {
+			// TODO N21-XXXX implement onEditTool
+		};
+
+		const onClickTool = async (tool: ExternalToolDisplayData) => {
+			const launchToolResponse: ToolLaunchRequestResponse | undefined =
+				await externalToolsModule.loadToolLaunchData(tool.id);
+
+			switch (launchToolResponse?.method) {
+				case ToolLaunchRequestResponseMethodEnum.Get:
+					handleGetLaunchRequest(launchToolResponse);
+					break;
+				case ToolLaunchRequestResponseMethodEnum.Post:
+					handlePostLaunchRequest(launchToolResponse);
+					break;
+				default:
+					handleLaunchError(tool);
+					break;
+			}
+		};
+
+		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+			if (toolLaunch.openNewTab) {
+				window.open(toolLaunch.url, "_blank");
+				return;
+			}
+			window.location.href = toolLaunch.url;
+		};
+
+		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+			const form: HTMLFormElement = document.createElement("form");
+			form.method = "POST";
+			form.action = toolLaunch.url;
+			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
+
+			const payload = JSON.parse(toolLaunch.payload || "{}");
+
+			for (const key in payload) {
+				if (Object.prototype.hasOwnProperty.call(payload, key)) {
+					const hiddenField = document.createElement("input");
+					hiddenField.type = "hidden";
+					hiddenField.name = key;
+					hiddenField.value = payload[key];
+
+					form.appendChild(hiddenField);
+				}
+			}
+
+			document.body.appendChild(form);
+			form.submit();
+		};
+
+		const handleLaunchError = (tool: ExternalToolDisplayData) => {
+			const businessErrorMessage = externalToolsModule.getBusinessError.message;
+
+			if (
+				["TOOL_STATUS_OUTDATED", "MISSING_TOOL_PARAMETER_VALUE"].some(
+					(keyword) => businessErrorMessage.includes(keyword)
+				)
+			) {
+				selectedItem.value = tool;
+				isErrorDialogOpen.value = true;
+			}
+		};
+
+		const errorDialogText: ComputedRef<string> = computed(() => {
+			if (authModule.getUserRoles.includes("teacher")) {
+				return t("pages.rooms.tools.outdatedDialog.content.teacher");
+			}
+
+			return t("pages.rooms.tools.outdatedDialog.content.student");
+		});
+
+		return {
+			t,
+			canEdit,
+			selectedItem,
+			selectedItemName,
+			isDeleteDialogOpen,
+			onOpenDeleteDialog,
+			onCloseDeleteDialog,
+			onDeleteTool,
+			onClickTool,
+			onEditTool,
+			isErrorDialogOpen,
+			onCloseErrorDialog,
+			errorDialogText,
+		};
+	},
+});
+</script>
+
+<style lang="scss" scoped>
+.text-break-word {
+	word-break: break-word;
+}
+</style>

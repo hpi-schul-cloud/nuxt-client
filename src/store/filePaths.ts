@@ -17,6 +17,8 @@ const specificFiles = {
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
+const termsOfUseSchoolThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+
 const globalFiles = {
 	BeschreibungDerSchulCloud: "Dokumente/Beschreibung-der-HPI-Schul-Cloud.pdf",
 	TechnischerBericht2019:
@@ -109,10 +111,13 @@ export default class FilePathsModule extends VuexModule {
 	@Action
 	init() {
 		try {
+			const theme = envConfigModule.getTheme;
+			if (theme === "thr") {
+				specificFiles.termsOfUseSchool = termsOfUseSchoolThr;
+			}
 			const baseDir =
 				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
 				"https://s3.hidrive.strato.com/cloud-instances/";
-			const theme = envConfigModule.getEnv.SC_THEME;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			this.setDocumentBaseDir({ baseDir, theme });

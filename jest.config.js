@@ -11,7 +11,13 @@ module.exports = {
 
 	moduleNameMapper: {
 		"^axios$": require.resolve("axios"),
+		"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+			"<rootDir>/tests/test-utils/mediaFileMock.js",
+		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@@/(.*)$": "<rootDir>/$1",
+		"^@boardShared/(.*)$": "<rootDir>/src/components/feature-board/shared/$1",
+		"^@boardState/(.*)$": "<rootDir>/src/components/feature-board/state/$1",
+		"^@boardTypes/(.*)$": "<rootDir>/src/components/feature-board/types/$1",
 	},
 
 	setupFiles: ["./tests/unit/setup.js"],
@@ -21,9 +27,9 @@ module.exports = {
 		"<rootDir>/src/components/**/*.{js,ts,vue}",
 		"<rootDir>/src/pages/**/*.{js,vue}",
 		"<rootDir>/src/mixins/**/*.js",
-		"<rootDir>/src/plugins/**/*.js",
+		"<rootDir>/src/plugins/**/*.(js|ts)",
 		"<rootDir>/src/store/**/*.(js|ts)",
-		"<rootDir>/src/utils/**/*.js",
+		"<rootDir>/src/utils/**/*.(js|ts)",
 		// Exclude
 		"!<rootDir>/src/components/base/_globals.js",
 		"!<rootDir>/src/components/icons/**/*",
@@ -31,7 +37,6 @@ module.exports = {
 		"!<rootDir>/src/pages/Imprint.page.vue",
 		"!<rootDir>/src/pages/LernStoreDetails.page.vue",
 		"!<rootDir>/src/pages/LernStoreOverview.page.vue",
-		"!<rootDir>/src/pages/LoginInstances.page.vue",
 		"!<rootDir>/src/pages/NewsCreate.page.vue",
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",

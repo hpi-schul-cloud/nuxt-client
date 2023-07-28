@@ -1,9 +1,20 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
-import * as fileHelper from "@/utils/fileHelper";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStorageFactoryMock";
+import { setupFileStorageNotifier } from "@@/tests/test-utils/composable-mocks/fileStorageNotifier";
+import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
+import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { useFileStorageApi } from "./FileStorageApi.composable";
+import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+jest.mock("./FileStorageNotifications.composable");
+
+jest.mock("@/utils/helpers");
+
+jest.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = jest.mocked(
+	mapAxiosErrorToResponseError
+);
 
 jest.mock("@/store/store-accessor", () => ({
 	authModule: {
@@ -11,14 +22,27 @@ jest.mock("@/store/store-accessor", () => ({
 	},
 }));
 
-const { fileApiFactory } = setupFileStorageFactoryMock();
+const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
+	const expectedPayload = apiResponseErrorFactory.build({
+		message,
+		code,
+	});
+	const responseError = axiosErrorFactory.build({
+		response: { data: expectedPayload },
+	});
+
+	return {
+		responseError,
+		expectedPayload,
+	};
+};
 
 describe("FileStorageApi Composable", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
-	describe("fetchFiles", () => {
+	describe("fetchFile", () => {
 		describe("when file api returns list successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
@@ -30,17 +54,25 @@ describe("FileStorageApi Composable", () => {
 				const response = {
 					data: { data: [fileRecordResponse] },
 				};
+				const listMock = jest.fn().mockResolvedValueOnce(response);
+				const { fileApiFactory } = setupFileStorageFactoryMock({ listMock });
+				const { showFileTooBigError } = setupFileStorageNotifier();
 
-				fileApiFactory.list.mockImplementationOnce(() => response);
-
-				return { parentId, parentType, fileRecordResponse };
+				return {
+					parentId,
+					parentType,
+					fileRecordResponse,
+					response,
+					fileApiFactory,
+					showFileTooBigError,
+				};
 			};
 
 			it("should call FileApiFactory.list", async () => {
-				const { parentId, parentType } = setup();
-				const { fetchFiles } = useFileStorageApi();
+				const { parentId, parentType, fileApiFactory } = setup();
+				const { fetchFile } = useFileStorageApi(parentId, parentType);
 
-				await fetchFiles(parentId, parentType);
+				await fetchFile();
 
 				expect(fileApiFactory.list).toBeCalledWith(
 					"schoolId",
@@ -49,40 +81,78 @@ describe("FileStorageApi Composable", () => {
 				);
 			});
 
-			it("should set files", async () => {
-				const { parentId, parentType, fileRecordResponse } = setup();
-				const { fetchFiles, getFile } = useFileStorageApi();
+			it("should set filerecord", async () => {
+				const { parentId, parentType, response } = setup();
+				const { fetchFile, fileRecord } = useFileStorageApi(
+					parentId,
+					parentType
+				);
 
-				await fetchFiles(parentId, parentType);
+				await fetchFile();
 
-				expect(getFile(parentId)).toBe(fileRecordResponse);
+				expect(fileRecord.value).toBe(response.data.data[0]);
 			});
 		});
 
 		describe("when file api returns error", () => {
-			const setup = () => {
+			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const error = { message: "WRONG ID", statusCode: "400" };
 
-				fileApiFactory.list.mockRejectedValueOnce(error);
+				const { responseError, expectedPayload } = setupErrorResponse(message);
 
-				return { parentId, parentType, error };
+				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
+				const listMock = jest.fn().mockRejectedValue(responseError);
+
+				setupFileStorageFactoryMock({ listMock });
+
+				const {
+					showInternalServerError,
+					showUnauthorizedError,
+					showForbiddenError,
+				} = setupFileStorageNotifier();
+
+				return {
+					parentId,
+					parentType,
+					responseError,
+					showInternalServerError,
+					showUnauthorizedError,
+					showForbiddenError,
+				};
 			};
 
-			it("should set BusinessError", async () => {
-				const { error, parentId, parentType } = setup();
-				const { fetchFiles, businessError } = useFileStorageApi();
+			it("should call showUnauthorizedError and pass error", async () => {
+				const { parentId, parentType, showUnauthorizedError, responseError } =
+					setup(ErrorType.Unauthorized);
+				const { fetchFile } = useFileStorageApi(parentId, parentType);
+				await expect(fetchFile()).rejects.toBe(responseError);
 
-				await fetchFiles(parentId, parentType);
+				expect(showUnauthorizedError).toBeCalledTimes(1);
+			});
 
-				expect(businessError.value).toBe(error);
+			it("should call showForbiddenError and pass error", async () => {
+				const { parentId, parentType, showForbiddenError, responseError } =
+					setup(ErrorType.Forbidden);
+				const { fetchFile } = useFileStorageApi(parentId, parentType);
+				await expect(fetchFile()).rejects.toBe(responseError);
+
+				expect(showForbiddenError).toBeCalledTimes(1);
+			});
+
+			it("should call showInternalServerError and pass error", async () => {
+				const { parentId, parentType, showInternalServerError, responseError } =
+					setup();
+				const { fetchFile } = useFileStorageApi(parentId, parentType);
+				await expect(fetchFile()).rejects.toBe(responseError);
+
+				expect(showInternalServerError).toBeCalledTimes(1);
 			});
 		});
 	});
 
 	describe("upload", () => {
-		describe("when file api upload file successfully", () => {
+		describe("when file api uploads file successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
@@ -96,16 +166,24 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				};
 
-				fileApiFactory.upload.mockImplementationOnce(() => response);
+				const uploadMock = jest.fn().mockResolvedValueOnce(response);
+				const { fileApiFactory } = setupFileStorageFactoryMock({ uploadMock });
+				setupFileStorageNotifier();
 
-				return { parentId, parentType, fileRecordResponse, file };
+				return {
+					parentId,
+					parentType,
+					fileRecordResponse,
+					file,
+					fileApiFactory,
+				};
 			};
 
 			it("should call FileApiFactory.upload", async () => {
-				const { parentId, parentType, file } = setup();
-				const { upload } = useFileStorageApi();
+				const { parentId, parentType, file, fileApiFactory } = setup();
+				const { upload } = useFileStorageApi(parentId, parentType);
 
-				await upload(parentId, parentType, file);
+				await upload(file);
 
 				expect(fileApiFactory.upload).toBeCalledWith(
 					"schoolId",
@@ -115,13 +193,13 @@ describe("FileStorageApi Composable", () => {
 				);
 			});
 
-			it("should set file", async () => {
+			it("should set filerecord", async () => {
 				const { parentId, parentType, file, fileRecordResponse } = setup();
-				const { upload, getFile } = useFileStorageApi();
+				const { upload, fileRecord } = useFileStorageApi(parentId, parentType);
 
-				await upload(parentId, parentType, file);
+				await upload(file);
 
-				expect(getFile(parentId)).toBe(fileRecordResponse);
+				expect(fileRecord.value).toBe(fileRecordResponse);
 			});
 		});
 
@@ -129,77 +207,41 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const error = { message: "WRONG ID", statusCode: "400" };
 				const file = new File([""], "filename");
 
-				fileApiFactory.upload.mockRejectedValueOnce(error);
-
-				return { parentId, parentType, error, file };
-			};
-
-			it("should set BusinessError", async () => {
-				const { error, parentId, parentType, file } = setup();
-				const { upload, businessError } = useFileStorageApi();
-
-				await upload(parentId, parentType, file);
-
-				expect(businessError.value).toBe(error);
-			});
-		});
-	});
-
-	describe("download", () => {
-		describe("when file api download file successfully", () => {
-			const setup = () => {
-				const fileRecordResponse = fileRecordResponseFactory.build();
-				const downloadFileHelper = jest.spyOn(fileHelper, "downloadFile");
-
-				const response = {};
-
-				fileApiFactory.download.mockImplementationOnce(() => response);
-
-				return { fileRecordResponse, downloadFileHelper };
-			};
-
-			it("should call FileApiFactory.download", async () => {
-				const { fileRecordResponse } = setup();
-				const { download } = useFileStorageApi();
-
-				await download(fileRecordResponse);
-
-				expect(fileApiFactory.download).toBeCalledWith(
-					fileRecordResponse.id,
-					fileRecordResponse.name,
-					{ responseType: "blob" }
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.FILE_TOO_BIG
 				);
-			});
 
-			it("should call downloadFileHelper", async () => {
-				const { fileRecordResponse, downloadFileHelper } = setup();
-				const { download } = useFileStorageApi();
+				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 
-				await download(fileRecordResponse);
+				const uploadMock = jest.fn().mockRejectedValue(responseError);
+				setupFileStorageFactoryMock({ uploadMock });
 
-				expect(downloadFileHelper).toBeCalled();
-			});
-		});
+				const { showFileTooBigError } = setupFileStorageNotifier();
 
-		describe("when file api returns error", () => {
-			const setup = () => {
-				const error = { message: "WRONG ID", statusCode: "400" };
-				const fileRecordResponse = fileRecordResponseFactory.build();
-
-				fileApiFactory.download.mockRejectedValueOnce(error);
-
-				return { error, fileRecordResponse };
+				return {
+					parentId,
+					parentType,
+					file,
+					showFileTooBigError,
+					responseError,
+				};
 			};
 
-			it("should set BusinessError", async () => {
-				const { error, fileRecordResponse } = setup();
-				const { download, businessError } = useFileStorageApi();
-				await download(fileRecordResponse);
+			it("should call showFileTooBigError and pass error", async () => {
+				const {
+					parentId,
+					parentType,
+					file,
+					showFileTooBigError,
+					responseError,
+				} = setup();
+				const { upload } = useFileStorageApi(parentId, parentType);
 
-				expect(businessError.value).toBe(error);
+				await expect(upload(file)).rejects.toBe(responseError);
+
+				expect(showFileTooBigError).toBeCalled();
 			});
 		});
 	});
@@ -222,14 +264,31 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				};
 
-				fileApiFactory.patchFilename.mockImplementationOnce(() => response);
+				const patchFilenameMock = jest.fn().mockResolvedValueOnce(response);
+				const { fileApiFactory } = setupFileStorageFactoryMock({
+					patchFilenameMock,
+				});
 
-				return { parentId, fileRecordResponse, renameFileParams };
+				setupFileStorageNotifier();
+
+				return {
+					parentId,
+					parentType,
+					fileRecordResponse,
+					renameFileParams,
+					fileApiFactory,
+				};
 			};
 
 			it("should call FileApiFactory.patchFilename", async () => {
-				const { fileRecordResponse, renameFileParams } = setup();
-				const { rename } = useFileStorageApi();
+				const {
+					fileRecordResponse,
+					renameFileParams,
+					parentId,
+					parentType,
+					fileApiFactory,
+				} = setup();
+				const { rename } = useFileStorageApi(parentId, parentType);
 
 				await rename(fileRecordResponse.id, renameFileParams);
 
@@ -239,35 +298,62 @@ describe("FileStorageApi Composable", () => {
 				);
 			});
 
-			it("should set file", async () => {
-				const { parentId, fileRecordResponse, renameFileParams } = setup();
-				const { rename, getFile } = useFileStorageApi();
+			it("should set filerecord", async () => {
+				const { parentId, parentType, fileRecordResponse, renameFileParams } =
+					setup();
+				const { rename, fileRecord } = useFileStorageApi(parentId, parentType);
 
 				await rename(fileRecordResponse.id, renameFileParams);
 
-				expect(getFile(parentId)).toBe(fileRecordResponse);
+				expect(fileRecord.value).toBe(fileRecordResponse);
 			});
 		});
 
 		describe("when file api returns error", () => {
 			const setup = () => {
-				const error = { message: "WRONG NAME", statusCode: "400" };
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
 				const renameFileParams = {
 					fileName: "new-file-name.txt",
 				};
 
-				fileApiFactory.patchFilename.mockRejectedValueOnce(error);
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.FILE_NAME_EXISTS
+				);
 
-				return { error, renameFileParams };
+				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
+
+				const patchFilenameMock = jest.fn().mockRejectedValue(responseError);
+				setupFileStorageFactoryMock({
+					patchFilenameMock,
+				});
+
+				const { showFileExistsError } = setupFileStorageNotifier();
+
+				return {
+					renameFileParams,
+					parentId,
+					parentType,
+					showFileExistsError,
+					responseError,
+				};
 			};
 
-			it("should set BusinessError", async () => {
-				const { error, renameFileParams } = setup();
-				const { rename, businessError } = useFileStorageApi();
+			it("should call showFileExistsError and pass error", async () => {
+				const {
+					renameFileParams,
+					parentId,
+					parentType,
+					showFileExistsError,
+					responseError,
+				} = setup();
+				const { rename } = useFileStorageApi(parentId, parentType);
 
-				await rename("dfgdfg", renameFileParams);
+				await expect(rename("dfgdfg", renameFileParams)).rejects.toBe(
+					responseError
+				);
 
-				expect(businessError.value).toBe(error);
+				expect(showFileExistsError).toBeCalled();
 			});
 		});
 	});

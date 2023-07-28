@@ -29,5 +29,15 @@ describe("RichTextContentElementEdit", () => {
 
 			expect(ckEditor.props("value")).toStrictEqual("test value");
 		});
+
+		it("should emit delete:element on CK editor keyboard delete event", async () => {
+			setup({ value: "test value", autofocus: true });
+
+			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
+			ckEditor.vm.$emit("keyboard:delete");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["delete:element"]).toHaveLength(1);
+		});
 	});
 });

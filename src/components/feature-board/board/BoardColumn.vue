@@ -18,7 +18,7 @@
 			drop-class="elevation-0"
 			:drop-placeholder="cardDropPlaceholderOptions"
 			:get-child-payload="getChildPayload"
-			:lock-axis="lockAxis"
+			:drag-begin-delay="isDesktop ? 0 : 300"
 			non-drag-area-selector=".drag-disabled"
 			@drop="onMoveCard"
 			class="scrollable-column pr-1 -mt-3"
@@ -28,6 +28,7 @@
 					class="my-3 mx-2"
 					:card-id="card.cardId"
 					:height="card.height"
+					:class="{ 'drag-disabled': !hasMovePermission }"
 					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
 					@delete:card="onDeleteCard"
 				/>
@@ -41,13 +42,14 @@
 </template>
 
 <script lang="ts">
-import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, inject, PropType, ref } from "vue";
-import VueI18n from "vue-i18n";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { Container, Draggable } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	cardDropPlaceholderOptions,
 	CardMove,
@@ -83,11 +85,10 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
-		const lockAxis = hasMovePermission ? "" : "x,y";
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -98,6 +99,7 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onMoveCard = (dropResult: CardMove): void => {
 			const { removedIndex, addedIndex } = dropResult;
@@ -147,14 +149,14 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n?.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {
 			cardDropPlaceholderOptions,
 			colWidth,
 			hasCreateColumnPermission,
-			lockAxis,
+			hasMovePermission,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -164,6 +166,7 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 			getChildPayload,
+			isDesktop,
 		};
 	},
 });
@@ -182,7 +185,7 @@ export default defineComponent({
 
 /* width */
 .scrollable-column::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
 
 /* Track */
@@ -193,12 +196,16 @@ export default defineComponent({
 
 /* Handle */
 .scrollable-column::-webkit-scrollbar-thumb {
-	background: var(--v-secondary-lighten1);
+	background-color: transparent;
+	border-radius: 5px;
+}
+.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
+	background-color: var(--v-secondary-lighten1);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base);
+	background: var(--v-secondary-base) !important;
 }
 </style>

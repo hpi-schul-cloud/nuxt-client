@@ -83,17 +83,18 @@
 import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import TasksList from "@/components/organisms/TasksList";
-import { defineComponent, inject } from "vue";
-import { useCopy } from "../../composables/copy";
-import { useLoadingState } from "../../composables/loadingState";
-import { envConfigModule } from "@/store";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { envConfigModule } from "@/store";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { defineComponent } from "vue";
+import { useCopy } from "../../composables/copy";
+import { useLoadingState } from "../../composables/loadingState";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
-		const i18n = inject("i18n");
+		const i18n = injectStrict(I18N_KEY);
 		const { isLoadingDialogOpen } = useLoadingState(
 			i18n.t("components.molecules.copyResult.title.loading")
 		);

@@ -4,7 +4,12 @@
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
 		<RenderHTML
-			:html="t('components.administration.adminMigrationSection.description')"
+			data-testid="text-description"
+			:html="
+				t('components.administration.adminMigrationSection.description', {
+					supportLink,
+				})
+			"
 			component="p"
 		/>
 		<div v-if="!oauthMigration.oauthMigrationPossible">
@@ -108,10 +113,39 @@
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
 		/>
+		<v-switch
+			v-if="globalFeatureShowOutdatedUsers"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.showOutdatedUsers.label'
+				)
+			"
+			v-model="school.features.showOutdatedUsers"
+			inset
+			dense
+			class="ml-1"
+			data-testid="show-outdated-users-switch"
+			@change="setShowOutdatedUsers"
+		/>
+		<p
+			v-if="globalFeatureShowOutdatedUsers"
+			data-testid="show-outdated-users-description"
+		>
+			{{
+				t(
+					"components.administration.adminMigrationSection.showOutdatedUsers.description"
+				)
+			}}
+		</p>
 	</div>
 </template>
 
 <script lang="ts">
+import { MigrationBody } from "@/serverApi/v3";
+import SchoolsModule from "@/store/schools";
+import { OauthMigration, School } from "@/store/types/schools";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
@@ -122,11 +156,7 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import SchoolsModule from "@/store/schools";
 import VueI18n from "vue-i18n";
-import { MigrationBody } from "@/serverApi/v3";
-import dayjs from "dayjs";
-import { OauthMigration, School } from "@/store/types/schools";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
@@ -137,7 +167,8 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
+		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
 		if (!schoolsModule || !i18n) {
@@ -149,13 +180,8 @@ export default defineComponent({
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(
 			() => schoolsModule.getOauthMigration
@@ -225,6 +251,36 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
+		const schoolNumber: ComputedRef<string | undefined> = computed(
+			() => schoolsModule.getSchool.officialSchoolNumber
+		);
+		const getSubject = (): string => {
+			const subject = encodeURIComponent(
+				`Schule mit der Nummer: ${
+					schoolNumber.value ?? "???"
+				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
+			);
+
+			return subject;
+		};
+
+		const supportLink: ComputedRef<string> = computed(
+			() =>
+				`mailto:${
+					envConfigModule.getAccessibilityReportEmail
+				}?subject=${getSubject()}`
+		);
+
+		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
+			() => envConfigModule.getShowOutdatedUsers
+		);
+
+		const setShowOutdatedUsers = () => {
+			schoolsModule.update({
+				id: school.value.id,
+				features: school.value.features,
+			});
+		};
 
 		return {
 			oauthMigration,
@@ -240,6 +296,10 @@ export default defineComponent({
 			isCurrentDateAfterFinalFinish,
 			finalFinishText,
 			dayjs,
+			supportLink,
+			school,
+			setShowOutdatedUsers,
+			globalFeatureShowOutdatedUsers,
 		};
 	},
 });

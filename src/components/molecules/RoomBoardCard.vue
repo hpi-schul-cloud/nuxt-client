@@ -4,7 +4,7 @@
 		hover
 		tabindex="0"
 		role="button"
-		color="grey lighten-3"
+		color="var(--v-primary-lighten)"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -30,10 +30,8 @@
 
 <script lang="ts">
 import { mdiViewDashboard } from "@mdi/js";
-import { defineComponent, inject } from "vue";
-import VueI18n from "vue-i18n";
+import { defineComponent } from "vue";
 import { useRouter } from "vue-router/composables";
-import { setBoardBreadcrumbs } from "../feature-board/shared/BoardBreadcrumbs.composable";
 
 export default defineComponent({
 	name: "RoomBoardCard",
@@ -45,15 +43,9 @@ export default defineComponent({
 	},
 	emits: ["tab-pressed", "on-drag", "move-element"],
 	setup(props, { emit }) {
-		const i18n: VueI18n | undefined = inject<VueI18n>("i18n");
 		const router = useRouter();
 
 		const openBoard = async () => {
-			setBoardBreadcrumbs(
-				props.courseData.courseName,
-				`/rooms/${props.courseData.courseId}`,
-				i18n?.t("components.board").toString()
-			);
 			if (!props.dragInProgress) {
 				await router.push(`${props.columnBoardItem.columnBoardId}/board`);
 			}

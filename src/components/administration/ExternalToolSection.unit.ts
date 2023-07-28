@@ -1,9 +1,18 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
 import ExternalToolsModule from "@/store/external-tools";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import NotifierModule from "@/store/notifier";
+import Vue from "vue";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { SchoolExternalToolStatus } from "@/store/external-tool";
+import { ToolConfigurationStatus } from "@/store/external-tool";
+import {
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -17,17 +26,25 @@ describe("ExternalToolSection", () => {
 			getSchoolExternalTools: [],
 			...getters,
 		});
+
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(ExternalToolSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
-				i18n: { t: (key: string) => key },
-				externalToolsModule,
+				[I18N_KEY.valueOf()]: i18nMock,
+				[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 
-		return { wrapper, externalToolsModule };
+		return {
+			wrapper,
+			externalToolsModule,
+			notifierModule,
+		};
 	};
 
 	describe("when component is used", () => {
@@ -37,93 +54,11 @@ describe("ExternalToolSection", () => {
 		});
 	});
 
-	describe("inject is called", () => {
-		describe("when i18n injection fails", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-					getSchoolExternalTools: [],
-				});
-
-				try {
-					shallowMount(ExternalToolSection, {
-						provide: {
-							externalToolsModule,
-						},
-					});
-				} catch (e) {
-					expect(consoleErrorSpy).toHaveBeenCalledWith(
-						expect.stringMatching(
-							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-						)
-					);
-				}
-
-				consoleErrorSpy.mockRestore();
-			});
-		});
-
-		describe("when externalToolsModule injection fails", () => {
-			it("should throw an error", () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
-
-				try {
-					shallowMount(ExternalToolSection, {
-						provide: {
-							i18n: { t: (key: string) => key },
-						},
-					});
-				} catch (e) {
-					expect(consoleErrorSpy).toHaveBeenCalledWith(
-						expect.stringMatching(
-							/\[Vue warn]: Error in setup: "Error: Injection of dependencies failed"/
-						)
-					);
-				}
-
-				consoleErrorSpy.mockRestore();
-			});
-		});
-	});
-
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
 				const { externalToolsModule } = setup();
 				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("t is called", () => {
-		describe("when translation key exists", () => {
-			it("should return translation", () => {
-				const { wrapper } = setup();
-				const testKey = "testKey";
-
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result).toEqual(testKey);
-			});
-		});
-
-		describe("when translation key not exists", () => {
-			it("should return unknown translation-key", () => {
-				const { wrapper } = setup();
-				const testKey = 123;
-
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				const result: string = wrapper.vm.t(testKey);
-
-				expect(result.includes("unknown translation-key:")).toBeTruthy();
 			});
 		});
 	});
@@ -159,7 +94,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: firstToolName,
-						status: SchoolExternalToolStatus.Latest,
+						status: ToolConfigurationStatus.Latest,
 						version: 1,
 					},
 					{
@@ -167,7 +102,7 @@ describe("ExternalToolSection", () => {
 						toolId: "toolId",
 						parameters: [],
 						name: secondToolName,
-						status: SchoolExternalToolStatus.Outdated,
+						status: ToolConfigurationStatus.Outdated,
 						version: 1,
 					},
 				],
@@ -200,11 +135,25 @@ describe("ExternalToolSection", () => {
 				const secondRow = tableRows.at(1).findAll("td");
 
 				expect(firstRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.latest"
+					"components.externalTools.status.latest"
 				);
+				expect(
+					firstRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
+				).toEqual(mdiCheckCircle);
 				expect(secondRow.at(1).text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status.outdated"
+					"components.externalTools.status.outdated"
 				);
+				expect(
+					secondRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
+				).toEqual(mdiRefreshCircle);
 			});
 
 			describe("when actions buttons are rendered", () => {
@@ -260,7 +209,7 @@ describe("ExternalToolSection", () => {
 									toolId: "toolId",
 									parameters: [],
 									name: "firstToolName",
-									status: SchoolExternalToolStatus.Latest,
+									status: ToolConfigurationStatus.Latest,
 									version: 1,
 								},
 							],
@@ -280,36 +229,33 @@ describe("ExternalToolSection", () => {
 							externalToolsModule.deleteSchoolExternalTool
 						).toHaveBeenCalled();
 					});
-				});
-			});
 
-			describe("when status is rendered", () => {
-				it("should have a red text color when status is outdated", () => {
-					const { wrapper } = setupItems();
+					it("should call notifierModule.show", async () => {
+						const { wrapper, notifierModule } = setup({
+							getSchoolExternalTools: [
+								{
+									id: "testId",
+									toolId: "toolId",
+									parameters: [],
+									name: "firstToolName",
+									status: ToolConfigurationStatus.Latest,
+									version: 1,
+								},
+							],
+						});
 
-					const tableRows = wrapper.find("tbody").findAll("tr");
+						const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const secondRow = tableRows.at(1).findAll("td");
-					expect(
-						secondRow.at(0).find("span").classes().includes("outdated")
-					).toBeTruthy();
-					expect(
-						secondRow.at(1).find("span").classes().includes("outdated")
-					).toBeTruthy();
-				});
+						const firstRowButtons = tableRows.at(0).findAll("button");
 
-				it("should have a normal text color when status is latest", () => {
-					const { wrapper } = setupItems();
+						const deleteButton = firstRowButtons.at(1);
+						await deleteButton.trigger("click");
 
-					const tableRows = wrapper.find("tbody").findAll("tr");
+						const confirmButton = wrapper.find("[data-testId=dialog-confirm]");
+						await confirmButton.trigger("click");
 
-					const firstRow = tableRows.at(0).findAll("td");
-					expect(
-						firstRow.at(0).find("span").classes().includes("outdated")
-					).toBeFalsy();
-					expect(
-						firstRow.at(1).find("span").classes().includes("outdated")
-					).toBeFalsy();
+						expect(notifierModule.show).toHaveBeenCalled();
+					});
 				});
 			});
 		});
@@ -325,7 +271,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: SchoolExternalToolStatus.Latest,
+					status: ToolConfigurationStatus.Latest,
 					outdated: false,
 				};
 

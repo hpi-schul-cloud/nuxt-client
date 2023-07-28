@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
 import ElementTypeSelection from "./ElementTypeSelection.vue";
-import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
 jest.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
 	const setupMocks = () => {
 		const { closeDialog, isDialogOpen, elementTypeOptions } =
-			setupSharedElementTypeSelectionMock({});
+			setupSharedElementTypeSelectionMock();
 
 		const createTextElement = jest.fn();
 		const createFileElement = jest.fn();

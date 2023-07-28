@@ -48,11 +48,11 @@ const vueRoutes = [
 	`^/beta-task/${mongoId}/?$`,
 	`^/beta-task/${mongoId}/?$`,
 	`^/termsofuse/?$`,
-	`^/login-instances/?$`,
 	`^/error/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
+	`^/tools/context/tool-configuration/?$`,
 ];
 
 const isVueClient = (path) => {

@@ -1,12 +1,12 @@
+import { contentModule, envConfigModule } from "@/store";
+import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { shallowMount } from "@vue/test-utils";
 import lernStoreLayout from "./lernStore.layout.vue";
-import { envConfigModule, contentModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import AuthModule from "@/store/auth";
-import { Envs } from "@/store/types/env-config";
 
 describe("lernStoreLayout", () => {
 	const params = {
@@ -18,7 +18,6 @@ describe("lernStoreLayout", () => {
 			...createComponentMocks({}),
 			provide: {
 				contentModule: ContentModule,
-				envConfigModule: EnvConfigModule,
 			},
 			...attrs,
 		});
