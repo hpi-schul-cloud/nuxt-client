@@ -74,6 +74,7 @@ export const mockSchool: School = {
 		videoconference: false,
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
+		showOutdatedUsers: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},
