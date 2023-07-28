@@ -42,4 +42,5 @@ export type Envs = {
 	FEATURE_CTL_TOOLS_TAB_ENABLED?: boolean;
 	FEATURE_LTI_TOOLS_TAB_ENABLED?: boolean;
 	FILES_STORAGE__MAX_FILE_SIZE: number;
+	FEATURE_SHOW_OUTDATED_USERS?: boolean;
 };
