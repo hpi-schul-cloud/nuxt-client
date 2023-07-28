@@ -52,7 +52,7 @@
 						</BoardMenuAction>
 					</BoardMenu>
 				</div>
-
+				<ContentElementIframe :iframeSrc="iframeSrc" />
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
@@ -65,6 +65,7 @@
 					@add-element="onAddElement"
 					v-if="isEditMode"
 				></CardAddElementMenu>
+				<link />
 			</template>
 		</VCard>
 		<FilePicker
@@ -97,6 +98,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import ContentElementIframe from "../content-elements/tldraw-iframe-element/ContentElementIframe.vue";
 import {
 	DragAndDropKey,
 	ElementMove,
@@ -114,6 +116,7 @@ export default defineComponent({
 		CardAddElementMenu,
 		CardHostInteractionHandler,
 		FilePicker,
+		ContentElementIframe,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -213,6 +216,7 @@ export default defineComponent({
 		);
 
 		return {
+			iframeSrc: "http://localhost:3046",
 			boardMenuClasses,
 			isLoading,
 			card,

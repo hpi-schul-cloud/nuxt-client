@@ -103,6 +103,13 @@ export const useBoardApi = () => {
 			};
 		}
 
+		if (element.type === ContentElementType.TldrawBoard) {
+			return {
+				content: element.content as FileElementContent,
+				type: ContentElementType.TldrawBoard,
+			};
+		}
+
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 

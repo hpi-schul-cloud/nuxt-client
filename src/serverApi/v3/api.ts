@@ -643,6 +643,7 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
+    TldrawBoard = 'board',
     SubmissionContainer = 'submissionContainer'
 }
 

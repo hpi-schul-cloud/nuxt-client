@@ -1,5 +1,5 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
+import { mdiDrawingBox, mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useSelectedFile } from "./SelectedFile.composable";
@@ -46,6 +46,12 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: onFileElementClick,
 			testId: "create-element-file",
+		},
+		{
+			icon: mdiDrawingBox,
+			label: "components.elementTypeSelection.elements.fileElement.subtitle",
+			action: () => onElementClick(ContentElementType.TldrawBoard),
+			testId: "create-element-tldraw-board",
 		},
 	];
 
