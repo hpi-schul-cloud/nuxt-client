@@ -113,6 +113,30 @@
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
 		/>
+		<v-switch
+			v-if="globalFeatureShowOutdatedUsers"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.showOutdatedUsers.label'
+				)
+			"
+			v-model="school.features.showOutdatedUsers"
+			inset
+			dense
+			class="ml-1"
+			data-testid="show-outdated-users-switch"
+			@change="setShowOutdatedUsers"
+		/>
+		<p
+			v-if="globalFeatureShowOutdatedUsers"
+			data-testid="show-outdated-users-description"
+		>
+			{{
+				t(
+					"components.administration.adminMigrationSection.showOutdatedUsers.description"
+				)
+			}}
+		</p>
 	</div>
 </template>
 
@@ -247,6 +271,17 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
+			() => envConfigModule.getShowOutdatedUsers
+		);
+
+		const setShowOutdatedUsers = () => {
+			schoolsModule.update({
+				id: school.value.id,
+				features: school.value.features,
+			});
+		};
+
 		return {
 			oauthMigration,
 			setMigration,
@@ -262,6 +297,9 @@ export default defineComponent({
 			finalFinishText,
 			dayjs,
 			supportLink,
+			school,
+			setShowOutdatedUsers,
+			globalFeatureShowOutdatedUsers,
 		};
 	},
 });
