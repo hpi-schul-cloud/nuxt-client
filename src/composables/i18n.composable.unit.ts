@@ -36,6 +36,12 @@ describe("useI18n", () => {
 	});
 
 	describe("t", () => {
+		it("should be defined", () => {
+			const { composable } = getWrapper();
+
+			expect(composable?.t).toBeDefined();
+		});
+
 		describe("when translating", () => {
 			const setup = () => {
 				const { vueI18n, composable } = getWrapper();

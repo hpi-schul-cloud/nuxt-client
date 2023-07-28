@@ -5,13 +5,13 @@ import Vue from "vue";
 import {
 	businessErrorFactory,
 	schoolExternalToolConfigurationTemplateFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
 import { i18nMock } from "@@/tests/test-utils";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
@@ -23,13 +23,6 @@ import ExternalToolConfigurator from "@/components/external-tools/configuration/
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 describe("SchoolExternalToolConfigurator", () => {
-	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
-
 	const routerPush = jest.fn();
 
 	const getWrapper = (
@@ -176,7 +169,9 @@ describe("SchoolExternalToolConfigurator", () => {
 	describe("onSave", () => {
 		describe("when creating a new configuration", () => {
 			const setup = () => {
-				const template = schoolExternalToolConfigurationTemplateFactory.build();
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
 
 				const { wrapper, schoolExternalToolsModule, schoolId, notifierModule } =
 					getWrapper(
@@ -198,17 +193,23 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should call store action to save tool", async () => {
 				const { wrapper, template, schoolExternalToolsModule, schoolId } =
 					setup();
+				const testValue = "test";
 
 				await wrapper
 					.findComponent(ExternalToolConfigurator)
-					.vm.$emit("save", template, []);
+					.vm.$emit("save", template, [testValue]);
 
 				expect(
 					schoolExternalToolsModule.createSchoolExternalTool
 				).toHaveBeenCalledWith<[SchoolExternalToolSave]>({
 					toolId: template.externalToolId,
 					version: template.version,
-					parameters: [],
+					parameters: [
+						{
+							name: template.parameters[0].name,
+							value: testValue,
+						},
+					],
 					schoolId,
 				});
 			});

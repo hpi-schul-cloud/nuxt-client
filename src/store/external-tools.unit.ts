@@ -2,6 +2,7 @@ import { ToolApiInterface, ToolLaunchRequestResponse } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	axiosErrorFactory,
+	businessErrorFactory,
 	toolLaunchRequestResponeFactory,
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -25,6 +26,25 @@ describe("ExternalToolsModule", () => {
 
 	afterEach(() => {
 		jest.restoreAllMocks();
+	});
+
+	describe("mutations", () => {
+		describe("resetBusinessError", () => {
+			it("should reset the error", () => {
+				const error = businessErrorFactory.build();
+
+				module.setBusinessError(error);
+
+				module.resetBusinessError();
+
+				expect(module.getBusinessError).not.toEqual(error);
+				expect(module.getBusinessError).toEqual({
+					statusCode: "",
+					message: "",
+					error: undefined,
+				});
+			});
+		});
 	});
 
 	describe("actions", () => {

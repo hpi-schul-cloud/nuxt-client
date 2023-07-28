@@ -7,6 +7,7 @@ import {
 	schoolExternalToolConfigurationTemplateResponseFactory,
 	schoolExternalToolSaveFactory,
 	schoolExternalToolResponseFactory,
+	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
@@ -42,6 +43,24 @@ describe("SchoolExternalToolsModule", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("getters", () => {
+		describe("getLoading", () => {
+			describe("when it is in initial state", () => {
+				it("should return false", () => {
+					expect(module.getLoading).toEqual(false);
+				});
+			});
+
+			describe("when loading is set", () => {
+				it("should return true", () => {
+					module.setLoading(true);
+
+					expect(module.getLoading).toEqual(true);
+				});
+			});
+		});
 	});
 
 	describe("actions", () => {
@@ -210,19 +229,19 @@ describe("SchoolExternalToolsModule", () => {
 				};
 
 				it("should call the toolApi.toolSchoolControllerDeleteSchoolExternalTool", async () => {
-					setup();
+					const { schoolExternalTool } = setup();
 
-					await module.deleteSchoolExternalTool("schoolExternalToolId");
+					await module.deleteSchoolExternalTool(schoolExternalTool.id);
 
 					expect(
 						apiMock.toolSchoolControllerDeleteSchoolExternalTool
-					).toHaveBeenCalledWith("schoolExternalToolId");
+					).toHaveBeenCalledWith(schoolExternalTool.id);
 				});
 
 				it("should remove the tool from the state", async () => {
 					const { schoolExternalTool } = setup();
 
-					await module.deleteSchoolExternalTool("schoolExternalToolId");
+					await module.deleteSchoolExternalTool(schoolExternalTool.id);
 
 					expect(module.getSchoolExternalTools).not.toContain(
 						schoolExternalTool
@@ -466,7 +485,9 @@ describe("SchoolExternalToolsModule", () => {
 		describe("createSchoolExternalTool is called", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const schoolExternalTool = schoolExternalToolSaveFactory.build();
+					const schoolExternalTool = schoolExternalToolSaveFactory.build({
+						parameters: toolParameterEntryFactory.buildList(1),
+					});
 
 					return {
 						schoolExternalTool,
@@ -484,7 +505,12 @@ describe("SchoolExternalToolsModule", () => {
 						toolId: schoolExternalTool.toolId,
 						schoolId: schoolExternalTool.schoolId,
 						version: schoolExternalTool.version,
-						parameters: [],
+						parameters: [
+							{
+								name: schoolExternalTool.parameters[0].name,
+								value: schoolExternalTool.parameters[0].value,
+							},
+						],
 					});
 				});
 			});

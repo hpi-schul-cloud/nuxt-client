@@ -13,9 +13,11 @@ import {
 	ToolApiInterface,
 	ToolReferenceListResponse,
 } from "@/serverApi/v3";
-import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { ContextExternalToolSave } from "./external-tool/context-external-tool";
-import { ContextExternalToolMapper } from "./external-tool/mapper";
+import {
+	ContextExternalToolMapper,
+	ExternalToolMapper,
+} from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 
@@ -147,9 +149,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 				);
 
 			const mapped: ExternalToolDisplayData[] =
-				useExternalToolMappings().mapToolReferencesToExternalToolDisplayData(
-					response.data
-				);
+				ExternalToolMapper.mapToExternalToolDisplayData(response.data);
 
 			this.setExternalToolDisplayDataList(mapped);
 		} catch (error: unknown) {

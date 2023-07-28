@@ -1,5 +1,4 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ToolContextType } from "@/store/external-tool";
 import { ContextExternalToolSave } from "@/store/external-tool/context-external-tool";
@@ -16,6 +15,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationTemplateFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
@@ -23,13 +23,6 @@ import RoomModule from "@/store/room";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
 
 describe("ContextExternalToolConfigurator", () => {
-	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
-
 	const routerPush = jest.fn();
 
 	const getWrapper = (
@@ -169,8 +162,9 @@ describe("ContextExternalToolConfigurator", () => {
 			const setup = () => {
 				const contextId = "contextId";
 				const contextType: ToolContextType = ToolContextType.COURSE;
-				const template =
-					contextExternalToolConfigurationTemplateFactory.build();
+				const template = contextExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
 
 				const { wrapper, contextExternalToolsModule, notifierModule } =
 					getWrapper(
@@ -201,10 +195,11 @@ describe("ContextExternalToolConfigurator", () => {
 					contextId,
 					contextType,
 				} = setup();
+				const testValue = "test";
 
 				await wrapper
 					.findComponent(ExternalToolConfigurator)
-					.vm.$emit("save", template, []);
+					.vm.$emit("save", template, [testValue]);
 
 				expect(
 					contextExternalToolsModule.createContextExternalTool
@@ -214,7 +209,12 @@ describe("ContextExternalToolConfigurator", () => {
 					displayName: undefined,
 					schoolToolId: template.schoolExternalToolId,
 					toolVersion: template.version,
-					parameters: [],
+					parameters: [
+						{
+							name: template.parameters[0].name,
+							value: testValue,
+						},
+					],
 				});
 			});
 
