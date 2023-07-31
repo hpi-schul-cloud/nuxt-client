@@ -1,56 +1,61 @@
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
-import {
-	ToolConfigurationTemplate,
-	ToolParameter,
-	ToolParameterLocation,
-	ToolParameterScope,
-	ToolParameterType,
-} from "@/store/external-tool";
+import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
 import ExternalToolsModule from "@/store/external-tools";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
-import { toolConfigurationTemplateFactory } from "@@/tests/test-utils/factory";
 import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	i18nMock,
+	schoolExternalToolConfigurationTemplateFactory,
+	toolParameterFactory,
+} from "@@/tests/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 
 describe("ExternalToolConfigSettings", () => {
-	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
-
-	const setup = (
-		getter: Partial<ExternalToolsModule> = {},
-		template: ToolConfigurationTemplate = toolConfigurationTemplateFactory.build()
+	const getWrapper = (
+		props: {
+			template: ExternalToolConfigurationTemplate;
+			value: (string | undefined)[];
+		} = {
+			template: schoolExternalToolConfigurationTemplateFactory.build(),
+			value: [],
+		},
+		getter: Partial<ExternalToolsModule> = {}
 	) => {
 		document.body.setAttribute("data-app", "true");
-		externalToolsModule = createModuleMocks(ExternalToolsModule, {
+
+		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
 			getLoading: false,
 			...getter,
 		}) as jest.Mocked<ExternalToolsModule>;
 
-		const wrapper: Wrapper<any> = shallowMount(
+		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolConfigSettings as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
 				}),
 				provide: {
-					[I18N_KEY as symbol]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 				propsData: {
-					value: template,
+					...props,
 				},
 			}
 		);
 
 		return {
 			wrapper,
+			externalToolsModule,
 		};
 	};
 
 	describe("basic functions", () => {
 		it("should render component", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
+
 			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(
 				true
 			);
@@ -59,7 +64,7 @@ describe("ExternalToolConfigSettings", () => {
 
 	describe("display title", () => {
 		it("should display title", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			const h2 = wrapper.find("h2");
 
@@ -69,9 +74,15 @@ describe("ExternalToolConfigSettings", () => {
 
 	describe("progressbar", () => {
 		it("should display progressbar when loading in store is set", () => {
-			const { wrapper } = setup({
-				getLoading: true,
-			});
+			const { wrapper } = getWrapper(
+				{
+					template: schoolExternalToolConfigurationTemplateFactory.build(),
+					value: [],
+				},
+				{
+					getLoading: true,
+				}
+			);
 
 			const progressbar = wrapper.find("v-progress-linear-stub");
 
@@ -79,9 +90,15 @@ describe("ExternalToolConfigSettings", () => {
 		});
 
 		it("should not display progressbar when loading in store is not set", () => {
-			const { wrapper } = setup({
-				getLoading: false,
-			});
+			const { wrapper } = getWrapper(
+				{
+					template: schoolExternalToolConfigurationTemplateFactory.build(),
+					value: [],
+				},
+				{
+					getLoading: false,
+				}
+			);
 
 			const progressbar = wrapper.find("v-progress-linear-stub");
 
@@ -90,24 +107,24 @@ describe("ExternalToolConfigSettings", () => {
 	});
 
 	describe("parameters", () => {
-		const setupTemplate = (): ToolConfigurationTemplate => {
-			const template: ToolConfigurationTemplate =
-				toolConfigurationTemplateFactory.build();
-			const param1: ToolParameter = {
-				name: "Parameter1",
-				displayName: "Parameter 1",
-				type: ToolParameterType.String,
-				isOptional: false,
-				scope: ToolParameterScope.School,
-				location: ToolParameterLocation.PATH,
+		const setup = () => {
+			const template = schoolExternalToolConfigurationTemplateFactory.build({
+				parameters: toolParameterFactory.buildList(3),
+			});
+
+			const { wrapper } = getWrapper({
+				template,
+				value: [],
+			});
+
+			return {
+				wrapper,
+				template,
 			};
-			template.parameters = [param1, { ...param1, name: "Param2" }];
-			return template;
 		};
 
 		it("should render given toolParameters", () => {
-			const template = setupTemplate();
-			const { wrapper } = setup({}, template);
+			const { wrapper, template } = setup();
 
 			expect(
 				wrapper.findAll("external-tool-config-parameter-stub").length

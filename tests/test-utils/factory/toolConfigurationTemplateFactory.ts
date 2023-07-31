@@ -1,9 +1,9 @@
 import { Factory } from "fishery";
-import { ToolConfigurationTemplate } from "@/store/external-tool";
+import { SchoolExternalToolConfigurationTemplate } from "@/store/external-tool";
 
-export const toolConfigurationTemplateFactory =
-	Factory.define<ToolConfigurationTemplate>(({ sequence }) => ({
-		id: `tool${sequence}`,
+export const schoolExternalToolConfigurationTemplate =
+	Factory.define<SchoolExternalToolConfigurationTemplate>(({ sequence }) => ({
+		externalToolId: `tool${sequence}`,
 		configId: "configId",
 		version: 1,
 		name: "toolName",
