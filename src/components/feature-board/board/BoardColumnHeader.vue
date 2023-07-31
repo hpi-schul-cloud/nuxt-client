@@ -8,6 +8,7 @@
 		<div
 			class="column-header mb-4 rounded"
 			:class="{ 'grey lighten-2': isFocusContained }"
+			tabindex="0"
 			ref="columnHeader"
 		>
 			<div class="d-flex align-start py-2 px-2">
