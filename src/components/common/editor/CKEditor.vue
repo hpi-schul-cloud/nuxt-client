@@ -14,13 +14,15 @@
 </template>
 
 <script>
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { useMediaQuery } from "@vueuse/core";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -131,103 +133,108 @@ export default defineComponent({
 			}
 		);
 
-		const config = {
-			toolbar: {
-				items: toolbarItems[props.mode],
-			},
-			plugins: plugins,
-			heading: {
-				options: [
-					{
-						model: "paragraph",
-						title: "Paragraph",
-						class: "ck-heading_paragraph",
-					},
-					{
-						model: "heading1",
-						view: "h4",
-						title: "Heading 1",
-						class: "ck-heading_heading1",
-					},
-					{
-						model: "heading2",
-						view: "h5",
-						title: "Heading 2",
-						class: "ck-heading_heading2",
-					},
-				],
-			},
-			link: {
-				defaultProtocol: "//",
-			},
-			highlight: {
-				options: [
-					{
-						model: "dullPinkMarker",
-						class: "marker-dull-pink",
-						title: i18n.t("components.editor.highlight.dullPink").toString(),
-						color: "var(--ck-highlight-marker-dull-pink)",
-						type: "marker",
-					},
-					{
-						model: "pinkMarker",
-						class: "marker-pink",
-						title: "Pink marker",
-						color: "var(--ck-highlight-marker-pink)",
-						type: "marker",
-					},
-					{
-						model: "dullYellowMarker",
-						class: "marker-dull-yellow",
-						title: i18n.t("components.editor.highlight.dullYellow").toString(),
-						color: "var(--ck-highlight-marker-dull-yellow)",
-						type: "marker",
-					},
-					{
-						model: "yellowMarker",
-						class: "marker-yellow",
-						title: "Yellow marker",
-						color: "var(--ck-highlight-marker-yellow)",
-						type: "marker",
-					},
-					{
-						model: "dullBlueMarker",
-						class: "marker-dull-blue",
-						title: i18n.t("components.editor.highlight.dullBlue").toString(),
-						color: "var(--ck-highlight-marker-dull-blue)",
-						type: "marker",
-					},
-					{
-						model: "blueMarker",
-						class: "marker-blue",
-						title: "Blue marker",
-						color: "var(--ck-highlight-marker-blue)",
-						type: "marker",
-					},
-					{
-						model: "dullGreenMarker",
-						class: "marker-dull-green",
-						title: i18n.t("components.editor.highlight.dullGreen").toString(),
-						color: "var(--ck-highlight-marker-dull-green)",
-						type: "marker",
-					},
-					{
-						model: "greenMarker",
-						class: "marker-green",
-						title: "Green marker",
-						color: "var(--ck-highlight-marker-green)",
-						type: "marker",
-					},
-				],
-			},
-			wordCount: {
-				onUpdate: (stats) => {
-					charCount.value = stats.characters;
+		const config = computed(() => {
+			return {
+				toolbar: {
+					items: toolbarItems[props.mode],
+					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
-			},
-			language: language,
-			placeholder: props.placeholder,
-		};
+				plugins: plugins,
+				heading: {
+					options: [
+						{
+							model: "paragraph",
+							title: "Paragraph",
+							class: "ck-heading_paragraph",
+						},
+						{
+							model: "heading1",
+							view: "h4",
+							title: "Heading 1",
+							class: "ck-heading_heading1",
+						},
+						{
+							model: "heading2",
+							view: "h5",
+							title: "Heading 2",
+							class: "ck-heading_heading2",
+						},
+					],
+				},
+				link: {
+					defaultProtocol: "//",
+				},
+				highlight: {
+					options: [
+						{
+							model: "dullPinkMarker",
+							class: "marker-dull-pink",
+							title: i18n.t("components.editor.highlight.dullPink").toString(),
+							color: "var(--ck-highlight-marker-dull-pink)",
+							type: "marker",
+						},
+						{
+							model: "pinkMarker",
+							class: "marker-pink",
+							title: "Pink marker",
+							color: "var(--ck-highlight-marker-pink)",
+							type: "marker",
+						},
+						{
+							model: "dullYellowMarker",
+							class: "marker-dull-yellow",
+							title: i18n
+								.t("components.editor.highlight.dullYellow")
+								.toString(),
+							color: "var(--ck-highlight-marker-dull-yellow)",
+							type: "marker",
+						},
+						{
+							model: "yellowMarker",
+							class: "marker-yellow",
+							title: "Yellow marker",
+							color: "var(--ck-highlight-marker-yellow)",
+							type: "marker",
+						},
+						{
+							model: "dullBlueMarker",
+							class: "marker-dull-blue",
+							title: i18n.t("components.editor.highlight.dullBlue").toString(),
+							color: "var(--ck-highlight-marker-dull-blue)",
+							type: "marker",
+						},
+						{
+							model: "blueMarker",
+							class: "marker-blue",
+							title: "Blue marker",
+							color: "var(--ck-highlight-marker-blue)",
+							type: "marker",
+						},
+						{
+							model: "dullGreenMarker",
+							class: "marker-dull-green",
+							title: i18n.t("components.editor.highlight.dullGreen").toString(),
+							color: "var(--ck-highlight-marker-dull-green)",
+							type: "marker",
+						},
+						{
+							model: "greenMarker",
+							class: "marker-green",
+							title: "Green marker",
+							color: "var(--ck-highlight-marker-green)",
+							type: "marker",
+						},
+					],
+				},
+				wordCount: {
+					onUpdate: (stats) => {
+						charCount.value = stats.characters;
+					},
+				},
+				language: language,
+				placeholder: props.placeholder,
+			};
+		});
 
 		const handleInput = () => emit("input", content.value);
 		const handleFocus = () => emit("focus");
@@ -257,6 +264,11 @@ export default defineComponent({
 				}
 			});
 		};
+
+		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
+		const showFullToolbar = computed(() => {
+			return props.mode === "simple" && !isMobile.value;
+		});
 
 		return {
 			ck,
