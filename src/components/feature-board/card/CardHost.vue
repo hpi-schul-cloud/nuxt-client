@@ -33,7 +33,7 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction @click="onStartEditMode">
+						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
 								<VIcon>
 									{{ mdiPencilOutline }}
