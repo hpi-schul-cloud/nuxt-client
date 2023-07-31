@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { useRoute } from "vue-router/composables";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
 	SidebarItem,
