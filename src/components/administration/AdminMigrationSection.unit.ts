@@ -5,12 +5,16 @@ import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Wrapper, mount, shallowMount } from "@vue/test-utils";
+import { i18nMock, mockSchool } from "@@/tests/test-utils";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = (schoolGetters: Partial<SchoolsModule> = {}) => {
+	const setup = (
+		schoolGetters: Partial<SchoolsModule> = {},
+		envConfigGetters: Partial<EnvConfigModule> = {}
+	) => {
 		document.body.setAttribute("data-app", "true");
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getOauthMigration: {
@@ -20,17 +24,21 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationFinished: "",
 				oauthMigrationFinalFinish: "",
 			},
+			getSchool: mockSchool,
 			...schoolGetters,
 		}) as jest.Mocked<SchoolsModule>;
 
-		envConfigModule = createModuleMocks(EnvConfigModule);
+		envConfigModule = createModuleMocks(EnvConfigModule, {
+			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+			...envConfigGetters,
+		});
 
 		const wrapper: Wrapper<any> = mount(AdminMigrationSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				schoolsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
@@ -38,6 +46,8 @@ describe("AdminMigrationSection", () => {
 
 		return {
 			wrapper,
+			envConfigModule,
+			schoolsModule,
 		};
 	};
 
@@ -70,22 +80,33 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("t", () => {
-		it("should return translation", () => {
+	describe("supportLink", () => {
+		it("should return support link without schoolnumber in subject", () => {
 			const { wrapper } = setup({});
-			const testKey = "testKey";
 
-			const result: string = wrapper.vm.t(testKey);
-			expect(result).toEqual(testKey);
+			const subject = encodeURIComponent(
+				"Schule mit der Nummer: ??? soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
+			);
+			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
+
+			expect(wrapper.find('[data-testid="text-description"]').text()).toEqual(
+				`components.administration.adminMigrationSection.description {"supportLink":${expectedLink}}`
+			);
 		});
 
-		it("should return 'unknown translation-key'", () => {
-			const { wrapper } = setup({});
-			const testKey = 123;
+		it("should return support link with schoolnumber in subject", () => {
+			const { wrapper } = setup({
+				getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
+			});
 
-			const result: string = wrapper.vm.t(testKey);
+			const subject = encodeURIComponent(
+				"Schule mit der Nummer: 12345 soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
+			);
+			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
 
-			expect(result.includes("unknown translation-key:")).toBeTruthy();
+			expect(wrapper.find('[data-testid="text-description"]').text()).toEqual(
+				`components.administration.adminMigrationSection.description {"supportLink":${expectedLink}}`
+			);
 		});
 	});
 
@@ -556,7 +577,7 @@ describe("AdminMigrationSection", () => {
 			const paragraph = wrapper.find(".migration-completion-date");
 
 			expect(paragraph.exists()).toBe(true);
-			expect(paragraph.text()).toEqual(
+			expect(paragraph.text()).toContain(
 				`components.administration.adminMigrationSection.oauthMigrationFinished.text`
 			);
 		});
@@ -579,7 +600,7 @@ describe("AdminMigrationSection", () => {
 			const paragraph = wrapper.find(".migration-completion-date");
 
 			expect(paragraph.exists()).toBe(true);
-			expect(paragraph.text()).toEqual(
+			expect(paragraph.text()).toContain(
 				`components.administration.adminMigrationSection.oauthMigrationFinished.textComplete`
 			);
 		});
@@ -598,6 +619,73 @@ describe("AdminMigrationSection", () => {
 			const paragraph = wrapper.find(".migration-completion-date");
 
 			expect(paragraph.exists()).toBe(false);
+		});
+	});
+
+	describe("FEATURE_SHOW_OUTDATED_USERS", () => {
+		describe("when feature is set to false", () => {
+			it("should hide switch button and description", () => {
+				const { wrapper } = setup(
+					{},
+					{
+						getShowOutdatedUsers: false,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+				const paragraph = wrapper.find(
+					'[data-testid="show-outdated-users-description"]'
+				);
+
+				expect(switchComponent.exists()).toBe(false);
+				expect(paragraph.exists()).toBe(false);
+			});
+		});
+
+		describe("when feature is set to true", () => {
+			it("should show switch button and description", () => {
+				const { wrapper } = setup(
+					{},
+					{
+						getShowOutdatedUsers: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+				const paragraph = wrapper.find(
+					'[data-testid="show-outdated-users-description"]'
+				);
+
+				expect(switchComponent.exists()).toBe(true);
+				expect(paragraph.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("switch button for school feature showOutdatedUsers", () => {
+		describe("when clicking switch button", () => {
+			it("should call update in schoolsModule", async () => {
+				const { wrapper, schoolsModule } = setup(
+					{},
+					{
+						getShowOutdatedUsers: true,
+					}
+				);
+				const switchComponent = wrapper.find(
+					'[data-testid="show-outdated-users-switch"]'
+				);
+
+				await switchComponent.setChecked();
+
+				expect(schoolsModule.update).toHaveBeenCalledWith({
+					id: mockSchool.id,
+					features: { ...mockSchool.features, showOutdatedUsers: true },
+				});
+			});
 		});
 	});
 });

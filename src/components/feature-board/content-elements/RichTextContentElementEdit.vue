@@ -8,6 +8,7 @@
 			"
 			mode="simple"
 			@focus="onFocus"
+			@blur="onBlur"
 			@keyboard:delete="onDelete"
 		/>
 	</div>
@@ -15,7 +16,7 @@
 <script lang="ts">
 import CkEditor from "@/components/common/editor/CKEditor.vue";
 import { useEventListener, useVModel } from "@vueuse/core";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -30,27 +31,26 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["update:value", "delete:element"],
+	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 
 		const onFocus = () => {
-			const elements = computed(() =>
-				document.getElementsByClassName("ck-balloon-panel")
-			);
+			const ckBalloonPanelElements =
+				document.getElementsByClassName("ck-balloon-panel");
 
-			for (const element of elements.value) {
+			for (const element of ckBalloonPanelElements) {
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 				});
 			}
 		};
 
-		const onDelete = () => {
-			emit("delete:element");
-		};
+		const onBlur = () => emit("blur");
 
-		return { modelValue, onFocus, onDelete };
+		const onDelete = () => emit("delete:element");
+
+		return { modelValue, onFocus, onDelete, onBlur };
 	},
 });
 </script>

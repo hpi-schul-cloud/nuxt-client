@@ -43,6 +43,7 @@ export default class EnvConfigModule extends VuexModule {
 		SC_TITLE: "",
 		SC_SHORT_TITLE: "",
 		FILES_STORAGE__MAX_FILE_SIZE: 0,
+		FEATURE_SHOW_OUTDATED_USERS: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -110,6 +111,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 
+	get getTheme() {
+		return this.env.SC_THEME;
+	}
+
 	get getVideoConferenceEnabled() {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
 	}
@@ -159,6 +164,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getMaxFileSize(): number {
 		return this.env.FILES_STORAGE__MAX_FILE_SIZE;
+	}
+
+	get getShowOutdatedUsers(): boolean {
+		return this.env.FEATURE_SHOW_OUTDATED_USERS ?? false;
 	}
 
 	get getEnv(): Envs {

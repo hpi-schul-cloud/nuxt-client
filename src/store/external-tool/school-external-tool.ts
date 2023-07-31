@@ -1,16 +1,20 @@
 import { ToolParameterEntry } from "./tool-parameter-entry";
 import { ToolConfigurationStatus } from "@/store/external-tool/tool-configuration-status.enum";
 
-export interface SchoolExternalTool {
-	id: string;
-
+export interface SchoolExternalToolSave {
 	toolId: string;
 
-	name: string;
+	schoolId: string;
 
 	parameters: ToolParameterEntry[];
 
-	status: ToolConfigurationStatus;
+	version: number;
+}
 
-	version?: number;
+export interface SchoolExternalTool extends SchoolExternalToolSave {
+	id: string;
+
+	name: string;
+
+	status: ToolConfigurationStatus;
 }

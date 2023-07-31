@@ -45,9 +45,10 @@
 
 <script lang="ts">
 import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { computed, defineComponent, onMounted, watch, onUnmounted } from "vue";
-import { Container, Draggable } from "vue-smooth-dnd";
+import { useMediaQuery } from "@vueuse/core";
+import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
 import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
@@ -64,8 +65,8 @@ import {
 } from "../types/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useMediaQuery } from "@vueuse/core";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Container, Draggable } = require("vue-dndrop");
 
 export default defineComponent({
 	components: {
@@ -145,13 +146,13 @@ export default defineComponent({
 		};
 
 		/**
-		 * These classes should be removed automatically by vue-smooth-dnd.
+		 * These classes should be removed automatically by vue-dndrop.
 		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
 		 */
 		const onTouchEnd = () => {
 			document.body.classList.remove(
-				"smooth-dnd-no-user-select",
-				"smooth-dnd-disable-touch-action"
+				"dndrop-no-user-select",
+				"dndrop-disable-touch-action"
 			);
 		};
 

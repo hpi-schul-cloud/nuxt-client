@@ -511,9 +511,11 @@ export default defineComponent({
 				});
 			}
 		},
-	},
-	mounted() {
-		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
+		roomData(newRoomData, oldRoomData) {
+			if (newRoomData.title !== oldRoomData.title) {
+				document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
+			}
+		},
 	},
 });
 </script>

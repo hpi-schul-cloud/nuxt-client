@@ -18,6 +18,7 @@ import {
 	privacyPolicyModule,
 	roomModule,
 	roomsModule,
+	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
 	statusAlertsModule,
@@ -97,6 +98,7 @@ import {
 	ROOM_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "./utils/inject";
 
 (async () => {
@@ -155,6 +157,7 @@ import {
 			privacyPolicyModule,
 			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
+			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 			schoolsModule,
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,

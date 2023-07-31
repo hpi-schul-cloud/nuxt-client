@@ -1,6 +1,6 @@
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { DataTableHeader } from "vuetify";
-import { externalToolsModule } from "@/store";
+import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolResponseStatusEnum,
@@ -9,7 +9,7 @@ import {
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { ToolConfigurationStatus } from "@/store/external-tool";
 
-const externalToolsModuleMock = () => {
+const schoolExternalToolsModuleMock = () => {
 	return {
 		getSchoolExternalTools: [
 			{
@@ -23,7 +23,7 @@ const externalToolsModuleMock = () => {
 };
 
 jest.mock("@/store", () => ({
-	externalToolsModule: externalToolsModuleMock(),
+	schoolExternalToolsModule: schoolExternalToolsModuleMock(),
 }));
 
 describe("useSchoolExternalToolUtils", () => {
@@ -124,7 +124,9 @@ describe("useSchoolExternalToolUtils", () => {
 		it("should return schoolExternalToolItems", () => {
 			const { getItems } = setup();
 
-			const items: SchoolExternalToolItem[] = getItems(externalToolsModule);
+			const items: SchoolExternalToolItem[] = getItems(
+				schoolExternalToolsModule
+			);
 
 			expect(items).toEqual([
 				{

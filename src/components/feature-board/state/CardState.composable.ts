@@ -4,12 +4,12 @@ import {
 } from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedFocusedId } from "../shared/BoardFocusHandler.composable";
 
 declare type CardState = {
 	isLoading: boolean;
@@ -31,7 +31,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardHeightCall,
 		updateCardTitle,
 	} = useBoardApi();
-	const { announceFocusReceived } = useSharedFocusedId();
+	const { setFocus } = useBoardFocusHandler();
 	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	const fetchCard = async (id: string): Promise<void> => {
@@ -49,12 +49,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
+		cardState.card.title = newTitle;
 		const status = await updateCardTitle(cardState.card.id, newTitle);
 		if (isErrorCode(status)) {
 			await showErrorAndReload(generateErrorText("update"));
-			return;
 		}
-		cardState.card.title = newTitle;
 	};
 
 	const deleteCard = async () => {
@@ -99,17 +98,12 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 
 		if (atFirstPosition) {
-			announceFocusReceived(response.data.id);
-			cardState.card.elements.splice(
-				0,
-				0,
-				response.data as unknown as AnyContentElement
-			);
+			cardState.card.elements.splice(0, 0, response.data);
 		} else {
-			cardState.card.elements.push(
-				response.data as unknown as AnyContentElement
-			);
+			cardState.card.elements.push(response.data);
 		}
+
+		setFocus(response.data.id);
 
 		return response.data;
 	};
