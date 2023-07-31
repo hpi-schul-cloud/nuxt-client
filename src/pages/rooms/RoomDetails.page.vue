@@ -8,7 +8,10 @@
 	>
 		<template slot="header">
 			<div class="ma-2">
-				<div class="text-h3 pb-2 course-title">
+				<div
+					class="text-h3 pb-2 course-title"
+					data-testid="courses-course-title"
+				>
 					{{ roomData.title }}
 				</div>
 				<div class="course-title pa-2 pb-1">
