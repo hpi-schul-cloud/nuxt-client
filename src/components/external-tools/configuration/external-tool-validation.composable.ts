@@ -5,30 +5,32 @@ export function useExternalToolValidation(
 	t: (key: string, values?: VueI18n.Values | undefined) => string
 ) {
 	const validateParameter = (
-		param: ToolParameter
+		param: ToolParameter,
+		inputValue: string | undefined
 	): Array<() => boolean | string> => {
 		const rules = [];
-		if (!param.isOptional && !param.value) {
+		if (!param.isOptional && !inputValue) {
 			rules.push(() => t("common.validation.required2"));
 		}
 
-		validateRegex(param, rules);
+		validateRegex(param, inputValue, rules);
 
-		validateType(param, rules);
+		validateType(param, inputValue, rules);
 
 		return rules;
 	};
 
 	const validateRegex = (
 		param: ToolParameter,
+		inputValue: string | undefined,
 		rules: Array<() => boolean | string>
 	) => {
 		if (param.regex) {
 			const regex = new RegExp(param.regex);
 			rules.push(() => {
-				if (param.value) {
+				if (inputValue) {
 					return (
-						regex.test(param.value) ||
+						regex.test(inputValue) ||
 						t("common.validation.regex", { comment: param.regexComment })
 					);
 				}
@@ -39,11 +41,12 @@ export function useExternalToolValidation(
 
 	const validateType = (
 		param: ToolParameter,
+		inputValue: string | undefined,
 		rules: Array<() => boolean | string>
 	): void => {
-		if (param.value && param.type === ToolParameterType.Number) {
+		if (inputValue && param.type === ToolParameterType.Number) {
 			rules.push(
-				() => !isNaN(Number(param.value)) || t("common.validation.number")
+				() => !isNaN(Number(inputValue)) || t("common.validation.number")
 			);
 		}
 	};

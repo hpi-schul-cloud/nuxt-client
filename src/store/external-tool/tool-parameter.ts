@@ -9,7 +9,7 @@ export interface ToolParameter {
 
 	description?: string;
 
-	default?: string;
+	defaultValue?: string;
 
 	regex?: string;
 
@@ -22,6 +22,4 @@ export interface ToolParameter {
 	type: ToolParameterType;
 
 	isOptional: boolean;
-
-	value?: string;
 }
