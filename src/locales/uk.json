@@ -879,6 +879,7 @@
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.headerSection.archived": "Архів",
 	"pages.rooms.tools.logo": "Інструмент-логотип",
 	"pages.rooms.tools.outdated": "Інструмент застарів",
 	"pages.rooms.tabLabel.toolsOld": "Інструмент",

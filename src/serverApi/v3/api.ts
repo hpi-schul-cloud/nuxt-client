@@ -3913,6 +3913,12 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     elements: Array<BoardElementResponse>;
+    /**
+     * Boolean if the room this board belongs to is archived
+     * @type {boolean}
+     * @memberof SingleColumnBoardResponse
+     */
+    isArchived: boolean;
 }
 /**
  * 
