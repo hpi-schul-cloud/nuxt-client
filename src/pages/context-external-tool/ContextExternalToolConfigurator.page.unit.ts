@@ -54,6 +54,7 @@ describe("ContextExternalToolConfigurator", () => {
 				roomId: "contextId",
 				displayColor: "#ffffff",
 				elements: [],
+				isArchived: false,
 			},
 		});
 

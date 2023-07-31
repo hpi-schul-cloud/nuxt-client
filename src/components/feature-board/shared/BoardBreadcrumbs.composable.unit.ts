@@ -40,6 +40,7 @@ describe("BoardBreadcrumbs.composable", () => {
 						roomId: "roomId",
 						displayColor: "#F0F0F0",
 						elements: [],
+						isArchived: false,
 					},
 				})
 			);
