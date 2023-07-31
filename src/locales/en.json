@@ -969,5 +969,6 @@
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"pages.videoConference.info.notStarted": "The video conference hasn't started yet.",
 	"pages.videoConference.info.noPermission": "The video conference hasn't started yet or you don't have permission to join it.",
-	"pages.videoConference.action.refresh": "Update status"
+	"pages.videoConference.action.refresh": "Update status",
+	"pages.h5p.api.success.save": "Content was successfully saved."
 }

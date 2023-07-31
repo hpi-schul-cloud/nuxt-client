@@ -1,62 +1,158 @@
 <template>
-	<iframe
-		v-if="!loading"
-		:src="iframeSrc"
-		class="editor-iframe"
-		allowfullscreen="allowfullscreen"
-		title="H5PEditor"
-	></iframe>
-	<div v-else class="d-flex justify-center align-center min-height-screen">
-		<v-progress-circular indeterminate color="secondary" size="115" />
-	</div>
+	<section :class="{ inline: isInline }">
+		<v-btn
+			v-if="isInline"
+			text
+			plain
+			:ripple="false"
+			design="none"
+			class="arrow__back"
+			@click="goBack"
+		>
+			<v-icon>{{ mdiChevronLeft }}</v-icon>
+			{{ $t("pages.content.index.backToCourse") }}
+		</v-btn>
+
+		<div class="content" :class="{ inline: isInline }">
+			<div class="column-layout">
+				<H5PEditorComponent
+					ref="editorRef"
+					class="editor"
+					:contentId="contentId"
+					@load-error="loadError"
+				/>
+				<v-btn role="button" class="save-button" color="primary" @click="save">
+					{{ $t("common.actions.save") }}
+				</v-btn>
+			</div>
+		</div>
+	</section>
 </template>
 
-<script :src="scriptSrc" charset="UTF-8"></script>
-
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { useApplicationError } from "@/composables/application-error.composable";
+import { applicationErrorModule, notifierModule } from "@/store";
+import { mdiChevronLeft } from "@mdi/js";
+import { AxiosError, HttpStatusCode } from "axios";
+import { defineComponent, inject, ref } from "vue";
+import VueI18n from "vue-i18n";
+import { useRoute } from "vue-router/composables";
+
+import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "H5PEditor",
-	props: {
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
-		scriptSrc: {
-			type: String,
-			default: "",
-		},
+	components: {
+		H5PEditorComponent,
 	},
-	mounted() {
-		this.iframeSrc =
-			window.location.origin +
-			`/api/v3/h5p-editor/${this.$route.params.id}/edit`;
-		this.loading = false;
-	},
-	setup(props) {
-		const loading = ref(props.loading);
-		let iframeSrc = ref(props.iframeSrc);
-		const scriptSrc = ref(props.scriptSrc);
+	setup() {
+		const { createApplicationError } = useApplicationError();
+
+		const i18n = injectStrict(I18N_KEY);
+
+		if (!i18n) {
+			throw new Error("Injection of dependencies failed");
+		}
+
+		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
+		const t = (key: string, values?: VueI18n.Values | undefined): string => {
+			const translateResult = i18n.t(key, values);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
+		const route = useRoute();
+
+		const editorRef = ref<typeof H5PEditorComponent>();
+
+		const contentId = route.params?.id;
+		const isInline = !!route.query?.inline;
+
+		function notifyParent(event: CustomEvent) {
+			window.dispatchEvent(event);
+		}
+
+		async function save() {
+			if (editorRef.value) {
+				try {
+					const data = await editorRef.value.save();
+
+					notifierModule.show({
+						text: t("pages.h5p.api.success.save"),
+						status: "success",
+						timeout: 10000,
+					});
+
+					notifyParent(
+						new CustomEvent("save-content", {
+							detail: {
+								contentId: data.contentId,
+								title: data.metadata.title,
+								contentType: data.metadata.mainLibrary,
+							},
+						})
+					);
+				} catch (err) {
+					notifierModule.show({
+						text: t("common.validation.invalid"),
+						status: "error",
+						timeout: 10000,
+					});
+				}
+			}
+		}
+
+		function goBack() {
+			window.close();
+		}
+
+		function loadError(err: AxiosError) {
+			const statusCode =
+				err.response?.status ?? HttpStatusCode.InternalServerError;
+
+			applicationErrorModule.setError(
+				createApplicationError(
+					statusCode in HttpStatusCode
+						? statusCode
+						: HttpStatusCode.InternalServerError
+				)
+			);
+		}
+
 		return {
-			loading,
-			iframeSrc,
-			scriptSrc,
+			contentId,
+			mdiChevronLeft,
+			isInline,
+			loadError,
+			goBack,
+			save,
+			editorRef,
 		};
 	},
 });
 </script>
 
 <style scoped>
-.editor-iframe {
-	width: 100%;
+.content {
+	margin-top: var(--space-xl-3);
+}
+
+.editor {
 	height: 100%;
+	width: 100%;
+	max-width: 960px;
 	border: none;
 	overflow: auto;
-	background-color: #b1b1b1;
+	display: block;
+	margin: auto;
+}
+
+.column-layout {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 </style>
