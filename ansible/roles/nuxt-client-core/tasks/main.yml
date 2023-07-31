@@ -21,4 +21,4 @@
   kubernetes.core.k8s:
     kubeconfig: ~/.kube/config
     namespace: "{{ NAMESPACE }}"
-    template: svc-tldraw-client.yml.j2
+    template: tldraw-client-svc.yml.j2
