@@ -143,13 +143,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
-	get getNewSchoolAdminPageAsDefault(): boolean {
-		return (
-			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ??
-			false
-		);
-	}
-
 	get getClientUserLoginMigration(): boolean {
 		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED ?? false;
 	}
