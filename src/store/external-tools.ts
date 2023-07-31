@@ -76,7 +76,7 @@ export default class ExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 
