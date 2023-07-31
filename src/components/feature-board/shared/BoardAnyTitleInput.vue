@@ -81,8 +81,6 @@ export default defineComponent({
 			return titleInput.value.$refs.input as HTMLTextAreaElement;
 		});
 
-		// useBoardFocusHandler("klasdfhasdklf", textarea, setFocusOnEdit);
-
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
 		});
@@ -175,12 +173,12 @@ export default defineComponent({
 
 /** Edge */
 :deep(textarea)::-ms-input-placeholder {
-	color: var(--v-black) !important;
+	color: var(--v-secondary-base) !important;
 	opacity: 1;
 }
 /** Other common browsers */
 :deep(textarea)::placeholder {
-	color: var(--v-black) !important;
+	color: var(--v-secondary-base) !important;
 	opacity: 1;
 }
 </style>

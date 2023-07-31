@@ -8,7 +8,6 @@
 		<VCard
 			ref="cardHost"
 			:height="isLoading ? height : 'auto'"
-			class="transition-swing"
 			:class="{ 'drag-disabled': isEditMode }"
 			outlined
 			tabindex="0"
@@ -260,7 +259,7 @@ export default defineComponent({
 }
 
 .v-card:focus {
-	outline: 2px solid var(--v-secondary-base);
+	outline: 2px solid var(--v-secondary-lighten1);
 	outline-offset: 0;
 }
 </style>
