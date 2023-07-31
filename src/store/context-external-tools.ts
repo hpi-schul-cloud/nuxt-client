@@ -126,7 +126,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 
@@ -160,7 +160,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 
@@ -183,7 +183,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 
@@ -219,7 +219,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 
@@ -255,7 +255,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: apiError.message,
+				message: `${apiError.type}: ${apiError.message}}`,
 			});
 		}
 

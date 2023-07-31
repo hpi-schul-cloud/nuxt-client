@@ -2,7 +2,6 @@ import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolPostParams,
 	ToolApiInterface,
-	ToolReferenceListResponse,
 	ToolReferenceResponse,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
@@ -18,7 +17,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { toolReferenceResponseFactory } from "../../tests/test-utils/factory/toolReferenceResponseFactory";
+import { toolReferenceResponseFactory } from "@@/tests/test-utils/factory/toolReferenceResponseFactory";
 import ContextExternalToolsModule from "./context-external-tools";
 import {
 	ContextExternalToolConfigurationTemplate,
@@ -200,7 +199,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});
@@ -281,7 +280,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});
@@ -346,7 +345,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});
@@ -458,7 +457,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});
@@ -564,7 +563,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});

@@ -107,7 +107,7 @@ describe("ExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: apiError.message,
+						message: `${apiError.type}: ${apiError.message}}`,
 					});
 				});
 			});
