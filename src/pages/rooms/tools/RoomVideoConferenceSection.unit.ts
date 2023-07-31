@@ -58,6 +58,7 @@ describe("RoomVideoConferenceSection", () => {
 				title: "roomName",
 				displayColor: "displayColor",
 				elements: [],
+				isArchived: false,
 			},
 		});
 

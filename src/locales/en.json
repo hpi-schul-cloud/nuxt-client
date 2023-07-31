@@ -841,6 +841,7 @@
 	"pages.rooms.index.search.label": "Search course",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.headerSection.archived": "Archive",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.outdated": "Tool outdated",
 	"pages.rooms.tabLabel.toolsOld": "Tools",

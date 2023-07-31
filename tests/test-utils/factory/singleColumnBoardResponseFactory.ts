@@ -7,4 +7,5 @@ export const singleColumnBoardResponseFactory =
 		title: "room",
 		displayColor: "#ff00ff",
 		elements: [],
+		isArchived: false,
 	}));
