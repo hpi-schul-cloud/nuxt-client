@@ -1,20 +1,20 @@
-import { I18N_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { nextTick, ref } from "vue";
-import { useBoardState } from "./BoardState.composable";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-import { useBoardApi } from "../shared/BoardApi.composable";
+import { I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { useSharedEditMode } from "../shared/EditMode.composable";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { nextTick, ref } from "vue";
+import { useBoardApi } from "../shared/BoardApi.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardState } from "./BoardState.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -576,7 +576,6 @@ describe("BoardState.composable", () => {
 				column.id,
 				NEW_TITLE
 			);
-			expect(board.value.columns[0].title).toEqual(NEW_TITLE);
 		});
 	});
 

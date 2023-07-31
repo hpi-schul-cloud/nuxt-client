@@ -6,7 +6,7 @@
 // into the actual stores, and then re-export them.
 
 import AccountsModule from "@/store/accounts";
-import ApplicationErrorModule from "./application-error";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import CollaborativeFilesModule from "@/store/collaborative-files";
@@ -33,7 +33,8 @@ import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import VideoConferenceModule from "./video-conference";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import VideoConferenceModule from "@/store/video-conference";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -57,6 +58,7 @@ export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
+export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let statusAlertsModule: StatusAlertsModule;
@@ -87,6 +89,7 @@ export function initializeStores(store: Store<any>): void {
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
+	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
@@ -120,6 +123,7 @@ export const modules = {
 	privacyPolicyModule: PrivacyPolicyModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
+	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
 	statusAlertsModule: StatusAlertsModule,

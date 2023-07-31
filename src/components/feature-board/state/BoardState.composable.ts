@@ -211,12 +211,6 @@ export const useBoardState = (id: string) => {
 		if (isErrorCode(status)) {
 			const errorText = generateErrorText("update");
 			await showErrorAndReload(errorText);
-			return;
-		}
-
-		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex > -1) {
-			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
 

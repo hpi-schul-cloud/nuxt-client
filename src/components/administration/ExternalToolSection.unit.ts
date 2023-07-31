@@ -1,48 +1,61 @@
-import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
-import ExternalToolsModule from "@/store/external-tools";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import NotifierModule from "@/store/notifier";
-import Vue from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import AuthModule from "@/store/auth";
 import { ToolConfigurationStatus } from "@/store/external-tool";
+import NotifierModule from "@/store/notifier";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { User } from "@/store/types/auth";
 import {
-	EXTERNAL_TOOLS_MODULE_KEY,
+	AUTH_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ExternalToolSection from "./ExternalToolSection.vue";
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
 
-	const setup = (getters: Partial<ExternalToolsModule> = {}) => {
+	const setup = (getters: Partial<SchoolExternalToolsModule> = {}) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
 
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getSchoolExternalTools: [],
-			...getters,
-		});
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule,
+			{
+				getSchoolExternalTools: [],
+				...getters,
+			}
+		);
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper = mount(ExternalToolSection, {
+		const authModule = createModuleMocks(AuthModule, {
+			getUser: {
+				schoolId: "schoolId",
+			} as User,
+		});
+
+		const wrapper: Wrapper<Vue> = mount(ExternalToolSection, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
-				[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+				[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 		});
 
 		return {
 			wrapper,
-			externalToolsModule,
+			schoolExternalToolsModule,
 			notifierModule,
 		};
 	};
@@ -57,8 +70,11 @@ describe("ExternalToolSection", () => {
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
-				const { externalToolsModule } = setup();
-				expect(externalToolsModule.loadSchoolExternalTools).toHaveBeenCalled();
+				const { schoolExternalToolsModule } = setup();
+
+				expect(
+					schoolExternalToolsModule.loadSchoolExternalTools
+				).toHaveBeenCalledWith("schoolId");
 			});
 		});
 	});
@@ -87,11 +103,12 @@ describe("ExternalToolSection", () => {
 		const setupItems = () => {
 			const firstToolName = "Test";
 			const secondToolName = "Test2";
-			const { wrapper, externalToolsModule } = setup({
+			const { wrapper, schoolExternalToolsModule } = setup({
 				getSchoolExternalTools: [
 					{
 						id: "testId",
 						toolId: "toolId",
+						schoolId: "schoolId",
 						parameters: [],
 						name: firstToolName,
 						status: ToolConfigurationStatus.Latest,
@@ -100,6 +117,7 @@ describe("ExternalToolSection", () => {
 					{
 						id: "testId2",
 						toolId: "toolId",
+						schoolId: "schoolId",
 						parameters: [],
 						name: secondToolName,
 						status: ToolConfigurationStatus.Outdated,
@@ -109,7 +127,7 @@ describe("ExternalToolSection", () => {
 			});
 			return {
 				wrapper,
-				externalToolsModule,
+				schoolExternalToolsModule,
 				firstToolName,
 				secondToolName,
 			};
@@ -202,11 +220,12 @@ describe("ExternalToolSection", () => {
 
 				describe("when deletion is confirmed", () => {
 					it("should call externalToolsModule.deleteSchoolExternalTool", async () => {
-						const { wrapper, externalToolsModule } = setup({
+						const { wrapper, schoolExternalToolsModule } = setup({
 							getSchoolExternalTools: [
 								{
 									id: "testId",
 									toolId: "toolId",
+									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
 									status: ToolConfigurationStatus.Latest,
@@ -226,7 +245,7 @@ describe("ExternalToolSection", () => {
 						await confirmButton.trigger("click");
 
 						expect(
-							externalToolsModule.deleteSchoolExternalTool
+							schoolExternalToolsModule.deleteSchoolExternalTool
 						).toHaveBeenCalled();
 					});
 
@@ -236,6 +255,7 @@ describe("ExternalToolSection", () => {
 								{
 									id: "testId",
 									toolId: "toolId",
+									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
 									status: ToolConfigurationStatus.Latest,
