@@ -22,7 +22,7 @@
 					large
 					:height="84"
 					:width="126"
-					class="d-sm-flex button-alignment-top"
+					class="d-sm-flex button-alignment-center"
 					:data-testid="item.testId"
 					@click.stop="item.action"
 				>
@@ -90,7 +90,7 @@ export default defineComponent({
 	max-width: calc(var(--topbar-height) * 2);
 }
 
-.button-alignment-top {
-	align-items: start;
+.button-alignment-center {
+	align-items: center;
 }
 </style>
