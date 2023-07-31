@@ -21,7 +21,7 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction @click="onStartEditMode">
+					<BoardMenuAction v-if="isEditMode" @click="onStartEditMode">
 						<template #icon>
 							<VIcon>
 								{{ mdiPencilOutline }}
