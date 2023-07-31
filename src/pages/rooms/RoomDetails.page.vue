@@ -519,12 +519,17 @@ export default defineComponent({
 	},
 });
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 
 .course-title {
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+::v-deep .theme--light.v-chip:hover::before {
+	opacity: 0;
 }
 
 .modal-text {
