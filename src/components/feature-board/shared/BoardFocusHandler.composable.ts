@@ -1,6 +1,6 @@
 import {
 	createSharedComposable,
-	MaybeComputedRef,
+	MaybeRefOrGetter,
 	useEventListener,
 	useFocus,
 	useFocusWithin,
@@ -55,7 +55,7 @@ export function useBoardFocusHandler(): Pick<
  * e.g. when your elementRef is a custom component and not a HTMLElement
  */
 export function useBoardFocusHandler(
-	id: MaybeComputedRef<FocusableId>,
+	id: MaybeRefOrGetter<FocusableId>,
 	element: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Pick<
@@ -71,7 +71,7 @@ export function useBoardFocusHandler(
 	onFocusReceived?: never
 ): Partial<FocusHandler>;
 export function useBoardFocusHandler(
-	id?: MaybeComputedRef<FocusableId>,
+	id?: MaybeRefOrGetter<FocusableId>,
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
@@ -172,7 +172,7 @@ export function useBoardFocusHandler(
 const useSharedFocusedId = createSharedComposable(() => {
 	const focusedId = ref<FocusableId | undefined>(undefined);
 
-	const setFocus = (id: MaybeComputedRef<FocusableId>) => {
+	const setFocus = (id: MaybeRefOrGetter<FocusableId>) => {
 		if (focusedId.value === id.valueOf()) {
 			return;
 		}
