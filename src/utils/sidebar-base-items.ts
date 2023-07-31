@@ -24,9 +24,7 @@ export type SidebarCategoryItem = SidebarItem & {
 
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
-const getSidebarItems = (
-	isNewSchoolAdminPageDefault: boolean
-): SidebarItemList => [
+const getSidebarItems = (): SidebarItemList => [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
@@ -222,27 +220,13 @@ const getSidebarItems = (
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			isNewSchoolAdminPageDefault
-				? {
-						title: "global.sidebar.school",
-						icon: "$school_outline",
-						to: "/administration/school-settings",
-						testId: "Schule",
-						activeForUrls: [
-							"^/administration/school($|/.*)",
-							"^/administration/school-settings($|/.*)",
-						],
-				  }
-				: {
-						title: "global.sidebar.school",
-						icon: "$school_outline",
-						href: "/administration/school",
-						testId: "Schule",
-						activeForUrls: [
-							"^/administration/school($|/.*)",
-							"^/administration/school-settings($|/.*)",
-						],
-				  },
+			{
+				title: "global.sidebar.school",
+				icon: "$school_outline",
+				to: "/administration/school-settings",
+				testId: "Schule",
+				activeForUrls: ["^/administration/school-settings($|/.*)"],
+			},
 		],
 	},
 	{

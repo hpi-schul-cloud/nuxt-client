@@ -15,12 +15,6 @@
 			src="@/assets/img/pc_repair.png"
 		/>
 		<div v-if="!schoolError" class="no-school-error">
-			<v-alert light prominent text type="info">
-				{{ $t("pages.administration.school.index.info") }}
-				<a href="/administration/school/">
-					{{ $t("pages.administration.school.index.back") }}
-				</a>
-			</v-alert>
 			<h2 class="text-h4">
 				{{ currentSchoolYear }}
 			</h2>
