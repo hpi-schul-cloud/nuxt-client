@@ -1,10 +1,15 @@
-import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	FileElementResponse,
+	SubmissionContainerElementResponse,
+} from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import RichTextContentElement from "./RichTextContentElement.vue";
+import SubmissionContentElement from "./SubmissionContentElement.vue";
 import { FileContentElement } from "./file-content-element";
 
 describe("ContentElementList", () => {
@@ -43,6 +48,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.File,
 				component: FileContentElement,
 			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
+			},
 		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
@@ -62,6 +71,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.File,
 				component: FileContentElement,
+			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
 			},
 		])(
 			"should propagate isEditMode to child elements",
@@ -91,6 +104,22 @@ describe("ContentElementList", () => {
 			});
 
 			const childComponent = wrapper.findComponent(FileContentElement);
+
+			expect(childComponent.exists()).toBe(true);
+			expect(childComponent.props("deleteElement")).toBe(deleteElementMock);
+		});
+
+		it("should propagate deleteElement function to submission container elements", () => {
+			const { deleteElementMock } = setup({
+				elements: [
+					{
+						type: ContentElementType.SubmissionContainer,
+					} as SubmissionContainerElementResponse,
+				],
+				isEditMode: true,
+			});
+
+			const childComponent = wrapper.findComponent(SubmissionContentElement);
 
 			expect(childComponent.exists()).toBe(true);
 			expect(childComponent.props("deleteElement")).toBe(deleteElementMock);
