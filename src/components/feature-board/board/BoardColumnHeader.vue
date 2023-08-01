@@ -8,6 +8,7 @@
 		<div
 			class="column-header mb-4 rounded"
 			:class="{ 'grey lighten-2': isFocusContained }"
+			tabindex="0"
 			ref="columnHeader"
 		>
 			<div class="d-flex align-start py-2 px-2">
@@ -20,7 +21,7 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction @click="onStartEditMode">
+					<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 						<template #icon>
 							<VIcon>
 								{{ mdiPencilOutline }}

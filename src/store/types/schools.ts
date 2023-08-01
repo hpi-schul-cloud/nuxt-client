@@ -42,6 +42,7 @@ export type School = {
 		videoconference: boolean;
 		studentVisibility: boolean;
 		ldapUniventionMigrationSchool: boolean;
+		showOutdatedUsers: boolean;
 	};
 	enableStudentTeamCreation: boolean;
 	permissions: unknown;

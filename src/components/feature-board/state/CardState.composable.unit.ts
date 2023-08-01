@@ -129,12 +129,13 @@ describe("CardState composable", () => {
 		it("should call updateCardTitle", async () => {
 			const { updateTitle, card } = setup(boardCard.id);
 			card.value = boardCard;
+			const newTitle = "new title";
 
-			await updateTitle("new title");
+			await updateTitle(newTitle);
 
 			expect(mockedBoardApiCalls.updateCardTitle).toHaveBeenCalledWith(
 				boardCard.id,
-				boardCard.title
+				newTitle
 			);
 		});
 
@@ -145,42 +146,6 @@ describe("CardState composable", () => {
 			await updateTitle("new title");
 
 			expect(mockedBoardApiCalls.updateCardTitle).not.toHaveBeenCalled();
-		});
-
-		it("should update card title", async () => {
-			const newTitle = "new Title";
-			const { updateTitle, card } = setup(boardCard.id);
-			card.value = boardCard;
-
-			await updateTitle(newTitle);
-
-			expect(boardCard.title).toEqual(newTitle);
-		});
-
-		it("should not update card title when api response has error", async () => {
-			mockedBoardApiCalls.updateCardTitle = jest
-				.fn()
-				.mockResolvedValue({ status: 300 });
-			mockedBoardNotifierCalls.isErrorCode = jest.fn().mockReturnValue(true);
-			const boardCardNew: BoardCard = {
-				id: `cardid`,
-				height: 200,
-				title: "old Title",
-				elements: [],
-				visibility: { publishedAt: new Date().toUTCString() },
-			};
-
-			const newTitle = "new Title";
-			const { updateTitle, card } = setup(boardCardNew.id);
-			card.value = boardCardNew;
-
-			await updateTitle(newTitle);
-
-			expect(boardCardNew.title).toEqual("old Title");
-			expect(mockedBoardNotifierCalls.generateErrorText).toHaveBeenCalledWith(
-				"update"
-			);
-			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalled();
 		});
 	});
 

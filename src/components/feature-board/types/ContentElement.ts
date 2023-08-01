@@ -1,7 +1,10 @@
-import { FileElementResponse, RichTextElementResponse } from "@/serverApi/v3";
-import { type SubmissionElementResponse } from "@/components/feature-board/content-elements/SubmissionContentElement.vue";
+import {
+	FileElementResponse,
+	RichTextElementResponse,
+	SubmissionContainerElementResponse,
+} from "@/serverApi/v3";
 
 export type AnyContentElement =
-	| FileElementResponse
 	| RichTextElementResponse
-	| SubmissionElementResponse;
+	| FileElementResponse
+	| SubmissionContainerElementResponse;
