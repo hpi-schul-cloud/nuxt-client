@@ -20,8 +20,10 @@
 			:get-child-payload="getChildPayload"
 			:drag-begin-delay="isDesktop ? 0 : 300"
 			non-drag-area-selector=".drag-disabled"
-			@drop="onMoveCard"
+			@drag-start="onDragStart"
+			@drop="onDragEnd"
 			class="scrollable-column pr-1 -mt-3"
+			:class="{ 'expanded-column': isDragging }"
 		>
 			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
 				<CardHost
@@ -35,7 +37,7 @@
 			</Draggable>
 		</Container>
 		<BoardAddCardButton
-			v-if="hasCreateColumnPermission"
+			v-if="hasCreateColumnPermission && !isDragging"
 			@add-card="onCreateCard"
 		></BoardAddCardButton>
 	</div>
@@ -48,6 +50,7 @@ import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { BoardColumn, BoardSkeletonCard } from "../types/Board";
 import {
 	CardMove,
@@ -91,6 +94,8 @@ export default defineComponent({
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
 
+		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+
 		const onCreateCard = () => emit("create:card", props.column.id);
 
 		const onColumnDelete = (columnId: string): void => {
@@ -102,7 +107,12 @@ export default defineComponent({
 		};
 		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
-		const onMoveCard = (dropResult: CardMove): void => {
+		const onDragStart = (): void => {
+			dragStart();
+		};
+
+		const onDragEnd = (dropResult: CardMove): void => {
+			dragEnd();
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
 			emit("update:card-position", {
@@ -158,11 +168,13 @@ export default defineComponent({
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
+			isDragging,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
-			onMoveCard,
+			onDragStart,
+			onDragEnd,
 			onMoveCardKeyboard,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
@@ -179,6 +191,9 @@ export default defineComponent({
 }
 </style>
 <style scoped>
+.scrollable-column.expanded-column {
+	min-height: 75vh;
+}
 .scrollable-column {
 	overflow-y: auto;
 	max-height: 75vh;
