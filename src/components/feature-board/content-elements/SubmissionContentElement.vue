@@ -27,37 +27,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import {
-	ContentElementType,
-	SubmissionContainerContentBody,
-} from "@/serverApi/v3";
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-
-// mock interface
-export interface SubmissionElementResponse {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof SubmissionElementResponse
-	 */
-	id: string;
-	/**
-	 *
-	 * @type {ContentElementType}
-	 * @memberof SubmissionElementResponse
-	 */
-	type: ContentElementType;
-	/**
-	 *
-	 * @type {SubmissionContainerContentBody}
-	 * @memberof SubmissionElementResponse
-	 */
-	content: SubmissionContainerContentBody;
-}
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -67,7 +42,7 @@ export default defineComponent({
 	},
 	props: {
 		element: {
-			type: Object as PropType<SubmissionElementResponse>,
+			type: Object as PropType<SubmissionContainerElementResponse>,
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
