@@ -2,9 +2,7 @@ import { I18N_KEY } from "@/utils/inject";
 import { setupDeleteConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteConfirmationMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteBoardNodeConfirmation } from "./DeleteBoardNodeConfirmation.composable";
-jest.mock(
-	"@/components/feature-confirmation-dialog/delete-confirmation.composable"
-);
+jest.mock("@/ui/confirmation-dialog/delete-confirmation.composable");
 
 describe("DeleteBoardNodeConfirmation composable", () => {
 	describe("askDeleteBoardNodeConfirmation", () => {

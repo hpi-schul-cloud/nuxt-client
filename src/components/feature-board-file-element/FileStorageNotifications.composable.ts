@@ -56,7 +56,9 @@ export const useFileStorageNotifier = () => {
 
 		const message = getMessageString(
 			"components.board.notifications.errors.fileToBig",
-			{ maxFileSizeWithUnit: `${localizedFileSize} ${unit}` }
+			{
+				maxFileSizeWithUnit: `${localizedFileSize} ${unit}`,
+			}
 		);
 
 		showFailure(message);

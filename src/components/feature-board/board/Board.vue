@@ -36,7 +36,7 @@
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
-				<DeleteConfirmation></DeleteConfirmation>
+				<ConfirmationDialog></ConfirmationDialog>
 				<ElementTypeSelection></ElementTypeSelection>
 			</template>
 		</div>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
+import { ConfirmationDialog } from "@/ui/confirmation-dialog";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useMediaQuery } from "@vueuse/core";
@@ -74,7 +74,7 @@ export default defineComponent({
 		Container,
 		Draggable,
 		BoardColumnGhost,
-		DeleteConfirmation,
+		ConfirmationDialog,
 		ElementTypeSelection,
 	},
 	props: {

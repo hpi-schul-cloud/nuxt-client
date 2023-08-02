@@ -2,7 +2,7 @@ import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
-import { useSelectedFile } from "./SelectedFile.composable";
+import { useSelectedFile } from "../../feature-board-file-element/SelectedFile.composable";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export const useElementTypeSelection = (addElementFunction: AddCardElement) => {

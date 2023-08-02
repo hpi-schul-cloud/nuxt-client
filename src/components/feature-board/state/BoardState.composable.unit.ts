@@ -9,7 +9,7 @@ import {
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { nextTick, ref } from "vue";
-import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "../types/Board";

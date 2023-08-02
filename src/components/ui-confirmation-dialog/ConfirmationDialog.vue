@@ -3,7 +3,7 @@
 		data-testid="delete-dialog-item"
 		:has-buttons="true"
 		confirm-btn-title-key="common.actions.remove"
-		@dialog-confirmed="onDeleteConfirmation"
+		@dialog-confirmed="onConfirmation"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
 	>
@@ -19,7 +19,7 @@ import { computed, defineComponent } from "vue";
 import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
 
 export default defineComponent({
-	name: "CardDeleteConfirmation",
+	name: "ConfirmationDialog",
 	components: {
 		vCustomDialog,
 	},
@@ -27,7 +27,7 @@ export default defineComponent({
 		const { confirm, cancel, dialogOptions, isDialogOpen } =
 			useInternalDeleteConfirmation();
 
-		const onDeleteConfirmation = () => confirm();
+		const onConfirmation = () => confirm();
 		const onCloseDialog = () => cancel();
 
 		const message = computed(() =>
@@ -38,7 +38,7 @@ export default defineComponent({
 			message,
 			dialogOptions,
 			isDialogOpen,
-			onDeleteConfirmation,
+			onConfirmation: onConfirmation,
 			onCloseDialog,
 		};
 	},

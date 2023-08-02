@@ -61,19 +61,21 @@
 </template>
 
 <script lang="ts">
+import {
+	useBoardFocusHandler,
+	useContentElementState,
+	useDeleteBoardNodeConfirmation,
+} from "@/feature/board";
+import { useFileRecord } from "../FileRecord.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler } from "@boardShared/BoardFocusHandler.composable";
-import { useDeleteBoardNodeConfirmation } from "@boardShared/DeleteBoardNodeConfirmation.composable";
-import { useFileStorageApi } from "@boardShared/FileStorageApi.composable";
-import { useSelectedFile } from "@boardShared/SelectedFile.composable";
-import { useContentElementState } from "@boardState/ContentElementState.composable";
+import { useFileStorageApi } from "../FileStorageApi.composable";
+import { useSelectedFile } from "../SelectedFile.composable";
 import { PropType, defineComponent, onMounted, ref } from "vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import { useFileRecord } from "./FileRecord.composable";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({

@@ -2,7 +2,7 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import VueI18n from "vue-i18n";
-import { useBoardApi } from "./BoardApi.composable";
+import { useBoardApi } from "../state/BoardApi.composable";
 
 export type BoardBreadcrumb = {
 	text: string | undefined;

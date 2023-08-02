@@ -3,7 +3,7 @@ import {
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
-import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";

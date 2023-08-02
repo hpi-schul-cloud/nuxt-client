@@ -1,4 +1,4 @@
-import { useFileStorageNotifier } from "@/components/feature-board/shared/FileStorageNotifications.composable";
+import { useFileStorageNotifier } from "@/components/feature-board-file-element/FileStorageNotifications.composable";
 import { jest } from "@jest/globals";
 
 interface Props {

@@ -26,16 +26,16 @@
 </template>
 
 <script lang="ts">
+import { FileContentElement } from "@/feature/board-file-element";
+import { RichTextContentElement } from "@/feature/board-text-element";
 import {
 	ContentElementType,
 	FileElementResponse,
 	RichTextElementResponse,
 } from "@/serverApi/v3";
-import { PropType, computed, defineComponent } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
-import RichTextContentElement from "./RichTextContentElement.vue";
-import { FileContentElement } from "./file-content-element";
 
 export default defineComponent({
 	name: "ContentElementList",

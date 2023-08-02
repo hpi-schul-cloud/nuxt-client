@@ -1,5 +1,5 @@
 import { nextTick, onMounted, ref } from "vue";
-import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";

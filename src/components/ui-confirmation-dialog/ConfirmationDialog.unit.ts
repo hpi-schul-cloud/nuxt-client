@@ -2,7 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
-import DeleteConfirmation from "./DeleteConfirmation.vue";
+import DeleteConfirmation from "./ConfirmationDialog.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("./delete-confirmation.composable");

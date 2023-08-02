@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
 import { defineComponent, ref } from "vue";
@@ -152,3 +152,4 @@ export default defineComponent({
 	outline: none;
 }
 </style>
+@/components/ui-confirmation-dialog/delete-confirmation.composable

@@ -4,8 +4,8 @@ import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import RichTextContentElement from "./RichTextContentElement.vue";
-import { FileContentElement } from "./file-content-element";
+import { RichTextContentElement } from "@/feature/board-text-element";
+import { FileContentElement } from "@/feature/board-file-element";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;

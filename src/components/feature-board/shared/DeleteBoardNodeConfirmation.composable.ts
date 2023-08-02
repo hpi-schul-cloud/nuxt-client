@@ -1,4 +1,4 @@
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
+import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export const useDeleteBoardNodeConfirmation = () => {

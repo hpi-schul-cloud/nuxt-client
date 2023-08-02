@@ -35,6 +35,32 @@ module.exports = {
 		"vue/no-v-html": "error",
 		"no-prototype-builtins": "error",
 		"no-empty": "error",
+		"@typescript-eslint/no-restricted-imports": [
+			"warn",
+			{
+				patterns: [
+					{
+						group: ["@/feature/*/*", "@/ui/*/*", "@/util/*/*"],
+						message: "Do not deep import into a module",
+					},
+					{
+						group: ["@/components/feature-*", "*/../feature-*"],
+						message:
+							"Feature-Modules have to be imported using the pattern '@/feature/<name>'",
+					},
+					{
+						group: ["@/components/util-*", "*/../util-*"],
+						message:
+							"Util-Modules have to be imported using the pattern '@/util/<name>'",
+					},
+					{
+						group: ["@/components/ui-*", "*/../ui-*"],
+						message:
+							"Ui-Modules have to be imported using the pattern '@/ui/<name>'",
+					},
+				],
+			},
+		],
 	},
 	overrides: [
 		{

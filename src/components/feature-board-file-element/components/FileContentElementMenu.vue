@@ -51,9 +51,8 @@
 </template>
 
 <script lang="ts">
+import { BoardMenu, BoardMenuAction } from "@/feature/board";
 import { downloadFile } from "@/utils/fileHelper";
-import BoardMenu from "@boardShared/BoardMenu.vue";
-import BoardMenuAction from "@boardShared/BoardMenuAction.vue";
 import {
 	mdiAlertCircle,
 	mdiArrowCollapseDown,

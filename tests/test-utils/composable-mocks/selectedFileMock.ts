@@ -1,4 +1,4 @@
-import { useSelectedFile } from "@/components/feature-board/shared/SelectedFile.composable";
+import { useSelectedFile } from "@/components/feature-board-file-element/SelectedFile.composable";
 import { jest } from "@jest/globals";
 
 interface Props {

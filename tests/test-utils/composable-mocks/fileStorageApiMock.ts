@@ -1,4 +1,4 @@
-import { useFileStorageApi } from "@/components/feature-board/shared/FileStorageApi.composable";
+import { useFileStorageApi } from "@/components/feature-board-file-element/FileStorageApi.composable";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { jest } from "@jest/globals";
 import { ref } from "vue";

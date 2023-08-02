@@ -13,7 +13,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { nextTick } from "vue";
-import { useBoardApi } from "../shared/BoardApi.composable";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";

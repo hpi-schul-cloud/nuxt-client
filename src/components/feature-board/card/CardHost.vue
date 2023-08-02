@@ -208,7 +208,10 @@ export default defineComponent({
 		watchDebounced(
 			cardHostHeight,
 			(newHeight: number) => updateCardHeight(newHeight),
-			{ debounce: 500, maxWait: 2000 }
+			{
+				debounce: 500,
+				maxWait: 2000,
+			}
 		);
 
 		return {

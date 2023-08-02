@@ -19,11 +19,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import { useContentElementState } from "../state/ContentElementState.composable";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import {
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@/feature/board";
 
 export default defineComponent({
 	name: "RichTextContentElement",
