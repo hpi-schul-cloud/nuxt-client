@@ -1,6 +1,6 @@
 <template>
 	<v-list
-		data-test-id="status-alerts"
+		data-testId="status-alerts"
 		min-width="250"
 		max-height="400"
 		class="alerts pa-0 rounded"

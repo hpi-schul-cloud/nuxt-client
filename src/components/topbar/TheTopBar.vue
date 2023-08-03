@@ -28,7 +28,7 @@
 					:color="statusAlertColor"
 					class="item exclamation-triangle"
 					centered
-					data-test-id="status-alerts-icon"
+					data-testID="status-alerts-icon"
 				>
 					<StatusAlerts :status-alerts="statusAlerts" />
 				</popup-icon>
