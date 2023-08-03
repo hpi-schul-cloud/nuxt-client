@@ -276,7 +276,7 @@ export default class AuthModule extends VuexModule {
 	@Action
 	logout(redirectUrl = "/logout"): void {
 		localStorage.clear();
-		window.location.assign(redirectUrl);
+		window.location.replace(redirectUrl);
 	}
 
 	private get userApi(): UserApiInterface {
