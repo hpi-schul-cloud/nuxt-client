@@ -22,7 +22,7 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 			/>
 			<SubmissionContentElement
-				v-else-if="isSubmissionElementResponse(element)"
+				v-else-if="isSubmissionContainerElementResponse(element)"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
@@ -43,14 +43,13 @@ import {
 	ContentElementType,
 	FileElementResponse,
 	RichTextElementResponse,
+	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { PropType, computed, defineComponent } from "vue";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
 import RichTextContentElement from "./RichTextContentElement.vue";
-import SubmissionContentElement, {
-	SubmissionElementResponse,
-} from "./SubmissionContentElement.vue";
+import SubmissionContentElement from "./SubmissionContentElement.vue";
 import { FileContentElement } from "./file-content-element";
 
 export default defineComponent({
@@ -88,9 +87,9 @@ export default defineComponent({
 			return element.type === ContentElementType.RichText;
 		};
 
-		const isSubmissionElementResponse = (
+		const isSubmissionContainerElementResponse = (
 			element: AnyContentElement
-		): element is SubmissionElementResponse => {
+		): element is SubmissionContainerElementResponse => {
 			return element.type === ContentElementType.SubmissionContainer;
 		};
 
@@ -147,7 +146,7 @@ export default defineComponent({
 			hasMultipleElements,
 			isFileElementResponse,
 			isRichTextElementResponse,
-			isSubmissionElementResponse,
+			isSubmissionContainerElementResponse,
 			lastElementId,
 			onMoveElementDown,
 			onMoveElementUp,
