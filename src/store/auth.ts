@@ -274,11 +274,9 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Action
-	logout(redirectUrl = "/logout"): Promise<void> {
-		// localStorage.clear();
-		// this.context.commit("clearAuthData");
-		window.location.replace(redirectUrl);
-		return Promise.resolve();
+	logout(redirectUrl = "/logout"): void {
+		localStorage.clear();
+		window.location.assign(redirectUrl);
 	}
 
 	private get userApi(): UserApiInterface {
