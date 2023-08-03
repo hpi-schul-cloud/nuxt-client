@@ -1,5 +1,5 @@
-import { useFileStorageNotifier } from "@/components/feature-board-file-element/FileStorageNotifications.composable";
 import { jest } from "@jest/globals";
+import { useFileStorageNotifier } from "../FileStorageNotifications.composable";
 
 interface Props {
 	showFileTooBigErrorMock?: () => void;

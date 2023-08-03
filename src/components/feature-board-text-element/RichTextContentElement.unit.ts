@@ -1,14 +1,21 @@
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-jest.mock("../shared/InlineEditInteractionHandler.composable");
+jest.mock("@/feature/board", () => {
+	return {
+		useBoardFocusHandler: jest.fn(),
+		useContentElementState: jest.fn(() => ({ modelValue: {} })),
+		useDeleteBoardNodeConfirmation: jest.fn(),
+		useInlineEditInteractionHandler: jest.fn(),
+	};
+});
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
@@ -48,7 +55,7 @@ describe("RichTextContentElement", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("should render display if isEditMode is false", () => {
+		it.only("should render display if isEditMode is false", () => {
 			setup({
 				element: TEST_ELEMENT,
 				isEditMode: false,

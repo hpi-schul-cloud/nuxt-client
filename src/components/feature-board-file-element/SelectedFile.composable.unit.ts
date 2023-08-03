@@ -1,9 +1,9 @@
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { setupFileStorageNotifier } from "@@/tests/test-utils/composable-mocks/fileStorageNotifier";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSelectedFile } from "./SelectedFile.composable";
+import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 jest.mock("./FileStorageNotifications.composable");
 
 const configModule = createModuleMocks(EnvConfigModule, {

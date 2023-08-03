@@ -1,25 +1,25 @@
 import {
 	ContentElementType,
-	CreateContentElementBodyParams,
+	CreateContentElementBodyParams
 } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardCardFactory,
-	fileElementResponseFactory,
+	fileElementResponseFactory
 } from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { nextTick } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
 import { BoardCard } from "../types/Card";
 import { AnyContentElement } from "../types/ContentElement";
 import { ElementMove } from "../types/DragAndDrop";
+import { useBoardApi } from "./BoardApi.composable";
 import { useCardState } from "./CardState.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
@@ -34,7 +34,7 @@ const setup = (cardId = "123123") => {
 jest.mock("../shared/CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
-jest.mock("../shared/BoardApi.composable");
+jest.mock("../state/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("../shared/BoardNotifications.composable");

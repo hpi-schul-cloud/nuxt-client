@@ -1,7 +1,7 @@
-import { useFileStorageApi } from "@/components/feature-board-file-element/FileStorageApi.composable";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { jest } from "@jest/globals";
 import { ref } from "vue";
+import { useFileStorageApi } from "../FileStorageApi.composable";
 
 interface Props {
 	fetchFileMock?: jest.Mock;

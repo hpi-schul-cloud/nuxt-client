@@ -1,8 +1,10 @@
-import { useContentElementState } from "./state/ContentElementState.composable";
 import { useBoardFocusHandler } from "./shared/BoardFocusHandler.composable";
-import { useDeleteBoardNodeConfirmation } from "./shared/DeleteBoardNodeConfirmation.composable";
 import BoardMenu from "./shared/BoardMenu.vue";
 import BoardMenuAction from "./shared/BoardMenuAction.vue";
+import { useDeleteBoardNodeConfirmation } from "./shared/DeleteBoardNodeConfirmation.composable";
+import { useInlineEditInteractionHandler } from "./shared/InlineEditInteractionHandler.composable";
+import { useContentElementState } from "./state/ContentElementState.composable";
+import { AnyContentElement } from "./types/ContentElement";
 /**
  * Todo: Refactor to accept any permission and be less specific to the board. then move to another module and export form there
  */
@@ -12,6 +14,8 @@ export {
 	useContentElementState,
 	useBoardFocusHandler,
 	useDeleteBoardNodeConfirmation,
+	useInlineEditInteractionHandler,
+	AnyContentElement,
 	BoardMenu,
 	BoardMenuAction,
 };

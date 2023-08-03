@@ -1,4 +1,4 @@
-import { useDeleteConfirmation } from "@/components/ui-confirmation-dialog/delete-confirmation.composable";
+import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { jest } from "@jest/globals";
 import { ref } from "vue";
 

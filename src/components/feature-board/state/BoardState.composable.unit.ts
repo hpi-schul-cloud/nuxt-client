@@ -4,21 +4,21 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
-	columnResponseFactory,
+	columnResponseFactory
 } from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { nextTick, ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "../types/Board";
 import { CardMove, ColumnMove } from "../types/DragAndDrop";
+import { useBoardApi } from "./BoardApi.composable";
 import { useBoardState } from "./BoardState.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-jest.mock("../shared/BoardApi.composable");
+jest.mock("../state/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("../shared/EditMode.composable");

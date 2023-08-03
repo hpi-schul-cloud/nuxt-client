@@ -1,5 +1,5 @@
-import { useSelectedFile } from "@/components/feature-board-file-element/SelectedFile.composable";
 import { jest } from "@jest/globals";
+import { useSelectedFile } from "../SelectedFile.composable";
 
 interface Props {
 	getSelectedFileMock?: () => File | undefined;

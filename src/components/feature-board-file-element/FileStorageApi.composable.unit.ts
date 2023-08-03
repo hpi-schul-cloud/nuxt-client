@@ -1,12 +1,12 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { setupFileStorageFactoryMock } from "@@/tests/test-utils/api-mocks/fileStorageFactoryMock";
-import { setupFileStorageNotifier } from "@@/tests/test-utils/composable-mocks/fileStorageNotifier";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");

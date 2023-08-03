@@ -22,10 +22,7 @@ import { defineComponent, PropType, ref } from "vue";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import {
-	useBoardFocusHandler,
-	useContentElementState,
-} from "@/feature/board";
+import { useBoardFocusHandler, useContentElementState } from "@/feature/board";
 
 export default defineComponent({
 	name: "RichTextContentElement",

@@ -1,17 +1,17 @@
+import { AnyContentElement } from "@/feature/board";
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
-import { setupFileRecordMock } from "@@/tests/test-utils/composable-mocks/fileRecordMock";
-import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
-import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { AnyContentElement } from "@boardTypes/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
+import { setupFileRecordMock } from "../test-utils/fileRecordMock";
+import { setupFileStorageApiMock } from "../test-utils/fileStorageApiMock";
+import { setupSelectedFileMock } from "../test-utils/selectedFileMock";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
@@ -19,11 +19,17 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
-jest.mock("@boardShared/InlineEditInteractionHandler.composable");
-jest.mock("@boardShared/DeleteBoardNodeConfirmation.composable");
-jest.mock("@boardShared/FileStorageApi.composable");
-jest.mock("@boardShared/SelectedFile.composable");
-jest.mock("./FileRecord.composable");
+jest.mock("@/feature/board", () => {
+	return {
+		useBoardFocusHandler: jest.fn(),
+		useContentElementState: jest.fn(() => ({ modelValue: {} })),
+		useDeleteBoardNodeConfirmation: jest.fn(),
+		useInlineEditInteractionHandler: jest.fn(),
+	};
+});
+jest.mock("../FileStorageApi.composable");
+jest.mock("../SelectedFile.composable");
+jest.mock("../FileRecord.composable");
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
