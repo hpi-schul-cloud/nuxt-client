@@ -56,7 +56,7 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 			label:
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
-			testId: "create-element-file",
+			testId: "create-element-submission-container",
 		},
 	];
 
