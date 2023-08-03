@@ -56,9 +56,9 @@ export default defineComponent({
 		const expandedMenu = ref(false);
 		const fullScreenMode = ref(sessionStorage.getItem("fullscreen") === "true");
 
-		const handleTopAction = (event: string) => {
+		const handleTopAction = async (event: string) => {
 			if (event === "logout") {
-				authModule.logout();
+				await authModule.logout();
 			}
 			if (event === "fullscreen") {
 				fullScreenMode.value = !fullScreenMode.value;
