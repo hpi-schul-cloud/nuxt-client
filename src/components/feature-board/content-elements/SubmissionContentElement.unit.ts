@@ -204,13 +204,15 @@ describe("SubmissionContentElement", () => {
 			expect(submissionContentElementEdit.exists()).toBe(true);
 		});
 
-		/* it("should emit 'move-keyboard:edit' when arrow key up is pressed", async () => {
+		// currently blocked as v-card blocks correct usage of keydown event (works when its a div)
+		it.todo("should emit 'move-keyboard:edit' when arrow key up or is pressed");
+		/* async () => {
 			const { wrapper } = setup();
 
 			await wrapper.trigger("keydown.up");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["move-keyboard:edit"]).toBeDefined();
-		}); */
+		}; */
 	});
 });
