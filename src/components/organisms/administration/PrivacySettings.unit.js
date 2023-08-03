@@ -35,10 +35,49 @@ describe("PrivacySettings", () => {
 	});
 
 	describe("env config", () => {
+		describe("when env var for visibility is true", () => {
+			it("should render visibility switch", () => {
+				envConfigModule.setEnvs({
+					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
+				});
+
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(
+					1
+				);
+			});
+		});
+		describe("when env var for visibility is false", () => {
+			it("should not render student visibility switch", () => {
+				envConfigModule.setEnvs({
+					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
+				});
+
+				const wrapper = mount(PrivacySettings, {
+					...createComponentMocks({
+						i18n: true,
+						vuetify: true,
+					}),
+					propsData: generateProps(),
+				});
+
+				expect(wrapper.findAll(searchStrings.studentVisibility)).toHaveLength(
+					0
+				);
+			});
+		});
 		describe("when env var for configurability is true", () => {
 			it("should enable student visibility switch", () => {
 				envConfigModule.setEnvs({
 					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 				});
 
 				const wrapper = mount(PrivacySettings, {
@@ -60,6 +99,7 @@ describe("PrivacySettings", () => {
 			it("should disable student visibility switch", () => {
 				envConfigModule.setEnvs({
 					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
+					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 				});
 
 				const wrapper = mount(PrivacySettings, {
@@ -183,6 +223,7 @@ describe("PrivacySettings", () => {
 				it("should be set to true based on school permission", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
 					const wrapper = mount(PrivacySettings, {
 						...createComponentMocks({
@@ -207,6 +248,7 @@ describe("PrivacySettings", () => {
 				it("should be set to false based on school permission", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
 					const wrapper = mount(PrivacySettings, {
 						...createComponentMocks({
@@ -231,6 +273,7 @@ describe("PrivacySettings", () => {
 				it("should be set to false if no property found on school", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
 					const wrapper = mount(PrivacySettings, {
 						...createComponentMocks({
@@ -254,6 +297,7 @@ describe("PrivacySettings", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: true,
+						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
 					const wrapper = mount(PrivacySettings, {
 						...createComponentMocks({
@@ -273,6 +317,7 @@ describe("PrivacySettings", () => {
 					envConfigModule.setEnvs({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
+						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
 					const wrapper = mount(PrivacySettings, {
 						...createComponentMocks({
@@ -477,6 +522,7 @@ describe("PrivacySettings", () => {
 		it("should emit on value change for student visibility switch", async () => {
 			envConfigModule.setEnvs({
 				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
+				TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 			});
 			const wrapper = mount(PrivacySettings, {
 				...createComponentMocks({
