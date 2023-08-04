@@ -60,6 +60,7 @@ import {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiRefreshCircle,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -124,6 +125,7 @@ const materialIcons = {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiRefreshCircle,
 };
 
 export default materialIcons;
