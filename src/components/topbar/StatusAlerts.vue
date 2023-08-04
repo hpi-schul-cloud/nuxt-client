@@ -1,6 +1,6 @@
 <template>
 	<v-list
-		data-testID="status-alerts"
+		data-testid="status-alerts"
 		min-width="250"
 		max-height="400"
 		class="alerts pa-0 rounded"
@@ -9,7 +9,7 @@
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
 			:key="index"
-			:data-testid="`alert-item-${index}`"
+			:data-testid="setItemIndex(index)"
 			class="alert-item"
 		>
 			<v-list-item-icon class="mt-3 mr-3">
