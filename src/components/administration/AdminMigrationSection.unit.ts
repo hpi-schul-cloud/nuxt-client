@@ -6,6 +6,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Wrapper, mount, shallowMount } from "@vue/test-utils";
 import { i18nMock, mockSchool } from "@@/tests/test-utils";
+import Vue from "vue";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -110,6 +111,39 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
+	describe("Migration Description", () => {
+		it("should render migration description when grace period is not expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: false,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
+				},
+			});
+			expect(wrapper.find('[data-testid="text-description"]').exists());
+		});
+
+		it("should not render migration description when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			expect(wrapper.find('[data-testid="text-description"]').exists()).toBe(
+				false
+			);
+		});
+	});
+
 	describe("Info Text", () => {
 		it("should display the info text for migration when it is not started", () => {
 			const { wrapper } = setup({
@@ -127,6 +161,26 @@ describe("AdminMigrationSection", () => {
 			expect(text).toStrictEqual(
 				"components.administration.adminMigrationSection.infoText"
 			);
+		});
+
+		// test
+
+		it("should not display the info text for migration when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			const infoBox: Wrapper<Vue> = wrapper.findComponent({ name: "v-alert" });
+
+			expect(infoBox.exists()).toBe(false);
 		});
 
 		it("should display the info text activeMigration when the admin activated the migration", () => {
@@ -223,6 +277,24 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationFinished: false,
 			});
 		});
+
+		it("should not render when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			expect(
+				wrapper.find("[data-testid=migration-mandatory-switch]").isVisible()
+			).toBeFalsy();
+		});
 	});
 
 	describe("Migration start button", () => {
@@ -290,6 +362,26 @@ describe("AdminMigrationSection", () => {
 			expect(buttonComponent.props("disabled")).toBeTruthy();
 		});
 
+		it("should not render migration start button when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			const buttonComponent = wrapper.find(
+				"[data-testId=migration-start-button]"
+			);
+
+			expect(buttonComponent.exists()).toBe(false);
+		});
+
 		it("should not render migration start button and migration mandatory switch, when click has been triggered", async () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
@@ -349,6 +441,26 @@ describe("AdminMigrationSection", () => {
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
+		});
+
+		it("should not render migration end button when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			const buttonComponent = wrapper.find(
+				"[data-testId=migration-end-button]"
+			);
+
+			expect(buttonComponent.exists()).toBe(false);
 		});
 	});
 

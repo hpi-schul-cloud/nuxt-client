@@ -4,6 +4,7 @@
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
 		<RenderHTML
+			v-if="!isCurrentDateAfterFinalFinish"
 			data-testid="text-description"
 			:html="
 				t('components.administration.adminMigrationSection.description', {
@@ -12,7 +13,11 @@
 			"
 			component="p"
 		/>
-		<div v-if="!oauthMigration.oauthMigrationPossible">
+		<div
+			v-if="
+				!oauthMigration.oauthMigrationPossible && !isCurrentDateAfterFinalFinish
+			"
+		>
 			<v-alert light prominent text type="info">
 				<RenderHTML
 					:html="t('components.administration.adminMigrationSection.infoText')"
@@ -20,7 +25,7 @@
 				/>
 			</v-alert>
 		</div>
-		<div v-else>
+		<div v-else-if="!isCurrentDateAfterFinalFinish">
 			<v-alert light prominent text type="info">
 				<RenderHTML
 					:html="
@@ -31,7 +36,7 @@
 			</v-alert>
 		</div>
 		<v-btn
-			v-if="isShowStartButton"
+			v-if="isShowStartButton && !isCurrentDateAfterFinalFinish"
 			class="my-5 button-start"
 			color="primary"
 			depressed
@@ -48,7 +53,7 @@
 			}}
 		</v-btn>
 		<v-btn
-			v-if="isShowEndButton"
+			v-if="isShowEndButton && !isCurrentDateAfterFinalFinish"
 			class="my-5 button-end"
 			color="primary"
 			depressed
@@ -63,7 +68,7 @@
 			}}
 		</v-btn>
 		<v-switch
-			v-show="isShowMandatorySwitch"
+			v-show="isShowMandatorySwitch && !isCurrentDateAfterFinalFinish"
 			:label="
 				t(
 					'components.administration.adminMigrationSection.mandatorySwitch.label'
@@ -230,7 +235,6 @@ export default defineComponent({
 		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
-
 		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
 			if (schoolsModule.getOauthMigration.oauthMigrationFinalFinish) {
 				return (
