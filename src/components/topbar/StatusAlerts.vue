@@ -9,7 +9,7 @@
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
 			:key="index"
-			:data-testid="setItemIndex(index)"
+			:data-test-id="`alert-item-${index}`"
 			class="alert-item"
 		>
 			<v-list-item-icon class="mt-3 mr-3">
