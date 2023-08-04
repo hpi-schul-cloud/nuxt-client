@@ -9,6 +9,8 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 const replacements = generateAliases(__dirname);
 
+const getDir = (subPath) => path.resolve(__dirname, subPath);
+
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
@@ -30,23 +32,18 @@ module.exports = defineConfig({
 					__dirname,
 					"src/components/feature-board/types"
 				),
-				"@/feature/board": path.resolve(
-					__dirname,
-					"src/components/feature-board"
-				),
-				"@/feature/board-text-element": path.resolve(
-					__dirname,
+				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
-				"@/feature/board-file-element": path.resolve(
-					__dirname,
+				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
-				"@/ui/confirmation-dialog": path.resolve(
-					__dirname,
+				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
 			},
+			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
 	},

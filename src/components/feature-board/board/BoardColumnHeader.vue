@@ -45,17 +45,17 @@
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { useDeleteConfirmation } from "@ui-confirmation-dialog";
 import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "BoardColumnHeader",

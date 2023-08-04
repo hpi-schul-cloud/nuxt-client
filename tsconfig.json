@@ -19,14 +19,15 @@
 		"paths": {
 			"@/*": ["src/*"],
 			"@@/*": ["*"],
-			"@/feature/board": ["src/components/feature-board"],
-			"@/feature/board-text-element": [
-				"src/components/feature-board-text-element"
+			"@feature-board": ["src/components/feature-board/index.js"],
+			"@feature-board-text-element": [
+				"src/components/feature-board-text-element/index.js"
 			],
-			"@/feature/board-file-element": [
-				"src/components/feature-board-file-element"
+			"@feature-board-file-element": [
+				"src/components/feature-board-file-element/index.js"
 			],
-			"@/ui/confirmation-dialog": ["src/components/ui-confirmation-dialog"]
+			"@ui-confirmation-dialog/*": ["src/components/ui-confirmation-dialog/*"],
+			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},

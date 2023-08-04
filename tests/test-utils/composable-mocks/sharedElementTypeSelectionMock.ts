@@ -1,4 +1,4 @@
-import { useSharedElementTypeSelection } from "@/components/feature-board/shared/SharedElementTypeSelection.composable";
+import { useSharedElementTypeSelection } from "@feature-board";
 import { jest } from "@jest/globals";
 import { Ref, ref } from "vue";
 

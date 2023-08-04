@@ -1,5 +1,5 @@
-import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useDeleteConfirmation } from "@ui-confirmation-dialog";
 
 export const useDeleteBoardNodeConfirmation = () => {
 	const i18n = injectStrict(I18N_KEY);

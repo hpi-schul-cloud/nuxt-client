@@ -44,9 +44,9 @@
 </template>
 
 <script lang="ts">
-import { ConfirmationDialog } from "@/ui/confirmation-dialog";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
 import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";

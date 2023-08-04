@@ -18,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
 import { RichTextElementResponse } from "@/serverApi/v3";
+import { useBoardFocusHandler, useContentElementState } from "@feature-board";
+import { defineComponent, PropType, ref } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { useBoardFocusHandler, useContentElementState } from "@/feature/board";
 
 export default defineComponent({
 	name: "RichTextContentElement",

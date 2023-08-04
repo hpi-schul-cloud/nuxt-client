@@ -65,7 +65,7 @@ import {
 	useBoardFocusHandler,
 	useContentElementState,
 	useDeleteBoardNodeConfirmation,
-} from "@/feature/board";
+} from "@feature-board";
 import { useFileRecord } from "../FileRecord.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";

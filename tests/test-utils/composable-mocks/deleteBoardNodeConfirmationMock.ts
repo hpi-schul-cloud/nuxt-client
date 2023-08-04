@@ -1,4 +1,4 @@
-import { useDeleteBoardNodeConfirmation } from "@/feature/board";
+import { useDeleteBoardNodeConfirmation } from "@feature-board";
 import { jest } from "@jest/globals";
 import { ref } from "vue";
 

@@ -1,5 +1,5 @@
-import { useDeleteConfirmation } from "@/ui/confirmation-dialog";
 import { jest } from "@jest/globals";
+import { useDeleteConfirmation } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
 interface Props {

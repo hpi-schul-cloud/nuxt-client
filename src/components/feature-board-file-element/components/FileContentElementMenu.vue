@@ -51,8 +51,8 @@
 </template>
 
 <script lang="ts">
-import { BoardMenu, BoardMenuAction } from "@/feature/board";
 import { downloadFile } from "@/utils/fileHelper";
+import { BoardMenu, BoardMenuAction } from "@feature-board";
 import {
 	mdiAlertCircle,
 	mdiArrowCollapseDown,
