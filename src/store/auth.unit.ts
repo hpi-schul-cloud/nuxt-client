@@ -4,6 +4,19 @@ import { mockUser } from "@@/tests/test-utils/mockObjects";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
+import * as axios from "axios";
+import { initializeAxios } from "@/utils/api";
+
+jest.mock("axios");
+initializeAxios({
+	defaults: {
+		headers: {
+			common: {
+				Authorization: "",
+			},
+		},
+	},
+} as axios.AxiosInstance);
 
 jest.useFakeTimers();
 
@@ -104,6 +117,32 @@ describe("auth store module", () => {
 				schoolsModule.school.language = "";
 				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
 				expect(authModule.getLocale).toBe("de");
+			});
+		});
+	});
+
+	describe("actions", () => {
+		describe("logout", () => {
+			beforeEach(() => {
+				setupStores({
+					schoolsModule: SchoolsModule,
+					envConfigModule: EnvConfigModule,
+				});
+			});
+
+			const mockReplace = jest.fn();
+			window.location.replace = mockReplace;
+
+			describe("when logout action is called", () => {
+				it("should replace the window.location", () => {
+					const authModule = new AuthModule({});
+					authModule.logout();
+					expect(mockReplace).toHaveBeenCalledWith("/logout");
+
+					jest.clearAllMocks();
+					authModule.logout("/to_another_path");
+					expect(mockReplace).toHaveBeenCalledWith("/to_another_path");
+				});
 			});
 		});
 	});
