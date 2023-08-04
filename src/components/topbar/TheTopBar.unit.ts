@@ -69,7 +69,7 @@ describe("@/components/topbar/TheTopBar", () => {
 		});
 
 		it("should not render status alert icon", () => {
-			expect(wrapper.find("[ddata-testid='status-alerts-icon']").exists()).toBe(
+			expect(wrapper.find("[data-testid='status-alerts-icon']").exists()).toBe(
 				false
 			);
 		});
