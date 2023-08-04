@@ -91,7 +91,7 @@
 					</a>
 					<button
 						class="logout-button"
-						data-testid="logout-button"
+						data-testid="logout"
 						role="menuitem"
 						:aria-label="$t('common.labels.logout').toString()"
 						@click="sendEvent('logout')"
