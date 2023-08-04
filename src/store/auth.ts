@@ -276,6 +276,7 @@ export default class AuthModule extends VuexModule {
 	@Action
 	logout(redirectUrl = "/logout"): void {
 		localStorage.clear();
+		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
 	}
 
