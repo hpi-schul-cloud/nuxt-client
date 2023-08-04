@@ -71,10 +71,8 @@ export default defineComponent({
 		const getCreatedDate = (dateTime: string) => {
 			return printDateTime(dateTime);
 		};
-		const setItemIndex = (index: number) => {
-			return ["alert-item", `alert-item-${index}`];
-		};
-		return { getIconTag, getDate, getCreatedDate, setItemIndex };
+
+		return { getIconTag, getDate, getCreatedDate };
 	},
 });
 </script>
