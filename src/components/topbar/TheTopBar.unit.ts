@@ -153,8 +153,8 @@ describe("@/components/topbar/TheTopBar", () => {
 		const initials = wrapper.find("[data-testid='initials']");
 		await initials.trigger("click");
 
-		const logoutBtn = wrapper.find("[data-testid='logout']");
-		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
+		const logoutBtn = wrapper.find("[data-testid='logout-button']");
+		expect(wrapper.find("[data-testid='logout-button']").exists()).toBe(true);
 
 		await logoutBtn.trigger("click");
 
@@ -162,6 +162,6 @@ describe("@/components/topbar/TheTopBar", () => {
 		expect(wrapper.emitted("action")).toHaveLength(1);
 		const action = wrapper.emitted("action") as any[][];
 
-		expect(action[0]).toStrictEqual(["logout"]);
+		expect(action[0]).toStrictEqual(["logout-button"]);
 	});
 });
