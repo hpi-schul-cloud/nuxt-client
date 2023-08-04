@@ -62,6 +62,7 @@ import {
 	mdiViewGridOutline,
 	mdiRefreshCircle,
 	mdiTrashCanOutline,
+	mdiTimerSandComplete,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -128,6 +129,7 @@ const materialIcons = {
 	mdiViewGridOutline,
 	mdiRefreshCircle,
 	mdiTrashCanOutline,
+	mdiTimerSandComplete,
 };
 
 export default materialIcons;
