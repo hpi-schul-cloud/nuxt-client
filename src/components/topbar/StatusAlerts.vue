@@ -1,6 +1,6 @@
 <template>
 	<v-list
-		data-testId="status-alerts"
+		data-testID="status-alerts"
 		min-width="250"
 		max-height="400"
 		class="alerts pa-0 rounded"
@@ -9,7 +9,7 @@
 		<v-list-item
 			v-for="(item, index) in statusAlerts"
 			:key="index"
-			:data-test-id="`alert-item-${index}`"
+			:data-testid="`alert-item-${index}`"
 			class="alert-item"
 		>
 			<v-list-item-icon class="mt-3 mr-3">
@@ -19,20 +19,20 @@
 			</v-list-item-icon>
 			<v-list-item-content>
 				<v-list-item-title
-					:data-test-id="`alert-title-${index}`"
+					:data-testid="`alert-title-${index}`"
 					class="subtitle-1 ma-0"
 				>
 					{{ item.title }}
 				</v-list-item-title>
 				<v-list-item-subtitle
-					:data-test-id="`alert-text-${index}`"
+					:data-testid="`alert-text-${index}`"
 					class="subtitle-2 text--primary ma-0 mt-1"
 				>
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
-					:data-test-id="`alert-date-${index}`"
+					:data-testid="`alert-date-${index}`"
 				>
 					{{ $t("common.labels.updateAt") }}
 					{{ getDate(item.timestamp) }} |
@@ -71,8 +71,10 @@ export default defineComponent({
 		const getCreatedDate = (dateTime: string) => {
 			return printDateTime(dateTime);
 		};
-
-		return { getIconTag, getDate, getCreatedDate };
+		const setItemIndex = (index: number) => {
+			return ["alert-item", `alert-item-${index}`];
+		};
+		return { getIconTag, getDate, getCreatedDate, setItemIndex };
 	},
 });
 </script>
