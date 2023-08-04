@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router/composables";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import getSidebarItems, {
@@ -121,6 +121,13 @@ export default defineComponent({
 			});
 
 			return sidebarItems;
+		});
+
+		onMounted(() => {
+			console.log("loggedin", authModule.isLoggedIn);
+			if (!authModule.isLoggedIn) {
+				console.log("not logged in");
+			}
 		});
 
 		return {
