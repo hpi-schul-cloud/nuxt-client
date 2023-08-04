@@ -10,7 +10,7 @@
 			data-testid="add-element-btn"
 			@click="addElement"
 		>
-			<v-icon>{{ mdiPlus }}</v-icon>
+			<v-icon>$mdiPlus</v-icon>
 		</v-btn>
 		<hr class="dashed-divider" />
 	</div>
@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mdiPlus } from "@mdi/js";
 
 export default defineComponent({
 	name: "AddCardElement",
@@ -28,7 +27,6 @@ export default defineComponent({
 
 		return {
 			addElement,
-			mdiPlus,
 		};
 	},
 });
