@@ -516,11 +516,6 @@ export default defineComponent({
 				});
 			}
 		},
-		// roomData(newRoomData, oldRoomData) {
-		// 	if (newRoomData.title !== oldRoomData.title) {
-		// 		document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
-		// 	}
-		// },
 	},
 });
 </script>
