@@ -433,6 +433,8 @@ export default defineComponent({
 			courseId: this.courseId,
 			userId: authModule.getUser.id,
 		});
+
+		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
 	},
 	methods: {
 		setActiveTab(tabName) {
@@ -514,11 +516,11 @@ export default defineComponent({
 				});
 			}
 		},
-		roomData(newRoomData, oldRoomData) {
-			if (newRoomData.title !== oldRoomData.title) {
-				document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
-			}
-		},
+		// roomData(newRoomData, oldRoomData) {
+		// 	if (newRoomData.title !== oldRoomData.title) {
+		// 		document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
+		// 	}
+		// },
 	},
 });
 </script>
