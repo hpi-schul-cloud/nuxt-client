@@ -18,7 +18,7 @@
 		"@ckeditor/ckeditor5-vue2": "^3.0.1",
 		"@hpi-schul-cloud/ckeditor": "0.4.0",
 		"@mdi/js": "^7.2.96",
-		"@types/vuelidate": "^0.7.16",
+		"@types/vuelidate": "^0.7.18",
 		"@vueuse/components": "^10.2.1",
 		"@vueuse/core": "^10.3.0",
 		"axios": "^1.1.3",
