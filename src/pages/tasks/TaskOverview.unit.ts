@@ -2,14 +2,18 @@ import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import Theme from "@/theme.config";
+import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { Envs } from "@/store/types/env-config";
+import { i18nMock } from "@@/tests/test-utils";
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = jest.fn();
 	const getWrapper = (userRole: string) => {
 		return shallowMount(TaskOverview, {
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[AUTH_MODULE_KEY.valueOf()]: {
 					getUserRoles: [userRole],
 				},
@@ -22,6 +26,9 @@ describe("TaskOverview", () => {
 
 	beforeEach(() => {
 		jest.resetAllMocks();
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
 	});
 
 	it("should create component", () => {
@@ -30,8 +37,11 @@ describe("TaskOverview", () => {
 	});
 
 	it("should set title to tasks", () => {
+		envConfigModule.setEnvs({ SC_TITLE: "dBildungscloud" } as Envs);
 		getWrapper("userRole");
-		expect(document.title).toBe(`common.words.tasks - ${Theme.name}`);
+		expect(document.title).toBe(
+			`common.words.tasks - ${envConfigModule.getEnv.SC_TITLE}`
+		);
 	});
 
 	it("should fetchAllTasks on mount", () => {
