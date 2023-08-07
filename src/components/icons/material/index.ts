@@ -69,6 +69,7 @@ import {
 	mdiCalendarClock,
 	mdiLogin,
 	mdiOpenInNew,
+	mdiInformation,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -142,6 +143,7 @@ const materialIcons = {
 	mdiCalendarClock,
 	mdiLogin,
 	mdiOpenInNew,
+	mdiInformation,
 };
 
 export default materialIcons;

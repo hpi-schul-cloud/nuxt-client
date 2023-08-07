@@ -15,7 +15,7 @@
 			max-width="400"
 			min-width="200"
 			text
-			:close-icon="mdiClose"
+			:close-icon="$mdiClose"
 			:close-label="$t('common.labels.close')"
 			border="left"
 			@input="closeNotification"
@@ -35,17 +35,8 @@
 
 <script>
 import { notifierModule } from "@/store";
-import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
 
 export default {
-	data() {
-		return {
-			mdiClose,
-			mdiAlert,
-			mdiCheckCircle,
-			mdiInformation,
-		};
-	},
 	computed: {
 		notifierData() {
 			return notifierModule.getNotifier;
@@ -66,10 +57,10 @@ export default {
 			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
 		},
 		icon() {
-			if (this.status === "success") return mdiCheckCircle;
-			if (this.status === "warning") return mdiAlert;
-			if (this.status === "error") return mdiAlert;
-			if (this.status === "info") return mdiInformation;
+			if (this.status === "success") return "$mdiCheckCircle";
+			if (this.status === "warning") return "$mdiAlert";
+			if (this.status === "error") return "$mdiAlert";
+			if (this.status === "info") return "$mdiInformation";
 			return undefined;
 		},
 		showNotifier: {
