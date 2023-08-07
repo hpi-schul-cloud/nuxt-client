@@ -434,7 +434,7 @@ export default defineComponent({
 			userId: authModule.getUser.id,
 		});
 
-		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
+		document.title = `${this.roomData.title} - ${envConfigModule.getEnv.SC_TITLE}`;
 	},
 	methods: {
 		setActiveTab(tabName) {

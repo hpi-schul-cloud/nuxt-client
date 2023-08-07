@@ -64,7 +64,7 @@
 import Vue from "vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
-import { roomsModule } from "@/store";
+import { envConfigModule, roomsModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 
@@ -95,7 +95,7 @@ export default Vue.extend({
 	},
 	async mounted() {
 		document.title = `${this.$t("pages.rooms.index.courses.all")} - ${
-			this.$theme.short_name
+			envConfigModule.getEnv.SC_TITLE
 		}`;
 		await roomsModule.fetchAllElements();
 	},
