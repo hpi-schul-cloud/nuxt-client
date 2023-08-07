@@ -9,11 +9,15 @@ import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolReferenceListResponse,
 } from "@/serverApi/v3";
-import { ContextExternalToolSave } from "./external-tool/context-external-tool";
+import {
+	ContextExternalTool,
+	ContextExternalToolSave,
+} from "./external-tool/context-external-tool";
 import {
 	ContextExternalToolMapper,
 	ExternalToolMapper,
@@ -116,6 +120,37 @@ export default class ContextExternalToolsModule extends VuexModule {
 				);
 
 			await this.toolApi.toolContextControllerCreateContextExternalTool(
+				contextExternalToolPostParams
+			);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: `${apiError.type}: ${apiError.message}}`,
+			});
+		}
+
+		this.setLoading(false);
+	}
+
+	@Action
+	async updateContextExternalTool(
+		contextExternalTool: ContextExternalToolSave
+	): Promise<void> {
+		this.setLoading(true);
+		this.resetBusinessError();
+
+		try {
+			const contextExternalToolPostParams: ContextExternalToolPostParams =
+				ContextExternalToolMapper.mapToContextExternalToolPostParams(
+					contextExternalTool
+				);
+
+			await this.toolApi.toolContextControllerUpdateContextExternalTool(
 				contextExternalToolPostParams
 			);
 		} catch (error: unknown) {
@@ -247,6 +282,40 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setContextExternalToolConfigurationTemplates([
 				toolConfigurationTemplate,
 			]);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: `${apiError.type}: ${apiError.message}}`,
+			});
+		}
+
+		this.setLoading(false);
+	}
+
+	@Action
+	async loadContextExternalTool(
+		contextExternalToolId: string
+	): Promise<ContextExternalTool | undefined> {
+		this.setLoading(true);
+		this.resetBusinessError();
+
+		try {
+			const availableTools: AxiosResponse<ContextExternalToolResponse> =
+				await this.toolApi.toolContextControllerGetContextExternalTool(
+					contextExternalToolId
+				);
+
+			const mapped: ContextExternalTool =
+				ContextExternalToolMapper.mapToContextExternalTool(availableTools.data);
+
+			this.setLoading(false);
+
+			return mapped;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 

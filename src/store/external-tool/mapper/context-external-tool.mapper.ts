@@ -2,15 +2,27 @@ import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ContextExternalToolResponseContextTypeEnum,
 	CustomParameterEntryParam,
 } from "@/serverApi/v3";
-import { ContextExternalToolSave } from "../context-external-tool";
+import {
+	ContextExternalTool,
+	ContextExternalToolSave,
+} from "../context-external-tool";
 import { ContextExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolContextType } from "../tool-context-type.enum";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
+
+export const ToolContextMapping: Record<
+	ContextExternalToolResponseContextTypeEnum,
+	ToolContextType
+> = {
+	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.COURSE,
+};
 
 export class ContextExternalToolMapper {
 	static mapToContextExternalToolConfigurationTemplate(
@@ -75,6 +87,27 @@ export class ContextExternalToolMapper {
 				(parameter, index): ToolParameterEntry => ({
 					name: parameter.name,
 					value: parameterConfiguration[index],
+				})
+			),
+		};
+
+		return mapped;
+	}
+
+	static mapToContextExternalTool(
+		response: ContextExternalToolResponse
+	): ContextExternalTool {
+		const mapped: ContextExternalTool = {
+			id: response.id,
+			contextId: response.contextId,
+			contextType: ToolContextMapping[response.contextType],
+			displayName: response.displayName,
+			schoolToolId: response.schoolToolId,
+			toolVersion: response.toolVersion,
+			parameters: response.parameters.map(
+				(parameter): ToolParameterEntry => ({
+					name: parameter.name,
+					value: parameter.value,
 				})
 			),
 		};

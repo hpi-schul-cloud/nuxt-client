@@ -145,7 +145,9 @@ export default defineComponent({
 				);
 
 			if (props.configId) {
-				// TODO Implement updating of context tools
+				await contextExternalToolsModule.updateContextExternalTool(
+					contextExternalTool
+				);
 			} else {
 				await contextExternalToolsModule.createContextExternalTool(
 					contextExternalTool
@@ -177,8 +179,10 @@ export default defineComponent({
 					props.configId
 				);
 
-				//TODO Add loading of Context External Tools for updating
-				configuration.value = undefined;
+				configuration.value =
+					await contextExternalToolsModule.loadContextExternalTool(
+						props.configId
+					);
 			} else {
 				await contextExternalToolsModule.loadAvailableToolsForContext({
 					contextId: props.contextId,
