@@ -1,4 +1,4 @@
-import { BoardMenuAction } from "@/feature/board";
+import { BoardMenuAction } from "@ui-board";
 import { downloadFile } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";

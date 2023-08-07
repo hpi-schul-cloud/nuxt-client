@@ -25,6 +25,7 @@
 				"src/components/feature-board-file-element"
 			],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@ui-board": ["src/components/ui-board"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

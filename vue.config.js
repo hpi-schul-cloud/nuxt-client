@@ -30,6 +30,7 @@ module.exports = defineConfig({
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-board": getDir("src/components/ui-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],

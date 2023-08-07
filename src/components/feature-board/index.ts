@@ -1,9 +1,6 @@
 import { useBoardFocusHandler } from "./shared/BoardFocusHandler.composable";
 import Board from "./board/Board.vue";
 import { BoardCard } from "./types/Card"; // WIP: should probably be replaced by API-type?!?
-import BoardMenu from "./shared/BoardMenu.vue";
-import BoardMenuAction from "./shared/BoardMenuAction.vue";
-import TestBoard from "./TestBoard.vue";
 import { useInlineEditInteractionHandler } from "./shared/InlineEditInteractionHandler.composable";
 import { useElementTypeSelection } from "./shared/ElementTypeSelection.composable";
 import { useSharedElementTypeSelection } from "./shared/SharedElementTypeSelection.composable";
@@ -25,7 +22,4 @@ export {
 	AnyContentElement,
 	Board,
 	BoardCard, // WIP: refactor so export is not needed anymore
-	BoardMenu, // WIP: refactor so export is not needed anymore
-	BoardMenuAction, // WIP: refactor so export is not needed anymore
-	TestBoard,
 };

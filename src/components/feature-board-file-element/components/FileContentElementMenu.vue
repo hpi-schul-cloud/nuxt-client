@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
-import { BoardMenu, BoardMenuAction } from "@feature-board";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
 import {
 	mdiAlertCircle,
 	mdiArrowCollapseDown,

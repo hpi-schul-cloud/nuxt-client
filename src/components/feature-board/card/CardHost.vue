@@ -84,8 +84,7 @@ import {
 import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "../content-elements/ContentElementList.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useEditMode } from "../shared/EditMode.composable";
