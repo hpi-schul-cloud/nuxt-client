@@ -249,6 +249,7 @@ export default defineComponent({
 				width: 100%;
 				height: var(--sidebar-item-height);
 				line-height: var(--sidebar-item-height);
+				list-style: none;
 
 				&.list-sub-item {
 					height: var(--sidebar-sub-item-height);
