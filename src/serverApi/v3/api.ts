@@ -2115,6 +2115,12 @@ export interface Lti11ToolConfigCreateParams {
      * @memberof Lti11ToolConfigCreateParams
      */
     privacy_permission: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigCreateParams
+     */
+    launch_presentation_locale: string;
 }
 /**
  * 
@@ -2164,6 +2170,12 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     privacy_permission: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11ToolConfigUpdateParams
+     */
+    launch_presentation_locale: string;
 }
 /**
  * 

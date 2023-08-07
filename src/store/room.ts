@@ -236,16 +236,6 @@ export default class RoomModule extends VuexModule {
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const requestUrl = `/v1/homework/${payload.itemId}`;
-			const response = await $axios.get(requestUrl);
-			const homework = response?.data;
-			if (!homework.archived) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "archived-not-found",
-				});
-				return;
-			}
 			if (payload.action === "finish") {
 				await this.taskApi.taskControllerFinish(payload.itemId);
 			} else if (payload.action === "restore") {
