@@ -122,7 +122,9 @@ describe("AdminMigrationSection", () => {
 					oauthMigrationFinalFinish: "",
 				},
 			});
-			expect(wrapper.find('[data-testid="text-description"]').exists());
+			expect(wrapper.find('[data-testid="text-description"]').exists()).toEqual(
+				true
+			);
 		});
 
 		it("should not render migration description when grace period is expired", () => {

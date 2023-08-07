@@ -40,9 +40,7 @@
 			class="my-5 button-start"
 			color="primary"
 			depressed
-			:disabled="
-				!oauthMigration.enableMigrationStart || isCurrentDateAfterFinalFinish
-			"
+			:disabled="!oauthMigration.enableMigrationStart"
 			data-testid="migration-start-button"
 			@click="onToggleShowStartWarning"
 		>
