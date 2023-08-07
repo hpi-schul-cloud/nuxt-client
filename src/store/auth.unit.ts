@@ -6,17 +6,34 @@ import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
+import { Envs } from "./types/env-config";
+import * as serverApi from "@/serverApi/v3/api";
 
-jest.mock("axios");
-initializeAxios({
-	defaults: {
-		headers: {
-			common: {
-				Authorization: "",
+const axiosInitializer = (options: object) => {
+	initializeAxios({
+		defaults: {
+			headers: {
+				common: {
+					Authorization: "",
+				},
 			},
 		},
-	},
-} as axios.AxiosInstance);
+		get: async (path: string) => {
+			if (path === "/v1/me") {
+				return options;
+			}
+			if (path === "/v1/roles/user/test-id") {
+				return {
+					data: [
+						{
+							permissions: [],
+						},
+					],
+				};
+			}
+		},
+	} as axios.AxiosInstance);
+};
 
 jest.useFakeTimers();
 
@@ -79,17 +96,61 @@ describe("auth store module", () => {
 				expect(authModule.getAccessToken).toBe(null);
 			});
 		});
+
+		describe("setStatus", () => {
+			it("should set status data", () => {
+				const authModule = new AuthModule({});
+				const statusMock = "pending";
+				authModule.setStatus(statusMock);
+				expect(authModule.status).toBe(statusMock);
+			});
+		});
+
+		describe("setBusinessError", () => {
+			it("should set businessError", () => {
+				const authModule = new AuthModule({});
+				const businessErrorMock = {
+					statusCode: "418",
+					message: "I'm a teapot",
+				};
+				authModule.setBusinessError(businessErrorMock);
+				expect(authModule.businessError).toBe(businessErrorMock);
+			});
+		});
+
+		describe("resetBusinessError", () => {
+			it("should reset businessError", () => {
+				const authModule = new AuthModule({});
+				const businessErrorMock = {
+					statusCode: "418",
+					message: "I'm a teapot",
+				};
+				const defaultbusinessErrorMock = {
+					statusCode: "",
+					message: "",
+				};
+				authModule.setBusinessError(businessErrorMock);
+				expect(authModule.businessError).toBe(businessErrorMock);
+
+				authModule.resetBusinessError();
+				expect(authModule.businessError.statusCode).toBe(
+					defaultbusinessErrorMock.statusCode
+				);
+				expect(authModule.businessError.message).toBe(
+					defaultbusinessErrorMock.message
+				);
+			});
+		});
 	});
 
 	describe("getters", () => {
-		describe("locale", () => {
-			beforeEach(() => {
-				setupStores({
-					schoolsModule: SchoolsModule,
-					envConfigModule: EnvConfigModule,
-				});
+		beforeEach(() => {
+			setupStores({
+				schoolsModule: SchoolsModule,
+				envConfigModule: EnvConfigModule,
 			});
-
+		});
+		describe("locale", () => {
 			it("returns the user's language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "mock";
@@ -119,22 +180,183 @@ describe("auth store module", () => {
 				expect(authModule.getLocale).toBe("de");
 			});
 		});
+
+		describe("getSchool", () => {
+			it("returns the school data", () => {
+				const authModule = new AuthModule({});
+				authModule.locale = "";
+				schoolsModule.school._id = "test-school-id";
+				schoolsModule.school.name = "test school";
+				expect(authModule.getSchool._id).toStrictEqual("test-school-id");
+				expect(authModule.getSchool.name).toStrictEqual("test school");
+			});
+		});
+
+		describe("getUserRoles", () => {
+			it("returns the user roles", () => {
+				const authModule = new AuthModule({});
+				const mockValue = { ...mockUser, name: "mockName" };
+				authModule.setUser(mockValue);
+
+				expect(authModule.getUserRoles).toStrictEqual(["test-role"]);
+			});
+		});
+
+		describe("getUserRolesDisplayName", () => {
+			it("returns the user display name", () => {
+				const authModule = new AuthModule({});
+				const mockValue = { ...mockUser, name: "mockName" };
+				authModule.setUser(mockValue);
+
+				expect(authModule.getUserRolesDisplayName).toStrictEqual([
+					"test-display-name",
+				]);
+			});
+		});
+
+		describe("getUserPermissions", () => {
+			it("returns the user dpermissions", () => {
+				const authModule = new AuthModule({});
+				const mockValue = { ...mockUser, name: "mockName" };
+				authModule.setUser(mockValue);
+
+				expect(authModule.getUserPermissions).toStrictEqual([
+					"test-permission",
+				]);
+			});
+		});
+
+		describe("getAuthenticated", () => {
+			it("returns true if accessToken is set", () => {
+				const authModule = new AuthModule({});
+				expect(authModule.getAuthenticated).toBe(false);
+
+				authModule.setAccessToken("test-access-token");
+				expect(authModule.getAuthenticated).toStrictEqual("test-access-token");
+			});
+		});
+
+		describe("userIsExternallyManaged", () => {
+			it("returns if the user is externally managed", () => {
+				const authModule = new AuthModule({});
+				authModule.setUser(mockUser);
+
+				expect(authModule.userIsExternallyManaged).toBe(false);
+				authModule.setUser({ ...mockUser, externallyManaged: true });
+				expect(authModule.userIsExternallyManaged).toBe(true);
+			});
+		});
+
+		describe("isLoggedIn", () => {
+			it("returns true if accessToken is set", () => {
+				const authModule = new AuthModule({});
+				expect(authModule.isLoggedIn).toBe(false);
+
+				authModule.setAccessToken("test-access-token");
+				expect(authModule.isLoggedIn).toBe(true);
+			});
+		});
 	});
 
 	describe("actions", () => {
-		describe("logout", () => {
-			beforeEach(() => {
-				setupStores({
-					schoolsModule: SchoolsModule,
-					envConfigModule: EnvConfigModule,
+		const fetchSchoolMock = jest.fn().mockReturnValue({});
+		beforeEach(() => {
+			setupStores({
+				schoolsModule: SchoolsModule,
+				envConfigModule: EnvConfigModule,
+			});
+			schoolsModule.fetchSchool = fetchSchoolMock;
+			envConfigModule.setEnvs({
+				FEATURE_EXTENSIONS_ENABLED: true,
+				FEATURE_TEAMS_ENABLED: true,
+			} as Envs);
+		});
+
+		const defaultUserData = {
+			...mockUser,
+			id: "test-id",
+			firstName: "returned name",
+		};
+
+		describe("login", () => {
+			it("should call backend and returned user data", async () => {
+				axiosInitializer({
+					data: { ...defaultUserData, schoolId: "school-id", language: "de" },
 				});
+				const authModule = new AuthModule({});
+
+				expect(authModule?.getUser?.firstName).toStrictEqual("");
+
+				await authModule.login("sample-jwt");
+				expect(fetchSchoolMock).toHaveBeenCalled();
+				expect(authModule?.getLocale).toStrictEqual("de");
+				expect(authModule?.getUserPermissions).toStrictEqual([
+					"addons_enabled",
+					"teams_enabled",
+				]);
+				expect(authModule?.getUser?.firstName).toStrictEqual("returned name");
 			});
 
+			it("should call backend and returned user data", async () => {
+				axiosInitializer({ data: undefined });
+				const authModule = new AuthModule({});
+
+				expect(authModule?.getUser?.firstName).toStrictEqual("");
+
+				await authModule.login("sample-jwt");
+				expect(authModule?.getUser).toBe(null);
+			});
+		});
+
+		describe("updateUserLanguage", () => {
+			afterEach(() => {
+				jest.clearAllMocks();
+			});
+
+			it("should call backend succesfully", () => {
+				const mockApi = {
+					userControllerChangeLanguage: jest.fn().mockReturnValue({
+						data: { successful: true },
+					}),
+				};
+				jest
+					.spyOn(serverApi, "UserApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+
+				const authModule = new AuthModule({});
+				authModule.updateUserLanguage(
+					serverApi.ChangeLanguageParamsLanguageEnum.De
+				);
+				expect(mockApi.userControllerChangeLanguage).toHaveBeenCalled();
+			});
+
+			it("should catch error", () => {
+				const mockApi = {
+					userControllerChangeLanguage: jest.fn().mockImplementation(() => {
+						throw new axios.AxiosError("I'm an error");
+					}),
+				};
+				jest
+					.spyOn(serverApi, "UserApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+
+				const authModule = new AuthModule({});
+				authModule.updateUserLanguage(
+					serverApi.ChangeLanguageParamsLanguageEnum.De
+				);
+				expect(authModule.businessError.message).toStrictEqual("I'm an error");
+			});
+		});
+
+		describe("logout", () => {
 			const mockReplace = jest.fn();
 			window.location.replace = mockReplace;
 
 			describe("when logout action is called", () => {
 				it("should replace the window.location", () => {
+					axiosInitializer({
+						data: defaultUserData,
+					});
 					const authModule = new AuthModule({});
 					authModule.logout();
 					expect(mockReplace).toHaveBeenCalledWith("/logout");
