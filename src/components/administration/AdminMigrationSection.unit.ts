@@ -163,8 +163,6 @@ describe("AdminMigrationSection", () => {
 			);
 		});
 
-		// test
-
 		it("should not display the info text for migration when grace period is expired", () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
