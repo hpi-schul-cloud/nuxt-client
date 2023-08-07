@@ -76,6 +76,7 @@ import {
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
 	mdiShareVariantOutline,
+	mdiArchiveOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -156,6 +157,7 @@ const materialIcons = {
 	mdiContentCopy,
 	mdiTextBoxCheckOutline,
 	mdiShareVariantOutline,
+	mdiArchiveOutline,
 };
 
 export default materialIcons;
