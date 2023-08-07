@@ -1,10 +1,10 @@
-import { AnyContentElement } from "@feature-board";
+import { AnyContentElement } from "../../../types/board/ContentElement";
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupDeleteConfirmationComposableMock } from "@ui-confirmation-dialog";
+import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
