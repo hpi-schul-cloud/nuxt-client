@@ -1,8 +1,6 @@
 <template>
 	<div class="d-flex flex-row">
-		<v-icon :color="iconColor" class="icon mr-2">
-			{{ mdiCalendarClock }}
-		</v-icon>
+		<v-icon :color="iconColor" class="icon mr-2"> $mdiCalendarClock </v-icon>
 		<date-picker
 			class="mr-2 picker-width"
 			:required="required"
@@ -34,7 +32,6 @@ import DatePicker from "@/components/common/date-time-picker/DatePicker.vue";
 import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
 import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiCalendarClock } from "@mdi/js";
 import { computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -141,7 +138,6 @@ export default defineComponent({
 			handleTimeError,
 			handleTimeValid,
 			iconColor,
-			mdiCalendarClock,
 		};
 	},
 });

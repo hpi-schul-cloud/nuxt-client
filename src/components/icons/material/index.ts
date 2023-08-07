@@ -66,6 +66,7 @@ import {
 	mdiEyeOutline,
 	mdiEyeOffOutline,
 	mdiDrag,
+	mdiCalendarClock,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -136,6 +137,7 @@ const materialIcons = {
 	mdiEyeOutline,
 	mdiEyeOffOutline,
 	mdiDrag,
+	mdiCalendarClock,
 };
 
 export default materialIcons;
