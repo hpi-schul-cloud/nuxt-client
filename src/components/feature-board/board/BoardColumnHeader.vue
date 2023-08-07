@@ -80,7 +80,7 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.columnId
 		);
@@ -105,8 +105,6 @@ export default defineComponent({
 		};
 
 		const onTryDelete = async () => {
-			const { askDeleteConfirmation } = useDeleteConfirmationDialog();
-
 			const shouldDelete = await askDeleteConfirmation(
 				props.title,
 				"boardColumn"
