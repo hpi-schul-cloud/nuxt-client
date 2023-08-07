@@ -77,6 +77,10 @@ import {
 	mdiTextBoxCheckOutline,
 	mdiShareVariantOutline,
 	mdiArchiveOutline,
+	mdiAccountSearch,
+	mdiContentSave,
+	mdiFlag,
+	mdiFlagOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -158,6 +162,10 @@ const materialIcons = {
 	mdiTextBoxCheckOutline,
 	mdiShareVariantOutline,
 	mdiArchiveOutline,
+	mdiAccountSearch,
+	mdiContentSave,
+	mdiFlag,
+	mdiFlagOutline,
 };
 
 export default materialIcons;
