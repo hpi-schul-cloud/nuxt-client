@@ -9,7 +9,7 @@
 				:aria-label="$t('components.cardElement.dragElement')"
 				data-testid="drag-element-btn"
 			>
-				<v-icon>{{ mdiDrag }}</v-icon>
+				<v-icon>$mdiDrag</v-icon>
 			</v-btn>
 			<v-btn
 				v-show="isActive"
@@ -21,7 +21,7 @@
 				data-testid="delete-element-btn"
 				@click="handleDelete"
 			>
-				<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+				<v-icon>$mdiTrashCanOutline</v-icon>
 			</v-btn>
 		</div>
 		<component
@@ -44,7 +44,7 @@
 			data-testid="add-element-btn"
 			@click="handleAdd"
 		>
-			<v-icon>{{ mdiPlus }}</v-icon>
+			<v-icon>$mdiPlus</v-icon>
 		</v-btn>
 	</v-card>
 	<v-card v-else flat class="card mb-7">
@@ -59,7 +59,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { mdiTrashCanOutline, mdiDrag, mdiPlus } from "@mdi/js";
 import { CardElementComponentEnum } from "@/store/types/card-element";
 import RichTextCardElement from "@/components/card-elements/RichTextCardElement.vue";
 
@@ -120,9 +119,6 @@ export default defineComponent({
 			handleFocus,
 			handleBlur,
 			isActive,
-			mdiTrashCanOutline,
-			mdiDrag,
-			mdiPlus,
 		};
 	},
 });
