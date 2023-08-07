@@ -71,6 +71,7 @@ import {
 	mdiOpenInNew,
 	mdiInformation,
 	mdiViewDashboard,
+	mdiDotsVertical,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -146,6 +147,7 @@ const materialIcons = {
 	mdiOpenInNew,
 	mdiInformation,
 	mdiViewDashboard,
+	mdiDotsVertical,
 };
 
 export default materialIcons;
