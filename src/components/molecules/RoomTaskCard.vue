@@ -111,15 +111,6 @@
 <script>
 import { fromNow } from "@/plugins/datetime";
 import RoomDotMenu from "./RoomDotMenu";
-import {
-	mdiPencilOutline,
-	mdiFormatListChecks,
-	mdiUndoVariant,
-	mdiTrashCanOutline,
-	mdiContentCopy,
-	mdiTextBoxCheckOutline,
-	mdiShareVariantOutline,
-} from "@mdi/js";
 import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
@@ -151,15 +142,6 @@ export default {
 	data() {
 		return {
 			fromNow,
-			icons: {
-				mdiFormatListChecks,
-				mdiPencilOutline,
-				mdiUndoVariant,
-				mdiTrashCanOutline,
-				mdiContentCopy,
-				mdiTextBoxCheckOutline,
-				mdiShareVariantOutline,
-			},
 			roles: Roles,
 			canShowDescription: false,
 		};
@@ -296,7 +278,7 @@ export default {
 						testid: "room-detail-task-chip-submitted",
 					});
 					roleBasedChips[Roles.Student].push({
-						icon: this.icons.mdiTextBoxCheckOutline,
+						icon: "$mdiTextBoxCheckOutline",
 						name: this.$t(`pages.room.taskCard.label.graded`),
 						class: "graded",
 						testid: "room-detail-task-chip-graded",
@@ -322,7 +304,7 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiPencilOutline,
+					icon: "$mdiPencilOutline",
 					action: () =>
 						this.redirectAction(
 							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
@@ -333,7 +315,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiContentCopy,
+						icon: "$mdiContentCopy",
 						action: () => this.copyCard(),
 						name: this.$t("common.actions.copy"),
 						dataTestId: "content-card-task-menu-copy",
@@ -342,7 +324,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariantOutline,
+						icon: "$mdiShareVariantOutline",
 						action: () => this.$emit("share-task", this.task.id),
 						name: this.$t("pages.room.taskCard.label.shareTask"),
 						dataTestId: "content-card-task-menu-share",
@@ -351,7 +333,7 @@ export default {
 
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiUndoVariant,
+						icon: "$mdiUndoVariant",
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-task-menu-revert",
@@ -359,7 +341,7 @@ export default {
 				}
 
 				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiTrashCanOutline,
+					icon: "$mdiTrashCanOutline",
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.remove"),
 					dataTestId: "content-card-task-menu-remove",
@@ -372,13 +354,13 @@ export default {
 
 			if (this.isFinished) {
 				roleBasedMoreActions[Roles.Teacher].splice(-1, 0, {
-					icon: this.icons.mdiUndoVariant,
+					icon: "$mdiUndoVariant",
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
 					dataTestId: "content-card-task-menu-restore",
 				});
 				roleBasedMoreActions[Roles.Student].push({
-					icon: this.icons.mdiUndoVariant,
+					icon: "$mdiUndoVariant",
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
 					dataTestId: "content-card-task-menu-restore",
