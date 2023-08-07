@@ -61,11 +61,8 @@
 </template>
 
 <script lang="ts">
-import {
-	useBoardFocusHandler,
-	useContentElementState,
-	useDeleteBoardNodeConfirmation,
-} from "@feature-board";
+import { useBoardFocusHandler, useContentElementState } from "@feature-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useFileRecord } from "../FileRecord.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
@@ -109,7 +106,7 @@ export default defineComponent({
 			FileRecordParentType.BOARDNODES
 		);
 		const { setSelectedFile, getSelectedFile } = useSelectedFile();
-		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
@@ -151,7 +148,7 @@ export default defineComponent({
 		};
 
 		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
+			const shouldDelete = await askDeleteConfirmation(
 				fileRecord.value?.name,
 				"boardElement"
 			);

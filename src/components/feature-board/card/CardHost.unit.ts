@@ -1,6 +1,6 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+import { setupConfirmationComposableMock } from "@ui-confirmation-dialog";
 import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
 import {
 	boardCardFactory,
@@ -22,7 +22,7 @@ import CardHost from "./CardHost.vue";
 
 jest.mock("../shared/BoardFocusHandler.composable");
 jest.mock("../shared/BoardPermissions.composable");
-jest.mock("../shared/DeleteBoardNodeConfirmation.composable");
+jest.mock("../shared/DeleteConfirmation.composable");
 jest.mock("../shared/EditMode.composable");
 jest.mock("../shared/ElementTypeSelection.composable");
 jest.mock("../state/CardState.composable");
@@ -95,8 +95,8 @@ describe("CardHost", () => {
 
 		const deleteCardMock = jest.fn().mockReturnValue(true);
 
-		setupDeleteBoardNodeConfirmationMock({
-			askDeleteBoardNodeConfirmationMock: deleteCardMock,
+		setupConfirmationComposableMock({
+			askConfirmationMock: deleteCardMock,
 		});
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {

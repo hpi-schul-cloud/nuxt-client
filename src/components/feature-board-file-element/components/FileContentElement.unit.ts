@@ -1,10 +1,10 @@
-import { AnyContentElement } from "@/feature/board";
+import { AnyContentElement } from "@feature-board";
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
+import { setupDeleteConfirmationComposableMock } from "@ui-confirmation-dialog";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
@@ -23,7 +23,7 @@ jest.mock("@/feature/board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteBoardNodeConfirmation: jest.fn(),
+		useDeleteConfirmation: jest.fn(),
 		useInlineEditInteractionHandler: jest.fn(),
 	};
 });
@@ -75,9 +75,9 @@ describe("FileContentElement", () => {
 						uploadMock,
 					});
 
-					const askDeleteBoardNodeConfirmationMock = jest.fn();
-					setupDeleteBoardNodeConfirmationMock({
-						askDeleteBoardNodeConfirmationMock,
+					const askDeleteConfirmationMock = jest.fn();
+					setupDeleteConfirmationComposableMock({
+						askDeleteConfirmationMock,
 					});
 
 					setupFileRecordMock();
@@ -167,9 +167,9 @@ describe("FileContentElement", () => {
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
 					setupFileStorageApiMock({ uploadMock });
 
-					const askDeleteBoardNodeConfirmationMock = jest.fn();
-					setupDeleteBoardNodeConfirmationMock({
-						askDeleteBoardNodeConfirmationMock,
+					const askDeleteConfirmationMock = jest.fn();
+					setupDeleteConfirmationComposableMock({
+						askDeleteConfirmationMock,
 					});
 
 					const { wrapper, deleteElementMock } = getWrapper({
@@ -261,11 +261,9 @@ describe("FileContentElement", () => {
 					});
 					setupSelectedFileMock();
 
-					const askDeleteBoardNodeConfirmationMock = jest
-						.fn()
-						.mockReturnValueOnce(true);
-					setupDeleteBoardNodeConfirmationMock({
-						askDeleteBoardNodeConfirmationMock,
+					const askDeleteConfirmationMock = jest.fn().mockReturnValueOnce(true);
+					setupDeleteConfirmationComposableMock({
+						askDeleteConfirmationMock,
 					});
 
 					setupFileRecordMock({ urlMock: fileRecordResponse.url });
@@ -380,11 +378,11 @@ describe("FileContentElement", () => {
 							});
 							setupSelectedFileMock();
 
-							const askDeleteBoardNodeConfirmationMock = jest
+							const askDeleteConfirmationMock = jest
 								.fn()
 								.mockReturnValueOnce(true);
-							setupDeleteBoardNodeConfirmationMock({
-								askDeleteBoardNodeConfirmationMock,
+							setupDeleteConfirmationComposableMock({
+								askDeleteConfirmationMock,
 							});
 
 							setupFileRecordMock({ isImageMock: true });
@@ -505,11 +503,11 @@ describe("FileContentElement", () => {
 						});
 						setupSelectedFileMock();
 
-						const askDeleteBoardNodeConfirmationMock = jest
+						const askDeleteConfirmationMock = jest
 							.fn()
 							.mockReturnValueOnce(true);
-						setupDeleteBoardNodeConfirmationMock({
-							askDeleteBoardNodeConfirmationMock,
+						setupDeleteConfirmationComposableMock({
+							askDeleteConfirmationMock,
 						});
 
 						setupFileRecordMock({
@@ -609,11 +607,11 @@ describe("FileContentElement", () => {
 							});
 							setupSelectedFileMock();
 
-							const askDeleteBoardNodeConfirmationMock = jest
+							const askDeleteConfirmationMock = jest
 								.fn()
 								.mockReturnValueOnce(true);
-							setupDeleteBoardNodeConfirmationMock({
-								askDeleteBoardNodeConfirmationMock,
+							setupDeleteConfirmationComposableMock({
+								askDeleteConfirmationMock,
 							});
 
 							setupFileRecordMock({
@@ -745,9 +743,9 @@ describe("FileContentElement", () => {
 						uploadMock,
 					});
 
-					const askDeleteBoardNodeConfirmationMock = jest.fn();
-					setupDeleteBoardNodeConfirmationMock({
-						askDeleteBoardNodeConfirmationMock,
+					const askDeleteConfirmationMock = jest.fn();
+					setupDeleteConfirmationComposableMock({
+						askDeleteConfirmationMock,
 					});
 
 					setupFileRecordMock();
@@ -815,9 +813,9 @@ describe("FileContentElement", () => {
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
 					setupFileStorageApiMock({ uploadMock });
 
-					const askDeleteBoardNodeConfirmationMock = jest.fn();
-					setupDeleteBoardNodeConfirmationMock({
-						askDeleteBoardNodeConfirmationMock,
+					const askDeleteConfirmationMock = jest.fn();
+					setupDeleteConfirmationComposableMock({
+						askDeleteConfirmationMock,
 					});
 
 					const { wrapper, deleteElementMock } = getWrapper({
@@ -884,11 +882,11 @@ describe("FileContentElement", () => {
 						});
 						setupSelectedFileMock();
 
-						const askDeleteBoardNodeConfirmationMock = jest
+						const askDeleteConfirmationMock = jest
 							.fn()
 							.mockReturnValueOnce(true);
-						setupDeleteBoardNodeConfirmationMock({
-							askDeleteBoardNodeConfirmationMock,
+						setupDeleteConfirmationComposableMock({
+							askDeleteConfirmationMock,
 						});
 
 						setupFileRecordMock();
@@ -988,11 +986,11 @@ describe("FileContentElement", () => {
 							});
 							setupSelectedFileMock();
 
-							const askDeleteBoardNodeConfirmationMock = jest
+							const askDeleteConfirmationMock = jest
 								.fn()
 								.mockReturnValueOnce(true);
-							setupDeleteBoardNodeConfirmationMock({
-								askDeleteBoardNodeConfirmationMock,
+							setupDeleteConfirmationComposableMock({
+								askDeleteConfirmationMock,
 							});
 
 							setupFileRecordMock({ isImageMock: true });
@@ -1113,11 +1111,11 @@ describe("FileContentElement", () => {
 						});
 						setupSelectedFileMock();
 
-						const askDeleteBoardNodeConfirmationMock = jest
+						const askDeleteConfirmationMock = jest
 							.fn()
 							.mockReturnValueOnce(true);
-						setupDeleteBoardNodeConfirmationMock({
-							askDeleteBoardNodeConfirmationMock,
+						setupDeleteConfirmationComposableMock({
+							askDeleteConfirmationMock,
 						});
 
 						setupFileRecordMock({
@@ -1273,11 +1271,11 @@ describe("FileContentElement", () => {
 							});
 							setupSelectedFileMock();
 
-							const askDeleteBoardNodeConfirmationMock = jest
+							const askDeleteConfirmationMock = jest
 								.fn()
 								.mockReturnValueOnce(true);
-							setupDeleteBoardNodeConfirmationMock({
-								askDeleteBoardNodeConfirmationMock,
+							setupDeleteConfirmationComposableMock({
+								askDeleteConfirmationMock,
 							});
 
 							setupFileRecordMock({

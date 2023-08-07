@@ -1,14 +1,14 @@
 import { jest } from "@jest/globals";
-import { useDeleteConfirmation } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "../Confirmation.composable";
 import { ref } from "vue";
 
 interface Props {
 	askConfirmationMock?: jest.Mock;
 }
 
-export const setupDeleteConfirmationMock = (props: Props = {}) => {
+export default function setupConfirmationComposableMock(props: Props = {}) {
 	const { askConfirmationMock } = props;
-	const mockedDeleteConfirmation = jest.mocked(useDeleteConfirmation);
+	const confirmationMock = jest.mocked(useConfirmationDialog);
 
 	const askConfirmation = askConfirmationMock ?? jest.fn();
 	const isDialogOpen = ref(false);
@@ -18,7 +18,7 @@ export const setupDeleteConfirmationMock = (props: Props = {}) => {
 		isDialogOpen,
 	};
 
-	mockedDeleteConfirmation.mockReturnValue(mocks);
+	confirmationMock.mockReturnValue(mocks);
 
 	return mocks;
-};
+}

@@ -11,6 +11,7 @@ module.exports = {
 		"@vue/typescript/recommended",
 		"plugin:prettier/recommended",
 	],
+	plugins: ["import"],
 	parserOptions: {
 		ecmaVersion: 2020,
 	},
@@ -40,8 +41,17 @@ module.exports = {
 			{
 				patterns: [
 					{
-						group: ["@/feature/*/*", "@/ui/*/*", "@/util/*/*"],
+						group: ["@feature-*/*", "@ui-*/*", "@util-*/*"],
 						message: "Do not deep import into a module",
+					},
+					{
+						group: [
+							"../**/components/feature-*",
+							"../**/components/ui-*/*",
+							"../**/components/util-*/*",
+						],
+						message:
+							"Use aliases (@feature-, @ui-, @util-, ...) to import modules cleanly.",
 					},
 					{
 						group: ["@/components/feature-*", "*/../feature-*"],
@@ -61,6 +71,34 @@ module.exports = {
 				],
 			},
 		],
+		"import/no-restricted-paths": [
+			"warn",
+			{
+				zones: [
+					{
+						from: "@ui-*",
+						target: "@feature-*",
+					},
+					{
+						from: "@ui-*",
+						target: "@feature-*",
+					},
+					{
+						from: "@util-*",
+						target: "@feature-*",
+					},
+					{
+						from: "@util-*",
+						target: "@ui-*",
+					},
+				],
+			},
+		],
+	},
+	settings: {
+		"import/parsers": {
+			"@typescript-eslint/parser": [".ts", ".tsx"],
+		},
 	},
 	overrides: [
 		{

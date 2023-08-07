@@ -12,7 +12,7 @@ jest.mock("@/feature/board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteBoardNodeConfirmation: jest.fn(),
+		useDeleteConfirmationDialog: jest.fn(),
 		useInlineEditInteractionHandler: jest.fn(),
 	};
 });

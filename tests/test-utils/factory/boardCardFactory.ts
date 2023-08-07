@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { BoardCard } from "@/components/feature-board/types/Card";
+import { BoardCard } from "@feature-board";
 
 export const boardCardFactory = Factory.define<BoardCard>(({ sequence }) => ({
 	id: `cardId ${sequence}`,

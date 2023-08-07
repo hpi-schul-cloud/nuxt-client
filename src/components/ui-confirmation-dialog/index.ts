@@ -1,4 +1,13 @@
 import ConfirmationDialog from "./ConfirmationDialog.vue";
-import { useDeleteConfirmation } from "./delete-confirmation.composable";
+import setupConfirmationComposableMock from "./test-utils/setupConfirmationComposableMock";
+import setupDeleteConfirmationComposableMock from "./test-utils/setupDeleteConfirmationComposableMock";
+import { useConfirmationDialog } from "./Confirmation.composable";
+import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 
-export { useDeleteConfirmation, ConfirmationDialog };
+export {
+	useConfirmationDialog,
+	useDeleteConfirmationDialog,
+	setupConfirmationComposableMock,
+	setupDeleteConfirmationComposableMock,
+	ConfirmationDialog,
+};

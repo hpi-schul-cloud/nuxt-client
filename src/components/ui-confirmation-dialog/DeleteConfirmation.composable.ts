@@ -1,19 +1,19 @@
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useDeleteConfirmation } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "./Confirmation.composable";
 
-export const useDeleteBoardNodeConfirmation = () => {
+export const useDeleteConfirmationDialog = () => {
 	const i18n = injectStrict(I18N_KEY);
-	const { askConfirmation, isDialogOpen } = useDeleteConfirmation();
+	const { askConfirmation, isDialogOpen } = useConfirmationDialog();
 
-	const askDeleteBoardNodeConfirmation = async (
+	const askDeleteConfirmation = async (
 		title: string | undefined,
-		type: "boardCard" | "boardElement"
+		type: "boardColumn" | "boardCard" | "boardElement"
 	) => {
 		const titleString = title ? `"${title}"` : "";
 		const typeString = i18n.t(`components.${type}`).toString();
 
 		const message = i18n
-			.t("components.cardHost.deletionModal.confirmation", {
+			.t("ui-confirmation-dialog.ask-delete.card", {
 				title: titleString,
 				type: typeString,
 			})
@@ -25,7 +25,7 @@ export const useDeleteBoardNodeConfirmation = () => {
 	};
 
 	return {
-		askDeleteBoardNodeConfirmation,
+		askDeleteConfirmation,
 		isDeleteDialogOpen: isDialogOpen,
 	};
 };

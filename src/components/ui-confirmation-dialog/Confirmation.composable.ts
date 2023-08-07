@@ -1,15 +1,15 @@
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
-interface DeleteConfirmationOptions {
+interface ConfirmationOptions {
 	message: string;
 }
 
-export const useDeleteConfirmation = () => {
-	const { askInternal, isDialogOpen } = useInternalDeleteConfirmation();
+export const useConfirmationDialog = () => {
+	const { askInternal, isDialogOpen } = useInternalConfirmationDialog();
 
 	const askConfirmation = async (
-		data: DeleteConfirmationOptions
+		data: ConfirmationOptions
 	): Promise<boolean> => {
 		const promise = new Promise<boolean>((resolve) => {
 			askInternal(data, resolve);
@@ -23,10 +23,10 @@ export const useDeleteConfirmation = () => {
 	};
 };
 
-export const useInternalDeleteConfirmation = createSharedComposable(() => {
+export const useInternalConfirmationDialog = createSharedComposable(() => {
 	let returnResult: ((value: boolean) => void) | undefined = undefined;
 
-	const dialogOptions = ref<DeleteConfirmationOptions | undefined>(undefined);
+	const dialogOptions = ref<ConfirmationOptions | undefined>(undefined);
 	const isDialogOpen = ref<boolean>(false);
 
 	const confirm = () => {
@@ -46,7 +46,7 @@ export const useInternalDeleteConfirmation = createSharedComposable(() => {
 	};
 
 	const askInternal = (
-		options: DeleteConfirmationOptions,
+		options: ConfirmationOptions,
 		resolve: (value: boolean) => void
 	) => {
 		dialogOptions.value = options;

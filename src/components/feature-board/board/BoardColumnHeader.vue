@@ -47,7 +47,7 @@
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { useDeleteConfirmation } from "@ui-confirmation-dialog";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
@@ -106,17 +106,13 @@ export default defineComponent({
 		};
 
 		const onTryDelete = async () => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						title: props.title ? `"${props.title}"` : "",
-						type: i18n.t("components.boardColumn").toString(),
-					})
-					.toString() ?? "";
+			const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-			const { askConfirmation } = useDeleteConfirmation();
+			const shouldDelete = await askDeleteConfirmation(
+				props.title,
+				"boardColumn"
+			);
 
-			const shouldDelete = await askConfirmation({ message });
 			if (shouldDelete) {
 				emit("delete:column", props.columnId);
 			}
@@ -152,4 +148,3 @@ export default defineComponent({
 	outline: none;
 }
 </style>
-@/components/ui-confirmation-dialog/delete-confirmation.composable

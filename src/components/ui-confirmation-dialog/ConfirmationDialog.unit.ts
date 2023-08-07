@@ -1,13 +1,13 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { ref } from "vue";
-import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
+import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import DeleteConfirmation from "./ConfirmationDialog.vue";
 import { I18N_KEY } from "@/utils/inject";
+jest.mock("./Confirmation.composable");
 
-jest.mock("./delete-confirmation.composable");
-const mockedUseInternalDeleteConfirmation = jest.mocked(
-	useInternalDeleteConfirmation
+const mockedUseInternalConfirmationDialog = jest.mocked(
+	useInternalConfirmationDialog
 );
 
 describe(DeleteConfirmation.name, () => {
@@ -20,7 +20,7 @@ describe(DeleteConfirmation.name, () => {
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		mockedUseInternalDeleteConfirmation.mockReturnValue({
+		mockedUseInternalConfirmationDialog.mockReturnValue({
 			confirm: confirmSpy,
 			cancel: cancelSpy,
 			askInternal: jest.fn(),

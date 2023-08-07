@@ -87,7 +87,7 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import BoardMenu from "../shared/BoardMenu.vue";
 import BoardMenuAction from "../shared/BoardMenuAction.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
@@ -142,8 +142,8 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
-			useDeleteBoardNodeConfirmation();
+		const { askDeleteConfirmation, isDeleteDialogOpen } =
+			useDeleteConfirmationDialog();
 
 		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
 			useElementTypeSelection(addElement);
@@ -154,7 +154,7 @@ export default defineComponent({
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
 		const onDeleteCard = async () => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
+			const shouldDelete = await askDeleteConfirmation(
 				card.value?.title,
 				"boardCard"
 			);

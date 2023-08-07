@@ -1,38 +1,37 @@
 import { I18N_KEY } from "@/utils/inject";
-import { setupDeleteConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteConfirmationMock";
+import setupConfirmationComposableMock from "./test-utils/setupConfirmationComposableMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { useDeleteBoardNodeConfirmation } from "./DeleteBoardNodeConfirmation.composable";
-jest.mock("@/ui/confirmation-dialog/delete-confirmation.composable");
+import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
+jest.mock("./Confirmation.composable");
 
-describe("DeleteBoardNodeConfirmation composable", () => {
-	describe("askDeleteBoardNodeConfirmation", () => {
+describe("DeleteConfirmation composable", () => {
+	describe("askDeleteConfirmation", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";
 			const titleString = `"${title}"`;
 			const type: "boardCard" | "boardElement" = "boardElement";
 			const typeString = `components.${type}`;
-			const titleTranslationKey =
-				"components.cardHost.deletionModal.confirmation";
+			const titleTranslationKey = "ui-confirmation-dialog.ask-delete.card";
 			const data = {
 				elementId: "elementId",
 				name: "name",
 			};
 			const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
-			const { askConfirmation } = setupDeleteConfirmationMock({
+			const { askConfirmation } = setupConfirmationComposableMock({
 				askConfirmationMock,
 			});
 
 			const translateMock = jest.fn().mockImplementation((key: string) => key);
 
-			const { askDeleteBoardNodeConfirmation } = mountComposable(
-				() => useDeleteBoardNodeConfirmation(),
+			const { askDeleteConfirmation } = mountComposable(
+				() => useDeleteConfirmationDialog(),
 				{
 					[I18N_KEY.valueOf()]: { t: translateMock },
 				}
 			);
 
 			return {
-				askDeleteBoardNodeConfirmation,
+				askDeleteConfirmation,
 				askConfirmation,
 				data,
 				translateMock,
@@ -51,7 +50,7 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 		describe("when title is defined", () => {
 			it("should call translate functions", async () => {
 				const {
-					askDeleteBoardNodeConfirmation,
+					askDeleteConfirmation,
 					translateMock,
 					type,
 					typeString,
@@ -60,7 +59,7 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteBoardNodeConfirmation(title, type);
+				await askDeleteConfirmation(title, type);
 
 				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
 				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
@@ -71,14 +70,14 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 
 			it("should call askConfirmation", async () => {
 				const {
-					askDeleteBoardNodeConfirmation,
+					askDeleteConfirmation,
 					askConfirmation,
 					title,
 					type,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteBoardNodeConfirmation(title, type);
+				await askDeleteConfirmation(title, type);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
 					message: titleTranslationKey,
@@ -86,9 +85,9 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 			});
 
 			it("should return result", async () => {
-				const { askDeleteBoardNodeConfirmation, title, type } = setup(true);
+				const { askDeleteConfirmation, title, type } = setup(true);
 
-				const result = await askDeleteBoardNodeConfirmation(title, type);
+				const result = await askDeleteConfirmation(title, type);
 
 				expect(result).toBe(true);
 			});
@@ -97,14 +96,14 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 		describe("when title is undefined", () => {
 			it("should call translate functions", async () => {
 				const {
-					askDeleteBoardNodeConfirmation,
+					askDeleteConfirmation,
 					translateMock,
 					type,
 					typeString,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteBoardNodeConfirmation("", type);
+				await askDeleteConfirmation("", type);
 
 				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
 				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
@@ -115,13 +114,13 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 
 			it("should call askConfirmation", async () => {
 				const {
-					askDeleteBoardNodeConfirmation,
+					askDeleteConfirmation,
 					askConfirmation,
 					type,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteBoardNodeConfirmation("", type);
+				await askDeleteConfirmation("", type);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
 					message: titleTranslationKey,
@@ -129,9 +128,9 @@ describe("DeleteBoardNodeConfirmation composable", () => {
 			});
 
 			it("should return result", async () => {
-				const { askDeleteBoardNodeConfirmation, type } = setup(true);
+				const { askDeleteConfirmation, type } = setup(true);
 
-				const result = await askDeleteBoardNodeConfirmation("", type);
+				const result = await askDeleteConfirmation("", type);
 
 				expect(result).toBe(true);
 			});

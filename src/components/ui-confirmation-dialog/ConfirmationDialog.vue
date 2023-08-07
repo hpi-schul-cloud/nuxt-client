@@ -16,7 +16,7 @@
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, defineComponent } from "vue";
-import { useInternalDeleteConfirmation } from "./delete-confirmation.composable";
+import { useInternalConfirmationDialog } from "./Confirmation.composable";
 
 export default defineComponent({
 	name: "ConfirmationDialog",
@@ -25,7 +25,7 @@ export default defineComponent({
 	},
 	setup() {
 		const { confirm, cancel, dialogOptions, isDialogOpen } =
-			useInternalDeleteConfirmation();
+			useInternalConfirmationDialog();
 
 		const onConfirmation = () => confirm();
 		const onCloseDialog = () => cancel();
