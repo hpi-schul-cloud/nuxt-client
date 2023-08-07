@@ -11,7 +11,6 @@ module.exports = {
 		"@vue/typescript/recommended",
 		"plugin:prettier/recommended",
 	],
-	plugins: ["import"],
 	parserOptions: {
 		ecmaVersion: 2020,
 	},
@@ -46,60 +45,47 @@ module.exports = {
 					},
 					{
 						group: [
-							"../**/components/feature-*",
-							"../**/components/ui-*/*",
-							"../**/components/util-*/*",
+							"@/components/feature-*",
+							"*/../feature-*",
+							"../**/feature-*",
 						],
 						message:
-							"Use aliases (@feature-, @ui-, @util-, ...) to import modules cleanly.",
+							"Feature-Modules have to be imported using the pattern '@feature-<name>'",
 					},
 					{
-						group: ["@/components/feature-*", "*/../feature-*"],
+						group: ["@components/util-*", "*/../util-*", "../**/util-*/*"],
 						message:
-							"Feature-Modules have to be imported using the pattern '@/feature/<name>'",
+							"Util-Modules have to be imported using the pattern '@util-<name>'",
 					},
 					{
-						group: ["@/components/util-*", "*/../util-*"],
+						group: ["@components/ui-*", "*/../ui-*", "../**/ui-*/*"],
 						message:
-							"Util-Modules have to be imported using the pattern '@/util/<name>'",
-					},
-					{
-						group: ["@/components/ui-*", "*/../ui-*"],
-						message:
-							"Ui-Modules have to be imported using the pattern '@/ui/<name>'",
+							"Ui-Modules have to be imported using the pattern '@ui-<name>'",
 					},
 				],
 			},
 		],
-		"import/no-restricted-paths": [
-			"warn",
-			{
-				zones: [
-					{
-						from: "@ui-*",
-						target: "@feature-*",
-					},
-					{
-						from: "@ui-*",
-						target: "@feature-*",
-					},
-					{
-						from: "@util-*",
-						target: "@feature-*",
-					},
-					{
-						from: "@util-*",
-						target: "@ui-*",
-					},
-				],
-			},
-		],
+		// "import/no-restricted-paths": [
+		// 	"warn",
+		// 	{
+		// 		zones: [
+		// 			{
+		// 				from: "@ui-*",
+		// 				target: "@feature-*",
+		// 			},
+		// 			{
+		// 				from: "@util-*",
+		// 				target: "@feature-*",
+		// 			},
+		// 		],
+		// 	},
+		// ],
 	},
-	settings: {
-		"import/parsers": {
-			"@typescript-eslint/parser": [".ts", ".tsx"],
-		},
-	},
+	// settings: {
+	// 	"import/parsers": {
+	// 		"@typescript-eslint/parser": [".ts", ".tsx"],
+	// 	},
+	// },
 	overrides: [
 		{
 			files: ["**/*.unit.{j,t}s?(x)"],

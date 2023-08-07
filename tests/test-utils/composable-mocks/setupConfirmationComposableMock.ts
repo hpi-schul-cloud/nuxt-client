@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { useConfirmationDialog } from "../Confirmation.composable";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
 interface Props {

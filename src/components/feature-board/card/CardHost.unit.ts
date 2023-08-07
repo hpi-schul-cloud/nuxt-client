@@ -1,7 +1,7 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupConfirmationComposableMock } from "@ui-confirmation-dialog";
 import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,

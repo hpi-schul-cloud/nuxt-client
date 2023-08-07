@@ -83,7 +83,7 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const { showInfo, resetNotifier } = useBoardNotifier();
-
+		console.log("init board");
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
 

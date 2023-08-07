@@ -20,18 +20,6 @@ module.exports = defineConfig({
 		plugins: [new NoncePlaceholderPlugin()],
 		resolve: {
 			alias: {
-				"@boardShared": path.resolve(
-					__dirname,
-					"src/components/feature-board/shared"
-				),
-				"@boardState": path.resolve(
-					__dirname,
-					"src/components/feature-board/state"
-				),
-				"@boardTypes": path.resolve(
-					__dirname,
-					"src/components/feature-board/types"
-				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"

@@ -17,17 +17,16 @@
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
 		"paths": {
-			"@/*": ["src/*"],
-			"@@/*": ["*"],
-			"@feature-board": ["src/components/feature-board/index.js"],
+			"@feature-board": ["src/components/feature-board"],
 			"@feature-board-text-element": [
-				"src/components/feature-board-text-element/index.js"
+				"src/components/feature-board-text-element"
 			],
 			"@feature-board-file-element": [
-				"src/components/feature-board-file-element/index.js"
+				"src/components/feature-board-file-element"
 			],
-			"@ui-confirmation-dialog/*": ["src/components/ui-confirmation-dialog/*"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@/*": ["src/*"],
+			"@@/*": ["*"]
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},

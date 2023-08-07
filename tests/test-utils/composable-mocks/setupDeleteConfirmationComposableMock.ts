@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
-import { useDeleteConfirmationDialog } from "../DeleteConfirmation.composable";
 import { ref } from "vue";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 
 interface Props {
 	askDeleteConfirmationMock?: jest.Mock;

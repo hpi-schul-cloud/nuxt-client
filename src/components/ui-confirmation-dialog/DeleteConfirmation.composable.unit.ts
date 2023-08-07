@@ -1,5 +1,5 @@
 import { I18N_KEY } from "@/utils/inject";
-import setupConfirmationComposableMock from "./test-utils/setupConfirmationComposableMock";
+import setupConfirmationComposableMock from "../../../tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 jest.mock("./Confirmation.composable");
