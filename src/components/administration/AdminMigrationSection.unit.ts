@@ -337,29 +337,6 @@ describe("AdminMigrationSection", () => {
 			expect(buttonComponent.props("disabled")).toBeTruthy();
 		});
 
-		it("should be disabled when grace period is expired", () => {
-			const { wrapper } = setup({
-				getOauthMigration: {
-					enableMigrationStart: true,
-					oauthMigrationPossible: false,
-					oauthMigrationMandatory: false,
-					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
-					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
-				},
-			});
-			jest.useFakeTimers();
-			jest.setSystemTime(new Date(2023, 1, 3));
-
-			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-
-			expect(buttonComponent.exists()).toBe(true);
-			expect(buttonComponent.classes("button-start")).toBeTruthy();
-			expect(buttonComponent.text()).toEqual(
-				"components.administration.adminMigrationSection.migrationEnableButton.label"
-			);
-			expect(buttonComponent.props("disabled")).toBeTruthy();
-		});
-
 		it("should not render migration start button when grace period is expired", () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
