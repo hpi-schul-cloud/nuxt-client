@@ -1,5 +1,4 @@
 import { mount, MountOptions } from "@vue/test-utils";
-import { mdiPlus, mdiAccountPlus, mdiAccountMultipleMinus } from "@mdi/js";
 import vCustomFab from "./vCustomFab.vue";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -18,7 +17,7 @@ describe("@/components/atoms/vCustomFab", () => {
 	describe("when fab is simple (icon only)", () => {
 		const simpleFab = {
 			actions: [],
-			icon: mdiPlus,
+			icon: "$mdiPlus",
 		};
 
 		it("should not display title", () => {
@@ -55,7 +54,7 @@ describe("@/components/atoms/vCustomFab", () => {
 	describe("when fab is extended", () => {
 		const simpleExtendedFab = {
 			actions: [],
-			icon: mdiPlus,
+			icon: "$mdiPlus",
 			title: "User",
 			href: "/",
 		};
@@ -128,17 +127,17 @@ describe("@/components/atoms/vCustomFab", () => {
 			actions: [
 				{
 					label: "Add User",
-					icon: mdiAccountPlus,
+					icon: "$mdiAccountPlus",
 					to: "/",
 					ariaLabel: "Custom Aria Label",
 				},
 				{
 					label: "Delete User",
-					icon: mdiAccountMultipleMinus,
+					icon: "$mdiAccountMultipleMinus",
 					to: "/",
 				},
 			],
-			icon: mdiPlus,
+			icon: "$mdiPlus",
 			title: "User",
 		};
 
