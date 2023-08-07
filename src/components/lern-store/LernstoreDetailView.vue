@@ -11,7 +11,7 @@
 				aria-label="close detail view"
 				@click="goBack"
 			>
-				<v-icon size="20">{{ mdiClose }}</v-icon>
+				<v-icon size="20">$mdiClose</v-icon>
 			</v-btn>
 		</div>
 		<div class="content">
@@ -81,7 +81,7 @@
 							}
 						"
 					>
-						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
+						<v-icon size="20" class="mr-1">$mdiOpenInNew</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
 					</v-btn>
 					<v-btn
@@ -92,7 +92,7 @@
 						class="content-button"
 						target="_blank"
 					>
-						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
+						<v-icon size="20" class="mr-1">$mdiOpenInNew</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
 					</v-btn>
 					<!-- This will be replaced with Modal -->
@@ -180,7 +180,6 @@ import contentMeta from "@/mixins/contentMeta";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
 import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
-import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -215,8 +214,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiClose,
-			mdiOpenInNew,
 			windowWidth: window.outerWidth,
 			window: {
 				width: 0,
