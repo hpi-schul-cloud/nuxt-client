@@ -62,7 +62,7 @@ import {
 	DragAndDropKey,
 	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires

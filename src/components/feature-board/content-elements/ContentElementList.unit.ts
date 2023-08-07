@@ -2,10 +2,10 @@ import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import { AnyContentElement } from "../types/ContentElement";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
-import { RichTextContentElement } from "@/feature/board-text-element";
-import { FileContentElement } from "@/feature/board-file-element";
+import { RichTextContentElement } from "@feature-board-text-element";
+import { FileContentElement } from "@feature-board-file-element";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;

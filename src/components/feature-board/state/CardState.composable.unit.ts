@@ -1,13 +1,13 @@
 import {
 	ContentElementType,
-	CreateContentElementBodyParams
+	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardCardFactory,
-	fileElementResponseFactory
+	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -16,9 +16,9 @@ import { nextTick } from "vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
-import { BoardCard } from "../types/Card";
-import { AnyContentElement } from "../types/ContentElement";
-import { ElementMove } from "../types/DragAndDrop";
+import { BoardCard } from "@/types/board/Card";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { ElementMove } from "@/types/board/DragAndDrop";
 import { useBoardApi } from "./BoardApi.composable";
 import { useCardState } from "./CardState.composable";
 

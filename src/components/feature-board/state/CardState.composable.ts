@@ -7,9 +7,9 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
-import { BoardCard } from "../types/Card";
-import { AnyContentElement } from "../types/ContentElement";
-import { ElementMove } from "../types/DragAndDrop";
+import { BoardCard } from "@/types/board/Card";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { ElementMove } from "@/types/board/DragAndDrop";
 
 declare type CardState = {
 	isLoading: boolean;

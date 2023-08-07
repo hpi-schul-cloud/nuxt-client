@@ -1,7 +1,7 @@
 import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createSharedComposable, useDebounceFn } from "@vueuse/core";
-import { BoardCard } from "../types/Card";
+import { BoardCard } from "@/types/board/Card";
 
 type CardRequest = {
 	id: string;

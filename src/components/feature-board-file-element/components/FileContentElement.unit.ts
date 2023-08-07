@@ -1,4 +1,4 @@
-import { AnyContentElement } from "../../../types/board/ContentElement";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";

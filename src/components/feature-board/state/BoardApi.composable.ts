@@ -13,7 +13,7 @@ import {
 	BoardResponse,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AnyContentElement } from "../types/ContentElement";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { AxiosPromise } from "axios";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 

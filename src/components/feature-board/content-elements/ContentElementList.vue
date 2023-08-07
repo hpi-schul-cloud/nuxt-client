@@ -34,8 +34,8 @@ import {
 import { FileContentElement } from "@feature-board-file-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { PropType, computed, defineComponent } from "vue";
-import { AnyContentElement } from "../types/ContentElement";
-import { ElementMove } from "../types/DragAndDrop";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { ElementMove } from "@/types/board/DragAndDrop";
 
 export default defineComponent({
 	name: "ContentElementList",

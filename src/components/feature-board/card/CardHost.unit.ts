@@ -13,11 +13,11 @@ import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useCardState } from "../state/CardState.composable";
-import { BoardCard, BoardCardSkeleton } from "../types/Card";
+import { BoardCard, BoardCardSkeleton } from "@/types/board/Card";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import CardHost from "./CardHost.vue";
 
 jest.mock("../shared/BoardFocusHandler.composable");

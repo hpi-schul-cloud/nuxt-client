@@ -3,8 +3,8 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
-import { Board, BoardSkeletonCard } from "../types/Board";
-import { CardMove, ColumnMove } from "../types/DragAndDrop";
+import { Board, BoardSkeletonCard } from "@/types/board/Board";
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
 export const useBoardState = (id: string) => {
 	const board = ref<Board | undefined>(undefined);

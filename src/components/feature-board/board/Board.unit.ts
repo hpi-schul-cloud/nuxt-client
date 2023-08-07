@@ -13,11 +13,11 @@ import { Route } from "vue-router";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBoardState } from "../state/BoardState.composable";
-import { Board } from "../types/Board";
+import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
