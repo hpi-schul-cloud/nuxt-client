@@ -38,23 +38,23 @@ describe("@/components/topbar/StatusAlerts", () => {
 
 	it("should show alert title", () => {
 		const wrapper = getWrapper(testProps);
-		const title = wrapper.find("[data-test-id='alert-title-0']");
+		const title = wrapper.find("[data-testid='alert-title-0']");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].title);
 	});
 
 	it("should show alert text", () => {
 		const wrapper = getWrapper(testProps);
-		const title = wrapper.find("[data-test-id='alert-text-0']");
+		const title = wrapper.find("[data-testid='alert-text-0']");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].text);
 	});
 
 	it("should show multiple alerts", () => {
 		const wrapper = getWrapper(testProps);
-		const title0 = wrapper.find("[data-test-id='alert-title-0']");
+		const title0 = wrapper.find("[data-testid='alert-title-0']");
 		expect(title0.element.textContent).toContain(mockStatusAlerts[0].title);
-		const title1 = wrapper.find("[data-test-id='alert-title-1']");
+		const title1 = wrapper.find("[data-testid='alert-title-1']");
 		expect(title1.element.textContent).toContain(mockStatusAlerts[1].title);
-		const title2 = wrapper.find("[data-test-id='alert-title-2']");
+		const title2 = wrapper.find("[data-testid='alert-title-2']");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
 	});
 });
