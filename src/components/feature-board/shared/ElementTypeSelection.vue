@@ -24,7 +24,7 @@
 					:width="126"
 					class="d-sm-flex button-alignment-center"
 					:data-testid="item.testId"
-					@click.stop="item.action"
+					@click.stop.once="item.action"
 				>
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"

@@ -13,7 +13,7 @@ export const useDeleteConfirmationDialog = () => {
 		const typeString = i18n.t(`components.${type}`).toString();
 
 		const message = i18n
-			.t("ui-confirmation-dialog.ask-delete.card", {
+			.t("ui-confirmation-dialog.ask-delete", {
 				title: titleString,
 				type: typeString,
 			})

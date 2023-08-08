@@ -66,10 +66,6 @@
 				></CardAddElementMenu>
 			</template>
 		</VCard>
-		<FilePicker
-			@update:file="onFileSelect"
-			:isFilePickerOpen.sync="isFilePickerOpen"
-		/>
 	</CardHostInteractionHandler>
 </template>
 
@@ -89,7 +85,6 @@ import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
-import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
 import {
 	DragAndDropKey,
@@ -111,7 +106,6 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		FilePicker,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -141,11 +135,9 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteConfirmation, isDeleteDialogOpen } =
-			useDeleteConfirmationDialog();
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
-			useElementTypeSelection(addElement);
+		const { askType } = useElementTypeSelection(addElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -172,9 +164,7 @@ export default defineComponent({
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
-				stopEditMode();
-			}
+			stopEditMode();
 		};
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
@@ -234,8 +224,6 @@ export default defineComponent({
 			isEditMode,
 			mdiTrashCanOutline,
 			mdiPencilOutline,
-			onFileSelect,
-			isFilePickerOpen,
 			addTextAfterTitle,
 		};
 	},

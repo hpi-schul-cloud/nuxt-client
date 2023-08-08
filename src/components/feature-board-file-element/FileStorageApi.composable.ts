@@ -40,6 +40,7 @@ export const useFileStorageApi = (
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
+			// WIP: idea: use request-pooling to reduce number of api-requests
 			fileRecord.value = response.data.data[0];
 		} catch (error) {
 			showError(error);
