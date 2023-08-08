@@ -15,7 +15,7 @@
 					text-color="black"
 					data-testId="tool-card-status"
 				>
-					<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
+					<v-icon small class="mr-1" color="warning">$mdiAlert</v-icon>
 					{{ t("pages.rooms.tools.outdated") }}
 				</v-chip>
 			</div>
@@ -36,7 +36,6 @@
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiAlert, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { ToolConfigurationStatus } from "@/store/external-tool";
 import RoomBaseCard from "./RoomBaseCard.vue";
@@ -82,7 +81,7 @@ export default defineComponent({
 				dataTestId: "tool-edit",
 			}, */
 			{
-				icon: mdiTrashCanOutline,
+				icon: "$mdiTrashCanOutline",
 				action: handleDelete,
 				name: t("common.actions.remove"),
 				dataTestId: "tool-delete",
@@ -98,7 +97,6 @@ export default defineComponent({
 			handleClick,
 			menuItems,
 			isToolOutdated,
-			mdiAlert,
 		};
 	},
 });
