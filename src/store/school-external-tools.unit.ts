@@ -141,7 +141,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -212,7 +212,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -273,7 +273,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -374,7 +374,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -478,7 +478,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -541,7 +541,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});
@@ -604,7 +604,7 @@ describe("SchoolExternalToolsModule", () => {
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
 						statusCode: apiError.code,
-						message: `${apiError.type}: ${apiError.message}}`,
+						message: apiError.message,
 					});
 				});
 			});

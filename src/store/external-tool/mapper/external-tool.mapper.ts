@@ -34,7 +34,7 @@ export class ExternalToolMapper {
 	): ExternalToolDisplayData[] {
 		const mapped: ExternalToolDisplayData[] = response.data.map(
 			(tool): ExternalToolDisplayData => ({
-				id: tool.contextToolId,
+				contextExternalToolId: tool.contextToolId,
 				name: tool.displayName,
 				status: ToolConfigurationStatusMapping[tool.status],
 				logoUrl: tool.logoUrl,

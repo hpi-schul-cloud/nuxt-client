@@ -28,6 +28,7 @@ const mockEnvs: Envs = {
 	MIGRATION_END_GRACE_PERIOD_MS: 1,
 	FILES_STORAGE__MAX_FILE_SIZE: 0,
 	FEATURE_SHOW_OUTDATED_USERS: true,
+	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
 };
 
 const URL = "/v1/config/app/public";
@@ -246,6 +247,23 @@ describe("env-config module", () => {
 			delete envConfigModule.env.FEATURE_SHOW_OUTDATED_USERS;
 
 			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
+		});
+
+		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getCtlContextConfigurationEnabled).toStrictEqual(
+				mockEnvs.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED
+			);
+		});
+
+		it("getCtlContextConfigurationEnabled should not get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
+			const envConfigModule = new EnvConfigModule({});
+			envConfigModule.env = mockEnvs;
+			delete envConfigModule.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED;
+
+			expect(envConfigModule.getCtlContextConfigurationEnabled).toEqual(false);
 		});
 	});
 });

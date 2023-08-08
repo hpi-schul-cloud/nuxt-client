@@ -967,6 +967,8 @@
 	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not match its regular expression. Please correct the value.",
 	"pages.tool.apiError.tool_launch_outdated": "The tool configuration is out of date due to a version change. The tool cannot be started!",
 	"pages.tool.context.title": "Adding External Tools",
+	"pages.tool.context.displayName": "Display name",
+	"pages.tool.context.displayNameDescription": "The tool display name can be overridden and must be unique",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"pages.videoConference.info.notStarted": "The video conference hasn't started yet.",
 	"pages.videoConference.info.noPermission": "The video conference hasn't started yet or you don't have permission to join it.",

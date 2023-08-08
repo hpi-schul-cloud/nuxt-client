@@ -75,12 +75,13 @@ export class ContextExternalToolMapper {
 		template: ContextExternalToolConfigurationTemplate,
 		parameterConfiguration: (string | undefined)[],
 		contextId: string,
-		contextType: ToolContextType
+		contextType: ToolContextType,
+		displayName?: string
 	): ContextExternalToolSave {
 		const mapped: ContextExternalToolSave = {
 			contextId,
 			contextType,
-			displayName: undefined,
+			displayName: displayName ? displayName : undefined,
 			schoolToolId: template.schoolExternalToolId,
 			toolVersion: template.version,
 			parameters: template.parameters.map(

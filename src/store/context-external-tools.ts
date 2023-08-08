@@ -102,7 +102,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 	@Mutation
 	removeContextExternalTool(toolId: string): void {
 		this.externalToolDisplayDataList = this.externalToolDisplayDataList.filter(
-			(tool: ExternalToolDisplayData) => tool.id !== toolId
+			(tool: ExternalToolDisplayData) => tool.contextExternalToolId !== toolId
 		);
 	}
 
@@ -130,7 +130,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -138,19 +138,21 @@ export default class ContextExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async updateContextExternalTool(
-		contextExternalTool: ContextExternalToolSave
-	): Promise<void> {
+	async updateContextExternalTool(params: {
+		contextExternalToolId: string;
+		contextExternalTool: ContextExternalToolSave;
+	}): Promise<void> {
 		this.setLoading(true);
 		this.resetBusinessError();
 
 		try {
 			const contextExternalToolPostParams: ContextExternalToolPostParams =
 				ContextExternalToolMapper.mapToContextExternalToolPostParams(
-					contextExternalTool
+					params.contextExternalTool
 				);
 
 			await this.toolApi.toolContextControllerUpdateContextExternalTool(
+				params.contextExternalToolId,
 				contextExternalToolPostParams
 			);
 		} catch (error: unknown) {
@@ -161,7 +163,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -195,7 +197,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -218,7 +220,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -254,7 +256,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -290,7 +292,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -324,7 +326,7 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
