@@ -3,85 +3,89 @@
 		<h2 class="text-h4 mb-10">
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
-		<RenderHTML
-			v-if="!isCurrentDateAfterFinalFinish"
-			data-testid="text-description"
-			:html="
-				t('components.administration.adminMigrationSection.description', {
-					supportLink,
-				})
-			"
-			component="p"
-		/>
 		<div
-			v-if="
-				!oauthMigration.oauthMigrationPossible && !isCurrentDateAfterFinalFinish
-			"
+			v-if="!isCurrentDateAfterFinalFinish"
+			data-testId="migration-control-section"
 		>
-			<v-alert light prominent text type="info">
-				<RenderHTML
-					:html="t('components.administration.adminMigrationSection.infoText')"
-					component="span"
-				/>
-			</v-alert>
+			<RenderHTML
+				data-testid="text-description"
+				:html="
+					t('components.administration.adminMigrationSection.description', {
+						supportLink,
+					})
+				"
+				component="p"
+			/>
+			<div v-if="!oauthMigration.oauthMigrationPossible">
+				<v-alert light prominent text type="info">
+					<RenderHTML
+						:html="
+							t('components.administration.adminMigrationSection.infoText')
+						"
+						component="span"
+					/>
+				</v-alert>
+			</div>
+			<div>
+				<v-alert light prominent text type="info">
+					<RenderHTML
+						:html="
+							t(
+								'components.administration.adminMigrationSection.migrationActive'
+							)
+						"
+						component="span"
+					/>
+				</v-alert>
+			</div>
+			<v-btn
+				v-if="isShowStartButton"
+				class="my-5 button-start"
+				color="primary"
+				depressed
+				:disabled="!oauthMigration.enableMigrationStart"
+				data-testid="migration-start-button"
+				@click="onToggleShowStartWarning"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationEnableButton.label"
+					)
+				}}
+			</v-btn>
+			<v-btn
+				v-if="isShowEndButton"
+				class="my-5 button-end"
+				color="primary"
+				depressed
+				:disabled="!oauthMigration.oauthMigrationPossible"
+				data-testid="migration-end-button"
+				@click="onToggleShowEndWarning"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationEndButton.label"
+					)
+				}}
+			</v-btn>
+			<v-switch
+				v-show="isShowMandatorySwitch"
+				:label="
+					t(
+						'components.administration.adminMigrationSection.mandatorySwitch.label'
+					)
+				"
+				:disabled="!oauthMigration.oauthMigrationPossible"
+				:true-value="true"
+				:false-value="false"
+				:value="oauthMigration.oauthMigrationMandatory"
+				inset
+				dense
+				class="ml-1"
+				data-testid="migration-mandatory-switch"
+				@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
+			/>
 		</div>
-		<div v-else-if="!isCurrentDateAfterFinalFinish">
-			<v-alert light prominent text type="info">
-				<RenderHTML
-					:html="
-						t('components.administration.adminMigrationSection.migrationActive')
-					"
-					component="span"
-				/>
-			</v-alert>
-		</div>
-		<v-btn
-			v-if="isShowStartButton && !isCurrentDateAfterFinalFinish"
-			class="my-5 button-start"
-			color="primary"
-			depressed
-			:disabled="!oauthMigration.enableMigrationStart"
-			data-testid="migration-start-button"
-			@click="onToggleShowStartWarning"
-		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEnableButton.label"
-				)
-			}}
-		</v-btn>
-		<v-btn
-			v-if="isShowEndButton && !isCurrentDateAfterFinalFinish"
-			class="my-5 button-end"
-			color="primary"
-			depressed
-			:disabled="!oauthMigration.oauthMigrationPossible"
-			data-testid="migration-end-button"
-			@click="onToggleShowEndWarning"
-		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEndButton.label"
-				)
-			}}
-		</v-btn>
-		<v-switch
-			v-show="isShowMandatorySwitch && !isCurrentDateAfterFinalFinish"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.mandatorySwitch.label'
-				)
-			"
-			:disabled="!oauthMigration.oauthMigrationPossible"
-			:true-value="true"
-			:false-value="false"
-			:value="oauthMigration.oauthMigrationMandatory"
-			inset
-			dense
-			class="ml-1"
-			data-testid="migration-mandatory-switch"
-			@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
-		/>
 		<RenderHTML
 			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
