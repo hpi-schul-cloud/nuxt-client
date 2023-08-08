@@ -55,7 +55,7 @@
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
-					:deleteElement="deleteElement"
+					@delete:element="onDeleteElement"
 					@move-down:element="onMoveContentElementDown"
 					@move-up:element="onMoveContentElementUp"
 					@move-keyboard:element="onMoveContentElementKeyboard"
@@ -159,6 +159,10 @@ export default defineComponent({
 			askType();
 		};
 
+		const onDeleteElement = (elementId: string) => {
+			deleteElement(elementId);
+		};
+
 		const onStartEditMode = () => {
 			startEditMode();
 		};
@@ -214,6 +218,7 @@ export default defineComponent({
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
+			onDeleteElement,
 			deleteElement,
 			onStartEditMode,
 			onEndEditMode,

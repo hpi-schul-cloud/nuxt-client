@@ -82,12 +82,13 @@ export default defineComponent({
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
-		deleteElement: {
-			type: Function as PropType<(elementId: string) => Promise<void>>,
-			required: true,
-		},
 	},
-	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, fileContentElement);
@@ -129,7 +130,7 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				await deleteFileElement();
+				emit("delete:element", props.element.id);
 			}
 		};
 
@@ -137,12 +138,8 @@ export default defineComponent({
 			try {
 				await upload(file);
 			} catch (error) {
-				deleteFileElement();
+				emit("delete:element", props.element.id);
 			}
-		};
-
-		const deleteFileElement = () => {
-			return props.deleteElement(props.element.id); // WIP: can not be a parameter
 		};
 
 		return {

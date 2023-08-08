@@ -36,12 +36,9 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		deleteElement: {
-			type: Function as PropType<(elementId: string) => Promise<void>>,
-			required: true,
-		},
 	},
-	setup(props) {
+	emits: ["delete:element"],
+	setup(props, { emit }) {
 		const { modelValue } = useContentElementState(props);
 		const autofocus = ref(false);
 		useBoardFocusHandler(props.element.id, ref(null), () => {
@@ -49,7 +46,7 @@ export default defineComponent({
 		});
 
 		const onDeleteElement = async (): Promise<void> => {
-			await props.deleteElement(props.element.id);
+			emit("delete:element", props.element.id);
 		};
 
 		return {

@@ -6,7 +6,7 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				:deleteElement="deleteElement"
+				@delete-element="onDeleteElement"
 			/>
 			<FileContentElement
 				v-else-if="isFileElementResponse(element)"
@@ -16,10 +16,10 @@
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
-				:deleteElement="deleteElement"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
+				@delete-element="onDeleteElement"
 			/>
 		</template>
 	</VCardText>
@@ -52,13 +52,18 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		deleteElement: {
-			type: Function as PropType<(elementId: string) => Promise<void>>,
-			required: true,
-		},
 	},
-	emits: ["move-down:element", "move-up:element", "move-keyboard:element"],
+	emits: [
+		"delete:element",
+		"move-down:element",
+		"move-up:element",
+		"move-keyboard:element",
+	],
 	setup(props, { emit }) {
+		const onDeleteElement = (elementId: string) => {
+			emit("delete:element", elementId);
+		};
+
 		const isRichTextElementResponse = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
@@ -125,6 +130,7 @@ export default defineComponent({
 			isFileElementResponse,
 			isRichTextElementResponse,
 			lastElementId,
+			onDeleteElement,
 			onMoveElementDown,
 			onMoveElementUp,
 			onMoveElementKeyboard,
