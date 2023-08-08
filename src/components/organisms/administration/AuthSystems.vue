@@ -25,7 +25,7 @@
 					"
 				>
 					<v-icon>
-						{{ getCopyStatus(0) ? $mdiCheckCircle : $mdiContentCopy }}
+						{{ getCopyStatus(0) ? "$mdiCheckCircle" : "$mdiContentCopy" }}
 					</v-icon>
 				</v-btn>
 			</template>
@@ -77,8 +77,8 @@
 									>
 										<v-icon>{{
 											getCopyStatus(system._id)
-												? $mdiCheckCircle
-												: $mdiContentCopy
+												? "$mdiCheckCircle"
+												: "$mdiContentCopy"
 										}}</v-icon>
 									</v-btn>
 								</template>
