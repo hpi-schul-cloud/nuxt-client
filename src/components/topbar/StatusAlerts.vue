@@ -47,7 +47,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { printDateTime, fromNow } from "../../plugins/datetime";
-import { mdiAlertCircle, mdiInformation } from "@mdi/js";
 import { StatusAlert } from "@/store/types/status-alert";
 
 export default defineComponent({
@@ -61,8 +60,8 @@ export default defineComponent({
 	setup() {
 		const getIconTag = (status: string) => {
 			return status === "danger"
-				? { icon: mdiAlertCircle, color: "error" }
-				: { icon: mdiInformation, color: "info" };
+				? { icon: "$mdiAlertCircle", color: "error" }
+				: { icon: "$mdiInformation", color: "info" };
 		};
 
 		const getDate = (date: string) => {
