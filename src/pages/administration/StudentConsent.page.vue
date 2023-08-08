@@ -86,7 +86,7 @@
 				</backend-data-table>
 
 				<p v-if="birthdayWarning" class="error--text" data-testid="error-text">
-					<v-icon color="error">{{ mdiAlert }} </v-icon>
+					<v-icon color="error">$mdiAlert </v-icon>
 					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
 
@@ -156,7 +156,7 @@
 				</div>
 
 				<p v-if="checkWarning" class="error--text" data-testid="confirm-error">
-					<v-icon color="error">{{ mdiAlert }} </v-icon>
+					<v-icon color="error">$mdiAlert </v-icon>
 					{{
 						$t(
 							"pages.administration.students.consent.steps.register.confirm.warn"
@@ -244,7 +244,7 @@
 						"
 					>
 						<template #icon>
-							<v-icon color="error" size="60">{{ mdiAlert }}</v-icon>
+							<v-icon color="error" size="60">$mdiAlert</v-icon>
 						</template>
 					</modal-body-info>
 					<span v-if="currentStep === 2">
@@ -318,7 +318,6 @@ import {
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
 } from "@/plugins/datetime";
-import { mdiAlert } from "@mdi/js";
 
 export default {
 	components: {
@@ -329,7 +328,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiAlert,
 			tableColumns: [
 				{
 					field: "fullName",
