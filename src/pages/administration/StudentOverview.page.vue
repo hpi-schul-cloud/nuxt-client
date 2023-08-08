@@ -144,7 +144,6 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 
 export default {
 	components: {
@@ -162,8 +161,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiAccountPlus,
-			mdiCloudDownload,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.students.index"
@@ -420,14 +417,14 @@ export default {
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
-						icon: mdiAccountPlus,
+						icon: "$mdiAccountPlus",
 						to: "/administration/students/new",
 						dataTestid: "fab_button_add_students",
 						ariaLabel: this.$t("pages.administration.students.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
-						icon: mdiCloudDownload,
+						icon: "$mdiCloudDownload",
 						href: "/administration/students/import",
 						dataTestid: "fab_button_import_students",
 						ariaLabel: this.$t("pages.administration.students.fab.import"),
