@@ -146,7 +146,7 @@
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
 			>
-				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
+				<v-icon size="20" class="mr-1">$mdiChevronLeft</v-icon>
 				{{ $t("common.actions.back") }}
 			</v-btn>
 			<v-btn
@@ -196,7 +196,6 @@ import { unchangedPassword } from "@/utils/ldapConstants";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { mdiChevronLeft } from "@mdi/js";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
@@ -220,7 +219,6 @@ export default {
 	data() {
 		return {
 			migrateUsersCheckbox: false,
-			mdiChevronLeft,
 		};
 	},
 	computed: {
