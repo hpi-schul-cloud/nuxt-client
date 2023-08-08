@@ -18,8 +18,14 @@
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.outdated" color="error"> $mdiRefreshCircle </v-icon>
-				<v-icon v-else color="success"> $mdiCheckCircle </v-icon>
+				<v-icon v-if="item.outdated" color="error">
+					{{ mdiRefreshCircle }}
+				</v-icon>
+				<v-icon v-else color="success">
+					{{ mdiCheckCircle }}
+				</v-icon>
+				<!-- <v-icon v-if="item.outdated" color="error"> $mdiRefreshCircle </v-icon>
+				<v-icon v-else color="success"> $mdiCheckCircle </v-icon> -->
 				<span>
 					{{ item.status }}
 				</span>
@@ -114,6 +120,7 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -206,6 +213,8 @@ export default defineComponent({
 			onCloseDeleteDialog,
 			itemToDelete,
 			getItemName,
+			mdiRefreshCircle,
+			mdiCheckCircle,
 		};
 	},
 });

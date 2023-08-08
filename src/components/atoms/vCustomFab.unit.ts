@@ -17,7 +17,6 @@ describe("@/components/atoms/vCustomFab", () => {
 	describe("when fab is simple (icon only)", () => {
 		const simpleFab = {
 			actions: [],
-			icon: "$mdiPlus",
 		};
 
 		it("should not display title", () => {
@@ -62,7 +61,7 @@ describe("@/components/atoms/vCustomFab", () => {
 		it("should display title", () => {
 			const wrapper = getWrapper({ ...simpleExtendedFab });
 
-			expect(wrapper.text()).toStrictEqual("User");
+			expect(wrapper.text()).toStrictEqual("$mdiPlus User");
 		});
 
 		it("should display icon", () => {

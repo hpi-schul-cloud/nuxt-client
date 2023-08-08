@@ -81,6 +81,7 @@ import {
 	mdiContentSave,
 	mdiFlag,
 	mdiFlagOutline,
+	mdiPlusCircleOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -166,6 +167,7 @@ const materialIcons = {
 	mdiContentSave,
 	mdiFlag,
 	mdiFlagOutline,
+	mdiPlusCircleOutline,
 };
 
 export default materialIcons;
