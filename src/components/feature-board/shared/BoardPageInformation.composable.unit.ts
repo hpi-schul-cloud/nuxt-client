@@ -7,13 +7,20 @@ import {
 	BoardExternalReferenceType,
 	RoomsApiInterface,
 } from "@/serverApi/v3/api";
-import { useSharedBoardBreadcrumbs } from "./BoardBreadcrumbs.composable";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { i18nMock } from "@@/tests/test-utils";
+import * as pageTitleUtil from "@/utils/pageTitle";
 
 /**
  * hint: this is difficult to test, as we are testing a shared composable (and all mocked return values need to be set before mounting the composable... but the composable is a singleton... due to being a shared composable...)
  */
-describe("BoardBreadcrumbs.composable", () => {
+describe("BoardPageInformation.composable", () => {
+	beforeEach(() => {
+		jest
+			.spyOn(pageTitleUtil, "buildPageTitle")
+			.mockImplementation((value) => value ?? "");
+	});
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
@@ -47,22 +54,32 @@ describe("BoardBreadcrumbs.composable", () => {
 
 			jest.spyOn(serverApi, "RoomsApiFactory").mockReturnValueOnce(roomApi);
 
-			const { createBreadcrumbs, breadcrumbs } = mountComposable(
-				() => useSharedBoardBreadcrumbs(),
+			const { createPageInformation, breadcrumbs } = mountComposable(
+				() => useSharedBoardPageInformation(),
 				{
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 				}
 			);
 
-			return { createBreadcrumbs, breadcrumbs };
+			return { createPageInformation, breadcrumbs };
 		};
 
 		it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
-			const { createBreadcrumbs, breadcrumbs } = setup();
+			const { createPageInformation, breadcrumbs } = setup();
 
 			const fakeId = "abc123";
 
-			await createBreadcrumbs(fakeId);
+			await createPageInformation(fakeId);
+
+			expect(breadcrumbs.value).toHaveLength(2);
+		});
+
+		it.todo("should set page title", async () => {
+			const { createPageInformation, breadcrumbs } = setup();
+
+			const fakeId = "abc123";
+
+			await createPageInformation(fakeId);
 
 			expect(breadcrumbs.value).toHaveLength(2);
 		});
