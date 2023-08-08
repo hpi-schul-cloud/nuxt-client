@@ -23,6 +23,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews";
 import { newsModule, notifierModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -84,7 +85,7 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = this.$t("pages.news.new.title").toString();
+		document.title = buildPageTitle(this.$t("pages.news.new.title"));
 	},
 };
 </script>
