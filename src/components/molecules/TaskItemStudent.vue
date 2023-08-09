@@ -4,7 +4,6 @@
 			:key="task.id"
 			v-click-outside="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
-			:class="{ 'beta-task-background': isBetaTask }"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -12,76 +11,39 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<template v-if="isBetaTask">
-				<v-list-item-avatar>
-					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-				</v-list-item-avatar>
-				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">
-						{{ taskLabel }}
-					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle">
-						{{ task.name }}
-					</v-list-item-title>
-					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-				</v-list-item-content>
-				<v-list-item-action>
-					<v-list-item-action-text
-						class="subtitle-2"
-						data-test-id="dueDateLabel"
-					>
-						{{ dueDateLabel }}
-					</v-list-item-action-text>
-					<v-spacer />
-					<v-custom-chip-time-remaining
-						v-if="taskState === 'warning'"
-						:type="taskState"
-						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.breakpoint.xsOnly"
-					/>
-				</v-list-item-action>
-			</template>
-			<template v-else>
-				<v-list-item-avatar>
-					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-				</v-list-item-avatar>
-				<v-list-item-content>
-					<v-list-item-subtitle data-testid="taskSubtitle">
-						{{ taskLabel }}
-					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle">
-						{{ task.name }}
-					</v-list-item-title>
-					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-				</v-list-item-content>
-				<v-list-item-action>
-					<v-list-item-action-text
-						class="subtitle-2"
-						data-test-id="dueDateLabel"
-					>
-						{{ dueDateLabel }}
-					</v-list-item-action-text>
-					<v-spacer />
-					<v-custom-chip-time-remaining
-						v-if="taskState === 'warning'"
-						:type="taskState"
-						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.breakpoint.xsOnly"
-					/>
-				</v-list-item-action>
-				<v-list-item-action
-					:id="`task-menu-${task.id}`"
-					class="context-menu-btn"
-				>
-					<task-item-menu
-						:task-id="task.id"
-						:task-is-finished="task.status.isFinished"
-						user-role="student"
-						@toggled-menu="toggleMenu"
-						@focus-changed="handleFocus"
-					/>
-				</v-list-item-action>
-			</template>
+			<v-list-item-avatar>
+				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+			</v-list-item-avatar>
+			<v-list-item-content>
+				<v-list-item-subtitle data-testid="taskSubtitle">
+					{{ taskLabel }}
+				</v-list-item-subtitle>
+				<v-list-item-title data-testid="taskTitle">
+					{{ task.name }}
+				</v-list-item-title>
+				<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+			</v-list-item-content>
+			<v-list-item-action>
+				<v-list-item-action-text class="subtitle-2" data-test-id="dueDateLabel">
+					{{ dueDateLabel }}
+				</v-list-item-action-text>
+				<v-spacer />
+				<v-custom-chip-time-remaining
+					v-if="taskState === 'warning'"
+					:type="taskState"
+					:due-date="task.dueDate"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
+				/>
+			</v-list-item-action>
+			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
+				<task-item-menu
+					:task-id="task.id"
+					:task-is-finished="task.status.isFinished"
+					user-role="student"
+					@toggled-menu="toggleMenu"
+					@focus-changed="handleFocus"
+				/>
+			</v-list-item-action>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -115,9 +77,6 @@ export default {
 	},
 	computed: {
 		iconColor() {
-			if (this.isBetaTask) {
-				return "beta-task";
-			}
 			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
 		},
@@ -135,17 +94,6 @@ export default {
 			const { status } = this.task;
 			return this.isOverDue && !status.submitted && status.graded;
 		},
-		isBetaTask() {
-			return !!this.task.taskCardId;
-		},
-		taskEditRoute() {
-			return this.isBetaTask
-				? {
-						name: "beta-task-view-edit",
-						params: { id: this.task.taskCardId },
-				  }
-				: `/homework/${this.task.id}`;
-		},
 		taskState() {
 			const { status } = this.task;
 
@@ -157,9 +105,6 @@ export default {
 			return undefined;
 		},
 		taskIcon() {
-			if (this.isBetaTask) {
-				return "$taskDoneFilled";
-			}
 			const stateIcons = {
 				warning: "$taskOpenFilled",
 				overdue: "$taskMissed",
@@ -186,17 +131,10 @@ export default {
 				: `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
 		taskLabel() {
-			const labelText = this.isBetaTask
-				? `${this.task.courseName} - ${this.$t(
-						"pages.room.taskCard.label.betaTask"
-				  )}`
-				: `${this.task.courseName}`;
-			return labelText;
+			return `${this.task.courseName}`;
 		},
 		ariaLabel() {
-			return this.isBetaTask
-				? `${this.$t("pages.room.taskCard.label.betaTask")} ${this.task.name}`
-				: `${this.$t("common.words.task")} ${this.task.name}`;
+			return `${this.$t("common.words.task")} ${this.task.name}`;
 		},
 	},
 	methods: {
@@ -205,9 +143,7 @@ export default {
 			this.isHovering = stateValue;
 		},
 		handleClick() {
-			this.isBetaTask
-				? this.$router.push(this.taskEditRoute)
-				: this.redirectAction(this.taskEditRoute);
+			this.redirectAction(`/homework/${this.task.id}`);
 		},
 		handleFocus(value) {
 			this.isActive = value;
@@ -227,10 +163,5 @@ export default {
 // stylelint-disable sh-waqar/declaration-use-variable
 .context-menu-btn {
 	min-width: 45px;
-}
-
-.beta-task-background {
-	// based on beta-task color #196c9e
-	background-color: rgba(25, 108, 158, 0.05);
 }
 </style>

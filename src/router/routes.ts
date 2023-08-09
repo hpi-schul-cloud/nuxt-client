@@ -230,12 +230,6 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-board",
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "rooms-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
-	},
-	{
 		path: "/rooms-list",
 		component: () => import("@/pages/rooms/RoomList.page.vue"),
 		name: "rooms-list",
@@ -249,18 +243,6 @@ export const routes: Array<RouteConfig> = [
 		path: "/tasks",
 		component: () => import("../pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
-	},
-	{
-		path: `/tasks/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "tasks-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
-	},
-	{
-		path: `/beta-task/:id(${REGEX_ID})`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "beta-task-view-edit",
-		beforeEnter: createPermissionGuard(["task_card_view"]),
 	},
 	{
 		path: `/tools/context/tool-configuration`,
