@@ -1,36 +1,15 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
-import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
-import { useSelectedFile } from "@feature-board-file-element";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
-	const { setSelectedFile } = useSelectedFile();
-	const isFilePickerOpen = ref(false);
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		await addElementFunction(elementType);
 
-		closeDialog();
-	};
-
-	const onFileSelect = async (file: File) => {
-		const hasSetFile = setSelectedFile(file);
-
-		if (hasSetFile) {
-			try {
-				await addElementFunction(ContentElementType.File);
-			} catch (error) {
-				setSelectedFile();
-			}
-		}
-	};
-
-	const onFileElementClick = () => {
-		isFilePickerOpen.value = true;
 		closeDialog();
 	};
 
@@ -44,7 +23,7 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		{
 			icon: mdiTrayArrowUp,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
-			action: onFileElementClick,
+			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
 	];
@@ -59,8 +38,5 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 		isDialogOpen,
 		elementTypeOptions,
 		onElementClick,
-		onFileElementClick,
-		onFileSelect,
-		isFilePickerOpen,
 	};
 };

@@ -848,10 +848,10 @@
 	"pages.rooms.tools.outdatedDialog.content.student": "Debido a cambios de versión, la herramienta integrada está desactualizada y no se puede iniciar en este momento.<br><br> Se recomienda ponerse en contacto con el profesor o el líder del curso para obtener más ayuda.",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
 	"pages.rooms.tools.deleteDialog.content": "¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
-	"pages.rooms.tools.configureVideoconferenceDialog.title" : "Crear videoconferencia {roomName}",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute" : "Silenciar a las participantes al entrar",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom" : "Aprobación del moderador antes de poder ingresar a la sala",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission" : "Todas las usuarias participan como moderadoras",
+	"pages.rooms.tools.configureVideoconferenceDialog.title": "Crear videoconferencia {roomName}",
+	"pages.rooms.tools.configureVideoconferenceDialog.text.mute": "Silenciar a las participantes al entrar",
+	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom": "Aprobación del moderador antes de poder ingresar a la sala",
+	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission": "Todas las usuarias participan como moderadoras",
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
@@ -965,6 +965,5 @@
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"ui-confirmation-dialog.ask-delete.cardElement": "¿Eliminar {type}?",
 	"ui-confirmation-dialog.ask-delete.card": "¿Eliminar {type} {title}?"
 }

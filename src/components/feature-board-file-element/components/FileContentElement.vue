@@ -10,53 +10,46 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<div v-if="fileRecord">
-			<div v-if="isImage">
-				<ImageFileDisplay
-					:fileName="fileRecord.name"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-					:url="fileRecord.url"
-					:isEditMode="isEditMode"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<div v-else>
-				<FileContentElementDisplay
-					v-if="!isEditMode"
-					:fileName="fileRecord.name"
-					:url="url"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-				/>
-				<FileContentElementEdit
-					v-if="isEditMode"
-					:fileName="fileRecord.name"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-					:url="url"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<FileContentElementChips
-				:fileSize="fileRecord.size"
+		<div v-if="fileRecord && isImage">
+			<ImageFileDisplay
 				:fileName="fileRecord.name"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+				:url="fileRecord.url"
+				:isEditMode="isEditMode"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@delete:element="onDeleteElement"
 			/>
-			<FileContentElementAlert v-if="isBlockedByVirusScan" />
 		</div>
-		<v-card-text v-else>
-			<v-progress-linear
-				data-testid="board-file-element-progress-bar"
-				indeterminate
-			></v-progress-linear>
-		</v-card-text>
+		<div v-else>
+			<FileContentElementDisplay
+				v-if="!isEditMode"
+				:fileName="fileRecord?.name ?? ''"
+				:url="url"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+			/>
+			<FileContentElementEdit
+				v-if="isEditMode"
+				:fileName="fileRecord?.name ?? ''"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+				:url="url"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@delete:element="onDeleteElement"
+				@upload:file="onUploadFile"
+			/>
+		</div>
+		<FileContentElementChips
+			:fileSize="fileRecord?.size ?? 0"
+			:fileName="fileRecord?.name ?? ''"
+		/>
+		<FileContentElementAlert v-if="isBlockedByVirusScan" />
 	</v-card>
 </template>
 
@@ -67,7 +60,6 @@ import { useFileRecord } from "../FileRecord.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { useFileStorageApi } from "../FileStorageApi.composable";
-import { useSelectedFile } from "../SelectedFile.composable";
 import { PropType, defineComponent, onMounted, ref } from "vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
@@ -90,12 +82,13 @@ export default defineComponent({
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
-		deleteElement: {
-			type: Function as PropType<(elementId: string) => Promise<void>>,
-			required: true,
-		},
 	},
-	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, fileContentElement);
@@ -105,33 +98,16 @@ export default defineComponent({
 			props.element.id,
 			FileRecordParentType.BOARDNODES
 		);
-		const { setSelectedFile, getSelectedFile } = useSelectedFile();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
 		onMounted(() => {
 			(async () => {
-				const file = getSelectedFile();
-
-				if (file) {
-					await tryUpload(file);
-				} else {
-					await fetchFile();
-				}
+				await fetchFile();
 			})();
 		});
 
-		const tryUpload = async (file: File) => {
-			try {
-				await upload(file);
-
-				setSelectedFile();
-			} catch (error) {
-				setSelectedFile();
-				await deleteFileElement();
-			}
-		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -154,13 +130,18 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				await deleteFileElement();
+				emit("delete:element", props.element.id);
 			}
 		};
 
-		const deleteFileElement = () => {
-			return props.deleteElement(props.element.id);
+		const onUploadFile = async (file: File, event: Event): Promise<void> => {
+			try {
+				await upload(file);
+			} catch (error) {
+				emit("delete:element", props.element.id);
+			}
 		};
+
 		return {
 			fileContentElement,
 			fileRecord,
@@ -172,6 +153,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveFileEditDown,
 			onMoveFileEditUp,
+			onUploadFile,
 		};
 	},
 });
