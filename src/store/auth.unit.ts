@@ -48,7 +48,7 @@ describe("auth store module", () => {
 
 	describe("mutations", () => {
 		describe("setUser", () => {
-			it("should set user data", () => {
+			it("should set the user state", () => {
 				const authModule = new AuthModule({});
 				const mockValue = { ...mockUser, name: "mockName" };
 				expect(authModule.getUser).not.toStrictEqual(mockValue);
@@ -58,7 +58,7 @@ describe("auth store module", () => {
 		});
 
 		describe("setLocale", () => {
-			it("should set locale data", () => {
+			it("should set the locale state", () => {
 				const authModule = new AuthModule({});
 				const localeMock = "mock";
 				expect(authModule.getLocale).not.toStrictEqual(localeMock);
@@ -68,7 +68,7 @@ describe("auth store module", () => {
 		});
 
 		describe("setAccessToken", () => {
-			it("should set accessToken data", () => {
+			it("should set the accessToken state", () => {
 				const authModule = new AuthModule({});
 				const tokenMock = "tokenMock";
 				expect(authModule.getAccessToken).not.toBe(tokenMock);
@@ -78,7 +78,7 @@ describe("auth store module", () => {
 		});
 
 		describe("addUserPermission", () => {
-			it("should add user permission data", () => {
+			it("should add the userPermission state", () => {
 				const authModule = new AuthModule({});
 				const permissionToBeAdded = "permission_z";
 				authModule.addUserPermmission(permissionToBeAdded);
@@ -87,7 +87,7 @@ describe("auth store module", () => {
 		});
 
 		describe("clearAuthData", () => {
-			it("should clear the auth data", () => {
+			it("should clear the auth state", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.getUser).not.toBe(null);
 				expect(authModule.getAccessToken).not.toBe(null);
@@ -98,7 +98,7 @@ describe("auth store module", () => {
 		});
 
 		describe("setStatus", () => {
-			it("should set status data", () => {
+			it("should set the status state", () => {
 				const authModule = new AuthModule({});
 				const statusMock = "pending";
 				authModule.setStatus(statusMock);
@@ -107,7 +107,7 @@ describe("auth store module", () => {
 		});
 
 		describe("setBusinessError", () => {
-			it("should set businessError", () => {
+			it("should set the businessError state", () => {
 				const authModule = new AuthModule({});
 				const businessErrorMock = {
 					statusCode: "418",
@@ -119,7 +119,7 @@ describe("auth store module", () => {
 		});
 
 		describe("resetBusinessError", () => {
-			it("should reset businessError", () => {
+			it("should reset the businessError state", () => {
 				const authModule = new AuthModule({});
 				const businessErrorMock = {
 					statusCode: "418",
@@ -151,20 +151,20 @@ describe("auth store module", () => {
 			});
 		});
 		describe("locale", () => {
-			it("returns the user's language", () => {
+			it("should return the user's language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "mock";
 				expect(authModule.getLocale).toBe("mock");
 			});
 
-			it("returns the school's language", () => {
+			it("should return the school's language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				schoolsModule.school.language = "fi";
 				expect(authModule.getLocale).toBe("fi");
 			});
 
-			it("returns the instance language", () => {
+			it("should return the instance language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				schoolsModule.school.language = "";
@@ -172,7 +172,7 @@ describe("auth store module", () => {
 				expect(authModule.getLocale).toBe("fu");
 			});
 
-			it("returns the default language", () => {
+			it("should return the default language", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				schoolsModule.school.language = "";
@@ -182,7 +182,7 @@ describe("auth store module", () => {
 		});
 
 		describe("getSchool", () => {
-			it("returns the school data", () => {
+			it("should return the school state", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				schoolsModule.school._id = "test-school-id";
@@ -193,7 +193,7 @@ describe("auth store module", () => {
 		});
 
 		describe("getUserRoles", () => {
-			it("returns the user roles", () => {
+			it("should return the userRoles state", () => {
 				const authModule = new AuthModule({});
 				const mockValue = { ...mockUser, name: "mockName" };
 				authModule.setUser(mockValue);
@@ -203,7 +203,7 @@ describe("auth store module", () => {
 		});
 
 		describe("getUserRolesDisplayName", () => {
-			it("returns the user display name", () => {
+			it("should return the userDisplayName state", () => {
 				const authModule = new AuthModule({});
 				const mockValue = { ...mockUser, name: "mockName" };
 				authModule.setUser(mockValue);
@@ -215,7 +215,7 @@ describe("auth store module", () => {
 		});
 
 		describe("getUserPermissions", () => {
-			it("returns the user dpermissions", () => {
+			it("should return the userPermissions state", () => {
 				const authModule = new AuthModule({});
 				const mockValue = { ...mockUser, name: "mockName" };
 				authModule.setUser(mockValue);
@@ -227,7 +227,7 @@ describe("auth store module", () => {
 		});
 
 		describe("getAuthenticated", () => {
-			it("returns true if accessToken is set", () => {
+			it("should return true if accessToken is set", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.getAuthenticated).toBe(false);
 
@@ -237,7 +237,7 @@ describe("auth store module", () => {
 		});
 
 		describe("userIsExternallyManaged", () => {
-			it("returns if the user is externally managed", () => {
+			it("should return true if the user is externally managed", () => {
 				const authModule = new AuthModule({});
 				authModule.setUser(mockUser);
 
@@ -248,7 +248,7 @@ describe("auth store module", () => {
 		});
 
 		describe("isLoggedIn", () => {
-			it("returns true if accessToken is set", () => {
+			it("should return true if accessToken is set", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.isLoggedIn).toBe(false);
 
@@ -279,32 +279,36 @@ describe("auth store module", () => {
 		};
 
 		describe("login", () => {
-			it("should call backend and returned user data", async () => {
-				axiosInitializer({
-					data: { ...defaultUserData, schoolId: "school-id", language: "de" },
+			describe("when the login process is successful", () => {
+				it("should set the user state", async () => {
+					axiosInitializer({
+						data: { ...defaultUserData, schoolId: "school-id", language: "de" },
+					});
+					const authModule = new AuthModule({});
+
+					expect(authModule?.getUser?.firstName).toStrictEqual("");
+
+					await authModule.login("sample-jwt");
+					expect(fetchSchoolMock).toHaveBeenCalled();
+					expect(authModule?.getLocale).toStrictEqual("de");
+					expect(authModule?.getUserPermissions).toStrictEqual([
+						"addons_enabled",
+						"teams_enabled",
+					]);
+					expect(authModule?.getUser?.firstName).toStrictEqual("returned name");
 				});
-				const authModule = new AuthModule({});
-
-				expect(authModule?.getUser?.firstName).toStrictEqual("");
-
-				await authModule.login("sample-jwt");
-				expect(fetchSchoolMock).toHaveBeenCalled();
-				expect(authModule?.getLocale).toStrictEqual("de");
-				expect(authModule?.getUserPermissions).toStrictEqual([
-					"addons_enabled",
-					"teams_enabled",
-				]);
-				expect(authModule?.getUser?.firstName).toStrictEqual("returned name");
 			});
 
-			it("should call backend and returned user data", async () => {
-				axiosInitializer({ data: undefined });
-				const authModule = new AuthModule({});
+			describe("when the login process is not successful", () => {
+				it("should not set the user state", async () => {
+					axiosInitializer({ data: undefined });
+					const authModule = new AuthModule({});
 
-				expect(authModule?.getUser?.firstName).toStrictEqual("");
+					expect(authModule?.getUser?.firstName).toStrictEqual("");
 
-				await authModule.login("sample-jwt");
-				expect(authModule?.getUser).toBe(null);
+					await authModule.login("sample-jwt");
+					expect(authModule?.getUser).toBe(null);
+				});
 			});
 		});
 
