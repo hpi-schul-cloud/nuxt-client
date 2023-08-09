@@ -243,12 +243,12 @@ export default defineComponent({
 			width: 100%;
 			padding: 0;
 			margin: 0;
-			list-style-type: none;
 
 			.list-item {
 				width: 100%;
 				height: var(--sidebar-item-height);
 				line-height: var(--sidebar-item-height);
+				list-style: none;
 
 				&.list-sub-item {
 					height: var(--sidebar-sub-item-height);
