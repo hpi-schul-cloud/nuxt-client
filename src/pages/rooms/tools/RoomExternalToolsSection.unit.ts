@@ -6,6 +6,7 @@ import Vue from "vue";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 } from "@/utils/inject";
@@ -24,6 +25,7 @@ import { BusinessError } from "@/store/types/commons";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import VueRouter from "vue-router";
 import * as routerComposables from "vue-router/composables";
+import EnvConfigModule from "../../../store/env-config";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
 describe("RoomExternalToolsSection", () => {
@@ -53,6 +55,10 @@ describe("RoomExternalToolsSection", () => {
 			getUserRoles: ["teacher"],
 		});
 
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getCtlContextConfigurationEnabled: true,
+		});
+
 		router = createMock<VueRouter>();
 		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
 
@@ -73,6 +79,7 @@ describe("RoomExternalToolsSection", () => {
 						contextExternalToolsModule,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			}
 		);
