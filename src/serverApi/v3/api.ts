@@ -4642,7 +4642,7 @@ export interface ToolReferenceResponse {
      */
     contextToolId: string;
     /**
-     * The url of the logo of the tool
+     * The url of the logo which is stored in the db
      * @type {string}
      * @memberof ToolReferenceResponse
      */
@@ -14038,6 +14038,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Gets the logo of an external tool.
+         * @param {string} toolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetExternalToolLogo: async (toolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'toolId' is not null or undefined
+            assertParamExists('toolControllerGetExternalToolLogo', 'toolId', toolId)
+            const localVarPath = `/tools/external-tools/{toolId}/logo`
+                .replace(`{${"toolId"}}`, encodeURIComponent(String(toolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get Tool References
          * @param {string} contextId 
          * @param {string} contextType 
@@ -14514,6 +14552,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Gets the logo of an external tool.
+         * @param {string} toolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetExternalToolLogo(toolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetExternalToolLogo(toolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get Tool References
          * @param {string} contextId 
          * @param {string} contextType 
@@ -14743,6 +14792,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Gets the logo of an external tool.
+         * @param {string} toolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetExternalToolLogo(toolId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.toolControllerGetExternalToolLogo(toolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get Tool References
          * @param {string} contextId 
          * @param {string} contextType 
@@ -14960,6 +15019,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerGetExternalTool(toolId: string, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @summary Gets the logo of an external tool.
+     * @param {string} toolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetExternalToolLogo(toolId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -15205,6 +15274,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerGetExternalTool(toolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolControllerGetExternalTool(toolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets the logo of an external tool.
+     * @param {string} toolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetExternalToolLogo(toolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetExternalToolLogo(toolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -16273,6 +16354,43 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
     return {
         /**
          * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerFindUserLoginMigrationBySchool: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('userLoginMigrationControllerFindUserLoginMigrationBySchool', 'schoolId', schoolId)
+            const localVarPath = `/user-login-migrations/schools/{schoolId}`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16465,6 +16583,16 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16523,6 +16651,15 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
     return {
         /**
          * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse> {
+            return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16575,6 +16712,15 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
 export interface UserLoginMigrationApiInterface {
     /**
      * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse>;
+
+    /**
+     * 
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16625,6 +16771,17 @@ export interface UserLoginMigrationApiInterface {
  * @extends {BaseAPI}
  */
 export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigrationApiInterface {
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} [userId] 
