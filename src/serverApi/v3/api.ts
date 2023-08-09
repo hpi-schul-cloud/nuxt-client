@@ -14004,7 +14004,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Returns an ExternalTool
+         * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14042,7 +14042,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get ExternalTool References
+         * @summary Get ExternalTool References for a given context
          * @param {string} contextId 
          * @param {string} contextType 
          * @param {*} [options] Override http request option.
@@ -14244,7 +14244,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Returns a SchoolExternalTool
+         * @summary Returns a SchoolExternalTool for the given id
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14517,7 +14517,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Returns an ExternalTool
+         * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14528,7 +14528,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get ExternalTool References
+         * @summary Get ExternalTool References for a given context
          * @param {string} contextId 
          * @param {string} contextType 
          * @param {*} [options] Override http request option.
@@ -14585,7 +14585,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Returns a SchoolExternalTool
+         * @summary Returns a SchoolExternalTool for the given id
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14757,7 +14757,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Returns an ExternalTool
+         * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14767,7 +14767,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get ExternalTool References
+         * @summary Get ExternalTool References for a given context
          * @param {string} contextId 
          * @param {string} contextType 
          * @param {*} [options] Override http request option.
@@ -14819,7 +14819,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Returns a SchoolExternalTool
+         * @summary Returns a SchoolExternalTool for the given id
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14987,7 +14987,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Returns an ExternalTool
+     * @summary Returns an ExternalTool for the given id
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14997,7 +14997,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Get ExternalTool References
+     * @summary Get ExternalTool References for a given context
      * @param {string} contextId 
      * @param {string} contextType 
      * @param {*} [options] Override http request option.
@@ -15049,7 +15049,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Returns a SchoolExternalTool
+     * @summary Returns a SchoolExternalTool for the given id
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15241,7 +15241,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Returns an ExternalTool
+     * @summary Returns an ExternalTool for the given id
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15253,7 +15253,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Get ExternalTool References
+     * @summary Get ExternalTool References for a given context
      * @param {string} contextId 
      * @param {string} contextType 
      * @param {*} [options] Override http request option.
@@ -15315,7 +15315,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Returns a SchoolExternalTool
+     * @summary Returns a SchoolExternalTool for the given id
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
