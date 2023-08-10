@@ -1,14 +1,12 @@
-/* eslint-disable */
 <template>
 	<div class="d-flex flex-column">
 		<p>TLDRAW</p>
 		<a :href="`http://localhost:3046/${$route.params.id}`" target="_blank">
 			NEW WINDOW
 		</a>
-		<!--		<a href="/tldraw-test" target="_blank">NEW WINDOW</a>-->
-		<!--		<iframe src="/tldraw-test" width="600px" height="600px"></iframe>-->
 		<iframe
-			:src="`http://localhost:3046/${$route.params.id}`"
+			v-if="tldrawServerURL"
+			:src="tldrawServerURL"
 			width="600px"
 			height="600px"
 		></iframe>
@@ -19,12 +17,28 @@
 export default {
 	data() {
 		return {
-			urlParams: new URLSearchParams(window.location.search),
+			tldrawServerURL: null,
 		};
 	},
-	render() {
-		return h("div", "elo");
+	created() {
+		this.fetchTldrawServerURL();
+	},
+	methods: {
+		async fetchTldrawServerURL() {
+			try {
+				const response = await fetch(
+					`${window.location.origin}/tldraw-client-runtime.config.json`
+				);
+				const data = await response.json();
+				if (data.tldrawServerURL) {
+					this.tldrawServerURL = data.tldrawServerURL;
+				}
+			} catch (error) {
+				console.error("Error fetching tldrawServerURL:", error);
+			}
+		},
 	},
 };
 </script>
+
 <style lang="scss" scoped></style>
