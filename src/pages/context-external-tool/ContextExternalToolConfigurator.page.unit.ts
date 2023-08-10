@@ -5,12 +5,13 @@ import { ContextExternalToolSave } from "@/store/external-tool/context-external-
 import NotifierModule from "@/store/notifier";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils";
+import { contextExternalToolFactory, i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	businessErrorFactory,
@@ -20,6 +21,7 @@ import {
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import RoomModule from "@/store/room";
+import EnvConfigModule from "@/store/env-config";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
 
 describe("ContextExternalToolConfigurator", () => {
@@ -35,20 +37,22 @@ describe("ContextExternalToolConfigurator", () => {
 	) => {
 		document.body.setAttribute("data-app", "true");
 
-		const contextExternalToolsModule: ContextExternalToolsModule =
-			createModuleMocks(ContextExternalToolsModule, {
+		const contextExternalToolsModule = createModuleMocks(
+			ContextExternalToolsModule,
+			{
 				getContextExternalToolConfigurationTemplates: [
 					contextExternalToolConfigurationTemplateFactory.build(),
 				],
 				getLoading: false,
 				getBusinessError: businessErrorFactory.build({ message: undefined }),
 				...getters,
-			});
+			}
+		);
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
-		const roomModule: RoomModule = createModuleMocks(RoomModule, {
+		const roomModule = createModuleMocks(RoomModule, {
 			getRoomData: {
 				title: roomTitle,
 				roomId: "contextId",
@@ -56,6 +60,10 @@ describe("ContextExternalToolConfigurator", () => {
 				elements: [],
 				isArchived: false,
 			},
+		});
+
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getCtlContextConfigurationEnabled: true,
 		});
 
 		const $router = {
@@ -74,6 +82,7 @@ describe("ContextExternalToolConfigurator", () => {
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				propsData: {
 					...propsData,
@@ -138,6 +147,48 @@ describe("ContextExternalToolConfigurator", () => {
 					contextId: "contextId",
 					contextType: ToolContextType.COURSE,
 				});
+			});
+		});
+
+		describe("when updating an existing configuration", () => {
+			const setup = async () => {
+				const contextExternalTool = contextExternalToolFactory.build({
+					displayName: "testName",
+				});
+
+				const { contextExternalToolsModule, wrapper } = getWrapper({
+					configId: "configId",
+					contextId: "contextId",
+					contextType: ToolContextType.COURSE,
+				});
+
+				await Vue.nextTick();
+
+				contextExternalToolsModule.loadContextExternalTool.mockResolvedValue(
+					contextExternalTool
+				);
+
+				return {
+					contextExternalToolsModule,
+					wrapper,
+					contextExternalTool,
+				};
+			};
+
+			it("should load the template", async () => {
+				const { contextExternalToolsModule } = await setup();
+
+				expect(
+					contextExternalToolsModule.loadConfigurationTemplateForContextExternalTool
+				).toHaveBeenCalledWith("configId");
+			});
+
+			it("should load the configuration", async () => {
+				const { contextExternalToolsModule } = await setup();
+
+				expect(
+					contextExternalToolsModule.loadContextExternalTool
+				).toHaveBeenCalledWith("configId");
 			});
 		});
 	});
@@ -241,6 +292,101 @@ describe("ContextExternalToolConfigurator", () => {
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.created",
+					status: "success",
+				});
+			});
+		});
+
+		describe("when editing a configuration", () => {
+			const setup = () => {
+				const template =
+					contextExternalToolConfigurationTemplateFactory.build();
+
+				const contextId = "contextId";
+				const contextType: ToolContextType = ToolContextType.COURSE;
+				const contextExternalToolId = "configId";
+
+				const { wrapper, contextExternalToolsModule, notifierModule } =
+					getWrapper(
+						{
+							contextId,
+							contextType,
+							configId: contextExternalToolId,
+						},
+						{
+							getContextExternalToolConfigurationTemplates: [template],
+						}
+					);
+
+				return {
+					wrapper,
+					contextExternalToolsModule,
+					notifierModule,
+					template,
+					contextExternalToolId,
+					contextId,
+					contextType,
+				};
+			};
+
+			it("should call store action to update tool", async () => {
+				const {
+					wrapper,
+					contextExternalToolsModule,
+					template,
+					contextExternalToolId,
+					contextId,
+					contextType,
+				} = setup();
+
+				await wrapper
+					.findComponent(ExternalToolConfigurator)
+					.vm.$emit("save", template, []);
+
+				expect(
+					contextExternalToolsModule.updateContextExternalTool
+				).toHaveBeenCalledWith<
+					[
+						{
+							contextExternalToolId: string;
+							contextExternalTool: ContextExternalToolSave;
+						}
+					]
+				>({
+					contextExternalToolId: contextExternalToolId,
+					contextExternalTool: {
+						contextId,
+						contextType,
+						displayName: undefined,
+						parameters: [],
+						toolVersion: template.version,
+						schoolToolId: template.schoolExternalToolId,
+					},
+				});
+			});
+
+			it("should redirect back to context settings page when there is no error", async () => {
+				const { wrapper, template, contextId } = setup();
+
+				await wrapper
+					.findComponent(ExternalToolConfigurator)
+					.vm.$emit("save", template, []);
+
+				expect(routerPush).toHaveBeenCalledWith({
+					path: `/rooms/${contextId}`,
+					query: { tab: "tools" },
+				});
+			});
+
+			it("should display a notification when updated", async () => {
+				const { wrapper, notifierModule, template } = setup();
+
+				await wrapper
+					.findComponent(ExternalToolConfigurator)
+					.vm.$emit("save", template, []);
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "components.administration.externalToolsSection.notification.updated",
 					status: "success",
 				});
 			});

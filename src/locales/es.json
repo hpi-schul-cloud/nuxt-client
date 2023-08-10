@@ -963,6 +963,8 @@
 	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no coincide con su expresión regular. Por favor, corrija el valor.",
 	"pages.tool.apiError.tool_launch_outdated": "La configuración de la herramienta está desactualizada debido a un cambio de versión. ¡La herramienta no se puede iniciar!",
 	"pages.tool.context.title": "Adición de herramientas externas",
+	"pages.tool.context.displayName": "Nombre para mostrar",
+	"pages.tool.context.displayNameDescription": "El nombre para mostrar de la herramienta se puede anular y debe ser único",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",

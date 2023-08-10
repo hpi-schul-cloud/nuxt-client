@@ -18,7 +18,6 @@
 		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
-					<v-icon size="14">{{ icons.mdiFormatListChecks }}</v-icon>
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
@@ -310,6 +309,7 @@ export default {
 	.dot-menu-section {
 		align-self: start;
 		text-align: right;
+		height: calc(var(--space-base-vuetify) * 9);
 	}
 }
 

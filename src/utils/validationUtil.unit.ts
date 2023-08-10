@@ -1,4 +1,4 @@
-import { isOfficialSchoolNumber } from "./validationUtil";
+import { isEnum, isOfficialSchoolNumber } from "./validationUtil";
 
 describe("validationUtil", () => {
 	describe("isOfficialSchoolNumber", () => {
@@ -30,6 +30,27 @@ describe("validationUtil", () => {
 			expect(isOfficialSchoolNumber("AB-1234")).toBe(false);
 			expect(isOfficialSchoolNumber("-1234")).toBe(false);
 			expect(isOfficialSchoolNumber("1234")).toBe(false);
+		});
+	});
+
+	describe("isEnum", () => {
+		enum TestEnum {
+			Value1 = 0,
+			Value2 = "Test2",
+		}
+
+		describe("when it is in the enum", () => {
+			it("should return true", () => {
+				expect(isEnum(TestEnum)(TestEnum.Value1)).toBe(true);
+				expect(isEnum(TestEnum)(TestEnum.Value2)).toBe(true);
+			});
+		});
+
+		describe("when it is not part of the enum", () => {
+			it("should return false", () => {
+				expect(isEnum(TestEnum)(1)).toBe(false);
+				expect(isEnum(TestEnum)("other")).toBe(false);
+			});
 		});
 	});
 });
