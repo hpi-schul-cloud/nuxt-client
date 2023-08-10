@@ -1,5 +1,4 @@
 import { I18N_KEY } from "@/utils/inject";
-import * as pageTitleUtil from "@/utils/pageTitle";
 import { i18nMock } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -15,15 +14,14 @@ jest.mock<typeof import("@/utils/create-shared-composable")>(
 		createTestableSharedComposable: (composable) => composable,
 	})
 );
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("BoardPageInformation.composable", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 
 	beforeEach(() => {
-		jest
-			.spyOn(pageTitleUtil, "buildPageTitle")
-			.mockImplementation((value) => value ?? "");
-
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});

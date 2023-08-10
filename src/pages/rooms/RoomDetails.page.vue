@@ -149,6 +149,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	setup() {
@@ -434,7 +435,7 @@ export default defineComponent({
 			userId: authModule.getUser.id,
 		});
 
-		document.title = `${this.roomData.title} - ${envConfigModule.getEnv.SC_TITLE}`;
+		document.title = buildPageTitle(this.roomData.title);
 	},
 	methods: {
 		setActiveTab(tabName) {

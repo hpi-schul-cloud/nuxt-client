@@ -124,8 +124,8 @@ import {
 	CardElement,
 	CardElementComponentEnum,
 } from "@/store/types/card-element";
-import Theme from "@/theme.config";
 import { useTitle } from "@vueuse/core";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { Ref, computed, defineComponent, inject, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
 
@@ -174,11 +174,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		useTitle(
-			`${i18n.t("pages.rooms.fab.add.betatask").toString()} - ${
-				Theme.short_name
-			}`
-		);
+		useTitle(buildPageTitle(i18n.t("pages.rooms.fab.add.betatask").toString()));
 
 		const deleteDialog = ref({
 			isOpen: false,

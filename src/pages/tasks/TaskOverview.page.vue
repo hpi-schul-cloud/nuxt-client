@@ -9,8 +9,8 @@ import TasksModule from "@/store/tasks";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, inject, onMounted, ref } from "vue";
-import { envConfigModule } from "@/store";
 import { useI18n } from "@/composables/i18n.composable";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	components: { TasksDashboardMain },
@@ -23,7 +23,7 @@ export default defineComponent({
 			throw new Error("tasksModule Module undefined"); // NUXT_REMOVAL use application error
 		}
 
-		useTitle(`${t("common.words.tasks")} - ${envConfigModule.getEnv.SC_TITLE}`);
+		useTitle(buildPageTitle(t("common.words.tasks")));
 
 		onMounted(() => tasksModule.fetchAllTasks());
 

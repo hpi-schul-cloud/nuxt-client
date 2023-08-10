@@ -3,10 +3,12 @@ import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
-import { envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Envs } from "@/store/types/env-config";
 import { i18nMock } from "@@/tests/test-utils";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = jest.fn();
@@ -37,11 +39,8 @@ describe("TaskOverview", () => {
 	});
 
 	it("should set title to tasks", () => {
-		envConfigModule.setEnvs({ SC_TITLE: "dBildungscloud" } as Envs);
 		getWrapper("userRole");
-		expect(document.title).toBe(
-			`common.words.tasks - ${envConfigModule.getEnv.SC_TITLE}`
-		);
+		expect(document.title).toBe(`common.words.tasks`);
 	});
 
 	it("should fetchAllTasks on mount", () => {

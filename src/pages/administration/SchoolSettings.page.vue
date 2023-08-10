@@ -56,6 +56,7 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -126,9 +127,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.administration.school.index.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.school.index.title")
+		);
 	},
 };
 </script>
