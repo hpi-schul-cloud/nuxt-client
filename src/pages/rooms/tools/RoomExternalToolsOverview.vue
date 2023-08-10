@@ -36,7 +36,10 @@
 			:room-id="roomId"
 		></room-video-conference-section>
 
-		<room-external-tools-section :tools="tools"></room-external-tools-section>
+		<room-external-tools-section
+			:tools="tools"
+			:room-id="roomId"
+		></room-external-tools-section>
 	</div>
 </template>
 

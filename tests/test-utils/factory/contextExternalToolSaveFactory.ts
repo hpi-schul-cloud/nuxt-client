@@ -7,6 +7,7 @@ export const contextExternalToolSaveFactory =
 		contextId: `context-${sequence}`,
 		contextType: ToolContextType.COURSE,
 		schoolToolId: `school-external-tool-${sequence}`,
+		displayName: `Tool ${sequence}`,
 		toolVersion: 1,
 		parameters: [],
 	}));

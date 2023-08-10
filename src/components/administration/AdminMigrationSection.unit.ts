@@ -110,6 +110,41 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
+	describe("Migration Control Section", () => {
+		it("should render migration control section when grace period is not expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: false,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: "",
+					oauthMigrationFinalFinish: "",
+				},
+			});
+			expect(
+				wrapper.find('[data-testId="migration-control-section"]').exists()
+			).toEqual(true);
+		});
+
+		it("should not render migration description when grace period is expired", () => {
+			const { wrapper } = setup({
+				getOauthMigration: {
+					enableMigrationStart: true,
+					oauthMigrationPossible: false,
+					oauthMigrationMandatory: false,
+					oauthMigrationFinished: new Date(2023, 1, 1).toString(),
+					oauthMigrationFinalFinish: new Date(2023, 1, 2).toString(),
+				},
+			});
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
+
+			expect(
+				wrapper.find('[data-testId="migration-control-section"]').exists()
+			).toBe(false);
+		});
+	});
+
 	describe("Info Text", () => {
 		it("should display the info text for migration when it is not started", () => {
 			const { wrapper } = setup({
@@ -267,7 +302,7 @@ describe("AdminMigrationSection", () => {
 			expect(buttonComponent.props("disabled")).toBeTruthy();
 		});
 
-		it("should be disabled when grace period is expired", () => {
+		it("should not render migration start button when grace period is expired", () => {
 			const { wrapper } = setup({
 				getOauthMigration: {
 					enableMigrationStart: true,
@@ -280,14 +315,11 @@ describe("AdminMigrationSection", () => {
 			jest.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 3));
 
-			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-
-			expect(buttonComponent.exists()).toBe(true);
-			expect(buttonComponent.classes("button-start")).toBeTruthy();
-			expect(buttonComponent.text()).toEqual(
-				"components.administration.adminMigrationSection.migrationEnableButton.label"
+			const buttonComponent = wrapper.find(
+				"[data-testId=migration-start-button]"
 			);
-			expect(buttonComponent.props("disabled")).toBeTruthy();
+
+			expect(buttonComponent.exists()).toBe(false);
 		});
 
 		it("should not render migration start button and migration mandatory switch, when click has been triggered", async () => {

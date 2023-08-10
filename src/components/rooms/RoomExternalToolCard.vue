@@ -6,7 +6,7 @@
 		test-id="tool-card"
 		@click="handleClick"
 	>
-		<template v-slot:under-title>
+		<template #under-title>
 			<div v-if="isToolOutdated" class="mt-1">
 				<v-chip
 					small
@@ -20,7 +20,7 @@
 				</v-chip>
 			</div>
 		</template>
-		<template v-slot:right>
+		<template #right>
 			<div v-if="canEdit" class="ml-1 my-auto">
 				<room-dot-menu
 					:menu-items="menuItems"
@@ -35,10 +35,11 @@
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiAlert, mdiTrashCanOutline } from "@mdi/js";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { ToolConfigurationStatus } from "@/store/external-tool";
+import EnvConfigModule from "@/store/env-config";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
@@ -57,6 +58,9 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
+		);
 
 		const t = (key: string): string => i18n.tc(key, 0);
 
@@ -64,23 +68,15 @@ export default defineComponent({
 			emit("click", props.tool);
 		};
 
-		/* TODO N21-905
 		const handleEdit = () => {
 			emit("edit", props.tool);
-		}; */
+		};
 
 		const handleDelete = () => {
 			emit("delete", props.tool);
 		};
 
 		const menuItems = [
-			/* TODO N21-905
-			{
-				icon: mdiPencilOutline,
-				action: handleEdit,
-				name: t("common.actions.edit"),
-				dataTestId: "tool-edit",
-			}, */
 			{
 				icon: mdiTrashCanOutline,
 				action: handleDelete,
@@ -88,6 +84,15 @@ export default defineComponent({
 				dataTestId: "tool-delete",
 			},
 		];
+
+		if (envConfigModule.getCtlContextConfigurationEnabled) {
+			menuItems.unshift({
+				icon: mdiPencilOutline,
+				action: handleEdit,
+				name: t("common.actions.edit"),
+				dataTestId: "tool-edit",
+			});
+		}
 
 		const isToolOutdated: ComputedRef = computed(
 			() => props.tool.status === ToolConfigurationStatus.Outdated

@@ -27,7 +27,7 @@
 					})
 				}}
 			</h2>
-			<template v-slot:content>
+			<template #content>
 				<RenderHTML
 					:html="errorDialogText"
 					component="p"
@@ -111,6 +111,8 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { useRouter } from "vue-router/composables";
+import { ToolContextType } from "@/store/external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -124,8 +126,12 @@ export default defineComponent({
 			type: Array as PropType<ExternalToolDisplayData[]>,
 			required: true,
 		},
+		roomId: {
+			type: String,
+			required: true,
+		},
 	},
-	setup() {
+	setup(props) {
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
@@ -134,6 +140,8 @@ export default defineComponent({
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
+		const router = useRouter();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -166,7 +174,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (selectedItem.value) {
 				await contextExternalToolsModule.deleteContextExternalTool(
-					selectedItem.value.id
+					selectedItem.value.contextExternalToolId
 				);
 			}
 
@@ -179,13 +187,22 @@ export default defineComponent({
 			externalToolsModule.resetBusinessError();
 		};
 
-		const onEditTool = () => {
-			// TODO N21-XXXX implement onEditTool
+		const onEditTool = (tool: ExternalToolDisplayData) => {
+			router.push({
+				name: "context-external-tool-configuration-edit",
+				params: { configId: tool.contextExternalToolId },
+				query: {
+					contextId: props.roomId,
+					contextType: ToolContextType.COURSE,
+				},
+			});
 		};
 
 		const onClickTool = async (tool: ExternalToolDisplayData) => {
 			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(tool.id);
+				await externalToolsModule.loadToolLaunchData(
+					tool.contextExternalToolId
+				);
 
 			switch (launchToolResponse?.method) {
 				case ToolLaunchRequestResponseMethodEnum.Get:

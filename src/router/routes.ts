@@ -3,6 +3,7 @@ import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
 import {
+	isEnum,
 	isMongoId,
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
@@ -273,13 +274,19 @@ export const routes: Array<RouteConfig> = [
 			createPermissionGuard(["context_tool_admin"]),
 			validateQueryParameters({
 				contextId: isMongoId,
-				contextType: (value: any) =>
-					Object.values(ToolContextType).includes(value),
+				contextType: isEnum(ToolContextType),
 			}),
 		]),
+		children: [
+			{
+				path: ":configId",
+				name: "context-external-tool-configuration-edit",
+			},
+		],
 		props: (route: Route) => ({
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,
+			configId: route.params.configId,
 		}),
 	},
 	{

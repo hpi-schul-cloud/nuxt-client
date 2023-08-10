@@ -498,6 +498,7 @@ export default {
 
 	.dot-menu-section {
 		text-align: right;
+		height: calc(var(--space-base-vuetify) * 9);
 	}
 }
 
