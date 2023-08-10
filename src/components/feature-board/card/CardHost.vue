@@ -65,7 +65,6 @@
 					@add-element="onAddElement"
 					v-if="isEditMode"
 				></CardAddElementMenu>
-				<link />
 			</template>
 		</VCard>
 		<FilePicker
