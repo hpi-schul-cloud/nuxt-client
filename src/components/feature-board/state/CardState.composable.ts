@@ -161,7 +161,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		await moveElementCall(payload, cardState.card.id, elementIndex - 1);
 	};
 
-	const deleteElement = async (elementId: string) => {
+	const deleteElement = async (elementId: string): Promise<void> => {
 		if (cardState.card === undefined) {
 			return;
 		}

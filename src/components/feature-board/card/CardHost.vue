@@ -84,7 +84,7 @@ import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import { useCardState } from "../state/CardState.composable";
 import {
 	DragAndDropKey,
@@ -137,7 +137,7 @@ export default defineComponent({
 		const { hasDeletePermission } = useBoardPermissions();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const { askType } = useElementTypeSelection(addElement);
+		const { askType } = useAddElementDialog(addElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);

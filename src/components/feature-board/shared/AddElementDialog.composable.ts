@@ -3,14 +3,13 @@ import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { AddCardElement } from "../state/CardState.composable";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
+export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
 	const onElementClick = async (elementType: ContentElementType) => {
-		await addElementFunction(elementType);
-
 		closeDialog();
+		await addElementFunction(elementType);
 	};
 
 	const options = [

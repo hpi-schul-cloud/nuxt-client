@@ -10,11 +10,11 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<div v-if="fileRecord && isImage">
+		<div v-if="isImage">
 			<ImageFileDisplay
-				:fileName="fileRecord.name"
+				:fileName="fileName"
 				:isDownloadAllowed="!isBlockedByVirusScan"
-				:url="fileRecord.url"
+				:url="fileUrl"
 				:isEditMode="isEditMode"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
@@ -27,13 +27,13 @@
 		<div v-else>
 			<FileContentElementDisplay
 				v-if="!isEditMode"
-				:fileName="fileRecord?.name ?? ''"
+				:fileName="fileName"
 				:url="url"
 				:isDownloadAllowed="!isBlockedByVirusScan"
 			/>
 			<FileContentElementEdit
 				v-if="isEditMode"
-				:fileName="fileRecord?.name ?? ''"
+				:fileName="fileName"
 				:isDownloadAllowed="!isBlockedByVirusScan"
 				:url="url"
 				:isFirstElement="isFirstElement"
@@ -45,10 +45,7 @@
 				@upload:file="onUploadFile"
 			/>
 		</div>
-		<FileContentElementChips
-			:fileSize="fileRecord?.size ?? 0"
-			:fileName="fileRecord?.name ?? ''"
-		/>
+		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
 		<FileContentElementAlert v-if="isBlockedByVirusScan" />
 	</v-card>
 </template>
@@ -66,6 +63,7 @@ import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
+import { computed } from "vue";
 
 export default defineComponent({
 	name: "FileContentElement",
@@ -102,6 +100,18 @@ export default defineComponent({
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
+		const fileName = computed(() => {
+			return fileRecord.value === undefined ? "" : fileRecord.value.name;
+		});
+
+		const fileSize = computed(() => {
+			return fileRecord.value === undefined ? 0 : fileRecord.value.size;
+		});
+
+		const fileUrl = computed(() => {
+			return fileRecord.value === undefined ? "" : fileRecord.value.url;
+		});
+
 		onMounted(() => {
 			(async () => {
 				await fetchFile();
@@ -125,7 +135,7 @@ export default defineComponent({
 
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
-				fileRecord.value?.name,
+				fileName.value,
 				"boardElement"
 			);
 
@@ -134,7 +144,7 @@ export default defineComponent({
 			}
 		};
 
-		const onUploadFile = async (file: File, event: Event): Promise<void> => {
+		const onUploadFile = async (file: File): Promise<void> => {
 			try {
 				await upload(file);
 			} catch (error) {
@@ -144,7 +154,9 @@ export default defineComponent({
 
 		return {
 			fileContentElement,
-			fileRecord,
+			fileSize,
+			fileName,
+			fileUrl,
 			isBlockedByVirusScan,
 			isImage,
 			modelValue,

@@ -1,5 +1,5 @@
 import { I18N_KEY } from "@/utils/inject";
-import setupConfirmationComposableMock from "../../../tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 jest.mock("./Confirmation.composable");
@@ -11,7 +11,7 @@ describe("DeleteConfirmation composable", () => {
 			const titleString = `"${title}"`;
 			const type: "boardCard" | "boardElement" = "boardElement";
 			const typeString = `components.${type}`;
-			const titleTranslationKey = "ui-confirmation-dialog.ask-delete.card";
+			const titleTranslationKey = "ui-confirmation-dialog.ask-delete";
 			const data = {
 				elementId: "elementId",
 				name: "name",

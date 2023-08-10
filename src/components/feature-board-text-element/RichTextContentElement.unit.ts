@@ -8,7 +8,7 @@ import Vue from "vue";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-jest.mock("@/feature/board", () => {
+jest.mock("@feature-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),

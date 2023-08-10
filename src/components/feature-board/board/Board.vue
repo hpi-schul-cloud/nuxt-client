@@ -37,7 +37,7 @@
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
 				<ConfirmationDialog></ConfirmationDialog>
-				<ElementTypeSelection></ElementTypeSelection>
+				<AddElementDialog></AddElementDialog>
 			</template>
 		</div>
 	</div>
@@ -54,7 +54,7 @@ import { useBoardNotifier } from "../shared/BoardNotifications.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
-import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
+import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBoardState } from "../state/BoardState.composable";
 import {
 	CardMove,
@@ -75,7 +75,7 @@ export default defineComponent({
 		Draggable,
 		BoardColumnGhost,
 		ConfirmationDialog,
-		ElementTypeSelection,
+		AddElementDialog,
 	},
 	props: {
 		boardId: { type: String, required: true },

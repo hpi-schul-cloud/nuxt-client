@@ -9,9 +9,8 @@ import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElem
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import { setupFileRecordMock } from "../test-utils/fileRecordMock";
-import { setupFileStorageApiMock } from "../test-utils/fileStorageApiMock";
-import { setupSelectedFileMock } from "../test-utils/selectedFileMock";
+import { setupFileRecordMock } from "../../../../tests/test-utils/composable-mocks/fileRecordMock";
+import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
@@ -19,7 +18,7 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
-jest.mock("@/feature/board", () => {
+jest.mock("@feature-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
@@ -28,7 +27,6 @@ jest.mock("@/feature/board", () => {
 	};
 });
 jest.mock("../FileStorageApi.composable");
-jest.mock("../SelectedFile.composable");
 jest.mock("../FileRecord.composable");
 
 describe("FileContentElement", () => {
@@ -62,11 +60,6 @@ describe("FileContentElement", () => {
 					document.body.setAttribute("data-app", "true");
 
 					const fileRecordResponse = fileRecordResponseFactory.build();
-					const file = new File([], "test");
-					const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-					const { setSelectedFile } = setupSelectedFileMock({
-						getSelectedFileMock,
-					});
 
 					const uploadMock = jest.fn().mockImplementationOnce(() => {
 						fileRecord.value = fileRecordResponse;
@@ -94,8 +87,6 @@ describe("FileContentElement", () => {
 						wrapper,
 						upload,
 						fileRecord,
-						setSelectedFile,
-						file,
 						deleteElementMock,
 					};
 				};
@@ -120,26 +111,6 @@ describe("FileContentElement", () => {
 					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 
-				it("should call upload", async () => {
-					const { wrapper, upload, file } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					expect(upload).toHaveBeenCalledTimes(1);
-					expect(upload).toHaveBeenCalledWith(file);
-				});
-
-				it("should set selected file to undefined", async () => {
-					const { wrapper, setSelectedFile } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					expect(setSelectedFile).toHaveBeenCalledTimes(1);
-					expect(setSelectedFile).toHaveBeenCalledWith();
-				});
-
 				it("should render FileContentElementChips component", async () => {
 					const { wrapper } = setup();
 
@@ -156,12 +127,6 @@ describe("FileContentElement", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
-
-					const file = new File([], "test");
-					const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-					const { setSelectedFile } = setupSelectedFileMock({
-						getSelectedFileMock,
-					});
 
 					const error = new Error("test");
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
@@ -182,7 +147,6 @@ describe("FileContentElement", () => {
 
 					return {
 						wrapper,
-						setSelectedFile,
 						deleteElementMock,
 					};
 				};
@@ -194,16 +158,6 @@ describe("FileContentElement", () => {
 					await wrapper.vm.$nextTick();
 
 					expect(deleteElementMock).toHaveBeenCalledTimes(1);
-				});
-
-				it("should call setSelectedFile", async () => {
-					const { wrapper, setSelectedFile } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					expect(setSelectedFile).toHaveBeenCalledTimes(1);
-					expect(setSelectedFile).toHaveBeenCalledWith();
 				});
 
 				it("should not render FileContentElementChips component", async () => {
@@ -224,7 +178,6 @@ describe("FileContentElement", () => {
 					document.body.setAttribute("data-app", "true");
 
 					setupFileStorageApiMock();
-					setupSelectedFileMock();
 
 					const { wrapper } = getWrapper({
 						element,
@@ -259,7 +212,6 @@ describe("FileContentElement", () => {
 					const { fetchFile, fileRecord } = setupFileStorageApiMock({
 						fetchFileMock,
 					});
-					setupSelectedFileMock();
 
 					const askDeleteConfirmationMock = jest.fn().mockReturnValueOnce(true);
 					setupDeleteConfirmationComposableMock({
@@ -376,7 +328,6 @@ describe("FileContentElement", () => {
 							const { fetchFile, fileRecord } = setupFileStorageApiMock({
 								fetchFileMock,
 							});
-							setupSelectedFileMock();
 
 							const askDeleteConfirmationMock = jest
 								.fn()
@@ -501,7 +452,6 @@ describe("FileContentElement", () => {
 						const { fetchFile, fileRecord } = setupFileStorageApiMock({
 							fetchFileMock,
 						});
-						setupSelectedFileMock();
 
 						const askDeleteConfirmationMock = jest
 							.fn()
@@ -605,7 +555,6 @@ describe("FileContentElement", () => {
 							const { fetchFile, fileRecord } = setupFileStorageApiMock({
 								fetchFileMock,
 							});
-							setupSelectedFileMock();
 
 							const askDeleteConfirmationMock = jest
 								.fn()
@@ -730,11 +679,6 @@ describe("FileContentElement", () => {
 					document.body.setAttribute("data-app", "true");
 
 					const fileRecordResponse = fileRecordResponseFactory.build();
-					const file = new File([], "test");
-					const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-					const { setSelectedFile } = setupSelectedFileMock({
-						getSelectedFileMock,
-					});
 
 					const uploadMock = jest.fn().mockImplementationOnce(() => {
 						fileRecord.value = fileRecordResponse;
@@ -762,8 +706,6 @@ describe("FileContentElement", () => {
 						wrapper,
 						upload,
 						fileRecord,
-						setSelectedFile,
-						file,
 						deleteElementMock,
 					};
 				};
@@ -803,12 +745,6 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const file = new File([], "test");
-					const getSelectedFileMock = jest.fn().mockReturnValueOnce(file);
-					const { setSelectedFile } = setupSelectedFileMock({
-						getSelectedFileMock,
-					});
-
 					const error = new Error("test");
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
 					setupFileStorageApiMock({ uploadMock });
@@ -828,7 +764,6 @@ describe("FileContentElement", () => {
 
 					return {
 						wrapper,
-						setSelectedFile,
 						deleteElementMock,
 					};
 				};
@@ -840,16 +775,6 @@ describe("FileContentElement", () => {
 					await wrapper.vm.$nextTick();
 
 					expect(deleteElementMock).toHaveBeenCalledTimes(1);
-				});
-
-				it("should call setSelectedFile", async () => {
-					const { wrapper, setSelectedFile } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					expect(setSelectedFile).toHaveBeenCalledTimes(1);
-					expect(setSelectedFile).toHaveBeenCalledWith();
 				});
 
 				it("should not render FileContentElementChips component", async () => {
@@ -880,7 +805,6 @@ describe("FileContentElement", () => {
 						const { fetchFile, fileRecord } = setupFileStorageApiMock({
 							fetchFileMock,
 						});
-						setupSelectedFileMock();
 
 						const askDeleteConfirmationMock = jest
 							.fn()
@@ -984,7 +908,6 @@ describe("FileContentElement", () => {
 							const { fetchFile, fileRecord } = setupFileStorageApiMock({
 								fetchFileMock,
 							});
-							setupSelectedFileMock();
 
 							const askDeleteConfirmationMock = jest
 								.fn()
@@ -1109,7 +1032,6 @@ describe("FileContentElement", () => {
 						const { fetchFile, fileRecord } = setupFileStorageApiMock({
 							fetchFileMock,
 						});
-						setupSelectedFileMock();
 
 						const askDeleteConfirmationMock = jest
 							.fn()
@@ -1269,7 +1191,6 @@ describe("FileContentElement", () => {
 							const { fetchFile, fileRecord } = setupFileStorageApiMock({
 								fetchFileMock,
 							});
-							setupSelectedFileMock();
 
 							const askDeleteConfirmationMock = jest
 								.fn()

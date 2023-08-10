@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<button @click="onUploadClick">upload</button>
 		<FilePicker
 			@update:file="onFileSelect"
 			:isFilePickerOpen.sync="isFilePickerOpen"
@@ -10,6 +9,7 @@
 			data-testid="board-file-element-edit"
 			inactive
 			:ripple="false"
+			@click.stop="onUploadClick"
 		>
 			<v-list-item-icon class="my-2 mr-2">
 				<v-icon
@@ -24,7 +24,7 @@
 				<span
 					class="subtitle-1 d-inline-block text-truncate"
 					data-testid="board-file-element-edit-file-name"
-					>{{ fileName }}</span
+					>{{ fileName === "" ? "click to upload image" : fileName }}</span
 				>
 			</v-list-item-content>
 
@@ -40,13 +40,12 @@
 				@delete:element="onDeleteElement"
 			/>
 		</v-list-item>
-		-- {{ fileName }} --
 	</div>
 </template>
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { computed, defineComponent, ref, Ref } from "vue";
+import { defineComponent, ref, Ref, watch } from "vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 import FilePicker from "./FilePicker.vue";
 
@@ -54,6 +53,7 @@ export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { FileContentElementMenu, FilePicker },
 	props: {
+		fileName: { type: String, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
@@ -68,7 +68,26 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const isFilePickerOpen = ref(false);
-		const file: Ref<File | undefined> = ref(undefined);
+		const filePickerWasClosed = ref(false);
+		const lastFile: Ref<File | undefined> = ref(undefined);
+
+		watch(isFilePickerOpen, (isVisible, wasVisible) => {
+			console.log("isVisible", isVisible);
+			console.log("wasVisible", wasVisible);
+			filePickerWasClosed.value = wasVisible && !isVisible;
+			if (filePickerWasClosed.value) {
+				console.log("closed");
+				if (lastFile.value === undefined) {
+					console.log("canceled");
+				} else {
+					console.log("picked");
+				}
+			} else {
+				console.log("opened");
+				lastFile.value = undefined;
+			}
+			// Todo: check error
+		});
 
 		const onUploadClick = () => {
 			isFilePickerOpen.value = true;
@@ -88,16 +107,12 @@ export default defineComponent({
 
 		const onFileSelect = async (file: File) => {
 			console.log("file", file);
+			lastFile.value = file;
 			emit("upload:file", file);
 		};
 
-		const fileName = computed(() => {
-			return file.value ? file.value.name : "";
-		});
-
 		return {
 			isFilePickerOpen,
-			fileName,
 			mdiFileDocumentOutline,
 			onMoveElementDown,
 			onMoveElementUp,

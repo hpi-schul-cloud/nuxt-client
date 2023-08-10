@@ -1,4 +1,4 @@
-import { useElementTypeSelection } from "@feature-board";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import { jest } from "@jest/globals";
 import { Ref, ref } from "vue";
 
@@ -6,8 +6,8 @@ interface Props {
 	askTypeMock?: jest.Mock;
 }
 
-export const setupElementTypeSelectionMock = (props: Props = {}) => {
-	const mockedElementTypeSelection = jest.mocked(useElementTypeSelection);
+export const setupAddElementDialogMock = (props: Props = {}) => {
+	const mockedUseAddElementDialog = jest.mocked(useAddElementDialog);
 
 	const createTextElementMock = jest.fn();
 	const createFileElementMock = jest.fn();
@@ -48,7 +48,7 @@ export const setupElementTypeSelectionMock = (props: Props = {}) => {
 		isFilePickerOpen: isFilePickerOpenMock,
 	};
 
-	mockedElementTypeSelection.mockReturnValue(mocks);
+	mockedUseAddElementDialog.mockReturnValue(mocks);
 
 	return mocks;
 };

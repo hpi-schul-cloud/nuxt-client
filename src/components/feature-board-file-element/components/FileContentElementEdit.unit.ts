@@ -59,7 +59,7 @@ describe("FileContentElementEdit", () => {
 		const { wrapper, fileNameProp } = setup();
 
 		const fileName = wrapper.find("span").text();
-
+		await wrapper.vm.$nextTick();
 		expect(fileName).toBe(fileNameProp);
 	});
 

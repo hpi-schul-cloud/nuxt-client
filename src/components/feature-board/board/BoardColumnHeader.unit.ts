@@ -8,7 +8,7 @@ import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("../shared/BoardPermissions.composable");

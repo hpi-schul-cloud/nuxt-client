@@ -1,6 +1,6 @@
+import { useFileRecord } from "@feature-board-file-element";
 import { jest } from "@jest/globals";
 import { computed } from "vue";
-import { useFileRecord } from "../FileRecord.composable";
 
 interface Props {
 	isImageMock?: boolean;

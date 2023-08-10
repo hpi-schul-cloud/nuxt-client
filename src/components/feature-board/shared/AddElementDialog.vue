@@ -24,7 +24,7 @@
 					:width="126"
 					class="d-sm-flex button-alignment-center"
 					:data-testid="item.testId"
-					@click.stop.once="item.action"
+					@click.stop="item.action"
 				>
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
@@ -48,7 +48,7 @@ import { defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
-	name: "ElementTypeSelection",
+	name: "AddElementDialog",
 	components: {
 		vCustomDialog,
 	},

@@ -11,7 +11,7 @@ import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");

@@ -35,6 +35,7 @@ export default defineComponent({
 		);
 
 		const onFileChange = (file: File) => {
+			console.log("file", file);
 			emit("update:file", file);
 		};
 

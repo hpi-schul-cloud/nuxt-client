@@ -1,7 +1,6 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/elementTypeSelectionMock";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,
@@ -19,13 +18,14 @@ import {
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import CardHost from "./CardHost.vue";
+import { expect, jest, describe, it } from "@jest/globals";
+import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 
 jest.mock("../shared/BoardFocusHandler.composable");
 jest.mock("../shared/BoardPermissions.composable");
-jest.mock("../shared/DeleteConfirmation.composable");
 jest.mock("../shared/EditMode.composable");
-jest.mock("../shared/ElementTypeSelection.composable");
 jest.mock("../state/CardState.composable");
+jest.mock("../shared/AddElementDialog.composable");
 
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -76,7 +76,7 @@ describe("CardHost", () => {
 			stopEditMode: stopEditModeMock,
 		});
 
-		setupElementTypeSelectionMock();
+		setupAddElementDialogMock();
 
 		const deleteElementMock = jest.fn();
 		mockedUseCardState.mockReturnValue({
@@ -88,15 +88,9 @@ describe("CardHost", () => {
 			addTextAfterTitle: jest.fn(),
 			moveElementDown: jest.fn(),
 			moveElementUp: jest.fn(),
-			deleteElement: deleteElementMock,
+			deleteElement: deleteElementMock as () => Promise<void>,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
-		});
-
-		const deleteCardMock = jest.fn().mockReturnValue(true);
-
-		setupConfirmationComposableMock({
-			askConfirmationMock: deleteCardMock,
 		});
 
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
@@ -175,14 +169,26 @@ describe("CardHost", () => {
 			it("should emit 'delete:card'", async () => {
 				setup({ card: CARD_WITHOUT_ELEMENTS });
 
-				const menuItems = wrapper.findAllComponents({
+				const firstMenuItem = wrapper.findComponent({
 					name: "BoardMenuAction",
 				});
-				menuItems.wrappers[0].vm.$emit("click");
-				await nextTick();
-				const emitted = wrapper.emitted();
 
-				expect(emitted["delete:card"]).toHaveLength(1);
+				const askDeleteConfirmationMock = jest.fn().mockReturnValue(true);
+				setupDeleteConfirmationComposableMock({
+					askDeleteConfirmationMock,
+				});
+
+				// console.log("menuItems.props", menuItems.props.name);
+				// console.log("menuItems.length", menuItems.length);
+				// console.log(
+				// 	"menuItems.wrappers[0].text()",
+				// 	menuItems.wrappers[0].text()
+				// );
+				// await nextTick();
+
+				await firstMenuItem.trigger("click");
+
+				expect(wrapper.emitted("delete.card")).toHaveLength(1);
 			});
 		});
 	});

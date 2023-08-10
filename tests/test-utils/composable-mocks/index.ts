@@ -1,3 +1,2 @@
-export * from "../../../src/components/feature-board-file-element/test-utils/fileRecordMock";
-export * from "./elementTypeSelectionMock";
-export * from "./sharedElementTypeSelectionMock";
+export * from "./fileRecordMock";
+export * from "../../../src/components/feature-board/test-utils/sharedElementTypeSelectionMock";

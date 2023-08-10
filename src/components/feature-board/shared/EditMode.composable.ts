@@ -17,7 +17,7 @@ export const useEditMode = (id: string) => {
 	});
 
 	const startEditMode = () => {
-		if (!hasEditPermission) return false;
+		if (!hasEditPermission) return;
 		setEditModeId(id);
 	};
 

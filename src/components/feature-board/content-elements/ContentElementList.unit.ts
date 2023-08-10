@@ -1,4 +1,4 @@
-import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
@@ -14,15 +14,11 @@ describe("ContentElementList", () => {
 		elements: AnyContentElement[];
 		isEditMode: boolean;
 	}) => {
-		const deleteElementMock = jest.fn();
-
 		document.body.setAttribute("data-app", "true");
 		wrapper = shallowMount(ContentElementList as MountOptions<Vue>, {
 			...createComponentMocks({}),
-			propsData: { ...props, deleteElement: deleteElementMock },
+			propsData: { ...props },
 		});
-
-		return { deleteElementMock };
 	};
 
 	describe("when component is mounted", () => {
@@ -79,21 +75,5 @@ describe("ContentElementList", () => {
 				expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
 			}
 		);
-
-		it("should propagate deleteElement function to file elements", () => {
-			const { deleteElementMock } = setup({
-				elements: [
-					{
-						type: ContentElementType.File,
-					} as FileElementResponse,
-				],
-				isEditMode: true,
-			});
-
-			const childComponent = wrapper.findComponent(FileContentElement);
-
-			expect(childComponent.exists()).toBe(true);
-			expect(childComponent.props("deleteElement")).toBe(deleteElementMock);
-		});
 	});
 });

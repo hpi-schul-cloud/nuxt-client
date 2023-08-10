@@ -6,7 +6,7 @@ import { useBoardPermissions } from "./BoardPermissions.composable";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 

@@ -1,8 +1,8 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
+import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
-import ElementTypeSelection from "./ElementTypeSelection.vue";
+import AddElementDialog from "./AddElementDialog.vue";
 jest.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
@@ -38,7 +38,7 @@ describe("ElementTypeSelection", () => {
 			setupMocks();
 
 			const wrapper: Wrapper<Vue> = mount(
-				ElementTypeSelection as MountOptions<Vue>,
+				AddElementDialog as MountOptions<Vue>,
 				{
 					...createComponentMocks({}),
 				}
@@ -50,7 +50,7 @@ describe("ElementTypeSelection", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent(ElementTypeSelection).exists()).toBe(true);
+			expect(wrapper.findComponent(AddElementDialog).exists()).toBe(true);
 		});
 	});
 
@@ -61,7 +61,7 @@ describe("ElementTypeSelection", () => {
 			const { isDialogOpen, elementTypeOptions, closeDialog } = setupMocks();
 
 			const wrapper: Wrapper<Vue> = mount(
-				ElementTypeSelection as MountOptions<Vue>,
+				AddElementDialog as MountOptions<Vue>,
 				{
 					...createComponentMocks({}),
 				}
