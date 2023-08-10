@@ -3,18 +3,15 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { useEditMode } from "../shared/EditMode.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useEditMode, useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import { I18N_KEY } from "@/utils/inject";
 
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
-
-jest.mock("../shared/EditMode.composable");
 
 describe("BoardColumnHeader", () => {
 	let wrapper: Wrapper<Vue>;

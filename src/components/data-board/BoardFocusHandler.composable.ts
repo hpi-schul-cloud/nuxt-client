@@ -9,7 +9,8 @@ import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+// WIP
+import { useInlineEditInteractionHandler } from "../feature-board/shared/InlineEditInteractionHandler.composable";
 
 declare type FocusableId =
 	| BoardColumn["id"]

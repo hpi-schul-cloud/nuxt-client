@@ -8,11 +8,21 @@ import Vue from "vue";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-jest.mock("@feature-board", () => {
+jest.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
 		useDeleteConfirmationDialog: jest.fn(),
+	};
+});
+jest.mock("@ui-confirmation-dialog", () => {
+	return {
+		useDeleteConfirmationDialog: jest.fn(),
+	};
+});
+
+jest.mock("@feature-board", () => {
+	return {
 		useInlineEditInteractionHandler: jest.fn(),
 	};
 });

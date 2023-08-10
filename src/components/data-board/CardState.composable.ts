@@ -4,21 +4,16 @@ import {
 } from "@/serverApi/v3";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedCardRequestPool } from "../shared/CardRequestPool.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useBoardNotifier } from "@util-board";
+import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { BoardCard } from "@/types/board/Card";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 
 declare type CardState = {
 	isLoading: boolean;
 	card: BoardCard | undefined;
 };
-
-export type AddCardElement = (
-	type: ContentElementType
-) => Promise<AnyContentElement | undefined>;
 
 export const useCardState = (id: BoardCard["id"]) => {
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });

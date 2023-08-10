@@ -1,31 +1,30 @@
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
-import {
-	boardCardFactory,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils/factory";
-import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue, { computed, nextTick, ref } from "vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useEditMode } from "../shared/EditMode.composable";
-import { useCardState } from "../state/CardState.composable";
 import { BoardCard, BoardCardSkeleton } from "@/types/board/Card";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import CardHost from "./CardHost.vue";
-import { expect, jest, describe, it } from "@jest/globals";
+import { I18N_KEY } from "@/utils/inject";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import {
+	boardCardFactory,
+	fileElementResponseFactory,
+} from "@@/tests/test-utils/factory";
+import { useCardState, useEditMode } from "@data-board";
+import { describe, expect, it, jest } from "@jest/globals";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue, { computed, ref } from "vue";
+import ContentElementList from "./ContentElementList.vue";
+import { useBoardFocusHandler } from "@data-board";
+import { useBoardPermissions } from "@data-board";
+import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
+import CardHost from "./CardHost.vue";
 
 jest.mock("../shared/BoardFocusHandler.composable");
 jest.mock("../shared/BoardPermissions.composable");
-jest.mock("../shared/EditMode.composable");
-jest.mock("../state/CardState.composable");
 jest.mock("../shared/AddElementDialog.composable");
+jest.mock("../shared/DeleteConfirmation.composable");
+jest.mock("@data-board");
 
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);

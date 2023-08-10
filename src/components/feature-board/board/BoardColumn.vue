@@ -47,7 +47,7 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
@@ -210,3 +210,4 @@ export default defineComponent({
 	background: var(--v-secondary-base) !important;
 }
 </style>
+@data-board";

@@ -1,7 +1,11 @@
 import { ContentElementType } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
-import { AddCardElement } from "../state/CardState.composable";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+
+type AddCardElement = (
+	type: ContentElementType
+) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const { isDialogOpen, closeDialog, elementTypeOptions } =

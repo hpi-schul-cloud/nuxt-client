@@ -4,7 +4,8 @@
 	</DefaultWireframe>
 </template>
 <script lang="ts">
-import { Board, useSharedBoardBreadcrumbs } from "@feature-board";
+import { Board } from "@feature-board";
+import { useSharedBoardBreadcrumbs } from "@data-board";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import Theme from "@/theme.config";
 import { I18N_KEY, injectStrict } from "@/utils/inject";

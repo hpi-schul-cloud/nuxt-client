@@ -2,7 +2,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { useBoardPermissions } from "./BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,

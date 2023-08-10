@@ -51,19 +51,18 @@
 </template>
 
 <script lang="ts">
-import { useBoardFocusHandler, useContentElementState } from "@feature-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { useFileRecord } from "../FileRecord.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import { useFileRecord } from "../FileRecord.composable";
 import { useFileStorageApi } from "../FileStorageApi.composable";
-import { PropType, defineComponent, onMounted, ref } from "vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
-import { computed } from "vue";
 
 export default defineComponent({
 	name: "FileContentElement",

@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@feature-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { defineComponent, PropType, ref } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";

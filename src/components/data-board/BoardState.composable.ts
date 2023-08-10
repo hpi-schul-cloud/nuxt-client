@@ -1,8 +1,8 @@
 import { nextTick, onMounted, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedEditMode } from "../shared/EditMode.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useBoardNotifier } from "@util-board";
+import { useSharedEditMode } from "./EditMode.composable";
 import { Board, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 

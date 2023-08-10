@@ -20,17 +20,20 @@ module.exports = defineConfig({
 		plugins: [new NoncePlaceholderPlugin()],
 		resolve: {
 			alias: {
-				"@feature-board": getDir("src/components/feature-board"),
-				"@feature-board-text-element": getDir(
-					"src/components/feature-board-text-element"
-				),
+				"@data-board": getDir("src/components/data-board"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
+				"@feature-board-text-element": getDir(
+					"src/components/feature-board-text-element"
+				),
+				"@feature-board": getDir("src/components/feature-board"),
+				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
-				"@ui-board": getDir("src/components/ui-board"),
+				"@util-board": getDir("src/components/util-board"),
+				"@page-board": getDir("src/components/page-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],

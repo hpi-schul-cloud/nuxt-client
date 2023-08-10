@@ -1,4 +1,4 @@
-import { useBoardNotifier } from "./BoardNotifications.composable";
+import { useBoardNotifier } from "./BoardNotifier.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";

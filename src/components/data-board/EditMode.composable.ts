@@ -1,6 +1,6 @@
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ref, Ref } from "vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "./BoardPermissions.composable";
 
 /**
  * Handles EditMode for a specific card.

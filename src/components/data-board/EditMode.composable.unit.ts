@@ -1,8 +1,8 @@
 import { useEditMode } from "./EditMode.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "./BoardPermissions.composable";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
 
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("./BoardPermissions.composable");
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
 
 describe("EditMode.composable", () => {

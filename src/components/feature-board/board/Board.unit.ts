@@ -10,9 +10,11 @@ import {
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useBoardState } from "../state/BoardState.composable";
+import {
+	useBoardNotifier,
+	useBoardState,
+	useBoardPermissions,
+} from "@data-board";
 import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
@@ -21,11 +23,12 @@ import {
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
-jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
-
-jest.mock("../shared/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+jest.mock("@data-board", () => ({
+	useBoardState: mockedUseBoardState,
+	useBoardPermissions: mockedUseBoardPermissions,
+}));
 
 jest.mock("../shared/BoardNotifications.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -88,7 +91,7 @@ describe("Board", () => {
 			moveColumn: moveColumnMock,
 			updateColumnTitle: updateColumnTitleMock,
 		});
-		mockedUserPermissions.mockReturnValue({
+		mockedUseBoardPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
 		});

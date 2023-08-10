@@ -1,7 +1,7 @@
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useBoardNotifier } from "@util-board";
 import { AnyContentElement } from "@/types/board/ContentElement";
 
 export const useContentElementState = <T extends AnyContentElement>(

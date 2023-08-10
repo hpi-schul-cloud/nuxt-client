@@ -9,8 +9,8 @@ import {
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { nextTick, ref } from "vue";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedEditMode } from "../shared/EditMode.composable";
+import { useBoardNotifier } from "@util-board";
+import { useSharedEditMode } from "./EditMode.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import { useBoardApi } from "./BoardApi.composable";
@@ -18,13 +18,13 @@ import { useBoardState } from "./BoardState.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-jest.mock("../state/BoardApi.composable");
+jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("../shared/EditMode.composable");
+jest.mock("./EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
-jest.mock("../shared/BoardNotifications.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("BoardState.composable", () => {

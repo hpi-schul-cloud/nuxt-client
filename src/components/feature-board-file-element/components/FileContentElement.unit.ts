@@ -18,12 +18,20 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
-jest.mock("@feature-board", () => {
+jest.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteConfirmation: jest.fn(),
+	};
+});
+jest.mock("@feature-board", () => {
+	return {
 		useInlineEditInteractionHandler: jest.fn(),
+	};
+});
+jest.mock("@ui-confirmation-dialog", () => {
+	return {
+		useDeleteConfirmation: jest.fn(),
 	};
 });
 jest.mock("../FileStorageApi.composable");

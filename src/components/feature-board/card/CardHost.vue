@@ -78,14 +78,16 @@ import {
 	watchDebounced,
 } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
+import ContentElementList from "./ContentElementList.vue";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { useEditMode } from "../shared/EditMode.composable";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
-import { useCardState } from "../state/CardState.composable";
+import {
+	useEditMode,
+	useCardState,
+	useBoardPermissions,
+	useBoardFocusHandler,
+} from "@data-board";
 import {
 	DragAndDropKey,
 	ElementMove,
@@ -258,3 +260,4 @@ export default defineComponent({
 	outline-offset: 0;
 }
 </style>
+@data-board"; @data-board"; @data-board";
