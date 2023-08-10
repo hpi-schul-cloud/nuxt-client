@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 
 interface Props {
-	askDeleteConfirmationMock?: () => boolean;
+	askDeleteConfirmationMock?: () => Promise<boolean>;
 }
 
 jest.mock("@ui-confirmation-dialog");
