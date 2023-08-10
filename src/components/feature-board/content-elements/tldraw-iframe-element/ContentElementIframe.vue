@@ -1,11 +1,5 @@
 <template>
 	<div>
-		<!-- <iframe
-      :src="iframeSrc"
-			:width="iframeWidth"
-			:height="iframeHeight"
-      frameborder="0"
-		></iframe> -->
 		<button class="tldraw-button" @click="openLink" target="_blank">
 			<tldrawIcon class="svg-icon" />
 			<span class="button-text">{{ buttonText }}</span>
@@ -14,52 +8,43 @@
 </template>
 <script>
 import tldrawIcon from "../../../icons/custom/tldraw-icon.vue";
+
 export default {
 	props: {
-		iframeSrc: {
-			type: String,
-			required: true,
-		},
-		iframeWidth: {
-			type: String,
-			default: "100%",
-		},
-		iframeHeight: {
-			type: String,
-			default: "270px",
-		},
 		buttonText: {
 			type: String,
-			default: "Whiteboard",
+			default: "Tldraw",
 		},
 	},
 	components: {
 		tldrawIcon,
 	},
+	data() {
+		return {
+			tldrawServerURL: null,
+		};
+	},
+	created() {
+		this.fetchTldrawServerURL();
+	},
 	methods: {
-		openLink() {
-			const savedRoomID = localStorage.getItem("roomID");
-
-			if (savedRoomID) {
-				const urlWithRoom = `${this.iframeSrc}?roomName=${savedRoomID}`;
-				window.open(urlWithRoom, "_blank");
-			} else {
-				const newRoomID = this.generateRandomRoomID();
-
-				localStorage.setItem("roomID", newRoomID);
-
-				const urlWithRoom = `${this.iframeSrc}?roomName=${newRoomID}`;
-				window.open(urlWithRoom, "_blank");
+		async fetchTldrawServerURL() {
+			try {
+				const response = await fetch(`${window.location.origin}/tldraw`);
+				const data = await response.json();
+				if (data.tldrawServerURL) {
+					this.tldrawServerURL = data.tldrawServerURL;
+				}
+			} catch (error) {
+				console.error("Error fetching tldrawServerURL:", error);
 			}
 		},
-		generateRandomRoomID() {
-			const randomNumber = Math.random();
-
-			const randomString = randomNumber.toString().substring(2);
-
-			const roomID = "room_" + randomString;
-
-			return roomID;
+		openLink() {
+			if (this.tldrawServerURL) {
+				window.open(this.tldrawServerURL, "_blank");
+			} else {
+				console.error("tldrawServerURL is not available.");
+			}
 		},
 	},
 };

@@ -52,7 +52,7 @@
 						</BoardMenuAction>
 					</BoardMenu>
 				</div>
-				<ContentElementIframe :iframeSrc="iframeSrc" />
+				<ContentElementIframe />
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
@@ -216,7 +216,6 @@ export default defineComponent({
 		);
 
 		return {
-			iframeSrc: `${window.location.origin}/tldraw-client-runtime.config.json`,
 			boardMenuClasses,
 			isLoading,
 			card,
