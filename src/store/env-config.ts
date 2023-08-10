@@ -174,6 +174,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS ?? false;
 	}
 
+	get getCtlContextConfigurationEnabled(): boolean {
+		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED ?? false;
+	}
+
 	get getEnv(): Envs {
 		return this.env;
 	}

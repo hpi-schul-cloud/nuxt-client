@@ -1,7 +1,7 @@
 import { ToolConfigurationStatus } from "@/store/external-tool/tool-configuration-status.enum";
 
 export type ExternalToolDisplayData = {
-	id: string;
+	contextExternalToolId: string;
 
 	name: string;
 
