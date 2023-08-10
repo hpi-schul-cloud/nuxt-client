@@ -216,7 +216,7 @@ export default defineComponent({
 		);
 
 		return {
-			iframeSrc: "http://localhost:3046",
+			iframeSrc: `${window.location.origin}/tldraw-client-runtime.config.json`,
 			boardMenuClasses,
 			isLoading,
 			card,
