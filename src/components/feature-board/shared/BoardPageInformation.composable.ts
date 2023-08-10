@@ -1,6 +1,6 @@
 import { useI18n } from "@/composables/i18n.composable";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 
@@ -55,6 +55,6 @@ const useBoardPageInformation = () => {
 	};
 };
 
-export const useSharedBoardPageInformation = createSharedComposable(
+export const useSharedBoardPageInformation = createTestableSharedComposable(
 	useBoardPageInformation
 );

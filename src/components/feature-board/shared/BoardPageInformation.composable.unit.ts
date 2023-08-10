@@ -1,59 +1,43 @@
 import { I18N_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock } from "@golevelup/ts-jest";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	BoardApiInterface,
-	BoardExternalReferenceType,
-	RoomsApiInterface,
-} from "@/serverApi/v3/api";
-import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { i18nMock } from "@@/tests/test-utils";
 import * as pageTitleUtil from "@/utils/pageTitle";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { i18nMock } from "@@/tests/test-utils";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardApi } from "./BoardApi.composable";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 
-/**
- * hint: this is difficult to test, as we are testing a shared composable (and all mocked return values need to be set before mounting the composable... but the composable is a singleton... due to being a shared composable...)
- */
+jest.mock("./BoardApi.composable");
+const mockedUseBoardApi = jest.mocked(useBoardApi);
+
+jest.mock<typeof import("@/utils/create-shared-composable")>(
+	"@/utils/create-shared-composable",
+	() => ({
+		createTestableSharedComposable: (composable) => composable,
+	})
+);
+
 describe("BoardPageInformation.composable", () => {
+	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
+
 	beforeEach(() => {
 		jest
 			.spyOn(pageTitleUtil, "buildPageTitle")
 			.mockImplementation((value) => value ?? "");
+
+		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
+
 	afterEach(() => {
-		jest.clearAllMocks();
+		jest.resetAllMocks();
 	});
 
 	describe("when board context exists", () => {
 		const setup = () => {
-			const boardApi = createMock<BoardApiInterface>();
-			boardApi.boardControllerGetBoardContext.mockResolvedValue(
-				mockApiResponse({
-					data: {
-						id: "courseId",
-						type: BoardExternalReferenceType.Course,
-					},
-				})
-			);
-			jest.spyOn(serverApi, "BoardApiFactory").mockReturnValueOnce(boardApi);
-
-			const roomApi = createMock<RoomsApiInterface>();
-			roomApi.roomsControllerGetRoomBoard.mockResolvedValue(
-				mockApiResponse({
-					data: {
-						id: "courseId",
-						title: "Course #1",
-						roomId: "roomId",
-						displayColor: "#F0F0F0",
-						elements: [],
-						isArchived: false,
-					},
-				})
-			);
-
-			jest.spyOn(serverApi, "RoomsApiFactory").mockReturnValueOnce(roomApi);
+			mockedBoardApiCalls.getContextInfo.mockResolvedValue({
+				id: "courseId",
+				name: "Course #1",
+			});
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
 				() => useSharedBoardPageInformation(),
@@ -88,14 +72,7 @@ describe("BoardPageInformation.composable", () => {
 
 	describe("when board context does not exist", () => {
 		const setup = () => {
-			const boardApi = createMock<BoardApiInterface>();
-			boardApi.boardControllerGetBoardContext.mockResolvedValue(
-				mockApiResponse({
-					status: HttpStatusCode.NoContent,
-				})
-			);
-
-			jest.spyOn(serverApi, "BoardApiFactory").mockReturnValueOnce(boardApi);
+			mockedBoardApiCalls.getContextInfo.mockResolvedValue(undefined);
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
 				() => useSharedBoardPageInformation(),
