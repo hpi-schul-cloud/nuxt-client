@@ -1,47 +1,60 @@
 <template>
-	<v-list-item
-		class="grey lighten-3 px-2 rounded-t-sm"
-		data-testid="board-submission-element-edit"
-		inactive
-		:ripple="false"
-	>
-		<v-list-item-icon class="my-2 mr-2">
-			<v-icon
-				class="grey--text"
-				data-testid="board-submission-element-edit-icon"
-				large
-				>{{ mdiClipboardClockOutline }}</v-icon
-			>
-		</v-list-item-icon>
+	<div class="grey lighten-4 px-4 py-3 rounded-t-sm">
+		<v-list-item
+			class="px-0"
+			data-testid="board-submission-element-edit"
+			inactive
+		>
+			<v-list-item-icon class="mr-2 my-2">
+				<v-icon
+					class="grey--text text--darken-2"
+					data-testid="board-submission-element-edit-icon"
+					medium
+					>{{ mdiLightbulbOnOutline }}</v-icon
+				>
+			</v-list-item-icon>
 
-		<v-list-item-content>
-			<span
-				class="subtitle-1 d-inline-block text-truncate"
-				data-testid="board-submission-element-edit-content"
-				>{{ $t("components.cardElement.submissionElement") }}</span
-			>
-		</v-list-item-content>
+			<v-list-item-content class="py-0">
+				<span
+					class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
+					data-testid="board-submission-element-edit-content"
+					>{{ $t("components.cardElement.submissionElement") }}</span
+				>
+			</v-list-item-content>
 
-		<SubmissionContentElementMenu
-			:isFirstElement="isFirstElement"
-			:isLastElement="isLastElement"
-			:hasMultipleElements="hasMultipleElements"
-			@move-down:element="onMoveElementDown"
-			@move-up:element="onMoveElementUp"
-			@delete:element="onDeleteElement"
-		/>
-	</v-list-item>
+			<SubmissionContentElementMenu
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveElementDown"
+				@move-up:element="onMoveElementUp"
+				@delete:element="onDeleteElement"
+			/>
+		</v-list-item>
+
+		<v-card-text
+			class="pa-0 subtitle-1 font-weight-bold"
+			data-testid="board-submission-element-due-date"
+		>
+			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
+		</v-card-text>
+	</div>
 </template>
 
 <script lang="ts">
-import { mdiClipboardClockOutline } from "@mdi/js";
+import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent } from "vue";
+import dayjs from "dayjs";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
 	components: { SubmissionContentElementMenu },
 	props: {
+		dueDate: {
+			type: String,
+			required: true,
+		},
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
@@ -61,7 +74,8 @@ export default defineComponent({
 		};
 
 		return {
-			mdiClipboardClockOutline,
+			dayjs,
+			mdiLightbulbOnOutline,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

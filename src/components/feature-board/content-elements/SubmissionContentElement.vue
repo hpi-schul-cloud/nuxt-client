@@ -11,9 +11,13 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<div>
-			<SubmissionContentElementDisplay v-if="!isEditMode" />
+			<SubmissionContentElementDisplay
+				v-if="!isEditMode"
+				:dueDate="element.content.dueDate"
+			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
+				:dueDate="element.content.dueDate"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -101,11 +105,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.submission {
-	color: rgba(0, 0, 0, 0.87);
-	font-size: 1rem;
-	padding: 0.05px; // prevent margin collapse
-}
-</style>
