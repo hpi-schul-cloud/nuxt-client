@@ -14,6 +14,7 @@ jest.mock<typeof import("@/utils/create-shared-composable")>(
 		createTestableSharedComposable: (composable) => composable,
 	})
 );
+
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
