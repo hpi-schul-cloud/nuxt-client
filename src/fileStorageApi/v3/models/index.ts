@@ -9,5 +9,8 @@ export * from './file-record-parent-type';
 export * from './file-record-response';
 export * from './file-record-scan-status';
 export * from './file-url-params';
+export * from './preview-height';
+export * from './preview-output-mime-types';
 export * from './preview-status';
+export * from './preview-width';
 export * from './rename-file-params';
