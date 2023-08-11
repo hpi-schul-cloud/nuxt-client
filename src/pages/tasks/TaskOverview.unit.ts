@@ -2,6 +2,7 @@ import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import Theme from "@/theme.config";
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = jest.fn();
@@ -30,7 +31,7 @@ describe("TaskOverview", () => {
 
 	it("should set title to tasks", () => {
 		getWrapper("userRole");
-		expect(document.title).toBe("common.words.tasks");
+		expect(document.title).toBe(`common.words.tasks - ${Theme.name}`);
 	});
 
 	it("should fetchAllTasks on mount", () => {
