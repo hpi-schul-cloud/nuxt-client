@@ -94,7 +94,6 @@ const mockAuthStoreDataTeacher = {
 		"COURSE_CREATE",
 		"COURSE_EDIT",
 		"TOPIC_CREATE",
-		"TASK_CARD_EDIT",
 		"HOMEWORK_CREATE",
 	],
 };
@@ -243,34 +242,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(newTaskAction.href).toStrictEqual(
 			"/courses/123/topics/add?returnUrl=rooms/123"
 		);
-	});
-
-	describe("new task-card button", () => {
-		const mockRoute = {
-			name: "rooms-beta-task-new",
-			params: { course: "123" },
-		};
-		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
-		});
-		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.vm.actions.length).toBe(3);
-		});
-		it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.vm.actions.length).toBe(2);
-		});
-
-		it("should have correct path", async () => {
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			const newTaskCardAction = fabComponent.vm.actions[1];
-			expect(newTaskCardAction.to).toStrictEqual(mockRoute);
-		});
 	});
 
 	describe("headline menus", () => {

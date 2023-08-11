@@ -5,13 +5,13 @@
 		test-id="vc-card"
 		@click="onClick"
 	>
-		<template v-slot:right>
+		<template #right>
 			<div
 				v-if="isRunning && hasPermission"
 				class="pulsating-dot my-auto"
 			></div>
 		</template>
-		<template v-slot:footer>
+		<template #footer>
 			<div v-show="!isRunning" class="mt-2">
 				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">

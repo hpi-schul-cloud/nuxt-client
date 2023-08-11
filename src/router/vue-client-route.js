@@ -38,17 +38,14 @@ const vueRoutes = [
 	`^/rooms-list/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board?$`,
-	`^/rooms/${mongoId}/create-beta-task/?$`,
 	`^/tasks/?$`,
-	`^/tasks/create-beta-task/?$`,
-	`^/beta-task/${mongoId}/?$`,
-	`^/beta-task/${mongoId}/?$`,
 	`^/termsofuse/?$`,
 	`^/error/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
+	`^/tools/context/tool-configuration/${mongoId}/?$`,
 ];
 
 const isVueClient = (path) => {

@@ -13,8 +13,6 @@ const {
 	plannedTask,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
-	betaTask,
-	substitutionBetaTask,
 } = mocks;
 
 const defineWindowWidth = (width) => {
@@ -391,48 +389,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 			const menuBtn = wrapper.find("#task-menu-btn");
 			expect(menuBtn.isVisible()).toBe(true);
-		});
-	});
-
-	describe("when task is a beta task", () => {
-		it("should have correct combined label for beta task", () => {
-			const wrapper = getWrapper({
-				task: betaTask,
-			});
-
-			const taskLabel = wrapper.find("[data-testid='task-label']");
-
-			expect(taskLabel.text()).toStrictEqual(
-				"Mathe - Beta-Aufgabe - Abgabe 11.06.00"
-			);
-		});
-
-		it("should redirect to beta task page", async () => {
-			const wrapper = getWrapper({
-				task: betaTask,
-			});
-
-			const taskCard = wrapper.findComponent({ name: "v-list-item" });
-			await taskCard.trigger("click");
-			expect(mockRouter.push).toHaveBeenCalledTimes(1);
-			expect(mockRouter.push).toHaveBeenCalledWith({
-				name: "beta-task-view-edit",
-				params: { id: "789" },
-			});
-		});
-
-		describe("when teacher is a subtitution teacher", () => {
-			it("should add 'substitution' to the course label", () => {
-				const wrapper = getWrapper({
-					task: substitutionBetaTask,
-				});
-
-				const taskLabel = wrapper.find("[data-testid='task-label']");
-
-				expect(taskLabel.exists()).toBe(true);
-				expect(taskLabel.text()).toMatch(/Vertretung Mathe/i);
-				expect(wrapper.vm.courseName).toStrictEqual("Vertretung Mathe");
-			});
 		});
 	});
 });

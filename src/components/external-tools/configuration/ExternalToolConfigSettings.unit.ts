@@ -62,16 +62,6 @@ describe("ExternalToolConfigSettings", () => {
 		});
 	});
 
-	describe("display title", () => {
-		it("should display title", () => {
-			const { wrapper } = getWrapper();
-
-			const h2 = wrapper.find("h2");
-
-			expect(h2.exists()).toBeTruthy();
-		});
-	});
-
 	describe("progressbar", () => {
 		it("should display progressbar when loading in store is set", () => {
 			const { wrapper } = getWrapper(

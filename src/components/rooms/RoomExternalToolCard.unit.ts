@@ -3,13 +3,19 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
+import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { I18N_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { ToolConfigurationStatus } from "@/store/external-tool";
 
 describe("RoomExternalToolCard", () => {
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
 		document.body.setAttribute("data-app", "true");
+
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getCtlContextConfigurationEnabled: true,
+		});
 
 		const wrapper: Wrapper<Vue> = mount(
 			RoomExternalToolCard as MountOptions<Vue>,
@@ -26,6 +32,7 @@ describe("RoomExternalToolCard", () => {
 						$t: (key: string): string => key,
 						tc: (key: string): string => key,
 					},
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			}
 		);
@@ -132,8 +139,7 @@ describe("RoomExternalToolCard", () => {
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
 
-		// TODO add this test back in as soon as edit is implemented
-		it.skip("should display the edit menu item", async () => {
+		it("should display the edit menu item", async () => {
 			const { wrapper } = setup();
 
 			const itemMenu = wrapper.find(
@@ -159,8 +165,7 @@ describe("RoomExternalToolCard", () => {
 			expect(toolDeleteMenuItem.exists()).toEqual(true);
 		});
 
-		// TODO add this test back in as soon as edit is implemented
-		describe.skip("when clicking on the edit menu item", () => {
+		describe("when clicking on the edit menu item", () => {
 			it("should emit the edit event", async () => {
 				const { wrapper, tool } = setup();
 
