@@ -40,11 +40,7 @@ export default {
 			}
 		},
 		openLink() {
-			if (this.tldrawServerURL) {
-				window.open(this.tldrawServerURL, "_blank");
-			} else {
-				console.error("tldrawServerURL is not available.");
-			}
+			window.open(`${window.location.origin}/tldraw`, "_blank");
 		},
 	},
 };
