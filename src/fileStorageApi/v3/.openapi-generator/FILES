@@ -16,4 +16,5 @@ models/file-record-response.ts
 models/file-record-scan-status.ts
 models/file-url-params.ts
 models/index.ts
+models/preview-status.ts
 models/rename-file-params.ts
