@@ -1,12 +1,17 @@
 import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
@@ -46,6 +51,7 @@ describe("UserLoginMigrationError", () => {
 				provide: {
 					systemsModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[I18N_KEY.valueOf()]: i18nMock,
 				},
 				propsData: props,
 				mocks: {
