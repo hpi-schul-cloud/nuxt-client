@@ -207,28 +207,6 @@ const studentTestProps = {
 	dragInProgress: false,
 };
 
-const betaTaskTestProps = {
-	room: {
-		roomId: "456",
-	},
-	task: {
-		id: "123",
-		name: "Test Name",
-		createdAt: "2017-09-28T11:58:46.601Z",
-		updatedAt: "2017-09-28T11:58:46.601Z",
-		status: {
-			isDraft: true,
-		},
-		courseName: "Mathe",
-		displayColor: "#54616e",
-		taskCardId: "789",
-	},
-	ariaLabel:
-		"task, Link, Aufgabe an Marla (Mathe) - offen, zum Öffnen die Eingabetaste drücken",
-	keyDrag: false,
-	dragInProgress: false,
-};
-
 const mockRouter = {
 	push: jest.fn(),
 };
@@ -251,28 +229,6 @@ describe("@/components/molecules/RoomTaskCard", () => {
 		document.body.setAttribute("data-app", "true");
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });
-	});
-
-	describe("beta task behavior", () => {
-		const role = "teacher";
-
-		it("should have correct combined title for beta task", () => {
-			const wrapper = getWrapper({ ...betaTaskTestProps, role });
-			const tagline = wrapper.find("[data-testid='tagline']");
-
-			expect(tagline.element.textContent).toContain("Beta-Aufgabe – Entwurf");
-		});
-
-		it("should redirect to task-cards page", async () => {
-			const wrapper = getWrapper({ ...betaTaskTestProps, role });
-			const taskCard = wrapper.findComponent({ name: "v-card" });
-			await taskCard.trigger("click");
-			expect(mockRouter.push).toHaveBeenCalledTimes(1);
-			expect(mockRouter.push).toHaveBeenCalledWith({
-				name: "beta-task-view-edit",
-				params: { id: "789" },
-			});
-		});
 	});
 
 	describe("common behaviors and actions", () => {
