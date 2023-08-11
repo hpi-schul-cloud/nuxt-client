@@ -62,6 +62,7 @@ describe("SubmissionContentElement", () => {
 			});
 
 			return {
+				element,
 				wrapper,
 				submissionContainerElementResponse,
 				deleteElementMock,
@@ -84,6 +85,16 @@ describe("SubmissionContentElement", () => {
 				SubmissionContentElementDisplay
 			);
 			expect(submissionContentElementDisplay.exists()).toBe(true);
+		});
+
+		it("should hand over dueDate to SubmissionContentElementDisplay", async () => {
+			const { wrapper, element } = setup();
+
+			const dueDate = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("dueDate");
+
+			expect(dueDate).toBe(element.content.dueDate);
 		});
 	});
 
@@ -162,6 +173,16 @@ describe("SubmissionContentElement", () => {
 				.props("hasMultipleElements");
 
 			expect(hasMultipleElements).toBe(false);
+		});
+
+		it("should hand over dueDate to SubmissionContentElementEdit", async () => {
+			const { wrapper, element } = setup();
+
+			const dueDate = wrapper
+				.findComponent(SubmissionContentElementEdit)
+				.props("dueDate");
+
+			expect(dueDate).toBe(element.content.dueDate);
 		});
 
 		it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
