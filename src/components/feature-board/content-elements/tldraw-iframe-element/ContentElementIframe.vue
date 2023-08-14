@@ -22,7 +22,24 @@ export default {
 
 	methods: {
 		openLink() {
-			window.open(`${window.location.origin}/tldraw`, "_blank");
+			const savedRoomID = localStorage.getItem("roomID");
+			let urlWithRoom;
+
+			if (savedRoomID) {
+				urlWithRoom = `/tldraw?roomName=${savedRoomID}`;
+			} else {
+				const newRoomID = this.generateRandomRoomID();
+				localStorage.setItem("roomID", newRoomID);
+				urlWithRoom = `/tldraw?roomName=${newRoomID}`;
+			}
+
+			window.open(urlWithRoom, "_blank");
+		},
+		generateRandomRoomID() {
+			const randomNumber = Math.random();
+			const randomString = randomNumber.toString().substring(2);
+			const roomID = "room_" + randomString;
+			return roomID;
 		},
 	},
 };
