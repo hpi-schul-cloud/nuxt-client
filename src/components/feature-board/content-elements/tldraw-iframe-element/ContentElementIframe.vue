@@ -19,26 +19,8 @@ export default {
 	components: {
 		tldrawIcon,
 	},
-	data() {
-		return {
-			tldrawServerURL: null,
-		};
-	},
-	created() {
-		this.fetchTldrawServerURL();
-	},
+
 	methods: {
-		async fetchTldrawServerURL() {
-			try {
-				const response = await fetch(`${window.location.origin}/tldraw`);
-				const data = await response.json();
-				if (data.tldrawServerURL) {
-					this.tldrawServerURL = data.tldrawServerURL;
-				}
-			} catch (error) {
-				console.error("Error fetching tldrawServerURL:", error);
-			}
-		},
 		openLink() {
 			window.open(`${window.location.origin}/tldraw`, "_blank");
 		},
