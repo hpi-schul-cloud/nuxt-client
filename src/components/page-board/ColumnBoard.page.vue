@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { Board } from "@feature-board";
-import { useSharedBoardPageInformation } from "@feature-board"; // WIP: move to data-board
+import { useSharedBoardPageInformation } from "@data-board";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useTitle } from "@vueuse/core";
 import { defineComponent } from "vue";
