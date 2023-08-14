@@ -3,3 +3,6 @@
 /coverage/**
 LICENSE.md
 .browserslistrc
+/src/serverApi/**
+/src/fileStorageApi/**
+/src/h5pEditorApi/**
