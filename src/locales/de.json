@@ -972,5 +972,6 @@
 	"pages.videoConference.info.notStarted": "Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.noPermission": "Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
 	"pages.videoConference.action.refresh": "Status aktualisieren",
-	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?"
+	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
+	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen"
 }

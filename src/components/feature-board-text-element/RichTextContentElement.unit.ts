@@ -65,7 +65,7 @@ describe("RichTextContentElement", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it.only("should render display if isEditMode is false", () => {
+		it("should render display if isEditMode is false", () => {
 			setup({
 				element: TEST_ELEMENT,
 				isEditMode: false,

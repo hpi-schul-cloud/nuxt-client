@@ -2,18 +2,22 @@ import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { useSharedLastCreatedElement } from "@util-board";
 
 type AddCardElement = (
 	type: ContentElementType
 ) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+	const { lastCreatedElementId } = useSharedLastCreatedElement();
+
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
-		await addElementFunction(elementType);
+		const elementData = await addElementFunction(elementType);
+		lastCreatedElementId.value = elementData?.id;
 	};
 
 	const options = [

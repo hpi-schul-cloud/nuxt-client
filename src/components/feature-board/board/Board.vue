@@ -216,4 +216,3 @@ export default defineComponent({
 	},
 });
 </script>
-@data-board"; @data-board"; @data-board"; ../shared/BoardNotifier.composable

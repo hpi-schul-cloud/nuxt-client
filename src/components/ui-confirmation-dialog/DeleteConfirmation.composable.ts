@@ -8,7 +8,7 @@ export const useDeleteConfirmationDialog = () => {
 	const askDeleteConfirmation = async (
 		title: string | undefined,
 		type: "boardColumn" | "boardCard" | "boardElement"
-	) => {
+	): Promise<boolean> => {
 		const titleString = title ? `"${title}"` : "";
 		const typeString = i18n.t(`components.${type}`).toString();
 
