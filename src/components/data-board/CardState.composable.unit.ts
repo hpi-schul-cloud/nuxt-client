@@ -37,7 +37,7 @@ const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("./BoardNotifications.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock("./BoardFocusHandler.composable");
