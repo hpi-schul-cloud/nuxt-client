@@ -111,6 +111,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 
+	get getTeacherStudentVisibilityIsVisible() {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE;
+	}
+
 	get getTheme() {
 		return this.env.SC_THEME;
 	}
@@ -168,6 +172,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getShowOutdatedUsers(): boolean {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS ?? false;
+	}
+
+	get getCtlContextConfigurationEnabled(): boolean {
+		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {

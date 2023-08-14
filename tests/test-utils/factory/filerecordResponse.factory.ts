@@ -2,6 +2,7 @@ import {
 	FileRecordParentType,
 	FileRecordResponse,
 	FileRecordScanStatus,
+	PreviewStatus,
 } from "@/fileStorageApi/v3";
 import { Factory } from "fishery";
 
@@ -21,6 +22,7 @@ export const fileRecordResponseFactory = Factory.define<FileRecordResponse>(
 			parentId: `parentId${sequence}`,
 			creatorId: `creatorId${sequence}`,
 			schoolId: `schoolId${sequence}`,
+			previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
 		};
 	}
 );

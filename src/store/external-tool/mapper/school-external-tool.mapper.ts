@@ -6,7 +6,6 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { ToolConfigurationStatusMapping } from "@/composables/external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
@@ -14,7 +13,10 @@ import {
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
-import { CommonToolMapper } from "./common-tool.mapper";
+import {
+	CommonToolMapper,
+	ToolConfigurationStatusMapping,
+} from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
 
 export class SchoolExternalToolMapper {

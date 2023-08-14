@@ -27,7 +27,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
-import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
@@ -63,7 +62,6 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
-export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
@@ -94,7 +92,6 @@ export function initializeStores(store: Store<any>): void {
 	shareModule = getModule(ShareModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	systemsModule = getModule(SystemsModule, store);
-	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
@@ -128,7 +125,6 @@ export const modules = {
 	shareModule: ShareModule,
 	statusAlertsModule: StatusAlertsModule,
 	systemsModule: SystemsModule,
-	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
