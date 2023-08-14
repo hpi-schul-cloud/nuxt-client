@@ -2,5 +2,5 @@
 /node_modules/**
 dist
 /src/serverApi/**
-/src/fileStorageApi/**/*.ts
-/src/h5pEditorApi/**/*.ts
+/src/fileStorageApi/**
+/src/h5pEditorApi/**
