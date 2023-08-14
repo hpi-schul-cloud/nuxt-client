@@ -14,6 +14,7 @@
 			<div v-if="isImage">
 				<ImageFileDisplay
 					:fileName="fileName"
+					:fileSize="fileSize"
 					:isDownloadAllowed="!isBlockedByVirusScan"
 					:url="fileUrl"
 					:isEditMode="isEditMode"
@@ -29,12 +30,14 @@
 				<FileContentElementDisplay
 					v-if="!isEditMode"
 					:fileName="fileName"
+					:fileSize="fileSize"
 					:url="url"
 					:isDownloadAllowed="!isBlockedByVirusScan"
 				/>
 				<FileContentElementEdit
 					v-if="isEditMode"
 					:fileName="fileName"
+					:fileSize="fileSize"
 					:elementId="element.id"
 					:isDownloadAllowed="!isBlockedByVirusScan"
 					:url="url"

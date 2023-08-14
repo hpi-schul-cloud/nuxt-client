@@ -37,25 +37,24 @@
 </template>
 
 <script lang="ts">
-import FileContentElementChips from "@/components/feature-board-file-element/components/FileContentElementChips.vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
 	props: {
 		fileName: { type: String, required: true },
+		fileSize: { type: Number, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
 	},
+	components: { FileContentElementChips },
 	setup() {
-		const fileSize = ref(0);
 		return {
-			fileSize,
 			mdiFileDocumentOutline,
 		};
 	},
-	components: { FileContentElementChips },
 });
 </script>
 
