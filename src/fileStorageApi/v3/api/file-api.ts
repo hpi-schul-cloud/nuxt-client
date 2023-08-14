@@ -37,8 +37,6 @@ import { FileRecordResponse } from '../models';
 // @ts-ignore
 import { FileUrlParams } from '../models';
 // @ts-ignore
-import { PreviewHeight } from '../models';
-// @ts-ignore
 import { PreviewOutputMimeTypes } from '../models';
 // @ts-ignore
 import { PreviewWidth } from '../models';
@@ -284,13 +282,12 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
-         * @param {PreviewHeight} [height] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadPreview: async (fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, height?: PreviewHeight, forceUpdate?: boolean, range?: string, options: any = {}): Promise<RequestArgs> => {
+        downloadPreview: async (fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('downloadPreview', 'fileRecordId', fileRecordId)
             // verify required parameter 'fileName' is not null or undefined
@@ -319,10 +316,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (width !== undefined) {
                 localVarQueryParameter['width'] = width;
-            }
-
-            if (height !== undefined) {
-                localVarQueryParameter['height'] = height;
             }
 
             if (forceUpdate !== undefined) {
@@ -717,14 +710,13 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
-         * @param {PreviewHeight} [height] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, height?: PreviewHeight, forceUpdate?: boolean, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadPreview(fileRecordId, fileName, outputFormat, width, height, forceUpdate, range, options);
+        async downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -881,14 +873,13 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
-         * @param {PreviewHeight} [height] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, height?: PreviewHeight, forceUpdate?: boolean, range?: string, options?: any): AxiosPromise<object> {
-            return localVarFp.downloadPreview(fileRecordId, fileName, outputFormat, width, height, forceUpdate, range, options).then((request) => request(axios, basePath));
+        downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, options?: any): AxiosPromise<object> {
+            return localVarFp.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1037,14 +1028,13 @@ export interface FileApiInterface {
      * @param {string} fileName 
      * @param {PreviewOutputMimeTypes} [outputFormat] 
      * @param {PreviewWidth} [width] 
-     * @param {PreviewHeight} [height] 
      * @param {boolean} [forceUpdate] If true, the preview will be generated again.
      * @param {string} [range] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, height?: PreviewHeight, forceUpdate?: boolean, range?: string, options?: any): AxiosPromise<object>;
+    downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -1203,15 +1193,14 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @param {string} fileName 
      * @param {PreviewOutputMimeTypes} [outputFormat] 
      * @param {PreviewWidth} [width] 
-     * @param {PreviewHeight} [height] 
      * @param {boolean} [forceUpdate] If true, the preview will be generated again.
      * @param {string} [range] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, height?: PreviewHeight, forceUpdate?: boolean, range?: string, options?: any) {
-        return FileApiFp(this.configuration).downloadPreview(fileRecordId, fileName, outputFormat, width, height, forceUpdate, range, options).then((request) => request(this.axios, this.basePath));
+    public downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, options?: any) {
+        return FileApiFp(this.configuration).downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
