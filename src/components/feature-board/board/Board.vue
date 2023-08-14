@@ -53,9 +53,9 @@ import {
 	useBoardState,
 	useBoardPermissions,
 	useSharedEditMode,
+	useSharedBoardPageInformation,
 } from "@data-board";
 import { useBoardNotifier } from "@util-board";
-import { useSharedBoardPageInformation } from "@data-board";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import {

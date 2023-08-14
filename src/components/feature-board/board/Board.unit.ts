@@ -15,7 +15,7 @@ import {
 	useBoardState,
 	useBoardPermissions,
 	useSharedEditMode,
-	useSharedBoardBreadcrumbs,
+	useSharedBoardPageInformation,
 } from "@data-board";
 import { useBoardNotifier } from "@util-board";
 import { Board } from "@/types/board/Board";
@@ -29,7 +29,9 @@ import BoardColumnVue from "./BoardColumn.vue";
 const mockedUseBoardState = jest.mocked(useBoardState);
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
 const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseSharedBoardBreadcrumbs = jest.mocked(useSharedBoardBreadcrumbs);
+const mockedUseSharedBoardPageInformation = jest.mocked(
+	useSharedBoardPageInformation
+);
 jest.mock("@data-board");
 jest.mock("@util-board");
 
@@ -105,9 +107,10 @@ describe("Board", () => {
 			editModeId: ref(""),
 			setEditModeId: jest.fn(),
 		});
-		mockedUseSharedBoardBreadcrumbs.mockReturnValue({
-			createBreadcrumbs: jest.fn(),
+		mockedUseSharedBoardPageInformation.mockReturnValue({
+			createPageInformation: jest.fn(),
 			breadcrumbs: ref([]),
+			pageTitle: ref("page-title"),
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
