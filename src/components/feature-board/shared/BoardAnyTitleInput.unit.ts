@@ -10,7 +10,7 @@ import {
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
-jest.mock("./BoardPermissions.composable");
+jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const defaultProps = {
 	value: "props value",
