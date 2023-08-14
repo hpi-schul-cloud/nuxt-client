@@ -157,41 +157,6 @@ const gradedTasks = [
 	},
 ];
 
-const betaTask = {
-	id: "456",
-	_id: "456",
-	name: "Aufgabe von Cord - Beta",
-	displayColor: "#00E5FF",
-	visibleAtDate: "2017-09-28T12:02:11.432Z",
-	dueDate: "2300-06-11T14:00:00.000Z",
-	courseName: "Mathe",
-	createdAt: "2017-09-28T12:02:11.432Z",
-	updatedAt: "2017-09-28T12:02:11.432Z",
-	status: generateStatus({
-		isDraft: false,
-		maxSubmissions: 1,
-	}),
-	taskCardId: "789",
-};
-
-const substitutionBetaTask = {
-	id: "456",
-	_id: "456",
-	name: "Aufgabe von Cord - Beta",
-	displayColor: "#00E5FF",
-	visibleAtDate: "2017-09-28T12:02:11.432Z",
-	dueDate: "2300-06-11T14:00:00.000Z",
-	courseName: "Mathe",
-	createdAt: "2017-09-28T12:02:11.432Z",
-	updatedAt: "2017-09-28T12:02:11.432Z",
-	status: generateStatus({
-		isDraft: false,
-		maxSubmissions: 1,
-		isSubstitutionTeacher: true,
-	}),
-	taskCardId: "789",
-};
-
 const openTasks = [
 	...openTasksWithDueDate,
 	...overDueTasks,
@@ -540,6 +505,4 @@ export default {
 	overDueTasks,
 	plannedTask,
 	generateTask,
-	betaTask,
-	substitutionBetaTask,
 };

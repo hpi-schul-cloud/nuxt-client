@@ -6,7 +6,6 @@ import {
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { Container } from "vue-smooth-dnd";
 import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import {
@@ -14,6 +13,8 @@ import {
 	defaultPermissions,
 } from "../types/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Container } = require("vue-dndrop");
 
 jest.mock("../shared/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);

@@ -1,5 +1,5 @@
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
-import { isObject, isString } from "@vueuse/core";
+import { isObject } from "@vueuse/core";
 import { AxiosInstance, isAxiosError } from "axios";
 import Vue from "vue";
 
@@ -29,7 +29,7 @@ export const mapAxiosErrorToResponseError = (
 		const errorPayload = error.response?.data;
 		if (errorPayload && isObject(errorPayload)) {
 			apiError = errorPayload;
-		} else if (isString(errorPayload)) {
+		} else if (typeof errorPayload === "string") {
 			apiError.message = errorPayload;
 			apiError.code = error.response?.status || apiError.code;
 			apiError.type = error.code || apiError.type;

@@ -178,7 +178,7 @@ describe("CardHost", () => {
 				const menuItems = wrapper.findAllComponents({
 					name: "BoardMenuAction",
 				});
-				menuItems.wrappers[1].vm.$emit("click");
+				menuItems.wrappers[0].vm.$emit("click");
 				await nextTick();
 				const emitted = wrapper.emitted();
 

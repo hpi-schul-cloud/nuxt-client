@@ -6,7 +6,7 @@
 // into the actual stores, and then re-export them.
 
 import AccountsModule from "@/store/accounts";
-import ApplicationErrorModule from "./application-error";
+import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import CollaborativeFilesModule from "@/store/collaborative-files";
@@ -27,13 +27,13 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
-import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
 import UserLoginMigrationModule from "@/store/user-login-migration";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import VideoConferenceModule from "./video-conference";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import VideoConferenceModule from "@/store/video-conference";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -57,11 +57,11 @@ export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
+export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
-export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
@@ -87,11 +87,11 @@ export function initializeStores(store: Store<any>): void {
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
+	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	systemsModule = getModule(SystemsModule, store);
-	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
@@ -120,11 +120,11 @@ export const modules = {
 	privacyPolicyModule: PrivacyPolicyModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
+	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
 	statusAlertsModule: StatusAlertsModule,
 	systemsModule: SystemsModule,
-	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,

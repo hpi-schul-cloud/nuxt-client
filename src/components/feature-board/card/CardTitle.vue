@@ -1,13 +1,16 @@
 <template>
 	<VCardTitle
 		class="d-block text-break-word pb-2"
+		:class="{ 'pointer-events-none': !isEditMode }"
 		v-if="isEditMode || value !== ''"
 	>
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
-			:placeholder="$t('common.labels.title').toString()"
+			:placeholder="
+				$t('components.cardElement.titleElement.placeholder').toString()
+			"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
@@ -55,5 +58,9 @@ export default defineComponent({
 <style scoped>
 .text-break-word {
 	word-break: break-word;
+}
+
+.pointer-events-none {
+	pointer-events: none;
 }
 </style>

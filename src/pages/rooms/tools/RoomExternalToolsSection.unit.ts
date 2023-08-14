@@ -1,3 +1,4 @@
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { AxiosError } from "axios";
@@ -5,6 +6,7 @@ import Vue from "vue";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 } from "@/utils/inject";
@@ -12,17 +14,25 @@ import {
 	businessErrorFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
-import { ExternalToolDisplayData } from "@/store/external-tool";
+import {
+	ExternalToolDisplayData,
+	ToolContextType,
+} from "@/store/external-tool";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import VueRouter from "vue-router";
+import * as routerComposables from "vue-router/composables";
+import EnvConfigModule from "../../../store/env-config";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
 describe("RoomExternalToolsSection", () => {
+	let router: DeepMocked<VueRouter>;
+
 	const getWrapper = (
-		props: { tools: ExternalToolDisplayData[] },
+		props: { tools: ExternalToolDisplayData[]; roomId: string },
 		externalToolsModuleGetter?: Partial<ExternalToolsModule>
 	) => {
 		document.body.setAttribute("data-app", "true");
@@ -45,6 +55,13 @@ describe("RoomExternalToolsSection", () => {
 			getUserRoles: ["teacher"],
 		});
 
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getCtlContextConfigurationEnabled: true,
+		});
+
+		router = createMock<VueRouter>();
+		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
+
 		const wrapper: Wrapper<any> = mount(
 			RoomExternalToolsSection as MountOptions<Vue>,
 			{
@@ -62,6 +79,7 @@ describe("RoomExternalToolsSection", () => {
 						contextExternalToolsModule,
 					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			}
 		);
@@ -83,7 +101,7 @@ describe("RoomExternalToolsSection", () => {
 			const tools: ExternalToolDisplayData[] =
 				externalToolDisplayDataFactory.buildList(2);
 
-			const { wrapper } = getWrapper({ tools });
+			const { wrapper } = getWrapper({ tools, roomId: "roomId" });
 
 			return {
 				wrapper,
@@ -106,7 +124,7 @@ describe("RoomExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper } = getWrapper({ tools: [tool] });
+			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
 
 			return {
 				wrapper,
@@ -129,6 +147,42 @@ describe("RoomExternalToolsSection", () => {
 		});
 	});
 
+	describe("when clicking the edit button on a tool", () => {
+		const setup = () => {
+			const tool: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const roomId = "roomId";
+
+			const { wrapper } = getWrapper({ tools: [tool], roomId });
+
+			return {
+				wrapper,
+				roomId,
+				tool,
+			};
+		};
+
+		it("should redirect to the edit page", async () => {
+			const { wrapper, tool, roomId } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+
+			await card.vm.$emit("edit", tool);
+
+			expect(router.push).toHaveBeenCalledWith({
+				name: "context-external-tool-configuration-edit",
+				params: { configId: tool.contextExternalToolId },
+				query: {
+					contextId: roomId,
+					contextType: ToolContextType.COURSE,
+				},
+			});
+		});
+	});
+
 	describe("when clicking on confirm button of delete dialog", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
@@ -136,6 +190,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const { wrapper, contextExternalToolsModule } = getWrapper({
 				tools: [tool],
+				roomId: "roomId",
 			});
 
 			return {
@@ -158,7 +213,7 @@ describe("RoomExternalToolsSection", () => {
 
 			expect(
 				contextExternalToolsModule.deleteContextExternalTool
-			).toHaveBeenCalledWith(tool.id);
+			).toHaveBeenCalledWith(tool.contextExternalToolId);
 			expect(deleteDialog.element.childNodes.length).toEqual(0);
 		});
 	});
@@ -170,6 +225,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const { wrapper, contextExternalToolsModule } = getWrapper({
 				tools: [tool],
+				roomId: "roomId",
 			});
 
 			return {
@@ -204,7 +260,10 @@ describe("RoomExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper, externalToolsModule } = getWrapper({ tools: [tool] });
+			const { wrapper, externalToolsModule } = getWrapper({
+				tools: [tool],
+				roomId: "roomId",
+			});
 
 			return {
 				wrapper,
@@ -223,7 +282,7 @@ describe("RoomExternalToolsSection", () => {
 			await card.trigger("click");
 
 			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
-				tool.id
+				tool.contextExternalToolId
 			);
 		});
 	});
@@ -239,7 +298,7 @@ describe("RoomExternalToolsSection", () => {
 			});
 
 			const { wrapper } = getWrapper(
-				{ tools: [tool] },
+				{ tools: [tool], roomId: "roomId" },
 				{
 					getBusinessError: error,
 				}
@@ -277,7 +336,7 @@ describe("RoomExternalToolsSection", () => {
 			});
 
 			const { wrapper } = getWrapper(
-				{ tools: [tool] },
+				{ tools: [tool], roomId: "roomId" },
 				{
 					getBusinessError: error,
 				}
@@ -309,7 +368,7 @@ describe("RoomExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper } = getWrapper({ tools: [tool] });
+			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
 
 			return {
 				wrapper,

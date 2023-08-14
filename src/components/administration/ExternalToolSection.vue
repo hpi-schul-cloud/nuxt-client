@@ -93,29 +93,31 @@
 
 <script lang="ts">
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import ExternalToolsModule from "@/store/external-tools";
+import AuthModule from "@/store/auth";
+import NotifierModule from "@/store/notifier";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
-	EXTERNAL_TOOLS_MODULE_KEY,
+	AUTH_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiRefreshCircle, mdiCheckCircle } from "@mdi/js";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
 import {
-	ComputedRef,
-	Ref,
 	computed,
+	ComputedRef,
 	defineComponent,
 	onMounted,
+	Ref,
 	ref,
 } from "vue";
 import VueI18n from "vue-i18n";
 import { default as VueRouter } from "vue-router";
 import { useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
-import NotifierModule from "@/store/notifier";
-import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
+import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export default defineComponent({
@@ -123,15 +125,20 @@ export default defineComponent({
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
+		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router: VueRouter = useRouter();
 
 		onMounted(async () => {
-			await externalToolsModule.loadSchoolExternalTools();
+			if (authModule.getUser) {
+				await schoolExternalToolsModule.loadSchoolExternalTools(
+					authModule.getUser.schoolId
+				);
+			}
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
@@ -143,11 +150,11 @@ export default defineComponent({
 		const headers: DataTableHeader[] = getHeaders;
 
 		const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
-			return getItems(externalToolsModule);
+			return getItems(schoolExternalToolsModule);
 		});
 
 		const isLoading: ComputedRef<boolean> = computed(() => {
-			return externalToolsModule.getLoading;
+			return schoolExternalToolsModule.getLoading;
 		});
 
 		const editTool = (item: SchoolExternalToolItem) => {
@@ -159,7 +166,7 @@ export default defineComponent({
 
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
-				await externalToolsModule.deleteSchoolExternalTool(
+				await schoolExternalToolsModule.deleteSchoolExternalTool(
 					itemToDelete.value.id
 				);
 			}
@@ -188,7 +195,7 @@ export default defineComponent({
 
 		const onCloseDeleteDialog = () => {
 			itemToDelete.value = undefined;
-			externalToolsModule.setLoading(false);
+
 			isDeleteDialogOpen.value = false;
 		};
 

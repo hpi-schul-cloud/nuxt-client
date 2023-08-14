@@ -7,11 +7,14 @@
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
-			<div class="ma-2">
-				<div class="text-h3 pb-2 course-title">
+			<div class="d-flex ma-2 mt-3">
+				<div
+					class="text-h3 pb-2 course-title"
+					data-testid="courses-course-title"
+				>
 					{{ roomData.title }}
 				</div>
-				<div class="course-title pa-2 pb-1">
+				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
 						nudge-right="120"
@@ -19,6 +22,9 @@
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
+				<v-chip v-if="roomData.isArchived" label small class="mt-1">
+					{{ $t("pages.rooms.headerSection.archived") }}
+				</v-chip>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -288,21 +294,6 @@ export default defineComponent({
 				});
 			}
 			if (
-				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
-				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
-			) {
-				const action = {
-					label: this.$t("pages.rooms.fab.add.betatask"),
-					icon: mdiFormatListChecks,
-					to: {
-						name: "rooms-beta-task-new",
-						params: { course: this.roomData.roomId },
-					},
-					dataTestid: "fab_button_add_beta_task",
-				};
-				actions.push(action);
-			}
-			if (
 				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
 			) {
 				actions.push({
@@ -427,6 +418,8 @@ export default defineComponent({
 			courseId: this.courseId,
 			userId: authModule.getUser.id,
 		});
+
+		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
 	},
 	methods: {
 		setActiveTab(tabName) {
@@ -508,21 +501,20 @@ export default defineComponent({
 				});
 			}
 		},
-		roomData(newRoomData, oldRoomData) {
-			if (newRoomData.title !== oldRoomData.title) {
-				document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
-			}
-		},
 	},
 });
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/src/styles/styles.sass";
 
 .course-title {
-	display: inline-block;
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+::v-deep .theme--light.v-chip:hover::before {
+	opacity: 0;
 }
 
 .modal-text {
