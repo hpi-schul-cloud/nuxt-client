@@ -11,10 +11,12 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
 import {
-	useBoardNotifier,
 	useBoardState,
 	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardBreadcrumbs,
 } from "@data-board";
+import { useBoardNotifier } from "@util-board";
 import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
@@ -25,12 +27,11 @@ import BoardColumnVue from "./BoardColumn.vue";
 
 const mockedUseBoardState = jest.mocked(useBoardState);
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
-jest.mock("@data-board", () => ({
-	useBoardState: mockedUseBoardState,
-	useBoardPermissions: mockedUseBoardPermissions,
-}));
+const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseSharedBoardBreadcrumbs = jest.mocked(useSharedBoardBreadcrumbs);
+jest.mock("@data-board");
+jest.mock("@util-board");
 
-jest.mock("../shared/BoardNotifications.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 const $route: Route = {
@@ -94,6 +95,14 @@ describe("Board", () => {
 		mockedUseBoardPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+		mockedUseSharedEditMode.mockReturnValue({
+			editModeId: ref(""),
+			setEditModeId: jest.fn(),
+		});
+		mockedUseSharedBoardBreadcrumbs.mockReturnValue({
+			createBreadcrumbs: jest.fn(),
+			breadcrumbs: ref([]),
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;

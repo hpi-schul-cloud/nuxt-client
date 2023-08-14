@@ -49,12 +49,15 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
-import { useSharedBoardBreadcrumbs } from "@data-board";
+import {
+	useBoardState,
+	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardBreadcrumbs,
+} from "@data-board";
 import { useBoardNotifier } from "@util-board";
-import { useBoardPermissions } from "@data-board";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import AddElementDialog from "../shared/AddElementDialog.vue";
-import { useSharedEditMode, useBoardState } from "@data-board";
 import {
 	CardMove,
 	ColumnMove,

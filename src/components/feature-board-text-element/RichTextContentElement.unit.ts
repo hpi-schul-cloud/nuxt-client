@@ -39,7 +39,6 @@ const TEST_ELEMENT: RichTextElementResponse = {
 		lastUpdatedAt: new Date().toISOString(),
 	},
 };
-const deleteElementMock = jest.fn();
 
 describe("RichTextContentElement", () => {
 	let wrapper: Wrapper<Vue>;
@@ -55,7 +54,7 @@ describe("RichTextContentElement", () => {
 			RichTextContentElementComponent as MountOptions<Vue>,
 			{
 				...createComponentMocks({}),
-				propsData: { ...props, deleteElement: deleteElementMock },
+				propsData: props,
 				provide: {
 					[I18N_KEY.valueOf()]: { t: (key: string) => key },
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -95,11 +94,11 @@ describe("RichTextContentElement", () => {
 				RichTextContentElementEditComponent
 			);
 			richTextContentElementEditComponent.vm.$emit("delete:element");
-
 			await wrapper.vm.$nextTick();
+			const emitted = wrapper.emitted()["delete:element"] ?? [];
 
-			expect(deleteElementMock).toHaveBeenCalledTimes(1);
-			expect(deleteElementMock).toHaveBeenCalledWith(TEST_ELEMENT.id);
+			expect(emitted).toHaveLength(1);
+			expect(emitted[0][0]).toStrictEqual("test-id");
 		});
 	});
 });

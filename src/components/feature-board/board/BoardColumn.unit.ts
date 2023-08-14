@@ -16,7 +16,7 @@ import BoardColumnVue from "./BoardColumn.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 describe("BoardColumn", () => {
