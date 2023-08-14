@@ -132,6 +132,7 @@ import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -404,9 +405,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.rooms.index.courses.active")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.rooms.index.courses.active")
+		);
 	},
 };
 </script>

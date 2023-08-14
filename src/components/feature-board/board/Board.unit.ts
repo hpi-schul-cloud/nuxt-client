@@ -1,6 +1,7 @@
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	boardResponseFactory,
@@ -33,6 +34,10 @@ jest.mock("@data-board");
 jest.mock("@util-board");
 
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 const $route: Route = {
 	params: {
@@ -114,7 +119,7 @@ describe("Board", () => {
 			},
 			propsData: { boardId },
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});

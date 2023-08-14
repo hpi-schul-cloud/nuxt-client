@@ -5,6 +5,12 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
+import { i18nMock } from "@@/tests/test-utils";
+import { I18N_KEY } from "@/utils/inject";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("UserLoginMigrationSuccess", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
@@ -34,6 +40,7 @@ describe("UserLoginMigrationSuccess", () => {
 				}),
 				provide: {
 					systemsModule,
+					[I18N_KEY.valueOf()]: i18nMock,
 				},
 				propsData: props,
 				mocks: {

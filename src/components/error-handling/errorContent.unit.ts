@@ -4,14 +4,23 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("@/components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (errorText: string, statusCode: HttpStatusCode) => {
 		return shallowMount(ErrorContent as MountOptions<Vue>, {
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				errorText,
 				statusCode,
+			},
+			provide: {
+				[I18N_KEY.valueOf()]: i18nMock,
 			},
 		});
 	};

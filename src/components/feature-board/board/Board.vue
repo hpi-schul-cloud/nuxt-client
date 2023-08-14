@@ -53,9 +53,9 @@ import {
 	useBoardState,
 	useBoardPermissions,
 	useSharedEditMode,
-	useSharedBoardBreadcrumbs,
 } from "@data-board";
 import { useBoardNotifier } from "@util-board";
+import { useSharedBoardPageInformation } from "../shared/BoardPageInformation.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import {
@@ -101,10 +101,10 @@ export default defineComponent({
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
 
-		const { createBreadcrumbs } = useSharedBoardBreadcrumbs();
+		const { createPageInformation } = useSharedBoardPageInformation();
 
 		watch(board, async () => {
-			await createBreadcrumbs(props.boardId);
+			await createPageInformation(props.boardId);
 		});
 
 		useBodyScrolling();
