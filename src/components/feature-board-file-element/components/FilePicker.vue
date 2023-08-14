@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!fileWasPicked" class="grey lighten-3">
+	<div class="grey lighten-3">
 		<v-file-input
 			class="px-5"
 			ref="inputRef"
@@ -8,12 +8,6 @@
 			:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
 		/>
 	</div>
-	<v-card-text v-else>
-		<v-progress-linear
-			data-testid="board-file-element-progress-bar"
-			indeterminate
-		></v-progress-linear>
-	</v-card-text>
 </template>
 
 <script lang="ts">
@@ -30,7 +24,6 @@ export default defineComponent({
 	emits: ["update:file"],
 	setup(props, { emit }) {
 		const inputRef = ref();
-		const fileWasPicked = ref(false);
 		const isFilePickerOpen = useVModel(props, "isFilePickerOpen", emit);
 
 		onMounted(() => {
@@ -45,19 +38,16 @@ export default defineComponent({
 				if (newValue) {
 					inputRef.value.$refs.input.value = "";
 					inputRef.value.$refs.input.click();
-					fileWasPicked.value = false;
 					isFilePickerOpen.value = false;
 				}
 			}
 		);
 
 		const onFileChange = (file: File) => {
-			fileWasPicked.value = true;
 			emit("update:file", file);
 		};
 
 		return {
-			fileWasPicked,
 			inputRef,
 			mdiTrayArrowUp,
 			onFileChange,

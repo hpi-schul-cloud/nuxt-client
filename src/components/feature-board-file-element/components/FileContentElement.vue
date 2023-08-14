@@ -27,6 +27,12 @@
 				/>
 			</div>
 			<div v-else>
+				<FileContentElementInit
+					v-if="isEditMode && fileRecord === undefined"
+					:fileName="fileName"
+					:elementId="element.id"
+					@upload:file="onUploadFile"
+				/>
 				<FileContentElementDisplay
 					v-if="!isEditMode"
 					:fileName="fileName"
@@ -35,7 +41,7 @@
 					:isDownloadAllowed="!isBlockedByVirusScan"
 				/>
 				<FileContentElementEdit
-					v-if="isEditMode"
+					v-if="isEditMode && fileRecord"
 					:fileName="fileName"
 					:fileSize="fileSize"
 					:elementId="element.id"
@@ -48,7 +54,6 @@
 					@move-down:element="onMoveFileEditDown"
 					@move-up:element="onMoveFileEditUp"
 					@delete:element="onDeleteElement"
-					@upload:file="onUploadFile"
 				/>
 			</div>
 			<FileContentElementAlert v-if="isBlockedByVirusScan" />
@@ -67,6 +72,7 @@ import { useFileStorageApi } from "../FileStorageApi.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import FileContentElementInit from "./FileContentElementInit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 export default defineComponent({
@@ -75,6 +81,7 @@ export default defineComponent({
 		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
+		FileContentElementInit,
 		ImageFileDisplay,
 	},
 	props: {
