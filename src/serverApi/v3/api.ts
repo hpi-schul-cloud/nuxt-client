@@ -557,7 +557,7 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
     TldrawBoard = 'board'
 }
 
