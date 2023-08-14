@@ -1,7 +1,7 @@
 <template>
 	<div v-if="news">
 		<default-wireframe
-			:headline="$t('pages.news._id.edit.title')"
+			:headline="$t('pages.news.edit.title.default')"
 			:breadcrumbs="[
 				{
 					to: '/news',
@@ -12,7 +12,7 @@
 					text: news.title,
 				},
 				{
-					text: $t('pages.news._id.edit.title'),
+					text: $t('pages.news.edit.title.default'),
 					disabled: true,
 				},
 			]"
@@ -36,6 +36,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews";
 import { newsModule, notifierModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -48,14 +49,18 @@ export default {
 	computed: {
 		news: () => newsModule.getCurrentNews,
 	},
-	mounted() {
-		newsModule.fetchNews(this.$route.params.id);
-		const hasTitle = (this.news || {}).title;
-		document.title = (
-			hasTitle
-				? `${(this.news || {}).title} bearbeiten`
-				: this.$t("pages.news._id.edit.title")
-		).toString();
+	async mounted() {
+		document.title = buildPageTitle(this.$t("pages.news.edit.title.default"));
+
+		await newsModule.fetchNews(this.$route.params.id);
+		const newsTitle = this.news?.title;
+		if (newsTitle) {
+			document.title = buildPageTitle(
+				this.$t("pages.news.edit.title", {
+					title: newsTitle,
+				})
+			);
+		}
 	},
 	methods: {
 		save: async function (newsToPatch) {

@@ -1,6 +1,10 @@
 import LernstoreDetailView from "./LernstoreDetailView";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 
+jest.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 const testProps = {
 	resource: Resource,
 };
