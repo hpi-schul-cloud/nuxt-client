@@ -5,7 +5,7 @@
 			data-testid="board-file-element"
 			dense
 			elevation="0"
-			outlined
+			:outlined="isOutlined"
 			ref="fileContentElement"
 			:ripple="false"
 			tabindex="0"
@@ -134,6 +134,10 @@ export default defineComponent({
 			);
 		});
 
+		const isOutlined = computed(() => {
+			return fileRecord.value !== undefined || props.isEditMode === true;
+		});
+
 		onMounted(() => {
 			(async () => {
 				await fetchFile();
@@ -191,6 +195,7 @@ export default defineComponent({
 			hasFileRecord,
 			isBlockedByVirusScan,
 			isImage,
+			isOutlined,
 			modelValue,
 			needsFileUpload,
 			url,

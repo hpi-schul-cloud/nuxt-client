@@ -1,7 +1,7 @@
 <template>
 	<div class="grey lighten-3">
 		<v-file-input
-			class="px-5"
+			class="px-5 mt-0"
 			ref="inputRef"
 			@change="onFileChange"
 			prepend-icon="$mdiTrayArrowUp"

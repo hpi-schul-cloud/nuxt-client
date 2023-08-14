@@ -118,16 +118,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.custom-info-alert::v-deep .v-btn__content .v-icon {
-	color: var(--v-black-base) !important;
-}
-.custom-info-alert .text {
-	color: var(--v-black-base) !important;
-}
-.custom-info-alert .text a {
-	color: var(--v-black-base) !important;
-	text-decoration: underline;
-}
-</style>
