@@ -4,11 +4,10 @@ import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import Vue, { nextTick } from "vue";
 import { setupFileRecordMock } from "../../../../tests/test-utils/composable-mocks/fileRecordMock";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import FileContentElement from "./FileContentElement.vue";
@@ -16,7 +15,10 @@ import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
+import FileContentElementInit from "./FileContentElementInit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("@data-board", () => {
 	return {
@@ -24,22 +26,22 @@ jest.mock("@data-board", () => {
 		useContentElementState: jest.fn(() => ({ modelValue: {} })),
 	};
 });
-jest.mock("@feature-board", () => {
-	return {
-		useInlineEditInteractionHandler: jest.fn(),
-	};
-});
-jest.mock("@ui-confirmation-dialog", () => {
-	return {
-		useDeleteConfirmation: jest.fn(),
-	};
-});
+jest.mock("@feature-board");
 jest.mock("../FileStorageApi.composable");
 jest.mock("../FileRecord.composable");
+
+jest.mock("@ui-confirmation-dialog");
+const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
+mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+const useDeleteConfirmationDialogMock = jest.mocked(
+	useDeleteConfirmationDialog
+);
+useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
+		fileName: string;
 		element: AnyContentElement;
 		isEditMode: boolean;
 		isFirstElement: boolean;
@@ -76,14 +78,10 @@ describe("FileContentElement", () => {
 						uploadMock,
 					});
 
-					const askDeleteConfirmationMock = jest.fn();
-					setupDeleteConfirmationComposableMock({
-						askDeleteConfirmationMock,
-					});
-
 					setupFileRecordMock();
 
 					const { wrapper, deleteElementMock } = getWrapper({
+						fileName: "myfile",
 						element,
 						isEditMode: false,
 						isFirstElement: false,
@@ -102,32 +100,15 @@ describe("FileContentElement", () => {
 				it("should be found in dom", () => {
 					const { wrapper } = setup();
 
-					const fileContentElement = wrapper.findComponent(FileContentElement);
-					expect(fileContentElement.exists()).toBe(true);
+					const component = wrapper.findComponent(FileContentElement);
+					expect(component.exists()).toBe(true);
 				});
 
 				it("should render FileContentElementDisplay component", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					const fileContentElementDisplay = wrapper.findComponent(
-						FileContentElementDisplay
-					);
-					expect(fileContentElementDisplay.exists()).toBe(true);
-				});
-
-				it("should render FileContentElementChips component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const FileContentElementChip = wrapper.findComponent(
-						FileContentElementChips
-					);
-					expect(FileContentElementChip.exists()).toBe(true);
+					const component = wrapper.findComponent(FileContentElementDisplay);
+					expect(component.exists()).toBe(true);
 				});
 			});
 
@@ -138,14 +119,20 @@ describe("FileContentElement", () => {
 
 					const error = new Error("test");
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
-					setupFileStorageApiMock({ uploadMock });
-
-					const askDeleteConfirmationMock = jest.fn();
-					setupDeleteConfirmationComposableMock({
-						askDeleteConfirmationMock,
+					setupFileStorageApiMock({
+						uploadMock,
 					});
 
+					setupFileRecordMock({
+						isImageMock: false,
+						isBlockedByVirusScanMock: true,
+						urlMock: "",
+					});
+
+					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+
 					const { wrapper, deleteElementMock } = getWrapper({
+						fileName: "abc.jpg",
 						element,
 						isEditMode: false,
 						isFirstElement: false,
@@ -159,15 +146,6 @@ describe("FileContentElement", () => {
 					};
 				};
 
-				it("should call deleteElement", async () => {
-					const { wrapper, deleteElementMock } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					expect(deleteElementMock).toHaveBeenCalledTimes(1);
-				});
-
 				it("should not render FileContentElementChips component", async () => {
 					const { wrapper } = setup();
 
@@ -177,32 +155,6 @@ describe("FileContentElement", () => {
 						FileContentElementChips
 					);
 					expect(FileContentElementChip.exists()).toBe(false);
-				});
-			});
-
-			describe("when file upload is not finished onMount", () => {
-				const setup = () => {
-					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
-
-					setupFileStorageApiMock();
-
-					const { wrapper } = getWrapper({
-						element,
-						isEditMode: false,
-						isFirstElement: false,
-						isLastElement: false,
-						hasMultipleElements: false,
-					});
-
-					return { wrapper };
-				};
-
-				it("should render v-progress-linear component", async () => {
-					const { wrapper } = setup();
-
-					const progressLinear = wrapper.find("v-progress-linear-stub");
-					expect(progressLinear.exists()).toBe(true);
 				});
 			});
 
@@ -221,14 +173,12 @@ describe("FileContentElement", () => {
 						fetchFileMock,
 					});
 
-					const askDeleteConfirmationMock = jest.fn().mockReturnValueOnce(true);
-					setupDeleteConfirmationComposableMock({
-						askDeleteConfirmationMock,
-					});
+					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 					setupFileRecordMock({ urlMock: fileRecordResponse.url });
 
 					const { wrapper, deleteElementMock } = getWrapper({
+						fileName: "abc.jpg",
 						element,
 						isEditMode: false,
 						isFirstElement: false,
@@ -311,16 +261,6 @@ describe("FileContentElement", () => {
 						expect(fetchFile).toHaveBeenCalledTimes(1);
 					});
 
-					it("should render FileContentElementChips component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const chips = wrapper.findComponent(FileContentElementChips);
-
-						expect(chips.exists()).toBe(true);
-					});
-
 					describe("when file is an image", () => {
 						const setup = () => {
 							const element = fileElementResponseFactory.build();
@@ -337,16 +277,12 @@ describe("FileContentElement", () => {
 								fetchFileMock,
 							});
 
-							const askDeleteConfirmationMock = jest
-								.fn()
-								.mockReturnValueOnce(true);
-							setupDeleteConfirmationComposableMock({
-								askDeleteConfirmationMock,
-							});
+							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 							setupFileRecordMock({ isImageMock: true });
 
 							const { wrapper, deleteElementMock } = getWrapper({
+								fileName: "abc.jpg",
 								element,
 								isEditMode: false,
 								isFirstElement: false,
@@ -461,12 +397,7 @@ describe("FileContentElement", () => {
 							fetchFileMock,
 						});
 
-						const askDeleteConfirmationMock = jest
-							.fn()
-							.mockReturnValueOnce(true);
-						setupDeleteConfirmationComposableMock({
-							askDeleteConfirmationMock,
-						});
+						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 						setupFileRecordMock({
 							isBlockedByVirusScanMock: true,
@@ -474,6 +405,7 @@ describe("FileContentElement", () => {
 						});
 
 						const { wrapper, deleteElementMock } = getWrapper({
+							fileName: "abc.jpg",
 							element,
 							isEditMode: false,
 							isFirstElement: false,
@@ -512,17 +444,6 @@ describe("FileContentElement", () => {
 							.props("url");
 
 						expect(url).toBe("");
-					});
-
-					it("should render FileContentElementChips component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const FileContentElementChip = wrapper.findComponent(
-							FileContentElementChips
-						);
-						expect(FileContentElementChip.exists()).toBe(true);
 					});
 
 					it("should hand over isDownloadAllowed property as false", async () => {
@@ -564,12 +485,7 @@ describe("FileContentElement", () => {
 								fetchFileMock,
 							});
 
-							const askDeleteConfirmationMock = jest
-								.fn()
-								.mockReturnValueOnce(true);
-							setupDeleteConfirmationComposableMock({
-								askDeleteConfirmationMock,
-							});
+							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 							setupFileRecordMock({
 								isImageMock: true,
@@ -578,6 +494,7 @@ describe("FileContentElement", () => {
 							});
 
 							const { wrapper, deleteElementMock } = getWrapper({
+								fileName: "abc.jpg",
 								element,
 								isEditMode: false,
 								isFirstElement: false,
@@ -695,14 +612,12 @@ describe("FileContentElement", () => {
 						uploadMock,
 					});
 
-					const askDeleteConfirmationMock = jest.fn();
-					setupDeleteConfirmationComposableMock({
-						askDeleteConfirmationMock,
-					});
+					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 					setupFileRecordMock();
 
 					const { wrapper, deleteElementMock } = getWrapper({
+						fileName: "abc.jpg",
 						element,
 						isEditMode: true,
 						isFirstElement: false,
@@ -723,28 +638,17 @@ describe("FileContentElement", () => {
 					expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 				});
 
-				it("should render FileContentElementEdit component", async () => {
+				it("should render fileContentElementInit component", async () => {
 					const { wrapper } = setup();
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					const fileContentElementEdit = wrapper.findComponent(
-						FileContentElementEdit
+					const fileContentElementInit = wrapper.findComponent(
+						FileContentElementInit
 					);
-					expect(fileContentElementEdit.exists()).toBe(true);
-				});
-
-				it("should render FileContentElementChips component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const FileContentElementChip = wrapper.findComponent(
-						FileContentElementChips
-					);
-					expect(FileContentElementChip.exists()).toBe(true);
+					expect(fileContentElementInit.exists()).toBe(true);
 				});
 			});
 
@@ -757,12 +661,10 @@ describe("FileContentElement", () => {
 					const uploadMock = jest.fn().mockRejectedValueOnce(error);
 					setupFileStorageApiMock({ uploadMock });
 
-					const askDeleteConfirmationMock = jest.fn();
-					setupDeleteConfirmationComposableMock({
-						askDeleteConfirmationMock,
-					});
+					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 					const { wrapper, deleteElementMock } = getWrapper({
+						fileName: "abc.jpg",
 						element,
 						isEditMode: true,
 						isFirstElement: false,
@@ -776,13 +678,16 @@ describe("FileContentElement", () => {
 					};
 				};
 
-				it("should call deleteElement", async () => {
-					const { wrapper, deleteElementMock } = setup();
+				it("should emit delete:element", async () => {
+					const { wrapper } = setup();
+
+					const initComponent = wrapper.findComponent(FileContentElementInit);
+					initComponent.vm.$emit("upload:file", { fileName: "mysample.txt" });
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					expect(deleteElementMock).toHaveBeenCalledTimes(1);
+					expect(wrapper.emitted("delete:element")).toHaveLength(1);
 				});
 
 				it("should not render FileContentElementChips component", async () => {
@@ -814,16 +719,12 @@ describe("FileContentElement", () => {
 							fetchFileMock,
 						});
 
-						const askDeleteConfirmationMock = jest
-							.fn()
-							.mockReturnValueOnce(true);
-						setupDeleteConfirmationComposableMock({
-							askDeleteConfirmationMock,
-						});
+						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 						setupFileRecordMock();
 
 						const { wrapper, deleteElementMock } = getWrapper({
+							fileName: "abc.jpg",
 							element,
 							isEditMode: true,
 							isFirstElement: false,
@@ -859,16 +760,6 @@ describe("FileContentElement", () => {
 						expect(fileContentElementEdit.exists()).toBe(true);
 					});
 
-					it("should render FileContentElementChips component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const chips = wrapper.findComponent(FileContentElementChips);
-
-						expect(chips.exists()).toBe(true);
-					});
-
 					it("should hand over isDownloadAllowed property as true", async () => {
 						const { wrapper } = setup();
 
@@ -881,24 +772,19 @@ describe("FileContentElement", () => {
 						expect(isDownloadAllowed).toBe(true);
 					});
 
-					it("should call deleteElement function when it receives delete:element event from child", async () => {
-						const { wrapper, element, deleteElementMock } = setup();
+					it("should pass delete:element event from child to parent", async () => {
+						const { wrapper } = setup();
 
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
+						await nextTick();
+						await nextTick();
 
-						const fileContentElementEdit = wrapper.findComponent(
-							FileContentElementEdit
-						);
-						fileContentElementEdit.vm.$emit("delete:element");
+						const child = wrapper.findComponent(FileContentElementEdit);
+						child.vm.$emit("delete:element");
 
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
+						await nextTick();
+						await nextTick();
 
-						expect(deleteElementMock).toHaveBeenCalledTimes(1);
-						expect(deleteElementMock).toHaveBeenCalledWith(element.id);
-
-						expect(fileContentElementEdit.exists()).toBe(true);
+						expect(wrapper.emitted("delete:element")).toHaveLength(1);
 					});
 
 					describe("when file is an image", () => {
@@ -917,16 +803,12 @@ describe("FileContentElement", () => {
 								fetchFileMock,
 							});
 
-							const askDeleteConfirmationMock = jest
-								.fn()
-								.mockReturnValueOnce(true);
-							setupDeleteConfirmationComposableMock({
-								askDeleteConfirmationMock,
-							});
+							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 							setupFileRecordMock({ isImageMock: true });
 
 							const { wrapper, deleteElementMock } = getWrapper({
+								fileName: "abc.jpg",
 								element,
 								isEditMode: true,
 								isFirstElement: false,
@@ -1041,12 +923,7 @@ describe("FileContentElement", () => {
 							fetchFileMock,
 						});
 
-						const askDeleteConfirmationMock = jest
-							.fn()
-							.mockReturnValueOnce(true);
-						setupDeleteConfirmationComposableMock({
-							askDeleteConfirmationMock,
-						});
+						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 						setupFileRecordMock({
 							isBlockedByVirusScanMock: true,
@@ -1054,6 +931,7 @@ describe("FileContentElement", () => {
 						});
 
 						const { wrapper, deleteElementMock } = getWrapper({
+							fileName: "abc.jpg",
 							element,
 							isEditMode: true,
 							isFirstElement: false,
@@ -1142,17 +1020,6 @@ describe("FileContentElement", () => {
 						expect(hasMultipleElements).toBe(false);
 					});
 
-					it("should render FileContentElementChips component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const FileContentElementChip = wrapper.findComponent(
-							FileContentElementChips
-						);
-						expect(FileContentElementChip.exists()).toBe(true);
-					});
-
 					it("should render FileContentElementAlert component", async () => {
 						const { wrapper } = setup();
 
@@ -1164,24 +1031,19 @@ describe("FileContentElement", () => {
 						expect(fileContentElementAlert.exists()).toBe(true);
 					});
 
-					it("should call deleteElement function when it receives delete:element event from child", async () => {
-						const { wrapper, element, deleteElementMock } = setup();
+					it("should pass delete:element event from child to parent", async () => {
+						const { wrapper } = setup();
 
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
+						await nextTick();
+						await nextTick();
 
-						const fileContentElementEdit = wrapper.findComponent(
-							FileContentElementEdit
-						);
-						fileContentElementEdit.vm.$emit("delete:element");
+						const child = wrapper.findComponent(FileContentElementEdit);
+						child.vm.$emit("delete:element");
 
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
+						await nextTick();
+						await nextTick();
 
-						expect(deleteElementMock).toHaveBeenCalledTimes(1);
-						expect(deleteElementMock).toHaveBeenCalledWith(element.id);
-
-						expect(fileContentElementEdit.exists()).toBe(true);
+						expect(wrapper.emitted("delete:element")).toHaveLength(1);
 					});
 
 					describe("when file is an image", () => {
@@ -1200,12 +1062,7 @@ describe("FileContentElement", () => {
 								fetchFileMock,
 							});
 
-							const askDeleteConfirmationMock = jest
-								.fn()
-								.mockReturnValueOnce(true);
-							setupDeleteConfirmationComposableMock({
-								askDeleteConfirmationMock,
-							});
+							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 
 							setupFileRecordMock({
 								isImageMock: true,
@@ -1214,6 +1071,7 @@ describe("FileContentElement", () => {
 							});
 
 							const { wrapper, deleteElementMock } = getWrapper({
+								fileName: "abc.jpg",
 								element,
 								isEditMode: true,
 								isFirstElement: false,

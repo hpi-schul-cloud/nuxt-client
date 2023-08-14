@@ -67,6 +67,7 @@ import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -94,9 +95,9 @@ export default Vue.extend({
 		},
 	},
 	async mounted() {
-		document.title = `${this.$t("pages.rooms.index.courses.all")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.rooms.index.courses.all").toString()
+		);
 		await roomsModule.fetchAllElements();
 	},
 });

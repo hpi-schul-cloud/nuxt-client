@@ -7,11 +7,16 @@ import {
 	MigrationPageOrigin,
 } from "@/store/types/user-login-migration";
 import UserLoginMigrationModule from "@/store/user-login-migration";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import Vue from "vue";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("UserLoginMigrationConsent", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
@@ -53,6 +58,7 @@ describe("UserLoginMigrationConsent", () => {
 					systemsModule,
 					userLoginMigrationModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[I18N_KEY.valueOf()]: i18nMock,
 				},
 				propsData: props,
 				mocks: {

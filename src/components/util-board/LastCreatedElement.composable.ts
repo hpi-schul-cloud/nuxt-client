@@ -5,9 +5,7 @@ const useLastCreatedElement = () => {
 	const lastCreatedElementId: Ref<string | undefined> = ref(undefined);
 
 	const resetLastCreatedElementId = () => {
-		setTimeout(() => {
-			lastCreatedElementId.value = undefined;
-		}, 1000);
+		lastCreatedElementId.value = undefined;
 	};
 
 	return {

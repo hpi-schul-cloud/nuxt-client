@@ -22,6 +22,10 @@ import { User } from "@/store/types/auth";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("SchoolExternalToolConfigurator", () => {
 	const routerPush = jest.fn();
 

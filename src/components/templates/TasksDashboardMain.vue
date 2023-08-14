@@ -83,7 +83,7 @@
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule, envConfigModule } from "@/store";
+import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
@@ -254,39 +254,10 @@ export default {
 			};
 		},
 		fabItems() {
-			const actions = [];
 			if (
 				!this.isStudent &&
 				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
-				actions.push({
-					label: this.$t("pages.rooms.fab.add.task"),
-					icon: mdiFormatListChecks,
-					href: "/homework/new?returnUrl=tasks",
-					ariaLabel: this.$t("pages.rooms.fab.add.task"),
-					dataTestid: "fab_button_add_task",
-				});
-			}
-			if (
-				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
-				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
-			) {
-				const action = {
-					label: this.$t("pages.rooms.fab.add.betatask"),
-					icon: mdiFormatListChecks,
-					to: {
-						name: "tasks-beta-task-new",
-					},
-					ariaLabel: this.$t("common.actions.create"),
-					dataTestid: "fab_button_add_beta_task",
-				};
-				actions.push(action);
-			}
-
-			if (actions.length === 0) {
-				return null;
-			}
-			if (actions.length === 1) {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
@@ -295,14 +266,7 @@ export default {
 					testId: "addTask",
 				};
 			}
-			const items = {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				ariaLabel: this.$t("common.actions.create"),
-				testId: "add-content-button",
-				actions: actions,
-			};
-			return items;
+			return null;
 		},
 		emptyState() {
 			let title = "";

@@ -19,6 +19,7 @@
 <script>
 import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
 import { mapGetters } from "vuex";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -71,6 +72,7 @@ export default {
 	},
 	created() {
 		this.submitHandler();
+		document.title = buildPageTitle(this.getTitle);
 	},
 	methods: {
 		buttonHandler() {
