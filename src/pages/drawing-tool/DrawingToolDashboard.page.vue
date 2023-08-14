@@ -1,11 +1,13 @@
 <template>
 	<div class="d-flex flex-column">
 		<p>TLDRAW</p>
-		<a :href="`http://localhost:3046${newWindowUrl}`"> NEW WINDOW </a>
+		<a :href="newWindowUrl" @click="openNewWindow"> NEW WINDOW </a>
 	</div>
 </template>
 
 <script>
+import { useRoute } from "vue-router/composables";
+
 export default {
 	props: {
 		buttonText: {
@@ -13,31 +15,21 @@ export default {
 			default: "Tldraw",
 		},
 	},
+	setup() {
+		const route = useRoute();
+		const boardId = route.params?.id;
+		const urlWithRoom = `/tldraw?roomName=${boardId}`;
 
-	computed: {
-		newWindowUrl() {
-			const savedRoomID = localStorage.getItem("roomID");
+		const newWindowUrl = `http://localhost:3046${urlWithRoom}`;
 
-			if (savedRoomID) {
-				return `/tldraw?roomName=${savedRoomID}`;
-			} else {
-				const newRoomID = this.generateRandomRoomID();
-				localStorage.setItem("roomID", newRoomID);
-				return `/tldraw?roomName=${newRoomID}`;
-			}
-		},
-	},
-	methods: {
-		generateRandomRoomID() {
-			const randomNumber = Math.random();
-			const randomString = randomNumber.toString().substring(2);
-			const roomID = "room_" + randomString;
-			return roomID;
-		},
+		const openNewWindow = () => {
+			window.open(newWindowUrl, "_blank");
+		};
+
+		return {
+			newWindowUrl,
+			openNewWindow,
+		};
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-/* Ваш стиль тут */
-</style>

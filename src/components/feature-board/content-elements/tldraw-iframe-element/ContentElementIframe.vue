@@ -8,6 +8,7 @@
 </template>
 <script>
 import tldrawIcon from "../../../icons/custom/tldraw-icon.vue";
+import { useRoute } from "vue-router/composables";
 
 export default {
 	props: {
@@ -19,28 +20,20 @@ export default {
 	components: {
 		tldrawIcon,
 	},
-
-	methods: {
-		openLink() {
-			const savedRoomID = localStorage.getItem("roomID");
-			let urlWithRoom;
-
-			if (savedRoomID) {
-				urlWithRoom = `/tldraw?roomName=${savedRoomID}`;
-			} else {
-				const newRoomID = this.generateRandomRoomID();
-				localStorage.setItem("roomID", newRoomID);
-				urlWithRoom = `/tldraw?roomName=${newRoomID}`;
+	setup() {
+		const route = useRoute();
+		const boardId = route.params?.id;
+		const openLink = () => {
+			if (boardId) {
+				const urlWithRoom = `/tldraw?roomName=${boardId}`;
+				window.open(urlWithRoom, "_blank");
 			}
+		};
 
-			window.open(urlWithRoom, "_blank");
-		},
-		generateRandomRoomID() {
-			const randomNumber = Math.random();
-			const randomString = randomNumber.toString().substring(2);
-			const roomID = "room_" + randomString;
-			return roomID;
-		},
+		return {
+			boardId,
+			openLink,
+		};
 	},
 };
 </script>
