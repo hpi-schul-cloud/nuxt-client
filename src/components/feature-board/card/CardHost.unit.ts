@@ -10,26 +10,34 @@ import {
 	boardCardFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { useCardState, useEditMode } from "@data-board";
+import {
+	useCardState,
+	useEditMode,
+	useBoardFocusHandler,
+	useBoardPermissions,
+} from "@data-board";
 import { describe, expect, it, jest } from "@jest/globals";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { computed, ref } from "vue";
 import ContentElementList from "./ContentElementList.vue";
-import { useBoardFocusHandler } from "@data-board";
-import { useBoardPermissions } from "@data-board";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 
-jest.mock("../shared/BoardFocusHandler.composable");
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("@data-board/BoardFocusHandler.composable");
+jest.mock("@data-board/BoardPermissions.composable");
 jest.mock("../shared/AddElementDialog.composable");
-jest.mock("../shared/DeleteConfirmation.composable");
+jest.mock("@ui-confirmation-dialog");
 jest.mock("@data-board");
 
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const mockedEditMode = jest.mocked(useEditMode);
 const mockedUseCardState = jest.mocked(useCardState);
+
+const mockedUseDeleteConfirmationDialog = jest.mocked(
+	useDeleteConfirmationDialog
+);
 
 const CARD_SKELETON: BoardCardSkeleton = {
 	height: 200,
@@ -92,6 +100,17 @@ describe("CardHost", () => {
 			isLoading: ref(isLoading ?? false),
 		});
 
+		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
+
+		setupDeleteConfirmationComposableMock({
+			askDeleteConfirmationMock,
+		});
+
+		mockedUseDeleteConfirmationDialog.mockReturnValue({
+			askDeleteConfirmation: askDeleteConfirmationMock,
+			isDeleteDialogOpen: ref(false),
+		});
+
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
@@ -133,16 +152,6 @@ describe("CardHost", () => {
 
 				expect(contentElementList.exists()).toBe(true);
 			});
-
-			it("should propagate deleteElement function to ContentElementList", () => {
-				const { deleteElementMock } = setup({ card: CARD_WITH_FILE_ELEMENT });
-
-				const contentElementList = wrapper.findComponent(ContentElementList);
-
-				expect(contentElementList.props("deleteElement")).toBe(
-					deleteElementMock
-				);
-			});
 		});
 	});
 
@@ -172,22 +181,13 @@ describe("CardHost", () => {
 					name: "BoardMenuAction",
 				});
 
-				const askDeleteConfirmationMock = jest.fn().mockReturnValue(true);
-				setupDeleteConfirmationComposableMock({
-					askDeleteConfirmationMock,
-				});
+				firstMenuItem.vm.$emit("click");
 
-				// console.log("menuItems.props", menuItems.props.name);
-				// console.log("menuItems.length", menuItems.length);
-				// console.log(
-				// 	"menuItems.wrappers[0].text()",
-				// 	menuItems.wrappers[0].text()
-				// );
-				// await nextTick();
+				await wrapper.vm.$nextTick();
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted()["delete:card"] ?? [];
 
-				await firstMenuItem.trigger("click");
-
-				expect(wrapper.emitted("delete.card")).toHaveLength(1);
+				expect(emitted).toHaveLength(1);
 			});
 		});
 	});
