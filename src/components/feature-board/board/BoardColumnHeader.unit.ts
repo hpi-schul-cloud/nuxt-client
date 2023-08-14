@@ -3,7 +3,11 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { useEditMode, useBoardPermissions } from "@data-board";
+import {
+	useEditMode,
+	useBoardPermissions,
+	useBoardFocusHandler,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -12,6 +16,7 @@ import { I18N_KEY } from "@/utils/inject";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardColumnHeader", () => {
 	let wrapper: Wrapper<Vue>;
@@ -31,6 +36,9 @@ describe("BoardColumnHeader", () => {
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+		mockUseBoardFocusHandler.mockReturnValue({
+			isFocusContained: undefined,
 		});
 
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
