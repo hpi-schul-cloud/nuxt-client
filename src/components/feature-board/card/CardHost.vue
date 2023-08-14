@@ -41,7 +41,10 @@
 							</template>
 							{{ $t("common.actions.edit") }}
 						</BoardMenuAction>
-						<BoardMenuAction @click="onDeleteCard">
+						<BoardMenuAction
+							@click="onDeleteCard"
+							data-test-id="board-menu-action-delete"
+						>
 							<template #icon>
 								<VIcon>
 									{{ mdiTrashCanOutline }}

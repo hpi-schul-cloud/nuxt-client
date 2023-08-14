@@ -6,8 +6,6 @@ interface Props {
 	askDeleteConfirmationMock?: () => Promise<boolean>;
 }
 
-jest.mock("@ui-confirmation-dialog");
-
 export default function setupDeleteConfirmationComposableMock(
 	props: Props = {}
 ) {

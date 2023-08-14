@@ -993,5 +993,6 @@
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.noPermission": "Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.action.refresh": "оновити статус",
-	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?"
+	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo"
 }

@@ -1,53 +1,59 @@
 <template>
-	<v-card
-		class="mb-4"
-		data-testid="board-file-element"
-		dense
-		elevation="0"
-		outlined
-		ref="fileContentElement"
-		:ripple="false"
-		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
-	>
-		<div v-if="isImage">
-			<ImageFileDisplay
-				:fileName="fileName"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:url="fileUrl"
-				:isEditMode="isEditMode"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@delete:element="onDeleteElement"
-			/>
-		</div>
-		<div v-else>
-			<FileContentElementDisplay
-				v-if="!isEditMode"
-				:fileName="fileName"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-			/>
-			<FileContentElementEdit
-				v-if="isEditMode"
-				:fileName="fileName"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:url="url"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@delete:element="onDeleteElement"
-				@upload:file="onUploadFile"
-			/>
-		</div>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
-		<FileContentElementAlert v-if="isBlockedByVirusScan" />
-	</v-card>
+	<div>
+		<v-card
+			class="mb-4"
+			data-testid="board-file-element"
+			dense
+			elevation="0"
+			outlined
+			ref="fileContentElement"
+			:ripple="false"
+			tabindex="0"
+			@keydown.up.down="onKeydownArrow"
+		>
+			<div v-if="isImage">
+				<ImageFileDisplay
+					:fileName="fileName"
+					:fileSize="fileSize"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="fileUrl"
+					:isEditMode="isEditMode"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+			<div v-else>
+				<FileContentElementDisplay
+					v-if="!isEditMode"
+					:fileName="fileName"
+					:fileSize="fileSize"
+					:url="url"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+				/>
+				<FileContentElementEdit
+					v-if="isEditMode"
+					:fileName="fileName"
+					:fileSize="fileSize"
+					:elementId="element.id"
+					:isDownloadAllowed="!isBlockedByVirusScan"
+					:url="url"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					:needsFileUpload="needsFileUpload"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+					@upload:file="onUploadFile"
+				/>
+			</div>
+			<FileContentElementAlert v-if="isBlockedByVirusScan" />
+		</v-card>
+	</div>
 </template>
 
 <script lang="ts">
@@ -59,7 +65,6 @@ import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { useFileRecord } from "../FileRecord.composable";
 import { useFileStorageApi } from "../FileStorageApi.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
@@ -70,7 +75,6 @@ export default defineComponent({
 		FileContentElementAlert,
 		FileContentElementDisplay,
 		FileContentElementEdit,
-		FileContentElementChips,
 		ImageFileDisplay,
 	},
 	props: {
@@ -88,6 +92,8 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
+		const isLoadingFileRecord = ref(true);
+
 		useBoardFocusHandler(props.element.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
@@ -111,9 +117,20 @@ export default defineComponent({
 			return fileRecord.value === undefined ? "" : fileRecord.value.url;
 		});
 
+		const hasFileRecord = computed(() => {
+			return fileRecord.value !== undefined;
+		});
+
+		const needsFileUpload = computed(() => {
+			return (
+				isLoadingFileRecord.value === false && hasFileRecord.value === false
+			);
+		});
+
 		onMounted(() => {
 			(async () => {
 				await fetchFile();
+				isLoadingFileRecord.value = false;
 			})();
 		});
 
@@ -132,7 +149,14 @@ export default defineComponent({
 			emit("move-up:edit");
 		};
 
-		const onDeleteElement = async (): Promise<void> => {
+		const onDeleteElement = async (
+			deleteDirectly: true | undefined
+		): Promise<void> => {
+			if (deleteDirectly === true) {
+				emit("delete:element", props.element.id);
+				return;
+			}
+
 			const shouldDelete = await askDeleteConfirmation(
 				fileName.value,
 				"boardElement"
@@ -156,9 +180,12 @@ export default defineComponent({
 			fileSize,
 			fileName,
 			fileUrl,
+			fileRecord,
+			hasFileRecord,
 			isBlockedByVirusScan,
 			isImage,
 			modelValue,
+			needsFileUpload,
 			url,
 			onDeleteElement,
 			onKeydownArrow,
