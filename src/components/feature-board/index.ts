@@ -1,5 +1,6 @@
 import Board from "./board/Board.vue";
 import { useInlineEditInteractionHandler } from "./shared/InlineEditInteractionHandler.composable";
+import { useSharedBoardPageInformation } from "./shared/BoardPageInformation.composable";
 /**
  * Todo: Refactor to accept any permission and be less specific to the board. then move to another module and export form there
  */
@@ -7,5 +8,6 @@ import { useInlineEditInteractionHandler } from "./shared/InlineEditInteractionH
 
 export {
 	useInlineEditInteractionHandler, // WIP: refactor so export is not needed anymore
+	useSharedBoardPageInformation, // WIP: refactor so export is not needed anymore
 	Board,
 };
