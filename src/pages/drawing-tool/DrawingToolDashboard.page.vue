@@ -1,14 +1,7 @@
 <template>
 	<div class="d-flex flex-column">
 		<p>TLDRAW</p>
-		<a :href="`http://localhost:3046${newWindowUrl}`" target="_blank">
-			NEW WINDOW
-		</a>
-		<iframe
-			:src="`http://localhost:3046${newWindowUrl}`"
-			width="600px"
-			height="600px"
-		></iframe>
+		<a :href="`http://localhost:3046${newWindowUrl}`"> NEW WINDOW </a>
 	</div>
 </template>
 
