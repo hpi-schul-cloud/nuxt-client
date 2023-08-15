@@ -13,6 +13,7 @@ import {
 	defineElements,
 	H5PEditorComponent,
 } from "@lumieducation/h5p-webcomponents";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 defineElements("h5p-editor");
 
@@ -36,20 +37,23 @@ export default defineComponent({
 		const h5pEditorRef = ref<H5PEditorComponent>();
 
 		const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
+		const i18n = injectStrict(I18N_KEY);
+		const language = i18n.locale;
 
 		const loadContent = async (id?: string) => {
 			try {
 				if (id) {
 					// Load content
 					const { data } = await h5pEditorApi.h5PEditorControllerGetH5PEditor(
-						id
+						id,
+						language
 					);
 
 					return data;
 				} else {
 					// Create new editor
 					const { data } =
-						await h5pEditorApi.h5PEditorControllerGetNewH5PEditor();
+						await h5pEditorApi.h5PEditorControllerGetNewH5PEditor(language);
 
 					return data;
 				}
