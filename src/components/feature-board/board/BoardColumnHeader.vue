@@ -49,9 +49,12 @@ import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { useBoardFocusHandler } from "@data-board";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useBoardPermissions, useEditMode } from "@data-board";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useEditMode,
+} from "@data-board";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 export default defineComponent({

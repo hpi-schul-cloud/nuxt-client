@@ -40,11 +40,10 @@
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline } from "@mdi/js";
+import { mdiFileDocumentOutline, mdiClose } from "@mdi/js";
 import { defineComponent, ref, watch } from "vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
-import { mdiClose } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({

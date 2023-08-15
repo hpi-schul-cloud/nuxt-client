@@ -255,7 +255,7 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board?.value.id);
 	};
 
-	onMounted(() => fetchBoard(id));
+	onMounted(async () => await fetchBoard(id));
 
 	return {
 		board,

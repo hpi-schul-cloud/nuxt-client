@@ -177,7 +177,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 	};
 
-	onMounted(() => fetchCard(id));
+	onMounted(async () => await fetchCard(id));
 
 	return {
 		addElement,

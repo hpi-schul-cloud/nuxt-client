@@ -21,18 +21,6 @@ const TEST_ELEMENT: RichTextElementResponse = {
 	},
 };
 
-/**
- * Call this function during test to mock a CardHostInteraction targeting the Hosting Component
- */
-// let mockCardHostInteraction: () => void;
-
-// jest.mock("../CardHostInteractionHandler.composable", () => ({
-// 	useCardHostInteractionHandler: (callback: () => void) => {
-// 		mockCardHostInteraction = () => callback();
-// 		return {};
-// 	},
-// }));
-
 describe("useContentElementState composable", () => {
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {

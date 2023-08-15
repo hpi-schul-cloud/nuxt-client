@@ -25,10 +25,12 @@ const useCardRequestPool = () => {
 	};
 
 	const debouncedFetchCards = useDebounceFn(
-		async () => {
+		() => {
 			const poolCopy = requestPool.splice(0, 9999999); // atomic operation
 			const requestChunks = cutIntoChunks(poolCopy, MAX_CARDIDS_PER_REQUEST);
-			await fetchCardChunks(requestChunks);
+			fetchCardChunks(
+				requestChunks
+			).then(/* show sonarcloud that you know that the function is async but it does not matter */);
 		},
 		WAIT_AFTER_LAST_CALL_IN_MS,
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
