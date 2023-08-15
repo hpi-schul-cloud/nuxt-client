@@ -49,8 +49,8 @@ import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
-import { useSharedBoardBreadcrumbs } from "../shared/BoardBreadcrumbs.composable";
 import { useBoardNotifier } from "../shared/BoardNotifications.composable";
+import { useSharedBoardPageInformation } from "../shared/BoardPageInformation.composable";
 import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import { useSharedEditMode } from "../shared/EditMode.composable";
@@ -100,10 +100,10 @@ export default defineComponent({
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
 
-		const { createBreadcrumbs } = useSharedBoardBreadcrumbs();
+		const { createPageInformation } = useSharedBoardPageInformation();
 
 		watch(board, async () => {
-			await createBreadcrumbs(props.boardId);
+			await createPageInformation(props.boardId);
 		});
 
 		useBodyScrolling();

@@ -7,6 +7,10 @@ import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 const $theme = {
 	short_name: "instance name",
 };

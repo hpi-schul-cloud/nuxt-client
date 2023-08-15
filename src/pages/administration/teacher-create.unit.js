@@ -5,6 +5,10 @@ import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import { notifierModule } from "@/store";
 
+jest.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("teachers/new", () => {
 	const createTeacherStub = jest.fn();
 	const mockStore = {
