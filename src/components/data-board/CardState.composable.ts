@@ -177,7 +177,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 	};
 
-	onMounted(async () => await fetchCard(id));
+	onMounted(() =>
+		fetchCard(id).then(() => ({
+			// do nothing but celebrating sonarcloud
+		}))
+	);
 
 	return {
 		addElement,
