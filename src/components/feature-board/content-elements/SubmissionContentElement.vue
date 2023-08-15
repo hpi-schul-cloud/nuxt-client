@@ -61,7 +61,7 @@ export default defineComponent({
 	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
-		const submissionContentElement = ref();
+		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
 
 		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
@@ -97,6 +97,7 @@ export default defineComponent({
 		};
 
 		return {
+			submissionContentElement,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveFileEditDown,
