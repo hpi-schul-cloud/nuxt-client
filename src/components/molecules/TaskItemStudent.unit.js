@@ -10,13 +10,8 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import TaskItemStudent from "./TaskItemStudent";
 
-const {
-	tasks,
-	openTasksWithoutDueDate,
-	openTasksWithDueDate,
-	invalidTasks,
-	betaTask,
-} = mocks;
+const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
+	mocks;
 
 let tasksModuleMock;
 let copyModuleMock;
@@ -169,43 +164,5 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
 		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
-	});
-
-	describe("when task is a beta task", () => {
-		it("should have correct combined label for beta task", () => {
-			const wrapper = getWrapper({
-				task: betaTask,
-			});
-			const taskLabel = wrapper.find("[data-testid='taskSubtitle']");
-
-			expect(taskLabel.text()).toStrictEqual("Mathe - Beta-Aufgabe");
-		});
-
-		it("Should display due date label", () => {
-			const wrapper = getWrapper({
-				task: betaTask,
-			});
-			const convertedDueDate = dateTimeFromUTC(betaTask.dueDate);
-			const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
-				"pages.tasks.labels.due"
-			)} ${convertedDueDate}`;
-
-			const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
-			expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
-		});
-
-		it("should redirect to beta task page", async () => {
-			const wrapper = getWrapper({
-				task: betaTask,
-			});
-			const taskCard = wrapper.findComponent({ name: "v-list-item" });
-			await taskCard.trigger("click");
-
-			expect(mockRouter.push).toHaveBeenCalledTimes(1);
-			expect(mockRouter.push).toHaveBeenCalledWith({
-				name: "beta-task-view-edit",
-				params: { id: "789" },
-			});
-		});
 	});
 });

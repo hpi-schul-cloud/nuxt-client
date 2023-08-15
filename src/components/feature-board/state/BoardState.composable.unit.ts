@@ -576,6 +576,9 @@ describe("BoardState.composable", () => {
 				column.id,
 				NEW_TITLE
 			);
+
+			const boardColumn = board.value.columns.find((c) => c.id === column.id);
+			expect(boardColumn?.title).toStrictEqual(NEW_TITLE);
 		});
 	});
 

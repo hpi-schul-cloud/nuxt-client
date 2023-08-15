@@ -51,6 +51,8 @@ import {
 import VueRouter, { Route } from "vue-router";
 import { useRoute, useRouter } from "vue-router/composables";
 import { DataTableHeader } from "vuetify";
+import { useTitle } from "@vueuse/core";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	components: { DefaultWireframe },
@@ -98,6 +100,9 @@ export default defineComponent({
 		const click = (item: FileTableItem): void => {
 			router.push({ path: item.path });
 		};
+
+		const pageTitle = buildPageTitle(filesPage.title);
+		useTitle(pageTitle);
 
 		onMounted(async () => {
 			await filesPage.loadFilesFunction();

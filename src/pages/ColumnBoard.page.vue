@@ -5,10 +5,8 @@
 </template>
 <script lang="ts">
 import Board from "@/components/feature-board/board/Board.vue";
-import { useSharedBoardBreadcrumbs } from "@/components/feature-board/shared/BoardBreadcrumbs.composable";
+import { useSharedBoardPageInformation } from "@/components/feature-board/shared/BoardPageInformation.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import Theme from "@/theme.config";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
@@ -17,12 +15,11 @@ export default defineComponent({
 	name: "ColumnBoardPage",
 	components: { Board, DefaultWireframe },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
 		const route = useRoute();
 		const boardId = route.params?.id;
-		const { breadcrumbs } = useSharedBoardBreadcrumbs();
+		const { breadcrumbs, pageTitle } = useSharedBoardPageInformation();
 
-		useTitle(`${i18n.t("components.board")} -  ${Theme.name}`);
+		useTitle(pageTitle);
 
 		return {
 			breadcrumbs,
