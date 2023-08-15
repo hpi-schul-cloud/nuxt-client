@@ -255,11 +255,11 @@ export const useBoardState = (id: string) => {
 		await fetchBoard(board?.value.id);
 	};
 
-	onMounted(() =>
+	onMounted(() => {
 		fetchBoard(id).then(() => ({
 			// do nothing but celebrating sonarcloud
-		}))
-	);
+		}));
+	});
 
 	return {
 		board,

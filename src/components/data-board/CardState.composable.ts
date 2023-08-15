@@ -177,11 +177,11 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 	};
 
-	onMounted(() =>
+	onMounted(() => {
 		fetchCard(id).then(() => ({
 			// do nothing but celebrating sonarcloud
-		}))
-	);
+		}));
+	});
 
 	return {
 		addElement,
