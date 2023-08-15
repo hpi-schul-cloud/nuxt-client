@@ -837,7 +837,7 @@
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
 	"pages.rooms.tools.outdated": "Herramienta obsoleta",
 	"pages.rooms.tabLabel.toolsOld": "Herramientas",
-	"pages.rooms.tabLabel.tools": "Herramientas (nuevo)",
+	"pages.rooms.tabLabel.tools": "Herramientas",
 	"pages.rooms.tabLabel.groups": "Grupos",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",

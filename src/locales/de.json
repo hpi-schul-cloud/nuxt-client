@@ -843,7 +843,7 @@
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
 	"pages.rooms.headerSection.archived": "Archiv",
 	"pages.rooms.tabLabel.toolsOld": "Tools",
-	"pages.rooms.tabLabel.tools": "Tools (neu)",
+	"pages.rooms.tabLabel.tools": "Tools",
 	"pages.rooms.tabLabel.groups": "Gruppen",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",

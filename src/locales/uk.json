@@ -879,7 +879,7 @@
 	"pages.rooms.tools.logo": "Інструмент-логотип",
 	"pages.rooms.tools.outdated": "Інструмент застарів",
 	"pages.rooms.tabLabel.toolsOld": "Інструмент",
-	"pages.rooms.tabLabel.tools": "Інструмент (новий)",
+	"pages.rooms.tabLabel.tools": "Інструмент",
 	"pages.rooms.tabLabel.groups": "Групи",
 	"pages.rooms.tools.emptyState": "У цьому курсі ще немає інструментів.",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент \"{toolName}\" застарів",
