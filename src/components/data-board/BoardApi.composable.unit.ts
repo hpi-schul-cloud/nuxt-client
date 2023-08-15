@@ -310,4 +310,19 @@ describe("BoardApi.composable", () => {
 			);
 		});
 	});
+
+	describe("getContextInfo", () => {
+		it("should call getContextInfoCall api", async () => {
+			const { getContextInfo } = useBoardApi();
+			const PAYLOAD = {
+				boardId: "myid123",
+			};
+
+			await getContextInfo(PAYLOAD.boardId);
+
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
+				PAYLOAD.boardId
+			);
+		});
+	});
 });
