@@ -1,6 +1,6 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import BoardMenuAction from "@boardShared/BoardMenuAction.vue";
+import { BoardMenuAction } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 

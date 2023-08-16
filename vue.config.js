@@ -24,6 +24,9 @@ module.exports = defineConfig({
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
+				"@feature-board-submission-element": getDir(
+					"src/components/feature-board-submission-element"
+				),
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),

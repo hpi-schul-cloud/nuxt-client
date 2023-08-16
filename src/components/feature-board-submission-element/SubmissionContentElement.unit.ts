@@ -2,17 +2,31 @@ import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupDeleteBoardNodeConfirmationMock } from "@@/tests/test-utils/composable-mocks/deleteBoardNodeConfirmationMock";
-import { AnyContentElement } from "@boardTypes/ContentElement";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import Vue, { nextTick } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
+import { createMock } from "@golevelup/ts-jest";
 
-jest.mock("@boardShared/InlineEditInteractionHandler.composable");
-jest.mock("@boardShared/DeleteBoardNodeConfirmation.composable");
+jest.mock("@data-board", () => {
+	return {
+		useBoardFocusHandler: jest.fn(),
+		useContentElementState: jest.fn(() => ({ modelValue: {} })),
+	};
+});
+jest.mock("@feature-board");
+
+jest.mock("@ui-confirmation-dialog");
+const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
+mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+const useDeleteConfirmationDialogMock = jest.mocked(
+	useDeleteConfirmationDialog
+);
+useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 describe("SubmissionContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -23,8 +37,6 @@ describe("SubmissionContentElement", () => {
 		isLastElement: boolean;
 		hasMultipleElements: boolean;
 	}) => {
-		const deleteElementMock = jest.fn();
-
 		const wrapper = shallowMount(
 			SubmissionContentElement as MountOptions<Vue>,
 			{
@@ -33,11 +45,11 @@ describe("SubmissionContentElement", () => {
 					[I18N_KEY.valueOf()]: { t: (key: string) => key },
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
-				propsData: { ...props, deleteElement: deleteElementMock },
+				propsData: { ...props },
 			}
 		);
 
-		return { wrapper, deleteElementMock };
+		return { wrapper };
 	};
 
 	describe("when component is in view mode", () => {
@@ -48,12 +60,7 @@ describe("SubmissionContentElement", () => {
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
 
-			const askDeleteBoardNodeConfirmationMock = jest.fn();
-			setupDeleteBoardNodeConfirmationMock({
-				askDeleteBoardNodeConfirmationMock,
-			});
-
-			const { wrapper, deleteElementMock } = getWrapper({
+			const { wrapper } = getWrapper({
 				element,
 				isEditMode: false,
 				isFirstElement: false,
@@ -65,26 +72,21 @@ describe("SubmissionContentElement", () => {
 				element,
 				wrapper,
 				submissionContainerElementResponse,
-				deleteElementMock,
 			};
 		};
 
 		it("should be found in dom", () => {
 			const { wrapper } = setup();
 
-			const submissionContentElement = wrapper.findComponent(
-				SubmissionContentElement
-			);
-			expect(submissionContentElement.exists()).toBe(true);
+			const component = wrapper.findComponent(SubmissionContentElement);
+			expect(component.exists()).toBe(true);
 		});
 
 		it("should render SubmissionContentElementDisplay component", async () => {
 			const { wrapper } = setup();
 
-			const submissionContentElementDisplay = wrapper.findComponent(
-				SubmissionContentElementDisplay
-			);
-			expect(submissionContentElementDisplay.exists()).toBe(true);
+			const component = wrapper.findComponent(SubmissionContentElementDisplay);
+			expect(component.exists()).toBe(true);
 		});
 
 		it("should hand over dueDate to SubmissionContentElementDisplay", async () => {
@@ -106,14 +108,7 @@ describe("SubmissionContentElement", () => {
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
 
-			const askDeleteBoardNodeConfirmationMock = jest
-				.fn()
-				.mockReturnValueOnce(true);
-			setupDeleteBoardNodeConfirmationMock({
-				askDeleteBoardNodeConfirmationMock,
-			});
-
-			const { wrapper, deleteElementMock } = getWrapper({
+			const { wrapper } = getWrapper({
 				element,
 				isEditMode: true,
 				isFirstElement: false,
@@ -125,7 +120,6 @@ describe("SubmissionContentElement", () => {
 				element,
 				wrapper,
 				submissionContainerElementResponse,
-				deleteElementMock,
 			};
 		};
 
@@ -139,10 +133,8 @@ describe("SubmissionContentElement", () => {
 		it("should render SubmissionContentElementEdit component", async () => {
 			const { wrapper } = setup();
 
-			const submissionContentElementEdit = wrapper.findComponent(
-				SubmissionContentElementEdit
-			);
-			expect(submissionContentElementEdit.exists()).toBe(true);
+			const component = wrapper.findComponent(SubmissionContentElementEdit);
+			expect(component.exists()).toBe(true);
 		});
 
 		it("should hand over isFirstElement property to SubmissionContentElementEdit", async () => {
@@ -188,10 +180,8 @@ describe("SubmissionContentElement", () => {
 		it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
 			const { wrapper } = setup();
 
-			const submissionContentElementEdit = wrapper.findComponent(
-				SubmissionContentElementEdit
-			);
-			submissionContentElementEdit.vm.$emit("move-down:element");
+			const component = wrapper.findComponent(SubmissionContentElementEdit);
+			component.vm.$emit("move-down:element");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["move-down:edit"]).toBeDefined();
@@ -200,29 +190,26 @@ describe("SubmissionContentElement", () => {
 		it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
 			const { wrapper } = setup();
 
-			const submissionContentElementEdit = wrapper.findComponent(
-				SubmissionContentElementEdit
-			);
-			submissionContentElementEdit.vm.$emit("move-up:element");
+			const component = wrapper.findComponent(SubmissionContentElementEdit);
+			component.vm.$emit("move-up:element");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["move-up:edit"]).toBeDefined();
 		});
 
-		it("should call deleteElement function when it receives delete:element event from child", async () => {
-			const { wrapper, element, deleteElementMock } = setup();
+		it("should pass delete:element event from child to parent", async () => {
+			const { wrapper } = setup();
 
-			const submissionContentElementEdit = wrapper.findComponent(
-				SubmissionContentElementEdit
-			);
-			submissionContentElementEdit.vm.$emit("delete:element");
+			await nextTick();
+			await nextTick();
 
-			await wrapper.vm.$nextTick();
+			const child = wrapper.findComponent(SubmissionContentElementEdit);
+			child.vm.$emit("delete:element");
 
-			expect(deleteElementMock).toHaveBeenCalledTimes(1);
-			expect(deleteElementMock).toHaveBeenCalledWith(element.id);
+			await nextTick();
+			await nextTick();
 
-			expect(submissionContentElementEdit.exists()).toBe(true);
+			expect(wrapper.emitted("delete:element")).toHaveLength(1);
 		});
 
 		// currently blocked as v-card blocks correct usage of keydown event (works when its a div)

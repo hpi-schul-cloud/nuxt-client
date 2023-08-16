@@ -27,10 +27,8 @@ describe("SubmissionContentElementDisplay", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const submissionContentElement = wrapper.findComponent(
-			SubmissionContentElementDisplay
-		);
-		expect(submissionContentElement.exists()).toBe(true);
+		const component = wrapper.findComponent(SubmissionContentElementDisplay);
+		expect(component.exists()).toBe(true);
 	});
 
 	it("should display icon", async () => {

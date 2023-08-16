@@ -46,8 +46,7 @@ import {
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
 
 export default defineComponent({
 	name: "SubmissionContentElementMenu",

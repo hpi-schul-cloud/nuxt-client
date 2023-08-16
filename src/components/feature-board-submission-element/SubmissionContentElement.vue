@@ -1,41 +1,43 @@
 <template>
-	<v-card
-		class="mb-4"
-		data-testid="board-submission-element"
-		dense
-		elevation="0"
-		outlined
-		ref="submissionContentElement"
-		:ripple="false"
-		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
-	>
-		<div>
-			<SubmissionContentElementDisplay
-				v-if="!isEditMode"
-				:dueDate="element.content.dueDate"
-			/>
-			<SubmissionContentElementEdit
-				v-if="isEditMode"
-				:dueDate="element.content.dueDate"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@delete:element="onDeleteElement"
-			/>
-		</div>
-	</v-card>
+	<div>
+		<v-card
+			class="mb-4"
+			data-testid="board-submission-element"
+			dense
+			elevation="0"
+			:outlined="isOutlined"
+			ref="submissionContentElement"
+			:ripple="false"
+			tabindex="0"
+			@keydown.up.down="onKeydownArrow"
+		>
+			<div>
+				<SubmissionContentElementDisplay
+					v-if="!isEditMode"
+					:dueDate="element.content.dueDate"
+				/>
+				<SubmissionContentElementEdit
+					v-if="isEditMode"
+					:dueDate="element.content.dueDate"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+		</v-card>
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
+import { useBoardFocusHandler } from "@data-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
@@ -53,18 +55,23 @@ export default defineComponent({
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
-		deleteElement: {
-			type: Function as PropType<(elementId: string) => Promise<void>>,
-			required: true,
-		},
 	},
-	emits: ["move-down:edit", "move-up:edit", "move-keyboard:edit"],
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
 
-		const { askDeleteBoardNodeConfirmation } = useDeleteBoardNodeConfirmation();
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+		const isOutlined = computed(() => {
+			return props.isEditMode === true;
+		});
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -82,21 +89,18 @@ export default defineComponent({
 		};
 
 		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
+			const shouldDelete = await askDeleteConfirmation(
 				i18n.t("components.cardElement.submissionElement").toString(),
 				"boardElement"
 			);
 
 			if (shouldDelete) {
-				await deleteSubmissionElement();
+				emit("delete:element", props.element.id);
 			}
 		};
 
-		const deleteSubmissionElement = () => {
-			return props.deleteElement(props.element.id);
-		};
-
 		return {
+			isOutlined,
 			submissionContentElement,
 			onDeleteElement,
 			onKeydownArrow,

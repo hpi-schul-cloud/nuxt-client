@@ -29,7 +29,7 @@
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
-				:deleteElement="deleteElement"
+				@delete:element="onDeleteElement"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
@@ -46,6 +46,7 @@ import {
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { FileContentElement } from "@feature-board-file-element";
+import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { PropType, computed, defineComponent } from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
