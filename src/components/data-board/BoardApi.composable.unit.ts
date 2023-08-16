@@ -10,6 +10,7 @@ let boardApi: DeepMocked<serverApi.BoardApiInterface>;
 let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
 let cardApi: DeepMocked<serverApi.BoardCardApiInterface>;
 let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
+let roomsApi: DeepMocked<serverApi.RoomsApiInterface>;
 
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
@@ -17,11 +18,13 @@ describe("BoardApi.composable", () => {
 		columnApi = createMock<serverApi.BoardColumnApiInterface>();
 		cardApi = createMock<serverApi.BoardCardApiInterface>();
 		elementApi = createMock<serverApi.BoardElementApiInterface>();
+		roomsApi = createMock<serverApi.RoomsApiInterface>();
 
 		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		jest.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
 		jest.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
 		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
+		jest.spyOn(serverApi, "RoomsApiFactory").mockReturnValue(roomsApi);
 	});
 
 	afterEach(() => {
@@ -312,7 +315,7 @@ describe("BoardApi.composable", () => {
 	});
 
 	describe("getContextInfo", () => {
-		it("should call getContextInfoCall api", async () => {
+		it("should call boardControllerGetBoardContext api", async () => {
 			const { getContextInfo } = useBoardApi();
 			const PAYLOAD = {
 				boardId: "myid123",
@@ -322,6 +325,32 @@ describe("BoardApi.composable", () => {
 
 			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
 				PAYLOAD.boardId
+			);
+		});
+
+		it("should call roomsControllerGetRoomBoard api", async () => {
+			const { getContextInfo } = useBoardApi();
+
+			const FAKE_BOARD_ID = "MY_BOARD_ID123";
+			const FAKE_RESPONSE = {
+				status: 200,
+				data: {
+					id: "abc123",
+				},
+			};
+
+			boardApi.boardControllerGetBoardContext = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_RESPONSE);
+
+			await getContextInfo(FAKE_BOARD_ID);
+
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
+				FAKE_BOARD_ID
+			);
+
+			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
+				FAKE_RESPONSE.data.id
 			);
 		});
 	});
