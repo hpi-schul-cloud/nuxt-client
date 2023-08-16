@@ -45,7 +45,7 @@ export default defineComponent({
 			autofocus.value = true;
 		});
 
-		const onDeleteElement = async (): Promise<void> => {
+		const onDeleteElement = () => {
 			emit("delete:element", props.element.id);
 		};
 
