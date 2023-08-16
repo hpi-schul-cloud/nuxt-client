@@ -42,7 +42,6 @@ export default defineComponent({
 			useSharedLastCreatedElement();
 
 		watch(lastCreatedElementId, (newValue) => {
-			console.log("watcher");
 			if (newValue !== undefined && newValue === props.elementId) {
 				isFilePickerOpen.value = true;
 				resetLastCreatedElementId();
