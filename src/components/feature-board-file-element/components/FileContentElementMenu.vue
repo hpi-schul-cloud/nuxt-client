@@ -25,18 +25,6 @@
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
 		<BoardMenuAction
-			v-if="isDownloadAllowed"
-			data-testid="board-file-element-edit-menu-download"
-			@click="onDownload"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiTrayArrowDown }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.download") }}
-		</BoardMenuAction>
-		<BoardMenuAction
 			data-testid="board-file-element-edit-menu-delete"
 			@click="onDelete"
 		>
@@ -51,7 +39,6 @@
 </template>
 
 <script lang="ts">
-import { downloadFile } from "@/utils/fileHelper";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import {
 	mdiAlertCircle,
@@ -59,7 +46,6 @@ import {
 	mdiArrowCollapseUp,
 	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
-	mdiTrayArrowDown,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 
@@ -79,9 +65,6 @@ export default defineComponent({
 		const onDelete = () => {
 			emit("delete:element");
 		};
-		const onDownload = async () => {
-			await downloadFile(props.url, props.fileName);
-		};
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -94,9 +77,7 @@ export default defineComponent({
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
-			mdiTrayArrowDown,
 			onDelete,
-			onDownload,
 			onMoveElementDown,
 			onMoveElementUp,
 		};
