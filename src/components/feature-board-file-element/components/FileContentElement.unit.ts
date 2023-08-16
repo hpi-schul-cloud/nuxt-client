@@ -100,15 +100,17 @@ describe("FileContentElement", () => {
 				it("should be found in dom", () => {
 					const { wrapper } = setup();
 
-					const component = wrapper.findComponent(FileContentElement);
-					expect(component.exists()).toBe(true);
+					const fileContentElement = wrapper.findComponent(FileContentElement);
+					expect(fileContentElement.exists()).toBe(true);
 				});
 
 				it("should render FileContentElementDisplay component", async () => {
 					const { wrapper } = setup();
 
-					const component = wrapper.findComponent(FileContentElementDisplay);
-					expect(component.exists()).toBe(true);
+					const fileContentElementDisplay = wrapper.findComponent(
+						FileContentElementDisplay
+					);
+					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 			});
 
