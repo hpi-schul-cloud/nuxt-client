@@ -8,6 +8,10 @@ import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { initializeAxios } from "@/utils/api";
 
+jest.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 initializeAxios({
 	get: async () => {
 		return { data: [] };

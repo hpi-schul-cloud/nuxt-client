@@ -16,7 +16,6 @@ export * from "./fileElementResponseFactory";
 export * from "./filerecordResponse.factory";
 export * from "./schoolExternalToolFactory";
 export * from "./singleColumnBoardResponseFactory";
-export * from "./taskCardResponseFactory";
 export * from "./taskResponseFactory";
 export * from "./timestampsResponseFactory";
 export * from "./toolConfigurationTemplateFactory";

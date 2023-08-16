@@ -3,6 +3,11 @@ import { shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Route } from "vue-router";
 import { I18N_KEY } from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("@pages/ColumnBoard.page.vue", () => {
 	const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
@@ -16,7 +21,7 @@ describe("@pages/ColumnBoard.page.vue", () => {
 		return shallowMount(ColumnBoardPage, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 			},
 			mocks: { $router, $route },
 		});

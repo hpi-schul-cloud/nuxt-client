@@ -25,6 +25,9 @@
 import { computed, defineComponent } from "vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useTitle } from "@vueuse/core";
+import { useI18n } from "@/composables/i18n.composable";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -38,6 +41,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("error.generic"));
+		useTitle(pageTitle);
+
 		const permissionErrorStatusCodes: HttpStatusCode[] = [
 			HttpStatusCode.Unauthorized,
 			HttpStatusCode.Forbidden,

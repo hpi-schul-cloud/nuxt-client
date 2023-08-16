@@ -29,6 +29,7 @@ import FormCreateUser from "@/components/organisms/FormCreateUser";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { notifierModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -85,9 +86,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.administration.teachers.new.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.new.title")
+		);
 	},
 };
 </script>
