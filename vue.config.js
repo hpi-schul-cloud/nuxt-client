@@ -9,6 +9,8 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 const replacements = generateAliases(__dirname);
 
+const getDir = (subPath) => path.resolve(__dirname, subPath);
+
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
@@ -30,7 +32,14 @@ module.exports = defineConfig({
 					__dirname,
 					"src/components/feature-board/types"
 				),
+				"@feature-common-editor": getDir(
+					"src/components/feature-common-editor"
+				),
+				"@feature-common-render-html": getDir(
+					"src/components/feature-common-render-html"
+				),
 			},
+			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
 	},
