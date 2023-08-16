@@ -17,11 +17,15 @@
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
 		"paths": {
-			"@/*": ["src/*"],
-			"@@/*": ["*"],
+			"@feature-common-editor": ["src/components/feature-common-editor"],
+			"@feature-common-render-html": [
+				"src/components/feature-common-render-html"
+			],
 			"@boardShared/*": ["src/components/feature-board/shared/*"],
 			"@boardState/*": ["src/components/feature-board/state/*"],
 			"@boardTypes/*": ["src/components/feature-board/types/*"],
+			"@/*": ["src/*"],
+			"@@/*": ["*"]
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},
@@ -32,7 +36,7 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules"],
+	"exclude": ["node_modules", "./src/components/base/_globals.js"],
 	"vueCompilerOptions": {
 		"target": 2.7
 	}
