@@ -29,10 +29,10 @@
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
-				@delete:element="onDeleteElement"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
+				@delete:element="onDeleteElement"
 			/>
 		</template>
 	</VCardText>
