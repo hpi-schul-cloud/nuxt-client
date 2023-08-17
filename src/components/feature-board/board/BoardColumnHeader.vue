@@ -146,4 +146,3 @@ export default defineComponent({
 	outline: none;
 }
 </style>
-@data-board"; @data-board"; @data-board";
