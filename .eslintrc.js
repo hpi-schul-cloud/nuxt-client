@@ -35,7 +35,73 @@ module.exports = {
 		"vue/no-v-html": "error",
 		"no-prototype-builtins": "error",
 		"no-empty": "error",
+		"@typescript-eslint/no-restricted-imports": [
+			"warn",
+			{
+				patterns: [
+					{
+						group: [
+							"@data-*/*",
+							"@feature-*/*",
+							"@page-*/*",
+							"@ui-*/*",
+							"@util-*/*",
+						],
+						message: "Do not deep import into a module",
+					},
+					{
+						group: ["@/components/data-*", "*/../data-*", "../**/data-*"],
+						message:
+							"Data-Modules have to be imported using the pattern '@data-<name>'",
+					},
+					{
+						group: [
+							"@/components/feature-*",
+							"*/../feature-*",
+							"../**/feature-*",
+						],
+						message:
+							"Feature-Modules have to be imported using the pattern '@feature-<name>'",
+					},
+					{
+						group: ["@components/page-*", "*/../page-*", "../**/page-*/*"],
+						message:
+							"page-Modules have to be imported using the pattern '@page-<name>'",
+					},
+					{
+						group: ["@components/ui-*", "*/../ui-*", "../**/ui-*/*"],
+						message:
+							"Ui-Modules have to be imported using the pattern '@ui-<name>'",
+					},
+					{
+						group: ["@components/util-*", "*/../util-*", "../**/util-*/*"],
+						message:
+							"Util-Modules have to be imported using the pattern '@util-<name>'",
+					},
+				],
+			},
+		],
+		// "import/no-restricted-paths": [
+		// 	"warn",
+		// 	{
+		// 		zones: [
+		// 			{
+		// 				from: "@ui-*",
+		// 				target: "@feature-*",
+		// 			},
+		// 			{
+		// 				from: "@util-*",
+		// 				target: "@feature-*",
+		// 			},
+		// 		],
+		// 	},
+		// ],
 	},
+	// settings: {
+	// 	"import/parsers": {
+	// 		"@typescript-eslint/parser": [".ts", ".tsx"],
+	// 	},
+	// },
 	overrides: [
 		{
 			files: ["**/*.unit.{j,t}s?(x)"],
