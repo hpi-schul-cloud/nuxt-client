@@ -23,7 +23,7 @@ class ResizeObserver {
 	}
 }
 
-describe("@/components/editor/CKEditor", () => {
+describe("CKEditor", () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let wrapper: any;
 
