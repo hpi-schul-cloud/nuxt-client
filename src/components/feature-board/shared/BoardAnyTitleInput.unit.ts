@@ -2,15 +2,15 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { useBoardPermissions } from "./BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
-jest.mock("./BoardPermissions.composable");
+jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const defaultProps = {
 	value: "props value",

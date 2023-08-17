@@ -303,7 +303,6 @@
 	"components.molecules.VCustomChipTimeRemaining.hintMinShort": "",
 	"components.molecules.VCustomChipTimeRemaining.hintMinutes": "",
 	"components.cardElement.deleteElement": "Видалити елемент",
-	"components.cardElement.deletionModal.confirmation": "{type} буде видалена. Ви впевнені, що хочете видалити?",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.fileElement.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.richTextElement": "Текстовий елемент",
@@ -312,7 +311,6 @@
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
-	"components.cardHost.deletionModal.confirmation": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
 	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
 	"components.board.action.download": "Завантажити",
@@ -991,5 +989,7 @@
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.noPermission": "Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
-	"pages.videoConference.action.refresh": "оновити статус"
+	"pages.videoConference.action.refresh": "оновити статус",
+	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo"
 }
