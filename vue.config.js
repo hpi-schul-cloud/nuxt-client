@@ -28,6 +28,9 @@ module.exports = defineConfig({
 					"src/components/feature-board-text-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-common-date-time-picker": getDir(
+					"src/components/feature-common-date-time-picker"
+				),
 				"@feature-common-editor": getDir(
 					"src/components/feature-common-editor"
 				),
