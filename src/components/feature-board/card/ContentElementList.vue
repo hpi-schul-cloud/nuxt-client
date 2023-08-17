@@ -46,8 +46,8 @@ import {
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { FileContentElement } from "@feature-board-file-element";
-import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { SubmissionContentElement } from "@feature-board-submission-element";
 import { PropType, computed, defineComponent } from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";

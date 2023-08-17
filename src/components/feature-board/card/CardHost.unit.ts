@@ -16,7 +16,6 @@ import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 } from "@data-board";
-import { describe, expect, it, jest } from "@jest/globals";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { computed, ref } from "vue";
 import ContentElementList from "./ContentElementList.vue";

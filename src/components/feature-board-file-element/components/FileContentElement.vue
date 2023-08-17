@@ -1,64 +1,62 @@
 <template>
-	<div>
-		<v-card
-			class="mb-4"
-			data-testid="board-file-element"
-			dense
-			elevation="0"
-			:outlined="isOutlined"
-			ref="fileContentElement"
-			:ripple="false"
-			tabindex="0"
-			@keydown.up.down="onKeydownArrow"
-		>
-			<div v-if="isImage">
-				<ImageFileDisplay
-					:fileName="fileName"
-					:fileSize="fileSize"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-					:url="fileUrl"
-					:isEditMode="isEditMode"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<div v-else>
-				<FileContentElementInit
-					v-if="isEditMode && fileRecord === undefined"
-					:fileName="fileName"
-					:elementId="element.id"
-					@upload:file="onUploadFile"
-				/>
-				<FileContentElementDisplay
-					v-if="!isEditMode"
-					:fileName="fileName"
-					:fileSize="fileSize"
-					:url="url"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-				/>
-				<FileContentElementEdit
-					v-if="isEditMode && fileRecord"
-					:fileName="fileName"
-					:fileSize="fileSize"
-					:elementId="element.id"
-					:isDownloadAllowed="!isBlockedByVirusScan"
-					:url="url"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					:needsFileUpload="needsFileUpload"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<FileContentElementAlert v-if="isBlockedByVirusScan" />
-		</v-card>
-	</div>
+	<v-card
+		class="mb-4"
+		data-testid="board-file-element"
+		dense
+		elevation="0"
+		:outlined="isOutlined"
+		ref="fileContentElement"
+		:ripple="false"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
+	>
+		<div v-if="isImage">
+			<ImageFileDisplay
+				:fileName="fileName"
+				:fileSize="fileSize"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+				:url="fileUrl"
+				:isEditMode="isEditMode"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@delete:element="onDeleteElement"
+			/>
+		</div>
+		<div v-else>
+			<FileContentElementInit
+				v-if="isEditMode && fileRecord === undefined"
+				:fileName="fileName"
+				:elementId="element.id"
+				@upload:file="onUploadFile"
+			/>
+			<FileContentElementDisplay
+				v-if="!isEditMode"
+				:fileName="fileName"
+				:fileSize="fileSize"
+				:url="url"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+			/>
+			<FileContentElementEdit
+				v-if="isEditMode && fileRecord"
+				:fileName="fileName"
+				:fileSize="fileSize"
+				:elementId="element.id"
+				:isDownloadAllowed="!isBlockedByVirusScan"
+				:url="url"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				:needsFileUpload="needsFileUpload"
+				@move-down:element="onMoveFileEditDown"
+				@move-up:element="onMoveFileEditUp"
+				@delete:element="onDeleteElement"
+			/>
+		</div>
+		<FileContentElementAlert v-if="isBlockedByVirusScan" />
+	</v-card>
 </template>
 
 <script lang="ts">

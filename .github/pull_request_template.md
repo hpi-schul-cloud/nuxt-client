@@ -76,5 +76,6 @@ This point should includes following information:
 
 - [ ] QA: In addition to review, the code has been manually tested (if manual testing is possible)
 - [ ] PO: Any deviation from requirements was agreed with Product-Owner / ticket author / support-team
+- [ ] DEV: Every new component is implemented having accessibility in mind (e.g. aria-label, role property)
 
 > Notice: Please keep this Pull-Request as a Draft (or add WIP label), until it is ready to be reviewed

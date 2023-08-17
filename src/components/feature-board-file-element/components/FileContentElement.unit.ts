@@ -107,8 +107,10 @@ describe("FileContentElement", () => {
 				it("should render FileContentElementDisplay component", async () => {
 					const { wrapper } = setup();
 
-					const component = wrapper.findComponent(FileContentElementDisplay);
-					expect(component.exists()).toBe(true);
+					const fileContentElementDisplay = wrapper.findComponent(
+						FileContentElementDisplay
+					);
+					expect(fileContentElementDisplay.exists()).toBe(true);
 				});
 			});
 
