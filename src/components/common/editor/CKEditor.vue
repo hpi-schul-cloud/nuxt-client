@@ -60,6 +60,14 @@ export default defineComponent({
 		const language = i18n.locale;
 		const charCount = ref(0);
 
+		watch(
+			() => props.value,
+			() => {
+				content.value = props.value;
+				console.log(props.value);
+			}
+		);
+
 		const toolbarItems = {
 			simple: [
 				"heading",
@@ -125,13 +133,6 @@ export default defineComponent({
 			"TableToolbar",
 			"WordCount",
 		];
-
-		watch(
-			() => props.value,
-			(newValue) => {
-				content.value = newValue;
-			}
-		);
 
 		const config = computed(() => {
 			return {

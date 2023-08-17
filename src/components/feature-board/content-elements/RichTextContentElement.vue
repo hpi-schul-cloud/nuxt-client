@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, watch } from "vue";
 import { useContentElementState } from "../state/ContentElementState.composable";
 import { RichTextElementResponse } from "@/serverApi/v3";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
@@ -45,9 +45,14 @@ export default defineComponent({
 	setup(props) {
 		const { modelValue } = useContentElementState(props);
 		const autofocus = ref(false);
-		useBoardFocusHandler(props.element.id, ref(null), () => {
-			autofocus.value = true;
-		});
+		watch(
+			() => props.element,
+			() => {
+				useBoardFocusHandler(props.element.id, ref(null), () => {
+					autofocus.value = true;
+				});
+			}
+		);
 
 		const onDeleteElement = async (): Promise<void> => {
 			await props.deleteElement(props.element.id);

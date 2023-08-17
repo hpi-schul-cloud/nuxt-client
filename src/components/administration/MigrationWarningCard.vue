@@ -72,9 +72,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const type: Ref<MigrationWarningCardTypeEnum> = ref(
-			props.value as MigrationWarningCardTypeEnum
-		);
 		const isConfirmed: Ref<boolean> = ref(false);
 
 		let title =
@@ -85,10 +82,10 @@ export default defineComponent({
 			"components.administration.adminMigrationSection.startWarningCard.agree";
 		let disagree =
 			"components.administration.adminMigrationSection.startWarningCard.disagree";
-		let eventName = "start";
+		let eventName: "start" | "end" = MigrationWarningCardTypeEnum.START;
 		let check: string | undefined;
 
-		if (type.value === MigrationWarningCardTypeEnum.END) {
+		if (props.value === MigrationWarningCardTypeEnum.END) {
 			title =
 				"components.administration.adminMigrationSection.endWarningCard.title";
 			text =
@@ -99,7 +96,7 @@ export default defineComponent({
 				"components.administration.adminMigrationSection.endWarningCard.disagree";
 			check =
 				"components.administration.adminMigrationSection.endWarningCard.check";
-			eventName = "end";
+			eventName = MigrationWarningCardTypeEnum.END;
 		}
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
