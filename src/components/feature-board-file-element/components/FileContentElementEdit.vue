@@ -35,20 +35,23 @@
 				@delete:element="onDeleteElement"
 			/>
 		</v-list-item>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementFooter
+			:fileSize="fileSize"
+			:fileName="fileName"
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
 import { mdiFileDocumentOutline, mdiClose } from "@mdi/js";
 import { defineComponent, ref, watch } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 import { useSharedLastCreatedElement } from "@util-board";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
-	components: { FileContentElementChips, FileContentElementMenu },
+	components: { FileContentElementMenu, FileContentElementFooter },
 	props: {
 		fileName: { type: String, required: true },
 		fileSize: { type: Number, required: true },
