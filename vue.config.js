@@ -28,6 +28,12 @@ module.exports = defineConfig({
 					"src/components/feature-board-text-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-common-editor": getDir(
+					"src/components/feature-common-editor"
+				),
+				"@feature-common-render-html": getDir(
+					"src/components/feature-common-render-html"
+				),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
