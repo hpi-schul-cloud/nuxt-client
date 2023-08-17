@@ -5,7 +5,7 @@
 <script>
 import { defineComponent, onMounted } from "vue";
 import renderMathInElement from "katex/dist/contrib/auto-render.js";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-common-render-html";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",

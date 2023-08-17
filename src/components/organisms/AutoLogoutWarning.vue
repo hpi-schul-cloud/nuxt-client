@@ -23,7 +23,7 @@
 
 <script>
 import { autoLogoutModule, notifierModule } from "@/store";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-common-render-html";
 
 const toast = {
 	error401: -1,

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-common-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import {
