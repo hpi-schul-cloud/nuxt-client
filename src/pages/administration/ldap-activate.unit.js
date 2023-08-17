@@ -265,7 +265,7 @@ describe("ldap/activate", () => {
 					short_name,
 				},
 				$router: { push: routerPushStub },
-				$route: { query: {}},
+				$route: { query: {} },
 			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
