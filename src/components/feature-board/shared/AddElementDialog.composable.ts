@@ -1,10 +1,6 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	mdiClipboardCheckOutline,
-	mdiFormatText,
-	mdiTrayArrowUp,
-} from "@mdi/js";
+import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { useSharedLastCreatedElement } from "@util-board";
 
@@ -38,7 +34,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			testId: "create-element-file",
 		},
 		{
-			icon: mdiClipboardCheckOutline,
+			icon: mdiLightbulbOnOutline,
 			label:
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
