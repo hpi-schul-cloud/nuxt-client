@@ -25,6 +25,9 @@
 				"src/components/feature-board-text-element"
 			],
 			"@feature-board": ["src/components/feature-board"],
+			"@feature-common-date-time-picker": [
+				"src/components/feature-common-date-time-picker"
+			],
 			"@feature-common-editor": ["src/components/feature-common-editor"],
 			"@feature-common-render-html": [
 				"src/components/feature-common-render-html"
