@@ -106,7 +106,7 @@ describe("SubmissionContentElementEdit", () => {
 		expect(hasMultipleElements).toBe(hasMultipleElementsProp);
 	});
 
-	it("should forward delete:element from FileContentElementMenu", () => {
+	it("should forward delete:element from SubmissionContentElementMenu", () => {
 		const { wrapper } = setup();
 		const menu = wrapper.findComponent(SubmissionContentElementMenu);
 

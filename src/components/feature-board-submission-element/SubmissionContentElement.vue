@@ -21,8 +21,8 @@
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
+				@move-down:element="onMoveSubmissionEditDown"
+				@move-up:element="onMoveSubmissionEditUp"
 				@delete:element="onDeleteElement"
 			/>
 		</div>
@@ -78,11 +78,11 @@ export default defineComponent({
 			}
 		};
 
-		const onMoveFileEditDown = () => {
+		const onMoveSubmissionEditDown = () => {
 			emit("move-down:edit");
 		};
 
-		const onMoveFileEditUp = () => {
+		const onMoveSubmissionEditUp = () => {
 			emit("move-up:edit");
 		};
 
@@ -102,8 +102,8 @@ export default defineComponent({
 			submissionContentElement,
 			onDeleteElement,
 			onKeydownArrow,
-			onMoveFileEditDown,
-			onMoveFileEditUp,
+			onMoveSubmissionEditDown,
+			onMoveSubmissionEditUp,
 		};
 	},
 });
