@@ -49,16 +49,16 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
+import { useBoardPermissions } from "@data-board";
+import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
 	DragAndDropKey,
 	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -225,3 +225,4 @@ export default defineComponent({
 	background: var(--v-secondary-base) !important;
 }
 </style>
+@data-board";

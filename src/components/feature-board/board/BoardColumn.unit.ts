@@ -7,16 +7,16 @@ import {
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 describe("BoardColumn", () => {

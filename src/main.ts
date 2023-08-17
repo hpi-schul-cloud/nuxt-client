@@ -23,7 +23,6 @@ import {
 	shareModule,
 	statusAlertsModule,
 	systemsModule,
-	taskCardModule,
 	tasksModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
@@ -96,9 +95,9 @@ import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 
 (async () => {
@@ -162,7 +161,6 @@ import {
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			systemsModule,
-			taskCardModule,
 			tasksModule,
 			userLoginMigrationModule,
 			[I18N_KEY.valueOf()]: i18n,

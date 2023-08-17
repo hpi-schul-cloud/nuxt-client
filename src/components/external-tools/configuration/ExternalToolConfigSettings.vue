@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ $t("pages.tool.settings") }}
-		</h2>
 		<div v-for="(param, index) in template.parameters" :key="param.name">
 			<external-tool-config-parameter
 				:parameter="template.parameters[index]"

@@ -11,7 +11,7 @@
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@change="fillParametersWithDefaultValues"
+			@change="onChangeSelection"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -25,12 +25,21 @@
 				<external-tool-selection-row :item="item" />
 			</template>
 		</v-select>
-		<template v-if="selectedTemplate && selectedTemplate.parameters.length > 0">
-			<external-tool-config-settings
-				:template="selectedTemplate"
-				v-model="parameterConfiguration"
-			/>
-		</template>
+		<h2
+			v-if="
+				selectedTemplate &&
+				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
+			"
+			class="text-h4 mb-10"
+		>
+			{{ $t("pages.tool.settings") }}
+		</h2>
+		<slot name="aboveParameters" :selectedTemplate="selectedTemplate"></slot>
+		<external-tool-config-settings
+			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
+			:template="selectedTemplate"
+			v-model="parameterConfiguration"
+		/>
 		<v-spacer class="mt-10"></v-spacer>
 		<v-alert v-if="error && error.message" light prominent text type="error">
 			{{ t(getBusinessErrorTranslationKey(error)) }}
@@ -77,6 +86,7 @@ import {
 	Ref,
 	ref,
 	toRef,
+	useSlots,
 	watch,
 } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
@@ -86,7 +96,7 @@ import { ContextExternalTool } from "@/store/external-tool/context-external-tool
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
 export default defineComponent({
-	emits: ["cancel", "save"],
+	emits: ["cancel", "save", "change"],
 	components: {
 		ExternalToolConfigSettings,
 		ExternalToolSelectionRow,
@@ -109,6 +119,8 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
+		const slots = useSlots();
+
 		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
 		const configurationTemplates: Ref<ExternalToolConfigurationTemplate[]> =
@@ -120,6 +132,10 @@ export default defineComponent({
 
 		const isInEditMode: ComputedRef<boolean> = computed(
 			() => !!loadedConfiguration.value
+		);
+
+		const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
+			() => slots.aboveParameters?.({ selectedTemplate }) === undefined
 		);
 
 		const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
@@ -137,6 +153,12 @@ export default defineComponent({
 
 		const onSave = async () => {
 			emit("save", selectedTemplate.value, parameterConfiguration.value);
+		};
+
+		const onChangeSelection = async () => {
+			fillParametersWithDefaultValues();
+
+			emit("change", selectedTemplate.value);
 		};
 
 		const populateEditMode = (configuration: ConfigurationTypes) => {
@@ -191,9 +213,11 @@ export default defineComponent({
 			selectedTemplate,
 			onCancel,
 			onSave,
+			onChangeSelection,
 			isInEditMode,
 			fillParametersWithDefaultValues,
 			parameterConfiguration,
+			isAboveParametersSlotEmpty,
 		};
 	},
 });

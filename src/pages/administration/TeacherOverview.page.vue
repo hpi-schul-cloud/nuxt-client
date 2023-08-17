@@ -143,6 +143,7 @@ import {
 	mdiPencilOutline,
 	mdiPlus,
 } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -630,9 +631,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t(
-			"pages.administration.teachers.index.title"
-		)} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.index.title")
+		);
 	},
 };
 </script>

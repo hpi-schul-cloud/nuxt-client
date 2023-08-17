@@ -7,6 +7,10 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { APPLICATION_ERROR_KEY, I18N_KEY } from "@/utils/inject";
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("@pages/Error.page.vue", () => {
 	beforeEach(() => {
 		Object.defineProperty(window, "location", {
