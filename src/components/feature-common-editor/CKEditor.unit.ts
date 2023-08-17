@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { MountOptions, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import CkEditor from "@/components/common/editor/CKEditor.vue";
+import CkEditor from "./CKEditor.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 type CkEditorProps = {
