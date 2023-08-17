@@ -25,6 +25,10 @@
 				"src/components/feature-board-text-element"
 			],
 			"@feature-board": ["src/components/feature-board"],
+			"@feature-common-editor": ["src/components/feature-common-editor"],
+			"@feature-common-render-html": [
+				"src/components/feature-common-render-html"
+			],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@util-board": ["src/components/util-board"],
