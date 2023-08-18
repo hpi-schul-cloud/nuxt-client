@@ -1,11 +1,12 @@
 <template>
 	<div class="pa-2 mr-2 mt-1">
-		<a
-			v-if="isDownloadAllowed"
+		<v-icon
 			data-testid="board-file-element-edit-menu-download"
 			@click="onDownload"
-			><v-icon class="float-right">$mdiTrayArrowDown</v-icon></a
-		>
+			@disabled="!isDownloadAllowed"
+			class="float-right"
+			>$mdiTrayArrowDown
+		</v-icon>
 	</div>
 </template>
 
