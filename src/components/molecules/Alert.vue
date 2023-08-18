@@ -66,10 +66,10 @@ export default {
 			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
 		},
 		icon() {
-			if (this.status == "success") return mdiCheckCircle;
-			if (this.status === "warning") return mdiAlert;
-			if (this.status === "error") return mdiAlert;
-			if (this.status === "info") return mdiInformation;
+			if (this.status == "success") return "$mdiCheckCircle";
+			if (this.status === "warning") return "$mdiAlert";
+			if (this.status === "error") return "$mdiAlert";
+			if (this.status === "info") return "$mdiInformation";
 			return undefined;
 		},
 		showNotifier: {
