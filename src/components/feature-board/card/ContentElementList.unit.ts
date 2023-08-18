@@ -6,6 +6,7 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import ContentElementList from "./ContentElementList.vue";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { SubmissionContentElement } from "@feature-board-submission-element";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -39,6 +40,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.File,
 				component: FileContentElement,
 			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
+			},
 		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
@@ -58,6 +63,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.File,
 				component: FileContentElement,
+			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
 			},
 		])(
 			"should propagate isEditMode to child elements",
