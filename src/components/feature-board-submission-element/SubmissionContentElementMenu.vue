@@ -2,7 +2,7 @@
 	<BoardMenu scope="element">
 		<BoardMenuAction
 			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-file-element-edit-menu-move-up"
+			data-testid="board-submission-element-edit-menu-move-up"
 			@click="onMoveElementUp"
 		>
 			<template #icon>
@@ -10,11 +10,12 @@
 					{{ mdiArrowCollapseUp }}
 				</VIcon>
 			</template>
+
 			{{ $t("components.board.action.moveUp") }}
 		</BoardMenuAction>
 		<BoardMenuAction
 			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-file-element-edit-menu-move-down"
+			data-testid="board-submission-element-edit-menu-move-down"
 			@click="onMoveElementDown"
 		>
 			<template #icon>
@@ -25,7 +26,7 @@
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
 		<BoardMenuAction
-			data-testid="board-file-element-edit-menu-delete"
+			data-testid="board-submission-element-edit-menu-delete"
 			@click="onDelete"
 		>
 			<template #icon>
@@ -40,28 +41,23 @@
 
 <script lang="ts">
 import {
-	mdiAlertCircle,
 	mdiArrowCollapseDown,
 	mdiArrowCollapseUp,
-	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { defineComponent } from "vue";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
 
 export default defineComponent({
-	name: "FileContentElementMenu",
+	name: "SubmissionContentElementMenu",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		fileName: { type: String, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: ["delete:element", "move-down:element", "move-up:element"],
-	setup(props, { emit }) {
+	setup(_, { emit }) {
 		const onDelete = () => {
 			emit("delete:element");
 		};
@@ -72,8 +68,6 @@ export default defineComponent({
 			emit("move-up:element");
 		};
 		return {
-			mdiAlertCircle,
-			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,

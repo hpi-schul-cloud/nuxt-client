@@ -11,18 +11,17 @@ import {
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import {
-	useCardState,
-	useEditMode,
 	useBoardFocusHandler,
 	useBoardPermissions,
+	useCardState,
+	useEditMode,
 } from "@data-board";
-import { describe, expect, it, jest } from "@jest/globals";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { computed, ref } from "vue";
-import ContentElementList from "./ContentElementList.vue";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import ContentElementList from "./ContentElementList.vue";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@data-board/BoardPermissions.composable");

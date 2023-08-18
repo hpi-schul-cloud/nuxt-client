@@ -1,7 +1,7 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<span class="current-year">© {{ currentYear }} </span>
+			<span class="current-year">© {{ currentYear }} {{ $theme.name }}</span>
 		</div>
 
 		<div>

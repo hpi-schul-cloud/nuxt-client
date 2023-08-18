@@ -1,8 +1,8 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
 	type: ContentElementType
@@ -32,6 +32,13 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
+		},
+		{
+			icon: mdiLightbulbOnOutline,
+			label:
+				"components.elementTypeSelection.elements.submissionElement.subtitle",
+			action: () => onElementClick(ContentElementType.SubmissionContainer),
+			testId: "create-element-submission-container",
 		},
 	];
 

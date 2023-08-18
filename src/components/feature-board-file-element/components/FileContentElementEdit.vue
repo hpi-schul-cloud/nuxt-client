@@ -45,11 +45,11 @@
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline, mdiClose } from "@mdi/js";
-import { defineComponent, ref, watch } from "vue";
-import FileContentElementMenu from "./FileContentElementMenu.vue";
+import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
+import { defineComponent, ref, watch } from "vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
+import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
 	name: "FileContentElementEdit",

@@ -21,6 +21,9 @@
 			"@feature-board-file-element": [
 				"src/components/feature-board-file-element"
 			],
+			"@feature-board-submission-element": [
+				"src/components/feature-board-submission-element"
+			],
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],

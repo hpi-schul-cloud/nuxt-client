@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
+import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, ref, watch } from "vue";
 import FilePicker from "./FilePicker.vue";
-import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	name: "FileContentElementInit",
@@ -42,7 +42,6 @@ export default defineComponent({
 			useSharedLastCreatedElement();
 
 		watch(lastCreatedElementId, (newValue) => {
-			console.log("watcher");
 			if (newValue !== undefined && newValue === props.elementId) {
 				isFilePickerOpen.value = true;
 				resetLastCreatedElementId();

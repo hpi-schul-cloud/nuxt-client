@@ -2,16 +2,21 @@ import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { BoardMenuAction } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementMenu from "./FileContentElementMenu.vue";
+import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 
-jest.mock("@/utils/fileHelper");
-
-describe("FileContentElementMenu", () => {
+describe("SubmissionContentElementMenu", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(FileContentElementMenu, {
+		const propsData = {
+			isFirstElement: false,
+			isLastElement: false,
+			hasMultipleElements: false,
+		};
+
+		const wrapper = shallowMount(SubmissionContentElementMenu, {
 			...createComponentMocks({ i18n: true }),
+			propsData,
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
@@ -25,10 +30,10 @@ describe("FileContentElementMenu", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const fileContentElementMenu = wrapper.findComponent(
-			FileContentElementMenu
+		const submissionContentElementMenu = wrapper.findComponent(
+			SubmissionContentElementMenu
 		);
-		expect(fileContentElementMenu.exists()).toBe(true);
+		expect(submissionContentElementMenu.exists()).toBe(true);
 	});
 
 	describe("move up and down board actions", () => {
@@ -36,15 +41,11 @@ describe("FileContentElementMenu", () => {
 			document.body.setAttribute("data-app", "true");
 
 			const multipleElementsSetupProps = {
-				fileId: "file-id #1",
-				fileName: "file-record #1.txt",
-				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
 				isFirstElement: false,
 				isLastElement: false,
 				hasMultipleElements: true,
 			};
-			const wrapper = shallowMount(FileContentElementMenu, {
+			const wrapper = shallowMount(SubmissionContentElementMenu, {
 				...createComponentMocks({ i18n: true }),
 				propsData: multipleElementsSetupProps,
 			});
@@ -124,15 +125,11 @@ describe("FileContentElementMenu", () => {
 					document.body.setAttribute("data-app", "true");
 
 					const firstElementSetupProps = {
-						fileId: "file-id #1",
-						fileName: "file-record #1.txt",
-						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: true,
 						isLastElement: false,
 						hasMultipleElements: true,
 					};
-					const wrapper = shallowMount(FileContentElementMenu, {
+					const wrapper = shallowMount(SubmissionContentElementMenu, {
 						...createComponentMocks({ i18n: true }),
 						propsData: firstElementSetupProps,
 					});
@@ -177,15 +174,11 @@ describe("FileContentElementMenu", () => {
 					document.body.setAttribute("data-app", "true");
 
 					const lastElementSetupProps = {
-						fileId: "file-id #1",
-						fileName: "file-record #1.txt",
-						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: false,
 						isLastElement: true,
 						hasMultipleElements: true,
 					};
-					const wrapper = shallowMount(FileContentElementMenu, {
+					const wrapper = shallowMount(SubmissionContentElementMenu, {
 						...createComponentMocks({ i18n: true }),
 						propsData: lastElementSetupProps,
 					});
@@ -231,15 +224,11 @@ describe("FileContentElementMenu", () => {
 				document.body.setAttribute("data-app", "true");
 
 				const singleElementSetupProps = {
-					fileId: "file-id #1",
-					fileName: "file-record #1.txt",
-					url: "1/file-record #1.txt",
-					isDownloadAllowed: true,
 					isFirstElement: false,
 					isLastElement: false,
 					hasMultipleElements: false,
 				};
-				const wrapper = shallowMount(FileContentElementMenu, {
+				const wrapper = shallowMount(SubmissionContentElementMenu, {
 					...createComponentMocks({ i18n: true }),
 					propsData: singleElementSetupProps,
 				});

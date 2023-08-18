@@ -25,8 +25,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import FileContentElementMenu from "./FileContentElementMenu.vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
+import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 export default defineComponent({
 	name: "ImageFileDisplay",

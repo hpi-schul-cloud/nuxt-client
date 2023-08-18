@@ -1,11 +1,12 @@
 import { ContentElementType } from "@/serverApi/v3";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import ContentElementList from "./ContentElementList.vue";
-import { RichTextContentElement } from "@feature-board-text-element";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { FileContentElement } from "@feature-board-file-element";
+import { SubmissionContentElement } from "@feature-board-submission-element";
+import { RichTextContentElement } from "@feature-board-text-element";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ContentElementList from "./ContentElementList.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -39,6 +40,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.File,
 				component: FileContentElement,
 			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
+			},
 		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
@@ -58,6 +63,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.File,
 				component: FileContentElement,
+			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
 			},
 		])(
 			"should propagate isEditMode to child elements",
