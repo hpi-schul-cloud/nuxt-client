@@ -18,7 +18,7 @@
 			<v-list-item-content>
 				<span
 					class="subtitle-1 d-inline-block text-truncate"
-					data-testid="board-file-element-edit-file-name"
+					data-testid="board-file-element-display-file-name"
 					>{{ fileName }}</span
 				>
 			</v-list-item-content>
