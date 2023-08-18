@@ -44,10 +44,6 @@
 import { authModule, envConfigModule, filePathsModule } from "@/store";
 
 export default {
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	computed: {
 		school() {
 			return authModule.getSchool;
@@ -96,9 +92,6 @@ export default {
 			});
 			return links;
 		},
-	},
-	mounted() {
-		// console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>
