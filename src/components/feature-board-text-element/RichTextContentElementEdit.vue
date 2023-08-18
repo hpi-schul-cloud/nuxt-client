@@ -14,7 +14,7 @@
 	</div>
 </template>
 <script lang="ts">
-import { CkEditor } from "@feature-common-editor";
+import { CkEditor } from "@feature-editor";
 import { useEventListener, useVModel } from "@vueuse/core";
 import { defineComponent } from "vue";
 

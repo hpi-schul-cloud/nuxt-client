@@ -56,7 +56,7 @@ import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
-import { ValidationRule } from "@/types/common/Validation";
+import { ValidationRule } from "@/types/date-time-picker/Validation";
 
 export default defineComponent({
 	name: "DatePicker",

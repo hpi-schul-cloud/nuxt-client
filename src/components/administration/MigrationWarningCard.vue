@@ -44,7 +44,7 @@
 	</v-card>
 </template>
 <script lang="ts">
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ComputedRef, Ref, computed, defineComponent, ref } from "vue";
 

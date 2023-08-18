@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";

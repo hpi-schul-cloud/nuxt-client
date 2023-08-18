@@ -191,7 +191,7 @@ import {
 	isVideoContent,
 	isMerlinContent,
 } from "@/utils/helpers";
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";

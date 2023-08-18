@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import EmptyState from "@/components/molecules/EmptyState.vue";
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 
 export default {
 	components: {

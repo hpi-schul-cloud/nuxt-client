@@ -23,7 +23,7 @@
 
 <script>
 import { autoLogoutModule, notifierModule } from "@/store";
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 
 const toast = {
 	error401: -1,

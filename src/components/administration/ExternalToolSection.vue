@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";

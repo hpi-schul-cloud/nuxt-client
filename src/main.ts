@@ -68,7 +68,7 @@ Vue.mixin({
 	},
 });
 
-import { htmlConfig } from "@feature-common-render-html";
+import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {

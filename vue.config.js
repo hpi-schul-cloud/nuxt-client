@@ -28,15 +28,11 @@ module.exports = defineConfig({
 					"src/components/feature-board-text-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
-				"@feature-common-date-time-picker": getDir(
-					"src/components/feature-common-date-time-picker"
+				"@feature-date-time-picker": getDir(
+					"src/components/feature-date-time-picker"
 				),
-				"@feature-common-editor": getDir(
-					"src/components/feature-common-editor"
-				),
-				"@feature-common-render-html": getDir(
-					"src/components/feature-common-render-html"
-				),
+				"@feature-editor": getDir("src/components/feature-editor"),
+				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"

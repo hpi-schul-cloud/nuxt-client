@@ -143,7 +143,7 @@ import ContentCard from "@/components/organisms/ContentCard";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import BaseLink from "../base/BaseLink";
-import { RenderHTML } from "@feature-common-render-html";
+import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";
