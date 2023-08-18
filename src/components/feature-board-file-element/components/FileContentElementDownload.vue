@@ -3,7 +3,7 @@
 		<v-icon
 			data-testid="board-file-element-edit-menu-download"
 			@click="onDownload"
-			@disabled="!isDownloadAllowed"
+			:disabled="!isDownloadAllowed"
 			class="float-right"
 			>$mdiTrayArrowDown
 		</v-icon>
@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import { downloadFile } from "@/utils/fileHelper";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileContentElementDownload",
