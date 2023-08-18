@@ -224,6 +224,18 @@ describe("BoardApi.composable", () => {
 	describe("createCardCall", () => {
 		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
+
+			const FAKE_RESPONSE = {
+				status: 200,
+				data: {
+					id: "my-little-fake-id",
+				},
+			};
+
+			columnApi.columnControllerCreateCard = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_RESPONSE);
+
 			const PAYLOAD = "column-id";
 			const INITIAL_ELEMENTS = {
 				requiredEmptyElements: [
@@ -231,11 +243,14 @@ describe("BoardApi.composable", () => {
 				],
 			};
 
-			await createCardCall(PAYLOAD);
+			const result = await createCardCall(PAYLOAD);
+
 			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(
 				PAYLOAD,
 				INITIAL_ELEMENTS
 			);
+
+			expect(result).toBe(FAKE_RESPONSE.data.id);
 		});
 	});
 
@@ -351,6 +366,50 @@ describe("BoardApi.composable", () => {
 
 			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
 				FAKE_RESPONSE.data.id
+			);
+		});
+
+		it("should return id and name of the parent course/room", async () => {
+			const { getContextInfo } = useBoardApi();
+
+			const FAKE_BOARD_ID = "MY_BOARD_ID123";
+			const FAKE_RESPONSE = {
+				status: 200,
+				data: {
+					id: "someid",
+				},
+			};
+
+			const FAKE_ROOM_RESPONSE = {
+				status: 200,
+				data: {
+					roomId: "abc123",
+					title: "my greate course",
+				},
+			};
+
+			boardApi.boardControllerGetBoardContext = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_RESPONSE);
+			roomsApi.roomsControllerGetRoomBoard = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
+
+			const result = await getContextInfo(FAKE_BOARD_ID);
+
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
+				FAKE_BOARD_ID
+			);
+
+			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
+				FAKE_RESPONSE.data.id
+			);
+
+			expect(result).toEqual(
+				expect.objectContaining({
+					id: FAKE_ROOM_RESPONSE.data.roomId,
+					name: FAKE_ROOM_RESPONSE.data.title,
+				})
 			);
 		});
 	});
