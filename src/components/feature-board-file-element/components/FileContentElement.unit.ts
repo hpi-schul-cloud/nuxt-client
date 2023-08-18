@@ -789,6 +789,49 @@ describe("FileContentElement", () => {
 						expect(wrapper.emitted("delete:element")).toHaveLength(1);
 					});
 
+					it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const fileContentElementEdit = wrapper.findComponent(
+							FileContentElementEdit
+						);
+						fileContentElementEdit.vm.$emit("move-down:element");
+
+						const emitted = wrapper.emitted();
+						expect(emitted["move-down:edit"]).toBeDefined();
+					});
+
+					it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const fileContentElementEdit = wrapper.findComponent(
+							FileContentElementEdit
+						);
+						fileContentElementEdit.vm.$emit("move-up:element");
+
+						const emitted = wrapper.emitted();
+						expect(emitted["move-up:edit"]).toBeDefined();
+					});
+
+					// currently blocked as v-card blocks correct usage of keydown event (works when its a div)
+					it.todo(
+						"should emit 'move-keyboard:edit' when arrow key up or is pressed"
+					);
+					/* async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						await wrapper.trigger("keydown.up");
+
+						const emitted = wrapper.emitted();
+						expect(emitted["move-keyboard:edit"]).toBeDefined();
+					}; */
+
 					describe("when file is an image", () => {
 						const setup = () => {
 							const element = fileElementResponseFactory.build();
