@@ -100,8 +100,8 @@ describe("FileContentElement", () => {
 				it("should be found in dom", () => {
 					const { wrapper } = setup();
 
-					const component = wrapper.findComponent(FileContentElement);
-					expect(component.exists()).toBe(true);
+					const fileContentElement = wrapper.findComponent(FileContentElement);
+					expect(fileContentElement.exists()).toBe(true);
 				});
 
 				it("should render FileContentElementDisplay component", async () => {
@@ -776,19 +776,6 @@ describe("FileContentElement", () => {
 
 					it("should pass delete:element event from child to parent", async () => {
 						const { wrapper } = setup();
-<<<<<<< HEAD
-
-						await nextTick();
-						await nextTick();
-
-						const child = wrapper.findComponent(FileContentElementEdit);
-						child.vm.$emit("delete:element");
-
-						await nextTick();
-						await nextTick();
-
-						expect(wrapper.emitted("delete:element")).toHaveLength(1);
-=======
 
 						await nextTick();
 						await nextTick();
@@ -814,7 +801,6 @@ describe("FileContentElement", () => {
 
 						const emitted = wrapper.emitted();
 						expect(emitted["move-down:edit"]).toBeDefined();
->>>>>>> main
 					});
 
 					it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
