@@ -16,18 +16,9 @@
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<a
-					v-if="isDownloadAllowed"
-					class="subtitle-1 d-inline-block text-truncate"
-					data-testid="board-file-element-display-file-name-link"
-					:download="fileName"
-					:href="url"
-					>{{ fileName }}</a
-				>
 				<span
-					v-else
 					class="subtitle-1 d-inline-block text-truncate"
-					data-testid="board-file-element-display-file-name"
+					data-testid="board-file-element-edit-file-name"
 					>{{ fileName }}</span
 				>
 			</v-list-item-content>
