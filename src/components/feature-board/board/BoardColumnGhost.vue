@@ -11,7 +11,7 @@
 			style="min-height: 500px"
 		>
 			<Container
-				v-if="!isDragging"
+				v-if="isDragging"
 				group-name="cards"
 				@drop="onDropCard"
 				@drag-enter="onDragEnter"
@@ -19,6 +19,7 @@
 				drag-class="elevation-12"
 				drop-class="elevation-0"
 				:drop-placeholder="cardDropPlaceholderOptions"
+				class="dndrop-container vertical"
 				:class="{ 'expanded-column': isDragging }"
 			>
 			</Container>

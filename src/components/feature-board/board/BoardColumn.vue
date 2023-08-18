@@ -22,7 +22,7 @@
 			non-drag-area-selector=".drag-disabled"
 			@drag-start="onDragStart"
 			@drop="onDragEnd"
-			class="scrollable-column pr-1 -mt-3"
+			class="dndrop-container vertical scrollable-column pr-1 -mt-3 find-my-class"
 			:class="{ 'expanded-column': isDragging }"
 		>
 			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
@@ -191,8 +191,9 @@ export default defineComponent({
 }
 </style>
 <style scoped>
-.scrollable-column.expanded-column {
+.expanded-column {
 	min-height: 75vh;
+	transition: min-height 1000ms;
 }
 .scrollable-column {
 	overflow-y: auto;
@@ -225,4 +226,3 @@ export default defineComponent({
 	background: var(--v-secondary-base) !important;
 }
 </style>
-@data-board";
