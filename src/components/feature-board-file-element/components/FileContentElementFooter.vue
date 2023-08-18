@@ -6,7 +6,11 @@
 			</v-col>
 
 			<v-col cols="2">
-				<FileContentElementDownload></FileContentElementDownload>
+				<FileContentElementDownload
+					:fileName="fileName"
+					:isDownloadAllowed="isDownloadAllowed"
+					:url="url"
+				></FileContentElementDownload>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -26,6 +30,8 @@ export default defineComponent({
 	props: {
 		fileName: { type: String, required: true },
 		fileSize: { type: Number, required: true },
+		isDownloadAllowed: { type: Boolean, required: true },
+		url: { type: String, required: true },
 	},
 });
 </script>

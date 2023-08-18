@@ -17,6 +17,8 @@
 		<FileContentElementFooter
 			:fileSize="fileSize"
 			:fileName="fileName"
+			:isDownloadAllowed="isDownloadAllowed"
+			:url="url"
 		></FileContentElementFooter>
 	</div>
 </template>
