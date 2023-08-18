@@ -33,7 +33,7 @@ import {
 	watch,
 } from "vue";
 import { VTextarea } from "vuetify/lib";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
@@ -182,3 +182,4 @@ export default defineComponent({
 	opacity: 1;
 }
 </style>
+@data-board";

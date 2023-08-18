@@ -784,7 +784,6 @@
 	"components.molecules.TaskItemMenu.confirmDelete.text": "¿Estás seguro de que deseas eliminar la tarea \"{taskTitle}\"?",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.cardElement.deleteElement": "Suprimir elemento",
-	"components.cardElement.deletionModal.confirmation": "¿Eliminar {type}?",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.fileElement.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.richTextElement": "Elemento texto",
@@ -793,7 +792,6 @@
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
-	"components.cardHost.deletionModal.confirmation": "¿Eliminar {type} {title}?",
 	"components.board.action.addCard": "Añadir tarjeta",
 	"components.board.action.delete": "Eliminar",
 	"components.board.action.download": "Descargar",
@@ -961,5 +959,7 @@
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
-	"pages.videoConference.action.refresh": "Estado de actualización"
+	"pages.videoConference.action.refresh": "Estado de actualización",
+	"ui-confirmation-dialog.ask-delete.card": "¿Eliminar {type} {title}?",
+	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo"
 }
