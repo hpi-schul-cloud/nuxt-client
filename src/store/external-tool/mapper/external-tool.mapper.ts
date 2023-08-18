@@ -2,14 +2,14 @@ import {
 	CustomParameterResponse,
 	ToolReferenceListResponse,
 } from "@/serverApi/v3";
+import { ExternalToolDisplayData } from "../external-tool-display-data";
+import { ToolParameter } from "../tool-parameter";
 import {
 	ToolConfigurationStatusMapping,
 	ToolParamLocationMapping,
 	ToolParamScopeMapping,
 	ToolParamTypeMapping,
-} from "@/composables/external-tool-mappings.composable";
-import { ExternalToolDisplayData } from "../external-tool-display-data";
-import { ToolParameter } from "../tool-parameter";
+} from "./common-tool.mapper";
 
 export class ExternalToolMapper {
 	static mapToToolParameter(response: CustomParameterResponse): ToolParameter {
@@ -34,7 +34,7 @@ export class ExternalToolMapper {
 	): ExternalToolDisplayData[] {
 		const mapped: ExternalToolDisplayData[] = response.data.map(
 			(tool): ExternalToolDisplayData => ({
-				id: tool.contextToolId,
+				contextExternalToolId: tool.contextToolId,
 				name: tool.displayName,
 				status: ToolConfigurationStatusMapping[tool.status],
 				logoUrl: tool.logoUrl,

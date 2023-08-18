@@ -31,6 +31,9 @@ import { defineComponent, inject, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
@@ -44,6 +47,11 @@ export default defineComponent({
 	setup() {
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
+
+		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
+		useTitle(pageTitle);
 
 		const getSystemName = (id: string): string => {
 			return (

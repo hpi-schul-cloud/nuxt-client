@@ -116,7 +116,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -150,7 +150,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -175,7 +175,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -207,7 +207,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -241,7 +241,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -272,7 +272,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -305,7 +305,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 

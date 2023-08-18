@@ -12,7 +12,7 @@ export const mountBaseComponents = (
 ) => {
 	for (const fileName of globalComponentFiles) {
 		// Get Component Name
-		const componentName = fileName.match(/([\w]+).vue$/)[1];
+		const componentName = fileName.match(/(\w+).vue$/)[1];
 		// Is naming scheme valid?
 		if (componentName !== upperFirst(camelCase(componentName))) {
 			throw new Error(`${fileName} is not in PascalCase.`);
@@ -37,7 +37,7 @@ const mountWithWebpack = () => {
 		// Do not look in subdirectories
 		true,
 		// Only include "Base" prefixed .vue files
-		/Base[\w]+\.vue$/
+		/Base\w+\.vue$/
 	);
 
 	mountBaseComponents(requireComponent.keys(), (fileName) =>

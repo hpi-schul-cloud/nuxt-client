@@ -1,54 +1,5 @@
-import {
-	CustomParameterResponseLocationEnum,
-	CustomParameterResponseScopeEnum,
-	CustomParameterResponseTypeEnum,
-	ToolReferenceListResponse,
-	ToolReferenceResponse,
-	ToolReferenceResponseStatusEnum,
-} from "@/serverApi/v3";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-	ToolParameterLocation,
-	ToolParameterScope,
-	ToolParameterType,
-} from "@/store/external-tool";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
-
-export const ToolParamLocationMapping: Record<
-	CustomParameterResponseLocationEnum,
-	ToolParameterLocation
-> = {
-	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocation.PATH,
-	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocation.QUERY,
-	[CustomParameterResponseLocationEnum.Body]: ToolParameterLocation.BODY,
-};
-
-export const ToolParamTypeMapping: Record<
-	CustomParameterResponseTypeEnum,
-	ToolParameterType
-> = {
-	[CustomParameterResponseTypeEnum.String]: ToolParameterType.String,
-	[CustomParameterResponseTypeEnum.Boolean]: ToolParameterType.Boolean,
-	[CustomParameterResponseTypeEnum.Number]: ToolParameterType.Number,
-	[CustomParameterResponseTypeEnum.AutoContextid]:
-		ToolParameterType.AutoContextid,
-	[CustomParameterResponseTypeEnum.AutoContextname]:
-		ToolParameterType.AutoContextname,
-	[CustomParameterResponseTypeEnum.AutoSchoolid]:
-		ToolParameterType.AutoSchoolid,
-	[CustomParameterResponseTypeEnum.AutoSchoolnumber]:
-		ToolParameterType.AutoSchoolnumber,
-};
-
-export const ToolParamScopeMapping: Record<
-	CustomParameterResponseScopeEnum,
-	ToolParameterScope
-> = {
-	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
-	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
-	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
-};
 
 const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_duplicate", "pages.tool.apiError.tool_param_duplicate"],
@@ -57,15 +8,6 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_type_mismatch", "pages.tool.apiError.tool_param_type_mismatch"],
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 ]);
-
-export const ToolConfigurationStatusMapping: Record<
-	ToolReferenceResponseStatusEnum,
-	ToolConfigurationStatus
-> = {
-	[ToolReferenceResponseStatusEnum.Latest]: ToolConfigurationStatus.Latest,
-	[ToolReferenceResponseStatusEnum.Outdated]: ToolConfigurationStatus.Outdated,
-	[ToolReferenceResponseStatusEnum.Unknown]: ToolConfigurationStatus.Unknown,
-};
 
 export const ToolConfigurationStatusTranslationMapping: Record<
 	ToolConfigurationStatus,
@@ -78,20 +20,6 @@ export const ToolConfigurationStatusTranslationMapping: Record<
 };
 
 export function useExternalToolMappings() {
-	const mapToolReferencesToExternalToolDisplayData = (
-		response: ToolReferenceListResponse
-	): ExternalToolDisplayData[] => {
-		return response.data.map(
-			(toolReference: ToolReferenceResponse): ExternalToolDisplayData => ({
-				id: toolReference.contextToolId,
-				logoUrl: toolReference.logoUrl,
-				name: toolReference.displayName,
-				openInNewTab: toolReference.openInNewTab,
-				status: ToolConfigurationStatusMapping[toolReference.status],
-			})
-		);
-	};
-
 	const getBusinessErrorTranslationKey = (
 		businessError: BusinessError | undefined
 	): undefined | string => {
@@ -125,7 +53,6 @@ export function useExternalToolMappings() {
 	};
 
 	return {
-		mapToolReferencesToExternalToolDisplayData,
 		getBusinessErrorTranslationKey,
 		getStatusTranslationKey,
 	};

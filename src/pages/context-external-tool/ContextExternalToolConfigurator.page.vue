@@ -13,7 +13,19 @@
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
+			@change="onSelectionChange"
 		>
+			<template #aboveParameters="{ selectedTemplate }">
+				<v-text-field
+					v-if="selectedTemplate && canConfigureContextTools"
+					v-model="displayName"
+					:label="t('pages.tool.context.displayName')"
+					:hint="t('pages.tool.context.displayNameDescription')"
+					persistent-hint
+					validate-on-blur
+					data-testId="parameter-display-name"
+				></v-text-field>
+			</template>
 		</external-tool-configurator>
 	</default-wireframe>
 </template>
@@ -29,6 +41,7 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
@@ -54,6 +67,7 @@ import {
 	ContextExternalTool,
 	ContextExternalToolSave,
 } from "@/store/external-tool/context-external-tool";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	components: {
@@ -80,6 +94,9 @@ export default defineComponent({
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
+		);
 
 		const { t } = useI18n();
 
@@ -112,6 +129,10 @@ export default defineComponent({
 			() => !hasData.value || contextExternalToolsModule.getLoading
 		);
 
+		const canConfigureContextTools: ComputedRef<boolean> = computed(
+			() => envConfigModule.getCtlContextConfigurationEnabled
+		);
+
 		const configurationTemplates: ComputedRef<
 			ContextExternalToolConfigurationTemplate[]
 		> = computed(
@@ -120,6 +141,7 @@ export default defineComponent({
 		);
 
 		const configuration: Ref<ContextExternalTool | undefined> = ref();
+		const displayName: Ref<string | undefined> = ref();
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 			contextExternalToolsModule.getBusinessError.message
@@ -132,6 +154,10 @@ export default defineComponent({
 			await router.push({ path: contextRoute, query: { tab: "tools" } });
 		};
 
+		const onSelectionChange = async () => {
+			displayName.value = undefined;
+		};
+
 		const onSave = async (
 			template: ContextExternalToolConfigurationTemplate,
 			configuredParameterValues: (string | undefined)[]
@@ -141,11 +167,15 @@ export default defineComponent({
 					template,
 					configuredParameterValues,
 					props.contextId,
-					props.contextType
+					props.contextType,
+					displayName.value
 				);
 
 			if (props.configId) {
-				// TODO Implement updating of context tools
+				await contextExternalToolsModule.updateContextExternalTool({
+					contextExternalToolId: props.configId,
+					contextExternalTool,
+				});
 			} else {
 				await contextExternalToolsModule.createContextExternalTool(
 					contextExternalTool
@@ -177,8 +207,11 @@ export default defineComponent({
 					props.configId
 				);
 
-				//TODO Add loading of Context External Tools for updating
-				configuration.value = undefined;
+				configuration.value =
+					await contextExternalToolsModule.loadContextExternalTool(
+						props.configId
+					);
+				displayName.value = configuration.value?.displayName;
 			} else {
 				await contextExternalToolsModule.loadAvailableToolsForContext({
 					contextId: props.contextId,
@@ -201,6 +234,9 @@ export default defineComponent({
 			onCancel,
 			onSave,
 			configuration,
+			displayName,
+			onSelectionChange,
+			canConfigureContextTools,
 		};
 	},
 });

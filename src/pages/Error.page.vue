@@ -21,10 +21,10 @@
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import Theme from "@/theme.config";
 import { APPLICATION_ERROR_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, onUnmounted } from "vue";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -82,7 +82,7 @@ export default defineComponent({
 			}
 		});
 
-		useTitle(i18n.tc("error.generic") + " - " + Theme.short_name);
+		useTitle(buildPageTitle(i18n.tc("error.generic")));
 
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
