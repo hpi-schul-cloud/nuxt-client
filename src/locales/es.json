@@ -954,6 +954,7 @@
 	"pages.tool.apiError.tool_param_required": "Aún faltan entradas para parámetros obligatorios para la configuración de esta herramienta. Introduzca los valores que faltan.",
 	"pages.tool.apiError.tool_param_type_mismatch": "El tipo de un parámetro no coincide con el tipo solicitado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_param_value_regex": "El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
+	"pages.tool.apiError.tool_param_name_duplicate": "Ya se ha asignado una herramienta con el mismo nombre a este curso. Los nombres de las herramientas deben ser únicos dentro de un curso.",
 	"pages.tool.apiError.tool_launch_outdated": "La configuración de la herramienta está desactualizada debido a un cambio de versión. ¡La herramienta no se puede iniciar!",
 	"pages.tool.context.title": "Adición de herramientas externas",
 	"pages.tool.context.displayName": "Nombre para mostrar",

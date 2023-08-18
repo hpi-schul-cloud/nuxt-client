@@ -961,6 +961,7 @@
 	"pages.tool.apiError.tool_param_required": "Für die Konfiguration dieses Tools fehlen noch Eingaben für Pflichtparameter. Bitte die fehlenden Werte eingeben.",
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
+	"pages.tool.apiError.tool_param_name_duplicate": "Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.title": "Hinzufügen externer Tools",
 	"pages.tool.context.displayName": "Anzeigename",
 	"pages.tool.context.displayNameDescription": "Der Anzeigename des Tools kann überschrieben werden und muss eindeutig sein",
