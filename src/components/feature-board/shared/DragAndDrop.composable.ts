@@ -18,6 +18,6 @@ const dragAndDrop = () => {
 };
 
 /**
- * Shares user permissions (/me)
+ * Shares dragAndDrop state
  */
 export const useDragAndDrop = createSharedComposable(dragAndDrop);
