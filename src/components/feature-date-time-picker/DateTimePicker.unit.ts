@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import DateTimePicker from "@/components/common/date-time-picker/DateTimePicker.vue";
+import DateTimePicker from "./DateTimePicker.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 type DateTimePickerProps = {
@@ -15,7 +15,7 @@ type DateTimePickerProps = {
 	required?: boolean;
 };
 
-describe("@components/date-time-picker/DateTimePicker", () => {
+describe("DateTimePicker", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const setup = (props: DateTimePickerProps) => {
