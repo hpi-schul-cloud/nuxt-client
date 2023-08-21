@@ -31,6 +31,11 @@ module.exports = defineConfig({
 					"src/components/feature-board-text-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-date-time-picker": getDir(
+					"src/components/feature-date-time-picker"
+				),
+				"@feature-editor": getDir("src/components/feature-editor"),
+				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"

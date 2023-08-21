@@ -28,6 +28,9 @@
 				"src/components/feature-board-text-element"
 			],
 			"@feature-board": ["src/components/feature-board"],
+			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
+			"@feature-editor": ["src/components/feature-editor"],
+			"@feature-render-html": ["src/components/feature-render-html"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@util-board": ["src/components/util-board"],

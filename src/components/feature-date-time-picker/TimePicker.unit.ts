@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import TimePicker from "@/components/common/date-time-picker/TimePicker.vue";
+import TimePicker from "./TimePicker.vue";
 import { I18N_KEY } from "@/utils/inject";
 
 type TimePickerProps = {
@@ -12,7 +12,7 @@ type TimePickerProps = {
 	allowPast?: boolean;
 };
 
-describe("@components/date-time-picker/TimePicker", () => {
+describe("TimePicker", () => {
 	let wrapper: Wrapper<Vue>;
 
 	// Fully mount component in the document so that trigger("focus") really focuses
