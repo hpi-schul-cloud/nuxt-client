@@ -26,7 +26,7 @@
 					/>
 				</v-alert>
 			</div>
-			<div>
+			<div v-else>
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						:html="
