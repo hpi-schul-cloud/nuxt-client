@@ -34,7 +34,7 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { applicationErrorModule, notifierModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
 import { AxiosError, HttpStatusCode } from "axios";
-import { defineComponent, inject, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute } from "vue-router/composables";
 
