@@ -5,7 +5,7 @@
 				<v-toolbar-title>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: $theme.short_name,
+							instance: $theme.name,
 							source: ldapSource,
 						})
 					}}
@@ -21,7 +21,7 @@
 			<v-card-text class="mt-5">
 				{{
 					$t("components.molecules.importUsersMatch.subtitle", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSource,
 					})
 				}}
@@ -58,7 +58,7 @@
 						</v-list-item>
 					</v-col>
 					<v-col class="md-6">
-						<v-card-title>{{ $theme.short_name }}</v-card-title>
+						<v-card-title>{{ $theme.name }}</v-card-title>
 						<v-list-item>
 							<v-list-item-content v-if="selectedItem">
 								<v-list-item-title>
