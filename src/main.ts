@@ -40,7 +40,17 @@ import themeConfig from "@/theme.config";
 // @ts-ignore
 import VueMq from "vue-mq";
 import Vuelidate from "vuelidate";
-import htmlConfig from "@/components/common/render-html/config";
+Vue.use(Vuelidate);
+
+Vue.mixin({
+	computed: {
+		$user() {
+			return authModule.getUser;
+		},
+	},
+});
+
+import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";

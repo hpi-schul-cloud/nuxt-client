@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import { useI18n } from "@/composables/i18n.composable";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
