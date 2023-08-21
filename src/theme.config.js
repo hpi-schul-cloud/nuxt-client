@@ -1,4 +1,4 @@
 export default {
-	name: "Dataport Bildungscloud",
+	name: "dBildungscloud",
 	short_name: "dBildungscloud",
 };
