@@ -51,7 +51,7 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/school-settings/tool-configuration",
 		component: () =>
 			import(
-				"@/pages/administration/external-tool/ExternalToolConfiguration.page.vue"
+				"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
 			),
 		name: "administration-tool-config-overview",
 		beforeEnter: createPermissionGuard(["school_tool_admin"]),
@@ -267,7 +267,7 @@ export const routes: Array<RouteConfig> = [
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
-				"@/pages/context-external-tool/ContextExternalToolConfiguration.page.vue"
+				"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
 			),
 		name: "context-external-tool-configuration",
 		beforeEnter: Multiguard([

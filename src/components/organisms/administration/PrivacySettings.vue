@@ -3,7 +3,10 @@
 		<h3 class="text-h6">
 			{{ $t("pages.administration.school.index.privacySettings") }}
 		</h3>
-		<v-row class="student-visibility-switch">
+		<v-row
+			class="student-visibility-switch"
+			v-if="isTeacherStudentVisibilityVisible"
+		>
 			<v-col>
 				<v-custom-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
@@ -154,6 +157,8 @@ export default {
 			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
 		isTeacherStudentVisibilityConfigurable: () =>
 			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
+		isTeacherStudentVisibilityVisible: () =>
+			envConfigModule.getTeacherStudentVisibilityIsVisible,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
 		studentVisibility() {

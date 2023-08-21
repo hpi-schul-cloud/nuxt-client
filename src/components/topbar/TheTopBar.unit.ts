@@ -57,19 +57,19 @@ describe("@/components/topbar/TheTopBar", () => {
 		});
 
 		it("should render action buttons correctly", () => {
-			expect(wrapper.find("[data-test-id='top-menu-btn']").exists()).toBe(true);
-			expect(wrapper.find("[data-test-id='status-alerts-icon']").exists()).toBe(
+			expect(wrapper.find("[data-testid='top-menu-btn']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='status-alerts-icon']").exists()).toBe(
 				false
 			);
-			expect(wrapper.find("[data-test-id='fullscreen-btn']").exists()).toBe(
+			expect(wrapper.find("[data-testid='fullscreen-btn']").exists()).toBe(
 				true
 			);
-			expect(wrapper.find("[data-test-id='qr-code-btn']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='qr-code-btn']").exists()).toBe(true);
 			expect(wrapper.find("[data-testid='initials']").exists()).toBe(true);
 		});
 
 		it("should not render status alert icon", () => {
-			expect(wrapper.find("[data-test-id='status-alerts-icon']").exists()).toBe(
+			expect(wrapper.find("[data-testid='status-alerts-icon']").exists()).toBe(
 				false
 			);
 		});
@@ -93,7 +93,7 @@ describe("@/components/topbar/TheTopBar", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(
-				wrapper.findAll('[data-test-id="status-alerts-icon"]')
+				wrapper.findAll('[data-testid="status-alerts-icon"]')
 			).toHaveLength(1);
 			expect(wrapper.findAll(".alert-item")).toHaveLength(
 				mockStatusAlerts.length
@@ -107,7 +107,7 @@ describe("@/components/topbar/TheTopBar", () => {
 				fullscreenMode: false,
 			});
 
-			const expandBtn = wrapper.find('[data-test-id="fullscreen-btn"]');
+			const expandBtn = wrapper.find('[data-testid="fullscreen-btn"]');
 			expect(expandBtn.exists()).toBe(true);
 
 			await expandBtn.trigger("click");

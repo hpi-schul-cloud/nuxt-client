@@ -8,7 +8,6 @@
 		<VCard
 			ref="cardHost"
 			:height="isLoading ? height : 'auto'"
-			class="transition-swing"
 			:class="{ 'drag-disabled': isEditMode }"
 			outlined
 			tabindex="0"
@@ -34,7 +33,7 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction @click="onStartEditMode">
+						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
 								<VIcon>
 									{{ mdiPencilOutline }}
@@ -75,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -93,15 +92,15 @@ import { useEditMode } from "../shared/EditMode.composable";
 import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
 import FilePicker from "../shared/FilePicker.vue";
 import { useCardState } from "../state/CardState.composable";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardTitle from "./CardTitle.vue";
 import {
 	DragAndDropKey,
 	ElementMove,
 	verticalCursorKeys,
 } from "../types/DragAndDrop";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import CardTitle from "./CardTitle.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -260,7 +259,7 @@ export default defineComponent({
 }
 
 .v-card:focus {
-	outline: 2px solid var(--v-secondary-base);
+	outline: 2px solid var(--v-secondary-lighten1);
 	outline-offset: 0;
 }
 </style>
