@@ -1,5 +1,4 @@
 import { useDragAndDrop } from "./DragAndDrop.composable";
-import { ref } from "vue";
 
 describe("DragAndDropComposable", () => {
 	describe("isDragging", () => {
