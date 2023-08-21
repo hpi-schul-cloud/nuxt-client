@@ -33,48 +33,15 @@ import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
-
-Vue.config.productionTip = false;
-
-Vue.config.errorHandler = handleApplicationError;
-
 // NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
-Vue.prototype.$theme = themeConfig;
-
 // NUXT_REMOVAL try to solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueMq from "vue-mq";
-Vue.use(VueMq, {
-	breakpoints: {
-		mobile: 750,
-		tabletPortrait: 770,
-		tablet: 991,
-		desktop: 1200,
-		large: Infinity,
-	},
-	defaultBreakpoint: "mobile",
-});
-
 import Vuelidate from "vuelidate";
-Vue.use(Vuelidate);
-
-Vue.mixin({
-	computed: {
-		$user() {
-			return authModule.getUser;
-		},
-	},
-});
-
 import htmlConfig from "@/components/common/render-html/config";
 import VueDOMPurifyHTML from "vue-dompurify-html";
-
-Vue.use(VueDOMPurifyHTML, {
-	namedConfigurations: htmlConfig,
-});
-
 // NUXT_REMOVAL change how global components are handled
 import "@/components/base/_globals";
 import "@/plugins/directives";
@@ -97,8 +64,41 @@ import {
 	ROOM_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
+	SYSTEMS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
+
+Vue.config.productionTip = false;
+
+Vue.config.errorHandler = handleApplicationError;
+
+Vue.prototype.$theme = themeConfig;
+
+Vue.use(VueMq, {
+	breakpoints: {
+		mobile: 750,
+		tabletPortrait: 770,
+		tablet: 991,
+		desktop: 1200,
+		large: Infinity,
+	},
+	defaultBreakpoint: "mobile",
+});
+
+Vue.use(Vuelidate);
+
+Vue.mixin({
+	computed: {
+		$user() {
+			return authModule.getUser;
+		},
+	},
+});
+
+Vue.use(VueDOMPurifyHTML, {
+	namedConfigurations: htmlConfig,
+});
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -160,9 +160,9 @@ import {
 			schoolsModule,
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-			systemsModule,
+			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 			tasksModule,
-			userLoginMigrationModule,
+			[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 			[I18N_KEY.valueOf()]: i18n,
 			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 		},

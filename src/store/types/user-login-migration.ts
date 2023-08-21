@@ -14,3 +14,12 @@ export type MigrationLinkRequest = {
 	sourceSystem: string;
 	targetSystem: string;
 };
+
+export type UserLoginMigration = {
+	sourceSystemId?: string;
+	targetSystemId: string;
+	mandatorySince?: string;
+	startedAt: string;
+	closedAt?: string;
+	finishedAt?: string;
+};
