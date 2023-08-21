@@ -37,7 +37,7 @@ const envs = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: process.env.SC_THEME || "default",
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: null,
+	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: false,
 	FEATURE_ES_COLLECTIONS_ENABLED: null,
 	FEATURE_EXTENSIONS_ENABLED: null,
 	FEATURE_TEAMS_ENABLED: null,
@@ -150,11 +150,6 @@ describe("teachers/index", () => {
 				store: mockStore,
 				uiState: mockUiState,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -201,11 +196,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
@@ -216,11 +206,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		// user row exists
 		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
@@ -266,11 +251,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -320,11 +300,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -372,11 +347,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const table = wrapper.find(`[data-testid="teachers_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
@@ -392,11 +362,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -418,11 +383,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -440,11 +400,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.exists()).toBe(true);
@@ -457,11 +412,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.exists()).toBe(false);
@@ -475,11 +425,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
 		expect(editBtn.vm.href).toStrictEqual(expectedURL);
@@ -491,11 +436,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		const fabComponent = wrapper.find(
@@ -511,11 +451,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: customMockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		const fabComponent = wrapper.find(".external-sync-hint");
@@ -529,11 +464,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_teachers_table"]`
@@ -548,11 +478,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 
@@ -565,11 +490,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		const externalHint = wrapper.find(`.external-sync-hint`);
@@ -582,11 +502,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		// run all existing timers
@@ -641,11 +556,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -665,11 +575,6 @@ describe("teachers/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
