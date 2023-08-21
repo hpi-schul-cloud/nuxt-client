@@ -2,7 +2,7 @@ import { ContentElementType } from "@/serverApi/v3";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/composable-mocks/fileStorageApiMock";
 import { setupSelectedFileMock } from "@@/tests/test-utils/composable-mocks/selectedFileMock";
 import { setupSharedElementTypeSelectionMock } from "@@/tests/test-utils/composable-mocks/sharedElementTypeSelectionMock";
-import { mdiDrawingBox, mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
+import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { useElementTypeSelection } from "./ElementTypeSelection.composable";
 jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("./FileStorageApi.composable");
@@ -197,13 +197,6 @@ describe("ElementTypeSelection Composable", () => {
 						"components.elementTypeSelection.elements.fileElement.subtitle",
 					action: onFileElementClick,
 					testId: "create-element-file",
-				},
-				{
-					icon: mdiDrawingBox,
-					label:
-						"components.elementTypeSelection.elements.fileElement.subtitle",
-					action: onFileElementClick,
-					testId: "create-element-tldraw-board",
 				},
 			];
 			expect(JSON.stringify(elementTypeOptions.value)).toEqual(

@@ -39,7 +39,6 @@ import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
-import tldrawIcon from "./tldraw-icon.vue";
 
 const customIcons = {
 	brb: {
@@ -164,9 +163,6 @@ const customIcons = {
 	},
 	thr: {
 		component: thr,
-	},
-	tldrawIcon: {
-		component: tldrawIcon,
 	},
 };
 
