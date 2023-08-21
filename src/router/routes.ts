@@ -2,12 +2,13 @@ import { Layouts } from "@/layouts/types";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
 import {
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
 	REGEX_H5P_ID,
 	REGEX_UUID,
-	isMongoId,
-	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
@@ -227,14 +228,8 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../pages/ColumnBoard.page.vue"),
+		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
-	},
-	{
-		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "rooms-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
 	},
 	{
 		path: "/rooms-list",
@@ -252,18 +247,6 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
-		path: `/tasks/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "tasks-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
-	},
-	{
-		path: `/beta-task/:id(${REGEX_ID})`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "beta-task-view-edit",
-		beforeEnter: createPermissionGuard(["task_card_view"]),
-	},
-	{
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
@@ -274,13 +257,19 @@ export const routes: Array<RouteConfig> = [
 			createPermissionGuard(["context_tool_admin"]),
 			validateQueryParameters({
 				contextId: isMongoId,
-				contextType: (value: any) =>
-					Object.values(ToolContextType).includes(value),
+				contextType: isEnum(ToolContextType),
 			}),
 		]),
+		children: [
+			{
+				path: ":configId",
+				name: "context-external-tool-configuration-edit",
+			},
+		],
 		props: (route: Route) => ({
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,
+			configId: route.params.configId,
 		}),
 	},
 	{

@@ -1,5 +1,5 @@
 # build stage
-FROM docker.io/node:18-bullseye as build-stage
+FROM docker.io/node:18-bullseye AS build-stage
 
 ## add libraries needed for installing canvas npm package
 RUN apt update && apt install -y g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev;
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json vue.config.js ./
+COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json vue.config.js .eslintignore .prettierignore ./
 COPY public ./public
 COPY src ./src
 COPY webpack-config ./webpack-config

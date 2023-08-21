@@ -13,3 +13,8 @@ const REGEX_OFFICIAL_SCHOOL_NUMBER =
 export const isOfficialSchoolNumber = (value: unknown): boolean =>
 	typeof value === "string" &&
 	new RegExp(REGEX_OFFICIAL_SCHOOL_NUMBER).test(value);
+
+export const isEnum =
+	(enumType: object) =>
+	(val: unknown): boolean =>
+		Object.values(enumType).includes(val);

@@ -149,6 +149,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	setup() {
@@ -294,21 +295,6 @@ export default defineComponent({
 				});
 			}
 			if (
-				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
-				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
-			) {
-				const action = {
-					label: this.$t("pages.rooms.fab.add.betatask"),
-					icon: mdiFormatListChecks,
-					to: {
-						name: "rooms-beta-task-new",
-						params: { course: this.roomData.roomId },
-					},
-					dataTestid: "fab_button_add_beta_task",
-				};
-				actions.push(action);
-			}
-			if (
 				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
 			) {
 				actions.push({
@@ -434,7 +420,7 @@ export default defineComponent({
 			userId: authModule.getUser.id,
 		});
 
-		document.title = `${this.roomData.title} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(this.roomData.title);
 	},
 	methods: {
 		setActiveTab(tabName) {

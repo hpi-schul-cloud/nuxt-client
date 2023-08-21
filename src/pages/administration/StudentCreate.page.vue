@@ -40,7 +40,7 @@ import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
-
+import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
 
 export default {
@@ -106,9 +106,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.administration.students.new.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.students.new.title")
+		);
 	},
 };
 </script>
