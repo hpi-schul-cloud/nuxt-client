@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";
@@ -89,6 +89,9 @@ import {
 	onMounted,
 	ref,
 } from "vue";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
@@ -115,6 +118,10 @@ export default defineComponent({
 		const userMigrationModule: UserLoginMigrationModule | undefined =
 			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("pages.userMigration.title"));
+		useTitle(pageTitle);
 
 		const getSystemName = (id: string): string => {
 			return (

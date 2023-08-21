@@ -143,7 +143,8 @@ import ContentCard from "@/components/organisms/ContentCard";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import BaseLink from "../base/BaseLink";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -250,11 +251,12 @@ export default defineComponent({
 	mounted() {
 		this.searchElements();
 		this.activateTransition = true;
-		document.title = this.isInline
+		const pageTitle = this.isInline
 			? this.$t("pages.content.page.window.title", {
 					instance: this.$theme.name,
 			  })
 			: this.$t("common.words.lernstore");
+		document.title = buildPageTitle(pageTitle);
 	},
 	methods: {
 		async searchElements() {

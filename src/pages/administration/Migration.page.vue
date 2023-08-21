@@ -401,7 +401,8 @@ import { mdiClose, mdiLoading } from "@mdi/js";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: { DefaultWireframe, ImportUsers, RenderHTML },
@@ -504,10 +505,12 @@ export default {
 		this.checkTotalInterval();
 	},
 	mounted() {
-		document.title = this.$t("pages.administration.migration.title", {
-			source: this.ldapSourceTranslation,
-			instance: this.$theme.short_name,
-		}).toString();
+		document.title = buildPageTitle(
+			this.$t("pages.administration.migration.title", {
+				source: this.ldapSourceTranslation,
+				instance: this.$theme.short_name,
+			})
+		);
 
 		this.breadcrumbs = [
 			{

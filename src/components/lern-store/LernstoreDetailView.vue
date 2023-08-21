@@ -191,7 +191,8 @@ import {
 	isVideoContent,
 	isMerlinContent,
 } from "@/utils/helpers";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -332,15 +333,15 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = (
-			this.isInline
-				? {
-						title: this.$t("pages.content.page.window.title", {
-							instance: this.$theme.name,
-						}),
-				  }
-				: { title: this.$t("common.words.lernstore") }
-		).toString();
+		const pageTitle = this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: this.$t("common.words.lernstore") };
+
+		document.title = buildPageTitle(pageTitle);
 	},
 };
 </script>

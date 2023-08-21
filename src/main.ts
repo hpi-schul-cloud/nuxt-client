@@ -68,7 +68,7 @@ Vue.mixin({
 	},
 });
 
-import htmlConfig from "@/components/common/render-html/config";
+import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
 Vue.use(VueDOMPurifyHTML, {
@@ -95,9 +95,9 @@ import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 
 (async () => {
