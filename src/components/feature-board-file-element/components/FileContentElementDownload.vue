@@ -25,6 +25,7 @@ export default defineComponent({
 		const onDownload = async () => {
 			await downloadFile(props.url, props.fileName);
 		};
+
 		return {
 			onDownload,
 		};

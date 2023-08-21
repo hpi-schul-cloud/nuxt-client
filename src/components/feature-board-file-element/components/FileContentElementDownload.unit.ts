@@ -5,6 +5,10 @@ import { downloadFile } from "@/utils/fileHelper";
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementDownload", () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
@@ -45,17 +49,16 @@ describe("FileContentElementDownload", () => {
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
-				const setupProps = (isDownloadAllowed?: boolean) => ({
+				const propsData = {
 					fileName: "file-record #1.txt",
 					url: "1/file-record #1.txt",
-					isDownloadAllowed: isDownloadAllowed ?? true,
-				});
+					isDownloadAllowed: true,
+				};
 
 				const downloadFileMock = jest
 					.mocked(downloadFile)
 					.mockReturnValueOnce();
 
-				const propsData = setupProps();
 				const wrapper = shallowMount(FileContentElementDownload, {
 					propsData,
 				});
@@ -83,23 +86,20 @@ describe("FileContentElementDownload", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const setupProps = (isDownloadAllowed?: boolean) => ({
+			const propsData = {
 				fileName: "file-record #1.txt",
 				url: "1/file-record #1.txt",
-				isDownloadAllowed: isDownloadAllowed ?? false,
-			});
+				isDownloadAllowed: false,
+			};
 
 			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
 
-			const propsData = setupProps();
 			const wrapper = shallowMount(FileContentElementDownload, {
 				propsData,
 			});
 
 			return {
 				wrapper,
-				fileNameProp: propsData.fileName,
-				urlProp: propsData.url,
 				downloadFileMock,
 			};
 		};
@@ -107,7 +107,7 @@ describe("FileContentElementDownload", () => {
 		it("should download icon be disabled", () => {
 			const { wrapper } = setup();
 			const icon = wrapper.find("v-icon");
-			expect(icon.attributes().disabled).toBeDefined();
+			expect(icon.attributes().disabled).toEqual("true");
 		});
 	});
 });
