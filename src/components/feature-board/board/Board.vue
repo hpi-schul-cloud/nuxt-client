@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="ml-1">
-			<h1>{{ $t("pages.room.boardCard.label.courseBoard") }}</h1>
+			<h3 aria-level="1">{{ $t("pages.room.boardCard.label.courseBoard") }}</h3>
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
@@ -36,33 +36,35 @@
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
 				></BoardColumnGhost>
-				<DeleteConfirmation></DeleteConfirmation>
-				<ElementTypeSelection></ElementTypeSelection>
+				<ConfirmationDialog></ConfirmationDialog>
+				<AddElementDialog></AddElementDialog>
 			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import DeleteConfirmation from "@/components/feature-confirmation-dialog/DeleteConfirmation.vue";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useSharedBoardPageInformation } from "../shared/BoardPageInformation.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import {
+	useBoardState,
+	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardPageInformation,
+} from "@data-board";
+import { useBoardNotifier } from "@util-board";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
-import { useSharedEditMode } from "../shared/EditMode.composable";
-import ElementTypeSelection from "../shared/ElementTypeSelection.vue";
-import { useBoardState } from "../state/BoardState.composable";
+import AddElementDialog from "../shared/AddElementDialog.vue";
 import {
 	CardMove,
 	ColumnMove,
 	DragAndDropKey,
 	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -74,8 +76,8 @@ export default defineComponent({
 		Container,
 		Draggable,
 		BoardColumnGhost,
-		DeleteConfirmation,
-		ElementTypeSelection,
+		ConfirmationDialog,
+		AddElementDialog,
 	},
 	props: {
 		boardId: { type: String, required: true },
@@ -83,7 +85,6 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const { showInfo, resetNotifier } = useBoardNotifier();
-
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
 

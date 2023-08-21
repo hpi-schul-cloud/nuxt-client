@@ -17,11 +17,26 @@
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
 		"paths": {
+			"@data-board": ["src/components/data-board"],
+			"@feature-board-file-element": [
+				"src/components/feature-board-file-element"
+			],
+			"@feature-board-submission-element": [
+				"src/components/feature-board-submission-element"
+			],
+			"@feature-board-text-element": [
+				"src/components/feature-board-text-element"
+			],
+			"@feature-board": ["src/components/feature-board"],
+			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
+			"@feature-editor": ["src/components/feature-editor"],
+			"@feature-render-html": ["src/components/feature-render-html"],
+			"@ui-board": ["src/components/ui-board"],
+			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@util-board": ["src/components/util-board"],
+			"@page-board": ["src/components/page-board"],
 			"@/*": ["src/*"],
-			"@@/*": ["*"],
-			"@boardShared/*": ["src/components/feature-board/shared/*"],
-			"@boardState/*": ["src/components/feature-board/state/*"],
-			"@boardTypes/*": ["src/components/feature-board/types/*"],
+			"@@/*": ["*"]
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},
@@ -32,7 +47,7 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules"],
+	"exclude": ["node_modules", "./src/components/base/_globals.js"],
 	"vueCompilerOptions": {
 		"target": 2.7
 	}

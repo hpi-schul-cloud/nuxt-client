@@ -11,24 +11,30 @@ import {
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import { Route } from "vue-router";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useBoardState } from "../state/BoardState.composable";
-import { Board } from "../types/Board";
+import {
+	useBoardState,
+	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardPageInformation,
+} from "@data-board";
+import { useBoardNotifier } from "@util-board";
+import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
-jest.mock("../state/BoardState.composable");
 const mockedUseBoardState = jest.mocked(useBoardState);
+const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseSharedBoardPageInformation = jest.mocked(
+	useSharedBoardPageInformation
+);
+jest.mock("@data-board");
+jest.mock("@util-board");
 
-jest.mock("../shared/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
-
-jest.mock("../shared/BoardNotifications.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
@@ -93,9 +99,18 @@ describe("Board", () => {
 			moveColumn: moveColumnMock,
 			updateColumnTitle: updateColumnTitleMock,
 		});
-		mockedUserPermissions.mockReturnValue({
+		mockedUseBoardPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+		mockedUseSharedEditMode.mockReturnValue({
+			editModeId: ref(""),
+			setEditModeId: jest.fn(),
+		});
+		mockedUseSharedBoardPageInformation.mockReturnValue({
+			createPageInformation: jest.fn(),
+			breadcrumbs: ref([]),
+			pageTitle: ref("page-title"),
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
