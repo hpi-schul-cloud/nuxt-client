@@ -10,7 +10,7 @@ import RoomModule from "@/store/room";
 import VideoConferenceModule from "@/store/video-conference";
 import StatusAlertsModule from "@/store/status-alerts";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import UserLoginMigrationModule from "@/store/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 import SystemsModule from "@/store/systems";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =

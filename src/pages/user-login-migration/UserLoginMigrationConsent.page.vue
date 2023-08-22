@@ -77,11 +77,7 @@
 import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import {
-	MigrationPageOrigin,
-	UserLoginMigration,
-} from "@/store/types/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -99,6 +95,10 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { useI18n } from "@/composables/i18n.composable";
+import {
+	MigrationPageOrigin,
+	UserLoginMigration,
+} from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
@@ -167,7 +167,7 @@ export default defineComponent({
 		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
-			await userLoginMigrationModule?.getLatestUserLoginMigrationForCurrentUser();
+			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
 			await systemsModule?.fetchSystems();
 			if (
 				!isNewLoginFlowEnabled &&

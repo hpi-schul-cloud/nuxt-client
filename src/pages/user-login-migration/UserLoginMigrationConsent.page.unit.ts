@@ -2,17 +2,24 @@ import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMig
 import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
-	MigrationLinks,
-	MigrationPageOrigin,
-} from "@/store/types/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migration";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	SYSTEMS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, Wrapper, mount } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
+import {
+	MigrationLinks,
+	MigrationPageOrigin,
+	UserLoginMigration,
+} from "@/store/user-login-migration";
+import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -23,15 +30,16 @@ describe("UserLoginMigrationConsent", () => {
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = async (props: object) => {
+	const setup = async (props: { origin: string }) => {
 		document.body.setAttribute("data-app", "true");
+		const targetSystemId = "targetSystemId";
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
 				name: "sourceSystem",
 			},
 			{
-				id: "targetSystemId",
+				id: targetSystemId,
 				name: "targetSystem",
 			},
 		];
@@ -43,8 +51,11 @@ describe("UserLoginMigrationConsent", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
+		const userLoginMigrationMock: UserLoginMigration =
+			userLoginMigrationFactory.build({ targetSystemId });
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getMigrationLinks: migrationLinksMock,
+			getUserLoginMigration: userLoginMigrationMock,
 		});
 		envConfigModule = createModuleMocks(EnvConfigModule);
 
@@ -55,8 +66,8 @@ describe("UserLoginMigrationConsent", () => {
 					i18n: true,
 				}),
 				provide: {
-					systemsModule,
-					userLoginMigrationModule,
+					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
+					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[I18N_KEY.valueOf()]: i18nMock,
 				},
@@ -78,8 +89,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -94,8 +103,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to sourceSystemId and mandatory is not set", () => {
 			it("should show the normal description text", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -110,8 +117,6 @@ describe("UserLoginMigrationConsent", () => {
 
 			it("should show the proceed migration button", async () => {
 				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -125,8 +130,6 @@ describe("UserLoginMigrationConsent", () => {
 
 			it("should show the skip migration button", async () => {
 				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -140,10 +143,7 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to sourceSystemId and when mandatory is set", () => {
 			it("should show the mandatory description text", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
-					mandatory: true,
 				});
 
 				const descriptionText: string = wrapper
@@ -157,10 +157,7 @@ describe("UserLoginMigrationConsent", () => {
 
 			it("should show the logout button", async () => {
 				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
-					mandatory: true,
 				});
 
 				const button = wrapper.find("[data-testId=btn-cancel]");
@@ -173,8 +170,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to targetSystem", () => {
 			it("should show the mandatory description text", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "targetSystemId",
 				});
 
@@ -193,17 +188,15 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to sourceSystem", () => {
 			it("should call the api to load the migrations links", async () => {
 				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 				});
 			});
 		});
@@ -211,18 +204,15 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to sourceSystem and mandatory is set", () => {
 			it("should call the api to load the migrations links", async () => {
 				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
-					mandatory: true,
 				});
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY,
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 				});
 			});
 		});
@@ -230,17 +220,15 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to targetSystem", () => {
 			it("should call the api to load the migrations links", async () => {
 				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "targetSystemId",
 				});
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_TARGET_SYSTEM,
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 				});
 			});
 		});

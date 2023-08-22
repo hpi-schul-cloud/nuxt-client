@@ -38,7 +38,6 @@ import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
-	components: { RenderHTML },
 	component: { RenderHTML },
 	props: {
 		targetSystem: {

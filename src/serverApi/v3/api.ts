@@ -10484,14 +10484,17 @@ export const SSOApiAxiosParamCreator = function (configuration?: Configuration) 
          * 
          * @param {string} systemId The id of the system.
          * @param {string} postLoginRedirect 
+         * @param {boolean} migration 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthSSOControllerGetAuthenticationUrl: async (systemId: string, postLoginRedirect: string, options: any = {}): Promise<RequestArgs> => {
+        oauthSSOControllerGetAuthenticationUrl: async (systemId: string, postLoginRedirect: string, migration: boolean, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('oauthSSOControllerGetAuthenticationUrl', 'systemId', systemId)
             // verify required parameter 'postLoginRedirect' is not null or undefined
             assertParamExists('oauthSSOControllerGetAuthenticationUrl', 'postLoginRedirect', postLoginRedirect)
+            // verify required parameter 'migration' is not null or undefined
+            assertParamExists('oauthSSOControllerGetAuthenticationUrl', 'migration', migration)
             const localVarPath = `/sso/login/{systemId}`
                 .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -10507,6 +10510,10 @@ export const SSOApiAxiosParamCreator = function (configuration?: Configuration) 
 
             if (postLoginRedirect !== undefined) {
                 localVarQueryParameter['postLoginRedirect'] = postLoginRedirect;
+            }
+
+            if (migration !== undefined) {
+                localVarQueryParameter['migration'] = migration;
             }
 
 
@@ -10670,11 +10677,12 @@ export const SSOApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} systemId The id of the system.
          * @param {string} postLoginRedirect 
+         * @param {boolean} migration 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, options);
+        async oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, migration: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, migration, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -10729,11 +10737,12 @@ export const SSOApiFactory = function (configuration?: Configuration, basePath?:
          * 
          * @param {string} systemId The id of the system.
          * @param {string} postLoginRedirect 
+         * @param {boolean} migration 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, options?: any): AxiosPromise<void> {
-            return localVarFp.oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, options).then((request) => request(axios, basePath));
+        oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, migration: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, migration, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10782,11 +10791,12 @@ export interface SSOApiInterface {
      * 
      * @param {string} systemId The id of the system.
      * @param {string} postLoginRedirect 
+     * @param {boolean} migration 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SSOApiInterface
      */
-    oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, options?: any): AxiosPromise<void>;
+    oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, migration: boolean, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -10835,12 +10845,13 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
      * 
      * @param {string} systemId The id of the system.
      * @param {string} postLoginRedirect 
+     * @param {boolean} migration 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SSOApi
      */
-    public oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, options?: any) {
-        return SSOApiFp(this.configuration).oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, options).then((request) => request(this.axios, this.basePath));
+    public oauthSSOControllerGetAuthenticationUrl(systemId: string, postLoginRedirect: string, migration: boolean, options?: any) {
+        return SSOApiFp(this.configuration).oauthSSOControllerGetAuthenticationUrl(systemId, postLoginRedirect, migration, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15389,7 +15400,8 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15600,7 +15612,8 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15675,7 +15688,8 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15744,7 +15758,8 @@ export interface UserLoginMigrationApiInterface {
     userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
-     * 
+     * Currently there can only be one migration for a user. Therefore only one migration is returned.
+     * @summary Get UserLoginMigrations
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15817,7 +15832,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
     }
 
     /**
-     * 
+     * Currently there can only be one migration for a user. Therefore only one migration is returned.
+     * @summary Get UserLoginMigrations
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

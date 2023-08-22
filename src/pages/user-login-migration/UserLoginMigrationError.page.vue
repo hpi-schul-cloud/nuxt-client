@@ -57,8 +57,9 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import UserLoginMigrationModule from "@/store/user-login-migration";
-import { UserLoginMigration } from "@/store/types/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { UserLoginMigration } from "@/store/user-login-migration";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -75,7 +76,9 @@ export default defineComponent({
 	},
 	setup(props) {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
+		);
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
 			USER_LOGIN_MIGRATION_MODULE_KEY
 		);
@@ -116,7 +119,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
-			await userLoginMigrationModule.getLatestUserLoginMigrationForCurrentUser();
+			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
 			isLoading.value = false;
 		});
 
