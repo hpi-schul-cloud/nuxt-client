@@ -35,7 +35,6 @@ module.exports = {
 		"vue/no-v-html": "error",
 		"no-prototype-builtins": "error",
 		"no-empty": "error",
-		"vue/no-setup-props-destructure": "warn",
 	},
 	overrides: [
 		{
