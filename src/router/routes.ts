@@ -152,10 +152,7 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
 		beforeEnter: validateQueryParameters({
-			origin: (value: unknown, to: Route) =>
-				!isDefined(value) ||
-				(isMongoId(value) &&
-					(value === to.query.sourceSystem || value === to.query.targetSystem)),
+			origin: (value: unknown) => !isDefined(value) || isMongoId(value),
 		}),
 		props: (route: Route) => ({
 			origin: route.query.origin,
@@ -190,6 +187,12 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
+		beforeEnter: validateQueryParameters({
+			targetSystem: isMongoId,
+		}),
+		props: (route: Route) => ({
+			targetSystem: route.query.targetSystem,
+		}),
 		meta: {
 			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
