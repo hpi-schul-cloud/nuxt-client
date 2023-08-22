@@ -36,14 +36,6 @@ describe("FileContentElementDownload", () => {
 		expect(icon.exists()).toBe(true);
 	});
 
-	it("should display correctly download icon", () => {
-		const { wrapper } = setup();
-
-		const icon = wrapper.find("v-icon");
-
-		expect(icon.text()).toBe("$mdiTrayArrowDown");
-	});
-
 	describe("when download is allowed", () => {
 		describe("when download icon is clicked", () => {
 			const setup = () => {
@@ -70,6 +62,7 @@ describe("FileContentElementDownload", () => {
 					downloadFileMock,
 				};
 			};
+
 			it("should download file", async () => {
 				const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
 
@@ -78,6 +71,16 @@ describe("FileContentElementDownload", () => {
 
 				expect(downloadFileMock).toHaveBeenCalledTimes(1);
 				expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
+			});
+		});
+
+		describe("when download icon is not clicked", () => {
+			it("should display correctly download icon", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.find("v-icon");
+
+				expect(icon.text()).toBe("$mdiTrayArrowDown");
 			});
 		});
 	});
