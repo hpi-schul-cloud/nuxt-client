@@ -94,7 +94,6 @@ const envs = {
 	I18N__FALLBACK_LANGUAGE: "de",
 	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/cloud-instances/",
 	SC_TITLE: "HPI Schul-Cloud",
-	SC_SHORT_TITLE: "HPI Schul-Cloud",
 };
 
 const mockStore = {

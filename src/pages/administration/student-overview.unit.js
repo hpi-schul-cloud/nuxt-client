@@ -20,7 +20,6 @@ const envs = {
 	I18N__FALLBACK_LANGUAGE: "",
 	DOCUMENT_BASE_DIR: "",
 	SC_TITLE: "",
-	SC_SHORT_TITLE: "",
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 };
 const mockData = [
