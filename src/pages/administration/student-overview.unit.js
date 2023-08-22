@@ -136,11 +136,6 @@ describe("students/index", () => {
 				store: mockStore,
 				uiState: mockUiState,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -185,11 +180,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
 	});
@@ -200,11 +190,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		mock$objects(wrapper);
 		authModule.addUserPermmission("STUDENT_DELETE");
@@ -253,11 +238,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -307,11 +287,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		mock$objects(wrapper);
 
@@ -360,11 +335,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const table = wrapper.find(`[data-testid="students_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
@@ -380,11 +350,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -406,11 +371,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -428,11 +388,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(true);
@@ -445,11 +400,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(false);
@@ -463,11 +413,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.vm.href).toStrictEqual(expectedURL);
@@ -480,11 +425,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -507,11 +447,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: customMockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 
 		const fabComponent = wrapper.find(
@@ -528,11 +463,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -548,11 +478,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 
@@ -565,11 +490,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
 		expect(externalHint.exists()).toBe(false);
@@ -581,11 +501,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 
 		//run all existing timers
@@ -614,11 +529,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 
 		mockStore.uiState.mutations.set.mockClear();
@@ -642,11 +552,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -665,11 +570,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
@@ -689,11 +589,6 @@ describe("students/index", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name: "nbc",
-				},
-			},
 		});
 
 		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);

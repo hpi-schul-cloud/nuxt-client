@@ -141,8 +141,6 @@ describe("teachers/index", () => {
 		set: (key, identifier) => ({}),
 	};
 
-	const short_name = "instance name";
-
 	it("should call 'deleteUsers' action", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
