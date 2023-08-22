@@ -12,6 +12,7 @@ describe("FileContentElementFooter", () => {
 			fileName: "file-record #1.txt",
 			url: "1/file-record #1.txt",
 			isDownloadAllowed: true,
+			fileSize: 3800,
 		};
 
 		const wrapper = shallowMount(FileContentElementFooter, {
@@ -24,6 +25,7 @@ describe("FileContentElementFooter", () => {
 			fileNameProp: propsData.fileName,
 			urlProp: propsData.url,
 			isDownloadAllowedProp: propsData.isDownloadAllowed,
+			fileSizeProp: propsData.fileSize,
 		};
 	};
 
@@ -36,11 +38,12 @@ describe("FileContentElementFooter", () => {
 	});
 
 	it("should render chips component with proper props", () => {
-		const { wrapper, fileNameProp } = setup();
+		const { wrapper, fileNameProp, fileSizeProp } = setup();
 
 		const props = wrapper.findComponent(FileContentElementChips).attributes();
 
 		expect(props.filename).toEqual(fileNameProp);
+		expect(props.filesize).toBe(fileSizeProp.toString());
 	});
 
 	it("should render download component with proper props", () => {
