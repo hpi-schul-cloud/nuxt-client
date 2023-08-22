@@ -293,6 +293,27 @@ describe("UserLoginMigrationModule", () => {
 				});
 			});
 
+			describe("when the api returns a bad request", () => {
+				const setup = () => {
+					authModule.setUser({ ...mockUser, id: "userId" });
+
+					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
+						createApplicationError(HttpStatusCode.BadRequest)
+					);
+				};
+
+				it("should throw an error with status code BadRequest when an ApplicationError is thrown", async () => {
+					setup();
+
+					const func = () =>
+						module.fetchLatestUserLoginMigrationForCurrentUser();
+
+					await expect(func()).rejects.toEqual(
+						createApplicationError(HttpStatusCode.BadRequest)
+					);
+				});
+			});
+
 			describe("when there are more than one migration for a user", () => {
 				const setup = () => {
 					authModule.setUser({ ...mockUser, id: "userId" });

@@ -1,5 +1,5 @@
 import { $axios } from "@/utils/api";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	PageContentResponse,
@@ -136,10 +136,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			} catch (error: unknown) {
 				if (error instanceof ApplicationError) {
 					throw error;
-				} else if (error instanceof AxiosError) {
-					throw createApplicationError(
-						error.response?.status ?? HttpStatusCode.InternalServerError
-					);
 				} else {
 					throw createApplicationError(HttpStatusCode.InternalServerError);
 				}
