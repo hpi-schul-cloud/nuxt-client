@@ -7432,6 +7432,133 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
 
 
 /**
+ * BoardSubmissionApi - axios parameter creator
+ * @export
+ */
+export const BoardSubmissionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of submission items by their parent container.
+         * @param {string} submissionContainerId The id of the submission container.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerGetSubmissionItems: async (submissionContainerId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'submissionContainerId' is not null or undefined
+            assertParamExists('boardSubmissionControllerGetSubmissionItems', 'submissionContainerId', submissionContainerId)
+            const localVarPath = `/board-submissions/{submissionContainerId}`
+                .replace(`{${"submissionContainerId"}}`, encodeURIComponent(String(submissionContainerId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BoardSubmissionApi - functional programming interface
+ * @export
+ */
+export const BoardSubmissionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BoardSubmissionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of submission items by their parent container.
+         * @param {string} submissionContainerId The id of the submission container.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SubmissionItemResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * BoardSubmissionApi - factory interface
+ * @export
+ */
+export const BoardSubmissionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BoardSubmissionApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of submission items by their parent container.
+         * @param {string} submissionContainerId The id of the submission container.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>> {
+            return localVarFp.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BoardSubmissionApi - interface
+ * @export
+ * @interface BoardSubmissionApi
+ */
+export interface BoardSubmissionApiInterface {
+    /**
+     * 
+     * @summary Get a list of submission items by their parent container.
+     * @param {string} submissionContainerId The id of the submission container.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApiInterface
+     */
+    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>>;
+
+}
+
+/**
+ * BoardSubmissionApi - object-oriented interface
+ * @export
+ * @class BoardSubmissionApi
+ * @extends {BaseAPI}
+ */
+export class BoardSubmissionApi extends BaseAPI implements BoardSubmissionApiInterface {
+    /**
+     * 
+     * @summary Get a list of submission items by their parent container.
+     * @param {string} submissionContainerId The id of the submission container.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApi
+     */
+    public boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any) {
+        return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerGetSubmissionItems(submissionContainerId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * CollaborativeStorageApi - axios parameter creator
  * @export
  */
