@@ -112,13 +112,10 @@ export default {
 				if (
 					!schoolsModule.getFederalState ||
 					!schoolsModule.getFederalState._id ||
-					!schoolsModule.currentYear ||
-					!schoolsModule.currentYear._id ||
 					!schoolsModule.systems ||
 					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 				) {
-					schoolsModule.fetchCurrentYear();
 					schoolsModule.fetchSystems();
 					schoolsModule.fetchFederalState();
 				}

@@ -140,7 +140,6 @@ const mockStore = {
 		},
 		actions: {
 			update: jest.fn(),
-			fetchCurrentYear: jest.fn(),
 		},
 	},
 };
@@ -151,11 +150,6 @@ setupStores({
 	schoolsModule: SchoolsModule,
 });
 
-const fetchYearSpy = jest
-	.spyOn(schoolsModule, "fetchCurrentYear")
-	.mockImplementation(() => {
-		schoolsModule.setCurrentYear(year);
-	});
 const fetchSystemsSpy = jest
 	.spyOn(schoolsModule, "fetchSystems")
 	.mockImplementation(() => {
@@ -407,7 +401,6 @@ describe("SchoolSettingPage", () => {
 			},
 		});
 		await wrapper.vm.$nextTick();
-		expect(fetchYearSpy).toHaveBeenCalled();
 		expect(fetchSystemsSpy).toHaveBeenCalled();
 		expect(fetchFederalStateSpy).toHaveBeenCalled();
 	});
