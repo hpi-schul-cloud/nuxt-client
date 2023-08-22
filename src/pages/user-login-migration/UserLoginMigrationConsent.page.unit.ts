@@ -30,16 +30,18 @@ describe("UserLoginMigrationConsent", () => {
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = async (props: { origin: string }) => {
+	const setup = async (
+		props: { origin: string },
+		userLoginMigration?: Partial<UserLoginMigration>
+	) => {
 		document.body.setAttribute("data-app", "true");
-		const targetSystemId = "targetSystemId";
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
 				name: "sourceSystem",
 			},
 			{
-				id: targetSystemId,
+				id: "targetSystemId",
 				name: "targetSystem",
 			},
 		];
@@ -52,7 +54,7 @@ describe("UserLoginMigrationConsent", () => {
 			getSystems: systemsMock,
 		});
 		const userLoginMigrationMock: UserLoginMigration =
-			userLoginMigrationFactory.build({ targetSystemId });
+			userLoginMigrationFactory.build({ ...userLoginMigration });
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getMigrationLinks: migrationLinksMock,
 			getUserLoginMigration: userLoginMigrationMock,
@@ -82,6 +84,7 @@ describe("UserLoginMigrationConsent", () => {
 		return {
 			wrapper,
 			migrationLinksMock,
+			userLoginMigrationMock,
 		};
 	};
 
@@ -142,9 +145,12 @@ describe("UserLoginMigrationConsent", () => {
 
 		describe("when origin is equal to sourceSystemId and when mandatory is set", () => {
 			it("should show the mandatory description text", async () => {
-				const { wrapper } = await setup({
-					origin: "sourceSystemId",
-				});
+				const { wrapper } = await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ mandatorySince: "someDate" }
+				);
 
 				const descriptionText: string = wrapper
 					.find("[data-testId=text-description]")
@@ -156,9 +162,12 @@ describe("UserLoginMigrationConsent", () => {
 			});
 
 			it("should show the logout button", async () => {
-				const { wrapper, migrationLinksMock } = await setup({
-					origin: "sourceSystemId",
-				});
+				const { wrapper, migrationLinksMock } = await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ mandatorySince: "someDate" }
+				);
 
 				const button = wrapper.find("[data-testId=btn-cancel]");
 
@@ -187,9 +196,12 @@ describe("UserLoginMigrationConsent", () => {
 	describe("Api", () => {
 		describe("when origin is equal to sourceSystem", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					origin: "sourceSystemId",
-				});
+				await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ sourceSystemId: "sourceSystemId" }
+				);
 
 				await Vue.nextTick();
 
@@ -197,15 +209,20 @@ describe("UserLoginMigrationConsent", () => {
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
+					sourceSystem: "sourceSystemId",
+					targetSystem: "targetSystemId",
 				});
 			});
 		});
 
 		describe("when origin is equal to sourceSystem and mandatory is set", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					origin: "sourceSystemId",
-				});
+				await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ sourceSystemId: "sourceSystemId", mandatorySince: "someDate" }
+				);
 
 				await Vue.nextTick();
 
@@ -213,15 +230,20 @@ describe("UserLoginMigrationConsent", () => {
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY,
+					sourceSystem: "sourceSystemId",
+					targetSystem: "targetSystemId",
 				});
 			});
 		});
 
 		describe("when origin is equal to targetSystem", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					origin: "targetSystemId",
-				});
+				await setup(
+					{
+						origin: "targetSystemId",
+					},
+					{ targetSystemId: "targetSystemId", mandatorySince: "someDate" }
+				);
 
 				await Vue.nextTick();
 
@@ -229,6 +251,8 @@ describe("UserLoginMigrationConsent", () => {
 					userLoginMigrationModule.fetchMigrationLinks
 				).toHaveBeenCalledWith({
 					pageType: MigrationPageOrigin.START_FROM_TARGET_SYSTEM,
+					sourceSystem: "sourceSystemId",
+					targetSystem: "targetSystemId",
 				});
 			});
 		});
