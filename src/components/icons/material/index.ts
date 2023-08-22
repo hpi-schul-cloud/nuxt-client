@@ -86,6 +86,7 @@ import {
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiTrayArrowDown,
+	mdiPlaylistEdit,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -176,6 +177,7 @@ const materialIcons = {
 	mdiArrowCollapseUp,
 	mdiArrowCollapseDown,
 	mdiTrayArrowDown,
+	mdiPlaylistEdit,
 };
 
 export default materialIcons;
