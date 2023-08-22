@@ -35,16 +35,20 @@
 				@delete:element="onDeleteElement"
 			/>
 		</v-list-item>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementChips
+			:fileSize="fileSize"
+			:fileName="fileName"
+			:mimeType="mimeType"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline, mdiClose } from "@mdi/js";
+import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
+import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, ref, watch } from "vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
-import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
@@ -55,6 +59,7 @@ export default defineComponent({
 		elementId: { type: String, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
+		mimeType: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },

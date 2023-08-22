@@ -16,6 +16,7 @@
 				:fileSize="fileSize"
 				:isDownloadAllowed="!isBlockedByVirusScan"
 				:url="fileUrl"
+				:mimeType="mimeType"
 				:isEditMode="isEditMode"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
@@ -37,6 +38,7 @@
 				:fileName="fileName"
 				:fileSize="fileSize"
 				:url="url"
+				:mimeType="mimeType"
 				:isDownloadAllowed="!isBlockedByVirusScan"
 			/>
 			<FileContentElementEdit
@@ -46,6 +48,7 @@
 				:elementId="element.id"
 				:isDownloadAllowed="!isBlockedByVirusScan"
 				:url="url"
+				:mimeType="mimeType"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -122,6 +125,10 @@ export default defineComponent({
 			return fileRecord.value === undefined ? "" : fileRecord.value.url;
 		});
 
+		const mimeType = computed(() => {
+			return fileRecord.value === undefined ? "" : fileRecord.value.mimeType;
+		});
+
 		const hasFileRecord = computed(() => {
 			return fileRecord.value !== undefined;
 		});
@@ -189,6 +196,7 @@ export default defineComponent({
 			fileSize,
 			fileName,
 			fileUrl,
+			mimeType,
 			fileRecord,
 			hasFileRecord,
 			isBlockedByVirusScan,

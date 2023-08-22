@@ -32,14 +32,18 @@
 				>
 			</v-list-item-content>
 		</v-list-item>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementChips
+			:fileSize="fileSize"
+			:fileName="fileName"
+			:mimeType="mimeType"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
-import FileContentElementChips from "./FileContentElementChips.vue";
 import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
+import FileContentElementChips from "./FileContentElementChips.vue";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
@@ -48,6 +52,7 @@ export default defineComponent({
 		fileSize: { type: Number, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
+		mimeType: { type: String, required: true },
 	},
 	components: { FileContentElementChips },
 	setup() {

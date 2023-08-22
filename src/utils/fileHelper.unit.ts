@@ -1,4 +1,4 @@
-import { convertFileSize, downloadFile, getFileExtension } from "./fileHelper";
+import { convertFileSize, downloadFile } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -114,32 +114,6 @@ describe("@/utils/fileHelper", () => {
 		it("should return file size >= 1024 GB", () => {
 			const result = convertFileSize(1099511627776);
 			expect(result).toEqual({ convertedSize: 1024, unit: "GB" });
-		});
-	});
-
-	describe("getFileExtension", () => {
-		describe("when input string contains one dot", () => {
-			it("should return the part of the input string behing the last dot", () => {
-				const result = getFileExtension("test.ext");
-
-				expect(result).toEqual("ext");
-			});
-		});
-
-		describe("when input string contains several dots", () => {
-			it("should return the part of the input string behing the last dot", () => {
-				const result = getFileExtension("test.test.test.ext");
-
-				expect(result).toEqual("ext");
-			});
-		});
-
-		describe("when input string contains no dot", () => {
-			it("should return the input string", () => {
-				const result = getFileExtension("test");
-
-				expect(result).toEqual("test");
-			});
 		});
 	});
 });

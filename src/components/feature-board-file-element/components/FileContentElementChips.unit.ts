@@ -1,22 +1,25 @@
-import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
+import { convertFileSize } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
+import { getExtension } from "mime";
 import FileContentElementChips from "./FileContentElementChips.vue";
 
 jest.mock("@/utils/fileHelper");
+jest.mock("mime");
 
 describe("FileContentElementChips", () => {
 	const setup = () => {
 		const fileSize = 3800;
 		const fileName = "pic.jpeg";
+		const mimeType = "image/jpeg";
 		const convertedSize = 3800;
 		const unit = "KB";
 		const convertFileSizeMock = jest
 			.mocked(convertFileSize)
 			.mockReturnValueOnce({ convertedSize, unit });
 		const getFileExtensionMock = jest
-			.mocked(getFileExtension)
+			.mocked(getExtension)
 			.mockReturnValueOnce("ext");
 		const wrapper = mount(FileContentElementChips, {
 			...createComponentMocks({
@@ -25,6 +28,7 @@ describe("FileContentElementChips", () => {
 			propsData: {
 				fileSize,
 				fileName,
+				mimeType,
 			},
 			provide: {
 				[I18N_KEY.valueOf()]: {
@@ -36,7 +40,7 @@ describe("FileContentElementChips", () => {
 		return {
 			wrapper,
 			fileSize,
-			fileName,
+			mimeType,
 			convertFileSizeMock,
 			getFileExtensionMock,
 			unit,
@@ -71,10 +75,10 @@ describe("FileContentElementChips", () => {
 	});
 
 	it("should call getFileExtension", () => {
-		const { fileName, getFileExtensionMock } = setup();
+		const { mimeType, getFileExtensionMock } = setup();
 
 		expect(getFileExtensionMock).toHaveBeenCalledTimes(1);
-		expect(getFileExtensionMock).toHaveBeenCalledWith(fileName);
+		expect(getFileExtensionMock).toHaveBeenCalledWith(mimeType);
 	});
 
 	it("should show correctly file extension", () => {

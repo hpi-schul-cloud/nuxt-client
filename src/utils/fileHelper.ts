@@ -38,9 +38,3 @@ export function convertFileSize(fileSize: number): {
 
 	return { convertedSize, unit };
 }
-
-export function getFileExtension(fileName: string): string {
-	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-	return ext;
-}

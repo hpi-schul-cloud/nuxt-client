@@ -10,8 +10,9 @@
 </template>
 
 <script lang="ts">
-import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
+import { convertFileSize } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { getExtension } from "mime";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
@@ -22,6 +23,10 @@ export default defineComponent({
 			required: true,
 		},
 		fileName: {
+			type: String,
+			required: true,
+		},
+		mimeType: {
 			type: String,
 			required: true,
 		},
@@ -39,7 +44,7 @@ export default defineComponent({
 		});
 
 		const fileExtension = computed(() =>
-			getFileExtension(props.fileName).toUpperCase()
+			getExtension(props.mimeType)?.toUpperCase()
 		);
 
 		return {

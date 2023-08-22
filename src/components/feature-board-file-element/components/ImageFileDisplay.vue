@@ -14,7 +14,11 @@
 				@delete:element="onDeleteElement"
 			/>
 		</div>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementChips
+			:fileSize="fileSize"
+			:fileName="fileName"
+			:mimeType="mimeType"
+		/>
 	</div>
 </template>
 
@@ -31,6 +35,7 @@ export default defineComponent({
 		fileSize: { type: Number, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
+		mimeType: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
