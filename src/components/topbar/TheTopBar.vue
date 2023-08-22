@@ -162,20 +162,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-		// const fullscreen = ref(props.fullscreenMode);
 
 		onMounted(() => {
 			(async () => {
 				await statusAlertsModule.fetchStatusAlerts();
 			})();
 		});
-
-		// watch(
-		// 	() => props.fullscreenMode,
-		// 	(newValue) => {
-		// 		fullscreen.value = newValue;
-		// 	}
-		// );
 
 		const sendEvent = (eventName: string) => {
 			emit("action", eventName);
