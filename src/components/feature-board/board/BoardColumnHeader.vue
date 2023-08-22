@@ -23,17 +23,13 @@
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 						<template #icon>
-							<VIcon>
-								{{ mdiPencilOutline }}
-							</VIcon>
+							<VIcon> $mdiPencilOutline </VIcon>
 						</template>
 						{{ $t("common.actions.edit") }}
 					</BoardMenuAction>
 					<BoardMenuAction @click="onTryDelete">
 						<template #icon>
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
+							<VIcon> $mdiTrashCanOutline </VIcon>
 						</template>
 						{{ $t("components.board.action.delete") }}
 					</BoardMenuAction>
@@ -47,7 +43,6 @@
 <script lang="ts">
 import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
 import { defineComponent, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
@@ -136,8 +131,6 @@ export default defineComponent({
 			isFocusContained,
 			isDeleteModalOpen,
 			hasDeletePermission,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			onStartEditMode,
 			onEndEditMode,
 			onTryDelete,

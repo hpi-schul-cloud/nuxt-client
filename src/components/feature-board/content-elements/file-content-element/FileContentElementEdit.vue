@@ -10,7 +10,7 @@
 				class="grey--text"
 				data-testid="board-file-element-edit-file-icon"
 				large
-				>{{ mdiFileDocumentOutline }}</v-icon
+				>$mdiFileDocumentOutline</v-icon
 			>
 		</v-list-item-icon>
 
@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 
@@ -67,7 +66,6 @@ export default defineComponent({
 		};
 
 		return {
-			mdiFileDocumentOutline,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

@@ -1,5 +1,4 @@
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiFormatText, mdiTrayArrowUp } from "@mdi/js";
 import { ref } from "vue";
 import { AddCardElement } from "../state/CardState.composable";
 import { useSelectedFile } from "./SelectedFile.composable";
@@ -36,13 +35,13 @@ export const useElementTypeSelection = (addElementFunction: AddCardElement) => {
 
 	const options = [
 		{
-			icon: mdiFormatText,
+			icon: "$mdiFormatText",
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
 			action: () => onElementClick(ContentElementType.RichText),
 			testId: "create-element-text",
 		},
 		{
-			icon: mdiTrayArrowUp,
+			icon: "$mdiTrayArrowUp",
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: onFileElementClick,
 			testId: "create-element-file",

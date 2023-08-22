@@ -36,7 +36,6 @@
 <script lang="ts">
 import { notifierModule } from "@/store";
 import { computed, defineComponent } from "vue";
-import { mdiInformation } from "@mdi/js";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery } from "@vueuse/core";
 
@@ -71,7 +70,6 @@ export default defineComponent({
 			icon,
 			isVisible,
 			isMobile,
-			mdiInformation,
 			transition,
 			onCloseNotification,
 		};

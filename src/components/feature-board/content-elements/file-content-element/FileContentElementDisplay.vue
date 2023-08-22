@@ -10,7 +10,7 @@
 				class="grey--text"
 				data-testid="board-file-element-display-file-icon"
 				large
-				>{{ mdiFileDocumentOutline }}</v-icon
+				>$mdiFileDocumentOutline</v-icon
 			>
 		</v-list-item-icon>
 
@@ -34,7 +34,6 @@
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -43,11 +42,6 @@ export default defineComponent({
 		fileName: { type: String, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
-	},
-	setup() {
-		return {
-			mdiFileDocumentOutline,
-		};
 	},
 });
 </script>

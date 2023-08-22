@@ -82,6 +82,10 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPlusCircleOutline,
+	mdiFileDocumentOutline,
+	mdiArrowCollapseUp,
+	mdiArrowCollapseDown,
+	mdiTrayArrowDown,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -168,6 +172,10 @@ const materialIcons = {
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPlusCircleOutline,
+	mdiFileDocumentOutline,
+	mdiArrowCollapseUp,
+	mdiArrowCollapseDown,
+	mdiTrayArrowDown,
 };
 
 export default materialIcons;
