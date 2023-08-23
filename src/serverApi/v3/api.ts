@@ -3524,6 +3524,12 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     status: SchoolExternalToolResponseStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolExternalToolResponse
+     */
+    logoUrl?: string;
 }
 
 /**
