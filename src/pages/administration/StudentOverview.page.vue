@@ -144,6 +144,8 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
+import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -461,9 +463,9 @@ export default {
 		this.find();
 	},
 	mounted() {
-		document.title = `${this.$t(
-			"pages.administration.students.index.title"
-		)} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.students.index.title")
+		);
 	},
 	methods: {
 		find() {

@@ -15,6 +15,7 @@
 
 import { FileRecordParentType } from './file-record-parent-type';
 import { FileRecordScanStatus } from './file-record-scan-status';
+import { PreviewStatus } from './preview-status';
 
 /**
  * 
@@ -76,6 +77,12 @@ export interface FileRecordResponse {
      * @memberof FileRecordResponse
      */
     parentType: FileRecordParentType;
+    /**
+     * 
+     * @type {PreviewStatus}
+     * @memberof FileRecordResponse
+     */
+    previewStatus: PreviewStatus;
     /**
      * 
      * @type {string}

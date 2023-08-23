@@ -96,6 +96,7 @@ import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import { notifierModule, envConfigModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -241,9 +242,7 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.administration.ldap.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
 	},
 };
 </script>

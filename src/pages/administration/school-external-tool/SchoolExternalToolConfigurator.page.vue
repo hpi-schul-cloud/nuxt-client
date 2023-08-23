@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import {
@@ -50,6 +50,8 @@ import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 
 export default defineComponent({
 	components: {
@@ -70,6 +72,9 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("pages.tool.title"));
+		useTitle(pageTitle);
 
 		const schoolSetting: Breadcrumb = {
 			text: t("pages.administration.school.index.title"),

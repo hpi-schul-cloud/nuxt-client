@@ -15,7 +15,7 @@
 import { defineComponent, provide, shallowRef } from "vue";
 
 import { OnClickOutside } from "@vueuse/components";
-import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 
 export default defineComponent({
 	name: "InlineEditInteractionHandler",

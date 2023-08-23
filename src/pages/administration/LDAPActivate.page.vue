@@ -198,6 +198,7 @@ import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
 import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -279,9 +280,9 @@ export default {
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
 
-		document.title = `${this.$t("pages.administration.ldap.save.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.ldap.save.title")
+		);
 	},
 	methods: {
 		backButtonHandler() {

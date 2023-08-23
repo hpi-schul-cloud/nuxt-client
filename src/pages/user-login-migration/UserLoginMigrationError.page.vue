@@ -37,10 +37,13 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "@/composables/i18n.composable";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 import {
 	ComputedRef,
 	Ref,
@@ -72,6 +75,10 @@ export default defineComponent({
 		const systemsModule: SystemsModule | undefined =
 			inject<SystemsModule>("systemsModule");
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
+		useTitle(pageTitle);
 
 		const getSystemName = (id: string): string => {
 			return (

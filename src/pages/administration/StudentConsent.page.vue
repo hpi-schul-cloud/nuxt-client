@@ -318,6 +318,8 @@ import {
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
 } from "@/plugins/datetime";
+import { mdiAlert } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -459,7 +461,7 @@ export default {
 	},
 	mounted() {
 		this.checkTableData();
-		document.title = `${this.title} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(this.title);
 	},
 	methods: {
 		async find() {

@@ -84,6 +84,8 @@ import infiniteScrolling from "@/mixins/infiniteScrolling";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
+import { mdiChevronLeft } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -169,11 +171,12 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = this.isInline
+		const pageTitle = this.isInline
 			? this.$t("pages.content.page.window.title", {
 					instance: this.$theme.name,
 			  })
 			: this.$t("common.words.lernstore");
+		document.title = buildPageTitle(pageTitle);
 
 		const initialSearchQuery = this.$route.query.q;
 		if (initialSearchQuery) {

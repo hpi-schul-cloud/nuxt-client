@@ -137,6 +137,13 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
+import {
+	mdiAccountPlus,
+	mdiCloudDownload,
+	mdiPencilOutline,
+	mdiPlus,
+} from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -620,9 +627,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t(
-			"pages.administration.teachers.index.title"
-		)} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.index.title")
+		);
 	},
 };
 </script>

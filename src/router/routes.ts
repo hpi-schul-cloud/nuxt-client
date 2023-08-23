@@ -227,7 +227,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../pages/ColumnBoard.page.vue"),
+		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
 	},
 	{

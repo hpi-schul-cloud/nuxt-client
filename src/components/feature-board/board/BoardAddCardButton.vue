@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { useSharedEditMode } from "../shared/EditMode.composable";
+import { useSharedEditMode } from "@data-board";
 
 export default defineComponent({
 	name: "BoardAddCardButton",
@@ -56,3 +56,4 @@ export default defineComponent({
 	width: 380px;
 }
 </style>
+@data-board";
