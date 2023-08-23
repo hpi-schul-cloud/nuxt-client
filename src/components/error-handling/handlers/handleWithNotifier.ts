@@ -1,6 +1,5 @@
 import { ErrorHandler } from "@/components/error-handling/handleError";
-import { BoardObjectType, ErrorType } from "@util-board";
-import { useBoardNotifier } from "@util-board";
+import { BoardObjectType, ErrorType, useBoardNotifier } from "@util-board";
 
 export const handleWithNotifier = (
 	errorType: ErrorType,

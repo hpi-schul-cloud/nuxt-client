@@ -1,5 +1,6 @@
+import { useI18n } from "@/composables/i18n.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // WIP: move to @/types/
 export type ErrorType =
@@ -15,8 +16,6 @@ export type BoardObjectType =
 	| "boardElement";
 
 export const useBoardNotifier = () => {
-	const i18n = injectStrict(I18N_KEY);
-
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const showSuccess = (text: string | undefined) => {
@@ -64,6 +63,8 @@ export const useBoardNotifier = () => {
 		return false;
 	};
 
+	const { t } = useI18n();
+
 	const generateErrorText = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -78,12 +79,10 @@ export const useBoardNotifier = () => {
 		const errorKey = errorTextMap[errorType] ?? "error.generic";
 
 		return boardObjectType
-			? i18n
-					.t(errorKey, {
-						type: i18n?.t(`components.${boardObjectType}`),
-					})
-					.toString()
-			: i18n.t(errorKey).toString();
+			? t(errorKey, {
+					type: t(`components.${boardObjectType}`),
+			  }).toString()
+			: t(errorKey).toString();
 	};
 
 	return {
