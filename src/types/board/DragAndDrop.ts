@@ -1,4 +1,3 @@
-import { CardSkeletonResponse } from "@/serverApi/v3";
 import { BoardColumn, BoardSkeletonCard } from "./Board";
 import { AnyContentElement } from "./ContentElement";
 
