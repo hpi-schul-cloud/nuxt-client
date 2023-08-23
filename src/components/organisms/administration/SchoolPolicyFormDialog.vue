@@ -5,7 +5,7 @@
 		</h4>
 		<template slot="content">
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" :icon="mdiAlert">
+				<v-alert light text type="warning" class="mb-10" :icon="$mdiAlert">
 					<div class="replace-alert-text">
 						{{
 							t(
@@ -40,7 +40,7 @@
 							color="var(--v-error-base)"
 							data-testid="warning-icon"
 						>
-							{{ mdiAlert }}
+							$mdiAlert
 						</v-icon>
 					</template>
 				</v-file-input>
@@ -65,7 +65,7 @@
 							@click.prevent="submit"
 							data-testid="submit-button"
 						>
-							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
+							<v-icon dense class="mr-1">$mdiFileReplaceOutline</v-icon>
 							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
 						</v-btn>
 					</div>
@@ -82,7 +82,6 @@ import SchoolsModule from "@/store/schools";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
-import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
@@ -184,8 +183,6 @@ export default defineComponent({
 			t,
 			file,
 			rules,
-			mdiFileReplaceOutline,
-			mdiAlert,
 			cancel,
 			submit,
 			onBlur,

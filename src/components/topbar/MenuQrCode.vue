@@ -5,7 +5,7 @@
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
 		<v-btn outlined color="secondary" @click="openPrintMenu">
-			<v-icon left>{{ mdiPrinter }}</v-icon>
+			<v-icon left>$mdiPrinter</v-icon>
 			{{ $t("global.topbar.MenuQrCode.print") }}
 		</v-btn>
 	</div>
@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { mdiPrinter } from "@mdi/js";
 
 export default defineComponent({
 	name: "MenuQrCode",
@@ -37,7 +36,6 @@ export default defineComponent({
 		};
 
 		return {
-			mdiPrinter,
 			qrCode,
 			openPrintMenu,
 		};
