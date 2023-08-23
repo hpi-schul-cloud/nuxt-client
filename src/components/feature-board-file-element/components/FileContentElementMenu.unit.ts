@@ -7,11 +7,21 @@ import FileContentElementMenu from "./FileContentElementMenu.vue";
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementMenu", () => {
+	const setupProps = () => ({
+		fileName: "file-record #1.txt",
+		url: "1/file-record #1.txt",
+		isFirstElement: false,
+		isLastElement: false,
+		hasMultipleElements: false,
+	});
+
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
+		const propsData = setupProps();
 		const wrapper = shallowMount(FileContentElementMenu, {
 			...createComponentMocks({ i18n: true }),
+			propsData,
 			provide: {
 				[I18N_KEY as symbol]: { t: (key: string) => key },
 			},
@@ -39,7 +49,6 @@ describe("FileContentElementMenu", () => {
 				fileId: "file-id #1",
 				fileName: "file-record #1.txt",
 				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
 				isFirstElement: false,
 				isLastElement: false,
 				hasMultipleElements: true,
@@ -127,7 +136,6 @@ describe("FileContentElementMenu", () => {
 						fileId: "file-id #1",
 						fileName: "file-record #1.txt",
 						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: true,
 						isLastElement: false,
 						hasMultipleElements: true,
@@ -180,7 +188,6 @@ describe("FileContentElementMenu", () => {
 						fileId: "file-id #1",
 						fileName: "file-record #1.txt",
 						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: false,
 						isLastElement: true,
 						hasMultipleElements: true,
@@ -234,7 +241,6 @@ describe("FileContentElementMenu", () => {
 					fileId: "file-id #1",
 					fileName: "file-record #1.txt",
 					url: "1/file-record #1.txt",
-					isDownloadAllowed: true,
 					isFirstElement: false,
 					isLastElement: false,
 					hasMultipleElements: false,

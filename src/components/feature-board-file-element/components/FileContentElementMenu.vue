@@ -54,7 +54,6 @@ export default defineComponent({
 	components: { BoardMenu, BoardMenuAction },
 	props: {
 		fileName: { type: String, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
