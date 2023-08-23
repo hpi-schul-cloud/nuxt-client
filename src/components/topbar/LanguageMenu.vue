@@ -16,7 +16,7 @@
 				{{ selectedItem.longName }}
 			</v-list-item-content>
 			<v-list-item-action>
-				<v-icon>{{ mdiMenuDown }}</v-icon>
+				<v-icon>$mdiMenuDown</v-icon>
 			</v-list-item-action>
 		</v-list-item>
 		<template v-if="menuVisible">
@@ -42,13 +42,10 @@
 
 <script>
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
 
 export default {
 	data() {
 		return {
-			mdiMenuDown,
-			mdiMenuUp,
 			menuVisible: false,
 		};
 	},

@@ -18,7 +18,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon color="info">{{ mdiInformation }}</v-icon>
+						<v-icon color="info">$mdiInformation</v-icon>
 					</div>
 					<div>
 						{{
@@ -41,7 +41,7 @@
 					:error="showError()"
 					:hint="$t('common.labels.course')"
 					persistent-hint
-					:append-icon="mdiTriangleSmallDown"
+					:append-icon="$mdiTriangleSmallDown"
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
@@ -52,7 +52,6 @@
 <script type="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
 import { defineComponent, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -92,8 +91,6 @@ export default defineComponent({
 		return {
 			onNext,
 			onCancel,
-			mdiInformation,
-			mdiTriangleSmallDown,
 			rules,
 			showError,
 			selectedCourse
