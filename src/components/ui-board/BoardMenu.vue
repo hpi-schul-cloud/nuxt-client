@@ -12,7 +12,7 @@
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
-				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
+				<VIcon data-testid="board-menu-icon">$mdiDotsVertical</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
 					<template v-if="scope === 'board'">{{
 						$t("components.board.menu.board")
@@ -38,7 +38,6 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 
-import { mdiDotsVertical } from "@mdi/js";
 export default defineComponent({
 	name: "BoardMenu",
 	props: {
@@ -52,7 +51,6 @@ export default defineComponent({
 
 		return {
 			hasBackground,
-			mdiDotsVertical,
 		};
 	},
 });

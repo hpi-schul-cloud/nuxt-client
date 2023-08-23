@@ -6,9 +6,7 @@
 			@click="onMoveElementUp"
 		>
 			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseUp }}
-				</VIcon>
+				<VIcon> $mdiArrowCollapseUp </VIcon>
 			</template>
 			{{ $t("components.board.action.moveUp") }}
 		</BoardMenuAction>
@@ -18,9 +16,7 @@
 			@click="onMoveElementDown"
 		>
 			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseDown }}
-				</VIcon>
+				<VIcon> $mdiArrowCollapseDown </VIcon>
 			</template>
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
@@ -29,9 +25,7 @@
 			@click="onDelete"
 		>
 			<template #icon>
-				<VIcon>
-					{{ mdiTrashCanOutline }}
-				</VIcon>
+				<VIcon> $mdiTrashCanOutline </VIcon>
 			</template>
 			{{ $t("components.board.action.delete") }}
 		</BoardMenuAction>
@@ -39,13 +33,6 @@
 </template>
 
 <script lang="ts">
-import {
-	mdiAlertCircle,
-	mdiArrowCollapseDown,
-	mdiArrowCollapseUp,
-	mdiFileDocumentOutline,
-	mdiTrashCanOutline,
-} from "@mdi/js";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { defineComponent } from "vue";
 
@@ -71,11 +58,6 @@ export default defineComponent({
 			emit("move-up:element");
 		};
 		return {
-			mdiAlertCircle,
-			mdiFileDocumentOutline,
-			mdiArrowCollapseUp,
-			mdiArrowCollapseDown,
-			mdiTrashCanOutline,
 			onDelete,
 			onMoveElementDown,
 			onMoveElementUp,

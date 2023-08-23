@@ -31,7 +31,7 @@
 							data-testId="refresh-btn"
 							:aria-label="t('pages.videoConference.action.refresh')"
 						>
-							<v-icon dense class="mr-1">{{ mdiReload }}</v-icon>
+							<v-icon dense class="mr-1">$mdiReload</v-icon>
 							{{ t("pages.videoConference.action.refresh") }}
 						</v-btn>
 					</div>
@@ -43,7 +43,6 @@
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiReload } from "@mdi/js";
 import { defineComponent, ComputedRef, computed } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
@@ -90,7 +89,6 @@ export default defineComponent({
 		return {
 			t,
 			onClick,
-			mdiReload,
 			logoUrl,
 			refreshVideoConferenceStatus,
 		};

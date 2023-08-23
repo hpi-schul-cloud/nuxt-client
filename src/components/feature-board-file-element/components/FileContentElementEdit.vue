@@ -11,7 +11,7 @@
 					class="grey--text"
 					data-testid="board-file-element-edit-file-icon"
 					large
-					>{{ mdiFileDocumentOutline }}</v-icon
+					>$mdiFileDocumentOutline</v-icon
 				>
 			</v-list-item-icon>
 
@@ -45,11 +45,10 @@
 </template>
 
 <script lang="ts">
-import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
-import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, ref, watch } from "vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
+import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
@@ -110,8 +109,6 @@ export default defineComponent({
 		return {
 			isFilePickerOpen,
 			lastCreatedElementId,
-			mdiFileDocumentOutline,
-			mdiClose,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

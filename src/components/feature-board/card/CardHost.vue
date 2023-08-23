@@ -35,9 +35,7 @@
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
-								<VIcon>
-									{{ mdiPencilOutline }}
-								</VIcon>
+								<VIcon> $mdiPencilOutline </VIcon>
 							</template>
 							{{ $t("common.actions.edit") }}
 						</BoardMenuAction>
@@ -46,9 +44,7 @@
 							data-test-id="board-menu-action-delete"
 						>
 							<template #icon>
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
+								<VIcon> $mdiTrashCanOutline </VIcon>
 							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
@@ -73,7 +69,6 @@
 </template>
 
 <script lang="ts">
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -232,8 +227,6 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},

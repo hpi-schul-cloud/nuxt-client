@@ -20,7 +20,7 @@
 						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 					>
 						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
+							<v-icon color="info">$mdiInformation</v-icon>
 						</div>
 						<div>
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
@@ -53,7 +53,6 @@ import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue"
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -149,7 +148,6 @@ export default defineComponent({
 			shareUrl,
 			isOpen,
 			shareOptions,
-			mdiInformation,
 			onCopy,
 		};
 	},
