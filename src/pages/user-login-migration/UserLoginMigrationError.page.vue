@@ -58,8 +58,8 @@ import {
 	ref,
 } from "vue";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { UserLoginMigration } from "@/store/user-login-migration";
 import EnvConfigModule from "@/store/env-config";
+import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
