@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { MigrationPageOrigin } from "@/store/types/user-login-migration";
