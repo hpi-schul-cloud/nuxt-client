@@ -66,6 +66,9 @@ const useCardRequestPool = () => {
 					requestEntry.resolve(card);
 				}
 			}
+			const cardIds: string[] = cards.map((card) => card.id);
+			const failed = cardRequests.filter(({ id }) => !cardIds.includes(id));
+			failed.forEach((requestEntry) => requestEntry.reject(new Error()));
 		}
 	};
 

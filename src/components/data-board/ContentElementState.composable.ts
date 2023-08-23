@@ -1,8 +1,9 @@
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-import { useBoardNotifier } from "@util-board";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { handleError } from "../error-handling/handleError";
+import { handleWithNotifier } from "@/components/error-handling/handlers/handleWithNotifier";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -15,21 +16,23 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
 	const { updateElementCall } = useBoardApi();
-	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
 
 	watchDebounced(
-		modelValue.value,
-		async (modelValue) => {
-			await updateElement(unref(modelValue));
+		elementRef.value,
+		async (elementRef) => {
+			await updateElement(unref(elementRef));
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
 
 	// TODO: refactor this to be properly typed
-	const updateElement = async (payload: T["content"]) => {
-		const status = await updateElementCall(props.element);
-		if (isErrorCode(status)) {
-			showFailure(generateErrorText("update", "boardElement"));
+	const updateElement = async (element: T) => {
+		try {
+			await updateElementCall(element);
+		} catch (error) {
+			handleError(error, {
+				404: handleWithNotifier("notUpdated", "boardElement"),
+			});
 		}
 	};
 

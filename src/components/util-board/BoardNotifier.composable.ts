@@ -1,8 +1,18 @@
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-type ErrorTypes = "create" | "read" | "update" | "delete";
-type BoardObjectTypes = "board" | "boardColumn" | "boardCard" | "boardElement";
+// WIP: move to @/types/
+export type ErrorType =
+	| "notCreated"
+	| "notLoaded"
+	| "notUpdated"
+	| "notDeleted";
+
+export type BoardObjectType =
+	| "board"
+	| "boardColumn"
+	| "boardCard"
+	| "boardElement";
 
 export const useBoardNotifier = () => {
 	const i18n = injectStrict(I18N_KEY);
@@ -55,14 +65,14 @@ export const useBoardNotifier = () => {
 	};
 
 	const generateErrorText = (
-		errorType: ErrorTypes,
-		boardObjectType?: BoardObjectTypes
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType
 	) => {
 		const errorTextMap = {
-			create: "components.board.notifications.errors.notCreated",
-			read: "components.board.notifications.errors.notLoaded",
-			update: "components.board.notifications.errors.notUpdated",
-			delete: "components.board.notifications.errors.notDeleted",
+			notCreated: "components.board.notifications.errors.notCreated",
+			notLoaded: "components.board.notifications.errors.notLoaded",
+			notUpdated: "components.board.notifications.errors.notUpdated",
+			notDeleted: "components.board.notifications.errors.notDeleted",
 		};
 
 		const errorKey = errorTextMap[errorType] ?? "error.generic";

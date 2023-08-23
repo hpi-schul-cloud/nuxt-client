@@ -1,3 +1,12 @@
-import { useBoardNotifier } from "./BoardNotifier.composable";
+import {
+	ErrorType,
+	BoardObjectType,
+	useBoardNotifier,
+} from "./BoardNotifier.composable";
 import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
-export { useBoardNotifier, useSharedLastCreatedElement };
+export {
+	ErrorType,
+	BoardObjectType,
+	useBoardNotifier,
+	useSharedLastCreatedElement,
+};
