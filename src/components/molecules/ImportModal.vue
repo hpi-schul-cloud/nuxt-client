@@ -21,7 +21,7 @@
 					<v-stepper-step
 						step="1"
 						:complete="step > 1"
-						:complete-icon="mdiCheck"
+						:complete-icon="$mdiCheck"
 						class="step"
 						@click="onClickStepper(1)"
 					>
@@ -31,7 +31,7 @@
 					<v-stepper-step
 						step="2"
 						:complete="step > 2"
-						:complete-icon="mdiCheck"
+						:complete-icon="$mdiCheck"
 						class="step"
 						@click="onClickStepper(2)"
 					>
@@ -91,7 +91,6 @@
 <script>
 import { roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { mdiCheck } from "@mdi/js";
 
 export default {
 	components: {
@@ -116,7 +115,6 @@ export default {
 				status: "",
 				message: "",
 			},
-			mdiCheck,
 			isImportError: false,
 		};
 	},

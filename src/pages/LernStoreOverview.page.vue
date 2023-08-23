@@ -9,7 +9,7 @@
 			class="arrow__back"
 			@click="goBack"
 		>
-			<v-icon> {{ mdiChevronLeft }}</v-icon>
+			<v-icon> $mdiChevronLeft</v-icon>
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
@@ -84,7 +84,6 @@ import infiniteScrolling from "@/mixins/infiniteScrolling";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
@@ -104,7 +103,6 @@ export default {
 			backToTopScrollYLimit: 115,
 			activateTransition: false,
 			prevRoute: null,
-			mdiChevronLeft,
 		};
 	},
 	computed: {

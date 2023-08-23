@@ -29,6 +29,7 @@
 			<div v-else>
 				<v-alert light prominent text type="info">
 					<RenderHTML
+						data-testid="migration-active-status"
 						:html="
 							t(
 								'components.administration.adminMigrationSection.migrationActive'

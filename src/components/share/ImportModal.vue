@@ -19,7 +19,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon color="info">{{ mdiInformation }}</v-icon>
+						<v-icon color="info">$mdiInformation</v-icon>
 					</div>
 					<div>
 						{{
@@ -41,7 +41,6 @@
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -79,7 +78,6 @@ export default defineComponent({
 		return {
 			onConfirm,
 			onCancel,
-			mdiInformation,
 			rules,
 			newName,
 		};
