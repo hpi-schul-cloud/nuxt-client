@@ -11,7 +11,7 @@
 					class="grey--text"
 					data-testid="board-file-element-display-file-icon"
 					large
-					>{{ mdiFileDocumentOutline }}</v-icon
+					>$mdiFileDocumentOutline</v-icon
 				>
 			</v-list-item-icon>
 
@@ -38,7 +38,6 @@
 
 <script lang="ts">
 import FileContentElementChips from "./FileContentElementChips.vue";
-import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -50,11 +49,6 @@ export default defineComponent({
 		url: { type: String, required: true },
 	},
 	components: { FileContentElementChips },
-	setup() {
-		return {
-			mdiFileDocumentOutline,
-		};
-	},
 });
 </script>
 

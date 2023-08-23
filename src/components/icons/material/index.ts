@@ -88,6 +88,8 @@ import {
 	mdiArrowCollapseDown,
 	mdiTrayArrowDown,
 	mdiPlaylistEdit,
+	mdiLightbulbOnOutline,
+	mdiFormatText,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -180,6 +182,8 @@ const materialIcons = {
 	mdiArrowCollapseDown,
 	mdiTrayArrowDown,
 	mdiPlaylistEdit,
+	mdiLightbulbOnOutline,
+	mdiFormatText,
 };
 
 export default materialIcons;

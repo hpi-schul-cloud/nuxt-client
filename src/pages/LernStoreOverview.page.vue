@@ -84,7 +84,6 @@ import infiniteScrolling from "@/mixins/infiniteScrolling";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {

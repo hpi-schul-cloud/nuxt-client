@@ -318,7 +318,6 @@ import {
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
 } from "@/plugins/datetime";
-import { mdiAlert } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {

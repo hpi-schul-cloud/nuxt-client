@@ -137,12 +137,6 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import {
-	mdiAccountPlus,
-	mdiCloudDownload,
-	mdiPencilOutline,
-	mdiPlus,
-} from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
