@@ -26,9 +26,10 @@
 					/>
 				</v-alert>
 			</div>
-			<div>
+			<div v-else>
 				<v-alert light prominent text type="info">
 					<RenderHTML
+						data-testid="migration-active-status"
 						:html="
 							t(
 								'components.administration.adminMigrationSection.migrationActive'
@@ -165,7 +166,7 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 
 export default defineComponent({
 	name: "AdminMigrationSection",

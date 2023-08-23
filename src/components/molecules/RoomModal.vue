@@ -34,7 +34,6 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 import Vue from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -66,8 +65,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			mdiPencilOutline,
-			mdiKeyboardReturn,
 			data: {
 				id: "",
 				title: "",

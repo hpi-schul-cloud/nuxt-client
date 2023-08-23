@@ -12,8 +12,7 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
+import { Wrapper, mount } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolSection from "./ExternalToolSection.vue";
 
@@ -152,26 +151,18 @@ describe("ExternalToolSection", () => {
 				const firstRow = tableRows.at(0).findAll("td");
 				const secondRow = tableRows.at(1).findAll("td");
 
-				expect(firstRow.at(1).text()).toEqual(
+				expect(firstRow.at(1).find("span").text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(
-					firstRow
-						.at(1)
-						.findComponent({ name: "v-icon" })
-						.find("path")
-						.attributes("d")
-				).toEqual(mdiCheckCircle);
-				expect(secondRow.at(1).text()).toEqual(
+				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
+					"$mdiCheckCircle"
+				);
+				expect(secondRow.at(1).find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
 				expect(
-					secondRow
-						.at(1)
-						.findComponent({ name: "v-icon" })
-						.find("path")
-						.attributes("d")
-				).toEqual(mdiRefreshCircle);
+					secondRow.at(1).findComponent({ name: "v-icon" }).text()
+				).toEqual("$mdiRefreshCircle");
 			});
 
 			describe("when actions buttons are rendered", () => {

@@ -58,8 +58,8 @@
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
-import { useTimePickerState } from "./state/TimePickerState.composable";
-import { ValidationRule } from "./types/Validation";
+import { useTimePickerState } from "./TimePickerState.composable";
+import { ValidationRule } from "@/types/date-time-picker/Validation";
 
 export default defineComponent({
 	name: "TimePicker",
