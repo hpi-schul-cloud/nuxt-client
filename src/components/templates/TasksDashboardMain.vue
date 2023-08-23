@@ -82,19 +82,12 @@
 </template>
 
 <script>
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import {
-	mdiPlus,
-	mdiFormatListChecks,
-	mdiArchiveOutline,
-	mdiCheckCircleOutline,
-	mdiPlaylistEdit,
-} from "@mdi/js";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { authModule } from "@/store";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
@@ -119,11 +112,6 @@ export default {
 			required: true,
 			validator: (val) => ["student", "teacher"].includes(val),
 		},
-	},
-	data() {
-		return {
-			mdiPlus,
-		};
 	},
 	inject: [
 		"tasksModule",
@@ -229,7 +217,7 @@ export default {
 		},
 		tabOneHeader() {
 			return {
-				icon: mdiFormatListChecks,
+				icon: "$mdiFormatListChecks",
 				route: `#${this.tabRoutes[0]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.open")
@@ -238,7 +226,7 @@ export default {
 		},
 		tabTwoHeader() {
 			return {
-				icon: this.isStudent ? mdiCheckCircleOutline : mdiPlaylistEdit,
+				icon: this.isStudent ? "$mdiCheckCircleOutline" : "$mdiPlaylistEdit",
 				route: `#${this.tabRoutes[1]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
@@ -248,7 +236,7 @@ export default {
 		},
 		tabThreeHeader() {
 			return {
-				icon: mdiArchiveOutline,
+				icon: "$mdiArchiveOutline",
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
 				route: `#${this.tabRoutes[2]}`,
 			};
@@ -259,7 +247,7 @@ export default {
 				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
 				return {
-					icon: mdiPlus,
+					icon: "$mdiPlus",
 					title: this.$t("common.actions.create"),
 					href: "/homework/new?returnUrl=tasks",
 					ariaLabel: this.$t("common.actions.create"),

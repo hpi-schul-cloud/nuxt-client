@@ -23,7 +23,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
+							<v-icon large>$mdiShareVariantOutline</v-icon></span
 						>
 						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
@@ -39,9 +39,7 @@
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
-						<span class="mb-2">
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
-						>
+						<span class="mb-2"> <v-icon large>$mdiEmailOutline</v-icon></span>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.mailShare")
 						}}</span>
@@ -59,9 +57,7 @@
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
-						<span class="mb-2">
-							<v-icon large>{{ mdiContentCopy }}</v-icon></span
-						>
+						<span class="mb-2"> <v-icon large>$mdiContentCopy</v-icon></span>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.copyClipboard")
 						}}</span>
@@ -79,9 +75,7 @@
 					<span
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
-						<span class="mb-2">
-							<v-icon large>{{ mdiQrcode }}</v-icon></span
-						>
+						<span class="mb-2"> <v-icon large>$mdiQrcode</v-icon></span>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.qrCodeScan")
 						}}</span>
@@ -102,12 +96,6 @@
 import BaseQrCode from "@/components/base/BaseQrCode";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import {
-	mdiContentCopy,
-	mdiEmailOutline,
-	mdiQrcode,
-	mdiShareVariantOutline,
-} from "@mdi/js";
 import { defineComponent, ref } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -178,10 +166,6 @@ export default defineComponent({
 			onShowQrCode,
 			onShareMobilePlatflorm,
 			isShowQrCode,
-			mdiEmailOutline,
-			mdiContentCopy,
-			mdiQrcode,
-			mdiShareVariantOutline,
 		};
 	},
 });
