@@ -3,8 +3,6 @@ export type Year = {
 	name: string;
 	endDate: string;
 	startDate: string;
-	years: unknown;
-	isTeamCreationByStudentsEnabled: boolean;
 	__v: number;
 };
 
@@ -35,7 +33,7 @@ export type School = {
 	updatedAt: string;
 	createdAt: string;
 	__v: number;
-	currentYear: string;
+	currentYear: Year;
 	purpose: string;
 	features: {
 		rocketChat: boolean;

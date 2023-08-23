@@ -970,16 +970,9 @@ describe("schools module", () => {
 		describe("getCurrentYear", () => {
 			it("should return current year state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const mockYear = schoolsModule.getCurrentYear;
-				expect(schoolsModule.getCurrentYear).not.toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
-				schoolsModule.setCurrentYear({ ...mockYear, _id: "mockId" });
-				expect(schoolsModule.getCurrentYear).toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
+				const mockYear = mockSchool.currentYear;
+
+				expect(schoolsModule.getCurrentYear).toStrictEqual(mockYear);
 			});
 		});
 

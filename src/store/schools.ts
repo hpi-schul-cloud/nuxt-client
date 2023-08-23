@@ -77,7 +77,13 @@ export default class SchoolsModule extends VuexModule {
 		updatedAt: "",
 		createdAt: "",
 		__v: 0,
-		currentYear: "",
+		currentYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+			__v: 0,
+		},
 		purpose: "",
 		features: {
 			rocketChat: false,
@@ -93,15 +99,6 @@ export default class SchoolsModule extends VuexModule {
 		documentBaseDir: "",
 		isExternal: false,
 		id: "",
-		years: {},
-		isTeamCreationByStudentsEnabled: false,
-	};
-	currentYear: Year = {
-		_id: "",
-		name: "",
-		startDate: "",
-		endDate: "",
-		__v: 0,
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
 	};
@@ -134,11 +131,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setCurrentYear(currentYear: Year): void {
-		this.currentYear = currentYear;
-	}
-
-	@Mutation
 	setFederalState(federalState: FederalState): void {
 		this.federalState = federalState;
 	}
@@ -168,7 +160,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get getCurrentYear(): Year {
-		return this.currentYear;
+		return this.school.currentYear;
 	}
 
 	get getFederalState(): FederalState {
