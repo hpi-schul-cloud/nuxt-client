@@ -12,32 +12,35 @@
 			@update:title="onUpdateTitle"
 			class="pl-2"
 		></BoardColumnHeader>
-		<Container
-			group-name="cards"
-			drag-class="elevation-12"
-			drop-class="elevation-0"
-			:drop-placeholder="cardDropPlaceholderOptions"
-			:get-child-payload="getChildPayload"
-			:drag-begin-delay="isDesktop ? 0 : 300"
-			non-drag-area-selector=".drag-disabled"
-			@drag-start="onDragStart"
-			@drop="onDragEnd"
-			class="dndrop-container vertical scrollable-column pr-1 -mt-3 find-my-class"
-			:class="{ 'expanded-column': isDragging }"
-		>
-			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
-				<CardHost
-					class="my-3 mx-2"
-					:card-id="card.cardId"
-					:height="card.height"
-					:class="{ 'drag-disabled': !hasMovePermission }"
-					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
-					@delete:card="onDeleteCard"
-				/>
-			</Draggable>
-		</Container>
+		<div class="scrollable-column">
+			<Container
+				orientation="vertical"
+				group-name="cards"
+				drag-class="elevation-12"
+				drop-class="elevation-0"
+				:drop-placeholder="cardDropPlaceholderOptions"
+				:get-child-payload="getChildPayload"
+				:drag-begin-delay="isDesktop ? 0 : 300"
+				non-drag-area-selector=".drag-disabled"
+				@drag-start="onDragStart"
+				@drop="onDragEnd"
+				class="dndrop-container vertical pr-1 -mt-3"
+				:class="{ 'expanded-column': isDragging }"
+			>
+				<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
+					<CardHost
+						class="my-3 mx-2"
+						:card-id="card.cardId"
+						:height="card.height"
+						:class="{ 'drag-disabled': !hasMovePermission }"
+						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@delete:card="onDeleteCard"
+					/>
+				</Draggable>
+			</Container>
+		</div>
 		<BoardAddCardButton
-			v-if="hasCreateColumnPermission && !isDragging"
+			v-if="hasCreateColumnPermission"
 			@add-card="onCreateCard"
 		></BoardAddCardButton>
 	</div>
@@ -55,6 +58,7 @@ import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
 	DragAndDropKey,
+	DragObject,
 	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
@@ -107,7 +111,8 @@ export default defineComponent({
 		};
 		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
-		const onDragStart = (): void => {
+		const onDragStart = (element: DragObject): void => {
+			if (!element.payload.cardId) return;
 			dragStart();
 		};
 
@@ -196,7 +201,7 @@ export default defineComponent({
 	transition: min-height 1000ms;
 }
 .scrollable-column {
-	overflow-y: auto;
+	overflow: auto;
 	max-height: 75vh;
 }
 

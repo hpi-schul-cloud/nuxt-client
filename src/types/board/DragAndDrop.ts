@@ -1,3 +1,4 @@
+import { CardSkeletonResponse } from "@/serverApi/v3";
 import { BoardColumn, BoardSkeletonCard } from "./Board";
 import { AnyContentElement } from "./ContentElement";
 
@@ -18,6 +19,12 @@ export interface ColumnMove {
 export interface ElementMove {
 	elementIndex: number;
 	payload: AnyContentElement["id"];
+}
+
+export interface DragObject {
+	isSource: boolean;
+	payload: BoardSkeletonCard;
+	willAcceptDrop: boolean;
 }
 
 export type DragAndDropKey =
