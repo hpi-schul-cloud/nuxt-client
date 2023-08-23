@@ -23,7 +23,7 @@
 						dense
 						:readonly="!hasSchoolEditPermission"
 						:disabled="isSyncedSchool"
-						data-testid="school-number"
+						data-testid="school-name"
 					></v-text-field>
 				</v-col>
 			</v-row>
@@ -32,6 +32,7 @@
 					<v-text-field
 						v-model="localSchool.officialSchoolNumber"
 						class="school-number"
+						data-testid="school-number"
 						:label="
 							$t(
 								'pages.administration.school.index.generalSettings.labels.schoolNumber'
