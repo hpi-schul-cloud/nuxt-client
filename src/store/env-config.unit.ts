@@ -21,7 +21,6 @@ const mockEnvs: Envs = {
 	I18N__FALLBACK_LANGUAGE: "mockValue",
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",
-	SC_SHORT_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",
 	FEATURE_CONSENT_NECESSARY: true,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,

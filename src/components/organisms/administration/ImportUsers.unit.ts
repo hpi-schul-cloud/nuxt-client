@@ -103,7 +103,7 @@ const getWrapper: any = (data?: object, options?: object) => {
 		data: () => data,
 		mocks: {
 			$theme: {
-				short_name: "nbc",
+				name: "nbc",
 			},
 		},
 		...options,
