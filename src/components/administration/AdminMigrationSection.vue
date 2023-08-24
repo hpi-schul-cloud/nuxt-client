@@ -295,9 +295,8 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
-		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> = computed(
-			() => envConfigModule.getEnableLdapSyncDuringMigration
-		);
+		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
+			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
 
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
