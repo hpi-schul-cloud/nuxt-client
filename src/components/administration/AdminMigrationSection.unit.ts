@@ -721,17 +721,16 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("switch button for school feature enableSyncDuringMigration", () => {
+	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
 		describe("when user login migration is finished", () => {
 			it("should hide switch button", () => {
-				const date: string = new Date(2023, 1, 1).toDateString();
 				const { wrapper } = setup({
 					getOauthMigration: {
 						enableMigrationStart: true,
 						oauthMigrationPossible: false,
 						oauthMigrationMandatory: false,
-						oauthMigrationFinished: date,
-						oauthMigrationFinalFinish: date,
+						oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+						oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
 					},
 				});
 
@@ -764,7 +763,7 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("switch button for school feature enableSyncDuringMigration", () => {
+	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup({});
@@ -776,7 +775,10 @@ describe("AdminMigrationSection", () => {
 
 				expect(schoolsModule.update).toHaveBeenCalledWith({
 					id: mockSchool.id,
-					features: { ...mockSchool.features, enableSyncDuringMigration: true },
+					features: {
+						...mockSchool.features,
+						enableLdapSyncDuringMigration: true,
+					},
 				});
 			});
 		});

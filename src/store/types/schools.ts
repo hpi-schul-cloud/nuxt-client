@@ -43,7 +43,7 @@ export type School = {
 		studentVisibility: boolean;
 		ldapUniventionMigrationSchool: boolean;
 		showOutdatedUsers: boolean;
-		enableSyncDuringMigration: boolean;
+		enableLdapSyncDuringMigration: boolean;
 	};
 	enableStudentTeamCreation: boolean;
 	permissions: unknown;

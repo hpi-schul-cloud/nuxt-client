@@ -128,12 +128,12 @@
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
-			v-model="school.features.enableSyncDuringMigration"
+			v-model="school.features.enableLdapSyncDuringMigration"
 			inset
 			dense
 			class="ml-1"
 			data-testid="enable-sync-during-migration-switch"
-			@change="setEnableSyncDuringMigration"
+			@change="setSchoolFeatures"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
@@ -147,7 +147,7 @@
 			dense
 			class="ml-1"
 			data-testid="show-outdated-users-switch"
-			@change="setShowOutdatedUsers"
+			@change="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -292,18 +292,11 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
-		const setEnableSyncDuringMigration = () => {
-			schoolsModule.update({
-				id: school.value.id,
-				features: school.value.features,
-			});
-		};
-
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setShowOutdatedUsers = () => {
+		const setSchoolFeatures = () => {
 			schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
@@ -326,8 +319,7 @@ export default defineComponent({
 			dayjs,
 			supportLink,
 			school,
-			setEnableSyncDuringMigration,
-			setShowOutdatedUsers,
+			setSchoolFeatures,
 			globalFeatureShowOutdatedUsers,
 		};
 	},
