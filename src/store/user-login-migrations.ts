@@ -12,7 +12,6 @@ import {
 } from "@/serverApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	MigrationLinkRequest,
 	MigrationLinks,
@@ -144,18 +143,20 @@ export default class UserLoginMigrationModule extends VuexModule {
 						authModule.getUser.id
 					);
 
-				if (response.data.total !== 1) {
-					throw createApplicationError(HttpStatusCode.BadRequest);
+				if (response.data.total > 1) {
+					throw new Error("More than one migration found for user.");
 				}
 
-				const userLoginMigrationResponse: UserLoginMigrationResponse =
-					response.data.data[0];
-				const userLoginMigration: UserLoginMigration =
-					UserLoginMigrationMapper.mapToUserLoginMigration(
-						userLoginMigrationResponse
-					);
+				if (response.data.data.length === 1) {
+					const userLoginMigrationResponse: UserLoginMigrationResponse =
+						response.data.data[0];
+					const userLoginMigration: UserLoginMigration =
+						UserLoginMigrationMapper.mapToUserLoginMigration(
+							userLoginMigrationResponse
+						);
 
-				this.setUserLoginMigration(userLoginMigration);
+					this.setUserLoginMigration(userLoginMigration);
+				}
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
 
