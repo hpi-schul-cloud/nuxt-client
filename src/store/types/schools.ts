@@ -58,9 +58,8 @@ export type School = {
 };
 
 export type OauthMigration = {
-	enableMigrationStart: boolean;
-	oauthMigrationPossible: boolean;
-	oauthMigrationMandatory: boolean;
-	oauthMigrationFinished?: string;
-	oauthMigrationFinalFinish?: string;
+	startedAt: boolean;
+	mandatorySince: boolean;
+	closedAt?: string;
+	finishedAt?: string;
 };

@@ -12,6 +12,7 @@ import StatusAlertsModule from "@/store/status-alerts";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import SystemsModule from "@/store/systems";
+import SchoolsModule from "@/store/schools";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -36,3 +37,5 @@ export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationMod
 	Symbol("userLoginMigrationModule");
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> =
 	Symbol("systemsModule");
+export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
+	Symbol("schoolsModule");

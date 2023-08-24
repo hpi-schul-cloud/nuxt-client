@@ -16,7 +16,7 @@
 				"
 				component="p"
 			/>
-			<div v-if="!oauthMigration.oauthMigrationPossible">
+			<div v-if="!oauthMigration.startedAt">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						:html="
@@ -44,7 +44,7 @@
 				class="my-5 button-start"
 				color="primary"
 				depressed
-				:disabled="!oauthMigration.enableMigrationStart"
+				:disabled="!oauthMigration.startedAt"
 				data-testid="migration-start-button"
 				@click="onToggleShowStartWarning"
 			>
@@ -59,7 +59,7 @@
 				class="my-5 button-end"
 				color="primary"
 				depressed
-				:disabled="!oauthMigration.oauthMigrationPossible"
+				:disabled="!oauthMigration.startedAt"
 				data-testid="migration-end-button"
 				@click="onToggleShowEndWarning"
 			>
@@ -76,33 +76,27 @@
 						'components.administration.adminMigrationSection.mandatorySwitch.label'
 					)
 				"
-				:disabled="!oauthMigration.oauthMigrationPossible"
+				:disabled="!oauthMigration.startedAt"
 				:true-value="true"
 				:false-value="false"
-				:value="oauthMigration.oauthMigrationMandatory"
+				:value="oauthMigration.mandatorySince"
 				inset
 				dense
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(oauthMigration.oauthMigrationMandatory)"
+				@change="setMigrationMandatory(oauthMigration.mandatorySince)"
 			/>
 		</div>
 		<RenderHTML
-			v-if="oauthMigration.oauthMigrationFinished"
+			v-if="oauthMigration.finishedAt"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			:html="
 				t(finalFinishText, {
-					date: dayjs(oauthMigration.oauthMigrationFinished).format(
-						'DD.MM.YYYY'
-					),
-					time: dayjs(oauthMigration.oauthMigrationFinished).format('HH:mm'),
-					finishDate: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
-						'DD.MM.YYYY'
-					),
-					finishTime: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
-						'HH:mm'
-					),
+					date: dayjs(oauthMigration.closedAt).format('DD.MM.YYYY'),
+					time: dayjs(oauthMigration.closedAt).format('HH:mm'),
+					finishDate: dayjs(oauthMigration.finishedAt).format('DD.MM.YYYY'),
+					finishTime: dayjs(oauthMigration.finishedAt).format('HH:mm'),
 				})
 			"
 			component="p"
@@ -152,13 +146,18 @@
 import { MigrationBody } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+	SCHOOLS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
 import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
 	Ref,
@@ -168,7 +167,7 @@ import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { UserLoginMigration } from "../../store/user-login-migration";
+import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -180,38 +179,33 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
+			injectStrict(SCHOOLS_MODULE_KEY);
 		const userLoginMigrationModule: UserLoginMigrationModule | undefined =
-			inject<UserLoginMigrationModule>("userLoginMigrationModule");
-		if (!schoolsModule || !i18n || !userLoginMigrationModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+			injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
 
 		onMounted(async () => {
-			await schoolsModule.fetchSchoolOAuthMigration();
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
 			i18n.tc(key, 0, values);
 
-		const userloginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(() => {
-			const migrationflags = {
-				enableMigrationStart: !!userloginMigration.value?.startedAt,
-				oauthMigrationPossible: !!userloginMigration.value?.startedAt,
-				oauthMigrationMandatory: !!userloginMigration.value?.mandatorySince,
-				oauthMigrationFinished: userloginMigration.value?.closedAt,
-				oauthMigrationFinalFinish: userloginMigration.value?.finishedAt,
+			return {
+				startedAt: !!userLoginMigration.value?.startedAt,
+				mandatorySince: !!userLoginMigration.value?.mandatorySince,
+				closedAt: userLoginMigration.value?.closedAt,
+				finishedAt: userLoginMigration.value?.finishedAt,
 			};
-
-			return migrationflags;
 		});
 
 		const startMigration = () => {
-			if (oauthMigration.value.oauthMigrationPossible) {
+			if (oauthMigration.value.startedAt) {
 				userLoginMigrationModule.restartUserLoginMigration();
 			} else {
 				userLoginMigrationModule.startUserLoginMigration();
@@ -254,14 +248,14 @@ export default defineComponent({
 
 		const isShowStartButton: ComputedRef<boolean> = computed(
 			() =>
-				oauthMigration.value.oauthMigrationPossible &&
+				!oauthMigration.value.startedAt &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
 
 		const isShowEndButton: ComputedRef<boolean> = computed(
 			() =>
-				oauthMigration.value.oauthMigrationPossible &&
+				oauthMigration.value.startedAt &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
@@ -270,12 +264,9 @@ export default defineComponent({
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
 		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
-			if (schoolsModule.getOauthMigration.oauthMigrationFinalFinish) {
+			if (userLoginMigration.value.finishedAt) {
 				return (
-					Date.now() >=
-					new Date(
-						schoolsModule.getOauthMigration.oauthMigrationFinalFinish
-					).getTime()
+					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
 				);
 			} else {
 				return false;

@@ -34,3 +34,4 @@ export * from "./customParameterResponseFactory";
 export * from "./schoolExternalToolSaveFactory";
 export * from "./schoolExternalToolResponseFactory";
 export * from "./userLoginMigration.factory";
+export * from "./userLoginMigrationResponse.factory";
