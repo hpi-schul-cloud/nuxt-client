@@ -87,20 +87,6 @@
 				@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
 			/>
 		</div>
-		<v-switch
-			v-if="!oauthMigration.oauthMigrationFinalFinish"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
-				)
-			"
-			v-model="school.features.enableSyncDuringMigration"
-			inset
-			dense
-			class="ml-1"
-			data-testid="enable-sync-during-migration-switch"
-			@change="setEnableSyncDuringMigration"
-		/>
 		<RenderHTML
 			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
@@ -134,6 +120,20 @@
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
+		/>
+		<v-switch
+			v-if="!isCurrentDateAfterFinalFinish"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+				)
+			"
+			v-model="school.features.enableSyncDuringMigration"
+			inset
+			dense
+			class="ml-1"
+			data-testid="enable-sync-during-migration-switch"
+			@change="setEnableSyncDuringMigration"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
