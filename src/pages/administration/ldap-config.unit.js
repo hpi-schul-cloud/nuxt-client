@@ -62,8 +62,6 @@ describe("ldap/config", () => {
 		},
 	};
 
-	const short_name = "instance name";
-
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -78,9 +76,6 @@ describe("ldap/config", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -94,9 +89,6 @@ describe("ldap/config", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -118,9 +110,6 @@ describe("ldap/config", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -146,9 +135,6 @@ describe("ldap/config", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -172,9 +158,6 @@ describe("ldap/config", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -190,9 +173,6 @@ describe("ldap/config", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -216,9 +196,6 @@ describe("ldap/config", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$route,
 			},
 		});
@@ -249,9 +226,6 @@ describe("ldap/config", () => {
 				},
 				store: mockStore,
 				mocks: {
-					$theme: {
-						short_name,
-					},
 					$route,
 				},
 			}),
@@ -286,9 +260,6 @@ describe("ldap/config", () => {
 				},
 				store: customMockStore,
 				mocks: {
-					$theme: {
-						short_name,
-					},
 					$route,
 				},
 			}),
