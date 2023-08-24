@@ -760,15 +760,20 @@ describe("AdminMigrationSection", () => {
 	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
 		describe("when user login migration is finished", () => {
 			it("should hide switch button", () => {
-				const { wrapper } = setup({
-					getOauthMigration: {
-						enableMigrationStart: true,
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
-						oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+							oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
+						},
 					},
-				});
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
 
 				const switchComponent = wrapper.find(
 					'[data-testid="enable-sync-during-migration-switch"]'
@@ -780,15 +785,20 @@ describe("AdminMigrationSection", () => {
 
 		describe("when migration is not yet finished", () => {
 			it("should show switch button and description", () => {
-				const { wrapper } = setup({
-					getOauthMigration: {
-						enableMigrationStart: true,
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: "",
-						oauthMigrationFinalFinish: "",
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
 					},
-				});
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
 
 				const switchComponent = wrapper.find(
 					'[data-testid="enable-sync-during-migration-switch"]'
@@ -802,7 +812,12 @@ describe("AdminMigrationSection", () => {
 	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
-				const { wrapper, schoolsModule } = setup({});
+				const { wrapper, schoolsModule } = setup(
+					{},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
 				const switchComponent = wrapper.find(
 					'[data-testid="enable-sync-during-migration-switch"]'
 				);
