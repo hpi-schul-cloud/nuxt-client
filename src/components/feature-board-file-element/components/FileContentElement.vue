@@ -10,7 +10,7 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<template v-if="fileProperties">
+		<template v-if="fileProperties && fileRecord">
 			<div v-if="fileProperties.previewUrl">
 				<ImageFileDisplay
 					:fileProperties="fileProperties"
@@ -41,6 +41,7 @@
 					@delete:element="onDeleteElement"
 				/>
 			</div>
+			<FileContentElementAlert :previewStatus="fileRecord.previewStatus" />
 		</template>
 		<template v-else>
 			<FileContentElementInit
@@ -49,8 +50,6 @@
 				@upload:file="onUploadFile"
 			/>
 		</template>
-
-		<FileContentElementAlert v-if="isBlockedByVirusScan" />
 	</v-card>
 </template>
 
