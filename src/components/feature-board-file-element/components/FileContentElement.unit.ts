@@ -1,15 +1,17 @@
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { createMock } from "@golevelup/ts-jest";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
 import { setupFileRecordMock } from "../../../../tests/test-utils/composable-mocks/fileRecordMock";
-import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import FileContentElement from "./FileContentElement.vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
@@ -17,8 +19,6 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileContentElementInit from "./FileContentElementInit.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("@data-board", () => {
 	return {
