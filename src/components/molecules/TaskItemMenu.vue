@@ -19,7 +19,7 @@
 					@focus="handleFocus(true)"
 					@blur="handleFocus(false)"
 				>
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
+					<v-icon>$mdiDotsVertical</v-icon>
 				</v-btn>
 			</template>
 			<v-list>
@@ -31,9 +31,7 @@
 					data-testId="task-edit"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiPencilOutline }}
-						</v-icon>
+						<v-icon class="task-action-icon"> $mdiPencilOutline </v-icon>
 						{{ $t("common.actions.edit") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -45,7 +43,7 @@
 					@click.stop.prevent="onCopyTask"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon"> {{ mdiContentCopy }} </v-icon>
+						<v-icon class="task-action-icon"> $mdiContentCopy </v-icon>
 						{{ $t("common.actions.copy") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -57,9 +55,7 @@
 					@click.stop.prevent="onShareTask"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiShareVariantOutline }}
-						</v-icon>
+						<v-icon class="task-action-icon"> $mdiShareVariantOutline </v-icon>
 						{{ $t("pages.room.taskCard.label.shareTask") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -71,7 +67,7 @@
 					@click.stop.prevent="handleRevertPublished"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon"> {{ mdiUndoVariant }} </v-icon>
+						<v-icon class="task-action-icon"> $mdiUndoVariant </v-icon>
 						{{ $t("pages.room.cards.label.revert") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -83,11 +79,11 @@
 				>
 					<v-list-item-title>
 						<template v-if="taskIsFinished">
-							<v-icon class="task-action-icon">{{ mdiUndoVariant }}</v-icon>
+							<v-icon class="task-action-icon">$mdiUndoVariant</v-icon>
 							{{ $t("common.labels.restore") }}
 						</template>
 						<template v-else>
-							<v-icon class="task-action-icon">{{ mdiArchiveOutline }}</v-icon>
+							<v-icon class="task-action-icon">mdiArchiveOutline</v-icon>
 							{{ $t("components.molecules.TaskItemMenu.finish") }}
 						</template>
 					</v-list-item-title>
@@ -100,9 +96,7 @@
 					@click.stop.prevent="() => (confirmDeleteDialogIsOpen = true)"
 				>
 					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiTrashCanOutline }}
-						</v-icon>
+						<v-icon class="task-action-icon"> $mdiTrashCanOutline </v-icon>
 						{{ $t("common.actions.remove") }}
 					</v-list-item-title>
 				</v-list-item>
@@ -134,15 +128,6 @@
 <script>
 import { envConfigModule, finishedTasksModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
-import {
-	mdiContentCopy,
-	mdiDotsVertical,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiUndoVariant,
-	mdiShareVariantOutline,
-	mdiArchiveOutline,
-} from "@mdi/js";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -188,13 +173,6 @@ export default defineComponent({
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
-			mdiDotsVertical,
-			mdiPencilOutline,
-			mdiUndoVariant,
-			mdiTrashCanOutline,
-			mdiContentCopy,
-			mdiShareVariantOutline,
-			mdiArchiveOutline,
 		};
 	},
 	computed: {

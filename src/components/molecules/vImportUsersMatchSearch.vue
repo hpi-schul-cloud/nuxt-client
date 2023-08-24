@@ -13,7 +13,7 @@
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<v-btn v-if="isDialog" icon dark @click="closeEdit">
-						<v-icon>{{ mdiClose }}</v-icon>
+						<v-icon>$mdiClose</v-icon>
 					</v-btn>
 				</v-toolbar-items>
 			</v-toolbar>
@@ -105,7 +105,7 @@
 							:search-input.sync="searchUser"
 							hide-no-data
 							hide-selected
-							:prepend-inner-icon="mdiAccountSearch"
+							:prepend-inner-icon="$mdiAccountSearch"
 							return-object
 							clearable
 							:label="$t('components.molecules.importUsersMatch.search')"
@@ -166,7 +166,7 @@
 						@click="saveFlag"
 					>
 						<v-icon color="primary"
-							>{{ flagged ? mdiFlag : mdiFlagOutline }}
+							>{{ flagged ? "$mdiFlag" : "$mdiFlagOutline" }}
 						</v-icon>
 					</v-btn>
 				</v-col>
@@ -179,7 +179,7 @@
 						data-testid="save-match-btn"
 						@click="saveMatch"
 					>
-						<v-icon small>{{ mdiContentSave }}</v-icon>
+						<v-icon small>$mdiContentSave</v-icon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
@@ -190,7 +190,7 @@
 						data-testid="delete-match-btn"
 						@click="deleteMatch"
 					>
-						<v-icon small>{{ mdiDelete }}</v-icon>
+						<v-icon small>$mdiDelete</v-icon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
 					</v-btn>
 				</v-col>
@@ -199,14 +199,6 @@
 	</div>
 </template>
 <script>
-import {
-	mdiAccountSearch,
-	mdiClose,
-	mdiContentSave,
-	mdiDelete,
-	mdiFlag,
-	mdiFlagOutline,
-} from "@mdi/js";
 import { importUsersModule } from "@/store";
 
 export default {
@@ -256,12 +248,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiAccountSearch,
-			mdiClose,
-			mdiContentSave,
-			mdiDelete,
-			mdiFlag,
-			mdiFlagOutline,
 			entries: [],
 			loading: false,
 			flagged: false,

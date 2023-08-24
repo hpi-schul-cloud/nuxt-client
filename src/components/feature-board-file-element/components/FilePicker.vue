@@ -13,7 +13,6 @@
 <script lang="ts">
 import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
-import { mdiTrayArrowUp } from "@mdi/js";
 
 export default defineComponent({
 	name: "FilePicker",
@@ -49,7 +48,6 @@ export default defineComponent({
 
 		return {
 			inputRef,
-			mdiTrayArrowUp,
 			onFileChange,
 		};
 	},
