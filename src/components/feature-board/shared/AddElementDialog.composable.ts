@@ -1,7 +1,7 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
 	type: ContentElementType
