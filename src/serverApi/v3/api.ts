@@ -15533,7 +15533,8 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15739,12 +15740,13 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
+        async userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15815,11 +15817,12 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse> {
+        userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Currently there can only be one migration for a user. Therefore only one migration is returned.
+         * @summary Get UserLoginMigrations
          * @param {string} [userId] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15885,10 +15888,11 @@ export interface UserLoginMigrationApiInterface {
      * @throws {RequiredError}
      * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse>;
+    userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
-     * 
+     * Currently there can only be one migration for a user. Therefore only one migration is returned.
+     * @summary Get UserLoginMigrations
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15961,7 +15965,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
     }
 
     /**
-     * 
+     * Currently there can only be one migration for a user. Therefore only one migration is returned.
+     * @summary Get UserLoginMigrations
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
