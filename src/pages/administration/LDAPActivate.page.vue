@@ -146,7 +146,7 @@
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
 			>
-				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
+				<v-icon size="20" class="mr-1">$mdiChevronLeft</v-icon>
 				{{ $t("common.actions.back") }}
 			</v-btn>
 			<v-btn
@@ -189,17 +189,16 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
-import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
-import { unchangedPassword } from "@/utils/ldapConstants";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import InfoMessage from "@/components/atoms/InfoMessage";
-import { mdiChevronLeft } from "@mdi/js";
-import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { envConfigModule, schoolsModule } from "@/store";
+import { unchangedPassword } from "@/utils/ldapConstants";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RenderHTML } from "@feature-render-html";
+import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -221,7 +220,6 @@ export default {
 	data() {
 		return {
 			migrateUsersCheckbox: false,
-			mdiChevronLeft,
 		};
 	},
 	computed: {

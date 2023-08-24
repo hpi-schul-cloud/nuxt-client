@@ -43,7 +43,6 @@ import { authModule, envConfigModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -76,21 +75,21 @@ export default Vue.extend({
 			) {
 				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 					return {
-						icon: mdiPlus,
+						icon: "$mdiPlus",
 						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
 						testId: "add-course-button",
 						actions: [
 							{
 								label: this.$t("pages.rooms.fab.add.course"),
-								icon: mdiSchool,
+								icon: "$mdiSchool",
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
 							{
 								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiCloudDownload,
+								icon: "$mdiCloudDownload",
 								dataTestid: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
 								customEvent: {
@@ -102,7 +101,7 @@ export default Vue.extend({
 					};
 				}
 				return {
-					icon: mdiPlus,
+					icon: "$mdiPlus",
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
