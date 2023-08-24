@@ -20,6 +20,12 @@ export interface ElementMove {
 	payload: AnyContentElement["id"];
 }
 
+export interface DragObject {
+	isSource: boolean;
+	payload: BoardSkeletonCard;
+	willAcceptDrop: boolean;
+}
+
 export type DragAndDropKey =
 	| "ArrowUp"
 	| "ArrowDown"
