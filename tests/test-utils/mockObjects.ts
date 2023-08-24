@@ -75,6 +75,7 @@ export const mockSchool: School = {
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
+		enableSyncDuringMigration: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},

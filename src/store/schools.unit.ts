@@ -102,6 +102,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableSyncDuringMigration: false,
 					},
 				});
 				expect(setLoadingSpy.mock.calls[3][0]).toBe(false);
@@ -338,6 +339,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableSyncDuringMigration: false,
 					},
 				};
 				initializeAxios({
@@ -396,6 +398,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableSyncDuringMigration: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});

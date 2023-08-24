@@ -87,6 +87,20 @@
 				@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
 			/>
 		</div>
+		<v-switch
+			v-if="!oauthMigration.oauthMigrationFinalFinish"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+				)
+			"
+			v-model="school.features.enableSyncDuringMigration"
+			inset
+			dense
+			class="ml-1"
+			data-testid="enable-sync-during-migration-switch"
+			@change="setEnableSyncDuringMigration"
+		/>
 		<RenderHTML
 			v-if="oauthMigration.oauthMigrationFinished"
 			class="migration-completion-date"
@@ -278,6 +292,13 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const setEnableSyncDuringMigration = () => {
+			schoolsModule.update({
+				id: school.value.id,
+				features: school.value.features,
+			});
+		};
+
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
@@ -305,6 +326,7 @@ export default defineComponent({
 			dayjs,
 			supportLink,
 			school,
+			setEnableSyncDuringMigration,
 			setShowOutdatedUsers,
 			globalFeatureShowOutdatedUsers,
 		};

@@ -27,6 +27,7 @@ const SCHOOL_FEATURES: (keyof School["features"])[] = [
 	"studentVisibility", // deprecated
 	"ldapUniventionMigrationSchool",
 	"showOutdatedUsers",
+	"enableSyncDuringMigration",
 ];
 
 function transformSchoolServerToClient(school: SchoolPayload): School {
@@ -85,6 +86,7 @@ export default class SchoolsModule extends VuexModule {
 			studentVisibility: false,
 			ldapUniventionMigrationSchool: false,
 			showOutdatedUsers: false,
+			enableSyncDuringMigration: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},

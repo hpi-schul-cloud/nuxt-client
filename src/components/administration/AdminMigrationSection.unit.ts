@@ -720,4 +720,65 @@ describe("AdminMigrationSection", () => {
 			});
 		});
 	});
+
+	describe("switch button for school feature enableSyncDuringMigration", () => {
+		describe("when user login migration is finished", () => {
+			it("should hide switch button", () => {
+				const date: string = new Date(2023, 1, 1).toDateString();
+				const { wrapper } = setup({
+					getOauthMigration: {
+						enableMigrationStart: true,
+						oauthMigrationPossible: false,
+						oauthMigrationMandatory: false,
+						oauthMigrationFinished: date,
+						oauthMigrationFinalFinish: date,
+					},
+				});
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(false);
+			});
+		});
+
+		describe("when migration is not yet finished", () => {
+			it("should show switch button and description", () => {
+				const { wrapper } = setup({
+					getOauthMigration: {
+						enableMigrationStart: true,
+						oauthMigrationPossible: false,
+						oauthMigrationMandatory: false,
+						oauthMigrationFinished: "",
+						oauthMigrationFinalFinish: "",
+					},
+				});
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("switch button for school feature enableSyncDuringMigration", () => {
+		describe("when clicking switch button", () => {
+			it("should call update in schoolsModule", async () => {
+				const { wrapper, schoolsModule } = setup({});
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				await switchComponent.setChecked();
+
+				expect(schoolsModule.update).toHaveBeenCalledWith({
+					id: mockSchool.id,
+					features: { ...mockSchool.features, enableSyncDuringMigration: true },
+				});
+			});
+		});
+	});
 });
