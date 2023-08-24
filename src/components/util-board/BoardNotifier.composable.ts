@@ -1,5 +1,4 @@
 import { useI18n } from "@/composables/i18n.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // WIP: move to @/types/
@@ -58,11 +57,6 @@ export const useBoardNotifier = () => {
 		notifierModule.setNotifier(undefined);
 	};
 
-	const isErrorCode = (statusCode: HttpStatusCode) => {
-		if (statusCode >= 300) return true;
-		return false;
-	};
-
 	const { t } = useI18n();
 
 	const generateErrorText = (
@@ -87,7 +81,6 @@ export const useBoardNotifier = () => {
 
 	return {
 		generateErrorText,
-		isErrorCode,
 		resetNotifier,
 		showCustomNotifier,
 		showFailure,

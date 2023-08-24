@@ -1,23 +1,24 @@
+import { CardResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
+import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
+import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { nextTick, ref } from "vue";
 import { useBoardNotifier } from "@util-board";
-import { useSharedEditMode } from "./EditMode.composable";
-import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { nextTick, ref } from "vue";
+import { handleError } from "../error-handling/handleError";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardState } from "./BoardState.composable";
-import { handleError } from "../error-handling/handleError";
-import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
+import { useSharedEditMode } from "./EditMode.composable";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -29,6 +30,8 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@/components/error-handling/handlers/handleWithNotifier");
 
 jest.mock("../error-handling/handleError");
 const handleErrorMock = jest.mocked(handleError);
@@ -46,10 +49,9 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 };
 
 describe("BoardState.composable", () => {
-	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let setEditModeId: jest.Mock;
-	let apiCallMock: DeepMocked<any> | undefined;
 
 	let testBoard: Board;
 	let column: BoardColumn;
@@ -57,16 +59,12 @@ describe("BoardState.composable", () => {
 
 	const setup = (boardId = testBoard.id) => {
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
-		const mock = apiCallMock ?? jest.fn();
-		mockedBoardApiCalls.createCardCall = mock;
-		mockedBoardApiCalls.createColumnCall = mock;
-		mockedBoardApiCalls.deleteCardCall = mock;
-		mockedBoardApiCalls.deleteColumnCall = mock;
-		mockedBoardApiCalls.moveCardCall = mock;
-		mockedBoardApiCalls.moveColumnCall = mock;
-		mockedBoardApiCalls.updateColumnTitleCall = mock;
 		mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		return mountComposable(() => useBoardState(boardId), {
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
@@ -78,14 +76,6 @@ describe("BoardState.composable", () => {
 		card = cardSkeletonResponseFactory.build();
 		column = columnResponseFactory.build({ cards: [card] });
 		testBoard = boardResponseFactory.build({ columns: [column] });
-
-		mockedBoardNotifierCalls = {
-			generateErrorText: jest.fn(),
-			showFailure: jest.fn(),
-		};
-		mockedUseBoardNotifier.mockReturnValue(
-			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
-		);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -124,11 +114,12 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should call setEditModeId", async () => {
-			const newCardId = "newCardId1234";
-			apiCallMock = jest.fn().mockResolvedValue({ id: newCardId });
-
 			const { createCard, board } = setup();
 			board.value = testBoard;
+			const newCardId = "newCardId1234";
+			mockedBoardApiCalls.createCardCall.mockResolvedValue({
+				id: newCardId,
+			} as CardResponse);
 
 			await createCard(column.id);
 			await nextTick();
@@ -161,11 +152,10 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should call setEditModeId and return new column", async () => {
-			const newColumn = columnResponseFactory.build();
-			apiCallMock = jest.fn().mockResolvedValue(newColumn);
-
 			const { createColumn, board } = setup();
 			board.value = testBoard;
+			const newColumn = columnResponseFactory.build();
+			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
 			const result = await createColumn();
 			await nextTick();
@@ -187,11 +177,10 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should create new column with card", async () => {
-			const newColumn = columnResponseFactory.build();
-			apiCallMock = jest.fn().mockResolvedValue(newColumn);
-
 			const { createColumnWithCard, board } = setup();
 			board.value = testBoard;
+			const newColumn = columnResponseFactory.build();
+			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
 			await createColumnWithCard(card.cardId);
 			await nextTick();
@@ -216,10 +205,11 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should handleError when api returns an error code", async () => {
-			apiCallMock = jest.fn().mockRejectedValue(setupErrorResponse());
-
 			const { deleteCard, board } = setup();
 			board.value = testBoard;
+			mockedBoardApiCalls.deleteCardCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
 			mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
@@ -265,10 +255,11 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should generate and show error when there is an error code", async () => {
-			apiCallMock = jest.fn().mockRejectedValue(setupErrorResponse());
-
 			const { deleteColumn, board } = setup();
 			board.value = testBoard;
+			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
 			await deleteColumn(column.id);
 			await nextTick();
@@ -400,7 +391,10 @@ describe("BoardState.composable", () => {
 		);
 
 		it("should handle error when api returns an error code", async () => {
-			apiCallMock = jest.fn().mockRejectedValue(setupErrorResponse());
+			const { moveCard, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
 
 			const cardPayload: CardMove = {
 				removedIndex: 2,
@@ -408,9 +402,6 @@ describe("BoardState.composable", () => {
 				payload: card,
 				columnId: column.id,
 			};
-
-			const { moveCard, board } = setup();
-			board.value = testBoard;
 
 			await moveCard(cardPayload);
 			await nextTick();
@@ -460,8 +451,13 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardApiCalls.moveColumnCall).not.toHaveBeenCalled();
 		});
 
-		it("should generate and show error when there is an error code", async () => {
-			apiCallMock = jest.fn().mockRejectedValue(setupErrorResponse());
+		it("should handle error when api returns an error code", async () => {
+			const { moveColumn, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
 			const movingColumn = columnResponseFactory.build();
 			const payload: ColumnMove = {
@@ -469,8 +465,6 @@ describe("BoardState.composable", () => {
 				removedIndex: 1,
 				payload: movingColumn.id,
 			};
-			const { moveColumn, board } = setup();
-			board.value = testBoard;
 
 			await moveColumn(payload);
 			await nextTick();
@@ -514,11 +508,13 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
 		});
 
-		it("should generate and show error when there is an error code", async () => {
-			apiCallMock = jest.fn().mockRejectedValue(setupErrorResponse());
-
+		it("shouldhandle error when api returns an error code", async () => {
 			const { updateColumnTitle, board } = setup();
 			board.value = testBoard;
+
+			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
 			await updateColumnTitle(column.id, NEW_TITLE);
 			await nextTick();

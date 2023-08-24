@@ -2,11 +2,15 @@ import { handleWithNotifier } from "@/components/error-handling/handlers/handleW
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 
-export type ErrorHandler = (
+// WIP: move type
+export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
 ) => Promise<void> | void;
 
-type ErrorMap = Record<number, ErrorHandler>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ApiErrorHandlerFactory = (...args: any[]) => ApiErrorHandler;
+
+type ErrorMap = Record<number, ApiErrorHandler>;
 
 const defaultErrorMap: ErrorMap = {
 	// WIP: define additional errorCode defaults
@@ -16,10 +20,8 @@ const defaultErrorMap: ErrorMap = {
 
 export const handleError = (error: unknown, errorMap?: Partial<ErrorMap>) => {
 	const responseError = mapAxiosErrorToResponseError(error);
-	const mergedErrorMap = errorMap
-		? { ...defaultErrorMap, ...errorMap }
-		: defaultErrorMap;
+	const mergedErrorMap = { ...defaultErrorMap, ...errorMap };
 	const handlerFunction =
-		mergedErrorMap[responseError.code] || handleWithNotifier("notLoaded");
+		mergedErrorMap[responseError.code] || handleWithNotifier("notLoaded"); // WIP: have a nicer default
 	handlerFunction(responseError);
 };

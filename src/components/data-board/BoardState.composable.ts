@@ -42,7 +42,7 @@ export const useBoardState = (id: string) => {
 			setEditModeId(newCard.id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notCreated", "boardCard"),
+				404: handleWithNotifierAndReload("notCreated", "boardCard"),
 			});
 		}
 	};
@@ -57,7 +57,7 @@ export const useBoardState = (id: string) => {
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notCreated", "boardColumn"),
+				404: handleWithNotifierAndReload("notCreated", "boardColumn"),
 			});
 		}
 	};
@@ -85,7 +85,7 @@ export const useBoardState = (id: string) => {
 			await extractCard(id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notDeleted", "boardCard"),
+				404: handleWithNotifierAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};
@@ -102,7 +102,7 @@ export const useBoardState = (id: string) => {
 			board.value.columns.splice(columnIndex, 1);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notDeleted", "boardColumn"),
+				404: handleWithNotifierAndReload("notDeleted", "boardColumn"),
 			});
 		}
 	};
@@ -176,7 +176,7 @@ export const useBoardState = (id: string) => {
 			}
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notUpdated", "boardColumn"),
+				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -199,7 +199,7 @@ export const useBoardState = (id: string) => {
 			await moveColumnCall(payload.payload, board.value.id, addedIndex);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notUpdated", "boardColumn"),
+				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -215,7 +215,7 @@ export const useBoardState = (id: string) => {
 			}
 		} catch (error) {
 			handleError(error, {
-				404: handleWithReload("notUpdated", "boardColumn"),
+				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -248,7 +248,7 @@ export const useBoardState = (id: string) => {
 		return columnIndex;
 	};
 
-	const handleWithReload = (
+	const handleWithNotifierAndReload = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
