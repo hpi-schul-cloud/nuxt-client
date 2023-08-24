@@ -1,5 +1,6 @@
-<template v-if="showAlert">
+<template>
 	<v-alert
+		v-if="showAlert"
 		class="mb-0 py-4 rounded-t-0"
 		:color="alertProperties.color"
 		data-testid="board-file-element-alert"
@@ -22,7 +23,7 @@ export default defineComponent({
 	name: "FileContentElementAlert",
 	props: {
 		previewStatus: {
-			type: Object as PropType<PreviewStatus>,
+			type: String as PropType<PreviewStatus>,
 			required: true,
 		},
 	},
