@@ -122,7 +122,10 @@
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
 		/>
 		<v-switch
-			v-if="!isCurrentDateAfterFinalFinish"
+			v-if="
+				!isCurrentDateAfterFinalFinish &
+				globalFeatureEnableLdapSyncDuringMigration
+			"
 			:label="
 				t(
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
@@ -292,6 +295,10 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> = computed(
+			() => envConfigModule.getEnableLdapSyncDuringMigration
+		);
+
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
@@ -321,6 +328,7 @@ export default defineComponent({
 			school,
 			setSchoolFeatures,
 			globalFeatureShowOutdatedUsers,
+			globalFeatureEnableLdapSyncDuringMigration,
 		};
 	},
 });
