@@ -179,10 +179,10 @@ export default defineComponent({
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule | undefined =
-			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
+		const userLoginMigrationModule: UserLoginMigrationModule | undefined =
+			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 		if (!schoolsModule || !i18n || !userLoginMigrationModule) {
 			throw new Error("Injection of dependencies failed");
 		}
@@ -199,15 +199,15 @@ export default defineComponent({
 			computed(() => userLoginMigrationModule.getUserLoginMigration);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(() => {
-			return {
+			const migrationflags = {
 				enableMigrationStart: !!userloginMigration.value?.startedAt,
-				oauthMigrationPossible:
-					!userloginMigration.value?.mandatorySince ??
-					!!userloginMigration.value?.startedAt,
+				oauthMigrationPossible: !!userloginMigration.value?.startedAt,
 				oauthMigrationMandatory: !!userloginMigration.value?.mandatorySince,
 				oauthMigrationFinished: userloginMigration.value?.closedAt,
 				oauthMigrationFinalFinish: userloginMigration.value?.finishedAt,
 			};
+
+			return migrationflags;
 		});
 
 		const startMigration = () => {
