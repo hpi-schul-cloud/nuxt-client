@@ -90,6 +90,7 @@ import {
 	mdiPlaylistEdit,
 	mdiLightbulbOnOutline,
 	mdiFormatText,
+	mdiViewListOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -184,6 +185,7 @@ const materialIcons = {
 	mdiPlaylistEdit,
 	mdiLightbulbOnOutline,
 	mdiFormatText,
+	mdiViewListOutline,
 };
 
 export default materialIcons;

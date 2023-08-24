@@ -83,7 +83,7 @@
 							{{ $t("common.labels.restore") }}
 						</template>
 						<template v-else>
-							<v-icon class="task-action-icon">mdiArchiveOutline</v-icon>
+							<v-icon class="task-action-icon">$mdiArchiveOutline</v-icon>
 							{{ $t("components.molecules.TaskItemMenu.finish") }}
 						</template>
 					</v-list-item-title>
