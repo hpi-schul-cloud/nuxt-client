@@ -6,7 +6,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import Vue from "vue";
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import { i18nMock } from "@@/tests/test-utils";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -15,7 +15,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 describe("UserLoginMigrationSuccess", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 
-	const setup = (props: { sourceSystem: string; targetSystem: string }) => {
+	const setup = (props: { targetSystem: string }) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
@@ -39,7 +39,7 @@ describe("UserLoginMigrationSuccess", () => {
 					i18n: true,
 				}),
 				provide: {
-					systemsModule,
+					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 					[I18N_KEY.valueOf()]: i18nMock,
 				},
 				propsData: props,
@@ -59,7 +59,6 @@ describe("UserLoginMigrationSuccess", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", () => {
 				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
 					targetSystem: "targetSystemId",
 				});
 
@@ -74,7 +73,6 @@ describe("UserLoginMigrationSuccess", () => {
 		describe("when the systems are loaded", () => {
 			it("should show the description text", () => {
 				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
 					targetSystem: "targetSystemId",
 				});
 
@@ -89,7 +87,6 @@ describe("UserLoginMigrationSuccess", () => {
 
 			it("should show the 'back to login' button", () => {
 				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
 					targetSystem: "targetSystemId",
 				});
 
@@ -107,7 +104,6 @@ describe("UserLoginMigrationSuccess", () => {
 		describe("when mounting the component", () => {
 			it("should fetch the systems", () => {
 				setup({
-					sourceSystem: "sourceSystemId",
 					targetSystem: "targetSystemId",
 				});
 
