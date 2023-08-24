@@ -38,6 +38,12 @@ Vue.config.productionTip = false;
 
 Vue.config.errorHandler = handleApplicationError;
 
+if (process.env.NODE_ENV === "development") {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const VueAxe = require("vue-axe").default;
+	Vue.use(VueAxe);
+}
+
 // NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
