@@ -1,11 +1,15 @@
 <template>
 	<div>
-		<v-img class="rounded-t-sm" :src="url" :alt="fileName" />
+		<v-img
+			class="rounded-t-sm"
+			:src="fileProperties.previewUrl"
+			:alt="fileProperties.name"
+		/>
 		<div v-if="isEditMode" class="menu">
 			<FileContentElementMenu
-				:fileName="fileName"
-				:isDownloadAllowed="isDownloadAllowed"
-				:url="url"
+				:fileName="fileProperties.name"
+				:isDownloadAllowed="fileProperties.isDownloadAllowed"
+				:url="fileProperties.url"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -14,23 +18,27 @@
 				@delete:element="onDeleteElement"
 			/>
 		</div>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementChips
+			:fileSize="fileProperties.size"
+			:fileName="fileProperties.name"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
+import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "ImageFileDisplay",
 	components: { FileContentElementMenu, FileContentElementChips },
 	props: {
-		fileName: { type: String, required: true },
-		fileSize: { type: Number, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
+		fileProperties: {
+			type: Object as PropType<FileProperties>,
+			required: true,
+		},
 		isEditMode: { type: Boolean, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },

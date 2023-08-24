@@ -1,3 +1,5 @@
+import { PreviewOutputMimeTypes, PreviewWidth } from "@/fileStorageApi/v3";
+
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -43,4 +45,12 @@ export function getFileExtension(fileName: string): string {
 	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 	return ext;
+}
+
+export function convertDownloadToPreviewUrl(downloadUrl: string): string {
+	const previewUrl =
+		downloadUrl.replace("download", "preview") +
+		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${PreviewWidth._500}`;
+
+	return previewUrl;
 }

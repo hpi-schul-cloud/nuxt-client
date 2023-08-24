@@ -1,4 +1,9 @@
-import { convertFileSize, downloadFile, getFileExtension } from "./fileHelper";
+import {
+	convertDownloadToPreviewUrl,
+	convertFileSize,
+	downloadFile,
+	getFileExtension,
+} from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -140,6 +145,32 @@ describe("@/utils/fileHelper", () => {
 
 				expect(result).toEqual("test");
 			});
+		});
+	});
+
+	describe("convertDownloadToPreviewUrl", () => {
+		it("should return the preview url", () => {
+			const url = "/file/download/233/text.txt";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual("/file/preview/233/text.txt");
+		});
+
+		it("should return the preview url with two download words in source", () => {
+			const url = "/file/download/233/download";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual("/file/preview/233/download");
+		});
+
+		it("should return the preview url with two download words in source with extension", () => {
+			const url = "/file/download/233/download.txt";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual("/file/preview/233/download.txt");
 		});
 	});
 });

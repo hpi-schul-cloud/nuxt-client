@@ -2,7 +2,6 @@
 	<div>
 		<div v-if="!fileWasPicked" class="grey lighten-3">
 			<FilePicker
-				v-if="fileName === ''"
 				@update:file="onFileSelect"
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
@@ -17,14 +16,13 @@
 </template>
 
 <script lang="ts">
+import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, ref, watch } from "vue";
 import FilePicker from "./FilePicker.vue";
-import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	name: "FileContentElementInit",
 	props: {
-		fileName: { type: String, required: true },
 		elementId: { type: String, required: true },
 	},
 	components: { FilePicker },

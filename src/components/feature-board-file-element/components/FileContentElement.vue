@@ -10,58 +10,54 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<div v-if="isImage">
-			<ImageFileDisplay
-				:fileName="fileName"
-				:fileSize="fileSize"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:url="fileUrl"
-				:isEditMode="isEditMode"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@delete:element="onDeleteElement"
-			/>
-		</div>
-		<div v-else>
+		<template v-if="fileProperties">
+			<div v-if="fileProperties.previewUrl">
+				<ImageFileDisplay
+					:fileProperties="fileProperties"
+					:isEditMode="isEditMode"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+			<div v-else>
+				<FileContentElementDisplay
+					v-if="!isEditMode"
+					:fileProperties="fileProperties"
+				/>
+				<FileContentElementEdit
+					v-if="isEditMode && fileRecord"
+					:fileProperties="fileProperties"
+					:elementId="element.id"
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					:needsFileUpload="needsFileUpload"
+					@move-down:element="onMoveFileEditDown"
+					@move-up:element="onMoveFileEditUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+		</template>
+		<template v-else>
 			<FileContentElementInit
 				v-if="isEditMode && fileRecord === undefined"
-				:fileName="fileName"
 				:elementId="element.id"
 				@upload:file="onUploadFile"
 			/>
-			<FileContentElementDisplay
-				v-if="!isEditMode"
-				:fileName="fileName"
-				:fileSize="fileSize"
-				:url="url"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-			/>
-			<FileContentElementEdit
-				v-if="isEditMode && fileRecord"
-				:fileName="fileName"
-				:fileSize="fileSize"
-				:elementId="element.id"
-				:isDownloadAllowed="!isBlockedByVirusScan"
-				:url="url"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				:needsFileUpload="needsFileUpload"
-				@move-down:element="onMoveFileEditDown"
-				@move-up:element="onMoveFileEditUp"
-				@delete:element="onDeleteElement"
-			/>
-		</div>
+		</template>
+
 		<FileContentElementAlert v-if="isBlockedByVirusScan" />
 	</v-card>
 </template>
 
 <script lang="ts">
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
+import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
@@ -110,16 +106,23 @@ export default defineComponent({
 
 		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
 
-		const fileName = computed(() => {
-			return fileRecord.value === undefined ? "" : fileRecord.value.name;
-		});
+		const fileProperties = computed(() => {
+			if (fileRecord.value === undefined) {
+				return;
+			}
 
-		const fileSize = computed(() => {
-			return fileRecord.value === undefined ? 0 : fileRecord.value.size;
-		});
+			const previewUrl =
+				fileRecord.value?.previewStatus === PreviewStatus.PREVIEW_POSSIBLE
+					? convertDownloadToPreviewUrl(fileRecord.value.url)
+					: undefined;
 
-		const fileUrl = computed(() => {
-			return fileRecord.value === undefined ? "" : fileRecord.value.url;
+			return {
+				size: fileRecord.value.size,
+				name: fileRecord.value.name,
+				url: fileRecord.value.url,
+				previewUrl,
+				isDownloadAllowed: !isBlockedByVirusScan,
+			};
 		});
 
 		const hasFileRecord = computed(() => {
@@ -167,7 +170,7 @@ export default defineComponent({
 			}
 
 			const shouldDelete = await askDeleteConfirmation(
-				fileName.value,
+				fileRecord.value?.name,
 				"boardElement"
 			);
 
@@ -186,9 +189,7 @@ export default defineComponent({
 
 		return {
 			fileContentElement,
-			fileSize,
-			fileName,
-			fileUrl,
+			fileProperties,
 			fileRecord,
 			hasFileRecord,
 			isBlockedByVirusScan,
