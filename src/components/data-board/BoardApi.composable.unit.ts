@@ -1,9 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { useBoardApi } from "./BoardApi.composable";
 
 let boardApi: DeepMocked<serverApi.BoardApiInterface>;

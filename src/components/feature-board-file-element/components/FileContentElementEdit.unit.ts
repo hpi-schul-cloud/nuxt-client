@@ -89,16 +89,6 @@ describe("FileContentElementEdit", () => {
 		expect(url).toBe(urlProp);
 	});
 
-	it("should hand over isDownloadAllowed prop correctly to FileContentElementMenu", () => {
-		const { wrapper, isDownloadAllowedProp } = setup(true);
-
-		const isDownloadAllowed = wrapper
-			.findComponent(FileContentElementMenu)
-			.props("isDownloadAllowed");
-
-		expect(isDownloadAllowed).toBe(isDownloadAllowedProp);
-	});
-
 	it("should hand over isFirstElement prop correctly to FileContentElementMenu", () => {
 		const { wrapper, isFirstElementProp } = setup(true);
 

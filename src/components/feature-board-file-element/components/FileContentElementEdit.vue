@@ -35,19 +35,24 @@
 				@delete:element="onDeleteElement"
 			/>
 		</v-list-item>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementFooter
+			:fileSize="fileSize"
+			:fileName="fileName"
+			:isDownloadAllowed="isDownloadAllowed"
+			:url="url"
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
-	components: { FileContentElementChips, FileContentElementMenu },
+	components: { FileContentElementMenu, FileContentElementFooter },
 	props: {
 		fileName: { type: String, required: true },
 		fileSize: { type: Number, required: true },
