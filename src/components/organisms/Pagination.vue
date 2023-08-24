@@ -33,7 +33,7 @@
 						aria-label="Go to previous page"
 						@click="previousPage"
 					>
-						<v-icon>{{ mdiChevronLeft }} </v-icon>
+						<v-icon>$mdiChevronLeft </v-icon>
 					</v-btn>
 				</li>
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
@@ -45,7 +45,7 @@
 						aria-label="Go to next page"
 						@click="nextPage"
 					>
-						<v-icon>{{ mdiChevronRight }} </v-icon>
+						<v-icon>$mdiChevronRight </v-icon>
 					</v-btn>
 				</li>
 			</ul>
@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 export default {
 	model: {
 		event: "update",
@@ -78,8 +77,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiChevronLeft,
-			mdiChevronRight,
 			perPageOptions: [
 				{
 					text: this.$t("components.organisms.Pagination.perPage.5"),

@@ -18,22 +18,24 @@
 				@delete:element="onDeleteElement"
 			/>
 		</div>
-		<FileContentElementChips
+		<FileContentElementFooter
 			:fileSize="fileProperties.size"
 			:fileName="fileProperties.name"
-		/>
+			:isDownloadAllowed="fileProperties.isDownloadAllowed"
+			:url="fileProperties.url"
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "ImageFileDisplay",
-	components: { FileContentElementMenu, FileContentElementChips },
+	components: { FileContentElementMenu, FileContentElementFooter },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,

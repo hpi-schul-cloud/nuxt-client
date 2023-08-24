@@ -101,7 +101,7 @@
 						"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
+						<v-icon size="20">$mdiPencilOutline</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
@@ -137,12 +137,6 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import {
-	mdiAccountPlus,
-	mdiCloudDownload,
-	mdiPencilOutline,
-	mdiPlus,
-} from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
@@ -161,10 +155,6 @@ export default {
 	},
 	data() {
 		return {
-			mdiPlus,
-			mdiAccountPlus,
-			mdiCloudDownload,
-			mdiPencilOutline,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
@@ -393,21 +383,21 @@ export default {
 			}
 
 			return {
-				icon: mdiPlus,
+				icon: "$mdiPlus",
 				title: this.$t("common.actions.create"),
 				testId: "fab_button_teachers_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.teachers.fab.add"),
-						icon: mdiAccountPlus,
+						icon: "$mdiAccountPlus",
 						to: "/administration/teachers/new",
 						dataTestid: "fab_button_add_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
-						icon: mdiCloudDownload,
+						icon: "$mdiCloudDownload",
 						href: "/administration/teachers/import",
 						dataTestid: "fab_button_import_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.import"),

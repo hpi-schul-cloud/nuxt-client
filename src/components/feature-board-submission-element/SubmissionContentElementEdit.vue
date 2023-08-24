@@ -10,7 +10,7 @@
 					class="grey--text text--darken-2"
 					data-testid="board-submission-element-edit-icon"
 					medium
-					>{{ mdiLightbulbOnOutline }}</v-icon
+					>$mdiLightbulbOnOutline</v-icon
 				>
 			</v-list-item-icon>
 
@@ -42,7 +42,6 @@
 </template>
 
 <script lang="ts">
-import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import dayjs from "dayjs";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
@@ -75,7 +74,6 @@ export default defineComponent({
 
 		return {
 			dayjs,
-			mdiLightbulbOnOutline,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

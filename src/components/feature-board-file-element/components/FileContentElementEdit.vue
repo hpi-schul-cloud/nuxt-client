@@ -11,7 +11,7 @@
 					class="grey--text"
 					data-testid="board-file-element-edit-file-icon"
 					large
-					>{{ mdiFileDocumentOutline }}</v-icon
+					>$mdiFileDocumentOutline</v-icon
 				>
 			</v-list-item-icon>
 
@@ -35,24 +35,25 @@
 				@delete:element="onDeleteElement"
 			/>
 		</v-list-item>
-		<FileContentElementChips
+		<FileContentElementFooter
 			:fileSize="fileProperties.size"
 			:fileName="fileProperties.name"
-		/>
+			:isDownloadAllowed="fileProperties.isDownloadAllowed"
+			:url="fileProperties.url"
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
-import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, PropType, ref, watch } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
-	components: { FileContentElementChips, FileContentElementMenu },
+	components: { FileContentElementMenu, FileContentElementFooter },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
@@ -109,8 +110,6 @@ export default defineComponent({
 		return {
 			isFilePickerOpen,
 			lastCreatedElementId,
-			mdiFileDocumentOutline,
-			mdiClose,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,

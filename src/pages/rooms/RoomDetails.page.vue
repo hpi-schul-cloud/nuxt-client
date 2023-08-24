@@ -134,19 +134,6 @@ import {
 import { authModule, envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import {
-	mdiAccountGroupOutline,
-	mdiContentCopy,
-	mdiEmailPlusOutline,
-	mdiFileDocumentOutline,
-	mdiFormatListChecks,
-	mdiPencilOutline,
-	mdiPlus,
-	mdiPuzzleOutline,
-	mdiShareVariantOutline,
-	mdiTrayArrowDown,
-	mdiViewListOutline,
-} from "@mdi/js";
 import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -192,13 +179,6 @@ export default defineComponent({
 				qrUrl: "",
 				courseShareToken: "",
 			},
-			icons: {
-				mdiPencilOutline,
-				mdiEmailPlusOutline,
-				mdiShareVariantOutline,
-				mdiContentCopy,
-				mdiTrayArrowDown,
-			},
 			breadcrumbs: [
 				{
 					text: this.$t("common.words.courses"),
@@ -225,7 +205,7 @@ export default defineComponent({
 				{
 					name: "learn-content",
 					label: this.$t("common.words.learnContent"),
-					icon: mdiFileDocumentOutline,
+					icon: "$mdiFileDocumentOutline",
 					dataTestId: "learnContent-tab",
 					component: RoomDashboard,
 					fabItems: this.learnContentFabItems,
@@ -234,7 +214,7 @@ export default defineComponent({
 
 			if (ctlToolsTabEnabled) {
 				const ctlToolFabItems = {
-					icon: mdiPlus,
+					icon: "$mdiPlus",
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
@@ -244,7 +224,7 @@ export default defineComponent({
 				tabs.push({
 					name: "tools",
 					label: this.$t("pages.rooms.tabLabel.tools"),
-					icon: mdiPuzzleOutline,
+					icon: "$mdiPuzzleOutline",
 					dataTestId: "tools-tab",
 					component: RoomExternalToolsOverview,
 					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
@@ -255,7 +235,7 @@ export default defineComponent({
 				tabs.push({
 					name: "old-tools",
 					label: this.$t("pages.rooms.tabLabel.toolsOld"),
-					icon: mdiPuzzleOutline,
+					icon: "$mdiPuzzleOutline",
 					dataTestId: "old-tools-tab",
 					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
 				});
@@ -264,7 +244,7 @@ export default defineComponent({
 			tabs.push({
 				name: "groups",
 				label: this.$t("pages.rooms.tabLabel.groups"),
-				icon: mdiAccountGroupOutline,
+				icon: "$mdiAccountGroupOutline",
 				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
 				dataTestId: "groups-tab",
 			});
@@ -288,7 +268,7 @@ export default defineComponent({
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
-					icon: mdiFormatListChecks,
+					icon: "$mdiFormatListChecks",
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestid: "fab_button_add_task",
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
@@ -299,7 +279,7 @@ export default defineComponent({
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
-					icon: mdiViewListOutline,
+					icon: "$mdiViewListOutline",
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestid: "fab_button_add_lesson",
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
@@ -310,7 +290,7 @@ export default defineComponent({
 				return null;
 			}
 			const items = {
-				icon: mdiPlus,
+				icon: "$mdiPlus",
 				title: this.$t("common.actions.create"),
 				ariaLabel: this.$t("common.actions.create"),
 				testId: "add-content-button",
@@ -341,7 +321,7 @@ export default defineComponent({
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
-					icon: this.icons.mdiPencilOutline,
+					icon: "$mdiPencilOutline",
 					action: () =>
 						(window.location.href = `/courses/${this.courseId}/edit`),
 					name:
@@ -354,7 +334,7 @@ export default defineComponent({
 
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 				items.push({
-					icon: this.icons.mdiContentCopy,
+					icon: "$mdiContentCopy",
 					action: () => this.onCopyRoom(this.roomData.roomId),
 					name: this.$t("common.actions.copy"),
 					dataTestId: "title-menu-copy",
@@ -366,7 +346,7 @@ export default defineComponent({
 				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
 			) {
 				items.push({
-					icon: this.icons.mdiShareVariantOutline,
+					icon: "$mdiShareVariantOutline",
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCourse"),
 					dataTestId: "title-menu-share",
@@ -375,7 +355,7 @@ export default defineComponent({
 
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
-					icon: this.icons.mdiTrayArrowDown,
+					icon: "$mdiTrayArrowDown",
 					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
 					name: this.$t("common.actions.download.v1.1"),
 					dataTestId: "title-menu-imscc-download-v1.1",
@@ -384,7 +364,7 @@ export default defineComponent({
 
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
-					icon: this.icons.mdiTrayArrowDown,
+					icon: "$mdiTrayArrowDown",
 					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
 					name: this.$t("common.actions.download.v1.3"),
 					dataTestId: "title-menu-imscc-download-v1.3",
