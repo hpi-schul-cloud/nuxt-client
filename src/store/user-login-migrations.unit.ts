@@ -281,20 +281,20 @@ describe("UserLoginMigrationModule", () => {
 			describe("when user is available", () => {
 				describe("when there is no migration for a user", () => {
 					const setup = () => {
-						const setup = () => {
-							authModule.setUser({ ...mockUser, id: "userId" });
+						authModule.setUser({ ...mockUser, id: "userId" });
 
-							const listResponse: UserLoginMigrationSearchListResponse = {
-								data: [],
-								total: 0,
-								skip: 0,
-								limit: 1,
-							};
-
-							apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-								mockApiResponse({ data: listResponse })
-							);
+						const listResponse: UserLoginMigrationSearchListResponse = {
+							data: [],
+							total: 0,
+							skip: 0,
+							limit: 1,
 						};
+
+						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
+							mockApiResponse({ data: listResponse })
+						);
+
+						jest.spyOn(module, "setUserLoginMigration");
 					};
 
 					it("should not set the user login migration", async () => {
@@ -302,9 +302,7 @@ describe("UserLoginMigrationModule", () => {
 
 						await module.fetchLatestUserLoginMigrationForCurrentUser();
 
-						expect(
-							apiMock.userLoginMigrationControllerGetMigrations
-						).not.toHaveBeenCalled();
+						expect(module.setUserLoginMigration).not.toHaveBeenCalled();
 					});
 				});
 
@@ -332,11 +330,9 @@ describe("UserLoginMigrationModule", () => {
 					it("should not set user login migration", async () => {
 						setup();
 
-						try {
-							await module.fetchLatestUserLoginMigrationForCurrentUser();
-						} catch (e) {
-							// test purpose
-						}
+						await expect(
+							module.fetchLatestUserLoginMigrationForCurrentUser()
+						).rejects.toThrow();
 
 						expect(module.setUserLoginMigration).not.toHaveBeenCalled();
 					});
@@ -422,11 +418,9 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					try {
-						await module.fetchLatestUserLoginMigrationForCurrentUser();
-					} catch (e) {
-						// test purpose
-					}
+					await expect(
+						module.fetchLatestUserLoginMigrationForCurrentUser()
+					).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -531,11 +525,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					try {
-						await module.startUserLoginMigration();
-					} catch (e) {
-						// test purpose
-					}
+					await expect(module.startUserLoginMigration()).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -619,11 +609,9 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					try {
-						await module.setUserLoginMigrationMandatory(true);
-					} catch (e) {
-						// test purpose
-					}
+					await expect(
+						module.setUserLoginMigrationMandatory(true)
+					).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -706,11 +694,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					try {
-						await module.restartUserLoginMigration();
-					} catch (e) {
-						// test purpose
-					}
+					await expect(module.restartUserLoginMigration()).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
@@ -794,11 +778,7 @@ describe("UserLoginMigrationModule", () => {
 				it("should set the businessError", async () => {
 					const { apiError } = setup();
 
-					try {
-						await module.closeUserLoginMigration();
-					} catch (e) {
-						// test purpose
-					}
+					await expect(module.closeUserLoginMigration()).rejects.toThrow();
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
 						error: apiError,
