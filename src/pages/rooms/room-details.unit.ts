@@ -127,9 +127,6 @@ const getWrapper: any = () => {
 			i18n: true,
 		}),
 		mocks: {
-			$theme: {
-				short_name: "instance name",
-			},
 			$router,
 			$route,
 		},
