@@ -77,8 +77,8 @@ describe("UserLoginMigrationSuccess", () => {
 				});
 
 				const descriptionText: string = wrapper
-					.find("[data-testId=text-description]")
-					.attributes().html;
+					.find('[data-testid="text-description"]')
+					.text();
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.success.description {"targetSystem":"targetSystem"}'
