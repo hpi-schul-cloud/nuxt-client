@@ -40,7 +40,7 @@
 			</Container>
 		</div>
 		<BoardAddCardButton
-			v-if="hasCreateColumnPermission"
+			v-if="hasCreateColumnPermission && !isDragging"
 			@add-card="onCreateCard"
 		></BoardAddCardButton>
 	</div>
@@ -198,7 +198,6 @@ export default defineComponent({
 <style scoped>
 .expanded-column {
 	min-height: 75vh;
-	transition: min-height 1000ms;
 }
 .scrollable-column {
 	overflow: auto;
