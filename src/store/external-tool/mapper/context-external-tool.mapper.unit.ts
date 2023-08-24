@@ -64,8 +64,7 @@ describe("ContextExternalToolMapper", () => {
 						template,
 						[],
 						contextId,
-						contextType,
-						undefined
+						contextType
 					);
 
 				expect(result).toEqual(
