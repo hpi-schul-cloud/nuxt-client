@@ -1,4 +1,4 @@
-<template v-if="alertProperties.text">
+<template v-if="showAlert">
 	<v-alert
 		class="mb-0 py-4 rounded-t-0"
 		:color="alertProperties.color"
@@ -27,45 +27,49 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const defaultProps = { color: "", icon: "", text: "" };
+		const properties = {
+			[PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED]: {
+				color: "error",
+				icon: "$error",
+				text: "components.cardElement.fileElement.virusDetected",
+			},
+			[PreviewStatus.AWAITING_SCAN_STATUS]: {
+				color: "info",
+				icon: "$info",
+				text: "components.cardElement.fileElement.awaitingScan",
+			},
+			[PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK]: {
+				color: "info",
+				icon: "$info",
+				text: "components.cardElement.fileElement.scanWontCheck",
+			},
+			[PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR]: {
+				color: "warning",
+				icon: "$warning",
+				text: "components.cardElement.fileElement.scanError",
+			},
+			[PreviewStatus.PREVIEW_POSSIBLE]: {
+				...defaultProps,
+			},
+			[PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE]: {
+				...defaultProps,
+			},
+		};
+
 		const alertProperties = computed(() => {
-			if (
-				props.previewStatus ===
-				PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
-			) {
-				return {
-					color: "error",
-					icon: "$error",
-					text: "components.cardElement.fileElement.virusDetected",
-				};
-			} else if (props.previewStatus === PreviewStatus.AWAITING_SCAN_STATUS) {
-				return {
-					color: "info",
-					icon: "$info",
-					text: "components.cardElement.fileElement.awaitingScan",
-				};
-			} else if (
-				props.previewStatus ===
-				PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
-			) {
-				return {
-					color: "info",
-					icon: "$info",
-					text: "components.cardElement.fileElement.scanWontCheck",
-				};
-			} else if (
-				props.previewStatus ===
-				PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
-			) {
-				return {
-					color: "warning",
-					icon: "$warning",
-					text: "components.cardElement.fileElement.scanError",
-				};
-			} else {
-				return {};
-			}
+			return properties[props.previewStatus];
 		});
-		return { alertProperties };
+
+		const showAlert = computed(() => {
+			return (
+				props.previewStatus !== PreviewStatus.PREVIEW_POSSIBLE &&
+				props.previewStatus !==
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+			);
+		});
+
+		return { alertProperties, PreviewStatus, showAlert };
 	},
 });
 </script>
