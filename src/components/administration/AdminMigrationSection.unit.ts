@@ -721,43 +721,43 @@ describe("AdminMigrationSection", () => {
 		});
 	});
 
-	describe("FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
-		describe("when feature is set to false", () => {
-			it("should hide switch button", () => {
-				const { wrapper } = setup(
-					{},
-					{
-						getEnableLdapSyncDuringMigration: false,
-					}
-				);
-
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
-
-				expect(switchComponent.exists()).toBe(false);
-			});
-		});
-
-		describe("when feature is set to true", () => {
-			it("should show switch button", () => {
-				const { wrapper } = setup(
-					{},
-					{
-						getEnableLdapSyncDuringMigration: true,
-					}
-				);
-
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
-
-				expect(switchComponent.exists()).toBe(true);
-			});
-		});
-	});
-
 	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
+		describe("FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
+			describe("when feature is set to false", () => {
+				it("should hide switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: false,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(false);
+				});
+			});
+
+			describe("when feature is set to true", () => {
+				it("should show switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: true,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(true);
+				});
+			});
+		});
+
 		describe("when user login migration is finished", () => {
 			it("should hide switch button", () => {
 				const { wrapper } = setup(
@@ -807,9 +807,7 @@ describe("AdminMigrationSection", () => {
 				expect(switchComponent.exists()).toBe(true);
 			});
 		});
-	});
 
-	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup(

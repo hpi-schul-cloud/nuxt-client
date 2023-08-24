@@ -249,21 +249,29 @@ describe("env-config module", () => {
 			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
 		});
 
-		it("getEnableLdapSyncDuringMigration should get FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
-			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+		describe("when getting FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
+			describe("when feature exists", () => {
+				it("should return value", () => {
+					const envConfigModule = new EnvConfigModule({});
+					envConfigModule.env = mockEnvs;
 
-			expect(envConfigModule.getEnableLdapSyncDuringMigration).toStrictEqual(
-				mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
-			);
-		});
+					expect(
+						envConfigModule.getEnableLdapSyncDuringMigration
+					).toStrictEqual(mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION);
+				});
+			});
 
-		it("getEnableLdapSyncDuringMigration should not get FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
-			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
-			delete envConfigModule.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
+			describe("when feature does not exist", () => {
+				it("return false", () => {
+					const envConfigModule = new EnvConfigModule({});
+					envConfigModule.env = mockEnvs;
+					delete envConfigModule.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
 
-			expect(envConfigModule.getEnableLdapSyncDuringMigration).toEqual(false);
+					expect(envConfigModule.getEnableLdapSyncDuringMigration).toEqual(
+						false
+					);
+				});
+			});
 		});
 
 		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
