@@ -26,7 +26,7 @@
 				{{
 					$t("pages.administration.migration.title", {
 						source: ldapSourceTranslation,
-						instance: $theme.short_name,
+						instance: $theme.name,
 					})
 				}}
 			</h1>
@@ -188,7 +188,7 @@
 										<RenderHTML
 											:html="
 												$t('pages.administration.migration.summary', {
-													instance: $theme.short_name,
+													instance: $theme.name,
 													source: ldapSourceTranslation,
 													importUsersCount: totalMatched,
 													importUsersUnmatchedCount:
@@ -253,7 +253,7 @@
 														"pages.administration.migration.step4.linkingFinished",
 														{
 															source: ldapSourceTranslation,
-															instance: $theme.short_name,
+															instance: $theme.name,
 														}
 													)
 												}}
@@ -278,7 +278,7 @@
 													{{
 														$t(
 															"pages.administration.migration.step4.bullets.newUsers",
-															{ instance: $theme.short_name }
+															{ instance: $theme.name }
 														)
 													}}
 												</li>
@@ -339,7 +339,7 @@
 									{{
 										$t("pages.administration.migration.step5.syncReady2", {
 											source: ldapSourceTranslation,
-											instance: $theme.short_name,
+											instance: $theme.name,
 										})
 									}}
 								</p>
@@ -348,7 +348,7 @@
 									{{
 										$t("pages.administration.migration.step5.afterSync", {
 											source: ldapSourceTranslation,
-											instance: $theme.short_name,
+											instance: $theme.name,
 										})
 									}}
 								</p>
@@ -505,7 +505,7 @@ export default {
 		document.title = buildPageTitle(
 			this.$t("pages.administration.migration.title", {
 				source: this.ldapSourceTranslation,
-				instance: this.$theme.short_name,
+				instance: this.$theme.name,
 			})
 		);
 
@@ -517,7 +517,7 @@ export default {
 			{
 				text: this.$t("pages.administration.migration.title", {
 					source: this.ldapSourceTranslation,
-					instance: this.$theme.short_name,
+					instance: this.$theme.name,
 				}),
 				disabled: true,
 			},

@@ -41,7 +41,6 @@ export default class EnvConfigModule extends VuexModule {
 		I18N__DEFAULT_LANGUAGE: "",
 		I18N__DEFAULT_TIMEZONE: "",
 		SC_TITLE: "",
-		SC_SHORT_TITLE: "",
 		FILES_STORAGE__MAX_FILE_SIZE: 0,
 		FEATURE_SHOW_OUTDATED_USERS: false,
 	};

@@ -51,12 +51,6 @@ const specificFilesMock = {
 		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
-const mocks = {
-	$theme: {
-		short_name: "nbc",
-	},
-};
-
 describe("students/consent", () => {
 	let mockStore;
 
@@ -108,7 +102,6 @@ describe("students/consent", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks,
 		});
 
 		expect(mockStore.bulkConsent.actions.findConsentUsers).toHaveBeenCalled();
@@ -120,7 +113,6 @@ describe("students/consent", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks,
 		});
 
 		const item = wrapper.find(`[data-testid="step_progress"]`);
@@ -134,7 +126,6 @@ describe("students/consent", () => {
 				i18n: true,
 				store: mockStore,
 			}),
-			mocks,
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
@@ -149,7 +140,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
@@ -164,7 +154,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -183,7 +172,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -202,7 +190,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -224,7 +211,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -244,7 +230,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -265,7 +250,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		await wrapper.vm.$nextTick();
@@ -288,7 +272,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -310,7 +293,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -332,7 +314,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";
@@ -360,7 +341,6 @@ describe("students/consent", () => {
 				store: mockStore,
 				i18n: true,
 			}),
-			mocks,
 		});
 
 		mockData[0].birthday = "10.10.2010";

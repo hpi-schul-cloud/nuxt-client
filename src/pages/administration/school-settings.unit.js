@@ -94,7 +94,6 @@ const envs = {
 	I18N__FALLBACK_LANGUAGE: "de",
 	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/cloud-instances/",
 	SC_TITLE: "HPI Schul-Cloud",
-	SC_SHORT_TITLE: "HPI Schul-Cloud",
 };
 
 const mockStore = {
@@ -166,7 +165,6 @@ const fetchFederalStateSpy = jest
 	.mockImplementation(() => {
 		schoolsModule.setFederalState(federalState);
 	});
-const short_name = "instance name";
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
@@ -184,11 +182,6 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeTruthy();
@@ -205,11 +198,6 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
@@ -226,11 +214,6 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.vm.isOauthMigrationEnabled).toBe(true);
@@ -247,11 +230,6 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.vm.isOauthMigrationEnabled).toBe(false);
@@ -263,11 +241,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
@@ -279,11 +252,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
@@ -297,11 +265,6 @@ describe("SchoolSettingPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(
@@ -319,11 +282,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(
@@ -338,11 +296,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		expect(wrapper.findComponent({ name: "v-skeleton-loader" }).exists()).toBe(
@@ -357,11 +310,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		const schoolError = wrapper.find(".school-error-image");
@@ -380,11 +328,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 
 		const text = wrapper.findComponent({ name: "v-alert" }).text();
@@ -400,11 +343,6 @@ describe("SchoolSettingPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			mocks: {
-				$theme: {
-					short_name,
-				},
-			},
 		});
 		await wrapper.vm.$nextTick();
 		expect(fetchYearSpy).toHaveBeenCalled();
