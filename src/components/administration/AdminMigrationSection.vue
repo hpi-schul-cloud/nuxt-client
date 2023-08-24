@@ -84,7 +84,7 @@
 				dense
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
+				@change="setMigrationMandatory(oauthMigration.oauthMigrationMandatory)"
 			/>
 		</div>
 		<RenderHTML
@@ -112,14 +112,14 @@
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
-			@set="setMigration(true, false)"
+			@set="startMigration()"
 		/>
 		<migration-warning-card
 			value="end"
 			v-if="isShowEndWarning"
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
-			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
+			@set="closeMigration()"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
@@ -167,6 +167,8 @@ import {
 import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { UserLoginMigration } from "../../store/user-login-migration";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -177,9 +179,11 @@ export default defineComponent({
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const userLoginMigrationModule: UserLoginMigrationModule | undefined =
+			inject<UserLoginMigrationModule>("userLoginMigrationModule");
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
-		if (!schoolsModule || !i18n) {
+		if (!schoolsModule || !i18n || !userLoginMigrationModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
@@ -191,9 +195,36 @@ export default defineComponent({
 		const t = (key: string, values?: VueI18n.Values): string =>
 			i18n.tc(key, 0, values);
 
-		const oauthMigration: ComputedRef<OauthMigration> = computed(
-			() => schoolsModule.getOauthMigration
-		);
+		const userloginMigration: ComputedRef<UserLoginMigration | undefined> =
+			computed(() => userLoginMigrationModule.getUserLoginMigration);
+
+		const oauthMigration: ComputedRef<OauthMigration> = computed(() => {
+			return {
+				enableMigrationStart: !!userloginMigration.value?.startedAt,
+				oauthMigrationPossible:
+					!userloginMigration.value?.mandatorySince ??
+					!!userloginMigration.value?.startedAt,
+				oauthMigrationMandatory: !!userloginMigration.value?.mandatorySince,
+				oauthMigrationFinished: userloginMigration.value?.closedAt,
+				oauthMigrationFinalFinish: userloginMigration.value?.finishedAt,
+			};
+		});
+
+		const startMigration = () => {
+			if (oauthMigration.value.oauthMigrationPossible) {
+				userLoginMigrationModule.restartUserLoginMigration();
+			} else {
+				userLoginMigrationModule.startUserLoginMigration();
+			}
+		};
+
+		const setMigrationMandatory = (mandatory: boolean) => {
+			userLoginMigrationModule.setUserLoginMigrationMandatory(mandatory);
+		};
+
+		const closeMigration = () => {
+			userLoginMigrationModule.closeUserLoginMigration();
+		};
 
 		const setMigration = (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
@@ -223,7 +254,7 @@ export default defineComponent({
 
 		const isShowStartButton: ComputedRef<boolean> = computed(
 			() =>
-				!oauthMigration.value.oauthMigrationPossible &&
+				oauthMigration.value.oauthMigrationPossible &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
@@ -292,6 +323,9 @@ export default defineComponent({
 		return {
 			oauthMigration,
 			setMigration,
+			startMigration,
+			setMigrationMandatory,
+			closeMigration,
 			t,
 			isShowEndWarning,
 			onToggleShowEndWarning,
