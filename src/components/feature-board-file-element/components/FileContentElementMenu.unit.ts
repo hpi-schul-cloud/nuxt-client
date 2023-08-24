@@ -1,26 +1,24 @@
-import { BoardMenuAction } from "@ui-board";
-import { downloadFile } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { BoardMenuAction } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
 
 jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementMenu", () => {
-	const setupProps = (isDownloadAllowed?: boolean) => ({
+	const setupProps = () => ({
 		fileName: "file-record #1.txt",
 		url: "1/file-record #1.txt",
-		isDownloadAllowed: isDownloadAllowed ?? true,
 		isFirstElement: false,
 		isLastElement: false,
 		hasMultipleElements: false,
 	});
 
-	const setup = (isDownloadAllowed?: boolean) => {
+	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = setupProps(isDownloadAllowed);
+		const propsData = setupProps();
 		const wrapper = shallowMount(FileContentElementMenu, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
@@ -31,9 +29,6 @@ describe("FileContentElementMenu", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileName,
-			urlProp: propsData.url,
-			isDownloadAllowedProp: propsData.isDownloadAllowed,
 		};
 	};
 
@@ -54,7 +49,6 @@ describe("FileContentElementMenu", () => {
 				fileId: "file-id #1",
 				fileName: "file-record #1.txt",
 				url: "1/file-record #1.txt",
-				isDownloadAllowed: true,
 				isFirstElement: false,
 				isLastElement: false,
 				hasMultipleElements: true,
@@ -142,7 +136,6 @@ describe("FileContentElementMenu", () => {
 						fileId: "file-id #1",
 						fileName: "file-record #1.txt",
 						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: true,
 						isLastElement: false,
 						hasMultipleElements: true,
@@ -195,7 +188,6 @@ describe("FileContentElementMenu", () => {
 						fileId: "file-id #1",
 						fileName: "file-record #1.txt",
 						url: "1/file-record #1.txt",
-						isDownloadAllowed: true,
 						isFirstElement: false,
 						isLastElement: true,
 						hasMultipleElements: true,
@@ -249,7 +241,6 @@ describe("FileContentElementMenu", () => {
 					fileId: "file-id #1",
 					fileName: "file-record #1.txt",
 					url: "1/file-record #1.txt",
-					isDownloadAllowed: true,
 					isFirstElement: false,
 					isLastElement: false,
 					hasMultipleElements: false,
@@ -290,84 +281,6 @@ describe("FileContentElementMenu", () => {
 					.filter((c) => c.text().includes(moveDownTranslation));
 
 				expect(childComponent.exists()).toBe(false);
-			});
-		});
-	});
-
-	describe("download board action", () => {
-		describe("when download is allowed", () => {
-			it("should show download board menu action", () => {
-				const { wrapper } = setup();
-
-				const downloadTranslation = wrapper.vm
-					.$t("components.board.action.download")
-					.toString();
-
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(downloadTranslation))
-					.at(0);
-
-				expect(childComponent.exists()).toBe(true);
-			});
-
-			describe("when download board menu action is clicked", () => {
-				const setup = () => {
-					document.body.setAttribute("data-app", "true");
-
-					const downloadFileMock = jest
-						.mocked(downloadFile)
-						.mockReturnValueOnce();
-
-					const propsData = setupProps();
-					const wrapper = shallowMount(FileContentElementMenu, {
-						...createComponentMocks({ i18n: true }),
-						propsData,
-						provide: {
-							[I18N_KEY as symbol]: { t: (key: string) => key },
-						},
-					});
-
-					return {
-						wrapper,
-						fileNameProp: propsData.fileName,
-						urlProp: propsData.url,
-						downloadFileMock,
-					};
-				};
-
-				it("should download file", async () => {
-					const { wrapper, urlProp, fileNameProp, downloadFileMock } = setup();
-
-					const downloadTranslation = wrapper.vm
-						.$t("components.board.action.download")
-						.toString();
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(downloadTranslation))
-						.at(0);
-
-					childComponent.vm.$emit("click");
-
-					expect(downloadFileMock).toHaveBeenCalledTimes(1);
-					expect(downloadFileMock).toHaveBeenCalledWith(urlProp, fileNameProp);
-				});
-			});
-		});
-
-		describe("when download is not allowed", () => {
-			it("should not show download board menu action", () => {
-				const { wrapper } = setup(false);
-
-				const downloadTranslation = wrapper.vm
-					.$t("components.board.action.download")
-					.toString();
-
-				const childComponents = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(downloadTranslation));
-
-				expect(childComponents.length).toBe(0);
 			});
 		});
 	});
