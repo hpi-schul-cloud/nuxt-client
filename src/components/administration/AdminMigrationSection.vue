@@ -44,7 +44,7 @@
 				class="my-5 button-start"
 				color="primary"
 				depressed
-				:disabled="!oauthMigration.startedAt"
+				:disabled="!officialSchoolNumber"
 				data-testid="migration-start-button"
 				@click="onToggleShowStartWarning"
 			>
@@ -84,7 +84,7 @@
 				dense
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(oauthMigration.mandatorySince)"
+				@change="setMigrationMandatory(!oauthMigration.mandatorySince)"
 			/>
 		</div>
 		<RenderHTML
@@ -106,14 +106,14 @@
 			v-if="isShowStartWarning"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
-			@set="startMigration()"
+			@set="onStartMigration()"
 		/>
 		<migration-warning-card
 			value="end"
 			v-if="isShowEndWarning"
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
-			@set="closeMigration()"
+			@set="onCloseMigration()"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
@@ -204,7 +204,7 @@ export default defineComponent({
 			};
 		});
 
-		const startMigration = () => {
+		const onStartMigration = () => {
 			if (oauthMigration.value.startedAt) {
 				userLoginMigrationModule.restartUserLoginMigration();
 			} else {
@@ -216,7 +216,7 @@ export default defineComponent({
 			userLoginMigrationModule.setUserLoginMigrationMandatory(mandatory);
 		};
 
-		const closeMigration = () => {
+		const onCloseMigration = () => {
 			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
@@ -263,6 +263,7 @@ export default defineComponent({
 		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
 			() => !isShowEndWarning.value && !isShowStartWarning.value
 		);
+
 		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
 			if (userLoginMigration.value.finishedAt) {
 				return (
@@ -280,13 +281,15 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
-		const schoolNumber: ComputedRef<string | undefined> = computed(
+
+		const officialSchoolNumber: ComputedRef<string | undefined> = computed(
 			() => schoolsModule.getSchool.officialSchoolNumber
 		);
+
 		const getSubject = (): string => {
 			const subject = encodeURIComponent(
 				`Schule mit der Nummer: ${
-					schoolNumber.value ?? "???"
+					officialSchoolNumber.value ?? "???"
 				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
 			);
 
@@ -314,9 +317,9 @@ export default defineComponent({
 		return {
 			oauthMigration,
 			setMigration,
-			startMigration,
+			onStartMigration,
 			setMigrationMandatory,
-			closeMigration,
+			onCloseMigration,
 			t,
 			isShowEndWarning,
 			onToggleShowEndWarning,
@@ -332,6 +335,7 @@ export default defineComponent({
 			school,
 			setShowOutdatedUsers,
 			globalFeatureShowOutdatedUsers,
+			officialSchoolNumber,
 		};
 	},
 });
