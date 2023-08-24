@@ -126,9 +126,6 @@ const defaultMocks = {
 	$route: { query: {} },
 	$router: { replace: jest.fn() },
 	$t: (key) => key,
-	$theme: {
-		short_name: "instance name",
-	},
 };
 
 const getWrapper = (

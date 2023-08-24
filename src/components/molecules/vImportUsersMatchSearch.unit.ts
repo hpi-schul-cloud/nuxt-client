@@ -28,7 +28,7 @@ const getWrapper: any = (props: object, options?: object) => {
 		propsData: props,
 		mocks: {
 			$theme: {
-				short_name: "nbc",
+				name: "nbc",
 			},
 		},
 		...options,
