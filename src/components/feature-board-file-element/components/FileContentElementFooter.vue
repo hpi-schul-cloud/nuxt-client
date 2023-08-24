@@ -2,14 +2,17 @@
 	<v-container class="ma-0 pa-0">
 		<v-row>
 			<v-col cols="10">
-				<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+				<FileContentElementChips
+					:fileSize="fileProperties.size"
+					:fileName="fileProperties.name"
+				/>
 			</v-col>
 
 			<v-col cols="2">
 				<FileContentElementDownload
-					:fileName="fileName"
-					:isDownloadAllowed="isDownloadAllowed"
-					:url="url"
+					:fileName="fileProperties.name"
+					:isDownloadAllowed="fileProperties.isDownloadAllowed"
+					:url="fileProperties.url"
 				></FileContentElementDownload>
 			</v-col>
 		</v-row>
@@ -17,9 +20,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDownload from "./FileContentElementDownload.vue";
+import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "FileContentElementFooter",
@@ -28,10 +32,10 @@ export default defineComponent({
 		FileContentElementDownload,
 	},
 	props: {
-		fileName: { type: String, required: true },
-		fileSize: { type: Number, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
+		fileProperties: {
+			type: Object as PropType<FileProperties>,
+			required: true,
+		},
 	},
 });
 </script>

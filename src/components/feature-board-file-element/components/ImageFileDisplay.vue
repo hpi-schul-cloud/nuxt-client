@@ -19,10 +19,7 @@
 			/>
 		</div>
 		<FileContentElementFooter
-			:fileSize="fileProperties.size"
-			:fileName="fileProperties.name"
-			:isDownloadAllowed="fileProperties.isDownloadAllowed"
-			:url="fileProperties.url"
+			:fileProperties="fileProperties"
 		></FileContentElementFooter>
 	</div>
 </template>
