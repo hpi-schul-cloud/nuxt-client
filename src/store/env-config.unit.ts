@@ -27,6 +27,7 @@ const mockEnvs: Envs = {
 	MIGRATION_END_GRACE_PERIOD_MS: 1,
 	FILES_STORAGE__MAX_FILE_SIZE: 0,
 	FEATURE_SHOW_OUTDATED_USERS: true,
+	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
 };
 
@@ -246,6 +247,31 @@ describe("env-config module", () => {
 			delete envConfigModule.env.FEATURE_SHOW_OUTDATED_USERS;
 
 			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
+		});
+
+		describe("when getting FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
+			describe("when feature exists", () => {
+				it("should return value", () => {
+					const envConfigModule = new EnvConfigModule({});
+					envConfigModule.env = mockEnvs;
+
+					expect(
+						envConfigModule.getEnableLdapSyncDuringMigration
+					).toStrictEqual(mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION);
+				});
+			});
+
+			describe("when feature does not exist", () => {
+				it("return false", () => {
+					const envConfigModule = new EnvConfigModule({});
+					envConfigModule.env = mockEnvs;
+					delete envConfigModule.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
+
+					expect(envConfigModule.getEnableLdapSyncDuringMigration).toEqual(
+						false
+					);
+				});
+			});
 		});
 
 		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
