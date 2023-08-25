@@ -11,7 +11,7 @@
 					class="grey--text"
 					data-testid="board-file-element-display-file-icon"
 					large
-					>$mdiFileDocumentOutline</v-icon
+					>{{ mdiFileDocumentOutline }}</v-icon
 				>
 			</v-list-item-icon>
 
@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent, PropType } from "vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 import { FileProperties } from "./types/file-properties";
@@ -44,6 +45,11 @@ export default defineComponent({
 			type: Object as PropType<FileProperties>,
 			required: true,
 		},
+	},
+	setup() {
+		return {
+			mdiFileDocumentOutline,
+		};
 	},
 });
 </script>

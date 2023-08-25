@@ -22,7 +22,7 @@
 				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
 					<v-btn color="primary" outlined to="/loginRedirect" class="mx-2">
-						<v-icon size="20" class="mr-1">$mdiLogin</v-icon>
+						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
 						{{ $t("common.labels.login") }}
 					</v-btn>
 					<v-btn color="primary" depressed to="/community">
@@ -35,6 +35,7 @@
 </template>
 <script>
 import { envConfigModule } from "@/store";
+import { mdiLogin } from "@mdi/js";
 
 export default {
 	props: {
@@ -59,6 +60,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiLogin,
 			activeLink: window.location.pathname,
 		};
 	},

@@ -15,7 +15,7 @@
 					text-color="black"
 					data-testId="tool-card-status"
 				>
-					<v-icon small class="mr-1" color="warning">$mdiAlert</v-icon>
+					<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
 					{{ t("pages.rooms.tools.outdated") }}
 				</v-chip>
 			</div>
@@ -34,11 +34,12 @@
 
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
-import EnvConfigModule from "@/store/env-config";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, PropType, computed, defineComponent } from "vue";
+import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { computed, ComputedRef, defineComponent, PropType } from "vue";
+import { ToolConfigurationStatus } from "@/store/external-tool";
+import EnvConfigModule from "@/store/env-config";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
@@ -77,7 +78,7 @@ export default defineComponent({
 
 		const menuItems = [
 			{
-				icon: "$mdiTrashCanOutline",
+				icon: mdiTrashCanOutline,
 				action: handleDelete,
 				name: t("common.actions.remove"),
 				dataTestId: "tool-delete",
@@ -86,7 +87,7 @@ export default defineComponent({
 
 		if (envConfigModule.getCtlContextConfigurationEnabled) {
 			menuItems.unshift({
-				icon: "$mdiPencilOutline",
+				icon: mdiPencilOutline,
 				action: handleEdit,
 				name: t("common.actions.edit"),
 				dataTestId: "tool-edit",
@@ -102,6 +103,7 @@ export default defineComponent({
 			handleClick,
 			menuItems,
 			isToolOutdated,
+			mdiAlert,
 		};
 	},
 });
