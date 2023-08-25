@@ -1,8 +1,11 @@
+import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
 	getFileExtension,
+	isDownloadAllowed,
+	isPreviewPossible,
 } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
@@ -171,6 +174,82 @@ describe("@/utils/fileHelper", () => {
 			const result = convertDownloadToPreviewUrl(url);
 
 			expect(result).toEqual("/file/preview/233/download.txt");
+		});
+	});
+
+	describe("isDownloadAllowed", () => {
+		describe("when scan status is not blocked", () => {
+			it("should return true", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is blocked", () => {
+			it("should return false", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isPreviewPossible", () => {
+		describe("when preview status is possible", () => {
+			it("should return true", () => {
+				const result = isPreviewPossible(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when preview status is AWAITING_SCAN_STATUS", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+				);
+
+				expect(result).toBe(false);
+			});
 		});
 	});
 });

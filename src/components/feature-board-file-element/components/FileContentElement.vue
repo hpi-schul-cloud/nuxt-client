@@ -54,13 +54,16 @@
 </template>
 
 <script lang="ts">
-import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
-import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import {
+	convertDownloadToPreviewUrl,
+	isDownloadAllowed,
+	isPreviewPossible,
+} from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
-import { useFileRecord } from "../FileRecord.composable";
 import { useFileStorageApi } from "../FileStorageApi.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
@@ -103,24 +106,23 @@ export default defineComponent({
 		);
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const { isBlockedByVirusScan, isImage, url } = useFileRecord(fileRecord);
-
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
 			}
 
-			const previewUrl =
-				fileRecord.value?.previewStatus === PreviewStatus.PREVIEW_POSSIBLE
-					? convertDownloadToPreviewUrl(fileRecord.value.url)
-					: undefined;
+			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
+				? convertDownloadToPreviewUrl(fileRecord.value.url)
+				: undefined;
 
 			return {
 				size: fileRecord.value.size,
 				name: fileRecord.value.name,
 				url: fileRecord.value.url,
 				previewUrl,
-				isDownloadAllowed: !isBlockedByVirusScan,
+				isDownloadAllowed: isDownloadAllowed(
+					fileRecord.value.securityCheckStatus
+				),
 			};
 		});
 
@@ -191,12 +193,10 @@ export default defineComponent({
 			fileProperties,
 			fileRecord,
 			hasFileRecord,
-			isBlockedByVirusScan,
-			isImage,
+
 			isOutlined,
 			modelValue,
 			needsFileUpload,
-			url,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveFileEditDown,
