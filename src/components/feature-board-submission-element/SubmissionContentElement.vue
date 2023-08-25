@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		:outlined="isOutlined"
+		outlined
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -67,10 +67,6 @@ export default defineComponent({
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const isOutlined = computed(() => {
-			return props.isEditMode === true;
-		});
-
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -98,7 +94,6 @@ export default defineComponent({
 		};
 
 		return {
-			isOutlined,
 			submissionContentElement,
 			onDeleteElement,
 			onKeydownArrow,
