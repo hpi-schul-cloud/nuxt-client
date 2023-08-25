@@ -55,8 +55,8 @@ export const useBoardState = (id: string) => {
 			return;
 		}
 
-		setEditModeId(newColumn.id);
 		await fetchBoard(board.value.id);
+		setEditModeId(newColumn.id);
 
 		return newColumn;
 	};
