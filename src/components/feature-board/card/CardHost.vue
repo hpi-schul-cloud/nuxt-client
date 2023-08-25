@@ -111,7 +111,7 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move:card-keyboard", "delete:card"],
+	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
@@ -129,7 +129,8 @@ export default defineComponent({
 			moveElementUp,
 			deleteElement,
 			addTextAfterTitle,
-		} = useCardState(props.cardId);
+		} = useCardState(props.cardId, emit);
+
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId

@@ -2,8 +2,7 @@ import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, unref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { handleError } from "../error-handling/handleError";
-import { handleWithNotifier } from "@/components/error-handling/handlers/handleWithNotifier";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -12,6 +11,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const elementRef = toRef(props, "element");
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
 
@@ -31,7 +31,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 			await updateElementCall(element);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated", "boardElement"),
+				404: notifyWithTemplate("notUpdated", "boardElement"),
 			});
 		}
 	};

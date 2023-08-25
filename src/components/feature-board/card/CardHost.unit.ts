@@ -97,7 +97,6 @@ describe("CardHost", () => {
 			deleteElement: deleteElementMock as () => Promise<void>,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
-			needsBoardReload: ref(false),
 		});
 
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);

@@ -20,6 +20,7 @@
 							:column="column"
 							:index="index"
 							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
+							@reload:board="onReloadBoard"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -98,6 +99,7 @@ export default defineComponent({
 			getColumnId,
 			moveCard,
 			moveColumn,
+			reloadBoard,
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
 
@@ -175,6 +177,10 @@ export default defineComponent({
 			}
 		};
 
+		const onReloadBoard = async () => {
+			await reloadBoard();
+		};
+
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
 			if (hasMovePermission) await moveCard(payload);
 		};
@@ -213,6 +219,7 @@ export default defineComponent({
 			onDropColumn,
 			onDeleteColumn,
 			onMoveColumnKeyboard,
+			onReloadBoard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};

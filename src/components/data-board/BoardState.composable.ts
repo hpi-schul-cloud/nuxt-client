@@ -256,7 +256,7 @@ export const useBoardState = (id: string) => {
 			if (board.value === undefined) return;
 
 			notifyWithTemplate(errorType, boardObjectType)();
-			fetchBoard(board?.value.id);
+			reloadBoard();
 		};
 	};
 
@@ -264,7 +264,7 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		try {
-			fetchBoardCall(board.value.id);
+			await fetchBoard(board.value.id);
 		} catch (error) {
 			handleError(error);
 		}
