@@ -45,8 +45,8 @@ describe("ErrorHandler.Composable", () => {
 	};
 
 	describe("handleError", () => {
-		describe("when response payload is an object", () => {
-			it("should call the custom error handler for code 404", () => {
+		describe("when custom error handler for 404 is defined", () => {
+			it("should call this custom error handler for code 404", () => {
 				const { handleError } = setup();
 
 				mockedIsAxiosError.mockReturnValueOnce(true);
@@ -59,10 +59,28 @@ describe("ErrorHandler.Composable", () => {
 				expect(handle404Mock).toHaveBeenCalledTimes(1);
 			});
 		});
+
+		describe("when no errorHandler for the code of the error is defined", () => {
+			it("should fall back to console.error", async () => {
+				const consoleErrorSpy = jest
+					.spyOn(console, "error")
+					.mockImplementation();
+				const { handleError } = setup();
+
+				mockedIsAxiosError.mockReturnValueOnce(true);
+				const errorResponse = mockErrorResponse(99999, "undefined error type");
+
+				handleError(errorResponse);
+
+				expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+				consoleErrorSpy.mockRestore();
+			});
+		});
 	});
 
 	describe("notifyWithTemplate", () => {
-		it.only("should return api error handler", async () => {
+		it("should return api error handler", async () => {
 			const { notifyWithTemplate } = setup();
 
 			const handler = notifyWithTemplate("notLoaded", "boardCard");
@@ -70,13 +88,9 @@ describe("ErrorHandler.Composable", () => {
 
 			expect(handler).toBeDefined();
 			expect(typeof handler).toBe("function");
-
-			await nextTick();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 		});
 
-		it.only("should show notification", async () => {
+		it("should show notification", async () => {
 			const { notifyWithTemplate } = setup();
 
 			const handler = notifyWithTemplate("notLoaded", "boardCard");
