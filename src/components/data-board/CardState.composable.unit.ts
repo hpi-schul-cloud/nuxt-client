@@ -166,6 +166,19 @@ describe("CardState composable", () => {
 
 			expect(mockedBoardApiCalls.updateCardTitle).not.toHaveBeenCalled();
 		});
+
+		it("should catch error and call handleError", async () => {
+			const { updateTitle, card } = setup(boardCard.id);
+			card.value = boardCard;
+			const newTitle = "new title";
+
+			mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateTitle(newTitle);
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalledTimes(1);
+		});
 	});
 
 	describe("deleteCard", () => {
@@ -278,7 +291,7 @@ describe("CardState composable", () => {
 			const { addElement, card } = setup(boardCard.id);
 			card.value = boardCard;
 
-			mockedBoardApiCalls.createElementCall = jest.fn().mockResolvedValue({
+			mockedBoardApiCalls.createElementCall.mockResolvedValue({
 				data: {
 					id: "element-id",
 				},
@@ -420,6 +433,35 @@ describe("CardState composable", () => {
 					fileElementResponse.id
 				);
 			});
+
+			it("should not call moveElement if 'elementIndex' equals 0", async () => {
+				const boardCard = boardCardFactory.build();
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
+				const moveElementPayload = {
+					elementIndex: -1,
+					payload: "elementId",
+				};
+				await moveElementDown(moveElementPayload);
+
+				expect(mockedBoardApiCalls.moveElementCall).not.toHaveBeenCalled();
+			});
+
+			it("should catch error and call handleError", async () => {
+				const boardCard = boardCardFactory.build();
+				const { card, moveElementDown } = setup();
+				card.value = boardCard;
+
+				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+					setupErrorResponse()
+				);
+				await moveElementDown({
+					elementIndex: 1,
+					payload: fileElementResponse.id,
+				});
+
+				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 
@@ -497,6 +539,35 @@ describe("CardState composable", () => {
 					fileElementResponse.id
 				);
 			});
+
+			it("should not call moveElement if 'elementIndex' equals 0", async () => {
+				const boardCard = boardCardFactory.build();
+				const { card, moveElementUp } = setup();
+				card.value = boardCard;
+				const moveElementPayload = {
+					elementIndex: 0,
+					payload: "elementId",
+				};
+				await moveElementUp(moveElementPayload);
+
+				expect(mockedBoardApiCalls.moveElementCall).not.toHaveBeenCalled();
+			});
+
+			it("should catch error and call handleError", async () => {
+				const boardCard = boardCardFactory.build();
+				const { card, moveElementUp } = setup();
+				card.value = boardCard;
+
+				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+					setupErrorResponse()
+				);
+				await moveElementUp({
+					elementIndex: 1,
+					payload: fileElementResponse.id,
+				});
+
+				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 
@@ -553,6 +624,26 @@ describe("CardState composable", () => {
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe("addTextAfterTitle", () => {
+		it("should call createElementCall", async () => {
+			const boardCard = boardCardFactory.build();
+			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
+			const { addTextAfterTitle, card } = setup(boardCard.id);
+			card.value = boardCard;
+
+			mockedBoardApiCalls.createElementCall.mockResolvedValue({
+				data: {
+					id: "element-id",
+				},
+			} as AxiosResponse<AnyContentElement>);
+
+			await addTextAfterTitle();
+
+			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalled();
+			expect(card.value?.elements).toHaveLength(1);
 		});
 	});
 });
