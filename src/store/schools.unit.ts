@@ -102,6 +102,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableLdapSyncDuringMigration: false,
 					},
 				});
 			});
@@ -282,6 +283,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableLdapSyncDuringMigration: false,
 					},
 				};
 				initializeAxios({
@@ -340,6 +342,7 @@ describe("schools module", () => {
 						videoconference: false,
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
+						enableLdapSyncDuringMigration: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});

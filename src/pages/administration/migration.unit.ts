@@ -12,7 +12,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 }));
 
 const $theme = {
-	short_name: "instance name",
+	name: "instance name",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -75,6 +75,7 @@ const schoolMock = {
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
+		enableLdapSyncDuringMigration: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
@@ -158,7 +159,7 @@ describe("User Migration / Index", () => {
 
 		const title = wrapper.vm.$i18n.t("pages.administration.migration.title", {
 			source: "LDAP",
-			instance: $theme.short_name,
+			instance: $theme.name,
 		});
 		expect(document.title).toBe(title);
 	});
@@ -303,7 +304,7 @@ describe("User Migration / Index", () => {
 			const summaryText = wrapper.vm.$i18n.t(
 				"pages.administration.migration.summary",
 				{
-					instance: $theme.short_name,
+					instance: $theme.name,
 					source: wrapper.vm.$i18n.t(
 						"pages.administration.migration.ldapSource"
 					),
@@ -379,7 +380,7 @@ describe("User Migration / Index", () => {
 					"pages.administration.migration.step4.linkingFinished",
 					{
 						source: "LDAP",
-						instance: $theme.short_name,
+						instance: $theme.name,
 					}
 				)
 			);

@@ -28,7 +28,7 @@ import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import UserLoginMigrationModule from "@/store/user-login-migration";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import ContextExternalToolsModule from "@/store/context-external-tools";
