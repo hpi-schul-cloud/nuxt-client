@@ -87,7 +87,7 @@ describe("CardState composable", () => {
 	beforeEach(() => {
 		mockedSharedCardCalls =
 			createMock<ReturnType<typeof useSharedCardRequestPool>>();
-		mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
+
 		mockedUseSharedCardRequestPool.mockReturnValue(mockedSharedCardCalls);
 
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
@@ -112,6 +112,7 @@ describe("CardState composable", () => {
 	describe("fetchCard", () => {
 		it("should fetch card on mount", async () => {
 			const cardId = "123124";
+
 			setup(cardId);
 
 			expect(mockedSharedCardCalls.fetchCard).toHaveBeenCalledWith(cardId);
@@ -127,9 +128,12 @@ describe("CardState composable", () => {
 			expect(isLoading.value).toBe(false);
 		});
 
-		it("should log on error and call board notifier", async () => {
+		it("should handle an error that is return from the api", async () => {
+			mockedSharedCardCalls.fetchCard = jest
+				.fn()
+				.mockRejectedValue(setupErrorResponse());
+
 			setup();
-			mockedSharedCardCalls.fetchCard.mockRejectedValue(setupErrorResponse());
 
 			await nextTick();
 			await nextTick(); // test mounts it twice
@@ -236,8 +240,11 @@ describe("CardState composable", () => {
 		});
 
 		it("should update card height", async () => {
-			const newHeight = 300;
+			mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
 			const { updateCardHeight, card } = setup(boardCard.id);
+
+			const newHeight = 300;
+
 			card.value = boardCard;
 
 			await updateCardHeight(newHeight);
@@ -246,6 +253,7 @@ describe("CardState composable", () => {
 		});
 
 		it("should not update card height when api response has error", async () => {
+			mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
 			mockedBoardApiCalls.updateCardHeightCall = jest
 				.fn()
 				.mockResolvedValue({ status: 300 });
@@ -263,12 +271,12 @@ describe("CardState composable", () => {
 	describe("addElement", () => {
 		it("should call addElement", async () => {
 			const boardCard = boardCardFactory.build();
-			const { addElement, card } = setup(boardCard.id);
+			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
+			const { addElement, card } = setup(boardCard.id);
 			card.value = boardCard;
-			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 
 			mockedBoardApiCalls.createElementCall = jest.fn().mockResolvedValue({
 				data: {
@@ -287,24 +295,24 @@ describe("CardState composable", () => {
 
 		it("should focus an added element", async () => {
 			const boardCard = boardCardFactory.build();
+			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 			const { addElement, card } = setup(boardCard.id);
+			card.value = boardCard;
+
+			const elementId = "element-id";
 			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
-
-			const expectedId = "element-id";
-
-			card.value = boardCard;
-			await nextTick();
 			mockedBoardApiCalls.createElementCall.mockResolvedValue({
 				data: {
-					id: "element-id",
+					id: elementId,
 				},
 			} as AxiosResponse<AnyContentElement>);
+
 			await addElement(elementType.type);
 
 			expect(mockedBoardFocusHandlerCalls.setFocus).toHaveBeenCalledWith(
-				expectedId
+				elementId
 			);
 		});
 
@@ -517,18 +525,13 @@ describe("CardState composable", () => {
 			});
 
 			it("should remove element from card", async () => {
-				const { deleteElement, card } = setup();
 				const fileElementResponse = fileElementResponseFactory.build();
 				const fileElementResponse2 = fileElementResponseFactory.build();
-				const testCard = {
-					id: "cardId 2",
-					height: 200,
-					title: "title 2",
+				const testCard = boardCardFactory.build({
 					elements: [fileElementResponse, fileElementResponse2],
-					visibility: {
-						publishedAt: "Tue, 20 Jun 2023 14:15:05 GMT",
-					},
-				};
+				});
+				mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
+				const { deleteElement, card } = setup();
 				card.value = testCard;
 
 				await deleteElement(fileElementResponse.id);

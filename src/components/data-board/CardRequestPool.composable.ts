@@ -46,7 +46,7 @@ const useCardRequestPool = () => {
 	};
 
 	const fetchCardChunks = async (chunks: CardRequest[][]) => {
-		const promises = [];
+		const promises: Promise<unknown>[] = [];
 		for (const chunk of chunks) {
 			promises.push(fetchCards(chunk));
 		}
