@@ -1,9 +1,11 @@
 import { ContentElementType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
+import { CardResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { AxiosPromise } from "axios";
 import { useBoardApi } from "./BoardApi.composable";
 
 let boardApi: DeepMocked<serverApi.BoardApiInterface>;
@@ -232,9 +234,9 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			columnApi.columnControllerCreateCard = jest
-				.fn()
-				.mockResolvedValueOnce(FAKE_RESPONSE);
+			columnApi.columnControllerCreateCard.mockResolvedValueOnce(
+				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
+			);
 
 			const PAYLOAD = "column-id";
 			const INITIAL_ELEMENTS = {
@@ -250,7 +252,7 @@ describe("BoardApi.composable", () => {
 				INITIAL_ELEMENTS
 			);
 
-			expect(result).toBe(FAKE_RESPONSE.data.id);
+			expect(result).toBe(FAKE_RESPONSE.data);
 		});
 	});
 
