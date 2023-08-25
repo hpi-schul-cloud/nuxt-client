@@ -1,54 +1,51 @@
 <template>
-	<div class="grey lighten-4 px-4 py-3 rounded-t-sm">
-		<v-list-item
-			class="px-0"
+	<div class="grey lighten-4 pa-4 rounded">
+		<v-card-title
+			class="pa-0"
 			data-testid="board-submission-element-edit"
 			inactive
 		>
-			<v-list-item-icon class="mr-2 my-2">
-				<v-icon
-					class="grey--text text--darken-2"
-					data-testid="board-submission-element-edit-icon"
-					medium
-					>$mdiLightbulbOnOutline</v-icon
-				>
-			</v-list-item-icon>
-
-			<v-list-item-content class="py-0">
-				<span
-					class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
-					data-testid="board-submission-element-edit-content"
-					>{{ $t("components.cardElement.submissionElement") }}</span
-				>
-			</v-list-item-content>
-
-			<SubmissionContentElementMenu
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveElementDown"
-				@move-up:element="onMoveElementUp"
-				@delete:element="onDeleteElement"
-			/>
-		</v-list-item>
-
-		<v-card-text
-			class="pa-0 subtitle-1 font-weight-bold"
-			data-testid="board-submission-element-due-date"
-		>
-			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
-		</v-card-text>
+			<v-icon
+				color="black"
+				size="18"
+				class="mr-2"
+				data-testid="board-submission-element-edit-icon"
+			>
+				$mdiLightbulbOnOutline
+			</v-icon>
+			<span
+				class="subtitle-1 d-inline-block text-truncate black--text font-weight-bold"
+				data-testid="board-submission-element-edit-content"
+			>
+				{{ $t("components.cardElement.submissionElement") }}
+			</span>
+			<div class="menu">
+				<SubmissionContentElementMenu
+					:isFirstElement="isFirstElement"
+					:isLastElement="isLastElement"
+					:hasMultipleElements="hasMultipleElements"
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+				/>
+			</div>
+		</v-card-title>
+		<date-time-picker
+			:date-input-label="t('common.labels.date')"
+			:time-input-label="t('common.labels.time')"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import dayjs from "dayjs";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
+import { DateTimePicker } from "@feature-date-time-picker";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
-	components: { SubmissionContentElementMenu },
+	components: { SubmissionContentElementMenu, DateTimePicker },
 	props: {
 		dueDate: {
 			type: String,
@@ -60,6 +57,8 @@ export default defineComponent({
 	},
 	emits: ["delete:element", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
+
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -73,7 +72,7 @@ export default defineComponent({
 		};
 
 		return {
-			dayjs,
+			t,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,
@@ -81,3 +80,11 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.menu {
+	position: absolute;
+	right: 4px;
+	top: 4px;
+}
+</style>
