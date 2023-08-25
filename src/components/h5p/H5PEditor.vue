@@ -19,7 +19,9 @@ defineElements("h5p-editor");
 
 import { defineComponent, ref, watch } from "vue";
 import {
+	H5PContentParentType,
 	H5pEditorApiFactory,
+	LanguageType,
 	PostH5PContentCreateParams,
 } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
@@ -31,6 +33,14 @@ export default defineComponent({
 			type: String,
 			default: "new",
 		},
+		parentType: {
+			type: String,
+			required: true,
+		},
+		parentId: {
+			type: String,
+			required: true,
+		},
 	},
 	emits: ["saved", "save-error", "load-error", "validation-error"],
 	setup(props, { emit, expose }) {
@@ -38,7 +48,7 @@ export default defineComponent({
 
 		const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
 		const i18n = injectStrict(I18N_KEY);
-		const language = i18n.locale;
+		const language = i18n.locale as LanguageType;
 
 		const loadContent = async (id?: string) => {
 			try {
@@ -64,20 +74,27 @@ export default defineComponent({
 
 		const saveContent = async (
 			contentId: string,
-			requestBody: PostH5PContentCreateParams
+			requestBody: { library: string; params: object }
 		) => {
+			const createParams: PostH5PContentCreateParams = {
+				library: requestBody.library,
+				params: requestBody.params,
+				parentId: props.parentId,
+				parentType: props.parentType as H5PContentParentType,
+			};
+
 			if (contentId) {
 				// Modify existing content
 				const { data } = await h5pEditorApi.h5PEditorControllerSaveH5pContent(
 					contentId,
-					requestBody
+					createParams
 				);
 
 				return data;
 			} else {
 				// Save new content
 				const { data } = await h5pEditorApi.h5PEditorControllerCreateH5pContent(
-					requestBody
+					createParams
 				);
 
 				return data;

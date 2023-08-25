@@ -13,6 +13,7 @@ import {
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -282,6 +283,13 @@ export const routes: Array<RouteConfig> = [
 		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
 		component: () => import("../pages/H5PEditor.page.vue"),
 		name: "h5pEditor",
-		//beforeEnter: createPermissionGuard(["H5P"]),
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (route: Route) => ({
+			parentId: route.query.parentId,
+			parentType: route.query.parentType,
+		}),
 	},
 ];

@@ -29,6 +29,8 @@ import { H5PEditorModelResponse } from '../models';
 // @ts-ignore
 import { H5PSaveResponse } from '../models';
 // @ts-ignore
+import { LanguageType } from '../models';
+// @ts-ignore
 import { PostH5PContentCreateParams } from '../models';
 /**
  * H5pEditorApi - axios parameter creator
@@ -77,12 +79,12 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerDeleteH5pContent: async (language: string, contentId: string, options: any = {}): Promise<RequestArgs> => {
+        h5PEditorControllerDeleteH5pContent: async (language: LanguageType, contentId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerDeleteH5pContent', 'language', language)
             // verify required parameter 'contentId' is not null or undefined
@@ -230,11 +232,11 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @param {string} contentId 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetH5PEditor: async (contentId: string, language: string, options: any = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetH5PEditor: async (contentId: string, language: LanguageType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentId' is not null or undefined
             assertParamExists('h5PEditorControllerGetH5PEditor', 'contentId', contentId)
             // verify required parameter 'language' is not null or undefined
@@ -311,11 +313,11 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetNewH5PEditor: async (language: string, options: any = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetNewH5PEditor: async (language: LanguageType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerGetNewH5PEditor', 'language', language)
             const localVarPath = `/h5p-editor/edit/{language}`
@@ -349,12 +351,12 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Return dummy HTML for testing
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer: async (language: string, contentId: string, options: any = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetPlayer: async (language: LanguageType, contentId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerGetPlayer', 'language', language)
             // verify required parameter 'contentId' is not null or undefined
@@ -523,12 +525,12 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerDeleteH5pContent(language, contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -565,11 +567,11 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} contentId 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetH5PEditor(contentId: string, language: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelContentResponse>> {
+        async h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelContentResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetH5PEditor(contentId, language, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -586,23 +588,23 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetNewH5PEditor(language: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelResponse>> {
+        async h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetNewH5PEditor(language, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Return dummy HTML for testing
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetPlayer(language, contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -657,12 +659,12 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): AxiosPromise<boolean> {
+        h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any): AxiosPromise<boolean> {
             return localVarFp.h5PEditorControllerDeleteH5pContent(language, contentId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -695,11 +697,11 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @param {string} contentId 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetH5PEditor(contentId: string, language: string, options?: any): AxiosPromise<H5PEditorModelContentResponse> {
+        h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any): AxiosPromise<H5PEditorModelContentResponse> {
             return localVarFp.h5PEditorControllerGetH5PEditor(contentId, language, options).then((request) => request(axios, basePath));
         },
         /**
@@ -714,22 +716,22 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetNewH5PEditor(language: string, options?: any): AxiosPromise<H5PEditorModelResponse> {
+        h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any): AxiosPromise<H5PEditorModelResponse> {
             return localVarFp.h5PEditorControllerGetNewH5PEditor(language, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Return dummy HTML for testing
-         * @param {string} language 
+         * @param {LanguageType} language 
          * @param {string} contentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<object> {
+        h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any): AxiosPromise<object> {
             return localVarFp.h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -779,13 +781,13 @@ export interface H5pEditorApiInterface {
 
     /**
      * 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any): AxiosPromise<boolean>;
+    h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -817,12 +819,12 @@ export interface H5pEditorApiInterface {
     /**
      * 
      * @param {string} contentId 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetH5PEditor(contentId: string, language: string, options?: any): AxiosPromise<H5PEditorModelContentResponse>;
+    h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any): AxiosPromise<H5PEditorModelContentResponse>;
 
     /**
      * 
@@ -836,23 +838,23 @@ export interface H5pEditorApiInterface {
 
     /**
      * 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetNewH5PEditor(language: string, options?: any): AxiosPromise<H5PEditorModelResponse>;
+    h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any): AxiosPromise<H5PEditorModelResponse>;
 
     /**
      * 
      * @summary Return dummy HTML for testing
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any): AxiosPromise<object>;
+    h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -903,13 +905,13 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
 
     /**
      * 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerDeleteH5pContent(language: string, contentId: string, options?: any) {
+    public h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerDeleteH5pContent(language, contentId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -949,12 +951,12 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
     /**
      * 
      * @param {string} contentId 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetH5PEditor(contentId: string, language: string, options?: any) {
+    public h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetH5PEditor(contentId, language, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -972,25 +974,25 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
 
     /**
      * 
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetNewH5PEditor(language: string, options?: any) {
+    public h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetNewH5PEditor(language, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Return dummy HTML for testing
-     * @param {string} language 
+     * @param {LanguageType} language 
      * @param {string} contentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetPlayer(language: string, contentId: string, options?: any) {
+    public h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(this.axios, this.basePath));
     }
 

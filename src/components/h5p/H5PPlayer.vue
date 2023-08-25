@@ -24,7 +24,7 @@ import {
 defineElements("h5p-player");
 
 import { defineComponent, ref, watch } from "vue";
-import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+import { H5pEditorApiFactory, LanguageType } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
 
 export default defineComponent({
@@ -44,7 +44,7 @@ export default defineComponent({
 		const loadContent = async (id: string) => {
 			try {
 				const { data } = await h5pEditorApi.h5PEditorControllerGetPlayer(
-					"de",
+					LanguageType.DE,
 					id
 				);
 				return data;

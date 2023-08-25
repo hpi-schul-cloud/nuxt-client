@@ -13,6 +13,7 @@
  */
 
 
+import { H5PContentParentType } from './h5-pcontent-parent-type';
 
 /**
  * 
@@ -20,6 +21,18 @@
  * @interface PostH5PContentCreateParams
  */
 export interface PostH5PContentCreateParams {
+    /**
+     * 
+     * @type {H5PContentParentType}
+     * @memberof PostH5PContentCreateParams
+     */
+    parentType: H5PContentParentType;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostH5PContentCreateParams
+     */
+    parentId: string;
     /**
      * 
      * @type {object}

@@ -19,6 +19,8 @@
 					ref="editorRef"
 					class="editor"
 					:contentId="contentId"
+					:parentType="parentType"
+					:parentId="parentId"
 					@load-error="loadError"
 				/>
 				<v-btn role="button" class="save-button" color="primary" @click="save">
@@ -45,6 +47,16 @@ export default defineComponent({
 	name: "H5PEditor",
 	components: {
 		H5PEditorComponent,
+	},
+	props: {
+		parentType: {
+			type: String,
+			required: true,
+		},
+		parentId: {
+			type: String,
+			required: true,
+		},
 	},
 	setup() {
 		const { createApplicationError } = useApplicationError();
