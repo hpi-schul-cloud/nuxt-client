@@ -1,5 +1,6 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
@@ -21,19 +22,19 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	const options = [
 		{
-			icon: "$mdiFormatText",
+			icon: mdiFormatText,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
 			action: () => onElementClick(ContentElementType.RichText),
 			testId: "create-element-text",
 		},
 		{
-			icon: "$mdiTrayArrowUp",
+			icon: mdiTrayArrowUp,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
 		{
-			icon: "$mdiLightbulbOnOutline",
+			icon: mdiLightbulbOnOutline,
 			label:
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
