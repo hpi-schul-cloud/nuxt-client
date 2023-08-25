@@ -4,6 +4,7 @@ import {
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
 	mdiAccountOutline,
+	mdiAccountPlus,
 	mdiAccountSchoolOutline,
 	mdiAccountSearch,
 	mdiAlert,
@@ -26,6 +27,7 @@ import {
 	mdiCheckCircleOutline,
 	mdiChevronLeft,
 	mdiClose,
+	mdiCloudDownload,
 	mdiCogOutline,
 	mdiContentCopy,
 	mdiContentSave,
@@ -188,6 +190,8 @@ const materialIcons = {
 	mdiFormatText,
 	mdiViewListOutline,
 	mdiReload,
+	mdiAccountPlus,
+	mdiCloudDownload,
 };
 
 export default materialIcons;
