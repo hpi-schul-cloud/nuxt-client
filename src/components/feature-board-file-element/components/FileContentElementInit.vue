@@ -16,49 +16,38 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
-import { defineComponent, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import FilePicker from "./FilePicker.vue";
 
-export default defineComponent({
-	name: "FileContentElementInit",
-	props: {
-		fileName: { type: String, required: true },
-		elementId: { type: String, required: true },
-	},
-	components: { FilePicker },
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"upload:file",
-	],
-	setup(props, { emit }) {
-		const isFilePickerOpen = ref(false);
-		const fileWasPicked = ref(false);
-
-		const { lastCreatedElementId, resetLastCreatedElementId } =
-			useSharedLastCreatedElement();
-
-		watch(lastCreatedElementId, (newValue) => {
-			if (newValue !== undefined && newValue === props.elementId) {
-				isFilePickerOpen.value = true;
-				resetLastCreatedElementId();
-			}
-		});
-
-		const onFileSelect = async (file: File) => {
-			fileWasPicked.value = true;
-			emit("upload:file", file);
-		};
-
-		return {
-			fileWasPicked,
-			isFilePickerOpen,
-			lastCreatedElementId,
-			onFileSelect,
-		};
-	},
+const props = defineProps({
+	fileName: { type: String, required: true },
+	elementId: { type: String, required: true },
 });
+
+const emit = defineEmits([
+	"delete:element",
+	"move-down:element",
+	"move-up:element",
+	"upload:file",
+]);
+
+const isFilePickerOpen = ref(false);
+const fileWasPicked = ref(false);
+
+const { lastCreatedElementId, resetLastCreatedElementId } =
+	useSharedLastCreatedElement();
+
+watch(lastCreatedElementId, (newValue) => {
+	if (newValue !== undefined && newValue === props.elementId) {
+		isFilePickerOpen.value = true;
+		resetLastCreatedElementId();
+	}
+});
+
+const onFileSelect = async (file: File) => {
+	fileWasPicked.value = true;
+	emit("upload:file", file);
+};
 </script>
