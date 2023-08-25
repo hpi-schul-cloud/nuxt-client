@@ -439,7 +439,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-				expect(tabTitle.text()).toContain(
+				expect(tabTitle.text()).toEqual(
 					wrapper.vm.$t("pages.rooms.tabLabel.tools")
 				);
 			});

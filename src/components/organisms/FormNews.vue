@@ -56,15 +56,15 @@
 								data-testid="btn_news_submit"
 								:disabled="status === 'pending'"
 							>
-								<v-icon size="20" class="mr-1">$mdiCheck</v-icon>
+								<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
 								{{ $t("common.actions.save") }}
 							</v-btn>
 							<v-btn v-if="news && news.id" text color="error" @click="remove">
-								<v-icon size="20" class="mr-1">$mdiDelete</v-icon>
+								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
 								{{ $t("common.actions.remove") }}
 							</v-btn>
 							<v-btn text color="secondary" @click="cancel">
-								<v-icon size="20" class="mr-1">$mdiClose</v-icon>
+								<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
 								{{ $t("common.actions.discard") }}
 							</v-btn>
 						</template>
@@ -88,6 +88,7 @@ import { newsModule, notifierModule } from "@/store";
 import TextEditor from "@/components/molecules/TextEditor.vue";
 import TitleInput from "@/components/molecules/TitleInput.vue";
 import FormActions from "@/components/molecules/FormActions.vue";
+import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
@@ -119,6 +120,9 @@ export default Vue.extend({
 			content: string;
 			date: { date: string; time: string };
 		};
+		mdiClose: string;
+		mdiCheck: string;
+		mdiDelete: string;
 		confirmDialogProps: Record<string, unknown>;
 		isConfirmDialogActive: boolean;
 	} {
@@ -131,6 +135,9 @@ export default Vue.extend({
 					time: "",
 				},
 			},
+			mdiClose,
+			mdiCheck,
+			mdiDelete,
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 		};

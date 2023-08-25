@@ -7,7 +7,7 @@
 				:color="isColumnActive ? 'black' : 'grey darken-2'"
 				@click="onAddColumn"
 			>
-				<VIcon>$mdiPlus</VIcon>
+				<VIcon>{{ mdiPlus }}</VIcon>
 				{{ $t("components.board.column.ghost.placeholder") }}
 			</VBtn>
 		</div>
@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { mdiPlus } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -34,7 +35,7 @@ export default defineComponent({
 		const onAddColumn = () => {
 			emit("add-column");
 		};
-		return { onAddColumn };
+		return { onAddColumn, mdiPlus };
 	},
 });
 </script>
