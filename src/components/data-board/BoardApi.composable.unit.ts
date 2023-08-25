@@ -162,6 +162,28 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "file-element-id",
+				type: ContentElementType.SubmissionContainer,
+				content: {
+					dueDate: new Date().toISOString(),
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: PAYLOAD.content,
+				type: ContentElementType.SubmissionContainer,
+			};
+
+			await updateElementCall(PAYLOAD);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ data }
+			);
+		});
+
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const PAYLOAD = {
