@@ -1,23 +1,29 @@
 import {
+	ApiErrorHandlerFactory,
+	useErrorHandler,
+} from "@/components/error-handling/ErrorHandler.composable";
+import {
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
-import { nextTick, onMounted, reactive, ref, toRef } from "vue";
+import { BoardCard } from "@/types/board/Card";
+import { ElementMove } from "@/types/board/DragAndDrop";
+import { BoardObjectType, ErrorType } from "@util-board";
+import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { BoardCard } from "@/types/board/Card";
-import { ElementMove } from "@/types/board/DragAndDrop";
-import { handleError } from "../error-handling/handleError";
-import { handleWithNotifier } from "@/components/error-handling/handlers/handleWithNotifier";
 
 declare type CardState = {
 	isLoading: boolean;
 	card: BoardCard | undefined;
 };
 
-export const useCardState = (id: BoardCard["id"]) => {
-	const needsBoardReload = ref(false);
+export const useCardState = (
+	id: BoardCard["id"],
+	emit: (...args: any[]) => void
+) => {
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
@@ -35,7 +41,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notLoaded", "boardCard"),
+				404: notifiyWithTemplateAndReload("notLoaded", "boardCard"),
 			});
 		} finally {
 			cardState.isLoading = false;
@@ -50,7 +56,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await updateCardTitle(cardState.card.id, newTitle);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated"),
+				404: notifiyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -62,7 +68,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await deleteCardCall(cardState.card.id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notDeleted", "boardCard"),
+				404: notifiyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};
@@ -75,7 +81,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			cardState.card.height = newHeight;
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated"),
+				404: notifiyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -103,7 +109,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			return response.data;
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notCreated", "boardElement"),
+				404: notifiyWithTemplateAndReload("notCreated", "boardElement"),
 			});
 		}
 	};
@@ -126,7 +132,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await moveElementCall(elementId, cardState.card.id, elementIndex + 1);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated"),
+				404: notifiyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -144,7 +150,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			await moveElementCall(elementId, cardState.card.id, elementIndex - 1);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated"),
+				404: notifiyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -175,7 +181,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 			extractElement(elementId);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notUpdated"),
+				404: notifiyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -188,10 +194,22 @@ export const useCardState = (id: BoardCard["id"]) => {
 		}
 	};
 
+	const notifiyWithTemplateAndReload: ApiErrorHandlerFactory = (
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType
+	) => {
+		return () => {
+			notifyWithTemplate(errorType, boardObjectType)();
+			emit("reload:board"); // WIP: event does not result in board-reload yet
+		};
+	};
+
 	onMounted(() => {
-		fetchCard(id).then(() => ({
-			// do nothing but celebrating sonarcloud
-		}));
+		fetchCard(id).catch((error) => {
+			handleError(error, {
+				404: notifyWithTemplate("notLoaded", "boardCard"),
+			});
+		});
 	});
 
 	return {
@@ -206,6 +224,5 @@ export const useCardState = (id: BoardCard["id"]) => {
 		addTextAfterTitle,
 		card: toRef(cardState, "card"),
 		isLoading: toRef(cardState, "isLoading"),
-		needsBoardReload, // WIP: discuss with others: better way? composable ==(emit)==> "parent"
 	};
 };

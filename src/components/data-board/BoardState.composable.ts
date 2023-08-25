@@ -4,11 +4,11 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { Board, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { handleError } from "../error-handling/handleError";
 import { BoardObjectType, ErrorType } from "@util-board";
-import { handleWithNotifier } from "@/components/error-handling/handlers/handleWithNotifier";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useBoardState = (id: string) => {
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const {
@@ -42,7 +42,7 @@ export const useBoardState = (id: string) => {
 			setEditModeId(newCard.id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notCreated", "boardCard"),
+				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
 			});
 		}
 	};
@@ -57,7 +57,7 @@ export const useBoardState = (id: string) => {
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notCreated", "boardColumn"),
+				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
 			});
 		}
 	};
@@ -85,7 +85,7 @@ export const useBoardState = (id: string) => {
 			await extractCard(id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notDeleted", "boardCard"),
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};
@@ -102,7 +102,7 @@ export const useBoardState = (id: string) => {
 			board.value.columns.splice(columnIndex, 1);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notDeleted", "boardColumn"),
+				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
 			});
 		}
 	};
@@ -138,7 +138,7 @@ export const useBoardState = (id: string) => {
 			board.value = await fetchBoardCall(id);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifier("notLoaded", "board"),
+				404: notifyWithTemplate("notLoaded", "board"),
 			});
 		}
 
@@ -176,7 +176,7 @@ export const useBoardState = (id: string) => {
 			}
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -199,7 +199,7 @@ export const useBoardState = (id: string) => {
 			await moveColumnCall(payload.payload, board.value.id, addedIndex);
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -215,7 +215,7 @@ export const useBoardState = (id: string) => {
 			}
 		} catch (error) {
 			handleError(error, {
-				404: handleWithNotifierAndReload("notUpdated", "boardColumn"),
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
 			});
 		}
 	};
@@ -248,16 +248,26 @@ export const useBoardState = (id: string) => {
 		return columnIndex;
 	};
 
-	const handleWithNotifierAndReload = (
+	const notifyWithTemplateAndReload = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
 		return () => {
 			if (board.value === undefined) return;
 
-			handleWithNotifier(errorType, boardObjectType)();
+			notifyWithTemplate(errorType, boardObjectType)();
 			fetchBoard(board?.value.id);
 		};
+	};
+
+	const reloadBoard = async () => {
+		if (board.value === undefined) return;
+
+		try {
+			fetchBoardCall(board.value.id);
+		} catch (error) {
+			handleError(error);
+		}
 	};
 
 	onMounted(() => {
@@ -279,6 +289,7 @@ export const useBoardState = (id: string) => {
 		getColumnId,
 		moveCard,
 		moveColumn,
+		reloadBoard,
 		updateColumnTitle,
 	};
 };

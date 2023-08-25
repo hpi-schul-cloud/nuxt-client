@@ -1,7 +1,8 @@
 import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { createSharedComposable, useDebounceFn } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { BoardCard } from "@/types/board/Card";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 type CardRequest = {
 	id: string;
@@ -76,4 +77,4 @@ const useCardRequestPool = () => {
 };
 
 export const useSharedCardRequestPool =
-	createSharedComposable(useCardRequestPool);
+	createTestableSharedComposable(useCardRequestPool);

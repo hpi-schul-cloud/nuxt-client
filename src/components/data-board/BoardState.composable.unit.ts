@@ -1,3 +1,4 @@
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
@@ -15,7 +16,6 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { nextTick, ref } from "vue";
-import { handleError } from "../error-handling/handleError";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardState } from "./BoardState.composable";
 import { useSharedEditMode } from "./EditMode.composable";
@@ -31,10 +31,8 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-jest.mock("@/components/error-handling/handlers/handleWithNotifier");
-
-jest.mock("../error-handling/handleError");
-const handleErrorMock = jest.mocked(handleError);
+jest.mock("@/components/error-handling/ErrorHandler.composable"); // WIP: maybe error handling should be extracted into it's own module
+const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -51,6 +49,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 describe("BoardState.composable", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
+	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let setEditModeId: jest.Mock;
 
 	let testBoard: Board;
@@ -65,6 +64,9 @@ describe("BoardState.composable", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
 		return mountComposable(() => useBoardState(boardId), {
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
@@ -216,7 +218,7 @@ describe("BoardState.composable", () => {
 			await deleteCard(card.cardId);
 			await nextTick();
 
-			expect(handleErrorMock).toHaveBeenCalled();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should delete card", async () => {
@@ -264,7 +266,7 @@ describe("BoardState.composable", () => {
 			await deleteColumn(column.id);
 			await nextTick();
 
-			expect(handleErrorMock).toHaveBeenCalled();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should delete column", async () => {
@@ -406,7 +408,7 @@ describe("BoardState.composable", () => {
 			await moveCard(cardPayload);
 			await nextTick();
 
-			expect(handleErrorMock).toHaveBeenCalled();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should move card", async () => {
@@ -469,7 +471,7 @@ describe("BoardState.composable", () => {
 			await moveColumn(payload);
 			await nextTick();
 
-			expect(handleErrorMock).toHaveBeenCalled();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should move column", async () => {
@@ -519,7 +521,7 @@ describe("BoardState.composable", () => {
 			await updateColumnTitle(column.id, NEW_TITLE);
 			await nextTick();
 
-			expect(handleErrorMock).toHaveBeenCalled();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should update column title", async () => {
