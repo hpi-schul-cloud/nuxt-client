@@ -18,6 +18,7 @@ import {
 	mdiCalendarClock,
 	mdiCalendarOutline,
 	mdiCardAccountDetailsOutline,
+	mdiChatOutline,
 	mdiCheck,
 	mdiCheckAll,
 	mdiCheckboxBlankOutline,
@@ -40,7 +41,9 @@ import {
 	mdiEmailRemoveOutline,
 	mdiEyeOffOutline,
 	mdiEyeOutline,
+	mdiFileCertificateOutline,
 	mdiFileDocumentOutline,
+	mdiFileQuestionOutline,
 	mdiFileTreeOutline,
 	mdiFlag,
 	mdiFlagOutline,
@@ -55,6 +58,7 @@ import {
 	mdiFormatStrikethrough,
 	mdiFormatText,
 	mdiFormatUnderline,
+	mdiGiftOutline,
 	mdiHeart,
 	mdiHelpCircleOutline,
 	mdiImage,
@@ -192,6 +196,10 @@ const materialIcons = {
 	mdiReload,
 	mdiAccountPlus,
 	mdiCloudDownload,
+	mdiFileQuestionOutline,
+	mdiChatOutline,
+	mdiGiftOutline,
+	mdiFileCertificateOutline,
 };
 
 export default materialIcons;
