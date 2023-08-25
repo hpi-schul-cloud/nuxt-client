@@ -62,7 +62,7 @@ describe("ErrorHandler.Composable", () => {
 	});
 
 	describe("notifyWithTemplate", () => {
-		it("should return api error handler", async () => {
+		it.only("should return api error handler", async () => {
 			const { notifyWithTemplate } = setup();
 
 			const handler = notifyWithTemplate("notLoaded", "boardCard");
@@ -70,6 +70,20 @@ describe("ErrorHandler.Composable", () => {
 
 			expect(handler).toBeDefined();
 			expect(typeof handler).toBe("function");
+
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+		});
+
+		it.only("should show notification", async () => {
+			const { notifyWithTemplate } = setup();
+
+			const handler = notifyWithTemplate("notLoaded", "boardCard");
+			handler();
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 		});
 	});
 
