@@ -166,5 +166,10 @@ export default defineComponent({
 			display: none;
 		}
 	}
+
+	.v-input__icon--append .v-icon {
+		width: 20px;
+		height: 20px;
+	}
 }
 </style>
