@@ -23,17 +23,13 @@
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 						<template #icon>
-							<VIcon>
-								{{ mdiPencilOutline }}
-							</VIcon>
+							<VIcon> $mdiPencilOutline </VIcon>
 						</template>
 						{{ $t("common.actions.edit") }}
 					</BoardMenuAction>
 					<BoardMenuAction @click="onTryDelete">
 						<template #icon>
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
+							<VIcon> $mdiTrashCanOutline </VIcon>
 						</template>
 						{{ $t("components.board.action.delete") }}
 					</BoardMenuAction>
@@ -45,16 +41,15 @@
 </template>
 
 <script lang="ts">
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { defineComponent, ref } from "vue";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useEditMode,
 } from "@data-board";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { defineComponent, ref } from "vue";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 export default defineComponent({
@@ -130,8 +125,6 @@ export default defineComponent({
 			isFocusContained,
 			isDeleteModalOpen,
 			hasDeletePermission,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			onStartEditMode,
 			onEndEditMode,
 			onTryDelete,

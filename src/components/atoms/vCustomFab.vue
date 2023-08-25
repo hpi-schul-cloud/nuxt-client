@@ -24,9 +24,7 @@
 				:class="{ 'extended-fab': isCollapsed }"
 				:aria-label="ariaLabel ? ariaLabel : title"
 			>
-				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
-					{{ mdiClose }}
-				</v-icon>
+				<v-icon v-if="isSpeedDialExpanded" name="fab-icon"> $mdiClose </v-icon>
 				<div v-else class="d-flex align-center">
 					<v-icon name="fab-icon" :class="{ 'mr-1': extended }">
 						{{ icon }}
@@ -85,8 +83,6 @@
 </template>
 
 <script>
-import { mdiClose } from "@mdi/js";
-
 export default {
 	props: {
 		actions: {
@@ -130,7 +126,6 @@ export default {
 			isSpeedDialExpanded: false,
 			pageOffset: 0,
 			extended: !!this.title,
-			mdiClose,
 		};
 	},
 	computed: {

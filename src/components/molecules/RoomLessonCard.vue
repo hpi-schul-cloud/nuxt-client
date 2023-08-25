@@ -62,16 +62,9 @@
 </template>
 
 <script>
-import {
-	mdiPencilOutline,
-	mdiUndoVariant,
-	mdiShareVariantOutline,
-	mdiTrashCanOutline,
-	mdiContentCopy,
-} from "@mdi/js";
-import RoomDotMenu from "./RoomDotMenu";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import RoomDotMenu from "./RoomDotMenu";
 const lessonRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
@@ -96,13 +89,6 @@ export default {
 	},
 	data() {
 		return {
-			icons: {
-				mdiPencilOutline,
-				mdiUndoVariant,
-				mdiShareVariantOutline,
-				mdiTrashCanOutline,
-				mdiContentCopy,
-			},
 			defaultTitleColor: "--v-secondary-base",
 		};
 	},
@@ -142,7 +128,7 @@ export default {
 
 			if (this.role === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiPencilOutline,
+					icon: "$mdiPencilOutline",
 					action: () =>
 						this.redirectAction(
 							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit?returnUrl=rooms/${this.room.roomId}`
@@ -153,7 +139,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiContentCopy,
+						icon: "$mdiContentCopy",
 						action: () => this.copyCard(),
 						name: this.$t("common.actions.copy"),
 						dataTestId: "content-card-lesson-menu-copy",
@@ -162,7 +148,7 @@ export default {
 
 				if (!this.isHidden) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiUndoVariant,
+						icon: "$mdiUndoVariant",
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-lesson-menu-revert",
@@ -171,7 +157,7 @@ export default {
 
 				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariantOutline,
+						icon: "$mdiShareVariantOutline",
 						action: () => this.$emit("open-modal", this.lesson.id),
 						name: this.$t("pages.room.lessonCard.label.shareLesson"),
 						dataTestId: "content-card-lesson-menu-share",
@@ -179,7 +165,7 @@ export default {
 				}
 
 				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiTrashCanOutline,
+					icon: "$mdiTrashCanOutline",
 					action: () => this.$emit("delete-lesson"),
 					name: this.$t("common.actions.remove"),
 					dataTestId: "content-card-lesson-menu-remove",

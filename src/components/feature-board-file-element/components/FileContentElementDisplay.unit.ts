@@ -41,41 +41,11 @@ describe("FileContentElementDisplay", () => {
 		expect(fileIcon.exists()).toBe(true);
 	});
 
-	describe("when download is allowed", () => {
-		it("should find file name", () => {
-			const { wrapper, fileNameProp } = setup();
+	it("should find file name", () => {
+		const { wrapper, fileNameProp } = setup();
 
-			const fileName = wrapper.find("a").text();
+		const fileName = wrapper.find("span").text();
 
-			expect(fileName).toBe(fileNameProp);
-		});
-
-		it("should find download url", () => {
-			const { wrapper, urlProp, fileNameProp } = setup();
-
-			const downloadLink = wrapper.find("a");
-
-			expect(downloadLink.exists()).toBe(true);
-			expect(downloadLink.attributes("href")).toBe(urlProp);
-			expect(downloadLink.attributes("download")).toBe(fileNameProp);
-		});
-	});
-
-	describe("when download is NOT allowed", () => {
-		it("should find file name", () => {
-			const { wrapper, fileNameProp } = setup(false);
-
-			const fileName = wrapper.find("span").text();
-
-			expect(fileName).toBe(fileNameProp);
-		});
-
-		it("should NOT find download url", () => {
-			const { wrapper } = setup(false);
-
-			const downloadLink = wrapper.find("a");
-
-			expect(downloadLink.exists()).toBe(false);
-		});
+		expect(fileName).toBe(fileNameProp);
 	});
 });

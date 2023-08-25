@@ -720,4 +720,116 @@ describe("AdminMigrationSection", () => {
 			});
 		});
 	});
+
+	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
+		describe("FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
+			describe("when feature is set to false", () => {
+				it("should hide switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: false,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(false);
+				});
+			});
+
+			describe("when feature is set to true", () => {
+				it("should show switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: true,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(true);
+				});
+			});
+		});
+
+		describe("when user login migration is finished", () => {
+			it("should hide switch button", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+							oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(false);
+			});
+		});
+
+		describe("when migration is not yet finished", () => {
+			it("should show switch button and description", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(true);
+			});
+		});
+
+		describe("when clicking switch button", () => {
+			it("should call update in schoolsModule", async () => {
+				const { wrapper, schoolsModule } = setup(
+					{},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				await switchComponent.setChecked();
+
+				expect(schoolsModule.update).toHaveBeenCalledWith({
+					id: mockSchool.id,
+					features: {
+						...mockSchool.features,
+						enableLdapSyncDuringMigration: true,
+					},
+				});
+			});
+		});
+	});
 });
