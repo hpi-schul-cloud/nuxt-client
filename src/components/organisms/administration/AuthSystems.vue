@@ -25,7 +25,7 @@
 					"
 				>
 					<v-icon>
-						{{ getCopyStatus(0) ? "$mdiCheckCircle" : "$mdiContentCopy" }}
+						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
 					</v-icon>
 				</v-btn>
 			</template>
@@ -77,8 +77,8 @@
 									>
 										<v-icon>{{
 											getCopyStatus(system._id)
-												? "$mdiCheckCircle"
-												: "$mdiContentCopy"
+												? iconMdiCheckCircle
+												: iconMdiContentCopy
 										}}</v-icon>
 									</v-btn>
 								</template>
@@ -92,7 +92,7 @@
 								:to="`/administration/ldap/config?id=${system._id}`"
 								:aria-label="ariaLabels(system).edit"
 							>
-								<v-icon>$mdiPencilOutline</v-icon>
+								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
 								v-if="isRemovable(system) && hasSystemCreatePermission"
@@ -101,7 +101,7 @@
 								:aria-label="ariaLabels(system).delete"
 								@click.stop="openConfirmDeleteDialog(system._id)"
 							>
-								<v-icon>$mdiTrashCanOutline</v-icon>
+								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 							</v-btn>
 						</td>
 					</tr>
@@ -144,6 +144,12 @@
 
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiContentCopy,
+	mdiCheckCircle,
+} from "@mdi/js";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
 
 export default {
@@ -162,6 +168,10 @@ export default {
 				isOpen: false,
 				systemId: undefined,
 			},
+			iconMdiPencilOutline: mdiPencilOutline,
+			iconMdiTrashCanOutline: mdiTrashCanOutline,
+			iconMdiContentCopy: mdiContentCopy,
+			iconMdiCheckCircle: mdiCheckCircle,
 			copiedElement: "",
 		};
 	},

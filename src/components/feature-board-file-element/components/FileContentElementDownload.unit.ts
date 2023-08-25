@@ -1,6 +1,7 @@
+import { downloadFile } from "@/utils/fileHelper";
+import { mdiTrayArrowDown } from "@mdi/js";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementDownload from "./FileContentElementDownload.vue";
-import { downloadFile } from "@/utils/fileHelper";
 
 jest.mock("@/utils/fileHelper");
 
@@ -79,8 +80,7 @@ describe("FileContentElementDownload", () => {
 				const { wrapper } = setup();
 
 				const icon = wrapper.find("v-icon");
-
-				expect(icon.text()).toBe("$mdiTrayArrowDown");
+				expect(icon.element.innerHTML).toContain(mdiTrayArrowDown);
 			});
 		});
 	});

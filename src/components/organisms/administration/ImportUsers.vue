@@ -112,7 +112,7 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>$mdiAccountPlus</v-icon
+										>{{ mdiAccountPlus }}</v-icon
 									>
 								</v-btn>
 								<v-btn
@@ -129,7 +129,7 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>$mdiAccountSwitch</v-icon
+										>{{ mdiAccountSwitch }}</v-icon
 									>
 								</v-btn>
 								<v-btn
@@ -146,7 +146,7 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>$mdiAccountSwitchOutline</v-icon
+										>{{ mdiAccountSwitchOutline }}</v-icon
 									>
 								</v-btn>
 							</v-btn-toggle>
@@ -160,7 +160,7 @@
 									class="searchFlagged"
 								>
 									<v-icon :color="searchFlagged ? 'primary' : 'secondary'"
-										>{{ searchFlagged ? "$mdiFlag" : "$mdiFlagOutline" }}
+										>{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
 									</v-icon>
 								</v-btn>
 							</v-btn-toggle>
@@ -189,7 +189,7 @@
 							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"
 						>
-							<v-icon small>$mdiPencilOutline</v-icon>
+							<v-icon small>{{ mdiPencilOutline }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
@@ -203,7 +203,7 @@
 						@click="saveFlag(item)"
 					>
 						<v-icon small :color="item.flagged ? 'primary' : ''">{{
-							item.flagged ? "$mdiFlag" : "$mdiFlagOutline"
+							item.flagged ? mdiFlag : mdiFlagOutline
 						}}</v-icon>
 					</v-btn>
 				</template>
@@ -212,7 +212,7 @@
 			<p class="text-sm">
 				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
 				<br />
-				<v-icon color="secondary">$mdiAccountPlus</v-icon>
+				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
@@ -221,7 +221,7 @@
 				}}
 
 				<br />
-				<v-icon color="secondary">$mdiAccountSwitch</v-icon>
+				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
@@ -229,7 +229,7 @@
 					})
 				}}
 				<br />
-				<v-icon color="secondary">$mdiAccountSwitchOutline</v-icon>
+				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
@@ -237,7 +237,7 @@
 					})
 				}}
 				<br />
-				<v-icon color="secondary">$mdiFlagOutline</v-icon>
+				<v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
@@ -256,6 +256,14 @@
 import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
 import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
+import {
+	mdiAccountPlus,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
+	mdiFlag,
+	mdiFlagOutline,
+	mdiPencilOutline,
+} from "@mdi/js";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 
 export default {
@@ -264,6 +272,12 @@ export default {
 	},
 	data() {
 		return {
+			mdiAccountPlus,
+			mdiAccountSwitch,
+			mdiAccountSwitchOutline,
+			mdiFlag,
+			mdiFlagOutline,
+			mdiPencilOutline,
 			MatchedBy,
 			loading: false,
 			roles: [
@@ -441,13 +455,13 @@ export default {
 		},
 		getMatchedByIcon(match) {
 			if (!match || !match.matchedBy) {
-				return "$mdiAccountPlus";
+				return mdiAccountPlus;
 			}
 			if (match.matchedBy === MatchedBy.Auto) {
-				return "$mdiAccountSwitchOutline";
+				return mdiAccountSwitchOutline;
 			}
 			if (match.matchedBy === MatchedBy.Admin) {
-				return "$mdiAccountSwitch";
+				return mdiAccountSwitch;
 			}
 		},
 		editItem(item) {

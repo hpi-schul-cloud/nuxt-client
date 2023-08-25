@@ -23,19 +23,26 @@
 				class="btn-delete"
 				@click.stop="$emit('remove', chip.id)"
 			>
-				<v-icon small>$mdiClose</v-icon>
+				<v-icon small>{{ mdiClose }}</v-icon>
 			</v-btn>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mdiClose } from "@mdi/js";
+
 export default {
 	props: {
 		chips: {
 			type: Array,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			mdiClose,
+		};
 	},
 };
 </script>

@@ -10,7 +10,7 @@
 				large
 				data-testid="add-element-btn"
 			>
-				<VIcon>$mdiPlus</VIcon>
+				<VIcon>{{ mdiPlus }}</VIcon>
 				<span class="d-sr-only"
 					>{{ $t("components.elementTypeSelection.dialog.title") }}
 				</span>
@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+import { mdiPlus } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -30,6 +31,7 @@ export default defineComponent({
 
 		return {
 			onAddElement,
+			mdiPlus,
 		};
 	},
 });
