@@ -1,4 +1,3 @@
-import { useI18n } from "@/composables/i18n.composable";
 import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 // WIP: move to @/types/
