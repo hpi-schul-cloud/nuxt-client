@@ -1,34 +1,31 @@
 <template>
-	<div class="grey lighten-4 px-4 py-3 rounded-t-sm">
-		<v-list-item
-			class="px-0"
+	<div class="grey lighten-4 pa-4 rounded">
+		<v-card-title
+			class="pa-0"
 			data-testid="board-submission-element-display"
 			inactive
 		>
-			<v-list-item-icon class="mr-2 my-2">
-				<v-icon
-					class="grey--text text--darken-2"
-					data-testid="board-submission-element-display-icon"
-					medium
-					>$mdiLightbulbOnOutline</v-icon
-				>
-			</v-list-item-icon>
-
-			<v-list-item-content class="py-0">
-				<span
-					class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
-					data-testid="board-submission-element-display-content"
-					>{{ $t("components.cardElement.submissionElement") }}</span
-				>
-			</v-list-item-content>
-		</v-list-item>
-
-		<v-card-text
-			class="pa-0 subtitle-1 font-weight-bold"
+			<v-icon
+				color="black"
+				size="18"
+				class="mr-2"
+				data-testid="board-submission-element-display-icon"
+			>
+				$mdiLightbulbOnOutline
+			</v-icon>
+			<span
+				class="subtitle-1 d-inline-block text-truncate black--text font-weight-bold"
+				data-testid="board-submission-element-display-content"
+			>
+				{{ $t("components.cardElement.submissionElement") }}
+			</span>
+		</v-card-title>
+		<v-card-subtitle
+			class="pa-0 mt-1 subtitle-1"
 			data-testid="board-submission-element-due-date"
 		>
-			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
-		</v-card-text>
+			{{ formattedDueDate }}
+		</v-card-subtitle>
 	</div>
 </template>
 
@@ -44,9 +41,12 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	setup(props) {
+		const formattedDueDate = dayjs(props.dueDate).format(
+			"dddd, DD.MM.YYYY - HH:mm"
+		);
 		return {
-			dayjs,
+			formattedDueDate,
 		};
 	},
 });
