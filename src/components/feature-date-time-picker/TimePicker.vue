@@ -19,7 +19,6 @@
 					:aria-label="ariaLabel"
 					placeholder="HH:MM"
 					append-icon="$mdiClockOutline"
-					clearable
 					:rules="rules"
 					validate-on-blur
 					data-testid="time-input"

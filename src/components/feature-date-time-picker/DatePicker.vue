@@ -21,7 +21,6 @@
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
 					readonly
-					clearable
 					:rules="rules"
 					validate-on-blur
 					data-testid="date-input"
