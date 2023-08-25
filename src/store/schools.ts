@@ -114,10 +114,11 @@ export default class SchoolsModule extends VuexModule {
 		__v: 0,
 	};
 	oauthMigration: OauthMigration = {
-		startedAt: false,
-		mandatorySince: false,
-		closedAt: "",
-		finishedAt: "",
+		enableMigrationStart: false,
+		oauthMigrationPossible: false,
+		oauthMigrationMandatory: false,
+		oauthMigrationFinished: "",
+		oauthMigrationFinalFinish: "",
 	};
 	systems: any[] = [];
 	loading = false;
@@ -424,10 +425,12 @@ export default class SchoolsModule extends VuexModule {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
 				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
 			this.setOauthMigration({
-				startedAt: oauthMigration.data.enableMigrationStart,
-				mandatorySince: !!oauthMigration.data.oauthMigrationMandatory,
-				closedAt: oauthMigration.data.oauthMigrationFinished,
-				finishedAt: oauthMigration.data.oauthMigrationFinalFinish,
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
@@ -454,10 +457,12 @@ export default class SchoolsModule extends VuexModule {
 					migrationFlags
 				);
 			this.setOauthMigration({
-				startedAt: oauthMigration.data.enableMigrationStart,
-				mandatorySince: !!oauthMigration.data.oauthMigrationMandatory,
-				closedAt: oauthMigration.data.oauthMigrationFinished,
-				finishedAt: oauthMigration.data.oauthMigrationFinalFinish,
+				enableMigrationStart: oauthMigration.data.enableMigrationStart,
+				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
+				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
+				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
+				oauthMigrationFinalFinish:
+					oauthMigration.data.oauthMigrationFinalFinish,
 			});
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {

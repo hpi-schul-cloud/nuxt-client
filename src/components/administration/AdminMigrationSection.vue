@@ -168,6 +168,7 @@ import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { UserLoginMigration } from "@/store/user-login-migration";
+import { UserLoginMigrationFlags } from "../../store/user-login-migration/user-login-migration-flags";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -195,14 +196,16 @@ export default defineComponent({
 			() => userLoginMigrationModule.getUserLoginMigration
 		);
 
-		const oauthMigration: ComputedRef<OauthMigration> = computed(() => {
-			return {
-				startedAt: !!userLoginMigration.value?.startedAt,
-				mandatorySince: !!userLoginMigration.value?.mandatorySince,
-				closedAt: userLoginMigration.value?.closedAt,
-				finishedAt: userLoginMigration.value?.finishedAt,
-			};
-		});
+		const oauthMigration: ComputedRef<UserLoginMigrationFlags> = computed(
+			() => {
+				return {
+					startedAt: !!userLoginMigration.value?.startedAt,
+					mandatorySince: !!userLoginMigration.value?.mandatorySince,
+					closedAt: userLoginMigration.value?.closedAt,
+					finishedAt: userLoginMigration.value?.finishedAt,
+				};
+			}
+		);
 
 		const onStartMigration = () => {
 			if (oauthMigration.value.startedAt) {
