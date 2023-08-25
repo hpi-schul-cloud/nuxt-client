@@ -1,5 +1,6 @@
 import { mount, MountOptions } from "@vue/test-utils";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
+import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
@@ -70,14 +71,14 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		const wrapper = getWrapper(testProps);
 
 		const flagButtonElement = wrapper.find("[data-testid=flag-button]");
-		expect(flagButtonElement.element.innerHTML).toContain("$mdiFlagOutline");
+		expect(flagButtonElement.element.innerHTML).toContain(mdiFlagOutline);
 		await flagButtonElement.trigger("click");
 
 		expect(saveFlagMock).toHaveBeenCalled();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 
-		expect(flagButtonElement.element.innerHTML).toContain("$mdiFlag");
+		expect(flagButtonElement.element.innerHTML).toContain(mdiFlag);
 		expect(wrapper.vm.flagged).toBe(true);
 	});
 
