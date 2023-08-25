@@ -249,16 +249,16 @@ export default defineComponent({
 			isShowStartWarning.value = !isShowStartWarning.value;
 		};
 
-		const isShowStartButton: ComputedRef<boolean> = computed(
+		const isShowEndButton: ComputedRef<boolean> = computed(
 			() =>
-				!oauthMigration.value.startedAt &&
+				oauthMigration.value.startedAt &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
 
-		const isShowEndButton: ComputedRef<boolean> = computed(
+		const isShowStartButton: ComputedRef<boolean> = computed(
 			() =>
-				oauthMigration.value.startedAt &&
+				!isShowEndButton.value &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
