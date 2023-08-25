@@ -52,8 +52,8 @@ export const useBoardState = (id: string) => {
 
 		try {
 			const newColumn = await createColumnCall(board.value.id);
-			setEditModeId(newColumn.id);
 			await fetchBoard(board.value.id);
+			setEditModeId(newColumn.id);
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
