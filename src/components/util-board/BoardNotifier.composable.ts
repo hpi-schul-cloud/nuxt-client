@@ -57,30 +57,7 @@ export const useBoardNotifier = () => {
 		notifierModule.setNotifier(undefined);
 	};
 
-	const { t } = useI18n();
-
-	const generateErrorText = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		const errorTextMap = {
-			notCreated: "components.board.notifications.errors.notCreated",
-			notLoaded: "components.board.notifications.errors.notLoaded",
-			notUpdated: "components.board.notifications.errors.notUpdated",
-			notDeleted: "components.board.notifications.errors.notDeleted",
-		};
-
-		const errorKey = errorTextMap[errorType] ?? "error.generic";
-
-		return boardObjectType
-			? t(errorKey, {
-					type: t(`components.${boardObjectType}`),
-			  }).toString()
-			: t(errorKey).toString();
-	};
-
 	return {
-		generateErrorText,
 		resetNotifier,
 		showCustomNotifier,
 		showFailure,
