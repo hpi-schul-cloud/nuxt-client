@@ -1,6 +1,5 @@
 <template>
 	<v-card
-		v-show="showElement"
 		class="mb-4"
 		data-testid="board-file-element"
 		dense
@@ -55,18 +54,10 @@
 </template>
 
 <script lang="ts">
-import {
-	FileRecordParentType,
-	FileRecordScanStatus,
-	PreviewStatus,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useContentElementState,
-} from "@data-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { useFileRecord } from "../FileRecord.composable";
@@ -105,7 +96,6 @@ export default defineComponent({
 
 		useBoardFocusHandler(props.element.id, fileContentElement);
 
-		const { hasEditPermission } = useBoardPermissions();
 		const { modelValue } = useContentElementState(props);
 		const { fetchFile, upload, fileRecord } = useFileStorageApi(
 			props.element.id,
@@ -146,16 +136,6 @@ export default defineComponent({
 
 		const isOutlined = computed(() => {
 			return fileRecord.value !== undefined || props.isEditMode === true;
-		});
-
-		const showElement = computed(() => {
-			return (
-				hasEditPermission ||
-				(!hasEditPermission &&
-					fileRecord.value !== undefined &&
-					fileRecord.value?.securityCheckStatus !==
-						FileRecordScanStatus.BLOCKED)
-			);
 		});
 
 		onMounted(() => {
@@ -217,7 +197,6 @@ export default defineComponent({
 			modelValue,
 			needsFileUpload,
 			url,
-			showElement,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveFileEditDown,
