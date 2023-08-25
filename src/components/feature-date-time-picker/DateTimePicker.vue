@@ -1,6 +1,5 @@
 <template>
 	<div class="d-flex flex-row">
-		<v-icon :color="iconColor" class="icon mr-2"> $mdiCalendarClock </v-icon>
 		<date-picker
 			class="mr-2 picker-width"
 			:required="required"
@@ -47,19 +46,18 @@ export default defineComponent({
 		},
 		dateInputLabel: { type: String, default: "" },
 		dateInputAriaLabel: { type: String, default: "" },
-		minDate: { type: String },
-		maxDate: { type: String },
 		timeInputLabel: { type: String, default: "" },
 		timeInputAriaLabel: { type: String, default: "" },
+		minDate: { type: String },
+		maxDate: { type: String },
 		required: {
 			type: Boolean,
 		},
-		allowPast: { type: Boolean, default: false },
+		allowPast: { type: Boolean },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
-
 		const locale = i18n.locale;
 
 		const getTime = (dateIsoString: string) => {
@@ -123,10 +121,6 @@ export default defineComponent({
 
 		const valid = computed(() => !dateError.value && !timeError.value);
 
-		const iconColor = computed(() => {
-			return valid.value ? "" : "error";
-		});
-
 		return {
 			date,
 			time,
@@ -137,17 +131,12 @@ export default defineComponent({
 			handleTimeInput,
 			handleTimeError,
 			handleTimeValid,
-			iconColor,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-.icon {
-	top: 18px;
-}
-
 .picker-width {
 	width: 225px;
 }

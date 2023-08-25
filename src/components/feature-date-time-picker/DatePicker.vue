@@ -11,21 +11,20 @@
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
+					ref="inputField"
 					:value="formattedDate"
+					v-bind="attrs"
+					v-on="on"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="$t('common.placeholder.dateformat')"
-					data-testid="date-input"
+					:class="{ 'menu-open': showDateDialog }"
+					append-icon="$mdiCalendar"
 					readonly
-					filled
 					clearable
-					v-bind="attrs"
-					v-on="on"
 					:rules="rules"
 					validate-on-blur
-					autocomplete="off"
-					ref="inputField"
-					:class="{ 'menu-open': showDateDialog }"
+					data-testid="date-input"
 					@blur="handleBlur"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"

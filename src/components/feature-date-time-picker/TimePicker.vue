@@ -11,19 +11,18 @@
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
+					ref="inputField"
 					v-model="model"
-					data-testid="time-input"
-					placeholder="HH:MM"
-					filled
-					clearable
-					:label="label"
-					:aria-label="ariaLabel"
 					v-bind="attrs"
 					v-on="on"
+					:label="label"
+					:aria-label="ariaLabel"
+					placeholder="HH:MM"
+					append-icon="$mdiClockOutline"
+					clearable
 					:rules="rules"
 					validate-on-blur
-					autocomplete="off"
-					ref="inputField"
+					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
 					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
