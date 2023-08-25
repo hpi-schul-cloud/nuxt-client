@@ -267,25 +267,22 @@ describe("CardState composable", () => {
 			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
+			card.value = boardCard;
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
-			mockedBoardApiCalls.createElementCall.mockResolvedValue({
+
+			mockedBoardApiCalls.createElementCall = jest.fn().mockResolvedValue({
 				data: {
 					id: "element-id",
 				},
 			} as AxiosResponse<AnyContentElement>);
-			card.value = boardCard;
-			console.log("card.value", card.value); // WIP: remove console.log
-			await nextTick();
-			await addElement(elementType.type);
-			await nextTick();
 
-			console.log("card.value2", card.value);
+			await addElement(elementType.type);
+
 			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalledWith(
 				boardCard.id,
 				elementType
 			);
-			console.log("card.value3", card.value);
-			expect(card.value.elements).toHaveLength(1);
+			expect(card.value?.elements).toHaveLength(1);
 		});
 
 		it("should focus an added element", async () => {
