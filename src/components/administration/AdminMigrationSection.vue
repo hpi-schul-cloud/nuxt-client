@@ -252,6 +252,7 @@ export default defineComponent({
 		const isShowEndButton: ComputedRef<boolean> = computed(
 			() =>
 				oauthMigration.value.startedAt &&
+				!oauthMigration.value.closedAt &&
 				!isShowEndWarning.value &&
 				!isShowStartWarning.value
 		);
