@@ -2,15 +2,15 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.error.title") }}
+			{{ t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					$t('pages.userMigration.error.description', {
-						targetSystem: getSystemName(targetSystem),
+					t('pages.userMigration.error.description', {
+						targetSystem: getSystemName(),
 						instance: this.$theme.name,
 						supportLink,
 					})
@@ -21,8 +21,8 @@
 				data-testId="text-schoolnumber-mismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
 				:html="
-					$t('pages.userMigration.error.schoolNumberMismatch', {
-						targetSystem: getSystemName(targetSystem),
+					t('pages.userMigration.error.schoolNumberMismatch', {
+						targetSystem: getSystemName(),
 						targetSchoolNumber,
 						sourceSchoolNumber,
 					})
@@ -30,38 +30,41 @@
 				component="p"
 			/>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
-				{{ $t("pages.userMigration.backToLogin") }}
+				{{ t("pages.userMigration.backToLogin") }}
 			</v-btn>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import { useI18n } from "@/composables/i18n.composable";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	SYSTEMS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import {
-	ComputedRef,
-	Ref,
 	computed,
+	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
+	Ref,
 	ref,
 } from "vue";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import EnvConfigModule from "@/store/env-config";
+import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
 	components: { RenderHTML },
 	props: {
-		targetSystem: {
-			type: String,
-			required: true,
-		},
 		targetSchoolNumber: {
 			type: String,
 			required: false,
@@ -72,18 +75,23 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const systemsModule: SystemsModule | undefined =
-			inject<SystemsModule>("systemsModule");
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
+		);
+		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
+			USER_LOGIN_MIGRATION_MODULE_KEY
+		);
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
 		useTitle(pageTitle);
 
-		const getSystemName = (id: string): string => {
+		const getSystemName = (): string => {
 			return (
 				systemsModule?.getSystems.find(
-					(system: System): boolean => system.id === id
+					(system: System): boolean =>
+						system.id === userLoginMigration.value.targetSystemId
 				)?.name ?? ""
 			);
 		};
@@ -105,15 +113,22 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
+
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
+			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
 			isLoading.value = false;
 		});
 
 		return {
+			t,
 			isLoading,
 			supportLink,
 			getSystemName,
+			userLoginMigration,
 		};
 	},
 });

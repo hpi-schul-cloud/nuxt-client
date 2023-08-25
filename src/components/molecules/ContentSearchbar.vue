@@ -23,11 +23,11 @@
 					class="search-icon"
 					aria-label="search"
 				>
-					{{ mdiMagnify }}
+					$mdiMagnify
 				</v-icon>
 				<v-btn v-else icon plain color="black" @click="clearBtnHandler">
 					<v-icon x-large class="search-icon" aria-label="clear">
-						{{ mdiClose }}
+						$mdiClose
 					</v-icon>
 				</v-btn>
 			</div>
@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import { mdiClose, mdiMagnify } from "@mdi/js";
-
 let typingTimer;
 
 export default {
@@ -54,8 +52,6 @@ export default {
 		return {
 			isActive: true,
 			inputValue: "",
-			mdiClose,
-			mdiMagnify,
 		};
 	},
 	mounted() {

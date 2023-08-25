@@ -35,17 +35,16 @@
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
-								<VIcon>
-									{{ mdiPencilOutline }}
-								</VIcon>
+								<VIcon> $mdiPencilOutline </VIcon>
 							</template>
 							{{ $t("common.actions.edit") }}
 						</BoardMenuAction>
-						<BoardMenuAction @click="onDeleteCard">
+						<BoardMenuAction
+							@click="onDeleteCard"
+							data-test-id="board-menu-action-delete"
+						>
 							<template #icon>
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
+								<VIcon> $mdiTrashCanOutline </VIcon>
 							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
@@ -55,7 +54,7 @@
 				<ContentElementList
 					:elements="card.elements"
 					:isEditMode="isEditMode"
-					:deleteElement="deleteElement"
+					@delete:element="onDeleteElement"
 					@move-down:element="onMoveContentElementDown"
 					@move-up:element="onMoveContentElementUp"
 					@move-keyboard:element="onMoveContentElementKeyboard"
@@ -66,15 +65,10 @@
 				></CardAddElementMenu>
 			</template>
 		</VCard>
-		<FilePicker
-			@update:file="onFileSelect"
-			:isFilePickerOpen.sync="isFilePickerOpen"
-		/>
 	</CardHostInteractionHandler>
 </template>
 
 <script lang="ts">
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -82,21 +76,21 @@ import {
 	watchDebounced,
 } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
-import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
-import FilePicker from "../shared/FilePicker.vue";
-import { useCardState } from "../state/CardState.composable";
+import ContentElementList from "./ContentElementList.vue";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
+import {
+	useEditMode,
+	useCardState,
+	useBoardPermissions,
+	useBoardFocusHandler,
+} from "@data-board";
 import {
 	DragAndDropKey,
 	ElementMove,
 	verticalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
@@ -112,7 +106,6 @@ export default defineComponent({
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		FilePicker,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -142,11 +135,9 @@ export default defineComponent({
 			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
-			useDeleteBoardNodeConfirmation();
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
-			useElementTypeSelection(addElement);
+		const { askType } = useAddElementDialog(addElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) => {
 			emit("move:card-keyboard", event.code);
@@ -154,7 +145,7 @@ export default defineComponent({
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
 		const onDeleteCard = async () => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
+			const shouldDelete = await askDeleteConfirmation(
 				card.value?.title,
 				"boardCard"
 			);
@@ -168,14 +159,16 @@ export default defineComponent({
 			askType();
 		};
 
+		const onDeleteElement = (elementId: string) => {
+			deleteElement(elementId);
+		};
+
 		const onStartEditMode = () => {
 			startEditMode();
 		};
 
 		const onEndEditMode = () => {
-			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
-				stopEditMode();
-			}
+			stopEditMode();
 		};
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
@@ -208,7 +201,10 @@ export default defineComponent({
 		watchDebounced(
 			cardHostHeight,
 			(newHeight: number) => updateCardHeight(newHeight),
-			{ debounce: 500, maxWait: 2000 }
+			{
+				debounce: 500,
+				maxWait: 2000,
+			}
 		);
 
 		return {
@@ -222,6 +218,7 @@ export default defineComponent({
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
+			onDeleteElement,
 			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
@@ -230,10 +227,6 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
-			onFileSelect,
-			isFilePickerOpen,
 			addTextAfterTitle,
 		};
 	},
@@ -263,3 +256,4 @@ export default defineComponent({
 	outline-offset: 0;
 }
 </style>
+@data-board"; @data-board"; @data-board";

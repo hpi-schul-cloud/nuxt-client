@@ -16,7 +16,7 @@
 			{{ $t("pages.administration.migration.error") }}
 			<template #action="{ attrs }">
 				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
-					<v-icon>{{ mdiClose }}</v-icon>
+					<v-icon>$mdiClose</v-icon>
 				</v-btn>
 			</template>
 		</v-snackbar>
@@ -26,7 +26,7 @@
 				{{
 					$t("pages.administration.migration.title", {
 						source: ldapSourceTranslation,
-						instance: $theme.short_name,
+						instance: $theme.name,
 					})
 				}}
 			</h1>
@@ -188,7 +188,7 @@
 										<RenderHTML
 											:html="
 												$t('pages.administration.migration.summary', {
-													instance: $theme.short_name,
+													instance: $theme.name,
 													source: ldapSourceTranslation,
 													importUsersCount: totalMatched,
 													importUsersUnmatchedCount:
@@ -253,7 +253,7 @@
 														"pages.administration.migration.step4.linkingFinished",
 														{
 															source: ldapSourceTranslation,
-															instance: $theme.short_name,
+															instance: $theme.name,
 														}
 													)
 												}}
@@ -278,7 +278,7 @@
 													{{
 														$t(
 															"pages.administration.migration.step4.bullets.newUsers",
-															{ instance: $theme.short_name }
+															{ instance: $theme.name }
 														)
 													}}
 												</li>
@@ -339,7 +339,7 @@
 									{{
 										$t("pages.administration.migration.step5.syncReady2", {
 											source: ldapSourceTranslation,
-											instance: $theme.short_name,
+											instance: $theme.name,
 										})
 									}}
 								</p>
@@ -348,7 +348,7 @@
 									{{
 										$t("pages.administration.migration.step5.afterSync", {
 											source: ldapSourceTranslation,
-											instance: $theme.short_name,
+											instance: $theme.name,
 										})
 									}}
 								</p>
@@ -397,19 +397,16 @@
 </template>
 <script>
 /* eslint-disable max-lines */
-import { mdiClose, mdiLoading } from "@mdi/js";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: { DefaultWireframe, ImportUsers, RenderHTML },
 	data() {
 		return {
-			mdiClose,
-			mdiLoading,
 			migrationStep: 1,
 			breadcrumbs: [
 				{
@@ -508,7 +505,7 @@ export default {
 		document.title = buildPageTitle(
 			this.$t("pages.administration.migration.title", {
 				source: this.ldapSourceTranslation,
-				instance: this.$theme.short_name,
+				instance: this.$theme.name,
 			})
 		);
 
@@ -520,7 +517,7 @@ export default {
 			{
 				text: this.$t("pages.administration.migration.title", {
 					source: this.ldapSourceTranslation,
-					instance: this.$theme.short_name,
+					instance: this.$theme.name,
 				}),
 				disabled: true,
 			},

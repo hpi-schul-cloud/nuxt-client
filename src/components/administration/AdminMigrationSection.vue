@@ -26,9 +26,10 @@
 					/>
 				</v-alert>
 			</div>
-			<div>
+			<div v-else>
 				<v-alert light prominent text type="info">
 					<RenderHTML
+						data-testid="migration-active-status"
 						:html="
 							t(
 								'components.administration.adminMigrationSection.migrationActive'
@@ -121,6 +122,23 @@
 			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
 		/>
 		<v-switch
+			v-if="
+				!isCurrentDateAfterFinalFinish &
+				globalFeatureEnableLdapSyncDuringMigration
+			"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+				)
+			"
+			v-model="school.features.enableLdapSyncDuringMigration"
+			inset
+			dense
+			class="ml-1"
+			data-testid="enable-sync-during-migration-switch"
+			@change="setSchoolFeatures"
+		/>
+		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
 			:label="
 				t(
@@ -132,7 +150,7 @@
 			dense
 			class="ml-1"
 			data-testid="show-outdated-users-switch"
-			@change="setShowOutdatedUsers"
+			@change="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -165,7 +183,7 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -277,11 +295,14 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
+			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
+
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setShowOutdatedUsers = () => {
+		const setSchoolFeatures = () => {
 			schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
@@ -304,8 +325,9 @@ export default defineComponent({
 			dayjs,
 			supportLink,
 			school,
-			setShowOutdatedUsers,
+			setSchoolFeatures,
 			globalFeatureShowOutdatedUsers,
+			globalFeatureEnableLdapSyncDuringMigration,
 		};
 	},
 });

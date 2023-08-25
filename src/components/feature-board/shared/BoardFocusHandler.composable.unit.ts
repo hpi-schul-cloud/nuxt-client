@@ -1,6 +1,6 @@
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { Ref, ref } from "vue";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useBoardFocusHandler } from "@data-board";
 
 describe("BoardFocusHandler composable", () => {
 	const columnId = "testColumnId";

@@ -13,16 +13,15 @@
 			large
 			v-if="!isEditMode"
 		>
-			<VIcon>{{ mdiPlus }}</VIcon>
+			<VIcon>$mdiPlus</VIcon>
 			<span class="d-sr-only">{{ $t("components.board.action.addCard") }}</span>
 		</VBtn>
 	</div>
 </template>
 
 <script lang="ts">
-import { mdiPlus } from "@mdi/js";
 import { computed, defineComponent } from "vue";
-import { useSharedEditMode } from "../shared/EditMode.composable";
+import { useSharedEditMode } from "@data-board";
 
 export default defineComponent({
 	name: "BoardAddCardButton",
@@ -33,7 +32,6 @@ export default defineComponent({
 
 		const isEditMode = computed(() => editModeId.value !== undefined);
 		return {
-			mdiPlus,
 			onAddCard,
 			isEditMode,
 		};
@@ -58,3 +56,4 @@ export default defineComponent({
 	width: 380px;
 }
 </style>
+@data-board";

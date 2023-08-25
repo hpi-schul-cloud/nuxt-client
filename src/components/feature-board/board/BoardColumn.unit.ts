@@ -7,16 +7,19 @@ import {
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
-jest.mock("../shared/BoardPermissions.composable");
+const { isDragging, dragEnd } = useDragAndDrop();
+
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 describe("BoardColumn", () => {
@@ -110,6 +113,41 @@ describe("BoardColumn", () => {
 			const emitted = wrapper.emitted("update:card-position");
 
 			expect(emitted).toBeUndefined();
+		});
+	});
+
+	describe("when a card is started dragging", () => {
+		beforeEach(() => {
+			dragEnd();
+		});
+		describe("if payload has 'cardId'", () => {
+			it("should set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: { cardId: "card-id", height: 100 },
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(true);
+			});
+		});
+
+		describe("if payload doesn't have 'cardId'", () => {
+			it("should not set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: "12345",
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(false);
+			});
 		});
 	});
 

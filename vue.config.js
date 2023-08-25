@@ -9,6 +9,8 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 const replacements = generateAliases(__dirname);
 
+const getDir = (subPath) => path.resolve(__dirname, subPath);
+
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
@@ -18,19 +20,30 @@ module.exports = defineConfig({
 		plugins: [new NoncePlaceholderPlugin()],
 		resolve: {
 			alias: {
-				"@boardShared": path.resolve(
-					__dirname,
-					"src/components/feature-board/shared"
+				"@data-board": getDir("src/components/data-board"),
+				"@feature-board-file-element": getDir(
+					"src/components/feature-board-file-element"
 				),
-				"@boardState": path.resolve(
-					__dirname,
-					"src/components/feature-board/state"
+				"@feature-board-submission-element": getDir(
+					"src/components/feature-board-submission-element"
 				),
-				"@boardTypes": path.resolve(
-					__dirname,
-					"src/components/feature-board/types"
+				"@feature-board-text-element": getDir(
+					"src/components/feature-board-text-element"
 				),
+				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-date-time-picker": getDir(
+					"src/components/feature-date-time-picker"
+				),
+				"@feature-editor": getDir("src/components/feature-editor"),
+				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@ui-board": getDir("src/components/ui-board"),
+				"@ui-confirmation-dialog": getDir(
+					"src/components/ui-confirmation-dialog"
+				),
+				"@util-board": getDir("src/components/util-board"),
+				"@page-board": getDir("src/components/page-board"),
 			},
+			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
 	},

@@ -32,7 +32,7 @@ describe("loggedOutLayout", () => {
 			...componentOptions,
 			mocks: {
 				$theme: {
-					short_name: "instance name",
+					name: "instance name",
 				},
 			},
 			provide: {

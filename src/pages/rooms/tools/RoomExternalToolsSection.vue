@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import {
 	ToolLaunchRequestResponse,

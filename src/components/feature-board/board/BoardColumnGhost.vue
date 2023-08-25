@@ -11,6 +11,7 @@
 			style="min-height: 500px"
 		>
 			<Container
+				v-if="isDragging"
 				group-name="cards"
 				@drop="onDropCard"
 				@drag-enter="onDragEnter"
@@ -18,6 +19,8 @@
 				drag-class="elevation-12"
 				drop-class="elevation-0"
 				:drop-placeholder="cardDropPlaceholderOptions"
+				class="dndrop-container vertical"
+				:class="{ 'expanded-column': isDragging }"
 			>
 			</Container>
 		</div>
@@ -26,7 +29,11 @@
 <script lang="ts">
 import { useElementHover, useFocusWithin } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { CardMove, cardDropPlaceholderOptions } from "../types/DragAndDrop";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import {
+	CardMove,
+	cardDropPlaceholderOptions,
+} from "@/types/board/DragAndDrop";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
@@ -37,6 +44,7 @@ export default defineComponent({
 	emits: ["create:column", "create:column-with-card"],
 	setup(props, { emit }) {
 		const isDragPending = ref<boolean>(false);
+		const { isDragging } = useDragAndDrop();
 
 		const ghostColumnRef = ref<HTMLDivElement | undefined>();
 		const ghostColumnTitleRef = ref<HTMLElement | undefined>();
@@ -72,6 +80,7 @@ export default defineComponent({
 			colWidth,
 			cardDropPlaceholderOptions,
 			isColumnActive,
+			isDragging,
 			ghostColumnRef,
 			ghostColumnTitleRef,
 		};
@@ -91,5 +100,9 @@ export default defineComponent({
 	min-height: 70vh;
 	height: 100%;
 	padding-bottom: 50px;
+}
+
+.expanded-column {
+	min-height: 75vh;
 }
 </style>

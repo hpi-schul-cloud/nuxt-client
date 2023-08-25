@@ -12,30 +12,35 @@
 			@update:title="onUpdateTitle"
 			class="pl-2"
 		></BoardColumnHeader>
-		<Container
-			group-name="cards"
-			drag-class="elevation-12"
-			drop-class="elevation-0"
-			:drop-placeholder="cardDropPlaceholderOptions"
-			:get-child-payload="getChildPayload"
-			:drag-begin-delay="isDesktop ? 0 : 300"
-			non-drag-area-selector=".drag-disabled"
-			@drop="onMoveCard"
-			class="scrollable-column pr-1 -mt-3"
-		>
-			<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
-				<CardHost
-					class="my-3 mx-2"
-					:card-id="card.cardId"
-					:height="card.height"
-					:class="{ 'drag-disabled': !hasMovePermission }"
-					@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
-					@delete:card="onDeleteCard"
-				/>
-			</Draggable>
-		</Container>
+		<div class="scrollable-column">
+			<Container
+				orientation="vertical"
+				group-name="cards"
+				drag-class="elevation-12"
+				drop-class="elevation-0"
+				:drop-placeholder="cardDropPlaceholderOptions"
+				:get-child-payload="getChildPayload"
+				:drag-begin-delay="isDesktop ? 0 : 300"
+				non-drag-area-selector=".drag-disabled"
+				@drag-start="onDragStart"
+				@drop="onDragEnd"
+				class="dndrop-container vertical pr-1 -mt-3"
+				:class="{ 'expanded-column': isDragging }"
+			>
+				<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
+					<CardHost
+						class="my-3 mx-2"
+						:card-id="card.cardId"
+						:height="card.height"
+						:class="{ 'drag-disabled': !hasMovePermission }"
+						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						@delete:card="onDeleteCard"
+					/>
+				</Draggable>
+			</Container>
+		</div>
 		<BoardAddCardButton
-			v-if="hasCreateColumnPermission"
+			v-if="hasCreateColumnPermission && !isDragging"
 			@add-card="onCreateCard"
 		></BoardAddCardButton>
 	</div>
@@ -47,15 +52,17 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { BoardColumn, BoardSkeletonCard } from "../types/Board";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import { useBoardPermissions } from "@data-board";
+import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
 	DragAndDropKey,
+	DragObject,
 	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -91,6 +98,8 @@ export default defineComponent({
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
 
+		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+
 		const onCreateCard = () => emit("create:card", props.column.id);
 
 		const onColumnDelete = (columnId: string): void => {
@@ -102,7 +111,13 @@ export default defineComponent({
 		};
 		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
-		const onMoveCard = (dropResult: CardMove): void => {
+		const onDragStart = (element: DragObject): void => {
+			if (!element.payload.cardId) return;
+			dragStart();
+		};
+
+		const onDragEnd = (dropResult: CardMove): void => {
+			dragEnd();
 			const { removedIndex, addedIndex } = dropResult;
 			if (removedIndex === null && addedIndex === null) return;
 			emit("update:card-position", {
@@ -158,11 +173,13 @@ export default defineComponent({
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
+			isDragging,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
-			onMoveCard,
+			onDragStart,
+			onDragEnd,
 			onMoveCardKeyboard,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
@@ -179,8 +196,11 @@ export default defineComponent({
 }
 </style>
 <style scoped>
+.expanded-column {
+	min-height: 75vh;
+}
 .scrollable-column {
-	overflow-y: auto;
+	overflow: auto;
 	max-height: 75vh;
 }
 
