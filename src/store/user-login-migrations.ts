@@ -103,7 +103,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async fetchMigrationLinks(request: MigrationLinkRequest): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
+
 		try {
 			const links: AxiosResponse<PageContentResponse> =
 				await this.userMigrationApi.userMigrationControllerGetMigrationPageDetails(
@@ -116,6 +118,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 				proceedLink: links.data.proceedButtonUrl,
 				cancelLink: links.data.cancelButtonUrl,
 			};
+
 			this.setMigrationLinks(mappedLinks);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -134,6 +137,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async fetchLatestUserLoginMigrationForCurrentUser(): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
 
 		if (authModule.getUser?.id) {
@@ -150,6 +154,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 				if (response.data.data.length === 1) {
 					const userLoginMigrationResponse: UserLoginMigrationResponse =
 						response.data.data[0];
+
 					const userLoginMigration: UserLoginMigration =
 						UserLoginMigrationMapper.mapToUserLoginMigration(
 							userLoginMigrationResponse
@@ -178,7 +183,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async startUserLoginMigration(): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
+
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerStartMigration();
@@ -206,7 +213,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async setUserLoginMigrationMandatory(mandatory: boolean): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
+
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerSetMigrationMandatory(
@@ -236,7 +245,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async restartUserLoginMigration(): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
+
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerRestartMigration();
@@ -264,7 +275,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Action
 	async closeUserLoginMigration(): Promise<void> {
 		this.setLoading(true);
+
 		this.resetBusinessError();
+
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
