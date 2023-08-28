@@ -41,7 +41,10 @@
 					@delete:element="onDeleteElement"
 				/>
 			</div>
-			<FileContentElementAlert :previewStatus="fileRecord.previewStatus" />
+			<FileContentElementAlert
+				:previewStatus="fileRecord.previewStatus"
+				@on-status-reload="onFetchFile"
+			/>
 		</template>
 		<template v-else>
 			<FileContentElementInit
@@ -188,6 +191,10 @@ export default defineComponent({
 			}
 		};
 
+		const onFetchFile = async (): Promise<void> => {
+			await fetchFile();
+		};
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -202,6 +209,7 @@ export default defineComponent({
 			onMoveFileEditDown,
 			onMoveFileEditUp,
 			onUploadFile,
+			onFetchFile,
 		};
 	},
 });

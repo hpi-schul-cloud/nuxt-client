@@ -11,6 +11,9 @@
 	>
 		<div class="black--text" v-if="alertProperties.text">
 			{{ $t(alertProperties.text) }}
+			<a v-if="alertProperties.actionText" @click.prevent="onStatusReload">
+				{{ $t(alertProperties.actionText) }}
+			</a>
 		</div>
 	</v-alert>
 </template>
@@ -18,6 +21,13 @@
 <script lang="ts">
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { computed, defineComponent, PropType } from "vue";
+
+interface Props {
+	color: string;
+	icon: string;
+	text: string;
+	actionText?: string;
+}
 
 export default defineComponent({
 	name: "FileContentElementAlert",
@@ -27,9 +37,9 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup(props) {
-		const defaultProps = { color: "", icon: "", text: "" };
-		const properties = {
+	emits: ["on-status-reload"],
+	setup(props, { emit }) {
+		const properties: { [key: string]: Props } = {
 			[PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED]: {
 				color: "error",
 				icon: "$error",
@@ -39,6 +49,7 @@ export default defineComponent({
 				color: "info",
 				icon: "$info",
 				text: "components.cardElement.fileElement.awaitingScan",
+				actionText: "components.cardElement.fileElement.reloadStatus",
 			},
 			[PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK]: {
 				color: "info",
@@ -49,12 +60,6 @@ export default defineComponent({
 				color: "warning",
 				icon: "$warning",
 				text: "components.cardElement.fileElement.scanError",
-			},
-			[PreviewStatus.PREVIEW_POSSIBLE]: {
-				...defaultProps,
-			},
-			[PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE]: {
-				...defaultProps,
 			},
 		};
 
@@ -70,7 +75,16 @@ export default defineComponent({
 			);
 		});
 
-		return { alertProperties, PreviewStatus, showAlert };
+		const onStatusReload = () => {
+			emit("on-status-reload");
+		};
+
+		return {
+			alertProperties,
+			PreviewStatus,
+			showAlert,
+			onStatusReload,
+		};
 	},
 });
 </script>
