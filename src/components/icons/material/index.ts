@@ -9,6 +9,7 @@ import {
 	mdiAlertCircle,
 	mdiArrowCollapse,
 	mdiArrowExpand,
+	mdiArtboard,
 	mdiCalendar,
 	mdiCalendarOutline,
 	mdiCardAccountDetailsOutline,
@@ -90,6 +91,7 @@ import {
 	mdiPlaylistEdit,
 	mdiLightbulbOnOutline,
 	mdiFormatText,
+	mdiPresentation,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -103,6 +105,7 @@ const materialIcons = {
 	mdiAlertCircle,
 	mdiArrowCollapse,
 	mdiArrowExpand,
+	mdiArtboard,
 	mdiCalendar,
 	mdiCalendarOutline,
 	mdiCardAccountDetailsOutline,
@@ -184,6 +187,7 @@ const materialIcons = {
 	mdiPlaylistEdit,
 	mdiLightbulbOnOutline,
 	mdiFormatText,
+	mdiPresentation,
 };
 
 export default materialIcons;

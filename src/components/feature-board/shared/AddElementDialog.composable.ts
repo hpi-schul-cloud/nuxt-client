@@ -39,6 +39,12 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
 		},
+		{
+			icon: "$mdiPresentation",
+			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			action: () => onElementClick(ContentElementType.Drawing),
+			testId: "create-element-drawing-element",
+		},
 	];
 
 	const askType = () => {

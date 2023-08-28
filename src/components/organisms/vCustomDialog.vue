@@ -2,7 +2,7 @@
 	<v-dialog
 		ref="vDialog"
 		:value="isOpen"
-		:max-width="size"
+		:max-width="550"
 		@click:outside="$emit('dialog-closed', false)"
 		@keydown.esc="$emit('dialog-closed', false)"
 	>
@@ -93,7 +93,7 @@ export default {
 		},
 		size: {
 			type: Number,
-			default: 480,
+			default: 550,
 		},
 		hasButtons: {
 			type: Boolean,

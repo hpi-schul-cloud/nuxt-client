@@ -34,6 +34,19 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 				@delete:element="onDeleteElement"
 			/>
+			<DrawingContentElement
+				v-else-if="isDrawingElementResponse(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
+				:hasMultipleElements="hasMultipleElements"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
+				@delete:element="onDeleteElement"
+			/>
 		</template>
 	</VCardText>
 </template>
@@ -44,12 +57,14 @@ import {
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	DrawingElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { DrawingContentElement } from "../../feature-board-drawing-element";
 import { computed, defineComponent, PropType } from "vue";
 
 export default defineComponent({
@@ -58,6 +73,7 @@ export default defineComponent({
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
+		DrawingContentElement,
 	},
 	props: {
 		elements: {
@@ -96,6 +112,12 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
 			return element.type === ContentElementType.SubmissionContainer;
+		};
+
+		const isDrawingElementResponse = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
+			return element.type === ContentElementType.Drawing;
 		};
 
 		const onMoveElementDown = (
@@ -152,6 +174,7 @@ export default defineComponent({
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			isDrawingElementResponse,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,

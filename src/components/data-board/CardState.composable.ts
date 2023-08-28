@@ -82,11 +82,15 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (cardState.card === undefined) {
 			return;
 		}
+
 		const params: CreateContentElementBodyParams = { type };
+
 		if (atFirstPosition) {
 			params.toPosition = 0;
 		}
+
 		const response = await createElementCall(cardState.card.id, params);
+
 		if (isErrorCode(response.status)) {
 			await showErrorAndReload(generateErrorText("create", "boardElement"));
 			return;

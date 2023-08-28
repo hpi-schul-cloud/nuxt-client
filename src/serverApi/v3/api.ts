@@ -557,7 +557,8 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    Drawing = 'drawing'
 }
 
 /**
@@ -923,7 +924,8 @@ export interface CreateCardBodyParams {
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    Drawing = 'drawing'
 }
 
 /**
@@ -3792,6 +3794,19 @@ export interface SubmissionContainerContentBody {
 /**
  * 
  * @export
+ * @interface DrawingContentBody
+ */
+export interface DrawingContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingContentBody
+     */
+    drawingName: string;
+}
+/**
+ * 
+ * @export
  * @interface SubmissionContainerElementContent
  */
 export interface SubmissionContainerElementContent {
@@ -3801,6 +3816,20 @@ export interface SubmissionContainerElementContent {
      * @memberof SubmissionContainerElementContent
      */
     dueDate: string;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementContent
+ */
+
+export interface DrawingElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementContent
+     */
+    drawingName: string;
 }
 /**
  * 
@@ -3851,6 +3880,56 @@ export interface SubmissionContainerElementResponse {
      * @memberof SubmissionContainerElementResponse
      */
     timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementResponse
+ */
+
+export interface DrawingElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DrawingElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {String}
+     * @memberof DrawingElementResponse
+     */
+    content: DrawingElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof DrawingElementResponse
+     */
+    timestamps: TimestampsResponse;
+}/**
+ * 
+ * @export
+ * @interface DrawingElementContentBody
+ */
+export interface DrawingElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DrawingElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {String}
+     * @memberof DrawingElementContentBody
+     */
+    drawingName: DrawingContentBody;
 }
 /**
  * 
@@ -6085,8 +6164,10 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
             assertParamExists('cardControllerCreateElement', 'createContentElementBodyParams', createContentElementBodyParams)
             const localVarPath = `/cards/{cardId}/elements`
                 .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+             
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+           
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -6095,20 +6176,19 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
+        
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+           
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createContentElementBodyParams, localVarRequestOptions, configuration)
-
+            
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -6343,7 +6423,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6423,7 +6503,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6497,7 +6577,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
 
     /**
      * 
