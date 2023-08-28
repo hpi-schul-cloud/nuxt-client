@@ -76,6 +76,12 @@ export interface AccountResponse {
      * @memberof AccountResponse
      */
     activated: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountResponse
+     */
+    updatedAt: string;
 }
 /**
  * 
