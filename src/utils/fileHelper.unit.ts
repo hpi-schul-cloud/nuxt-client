@@ -157,7 +157,9 @@ describe("@/utils/fileHelper", () => {
 
 			const result = convertDownloadToPreviewUrl(url);
 
-			expect(result).toEqual("/file/preview/233/text.txt");
+			expect(result).toEqual(
+				`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
+			);
 		});
 
 		it("should return the preview url with two download words in source", () => {
@@ -165,7 +167,9 @@ describe("@/utils/fileHelper", () => {
 
 			const result = convertDownloadToPreviewUrl(url);
 
-			expect(result).toEqual("/file/preview/233/download");
+			expect(result).toEqual(
+				`/file/preview/233/download?outputFormat=image/webp&width=500`
+			);
 		});
 
 		it("should return the preview url with two download words in source with extension", () => {
@@ -173,7 +177,20 @@ describe("@/utils/fileHelper", () => {
 
 			const result = convertDownloadToPreviewUrl(url);
 
-			expect(result).toEqual("/file/preview/233/download.txt");
+			expect(result).toEqual(
+				`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
+			);
+		});
+
+		it("should return the preview url", () => {
+			const url = "/file/download/233/text.txt";
+
+			// @ts-expect-error Enum only provides on value currently but will provide more in the future
+			const result = convertDownloadToPreviewUrl(url, 1000);
+
+			expect(result).toEqual(
+				`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
+			);
 		});
 	});
 

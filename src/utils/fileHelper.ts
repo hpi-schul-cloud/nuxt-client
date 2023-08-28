@@ -52,10 +52,13 @@ export function getFileExtension(fileName: string): string {
 	return ext;
 }
 
-export function convertDownloadToPreviewUrl(downloadUrl: string): string {
+export function convertDownloadToPreviewUrl(
+	downloadUrl: string,
+	width: PreviewWidth = PreviewWidth._500
+): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
-		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${PreviewWidth._500}`;
+		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${width}`;
 
 	return previewUrl;
 }
