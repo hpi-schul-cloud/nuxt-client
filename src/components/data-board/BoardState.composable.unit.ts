@@ -607,7 +607,7 @@ describe("BoardState.composable", () => {
 
 	describe("notifyWithTemplateAndReload", () => {
 		describe("when is called", () => {
-			it.only("should call notifyWithTemplate", async () => {
+			it("should call notifyWithTemplate", async () => {
 				const { notifyWithTemplateAndReload, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
