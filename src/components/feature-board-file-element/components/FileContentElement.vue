@@ -200,7 +200,6 @@ export default defineComponent({
 			fileProperties,
 			fileRecord,
 			hasFileRecord,
-
 			isOutlined,
 			modelValue,
 			needsFileUpload,
