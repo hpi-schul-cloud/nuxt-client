@@ -200,7 +200,7 @@ export const useCardState = (
 	) => {
 		return () => {
 			notifyWithTemplate(errorType, boardObjectType)();
-			emit("reload:board"); // WIP: event does not result in board-reload yet
+			emit("reload:board");
 		};
 	};
 
