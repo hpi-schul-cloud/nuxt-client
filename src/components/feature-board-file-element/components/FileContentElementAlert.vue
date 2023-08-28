@@ -11,7 +11,11 @@
 	>
 		<div class="black--text" v-if="alertProperties.text">
 			{{ $t(alertProperties.text) }}
-			<a v-if="alertProperties.actionText" @click.prevent="onStatusReload">
+			<a
+				href="#"
+				v-if="alertProperties.actionText"
+				@click.prevent="onStatusReload"
+			>
 				{{ $t(alertProperties.actionText) }}
 			</a>
 		</div>
