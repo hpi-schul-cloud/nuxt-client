@@ -16,37 +16,33 @@
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<a
-					v-if="isDownloadAllowed"
-					class="subtitle-1 d-inline-block text-truncate"
-					data-testid="board-file-element-display-file-name-link"
-					:download="fileName"
-					:href="url"
-					>{{ fileName }}</a
-				>
 				<span
-					v-else
 					class="subtitle-1 d-inline-block text-truncate"
 					data-testid="board-file-element-display-file-name"
 					>{{ fileName }}</span
 				>
 			</v-list-item-content>
 		</v-list-item>
-		<FileContentElementChips
+		<FileContentElementFooter
 			:fileSize="fileSize"
 			:fileName="fileName"
+			:isDownloadAllowed="isDownloadAllowed"
+			:url="url"
 			:mimeType="mimeType"
-		/>
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
+	components: {
+		FileContentElementFooter,
+	},
 	props: {
 		fileName: { type: String, required: true },
 		fileSize: { type: Number, required: true },
@@ -54,7 +50,6 @@ export default defineComponent({
 		url: { type: String, required: true },
 		mimeType: { type: String, required: true },
 	},
-	components: { FileContentElementChips },
 	setup() {
 		return {
 			mdiFileDocumentOutline,

@@ -215,7 +215,7 @@
 				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSourceTranslation,
 					})
 				}}
@@ -224,7 +224,7 @@
 				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSourceTranslation,
 					})
 				}}
@@ -232,7 +232,7 @@
 				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSourceTranslation,
 					})
 				}}
@@ -240,7 +240,7 @@
 				<v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSourceTranslation,
 					})
 				}}
@@ -350,7 +350,7 @@ export default {
 				},
 				{
 					text: this.$t("components.organisms.importUsers.tableMatch", {
-						instance: this.$theme.short_name,
+						instance: this.$theme.name,
 					}),
 					value: "match",
 					sortable: false,

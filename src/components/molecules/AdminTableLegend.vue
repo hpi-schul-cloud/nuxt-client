@@ -16,11 +16,7 @@
 
 		<span v-if="showExternalSyncHint" class="wrapper">
 			<strong class="external-sync-hint">
-				{{
-					$t("components.molecules.admintablelegend.externalSync", {
-						shortName: $theme.short_name,
-					})
-				}}
+				{{ $t("components.molecules.admintablelegend.externalSync") }}
 				<base-link
 					class="link-style"
 					to="/"

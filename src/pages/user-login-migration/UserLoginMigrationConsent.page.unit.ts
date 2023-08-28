@@ -2,17 +2,24 @@ import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMig
 import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
-	MigrationLinks,
-	MigrationPageOrigin,
-} from "@/store/types/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migration";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	SYSTEMS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, Wrapper, mount } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
+import {
+	MigrationLinks,
+	MigrationPageOrigin,
+	UserLoginMigration,
+} from "@/store/user-login-migration";
+import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -23,7 +30,10 @@ describe("UserLoginMigrationConsent", () => {
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	const setup = async (props: object) => {
+	const setup = async (
+		props: { origin: string },
+		userLoginMigration?: Partial<UserLoginMigration>
+	) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
@@ -43,8 +53,11 @@ describe("UserLoginMigrationConsent", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
+		const userLoginMigrationMock: UserLoginMigration =
+			userLoginMigrationFactory.build({ ...userLoginMigration });
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getMigrationLinks: migrationLinksMock,
+			getUserLoginMigration: userLoginMigrationMock,
 		});
 		envConfigModule = createModuleMocks(EnvConfigModule);
 
@@ -55,8 +68,8 @@ describe("UserLoginMigrationConsent", () => {
 					i18n: true,
 				}),
 				provide: {
-					systemsModule,
-					userLoginMigrationModule,
+					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
+					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[I18N_KEY.valueOf()]: i18nMock,
 				},
@@ -71,6 +84,7 @@ describe("UserLoginMigrationConsent", () => {
 		return {
 			wrapper,
 			migrationLinksMock,
+			userLoginMigrationMock,
 		};
 	};
 
@@ -78,8 +92,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -94,8 +106,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to sourceSystemId and mandatory is not set", () => {
 			it("should show the normal description text", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -110,8 +120,6 @@ describe("UserLoginMigrationConsent", () => {
 
 			it("should show the proceed migration button", async () => {
 				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -125,8 +133,6 @@ describe("UserLoginMigrationConsent", () => {
 
 			it("should show the skip migration button", async () => {
 				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "sourceSystemId",
 				});
 
@@ -139,12 +145,12 @@ describe("UserLoginMigrationConsent", () => {
 
 		describe("when origin is equal to sourceSystemId and when mandatory is set", () => {
 			it("should show the mandatory description text", async () => {
-				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-					origin: "sourceSystemId",
-					mandatory: true,
-				});
+				const { wrapper } = await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ mandatorySince: "someDate" }
+				);
 
 				const descriptionText: string = wrapper
 					.find("[data-testId=text-description]")
@@ -156,12 +162,12 @@ describe("UserLoginMigrationConsent", () => {
 			});
 
 			it("should show the logout button", async () => {
-				const { wrapper, migrationLinksMock } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-					origin: "sourceSystemId",
-					mandatory: true,
-				});
+				const { wrapper, migrationLinksMock } = await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ mandatorySince: "someDate" }
+				);
 
 				const button = wrapper.find("[data-testId=btn-cancel]");
 
@@ -173,8 +179,6 @@ describe("UserLoginMigrationConsent", () => {
 		describe("when origin is equal to targetSystem", () => {
 			it("should show the mandatory description text", async () => {
 				const { wrapper } = await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					origin: "targetSystemId",
 				});
 
@@ -192,11 +196,14 @@ describe("UserLoginMigrationConsent", () => {
 	describe("Api", () => {
 		describe("when origin is equal to sourceSystem", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-					origin: "sourceSystemId",
-				});
+				await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ sourceSystemId: "sourceSystemId" }
+				);
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
@@ -210,12 +217,14 @@ describe("UserLoginMigrationConsent", () => {
 
 		describe("when origin is equal to sourceSystem and mandatory is set", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-					origin: "sourceSystemId",
-					mandatory: true,
-				});
+				await setup(
+					{
+						origin: "sourceSystemId",
+					},
+					{ sourceSystemId: "sourceSystemId", mandatorySince: "someDate" }
+				);
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
@@ -229,11 +238,14 @@ describe("UserLoginMigrationConsent", () => {
 
 		describe("when origin is equal to targetSystem", () => {
 			it("should call the api to load the migrations links", async () => {
-				await setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-					origin: "targetSystemId",
-				});
+				await setup(
+					{
+						origin: "targetSystemId",
+					},
+					{ targetSystemId: "targetSystemId", mandatorySince: "someDate" }
+				);
+
+				await Vue.nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchMigrationLinks
