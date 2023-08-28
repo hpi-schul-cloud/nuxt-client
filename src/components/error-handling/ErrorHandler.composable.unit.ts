@@ -16,10 +16,15 @@ const mockedIsAxiosError = jest.mocked(isAxiosError);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+let translationMap: Record<string, string> = {};
 
 const mountErrorComposable = () => {
 	return mountComposable(() => useErrorHandler(), {
-		[I18N_KEY.valueOf()]: { t: (key: string) => key, tc: (key: string) => key },
+		[I18N_KEY.valueOf()]: {
+			t: (key: string) => key,
+			tc: (key: string) => key,
+			te: (key: string) => translationMap[key] !== undefined,
+		},
 		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
@@ -43,6 +48,17 @@ describe("ErrorHandler.Composable", () => {
 
 		return mountErrorComposable();
 	};
+
+	beforeEach(() => {
+		const keys = [
+			"components.board.notifications.errors.notCreated",
+			"components.board.notifications.errors.notLoaded",
+			"components.board.notifications.errors.notUpdated",
+			"components.board.notifications.errors.notDeleted",
+		];
+		translationMap = {};
+		keys.forEach((key) => (translationMap[key] = key));
+	});
 
 	describe("handleError", () => {
 		describe("when custom error handler for 404 is defined", () => {
@@ -80,24 +96,43 @@ describe("ErrorHandler.Composable", () => {
 	});
 
 	describe("notifyWithTemplate", () => {
-		it("should return api error handler", async () => {
-			const { notifyWithTemplate } = setup();
+		describe("when everything is normal", () => {
+			it("should return api error handler", async () => {
+				const { notifyWithTemplate } = setup();
 
-			const handler = notifyWithTemplate("notLoaded", "boardCard");
-			await nextTick();
+				const handler = notifyWithTemplate("notLoaded", "boardCard");
+				await nextTick();
 
-			expect(handler).toBeDefined();
-			expect(typeof handler).toBe("function");
+				expect(handler).toBeDefined();
+				expect(typeof handler).toBe("function");
+			});
+
+			it("should show notification", async () => {
+				const { notifyWithTemplate } = setup();
+
+				const handler = notifyWithTemplate("notLoaded", "boardCard");
+				handler();
+				await nextTick();
+
+				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+			});
 		});
 
-		it("should show notification", async () => {
-			const { notifyWithTemplate } = setup();
+		describe("when error key does not exist", () => {
+			it("should use a generic error message", async () => {
+				const { notifyWithTemplate } = setup();
+				delete translationMap[
+					"components.board.notifications.errors.notCreated"
+				];
 
-			const handler = notifyWithTemplate("notLoaded", "boardCard");
-			handler();
-			await nextTick();
+				const handler = notifyWithTemplate("notCreated");
+				handler();
+				await nextTick();
 
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith("error.generic", "error", undefined);
+			});
 		});
 	});
 

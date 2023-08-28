@@ -14,7 +14,7 @@ export type ApiErrorHandlerFactory = (...args: any[]) => ApiErrorHandler;
 export type ErrorMap = Record<number, ApiErrorHandler>;
 
 export const useErrorHandler = () => {
-	const { t } = useI18n();
+	const { t, te } = useI18n();
 
 	const { showCustomNotifier } = useBoardNotifier();
 
@@ -22,20 +22,12 @@ export const useErrorHandler = () => {
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
-		const errorTextMap = {
-			notCreated: "components.board.notifications.errors.notCreated",
-			notLoaded: "components.board.notifications.errors.notLoaded",
-			notUpdated: "components.board.notifications.errors.notUpdated",
-			notDeleted: "components.board.notifications.errors.notDeleted",
-		};
+		let errorKey = `components.board.notifications.errors.${errorType}`;
+		if (!te(errorKey)) errorKey = "error.generic";
 
-		const errorKey = errorTextMap[errorType] ?? "error.generic";
+		const type = boardObjectType ? t(`components.${boardObjectType}`) : "";
 
-		return boardObjectType
-			? t(errorKey, {
-					type: t(`components.${boardObjectType}`),
-			  }).toString()
-			: t(errorKey).toString();
+		return t(errorKey, { type }).toString();
 	};
 
 	const notifyWithTemplate: ApiErrorHandlerFactory = (
