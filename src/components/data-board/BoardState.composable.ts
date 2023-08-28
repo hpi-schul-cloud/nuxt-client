@@ -263,11 +263,7 @@ export const useBoardState = (id: string) => {
 	const reloadBoard = async () => {
 		if (board.value === undefined) return;
 
-		try {
-			await fetchBoard(board.value.id);
-		} catch (error) {
-			handleError(error);
-		}
+		await fetchBoard(board.value.id);
 	};
 
 	onMounted(() => {

@@ -205,11 +205,9 @@ export const useCardState = (
 	};
 
 	onMounted(() => {
-		fetchCard(id).catch((error) => {
-			handleError(error, {
-				404: notifyWithTemplate("notLoaded", "boardCard"),
-			});
-		});
+		fetchCard(id).then(() => ({
+			// do nothing but celebrating sonarcloud
+		}));
 	});
 
 	return {

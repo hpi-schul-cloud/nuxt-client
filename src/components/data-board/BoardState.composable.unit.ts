@@ -390,6 +390,19 @@ describe("BoardState.composable", () => {
 
 			expect(isLoading.value).toStrictEqual(false);
 		});
+
+		describe("when api returns an error", () => {
+			it("should use the error handler to react", async () => {
+				const { fetchBoard } = setup();
+
+				mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(
+					setupErrorResponse()
+				);
+				await fetchBoard(testBoard.id);
+
+				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("reloadBoard", () => {
