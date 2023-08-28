@@ -41,7 +41,7 @@ export const useCardState = (
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notLoaded", "boardCard"),
+				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
 			});
 		} finally {
 			cardState.isLoading = false;
@@ -56,7 +56,7 @@ export const useCardState = (
 			await updateCardTitle(cardState.card.id, newTitle);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notUpdated"),
+				404: notifyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -68,7 +68,7 @@ export const useCardState = (
 			await deleteCardCall(cardState.card.id);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notDeleted", "boardCard"),
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};
@@ -81,7 +81,7 @@ export const useCardState = (
 			cardState.card.height = newHeight;
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notUpdated"),
+				404: notifyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -109,7 +109,7 @@ export const useCardState = (
 			return response.data;
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notCreated", "boardElement"),
+				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
 			});
 		}
 	};
@@ -132,7 +132,7 @@ export const useCardState = (
 			await moveElementCall(elementId, cardState.card.id, elementIndex + 1);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notUpdated"),
+				404: notifyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -150,7 +150,7 @@ export const useCardState = (
 			await moveElementCall(elementId, cardState.card.id, elementIndex - 1);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notUpdated"),
+				404: notifyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -181,7 +181,7 @@ export const useCardState = (
 			extractElement(elementId);
 		} catch (error) {
 			handleError(error, {
-				404: notifiyWithTemplateAndReload("notUpdated"),
+				404: notifyWithTemplateAndReload("notUpdated"),
 			});
 		}
 	};
@@ -194,7 +194,7 @@ export const useCardState = (
 		}
 	};
 
-	const notifiyWithTemplateAndReload: ApiErrorHandlerFactory = (
+	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
@@ -214,6 +214,7 @@ export const useCardState = (
 		addElement,
 		moveElementDown,
 		moveElementUp,
+		notifyWithTemplateAndReload,
 		deleteCard,
 		fetchCard,
 		updateCardHeight,

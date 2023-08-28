@@ -30,8 +30,8 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const emitMock = jest.fn();
 
-const setup = (cardId = "123123") => {
-	return mountComposable(() => useCardState(cardId, emitMock), {
+const setup = (cardId = "123123", emitFn = emitMock) => {
+	return mountComposable(() => useCardState(cardId, emitFn), {
 		[I18N_KEY.valueOf()]: { t: (key: string) => key },
 		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
@@ -644,6 +644,32 @@ describe("CardState composable", () => {
 
 			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalled();
 			expect(card.value?.elements).toHaveLength(1);
+		});
+	});
+
+	describe("notifyWithTemplateAndReload", () => {
+		describe("when is called", () => {
+			it("should call notifyWithTemplate", async () => {
+				const boardCard = boardCardFactory.build();
+				const emitMock = jest.fn();
+				const { notifyWithTemplateAndReload, card } = setup(
+					boardCard.id,
+					emitMock
+				);
+				card.value = boardCard;
+
+				mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
+					jest.fn()
+				);
+
+				const handler = notifyWithTemplateAndReload("notLoaded");
+				handler();
+				await nextTick();
+
+				expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
+
+				expect(emitMock).toHaveBeenCalledWith("reload:board");
+			});
 		});
 	});
 });
