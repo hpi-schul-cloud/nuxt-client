@@ -1,7 +1,20 @@
 import { ContentElementType } from "@/serverApi/v3";
+import { injectStrict } from "@/utils/inject";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 jest.mock("./SharedElementTypeSelection.composable");
+
+jest.mock("@/utils/inject");
+const mockedInjectStrict = jest.mocked(injectStrict);
+
+// simple mock, as we only need to provide the env-config-module (the concrete value is even irrelevant for the currently implemented tests)
+mockedInjectStrict.mockImplementation(() => {
+	return {
+		getEnv: {
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
+		},
+	};
+});
 
 describe("ElementTypeSelection Composable", () => {
 	describe("onElementClick", () => {
@@ -89,7 +102,7 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[0].action;
-				await action();
+				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(ContentElementType.RichText);
@@ -102,7 +115,7 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[0].action;
-				await action();
+				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
@@ -116,7 +129,7 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[1].action;
-				await action();
+				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(ContentElementType.File);
@@ -129,7 +142,7 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[1].action;
-				await action();
+				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
