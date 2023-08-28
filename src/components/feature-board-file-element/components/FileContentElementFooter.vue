@@ -2,7 +2,11 @@
 	<v-container class="ma-0 pa-0">
 		<v-row>
 			<v-col cols="10">
-				<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+				<FileContentElementChips
+					:fileSize="fileSize"
+					:fileName="fileName"
+					:mimeType="mimeType"
+				/>
 			</v-col>
 
 			<v-col cols="2">
@@ -32,6 +36,7 @@ export default defineComponent({
 		fileSize: { type: Number, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
 		url: { type: String, required: true },
+		mimeType: { type: String, required: true },
 	},
 });
 </script>

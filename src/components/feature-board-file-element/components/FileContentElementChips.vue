@@ -1,6 +1,6 @@
 <template>
 	<div class="pa-2">
-		<v-chip class="grey lighten-3 mr-2" disabled small>{{
+		<v-chip v-if="fileExtension" class="grey lighten-3 mr-2" disabled small>{{
 			fileExtension
 		}}</v-chip>
 		<v-chip class="grey lighten-3 mr-2" disabled small>{{
