@@ -289,6 +289,7 @@ export const useBoardState = (id: string) => {
 		getColumnId,
 		moveCard,
 		moveColumn,
+		notifyWithTemplateAndReload,
 		reloadBoard,
 		updateColumnTitle,
 	};
