@@ -22,7 +22,7 @@
 				@delete:element="onDeleteElement"
 			/>
 			<SubmissionContentElement
-				v-else-if="isSubmissionContainerElementResponse(element)"
+				v-else-if="showSubmissionContainerElement(element)"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
@@ -51,6 +51,7 @@ import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "ContentElementList",
@@ -76,6 +77,8 @@ export default defineComponent({
 		"move-keyboard:element",
 	],
 	setup(props, { emit }) {
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const onDeleteElement = (elementId: string) => {
 			emit("delete:element", elementId);
 		};
@@ -96,6 +99,13 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
 			return element.type === ContentElementType.SubmissionContainer;
+		};
+
+		const showSubmissionContainerElement = (element: AnyContentElement) => {
+			return (
+				envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+				isSubmissionContainerElementResponse(element)
+			);
 		};
 
 		const onMoveElementDown = (
@@ -152,6 +162,7 @@ export default defineComponent({
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			showSubmissionContainerElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,
