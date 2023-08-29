@@ -138,7 +138,8 @@ jobs:
     
     with:
       ref: ${{ needs.branch_meta.outputs.branch }}
-    secrets: inherit
+    secrets:
+      service-account-token: ${{ secrets.CYPRESS_ONEPWD_SERVICE_ACCOUNT_TOKEN }}
 
   test-successful:
     runs-on: ubuntu-latest

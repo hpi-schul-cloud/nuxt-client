@@ -14,7 +14,9 @@
 			:disabled="disabled"
 			@click.prevent="addResource"
 		>
-			<v-icon :class="{ 'mr-2': !round }"> $mdiPlusCircleOutline </v-icon>
+			<v-icon :class="{ 'mr-2': !round }">
+				{{ mdiPlusCircleOutline }}
+			</v-icon>
 			{{ btnLabel }}
 		</v-btn>
 		<add-content-modal
@@ -53,6 +55,7 @@ import { contentModule } from "@/store";
 import AddContentModal from "@/components/molecules/AddContentModal";
 import NotificationModal from "@/components/molecules/NotificationModal";
 import LoadingModal from "@/components/molecules/LoadingModal";
+import { mdiPlusCircleOutline } from "@mdi/js";
 import {
 	getMerlinReference,
 	getMetadataAttribute,
@@ -83,6 +86,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiPlusCircleOutline,
 			copyModalActive: false,
 			loadingModal: {
 				visible: false,

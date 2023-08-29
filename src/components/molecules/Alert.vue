@@ -6,7 +6,7 @@
 		}"
 	>
 		<v-alert
-			v-model="isVisible"
+			v-model="showNotifier"
 			:icon="icon"
 			:transition="transition"
 			:type="status"
@@ -15,10 +15,10 @@
 			max-width="400"
 			min-width="200"
 			text
-			close-icon="$mdiClose"
+			:close-icon="mdiClose"
 			:close-label="$t('common.labels.close')"
 			border="left"
-			@input="onCloseNotification"
+			@input="closeNotification"
 		>
 			<div v-if="messages" class="alert_text mr-2">
 				<div v-for="(message, index) in messages" :key="index" class="mb-1">
@@ -33,48 +33,60 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script>
 import { notifierModule } from "@/store";
-import { computed, defineComponent } from "vue";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useMediaQuery } from "@vueuse/core";
+import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
 
-export default defineComponent({
-	setup: () => {
-		const notifierData = computed(() => notifierModule.getNotifier);
-
-		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
-		const isVisible = computed(() => notifierData.value !== undefined);
-		const status = computed(() => notifierData.value?.status);
-		const text = computed(() => notifierData.value?.text);
-		const messages = computed(() => notifierData.value?.messages);
-		const icon = computed(() => {
-			if (status.value === "success") return "$mdiCheckCircle";
-			if (status.value === "warning") return "$mdiAlert";
-			if (status.value === "error") return "$mdiAlert";
-			if (status.value === "info") return "$mdiInformation";
-			return undefined;
-		});
-		const transition = isMobile
-			? "scale-transition"
-			: "scroll-x-reverse-transition";
-
-		const onCloseNotification = () => {
-			notifierModule.setNotifier(undefined);
-		};
-
+export default {
+	data() {
 		return {
-			status,
-			text,
-			messages,
-			icon,
-			isVisible,
-			isMobile,
-			transition,
-			onCloseNotification,
+			mdiClose,
+			mdiAlert,
+			mdiCheckCircle,
+			mdiInformation,
 		};
 	},
-});
+	computed: {
+		notifierData() {
+			return notifierModule.getNotifier;
+		},
+		status() {
+			return this.notifierData?.status;
+		},
+		isMobile() {
+			return this.$mq === "mobile";
+		},
+		text() {
+			return this.notifierData?.text;
+		},
+		messages() {
+			return this.notifierData?.messages;
+		},
+		transition() {
+			return this.isMobile ? "scale-transition" : "scroll-x-reverse-transition";
+		},
+		icon() {
+			if (this.status === "success") return mdiCheckCircle;
+			if (this.status === "warning") return mdiAlert;
+			if (this.status === "error") return mdiAlert;
+			if (this.status === "info") return mdiInformation;
+			return undefined;
+		},
+		showNotifier: {
+			get() {
+				return this.notifierData !== undefined;
+			},
+			set() {
+				this.closeNotification();
+			},
+		},
+	},
+	methods: {
+		closeNotification() {
+			notifierModule.setNotifier(undefined);
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

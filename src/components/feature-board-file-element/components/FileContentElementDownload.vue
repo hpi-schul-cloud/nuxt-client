@@ -5,13 +5,14 @@
 			@click="onDownload"
 			:disabled="!isDownloadAllowed"
 			class="float-right"
-			>$mdiTrayArrowDown
+			>{{ mdiTrayArrowDown }}
 		</v-icon>
 	</div>
 </template>
 
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
+import { mdiTrayArrowDown } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -28,6 +29,7 @@ export default defineComponent({
 
 		return {
 			onDownload,
+			mdiTrayArrowDown,
 		};
 	},
 });

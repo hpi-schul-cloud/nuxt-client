@@ -17,7 +17,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon color="warning">$mdiAlert</v-icon>
+						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
 					<div>
 						<template v-for="(warning, index) in copyResultWarnings">
@@ -48,6 +48,12 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import {
+	mdiAlert,
+	mdiCheckCircle,
+	mdiCloseCircle,
+	mdiInformation,
+} from "@mdi/js";
 
 export default {
 	name: "CopyResultModal",
@@ -64,6 +70,14 @@ export default {
 			type: String,
 			default: "",
 		},
+	},
+	data() {
+		return {
+			mdiInformation,
+			mdiCheckCircle,
+			mdiCloseCircle,
+			mdiAlert,
+		};
 	},
 	computed: {
 		items() {
