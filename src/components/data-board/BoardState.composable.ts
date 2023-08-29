@@ -4,8 +4,11 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { Board, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { BoardObjectType, ErrorType } from "@util-board";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import {
+	BoardObjectType,
+	ErrorType,
+	useErrorHandler,
+} from "@/components/error-handling/ErrorHandler.composable";
 
 export const useBoardState = (id: string) => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();

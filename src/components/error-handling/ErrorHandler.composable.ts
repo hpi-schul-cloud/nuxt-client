@@ -1,9 +1,20 @@
 import { useI18n } from "@/composables/i18n.composable";
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { BoardObjectType, ErrorType, useBoardNotifier } from "@util-board";
+import { useBoardNotifier } from "@util-board";
 
-// WIP: move type
+export type ErrorType =
+	| "notCreated"
+	| "notLoaded"
+	| "notUpdated"
+	| "notDeleted";
+
+export type BoardObjectType =
+	| "board"
+	| "boardColumn"
+	| "boardCard"
+	| "boardElement";
+
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
 ) => Promise<void> | void;

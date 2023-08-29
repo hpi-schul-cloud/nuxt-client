@@ -1,5 +1,7 @@
 import {
 	ApiErrorHandlerFactory,
+	BoardObjectType,
+	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
@@ -9,7 +11,6 @@ import {
 import { BoardCard } from "@/types/board/Card";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { useSharedEditMode } from "@data-board";
-import { BoardObjectType, ErrorType } from "@util-board";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";

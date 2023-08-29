@@ -1,18 +1,5 @@
 import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-// WIP: move to @/types/
-export type ErrorType =
-	| "notCreated"
-	| "notLoaded"
-	| "notUpdated"
-	| "notDeleted";
-
-export type BoardObjectType =
-	| "board"
-	| "boardColumn"
-	| "boardCard"
-	| "boardElement";
-
 export const useBoardNotifier = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
