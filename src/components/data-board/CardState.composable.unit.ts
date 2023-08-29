@@ -49,7 +49,7 @@ const mockedUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 jest.mock("./CardRequestPool.composable");
 const mockedUseSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable"); // WIP: maybe error handling should be extracted into it's own module
+jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock<typeof import("@/utils/create-shared-composable")>(

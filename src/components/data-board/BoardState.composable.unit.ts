@@ -31,7 +31,7 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable"); // WIP: maybe error handling should be extracted into it's own module
+jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
