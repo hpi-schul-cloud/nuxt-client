@@ -16,6 +16,7 @@
 
 <script>
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { mdiChevronLeft, mdiMenuRight } from "@mdi/js";
 
 export default {
 	name: "CopyResultModalListItem",
@@ -24,6 +25,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			mdiChevronLeft,
+			mdiMenuRight,
+		};
 	},
 	computed: {
 		elements() {

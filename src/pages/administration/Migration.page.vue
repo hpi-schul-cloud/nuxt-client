@@ -16,7 +16,7 @@
 			{{ $t("pages.administration.migration.error") }}
 			<template #action="{ attrs }">
 				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
-					<v-icon>$mdiClose</v-icon>
+					<v-icon>{{ mdiClose }}</v-icon>
 				</v-btn>
 			</template>
 		</v-snackbar>
@@ -397,6 +397,7 @@
 </template>
 <script>
 /* eslint-disable max-lines */
+import { mdiClose, mdiLoading } from "@mdi/js";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
@@ -407,6 +408,8 @@ export default {
 	components: { DefaultWireframe, ImportUsers, RenderHTML },
 	data() {
 		return {
+			mdiClose,
+			mdiLoading,
 			migrationStep: 1,
 			breadcrumbs: [
 				{

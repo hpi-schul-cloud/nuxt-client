@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<v-icon>$mdiChevronLeft</v-icon>
+		<v-icon>{{ mdiChevronLeft }}</v-icon>
 		<v-breadcrumbs
 			color="secondary"
 			:items="breadcrumbs"
 			class="custom-breadcrumb px-0 py-0"
 		>
 			<template #divider>
-				<v-icon>$mdiChevronLeft</v-icon>
+				<v-icon>{{ mdiChevronLeft }}</v-icon>
 			</template>
 			<template #item="{ item }">
 				<v-breadcrumbs-item
@@ -25,12 +25,19 @@
 </template>
 
 <script>
+import { mdiChevronLeft } from "@mdi/js";
+
 export default {
 	props: {
 		breadcrumbs: {
 			type: Array,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			mdiChevronLeft: mdiChevronLeft,
+		};
 	},
 };
 </script>

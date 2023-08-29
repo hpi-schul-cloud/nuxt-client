@@ -3,13 +3,9 @@ import Alert from "./Alert.vue";
 import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
-import Vue, { ref } from "vue";
+import Vue from "vue";
 import { AlertPayload } from "@/store/types/alert-payload";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { useMediaQuery } from "@vueuse/core";
-
-jest.mock("@vueuse/core");
-const useMediaQueryMock = jest.mocked(useMediaQuery);
 
 const getWrapper: any = (device = "desktop", options?: object) => {
 	return mount(Alert, {
@@ -30,13 +26,13 @@ describe("Alert", () => {
 		});
 	});
 
-	it("should observe the store and set 'isVisible' to true", async () => {
+	it("should observe the store and set 'showNotifier' to true", async () => {
 		const wrapper = getWrapper();
-		expect(wrapper.vm.isVisible).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 		notifierModule.setNotifier({ text: "some text", status: "success" });
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should be visible when set with text", async () => {
@@ -48,7 +44,7 @@ describe("Alert", () => {
 		notifierModule.show(data);
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should be visible when set with message array", async () => {
@@ -60,7 +56,7 @@ describe("Alert", () => {
 		notifierModule.show(data);
 		await wrapper.vm.$nextTick();
 
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when no timeout is given", async () => {
@@ -73,10 +69,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after default timeout when autoClose is false", async () => {
@@ -90,10 +86,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should disappear after default timeout when autoClose is set", async () => {
@@ -109,10 +105,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should disappear after specific timeout when autoClose is not set", async () => {
@@ -128,10 +124,10 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(testTimeout);
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should not disappear after any time when autoClose is false", async () => {
@@ -145,12 +141,12 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
 	it("should set store 'undefined' when close button clicked", async () => {
@@ -164,22 +160,20 @@ describe("Alert", () => {
 		notifierModule.show(data);
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(true);
+		expect(wrapper.vm.showNotifier).toBe(true);
 
 		const alertComponent = wrapper.find(".alert");
 		await alertComponent.vm.$emit("input");
 		await wrapper.vm.$nextTick();
-		expect(wrapper.vm.isVisible).toBe(false);
+		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should set mobile position-class as default if the device is mobile", async () => {
-		useMediaQueryMock.mockReturnValue(ref(true));
-
 		const wrapper: Wrapper<Vue> = getWrapper("mobile");
 		await wrapper.vm.$nextTick();
 		const result = wrapper.find(".alert-wrapper-mobile");
@@ -187,8 +181,6 @@ describe("Alert", () => {
 	});
 
 	it("should set desktop position-class as default if the device is desktop or tablet", async () => {
-		useMediaQueryMock.mockReturnValue(ref(false));
-
 		const wrapper: Wrapper<Vue> = getWrapper("desktop");
 		await wrapper.vm.$nextTick();
 		const result = wrapper.get(".alert-wrapper");
