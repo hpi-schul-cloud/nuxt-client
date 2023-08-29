@@ -257,6 +257,7 @@ export const useBoardState = (id: string) => {
 
 			notifyWithTemplate(errorType, boardObjectType)();
 			reloadBoard();
+			setEditModeId(undefined);
 		};
 	};
 

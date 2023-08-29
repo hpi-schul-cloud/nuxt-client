@@ -8,6 +8,7 @@ import {
 } from "@/serverApi/v3";
 import { BoardCard } from "@/types/board/Card";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { useSharedEditMode } from "@data-board";
 import { BoardObjectType, ErrorType } from "@util-board";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
@@ -35,6 +36,7 @@ export const useCardState = (
 		updateCardTitle,
 	} = useBoardApi();
 	const { setFocus } = useBoardFocusHandler();
+	const { setEditModeId } = useSharedEditMode();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
@@ -201,6 +203,7 @@ export const useCardState = (
 		return () => {
 			notifyWithTemplate(errorType, boardObjectType)();
 			emit("reload:board");
+			setEditModeId(undefined);
 		};
 	};
 
