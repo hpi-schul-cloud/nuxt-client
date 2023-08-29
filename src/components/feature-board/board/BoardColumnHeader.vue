@@ -48,7 +48,7 @@ import {
 } from "@data-board";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
@@ -76,16 +76,17 @@ export default defineComponent({
 	},
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
+		const columnId = toRef(props, "columnId");
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			props.columnId
+			columnId.value
 		);
 
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref<HTMLDivElement | null>(null);
 		const { isFocusContained } = useBoardFocusHandler(
-			props.columnId,
+			columnId.value,
 			columnHeader
 		);
 		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();

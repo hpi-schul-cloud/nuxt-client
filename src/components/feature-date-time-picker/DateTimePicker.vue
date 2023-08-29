@@ -30,6 +30,7 @@
 <script lang="ts">
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
+import { useVModel } from "@vueuse/core";
 import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, ref } from "vue";
@@ -72,11 +73,11 @@ export default defineComponent({
 			});
 		};
 
-		const date = ref(props.dateTime);
-		const time = ref(getTime(props.dateTime));
+		const date = useVModel(props, "dateTime");
+		const time = ref(getTime(date.value));
 		const dateError = ref(false);
 		const timeError = ref(false);
-		const dateIsToday = ref(isToday(props.dateTime));
+		const dateIsToday = ref(isToday(date.value));
 
 		const emitDateTime = () => {
 			if (date.value !== "" && time.value !== "") {

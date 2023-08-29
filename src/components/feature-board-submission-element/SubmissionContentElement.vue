@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -63,7 +63,8 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const submissionContentElement = ref(null);
-		useBoardFocusHandler(props.element.id, submissionContentElement);
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, submissionContentElement);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -93,7 +94,7 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				emit("delete:element", props.element.id);
+				emit("delete:element", element.value.id);
 			}
 		};
 

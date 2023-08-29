@@ -48,7 +48,14 @@ import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { useMediaQuery } from "@vueuse/core";
-import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
+import {
+	computed,
+	defineComponent,
+	onMounted,
+	onUnmounted,
+	watch,
+	toRef,
+} from "vue";
 import {
 	useBoardState,
 	useBoardPermissions,
@@ -99,7 +106,7 @@ export default defineComponent({
 			moveCard,
 			moveColumn,
 			updateColumnTitle,
-		} = useBoardState(props.boardId);
+		} = useBoardState(toRef(props, "boardId").value);
 
 		const { createPageInformation } = useSharedBoardPageInformation();
 

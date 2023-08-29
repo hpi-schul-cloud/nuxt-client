@@ -64,7 +64,14 @@ import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import {
+	computed,
+	defineComponent,
+	onMounted,
+	PropType,
+	ref,
+	toRef,
+} from "vue";
 import { useFileRecord } from "../FileRecord.composable";
 import { useFileStorageApi } from "../FileStorageApi.composable";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
@@ -98,12 +105,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
-
-		useBoardFocusHandler(props.element.id, fileContentElement);
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
 		const { fetchFile, upload, fileRecord } = useFileStorageApi(
-			props.element.id,
+			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
@@ -162,7 +169,7 @@ export default defineComponent({
 			deleteDirectly: true | undefined
 		): Promise<void> => {
 			if (deleteDirectly === true) {
-				emit("delete:element", props.element.id);
+				emit("delete:element", element.value.id);
 				return;
 			}
 
@@ -172,7 +179,7 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				emit("delete:element", props.element.id);
+				emit("delete:element", element.value.id);
 			}
 		};
 
@@ -180,7 +187,7 @@ export default defineComponent({
 			try {
 				await upload(file);
 			} catch (error) {
-				emit("delete:element", props.element.id);
+				emit("delete:element", element.value.id);
 			}
 		};
 

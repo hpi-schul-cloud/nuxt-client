@@ -46,7 +46,7 @@
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, Ref, computed, defineComponent, ref } from "vue";
+import { ComputedRef, Ref, computed, defineComponent, ref, toRef } from "vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -72,6 +72,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const type = toRef(props, "value");
 		const isConfirmed: Ref<boolean> = ref(false);
 
 		let title =
@@ -82,10 +83,10 @@ export default defineComponent({
 			"components.administration.adminMigrationSection.startWarningCard.agree";
 		let disagree =
 			"components.administration.adminMigrationSection.startWarningCard.disagree";
-		let eventName: "start" | "end" = MigrationWarningCardTypeEnum.START;
+		let eventName = "start";
 		let check: string | undefined;
 
-		if (props.value === MigrationWarningCardTypeEnum.END) {
+		if (type.value === MigrationWarningCardTypeEnum.END) {
 			title =
 				"components.administration.adminMigrationSection.endWarningCard.title";
 			text =
@@ -96,7 +97,7 @@ export default defineComponent({
 				"components.administration.adminMigrationSection.endWarningCard.disagree";
 			check =
 				"components.administration.adminMigrationSection.endWarningCard.check";
-			eventName = MigrationWarningCardTypeEnum.END;
+			eventName = "end";
 		}
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
