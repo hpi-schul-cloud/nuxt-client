@@ -54,15 +54,14 @@ export const useErrorHandler = () => {
 	};
 
 	const defaultErrorMap: ErrorMap = {
-		// WIP: define additional errorCode defaults ? should that all be applicationErrors
 		404: notifyWithTemplate("notLoaded"),
 		500: notifyWithTemplate("notLoaded"),
-	}; // WIP: define better default notifications than "notLoaded"
+	};
 
 	const handleError = (error: unknown, errorMap?: Partial<ErrorMap>) => {
 		const responseError = mapAxiosErrorToResponseError(error);
 		const mergedErrorMap = { ...defaultErrorMap, ...errorMap };
-		const handlerFunction = mergedErrorMap[responseError.code]; // WIP: have a nicer default
+		const handlerFunction = mergedErrorMap[responseError.code];
 		if (handlerFunction) {
 			handlerFunction(responseError);
 		} else {
