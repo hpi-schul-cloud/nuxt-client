@@ -1,7 +1,8 @@
 import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { createSharedComposable, useDebounceFn } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { BoardCard } from "@/types/board/Card";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 type CardRequest = {
 	id: string;
@@ -45,7 +46,7 @@ const useCardRequestPool = () => {
 	};
 
 	const fetchCardChunks = async (chunks: CardRequest[][]) => {
-		const promises = [];
+		const promises: Promise<unknown>[] = [];
 		for (const chunk of chunks) {
 			promises.push(fetchCards(chunk));
 		}
@@ -66,6 +67,9 @@ const useCardRequestPool = () => {
 					requestEntry.resolve(card);
 				}
 			}
+			const cardIds: string[] = cards.map((card) => card.id);
+			const failed = cardRequests.filter(({ id }) => !cardIds.includes(id));
+			failed.forEach((requestEntry) => requestEntry.reject(new Error()));
 		}
 	};
 
@@ -73,4 +77,4 @@ const useCardRequestPool = () => {
 };
 
 export const useSharedCardRequestPool =
-	createSharedComposable(useCardRequestPool);
+	createTestableSharedComposable(useCardRequestPool);
