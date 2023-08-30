@@ -17,7 +17,7 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 defineElements("h5p-editor");
 
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, PropType } from "vue";
 import {
 	H5PContentParentType,
 	H5pEditorApiFactory,
@@ -34,7 +34,7 @@ export default defineComponent({
 			default: "new",
 		},
 		parentType: {
-			type: String,
+			type: String as PropType<H5PContentParentType>,
 			required: true,
 		},
 		parentId: {
@@ -80,7 +80,7 @@ export default defineComponent({
 				library: requestBody.library,
 				params: requestBody.params,
 				parentId: props.parentId,
-				parentType: props.parentType as H5PContentParentType,
+				parentType: props.parentType,
 			};
 
 			if (contentId) {

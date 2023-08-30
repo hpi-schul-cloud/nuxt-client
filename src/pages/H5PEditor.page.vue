@@ -36,12 +36,13 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { applicationErrorModule, notifierModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
 import { AxiosError, HttpStatusCode } from "axios";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, PropType } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute } from "vue-router/composables";
 
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -50,7 +51,7 @@ export default defineComponent({
 	},
 	props: {
 		parentType: {
-			type: String,
+			type: String as PropType<H5PContentParentType>,
 			required: true,
 		},
 		parentId: {
