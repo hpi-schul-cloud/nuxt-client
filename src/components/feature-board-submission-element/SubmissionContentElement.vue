@@ -14,6 +14,7 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
+				:submissionContainerId="element.id"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -65,6 +66,7 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
 
+		console.log(props.element.id);
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const isOutlined = computed(() => {

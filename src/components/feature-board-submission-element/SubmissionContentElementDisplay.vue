@@ -28,6 +28,7 @@
 			data-testid="board-submission-element-due-date"
 		>
 			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
+			<SubmissionContentElementDisplayStudent />
 		</v-card-text>
 	</div>
 </template>
@@ -35,17 +36,39 @@
 <script lang="ts">
 import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent } from "vue";
+import SubmissionContentElementDisplayStudent from "./SubmissionContentElementDisplayStudent.vue";
+import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import dayjs from "dayjs";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
 	props: {
+		submissionContainerId: {
+			type: String,
+			required: true,
+		},
 		dueDate: {
 			type: String,
 			required: true,
 		},
 	},
-	setup() {
+	components: {
+		SubmissionContentElementDisplayStudent,
+	},
+	setup(props) {
+		const { getSubmissionItems, createSubmissionItem } = useSubmissionItemApi();
+
+		const getIt = async () => {
+			const submissionItem = await getSubmissionItems(
+				props.submissionContainerId
+			);
+			console.log(submissionItem);
+			// now create it
+			// createSubmissionItem(props.submissionContainerId);
+		};
+
+		getIt();
+
 		return {
 			dayjs,
 			mdiLightbulbOnOutline,
