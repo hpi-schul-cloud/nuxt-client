@@ -6,9 +6,8 @@
 			@click="onMoveElementUp"
 		>
 			<template #icon>
-				<VIcon> $mdiArrowCollapseUp </VIcon>
+				<VIcon>$mdiArrowCollapseUp</VIcon>
 			</template>
-
 			{{ $t("components.board.action.moveUp") }}
 		</BoardMenuAction>
 		<BoardMenuAction
@@ -17,7 +16,7 @@
 			@click="onMoveElementDown"
 		>
 			<template #icon>
-				<VIcon> $mdiArrowCollapseDown </VIcon>
+				<VIcon>$mdiArrowCollapseDown</VIcon>
 			</template>
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
@@ -26,7 +25,7 @@
 			@click="onDelete"
 		>
 			<template #icon>
-				<VIcon> $mdiTrashCanOutline </VIcon>
+				<VIcon>$mdiTrashCanOutline</VIcon>
 			</template>
 			{{ $t("components.board.action.delete") }}
 		</BoardMenuAction>
@@ -35,7 +34,7 @@
 			@click="onOpenElement"
 		>
 			<template #icon>
-				<VIcon> $mdiOpenInNew </VIcon>
+				<VIcon>$mdiOpenInNew</VIcon>
 			</template>
 			{{ $t("components.board.action.open") }}
 		</BoardMenuAction>

@@ -1,11 +1,29 @@
 <template>
-	<div class="grey lighten-4">
-		<v-img src="@/assets/img/tldraw.png" height="175px" cover></v-img>
-		<v-list-item class="px-0" data-testid="drawing-element-edit" inactive>
+	<div>
+		<v-img :src="imageSrc" height="185px" cover></v-img>
+		<v-list-item
+			class="px-0"
+			data-testid="drawing-element-edit"
+			:inactive="true"
+		>
 			<v-list-item-content class="py-0">
+				<div class="board-last-updated">
+					<span
+						class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
+						:style="{ fontWeight: 400, padding: '10px 10px 0px 20px' }"
+						data-testid="board-drawing-element-display-last-updated"
+					>
+						{{ $t("components.cardElement.lastUpdatedAt") }}
+						{{ formattedLastUpdatedAt }}
+					</span>
+				</div>
 				<div
 					class="board-content"
-					style="display: flex; align-items: center; padding: 20px"
+					:style="{
+						display: 'flex',
+						alignItems: 'center',
+						padding: '10px 0px 20px 20px',
+					}"
 				>
 					<v-icon
 						class="grey--text text--darken-2"
@@ -16,14 +34,13 @@
 					</v-icon>
 					<span
 						class="subtitle-1 d-inline-block text-truncate black--text text--darken-2"
-						style="font-weight: 700; margin-left: 10px"
+						:style="{ fontWeight: 700, marginLeft: '10px' }"
 						data-testid="board-drawing-element-display-content"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
 					</span>
 				</div>
 			</v-list-item-content>
-
 			<DrawingContentElementMenu
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
@@ -39,13 +56,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import DrawingContentElementMenu from "./DrawingContentElementMenu.vue";
+import { computed, defineComponent } from "vue";
+import DrawingContentElementMenu from "@/components/feature-board-drawing-element/DrawingContentElementMenu.vue";
+import image from "@/assets/img/tldraw.png";
+import dayjs from "dayjs";
 
 export default defineComponent({
-	name: "DrawingContentElementEdit",
+	name: "DrawingContentElementDisplay",
 	components: { DrawingContentElementMenu },
 	props: {
+		lastUpdatedAt: {
+			type: String,
+			required: true,
+		},
 		elementId: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
@@ -58,11 +81,18 @@ export default defineComponent({
 		"open:element",
 	],
 	setup(props, { emit }) {
+		const imageSrc = image;
+
+		const formattedLastUpdatedAt = computed(() => {
+			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
+		});
+
 		const onOpenElement = () => {
 			const urlWithRoom = `/tldraw?roomName=${props.elementId}`;
 			window.open(urlWithRoom, "_blank");
 			emit("open:element");
 		};
+
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -74,11 +104,14 @@ export default defineComponent({
 		const onDeleteElement = () => {
 			emit("delete:element");
 		};
+
 		return {
+			imageSrc,
+			formattedLastUpdatedAt,
+			onOpenElement,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,
-			onOpenElement,
 		};
 	},
 });

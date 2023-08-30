@@ -9,11 +9,15 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<div>
-			<DrawingContentElementDisplay v-if="!isEditMode" />
+			<DrawingContentElementDisplay
+				v-if="!isEditMode"
+				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
+			/>
 
 			<DrawingContentElementEdit
 				v-if="isEditMode"
 				:elementId="element.id"
+				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -26,13 +30,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+
 export default defineComponent({
 	name: "DrawingContentElement",
 	components: {
@@ -57,36 +62,42 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
-		const drawingContentElement = ref(null);
-		useBoardFocusHandler(props.element.id, drawingContentElement);
+		const drawingElement = ref<HTMLElement | null>(null);
+		useBoardFocusHandler(props.element.id, drawingElement);
+
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
-		const isOutlined = computed(() => {
-			return props.isEditMode === true;
-		});
+
+		const isOutlined = ref(props.isEditMode);
+
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
 				emit("move-keyboard:edit", event);
 			}
 		};
+
 		const onMoveSubmissionEditDown = () => {
 			emit("move-down:edit");
 		};
+
 		const onMoveSubmissionEditUp = () => {
 			emit("move-up:edit");
 		};
+
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
 				i18n.t("components.cardElement.drawingElement").toString(),
 				"boardElement"
 			);
+
 			if (shouldDelete) {
 				emit("delete:element", props.element.id);
 			}
 		};
+
 		return {
 			isOutlined,
-			drawingContentElement,
+			drawingElement,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,

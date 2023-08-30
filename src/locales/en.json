@@ -783,6 +783,7 @@
 	"components.cardElement.submissionElement": "Submission",
 	"components.cardElement.drawingElement": "Whiteboard",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.lastUpdatedAt": "Edited by:",
 	"components.cardElement.titleElement.placeholder": "Add title",
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",

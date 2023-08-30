@@ -313,6 +313,7 @@
 	"components.cardElement.submissionElement": "Подання",
 	"components.cardElement.drawingElement": "Whiteboard",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.lastUpdatedAt": "Відредаговано:",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",

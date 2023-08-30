@@ -3809,19 +3809,31 @@ export interface DrawingContentBody {
      * @memberof DrawingContentBody
      */
     drawingName: string;
+      /**
+     * 
+     * @type {string}
+     * @memberof DrawingContentBody
+     */
+    description: string;
 }
 /**
  * 
  * @export
- * @interface SubmissionContainerElementContent
+ * @interface DrawingElementContentBody
  */
-export interface SubmissionContainerElementContent {
+export interface DrawingElementContentBody {
     /**
      * 
-     * @type {string}
-     * @memberof SubmissionContainerElementContent
+     * @type {ContentElementType}
+     * @memberof DrawingContentBody
      */
-    dueDate: string;
+    type: ContentElementType;
+    /**
+     * 
+     * @type {String}
+     * @memberof DrawingContentBody
+     */
+    content: DrawingContentBody;
 }
 /**
  * 
@@ -3836,6 +3848,57 @@ export interface DrawingElementContent {
      * @memberof DrawingElementContent
      */
     drawingName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementContent
+     */
+    description: string;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementResponse
+ */
+
+export interface DrawingElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DrawingElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {String}
+     * @memberof DrawingElementResponse
+     */
+    content: DrawingElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof DrawingElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionContainerElementContent
+ */
+export interface SubmissionContainerElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof SubmissionContainerElementContent
+     */
+    dueDate: string;
 }
 /**
  * 
@@ -3886,56 +3949,6 @@ export interface SubmissionContainerElementResponse {
      * @memberof SubmissionContainerElementResponse
      */
     timestamps: TimestampsResponse;
-}
-/**
- * 
- * @export
- * @interface DrawingElementResponse
- */
-
-export interface DrawingElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof DrawingElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof DrawingElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {String}
-     * @memberof DrawingElementResponse
-     */
-    content: DrawingElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof DrawingElementResponse
-     */
-    timestamps: TimestampsResponse;
-}/**
- * 
- * @export
- * @interface DrawingElementContentBody
- */
-export interface DrawingElementContentBody {
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof DrawingElementContentBody
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {String}
-     * @memberof DrawingElementContentBody
-     */
-    drawingName: DrawingContentBody;
 }
 /**
  * 
@@ -4409,7 +4422,7 @@ export interface UpdateElementContentBodyParams {
      * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | DrawingElementContentBody;
 }
 /**
  * 
