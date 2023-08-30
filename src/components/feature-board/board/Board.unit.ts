@@ -9,7 +9,7 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import Vue, { nextTick, ref } from "vue";
 import { Route } from "vue-router";
 import {
 	useBoardState,
@@ -400,6 +400,20 @@ describe("Board", () => {
 						mockedBoardStateCalls.updateColumnTitle
 					).not.toHaveBeenCalled();
 				});
+			});
+		});
+
+		describe("@onReloadBoard", () => {
+			it("should reload the board", async () => {
+				setup();
+
+				const boardColumnComponents = wrapper.findAllComponents({
+					name: "BoardColumn",
+				});
+				boardColumnComponents.at(0).vm.$emit("reload:board");
+				await nextTick();
+
+				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
 			});
 		});
 	});
