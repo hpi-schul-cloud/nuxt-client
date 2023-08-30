@@ -3809,19 +3809,6 @@ export interface SingleColumnBoardResponse {
 /**
  *
  * @export
- * @interface SubmissionContainerContentBody
- */
-export interface SubmissionContainerContentBody {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof SubmissionContainerContentBody
-	 */
-	dueDate: string;
-}
-/**
- *
- * @export
  * @interface DrawingContentBody
  */
 export interface DrawingContentBody {
@@ -3908,6 +3895,19 @@ export interface DrawingElementResponse {
 	 * @memberof DrawingElementResponse
 	 */
 	timestamps: TimestampsResponse;
+}
+/**
+ *
+ * @export
+ * @interface SubmissionContainerContentBody
+ */
+export interface SubmissionContainerContentBody {
+	/**
+	 *
+	 * @type {string}
+	 * @memberof SubmissionContainerContentBody
+	 */
+	dueDate: string;
 }
 /**
  *
