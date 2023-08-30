@@ -146,41 +146,39 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("createColumn", () => {
-		describe("when everything works as expected", () => {
-			it("should not call createCardCall when board value is undefined", async () => {
-				const { createColumn, board } = setup();
-				board.value = undefined;
+		it("should not call createCardCall when board value is undefined", async () => {
+			const { createColumn, board } = setup();
+			board.value = undefined;
 
-				await createColumn();
-				await nextTick();
+			await createColumn();
+			await nextTick();
 
-				expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
-			});
+			expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
+		});
 
-			it("should call createColumnCall", async () => {
-				const { createColumn, board } = setup();
-				board.value = testBoard;
+		it("should call createColumnCall", async () => {
+			const { createColumn, board } = setup();
+			board.value = testBoard;
 
-				await createColumn();
-				await nextTick();
+			await createColumn();
+			await nextTick();
 
-				expect(mockedBoardApiCalls.createColumnCall).toHaveBeenCalledWith(
-					board.value.id
-				);
-			});
+			expect(mockedBoardApiCalls.createColumnCall).toHaveBeenCalledWith(
+				board.value.id
+			);
+		});
 
-			it("should call setEditModeId and return new column", async () => {
-				const { createColumn, board } = setup();
-				board.value = testBoard;
-				const newColumn = columnResponseFactory.build();
-				mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
+		it("should call setEditModeId and return new column", async () => {
+			const { createColumn, board } = setup();
+			board.value = testBoard;
+			const newColumn = columnResponseFactory.build();
+			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
-				const result = await createColumn();
-				await nextTick();
+			const result = await createColumn();
+			await nextTick();
 
-				expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
-				expect(result).toEqual(newColumn);
-			});
+			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
+			expect(result).toEqual(newColumn);
 		});
 
 		describe("when api returns an error", () => {
@@ -200,32 +198,30 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("createColumnWithCard", () => {
-		describe("when everything works as expected", () => {
-			it("should not call createColumnCall when board value is undefined", async () => {
-				const { createColumnWithCard, board } = setup();
-				board.value = undefined;
+		it("should not call createColumnCall when board value is undefined", async () => {
+			const { createColumnWithCard, board } = setup();
+			board.value = undefined;
 
-				await createColumnWithCard(card.cardId);
-				await nextTick();
+			await createColumnWithCard(card.cardId);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
-			});
+			expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
+		});
 
-			it("should create new column with card", async () => {
-				const { createColumnWithCard, board } = setup();
-				board.value = testBoard;
-				const newColumn = columnResponseFactory.build();
-				mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
+		it("should create new column with card", async () => {
+			const { createColumnWithCard, board } = setup();
+			board.value = testBoard;
+			const newColumn = columnResponseFactory.build();
+			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
-				await createColumnWithCard(card.cardId);
-				await nextTick();
+			await createColumnWithCard(card.cardId);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
-					card.cardId,
-					newColumn.id,
-					0
-				);
-			});
+			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
+				card.cardId,
+				newColumn.id,
+				0
+			);
 		});
 
 		describe("when api returns an error", () => {
@@ -245,29 +241,27 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("deleteCard", () => {
-		describe("when everything works as expected", () => {
-			it("should not call deleteCardCall when board value is undefined", async () => {
-				const { deleteCard, board } = setup();
-				board.value = undefined;
+		it("should not call deleteCardCall when board value is undefined", async () => {
+			const { deleteCard, board } = setup();
+			board.value = undefined;
 
-				await deleteCard(card.cardId);
-				await nextTick();
+			await deleteCard(card.cardId);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.deleteCardCall).not.toHaveBeenCalled();
-			});
+			expect(mockedBoardApiCalls.deleteCardCall).not.toHaveBeenCalled();
+		});
 
-			it("should delete card", async () => {
-				const { deleteCard, board } = setup();
-				board.value = testBoard;
+		it("should delete card", async () => {
+			const { deleteCard, board } = setup();
+			board.value = testBoard;
 
-				await deleteCard(card.cardId);
-				await nextTick();
+			await deleteCard(card.cardId);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
-					card.cardId
-				);
-				expect(board.value.columns[0].cards).toEqual([]);
-			});
+			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
+				card.cardId
+			);
+			expect(board.value.columns[0].cards).toEqual([]);
 		});
 
 		describe("when api returns an error", () => {
@@ -289,39 +283,37 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("deleteColumn", () => {
-		describe("when everything works as expected", () => {
-			it("should not call deleteColumnCall when board value is undefined", async () => {
-				const { deleteColumn, board } = setup();
-				board.value = undefined;
+		it("should not call deleteColumnCall when board value is undefined", async () => {
+			const { deleteColumn, board } = setup();
+			board.value = undefined;
 
-				await deleteColumn(card.cardId);
-				await nextTick();
+			await deleteColumn(card.cardId);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
-			});
+			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
+		});
 
-			it("should not call deleteColumnCall when column id is unkown", async () => {
-				const { deleteColumn, board } = setup();
-				board.value = testBoard;
+		it("should not call deleteColumnCall when column id is unkown", async () => {
+			const { deleteColumn, board } = setup();
+			board.value = testBoard;
 
-				await deleteColumn("unkown");
-				await nextTick();
+			await deleteColumn("unkown");
+			await nextTick();
 
-				expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
-			});
+			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
+		});
 
-			it("should delete column", async () => {
-				const { deleteColumn, board } = setup();
-				board.value = testBoard;
+		it("should delete column", async () => {
+			const { deleteColumn, board } = setup();
+			board.value = testBoard;
 
-				await deleteColumn(column.id);
-				await nextTick();
+			await deleteColumn(column.id);
+			await nextTick();
 
-				expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
-					column.id
-				);
-				expect(board.value.columns).toEqual([]);
-			});
+			expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
+				column.id
+			);
+			expect(board.value.columns).toEqual([]);
 		});
 
 		describe("when api returns an error", () => {
