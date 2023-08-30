@@ -1,10 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
-import FileContentElementInit from "./FileContentElementInit.vue";
-import FilePicker from "./FilePicker.vue";
-import { useSharedLastCreatedElement } from "@util-board";
 import { createMock } from "@golevelup/ts-jest";
+import { useSharedLastCreatedElement } from "@util-board";
+import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import FilePicker from "./FilePicker.vue";
+import FileUpload from "./FileUpload.vue";
 
 jest.mock("@util-board");
 const mockedUse = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
@@ -13,7 +13,7 @@ const useSharedLastCreatedElementMock = jest.mocked(
 );
 useSharedLastCreatedElementMock.mockReturnValue(mockedUse);
 
-describe(FileContentElementInit.name, () => {
+describe(FileUpload.name, () => {
 	const setupProps = (fileName: string) => ({
 		fileName,
 		elementId: "element 123",
@@ -25,7 +25,7 @@ describe(FileContentElementInit.name, () => {
 
 		const propsData = setupProps(fileName);
 
-		const wrapper = shallowMount(FileContentElementInit, {
+		const wrapper = shallowMount(FileUpload, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
 		});
@@ -41,7 +41,7 @@ describe(FileContentElementInit.name, () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const component = wrapper.findComponent(FileContentElementInit);
+		const component = wrapper.findComponent(FileUpload);
 		expect(component.exists()).toBe(true);
 	});
 

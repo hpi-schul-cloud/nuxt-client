@@ -10,49 +10,24 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
-		<template v-if="fileProperties && fileRecord">
-			<div v-if="fileProperties.previewUrl">
-				<ImageFileDisplay
-					:fileProperties="fileProperties"
-					:isEditMode="isEditMode"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<div v-else>
-				<FileContentElementDisplay
-					v-if="!isEditMode"
-					:fileProperties="fileProperties"
-				/>
-				<FileContentElementEdit
-					v-if="isEditMode && fileRecord"
-					:fileProperties="fileProperties"
-					:elementId="element.id"
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					:needsFileUpload="needsFileUpload"
-					@move-down:element="onMoveFileEditDown"
-					@move-up:element="onMoveFileEditUp"
-					@delete:element="onDeleteElement"
-				/>
-			</div>
-			<FileContentElementAlert
-				:previewStatus="fileRecord.previewStatus"
-				@on-status-reload="onFetchFile"
-			/>
-		</template>
-		<template v-else>
-			<FileContentElementInit
-				v-if="isEditMode && fileRecord === undefined"
-				:elementId="element.id"
-				@upload:file="onUploadFile"
-			/>
-		</template>
+		<FileContent
+			v-if="fileProperties"
+			:file-properties="fileProperties"
+			@fetch:file="onFetchFile"
+			:is-edit-mode="isEditMode"
+		/>
+		<FileUpload
+			v-else-if="isEditMode"
+			:elementId="element.id"
+			@upload:file="onUploadFile"
+		/>
+		<ContentElementMenu
+			v-if="isEditMode"
+			v-bind="elementPositionProps"
+			@move-down:element="onMoveElementDown"
+			@move-up:element="onMoveElementUp"
+			@delete:element="onDeleteElement"
+		/>
 	</v-card>
 </template>
 
@@ -68,20 +43,16 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { useFileStorageApi } from "../FileStorageApi.composable";
-import FileContentElementAlert from "./FileContentElementAlert.vue";
-import FileContentElementDisplay from "./FileContentElementDisplay.vue";
-import FileContentElementEdit from "./FileContentElementEdit.vue";
-import FileContentElementInit from "./FileContentElementInit.vue";
-import ImageFileDisplay from "./ImageFileDisplay.vue";
+import ContentElementMenu from "./ContentElementMenu.vue";
+import FileContent from "./FileContent.vue";
+import FileUpload from "./FileUpload.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
 	components: {
-		FileContentElementAlert,
-		FileContentElementDisplay,
-		FileContentElementEdit,
-		FileContentElementInit,
-		ImageFileDisplay,
+		FileUpload,
+		FileContent,
+		ContentElementMenu,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
@@ -123,6 +94,7 @@ export default defineComponent({
 				name: fileRecord.value.name,
 				url: fileRecord.value.url,
 				previewUrl,
+				previewStatus: fileRecord.value.previewStatus,
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
@@ -143,6 +115,14 @@ export default defineComponent({
 			return fileRecord.value !== undefined || props.isEditMode === true;
 		});
 
+		const elementPositionProps = computed(() => {
+			return {
+				isFirstElement: props.isFirstElement,
+				isLastElement: props.isLastElement,
+				hasMultipleElements: props.hasMultipleElements,
+			};
+		});
+
 		onMounted(() => {
 			(async () => {
 				await fetchFile();
@@ -157,11 +137,11 @@ export default defineComponent({
 			}
 		};
 
-		const onMoveFileEditDown = () => {
+		const onMoveElementDown = () => {
 			emit("move-down:edit");
 		};
 
-		const onMoveFileEditUp = () => {
+		const onMoveElementUp = () => {
 			emit("move-up:edit");
 		};
 
@@ -204,11 +184,12 @@ export default defineComponent({
 			modelValue,
 			needsFileUpload,
 			onDeleteElement,
+			onMoveElementDown,
+			onMoveElementUp,
 			onKeydownArrow,
-			onMoveFileEditDown,
-			onMoveFileEditUp,
 			onUploadFile,
 			onFetchFile,
+			elementPositionProps,
 		};
 	},
 });

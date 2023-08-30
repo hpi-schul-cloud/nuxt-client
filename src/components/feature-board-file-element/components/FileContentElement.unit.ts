@@ -17,7 +17,7 @@ import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 import FileContentElementEdit from "./FileContentElementEdit.vue";
-import FileContentElementInit from "./FileContentElementInit.vue";
+import FileUpload from "./FileUpload.vue";
 import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 jest.mock("@data-board", () => {
@@ -103,10 +103,8 @@ describe("FileContentElement", () => {
 
 				await wrapper.vm.$nextTick();
 
-				const fileContentElementInit = wrapper.findComponent(
-					FileContentElementInit
-				);
-				expect(fileContentElementInit.exists()).toBe(false);
+				const fileUpload = wrapper.findComponent(FileUpload);
+				expect(fileUpload.exists()).toBe(false);
 			});
 		});
 
@@ -453,17 +451,15 @@ describe("FileContentElement", () => {
 					expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 				});
 
-				it("should render fileContentElementInit component", async () => {
+				it("should render FileUpload component", async () => {
 					const { wrapper } = setup();
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					const fileContentElementInit = wrapper.findComponent(
-						FileContentElementInit
-					);
-					expect(fileContentElementInit.exists()).toBe(true);
+					const fileUpload = wrapper.findComponent(FileUpload);
+					expect(fileUpload.exists()).toBe(true);
 				});
 			});
 
@@ -496,7 +492,7 @@ describe("FileContentElement", () => {
 				it("should emit delete:element", async () => {
 					const { wrapper } = setup();
 
-					const initComponent = wrapper.findComponent(FileContentElementInit);
+					const initComponent = wrapper.findComponent(FileUpload);
 					initComponent.vm.$emit("upload:file", { fileName: "mysample.txt" });
 
 					await wrapper.vm.$nextTick();

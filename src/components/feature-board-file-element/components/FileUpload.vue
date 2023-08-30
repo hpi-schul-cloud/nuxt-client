@@ -21,7 +21,7 @@ import { defineComponent, ref, watch } from "vue";
 import FilePicker from "./FilePicker.vue";
 
 export default defineComponent({
-	name: "FileContentElementInit",
+	name: "FileUpload",
 	props: {
 		elementId: { type: String, required: true },
 	},
