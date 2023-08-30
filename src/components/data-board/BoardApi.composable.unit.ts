@@ -1,9 +1,11 @@
 import { ContentElementType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
+import { CardResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { AxiosPromise } from "axios";
 import { useBoardApi } from "./BoardApi.composable";
 
 let boardApi: DeepMocked<serverApi.BoardApiInterface>;
@@ -160,6 +162,28 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "file-element-id",
+				type: ContentElementType.SubmissionContainer,
+				content: {
+					dueDate: new Date().toISOString(),
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: PAYLOAD.content,
+				type: ContentElementType.SubmissionContainer,
+			};
+
+			await updateElementCall(PAYLOAD);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ data }
+			);
+		});
+
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const PAYLOAD = {
@@ -224,6 +248,18 @@ describe("BoardApi.composable", () => {
 	describe("createCardCall", () => {
 		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
+
+			const FAKE_RESPONSE = {
+				status: 200,
+				data: {
+					id: "my-little-fake-id",
+				},
+			};
+
+			columnApi.columnControllerCreateCard.mockResolvedValueOnce(
+				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
+			);
+
 			const PAYLOAD = "column-id";
 			const INITIAL_ELEMENTS = {
 				requiredEmptyElements: [
@@ -231,11 +267,14 @@ describe("BoardApi.composable", () => {
 				],
 			};
 
-			await createCardCall(PAYLOAD);
+			const result = await createCardCall(PAYLOAD);
+
 			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(
 				PAYLOAD,
 				INITIAL_ELEMENTS
 			);
+
+			expect(result).toBe(FAKE_RESPONSE.data);
 		});
 	});
 
@@ -351,6 +390,50 @@ describe("BoardApi.composable", () => {
 
 			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
 				FAKE_RESPONSE.data.id
+			);
+		});
+
+		it("should return id and name of the parent course/room", async () => {
+			const { getContextInfo } = useBoardApi();
+
+			const FAKE_BOARD_ID = "MY_BOARD_ID123";
+			const FAKE_RESPONSE = {
+				status: 200,
+				data: {
+					id: "someid",
+				},
+			};
+
+			const FAKE_ROOM_RESPONSE = {
+				status: 200,
+				data: {
+					roomId: "abc123",
+					title: "my greate course",
+				},
+			};
+
+			boardApi.boardControllerGetBoardContext = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_RESPONSE);
+			roomsApi.roomsControllerGetRoomBoard = jest
+				.fn()
+				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
+
+			const result = await getContextInfo(FAKE_BOARD_ID);
+
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
+				FAKE_BOARD_ID
+			);
+
+			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
+				FAKE_RESPONSE.data.id
+			);
+
+			expect(result).toEqual(
+				expect.objectContaining({
+					id: FAKE_ROOM_RESPONSE.data.roomId,
+					name: FAKE_ROOM_RESPONSE.data.title,
+				})
 			);
 		});
 	});
