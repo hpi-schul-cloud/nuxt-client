@@ -5,7 +5,6 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import CardHost from "../card/CardHost.vue";
 import {
 	useBoardPermissions,
@@ -18,7 +17,7 @@ import {
 } from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { computed, nextTick } from "vue";
+import Vue, { computed, nextTick } from "vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
