@@ -1,5 +1,5 @@
 <template>
-	<div class="pa-2 mr-2 mt-1">
+	<div class="download-btn">
 		<v-icon
 			data-testid="board-file-element-edit-menu-download"
 			@click="onDownload"
@@ -34,3 +34,10 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.download-btn {
+	margin: 10px 14px 0px 0px;
+	padding: 0px;
+}
+</style>
