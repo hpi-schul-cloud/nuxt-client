@@ -6,12 +6,12 @@
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
 		</div>
-		<v-card-text v-else>
+		<div class="progress-bar" v-else>
 			<v-progress-linear
 				data-testid="board-file-element-progress-bar"
 				indeterminate
-			></v-progress-linear>
-		</v-card-text>
+			/>
+		</div>
 	</div>
 </template>
 
@@ -60,3 +60,11 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.progress-bar {
+	min-height: 52px;
+	margin: 0px 48px 0px 16px;
+	display: flex;
+	align-items: center;
+}
+</style>
