@@ -2,6 +2,7 @@
 	<div>
 		<div v-if="!fileWasPicked" class="grey lighten-3">
 			<FilePicker
+				class="mr-12"
 				@update:file="onFileSelect"
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
