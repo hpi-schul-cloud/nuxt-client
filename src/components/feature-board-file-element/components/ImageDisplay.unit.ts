@@ -1,8 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementMenu from "./FileContentElementMenu.vue";
-import ImageFileDisplay from "./ImageFileDisplay.vue";
+import ImageDisplay from "./ImageDisplay.vue";
 
-describe("ImageFileDisplay", () => {
+describe("ImageDisplay", () => {
 	const setupProps = () => ({
 		fileProperties: {
 			name: "file-record #1.txt",
@@ -22,7 +21,7 @@ describe("ImageFileDisplay", () => {
 
 		const propsData = setupProps();
 
-		const wrapper = shallowMount(ImageFileDisplay, {
+		const wrapper = shallowMount(ImageDisplay, {
 			propsData: { ...propsData, isEditMode },
 		});
 
@@ -40,7 +39,7 @@ describe("ImageFileDisplay", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const fileContentElement = wrapper.findComponent(ImageFileDisplay);
+		const fileContentElement = wrapper.findComponent(ImageDisplay);
 
 		expect(fileContentElement.exists()).toBe(true);
 	});
@@ -67,92 +66,5 @@ describe("ImageFileDisplay", () => {
 		const alt = wrapper.find("v-img").attributes("alt");
 
 		expect(alt).toBe(fileNameProp);
-	});
-
-	describe("when component is not in edit mode", () => {
-		it("should NOT render the FileContentElementMenu", () => {
-			const { wrapper } = setup();
-
-			const menu = wrapper.findComponent(FileContentElementMenu);
-
-			expect(menu.exists()).toBe(false);
-		});
-	});
-
-	describe("when component is in edit mode", () => {
-		it("should render the FileContentElementMenu", () => {
-			const { wrapper } = setup(true);
-
-			const menu = wrapper.findComponent(FileContentElementMenu);
-
-			expect(menu.exists()).toBe(true);
-		});
-
-		it("should hand over fileName prop correctly to FileContentElementMenu", () => {
-			const { wrapper, fileNameProp } = setup(true);
-
-			const fileName = wrapper
-				.findComponent(FileContentElementMenu)
-				.props("fileName");
-
-			expect(fileName).toBe(fileNameProp);
-		});
-
-		it("should hand over isFirstElement prop correctly to FileContentElementMenu", () => {
-			const { wrapper, isFirstElementProp } = setup(true);
-
-			const isFirstElement = wrapper
-				.findComponent(FileContentElementMenu)
-				.props("isFirstElement");
-
-			expect(isFirstElement).toBe(isFirstElementProp);
-		});
-
-		it("should hand over isLastElement prop correctly to FileContentElementMenu", () => {
-			const { wrapper, isLastElementProp } = setup(true);
-
-			const isLastElement = wrapper
-				.findComponent(FileContentElementMenu)
-				.props("isLastElement");
-
-			expect(isLastElement).toBe(isLastElementProp);
-		});
-
-		it("should hand over hasMultipleElements prop correctly to FileContentElementMenu", () => {
-			const { wrapper, hasMultipleElementsProp } = setup(true);
-
-			const hasMultipleElements = wrapper
-				.findComponent(FileContentElementMenu)
-				.props("hasMultipleElements");
-
-			expect(hasMultipleElements).toBe(hasMultipleElementsProp);
-		});
-
-		it("should forward delete:element from FileContentElementMenu", () => {
-			const { wrapper } = setup(true);
-			const menu = wrapper.findComponent(FileContentElementMenu);
-
-			menu.vm.$emit("delete:element");
-
-			expect(wrapper.emitted("delete:element")).toHaveLength(1);
-		});
-
-		it("should forward move-down:element from FileContentElementMenu", () => {
-			const { wrapper } = setup(true);
-			const menu = wrapper.findComponent(FileContentElementMenu);
-
-			menu.vm.$emit("move-down:element");
-
-			expect(wrapper.emitted("move-down:element")).toHaveLength(1);
-		});
-
-		it("should forward move-down:up from FileContentElementMenu", () => {
-			const { wrapper } = setup(true);
-			const menu = wrapper.findComponent(FileContentElementMenu);
-
-			menu.vm.$emit("move-up:element");
-
-			expect(wrapper.emitted("move-up:element")).toHaveLength(1);
-		});
 	});
 });
