@@ -4,10 +4,13 @@ import ImageFileDisplay from "./ImageFileDisplay.vue";
 
 describe("ImageFileDisplay", () => {
 	const setupProps = () => ({
+		fileProperties: {
+			name: "file-record #1.txt",
+			url: "1/file-record #1.txt",
+			previewUrl: "preview/1/file-record #1.txt",
+			isDownloadAllowed: true,
+		},
 		fileId: "file-id #1",
-		fileName: "file-record #1.txt",
-		url: "1/file-record #1.txt",
-		isDownloadAllowed: true,
 		isEditMode: false,
 		isFirstElement: true,
 		isLastElement: false,
@@ -25,9 +28,9 @@ describe("ImageFileDisplay", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileName,
-			isDownloadAllowedProp: propsData.isDownloadAllowed,
-			urlProp: propsData.url,
+			fileNameProp: propsData.fileProperties.name,
+			isDownloadAllowedProp: propsData.fileProperties.isDownloadAllowed,
+			previewUrl: propsData.fileProperties.previewUrl,
 			isFirstElementProp: propsData.isFirstElement,
 			isLastElementProp: propsData.isLastElement,
 			hasMultipleElementsProp: propsData.hasMultipleElements,
@@ -51,11 +54,11 @@ describe("ImageFileDisplay", () => {
 	});
 
 	it("should have set src correctly", () => {
-		const { wrapper, urlProp } = setup();
+		const { wrapper, previewUrl } = setup();
 
 		const src = wrapper.find("v-img").attributes("src");
 
-		expect(src).toBe(urlProp);
+		expect(src).toBe(previewUrl);
 	});
 
 	it("should have set alt correctly", () => {
@@ -93,14 +96,6 @@ describe("ImageFileDisplay", () => {
 				.props("fileName");
 
 			expect(fileName).toBe(fileNameProp);
-		});
-
-		it("should hand over url prop correctly to FileContentElementMenu", () => {
-			const { wrapper, urlProp } = setup(true);
-
-			const url = wrapper.findComponent(FileContentElementMenu).props("url");
-
-			expect(url).toBe(urlProp);
 		});
 
 		it("should hand over isFirstElement prop correctly to FileContentElementMenu", () => {
