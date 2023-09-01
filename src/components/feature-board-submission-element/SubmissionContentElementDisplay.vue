@@ -28,48 +28,42 @@
 			data-testid="board-submission-element-due-date"
 		>
 			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
-			<SubmissionContentElementDisplayStudent />
+
+			<SubmissionItemStudentDisplay v-if="isStudent" />
 		</v-card-text>
 	</div>
 </template>
 
 <script lang="ts">
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent } from "vue";
-import SubmissionContentElementDisplayStudent from "./SubmissionContentElementDisplayStudent.vue";
-import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
+import { defineComponent, ref, computed } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
+	components: {
+		SubmissionItemStudentDisplay,
+	},
 	props: {
-		submissionContainerId: {
-			type: String,
-			required: true,
-		},
 		dueDate: {
 			type: String,
 			required: true,
 		},
 	},
-	components: {
-		SubmissionContentElementDisplayStudent,
-	},
-	setup(props) {
-		const { getSubmissionItems, createSubmissionItem } = useSubmissionItemApi();
+	setup() {
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const userRoles = ref(authModule.getUserRoles);
 
-		const getIt = async () => {
-			const submissionItem = await getSubmissionItems(
-				props.submissionContainerId
-			);
-			console.log(submissionItem);
-			// now create it
-			// createSubmissionItem(props.submissionContainerId);
-		};
-
-		getIt();
+		console.log(userRoles);
+		const isStudent = computed(() => {
+			return userRoles.value.includes("student");
+		});
 
 		return {
+			isStudent,
 			dayjs,
 			mdiLightbulbOnOutline,
 		};
