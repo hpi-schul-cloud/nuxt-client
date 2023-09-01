@@ -5,19 +5,28 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "@data-board";
+import {
+	useBoardPermissions,
+	useEditMode,
+	useSharedEditMode,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import Vue, { computed, nextTick } from "vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
+const { isDragging, dragEnd } = useDragAndDrop();
+
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+jest.mocked(useSharedEditMode);
 
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
@@ -34,6 +43,15 @@ describe("BoardColumn", () => {
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+
+		const mockedUseEditMode = jest.mocked(useEditMode);
+
+		const isEditMode = computed(() => true);
+		mockedUseEditMode.mockReturnValue({
+			isEditMode,
+			startEditMode: jest.fn(),
+			stopEditMode: jest.fn(),
 		});
 
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
@@ -113,6 +131,41 @@ describe("BoardColumn", () => {
 		});
 	});
 
+	describe("when a card is started dragging", () => {
+		beforeEach(() => {
+			dragEnd();
+		});
+		describe("if payload has 'cardId'", () => {
+			it("should set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: { cardId: "card-id", height: 100 },
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(true);
+			});
+		});
+
+		describe("if payload doesn't have 'cardId'", () => {
+			it("should not set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: "12345",
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(false);
+			});
+		});
+	});
+
 	describe("user permissions", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {
@@ -132,6 +185,21 @@ describe("BoardColumn", () => {
 
 				expect(addCardComponent.length).toStrictEqual(0);
 			});
+		});
+	});
+
+	describe("when reload:board was triggered by a card", () => {
+		it("should emit reload:board", async () => {
+			setup();
+
+			const cardComponents = wrapper.findAllComponents({
+				name: "CardHost",
+			});
+			cardComponents.at(0).vm.$emit("reload:board");
+			await nextTick();
+
+			const emitted = wrapper.emitted("reload:board");
+			expect(emitted).toHaveLength(1);
 		});
 	});
 });

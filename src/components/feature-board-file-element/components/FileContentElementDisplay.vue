@@ -1,5 +1,5 @@
 <template>
-	<div v-if="fileName !== ''">
+	<div v-if="fileProperties.name !== ''">
 		<v-list-item
 			class="grey lighten-3 px-2 rounded-t-sm"
 			data-testid="board-file-element-display"
@@ -16,40 +16,36 @@
 			</v-list-item-icon>
 
 			<v-list-item-content>
-				<a
-					v-if="isDownloadAllowed"
-					class="subtitle-1 d-inline-block text-truncate"
-					data-testid="board-file-element-display-file-name-link"
-					:download="fileName"
-					:href="url"
-					>{{ fileName }}</a
-				>
 				<span
-					v-else
 					class="subtitle-1 d-inline-block text-truncate"
 					data-testid="board-file-element-display-file-name"
-					>{{ fileName }}</span
+					>{{ fileProperties.name }}</span
 				>
 			</v-list-item-content>
 		</v-list-item>
-		<FileContentElementChips :fileSize="fileSize" :fileName="fileName" />
+		<FileContentElementFooter
+			:fileProperties="fileProperties"
+		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
-import FileContentElementChips from "./FileContentElementChips.vue";
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
+import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "FileContentElementDisplay",
-	props: {
-		fileName: { type: String, required: true },
-		fileSize: { type: Number, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
+	components: {
+		FileContentElementFooter,
 	},
-	components: { FileContentElementChips },
+	props: {
+		fileProperties: {
+			type: Object as PropType<FileProperties>,
+			required: true,
+		},
+	},
 	setup() {
 		return {
 			mdiFileDocumentOutline,

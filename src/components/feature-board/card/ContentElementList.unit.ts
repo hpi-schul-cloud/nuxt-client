@@ -1,12 +1,17 @@
 import { ContentElementType } from "@/serverApi/v3";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, Wrapper, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import ContentElementList from "./ContentElementList.vue";
-import { RichTextContentElement } from "@feature-board-text-element";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
+import { RichTextContentElement } from "@feature-board-text-element";
+import { createMock } from "@golevelup/ts-jest";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ContentElementList from "./ContentElementList.vue";
 
 describe("ContentElementList", () => {
 	let wrapper: Wrapper<Vue>;
@@ -16,9 +21,20 @@ describe("ContentElementList", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
+
+		const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: createMock<Envs>({
+				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			}),
+		});
+
 		wrapper = shallowMount(ContentElementList as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: { ...props },
+			provide: {
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+			},
 		});
 	};
 

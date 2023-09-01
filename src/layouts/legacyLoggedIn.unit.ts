@@ -82,7 +82,7 @@ describe("legacyLoggedIn", () => {
 			},
 			mocks: {
 				$theme: {
-					short_name: "instance name",
+					name: "instance name",
 				},
 				$router,
 				$route,

@@ -10,6 +10,8 @@ import RoomModule from "@/store/room";
 import VideoConferenceModule from "@/store/video-conference";
 import StatusAlertsModule from "@/store/status-alerts";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import SystemsModule from "@/store/systems";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -30,3 +32,7 @@ export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
 export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> =
 	Symbol("statusAlertsModule");
+export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationModule> =
+	Symbol("userLoginMigrationModule");
+export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> =
+	Symbol("systemsModule");

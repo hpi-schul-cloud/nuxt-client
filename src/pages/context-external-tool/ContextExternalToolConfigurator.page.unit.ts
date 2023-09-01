@@ -258,7 +258,7 @@ describe("ContextExternalToolConfigurator", () => {
 				).toHaveBeenCalledWith<[ContextExternalToolSave]>({
 					contextId,
 					contextType,
-					displayName: undefined,
+					displayName: template.name,
 					schoolToolId: template.schoolExternalToolId,
 					toolVersion: template.version,
 					parameters: [
@@ -357,7 +357,7 @@ describe("ContextExternalToolConfigurator", () => {
 					contextExternalTool: {
 						contextId,
 						contextType,
-						displayName: undefined,
+						displayName: template.name,
 						parameters: [],
 						toolVersion: template.version,
 						schoolToolId: template.schoolExternalToolId,

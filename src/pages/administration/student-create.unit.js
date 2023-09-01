@@ -43,9 +43,6 @@ describe("students/new", () => {
 		const wrapper = mount(NewStudent, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
 			mocks: {
-				$theme: {
-					short_name: "instance name",
-				},
 				$user: { schoolId: "123" },
 			},
 		});

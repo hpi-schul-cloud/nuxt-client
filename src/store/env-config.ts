@@ -41,9 +41,9 @@ export default class EnvConfigModule extends VuexModule {
 		I18N__DEFAULT_LANGUAGE: "",
 		I18N__DEFAULT_TIMEZONE: "",
 		SC_TITLE: "",
-		SC_SHORT_TITLE: "",
 		FILES_STORAGE__MAX_FILE_SIZE: 0,
 		FEATURE_SHOW_OUTDATED_USERS: false,
+		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -172,6 +172,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getShowOutdatedUsers(): boolean {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS ?? false;
+	}
+
+	get getEnableLdapSyncDuringMigration(): boolean {
+		return this.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION ?? false;
 	}
 
 	get getCtlContextConfigurationEnabled(): boolean {

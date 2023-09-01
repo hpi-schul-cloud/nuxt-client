@@ -132,20 +132,20 @@
 </template>
 
 <script>
-import { envConfigModule, finishedTasksModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
+import { envConfigModule, finishedTasksModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import {
+	mdiArchiveOutline,
 	mdiContentCopy,
 	mdiDotsVertical,
 	mdiPencilOutline,
+	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-	mdiShareVariantOutline,
-	mdiArchiveOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
-import { CopyParamsTypeEnum } from "@/store/copy";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

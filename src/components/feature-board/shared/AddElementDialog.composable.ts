@@ -1,14 +1,16 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 type AddCardElement = (
 	type: ContentElementType
 ) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
@@ -33,14 +35,17 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
-		{
+	];
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+		options.push({
 			icon: mdiLightbulbOnOutline,
 			label:
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
-		},
-	];
+		});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;
