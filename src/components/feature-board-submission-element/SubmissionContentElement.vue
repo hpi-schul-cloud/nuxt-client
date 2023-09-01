@@ -14,7 +14,8 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
-				:submissionItems="submissionItems"
+				:completed="completed"
+				@update:completed="updateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -66,9 +67,8 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
-		const { submissionItems } = useSubmissionContentElementState(
-			props.element.id
-		);
+		const { completed, updateSubmissionItem } =
+			useSubmissionContentElementState(props.element.id);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -102,14 +102,19 @@ export default defineComponent({
 			}
 		};
 
+		const updateCompleted = (completed: boolean) => {
+			updateSubmissionItem(completed);
+		};
+
 		return {
 			isOutlined,
 			submissionContentElement,
-			submissionItems,
+			completed,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
+			updateCompleted,
 		};
 	},
 });

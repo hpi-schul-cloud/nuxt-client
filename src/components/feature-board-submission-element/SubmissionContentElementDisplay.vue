@@ -31,7 +31,8 @@
 
 			<SubmissionItemStudentDisplay
 				v-if="isStudent"
-				:submissionItems="submissionItems"
+				:completed="completed"
+				@update:completed="updateCompleted"
 			/>
 		</v-card-text>
 	</div>
@@ -41,9 +42,8 @@
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { SubmissionItemResponse } from "@/serverApi/v3";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent, ref, computed, PropType } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -52,8 +52,8 @@ export default defineComponent({
 		SubmissionItemStudentDisplay,
 	},
 	props: {
-		submissionItems: {
-			type: Array as PropType<Array<SubmissionItemResponse>>,
+		completed: {
+			type: Boolean,
 			required: true,
 		},
 		dueDate: {
@@ -61,7 +61,8 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
+	emits: ["update:completed"],
+	setup(props, { emit }) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const userRoles = ref(authModule.getUserRoles);
 
@@ -69,9 +70,14 @@ export default defineComponent({
 			return userRoles.value.includes("student");
 		});
 
+		const updateCompleted = (completed: boolean) => {
+			emit("update:completed", completed);
+		};
+
 		return {
 			isStudent,
 			dayjs,
+			updateCompleted,
 			mdiLightbulbOnOutline,
 		};
 	},

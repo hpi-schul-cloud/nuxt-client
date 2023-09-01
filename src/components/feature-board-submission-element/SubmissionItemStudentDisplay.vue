@@ -1,28 +1,27 @@
 <template>
 	<div>
-		<v-checkbox v-model="completed" label="erledigt"></v-checkbox>
+		<v-checkbox v-model="modelValue" label="erledigt"></v-checkbox>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { defineComponent } from "vue";
+import { useVModel } from "@vueuse/core";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplayStudent",
 	props: {
-		submissionItems: {
-			type: Array as PropType<Array<SubmissionItemResponse>>,
+		completed: {
+			type: Boolean,
 			required: true,
 		},
 	},
-	setup(props) {
-		const completed = computed(() => {
-			return props.submissionItems[0]?.completed;
-		});
+	emits: ["update:completed"],
+	setup(props, { emit }) {
+		const modelValue = useVModel(props, "completed", emit);
 
 		return {
-			completed,
+			modelValue,
 		};
 	},
 });
