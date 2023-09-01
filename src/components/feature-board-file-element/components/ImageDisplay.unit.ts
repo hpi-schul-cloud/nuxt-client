@@ -3,17 +3,9 @@ import ImageDisplay from "./ImageDisplay.vue";
 
 describe("ImageDisplay", () => {
 	const setupProps = () => ({
-		fileProperties: {
-			name: "file-record #1.txt",
-			url: "1/file-record #1.txt",
-			previewUrl: "preview/1/file-record #1.txt",
-			isDownloadAllowed: true,
-		},
-		fileId: "file-id #1",
+		name: "file-record #1.txt",
+		previewUrl: "preview/1/file-record #1.txt",
 		isEditMode: false,
-		isFirstElement: true,
-		isLastElement: false,
-		hasMultipleElements: false,
 	});
 
 	const setup = (isEditMode = false) => {
@@ -27,12 +19,8 @@ describe("ImageDisplay", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileProperties.name,
-			isDownloadAllowedProp: propsData.fileProperties.isDownloadAllowed,
-			previewUrl: propsData.fileProperties.previewUrl,
-			isFirstElementProp: propsData.isFirstElement,
-			isLastElementProp: propsData.isLastElement,
-			hasMultipleElementsProp: propsData.hasMultipleElements,
+			fileNameProp: propsData.name,
+			previewUrl: propsData.previewUrl,
 		};
 	};
 
