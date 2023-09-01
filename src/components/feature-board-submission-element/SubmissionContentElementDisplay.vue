@@ -29,7 +29,10 @@
 		>
 			{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
 
-			<SubmissionItemStudentDisplay v-if="isStudent" />
+			<SubmissionItemStudentDisplay
+				v-if="isStudent"
+				:submissionItems="submissionItems"
+			/>
 		</v-card-text>
 	</div>
 </template>
@@ -38,8 +41,9 @@
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { SubmissionItemResponse } from "@/serverApi/v3";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -48,6 +52,10 @@ export default defineComponent({
 		SubmissionItemStudentDisplay,
 	},
 	props: {
+		submissionItems: {
+			type: Array as PropType<Array<SubmissionItemResponse>>,
+			required: true,
+		},
 		dueDate: {
 			type: String,
 			required: true,
@@ -57,7 +65,6 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const userRoles = ref(authModule.getUserRoles);
 
-		console.log(userRoles);
 		const isStudent = computed(() => {
 			return userRoles.value.includes("student");
 		});

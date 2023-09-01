@@ -14,7 +14,7 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
-				:submissionContainerId="element.id"
+				:submissionItems="submissionItems"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -35,6 +35,7 @@ import { computed, defineComponent, PropType, ref } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -65,6 +66,9 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
+		const { submissionItems } = useSubmissionContentElementState(
+			props.element.id
+		);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -101,6 +105,7 @@ export default defineComponent({
 		return {
 			isOutlined,
 			submissionContentElement,
+			submissionItems,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,

@@ -1,29 +1,27 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 
-export const useSubmissionItemState = () => {
+export const useSubmissionItemState = (id: string) => {
 	const {
 		createSubmissionItemCall,
 		fetchSubmissionItemsCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
 
-	const updateSubmissionItem = async (columnId: string, newTitle: string) => {
-		// if (board.value === undefined) return;
-		// try {
-		// 	await updateSubmissionItemCall();
-		// 	const columnIndex = getColumnIndex(columnId);
-		// 	if (columnIndex > -1) {
-		// 		board.value.columns[columnIndex].title = newTitle;
-		// 	}
-		// } catch (error) {
-		// 	handleError(error, {
-		// 		404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
-		// 	});
-		// }
-		return "todo";
+	const createSubmissionItem = async () => {
+		console.log("createSubmissionItem");
+	};
+
+	const getSubmissionItems = async () => {
+		console.log("getSubmissionItems");
+	};
+
+	const updateSubmissionItem = async () => {
+		console.log("getSubmissionItems");
 	};
 
 	return {
+		createSubmissionItem,
+		getSubmissionItems,
 		updateSubmissionItem,
 	};
 };
