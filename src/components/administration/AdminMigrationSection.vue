@@ -213,18 +213,19 @@ export default defineComponent({
 			() => schoolsModule.getOauthMigration
 		);
 
-		const setMigration = (available: boolean, mandatory: boolean) => {
+		const setMigration = async (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,
 				oauthMigrationMandatory: mandatory,
 				oauthMigrationFinished: !available,
 			};
-			schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.fetchSchool();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(school, () => {
-			schoolsModule.fetchSchoolOAuthMigration();
+		watch(school, async () => {
+			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
 		const isShowEndWarning: Ref<boolean> = ref(false);
@@ -303,8 +304,8 @@ export default defineComponent({
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setSchoolFeatures = () => {
-			schoolsModule.update({
+		const setSchoolFeatures = async () => {
+			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
 			});
