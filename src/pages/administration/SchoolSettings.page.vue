@@ -24,14 +24,7 @@
 			<h2 class="text-h4">
 				{{ currentSchoolYear }}
 			</h2>
-			<p>
-				{{
-					$t(
-						"pages.administration.school.index.longText.provideStudentsAndTheirParents"
-					)
-				}}
-			</p>
-			<v-divider class="my-sm-6 my-md-8"></v-divider>
+			<v-divider class="my-sm-6 my-md-3"></v-divider>
 			<v-row>
 				<v-col>
 					<general-settings />
