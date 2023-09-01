@@ -78,9 +78,6 @@ export default {
 		systems() {
 			return schoolsModule.getSystems;
 		},
-		currentYear() {
-			return schoolsModule.getCurrentYear;
-		},
 		loading() {
 			return schoolsModule.getLoading;
 		},
@@ -94,7 +91,9 @@ export default {
 		isOauthMigrationEnabled: () =>
 			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
-			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
+			return `${this.$t("common.words.schoolYear")} ${
+				schoolsModule.getCurrentYear.name
+			}`;
 		},
 	},
 	watch: {
@@ -105,13 +104,10 @@ export default {
 				if (
 					!schoolsModule.getFederalState ||
 					!schoolsModule.getFederalState._id ||
-					!schoolsModule.currentYear ||
-					!schoolsModule.currentYear._id ||
 					!schoolsModule.systems ||
 					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 				) {
-					schoolsModule.fetchCurrentYear();
 					schoolsModule.fetchSystems();
 					schoolsModule.fetchFederalState();
 				}

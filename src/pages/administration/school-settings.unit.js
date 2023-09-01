@@ -20,7 +20,12 @@ const school = {
 		{ $oid: "0000d186816abba584714c91" },
 		{ $oid: "0000d186816abba584714c90" },
 	],
-	currentYear: { $oid: "5ebd6dc14a431f75ec9a3e77" },
+	currentYear: {
+		_id: "5ebd6dc14a431f75ec9a3e77",
+		name: "2021/22",
+		startDate: "2021-08-01T00:00:00.000Z",
+		endDate: "2022-07-31T00:00:00.000Z",
+	},
 	purpose: "demo",
 	enableStudentTeamCreation: false,
 	officialSchoolNumber: "123",
@@ -37,14 +42,6 @@ const school = {
 			LERNSTORE_VIEW: true,
 		},
 	},
-};
-
-const year = {
-	_id: "5ebd6dc14a431f75ec9a3e77",
-	name: "2021/22",
-	startDate: "2021-08-01T00:00:00.000Z",
-	endDate: "2022-07-31T00:00:00.000Z",
-	isTeamCreationByStudentsEnabled: true,
 };
 
 const federalState = {
@@ -134,12 +131,11 @@ const mockStore = {
 				return [{ _id: "123", type: "itslearning" }];
 			},
 			getCurrentYear: () => {
-				return year;
+				return school.currentYear;
 			},
 		},
 		actions: {
 			update: jest.fn(),
-			fetchCurrentYear: jest.fn(),
 		},
 	},
 };
@@ -150,11 +146,6 @@ setupStores({
 	schoolsModule: SchoolsModule,
 });
 
-const fetchYearSpy = jest
-	.spyOn(schoolsModule, "fetchCurrentYear")
-	.mockImplementation(() => {
-		schoolsModule.setCurrentYear(year);
-	});
 const fetchSystemsSpy = jest
 	.spyOn(schoolsModule, "fetchSystems")
 	.mockImplementation(() => {
@@ -168,9 +159,7 @@ const fetchFederalStateSpy = jest
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
-		// schoolsModule.setSchool(school);
-		// schoolsModule.setFederalState(federalState);
-		schoolsModule.setCurrentYear(year);
+		schoolsModule.setSchool(school);
 		schoolsModule.setSystems([]);
 		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
@@ -345,7 +334,6 @@ describe("SchoolSettingPage", () => {
 			}),
 		});
 		await wrapper.vm.$nextTick();
-		expect(fetchYearSpy).toHaveBeenCalled();
 		expect(fetchSystemsSpy).toHaveBeenCalled();
 		expect(fetchFederalStateSpy).toHaveBeenCalled();
 	});
