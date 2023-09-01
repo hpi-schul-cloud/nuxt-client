@@ -1,6 +1,8 @@
-import { I18N_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import AuthModule from "@/store/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 
 describe("SubmissionContentElementDisplay", () => {
@@ -10,11 +12,16 @@ describe("SubmissionContentElementDisplay", () => {
 		const propsData = {
 			dueDate: "01.01.2023 01:23",
 		};
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: ["student"],
+		});
+
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 		});
 
