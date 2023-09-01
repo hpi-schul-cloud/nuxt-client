@@ -78,7 +78,13 @@ export default class SchoolsModule extends VuexModule {
 		updatedAt: "",
 		createdAt: "",
 		__v: 0,
-		currentYear: "",
+		currentYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+			__v: 0,
+		},
 		purpose: "",
 		features: {
 			rocketChat: false,
@@ -95,15 +101,6 @@ export default class SchoolsModule extends VuexModule {
 		documentBaseDir: "",
 		isExternal: false,
 		id: "",
-		years: {},
-		isTeamCreationByStudentsEnabled: false,
-	};
-	currentYear: Year = {
-		_id: "",
-		name: "",
-		startDate: "",
-		endDate: "",
-		__v: 0,
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
 	};
@@ -136,11 +133,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setCurrentYear(currentYear: Year): void {
-		this.currentYear = currentYear;
-	}
-
-	@Mutation
 	setFederalState(federalState: FederalState): void {
 		this.federalState = federalState;
 	}
@@ -170,7 +162,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get getCurrentYear(): Year {
-		return this.currentYear;
+		return this.school.currentYear;
 	}
 
 	get getFederalState(): FederalState {
@@ -220,8 +212,6 @@ export default class SchoolsModule extends VuexModule {
 
 				this.setSchool(transformSchoolServerToClient(school));
 
-				await this.fetchCurrentYear();
-
 				this.setLoading(false);
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
@@ -248,28 +238,6 @@ export default class SchoolsModule extends VuexModule {
 			).data;
 
 			this.setFederalState(data);
-			this.setLoading(false);
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async fetchCurrentYear(): Promise<void> {
-		this.setLoading(true);
-		try {
-			const currentYear = (
-				await $axios.get<Year>(`/v1/years/${this.school.currentYear}`)
-			).data;
-			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
