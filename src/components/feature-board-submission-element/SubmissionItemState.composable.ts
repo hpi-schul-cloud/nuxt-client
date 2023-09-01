@@ -1,18 +1,11 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 
-export const useSubmissionItemState = (id: string) => {
-	const {
-		createSubmissionItemCall,
-		fetchSubmissionItemsCall,
-		updateSubmissionItemCall,
-	} = useSubmissionItemApi();
+export const useSubmissionItemState = () => {
+	const { createSubmissionItemCall, updateSubmissionItemCall } =
+		useSubmissionItemApi();
 
 	const createSubmissionItem = async () => {
 		console.log("createSubmissionItem");
-	};
-
-	const getSubmissionItems = async () => {
-		console.log("getSubmissionItems");
 	};
 
 	const updateSubmissionItem = async () => {
@@ -21,7 +14,6 @@ export const useSubmissionItemState = (id: string) => {
 
 	return {
 		createSubmissionItem,
-		getSubmissionItems,
 		updateSubmissionItem,
 	};
 };
