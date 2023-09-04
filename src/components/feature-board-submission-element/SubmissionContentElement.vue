@@ -73,7 +73,8 @@ export default defineComponent({
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const isOutlined = computed(() => {
-			return props.isEditMode === true;
+			// return props.isEditMode === true;
+			return true;
 		});
 
 		const onKeydownArrow = (event: KeyboardEvent) => {

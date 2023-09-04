@@ -1,6 +1,10 @@
 <template>
-	<div>
-		<v-checkbox v-model="modelValue" label="erledigt"></v-checkbox>
+	<div class="white px-4">
+		<v-checkbox
+			v-model="modelValue"
+			:disabled="!editable"
+			:label="$t('components.cardElement.submissionElement.completed')"
+		></v-checkbox>
 	</div>
 </template>
 
@@ -11,6 +15,10 @@ import { useVModel } from "@vueuse/core";
 export default defineComponent({
 	name: "SubmissionContentElementDisplayStudent",
 	props: {
+		editable: {
+			type: Boolean,
+			required: true,
+		},
 		completed: {
 			type: Boolean,
 			required: true,
