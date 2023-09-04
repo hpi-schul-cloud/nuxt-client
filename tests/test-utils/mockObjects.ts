@@ -67,7 +67,13 @@ export const mockSchool: School = {
 	updatedAt: "",
 	createdAt: "",
 	__v: 0,
-	currentYear: "",
+	currentYear: {
+		_id: "",
+		name: "",
+		startDate: "",
+		endDate: "",
+		__v: 0,
+	},
 	purpose: "",
 	features: {
 		rocketChat: false,
