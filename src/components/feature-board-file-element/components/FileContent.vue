@@ -3,14 +3,14 @@
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
 		<FileContentElementFooter :fileProperties="fileProperties" />
 		<FileContentElementAlert
-			:previewStatus="fileProperties.previewStatus"
+			:previewStatus="previewStatus"
 			@on-status-reload="onFetchFile"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import FileContentElementAlert from "./FileContentElementAlert.vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileDisplay from "./FileDisplay.vue";
@@ -36,7 +36,9 @@ export default defineComponent({
 			emit("fetch:file");
 		};
 
-		return { onFetchFile };
+		const previewStatus = computed(() => props.fileProperties.previewStatus);
+
+		return { onFetchFile, previewStatus };
 	},
 });
 </script>
