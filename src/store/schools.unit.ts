@@ -91,7 +91,7 @@ describe("schools module", () => {
 					"/v1/schools/sampleSchoolId "
 				);
 
-				expect(setLoadingSpy).toHaveBeenCalledTimes(4);
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSchoolSpy).toHaveBeenCalled();
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
@@ -105,7 +105,6 @@ describe("schools module", () => {
 						enableLdapSyncDuringMigration: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[3][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
@@ -203,61 +202,6 @@ describe("schools module", () => {
 
 				await schoolsModule.fetchFederalState();
 
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-			});
-		});
-
-		describe("fetchCurrentYear", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			it("should trigger call backend and sets state correctly", async () => {
-				axiosInitializer();
-				getRequestReturn = { data: "dummy response" };
-				const schoolsModule = new SchoolsModule({});
-				schoolsModule.setSchool({
-					...mockSchool,
-					currentYear: "yearId",
-				});
-
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setCurrentYearSpy = jest.spyOn(schoolsModule, "setCurrentYear");
-
-				await schoolsModule.fetchCurrentYear();
-
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("/v1/years/yearId");
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setCurrentYearSpy).toHaveBeenCalled();
-				expect(setCurrentYearSpy.mock.calls[0][0]).toStrictEqual(
-					"dummy response"
-				);
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-			});
-			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
-
-				const schoolsModule = new SchoolsModule({});
-				schoolsModule.setSchool({
-					...mockSchool,
-					currentYear: "yearId",
-				});
-
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-
-				await schoolsModule.fetchCurrentYear();
-
-				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
@@ -1029,16 +973,9 @@ describe("schools module", () => {
 		describe("getCurrentYear", () => {
 			it("should return current year state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const mockYear = schoolsModule.getCurrentYear;
-				expect(schoolsModule.getCurrentYear).not.toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
-				schoolsModule.setCurrentYear({ ...mockYear, _id: "mockId" });
-				expect(schoolsModule.getCurrentYear).toStrictEqual({
-					...mockYear,
-					_id: "mockId",
-				});
+				const mockYear = mockSchool.currentYear;
+
+				expect(schoolsModule.getCurrentYear).toStrictEqual(mockYear);
 			});
 		});
 

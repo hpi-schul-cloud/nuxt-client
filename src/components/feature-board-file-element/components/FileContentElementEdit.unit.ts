@@ -8,10 +8,12 @@ jest.mock("@/utils/fileHelper");
 
 describe("FileContentElementEdit", () => {
 	const setupProps = (isDownloadAllowed?: boolean) => ({
+		fileProperties: {
+			name: "file-record #1.txt",
+			url: "1/file-record #1.txt",
+			isDownloadAllowed: isDownloadAllowed ?? true,
+		},
 		fileId: "file-id #1",
-		fileName: "file-record #1.txt",
-		url: "1/file-record #1.txt",
-		isDownloadAllowed: isDownloadAllowed ?? true,
 		isFirstElement: false,
 		isLastElement: false,
 		hasMultipleElements: false,
@@ -31,9 +33,9 @@ describe("FileContentElementEdit", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileName,
-			isDownloadAllowedProp: propsData.isDownloadAllowed,
-			urlProp: propsData.url,
+			fileNameProp: propsData.fileProperties.name,
+			isDownloadAllowedProp: propsData.fileProperties.isDownloadAllowed,
+			urlProp: propsData.fileProperties.url,
 			isFirstElementProp: propsData.isFirstElement,
 			isLastElementProp: propsData.isLastElement,
 			hasMultipleElementsProp: propsData.hasMultipleElements,

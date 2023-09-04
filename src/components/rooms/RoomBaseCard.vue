@@ -28,7 +28,7 @@
 							class="ml-1 my-auto no-wrap"
 							data-testId="card-new-tab-icon"
 						>
-							$mdiOpenInNew
+							{{ mdiOpenInNew }}
 						</v-icon>
 						<div class="mx-auto"></div>
 						<slot name="right"></slot>
@@ -43,6 +43,7 @@
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { mdiOpenInNew } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -74,6 +75,7 @@ export default defineComponent({
 		return {
 			t,
 			onClick,
+			mdiOpenInNew,
 		};
 	},
 });

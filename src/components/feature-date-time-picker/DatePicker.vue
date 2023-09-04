@@ -50,6 +50,7 @@
 
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
@@ -137,6 +138,7 @@ export default defineComponent({
 		}, 50);
 
 		return {
+			mdiCalendarClock,
 			locale,
 			model,
 			rules,

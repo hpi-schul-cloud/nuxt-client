@@ -1,4 +1,12 @@
-import { convertFileSize, downloadFile, getFileExtension } from "./fileHelper";
+import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
+import {
+	convertDownloadToPreviewUrl,
+	convertFileSize,
+	downloadFile,
+	getFileExtension,
+	isDownloadAllowed,
+	isPreviewPossible,
+} from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -139,6 +147,125 @@ describe("@/utils/fileHelper", () => {
 				const result = getFileExtension("test");
 
 				expect(result).toEqual("test");
+			});
+		});
+	});
+
+	describe("convertDownloadToPreviewUrl", () => {
+		it("should return the preview url", () => {
+			const url = "/file/download/233/text.txt";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual(
+				`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
+			);
+		});
+
+		it("should return the preview url with two download words in source", () => {
+			const url = "/file/download/233/download";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual(
+				`/file/preview/233/download?outputFormat=image/webp&width=500`
+			);
+		});
+
+		it("should return the preview url with two download words in source with extension", () => {
+			const url = "/file/download/233/download.txt";
+
+			const result = convertDownloadToPreviewUrl(url);
+
+			expect(result).toEqual(
+				`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
+			);
+		});
+
+		it("should return the preview url", () => {
+			const url = "/file/download/233/text.txt";
+
+			// @ts-expect-error Enum only provides on value currently but will provide more in the future
+			const result = convertDownloadToPreviewUrl(url, 1000);
+
+			expect(result).toEqual(
+				`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
+			);
+		});
+	});
+
+	describe("isDownloadAllowed", () => {
+		describe("when scan status is not blocked", () => {
+			it("should return true", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is blocked", () => {
+			it("should return false", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isPreviewPossible", () => {
+		describe("when preview status is possible", () => {
+			it("should return true", () => {
+				const result = isPreviewPossible(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when preview status is AWAITING_SCAN_STATUS", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+				);
+
+				expect(result).toBe(false);
 			});
 		});
 	});
