@@ -33,7 +33,6 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			class="outlined"
 			:completed="completed"
 			:editable="editable"
 			@update:completed="updateCompleted"
