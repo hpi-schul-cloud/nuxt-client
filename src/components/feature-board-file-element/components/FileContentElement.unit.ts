@@ -11,14 +11,12 @@ import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecor
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import Vue from "vue";
+import ContentElementMenu from "./ContentElementMenu.vue";
+import FileContent from "./FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
-import FileContentElementAlert from "./FileContentElementAlert.vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
-import FileContentElementDisplay from "./FileContentElementDisplay.vue";
-import FileContentElementEdit from "./FileContentElementEdit.vue";
 import FileUpload from "./FileUpload.vue";
-import ImageFileDisplay from "./ImageFileDisplay.vue";
+import { FileProperties } from "./types/file-properties";
 
 jest.mock("@data-board", () => {
 	return {
@@ -28,13 +26,12 @@ jest.mock("@data-board", () => {
 });
 jest.mock("@feature-board");
 jest.mock("../FileStorageApi.composable");
-
 jest.mock("@ui-confirmation-dialog");
-const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
-mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+
 const useDeleteConfirmationDialogMock = jest.mocked(
 	useDeleteConfirmationDialog
 );
+const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 describe("FileContentElement", () => {
@@ -61,20 +58,13 @@ describe("FileContentElement", () => {
 		return { wrapper, deleteElementMock };
 	};
 
-	describe("when component is in view mode", () => {
-		describe("when file needs to be uploaded", () => {
+	describe("when component is not in edit mode", () => {
+		describe("when file record is not available", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
-				const fileRecordResponse = fileRecordResponseFactory.build({});
-
-				const uploadMock = jest.fn().mockImplementationOnce(() => {
-					fileRecord.value = fileRecordResponse;
-				});
-				const { upload, fileRecord } = setupFileStorageApiMock({
-					uploadMock,
-				});
+				setupFileStorageApiMock({});
 
 				const { wrapper, deleteElementMock } = getWrapper({
 					fileName: "myfile",
@@ -87,9 +77,9 @@ describe("FileContentElement", () => {
 
 				return {
 					wrapper,
-					upload,
-					fileRecord,
 					deleteElementMock,
+					element,
+					mockedUse,
 				};
 			};
 
@@ -98,7 +88,25 @@ describe("FileContentElement", () => {
 				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 			});
 
-			it("should not render Init component", async () => {
+			it("should pass isOutlined prop to v-card", () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+				expect(card.props("outlined")).toBe(false);
+			});
+
+			it("should not render FileContent component", async () => {
+				const { wrapper } = setup();
+				wrapper.overview();
+
+				await wrapper.vm.$nextTick();
+				const fileContent = wrapper.findComponent(FileContent);
+
+				expect(fileContent.exists()).toBe(false);
+			});
+
+			it("should not render FileUpload component", async () => {
 				const { wrapper } = setup();
 
 				await wrapper.vm.$nextTick();
@@ -106,15 +114,30 @@ describe("FileContentElement", () => {
 				const fileUpload = wrapper.findComponent(FileUpload);
 				expect(fileUpload.exists()).toBe(false);
 			});
+
+			it("should not render ContentElementMenu component", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.vm.$nextTick();
+
+				const contentElementMenu = wrapper.findComponent(ContentElementMenu);
+
+				expect(contentElementMenu.exists()).toBe(false);
+			});
 		});
 
-		describe("when file is uploaded", () => {
-			const setup = () => {
+		describe("when file record is available", () => {
+			const setup = (props?: {
+				scanStatus?: FileRecordScanStatus;
+				previewStatus?: PreviewStatus;
+			}) => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
 				const fileRecordResponse = fileRecordResponseFactory.build({
-					securityCheckStatus: FileRecordScanStatus.PENDING,
+					securityCheckStatus:
+						props?.scanStatus ?? FileRecordScanStatus.PENDING,
+					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 				});
 				const fetchFileMock = jest.fn().mockImplementationOnce(() => {
 					fileRecord.value = fileRecordResponse;
@@ -123,7 +146,14 @@ describe("FileContentElement", () => {
 					fetchFileMock,
 				});
 
-				mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+				const expectedFileProperties: FileProperties = {
+					name: fileRecordResponse.name,
+					isDownloadAllowed: true,
+					url: fileRecordResponse.url,
+					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+					size: fileRecordResponse.size,
+					previewStatus: fileRecordResponse.previewStatus,
+				};
 
 				const { wrapper, deleteElementMock } = getWrapper({
 					fileName: "abc.jpg",
@@ -140,8 +170,30 @@ describe("FileContentElement", () => {
 					fileRecordResponse,
 					element,
 					deleteElementMock,
+					expectedFileProperties,
 				};
 			};
+
+			it("should pass isOutlined prop to v-card", () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+				expect(card.props("outlined")).toBe(false);
+			});
+
+			describe("when v-card emits keydown.up.down event", () => {
+				it("should not emit move-keyboard:edit event", async () => {
+					const { wrapper } = setup();
+
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+					card.vm.$emit("keydown.up.down");
+
+					await wrapper.vm.$nextTick();
+
+					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+				});
+			});
 
 			describe("when no virus is detected", () => {
 				it("should be found in dom", () => {
@@ -149,38 +201,6 @@ describe("FileContentElement", () => {
 
 					const fileContentElement = wrapper.findComponent(FileContentElement);
 					expect(fileContentElement.exists()).toBe(true);
-				});
-
-				it("should render FileContentElementDisplay component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-
-					const fileContentElementDisplay = wrapper.findComponent(
-						FileContentElementDisplay
-					);
-					expect(fileContentElementDisplay.exists()).toBe(true);
-				});
-
-				it("should hand over correct fileProperties to FileContentElementDisplay", async () => {
-					const { wrapper, fileRecordResponse } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const fileProperties = wrapper
-						.findComponent(FileContentElementDisplay)
-						.props("fileProperties");
-
-					const expectedFileProperties = {
-						name: fileRecordResponse.name,
-						isDownloadAllowed: true,
-						url: fileRecordResponse.url,
-						previewUrl: undefined,
-						size: fileRecordResponse.size,
-					};
-
-					expect(fileProperties).toEqual(expectedFileProperties);
 				});
 
 				it("should call fetchFile", async () => {
@@ -192,257 +212,107 @@ describe("FileContentElement", () => {
 					expect(fetchFile).toHaveBeenCalledTimes(1);
 				});
 
-				describe("when file is an image", () => {
-					const setup = () => {
-						const element = fileElementResponseFactory.build();
-						document.body.setAttribute("data-app", "true");
+				it("should render FileContent component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
 
-						const fileRecordResponse = fileRecordResponseFactory.build({
-							securityCheckStatus: FileRecordScanStatus.PENDING,
-							mimeType: "image/png",
-							previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-						});
-						const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-							fileRecord.value = fileRecordResponse;
-						});
-						const { fetchFile, fileRecord } = setupFileStorageApiMock({
-							fetchFileMock,
-						});
+					const fileContent = wrapper.findComponent(FileContent);
 
-						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+					expect(fileContent.exists()).toBe(true);
+				});
 
-						const { wrapper, deleteElementMock } = getWrapper({
-							fileName: "abc.jpg",
-							element,
-							isEditMode: false,
-							isFirstElement: false,
-							isLastElement: false,
-							hasMultipleElements: false,
-						});
+				it("should pass correct fileProperties to FileContent", async () => {
+					const { wrapper, expectedFileProperties } = setup();
+					await wrapper.vm.$nextTick();
 
-						return {
-							wrapper,
-							fetchFile,
-							fileRecordResponse,
-							element,
-							deleteElementMock,
-						};
-					};
+					const fileProperties = wrapper
+						.findComponent(FileContent)
+						.props("fileProperties");
 
-					it("should render ImageFileDisplay component", async () => {
-						const { wrapper } = setup();
+					expect(fileProperties).toEqual(expectedFileProperties);
+				});
 
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
+				it("should call fetchFile when FileContent emits fetch:file event", async () => {
+					const { wrapper, fetchFile } = setup();
 
-						const imageFileDisplay = wrapper.findComponent(ImageFileDisplay);
-						expect(imageFileDisplay.exists()).toBe(true);
-					});
+					await wrapper.vm.$nextTick();
 
-					it("should hand over correct fileProperties to ImageFileDisplay", async () => {
-						const { wrapper, fileRecordResponse } = setup();
+					expect(fetchFile).toHaveBeenCalledTimes(1);
 
-						await wrapper.vm.$nextTick();
+					const fileContent = wrapper.findComponent(FileContent);
+					fileContent.vm.$emit("fetch:file");
 
-						const fileProperties = wrapper
-							.findComponent(ImageFileDisplay)
-							.props("fileProperties");
+					await wrapper.vm.$nextTick();
 
-						const url = fileRecordResponse.url;
-						const expectedFileProperties = {
-							name: fileRecordResponse.name,
-							isDownloadAllowed: true,
-							url,
-							previewUrl: convertDownloadToPreviewUrl(url),
-							size: fileRecordResponse.size,
-						};
+					expect(fetchFile).toHaveBeenCalledTimes(2);
+				});
 
-						expect(fileProperties).toEqual(expectedFileProperties);
-					});
+				it("should not render File Upload component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
 
-					it("should hand over isFirstElement property to ImageFileDisplay", async () => {
-						const { wrapper } = setup();
+					const fileUpload = wrapper.findComponent(FileUpload);
+					expect(fileUpload.exists()).toBe(false);
+				});
 
-						await wrapper.vm.$nextTick();
+				it("should not render ContentElementMenu component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
 
-						const isFirstElement = wrapper
-							.findComponent(ImageFileDisplay)
-							.props("isFirstElement");
+					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
 
-						expect(isFirstElement).toBe(false);
-					});
-
-					it("should hand over isLastElement property to ImageFileDisplay", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const isLastElement = wrapper
-							.findComponent(ImageFileDisplay)
-							.props("isLastElement");
-
-						expect(isLastElement).toBe(false);
-					});
-
-					it("should hand over hasMultipleElements property to ImageFileDisplay", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const hasMultipleElements = wrapper
-							.findComponent(ImageFileDisplay)
-							.props("hasMultipleElements");
-
-						expect(hasMultipleElements).toBe(false);
-					});
+					expect(contentElementMenu.exists()).toBe(false);
 				});
 			});
 
 			describe("when a virus is detected", () => {
-				const setup = () => {
-					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
-
-					const fileRecordResponse = fileRecordResponseFactory.build({
-						securityCheckStatus: FileRecordScanStatus.BLOCKED,
-						mimeType: "image/png",
+				it("should pass correct props to FileContent component", async () => {
+					const { wrapper, expectedFileProperties } = setup({
+						scanStatus: FileRecordScanStatus.BLOCKED,
 						previewStatus:
 							PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
 					});
-					const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-						fileRecord.value = fileRecordResponse;
-					});
-					const { fetchFile, fileRecord } = setupFileStorageApiMock({
-						fetchFileMock,
-					});
-
-					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
-					const { wrapper, deleteElementMock } = getWrapper({
-						fileName: "abc.jpg",
-						element,
-						isEditMode: false,
-						isFirstElement: false,
-						isLastElement: false,
-						hasMultipleElements: false,
-					});
-
-					return {
-						wrapper,
-						fetchFile,
-						fileRecordResponse,
-						element,
-						deleteElementMock,
-					};
-				};
-
-				it("should not render ImageFileDisplay", async () => {
-					const { wrapper } = setup();
-
 					await wrapper.vm.$nextTick();
 
-					const componentExists = wrapper
-						.findComponent(ImageFileDisplay)
-						.exists();
+					const fileProperties = wrapper
+						.findComponent(FileContent)
+						.props("fileProperties");
 
-					expect(componentExists).toBe(false);
-				});
-
-				it("should render FileContentElementAlert component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const fileContentElementAlert = wrapper.findComponent(
-						FileContentElementAlert
-					);
-					expect(fileContentElementAlert.exists()).toBe(true);
-				});
-
-				describe("when file is an image", () => {
-					const setup = () => {
-						const element = fileElementResponseFactory.build();
-						document.body.setAttribute("data-app", "true");
-
-						const fileRecordResponse = fileRecordResponseFactory.build({
-							securityCheckStatus: FileRecordScanStatus.BLOCKED,
-							mimeType: "image/png",
-						});
-						const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-							fileRecord.value = fileRecordResponse;
-						});
-						const { fetchFile, fileRecord } = setupFileStorageApiMock({
-							fetchFileMock,
-						});
-
-						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
-						const { wrapper, deleteElementMock } = getWrapper({
-							fileName: "abc.jpg",
-							element,
-							isEditMode: false,
-							isFirstElement: false,
-							isLastElement: false,
-							hasMultipleElements: false,
-						});
-
-						return {
-							wrapper,
-							fetchFile,
-							fileRecordResponse,
-							element,
-							deleteElementMock,
-						};
-					};
-
-					it("should not render ImageFileDisplay", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const componentExists = wrapper
-							.findComponent(ImageFileDisplay)
-							.exists();
-
-						expect(componentExists).toBe(false);
-					});
+					expectedFileProperties.isDownloadAllowed = false;
+					expectedFileProperties.previewUrl = undefined;
+					expect(fileProperties).toEqual(expectedFileProperties);
 				});
 			});
 		});
 	});
 
 	describe("when component is in edit mode", () => {
-		describe("when file needs to be uploaded", () => {
+		describe("when file record is not available", () => {
 			describe("when upload is successful", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const fileRecordResponse = fileRecordResponseFactory.build();
+					const { upload } = setupFileStorageApiMock({});
 
-					const uploadMock = jest.fn().mockImplementationOnce(() => {
-						fileRecord.value = fileRecordResponse;
-					});
-					const { upload, fileRecord } = setupFileStorageApiMock({
-						uploadMock,
-					});
-
-					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
+					const elementPositionProps = {
+						isFirstElement: false,
+						isLastElement: true,
+						hasMultipleElements: false,
+					};
 					const { wrapper, deleteElementMock } = getWrapper({
-						fileName: "abc.jpg",
+						fileName: "myfile",
 						element,
 						isEditMode: true,
-						isFirstElement: false,
-						isLastElement: false,
-						hasMultipleElements: false,
+						...elementPositionProps,
 					});
 
 					return {
 						wrapper,
-						upload,
-						fileRecord,
 						deleteElementMock,
+						upload,
+						element,
+						elementPositionProps,
 					};
 				};
 
@@ -451,31 +321,196 @@ describe("FileContentElement", () => {
 					expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 				});
 
+				it("should pass isOutlined prop to v-card", () => {
+					const { wrapper } = setup();
+
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+					expect(card.props("outlined")).toBe(true);
+				});
+
+				it("should not render FileContent component", async () => {
+					const { wrapper } = setup();
+					wrapper.overview();
+
+					await wrapper.vm.$nextTick();
+					const fileContent = wrapper.findComponent(FileContent);
+
+					expect(fileContent.exists()).toBe(false);
+				});
+
 				it("should render FileUpload component", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
 					const fileUpload = wrapper.findComponent(FileUpload);
 					expect(fileUpload.exists()).toBe(true);
 				});
+
+				it("should pass correct props to FileUpload component", async () => {
+					const { wrapper, element } = setup();
+
+					await wrapper.vm.$nextTick();
+
+					const props = wrapper.findComponent(FileUpload).props();
+
+					expect(props.elementId).toEqual(element.id);
+				});
+
+				describe("when FileUpload emits upload:file event", () => {
+					it("should call upload when FileUpload emits upload:file event", async () => {
+						const { wrapper, upload } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const fileUpload = wrapper.findComponent(FileUpload);
+						fileUpload.vm.$emit("upload:file", { fileName: "mysample.txt" });
+
+						await wrapper.vm.$nextTick();
+
+						expect(upload).toHaveBeenCalledTimes(1);
+					});
+				});
+
+				it("should render ContentElementMenu component", async () => {
+					const { wrapper } = setup();
+
+					await wrapper.vm.$nextTick();
+
+					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
+
+					expect(contentElementMenu.exists()).toBe(true);
+				});
+
+				it("should pass correct props to ContentElementMenu component", async () => {
+					const { wrapper } = setup();
+
+					await wrapper.vm.$nextTick();
+
+					const props = wrapper.findComponent(ContentElementMenu).props();
+
+					expect(props.isFirstElement).toBe(false);
+					expect(props.isLastElement).toBe(true);
+					expect(props.hasMultipleElements).toBe(false);
+				});
+
+				describe("when ContentElementMenu emits move-down:element event", () => {
+					it("should emit move-down:edit event", async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const contentElementMenu =
+							wrapper.findComponent(ContentElementMenu);
+						contentElementMenu.vm.$emit("move-down:element");
+
+						await wrapper.vm.$nextTick();
+
+						expect(wrapper.emitted("move-down:edit")).toHaveLength(1);
+					});
+				});
+
+				describe("when ContentElementMenu emits move-up:element event", () => {
+					it("should emit move-up:edit event", async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const contentElementMenu =
+							wrapper.findComponent(ContentElementMenu);
+						contentElementMenu.vm.$emit("move-up:element");
+
+						await wrapper.vm.$nextTick();
+
+						expect(wrapper.emitted("move-up:edit")).toHaveLength(1);
+					});
+				});
+
+				describe("when ContentElementMenu emits delete:element event with deleteDirectly prop = true", () => {
+					it("should emit delete:element event", async () => {
+						const { wrapper } = setup();
+
+						await wrapper.vm.$nextTick();
+
+						const contentElementMenu =
+							wrapper.findComponent(ContentElementMenu);
+						contentElementMenu.vm.$emit("delete:element", true);
+
+						await wrapper.vm.$nextTick();
+
+						expect(wrapper.emitted("delete:element")).toHaveLength(1);
+					});
+				});
+
+				describe("when ContentElementMenu emits delete:element event with deleteDirectly prop = false", () => {
+					describe("when askDeleteConfirmation returns true", () => {
+						it("should emit delete:element event", async () => {
+							const { wrapper } = setup();
+
+							mockedUse.askDeleteConfirmation.mockReset();
+							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+							useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
+							await wrapper.vm.$nextTick();
+
+							const contentElementMenu =
+								wrapper.findComponent(ContentElementMenu);
+							contentElementMenu.vm.$emit("delete:element");
+
+							await wrapper.vm.$nextTick();
+							await wrapper.vm.$nextTick();
+
+							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledTimes(1);
+							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledWith(
+								undefined,
+								"boardElement"
+							);
+							expect(wrapper.emitted("delete:element")).toHaveLength(1);
+						});
+					});
+
+					describe("when askDeleteConfirmation returns false", () => {
+						it("should emit delete:element event", async () => {
+							const { wrapper } = setup();
+
+							mockedUse.askDeleteConfirmation.mockReset();
+							mockedUse.askDeleteConfirmation.mockResolvedValue(false);
+							useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
+							await wrapper.vm.$nextTick();
+
+							const contentElementMenu =
+								wrapper.findComponent(ContentElementMenu);
+							contentElementMenu.vm.$emit("delete:element");
+
+							await wrapper.vm.$nextTick();
+							await wrapper.vm.$nextTick();
+
+							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledTimes(1);
+							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledWith(
+								undefined,
+								"boardElement"
+							);
+
+							expect(wrapper.emitted("delete:element")).toBeUndefined();
+						});
+					});
+				});
 			});
 
-			describe("when upload throws error", () => {
+			describe("when upload returns error", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const error = new Error("test");
-					const uploadMock = jest.fn().mockRejectedValueOnce(error);
-					setupFileStorageApiMock({ uploadMock });
-
-					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+					const uploadMock = jest.fn().mockRejectedValueOnce(new Error("test"));
+					setupFileStorageApiMock({
+						uploadMock,
+					});
 
 					const { wrapper, deleteElementMock } = getWrapper({
-						fileName: "abc.jpg",
+						fileName: "myfile",
 						element,
 						isEditMode: true,
 						isFirstElement: false,
@@ -486,10 +521,20 @@ describe("FileContentElement", () => {
 					return {
 						wrapper,
 						deleteElementMock,
+						element,
 					};
 				};
 
-				it("should emit delete:element", async () => {
+				it("should render FileUpload component", async () => {
+					const { wrapper } = setup();
+
+					await wrapper.vm.$nextTick();
+
+					const fileUpload = wrapper.findComponent(FileUpload);
+					expect(fileUpload.exists()).toBe(true);
+				});
+
+				it("should emit delete:element on upload", async () => {
 					const { wrapper } = setup();
 
 					const initComponent = wrapper.findComponent(FileUpload);
@@ -500,406 +545,166 @@ describe("FileContentElement", () => {
 
 					expect(wrapper.emitted("delete:element")).toHaveLength(1);
 				});
+			});
+		});
 
-				it("should not render FileContentElementChips component", async () => {
+		describe("when file record is available", () => {
+			const setup = (props?: {
+				scanStatus?: FileRecordScanStatus;
+				previewStatus?: PreviewStatus;
+			}) => {
+				const element = fileElementResponseFactory.build();
+				document.body.setAttribute("data-app", "true");
+
+				const fileRecordResponse = fileRecordResponseFactory.build({
+					securityCheckStatus:
+						props?.scanStatus ?? FileRecordScanStatus.PENDING,
+					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
+				});
+				const fetchFileMock = jest.fn().mockImplementationOnce(() => {
+					fileRecord.value = fileRecordResponse;
+				});
+				const { fetchFile, fileRecord } = setupFileStorageApiMock({
+					fetchFileMock,
+				});
+
+				const expectedFileProperties: FileProperties = {
+					name: fileRecordResponse.name,
+					isDownloadAllowed: true,
+					url: fileRecordResponse.url,
+					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+					size: fileRecordResponse.size,
+					previewStatus: fileRecordResponse.previewStatus,
+				};
+
+				const { wrapper, deleteElementMock } = getWrapper({
+					fileName: "abc.jpg",
+					element,
+					isEditMode: true,
+					isFirstElement: false,
+					isLastElement: false,
+					hasMultipleElements: false,
+				});
+
+				return {
+					wrapper,
+					fetchFile,
+					fileRecordResponse,
+					element,
+					deleteElementMock,
+					expectedFileProperties,
+				};
+			};
+
+			it("should pass isOutlined prop to v-card", () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+				expect(card.props("outlined")).toBe(true);
+			});
+
+			describe("when v-card emits keydown.up.down event", () => {
+				it("should emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
 
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+					card.vm.$emit("keydown.up.down");
+
+					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					const FileContentElementChip = wrapper.findComponent(
-						FileContentElementChips
-					);
-					expect(FileContentElementChip.exists()).toBe(false);
+					expect(card.emitted("keydown.up.down")).toHaveLength(1);
+					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 				});
 			});
 
-			describe("when file is uploaded", () => {
-				describe("when no virus is detected", () => {
-					const setup = () => {
-						const element = fileElementResponseFactory.build();
-						document.body.setAttribute("data-app", "true");
+			describe("when no virus is detected", () => {
+				it("should be found in dom", () => {
+					const { wrapper } = setup();
 
-						const fileRecordResponse = fileRecordResponseFactory.build({
-							securityCheckStatus: FileRecordScanStatus.PENDING,
-							mimeType: "image/png",
-						});
-						const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-							fileRecord.value = fileRecordResponse;
-						});
-						const { fetchFile, fileRecord } = setupFileStorageApiMock({
-							fetchFileMock,
-						});
-
-						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
-						const { wrapper, deleteElementMock } = getWrapper({
-							fileName: "abc.jpg",
-							element,
-							isEditMode: true,
-							isFirstElement: false,
-							isLastElement: false,
-							hasMultipleElements: false,
-						});
-
-						return {
-							wrapper,
-							fetchFile,
-							fileRecordResponse,
-							element,
-							deleteElementMock,
-						};
-					};
-
-					it("should be found in dom", () => {
-						const { wrapper } = setup();
-						expect(wrapper.findComponent(FileContentElement).exists()).toBe(
-							true
-						);
-					});
-
-					it("should render FileContentElementEdit component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-						await wrapper.vm.$nextTick();
-
-						const fileContentElementEdit = wrapper.findComponent(
-							FileContentElementEdit
-						);
-						expect(fileContentElementEdit.exists()).toBe(true);
-					});
-
-					it("should hand over fileProperties to FileContentElementEdit", async () => {
-						const { wrapper, fileRecordResponse } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const fileProperties = wrapper
-							.findComponent(FileContentElementEdit)
-							.props("fileProperties");
-
-						const expectedFileProperties = {
-							name: fileRecordResponse.name,
-							isDownloadAllowed: true,
-							url: fileRecordResponse.url,
-							previewUrl: undefined,
-							size: fileRecordResponse.size,
-						};
-
-						expect(fileProperties).toEqual(expectedFileProperties);
-					});
-
-					it("should pass delete:element event from child to parent", async () => {
-						const { wrapper } = setup();
-
-						await nextTick();
-						await nextTick();
-
-						const child = wrapper.findComponent(FileContentElementEdit);
-						child.vm.$emit("delete:element");
-
-						await nextTick();
-						await nextTick();
-
-						expect(wrapper.emitted("delete:element")).toHaveLength(1);
-					});
-
-					it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const fileContentElementEdit = wrapper.findComponent(
-							FileContentElementEdit
-						);
-						fileContentElementEdit.vm.$emit("move-down:element");
-
-						const emitted = wrapper.emitted();
-						expect(emitted["move-down:edit"]).toBeDefined();
-					});
-
-					it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const fileContentElementEdit = wrapper.findComponent(
-							FileContentElementEdit
-						);
-						fileContentElementEdit.vm.$emit("move-up:element");
-
-						const emitted = wrapper.emitted();
-						expect(emitted["move-up:edit"]).toBeDefined();
-					});
-
-					// currently blocked as v-card blocks correct usage of keydown event (works when its a div)
-					it.todo(
-						"should emit 'move-keyboard:edit' when arrow key up or is pressed"
-					);
-					/* async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						await wrapper.trigger("keydown.up");
-
-						const emitted = wrapper.emitted();
-						expect(emitted["move-keyboard:edit"]).toBeDefined();
-					}; */
-
-					describe("when file is an image", () => {
-						const setup = () => {
-							const element = fileElementResponseFactory.build();
-							document.body.setAttribute("data-app", "true");
-
-							const fileRecordResponse = fileRecordResponseFactory.build({
-								securityCheckStatus: FileRecordScanStatus.VERIFIED,
-								mimeType: "image/png",
-								previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-							});
-							const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-								fileRecord.value = fileRecordResponse;
-							});
-							const { fetchFile, fileRecord } = setupFileStorageApiMock({
-								fetchFileMock,
-							});
-
-							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
-							const { wrapper, deleteElementMock } = getWrapper({
-								fileName: "abc.jpg",
-								element,
-								isEditMode: true,
-								isFirstElement: false,
-								isLastElement: false,
-								hasMultipleElements: false,
-							});
-
-							return {
-								wrapper,
-								fetchFile,
-								fileRecordResponse,
-								element,
-								deleteElementMock,
-							};
-						};
-
-						it("should render ImageFileDisplay component", async () => {
-							const { wrapper } = setup();
-
-							await wrapper.vm.$nextTick();
-							await wrapper.vm.$nextTick();
-
-							const imageFileDisplay = wrapper.findComponent(ImageFileDisplay);
-							expect(imageFileDisplay.exists()).toBe(true);
-						});
-
-						it("should hand over isFirstElement property to ImageFileDisplay", async () => {
-							const { wrapper } = setup();
-
-							await wrapper.vm.$nextTick();
-
-							const isFirstElement = wrapper
-								.findComponent(ImageFileDisplay)
-								.props("isFirstElement");
-
-							expect(isFirstElement).toBe(false);
-						});
-
-						it("should hand over isLastElement property to ImageFileDisplay", async () => {
-							const { wrapper } = setup();
-
-							await wrapper.vm.$nextTick();
-
-							const isLastElement = wrapper
-								.findComponent(ImageFileDisplay)
-								.props("isLastElement");
-
-							expect(isLastElement).toBe(false);
-						});
-
-						it("should hand over hasMultipleElements property to ImageFileDisplay", async () => {
-							const { wrapper } = setup();
-
-							await wrapper.vm.$nextTick();
-
-							const hasMultipleElements = wrapper
-								.findComponent(ImageFileDisplay)
-								.props("hasMultipleElements");
-
-							expect(hasMultipleElements).toBe(false);
-						});
-					});
+					const fileContentElement = wrapper.findComponent(FileContentElement);
+					expect(fileContentElement.exists()).toBe(true);
 				});
 
-				describe("when a virus is detected", () => {
-					const setup = () => {
-						const element = fileElementResponseFactory.build();
-						document.body.setAttribute("data-app", "true");
+				it("should call fetchFile", async () => {
+					const { wrapper, fetchFile } = setup();
 
-						const fileRecordResponse = fileRecordResponseFactory.build({
-							securityCheckStatus: FileRecordScanStatus.BLOCKED,
-							mimeType: "image/png",
-							previewStatus:
-								PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
-						});
-						const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-							fileRecord.value = fileRecordResponse;
-						});
-						const { fetchFile, fileRecord } = setupFileStorageApiMock({
-							fetchFileMock,
-						});
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
 
-						mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+					expect(fetchFile).toHaveBeenCalledTimes(1);
+				});
 
-						const { wrapper, deleteElementMock } = getWrapper({
-							fileName: "abc.jpg",
-							element,
-							isEditMode: true,
-							isFirstElement: false,
-							isLastElement: false,
-							hasMultipleElements: false,
-						});
+				it("should render FileContent component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
 
-						return {
-							wrapper,
-							fetchFile,
-							fileRecordResponse,
-							element,
-							deleteElementMock,
-						};
-					};
+					const fileContent = wrapper.findComponent(FileContent);
 
-					it("should hand over correct file properties to FileContentElementEdit", async () => {
-						const { wrapper, fileRecordResponse } = setup();
+					expect(fileContent.exists()).toBe(true);
+				});
 
-						await wrapper.vm.$nextTick();
+				it("should pass correct fileProperties to FileContent", async () => {
+					const { wrapper, expectedFileProperties } = setup();
+					await wrapper.vm.$nextTick();
 
-						const fileProperties = wrapper
-							.findComponent(FileContentElementEdit)
-							.props("fileProperties");
+					const fileProperties = wrapper
+						.findComponent(FileContent)
+						.props("fileProperties");
 
-						const expectedFileProperties = {
-							name: fileRecordResponse.name,
-							isDownloadAllowed: false,
-							url: fileRecordResponse.url,
-							previewUrl: undefined,
-							size: fileRecordResponse.size,
-						};
+					expect(fileProperties).toEqual(expectedFileProperties);
+				});
 
-						expect(fileProperties).toEqual(expectedFileProperties);
+				it("should call fetchFile when FileContent emits fetch:file event", async () => {
+					const { wrapper, fetchFile } = setup();
+
+					await wrapper.vm.$nextTick();
+
+					expect(fetchFile).toHaveBeenCalledTimes(1);
+
+					const fileContent = wrapper.findComponent(FileContent);
+					fileContent.vm.$emit("fetch:file");
+
+					await wrapper.vm.$nextTick();
+
+					expect(fetchFile).toHaveBeenCalledTimes(2);
+				});
+
+				it("should not render File Upload component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
+
+					const fileUpload = wrapper.findComponent(FileUpload);
+					expect(fileUpload.exists()).toBe(false);
+				});
+
+				it("should not render ContentElementMenu component", async () => {
+					const { wrapper } = setup();
+					await wrapper.vm.$nextTick();
+
+					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
+
+					expect(contentElementMenu.exists()).toBe(true);
+				});
+			});
+
+			describe("when a virus is detected", () => {
+				it("should pass correct props to FileContent component", async () => {
+					const { wrapper, expectedFileProperties } = setup({
+						scanStatus: FileRecordScanStatus.BLOCKED,
+						previewStatus:
+							PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
 					});
+					await wrapper.vm.$nextTick();
 
-					it("should hand over isFirstElement property to FileContentElementEdit", async () => {
-						const { wrapper } = setup();
+					const fileProperties = wrapper
+						.findComponent(FileContent)
+						.props("fileProperties");
 
-						await wrapper.vm.$nextTick();
-
-						const isFirstElement = wrapper
-							.findComponent(FileContentElementEdit)
-							.props("isFirstElement");
-
-						expect(isFirstElement).toBe(false);
-					});
-
-					it("should hand over isLastElement property to FileContentElementEdit", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const isLastElement = wrapper
-							.findComponent(FileContentElementEdit)
-							.props("isLastElement");
-
-						expect(isLastElement).toBe(false);
-					});
-
-					it("should hand over hasMultipleElements property to FileContentElementEdit", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const hasMultipleElements = wrapper
-							.findComponent(FileContentElementEdit)
-							.props("hasMultipleElements");
-
-						expect(hasMultipleElements).toBe(false);
-					});
-
-					it("should render FileContentElementAlert component", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const fileContentElementAlert = wrapper.findComponent(
-							FileContentElementAlert
-						);
-						expect(fileContentElementAlert.exists()).toBe(true);
-					});
-
-					it("should pass delete:element event from child to parent", async () => {
-						const { wrapper } = setup();
-
-						await nextTick();
-						await nextTick();
-
-						const child = wrapper.findComponent(FileContentElementEdit);
-						child.vm.$emit("delete:element");
-
-						await nextTick();
-						await nextTick();
-
-						expect(wrapper.emitted("delete:element")).toHaveLength(1);
-					});
-
-					describe("when file is an image", () => {
-						const setup = () => {
-							const element = fileElementResponseFactory.build();
-							document.body.setAttribute("data-app", "true");
-
-							const fileRecordResponse = fileRecordResponseFactory.build({
-								securityCheckStatus: FileRecordScanStatus.BLOCKED,
-								mimeType: "image/png",
-								previewStatus:
-									PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
-							});
-							const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-								fileRecord.value = fileRecordResponse;
-							});
-							const { fetchFile, fileRecord } = setupFileStorageApiMock({
-								fetchFileMock,
-							});
-
-							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-
-							const { wrapper, deleteElementMock } = getWrapper({
-								fileName: "abc.jpg",
-								element,
-								isEditMode: true,
-								isFirstElement: false,
-								isLastElement: false,
-								hasMultipleElements: false,
-							});
-
-							return {
-								wrapper,
-								fetchFile,
-								fileRecordResponse,
-								element,
-								deleteElementMock,
-							};
-						};
-
-						it("should not render ImageFileDisplay component", async () => {
-							const { wrapper } = setup();
-
-							await wrapper.vm.$nextTick();
-							await wrapper.vm.$nextTick();
-
-							const imageFileDisplay = wrapper.findComponent(ImageFileDisplay);
-							expect(imageFileDisplay.exists()).toBe(false);
-						});
-					});
+					expectedFileProperties.isDownloadAllowed = false;
+					expectedFileProperties.previewUrl = undefined;
+					expect(fileProperties).toEqual(expectedFileProperties);
 				});
 			});
 		});
