@@ -1,17 +1,26 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, onMounted, computed } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 
 export const useSubmissionContentElementState = (id: string) => {
+	const { notifyWithTemplate } = useErrorHandler();
 	const {
 		fetchSubmissionItemsCall,
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
 	const submissionItems = ref<Array<SubmissionItemResponse>>([]);
+	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
-		submissionItems.value = await fetchSubmissionItemsCall(id);
+		try {
+			submissionItems.value = await fetchSubmissionItemsCall(id);
+		} catch (error) {
+			notifyWithTemplate("notLoaded", "boardElement")();
+		} finally {
+			loading.value = false;
+		}
 	};
 
 	const createSubmissionItem = async (completed: boolean) => {
@@ -42,5 +51,6 @@ export const useSubmissionContentElementState = (id: string) => {
 		submissionItems,
 		updateSubmissionItem,
 		completed,
+		loading,
 	};
 };

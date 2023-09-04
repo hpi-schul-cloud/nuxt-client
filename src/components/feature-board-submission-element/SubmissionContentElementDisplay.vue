@@ -35,6 +35,7 @@
 			v-if="isStudent"
 			:completed="completed"
 			:editable="editable"
+			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 	</div>
@@ -55,6 +56,10 @@ export default defineComponent({
 	},
 	props: {
 		completed: {
+			type: Boolean,
+			required: true,
+		},
+		loading: {
 			type: Boolean,
 			required: true,
 		},

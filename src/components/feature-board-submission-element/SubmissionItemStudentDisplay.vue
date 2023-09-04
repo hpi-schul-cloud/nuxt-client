@@ -2,7 +2,7 @@
 	<div class="white px-4">
 		<v-checkbox
 			v-model="modelValue"
-			:disabled="!editable"
+			:disabled="!editable || loading"
 			:label="$t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
@@ -20,6 +20,10 @@ export default defineComponent({
 			required: true,
 		},
 		completed: {
+			type: Boolean,
+			required: true,
+		},
+		loading: {
 			type: Boolean,
 			required: true,
 		},
