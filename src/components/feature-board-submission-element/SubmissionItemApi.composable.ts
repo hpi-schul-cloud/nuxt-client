@@ -3,8 +3,7 @@ import {
 	BoardSubmissionApiFactory,
 	SubmissionItemResponse,
 } from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { $axios } from "@/utils/api";
 
 export const useSubmissionItemApi = () => {
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
@@ -14,16 +13,11 @@ export const useSubmissionItemApi = () => {
 		submissionContainerId: string,
 		completed: boolean
 	): Promise<SubmissionItemResponse> => {
-		try {
-			const response = await elementApi.elementControllerCreateSubmissionItem(
-				submissionContainerId,
-				{ completed: completed }
-			);
-			return response.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-			throw createApplicationError(responseError.code);
-		}
+		const response = await elementApi.elementControllerCreateSubmissionItem(
+			submissionContainerId,
+			{ completed: completed }
+		);
+		return response.data;
 	};
 
 	const updateSubmissionItemCall = async (
@@ -39,16 +33,11 @@ export const useSubmissionItemApi = () => {
 	const fetchSubmissionItemsCall = async (
 		submissionContainerId: string
 	): Promise<Array<SubmissionItemResponse>> => {
-		try {
-			const response =
-				await submissionItemApi.boardSubmissionControllerGetSubmissionItems(
-					submissionContainerId
-				);
-			return response.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-			throw createApplicationError(responseError.code);
-		}
+		const response =
+			await submissionItemApi.boardSubmissionControllerGetSubmissionItems(
+				submissionContainerId
+			);
+		return response.data;
 	};
 
 	return {
