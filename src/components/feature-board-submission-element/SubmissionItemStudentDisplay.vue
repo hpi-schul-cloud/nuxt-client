@@ -4,7 +4,7 @@
 			v-model="modelValue"
 			:disabled="!editable"
 			:label="$t('components.cardElement.submissionElement.completed')"
-		></v-checkbox>
+		/>
 	</div>
 </template>
 
