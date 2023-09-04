@@ -1,3 +1,4 @@
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import ImageDisplay from "./ImageDisplay.vue";
 
@@ -15,6 +16,7 @@ describe("ImageDisplay", () => {
 
 		const wrapper = shallowMount(ImageDisplay, {
 			propsData: { ...propsData, isEditMode },
+			...createComponentMocks({}),
 		});
 
 		return {

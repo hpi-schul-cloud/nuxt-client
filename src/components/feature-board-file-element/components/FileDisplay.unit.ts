@@ -9,9 +9,15 @@ describe("FileDisplay", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			name: "file-record #1.txt",
-			previewUrl: "preview/1/file-record #1.txt",
-			isEditMode: false,
+			fileProperties: {
+				name: "test",
+				size: 100,
+				url: "test",
+				previewUrl: "test",
+				previewStatus: "test",
+				isDownloadAllowed: true,
+			},
+			isEditMode: true,
 		};
 
 		const wrapper = shallowMount(FileDisplay, {
@@ -21,9 +27,8 @@ describe("FileDisplay", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.name,
-			previewUrlProp: propsData.previewUrl,
-			editModeProp: propsData.isEditMode,
+			fileNameProp: propsData.fileProperties.name,
+			previewUrlProp: propsData.fileProperties.previewUrl,
 		};
 	};
 
@@ -36,13 +41,12 @@ describe("FileDisplay", () => {
 	});
 
 	it("should render image display component with proper props", () => {
-		const { wrapper, fileNameProp, previewUrlProp, editModeProp } = setup();
+		const { wrapper, fileNameProp, previewUrlProp } = setup();
 
 		const props = wrapper.findComponent(ImageDisplay).attributes();
 
 		expect(props.filename).toBe(fileNameProp);
 		expect(props.previewUrl).toBe(previewUrlProp);
-		expect(props.editMode).toBe(editModeProp);
 	});
 
 	it("should render default display component with proper props", () => {
