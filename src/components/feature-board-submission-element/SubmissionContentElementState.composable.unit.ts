@@ -5,6 +5,7 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { SubmissionItemResponse } from "@/serverApi/v3";
+import { nextTick } from "vue";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -20,31 +21,38 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 	},
 ];
 jest.mock("./SubmissionItemApi.composable");
-
-const mockedUseSubmissionItemApi = jest.mocked(useSubmissionItemApi);
 const mockedCreateSubmissionItemCall = jest.fn();
 const mockedUpdateSubmissionItemCall = jest.fn();
 const mockedFetchSubmissionItemsCall = jest.fn();
-mockedFetchSubmissionItemsCall.mockReturnValue(mockedSubmissionItems);
 
-const mocks = {
-	createSubmissionItemCall: mockedCreateSubmissionItemCall,
-	updateSubmissionItemCall: mockedUpdateSubmissionItemCall,
-	fetchSubmissionItemsCall: mockedFetchSubmissionItemsCall,
-};
-mockedUseSubmissionItemApi.mockReturnValue(mocks);
+describe("SubmissionContentElementState.composable", () => {
+	const setup = (
+		contentElementId = "123123",
+		submissionItems: Array<SubmissionItemResponse> = mockedSubmissionItems
+	) => {
+		const mockedUseSubmissionItemApi = jest.mocked(useSubmissionItemApi);
 
-const setup = (contentElementId = "123123") => {
-	return mountComposable(
-		() => useSubmissionContentElementState(contentElementId),
-		{
-			[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-		}
-	);
-};
+		mockedFetchSubmissionItemsCall.mockReturnValue(submissionItems);
 
-describe("SubmissionContentElementState composable", () => {
+		mockedUseSubmissionItemApi.mockReturnValue({
+			createSubmissionItemCall: mockedCreateSubmissionItemCall,
+			updateSubmissionItemCall: mockedUpdateSubmissionItemCall,
+			fetchSubmissionItemsCall: mockedFetchSubmissionItemsCall,
+		});
+
+		return mountComposable(
+			() => useSubmissionContentElementState(contentElementId),
+			{
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			}
+		);
+	};
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	it("should fetch submission items on mount", async () => {
 		const contentElementId = "123124";
 
@@ -71,15 +79,39 @@ describe("SubmissionContentElementState composable", () => {
 		expect(submissionItems.value.length).toEqual(mockedSubmissionItems.length);
 	});
 
-	it("should return update function that updates completed state", async () => {
-		const contentElementId = "123124";
-		const { updateSubmissionItem } = setup(contentElementId);
+	describe("if the student created a submission item before", () => {
+		it("should return update function that updates the completed state", async () => {
+			const contentElementId = "123124";
+			const { fetchSubmissionItems, updateSubmissionItem } =
+				setup(contentElementId);
 
-		const completed = true;
-		await updateSubmissionItem(completed);
-		expect(mockedCreateSubmissionItemCall).toHaveBeenLastCalledWith(
-			contentElementId,
-			completed
-		);
+			await fetchSubmissionItems(contentElementId);
+
+			const completed = true;
+			await updateSubmissionItem(completed);
+			expect(mockedUpdateSubmissionItemCall).toHaveBeenLastCalledWith(
+				mockedSubmissionItems[0].id,
+				completed
+			);
+		});
+	});
+
+	describe("if the student did not create a submission item so far", () => {
+		it("should return update function that creates initial completed state", async () => {
+			const contentElementId = "123124";
+			const { fetchSubmissionItems, updateSubmissionItem } = setup(
+				contentElementId,
+				[]
+			);
+
+			await fetchSubmissionItems(contentElementId);
+
+			const completed = true;
+			await updateSubmissionItem(completed);
+			expect(mockedCreateSubmissionItemCall).toHaveBeenLastCalledWith(
+				contentElementId,
+				completed
+			);
+		});
 	});
 });
