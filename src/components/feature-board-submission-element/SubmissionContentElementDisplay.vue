@@ -46,7 +46,7 @@ import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, toRef } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -78,7 +78,7 @@ export default defineComponent({
 		};
 
 		const editable = computed(() => {
-			return false;
+			return dayjs().isBefore(toRef(props, "dueDate").value);
 		});
 
 		return {
