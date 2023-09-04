@@ -5,10 +5,11 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import Vue, { nextTick, computed, ref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createMock } from "@golevelup/ts-jest";
 
@@ -27,6 +28,20 @@ const useDeleteConfirmationDialogMock = jest.mocked(
 	useDeleteConfirmationDialog
 );
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
+jest.mock("./SubmissionContentElementState.composable");
+const mockedUseSubmissionContentElementState = jest.mocked(
+	useSubmissionContentElementState
+);
+const mockedUpdateSubmissionItem = jest.fn();
+const mockedSubmissionItems = ref([]);
+const mockedCompleted = computed(() => true);
+const mocks = {
+	updateSubmissionItem: mockedUpdateSubmissionItem,
+	submissionItems: mockedSubmissionItems,
+	completed: mockedCompleted,
+};
+mockedUseSubmissionContentElementState.mockReturnValue(mocks);
 
 describe("SubmissionContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -97,6 +112,25 @@ describe("SubmissionContentElement", () => {
 				.props("dueDate");
 
 			expect(dueDate).toBe(element.content.dueDate);
+		});
+
+		it("should hand over completed to SubmissionContentElementDisplay", async () => {
+			const { wrapper } = setup();
+
+			const completed = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("completed");
+
+			expect(completed).toBe(mockedCompleted.value);
+		});
+
+		it("should update completed state when it receives 'update:completed' event from child", async () => {
+			const { wrapper } = setup();
+
+			const component = wrapper.findComponent(SubmissionContentElementDisplay);
+			component.vm.$emit("update:completed");
+
+			expect(mockedUpdateSubmissionItem).toHaveBeenCalledTimes(1);
 		});
 	});
 
