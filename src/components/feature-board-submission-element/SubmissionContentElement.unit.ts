@@ -34,10 +34,12 @@ const mockedUseSubmissionContentElementState = jest.mocked(
 	useSubmissionContentElementState
 );
 const mockedUpdateSubmissionItem = jest.fn();
+const mockedFetchSubmissionItems = jest.fn();
 const mockedSubmissionItems = ref([]);
 const mockedCompleted = computed(() => true);
-const mockedLoading = computed(() => false);
+const mockedLoading = ref(false);
 const mocks = {
+	fetchSubmissionItems: mockedFetchSubmissionItems,
 	updateSubmissionItem: mockedUpdateSubmissionItem,
 	submissionItems: mockedSubmissionItems,
 	completed: mockedCompleted,
