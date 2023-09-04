@@ -78,6 +78,16 @@ describe("SubmissionContentElementDisplay", () => {
 		expect(component.exists()).toBe(true);
 	});
 
+	it("should emit 'update:completed' when student changes completed state", async () => {
+		const { wrapper } = setup("student");
+
+		const component = wrapper.findComponent(SubmissionItemStudentDisplay);
+		component.vm.$emit("update:completed");
+
+		const emitted = wrapper.emitted();
+		expect(emitted["update:completed"]).toBeDefined();
+	});
+
 	it("should not render SubmissionItemStudentDisplay as a teacher", () => {
 		const { wrapper } = setup("teacher");
 
