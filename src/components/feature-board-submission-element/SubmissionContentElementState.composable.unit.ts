@@ -5,7 +5,6 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { SubmissionItemResponse } from "@/serverApi/v3";
-import { nextTick } from "vue";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
