@@ -36,10 +36,12 @@ const mockedUseSubmissionContentElementState = jest.mocked(
 const mockedUpdateSubmissionItem = jest.fn();
 const mockedSubmissionItems = ref([]);
 const mockedCompleted = computed(() => true);
+const mockedLoading = computed(() => false);
 const mocks = {
 	updateSubmissionItem: mockedUpdateSubmissionItem,
 	submissionItems: mockedSubmissionItems,
 	completed: mockedCompleted,
+	loading: mockedLoading,
 };
 mockedUseSubmissionContentElementState.mockReturnValue(mocks);
 
@@ -114,7 +116,7 @@ describe("SubmissionContentElement", () => {
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
-		it("should hand over completed to SubmissionContentElementDisplay", async () => {
+		it("should hand over completed state to SubmissionContentElementDisplay", async () => {
 			const { wrapper } = setup();
 
 			const completed = wrapper
@@ -122,6 +124,16 @@ describe("SubmissionContentElement", () => {
 				.props("completed");
 
 			expect(completed).toBe(mockedCompleted.value);
+		});
+
+		it("should hand over loading state to SubmissionContentElementDisplay", async () => {
+			const { wrapper } = setup();
+
+			const loading = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("loading");
+
+			expect(loading).toBe(mockedLoading.value);
 		});
 
 		it("should update completed state when it receives 'update:completed' event from child", async () => {
