@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		:outlined="isOutlined"
+		outlined
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -73,11 +73,6 @@ export default defineComponent({
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-		const isOutlined = computed(() => {
-			// return props.isEditMode === true;
-			return true;
-		});
-
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -109,7 +104,6 @@ export default defineComponent({
 		};
 
 		return {
-			isOutlined,
 			submissionContentElement,
 			completed,
 			loading,
