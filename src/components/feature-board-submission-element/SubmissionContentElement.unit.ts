@@ -5,7 +5,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick, computed, ref } from "vue";
+import Vue, { nextTick } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -33,19 +33,12 @@ jest.mock("./SubmissionContentElementState.composable");
 const mockedUseSubmissionContentElementState = jest.mocked(
 	useSubmissionContentElementState
 );
-const mockedUpdateSubmissionItem = jest.fn();
-const mockedFetchSubmissionItems = jest.fn();
-const mockedSubmissionItems = ref([]);
-const mockedCompleted = computed(() => true);
-const mockedLoading = ref(false);
-const mocks = {
-	fetchSubmissionItems: mockedFetchSubmissionItems,
-	updateSubmissionItem: mockedUpdateSubmissionItem,
-	submissionItems: mockedSubmissionItems,
-	completed: mockedCompleted,
-	loading: mockedLoading,
-};
-mockedUseSubmissionContentElementState.mockReturnValue(mocks);
+const mockedUseSubmissionContentElementStateResponse =
+	createMock<ReturnType<typeof useSubmissionContentElementState>>();
+
+mockedUseSubmissionContentElementState.mockReturnValue(
+	mockedUseSubmissionContentElementStateResponse
+);
 
 describe("SubmissionContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -125,7 +118,9 @@ describe("SubmissionContentElement", () => {
 				.findComponent(SubmissionContentElementDisplay)
 				.props("completed");
 
-			expect(completed).toBe(mockedCompleted.value);
+			expect(completed).toBe(
+				mockedUseSubmissionContentElementStateResponse.completed
+			);
 		});
 
 		it("should hand over loading state to SubmissionContentElementDisplay", async () => {
@@ -135,7 +130,9 @@ describe("SubmissionContentElement", () => {
 				.findComponent(SubmissionContentElementDisplay)
 				.props("loading");
 
-			expect(loading).toBe(mockedLoading.value);
+			expect(loading).toBe(
+				mockedUseSubmissionContentElementStateResponse.loading
+			);
 		});
 
 		it("should update completed state when it receives 'update:completed' event from child", async () => {
@@ -144,7 +141,9 @@ describe("SubmissionContentElement", () => {
 			const component = wrapper.findComponent(SubmissionContentElementDisplay);
 			component.vm.$emit("update:completed");
 
-			expect(mockedUpdateSubmissionItem).toHaveBeenCalledTimes(1);
+			expect(
+				mockedUseSubmissionContentElementStateResponse.updateSubmissionItem
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 
