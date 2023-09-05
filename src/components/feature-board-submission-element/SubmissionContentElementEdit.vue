@@ -37,7 +37,6 @@ export default defineComponent({
 	props: {
 		dueDate: {
 			type: String,
-			required: true,
 		},
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },

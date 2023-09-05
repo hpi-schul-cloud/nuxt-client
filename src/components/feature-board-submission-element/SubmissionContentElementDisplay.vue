@@ -13,6 +13,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import dayjs from "dayjs";
+import { useI18n } from "@/composables/i18n.composable";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 
 export default defineComponent({
@@ -21,13 +22,15 @@ export default defineComponent({
 	props: {
 		dueDate: {
 			type: String,
-			required: true,
 		},
 	},
 	setup(props) {
-		const formattedDueDate = dayjs(props.dueDate).format(
-			"dddd, DD.MM.YYYY - HH:mm"
-		);
+		const { t } = useI18n();
+
+		const formattedDueDate = props.dueDate
+			? dayjs(props.dueDate).format(`dddd, ${t("format.date")} - HH:mm`)
+			: undefined;
+
 		return {
 			formattedDueDate,
 		};
