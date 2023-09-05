@@ -1,5 +1,5 @@
 <template>
-	<div class="white">
+	<div class="white rounded-b-sm">
 		<v-skeleton-loader
 			v-if="loading"
 			class="mt-5 ml-5 mb-6"
