@@ -430,6 +430,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: false,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -509,6 +510,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: true,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -806,6 +808,29 @@ describe("AdminMigrationSection", () => {
 
 				expect(switchComponent.exists()).toBe(true);
 			});
+
+			it("should enable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: true,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual(undefined);
+			});
 		});
 
 		describe("when migration has not yet started", () => {
@@ -830,31 +855,6 @@ describe("AdminMigrationSection", () => {
 				);
 
 				expect(switchComponent.attributes("disabled")).toEqual("disabled");
-			});
-		});
-
-		describe("when migration is active", () => {
-			it("should enable the switch", () => {
-				const { wrapper } = setup(
-					{
-						getOauthMigration: {
-							enableMigrationStart: true,
-							oauthMigrationPossible: true,
-							oauthMigrationMandatory: false,
-							oauthMigrationFinished: "",
-							oauthMigrationFinalFinish: "",
-						},
-					},
-					{
-						getEnableLdapSyncDuringMigration: true,
-					}
-				);
-
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
-
-				expect(switchComponent.attributes("disabled")).toEqual(undefined);
 			});
 		});
 
