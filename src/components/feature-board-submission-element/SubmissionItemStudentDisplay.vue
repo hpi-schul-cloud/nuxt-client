@@ -1,8 +1,17 @@
 <template>
-	<div class="white px-4">
+	<div class="white">
+		<v-skeleton-loader
+			v-if="loading"
+			class="mt-5 ml-5 mb-6"
+			type="image"
+			width="120"
+			height="22"
+		/>
 		<v-checkbox
+			v-else
 			v-model="modelValue"
-			:disabled="!editable || loading"
+			class="px-4"
+			:disabled="!editable"
 			:label="$t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
