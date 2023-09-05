@@ -3789,11 +3789,11 @@ export interface SingleColumnBoardResponse {
  */
 export interface SubmissionContainerContentBody {
     /**
-     * 
+     * The point in time until when a submission can be handed in.
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
-    dueDate: string;
+    dueDate?: string;
 }
 /**
  * 
@@ -3806,7 +3806,7 @@ export interface SubmissionContainerElementContent {
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */
-    dueDate: string;
+    dueDate?: string;
 }
 /**
  * 
