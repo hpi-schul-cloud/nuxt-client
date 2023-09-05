@@ -43,7 +43,7 @@ describe("SubmissionItemStudentDisplay", () => {
 		expect(emitted["update:completed"]).toBeDefined();
 	});
 
-	describe("while state is loading", () => {
+	describe("while loading", () => {
 		it("should show loading skeleton", () => {
 			const loading = true;
 			const { wrapper } = setup(loading);
@@ -61,7 +61,7 @@ describe("SubmissionItemStudentDisplay", () => {
 		});
 	});
 
-	describe("after state is loaded", () => {
+	describe("after loading", () => {
 		it("should not show loading skeleton", () => {
 			const loading = false;
 			const { wrapper } = setup(loading);
