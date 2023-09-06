@@ -98,7 +98,6 @@ describe("FileContentElement", () => {
 
 			it("should not render FileContent component", async () => {
 				const { wrapper } = setup();
-				wrapper.overview();
 
 				await wrapper.vm.$nextTick();
 				const fileContent = wrapper.findComponent(FileContent);
@@ -358,7 +357,6 @@ describe("FileContentElement", () => {
 
 				it("should not render FileContent component", async () => {
 					const { wrapper } = setup();
-					wrapper.overview();
 
 					await wrapper.vm.$nextTick();
 					const fileContent = wrapper.findComponent(FileContent);
