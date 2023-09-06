@@ -161,6 +161,7 @@
 	"components.administration.adminMigrationSection.startWarningCard.text": "Con el inicio de la migración, todos los estudiantes y profesores de su escuela podrán cambiar el sistema de registro a moin.schule. Los usuarios que hayan cambiado el sistema de inicio de sesión solo podrán iniciar sesión a través de moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title": "¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
+	"components.administration.externalToolsSection.description": "Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.<br><br>\nEliminar una configuración hará la herramienta retirada de la escuela.<br><br>\nMás información está disponible en nuestro <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\" _blank\">Sección de ayuda sobre herramientas externas</a>.",
 	"components.administration.externalToolsSection.table.header.status": "Estado",
 	"components.administration.externalToolsSection.action.add": "Agregar herramienta",
 	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
