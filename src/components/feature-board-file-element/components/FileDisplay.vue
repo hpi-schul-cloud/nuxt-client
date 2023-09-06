@@ -6,7 +6,7 @@
 			:name="fileProperties.name"
 			:is-edit-mode="isEditMode"
 		/>
-		<DefaultDisplay :name="fileProperties.name" />
+		<DefaultDisplay v-else :name="fileProperties.name" />
 	</div>
 </template>
 
