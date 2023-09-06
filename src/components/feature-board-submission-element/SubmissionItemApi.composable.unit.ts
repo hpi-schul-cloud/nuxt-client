@@ -51,7 +51,7 @@ describe("SubmissionItemApi.composable", () => {
 	});
 
 	describe("fetch submissionItems", () => {
-		it("should call boardSubmissionControllerUpdateSubmissionItem api", async () => {
+		it("should call boardSubmissionControllerGetSubmissionItems api", async () => {
 			const { fetchSubmissionItemsCall } = useSubmissionItemApi();
 			const elementId = "123124";
 
