@@ -4,12 +4,16 @@ import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifierModule } from "@/store/store-accessor";
 
 type AddCardElement = (
 	type: ContentElementType
 ) => Promise<AnyContentElement | undefined>;
 
-export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+export const useAddElementDialog = (
+	addElementFunction: AddCardElement,
+	elements: any
+) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
@@ -18,6 +22,20 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
+		const drawingExists = elements.value.elements.some(
+			(element: { type: ContentElementType }) =>
+				element.type === ContentElementType.Drawing
+		);
+		if (elementType === ContentElementType.Drawing) {
+			if (drawingExists) {
+				notifierModule.show({
+					text: "You cannot add another board within the card",
+					status: "error",
+				});
+				return;
+			}
+		}
+
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
 	};

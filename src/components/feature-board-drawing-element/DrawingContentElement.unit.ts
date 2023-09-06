@@ -1,21 +1,20 @@
-import NotifierModule from "@/store/notifier";
+import Vue from "vue";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount, Wrapper } from "@vue/test-utils";
+import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
-import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
 
-jest.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteConfirmationDialog: jest.fn(),
-	};
-});
+// Mocks
+jest.mock("@data-board", () => ({
+	useBoardFocusHandler: jest.fn(),
+	useContentElementState: jest.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: jest.fn(),
+}));
 jest.mock("@feature-board");
 
 const DRAWING_ELEMENT: DrawingElementResponse = {
@@ -23,7 +22,7 @@ const DRAWING_ELEMENT: DrawingElementResponse = {
 	type: ContentElementType.Drawing,
 	content: {
 		drawingName: "DrawingName",
-		description: "DrawingDescripton",
+		description: "DrawingDescription",
 	},
 	timestamps: {
 		createdAt: new Date().toISOString(),
@@ -40,7 +39,7 @@ describe("DrawingContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(DrawingContentElement as MountOptions<Vue>, {
+		wrapper = shallowMount(DrawingContentElement, {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
@@ -49,6 +48,7 @@ describe("DrawingContentElement", () => {
 			},
 		});
 	};
+
 	describe("when component is mounted", () => {
 		it("should render display if isEditMode is false", () => {
 			setup({
@@ -70,21 +70,43 @@ describe("DrawingContentElement", () => {
 			);
 		});
 
-		// it("should call deleteElement when it receives delete:element event from edit component", async () => {
-		// 	setup({
-		// 		element: DRAWING_ELEMENT,
-		// 		isEditMode: true,
-		// 	});
+		const testMoveEvent = (eventName: string) => {
+			it(`should emit '${eventName}:edit' when it receives ${eventName}:element event from child`, async () => {
+				setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+				});
 
-		// 	const drawingContentElementEdit = wrapper.findComponent(
-		// 		DrawingContentElementEdit
-		// 	);
-		// 	drawingContentElementEdit.vm.$emit("delete:element");
-		// 	await wrapper.vm.$nextTick();
-		// 	const emitted = wrapper.emitted()["delete:element"] ?? [];
+				const component = wrapper.findComponent(DrawingContentElementEdit);
+				component.vm.$emit(`${eventName}:element`);
 
-		// 	expect(emitted).toHaveLength(1);
-		// 	expect(emitted[0][0]).toStrictEqual("test-id");
-		// });
+				const emitted = wrapper.emitted();
+				expect(emitted[`${eventName}:edit`]).toBeDefined();
+			});
+		};
+
+		testMoveEvent("move-down");
+		testMoveEvent("move-up");
+
+		const propsToTest = [
+			"isFirstElement",
+			"isLastElement",
+			"hasMultipleElements",
+		];
+
+		propsToTest.forEach((prop) => {
+			it(`should pass ${prop} property to DrawingContentElementEdit`, async () => {
+				setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+				});
+
+				const propValue = wrapper
+					.findComponent(DrawingContentElementEdit)
+					.props(prop);
+
+				expect(propValue).toBe(false);
+			});
+		});
 	});
 });

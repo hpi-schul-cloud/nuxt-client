@@ -1,16 +1,20 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
+import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 
-describe("DrawingContentElementDisplay", () => {
+describe("DrawingContentElementEdit", () => {
+	const propsData = {
+		lastUpdatedAt: "03.12 15:56",
+		isFirstElement: false,
+		isLastElement: false,
+		hasMultipleElements: false,
+	};
+
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = {
-			lastUpdatedAt: "03.12 15:56",
-		};
-		const wrapper = shallowMount(DrawingContentElementDisplay, {
+		const wrapper = shallowMount(DrawingContentElementEdit, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
 			provide: {
@@ -20,34 +24,27 @@ describe("DrawingContentElementDisplay", () => {
 
 		return {
 			wrapper,
-			lastUpdatedAt: propsData.lastUpdatedAt,
+			...propsData,
 		};
 	};
 
-	it("should be found in dom", () => {
+	it("should be found in the DOM", () => {
 		const { wrapper } = setup();
-
-		const component = wrapper.findComponent(DrawingContentElementDisplay);
-		expect(component.exists()).toBe(true);
+		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should display icon", async () => {
+	it("should display an icon", () => {
 		const { wrapper } = setup();
-
 		const drawingIcon = wrapper.find("v-icon-stub");
-
 		expect(drawingIcon.exists()).toBe(true);
 	});
 
-	it("should find drawing tag", () => {
+	it("should find the drawing tag and display it", () => {
 		const { wrapper } = setup();
-
 		const drawingTag = wrapper
 			.find("span.subtitle-1.text-truncate.black--text.text--darken-2")
 			.text();
-
-		expect(drawingTag).toContain(
-			wrapper.vm.$t("components.cardElement.drawingElement")
-		);
+		const expectedText = wrapper.vm.$t("components.cardElement.drawingElement");
+		expect(drawingTag).toContain(expectedText);
 	});
 });
