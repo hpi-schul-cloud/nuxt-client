@@ -105,12 +105,6 @@ export default defineComponent({
 			return fileRecord.value !== undefined;
 		});
 
-		const needsFileUpload = computed(() => {
-			return (
-				isLoadingFileRecord.value === false && hasFileRecord.value === false
-			);
-		});
-
 		const isOutlined = computed(() => {
 			return fileRecord.value !== undefined || props.isEditMode === true;
 		});
@@ -182,7 +176,6 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
-			needsFileUpload,
 			onDeleteElement,
 			onMoveElementDown,
 			onMoveElementUp,
