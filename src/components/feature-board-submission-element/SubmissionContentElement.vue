@@ -16,7 +16,7 @@
 				:dueDate="element.content.dueDate"
 				:completed="completed"
 				:loading="loading"
-				@update:completed="updateCompleted"
+				@update:completed="updateCompletionState"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -99,7 +99,7 @@ export default defineComponent({
 			}
 		};
 
-		const updateCompleted = (completed: boolean) => {
+		const updateCompletionState = (completed: boolean) => {
 			updateSubmissionItem(completed);
 		};
 
@@ -111,7 +111,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
-			updateCompleted,
+			updateCompletionState,
 		};
 	},
 });
