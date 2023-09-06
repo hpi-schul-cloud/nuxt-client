@@ -1,16 +1,16 @@
 import NotifierModule from "@/store/notifier";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
+import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
-import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("@data-board", () => {
 	return {
@@ -212,15 +212,40 @@ describe("SubmissionContentElement", () => {
 			expect(wrapper.emitted("delete:element")).toHaveLength(1);
 		});
 
-		// currently blocked as v-card blocks correct usage of keydown event (works when its a div)
-		it.todo("should emit 'move-keyboard:edit' when arrow key up or is pressed");
-		/* async () => {
+		it("should emit 'move-keyboard:edit' when arrow key down is pressed", async () => {
 			const { wrapper } = setup();
 
-			await wrapper.trigger("keydown.up");
+			const card = wrapper.findComponent({ ref: "submissionContentElement" });
+			card.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "ArrowDown",
+					keyCode: 40,
+				})
+			);
 
-			const emitted = wrapper.emitted();
-			expect(emitted["move-keyboard:edit"]).toBeDefined();
-		}; */
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
+
+		it("should emit 'move-keyboard:edit' when arrow key up is pressed", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.findComponent({ ref: "submissionContentElement" });
+			card.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "ArrowUp",
+					keyCode: 38,
+				})
+			);
+
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
 	});
 });
