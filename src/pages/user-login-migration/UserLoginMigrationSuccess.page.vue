@@ -31,10 +31,10 @@ import { defineComponent, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { RenderHTML } from "@feature-render-html";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",

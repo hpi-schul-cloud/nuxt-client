@@ -101,7 +101,6 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
@@ -109,6 +108,7 @@ import {
 	mdiShareVariantOutline,
 } from "@mdi/js";
 import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -129,15 +129,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const onMailShareUrl = (shareUrl, type) => {
 			const subject = encodeURIComponent(

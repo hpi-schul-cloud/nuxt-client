@@ -61,16 +61,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { defineComponent } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		RoomWrapper,
 		vRoomAvatar,

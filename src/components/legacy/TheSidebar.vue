@@ -90,7 +90,7 @@
 import { defineComponent, ref, watch } from "vue";
 import baseLink from "@/components/base/BaseLink.vue";
 import { SidebarItem } from "@/utils/sidebar-base-items";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	name: "TheSidebar",

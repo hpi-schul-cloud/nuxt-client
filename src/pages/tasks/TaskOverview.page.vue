@@ -9,8 +9,8 @@ import TasksModule from "@/store/tasks";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, inject, onMounted, ref } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { TasksDashboardMain },

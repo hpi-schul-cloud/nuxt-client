@@ -133,7 +133,6 @@ import {
 } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -150,12 +149,13 @@ import {
 import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const { isLoadingDialogOpen } = useLoadingState(
-			i18n.t("components.molecules.copyResult.title.loading")
+			t("components.molecules.copyResult.title.loading")
 		);
 
 		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =

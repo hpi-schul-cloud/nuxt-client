@@ -27,7 +27,7 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
@@ -39,7 +39,6 @@ import themeConfig from "@/theme.config";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueMq from "vue-mq";
-import Vuelidate from "vuelidate";
 import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 // NUXT_REMOVAL change how global components are handled
@@ -69,13 +68,19 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 
-Vue.config.productionTip = false;
+const app = createApp(App);
 
-Vue.config.errorHandler = handleApplicationError;
+// app.config.productionTip = false;
 
-Vue.prototype.$theme = themeConfig;
+app.config.errorHandler = handleApplicationError;
 
-Vue.use(VueMq, {
+app.config.globalProperties.$theme = themeConfig;
+
+// NUXT_REMOVAL try to solve without vue-mq dependency
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import VueMq from "vue-mq";
+app.use(VueMq, {
 	breakpoints: {
 		mobile: 750,
 		tabletPortrait: 770,
@@ -86,9 +91,7 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
-Vue.use(Vuelidate);
-
-Vue.mixin({
+app.mixin({
 	computed: {
 		$user() {
 			return authModule.getUser;
@@ -96,7 +99,7 @@ Vue.mixin({
 	},
 });
 
-Vue.use(VueDOMPurifyHTML, {
+app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
@@ -129,43 +132,47 @@ Vue.use(VueDOMPurifyHTML, {
 	// creation of i18n relies on envConfigModule authModule
 	const i18n = createI18n();
 
-	new Vue({
-		router,
-		store,
-		vuetify,
-		i18n,
-		// NUXT_REMOVAL get rid of store DI
-		provide: {
-			accountsModule,
-			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
-			authModule,
-			[AUTH_MODULE_KEY.valueOf()]: authModule,
-			autoLogoutModule,
-			collaborativeFilesModule,
-			contentModule,
-			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
-			copyModule,
-			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-			[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
-			filePathsModule,
-			finishedTasksModule,
-			importUsersModule,
-			loadingStateModule,
-			newsModule,
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			privacyPolicyModule,
-			[ROOM_MODULE_KEY.valueOf()]: roomModule,
-			roomsModule,
-			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-			schoolsModule,
-			shareModule,
-			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-			tasksModule,
-			[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
-			[I18N_KEY.valueOf()]: i18n,
-			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-		},
-		render: (h) => h(App),
-	}).$mount("#app");
+	app.use(router).use(store).use(vuetify).use(i18n);
+
+	// NUXT_REMOVAL get rid of store DI
+	app.provide("accountsModule", accountsModule);
+	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
+	app.provide("authModule", authModule);
+	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
+	app.provide("autoLogoutModule", autoLogoutModule);
+	app.provide("collaborativeFilesModule", collaborativeFilesModule);
+	app.provide("contentModule", contentModule);
+	app.provide(
+		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
+		contextExternalToolsModule
+	);
+	app.provide("copyModule", copyModule);
+	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
+	app.provide(EXTERNAL_TOOLS_MODULE_KEY.valueOf(), externalToolsModule);
+	app.provide("filePathsModule", filePathsModule);
+	app.provide("finishedTasksModule", finishedTasksModule);
+	app.provide("importUsersModule", importUsersModule);
+	app.provide("loadingStateModule", loadingStateModule);
+	app.provide("newsModule", newsModule);
+	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
+	app.provide("privacyPolicyModule", privacyPolicyModule);
+	app.provide(ROOM_MODULE_KEY.valueOf(), roomModule);
+	app.provide("roomsModule", roomsModule);
+	app.provide(
+		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
+		schoolExternalToolsModule
+	);
+	app.provide("schoolsModule", schoolsModule);
+	app.provide("shareModule", shareModule);
+	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);
+	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
+	app.provide("tasksModule", tasksModule);
+	app.provide(
+		USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(),
+		userLoginMigrationModule
+	);
+	app.provide(I18N_KEY.valueOf(), i18n);
+	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
+
+	app.mount("#app");
 })();

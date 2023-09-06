@@ -30,12 +30,12 @@
 	</v-data-iterator>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
+import { defineComponent } from "vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 
 // eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		vRoomAvatar,
 	},
@@ -63,5 +63,6 @@ export default Vue.extend({
 			type: Boolean,
 		},
 	},
+	emits: ["startDrag"],
 });
 </script>

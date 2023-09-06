@@ -98,7 +98,6 @@ import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -112,26 +111,24 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueI18n from "vue-i18n";
-import { default as VueRouter } from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
 		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 
 		onMounted(async () => {
 			if (authModule.getUser) {
@@ -141,9 +138,7 @@ export default defineComponent({
 			}
 		});
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 

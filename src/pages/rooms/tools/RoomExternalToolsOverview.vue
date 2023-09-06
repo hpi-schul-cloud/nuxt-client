@@ -51,7 +51,6 @@ import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -63,7 +62,7 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import RoomModule from "@/store/room";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
@@ -85,14 +84,10 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const i18n: VueI18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const course: Ref<Course | null> = ref(null);
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 			return (

@@ -31,7 +31,7 @@
 <script lang="ts">
 import { mdiViewDashboard } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	name: "RoomBoardCard",

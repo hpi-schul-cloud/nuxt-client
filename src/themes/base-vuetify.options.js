@@ -1,5 +1,6 @@
 import customIcons from "@/components/icons/custom";
 import materialIcons from "@/components/icons/material";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
 export default {
 	theme: {
@@ -48,8 +49,10 @@ export default {
 		},
 	},
 	icons: {
-		iconfont: "mdiSvg",
-		values: {
+		defaultSet: "mdi",
+		aliases,
+		sets: {
+			mdi,
 			...customIcons,
 			...materialIcons,
 		},

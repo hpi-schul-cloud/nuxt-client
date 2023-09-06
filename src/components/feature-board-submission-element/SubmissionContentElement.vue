@@ -36,7 +36,7 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -61,7 +61,7 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const submissionContentElement = ref(null);
 		useBoardFocusHandler(props.element.id, submissionContentElement);
 
@@ -88,7 +88,7 @@ export default defineComponent({
 
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
-				i18n.t("components.cardElement.submissionElement").toString(),
+				t("components.cardElement.submissionElement").toString(),
 				"boardElement"
 			);
 

@@ -16,13 +16,13 @@
 <script>
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery } from "@vueuse/core";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import { defineComponent, ref, watch, computed } from "vue";
+import { useI18n } from "vue-i18n";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -53,11 +53,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t, locale } = useI18n();
 
 		const ck = ref(null);
 		const content = ref(props.value);
-		const language = i18n.locale;
 		const charCount = ref(0);
 
 		const toolbarItems = {
@@ -169,7 +168,7 @@ export default defineComponent({
 						{
 							model: "dullPinkMarker",
 							class: "marker-dull-pink",
-							title: i18n.t("components.editor.highlight.dullPink").toString(),
+							title: t("components.editor.highlight.dullPink"),
 							color: "var(--ck-highlight-marker-dull-pink)",
 							type: "marker",
 						},
@@ -183,9 +182,7 @@ export default defineComponent({
 						{
 							model: "dullYellowMarker",
 							class: "marker-dull-yellow",
-							title: i18n
-								.t("components.editor.highlight.dullYellow")
-								.toString(),
+							title: t("components.editor.highlight.dullYellow"),
 							color: "var(--ck-highlight-marker-dull-yellow)",
 							type: "marker",
 						},
@@ -199,7 +196,7 @@ export default defineComponent({
 						{
 							model: "dullBlueMarker",
 							class: "marker-dull-blue",
-							title: i18n.t("components.editor.highlight.dullBlue").toString(),
+							title: t("components.editor.highlight.dullBlue").toString(),
 							color: "var(--ck-highlight-marker-dull-blue)",
 							type: "marker",
 						},
@@ -213,7 +210,7 @@ export default defineComponent({
 						{
 							model: "dullGreenMarker",
 							class: "marker-dull-green",
-							title: i18n.t("components.editor.highlight.dullGreen").toString(),
+							title: t("components.editor.highlight.dullGreen").toString(),
 							color: "var(--ck-highlight-marker-dull-green)",
 							type: "marker",
 						},
@@ -231,7 +228,7 @@ export default defineComponent({
 						charCount.value = stats.characters;
 					},
 				},
-				language: language,
+				language: locale,
 				placeholder: props.placeholder,
 			};
 		});

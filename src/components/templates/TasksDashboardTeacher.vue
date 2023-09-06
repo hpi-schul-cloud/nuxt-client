@@ -86,17 +86,17 @@ import TasksList from "@/components/organisms/TasksList";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const { isLoadingDialogOpen } = useLoadingState(
-			i18n.t("components.molecules.copyResult.title.loading")
+			t("components.molecules.copyResult.title.loading")
 		);
 
 		const { copy } = useCopy(isLoadingDialogOpen);

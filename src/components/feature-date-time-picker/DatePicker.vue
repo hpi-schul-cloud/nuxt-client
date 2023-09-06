@@ -51,12 +51,12 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -70,17 +70,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const locale = i18n.locale;
-
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t, locale } = useI18n();
 
 		const model = ref(props.date);
 		const showDateDialog = ref(false);

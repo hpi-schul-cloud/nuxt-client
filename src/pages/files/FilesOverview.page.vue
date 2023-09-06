@@ -38,7 +38,6 @@ import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 import { fromNow } from "@/plugins/datetime";
 import CollaborativeFilesModule from "@/store/collaborative-files";
 import { CollaborativeFile } from "@/store/types/collaborative-file";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	computed,
 	ComputedRef,
@@ -48,30 +47,22 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter, { Route } from "vue-router";
-import { useRoute, useRouter } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { DefaultWireframe },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
 		const collaborativeFilesModule: CollaborativeFilesModule | undefined =
 			inject<CollaborativeFilesModule>("collaborativeFilesModule");
-		if (!collaborativeFilesModule || !i18n) {
+		if (!collaborativeFilesModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const { getHeaders, mapFileToFileTableItem, getFilesPageForRoute } =
 			useFileTableUtils(collaborativeFilesModule, t);
@@ -86,7 +77,7 @@ export default defineComponent({
 			);
 		});
 
-		const route: Route = useRoute();
+		const route = useRoute();
 		const filesPage: FilesPageConfig = getFilesPageForRoute(route);
 
 		const title: Ref<string> = ref(filesPage.title);
@@ -96,7 +87,7 @@ export default defineComponent({
 			return fromNow(value, true);
 		};
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const click = (item: FileTableItem): void => {
 			router.push({ path: item.path });
 		};

@@ -40,9 +40,9 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -57,11 +57,11 @@ export default defineComponent({
 		parentType: { type: String, required: true },
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-			required: (value) => !!value || i18n.t("common.validation.required"),
+			required: (value) => !!value || t("common.validation.required"),
 		});
 
 		const newName = computed({

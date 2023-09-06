@@ -130,7 +130,6 @@ import {
 	injectStrict,
 	VIDEO_CONFERENCE_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	I18N_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -142,7 +141,7 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomModule from "@/store/room";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -154,7 +153,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
@@ -163,8 +161,7 @@ export default defineComponent({
 
 		const roomName = computed(() => roomModule.getRoomData.title ?? "");
 
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo

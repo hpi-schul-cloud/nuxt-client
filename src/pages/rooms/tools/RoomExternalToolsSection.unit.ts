@@ -24,7 +24,7 @@ import ExternalToolsModule from "@/store/external-tools";
 import { BusinessError } from "@/store/types/commons";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import VueRouter from "vue-router";
-import * as routerComposables from "vue-router/composables";
+import * as routerComposables from "vue-router";
 import EnvConfigModule from "../../../store/env-config";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 

@@ -44,9 +44,9 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
 import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		DefaultWireframe,
 		vCustomEmptyState,

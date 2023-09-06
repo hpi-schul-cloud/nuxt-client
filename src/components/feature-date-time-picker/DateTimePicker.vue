@@ -33,9 +33,9 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { isToday } from "@/plugins/datetime";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";
 import { computed, defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -61,15 +61,13 @@ export default defineComponent({
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const locale = i18n.locale;
+		const { locale } = useI18n();
 
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {
 				return "";
 			}
-			return new Date(dateIsoString).toLocaleTimeString(locale, {
+			return new Date(dateIsoString).toLocaleTimeString(locale.value, {
 				timeStyle: "short",
 				hourCycle: "h23",
 			});

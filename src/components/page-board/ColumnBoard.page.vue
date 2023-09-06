@@ -9,7 +9,7 @@ import { useSharedBoardPageInformation } from "@data-board";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useTitle } from "@vueuse/core";
 import { defineComponent } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	name: "ColumnBoardPage",

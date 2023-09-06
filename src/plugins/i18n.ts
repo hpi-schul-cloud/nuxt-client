@@ -1,11 +1,8 @@
 import { authModule, envConfigModule } from "@/store";
-import Vue from "vue";
-import VueI18n, { LocaleMessages } from "vue-i18n";
+import { createI18n } from "vue-i18n";
 
-Vue.use(VueI18n);
-
-const loadLocaleMessages = (): LocaleMessages => {
-	const messages: LocaleMessages = {
+const loadLocaleMessages = () => {
+	const messages = {
 		en: require("../locales/en.json"),
 		de: require("../locales/de.json"),
 		es: require("../locales/es.json"),
@@ -33,8 +30,9 @@ const numberFormats = {
 	},
 };
 
-export const createI18n = (): VueI18n => {
-	const i18n = new VueI18n({
+const localCreateI18n = () => {
+	const i18n = createI18n({
+		allowComposition: true, // you need to specify that!
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
 		messages: loadLocaleMessages(),
@@ -44,17 +42,19 @@ export const createI18n = (): VueI18n => {
 	return i18n;
 };
 
+export { localCreateI18n as createI18n };
+
 // NUXT_REMOVAL remove $ts when refactored
-declare module "vue/types/vue" {
-	interface Vue {
-		$ts(key: string): string;
-	}
-}
-// NUXT_REMOVAL remove $ts when refactored
-Vue.prototype.$ts = (key: string) => {
-	const result = (this as unknown as Vue).$t(key);
-	if (typeof result !== "string") {
-		throw new Error("Translation Result is not a string");
-	}
-	return result;
-};
+// declare module "vue/types/vue" {
+// 	interface Vue {
+// 		$ts(key: string): string;
+// 	}
+// }
+// // NUXT_REMOVAL remove $ts when refactored
+// Vue.prototype.$ts = (key: string) => {
+// 	const result = (this as unknown as Vue).$t(key);
+// 	if (typeof result !== "string") {
+// 		throw new Error("Translation Result is not a string");
+// 	}
+// 	return result;
+// };

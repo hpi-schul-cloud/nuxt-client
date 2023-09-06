@@ -1,8 +1,8 @@
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useConfirmationDialog } from "./Confirmation.composable";
+import { useI18n } from "vue-i18n";
 
 export const useDeleteConfirmationDialog = () => {
-	const i18n = injectStrict(I18N_KEY);
+	const { t } = useI18n();
 	const { askConfirmation, isDialogOpen } = useConfirmationDialog();
 
 	const askDeleteConfirmation = async (
@@ -10,14 +10,12 @@ export const useDeleteConfirmationDialog = () => {
 		type: "boardColumn" | "boardCard" | "boardElement"
 	): Promise<boolean> => {
 		const titleString = title ? `"${title}"` : "";
-		const typeString = i18n.t(`components.${type}`).toString();
+		const typeString = t(`components.${type}`);
 
-		const message = i18n
-			.t("ui-confirmation-dialog.ask-delete", {
-				title: titleString,
-				type: typeString,
-			})
-			.toString();
+		const message = t("ui-confirmation-dialog.ask-delete", {
+			title: titleString,
+			type: typeString,
+		});
 
 		const shouldDelete = await askConfirmation({ message });
 

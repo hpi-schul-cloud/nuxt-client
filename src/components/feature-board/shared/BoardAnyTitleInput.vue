@@ -32,7 +32,6 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { VTextarea } from "vuetify/lib";
 import { useBoardPermissions } from "@data-board";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -64,7 +63,9 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<InstanceType<typeof VTextarea> | null>(null);
+		const titleInput = ref<InstanceType<
+			(typeof import("vuetify/components"))["VTextarea"]
+		> | null>(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();

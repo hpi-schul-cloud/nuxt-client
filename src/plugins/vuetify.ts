@@ -1,9 +1,12 @@
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+
 import theme from "@/vuetify.options";
-import Vue from "vue";
-import Vuetify from "vuetify/lib/framework";
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
+	components,
+	directives,
 	...theme,
 });

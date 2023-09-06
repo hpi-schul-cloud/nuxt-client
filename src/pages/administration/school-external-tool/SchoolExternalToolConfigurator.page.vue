@@ -42,16 +42,15 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -112,9 +111,9 @@ export default defineComponent({
 				: undefined
 		);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const onCancel = () => {
-			router.push({ path: schoolSetting.to });
+			router.push({ path: schoolSetting.to! });
 		};
 
 		const onSave = async (
@@ -155,7 +154,7 @@ export default defineComponent({
 					status: "success",
 				});
 
-				await router.push({ path: schoolSetting.to });
+				await router.push({ path: schoolSetting.to! });
 			}
 		};
 

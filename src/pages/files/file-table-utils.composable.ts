@@ -4,7 +4,7 @@ import {
 	FileTypeIconMapping,
 } from "@/store/types/collaborative-file";
 import { FileTableItem } from "@/pages/files/file-table-item";
-import { Route } from "vue-router";
+import { RouteLocationNormalized } from "vue-router";
 import { DataTableHeader } from "vuetify";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
@@ -98,10 +98,12 @@ export function useFileTableUtils(
 		};
 	};
 
-	const getTeamsPage = (route: Route): FilesPageConfig => {
-		const paramsArray: string[] = route.params.catchAll
-			.split("/")
-			.filter((element: string) => element !== "");
+	const getTeamsPage = (route: RouteLocationNormalized): FilesPageConfig => {
+		const paramsArray: string[] = Array.isArray(route.params.catchAll)
+			? route.params.catchAll
+			: route.params.catchAll
+					.split("/")
+					.filter((element: string) => element !== "");
 		const teamsPath: string = route.path.replace("/cfiles/teams", "");
 		const deepBreadcrumbs: Breadcrumb[] = getDeepBreadcumbs(paramsArray);
 
@@ -123,7 +125,9 @@ export function useFileTableUtils(
 		};
 	};
 
-	const getFilesPageForRoute = (route: Route): FilesPageConfig => {
+	const getFilesPageForRoute = (
+		route: RouteLocationNormalized
+	): FilesPageConfig => {
 		const pathArray: string[] = route.path
 			.split("/")
 			.filter((element: string) => element !== "");

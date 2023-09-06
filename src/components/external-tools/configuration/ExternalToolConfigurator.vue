@@ -89,9 +89,9 @@ import {
 	useSlots,
 	watch,
 } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { useI18n } from "vue-i18n";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 

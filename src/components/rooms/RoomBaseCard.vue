@@ -42,9 +42,9 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiOpenInNew } from "@mdi/js";
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	emits: ["click"],
@@ -64,9 +64,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key: string): string => i18n.tc(key, 0);
+		const { t } = useI18n();
 
 		const onClick = () => {
 			emit("click");

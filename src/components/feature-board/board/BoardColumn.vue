@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
@@ -65,6 +64,7 @@ import {
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { useI18n } from "vue-i18n";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container, Draggable } = require("vue-dndrop");
 
@@ -94,7 +94,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
@@ -170,7 +170,7 @@ export default defineComponent({
 		};
 
 		const titlePlaceholder = computed(
-			() => `${i18n.t("components.boardColumn").toString()} ${props.index + 1}`
+			() => `${t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
 		return {

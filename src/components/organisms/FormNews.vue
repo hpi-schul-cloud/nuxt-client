@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
 import TextEditor from "@/components/molecules/TextEditor.vue";
@@ -91,7 +91,7 @@ import FormActions from "@/components/molecules/FormActions.vue";
 import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		TextEditor,
 		TitleInput,

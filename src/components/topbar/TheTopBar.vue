@@ -126,11 +126,7 @@ import {
 	ref,
 	watch,
 } from "vue";
-import {
-	I18N_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { User } from "@/store/types/auth";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
@@ -138,6 +134,7 @@ import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
 import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
 import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -167,7 +164,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 		const fullscreen = ref(props.fullscreenMode);
 
@@ -190,7 +187,7 @@ export default defineComponent({
 
 		const role = computed(() => {
 			const roleName = props.user.roles.map((r) => r.name);
-			return i18n.t(`common.roleName.${roleName[0]}`).toString();
+			return t(`common.roleName.${roleName[0]}`).toString();
 		});
 
 		const statusAlerts = computed(() => {

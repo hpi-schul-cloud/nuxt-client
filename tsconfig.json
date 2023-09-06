@@ -47,8 +47,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules", "./src/components/base/_globals.js"],
-	"vueCompilerOptions": {
-		"target": 2.7
-	}
+	"exclude": ["node_modules", "./src/components/base/_globals.js"]
 }

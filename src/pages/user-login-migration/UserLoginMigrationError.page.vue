@@ -38,7 +38,6 @@
 
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
-import { useI18n } from "@/composables/i18n.composable";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
@@ -60,6 +59,7 @@ import {
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import EnvConfigModule from "@/store/env-config";
 import { UserLoginMigration } from "@/store/user-login-migration";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",

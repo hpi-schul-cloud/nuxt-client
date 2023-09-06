@@ -51,9 +51,9 @@
 
 <script type="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
 import { defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -69,7 +69,7 @@ export default defineComponent({
 		courses: { type:Array, required: true }
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 
 		const selectedCourse = ref(undefined);
 
@@ -77,7 +77,7 @@ export default defineComponent({
 		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
 
 		const rules = reactive({
-          required: value => !!value || i18n.t("common.validation.required"),
+          required: value => !!value || t("common.validation.required"),
 		});
 
 		const onNext = () => {

@@ -26,8 +26,8 @@ import { computed, defineComponent } from "vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useTitle } from "@vueuse/core";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({

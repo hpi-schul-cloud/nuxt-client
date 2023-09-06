@@ -1,4 +1,3 @@
-import { Route, RouteConfig } from "vue-router";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
@@ -12,9 +11,10 @@ import {
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 // routes configuration sorted in alphabetical order
-export const routes: Array<RouteConfig> = [
+export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("../pages/ActivationCode.page.vue"),
@@ -59,10 +59,14 @@ export const routes: Array<RouteConfig> = [
 			{
 				path: ":configId",
 				name: "administration-tool-config-edit",
+				component: () =>
+					import(
+						"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
+					),
 			},
 		],
-		props: (route: Route) => ({
-			configId: route.params.configId,
+		props: (to: RouteLocationNormalized) => ({
+			configId: to.params.configId,
 		}),
 	},
 	{
@@ -154,8 +158,8 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: validateQueryParameters({
 			origin: (value: unknown) => !isDefined(value) || isMongoId(value),
 		}),
-		props: (route: Route) => ({
-			origin: route.query.origin,
+		props: (to: RouteLocationNormalized) => ({
+			origin: to.query.origin,
 		}),
 		meta: {
 			isPublic: true,
@@ -173,9 +177,9 @@ export const routes: Array<RouteConfig> = [
 			targetSchoolNumber: (value: unknown) =>
 				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
-		props: (route: Route) => ({
-			sourceSchoolNumber: route.query.sourceSchoolNumber,
-			targetSchoolNumber: route.query.targetSchoolNumber,
+		props: (to: RouteLocationNormalized) => ({
+			sourceSchoolNumber: to.query.sourceSchoolNumber,
+			targetSchoolNumber: to.query.targetSchoolNumber,
 		}),
 		meta: {
 			isPublic: true,
@@ -190,8 +194,8 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: validateQueryParameters({
 			targetSystem: isMongoId,
 		}),
-		props: (route: Route) => ({
-			targetSystem: route.query.targetSystem,
+		props: (to: RouteLocationNormalized) => ({
+			targetSystem: to.query.targetSystem,
 		}),
 		meta: {
 			isPublic: true,
@@ -253,12 +257,16 @@ export const routes: Array<RouteConfig> = [
 			{
 				path: ":configId",
 				name: "context-external-tool-configuration-edit",
+				component: () =>
+					import(
+						"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+					),
 			},
 		],
-		props: (route: Route) => ({
-			contextId: route.query.contextId,
-			contextType: route.query.contextType,
-			configId: route.params.configId,
+		props: (to: RouteLocationNormalized) => ({
+			contextId: to.query.contextId,
+			contextType: to.query.contextType,
+			configId: to.params.configId,
 		}),
 	},
 	{

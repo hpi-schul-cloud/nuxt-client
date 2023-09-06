@@ -147,7 +147,7 @@ describe("RoomExternalToolOverview", () => {
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
-			await flushPromises();
+			// await flushPromises();
 
 			return {
 				wrapper,

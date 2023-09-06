@@ -24,40 +24,40 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiChatOutline,
 	mdiFileQuestionOutline,
 	mdiFileCertificateOutline,
 	mdiGiftOutline,
 } from "@mdi/js";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "HelpDropdown",
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 
 		const menuItems = [
 			{
-				label: i18n.t("global.topbar.actions.helpSection"),
+				label: t("global.topbar.actions.helpSection"),
 				icon: mdiFileQuestionOutline,
 				action: "/help",
 				target: "_self",
 			},
 			{
-				label: i18n.t("global.topbar.actions.contactSupport"),
+				label: t("global.topbar.actions.contactSupport"),
 				icon: mdiChatOutline,
 				action: "/help/contact",
 				target: "_self",
 			},
 			{
-				label: i18n.t("global.topbar.actions.releaseNotes"),
+				label: t("global.topbar.actions.releaseNotes"),
 				icon: mdiGiftOutline,
 				action: "/help/releases",
 				target: "_self",
 			},
 			{
-				label: i18n.t("global.topbar.actions.training"),
+				label: t("global.topbar.actions.training"),
 				icon: mdiFileCertificateOutline,
 				action: "https://www.lernen.cloud/",
 				target: "_blank",

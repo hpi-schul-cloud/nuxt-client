@@ -1,7 +1,7 @@
-import { useI18n } from "@/composables/i18n.composable";
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
 
 export type ErrorType =
 	| "notCreated"

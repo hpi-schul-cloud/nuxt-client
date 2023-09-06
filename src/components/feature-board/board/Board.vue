@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, defineComponent, onMounted, onUnmounted, watch } from "vue";
@@ -70,6 +69,7 @@ import {
 } from "@/types/board/DragAndDrop";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { useI18n } from "vue-i18n";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container, Draggable } = require("vue-dndrop");
 
@@ -86,7 +86,7 @@ export default defineComponent({
 		boardId: { type: String, required: true },
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const { showInfo, resetNotifier } = useBoardNotifier();
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
@@ -192,10 +192,7 @@ export default defineComponent({
 		};
 		onMounted(() => {
 			if (isTeacher) {
-				showInfo(
-					i18n.t("components.board.alert.info.teacher").toString(),
-					false
-				);
+				showInfo(t("components.board.alert.info.teacher"), false);
 			}
 		});
 

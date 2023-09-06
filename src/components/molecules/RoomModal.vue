@@ -30,15 +30,15 @@
 		</template>
 	</vCustomDialog>
 </template>
-<script lang="ts">
+<script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
-import Vue from "vue";
+import { defineComponent } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		vCustomDialog,
 		RoomAvatarIterator,
@@ -64,6 +64,7 @@ export default Vue.extend({
 			type: Boolean,
 		},
 	},
+	emits: ["update:isOpen", "drag-from-group"],
 	data() {
 		return {
 			mdiPencilOutline,

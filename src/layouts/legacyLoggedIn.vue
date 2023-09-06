@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,

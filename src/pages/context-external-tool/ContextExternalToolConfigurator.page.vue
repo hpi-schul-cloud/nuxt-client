@@ -55,11 +55,9 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 import NotifierModule from "@/store/notifier";
 import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import RoomModule from "@/store/room";
@@ -68,6 +66,7 @@ import {
 	ContextExternalToolSave,
 } from "@/store/external-tool/context-external-tool";
 import EnvConfigModule from "@/store/env-config";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -149,7 +148,7 @@ export default defineComponent({
 				: undefined
 		);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const onCancel = async () => {
 			await router.push({ path: contextRoute, query: { tab: "tools" } });
 		};

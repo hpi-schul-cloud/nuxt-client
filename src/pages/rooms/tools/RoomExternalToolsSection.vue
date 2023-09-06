@@ -98,7 +98,6 @@ import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import {
@@ -109,10 +108,10 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { useRouter } from "vue-router/composables";
 import { ToolContextType } from "@/store/external-tool";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -138,14 +137,11 @@ export default defineComponent({
 		const externalToolsModule: ExternalToolsModule = injectStrict(
 			EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 

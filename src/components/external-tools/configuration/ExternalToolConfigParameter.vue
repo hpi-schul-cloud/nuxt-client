@@ -49,7 +49,6 @@ import {
 	ToolParameter,
 	ToolParameterType as toolParameterType,
 } from "@/store/external-tool";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	computed,
 	defineComponent,
@@ -58,7 +57,7 @@ import {
 	Ref,
 	WritableComputedRef,
 } from "vue";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 
 // eslint-disable-next-line vue/require-direct-export
@@ -74,8 +73,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
 		const inputValue: WritableComputedRef<string | undefined> = computed({
 			get() {
 				return props.value;
@@ -85,14 +82,7 @@ export default defineComponent({
 			},
 		});
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined) => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const { validateParameter } = useExternalToolValidation(t);
 
