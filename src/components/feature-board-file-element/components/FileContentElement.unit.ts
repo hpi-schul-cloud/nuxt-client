@@ -182,13 +182,40 @@ describe("FileContentElement", () => {
 				expect(card.props("outlined")).toBe(false);
 			});
 
-			describe("when v-card emits keydown.up.down event", () => {
-				it("should not emit move-keyboard:edit event", async () => {
+			describe("when v-card emits keydown.down event", () => {
+				it("should emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
-					card.vm.$emit("keydown.up.down");
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowDown",
+							keyCode: 40,
+						})
+					);
 
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+				});
+			});
+
+			describe("when v-card emits keydown.up event", () => {
+				it("should emit move-keyboard:edit event", async () => {
+					const { wrapper } = setup();
+
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowUp",
+							keyCode: 38,
+						})
+					);
+
+					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
 					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
@@ -604,17 +631,42 @@ describe("FileContentElement", () => {
 				expect(card.props("outlined")).toBe(true);
 			});
 
-			describe("when v-card emits keydown.up.down event", () => {
+			describe("when v-card emits keydown.down event", () => {
 				it("should emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
-					card.vm.$emit("keydown.up.down");
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowDown",
+							keyCode: 40,
+						})
+					);
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					expect(card.emitted("keydown.up.down")).toHaveLength(1);
+					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+				});
+			});
+
+			describe("when v-card emits keydown.up event", () => {
+				it("should emit move-keyboard:edit event", async () => {
+					const { wrapper } = setup();
+
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowUp",
+							keyCode: 38,
+						})
+					);
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
 					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 				});
 			});
