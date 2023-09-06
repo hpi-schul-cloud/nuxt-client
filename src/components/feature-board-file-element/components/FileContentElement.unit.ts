@@ -607,12 +607,31 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
-					card.vm.$emit("keydown.up.down");
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							altKey: false,
+							bubbles: true,
+							cancelable: true,
+							charCode: 0,
+							code: "ArrowDown",
+							composed: true,
+							ctrlKey: false,
+							detail: 0,
+							isComposing: false,
+							key: "ArrowDown",
+							keyCode: 40,
+							location: 0,
+							metaKey: false,
+							repeat: false,
+							shiftKey: false,
+							which: 40,
+						})
+					);
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
 
-					expect(card.emitted("keydown.up.down")).toHaveLength(1);
 					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 				});
 			});
