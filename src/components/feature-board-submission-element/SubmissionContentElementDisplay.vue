@@ -82,7 +82,9 @@ export default defineComponent({
 		};
 
 		const editable = computed(() => {
-			return dayjs().isBefore(toRef(props, "dueDate").value);
+			const dueDate = toRef(props, "dueDate").value;
+			const today = dayjs();
+			return today.isBefore(dueDate);
 		});
 
 		return {
