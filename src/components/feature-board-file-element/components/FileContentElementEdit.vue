@@ -41,11 +41,11 @@
 				<v-textarea
 					class="pa-0 ma-0 v-secondary-lighten1"
 					rows="1"
-					label="Alternativtext"
+					:label="$t('common.labels.alternativeText')"
 				></v-textarea>
-				<span class="pa-0 mt-n4 v-secondary-darken1">
-					Beschreiben Sie dieses Bild für Personen mit Sehbehinderung.</span
-				>
+				<span class="pa-0 mt-n4 v-secondary-darken1">{{
+					$t("common.labels.altDescription")
+				}}</span>
 			</v-list-item-content>
 		</v-list-item>
 

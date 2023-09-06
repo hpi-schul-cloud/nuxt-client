@@ -23,6 +23,8 @@
 	"common.actions.download.v1.3": "Download (CC v1.3)",
 	"common.actions.logout": "Logout",
 	"common.labels.admin": "",
+	"common.labels.alternativeText": "Alternative Text",
+	"common.labels.altDescription": "Describe this picture for people with visual impairments.",
 	"common.labels.updateAt": "Updated:",
 	"common.labels.createAt": "Created:",
 	"common.labels.birthdate": "Date of birth",

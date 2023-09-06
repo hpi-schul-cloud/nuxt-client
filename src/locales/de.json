@@ -23,6 +23,8 @@
 	"common.actions.download.v1.3": "Herunterladen (CC v1.3)",
 	"common.actions.logout": "Abmelden",
 	"common.labels.admin": "Admin(s)",
+	"common.labels.alternativeText": "Alternativtext",
+	"common.labels.altDescription": "Beschreiben Sie dieses Bild für Personen mit Sehbehinderung.",
 	"common.labels.updateAt": "Aktualisiert:",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.birthdate": "Geburtsdatum",
