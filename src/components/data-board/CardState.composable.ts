@@ -1,21 +1,31 @@
 import {
+	ApiErrorHandlerFactory,
+	BoardObjectType,
+	ErrorType,
+	useErrorHandler,
+} from "@/components/error-handling/ErrorHandler.composable";
+import {
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
+import { BoardCard } from "@/types/board/Card";
+import { ElementMove } from "@/types/board/DragAndDrop";
+import { useSharedEditMode } from "@data-board";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useBoardNotifier } from "@util-board";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { BoardCard } from "@/types/board/Card";
-import { ElementMove } from "@/types/board/DragAndDrop";
 
 declare type CardState = {
 	isLoading: boolean;
 	card: BoardCard | undefined;
 };
 
-export const useCardState = (id: BoardCard["id"]) => {
+export const useCardState = (
+	id: BoardCard["id"],
+	emit: (...args: any[]) => void
+) => {
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const cardState = reactive<CardState>({ isLoading: true, card: undefined });
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const {
@@ -27,150 +37,156 @@ export const useCardState = (id: BoardCard["id"]) => {
 		updateCardTitle,
 	} = useBoardApi();
 	const { setFocus } = useBoardFocusHandler();
-	const { isErrorCode, showFailure, generateErrorText } = useBoardNotifier();
+	const { setEditModeId } = useSharedEditMode();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
-			const errorText = generateErrorText("read", "boardCard");
-			showFailure(errorText);
-			console.error(error);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
+			});
+		} finally {
+			cardState.isLoading = false;
 		}
-		cardState.isLoading = false;
 	};
 
 	const updateTitle = async (newTitle: string): Promise<void> => {
-		if (cardState.card === undefined) {
-			return;
-		}
-		cardState.card.title = newTitle;
-		const status = await updateCardTitle(cardState.card.id, newTitle);
-		if (isErrorCode(status)) {
-			await showErrorAndReload(generateErrorText("update"));
+		if (cardState.card === undefined) return;
+
+		try {
+			cardState.card.title = newTitle;
+			await updateCardTitle(cardState.card.id, newTitle);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
 		}
 	};
 
 	const deleteCard = async () => {
 		if (cardState.card === undefined) return;
 
-		const status = await deleteCardCall(cardState.card.id);
-		if (isErrorCode(status)) {
-			await showErrorAndReload(generateErrorText("delete", "boardCard"));
+		try {
+			await deleteCardCall(cardState.card.id);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
 		}
 	};
 
 	const updateCardHeight = async (newHeight: number) => {
-		if (cardState.card === undefined) {
-			return;
+		if (cardState.card === undefined) return;
+
+		try {
+			await updateCardHeightCall(cardState.card.id, newHeight);
+			cardState.card.height = newHeight;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
 		}
-		if (cardState.card.height === newHeight) {
-			return;
-		}
-		const status = await updateCardHeightCall(cardState.card.id, newHeight);
-		if (isErrorCode(status)) {
-			await showErrorAndReload(generateErrorText("update"));
-			return;
-		}
-		cardState.card.height = newHeight;
 	};
 
 	const addElement = async (
 		type: ContentElementType,
 		atFirstPosition?: boolean
 	) => {
-		if (cardState.card === undefined) {
-			return;
+		if (cardState.card === undefined) return;
+
+		try {
+			const params: CreateContentElementBodyParams = { type };
+			if (atFirstPosition) {
+				params.toPosition = 0;
+			}
+			const response = await createElementCall(cardState.card.id, params);
+
+			if (atFirstPosition) {
+				cardState.card.elements.splice(0, 0, response.data);
+			} else {
+				cardState.card.elements.push(response.data);
+			}
+
+			setFocus(response.data.id);
+			return response.data;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
+			});
 		}
-
-		const params: CreateContentElementBodyParams = { type };
-
-		if (atFirstPosition) {
-			params.toPosition = 0;
-		}
-
-		const response = await createElementCall(cardState.card.id, params);
-
-		if (isErrorCode(response.status)) {
-			await showErrorAndReload(generateErrorText("create", "boardElement"));
-			return;
-		}
-
-		if (atFirstPosition) {
-			cardState.card.elements.splice(0, 0, response.data);
-		} else {
-			cardState.card.elements.push(response.data);
-		}
-
-		setFocus(response.data.id);
-
-		return response.data;
 	};
 
 	const addTextAfterTitle = async () => {
 		return await addElement(ContentElementType.RichText, true);
 	};
 
-	const showErrorAndReload = async (errorText: string | undefined) => {
-		if (cardState.card === undefined) return;
-		showFailure(errorText);
-		await fetchCard(cardState.card.id);
-	};
-
 	const moveElementDown = async (elementPayload: ElementMove) => {
-		if (cardState.card === undefined) {
-			return;
+		if (cardState.card === undefined) return;
+		try {
+			const { elementIndex, payload: elementId } = elementPayload;
+			if (
+				elementIndex === cardState.card.elements.length - 1 ||
+				elementIndex === -1
+			) {
+				return;
+			}
+			await moveElement(elementIndex, elementId, "down");
+			await moveElementCall(elementId, cardState.card.id, elementIndex + 1);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
 		}
-		const { elementIndex, payload } = elementPayload;
-		if (
-			elementIndex === cardState.card.elements.length - 1 ||
-			elementIndex === -1
-		) {
-			return;
-		}
-
-		const element = cardState.card.elements.filter(
-			(element) => element.id === payload
-		)[0];
-
-		cardState.card.elements.splice(elementIndex, 1);
-		await nextTick();
-		cardState.card.elements.splice(elementIndex + 1, 0, element);
-
-		await moveElementCall(payload, cardState.card.id, elementIndex + 1);
 	};
 
 	const moveElementUp = async (elementPayload: ElementMove) => {
-		if (cardState.card === undefined) {
-			return;
+		if (cardState.card === undefined) return;
+
+		try {
+			const { elementIndex, payload: elementId } = elementPayload;
+			if (elementIndex <= 0) {
+				return;
+			}
+
+			await moveElement(elementIndex, elementId, "up");
+			await moveElementCall(elementId, cardState.card.id, elementIndex - 1);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
 		}
-		const { elementIndex, payload } = elementPayload;
-		if (elementIndex <= 0) {
-			return;
-		}
+	};
+
+	const moveElement = async (
+		elementIndex: number,
+		elementId: string,
+		direction: "up" | "down"
+	) => {
+		if (cardState.card === undefined) return;
 
 		const element = cardState.card.elements.filter(
-			(element) => element.id === payload
+			(element) => element.id === elementId
 		)[0];
+
+		const delta = direction === "up" ? -1 : 1;
 
 		cardState.card.elements.splice(elementIndex, 1);
 		await nextTick();
-		cardState.card.elements.splice(elementIndex - 1, 0, element);
-
-		await moveElementCall(payload, cardState.card.id, elementIndex - 1);
+		cardState.card.elements.splice(elementIndex + delta, 0, element);
 	};
 
 	const deleteElement = async (elementId: string): Promise<void> => {
-		if (cardState.card === undefined) {
-			return;
-		}
+		if (cardState.card === undefined) return;
 
-		const status = await deleteElementCall(elementId);
-		if (isErrorCode(status)) {
-			await showErrorAndReload(generateErrorText("update"));
-			return;
+		try {
+			await deleteElementCall(elementId);
+			extractElement(elementId);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
 		}
-		extractElement(elementId);
 	};
 
 	const extractElement = (elementId: string): void => {
@@ -179,6 +195,17 @@ export const useCardState = (id: BoardCard["id"]) => {
 		if (index !== undefined && index > -1) {
 			cardState.card?.elements.splice(index, 1);
 		}
+	};
+
+	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType
+	) => {
+		return () => {
+			notifyWithTemplate(errorType, boardObjectType)();
+			emit("reload:board");
+			setEditModeId(undefined);
+		};
 	};
 
 	onMounted(() => {
@@ -191,6 +218,7 @@ export const useCardState = (id: BoardCard["id"]) => {
 		addElement,
 		moveElementDown,
 		moveElementUp,
+		notifyWithTemplateAndReload,
 		deleteCard,
 		fetchCard,
 		updateCardHeight,

@@ -2,7 +2,6 @@
 	<div>
 		<div v-if="!fileWasPicked" class="grey lighten-3">
 			<FilePicker
-				v-if="fileName === ''"
 				@update:file="onFileSelect"
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
@@ -24,7 +23,6 @@ import FilePicker from "./FilePicker.vue";
 export default defineComponent({
 	name: "FileContentElementInit",
 	props: {
-		fileName: { type: String, required: true },
 		elementId: { type: String, required: true },
 	},
 	components: { FilePicker },

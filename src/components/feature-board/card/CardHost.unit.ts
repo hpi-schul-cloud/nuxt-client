@@ -97,6 +97,7 @@ describe("CardHost", () => {
 			deleteElement: deleteElementMock as () => Promise<void>,
 			card: ref(card),
 			isLoading: ref(isLoading ?? false),
+			notifyWithTemplateAndReload: jest.fn(),
 		});
 
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
