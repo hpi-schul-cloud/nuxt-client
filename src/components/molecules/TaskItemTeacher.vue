@@ -214,7 +214,7 @@ export default {
 			return this.task.lessonHidden && !this.isDraft;
 		},
 		currentBreakpoint() {
-			return this.$vuetify.breakpoint.name;
+			return this.$vuetify.display.name;
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;

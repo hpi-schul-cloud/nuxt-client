@@ -32,7 +32,7 @@
 					v-if="taskState === 'warning'"
 					:type="taskState"
 					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.display.xsOnly"
 				/>
 			</v-list-item-action>
 			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
@@ -122,7 +122,7 @@ export default {
 		},
 		dueDateLabel() {
 			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.breakpoint.xsOnly
+			const convertedDueDate = this.$vuetify.display.xsOnly
 				? dateFromUTC(dueDate)
 				: dateTimeFromUTC(dueDate);
 

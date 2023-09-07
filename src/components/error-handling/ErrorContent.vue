@@ -2,7 +2,7 @@
 	<div>
 		<permission-error-svg
 			v-if="isPermissionError"
-			:svg-width="$vuetify.breakpoint.xs ? 200 : undefined"
+			:svg-width="$vuetify.display.xs ? 200 : undefined"
 			fill="var(--v-primary-base)"
 			data-testid="img-permission"
 		/>

@@ -135,7 +135,7 @@ export default {
 	},
 	computed: {
 		positionAtTop: function () {
-			return this.$vuetify.breakpoint.lgAndUp;
+			return this.$vuetify.display.lgAndUp;
 		},
 		hasMultipleActions: function () {
 			return this.actions.length > 0;
