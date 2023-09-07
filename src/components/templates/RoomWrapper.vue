@@ -131,8 +131,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-
 ::v-deep .v-skeleton-loader__date-picker-days {
 	justify-content: space-between;
 	padding: 0;

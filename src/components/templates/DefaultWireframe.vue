@@ -79,8 +79,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
-
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }

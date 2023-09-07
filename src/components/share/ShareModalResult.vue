@@ -180,9 +180,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
-
 .subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;

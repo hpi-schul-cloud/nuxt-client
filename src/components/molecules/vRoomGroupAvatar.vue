@@ -122,7 +122,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
 
 .subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
