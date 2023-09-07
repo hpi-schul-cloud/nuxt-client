@@ -319,6 +319,7 @@
 	"components.cardElement.richTextElement": "Текстовий елемент",
 	"components.cardElement.richTextElement.placeholder": "додати текст",
 	"components.cardElement.submissionElement": "Подання",
+	"components.cardElement.submissionElement.completed": "Завершено",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
