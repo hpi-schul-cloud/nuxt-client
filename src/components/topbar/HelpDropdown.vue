@@ -1,8 +1,7 @@
 <template>
 	<v-list class="pa-0 menu-width">
-		<template v-for="(item, index) in menuItems">
+		<template v-for="(item, index) in menuItems" :key="item.label">
 			<v-list-item
-				:key="item.label"
 				:href="item.action"
 				:target="item.target"
 				:ripple="false"

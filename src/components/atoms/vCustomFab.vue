@@ -35,8 +35,8 @@
 				</div>
 			</v-btn>
 		</template>
-		<template v-for="(action, index) of actions">
-			<div :key="index" class="d-flex align-center justify-end">
+		<template v-for="(action, index) of actions" :key="index">
+			<div class="d-flex align-center justify-end">
 				<span>
 					{{ action.label }}
 				</span>

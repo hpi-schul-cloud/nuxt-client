@@ -13,17 +13,17 @@
 			/>
 		</template>
 		<template v-for="(task, index) of tasks" v-else>
-			<template v-if="userRole === 'student'">
+			<template v-if="userRole === 'student'" :key="index" >
 				<task-item-student
 					v-if="isLastTaskItem(index)"
 					:key="index"
 					v-intersect="loadMore"
 					:task="task"
 				/>
-				<task-item-student v-else :key="index" :task="task" role="article" />
+				<task-item-student v-else :task="task" role="article" />
 				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 			</template>
-			<template v-if="userRole === 'teacher'">
+			<template v-if="userRole === 'teacher'" :key="index">
 				<task-item-teacher
 					v-if="isLastTaskItem(index)"
 					:key="index"
@@ -34,7 +34,6 @@
 				/>
 				<task-item-teacher
 					v-else
-					:key="index"
 					:task="task"
 					role="article"
 					@copy-task="onCopyTask"
