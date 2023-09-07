@@ -954,6 +954,31 @@ export interface CreateContentElementBodyParams {
 /**
  * 
  * @export
+ * @interface CreateFederalStateBodyParams
+ */
+export interface CreateFederalStateBodyParams {
+    /**
+     * Title of the Federal State entity
+     * @type {string}
+     * @memberof CreateFederalStateBodyParams
+     */
+    name: string;
+    /**
+     * Abbreviation of the Federal State
+     * @type {string}
+     * @memberof CreateFederalStateBodyParams
+     */
+    abbreviation: string;
+    /**
+     * Link to the logo of the Federal State
+     * @type {string}
+     * @memberof CreateFederalStateBodyParams
+     */
+    logoUrl: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateNewsParams
  */
 export interface CreateNewsParams {
@@ -1560,6 +1585,55 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface FederalStateResponse
+ */
+export interface FederalStateResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    abbreviation: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    logoUrl: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof FederalStateResponse
+     */
+    counties?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    updatedAt: string;
 }
 /**
  * 
@@ -8447,6 +8521,208 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public serverControllerGetHello(options?: any) {
         return DefaultApiFp(this.configuration).serverControllerGetHello(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * FederalStateApi - axios parameter creator
+ * @export
+ */
+export const FederalStateApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new element on a card.
+         * @param {CreateFederalStateBodyParams} createFederalStateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        federalStateControllerCreateElement: async (createFederalStateBodyParams: CreateFederalStateBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createFederalStateBodyParams' is not null or undefined
+            assertParamExists('federalStateControllerCreateElement', 'createFederalStateBodyParams', createFederalStateBodyParams)
+            const localVarPath = `/federal-states`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createFederalStateBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns all federal states
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        federalStateControllerFindAll: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/federal-states`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * FederalStateApi - functional programming interface
+ * @export
+ */
+export const FederalStateApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = FederalStateApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new element on a card.
+         * @param {CreateFederalStateBodyParams} createFederalStateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async federalStateControllerCreateElement(createFederalStateBodyParams: CreateFederalStateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.federalStateControllerCreateElement(createFederalStateBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns all federal states
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async federalStateControllerFindAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FederalStateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.federalStateControllerFindAll(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * FederalStateApi - factory interface
+ * @export
+ */
+export const FederalStateApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = FederalStateApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new element on a card.
+         * @param {CreateFederalStateBodyParams} createFederalStateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        federalStateControllerCreateElement(createFederalStateBodyParams: CreateFederalStateBodyParams, options?: any): AxiosPromise<string> {
+            return localVarFp.federalStateControllerCreateElement(createFederalStateBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns all federal states
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        federalStateControllerFindAll(options?: any): AxiosPromise<FederalStateResponse> {
+            return localVarFp.federalStateControllerFindAll(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * FederalStateApi - interface
+ * @export
+ * @interface FederalStateApi
+ */
+export interface FederalStateApiInterface {
+    /**
+     * 
+     * @summary Create a new element on a card.
+     * @param {CreateFederalStateBodyParams} createFederalStateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FederalStateApiInterface
+     */
+    federalStateControllerCreateElement(createFederalStateBodyParams: CreateFederalStateBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Returns all federal states
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FederalStateApiInterface
+     */
+    federalStateControllerFindAll(options?: any): AxiosPromise<FederalStateResponse>;
+
+}
+
+/**
+ * FederalStateApi - object-oriented interface
+ * @export
+ * @class FederalStateApi
+ * @extends {BaseAPI}
+ */
+export class FederalStateApi extends BaseAPI implements FederalStateApiInterface {
+    /**
+     * 
+     * @summary Create a new element on a card.
+     * @param {CreateFederalStateBodyParams} createFederalStateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FederalStateApi
+     */
+    public federalStateControllerCreateElement(createFederalStateBodyParams: CreateFederalStateBodyParams, options?: any) {
+        return FederalStateApiFp(this.configuration).federalStateControllerCreateElement(createFederalStateBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns all federal states
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FederalStateApi
+     */
+    public federalStateControllerFindAll(options?: any) {
+        return FederalStateApiFp(this.configuration).federalStateControllerFindAll(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
