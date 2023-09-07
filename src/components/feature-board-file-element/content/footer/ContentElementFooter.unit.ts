@@ -1,10 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementChips from "./chips/ContentElementChips.vue";
+import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
-import FileContentElementFooter from "./FileContentElementFooter.vue";
 
-describe("FileContentElementFooter", () => {
+describe("ContentElementFooter", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
@@ -17,7 +17,7 @@ describe("FileContentElementFooter", () => {
 			},
 		};
 
-		const wrapper = shallowMount(FileContentElementFooter, {
+		const wrapper = shallowMount(ContentElementFooter, {
 			propsData,
 			...createComponentMocks({}),
 		});
@@ -34,7 +34,7 @@ describe("FileContentElementFooter", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const fileContentElement = wrapper.findComponent(FileContentElementFooter);
+		const fileContentElement = wrapper.findComponent(ContentElementFooter);
 
 		expect(fileContentElement.exists()).toBe(true);
 	});

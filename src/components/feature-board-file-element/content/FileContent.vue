@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
-		<FileContentElementFooter :fileProperties="fileProperties" />
+		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
 </template>
@@ -11,13 +11,13 @@ import { computed, defineComponent, PropType } from "vue";
 import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
-import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
+import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
 	name: "FileContent",
 	components: {
 		FileDisplay,
-		FileContentElementFooter,
+		ContentElementFooter,
 		FileAlert,
 	},
 	props: {

@@ -26,7 +26,7 @@ import ContentElementChips from "./chips/ContentElementChips.vue";
 import FileDownload from "./download/FileDownload.vue";
 
 export default defineComponent({
-	name: "FileContentElementFooter",
+	name: "ContentElementFooter",
 	components: {
 		ContentElementChips,
 		FileDownload,

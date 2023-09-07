@@ -3,7 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileAlert from "./alert/FileAlert.vue";
 import FileContent from "./FileContent.vue";
-import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
+import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 describe("FileContent", () => {
 	const setup = () => {
@@ -42,14 +42,12 @@ describe("FileContent", () => {
 		});
 	});
 
-	it("should pass props to FileContentElementFooter", () => {
+	it("should pass props to ContentElementFooter", () => {
 		const { wrapper, fileProperties } = setup();
 
-		const fileContentElementFooter = wrapper.findComponent(
-			FileContentElementFooter
-		);
+		const contentElementFooter = wrapper.findComponent(ContentElementFooter);
 
-		expect(fileContentElementFooter.props()).toEqual({
+		expect(contentElementFooter.props()).toEqual({
 			fileProperties,
 		});
 	});
