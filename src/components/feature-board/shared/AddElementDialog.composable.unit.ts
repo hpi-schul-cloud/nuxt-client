@@ -164,5 +164,35 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
 		});
+		describe("when the third action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
+
+				askType();
+
+				const action = elementTypeOptions.value[2].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
+
+				askType();
+
+				const action = elementTypeOptions.value[2].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
 	});
 });
