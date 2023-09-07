@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
-import Vuelidate from "vuelidate";
+import Vuelidate from "@vuelidate/core";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import fs from "fs";
