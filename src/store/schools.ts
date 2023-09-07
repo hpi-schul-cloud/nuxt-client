@@ -9,6 +9,9 @@ import {
 	SchoolApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
+	FederalStateResponse,
+	FederalStateApiFactory,
+	FederalStateApiInterface,
 	ValidationError,
 } from "@/serverApi/v3";
 import { AxiosError, AxiosResponse } from "axios";
@@ -127,6 +130,10 @@ export default class SchoolsModule extends VuexModule {
 		return SchoolApiFactory(undefined, "v3", $axios);
 	}
 
+	private get federalStateApi(): FederalStateApiInterface {
+		return FederalStateApiFactory(undefined, "v3", $axios);
+	}
+
 	@Mutation
 	setSchool(updatedSchool: School): void {
 		this.school = updatedSchool;
@@ -227,6 +234,29 @@ export default class SchoolsModule extends VuexModule {
 		}
 	}
 
+	// @Action
+	// async fetchFederalState(): Promise<void> {
+	// 	this.setLoading(true);
+
+	// 	try {
+	// 		const data: AxiosResponse<FederalStateResponse> =
+	// 			await this.federalStateApi.federalStateControllerFindAll();
+
+	// 		console.log(data);
+	// 		this.setLoading(false);
+	// 	} catch (error: unknown) {
+	// 		if (error instanceof AxiosError) {
+	// 			this.setError(
+	// 				useApplicationError().createApplicationError(
+	// 					error.response?.status ?? 500,
+	// 					"pages.administration.school.index.error"
+	// 				)
+	// 			);
+	// 		}
+	// 		this.setLoading(false);
+	// 	}
+	// }
+
 	@Action
 	async fetchFederalState(): Promise<void> {
 		this.setLoading(true);
@@ -237,6 +267,7 @@ export default class SchoolsModule extends VuexModule {
 				)
 			).data;
 
+			console.log(data);
 			this.setFederalState(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
