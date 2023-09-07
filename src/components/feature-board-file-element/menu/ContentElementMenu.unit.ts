@@ -2,7 +2,7 @@ import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { BoardMenuAction } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementMenu from "./FileContentElementMenu.vue";
+import FileContentElementMenu from "./ContentElementMenu.vue";
 
 jest.mock("@/utils/fileHelper");
 

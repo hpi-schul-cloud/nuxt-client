@@ -25,7 +25,7 @@ jest.mock("@data-board", () => {
 	};
 });
 jest.mock("@feature-board");
-jest.mock("../FileStorageApi.composable");
+jest.mock("./shared/composables/FileStorageApi.composable");
 jest.mock("@ui-confirmation-dialog");
 
 const useDeleteConfirmationDialogMock = jest.mocked(
