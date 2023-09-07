@@ -16,7 +16,7 @@
 				"
 				component="p"
 			/>
-			<div v-if="!oauthMigration.startedAt">
+			<div v-if="isShowStartButton">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						:html="
@@ -26,7 +26,7 @@
 					/>
 				</v-alert>
 			</div>
-			<div v-else-if="oauthMigration.startedAt && !oauthMigration.closedAt">
+			<div v-else-if="isShowActiveMigration">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						data-testid="migration-active-status"
@@ -207,6 +207,10 @@ export default defineComponent({
 			}
 		);
 
+		const isShowActiveMigration: ComputedRef<boolean> = computed(
+			() => oauthMigration.value.startedAt && !oauthMigration.value.closedAt
+		);
+
 		const onStartMigration = () => {
 			if (oauthMigration.value.startedAt) {
 				userLoginMigrationModule.restartUserLoginMigration();
@@ -340,6 +344,7 @@ export default defineComponent({
 			setShowOutdatedUsers,
 			globalFeatureShowOutdatedUsers,
 			officialSchoolNumber,
+			isShowActiveMigration,
 		};
 	},
 });
