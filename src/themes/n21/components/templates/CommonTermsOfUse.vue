@@ -116,8 +116,6 @@
 	</div>
 </template>
 <script>
-import { filePathsModule } from "@/store";
-
 export default {
 	props: {
 		showSchoolTerms: {
@@ -128,7 +126,7 @@ export default {
 	data() {
 		return {
 			privacyLink: "/datenschutz",
-			termsOfUseLink: filePathsModule.getSpecificFiles.termsOfUseExemplary,
+			termsOfUseLink: "/termsofuse",
 		};
 	},
 	methods: {

@@ -8,9 +8,9 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">
-						{{ link.text }}
-					</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link">{{
+						link.text
+					}}</base-link>
 				</template>
 				<template v-else>
 					<span
@@ -20,8 +20,8 @@
 								itemName: link.text,
 							})
 						"
-						>{{ link.text }}
-					</span>
+						>{{ link.text }}</span
+					>
 				</template>
 			</template>
 		</div>
@@ -46,7 +46,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: "/termsofuse",
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
