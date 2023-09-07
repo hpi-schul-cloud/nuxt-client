@@ -1,11 +1,11 @@
 # Code Conventions
 
 <!-- vscode-markdown-toc -->
-* [filenames](#filenames)
-* [directory structure](#directorystructure)
-* [data-testid(s)](#data-testids)
-* [ts-ignore comments](#ts-ignorecomments)
-* [Composables](#Composables)
+- [Code Conventions](#code-conventions)
+	- [filenames](#filenames)
+	- [data-testid(s)](#data-testids)
+	- [ts-ignore comments](#ts-ignore-comments)
+	- [Composables](#composables)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -16,18 +16,17 @@
 ## <a name='filenames'></a>filenames
 
 Files should be consistently named like this:
-| file content   |   filename                    |
-|----------------|------------------------------:|
-| Components     | `YourComponent.vue`           |
-| Pages          | `YourPageName.page.vue`       |
-| Layouts        | `yourLayoutName.layout.vue`   |
-| Composables    | `yourComponent.composable.ts` |
-| Tests          | `yourTestFile.unit.ts`        |
-| Utils          | `yourUtil.ts`                 |
-| Pinia stores   | `yourFilename.ts`             |
-| Vuex stores    | `your-filename.ts`            |
+| file content |                      filename |
+| ------------ | ----------------------------: |
+| Components   |           `YourComponent.vue` |
+| Pages        |       `YourPageName.page.vue` |
+| Layouts      |   `yourLayoutName.layout.vue` |
+| Composables  | `yourComponent.composable.ts` |
+| Tests        |        `yourTestFile.unit.ts` |
+| Utils        |                 `yourUtil.ts` |
+| Pinia stores |             `yourFilename.ts` |
+| Vuex stores  |            `your-filename.ts` |
 
-## <a name='directorystructure'></a>directory structure
 
 **Near future**: The structure of this project will move from the old *Atomic Design* (= using molecules- and atoms- folders) to a more use-case-centeric approach.
 Details are documented here: [Vue 3 project structure](https://docs.dbildungscloud.de/x/oYAgDQ)
@@ -46,8 +45,8 @@ Please use ``<div ... data-testid="some-example" ...>`` in your HTML-code if you
 
 We also recommend to use **ref**s instead of data-testids. But if you do that, you need to be careful when removing them... as they could be used in the component-code AND in tests:
 
-- [VueJs - template refs](https://vuejs.org/guide/essentials/template-refs.html)
-- [VueTestUtils - ref](https://v1.test-utils.vuejs.org/api/#ref)
+* [VueJs - template refs](https://vuejs.org/guide/essentials/template-refs.html)
+* [VueTestUtils - ref](https://v1.test-utils.vuejs.org/api/#ref)
 
 Also look here: *Frontend Arc Group: Meeting Notes 2022-11-04*
 
