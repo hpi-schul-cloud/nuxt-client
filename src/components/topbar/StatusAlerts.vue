@@ -78,7 +78,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../../../node_modules/vuetify/src/styles/styles";
 @import "@/styles/mixins";
 
 .alerts {
