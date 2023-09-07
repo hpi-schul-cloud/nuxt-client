@@ -15,7 +15,7 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
-	name: "FileContentElementChips",
+	name: "ContentElementChips",
 	props: {
 		fileSize: {
 			type: Number,

@@ -2,11 +2,11 @@ import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import FileContentElementChips from "./FileContentElementChips.vue";
+import ContentElementChips from "./ContentElementChips.vue";
 
 jest.mock("@/utils/fileHelper");
 
-describe("FileContentElementChips", () => {
+describe("ContentElementChips", () => {
 	const setup = () => {
 		const fileSize = 3800;
 		const fileName = "pic.jpeg";
@@ -18,7 +18,7 @@ describe("FileContentElementChips", () => {
 		const getFileExtensionMock = jest
 			.mocked(getFileExtension)
 			.mockReturnValueOnce("ext");
-		const wrapper = mount(FileContentElementChips, {
+		const wrapper = mount(ContentElementChips, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -50,7 +50,7 @@ describe("FileContentElementChips", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const chipsComponent = wrapper.findComponent(FileContentElementChips);
+		const chipsComponent = wrapper.findComponent(ContentElementChips);
 
 		expect(chipsComponent.exists()).toBe(true);
 	});

@@ -2,7 +2,7 @@
 	<v-container class="ma-0 pa-0">
 		<v-row>
 			<v-col cols="10">
-				<FileContentElementChips
+				<ContentElementChips
 					:fileSize="fileProperties.size"
 					:fileName="fileProperties.name"
 				/>
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
-import FileContentElementChips from "./chips/FileContentElementChips.vue";
+import ContentElementChips from "./chips/ContentElementChips.vue";
 import FileContentElementDownload from "./download/FileContentElementDownload.vue";
 
 export default defineComponent({
 	name: "FileContentElementFooter",
 	components: {
-		FileContentElementChips,
+		ContentElementChips,
 		FileContentElementDownload,
 	},
 	props: {
