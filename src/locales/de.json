@@ -791,6 +791,7 @@
 	"components.cardElement.richTextElement": "Textelement",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
 	"components.cardElement.submissionElement": "Abgabe",
+	"components.cardElement.submissionElement.completed": "erledigt",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
