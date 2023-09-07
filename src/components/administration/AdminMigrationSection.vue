@@ -26,7 +26,7 @@
 					/>
 				</v-alert>
 			</div>
-			<div v-else>
+			<div v-else-if="oauthMigration.startedAt && oauthMigration.closedAt">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						data-testid="migration-active-status"
