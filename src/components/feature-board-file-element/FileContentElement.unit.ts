@@ -562,8 +562,8 @@ describe("FileContentElement", () => {
 				it("should emit delete:element on upload", async () => {
 					const { wrapper } = setup();
 
-					const initComponent = wrapper.findComponent(FileUpload);
-					initComponent.vm.$emit("upload:file", { fileName: "mysample.txt" });
+					const fileUpload = wrapper.findComponent(FileUpload);
+					fileUpload.vm.$emit("upload:file", { fileName: "mysample.txt" });
 
 					await wrapper.vm.$nextTick();
 					await wrapper.vm.$nextTick();
