@@ -413,6 +413,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: false,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -489,6 +490,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: true,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -690,6 +692,199 @@ describe("AdminMigrationSection", () => {
 				expect(schoolsModule.update).toHaveBeenCalledWith({
 					id: mockSchool.id,
 					features: { ...mockSchool.features, showOutdatedUsers: true },
+				});
+			});
+		});
+	});
+
+	describe("switch button for school feature enableLdapSyncDuringMigration", () => {
+		describe("FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
+			describe("when feature is set to false", () => {
+				it("should hide switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: false,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(false);
+				});
+			});
+
+			describe("when feature is set to true", () => {
+				it("should show switch button", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getEnableLdapSyncDuringMigration: true,
+						}
+					);
+
+					const switchComponent = wrapper.find(
+						'[data-testid="enable-sync-during-migration-switch"]'
+					);
+
+					expect(switchComponent.exists()).toBe(true);
+				});
+			});
+		});
+
+		describe("when user login migration is finished", () => {
+			it("should hide switch button", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+							oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(false);
+			});
+		});
+
+		describe("when migration is active", () => {
+			it("should show switch button", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.exists()).toBe(true);
+			});
+
+			it("should enable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: true,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual(undefined);
+			});
+		});
+
+		describe("when migration has not yet started", () => {
+			it("should disable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual("disabled");
+			});
+		});
+
+		describe("when migration has not yet closed", () => {
+			it("should disable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual("disabled");
+			});
+		});
+
+		describe("when clicking switch button", () => {
+			it("should call update in schoolsModule", async () => {
+				const { wrapper, schoolsModule } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: true,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				await switchComponent.setChecked();
+
+				expect(schoolsModule.update).toHaveBeenCalledWith({
+					id: mockSchool.id,
+					features: {
+						...mockSchool.features,
+						enableLdapSyncDuringMigration: true,
+					},
 				});
 			});
 		});

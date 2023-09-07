@@ -2,9 +2,11 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 
 describe("BoardColumnGhost", () => {
 	let wrapper: Wrapper<Vue>;
+	const { dragStart, dragEnd } = useDragAndDrop();
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
@@ -36,7 +38,8 @@ describe("BoardColumnGhost", () => {
 	});
 
 	describe("when a card dropped", () => {
-		it("should emit 'add-column-with-card'", () => {
+		it("should emit 'add-column-with-card'", async () => {
+			dragStart();
 			setup();
 			const movedCardObject = {
 				removedIndex: null,
@@ -66,6 +69,25 @@ describe("BoardColumnGhost", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["add-column-with-card"]).not.toBeDefined();
+		});
+	});
+
+	describe("Container component", () => {
+		it("should be found in DOM", () => {
+			dragStart();
+			setup();
+			const containerComponent = wrapper.findComponent({
+				name: "Container",
+			});
+			expect(containerComponent.vm).toBeDefined();
+		});
+		it("should not be found in DOM", () => {
+			dragEnd();
+			setup();
+			const containerComponent = wrapper.findComponent({
+				name: "Container",
+			});
+			expect(containerComponent.vm).not.toBeDefined();
 		});
 	});
 });

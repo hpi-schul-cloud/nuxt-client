@@ -116,6 +116,24 @@
 			@set="onCloseMigration()"
 		/>
 		<v-switch
+			v-if="
+				!isCurrentDateAfterFinalFinish &
+				globalFeatureEnableLdapSyncDuringMigration
+			"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+				)
+			"
+			:disabled="!oauthMigration.oauthMigrationPossible"
+			v-model="school.features.enableLdapSyncDuringMigration"
+			inset
+			dense
+			class="ml-1"
+			data-testid="enable-sync-during-migration-switch"
+			@change="setSchoolFeatures"
+		/>
+		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
 			:label="
 				t(
@@ -127,7 +145,7 @@
 			dense
 			class="ml-1"
 			data-testid="show-outdated-users-switch"
-			@change="setShowOutdatedUsers"
+			@change="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -227,18 +245,19 @@ export default defineComponent({
 			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
-		const setMigration = (available: boolean, mandatory: boolean) => {
+		const setMigration = async (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,
 				oauthMigrationMandatory: mandatory,
 				oauthMigrationFinished: !available,
 			};
-			schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.fetchSchool();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(school, () => {
-			schoolsModule.fetchSchoolOAuthMigration();
+		watch(school, async () => {
+			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
 		const isShowEndWarning: Ref<boolean> = ref(false);
@@ -311,12 +330,15 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
+			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
+
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setShowOutdatedUsers = () => {
-			schoolsModule.update({
+		const setSchoolFeatures = async () => {
+			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
 			});
@@ -341,8 +363,9 @@ export default defineComponent({
 			dayjs,
 			supportLink,
 			school,
-			setShowOutdatedUsers,
+			setSchoolFeatures,
 			globalFeatureShowOutdatedUsers,
+			globalFeatureEnableLdapSyncDuringMigration,
 			officialSchoolNumber,
 			isShowActiveMigration,
 		};

@@ -15,7 +15,7 @@
 		<VCardText>
 			<div class="mb-0">
 				<div class="d-flex align-center mb-3">
-					<VIcon size="14" class="mr-1">$mdiViewDashboard</VIcon>
+					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
 					<span class="title-board-card">
 						{{ $t("pages.room.boardCard.label.columnBoard") }}
 					</span>
@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts">
+import { mdiViewDashboard } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router/composables";
 
@@ -69,6 +70,7 @@ export default defineComponent({
 		};
 
 		return {
+			mdiViewDashboard,
 			moveCardDown,
 			moveCardUp,
 			openBoard,

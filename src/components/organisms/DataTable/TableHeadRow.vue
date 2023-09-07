@@ -43,7 +43,7 @@
 							"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<v-icon class="ma-0" size="20">$mdiInformation</v-icon>
+							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
 						</v-btn>
 					</span>
 					<info-box
@@ -231,6 +231,7 @@
 <script>
 import InfoBox from "@/components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
+import { mdiInformation } from "@mdi/js";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -272,6 +273,7 @@ export default {
 	data() {
 		return {
 			infoBoxActive: false,
+			mdiInformation,
 		};
 	},
 	computed: {

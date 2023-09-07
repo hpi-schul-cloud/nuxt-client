@@ -35,7 +35,9 @@
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
-								<VIcon> $mdiPencilOutline </VIcon>
+								<VIcon>
+									{{ mdiPencilOutline }}
+								</VIcon>
 							</template>
 							{{ $t("common.actions.edit") }}
 						</BoardMenuAction>
@@ -44,7 +46,9 @@
 							data-test-id="board-menu-action-delete"
 						>
 							<template #icon>
-								<VIcon> $mdiTrashCanOutline </VIcon>
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
 							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
@@ -69,6 +73,7 @@
 </template>
 
 <script lang="ts">
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -111,7 +116,7 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move:card-keyboard", "delete:card"],
+	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
@@ -129,7 +134,8 @@ export default defineComponent({
 			moveElementUp,
 			deleteElement,
 			addTextAfterTitle,
-		} = useCardState(props.cardId);
+		} = useCardState(props.cardId, emit);
+
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			props.cardId
@@ -227,6 +233,8 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
+			mdiTrashCanOutline,
+			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},

@@ -61,7 +61,13 @@ const schoolMock = {
 	updatedAt: "2022-02-10T11:56:22.817Z",
 	createdAt: "2017-01-01T00:06:37.148Z",
 	__v: 1,
-	currentYear: "5ebd6dc14a431f75ec9a3e77",
+	currentYear: {
+		_id: "5ebd6dc14a431f75ec9a3e77",
+		name: "2021/22",
+		startDate: "2021-08-01T00:00:00.000Z",
+		endDate: "2022-07-31T00:00:00.000Z",
+		__v: 0,
+	},
 	purpose: "demo",
 	features: {
 		rocketChat: true,
@@ -69,6 +75,7 @@ const schoolMock = {
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
+		enableLdapSyncDuringMigration: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
