@@ -1,11 +1,11 @@
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiTrayArrowDown } from "@mdi/js";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementDownload from "./FileContentElementDownload.vue";
+import FileDownload from "./FileDownload.vue";
 
 jest.mock("@/utils/fileHelper");
 
-describe("FileContentElementDownload", () => {
+describe("FileDownload", () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 	});
@@ -13,7 +13,7 @@ describe("FileContentElementDownload", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(FileContentElementDownload);
+		const wrapper = shallowMount(FileDownload);
 
 		return {
 			wrapper,
@@ -23,9 +23,7 @@ describe("FileContentElementDownload", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const fileContentElement = wrapper.findComponent(
-			FileContentElementDownload
-		);
+		const fileContentElement = wrapper.findComponent(FileDownload);
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
@@ -52,7 +50,7 @@ describe("FileContentElementDownload", () => {
 					.mocked(downloadFile)
 					.mockReturnValueOnce();
 
-				const wrapper = shallowMount(FileContentElementDownload, {
+				const wrapper = shallowMount(FileDownload, {
 					propsData,
 				});
 
@@ -97,7 +95,7 @@ describe("FileContentElementDownload", () => {
 
 			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
 
-			const wrapper = shallowMount(FileContentElementDownload, {
+			const wrapper = shallowMount(FileDownload, {
 				propsData,
 			});
 

@@ -1,7 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementChips from "./chips/ContentElementChips.vue";
-import FileContentElementDownload from "./download/FileContentElementDownload.vue";
+import FileDownload from "./download/FileDownload.vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 
 describe("FileContentElementFooter", () => {
@@ -51,9 +51,7 @@ describe("FileContentElementFooter", () => {
 	it("should render download component with proper props", () => {
 		const { wrapper, fileNameProp, urlProp, isDownloadAllowedProp } = setup();
 
-		const props = wrapper
-			.findComponent(FileContentElementDownload)
-			.attributes();
+		const props = wrapper.findComponent(FileDownload).attributes();
 
 		expect(props.filename).toEqual(fileNameProp);
 		expect(props.url).toEqual(urlProp);

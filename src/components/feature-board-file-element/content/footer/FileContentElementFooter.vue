@@ -9,11 +9,11 @@
 			</v-col>
 
 			<v-col cols="2">
-				<FileContentElementDownload
+				<FileDownload
 					:fileName="fileProperties.name"
 					:isDownloadAllowed="fileProperties.isDownloadAllowed"
 					:url="fileProperties.url"
-				></FileContentElementDownload>
+				></FileDownload>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -23,13 +23,13 @@
 import { defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import ContentElementChips from "./chips/ContentElementChips.vue";
-import FileContentElementDownload from "./download/FileContentElementDownload.vue";
+import FileDownload from "./download/FileDownload.vue";
 
 export default defineComponent({
 	name: "FileContentElementFooter",
 	components: {
 		ContentElementChips,
-		FileContentElementDownload,
+		FileDownload,
 	},
 	props: {
 		fileProperties: {

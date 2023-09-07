@@ -16,7 +16,7 @@ import { mdiTrayArrowDown } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: "FileContentElementDownload",
+	name: "FileDownload",
 	props: {
 		fileName: { type: String, required: true },
 		isDownloadAllowed: { type: Boolean, required: true },
