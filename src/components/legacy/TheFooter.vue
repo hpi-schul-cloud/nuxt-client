@@ -64,7 +64,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					to: "/datenschutz",
+					to: "/privacypolicy",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",

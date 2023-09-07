@@ -374,7 +374,7 @@ export default {
 			fileLinks: {
 				analogConsent: filePathsModule.getSpecificFiles.analogConsent,
 				termsOfUse: "/termsofuse",
-				dataProtection: "/datenschutz",
+				dataProtection: "/privacypolicy",
 			},
 			progressSteps: [
 				{

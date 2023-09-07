@@ -52,7 +52,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "/datenschutz",
+					href: "/privacypolicy",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",

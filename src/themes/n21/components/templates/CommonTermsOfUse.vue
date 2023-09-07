@@ -125,7 +125,7 @@ export default {
 	},
 	data() {
 		return {
-			privacyLink: "/datenschutz",
+			privacyLink: "/privacypolicy",
 			termsOfUseLink: "/termsofuse",
 		};
 	},
