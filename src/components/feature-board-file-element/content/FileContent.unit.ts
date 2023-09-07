@@ -31,12 +31,12 @@ describe("FileContent", () => {
 		};
 	};
 
-	it("should pass props to FileDisplay", () => {
+	it("should pass props to FileContent", () => {
 		const { wrapper, fileProperties } = setup();
 
-		const fileDisplay = wrapper.findComponent(FileContent);
+		const fileContent = wrapper.findComponent(FileContent);
 
-		expect(fileDisplay.props()).toEqual({
+		expect(fileContent.props()).toEqual({
 			fileProperties,
 			isEditMode: true,
 		});

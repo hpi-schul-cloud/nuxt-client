@@ -41,7 +41,7 @@ describe("FileDisplay", () => {
 			expect(fileDisplay.exists()).toBe(true);
 		});
 
-		it("should render image display component with proper props", () => {
+		it("should pass correct props to image display component", () => {
 			const { wrapper, fileNameProp, previewUrlProp } = setup();
 
 			const props = wrapper.findComponent(ImageDisplay).attributes();
@@ -88,7 +88,7 @@ describe("FileDisplay", () => {
 			};
 		};
 
-		it("should render default display component with proper props", () => {
+		it("should pass correct props to default display component", () => {
 			const { wrapper, fileNameProp } = setup();
 
 			const props = wrapper.findComponent(DefaultDisplay).attributes();
