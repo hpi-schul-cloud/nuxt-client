@@ -1,9 +1,9 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import FileContentElementAlert from "./alert/FileContentElementAlert.vue";
 import FileContent from "./FileContent.vue";
-import FileContentElementAlert from "./FileContentElementAlert.vue";
-import FileContentElementFooter from "./FileContentElementFooter.vue";
+import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
 
 describe("FileContent", () => {
 	const setup = () => {

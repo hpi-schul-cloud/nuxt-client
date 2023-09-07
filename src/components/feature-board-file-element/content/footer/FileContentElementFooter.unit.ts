@@ -1,7 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementChips from "./FileContentElementChips.vue";
-import FileContentElementDownload from "./FileContentElementDownload.vue";
+import FileContentElementChips from "./chips/FileContentElementChips.vue";
+import FileContentElementDownload from "./download/FileContentElementDownload.vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 
 describe("FileContentElementFooter", () => {

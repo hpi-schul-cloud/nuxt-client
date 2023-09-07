@@ -12,11 +12,11 @@ import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import ContentElementMenu from "./ContentElementMenu.vue";
-import FileContent from "./FileContent.vue";
+import FileContent from "./content/FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
-import FileUpload from "./FileUpload.vue";
-import { FileProperties } from "./types/file-properties";
+import ContentElementMenu from "./menu/ContentElementMenu.vue";
+import { FileProperties } from "./shared/types/file-properties";
+import FileUpload from "./upload/FileUpload.vue";
 
 jest.mock("@data-board", () => {
 	return {

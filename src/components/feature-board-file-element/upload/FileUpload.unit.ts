@@ -3,7 +3,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import FilePicker from "./FilePicker.vue";
+import FilePicker from "./file-picker/FilePicker.vue";
 import FileUpload from "./FileUpload.vue";
 
 jest.mock("@util-board");

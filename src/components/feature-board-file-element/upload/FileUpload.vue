@@ -19,7 +19,7 @@
 <script lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, ref, watch } from "vue";
-import FilePicker from "./FilePicker.vue";
+import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
 	name: "FileUpload",

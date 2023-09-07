@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { useFileStorageNotifier } from "../FileStorageNotifications.composable";
+import { useFileStorageNotifier } from "../composables/FileStorageNotifications.composable";
 
 interface Props {
 	showFileTooBigErrorMock?: () => void;

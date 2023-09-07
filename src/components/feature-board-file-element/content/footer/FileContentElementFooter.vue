@@ -21,9 +21,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import FileContentElementChips from "./FileContentElementChips.vue";
-import FileContentElementDownload from "./FileContentElementDownload.vue";
-import { FileProperties } from "./types/file-properties";
+import { FileProperties } from "../../shared/types/file-properties";
+import FileContentElementChips from "./chips/FileContentElementChips.vue";
+import FileContentElementDownload from "./download/FileContentElementDownload.vue";
 
 export default defineComponent({
 	name: "FileContentElementFooter",

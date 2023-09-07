@@ -11,10 +11,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import FileContentElementAlert from "./FileContentElementAlert.vue";
-import FileContentElementFooter from "./FileContentElementFooter.vue";
-import FileDisplay from "./FileDisplay.vue";
-import { FileProperties } from "./types/file-properties";
+import FileContentElementAlert from "../content/alert/FileContentElementAlert.vue";
+import FileDisplay from "../content/display/FileDisplay.vue";
+import { FileProperties } from "../shared/types/file-properties";
+import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
 
 export default defineComponent({
 	name: "FileContent",

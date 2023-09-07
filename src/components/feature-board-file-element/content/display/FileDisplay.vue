@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import DefaultDisplay from "./DefaultDisplay.vue";
-import ImageDisplay from "./ImageDisplay.vue";
-import { FileProperties } from "./types/file-properties";
+import { FileProperties } from "../../shared/types/file-properties";
+import DefaultDisplay from "./default-display/DefaultDisplay.vue";
+import ImageDisplay from "./image-display/ImageDisplay.vue";
 
 export default defineComponent({
 	name: "FileDisplay",

@@ -5,8 +5,8 @@ import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponse
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
+import { setupFileStorageNotifier } from "../../shared/test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");

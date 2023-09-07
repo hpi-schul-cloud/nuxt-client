@@ -1,8 +1,8 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import DefaultDisplay from "./DefaultDisplay.vue";
+import DefaultDisplay from "./default-display/DefaultDisplay.vue";
 import FileDisplay from "./FileDisplay.vue";
-import ImageDisplay from "./ImageDisplay.vue";
+import ImageDisplay from "./image-display/ImageDisplay.vue";
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {

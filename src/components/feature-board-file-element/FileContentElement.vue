@@ -42,10 +42,10 @@ import {
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, defineComponent, onMounted, PropType, ref } from "vue";
-import { useFileStorageApi } from "../FileStorageApi.composable";
-import ContentElementMenu from "./ContentElementMenu.vue";
-import FileContent from "./FileContent.vue";
-import FileUpload from "./FileUpload.vue";
+import FileContent from "./content/FileContent.vue";
+import ContentElementMenu from "./menu/ContentElementMenu.vue";
+import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
