@@ -12,6 +12,7 @@ mockedInjectStrict.mockImplementation(() => {
 	return {
 		getEnv: {
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
+			FEATURE_TLDRAW_ENABLED: false,
 		},
 	};
 });
@@ -31,8 +32,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should call add Element", async () => {
 				const { addElementMock, elementType } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock, {});
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					{ value: { elements: [] } }
+				);
 
 				await onElementClick(elementType);
 
@@ -44,8 +47,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should close dialog", async () => {
 				const { addElementMock, elementType } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock, {});
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					{ value: { elements: [] } }
+				);
 
 				await onElementClick(elementType);
 
@@ -65,7 +70,9 @@ describe("ElementTypeSelection Composable", () => {
 			it("should return error", async () => {
 				const { addElementMock, elementType, error } = setup();
 
-				const { onElementClick } = useAddElementDialog(addElementMock, {});
+				const { onElementClick } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				await expect(onElementClick(elementType)).rejects.toThrowError(error);
 			});
@@ -76,7 +83,9 @@ describe("ElementTypeSelection Composable", () => {
 		it("should set isDialogOpen to true", () => {
 			const addElementMock = jest.fn();
 			const { isDialogOpen } = setupSharedElementTypeSelectionMock();
-			const { askType } = useAddElementDialog(addElementMock, {});
+			const { askType } = useAddElementDialog(addElementMock, {
+				value: { elements: [] },
+			});
 
 			askType();
 			expect(isDialogOpen.value).toBe(true);
@@ -97,7 +106,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the first action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock, {});
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -110,7 +121,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock, {});
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -124,7 +137,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the second action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock, {});
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -137,7 +152,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock, {});
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 

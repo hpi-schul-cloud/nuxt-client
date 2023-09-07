@@ -73,6 +73,8 @@ export default defineComponent({
 		const submissionsEnabled =
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
 
+		const drawingEnabled = envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED;
+
 		const dialogWidth = submissionsEnabled ? 426 : 320;
 
 		return {
@@ -83,6 +85,7 @@ export default defineComponent({
 			isDialogOpen,
 			actionButtons,
 			submissionsEnabled,
+			drawingEnabled,
 			dialogWidth,
 		};
 	},

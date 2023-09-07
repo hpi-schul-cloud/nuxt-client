@@ -130,6 +130,13 @@ export default defineComponent({
 			);
 		};
 
+		// const showDrawingElement = (element: AnyContentElement) => {
+		// 	return (
+		// 		envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
+		// 		isDrawingElementResponse(element)
+		// 	);
+		// };
+
 		const onMoveElementDown = (
 			elementIndex: number,
 			element: AnyContentElement
@@ -184,6 +191,7 @@ export default defineComponent({
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			// showDrawingElement,
 			showSubmissionContainerElement,
 			isDrawingElementResponse,
 			lastElementId,

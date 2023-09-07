@@ -1,6 +1,11 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
+import {
+	mdiFormatText,
+	mdiLightbulbOnOutline,
+	mdiPresentation,
+	mdiTrayArrowUp,
+} from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -54,7 +59,7 @@ export const useAddElementDialog = (
 			testId: "create-element-file",
 		},
 		{
-			icon: "$mdiPresentation",
+			icon: mdiPresentation,
 			label: "components.elementTypeSelection.elements.boardElement.subtitle",
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
@@ -70,6 +75,14 @@ export const useAddElementDialog = (
 			testId: "create-element-submission-container",
 		});
 	}
+	// if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+	// 	options.push({
+	// 		icon: mdiPresentation,
+	// 		label: "components.elementTypeSelection.elements.boardElement.subtitle",
+	// 		action: () => onElementClick(ContentElementType.Drawing),
+	// 		testId: "create-element-drawing-element",
+	// 	});
+	// }
 
 	const askType = () => {
 		elementTypeOptions.value = options;
