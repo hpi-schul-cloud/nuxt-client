@@ -7,4 +7,5 @@ export interface FileProperties {
 	previewUrl?: string;
 	previewStatus: PreviewStatus;
 	isDownloadAllowed: boolean;
+	alternativeText?: string;
 }
