@@ -23,6 +23,8 @@
 	"common.actions.download.v1.3": "Завантажити (CC v1.3)",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.labels.admin": "адміністратор(и)",
+	"common.labels.alternativeText": "альтернативний текст",
+	"common.labels.altDescription": "Опишіть цю картинку для людей з вадами зору.",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.updateAt": "Оновлено:",
 	"common.labels.createAt": "Створено:",

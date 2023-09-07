@@ -23,6 +23,8 @@
 	"common.actions.shareCourse": "Compartir copia de la cotización",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.labels.admin": "Admin(s)",
+	"common.labels.alternativeText": "Texto alternativo",
+	"common.labels.altDescription": "Describe esta imagen para personas con discapacidad visual.",
 	"common.labels.updateAt": "Actualizado:",
 	"common.labels.createAt": "Creado:",
 	"common.labels.birthdate": "Fecha de nacimiento",
