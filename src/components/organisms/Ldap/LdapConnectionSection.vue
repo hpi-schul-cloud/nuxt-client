@@ -72,7 +72,7 @@
 </template>
 <script>
 import { envConfigModule } from "@/store";
-import { required } from "vuelidate/lib/validators";
+import { required } from "@vuelidate/validators";
 import {
 	ldapPathRegexValidator,
 	ldapURLRegexValidator,

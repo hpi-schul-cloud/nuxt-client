@@ -1,4 +1,4 @@
-import { helpers } from "vuelidate/lib/validators";
+import { helpers } from "@vuelidate/validators";
 
 // Regex-based validator for the LDAP path.
 //

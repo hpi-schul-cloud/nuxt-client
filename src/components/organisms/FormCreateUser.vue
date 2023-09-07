@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { email, required } from "vuelidate/lib/validators";
+import { email, required } from "@vuelidate/validators";
 
 export default {
 	data() {
