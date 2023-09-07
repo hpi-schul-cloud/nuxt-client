@@ -108,7 +108,7 @@ export default defineComponent({
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const { t } = useI18n();
 
-		if (!notifierModule || !schoolsModule || !privacyPolicyModule || !i18n) {
+		if (!notifierModule || !schoolsModule || !privacyPolicyModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
