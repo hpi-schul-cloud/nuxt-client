@@ -10,7 +10,7 @@
 			</template>
 			<template #footerRight>
 				<v-btn
-					depressed
+					variant="flat"
 					:text="!invertedDesign"
 					:dark="invertedDesign"
 					:color="!invertedDesign ? 'secondary' : 'success'"
@@ -20,7 +20,7 @@
 					{{ cancelText }}
 				</v-btn>
 				<v-btn
-					depressed
+					variant="flat"
 					:color="invertedDesign ? 'secondary' : 'success'"
 					:text="invertedDesign"
 					:dark="!invertedDesign"

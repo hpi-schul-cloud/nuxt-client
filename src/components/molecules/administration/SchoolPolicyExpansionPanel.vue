@@ -14,9 +14,8 @@
 			<v-row v-if="policy.fileData">
 				<v-col>
 					<v-btn
-						depressed
+						variant="outlined"
 						color="primary"
-						outlined
 						:href="policy.fileData.data"
 						:download="policy.fileData.filename"
 					>

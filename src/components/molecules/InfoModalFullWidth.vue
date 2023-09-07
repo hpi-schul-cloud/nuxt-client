@@ -15,7 +15,9 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4 px-4">
-				<v-btn depressed block :color="design" @click="close">{{ btn }}</v-btn>
+				<v-btn variant="flat" block :color="design" @click="close">{{
+					btn
+				}}</v-btn>
 			</div>
 		</template>
 	</base-modal>

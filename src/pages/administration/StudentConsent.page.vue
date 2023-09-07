@@ -91,12 +91,12 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn text color="secondary" @click="cancelWarning = true">
+					<v-btn variant="text" color="secondary" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						color="primary"
-						depressed
+						variant="flat"
 						data-testid="button-next"
 						@click="next"
 					>
@@ -165,12 +165,12 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn text color="secondary" @click="cancelWarning = true">
+					<v-btn variant="text" color="secondary" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						color="primary"
-						depressed
+						variant="flat"
 						data-testid="button-next-2"
 						@click="register"
 					>
@@ -208,7 +208,7 @@
 					<v-btn color="secondary" text @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
-					<v-btn color="primary" depressed @click="download">
+					<v-btn color="primary" variant="flat" @click="download">
 						{{
 							$t("pages.administration.students.consent.steps.download.next")
 						}}
@@ -229,7 +229,7 @@
 				/>
 
 				<div class="d-flex justify-end">
-					<v-btn color="primary" outlined @click="success">{{
+					<v-btn color="primary" variant="outlined" @click="success">{{
 						$t("pages.administration.students.consent.steps.success.back")
 					}}</v-btn>
 				</div>
@@ -259,7 +259,7 @@
 					</span>
 				</template>
 				<template #footerRight>
-					<v-btn color="error" text @click="cancel">
+					<v-btn color="error" variant="text" @click="cancel">
 						{{
 							$t("pages.administration.students.consent.cancel.modal.confirm")
 						}}
@@ -267,7 +267,7 @@
 					<v-btn
 						v-if="currentStep === 2"
 						color="error"
-						depressed
+						variant="flat"
 						@click="download"
 					>
 						{{
@@ -276,7 +276,12 @@
 							)
 						}}
 					</v-btn>
-					<v-btn v-else color="error" depressed @click="cancelWarning = false">
+					<v-btn
+						v-else
+						color="error"
+						variant="flat"
+						@click="cancelWarning = false"
+					>
 						{{
 							$t("pages.administration.students.consent.cancel.modal.continue")
 						}}

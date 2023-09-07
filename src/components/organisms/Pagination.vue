@@ -28,7 +28,7 @@
 					<v-btn
 						min-width="35"
 						color="secondary"
-						depressed
+						variant="flat"
 						class="pagination-link"
 						aria-label="Go to previous page"
 						@click="previousPage"
@@ -40,7 +40,7 @@
 					<v-btn
 						min-width="35"
 						color="secondary"
-						depressed
+						variant="flat"
 						class="pagination-link"
 						aria-label="Go to next page"
 						@click="nextPage"

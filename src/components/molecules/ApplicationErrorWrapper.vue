@@ -9,7 +9,7 @@
 			<v-btn
 				class="mt-4"
 				color="primary"
-				depressed
+				variant="flat"
 				ref="btn-back"
 				data-testid="btn-back"
 				href="/dashboard"

@@ -64,7 +64,7 @@
 			</div>
 			<div class="buttons-container">
 				<v-btn
-					text
+					variant="text"
 					color="secondary"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
@@ -73,7 +73,7 @@
 				</v-btn>
 				<v-btn
 					color="primary"
-					depressed
+					variant="flat"
 					data-testid="ldapVerifyButton"
 					:disabled="status === 'pending'"
 					@click="validateHandler"

@@ -15,7 +15,11 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-items mb-4">
-				<v-btn color="primary" depressed @click="$emit('update:active', false)">
+				<v-btn
+					color="primary"
+					variant="flat"
+					@click="$emit('update:active', false)"
+				>
 					{{ btnText }}
 				</v-btn>
 			</div>

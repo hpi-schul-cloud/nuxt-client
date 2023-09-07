@@ -21,7 +21,7 @@
 					data-test-id="context-menu-open"
 					class="context-menu-open"
 					small
-					depressed
+					variant="flat"
 					color="secondary"
 					@click="actionsMenuOpen = true"
 				>
@@ -37,7 +37,7 @@
 		</div>
 		<v-btn
 			fab
-			depressed
+			variant="flat"
 			color="secondary"
 			width="40"
 			height="40"

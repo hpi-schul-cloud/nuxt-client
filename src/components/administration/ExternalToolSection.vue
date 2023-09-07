@@ -38,7 +38,7 @@
 		<v-btn
 			class="my-5 button-save"
 			color="primary"
-			depressed
+			variant="flat"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
 			{{ t("components.administration.externalToolsSection.action.add") }}
@@ -70,8 +70,7 @@
 					<v-btn
 						data-testId="dialog-cancel"
 						class="dialog-closed"
-						depressed
-						text
+						variant="text"
 						@click="onCloseDeleteDialog"
 					>
 						{{ t("common.actions.cancel") }}
@@ -80,7 +79,7 @@
 						data-testId="dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="onDeleteTool"
 					>
 						{{ t("common.actions.confirm") }}

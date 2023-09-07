@@ -42,7 +42,7 @@
 						</v-btn>
 						<v-btn
 							color="primary"
-							depressed
+							variant="flat"
 							:disabled="!isSendEnabled"
 							data-testid="modal_submit_btn"
 							@click="addToLesson"

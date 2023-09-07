@@ -15,7 +15,12 @@
 				"
 				component="p"
 			/>
-			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
+			<v-btn
+				color="primary"
+				variant="flat"
+				data-testId="btn-proceed"
+				to="/logout"
+			>
 				{{
 					t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),

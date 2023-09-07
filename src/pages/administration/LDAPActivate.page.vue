@@ -141,7 +141,7 @@
 		</div>
 		<div class="bottom-buttons">
 			<v-btn
-				text
+				variant="text"
 				color="secondary"
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
@@ -151,7 +151,7 @@
 			</v-btn>
 			<v-btn
 				color="primary"
-				depressed
+				variant="flat"
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"

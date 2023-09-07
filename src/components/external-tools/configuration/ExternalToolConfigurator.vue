@@ -48,7 +48,7 @@
 			<v-btn
 				class="mr-2"
 				color="secondary"
-				outlined
+				variant="outlined"
 				@click="onCancel"
 				data-testId="cancel-button"
 			>
@@ -57,7 +57,7 @@
 			<v-btn
 				class="mr-2"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!parametersValid"
 				@click="onSave"
 				data-testId="save-button"

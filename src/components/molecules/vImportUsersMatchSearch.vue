@@ -172,7 +172,7 @@
 				</v-col>
 				<v-col class="col-6 text-right pa-0">
 					<v-btn
-						text
+						variant="text"
 						:class="canSave ? 'primary' : ''"
 						class="m-2"
 						:disabled="!canSave"
@@ -183,7 +183,7 @@
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
-						text
+						variant="text"
 						:class="canDelete ? 'secondary' : ''"
 						class="m-2"
 						:disabled="!canDelete"

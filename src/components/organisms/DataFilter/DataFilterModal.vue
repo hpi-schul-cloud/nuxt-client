@@ -7,15 +7,15 @@
 		<template #footer>
 			<modal-footer>
 				<template #left>
-					<v-btn text class="btn-left" @click="$emit('remove')">
+					<v-btn variant="text" class="btn-left" @click="$emit('remove')">
 						{{ labelRemove }}
 					</v-btn>
 				</template>
 				<template #right>
-					<v-btn text @click="$emit('cancel')">
+					<v-btn variant="text" @click="$emit('cancel')">
 						{{ labelCancel }}
 					</v-btn>
-					<v-btn color="primary" depressed @click="$emit('apply')">
+					<v-btn color="primary" variant="flat" @click="$emit('apply')">
 						{{ labelApply }}
 					</v-btn>
 				</template>

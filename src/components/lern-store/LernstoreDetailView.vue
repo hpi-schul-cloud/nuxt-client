@@ -72,7 +72,7 @@
 				<div v-else>
 					<v-btn
 						v-if="isMerlin"
-						outlined
+						variant="outlined"
 						color="secondary"
 						class="content-button"
 						@click="
@@ -86,7 +86,7 @@
 					</v-btn>
 					<v-btn
 						v-else
-						outlined
+						variant="outlined"
 						color="secondary"
 						:href="downloadUrl"
 						class="content-button"

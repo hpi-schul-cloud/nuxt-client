@@ -55,7 +55,7 @@
 					<v-btn
 						v-if="type === 'password' && !error && !success"
 						icon
-						plain
+						variant="plain"
 						type="button"
 						data-testid="pwd-visibility-toggle"
 						class="pwd-toggle"

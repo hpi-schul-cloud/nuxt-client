@@ -22,7 +22,7 @@
 			>
 				<v-btn
 					class="mx-8 mb-8"
-					depressed
+					variant="flat"
 					data-testId="btn-cancel"
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
@@ -37,7 +37,7 @@
 				<v-btn
 					class="mx-8 mb-8"
 					color="primary"
-					depressed
+					variant="flat"
 					data-testId="btn-proceed"
 					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
@@ -47,7 +47,7 @@
 			<div v-else class="d-flex flex-wrap justify-center mt-8">
 				<v-btn
 					class="mx-8 mb-8"
-					depressed
+					variant="flat"
 					data-testId="btn-cancel"
 					:to="cancelLink"
 				>
@@ -62,7 +62,7 @@
 				<v-btn
 					class="mx-8 mb-8"
 					color="primary"
-					depressed
+					variant="flat"
 					data-testId="btn-proceed"
 					:href="proceedLink"
 				>

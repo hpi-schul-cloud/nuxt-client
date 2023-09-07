@@ -12,7 +12,7 @@
 					<div class="btn">
 						<v-btn
 							color="secondary"
-							outlined
+							variant="outlined"
 							small
 							to="/rooms-list"
 							data-testid="go-to-all-courses"

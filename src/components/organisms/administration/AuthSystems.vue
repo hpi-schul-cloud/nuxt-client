@@ -112,7 +112,7 @@
 			v-if="hasSystemCreatePermission"
 			color="primary"
 			class="my-8 add-ldap"
-			depressed
+			variant="flat"
 			to="/administration/ldap/config"
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}

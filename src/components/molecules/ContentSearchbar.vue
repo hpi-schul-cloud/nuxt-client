@@ -25,7 +25,13 @@
 				>
 					{{ mdiMagnify }}
 				</v-icon>
-				<v-btn v-else icon plain color="black" @click="clearBtnHandler">
+				<v-btn
+					v-else
+					icon
+					variant="plain"
+					color="black"
+					@click="clearBtnHandler"
+				>
 					<v-icon x-large class="search-icon" aria-label="clear">
 						{{ mdiClose }}
 					</v-icon>

@@ -184,7 +184,7 @@
 						}}
 						<v-btn
 							class="ma-2"
-							text
+							variant="text"
 							icon
 							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"

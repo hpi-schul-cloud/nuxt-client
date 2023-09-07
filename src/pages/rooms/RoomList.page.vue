@@ -8,7 +8,7 @@
 				<div class="btn">
 					<v-btn
 						color="secondary"
-						outlined
+						variant="outlined"
 						small
 						to="/rooms-overview"
 						data-testid="go-to-active-courses"

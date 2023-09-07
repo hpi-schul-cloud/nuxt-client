@@ -1,7 +1,7 @@
 <template>
 	<div v-if="options.length > 0" v-outside-click="hideMenu" class="menu">
 		<v-btn
-			text
+			variant="text"
 			color="secondary"
 			data-testid="add_filter_button"
 			@click="showMenu"

@@ -18,7 +18,7 @@
 			<v-btn
 				v-if="chip.deletable"
 				fab
-				depressed
+				variant="flat"
 				color="secondary"
 				class="btn-delete"
 				@click.stop="$emit('remove', chip.id)"

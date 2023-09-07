@@ -91,8 +91,7 @@
 					<v-spacer></v-spacer>
 					<v-btn
 						data-testId="dialog-cancel"
-						depressed
-						text
+						variant="text"
 						@click="onCloseConfigurationDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -101,7 +100,7 @@
 						data-testId="dialog-create"
 						class="px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="startVideoConference"
 					>
 						{{ $t("common.actions.create") }}

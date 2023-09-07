@@ -106,7 +106,7 @@
 			color="secondary darken-1"
 			fab
 			dark
-			depressed
+			variant="flat"
 			width="40"
 			height="40"
 			class="fullscreen-button-active"

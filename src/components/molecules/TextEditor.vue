@@ -22,7 +22,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.bold()"
 					:fab="isActive.bold()"
 					data-testid="editor_format_bold"
@@ -34,7 +34,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.italic()"
 					:fab="isActive.italic()"
 					data-testid="editor_format_italic"
@@ -46,7 +46,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.underline()"
 					:fab="isActive.underline()"
 					data-testid="editor_format_underlined"
@@ -58,7 +58,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.strike()"
 					:fab="isActive.strike()"
 					data-testid="editor_format_strikethrough"
@@ -70,7 +70,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.heading({ level: 2 })"
 					:fab="isActive.heading({ level: 2 })"
 					data-testid="editor_format_h1"
@@ -82,7 +82,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.heading({ level: 3 })"
 					:fab="isActive.heading({ level: 3 })"
 					data-testid="editor_format_h2"
@@ -94,7 +94,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.heading({ level: 4 })"
 					:fab="isActive.heading({ level: 4 })"
 					data-testid="editor_format_h3"
@@ -106,7 +106,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.bullet_list()"
 					:fab="isActive.bullet_list()"
 					data-testid="editor_format_list_bulleted"
@@ -119,7 +119,7 @@
 					color="secondary"
 					width="36"
 					height="36"
-					depressed
+					variant="flat"
 					:icon="!isActive.ordered_list()"
 					:fab="isActive.ordered_list()"
 					data-testid="editor_format_list_numbered"

@@ -19,7 +19,7 @@
 				<v-btn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
-					plain
+					variant="plain"
 					large
 					:height="84"
 					:width="126"

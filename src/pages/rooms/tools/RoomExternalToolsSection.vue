@@ -62,8 +62,7 @@
 					<v-spacer></v-spacer>
 					<v-btn
 						data-testId="dialog-cancel"
-						depressed
-						text
+						variant="text"
 						@click="onCloseDeleteDialog"
 					>
 						{{ t("common.actions.cancel") }}
@@ -72,7 +71,7 @@
 						data-testId="dialog-confirm"
 						class="px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="onDeleteTool"
 					>
 						{{ t("common.actions.confirm") }}

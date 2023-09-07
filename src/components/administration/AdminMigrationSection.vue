@@ -43,7 +43,7 @@
 				v-if="isShowStartButton"
 				class="my-5 button-start"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!oauthMigration.enableMigrationStart"
 				data-testid="migration-start-button"
 				@click="onToggleShowStartWarning"
@@ -58,7 +58,7 @@
 				v-if="isShowEndButton"
 				class="my-5 button-end"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!oauthMigration.oauthMigrationPossible"
 				data-testid="migration-end-button"
 				@click="onToggleShowEndWarning"

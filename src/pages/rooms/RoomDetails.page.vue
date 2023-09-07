@@ -31,7 +31,7 @@
 					<v-btn
 						color="secondary"
 						class="back-button"
-						outlined
+						variant="outlined"
 						small
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"

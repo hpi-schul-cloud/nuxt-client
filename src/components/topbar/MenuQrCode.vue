@@ -4,7 +4,7 @@
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
-		<v-btn outlined color="secondary" @click="openPrintMenu">
+		<v-btn variant="outline" color="secondary" @click="openPrintMenu">
 			<v-icon left>{{ mdiPrinter }}</v-icon>
 			{{ $t("global.topbar.MenuQrCode.print") }}
 		</v-btn>

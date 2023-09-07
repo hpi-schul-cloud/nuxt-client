@@ -35,7 +35,7 @@
 		<v-btn
 			type="submit"
 			color="primary"
-			depressed
+			variant="flat"
 			class="w-100 mt--lg"
 			data-testid="button_create-user_submit"
 		>
@@ -43,7 +43,7 @@
 		</v-btn>
 		<v-btn
 			class="w-100 mt--lg"
-			text
+			variant="text"
 			color="secondary"
 			data-testid="button_create-user_abort"
 			@click.prevent="$router.go(-1)"

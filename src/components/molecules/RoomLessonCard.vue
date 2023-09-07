@@ -52,7 +52,7 @@
 				:class="`action-button action-button-${action.name
 					.split(' ')
 					.join('-')}`"
-				text
+				variant="text"
 				@click.stop="action.action"
 			>
 				{{ action.name }}

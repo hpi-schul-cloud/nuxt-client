@@ -51,7 +51,7 @@
 						<template #primary>
 							<v-btn
 								color="primary"
-								depressed
+								variant="flat"
 								type="submit"
 								data-testid="btn_news_submit"
 								:disabled="status === 'pending'"
@@ -59,11 +59,16 @@
 								<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
 								{{ $t("common.actions.save") }}
 							</v-btn>
-							<v-btn v-if="news && news.id" text color="error" @click="remove">
+							<v-btn
+								v-if="news && news.id"
+								variant="text"
+								color="error"
+								@click="remove"
+							>
 								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
 								{{ $t("common.actions.remove") }}
 							</v-btn>
-							<v-btn text color="secondary" @click="cancel">
+							<v-btn variant="text" color="secondary" @click="cancel">
 								<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
 								{{ $t("common.actions.discard") }}
 							</v-btn>

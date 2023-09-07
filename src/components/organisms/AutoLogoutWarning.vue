@@ -13,7 +13,7 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" depressed @click="extendSession">
+				<v-btn color="primary" variant="flat" @click="extendSession">
 					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
 				</v-btn>
 			</div>

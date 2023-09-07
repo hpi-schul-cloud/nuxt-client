@@ -31,7 +31,7 @@
 					<span class="info-slot">
 						<v-btn
 							icon
-							plain
+							variant="plain"
 							color="info"
 							class="info-button"
 							style="background-color: transparent"
@@ -194,8 +194,7 @@
 				</span>
 				<v-btn
 					v-if="column.sortable"
-					text
-					plain
+					variant="plain"
 					:ripple="false"
 					:class="{
 						'is-current-sort': sortBy === column.field,
@@ -412,7 +411,9 @@ export default {
 	button:not(.is-none):focus {
 		z-index: var(--layer-fab);
 		outline: none;
-		box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
+		box-shadow:
+			0 0 0 0 var(--v-white-base),
+			0 0 0 3px var(--button-background);
 	}
 }
 

@@ -49,8 +49,7 @@
 					<div class="button-section button-right">
 						<v-btn
 							class="dialog-closed"
-							depressed
-							text
+							variant="text"
 							@click="cancel"
 							data-testid="cancel-button"
 						>
@@ -60,7 +59,7 @@
 							class="icon-button dialog-confirmed px-6"
 							type="submit"
 							color="primary"
-							depressed
+							variant="flat"
 							:disabled="!isValid"
 							@click.prevent="submit"
 							data-testid="submit-button"

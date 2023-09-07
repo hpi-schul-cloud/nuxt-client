@@ -144,7 +144,7 @@
 				class="my-5 button-save"
 				data-testid="save-general-setting"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="loading"
 				@click="save"
 			>

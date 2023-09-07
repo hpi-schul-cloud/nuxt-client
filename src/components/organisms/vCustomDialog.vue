@@ -20,8 +20,7 @@
 					<v-btn
 						v-if="checkButtons('back')"
 						data-testId="dialog-back"
-						depressed
-						outlined
+						variant="outlined"
 						@click="$emit('back')"
 					>
 						{{ $t("common.actions.back") }}
@@ -29,7 +28,7 @@
 					<v-btn
 						v-if="checkButtons('edit')"
 						data-testId="dialog-edit"
-						depressed
+						variant="flat"
 						@click="$emit('dialog-edit')"
 					>
 						{{ $t("common.actions.edit") }}
@@ -40,8 +39,7 @@
 						v-if="checkButtons('cancel')"
 						data-testId="dialog-cancel"
 						class="dialog-closed"
-						depressed
-						text
+						variant="text"
 						@click="cancelDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -51,7 +49,7 @@
 						data-testId="dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
 						>{{ $t(confirmBtnTitleKey) }}
@@ -59,8 +57,7 @@
 					<v-btn
 						v-if="checkButtons('close')"
 						data-testId="dialog-close"
-						depressed
-						outlined
+						variant="outlined"
 						@click="closeDialog"
 					>
 						{{ $t("common.labels.close") }}
@@ -69,7 +66,7 @@
 						v-if="checkButtons('next')"
 						data-testId="dialog-next"
 						color="primary"
-						depressed
+						variant="flat"
 						:disabled="nextBtnDisabled"
 						@click="$emit('next')"
 						>{{ $t(nextBtnTitleKey) }}

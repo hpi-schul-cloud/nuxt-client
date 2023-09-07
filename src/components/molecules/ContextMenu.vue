@@ -11,7 +11,7 @@
 			<v-btn
 				v-for="(action, index) of actions"
 				:key="action.text"
-				text
+				variant="text"
 				tile
 				height="50"
 				:ripple="false"
