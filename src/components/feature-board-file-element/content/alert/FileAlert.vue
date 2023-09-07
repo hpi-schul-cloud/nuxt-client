@@ -34,7 +34,7 @@ interface Props {
 }
 
 export default defineComponent({
-	name: "FileContentElementAlert",
+	name: "FileAlert",
 	props: {
 		previewStatus: {
 			type: String as PropType<PreviewStatus>,

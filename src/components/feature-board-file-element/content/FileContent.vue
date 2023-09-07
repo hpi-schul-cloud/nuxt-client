@@ -2,16 +2,13 @@
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
 		<FileContentElementFooter :fileProperties="fileProperties" />
-		<FileContentElementAlert
-			:previewStatus="previewStatus"
-			@on-status-reload="onFetchFile"
-		/>
+		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import FileContentElementAlert from "../content/alert/FileContentElementAlert.vue";
+import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
@@ -21,7 +18,7 @@ export default defineComponent({
 	components: {
 		FileDisplay,
 		FileContentElementFooter,
-		FileContentElementAlert,
+		FileAlert,
 	},
 	props: {
 		fileProperties: {

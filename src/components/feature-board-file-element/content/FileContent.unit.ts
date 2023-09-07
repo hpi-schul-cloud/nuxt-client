@@ -1,7 +1,7 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementAlert from "./alert/FileContentElementAlert.vue";
+import FileAlert from "./alert/FileAlert.vue";
 import FileContent from "./FileContent.vue";
 import FileContentElementFooter from "./footer/FileContentElementFooter.vue";
 
@@ -54,14 +54,12 @@ describe("FileContent", () => {
 		});
 	});
 
-	it("Should pass props to FileContentElementAlert", () => {
+	it("Should pass props to FileAlert", () => {
 		const { wrapper, fileProperties } = setup();
 
-		const fileContentElementAlert = wrapper.findComponent(
-			FileContentElementAlert
-		);
+		const fileAlert = wrapper.findComponent(FileAlert);
 
-		expect(fileContentElementAlert.props()).toEqual({
+		expect(fileAlert.props()).toEqual({
 			previewStatus: fileProperties.previewStatus,
 		});
 	});
@@ -69,11 +67,9 @@ describe("FileContent", () => {
 	it("should emit delete event when alter emits on status reload", async () => {
 		const { wrapper } = setup();
 
-		const fileContentElementAlert = wrapper.findComponent(
-			FileContentElementAlert
-		);
+		const fileAlert = wrapper.findComponent(FileAlert);
 
-		await fileContentElementAlert.vm.$emit("on-status-reload");
+		await fileAlert.vm.$emit("on-status-reload");
 
 		expect(wrapper.emitted("fetch:file")).toBeTruthy();
 	});

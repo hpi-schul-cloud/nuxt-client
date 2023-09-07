@@ -1,13 +1,13 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileContentElementAlert from "./FileContentElementAlert.vue";
+import FileAlert from "./FileAlert.vue";
 
-describe("FileContentElementAlert", () => {
+describe("FileAlert", () => {
 	const mount = (previewStatus: PreviewStatus) => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(FileContentElementAlert, {
+		const wrapper = shallowMount(FileAlert, {
 			propsData: { previewStatus },
 			...createComponentMocks({ i18n: true }),
 		});
