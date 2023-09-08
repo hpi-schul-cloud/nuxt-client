@@ -1,22 +1,18 @@
 <template>
-	<v-container class="ma-0 pa-0">
-		<v-row>
-			<v-col cols="10">
-				<ContentElementChips
-					:fileSize="fileProperties.size"
-					:fileName="fileProperties.name"
-				/>
-			</v-col>
+	<v-card-actions>
+		<ContentElementChips
+			:fileSize="fileProperties.size"
+			:fileName="fileProperties.name"
+		/>
 
-			<v-col cols="2">
-				<FileDownload
-					:fileName="fileProperties.name"
-					:isDownloadAllowed="fileProperties.isDownloadAllowed"
-					:url="fileProperties.url"
-				></FileDownload>
-			</v-col>
-		</v-row>
-	</v-container>
+		<v-spacer></v-spacer>
+
+		<FileDownload
+			:fileName="fileProperties.name"
+			:isDownloadAllowed="fileProperties.isDownloadAllowed"
+			:url="fileProperties.url"
+		></FileDownload>
+	</v-card-actions>
 </template>
 
 <script lang="ts">

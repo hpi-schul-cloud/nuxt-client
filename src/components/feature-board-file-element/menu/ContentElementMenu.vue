@@ -89,7 +89,7 @@ export default defineComponent({
 <style scoped>
 .menu {
 	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
+	top: 8px;
+	right: 2px;
 }
 </style>

@@ -1,13 +1,11 @@
 <template>
-	<div class="download-btn">
-		<v-icon
-			data-testid="board-file-element-edit-menu-download"
-			@click="onDownload"
-			:disabled="!isDownloadAllowed"
-			class="float-right"
-			>{{ mdiTrayArrowDown }}
-		</v-icon>
-	</div>
+	<v-icon
+		data-testid="board-file-element-edit-menu-download"
+		@click="onDownload"
+		:disabled="!isDownloadAllowed"
+		class="float-right"
+		>{{ mdiTrayArrowDown }}
+	</v-icon>
 </template>
 
 <script lang="ts">
@@ -34,10 +32,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.download-btn {
-	margin: 10px 14px 0px 0px;
-	padding: 0px;
-}
-</style>
