@@ -3,7 +3,6 @@
 		<v-img class="rounded-t-sm" :src="previewUrl" :alt="alternativeText">
 			<div v-if="isEditMode" class="menu-background"></div>
 		</v-img>
-		<AlternativeText v-if="isEditMode" :element="element"></AlternativeText>
 	</div>
 </template>
 
@@ -11,13 +10,9 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, PropType } from "vue";
-import AlternativeText from "./AlternativeText.vue";
 
 export default defineComponent({
 	name: "ImageDisplay",
-	components: {
-		AlternativeText,
-	},
 	props: {
 		previewUrl: { type: String, required: true },
 		name: { type: String, required: true },

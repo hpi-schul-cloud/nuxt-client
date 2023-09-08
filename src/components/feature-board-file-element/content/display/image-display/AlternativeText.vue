@@ -1,13 +1,13 @@
 <template>
-	<div>
+	<v-container class="grey lighten-3">
 		<v-textarea
 			v-model="modelValue.alternativeText"
-			class="pa-0 ma-0 v-secondary-lighten1"
+			class="pt-2 ma-0 v-secondary-lighten1"
 			rows="1"
-			:label="$t('components.cardElement.fileElement.altDescription')"
-			:placeholder="$t('components.cardElement.fileElement.alternativeText')"
+			:placeholder="$t('components.cardElement.fileElement.altDescription')"
+			:label="$t('components.cardElement.fileElement.alternativeText')"
 		></v-textarea>
-	</div>
+	</v-container>
 </template>
 
 <script lang="ts">
