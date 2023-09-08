@@ -88,7 +88,7 @@ export default defineComponent({
 		});
 
 		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.elementId}`;
+			const urlWithRoom = `?roomName=${props.elementId}`;
 			window.open(urlWithRoom, "_blank");
 			emit("open:element");
 		};

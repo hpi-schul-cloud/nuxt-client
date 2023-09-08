@@ -8,8 +8,9 @@ import {
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { notifierModule } from "@/store/store-accessor";
+import VueI18n from "vue-i18n";
 
 type AddCardElement = (
 	type: ContentElementType
@@ -20,6 +21,7 @@ export const useAddElementDialog = (
 	elements: any
 ) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+	const i18n = injectStrict(I18N_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
@@ -27,6 +29,8 @@ export const useAddElementDialog = (
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
 		const drawingExists = elements.value.elements.some(
 			(element: { type: ContentElementType }) =>
 				element.type === ContentElementType.Drawing
@@ -34,7 +38,9 @@ export const useAddElementDialog = (
 		if (elementType === ContentElementType.Drawing) {
 			if (drawingExists) {
 				notifierModule.show({
-					text: "You cannot add another board within the card",
+					text: t(
+						"components.administration.externalToolsSection.notification.infoCreation"
+					),
 					status: "error",
 				});
 				return;

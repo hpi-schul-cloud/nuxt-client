@@ -170,6 +170,7 @@
 	"components.administration.externalToolsSection.notification.created": "Tool was created successfully.",
 	"components.administration.externalToolsSection.notification.updated": "Tool has been updated successfully.",
 	"components.administration.externalToolsSection.notification.deleted": "Tool was successfully deleted.",
+	"components.administration.externalToolsSection.notification.infoCreation": "You cannot add another board within the card",
 	"components.base.BaseIcon.error": "error loading icon {icon} from {source}. It might be not available or you are using the legacy Edge browser.",
 	"components.base.showPassword": "Show password",
 	"components.elementTypeSelection.dialog.title": "Add element",
