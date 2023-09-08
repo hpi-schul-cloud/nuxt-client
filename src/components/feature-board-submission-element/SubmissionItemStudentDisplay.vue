@@ -22,7 +22,7 @@ import { defineComponent } from "vue";
 import { useVModel } from "@vueuse/core";
 
 export default defineComponent({
-	name: "SubmissionContentElementDisplayStudent",
+	name: "SubmissionItemStudentDisplay",
 	props: {
 		editable: {
 			type: Boolean,
