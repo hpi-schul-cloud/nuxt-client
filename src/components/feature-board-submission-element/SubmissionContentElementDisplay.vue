@@ -38,11 +38,13 @@
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
+		<SubmissionItemsTeacherDisplay v-if="isTeacher" :loading="loading" />
 	</div>
 </template>
 
 <script lang="ts">
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
@@ -53,6 +55,7 @@ export default defineComponent({
 	name: "SubmissionContentElementDisplay",
 	components: {
 		SubmissionItemStudentDisplay,
+		SubmissionItemsTeacherDisplay,
 	},
 	props: {
 		completed: {
@@ -77,6 +80,10 @@ export default defineComponent({
 			return userRoles.value.includes("student");
 		});
 
+		const isTeacher = computed(() => {
+			return userRoles.value.includes("teacher");
+		});
+
 		const updateCompleted = (completed: boolean) => {
 			emit("update:completed", completed);
 		};
@@ -89,6 +96,7 @@ export default defineComponent({
 
 		return {
 			isStudent,
+			isTeacher,
 			editable,
 			dayjs,
 			updateCompleted,
