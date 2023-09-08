@@ -38,7 +38,11 @@
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
-		<SubmissionItemsTeacherDisplay v-if="isTeacher" :loading="loading" />
+		<SubmissionItemsTeacherDisplay
+			v-if="isTeacher"
+			:submissionItems="submissionItems"
+			:loading="loading"
+		/>
 	</div>
 </template>
 
@@ -48,8 +52,9 @@ import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent, ref, computed, toRef } from "vue";
+import { defineComponent, ref, computed, toRef, PropType } from "vue";
 import dayjs from "dayjs";
+import { SubmissionItemResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -60,6 +65,10 @@ export default defineComponent({
 	props: {
 		completed: {
 			type: Boolean,
+			required: true,
+		},
+		submissionItems: {
+			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
 		loading: {

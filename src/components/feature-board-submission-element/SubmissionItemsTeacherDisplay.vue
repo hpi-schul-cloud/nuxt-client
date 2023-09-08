@@ -7,18 +7,23 @@
 			width="120"
 			height="22"
 		/>
-		<v-container v-else>Submission Items</v-container>
+		<v-container v-else>{{ submissionItems }}</v-container>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+import { SubmissionItemResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
 	props: {
 		loading: {
 			type: Boolean,
+			required: true,
+		},
+		submissionItems: {
+			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
 	},
