@@ -62,13 +62,15 @@ describe("FileContent", () => {
 		});
 	});
 
-	it("should emit delete event when alter emits on status reload", async () => {
-		const { wrapper } = setup();
+	describe("when alert emits on-status-reload", () => {
+		it("should emit delete event", async () => {
+			const { wrapper } = setup();
 
-		const fileAlert = wrapper.findComponent(FileAlert);
+			const fileAlert = wrapper.findComponent(FileAlert);
 
-		await fileAlert.vm.$emit("on-status-reload");
+			await fileAlert.vm.$emit("on-status-reload");
 
-		expect(wrapper.emitted("fetch:file")).toBeTruthy();
+			expect(wrapper.emitted("fetch:file")).toBeTruthy();
+		});
 	});
 });
