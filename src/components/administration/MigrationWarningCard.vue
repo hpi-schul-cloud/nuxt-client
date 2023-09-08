@@ -1,8 +1,13 @@
 <template>
 	<v-card data-testid="migration-warning-card">
-		<v-card-title class="card-title">{{ $t(title) }}</v-card-title>
+		<v-card-title
+			data-testid="migration-warning-card-title"
+			class="card-title"
+			>{{ $t(title) }}</v-card-title
+		>
 		<v-card-text>
 			<RenderHTML
+				data-testid="migration-warning-card-info-text"
 				:html="
 					$t(text, {
 						gracePeriod: gracePeriodInDays,
