@@ -9,6 +9,7 @@ import Vue, { nextTick } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createMock } from "@golevelup/ts-jest";
 
@@ -27,6 +28,17 @@ const useDeleteConfirmationDialogMock = jest.mocked(
 	useDeleteConfirmationDialog
 );
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
+jest.mock("./SubmissionContentElementState.composable");
+const mockedUseSubmissionContentElementState = jest.mocked(
+	useSubmissionContentElementState
+);
+const mockedUseSubmissionContentElementStateResponse =
+	createMock<ReturnType<typeof useSubmissionContentElementState>>();
+
+mockedUseSubmissionContentElementState.mockReturnValue(
+	mockedUseSubmissionContentElementStateResponse
+);
 
 describe("SubmissionContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -97,6 +109,41 @@ describe("SubmissionContentElement", () => {
 				.props("dueDate");
 
 			expect(dueDate).toBe(element.content.dueDate);
+		});
+
+		it("should hand over completed state to SubmissionContentElementDisplay", async () => {
+			const { wrapper } = setup();
+
+			const completed = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("completed");
+
+			expect(completed).toBe(
+				mockedUseSubmissionContentElementStateResponse.completed
+			);
+		});
+
+		it("should hand over loading state to SubmissionContentElementDisplay", async () => {
+			const { wrapper } = setup();
+
+			const loading = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("loading");
+
+			expect(loading).toBe(
+				mockedUseSubmissionContentElementStateResponse.loading
+			);
+		});
+
+		it("should update completed state when it receives 'update:completed' event from child", async () => {
+			const { wrapper } = setup();
+
+			const component = wrapper.findComponent(SubmissionContentElementDisplay);
+			component.vm.$emit("update:completed");
+
+			expect(
+				mockedUseSubmissionContentElementStateResponse.updateSubmissionItem
+			).toHaveBeenCalledTimes(1);
 		});
 	});
 

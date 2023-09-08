@@ -124,7 +124,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getSchoolPolicyEnabled() {
-		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
+		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
 	}
 
 	get getLoginLinkEnabled() {
