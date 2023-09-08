@@ -125,7 +125,7 @@
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
-			:disabled="!oauthMigration.oauthMigrationPossible"
+			:disabled="!isShowActiveMigration"
 			v-model="school.features.enableLdapSyncDuringMigration"
 			inset
 			dense
