@@ -37,7 +37,7 @@ import { defineComponent, PropType, ref } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";

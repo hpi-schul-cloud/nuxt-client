@@ -9,7 +9,7 @@ import Vue, { nextTick } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createMock } from "@golevelup/ts-jest";
 
