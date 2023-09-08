@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, PropType } from "vue";
 import AlternativeText from "./AlternativeText.vue";
 
@@ -24,10 +25,17 @@ export default defineComponent({
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
 	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
+
 		const alternativeText = computed(() => {
-			return props.element.content.alternativeText
+			const altTranslation = i18n.t(
+				"components.cardElement.fileElement.emptyAlt"
+			);
+			const altText = props.element.content.alternativeText
 				? props.element.content.alternativeText
-				: `Hier ist ein Bild mit folgendem Namen ${props.name}`;
+				: `${altTranslation} ${props.name}`;
+
+			return altText;
 		});
 
 		return {
