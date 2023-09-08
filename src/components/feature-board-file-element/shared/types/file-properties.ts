@@ -1,4 +1,5 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
+import { FileElementResponse } from "@/serverApi/v3";
 
 export interface FileProperties {
 	name: string;
@@ -7,5 +8,5 @@ export interface FileProperties {
 	previewUrl?: string;
 	previewStatus: PreviewStatus;
 	isDownloadAllowed: boolean;
-	alternativeText?: string;
+	element: FileElementResponse;
 }

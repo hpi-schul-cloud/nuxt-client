@@ -98,7 +98,7 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
-				alternativeText: props.element.content.alternativeText,
+				element: props.element,
 			};
 		});
 

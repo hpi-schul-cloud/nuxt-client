@@ -1,12 +1,11 @@
 <template>
 	<div>
-		<VTextarea
+		<v-textarea
+			v-model="modelValue.alternativeText"
 			class="pa-0 ma-0 v-secondary-lighten1"
 			rows="1"
 			:label="$t('common.labels.alternativeText')"
-			ref="alternativeText"
-			@keyup.enter="onEnterAlternativeText"
-		></VTextarea>
+		></v-textarea>
 		<span class="pa-0 mt-n4 v-secondary-darken1">{{
 			$t("common.labels.altDescription")
 		}}</span>
@@ -14,24 +13,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { VTextarea } from "vuetify/lib";
+import { FileElementResponse } from "@/serverApi/v3";
+import { useContentElementState } from "@data-board";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	name: "AlternativeText",
 	props: {
-		text: { type: String, required: false },
+		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	emits: ["update:alternativeText"],
 	setup(props, { emit }) {
-		const alternativeText = ref<InstanceType<typeof VTextarea> | null>(null);
-
-		const onEnterAlternativeText = ($event: KeyboardEvent) => {
-			console.log(alternativeText);
-		};
+		const { modelValue } = useContentElementState({
+			element: props.element,
+			isEditMode: true,
+		});
 
 		return {
-			onEnterAlternativeText,
+			modelValue,
 		};
 	},
 });

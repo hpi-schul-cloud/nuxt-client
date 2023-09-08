@@ -5,7 +5,7 @@
 			:preview-url="fileProperties.previewUrl"
 			:name="fileProperties.name"
 			:is-edit-mode="isEditMode"
-			:alternativeText="fileProperties.alternativeText"
+			:element="fileProperties.element"
 		/>
 		<DefaultDisplay v-else :name="fileProperties.name" />
 	</div>
