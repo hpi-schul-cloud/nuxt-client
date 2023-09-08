@@ -1,26 +1,34 @@
+import { I18N_KEY } from "@/utils/inject";
+import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import ImageDisplay from "./ImageDisplay.vue";
 
 describe("ImageDisplay", () => {
-	const setup = (isEditMode: boolean) => {
+	const setup = (isEditMode: boolean, alternativeText?: string) => {
 		document.body.setAttribute("data-app", "true");
 
+		const element = fileElementResponseFactory.build();
 		const propsData = {
 			name: "file-record #1.txt",
 			previewUrl: "preview/1/file-record #1.txt",
 			isEditMode,
+			element,
 		};
 
 		const wrapper = shallowMount(ImageDisplay, {
 			propsData,
-			...createComponentMocks({}),
+			...createComponentMocks({ i18n: true }),
+			provide: {
+				[I18N_KEY.valueOf()]: i18nMock,
+			},
 		});
 
 		return {
 			wrapper,
 			fileNameProp: propsData.name,
 			previewUrl: propsData.previewUrl,
+			element,
 		};
 	};
 	const vImageSelektor = "v-img-stub";
@@ -50,14 +58,6 @@ describe("ImageDisplay", () => {
 			expect(src).toBe(previewUrl);
 		});
 
-		it("should have set alt correctly", () => {
-			const { wrapper, fileNameProp } = setup(false);
-
-			const alt = wrapper.find(vImageSelektor).attributes("alt");
-
-			expect(alt).toBe(fileNameProp);
-		});
-
 		it("should not display div with class 'menu-background'", () => {
 			const { wrapper } = setup(false);
 
@@ -65,6 +65,26 @@ describe("ImageDisplay", () => {
 			console.log(wrapper.props());
 
 			expect(div.exists()).toBe(false);
+		});
+
+		describe("When alternative text is defined", () => {
+			it("should have set alt correctly", () => {
+				const { wrapper, element } = setup(false);
+
+				const alt = wrapper.find(vImageSelektor).attributes("alt");
+
+				expect(alt).toBe(element.content.alternativeText);
+			});
+		});
+
+		describe("When alternative text is undefined", () => {
+			it("should have set alt correctly", () => {
+				const { wrapper, element } = setup(false);
+
+				const alt = wrapper.find(vImageSelektor).attributes("alt");
+
+				expect(alt).toBe(element.content.alternativeText);
+			});
 		});
 	});
 
