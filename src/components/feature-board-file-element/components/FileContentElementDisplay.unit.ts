@@ -4,9 +4,11 @@ import FileContentElementDisplay from "./FileContentElementDisplay.vue";
 
 describe("FileContentElementDisplay", () => {
 	const setupProps = (isDownloadAllowed?: boolean) => ({
-		fileName: "file-record #1.txt",
-		url: "1/file-record #1.txt",
-		isDownloadAllowed: isDownloadAllowed ?? true,
+		fileProperties: {
+			name: "file-record #1.txt",
+			url: "1/file-record #1.txt",
+			isDownloadAllowed: isDownloadAllowed ?? true,
+		},
 	});
 
 	const setup = (isDownloadAllowed?: boolean) => {
@@ -21,8 +23,8 @@ describe("FileContentElementDisplay", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileName,
-			urlProp: propsData.url,
+			fileNameProp: propsData.fileProperties.name,
+			urlProp: propsData.fileProperties.url,
 		};
 	};
 

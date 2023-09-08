@@ -19,14 +19,14 @@
 				<span
 					class="subtitle-1 d-inline-block text-truncate"
 					data-testid="board-file-element-edit-file-name"
-					>{{ fileName }}</span
+					>{{ fileProperties.name }}</span
 				>
 			</v-list-item-content>
 
 			<FileContentElementMenu
-				:fileName="fileName"
-				:isDownloadAllowed="isDownloadAllowed"
-				:url="url"
+				:fileName="fileProperties.name"
+				:isDownloadAllowed="fileProperties.isDownloadAllowed"
+				:url="fileProperties.url"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -36,30 +36,28 @@
 			/>
 		</v-list-item>
 		<FileContentElementFooter
-			:fileSize="fileSize"
-			:fileName="fileName"
-			:isDownloadAllowed="isDownloadAllowed"
-			:url="url"
+			:fileProperties="fileProperties"
 		></FileContentElementFooter>
 	</div>
 </template>
 
 <script lang="ts">
-import { mdiFileDocumentOutline, mdiClose } from "@mdi/js";
-import { defineComponent, ref, watch } from "vue";
+import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
+import { useSharedLastCreatedElement } from "@util-board";
+import { defineComponent, PropType, ref, watch } from "vue";
 import FileContentElementFooter from "./FileContentElementFooter.vue";
 import FileContentElementMenu from "./FileContentElementMenu.vue";
-import { useSharedLastCreatedElement } from "@util-board";
+import { FileProperties } from "./types/file-properties";
 
 export default defineComponent({
 	name: "FileContentElementEdit",
 	components: { FileContentElementMenu, FileContentElementFooter },
 	props: {
-		fileName: { type: String, required: true },
-		fileSize: { type: Number, required: true },
+		fileProperties: {
+			type: Object as PropType<FileProperties>,
+			required: true,
+		},
 		elementId: { type: String, required: true },
-		isDownloadAllowed: { type: Boolean, required: true },
-		url: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },

@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		:outlined="isOutlined"
+		outlined
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -14,6 +14,9 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
+				:completed="completed"
+				:loading="loading"
+				@update:completed="updateCompletionState"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -34,6 +37,7 @@ import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -65,12 +69,10 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
+		const { completed, updateSubmissionItem, loading } =
+			useSubmissionContentElementState(props.element.id);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
-
-		const isOutlined = computed(() => {
-			return props.isEditMode === true;
-		});
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -98,13 +100,19 @@ export default defineComponent({
 			}
 		};
 
+		const updateCompletionState = (completed: boolean) => {
+			updateSubmissionItem(completed);
+		};
+
 		return {
-			isOutlined,
 			submissionContentElement,
+			completed,
+			loading,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
+			updateCompletionState,
 		};
 	},
 });

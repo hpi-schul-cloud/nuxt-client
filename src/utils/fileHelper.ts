@@ -1,3 +1,10 @@
+import {
+	FileRecordScanStatus,
+	PreviewOutputMimeTypes,
+	PreviewStatus,
+	PreviewWidth,
+} from "@/fileStorageApi/v3";
+
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -43,4 +50,23 @@ export function getFileExtension(fileName: string): string {
 	const ext = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 	return ext;
+}
+
+export function convertDownloadToPreviewUrl(
+	downloadUrl: string,
+	width: PreviewWidth = PreviewWidth._500
+): string {
+	const previewUrl =
+		downloadUrl.replace("download", "preview") +
+		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${width}`;
+
+	return previewUrl;
+}
+
+export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
+	return scanStatus !== FileRecordScanStatus.BLOCKED;
+}
+
+export function isPreviewPossible(previewStatus: PreviewStatus): boolean {
+	return previewStatus === PreviewStatus.PREVIEW_POSSIBLE;
 }

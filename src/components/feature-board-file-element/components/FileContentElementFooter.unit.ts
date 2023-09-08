@@ -1,18 +1,20 @@
-import { shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import FileContentElementFooter from "./FileContentElementFooter.vue";
+import { shallowMount } from "@vue/test-utils";
 import FileContentElementChips from "./FileContentElementChips.vue";
 import FileContentElementDownload from "./FileContentElementDownload.vue";
+import FileContentElementFooter from "./FileContentElementFooter.vue";
 
 describe("FileContentElementFooter", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			fileName: "file-record #1.txt",
-			url: "1/file-record #1.txt",
-			isDownloadAllowed: true,
-			fileSize: 3800,
+			fileProperties: {
+				name: "file-record #1.txt",
+				url: "1/file-record #1.txt",
+				isDownloadAllowed: true,
+				size: 3800,
+			},
 		};
 
 		const wrapper = shallowMount(FileContentElementFooter, {
@@ -22,10 +24,10 @@ describe("FileContentElementFooter", () => {
 
 		return {
 			wrapper,
-			fileNameProp: propsData.fileName,
-			urlProp: propsData.url,
-			isDownloadAllowedProp: propsData.isDownloadAllowed,
-			fileSizeProp: propsData.fileSize,
+			fileNameProp: propsData.fileProperties.name,
+			urlProp: propsData.fileProperties.url,
+			isDownloadAllowedProp: propsData.fileProperties.isDownloadAllowed,
+			fileSizeProp: propsData.fileProperties.size,
 		};
 	};
 
