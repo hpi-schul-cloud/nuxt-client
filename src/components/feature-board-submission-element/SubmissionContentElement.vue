@@ -70,7 +70,7 @@ export default defineComponent({
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
 		const { completed, updateSubmissionItem, loading } =
-			useSubmissionContentElementState(props.element.id);
+			useSubmissionContentElementState(element.value.id);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
