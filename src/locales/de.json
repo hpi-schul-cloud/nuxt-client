@@ -784,7 +784,7 @@
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.fileElement.virusDetected": "Datei wurde aufgrund eines Virenverdachts gesperrt.",
-	"components.cardElement.fileElement.awaitingScan": "Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt. Status aktualisieren",
+	"components.cardElement.fileElement.awaitingScan": "Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
 	"components.cardElement.fileElement.scanError": "Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"components.cardElement.fileElement.scanWontCheck": "Aufgrund der Größe kann keine Vorschau generiert werden.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
