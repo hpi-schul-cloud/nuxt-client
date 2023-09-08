@@ -1,0 +1,189 @@
+<template>
+	<v-card
+		class="mb-4"
+		data-testid="board-file-element"
+		dense
+		elevation="0"
+		:outlined="isOutlined"
+		ref="fileContentElement"
+		:ripple="false"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
+	>
+		<FileContent
+			v-if="fileProperties"
+			:file-properties="fileProperties"
+			@fetch:file="onFetchFile"
+			:is-edit-mode="isEditMode"
+		/>
+		<FileUpload
+			v-else-if="isEditMode"
+			:elementId="element.id"
+			@upload:file="onUploadFile"
+		/>
+		<ContentElementMenu
+			v-if="isEditMode"
+			v-bind="elementPositionProps"
+			@move-down:element="onMoveElementDown"
+			@move-up:element="onMoveElementUp"
+			@delete:element="onDeleteElement"
+		/>
+	</v-card>
+</template>
+
+<script lang="ts">
+import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileElementResponse } from "@/serverApi/v3";
+import {
+	convertDownloadToPreviewUrl,
+	isDownloadAllowed,
+	isPreviewPossible,
+} from "@/utils/fileHelper";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import FileContent from "./content/FileContent.vue";
+import ContentElementMenu from "./menu/ContentElementMenu.vue";
+import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import FileUpload from "./upload/FileUpload.vue";
+
+export default defineComponent({
+	name: "FileContentElement",
+	components: {
+		FileUpload,
+		FileContent,
+		ContentElementMenu,
+	},
+	props: {
+		element: { type: Object as PropType<FileElementResponse>, required: true },
+		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
+	},
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
+	setup(props, { emit }) {
+		const fileContentElement = ref(null);
+		const isLoadingFileRecord = ref(true);
+
+		useBoardFocusHandler(props.element.id, fileContentElement);
+
+		const { modelValue } = useContentElementState(props);
+		const { fetchFile, upload, fileRecord } = useFileStorageApi(
+			props.element.id,
+			FileRecordParentType.BOARDNODES
+		);
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+		const fileProperties = computed(() => {
+			if (fileRecord.value === undefined) {
+				return;
+			}
+
+			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
+				? convertDownloadToPreviewUrl(fileRecord.value.url)
+				: undefined;
+
+			return {
+				size: fileRecord.value.size,
+				name: fileRecord.value.name,
+				url: fileRecord.value.url,
+				previewUrl,
+				previewStatus: fileRecord.value.previewStatus,
+				isDownloadAllowed: isDownloadAllowed(
+					fileRecord.value.securityCheckStatus
+				),
+			};
+		});
+
+		const hasFileRecord = computed(() => {
+			return fileRecord.value !== undefined;
+		});
+
+		const isOutlined = computed(() => {
+			return fileRecord.value !== undefined || props.isEditMode === true;
+		});
+
+		const elementPositionProps = computed(() => {
+			return {
+				isFirstElement: props.isFirstElement,
+				isLastElement: props.isLastElement,
+				hasMultipleElements: props.hasMultipleElements,
+			};
+		});
+
+		onMounted(() => {
+			(async () => {
+				await fetchFile();
+				isLoadingFileRecord.value = false;
+			})();
+		});
+
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:edit", event);
+			}
+		};
+
+		const onMoveElementDown = () => {
+			emit("move-down:edit");
+		};
+
+		const onMoveElementUp = () => {
+			emit("move-up:edit");
+		};
+
+		const onDeleteElement = async (
+			deleteDirectly: true | undefined
+		): Promise<void> => {
+			if (deleteDirectly === true) {
+				emit("delete:element", props.element.id);
+				return;
+			}
+
+			const shouldDelete = await askDeleteConfirmation(
+				fileRecord.value?.name,
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				emit("delete:element", props.element.id);
+			}
+		};
+
+		const onUploadFile = async (file: File): Promise<void> => {
+			try {
+				await upload(file);
+			} catch (error) {
+				emit("delete:element", props.element.id);
+			}
+		};
+
+		const onFetchFile = async (): Promise<void> => {
+			await fetchFile();
+		};
+
+		return {
+			fileContentElement,
+			fileProperties,
+			fileRecord,
+			hasFileRecord,
+			isOutlined,
+			modelValue,
+			onDeleteElement,
+			onMoveElementDown,
+			onMoveElementUp,
+			onKeydownArrow,
+			onUploadFile,
+			onFetchFile,
+			elementPositionProps,
+		};
+	},
+});
+</script>
