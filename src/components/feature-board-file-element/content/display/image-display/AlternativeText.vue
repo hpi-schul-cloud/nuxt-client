@@ -4,11 +4,9 @@
 			v-model="modelValue.alternativeText"
 			class="pa-0 ma-0 v-secondary-lighten1"
 			rows="1"
-			:label="$t('common.labels.alternativeText')"
+			:label="$t('components.cardElement.fileElement.altDescription')"
+			:placeholder="$t('components.cardElement.fileElement.alternativeText')"
 		></v-textarea>
-		<span class="pa-0 mt-n4 v-secondary-darken1">{{
-			$t("common.labels.altDescription")
-		}}</span>
 	</div>
 </template>
 
@@ -22,7 +20,7 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	setup(props, { emit }) {
+	setup(props) {
 		const { modelValue } = useContentElementState({
 			element: props.element,
 			isEditMode: true,

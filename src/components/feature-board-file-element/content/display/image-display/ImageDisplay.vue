@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-img class="rounded-t-sm" :src="previewUrl" :alt="name">
+		<v-img class="rounded-t-sm" :src="previewUrl" :alt="alternativeText">
 			<div v-if="isEditMode" class="menu-background"></div>
 		</v-img>
 		<AlternativeText v-if="isEditMode" :element="element"></AlternativeText>
@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import AlternativeText from "./AlternativeText.vue";
 
 export default defineComponent({
@@ -22,6 +22,17 @@ export default defineComponent({
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
+	},
+	setup(props) {
+		const alternativeText = computed(() => {
+			return props.element.content.alternativeText
+				? props.element.content.alternativeText
+				: `Hier ist ein Bild mit folgendem Namen ${props.name}`;
+		});
+
+		return {
+			alternativeText,
+		};
 	},
 });
 </script>
