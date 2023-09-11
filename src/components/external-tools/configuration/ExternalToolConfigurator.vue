@@ -41,7 +41,13 @@
 			v-model="parameterConfiguration"
 		/>
 		<v-spacer class="mt-10"></v-spacer>
-		<v-alert v-if="error && error.message" light prominent text type="error">
+		<v-alert
+			v-if="error && error.message"
+			light
+			prominent
+			variant="text"
+			type="error"
+		>
 			{{ t(getBusinessErrorTranslationKey(error)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">

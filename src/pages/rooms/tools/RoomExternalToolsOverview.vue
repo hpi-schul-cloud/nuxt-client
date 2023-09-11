@@ -17,7 +17,7 @@
 			v-if="apiError && apiError.message"
 			light
 			prominent
-			text
+			variant="text"
 			type="error"
 			data-testId="context-tool-error"
 		>
