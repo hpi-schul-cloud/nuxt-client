@@ -3,7 +3,7 @@
 		<div class="d-flex align-start justify-space-between pt-2 mb-1">
 			<VBtn
 				elevation="0"
-				text
+				variant="text"
 				:color="isColumnActive ? 'black' : 'grey darken-2'"
 				@click="onAddColumn"
 			>
