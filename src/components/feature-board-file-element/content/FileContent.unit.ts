@@ -3,7 +3,7 @@ import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileAlert from "./alert/FileAlert.vue";
-import AlternativeText from "./display/image-display/AlternativeText.vue";
+import AlternativeText from "./alternative-text/AlternativeText.vue";
 import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 

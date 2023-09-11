@@ -15,7 +15,7 @@ import { computed, defineComponent, PropType } from "vue";
 import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
-import AlternativeText from "./display/image-display/AlternativeText.vue";
+import AlternativeText from "./alternative-text/AlternativeText.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
