@@ -1,5 +1,5 @@
 <template>
-	<base-modal v-bind="$attrs" v-on="$listeners">
+	<base-modal v-bind="$attrs">
 		<template #body>
 			<modal-body-info :title="title" :description="description" />
 			<v-progress-linear

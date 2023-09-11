@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<form v-on="$listeners" @submit.prevent="save">
+		<form v-bind="$attrs" @submit.prevent="save">
 			<title-input
 				v-model="data.title"
 				:focus="true"
@@ -97,6 +97,7 @@ import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
+	inheritAttrs: false,
 	components: {
 		TextEditor,
 		TitleInput,

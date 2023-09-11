@@ -22,7 +22,7 @@
 						:class="fabItems.class"
 						class="wireframe-fab"
 						:aria-label="fabItems.ariaLabel"
-						v-on="$listeners"
+						v-bind="$attrs"
 					/>
 				</slot>
 			</div>
@@ -46,6 +46,7 @@ import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import vCustomFab from "@/components/atoms/vCustomFab.vue";
 
 export default defineComponent({
+	inheritAttrs: false,
 	components: {
 		vCustomBreadcrumbs,
 		vCustomFab,

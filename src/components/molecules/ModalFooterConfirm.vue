@@ -1,6 +1,6 @@
 <template>
 	<div class="footer-button" :class="isError ? 'error' : ''">
-		<button class="btn-confirm" v-on="$listeners">
+		<button class="btn-confirm" v-bind="$attrs">
 			{{ text }}
 		</button>
 	</div>
@@ -8,6 +8,7 @@
 
 <script>
 export default {
+	inheritAttrs: false,
 	props: {
 		isError: {
 			type: Boolean,

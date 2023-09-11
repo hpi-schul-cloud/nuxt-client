@@ -1,5 +1,5 @@
 <template>
-	<base-modal v-bind="$attrs" v-on="$listeners">
+	<base-modal v-bind="$attrs">
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>
@@ -28,7 +28,8 @@
 </template>
 <script>
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
 	components: {
 		ModalBodyInfo,
 	},
@@ -47,14 +48,12 @@ export default {
 		},
 		btnText: {
 			type: String,
-			default: function () {
-				return this.$t("common.actions.cancel");
-			},
+			default: this.$t("common.actions.cancel"),
 		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
-};
+});
 </script>

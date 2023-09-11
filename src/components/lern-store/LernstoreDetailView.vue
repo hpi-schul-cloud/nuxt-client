@@ -306,7 +306,7 @@ export default {
 		window.addEventListener("resize", this.handleResize);
 		this.handleResize();
 	},
-	destroyed() {
+	unmounted() {
 		window.removeEventListener("resize", this.handleResize);
 	},
 	methods: {

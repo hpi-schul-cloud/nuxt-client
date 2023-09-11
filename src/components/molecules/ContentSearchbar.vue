@@ -68,7 +68,7 @@ export default {
 		window.addEventListener("keydown", this.escKeyHandler);
 		this.$refs.searchInput.focus();
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {

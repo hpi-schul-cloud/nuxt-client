@@ -10,7 +10,6 @@
 		v-bind="$attrs"
 		:target="linkTarget"
 		:rel="external ? 'noreferrer' : undefined"
-		v-on="$listeners"
 	>
 		<slot />
 	</a>
@@ -20,7 +19,6 @@
 		:class="{ link: !noStyles, 'text-only': noStyles }"
 		:to="routerLinkTo"
 		v-bind="$attrs"
-		v-on="$listeners"
 	>
 		<slot />
 	</router-link>

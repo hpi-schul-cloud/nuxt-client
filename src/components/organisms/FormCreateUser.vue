@@ -2,7 +2,7 @@
 	<v-form
 		autocomplete="off"
 		novalidate
-		v-on="$listeners"
+		v-bind="$attrs"
 		@submit.prevent="submitHandler"
 	>
 		<v-text-field
@@ -57,6 +57,7 @@
 import { email, required } from "@vuelidate/validators";
 
 export default {
+	inheritAttrs: false,
 	data() {
 		return {
 			dataParam: "zuoi",

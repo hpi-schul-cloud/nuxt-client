@@ -232,7 +232,7 @@ export default {
 			}
 		},
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.editor.destroy();
 	},
 	methods: {

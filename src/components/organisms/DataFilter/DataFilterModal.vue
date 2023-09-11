@@ -1,6 +1,6 @@
 <template>
 	<base-modal :active="true" @onBackdropClick="$emit('cancel')">
-		<template #header> Filter: {{ title | entities }} </template>
+		<template #header> Filter: {{ $filters.entities(filterTitle) }} </template>
 		<template #body>
 			<slot />
 		</template>

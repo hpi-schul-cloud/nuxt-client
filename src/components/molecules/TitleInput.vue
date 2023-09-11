@@ -4,7 +4,6 @@
 		:vmodel="vmodel"
 		classes="h1"
 		:label-hidden="true"
-		v-on="$listeners"
 	/>
 </template>
 <script>

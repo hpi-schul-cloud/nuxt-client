@@ -1,10 +1,5 @@
 <template>
-	<base-modal
-		v-bind="$attrs"
-		design="white"
-		class="modal-container"
-		v-on="$listeners"
-	>
+	<base-modal v-bind="$attrs" design="white" class="modal-container">
 		<template #header></template>
 		<template #body>
 			<modal-body-info :title="title" :description="description">

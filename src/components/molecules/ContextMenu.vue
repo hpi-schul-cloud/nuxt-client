@@ -153,7 +153,7 @@ export default {
 	mounted() {
 		window.addEventListener("keydown", this.escKeyHandler);
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {
