@@ -87,6 +87,23 @@
 				@change="setMigrationMandatory(!oauthMigration.mandatorySince)"
 			/>
 		</div>
+
+		<migration-warning-card
+			value="start"
+			v-if="isShowStartWarning"
+			data-testid="migration-start-warning-card"
+			@start="onToggleShowStartWarning"
+			@set="onStartMigration()"
+		/>
+
+		<migration-warning-card
+			value="end"
+			v-if="isShowEndWarning"
+			data-testid="migration-end-warning-card"
+			@end="onToggleShowEndWarning"
+			@set="onCloseMigration()"
+		/>
+
 		<RenderHTML
 			v-if="oauthMigration.finishedAt"
 			class="migration-completion-date"
@@ -101,20 +118,7 @@
 			"
 			component="p"
 		/>
-		<migration-warning-card
-			value="start"
-			v-if="isShowStartWarning"
-			data-testid="migration-start-warning-card"
-			@start="onToggleShowStartWarning"
-			@set="onStartMigration()"
-		/>
-		<migration-warning-card
-			value="end"
-			v-if="isShowEndWarning"
-			data-testid="migration-end-warning-card"
-			@end="onToggleShowEndWarning"
-			@set="onCloseMigration()"
-		/>
+
 		<v-switch
 			v-if="
 				!isCurrentDateAfterFinalFinish &
@@ -186,7 +190,7 @@ import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { UserLoginMigration } from "@/store/user-login-migration";
-import { UserLoginMigrationFlags } from "../../store/user-login-migration/user-login-migration-flags";
+import { UserLoginMigrationFlags } from "@/store/user-login-migration/user-login-migration-flags";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
