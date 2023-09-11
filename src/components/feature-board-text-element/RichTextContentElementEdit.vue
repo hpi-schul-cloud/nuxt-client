@@ -7,6 +7,7 @@
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
 			mode="simple"
+			@update:value="onUpdateValue"
 			@focus="onFocus"
 			@blur="onBlur"
 			@keyboard:delete="onDelete"
@@ -34,6 +35,7 @@ export default defineComponent({
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
+		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 
 		const onFocus = () => {
 			const ckBalloonPanelElements =
@@ -50,7 +52,7 @@ export default defineComponent({
 
 		const onDelete = () => emit("delete:element");
 
-		return { modelValue, onFocus, onDelete, onBlur };
+		return { modelValue, onFocus, onDelete, onBlur, onUpdateValue };
 	},
 });
 </script>
