@@ -98,7 +98,7 @@ describe("SubmissionContentElementDisplay", () => {
 		});
 	});
 
-	describe("As a student", () => {
+	describe("As a teacher", () => {
 		it("should render SubmissionItemsTeacherDisplay", () => {
 			const { wrapper } = setup("teacher");
 
