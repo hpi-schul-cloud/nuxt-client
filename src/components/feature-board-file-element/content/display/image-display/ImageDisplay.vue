@@ -1,7 +1,14 @@
 <template>
-	<v-img class="rounded-t-sm" :src="previewUrl" :alt="alternativeText">
+	<div>
+		<img
+			class="rounded-t-sm image"
+			loading="lazy"
+			:src="previewUrl"
+			:alt="alternativeText"
+		/>
+
 		<div v-if="isEditMode" class="menu-background"></div>
-	</v-img>
+	</div>
 </template>
 
 <script lang="ts">
@@ -39,8 +46,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.image {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
 .menu-background {
 	position: absolute;
+	top: 0;
+	right: 0;
 	width: 100%;
 	height: 52px;
 	background-color: var(--v-white-base);
