@@ -1,13 +1,17 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileAlert from "./alert/FileAlert.vue";
+import AlternativeText from "./display/image-display/AlternativeText.vue";
 import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 describe("FileContent", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
+
+		const element = fileElementResponseFactory.build();
 
 		const fileProperties = {
 			name: "test",
@@ -16,6 +20,7 @@ describe("FileContent", () => {
 			previewUrl: "test",
 			previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 			isDownloadAllowed: true,
+			element,
 		};
 		const wrapper = shallowMount(FileContent, {
 			propsData: {
@@ -60,6 +65,14 @@ describe("FileContent", () => {
 		expect(fileAlert.props()).toEqual({
 			previewStatus: fileProperties.previewStatus,
 		});
+	});
+
+	it("Should pass element to alternative text", () => {
+		const { wrapper } = setup();
+
+		const alternativeText = wrapper.findComponent(AlternativeText);
+
+		expect(alternativeText.exists()).toBe(true);
 	});
 
 	describe("when alert emits on-status-reload", () => {
