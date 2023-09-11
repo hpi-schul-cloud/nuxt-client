@@ -1,6 +1,6 @@
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, MountOptions } from "@vue/test-utils";
+import { shallowMount, mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { submissionItemResponseFactory } from "@@/tests/test-utils";
 import { SubmissionItemResponse } from "@/serverApi/v3";
@@ -10,22 +10,19 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 ];
 
 describe("SubmissionItemStudentDisplay", () => {
-	const setup = (loading = false) => {
+	const setup = (loading = false, submissionItems = mockedSubmissionItems) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
 			editable: true,
 			loading: loading,
-			submissionItems: mockedSubmissionItems,
+			submissionItems: submissionItems,
 		};
 
-		const wrapper = shallowMount(
-			SubmissionItemStudentDisplay as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
-				propsData,
-			}
-		);
+		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
+			...createComponentMocks({ i18n: true }),
+			propsData,
+		});
 
 		return {
 			wrapper,
@@ -82,6 +79,35 @@ describe("SubmissionItemStudentDisplay", () => {
 
 			const skeleton = wrapper.findComponent({ name: "v-checkbox" });
 			expect(skeleton.exists()).toBe(true);
+		});
+
+		describe("if student has no submissionItem yet", () => {
+			it("should show state as not completed", async () => {
+				const loading = false;
+				const submissionItems: Array<SubmissionItemResponse> = [];
+				const { wrapper } = setup(loading, submissionItems);
+
+				const checked = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.find("input")
+					.attributes("aria-checked");
+
+				expect(checked).toBe("false");
+			});
+		});
+
+		describe("if student has a submissionItem yet", () => {
+			it("should show the completed state of the belonging submissionItem", async () => {
+				const loading = false;
+				const { wrapper } = setup(loading);
+
+				const checked = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.find("input")
+					.attributes("aria-checked");
+
+				expect(checked).toBe(mockedSubmissionItems[0].completed.toString());
+			});
 		});
 	});
 });
