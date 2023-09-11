@@ -174,7 +174,7 @@ export default defineComponent({
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
 }
-::v-deep {
+:deep() {
 	.menu-open {
 		label {
 			transform: $text-field-filled-full-width-label-active-transform;

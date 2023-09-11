@@ -301,9 +301,12 @@ export default {
 	opacity: 0;
 }
 
-::v-deep
-	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
-	.v-btn__content {
+:deep(
+		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
+				:hover
+			)
+			.v-btn__content
+	) {
 	opacity: 1;
 }
 </style>

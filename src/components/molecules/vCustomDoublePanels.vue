@@ -161,7 +161,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep .v-expansion-panel-content__wrap {
+:deep(.v-expansion-panel-content__wrap) {
 	padding: 0;
 }
 </style>

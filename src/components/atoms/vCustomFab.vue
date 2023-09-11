@@ -204,7 +204,7 @@ export default {
 		height 0.2s ease-in-out;
 }
 
-::v-deep .v-speed-dial__list {
+:deep(.v-speed-dial__list) {
 	right: 0 !important;
 	left: initial;
 	align-items: end;
@@ -220,7 +220,7 @@ export default {
 		height 0.2s ease-in-out;
 }
 
-// ::v-deep .v-btn--has-bg {
+// :deep(.v-btn--has-bg) {
 // 	background-color: var(--v-white-base) !important;
 // }
 

@@ -441,11 +441,11 @@ export default {
 	}
 }
 
-::v-deep .v-messages {
+:deep(.v-messages) {
 	display: none;
 }
 
-::v-deep .v-input {
+:deep(.v-input) {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;
 }

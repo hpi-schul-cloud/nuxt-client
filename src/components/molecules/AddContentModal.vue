@@ -182,7 +182,7 @@ export default {
 .fade-leave-to {
 	opacity: 0;
 }
-::v-deep .v-input__icon .v-icon {
+:deep(.v-input__icon .v-icon) {
 	font-size: var(--text-base-size);
 }
 </style>

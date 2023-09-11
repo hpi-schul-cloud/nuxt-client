@@ -112,12 +112,12 @@ export default {
 	background-color: var(--v-white-base) !important;
 }
 
-::v-deep .v-btn__content .v-icon,
+:deep(.v-btn__content .v-icon),
 .alert_text {
 	color: var(--v-black-base) !important;
 }
 
-::v-deep .v-alert__border {
+:deep(.v-alert__border) {
 	opacity: 1;
 }
 </style>

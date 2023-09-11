@@ -149,7 +149,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "~vuetify/src/components/VTextField/_variables.scss";
 
-::v-deep {
+:deep() {
 	.menu-open {
 		label {
 			transform: $text-field-filled-full-width-label-active-transform;

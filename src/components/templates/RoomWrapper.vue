@@ -133,12 +133,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
-::v-deep .v-skeleton-loader__date-picker-days {
+:deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;
 	padding: 0;
 }
 
-::v-deep .v-skeleton-loader__avatar {
+:deep(.v-skeleton-loader__avatar) {
 	width: 80px;
 	max-width: 80px;
 	height: 80px;
@@ -147,14 +147,14 @@ export default defineComponent({
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
-	::v-deep .v-skeleton-loader__avatar {
+	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 12px 36px;
 	}
 }
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {
-	::v-deep .v-skeleton-loader__avatar {
+	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 24px 48px;
 	}

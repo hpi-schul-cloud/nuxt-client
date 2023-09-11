@@ -107,11 +107,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $arrow-offset: 8px;
 
-.v-data-table ::v-deep th i {
+.v-data-table :deep(th i) {
 	margin-left: $arrow-offset;
 }
 
-.v-data-table ::v-deep td {
+.v-data-table :deep(td) {
 	cursor: pointer;
 }
 </style>

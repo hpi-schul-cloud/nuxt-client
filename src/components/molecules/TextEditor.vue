@@ -280,7 +280,7 @@ export default {};
 .editor__content {
 	outline: none;
 
-	::v-deep [contenteditable="true"] {
+	:deep([contenteditable="true"]) {
 		padding: var(--space-lg);
 		outline: none;
 
@@ -289,7 +289,7 @@ export default {};
 		}
 	}
 
-	::v-deep *.is-empty:first-child::before {
+	:deep(*.is-empty:first-child::before) {
 		float: left;
 		height: 0;
 		color: map-get($grey, base);

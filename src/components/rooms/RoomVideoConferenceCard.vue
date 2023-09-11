@@ -104,7 +104,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .v-alert {
-	::v-deep .v-icon {
+	:deep(.v-icon) {
 		margin-top: auto;
 		margin-bottom: auto;
 	}

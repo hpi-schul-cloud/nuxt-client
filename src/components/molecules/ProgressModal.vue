@@ -40,7 +40,7 @@ export default {
 
 <style lang="scss" scoped>
 .rounded,
-::v-deep .v-progress-linear__determinate {
+:deep(.v-progress-linear__determinate) {
 	border-radius: var(--radius-round) !important;
 }
 </style>

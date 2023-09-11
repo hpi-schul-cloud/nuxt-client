@@ -115,7 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 // hide default current date in MacOS/Safari if input date is indeed empty
-::v-deep {
+:deep() {
 	.hideCurrentDate {
 		input[type="date"]::-webkit-datetime-edit-day-field,
 		input[type="date"]::-webkit-datetime-edit-month-field,

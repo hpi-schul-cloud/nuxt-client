@@ -516,7 +516,7 @@ export default defineComponent({
 	white-space: nowrap;
 }
 
-::v-deep .theme--light.v-chip:hover::before {
+:deep(.theme--light.v-chip:hover::before) {
 	opacity: 0;
 }
 
@@ -547,8 +547,8 @@ export default defineComponent({
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-::v-deep .v-slide-group__prev,
-::v-deep .v-slide-group__next {
+:deep(.v-slide-group__prev),
+:deep(.v-slide-group__next) {
 	display: none !important;
 }
 

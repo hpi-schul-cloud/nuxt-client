@@ -657,12 +657,12 @@ export default {
 	color: var(--v-error-base);
 }
 
-::v-deep .link {
+:deep(.link) {
 	color: var(--v-primary-base);
 	text-decoration: none;
 }
 
-::v-deep .table {
+:deep(.table) {
 	margin-top: var(--space-lg);
 
 	.table__row {
@@ -670,11 +670,11 @@ export default {
 	}
 }
 
-::v-deep .toolbelt {
+:deep(.toolbelt) {
 	display: none;
 }
 
-::v-deep .calendar-input {
+:deep(.calendar-input) {
 	max-width: 5em;
 	margin-bottom: 0;
 
@@ -689,7 +689,7 @@ export default {
 	}
 }
 
-::v-deep .base-input {
+:deep(.base-input) {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);
