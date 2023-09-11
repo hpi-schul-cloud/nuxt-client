@@ -55,6 +55,7 @@ import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -68,17 +69,9 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const i18n = injectStrict(I18N_KEY);
-
 		const locale = i18n.locale;
-
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
 
 		// eslint-disable-next-line vue/no-setup-props-destructure
 		const model = ref(props.date);

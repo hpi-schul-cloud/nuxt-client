@@ -53,11 +53,11 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -70,15 +70,7 @@ export default defineComponent({
 	},
 	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		// eslint-disable-next-line vue/no-setup-props-destructure
 		const model = ref(props.time);
