@@ -5,7 +5,13 @@
 		</h4>
 		<template slot="content">
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" :icon="mdiAlert">
+				<v-alert
+					light
+					variant="text"
+					type="warning"
+					class="mb-10"
+					:icon="mdiAlert"
+				>
 					<div class="replace-alert-text">
 						{{
 							t(

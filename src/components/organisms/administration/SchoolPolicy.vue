@@ -7,7 +7,7 @@
 			v-if="status === 'error'"
 			light
 			prominent
-			text
+			variant="text"
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"

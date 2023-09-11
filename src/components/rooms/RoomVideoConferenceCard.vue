@@ -13,7 +13,13 @@
 		</template>
 		<template #footer>
 			<div v-show="!isRunning" class="mt-2">
-				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
+				<v-alert
+					dense
+					variant="text"
+					class="ma-0"
+					type="info"
+					data-testId="vc-info-box"
+				>
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
 							{{
