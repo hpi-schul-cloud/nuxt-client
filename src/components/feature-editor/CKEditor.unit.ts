@@ -93,7 +93,7 @@ describe("CKEditor", () => {
 			expect(emitted["ready"]).toHaveLength(1);
 		});
 
-		it("should emit input on content changes", async () => {
+		it("should emit update:value on content changes", async () => {
 			setup();
 
 			const ck = wrapper.findComponent({
@@ -103,7 +103,7 @@ describe("CKEditor", () => {
 			await wrapper.vm.$nextTick();
 
 			const emitted = wrapper.emitted();
-			expect(emitted["input"]).toHaveLength(1);
+			expect(emitted["update:value"]).toHaveLength(1);
 		});
 
 		it("should emit focus on editor focus", async () => {
