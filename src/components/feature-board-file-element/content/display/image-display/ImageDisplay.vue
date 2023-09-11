@@ -1,9 +1,7 @@
 <template>
-	<div>
-		<v-img class="rounded-t-sm" :src="previewUrl" :alt="alternativeText">
-			<div v-if="isEditMode" class="menu-background"></div>
-		</v-img>
-	</div>
+	<v-img class="rounded-t-sm" :src="previewUrl" :alt="alternativeText">
+		<div v-if="isEditMode" class="menu-background"></div>
+	</v-img>
 </template>
 
 <script lang="ts">
