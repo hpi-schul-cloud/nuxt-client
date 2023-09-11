@@ -12,7 +12,7 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					ref="inputField"
-					v-model="model"
+					v-model="modelValue"
 					v-bind="attrs"
 					v-on="on"
 					:label="label"
@@ -23,7 +23,6 @@
 					validate-on-blur
 					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
-					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="handleError"
@@ -53,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, useVModel } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
@@ -68,12 +67,11 @@ export default defineComponent({
 		required: { type: Boolean },
 		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["input", "error", "valid"],
+	emits: ["update:time", "error", "valid"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		// eslint-disable-next-line vue/no-setup-props-destructure
-		const model = ref(props.time);
+		const modelValue = useVModel(props, "time", emit);
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 
@@ -124,16 +122,9 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleBlur = useDebounceFn(() => {
-			const time = model.value || "";
-			if (time.match(timeRegex)) {
-				emit("input", time);
-			}
-		}, 200);
-
 		const handleSelect = async (selected: string) => {
 			inputField.value?.focus();
-			model.value = selected;
+			modelValue.value = selected;
 			await closeMenu();
 		};
 
@@ -154,10 +145,9 @@ export default defineComponent({
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			model,
+			modelValue,
 			rules,
 			inputField,
-			handleBlur,
 			handleSelect,
 			handleError,
 			handleMenuToggle,

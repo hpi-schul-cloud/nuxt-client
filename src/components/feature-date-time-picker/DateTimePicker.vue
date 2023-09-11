@@ -19,7 +19,7 @@
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
 			:allow-past="allowPast || !dateIsToday"
-			@input="handleTimeInput"
+			@update:time="handleTimeInput"
 			@error="handleTimeError"
 			@valid="handleTimeValid"
 		/>
