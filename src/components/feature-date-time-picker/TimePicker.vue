@@ -9,7 +9,7 @@
 			attach
 			@input="handleMenuToggle"
 		>
-			<template #activator="{ on, attrs }">
+			<template #activator="{ props }">
 				<v-text-field
 					v-model="model"
 					data-testid="time-input"
@@ -18,8 +18,7 @@
 					clearable
 					:label="label"
 					:aria-label="ariaLabel"
-					v-bind="attrs"
-					v-on="on"
+					v-bind="props"
 					:rules="rules"
 					validate-on-blur
 					autocomplete="off"
