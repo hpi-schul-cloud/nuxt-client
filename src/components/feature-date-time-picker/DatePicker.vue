@@ -9,7 +9,7 @@
 			attach
 			@input="handleMenuToggle"
 		>
-			<template #activator="{ on, attrs }">
+			<template #activator="{ props }">
 				<v-text-field
 					:value="formattedDate"
 					:label="label"
@@ -19,8 +19,7 @@
 					readonly
 					filled
 					clearable
-					v-bind="attrs"
-					v-on="on"
+					v-bind="props"
 					:rules="rules"
 					validate-on-blur
 					autocomplete="off"

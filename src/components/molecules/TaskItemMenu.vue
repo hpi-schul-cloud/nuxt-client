@@ -7,13 +7,11 @@
 			attach
 			@update:return-value="toggleMenu(false)"
 		>
-			<template #activator="{ on, attrs, value }">
+			<template #activator="{ props, value }">
 				<v-btn
 					id="task-menu-btn"
-					v-bind="attrs"
+					v-bind="props"
 					icon
-					data-testid="task-menu"
-					v-on="on"
 					@click.prevent="toggleMenu(!value)"
 					@keydown.space.stop="toggleMenu(!value)"
 					@focus="handleFocus(true)"

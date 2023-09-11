@@ -8,10 +8,9 @@
 		attach
 		:nudge-right="nudgeRight"
 	>
-		<template #activator="{ on, attrs }">
+		<template #activator="{ props }">
 			<v-btn
-				v-on="on"
-				v-bind="attrs"
+				v-bind="props"
 				class="three-dot-button"
 				icon
 				:aria-label="ariaLabel"
