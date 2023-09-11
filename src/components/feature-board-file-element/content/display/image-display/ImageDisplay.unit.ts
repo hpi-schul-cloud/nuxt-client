@@ -5,14 +5,16 @@ import { shallowMount } from "@vue/test-utils";
 import ImageDisplay from "./ImageDisplay.vue";
 
 describe("ImageDisplay", () => {
-	const setup = (isEditMode: boolean, alternativeText?: string) => {
+	const setup = (props: { isEditMode: boolean; alternativeText?: string }) => {
 		document.body.setAttribute("data-app", "true");
 
-		const element = fileElementResponseFactory.build();
+		const element = fileElementResponseFactory.build({
+			content: { alternativeText: props.alternativeText },
+		});
 		const propsData = {
 			name: "file-record #1.txt",
 			previewUrl: "preview/1/file-record #1.txt",
-			isEditMode,
+			isEditMode: props.isEditMode,
 			element,
 		};
 
@@ -35,7 +37,7 @@ describe("ImageDisplay", () => {
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup(false);
+			const { wrapper } = setup({ isEditMode: false });
 
 			const fileContentElement = wrapper.findComponent(ImageDisplay);
 
@@ -43,7 +45,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should display image", () => {
-			const { wrapper } = setup(false);
+			const { wrapper } = setup({ isEditMode: false });
 
 			const image = wrapper.find(vImageSelektor);
 
@@ -51,7 +53,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should have set src correctly", () => {
-			const { wrapper, previewUrl } = setup(false);
+			const { wrapper, previewUrl } = setup({ isEditMode: false });
 
 			const src = wrapper.find(vImageSelektor).attributes("src");
 
@@ -59,7 +61,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should not display div with class 'menu-background'", () => {
-			const { wrapper } = setup(false);
+			const { wrapper } = setup({ isEditMode: false });
 
 			const div = wrapper.find(".menu-background");
 			console.log(wrapper.props());
@@ -69,17 +71,21 @@ describe("ImageDisplay", () => {
 
 		describe("When alternative text is defined", () => {
 			it("should have set alt correctly", () => {
-				const { wrapper, element } = setup(false);
+				const alternativeText = "alternative text";
+				const { wrapper } = setup({
+					isEditMode: false,
+					alternativeText,
+				});
 
 				const alt = wrapper.find(vImageSelektor).attributes("alt");
 
-				expect(alt).toBe(element.content.alternativeText);
+				expect(alt).toBe(alternativeText);
 			});
 		});
 
 		describe("When alternative text is undefined", () => {
 			it("should have set alt correctly", () => {
-				const { wrapper, element } = setup(false);
+				const { wrapper, element } = setup({ isEditMode: false });
 
 				const alt = wrapper.find(vImageSelektor).attributes("alt");
 
@@ -90,7 +96,7 @@ describe("ImageDisplay", () => {
 
 	describe("when isEditMode is true", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup({ isEditMode: true });
 
 			const fileContentElement = wrapper.findComponent(ImageDisplay);
 
@@ -98,7 +104,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should display image", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup({ isEditMode: true });
 
 			const image = wrapper.find(vImageSelektor);
 
@@ -106,7 +112,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should have set src correctly", () => {
-			const { wrapper, previewUrl } = setup(true);
+			const { wrapper, previewUrl } = setup({ isEditMode: true });
 
 			const src = wrapper.find(vImageSelektor).attributes("src");
 
@@ -114,7 +120,7 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should have set alt correctly", () => {
-			const { wrapper, fileNameProp } = setup(true);
+			const { wrapper, fileNameProp } = setup({ isEditMode: true });
 
 			const alt = wrapper.find(vImageSelektor).attributes("alt");
 
@@ -122,11 +128,35 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should display div with class 'menu-background'", () => {
-			const { wrapper } = setup(true);
+			const { wrapper } = setup({ isEditMode: true });
 
 			const div = wrapper.find(".menu-background");
 
 			expect(div.exists()).toBe(true);
+		});
+
+		describe("When alternative text is defined", () => {
+			it("should have set alt correctly", () => {
+				const alternativeText = "alternative text";
+				const { wrapper } = setup({
+					isEditMode: true,
+					alternativeText,
+				});
+
+				const alt = wrapper.find(vImageSelektor).attributes("alt");
+
+				expect(alt).toBe(alternativeText);
+			});
+		});
+
+		describe("When alternative text is undefined", () => {
+			it("should have set alt correctly", () => {
+				const { wrapper, element } = setup({ isEditMode: true });
+
+				const alt = wrapper.find(vImageSelektor).attributes("alt");
+
+				expect(alt).toBe(element.content.alternativeText);
+			});
 		});
 	});
 });
