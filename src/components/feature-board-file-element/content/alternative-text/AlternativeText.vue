@@ -1,5 +1,5 @@
 <template>
-	<v-container class="grey lighten-3">
+	<v-card-text class="grey lighten-3">
 		<v-text-field
 			v-model="modelValue.alternativeText"
 			class="v-secondary-lighten1"
@@ -7,7 +7,7 @@
 			:hint="$t('components.cardElement.fileElement.altDescription')"
 			:label="$t('components.cardElement.fileElement.alternativeText')"
 		></v-text-field>
-	</v-container>
+	</v-card-text>
 </template>
 
 <script lang="ts">
