@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<img class="rounded-t-sm image" :src="previewUrl" :alt="name" />
+		<img
+			class="rounded-t-sm image"
+			loading="lazy"
+			:src="previewUrl"
+			:alt="name"
+		/>
 		<div v-if="isEditMode" class="menu-background"></div>
 	</div>
 </template>
