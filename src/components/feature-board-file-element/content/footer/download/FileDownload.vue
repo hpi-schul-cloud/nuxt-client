@@ -32,10 +32,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.download-btn {
-	margin: 10px 14px 0px 0px;
-	padding: 0px;
-}
-</style>
