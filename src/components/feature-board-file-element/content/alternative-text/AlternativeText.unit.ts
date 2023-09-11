@@ -1,7 +1,7 @@
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import AlternativeText from ".//AlternativeText.vue";
+import AlternativeText from "./AlternativeText.vue";
 
 const alternativeText = "alt text";
 jest.mock("@data-board", () => {
