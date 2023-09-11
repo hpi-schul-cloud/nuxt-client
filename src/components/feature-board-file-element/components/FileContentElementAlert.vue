@@ -6,7 +6,6 @@
 		data-testid="board-file-element-alert"
 		dense
 		:icon="alertProperties.icon"
-		text
 		variant="tonal"
 	>
 		<div class="black--text" v-if="alertProperties.text">

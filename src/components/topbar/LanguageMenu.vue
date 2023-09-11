@@ -68,6 +68,9 @@ export default defineComponent({
 					});
 				return languages;
 			},
+			set() {
+				return;
+			},
 		},
 		selectedItem: {
 			get() {
@@ -75,6 +78,9 @@ export default defineComponent({
 					this.authModule.getLocale || this.envConfigModule.getFallbackLanguage
 				);
 				return language;
+			},
+			set() {
+				return;
 			},
 		},
 	},

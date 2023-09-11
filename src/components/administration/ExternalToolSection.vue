@@ -111,7 +111,7 @@ import {
 	ref,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import { DataTableHeader } from "vuetify";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";

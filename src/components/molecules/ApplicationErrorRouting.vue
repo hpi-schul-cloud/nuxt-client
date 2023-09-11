@@ -3,8 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { watch } from "vue";
+import { defineComponent, watch } from "vue";
 import { useRouter } from "vue-router";
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 

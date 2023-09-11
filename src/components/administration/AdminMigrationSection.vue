@@ -17,7 +17,7 @@
 				component="p"
 			/>
 			<div v-if="!oauthMigration.oauthMigrationPossible">
-				<v-alert light prominent text type="info">
+				<v-alert light prominent variant="text" type="info">
 					<RenderHTML
 						:html="
 							t('components.administration.adminMigrationSection.infoText')
@@ -27,7 +27,7 @@
 				</v-alert>
 			</div>
 			<div v-else>
-				<v-alert light prominent text type="info">
+				<v-alert light prominent variant="text" type="info">
 					<RenderHTML
 						data-testid="migration-active-status"
 						:html="

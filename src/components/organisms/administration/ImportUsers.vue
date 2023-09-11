@@ -17,12 +17,7 @@
 			></v-import-users-match-search>
 		</v-dialog>
 
-		<v-alert
-			v-if="!canStartMigration"
-			colored-border
-			type="error"
-			elevation="2"
-		>
+		<v-alert v-if="!canStartMigration" border-color type="error" elevation="2">
 			{{ $t("pages.administration.migration.cannotStart") }}
 		</v-alert>
 

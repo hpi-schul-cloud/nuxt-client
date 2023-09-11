@@ -79,7 +79,7 @@
 						:disabled="isImportError"
 					></v-text-field>
 					<div v-if="businessError.message !== ''">
-						<v-alert dense outlined type="error" class="import-error">
+						<v-alert dense variant="outlined" type="error" class="import-error">
 							{{ $t("pages.rooms.importCourse.importError") }}
 						</v-alert>
 					</div>

@@ -5,7 +5,7 @@ import {
 } from "@/store/types/collaborative-file";
 import { FileTableItem } from "@/pages/files/file-table-item";
 import { RouteLocationNormalized } from "vue-router";
-import { DataTableHeader } from "vuetify";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
 import {
@@ -19,26 +19,30 @@ export function useFileTableUtils(
 	collaborativeFilesModule: CollaborativeFilesModule,
 	t: (key: string) => string
 ) {
+	// VUE3_UPGRADE -- check 'title', 'class' and 'cellClass' work
 	const getHeaders = (): DataTableHeader[] => {
 		return [
-			{ text: "", value: "icon", sortable: false, width: 5 },
+			{ title: "", value: "icon", sortable: false, width: 5, key: "" },
 			{
-				text: t("common.labels.name"),
+				title: t("common.labels.name"),
 				value: "name",
 				class: "primary--text",
 				cellClass: "primary--text",
+				key: "name",
 			},
 			{
-				text: t("common.labels.size"),
+				title: t("common.labels.size"),
 				value: "size",
 				class: "primary--text",
 				width: "110",
+				key: "size",
 			},
 			{
-				text: t("common.labels.changed"),
+				title: t("common.labels.changed"),
 				value: "lastChanged",
 				class: "primary--text",
 				width: "140",
+				key: "size",
 			},
 		];
 	};

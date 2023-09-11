@@ -11,13 +11,13 @@
 			:transition="transition"
 			:type="status"
 			class="alert"
-			dismissible
+			closable
 			max-width="400"
 			min-width="200"
-			text
+			variant="text"
 			:close-icon="mdiClose"
 			:close-label="$t('common.labels.close')"
-			border="left"
+			border="start"
 			@input="closeNotification"
 		>
 			<div v-if="messages" class="alert_text mr-2">

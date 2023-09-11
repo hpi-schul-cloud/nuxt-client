@@ -100,7 +100,7 @@
 									<v-alert
 										v-if="!school.inUserMigration || totalImportUsers === 0"
 										dense
-										outlined
+										variant="outlined"
 										type="info"
 									>
 										{{ $t("pages.administration.migration.tutorialWait") }}
