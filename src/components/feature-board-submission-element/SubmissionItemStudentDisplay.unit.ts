@@ -1,6 +1,6 @@
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, mount, MountOptions } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { submissionItemResponseFactory } from "@@/tests/test-utils";
 import { SubmissionItemResponse } from "@/serverApi/v3";

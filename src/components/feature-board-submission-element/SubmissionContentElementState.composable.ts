@@ -1,6 +1,6 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 
 export const useSubmissionContentElementState = (id: string) => {
