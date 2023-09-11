@@ -10,6 +10,7 @@ import UserLoginMigrationModule from "../../store/user-login-migrations";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
+	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
 	const setup = (
@@ -54,6 +55,7 @@ describe("AdminMigrationSection", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 				schoolsModule,
+				userLoginMigrationModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
 		});
@@ -62,6 +64,7 @@ describe("AdminMigrationSection", () => {
 			wrapper,
 			envConfigModule,
 			schoolsModule,
+			userLoginMigrationModule,
 		};
 	};
 
@@ -78,6 +81,7 @@ describe("AdminMigrationSection", () => {
 				shallowMount(AdminMigrationSection, {
 					provide: {
 						[I18N_KEY.valueOf()]: { t: (key: string) => key },
+						userLoginMigrationModule,
 					},
 				})
 			).toThrow();
@@ -87,6 +91,18 @@ describe("AdminMigrationSection", () => {
 			expect(() => {
 				shallowMount(AdminMigrationSection, {
 					provide: {
+						schoolsModule,
+						userLoginMigrationModule,
+					},
+				});
+			}).toThrow();
+		});
+
+		it("should throw an error when userLoginMigrationModule injection fails", () => {
+			expect(() => {
+				shallowMount(AdminMigrationSection, {
+					provide: {
+						[I18N_KEY.valueOf()]: { t: (key: string) => key },
 						schoolsModule,
 					},
 				});
@@ -682,6 +698,7 @@ describe("AdminMigrationSection", () => {
 			it("should hide switch button and description", () => {
 				const { wrapper } = setup(
 					{},
+					{},
 					{
 						getShowOutdatedUsers: false,
 					}
@@ -702,6 +719,7 @@ describe("AdminMigrationSection", () => {
 		describe("when feature is set to true", () => {
 			it("should show switch button and description", () => {
 				const { wrapper } = setup(
+					{},
 					{},
 					{
 						getShowOutdatedUsers: true,
@@ -725,6 +743,7 @@ describe("AdminMigrationSection", () => {
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup(
+					{},
 					{},
 					{
 						getShowOutdatedUsers: true,
@@ -750,6 +769,7 @@ describe("AdminMigrationSection", () => {
 				it("should hide switch button", () => {
 					const { wrapper } = setup(
 						{},
+						{},
 						{
 							getEnableLdapSyncDuringMigration: false,
 						}
@@ -766,6 +786,7 @@ describe("AdminMigrationSection", () => {
 			describe("when feature is set to true", () => {
 				it("should show switch button", () => {
 					const { wrapper } = setup(
+						{},
 						{},
 						{
 							getEnableLdapSyncDuringMigration: true,
@@ -793,6 +814,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: new Date(2023, 1, 1).toDateString(),
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
@@ -818,6 +840,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: "",
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
@@ -841,6 +864,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: "",
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
@@ -866,6 +890,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: "",
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
@@ -891,6 +916,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: "",
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
@@ -916,6 +942,7 @@ describe("AdminMigrationSection", () => {
 							oauthMigrationFinalFinish: "",
 						},
 					},
+					{},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}
