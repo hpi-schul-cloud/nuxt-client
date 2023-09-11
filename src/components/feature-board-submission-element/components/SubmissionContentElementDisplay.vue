@@ -66,7 +66,8 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const formattedDueDate = props.dueDate
-			? dayjs(props.dueDate).format(`dddd, ${t("format.date")} - HH:mm`)
+			? // eslint-disable-next-line vue/no-setup-props-destructure
+			  dayjs(props.dueDate).format(`dddd, ${t("format.date")} - HH:mm`)
 			: undefined;
 
 		return {
