@@ -214,14 +214,14 @@ export default {
 		},
 		dataRowSlots() {
 			return Object.fromEntries(
-				Object.entries(this.$scopedSlots).filter(([name]) =>
+				Object.entries(this.$slots).filter(([name]) =>
 					name.startsWith("datacolumn")
 				)
 			);
 		},
 		dataHeadSlots() {
 			return Object.fromEntries(
-				Object.entries(this.$scopedSlots).filter(([name]) =>
+				Object.entries(this.$slots).filter(([name]) =>
 					name.startsWith("headcolumn")
 				)
 			);
