@@ -121,6 +121,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/utils/multiline-ellipsis.scss";
 
 .subtitle {
@@ -136,7 +137,7 @@ export default {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs-only')} {
+@media #{map-get($display-breakpoints, 'xs')} {
 	.subtitle {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;

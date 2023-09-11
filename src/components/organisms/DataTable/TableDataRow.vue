@@ -86,6 +86,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .table__row {
 	background-color: var(--v-white-base);
 	border-top: 1px solid var(--v-white-base);

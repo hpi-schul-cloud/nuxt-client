@@ -80,6 +80,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }

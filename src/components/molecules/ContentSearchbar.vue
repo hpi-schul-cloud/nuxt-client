@@ -109,6 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .search {

@@ -73,6 +73,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .icon {
 	display: flex;
 	align-items: center;

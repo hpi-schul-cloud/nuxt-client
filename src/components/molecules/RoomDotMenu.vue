@@ -73,6 +73,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .menu-action {
 	min-height: var(--space-lg);
 	text-align: left;

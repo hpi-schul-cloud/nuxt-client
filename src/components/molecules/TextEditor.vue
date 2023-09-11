@@ -1,6 +1,7 @@
 <template>
 	<div class="editor">
-		<editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
+		<h3>VUE3_UPGRADE - temporarily disabled</h3>
+		<!-- <editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
 			<div class="menubar">
 				<v-btn
 					icon
@@ -144,130 +145,133 @@
 			v-model="content"
 			class="editor__content"
 			:editor="editor"
-		/>
+		/> -->
 	</div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-import {
-	Bold,
-	BulletList,
-	HardBreak,
-	Heading,
-	History,
-	Image,
-	Italic,
-	Link,
-	ListItem,
-	OrderedList,
-	Strike,
-	Underline,
-	Placeholder,
-} from "tiptap-extensions";
-import { notifierModule } from "@/store";
+export default {};
 
-export default {
-	components: {
-		EditorContent,
-		EditorMenuBar,
-	},
-	model: {
-		prop: "value",
-		event: "update",
-	},
-	props: {
-		value: {
-			type: String,
-			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: "",
-		},
-	},
-	data() {
-		return {
-			editor: new Editor({
-				extensions: [
-					new Bold(),
-					new BulletList(),
-					new HardBreak(),
-					new Heading({ levels: [2, 3, 4] }),
-					new History(),
-					new Image(),
-					new Italic(),
-					new Link(),
-					new ListItem(),
-					new OrderedList(),
-					new Strike(),
-					new Underline(),
-					new Placeholder({
-						emptyEditorClass: "is-editor-empty",
-						emptyNodeClass: "is-empty",
-						emptyNodeText: this.placeholder,
-						showOnlyWhenEditable: true,
-						showOnlyCurrent: true,
-					}),
-				],
-				content: this.value,
-				onUpdate: this.editorUpdateHandler,
-			}),
-			content: "",
-		};
-	},
-	computed: {
-		isInHeading() {
-			return (
-				this.editor.isActive.heading({ level: 2 }) ||
-				this.editor.isActive.heading({ level: 3 }) ||
-				this.editor.isActive.heading({ level: 4 })
-			);
-		},
-	},
-	watch: {
-		value(to) {
-			if (to !== this.content) {
-				this.editor.setContent(to);
-			}
-		},
-	},
-	beforeUnmount() {
-		this.editor.destroy();
-	},
-	methods: {
-		editorUpdateHandler({ getHTML }) {
-			const content = getHTML();
-			const error = this.isInvalid(content);
-			if (error) {
-				notifierModule.show({
-					text: String(error),
-					status: "error",
-					timeout: 10000,
-				});
-				this.editor.commands.undo();
-			} else {
-				this.content = content;
-				this.$emit("update", content);
-			}
-		},
-		showImagePrompt(command) {
-			const src = prompt("Bitte gib die URL deines Bildes hier ein:");
-			if (src !== null) {
-				command({ src });
-			}
-		},
-		isInvalid(content) {
-			let error = false;
-			if (content.includes(`src="data:`)) {
-				error = this.$t("components.molecules.TextEditor.noLocalFiles");
-			}
-			return error;
-		},
-	},
-};
+// import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+// import {
+// 	Bold,
+// 	BulletList,
+// 	HardBreak,
+// 	Heading,
+// 	History,
+// 	Image,
+// 	Italic,
+// 	Link,
+// 	ListItem,
+// 	OrderedList,
+// 	Strike,
+// 	Underline,
+// 	Placeholder,
+// } from "tiptap-extensions";
+// import { notifierModule } from "@/store";
+
+// export default {
+// 	components: {
+// 		EditorContent,
+// 		EditorMenuBar,
+// 	},
+// 	model: {
+// 		prop: "value",
+// 		event: "update",
+// 	},
+// 	props: {
+// 		value: {
+// 			type: String,
+// 			required: true,
+// 		},
+// 		placeholder: {
+// 			type: String,
+// 			default: "",
+// 		},
+// 	},
+// 	data() {
+// 		return {
+// 			editor: new Editor({
+// 				extensions: [
+// 					new Bold(),
+// 					new BulletList(),
+// 					new HardBreak(),
+// 					new Heading({ levels: [2, 3, 4] }),
+// 					new History(),
+// 					new Image(),
+// 					new Italic(),
+// 					new Link(),
+// 					new ListItem(),
+// 					new OrderedList(),
+// 					new Strike(),
+// 					new Underline(),
+// 					new Placeholder({
+// 						emptyEditorClass: "is-editor-empty",
+// 						emptyNodeClass: "is-empty",
+// 						emptyNodeText: this.placeholder,
+// 						showOnlyWhenEditable: true,
+// 						showOnlyCurrent: true,
+// 					}),
+// 				],
+// 				content: this.value,
+// 				onUpdate: this.editorUpdateHandler,
+// 			}),
+// 			content: "",
+// 		};
+// 	},
+// 	computed: {
+// 		isInHeading() {
+// 			return (
+// 				this.editor.isActive.heading({ level: 2 }) ||
+// 				this.editor.isActive.heading({ level: 3 }) ||
+// 				this.editor.isActive.heading({ level: 4 })
+// 			);
+// 		},
+// 	},
+// 	watch: {
+// 		value(to) {
+// 			if (to !== this.content) {
+// 				this.editor.setContent(to);
+// 			}
+// 		},
+// 	},
+// 	beforeUnmount() {
+// 		this.editor.destroy();
+// 	},
+// 	methods: {
+// 		editorUpdateHandler({ getHTML }) {
+// 			const content = getHTML();
+// 			const error = this.isInvalid(content);
+// 			if (error) {
+// 				notifierModule.show({
+// 					text: String(error),
+// 					status: "error",
+// 					timeout: 10000,
+// 				});
+// 				this.editor.commands.undo();
+// 			} else {
+// 				this.content = content;
+// 				this.$emit("update", content);
+// 			}
+// 		},
+// 		showImagePrompt(command) {
+// 			const src = prompt("Bitte gib die URL deines Bildes hier ein:");
+// 			if (src !== null) {
+// 				command({ src });
+// 			}
+// 		},
+// 		isInvalid(content) {
+// 			let error = false;
+// 			if (content.includes(`src="data:`)) {
+// 				error = this.$t("components.molecules.TextEditor.noLocalFiles");
+// 			}
+// 			return error;
+// 		},
+// 	},
+// };
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 .menubar {
 	padding-bottom: var(--space-xs-2);
 	border-bottom: 1px solid map-get($grey, base);

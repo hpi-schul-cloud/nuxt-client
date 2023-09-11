@@ -353,6 +353,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .substitute-filter-placeholder {
 	min-height: 46px;
 }

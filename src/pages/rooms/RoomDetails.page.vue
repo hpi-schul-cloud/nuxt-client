@@ -509,6 +509,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .course-title {
 	overflow: hidden;
 	white-space: nowrap;
