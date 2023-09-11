@@ -3,10 +3,11 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import AlternativeText from "./AlternativeText.vue";
 
+const alternativeText = "alt text";
 jest.mock("@data-board", () => {
 	return {
 		useContentElementState: jest.fn(() => ({
-			modelValue: { alternativeText: "alt text" },
+			modelValue: { alternativeText },
 		})),
 	};
 });
@@ -33,5 +34,43 @@ describe("AlternativeText", () => {
 		const fileContentElement = wrapper.findComponent(AlternativeText);
 
 		expect(fileContentElement.exists()).toBe(true);
+	});
+
+	it("should have the modelValue as value", async () => {
+		const { wrapper } = setup();
+
+		const textarea = wrapper.find("v-textarea-stub");
+
+		const valueAttribute = textarea.attributes("value");
+
+		expect(valueAttribute).toBe(alternativeText);
+	});
+
+	it("should have a hint translation", async () => {
+		const { wrapper } = setup();
+
+		const textarea = wrapper.find("v-textarea-stub");
+
+		const hint = textarea.attributes("hint");
+
+		expect(hint).toBe(
+			wrapper.vm.$i18n
+				.t("components.cardElement.fileElement.altDescription")
+				.toString()
+		);
+	});
+
+	it("should have a label translation", async () => {
+		const { wrapper } = setup();
+
+		const textarea = wrapper.find("v-textarea-stub");
+
+		const label = textarea.attributes("label");
+
+		expect(label).toBe(
+			wrapper.vm.$i18n
+				.t("components.cardElement.fileElement.alternativeText")
+				.toString()
+		);
 	});
 });
