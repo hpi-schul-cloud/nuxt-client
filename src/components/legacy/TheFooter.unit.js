@@ -1,4 +1,4 @@
-import { envConfigModule, filePathsModule } from "@/store";
+import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
