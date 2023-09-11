@@ -3896,10 +3896,10 @@ export interface SubmissionItemResponse {
     completed: boolean;
     /**
      * 
-     * @type {string}
+     * @type {UserDataResponse}
      * @memberof SubmissionItemResponse
      */
-    userId: string;
+    userData: UserDataResponse;
 }
 /**
  * 
@@ -4407,6 +4407,31 @@ export interface UpdateSubmissionItemBodyParams {
      * @memberof UpdateSubmissionItemBodyParams
      */
     completed: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UserDataResponse
+ */
+export interface UserDataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    userId: string;
 }
 /**
  * 

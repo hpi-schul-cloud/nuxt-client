@@ -19,6 +19,7 @@
 			<div v-if="!oauthMigration.oauthMigrationPossible">
 				<v-alert light prominent text type="info">
 					<RenderHTML
+						data-testid="migration-info-text"
 						:html="
 							t('components.administration.adminMigrationSection.infoText')
 						"

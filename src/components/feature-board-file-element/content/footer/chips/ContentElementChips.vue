@@ -1,5 +1,5 @@
 <template>
-	<div class="pa-2">
+	<div>
 		<v-chip class="grey lighten-3 mr-2" disabled small>{{
 			fileExtension
 		}}</v-chip>

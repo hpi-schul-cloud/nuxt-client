@@ -1,13 +1,11 @@
 <template>
-	<div class="download-btn">
-		<v-icon
-			data-testid="board-file-element-edit-menu-download"
-			@click="onDownload"
-			:disabled="!isDownloadAllowed"
-			class="float-right"
-			>{{ mdiTrayArrowDown }}
-		</v-icon>
-	</div>
+	<v-icon
+		data-testid="board-file-element-edit-menu-download"
+		@click="onDownload"
+		:disabled="!isDownloadAllowed"
+		class="float-right"
+		>{{ mdiTrayArrowDown }}
+	</v-icon>
 </template>
 
 <script lang="ts">
