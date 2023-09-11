@@ -125,6 +125,7 @@ export function useFileTableUtils(
 				...deepBreadcrumbs,
 			],
 			loadFilesFunction: async () =>
+				// VUE3_UPGRADE -- removed unexpected parameter
 				collaborativeFilesModule.fetchTeamFiles(teamsPath),
 		};
 	};
