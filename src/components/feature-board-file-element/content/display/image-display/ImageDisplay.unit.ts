@@ -23,7 +23,7 @@ describe("ImageDisplay", () => {
 			previewUrl: propsData.previewUrl,
 		};
 	};
-	const vImageSelektor = "v-img-stub";
+	const imageSelektor = "img";
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
@@ -37,7 +37,7 @@ describe("ImageDisplay", () => {
 		it("should display image", () => {
 			const { wrapper } = setup(false);
 
-			const image = wrapper.find(vImageSelektor);
+			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
 		});
@@ -45,7 +45,7 @@ describe("ImageDisplay", () => {
 		it("should have set src correctly", () => {
 			const { wrapper, previewUrl } = setup(false);
 
-			const src = wrapper.find(vImageSelektor).attributes("src");
+			const src = wrapper.find(imageSelektor).attributes("src");
 
 			expect(src).toBe(previewUrl);
 		});
@@ -53,7 +53,7 @@ describe("ImageDisplay", () => {
 		it("should have set alt correctly", () => {
 			const { wrapper, fileNameProp } = setup(false);
 
-			const alt = wrapper.find(vImageSelektor).attributes("alt");
+			const alt = wrapper.find(imageSelektor).attributes("alt");
 
 			expect(alt).toBe(fileNameProp);
 		});
@@ -80,7 +80,7 @@ describe("ImageDisplay", () => {
 		it("should display image", () => {
 			const { wrapper } = setup(true);
 
-			const image = wrapper.find(vImageSelektor);
+			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
 		});
@@ -88,7 +88,7 @@ describe("ImageDisplay", () => {
 		it("should have set src correctly", () => {
 			const { wrapper, previewUrl } = setup(true);
 
-			const src = wrapper.find(vImageSelektor).attributes("src");
+			const src = wrapper.find(imageSelektor).attributes("src");
 
 			expect(src).toBe(previewUrl);
 		});
@@ -96,7 +96,7 @@ describe("ImageDisplay", () => {
 		it("should have set alt correctly", () => {
 			const { wrapper, fileNameProp } = setup(true);
 
-			const alt = wrapper.find(vImageSelektor).attributes("alt");
+			const alt = wrapper.find(imageSelektor).attributes("alt");
 
 			expect(alt).toBe(fileNameProp);
 		});
