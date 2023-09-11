@@ -85,11 +85,13 @@ describe("ImageDisplay", () => {
 
 		describe("When alternative text is undefined", () => {
 			it("should have set alt correctly", () => {
-				const { wrapper, element } = setup({ isEditMode: false });
+				const { wrapper, fileNameProp } = setup({ isEditMode: false });
 
 				const alt = wrapper.find(vImageSelektor).attributes("alt");
 
-				expect(alt).toBe(element.content.alternativeText);
+				expect(alt).toBe(
+					"components.cardElement.fileElement.emptyAlt" + " " + fileNameProp
+				);
 			});
 		});
 	});
@@ -119,14 +121,6 @@ describe("ImageDisplay", () => {
 			expect(src).toBe(previewUrl);
 		});
 
-		it("should have set alt correctly", () => {
-			const { wrapper, fileNameProp } = setup({ isEditMode: true });
-
-			const alt = wrapper.find(vImageSelektor).attributes("alt");
-
-			expect(alt).toBe(fileNameProp);
-		});
-
 		it("should display div with class 'menu-background'", () => {
 			const { wrapper } = setup({ isEditMode: true });
 
@@ -151,11 +145,13 @@ describe("ImageDisplay", () => {
 
 		describe("When alternative text is undefined", () => {
 			it("should have set alt correctly", () => {
-				const { wrapper, element } = setup({ isEditMode: true });
+				const { wrapper, fileNameProp } = setup({ isEditMode: true });
 
 				const alt = wrapper.find(vImageSelektor).attributes("alt");
 
-				expect(alt).toBe(element.content.alternativeText);
+				expect(alt).toBe(
+					"components.cardElement.fileElement.emptyAlt" + " " + fileNameProp
+				);
 			});
 		});
 	});
