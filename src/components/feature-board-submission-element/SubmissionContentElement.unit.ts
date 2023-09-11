@@ -111,15 +111,15 @@ describe("SubmissionContentElement", () => {
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
-		it("should hand over completed state to SubmissionContentElementDisplay", async () => {
+		it("should hand over submissionItems to SubmissionContentElementDisplay", async () => {
 			const { wrapper } = setup();
 
 			const completed = wrapper
 				.findComponent(SubmissionContentElementDisplay)
-				.props("completed");
+				.props("submissionItems");
 
 			expect(completed).toBe(
-				mockedUseSubmissionContentElementStateResponse.completed
+				mockedUseSubmissionContentElementStateResponse.submissionItems
 			);
 		});
 

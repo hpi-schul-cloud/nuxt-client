@@ -2,6 +2,12 @@ import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import { submissionItemResponseFactory } from "@@/tests/test-utils";
+import { SubmissionItemResponse } from "@/serverApi/v3";
+
+const mockedSubmissionItems: Array<SubmissionItemResponse> = [
+	submissionItemResponseFactory.build(),
+];
 
 describe("SubmissionItemStudentDisplay", () => {
 	const setup = (loading = false) => {
@@ -9,8 +15,8 @@ describe("SubmissionItemStudentDisplay", () => {
 
 		const propsData = {
 			editable: true,
-			completed: false,
 			loading: loading,
+			submissionItems: mockedSubmissionItems,
 		};
 
 		const wrapper = shallowMount(
