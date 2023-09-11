@@ -39,9 +39,9 @@ describe("AlternativeText", () => {
 	it("should have the modelValue as value", async () => {
 		const { wrapper } = setup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textfield = wrapper.find("v-text-field-stub");
 
-		const valueAttribute = textarea.attributes("value");
+		const valueAttribute = textfield.attributes("value");
 
 		expect(valueAttribute).toBe(alternativeText);
 	});
@@ -49,9 +49,9 @@ describe("AlternativeText", () => {
 	it("should have a hint translation", async () => {
 		const { wrapper } = setup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textfield = wrapper.find("v-text-field-stub");
 
-		const hint = textarea.attributes("hint");
+		const hint = textfield.attributes("hint");
 
 		expect(hint).toBe(
 			wrapper.vm.$i18n
@@ -63,9 +63,9 @@ describe("AlternativeText", () => {
 	it("should have a label translation", async () => {
 		const { wrapper } = setup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textfield = wrapper.find("v-text-field-stub");
 
-		const label = textarea.attributes("label");
+		const label = textfield.attributes("label");
 
 		expect(label).toBe(
 			wrapper.vm.$i18n
