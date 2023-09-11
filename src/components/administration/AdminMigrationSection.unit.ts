@@ -11,7 +11,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Wrapper, mount } from "@vue/test-utils";
 import { i18nMock, mockSchool } from "@@/tests/test-utils";
-import UserLoginMigrationModule from "../../store/user-login-migrations";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
