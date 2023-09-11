@@ -1,4 +1,4 @@
-import { DataTableHeader } from "vuetify";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { Route } from "vue-router";
 import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
@@ -52,13 +52,13 @@ describe("UseFileTableUtils", () => {
 			expect(headers.length).toEqual(4);
 
 			const iconHeader = headers[0];
-			expect(iconHeader.text).toEqual("");
+			expect(iconHeader.title).toEqual("");
 			expect(iconHeader.value).toEqual("icon");
 			expect(iconHeader.sortable).toBeFalsy();
 			expect(iconHeader.width).toEqual(5);
 
 			const nameHeader = headers[1];
-			expect(nameHeader.text).toEqual(expectedTranslation);
+			expect(nameHeader.title).toEqual(expectedTranslation);
 			expect(nameHeader.value).toEqual("name");
 			expect(nameHeader.class).toEqual("primary--text");
 			expect(nameHeader.cellClass).toEqual("primary--text");
@@ -67,7 +67,7 @@ describe("UseFileTableUtils", () => {
 			expect(tMock).toHaveBeenCalledWith("common.labels.name");
 
 			const sizeHeader = headers[2];
-			expect(sizeHeader.text).toEqual(expectedTranslation);
+			expect(sizeHeader.title).toEqual(expectedTranslation);
 			expect(sizeHeader.value).toEqual("size");
 			expect(sizeHeader.class).toEqual("primary--text");
 			expect(sizeHeader.sortable).toBeUndefined();
@@ -75,7 +75,7 @@ describe("UseFileTableUtils", () => {
 			expect(tMock).toHaveBeenCalledWith("common.labels.size");
 
 			const changedHeader = headers[3];
-			expect(changedHeader.text).toEqual(expectedTranslation);
+			expect(changedHeader.title).toEqual(expectedTranslation);
 			expect(changedHeader.value).toEqual("lastChanged");
 			expect(changedHeader.class).toEqual("primary--text");
 			expect(changedHeader.sortable).toBeUndefined();

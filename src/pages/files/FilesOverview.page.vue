@@ -48,7 +48,7 @@ import {
 	ref,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { DataTableHeader } from "vuetify";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { useTitle } from "@vueuse/core";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
