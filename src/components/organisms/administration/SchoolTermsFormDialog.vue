@@ -119,13 +119,13 @@ export default defineComponent({
 		};
 
 		const termsForm: Ref = ref(null);
-		const isValid: Ref<boolean> = ref(false);
-		const isTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+		const isFormValid: Ref<boolean> = ref(false);
+		const isFormTouched: Ref<boolean> = ref(false);
+		const termsFile: Ref<File | null> = ref(null);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
-		const rules = {
+		const validationRules = {
 			required: (value: string) => !!value || t("common.validation.required"),
 			mustBePdf: (value: File) =>
 				!value ||
@@ -138,13 +138,13 @@ export default defineComponent({
 		};
 
 		const onBlur = () => {
-			isTouched.value = true;
+			isFormTouched.value = true;
 		};
 
 		const resetForm = () => {
 			termsForm.value.reset();
-			isValid.value = false;
-			isTouched.value = false;
+			isFormValid.value = false;
+			isFormTouched.value = false;
 		};
 
 		const cancel = () => {
@@ -153,14 +153,14 @@ export default defineComponent({
 		};
 
 		const submit = async () => {
-			if (isValid.value) {
+			if (isFormValid.value) {
 				const newConsentVersion: CreateConsentVersionPayload = {
 					schoolId: school.value.id,
 					title: t("pages.administration.school.index.termsOfUse.fileName"),
 					consentText: "",
 					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value as File)) as string,
+					consentData: (await toBase64(termsFile.value as File)) as string,
 				};
 
 				emit("close");
@@ -178,15 +178,15 @@ export default defineComponent({
 
 		return {
 			t,
-			file,
-			rules,
+			file: termsFile,
+			rules: validationRules,
 			mdiFileReplaceOutline,
 			mdiAlert,
 			cancel,
 			submit,
 			onBlur,
-			isValid,
-			isTouched,
+			isValid: isFormValid,
+			isTouched: isFormTouched,
 			termsForm,
 			school,
 		};
