@@ -7,11 +7,13 @@
 		@dialog-closed="onCloseDialog"
 		:buttons="actionButtons"
 	>
-		<div slot="title" class="text-h4 my-2 text-break">
-			{{ $t("components.elementTypeSelection.dialog.title") }}
-		</div>
+		<template #title>
+			<div class="text-h4 my-2 text-break">
+				{{ $t("components.elementTypeSelection.dialog.title") }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div
 				class="d-flex flex-sm-row flex-column align-items-center"
 				:class="{ 'justify-content-space-between': submissionsEnabled }"

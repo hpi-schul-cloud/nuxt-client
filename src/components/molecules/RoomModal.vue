@@ -5,19 +5,21 @@
 		class="room-dialog"
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
-		<div slot="title" class="pt-2 room-title">
-			<v-text-field
-				v-model="data.title"
-				dense
-				flat
-				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
-				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
-				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
-				@blur="onBlur"
-				@keyup.enter="onEnterInput"
-			/>
-		</div>
-		<template slot="content">
+		<template #title>
+			<div class="pt-2 room-title">
+				<v-text-field
+					v-model="data.title"
+					dense
+					flat
+					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
+					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
+					@blur="onBlur"
+					@keyup.enter="onEnterInput"
+				/>
+			</div>
+		</template>
+		<template #content>
 			<room-avatar-iterator
 				class="iterator"
 				:items="groupData.groupElements"

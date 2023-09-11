@@ -102,7 +102,7 @@
 							item-value="userId"
 							:items="items"
 							:loading="loading"
-							:search-input.sync="searchUser"
+							v-model:search-input="searchUser"
 							hide-no-data
 							hide-selected
 							:prepend-inner-icon="mdiAccountSearch"

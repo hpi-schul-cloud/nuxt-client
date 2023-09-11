@@ -31,7 +31,7 @@
 				v-if="canStartMigration"
 				:headers="tableHead"
 				:items="importUsers"
-				:options.sync="options"
+				v-model:options="options"
 				:server-items-length="totalImportUsers"
 				:loading="loading"
 				class="table"

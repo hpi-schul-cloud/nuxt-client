@@ -49,7 +49,7 @@
 					<info-box
 						v-if="isConsentNecessary"
 						class="info-box"
-						:active.sync="infoBoxActive"
+						v-model:active="infoBoxActive"
 					>
 						<template #header>{{
 							$t("pages.administration.students.infobox.headline")
@@ -129,7 +129,7 @@
 							</div>
 						</template>
 					</info-box>
-					<info-box v-else class="info-box" :active.sync="infoBoxActive">
+					<info-box v-else class="info-box" v-model:active="infoBoxActive">
 						<template #header>{{
 							$t(
 								"pages.administration.students.infobox.registrationOnly.headline"

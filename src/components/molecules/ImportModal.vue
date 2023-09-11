@@ -15,7 +15,7 @@
 		@back="stepBack"
 		@next="nextStep"
 	>
-		<template slot="content">
+		<template #content>
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
 				<v-stepper-header>
 					<v-stepper-step

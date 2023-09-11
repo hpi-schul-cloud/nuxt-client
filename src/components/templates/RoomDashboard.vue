@@ -151,10 +151,12 @@
 			confirm-btn-title-key="common.actions.remove"
 			@dialog-confirmed="deleteItem"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ $t("pages.room.itemDelete.title") }}
-			</h2>
-			<template slot="content">
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ $t("pages.room.itemDelete.title") }}
+				</h2>
+			</template>
+			<template #content>
 				<p class="text-md mt-2">
 					{{
 						$t("pages.room.itemDelete.text", {

@@ -6,7 +6,7 @@
 		:breadcrumbs="breadcrumbs"
 		@fabButtonEvent="fabClick"
 	>
-		<template slot="header">
+		<template #header>
 			<div class="d-flex ma-2 mt-3">
 				<div
 					class="text-h3 pb-2 course-title"
@@ -75,10 +75,12 @@
 			:buttons="['close']"
 			@dialog-closed="closeDialog"
 		>
-			<div slot="title" class="dialog-header">
-				<h4>{{ dialog.header }}</h4>
-			</div>
-			<template slot="content">
+			<template #title>
+				<div class="dialog-header">
+					<h4>{{ dialog.header }}</h4>
+				</div>
+			</template>
+			<template #content>
 				<v-divider class="mb-4"></v-divider>
 				<div class="modal-text">
 					<p class="text-md mt-2">

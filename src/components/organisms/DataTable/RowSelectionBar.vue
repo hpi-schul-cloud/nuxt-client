@@ -28,7 +28,7 @@
 					{{ $t("pages.administration.actions") }}
 				</v-btn>
 				<context-menu
-					:show.sync="actionsMenuOpen"
+					v-model:show="actionsMenuOpen"
 					anchor="top-right"
 					:actions="contextActions"
 					@action="fireAction"
@@ -98,7 +98,7 @@ export default {
 			}
 		},
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.actionsMenuOpen = false;
 	},
 	methods: {

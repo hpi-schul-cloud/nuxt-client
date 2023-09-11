@@ -20,13 +20,15 @@
 			data-testId="error-dialog"
 			@dialog-closed="onCloseErrorDialog"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{
-					t("pages.rooms.tools.outdatedDialog.title", {
-						toolName: selectedItemName,
-					})
-				}}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{
+						t("pages.rooms.tools.outdatedDialog.title", {
+							toolName: selectedItemName,
+						})
+					}}
+				</h2>
+			</template>
 			<template #content>
 				<RenderHTML
 					:html="errorDialogText"

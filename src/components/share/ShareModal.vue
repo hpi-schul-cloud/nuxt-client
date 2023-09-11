@@ -8,11 +8,13 @@
 		@dialog-closed="onCloseDialog"
 		@next="onNext(shareOptions)"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
-			{{ modalTitle }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2 text-break">
+				{{ modalTitle }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 1 && isOpen">

@@ -115,10 +115,12 @@
 			confirm-btn-title-key="common.actions.remove"
 			@dialog-confirmed="handleDelete"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ $t("components.molecules.TaskItemMenu.confirmDelete.title") }}
-			</h2>
-			<template slot="content">
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ $t("components.molecules.TaskItemMenu.confirmDelete.title") }}
+				</h2>
+			</template>
+			<template #content>
 				<p class="text-md mt-2">
 					{{
 						$t("components.molecules.TaskItemMenu.confirmDelete.text", {

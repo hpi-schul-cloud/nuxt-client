@@ -20,7 +20,7 @@
 			{{ btnLabel }}
 		</v-btn>
 		<add-content-modal
-			:show-copy-modal.sync="copyModalActive"
+			v-model:show-copy-modal="copyModalActive"
 			:updatedid="itemId"
 			:url="url"
 			:client="client"
@@ -33,10 +33,10 @@
 			:title="$t('pages.content.notification.loading')"
 			description=""
 			:btn-text="$t('common.labels.close')"
-			:active.sync="loadingModal.visible"
+			v-model:active="loadingModal.visible"
 		/>
 		<notification-modal
-			:show-notification-modal.sync="notificationModal.visible"
+			v-model:show-notification-modal="notificationModal.visible"
 			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="
 				notificationModal.isSuccess

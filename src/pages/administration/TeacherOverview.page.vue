@@ -35,22 +35,22 @@
 			<data-filter
 				:filters="filters"
 				:backend-filtering="true"
-				:active-filters.sync="currentFilterQuery"
+				v-model:active-filters="currentFilterQuery"
 				data-testid="data_filter"
 			/>
 
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				:current-page.sync="page"
+				v-model:current-page="page"
 				:data="teachers"
 				:paginated="true"
 				:total="pagination.total"
-				:rows-per-page.sync="limit"
+				v-model:rows-per-page="limit"
 				:rows-selectable="true"
 				track-by="_id"
-				:selected-row-ids.sync="tableSelection"
-				:selection-type.sync="tableSelectionType"
+				v-model:selected-row-ids="tableSelection"
+				v-model:selection-type="tableSelectionType"
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 				data-testid="teachers_table"

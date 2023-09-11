@@ -1,6 +1,6 @@
 <template>
 	<room-wrapper :has-rooms="hasRooms">
-		<template slot="header">
+		<template #header>
 			<h1 class="text-h3 pt-2">
 				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</template>
-		<template slot="page-content">
+		<template #page-content>
 			<v-row class="justify-center search">
 				<div class="d-flex justify-space-between col-sm-8">
 					<v-text-field

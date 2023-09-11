@@ -1,6 +1,7 @@
 export enum CollaborativeFileType {
 	FAVORITES = "favorites",
 	FILE = "draft",
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
 	PDF = "draft",
 	DIRECTORY = "dir",
 	SHARED_DIRECTORY = "shared_dir",

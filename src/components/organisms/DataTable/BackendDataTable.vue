@@ -5,7 +5,7 @@
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
-					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
+					v-model:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
 					:number-of-selected-items="numberOfSelectedItems"
 					:total-number-of-items="total"
 					@fire-action="fireAction"
@@ -17,10 +17,10 @@
 						<component
 							:is="componentHeaderRow"
 							:all-rows-selectable="rowsSelectable"
-							:current-page-selection-state.sync="currentPageSelectionState"
+							v-model:current-page-selection-state="currentPageSelectionState"
 							:columns="columns"
-							:sort-by.sync="$_controllableDataSortBy"
-							:sort-order.sync="$_controllableDataSortOrder"
+							v-model:sort-by="$_controllableDataSortBy"
+							v-model:sort-order="$_controllableDataSortOrder"
 							data-testid="table-data-head"
 							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"

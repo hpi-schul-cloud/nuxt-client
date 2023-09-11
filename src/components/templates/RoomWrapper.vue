@@ -6,7 +6,7 @@
 		:fab-items="fabItems"
 		@fabButtonEvent="fabClick"
 	>
-		<template slot="header">
+		<template #header>
 			<slot name="header"></slot>
 		</template>
 		<template v-if="isLoading">

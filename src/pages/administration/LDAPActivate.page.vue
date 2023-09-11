@@ -160,7 +160,7 @@
 			</v-btn>
 		</div>
 		<base-modal
-			:active.sync="submitted.ok"
+			v-model:active="submitted.ok"
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>

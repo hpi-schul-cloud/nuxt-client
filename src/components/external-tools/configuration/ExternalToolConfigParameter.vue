@@ -84,7 +84,7 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const { validateParameter } = useExternalToolValidation(t);
+		const { validateParameter } = useExternalToolValidation();
 
 		const getLabelText = (): string => {
 			if (props.parameter.isOptional) {

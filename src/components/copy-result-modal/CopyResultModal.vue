@@ -7,11 +7,13 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title.partial") }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+				{{ $t("components.molecules.copyResult.title.partial") }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
 				<div
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"

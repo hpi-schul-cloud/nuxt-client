@@ -104,7 +104,7 @@ export function useFileTableUtils(
 			: route.params.catchAll
 					.split("/")
 					.filter((element: string) => element !== "");
-		const teamsPath: string = route.path.replace("/cfiles/teams", "");
+		// const teamsPath: string = route.path.replace("/cfiles/teams", "");
 		const deepBreadcrumbs: Breadcrumb[] = getDeepBreadcumbs(paramsArray);
 
 		return {
@@ -120,8 +120,8 @@ export function useFileTableUtils(
 				},
 				...deepBreadcrumbs,
 			],
-			loadFilesFunction: async () =>
-				collaborativeFilesModule.fetchTeamFiles(teamsPath),
+			// VUE_UPGRADE path is not used inside fetchTeamFiles()
+			loadFilesFunction: async () => collaborativeFilesModule.fetchTeamFiles(),
 		};
 	};
 

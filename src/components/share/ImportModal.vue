@@ -9,11 +9,13 @@
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="onCancel"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2">
+				{{ $t(`components.molecules.import.${parentType}.options.title`) }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div>
 				<div
 					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"

@@ -15,7 +15,7 @@
 				data-testid="top-menu-btn"
 				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
 				role="menu"
-				@click.native="sendEvent('expandMenu')"
+				@click="sendEvent('expandMenu')"
 			>
 				<v-icon>$mdiMenu</v-icon>
 			</v-btn>
@@ -39,7 +39,7 @@
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"
-					@click.native="sendEvent('fullscreen')"
+					@click="sendEvent('fullscreen')"
 				>
 					<v-icon>$mdiArrowExpand</v-icon>
 				</v-btn>
@@ -110,7 +110,7 @@
 			width="40"
 			height="40"
 			class="fullscreen-button-active"
-			@click.native="sendEvent('fullscreen')"
+			@click="sendEvent('fullscreen')"
 		>
 			<v-icon>$mdiArrowCollapse</v-icon>
 		</v-btn>

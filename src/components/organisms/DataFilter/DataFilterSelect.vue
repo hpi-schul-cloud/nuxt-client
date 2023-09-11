@@ -11,7 +11,7 @@
 			<v-icon class="filter-icon">$mdiMenuDown</v-icon>
 		</v-btn>
 		<context-menu
-			:show.sync="visible"
+			v-model:show="visible"
 			anchor="top-left"
 			:actions="contextOptions"
 			@click="handleClick"

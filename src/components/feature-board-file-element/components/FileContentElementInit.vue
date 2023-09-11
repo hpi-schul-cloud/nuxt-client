@@ -3,7 +3,7 @@
 		<div v-if="!fileWasPicked" class="grey lighten-3">
 			<FilePicker
 				@update:file="onFileSelect"
-				:isFilePickerOpen.sync="isFilePickerOpen"
+				v-model:isFilePickerOpen="isFilePickerOpen"
 			/>
 		</div>
 		<v-card-text v-else>

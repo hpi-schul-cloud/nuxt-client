@@ -16,9 +16,11 @@
 			data-testId="error-dialog"
 			@dialog-closed="onCloseErrorDialog"
 		>
-			<h2 slot="title" class="text-h4 my-2 text-break-word">
-				{{ t("error.generic") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2 text-break-word">
+					{{ t("error.generic") }}
+				</h2>
+			</template>
 		</v-custom-dialog>
 
 		<v-dialog

@@ -12,8 +12,8 @@
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
-		<template v-for="(task, index) of tasks" v-else>
-			<template v-if="userRole === 'student'" :key="index" >
+		<template v-for="(task, index) of tasks" :key="index" v-else>
+			<template v-if="userRole === 'student'">
 				<task-item-student
 					v-if="isLastTaskItem(index)"
 					:key="index"
@@ -21,9 +21,9 @@
 					:task="task"
 				/>
 				<task-item-student v-else :task="task" role="article" />
-				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
+				<v-divider v-if="index < tasks.length - 1" />
 			</template>
-			<template v-if="userRole === 'teacher'" :key="index">
+			<template v-if="userRole === 'teacher'">
 				<task-item-teacher
 					v-if="isLastTaskItem(index)"
 					:key="index"
@@ -39,7 +39,7 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
+				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 		</template>
 		<div v-if="showSpinner" class="d-flex justify-center my-10">

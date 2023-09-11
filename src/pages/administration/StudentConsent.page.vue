@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
-		<template slot="header">
+		<template #header>
 			<h1 class="mb--md h3">
 				{{ title }}
 			</h1>
@@ -46,8 +46,8 @@
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_1"
 					@update:sort="onUpdateSort"
 				>
@@ -119,8 +119,8 @@
 					:data="tableData"
 					track-by="id"
 					:paginated="false"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_2"
 					@update:sort="onUpdateSort"
 				>
@@ -191,8 +191,8 @@
 					:data="tableData"
 					track-by="_id"
 					:paginated="false"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_3"
 					@update:sort="onUpdateSort"
 				>
@@ -235,7 +235,7 @@
 				</div>
 			</section>
 
-			<base-modal :active.sync="cancelWarning">
+			<base-modal v-model:active="cancelWarning">
 				<template #header></template>
 				<template #body>
 					<modal-body-info
@@ -460,7 +460,7 @@ export default {
 		await this.find();
 		window.addEventListener("beforeunload", this.warningEventHandler);
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("beforeunload", this.warningEventHandler);
 		clearTimeout(this.tableTimeOut);
 		clearTimeout(this.printTimeOut);

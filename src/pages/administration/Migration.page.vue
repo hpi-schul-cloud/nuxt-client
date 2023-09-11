@@ -21,7 +21,7 @@
 			</template>
 		</v-snackbar>
 
-		<div slot="header">
+		<template #header>
 			<h1 class="text-h3">
 				{{
 					$t("pages.administration.migration.title", {
@@ -78,7 +78,7 @@
 					</v-stepper-step>
 				</v-stepper-header>
 			</v-stepper>
-		</div>
+		</template>
 
 		<div>
 			<v-stepper v-model="migrationStep" v-ripple="false" flat>

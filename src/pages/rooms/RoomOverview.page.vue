@@ -4,7 +4,7 @@
 			:has-rooms="hasCurrentRooms"
 			:has-import-token="!!importToken"
 		>
-			<template slot="header">
+			<template #header>
 				<h1 class="text-h3 pt-2">
 					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
@@ -31,7 +31,7 @@
 					</div>
 				</div>
 			</template>
-			<template slot="page-content">
+			<template #page-content>
 				<div class="rooms-container">
 					<v-text-field
 						ref="search"

@@ -4,50 +4,46 @@
 		:full-width="false"
 		:fab-items="fabItems"
 	>
-		<div slot="header">
-			<div>
-				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
-				<div v-if="showSubstituteFilter">
-					<v-custom-switch
-						:value="isSubstituteFilterEnabled"
-						:label="
-							$t('components.organisms.TasksDashboardMain.filter.substitute')
-						"
-						:aria-label="
-							$t('components.organisms.TasksDashboardMain.filter.substitute')
-						"
-						@input-changed="setSubstituteFilter"
-					/>
-				</div>
-				<div v-else class="substitute-filter-placeholder"></div>
-				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" class="tabs-max-width" grow>
-						<v-tab :href="tabOneHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="openTasks">{{
-								tabOneHeader.title
-							}}</span>
-						</v-tab>
-						<v-tab :href="tabTwoHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span
-								class="d-none d-sm-inline"
-								:data-testid="tabTwoHeader.dataTestId"
-								>{{ tabTwoHeader.title }}</span
-							>
-						</v-tab>
-						<v-tab :href="tabThreeHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{
-								tabThreeHeader.icon
-							}}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
-								tabThreeHeader.title
-							}}</span>
-						</v-tab>
-					</v-tabs>
-				</div>
+		<template #header>
+			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
+			<div v-if="showSubstituteFilter">
+				<v-custom-switch
+					:value="isSubstituteFilterEnabled"
+					:label="
+						$t('components.organisms.TasksDashboardMain.filter.substitute')
+					"
+					:aria-label="
+						$t('components.organisms.TasksDashboardMain.filter.substitute')
+					"
+					@input-changed="setSubstituteFilter"
+				/>
 			</div>
-		</div>
+			<div v-else class="substitute-filter-placeholder"></div>
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
+					<v-tab :href="tabOneHeader.route">
+						<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
+						<span class="d-none d-sm-inline" data-testid="openTasks">{{
+							tabOneHeader.title
+						}}</span>
+					</v-tab>
+					<v-tab :href="tabTwoHeader.route">
+						<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
+						<span
+							class="d-none d-sm-inline"
+							:data-testid="tabTwoHeader.dataTestId"
+							>{{ tabTwoHeader.title }}</span
+						>
+					</v-tab>
+					<v-tab :href="tabThreeHeader.route">
+						<v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
+						<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
+							tabThreeHeader.title
+						}}</span>
+					</v-tab>
+				</v-tabs>
+			</div>
+		</template>
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="showCourseFilter"

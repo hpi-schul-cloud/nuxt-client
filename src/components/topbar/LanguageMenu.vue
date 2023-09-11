@@ -43,8 +43,9 @@
 <script>
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
 	data() {
 		return {
 			mdiMenuDown,
@@ -93,7 +94,7 @@ export default {
 			return { language, longName, translatedName, icon };
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
