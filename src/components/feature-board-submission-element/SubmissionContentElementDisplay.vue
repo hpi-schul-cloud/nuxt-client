@@ -33,7 +33,7 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:completed="completed"
+			:submissionItems="submissionItems"
 			:editable="editable"
 			:loading="loading"
 			@update:completed="updateCompleted"
@@ -63,10 +63,6 @@ export default defineComponent({
 		SubmissionItemsTeacherDisplay,
 	},
 	props: {
-		completed: {
-			type: Boolean,
-			required: true,
-		},
 		submissionItems: {
 			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,

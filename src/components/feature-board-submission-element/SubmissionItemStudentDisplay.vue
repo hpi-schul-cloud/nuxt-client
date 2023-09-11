@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useVModel } from "@vueuse/core";
+import { defineComponent, PropType, computed } from "vue";
+import { SubmissionItemResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
@@ -28,8 +28,8 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		completed: {
-			type: Boolean,
+		submissionItems: {
+			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
 		loading: {
@@ -39,7 +39,18 @@ export default defineComponent({
 	},
 	emits: ["update:completed"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "completed", emit);
+		const modelValue = computed({
+			get() {
+				if (props.submissionItems.length === 0) {
+					return false;
+				}
+
+				return props.submissionItems[0].completed;
+			},
+			set(newValue) {
+				emit("update:completed", newValue);
+			},
+		});
 
 		return {
 			modelValue,

@@ -46,14 +46,6 @@ export const useSubmissionContentElementState = (id: string) => {
 		}
 	};
 
-	const completed = computed(() => {
-		if (submissionItems.value.length === 0) {
-			return false;
-		}
-
-		return submissionItems.value[0].completed;
-	});
-
 	onMounted(() => {
 		fetchSubmissionItems(id);
 	});
@@ -62,7 +54,6 @@ export const useSubmissionContentElementState = (id: string) => {
 		submissionItems,
 		fetchSubmissionItems,
 		updateSubmissionItem,
-		completed,
 		loading,
 	};
 };
