@@ -7,19 +7,25 @@
 			width="120"
 			height="22"
 		/>
-		<v-data-table
-			v-else
-			:headers="headers"
-			:items="items"
-			:disable-pagination="true"
-			:hide-default-footer="true"
-			:multi-sort="true"
-		>
-			<template #[`item.completed`]="{ item }">
-				<v-chip v-if="item.completed">erledigt</v-chip>
-				<v-chip v-else>offen</v-chip>
-			</template>
-		</v-data-table>
+		<VExpansionPanels v-else>
+			<VExpansionPanel>
+				<VExpansionPanelHeader> Click & see more </VExpansionPanelHeader>
+				<VExpansionPanelContent>
+					<v-data-table
+						:headers="headers"
+						:items="items"
+						:disable-pagination="true"
+						:hide-default-footer="true"
+						:multi-sort="true"
+					>
+						<template #[`item.completed`]="{ item }">
+							<v-chip v-if="item.completed">erledigt</v-chip>
+							<v-chip v-else>offen</v-chip>
+						</template>
+					</v-data-table>
+				</VExpansionPanelContent>
+			</VExpansionPanel>
+		</VExpansionPanels>
 	</div>
 </template>
 
@@ -28,6 +34,12 @@ import { defineComponent, PropType, computed } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	VExpansionPanels,
+	VExpansionPanel,
+	VExpansionPanelContent,
+	VExpansionPanelHeader,
+} from "vuetify/lib";
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
@@ -40,6 +52,12 @@ export default defineComponent({
 			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
+	},
+	components: {
+		VExpansionPanels,
+		VExpansionPanel,
+		VExpansionPanelHeader,
+		VExpansionPanelContent,
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
@@ -74,3 +92,14 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+::v-deep {
+	.v-expansion-panel-content__wrap {
+		padding: 0;
+	}
+
+	.text-start {
+		font-size: 0.75rem !important;
+	}
+}
+</style>
