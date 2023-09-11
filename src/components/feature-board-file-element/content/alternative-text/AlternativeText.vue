@@ -1,12 +1,12 @@
 <template>
 	<v-container class="grey lighten-3">
-		<v-textarea
+		<v-text-field
 			v-model="modelValue.alternativeText"
-			class="pt-2 ma-0 v-secondary-lighten1"
+			class="v-secondary-lighten1"
 			rows="1"
 			:hint="$t('components.cardElement.fileElement.altDescription')"
 			:label="$t('components.cardElement.fileElement.alternativeText')"
-		></v-textarea>
+		></v-text-field>
 	</v-container>
 </template>
 
