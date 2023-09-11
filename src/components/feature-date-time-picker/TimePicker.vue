@@ -82,6 +82,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
+		// eslint-disable-next-line vue/no-setup-props-destructure
 		const model = ref(props.time);
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
