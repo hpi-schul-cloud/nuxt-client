@@ -8,82 +8,198 @@ import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 describe("FileContent", () => {
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
+	describe("When EditMode is true", () => {
+		describe("When PreviewUrl is defined", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-		const element = fileElementResponseFactory.build();
+				const element = fileElementResponseFactory.build();
 
-		const fileProperties = {
-			name: "test",
-			size: 100,
-			url: "test",
-			previewUrl: "test",
-			previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-			isDownloadAllowed: true,
-			element,
-		};
-		const wrapper = shallowMount(FileContent, {
-			propsData: {
-				fileProperties,
-				isEditMode: true,
-			},
-			...createComponentMocks({}),
+				const fileProperties = {
+					name: "test",
+					size: 100,
+					url: "test",
+					previewUrl: "test",
+					previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+					isDownloadAllowed: true,
+					element,
+				};
+				const wrapper = shallowMount(FileContent, {
+					propsData: {
+						fileProperties,
+						isEditMode: true,
+					},
+					...createComponentMocks({}),
+				});
+
+				return {
+					wrapper,
+					fileProperties,
+				};
+			};
+
+			it("should pass props to FileContent", () => {
+				const { wrapper, fileProperties } = setup();
+
+				const fileContent = wrapper.findComponent(FileContent);
+
+				expect(fileContent.props()).toEqual({
+					fileProperties,
+					isEditMode: true,
+				});
+			});
+
+			it("should pass props to ContentElementFooter", () => {
+				const { wrapper, fileProperties } = setup();
+
+				const contentElementFooter =
+					wrapper.findComponent(ContentElementFooter);
+
+				expect(contentElementFooter.props()).toEqual({
+					fileProperties,
+				});
+			});
+
+			it("Should pass props to FileAlert", () => {
+				const { wrapper, fileProperties } = setup();
+
+				const fileAlert = wrapper.findComponent(FileAlert);
+
+				expect(fileAlert.props()).toEqual({
+					previewStatus: fileProperties.previewStatus,
+				});
+			});
+
+			it("Should be in dom", () => {
+				const { wrapper } = setup();
+
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(true);
+			});
+
+			it("Should pass element to alterantive text", () => {
+				const { wrapper, fileProperties } = setup();
+
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.props()).toEqual({
+					element: fileProperties.element,
+				});
+			});
+
+			describe("when alert emits on-status-reload", () => {
+				it("should emit delete event", async () => {
+					const { wrapper } = setup();
+
+					const fileAlert = wrapper.findComponent(FileAlert);
+
+					await fileAlert.vm.$emit("on-status-reload");
+
+					expect(wrapper.emitted("fetch:file")).toBeTruthy();
+				});
+			});
 		});
 
-		return {
-			wrapper,
-			fileProperties,
-		};
-	};
+		describe("When PreviewUrl is undefined", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-	it("should pass props to FileContent", () => {
-		const { wrapper, fileProperties } = setup();
+				const element = fileElementResponseFactory.build();
 
-		const fileContent = wrapper.findComponent(FileContent);
+				const fileProperties = {
+					previewUrl: undefined,
+					element,
+				};
+				const wrapper = shallowMount(FileContent, {
+					propsData: {
+						fileProperties,
+						isEditMode: true,
+					},
+					...createComponentMocks({}),
+				});
 
-		expect(fileContent.props()).toEqual({
-			fileProperties,
-			isEditMode: true,
+				return {
+					wrapper,
+					fileProperties,
+				};
+			};
+
+			it("Should not be in dom", () => {
+				const { wrapper } = setup();
+
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(false);
+			});
 		});
 	});
 
-	it("should pass props to ContentElementFooter", () => {
-		const { wrapper, fileProperties } = setup();
+	describe("When EditMode is false", () => {
+		describe("When PreviewUrl is defined", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-		const contentElementFooter = wrapper.findComponent(ContentElementFooter);
+				const element = fileElementResponseFactory.build();
 
-		expect(contentElementFooter.props()).toEqual({
-			fileProperties,
+				const fileProperties = {
+					previewUrl: "test",
+					element,
+				};
+				const wrapper = shallowMount(FileContent, {
+					propsData: {
+						fileProperties,
+						isEditMode: false,
+					},
+					...createComponentMocks({}),
+				});
+
+				return {
+					wrapper,
+					fileProperties,
+				};
+			};
+
+			it("Should not be in dom", () => {
+				const { wrapper } = setup();
+
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(false);
+			});
 		});
-	});
 
-	it("Should pass props to FileAlert", () => {
-		const { wrapper, fileProperties } = setup();
+		describe("When PreviewUrl is undefined", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-		const fileAlert = wrapper.findComponent(FileAlert);
+				const element = fileElementResponseFactory.build();
 
-		expect(fileAlert.props()).toEqual({
-			previewStatus: fileProperties.previewStatus,
-		});
-	});
+				const fileProperties = {
+					previewUrl: undefined,
+					element,
+				};
+				const wrapper = shallowMount(FileContent, {
+					propsData: {
+						fileProperties,
+						isEditMode: false,
+					},
+					...createComponentMocks({}),
+				});
 
-	it("Should pass element to alternative text", () => {
-		const { wrapper } = setup();
+				return {
+					wrapper,
+					fileProperties,
+				};
+			};
 
-		const alternativeText = wrapper.findComponent(AlternativeText);
+			it("Should not be in dom", () => {
+				const { wrapper } = setup();
 
-		expect(alternativeText.exists()).toBe(true);
-	});
+				const alternativeText = wrapper.findComponent(AlternativeText);
 
-	describe("when alert emits on-status-reload", () => {
-		it("should emit delete event", async () => {
-			const { wrapper } = setup();
-
-			const fileAlert = wrapper.findComponent(FileAlert);
-
-			await fileAlert.vm.$emit("on-status-reload");
-
-			expect(wrapper.emitted("fetch:file")).toBeTruthy();
+				expect(alternativeText.exists()).toBe(false);
+			});
 		});
 	});
 });
