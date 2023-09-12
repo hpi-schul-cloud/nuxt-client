@@ -208,7 +208,7 @@ describe("SchoolSettingPage", () => {
 
 	it("tests env var terms of use being false", () => {
 		envConfigModule.setEnvs({
-			FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
+			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
 		});
 		const wrapper = shallowMount(SchoolPage, {
