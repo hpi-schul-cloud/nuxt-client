@@ -70,7 +70,7 @@ describe("FileContent", () => {
 				});
 			});
 
-			it("Should be in dom", () => {
+			it("Should AlternativeText component be in dom", () => {
 				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
@@ -125,7 +125,7 @@ describe("FileContent", () => {
 				};
 			};
 
-			it("Should not be in dom", () => {
+			it("Should AlternativeText component not be in dom", () => {
 				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
@@ -160,7 +160,7 @@ describe("FileContent", () => {
 				};
 			};
 
-			it("Should not be in dom", () => {
+			it("Should AlternativeText component not be in dom", () => {
 				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
@@ -193,7 +193,7 @@ describe("FileContent", () => {
 				};
 			};
 
-			it("Should not be in dom", () => {
+			it("Should AlternativeText component not be in dom", () => {
 				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
