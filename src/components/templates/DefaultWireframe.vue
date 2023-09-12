@@ -140,7 +140,7 @@ $fab-wrapper-height: 80px;
 
 .fab-wrapper {
 	position: relative;
-	top: $fab-wrapper-height / 2;
+	top: calc($fab-wrapper-height / 2);
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
