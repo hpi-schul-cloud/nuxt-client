@@ -66,7 +66,7 @@ describe("ImageDisplay", () => {
 			const { wrapper, fileNameProp } = setup({ isEditMode: false });
 
 			const renderedImageTag = wrapper.find(imageSelektor).html();
-			const expectedHtml = `<img loading="lazy" src="preview/1/${fileNameProp}" alt="${fileNameProp}" class="rounded-t-sm image">`;
+			const expectedHtml = `<img loading="lazy" src="preview/1/${fileNameProp}" alt="components.cardElement.fileElement.emptyAlt ${fileNameProp}" class="rounded-t-sm image">`;
 
 			expect(renderedImageTag).toBe(expectedHtml);
 		});
@@ -84,7 +84,9 @@ describe("ImageDisplay", () => {
 
 			const alt = wrapper.find(imageSelektor).attributes("alt");
 
-			expect(alt).toBe(fileNameProp);
+			expect(alt).toBe(
+				"components.cardElement.fileElement.emptyAlt " + fileNameProp
+			);
 		});
 
 		it("should not display div with class 'menu-background'", () => {
@@ -117,7 +119,7 @@ describe("ImageDisplay", () => {
 				const alt = wrapper.find(imageSelektor).attributes("alt");
 
 				expect(alt).toBe(
-					"components.cardElement.fileElement.emptyAlt" + " " + fileNameProp
+					"components.cardElement.fileElement.emptyAlt " + fileNameProp
 				);
 			});
 		});
@@ -177,7 +179,7 @@ describe("ImageDisplay", () => {
 				const alt = wrapper.find(imageSelektor).attributes("alt");
 
 				expect(alt).toBe(
-					"components.cardElement.fileElement.emptyAlt" + " " + fileNameProp
+					"components.cardElement.fileElement.emptyAlt " + fileNameProp
 				);
 			});
 		});
