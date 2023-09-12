@@ -78,7 +78,7 @@ describe("FileContent", () => {
 				expect(alternativeText.exists()).toBe(true);
 			});
 
-			it("Should pass element to alterantive text", () => {
+			it("Should pass element to alternative text", () => {
 				const { wrapper, fileProperties } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
