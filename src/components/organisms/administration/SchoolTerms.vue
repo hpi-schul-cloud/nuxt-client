@@ -105,11 +105,10 @@ import {
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import VueI18n from "vue-i18n";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SchoolTerms",
@@ -122,19 +121,12 @@ export default defineComponent({
 			inject<SchoolsModule>("schoolsModule");
 		const termsOfUseModule: TermsOfUseModule | undefined =
 			inject<TermsOfUseModule>("termsOfUseModule");
-		const i18n = injectStrict(I18N_KEY);
 
-		if (!authModule || !schoolsModule || !termsOfUseModule || !i18n) {
+		if (!authModule || !schoolsModule || !termsOfUseModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 

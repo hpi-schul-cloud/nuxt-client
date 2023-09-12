@@ -78,13 +78,13 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
-import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import VueI18n from "vue-i18n";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -104,19 +104,12 @@ export default defineComponent({
 		const termsOfUseModule: TermsOfUseModule | undefined =
 			inject<TermsOfUseModule>("termsOfUseModule");
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const i18n = injectStrict(I18N_KEY);
 
-		if (!notifierModule || !schoolsModule || !termsOfUseModule || !i18n) {
+		if (!notifierModule || !schoolsModule || !termsOfUseModule) {
 			throw new Error("Injection of dependencies failed");
 		}
 
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const termsForm: Ref = ref(null);
 		const isFormValid: Ref<boolean> = ref(false);
