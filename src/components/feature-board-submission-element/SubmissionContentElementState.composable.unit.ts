@@ -32,9 +32,12 @@ describe("SubmissionContentElementState.composable", () => {
 		jest.resetAllMocks();
 	});
 
-	const setup = (contentElementId = "123123") => {
+	const setup = (
+		contentElementId = "123123",
+		dueDate = "2100-12-31T00:00:00.000Z"
+	) => {
 		return mountComposable(
-			() => useSubmissionContentElementState(contentElementId),
+			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
