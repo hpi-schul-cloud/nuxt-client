@@ -34,7 +34,7 @@
 							{{
 								t("pages.administration.school.index.termsOfUse.uploadedOn", {
 									date: dayjs(termsOfUse.publishedAt).format(
-										"DD.MM.YYYY HH:mm"
+										t("format.dateTime")
 									),
 								})
 							}}

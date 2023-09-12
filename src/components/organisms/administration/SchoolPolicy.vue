@@ -34,7 +34,7 @@
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
 									date: dayjs(privacyPolicy.publishedAt).format(
-										"DD.MM.YYYY HH:mm"
+										t("format.dateTime")
 									),
 								})
 							}}
