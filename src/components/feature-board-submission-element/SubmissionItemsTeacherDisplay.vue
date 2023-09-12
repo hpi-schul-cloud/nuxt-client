@@ -20,9 +20,9 @@
 							$t("components.cardElement.submissionElement.completed")
 						}}</v-chip
 					>
-					<v-chip v-if="missed" class="grey lighten-3 mr-2" disabled small
-						>{{ missed }}
-						{{ $t("components.cardElement.submissionElement.missed") }}</v-chip
+					<v-chip v-if="expired" class="grey lighten-3 mr-2" disabled small
+						>{{ expired }}
+						{{ $t("components.cardElement.submissionElement.expired") }}</v-chip
 					>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
@@ -43,8 +43,8 @@
 										$t("components.cardElement.submissionElement.completed")
 									}}
 								</span>
-								<span v-if="item.status === 'missed'"
-									>{{ $t("components.cardElement.submissionElement.missed") }}
+								<span v-if="item.status === 'expired'"
+									>{{ $t("components.cardElement.submissionElement.expired") }}
 								</span>
 							</v-chip>
 						</template>
@@ -61,7 +61,7 @@ import { SubmissionItemResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
-type Status = "completed" | "open" | "missed";
+type Status = "completed" | "open" | "expired";
 type SubmissionInfo = {
 	status: Status;
 	firstName: string;
@@ -114,7 +114,7 @@ export default defineComponent({
 					submissionInfo.status = "open";
 				}
 				if (!item.completed && !props.editable) {
-					submissionInfo.status = "missed";
+					submissionInfo.status = "expired";
 				}
 
 				return submissionInfo as SubmissionInfo;
@@ -133,9 +133,9 @@ export default defineComponent({
 			}).length;
 		});
 
-		const missed = computed<number>(() => {
+		const expired = computed<number>(() => {
 			return items.value.filter((item) => {
-				return item.status === "missed";
+				return item.status === "expired";
 			}).length;
 		});
 
@@ -144,7 +144,7 @@ export default defineComponent({
 			items,
 			open,
 			completed,
-			missed,
+			expired,
 		};
 	},
 });
