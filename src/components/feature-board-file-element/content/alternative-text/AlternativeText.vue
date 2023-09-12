@@ -12,7 +12,7 @@
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { useContentElementState } from "@data-board";
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, toRef } from "vue";
 
 export default defineComponent({
 	name: "AlternativeText",
@@ -20,8 +20,9 @@ export default defineComponent({
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
 	setup(props) {
+		const element = toRef(props, "element");
 		const { modelValue } = useContentElementState({
-			element: props.element,
+			element: element.value,
 			isEditMode: true,
 		});
 
