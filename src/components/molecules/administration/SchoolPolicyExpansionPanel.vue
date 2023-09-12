@@ -20,7 +20,9 @@
 						:href="policy.fileData.data"
 						:download="policy.fileData.filename"
 					>
-						<v-icon class="mr-2"> $mdiTrayArrowDown </v-icon>
+						<v-icon class="mr-2">
+							{{ iconmdiTrayArrowDown }}
+						</v-icon>
 						{{
 							$t("pages.administration.school.index.schoolPolicies.downloadPDF")
 						}}
@@ -33,12 +35,19 @@
 
 <script>
 import { printDateTimeFromStringUTC } from "@/plugins/datetime";
+import { mdiTrayArrowDown } from "@mdi/js";
+
 export default {
 	props: {
 		policy: {
 			type: Object,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			iconmdiTrayArrowDown: mdiTrayArrowDown,
+		};
 	},
 	methods: {
 		schoolPolicyTitle(schoolPolicy) {

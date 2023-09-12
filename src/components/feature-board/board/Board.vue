@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<div class="ml-1">
-			<h3 aria-level="1">{{ $t("pages.room.boardCard.label.courseBoard") }}</h3>
+			<h3 aria-level="1" class="mt-3">
+				{{ $t("pages.room.boardCard.label.courseBoard") }}
+			</h3>
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
@@ -20,6 +22,7 @@
 							:column="column"
 							:index="index"
 							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
+							@reload:board="onReloadBoard"
 							@create:card="onCreateCard"
 							@delete:card="onDeleteCard"
 							@delete:column="onDeleteColumn"
@@ -98,6 +101,7 @@ export default defineComponent({
 			getColumnId,
 			moveCard,
 			moveColumn,
+			reloadBoard,
 			updateColumnTitle,
 		} = useBoardState(props.boardId);
 
@@ -175,6 +179,10 @@ export default defineComponent({
 			}
 		};
 
+		const onReloadBoard = async () => {
+			await reloadBoard();
+		};
+
 		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
 			if (hasMovePermission) await moveCard(payload);
 		};
@@ -213,6 +221,7 @@ export default defineComponent({
 			onDropColumn,
 			onDeleteColumn,
 			onMoveColumnKeyboard,
+			onReloadBoard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};

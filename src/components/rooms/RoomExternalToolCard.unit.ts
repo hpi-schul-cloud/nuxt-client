@@ -65,7 +65,7 @@ describe("RoomExternalToolCard", () => {
 
 				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
-				expect(statusChip.contains("pages.rooms.tools.outdated"));
+				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
 		});
 
