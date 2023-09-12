@@ -10,8 +10,12 @@
 		<VExpansionPanels v-else>
 			<VExpansionPanel>
 				<VExpansionPanelHeader class="pl-4 pr-4">
-					<v-chip class="grey lighten-3 mr-2" disabled small>1 offen</v-chip>
-					<v-chip class="grey lighten-3 mr-2" disabled small>2 erledigt</v-chip>
+					<v-chip v-if="open" class="grey lighten-3 mr-2" disabled small
+						>{{ open }} offen</v-chip
+					>
+					<v-chip v-if="done" class="grey lighten-3 mr-2" disabled small
+						>{{ done }} erledigt</v-chip
+					>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
 					<v-data-table
@@ -96,9 +100,24 @@ export default defineComponent({
 				};
 			});
 		});
+
+		const open = computed(() => {
+			return props.submissionItems.filter((item) => {
+				return !item.completed;
+			}).length;
+		});
+
+		const done = computed(() => {
+			return props.submissionItems.filter((item) => {
+				return item.completed;
+			}).length;
+		});
+
 		return {
 			headers,
 			items,
+			open,
+			done,
 		};
 	},
 });
@@ -116,6 +135,7 @@ export default defineComponent({
 
 	.text-start {
 		font-size: 0.75rem !important;
+		height: 30px;
 	}
 }
 </style>
