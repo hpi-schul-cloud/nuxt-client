@@ -60,9 +60,7 @@
 							t('pages.administration.school.index.schoolPolicy.edit')
 						"
 					>
-						<v-icon>
-							{{ mdiPencilOutline }}
-						</v-icon>
+						<v-icon>$mdiPencilOutline</v-icon>
 					</v-btn>
 				</v-list-item-action>
 				<v-list-item-action
@@ -77,9 +75,7 @@
 							t('pages.administration.school.index.schoolPolicy.download')
 						"
 					>
-						<v-icon>
-							{{ mdiTrayArrowDown }}
-						</v-icon>
+						<v-icon>$mdiTrayArrowDown</v-icon>
 					</v-btn>
 				</v-list-item-action>
 			</v-list-item>
@@ -96,7 +92,6 @@
 <script lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
 import dayjs from "dayjs";
-import { mdiPencilOutline, mdiTrayArrowDown } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -164,8 +159,6 @@ export default defineComponent({
 			privacyPolicy,
 			status,
 			error,
-			mdiPencilOutline,
-			mdiTrayArrowDown,
 			downloadFile,
 			dayjs,
 			closeDialog,

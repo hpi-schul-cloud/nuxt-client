@@ -5,7 +5,7 @@
 		</h4>
 		<template slot="content">
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" :icon="mdiAlert">
+				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="replace-alert-text">
 						{{
 							t(
@@ -39,9 +39,8 @@
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
 							data-testid="warning-icon"
+							>$mdiAlert</v-icon
 						>
-							{{ mdiAlert }}
-						</v-icon>
 					</template>
 				</v-file-input>
 				<v-card-actions>
@@ -65,7 +64,7 @@
 							@click.prevent="submit"
 							data-testid="submit-button"
 						>
-							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
+							<v-icon dense class="mr-1">$mdiFileReplaceOutline</v-icon>
 							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
 						</v-btn>
 					</div>
@@ -84,7 +83,6 @@ import {
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
@@ -173,8 +171,6 @@ export default defineComponent({
 			t,
 			file,
 			rules,
-			mdiFileReplaceOutline,
-			mdiAlert,
 			cancel,
 			submit,
 			onBlur,
