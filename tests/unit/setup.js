@@ -53,8 +53,10 @@ const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
 	);
 
-mountBaseComponents(globalComponentFiles, (fileName) =>
-	require(path.join(baseComponentDir, fileName))
+mountBaseComponents(
+	globalComponentFiles,
+	(fileName) => require(path.join(baseComponentDir, fileName)),
+	Vue
 );
 
 // ===
