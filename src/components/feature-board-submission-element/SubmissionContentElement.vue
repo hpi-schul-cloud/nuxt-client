@@ -21,6 +21,8 @@
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
 				:dueDate="element.content.dueDate"
+				:loading="loading"
+				:submissionItems="submissionItems"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
