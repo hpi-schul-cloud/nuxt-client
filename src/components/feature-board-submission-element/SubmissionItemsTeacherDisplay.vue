@@ -49,12 +49,6 @@ import { defineComponent, PropType, computed } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import {
-	VExpansionPanels,
-	VExpansionPanel,
-	VExpansionPanelContent,
-	VExpansionPanelHeader,
-} from "vuetify/lib";
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
@@ -67,12 +61,6 @@ export default defineComponent({
 			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
-	},
-	components: {
-		VExpansionPanels,
-		VExpansionPanel,
-		VExpansionPanelHeader,
-		VExpansionPanelContent,
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
