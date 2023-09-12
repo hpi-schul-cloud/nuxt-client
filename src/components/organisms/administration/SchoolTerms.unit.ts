@@ -10,6 +10,7 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
+	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import Vue from "vue";
@@ -75,7 +76,7 @@ describe("SchoolTerms", () => {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				schoolsModule,
+				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			},
 		});
 

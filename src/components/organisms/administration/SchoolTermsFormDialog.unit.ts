@@ -10,6 +10,7 @@ import Vue from "vue";
 import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
@@ -57,7 +58,7 @@ describe("SchoolPolicyFormDialog", () => {
 					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
-					schoolsModule,
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
 				propsData: mockProps,
 			}

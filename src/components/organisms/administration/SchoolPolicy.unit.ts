@@ -11,6 +11,7 @@ import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import Vue from "vue";
 import { i18nMock } from "@@/tests/test-utils";
@@ -75,7 +76,7 @@ describe("SchoolPolicy", () => {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				schoolsModule,
+				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			},
 		});
 

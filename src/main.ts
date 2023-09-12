@@ -70,6 +70,7 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "./utils/inject";
 
 Vue.config.productionTip = false;
@@ -161,7 +162,7 @@ Vue.use(VueDOMPurifyHTML, {
 			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
 			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-			schoolsModule,
+			[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,

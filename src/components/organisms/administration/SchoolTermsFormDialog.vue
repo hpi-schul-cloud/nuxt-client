@@ -75,11 +75,11 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
-import SchoolsModule from "@/store/schools";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
@@ -105,12 +105,7 @@ export default defineComponent({
 		const { t } = useI18n();
 		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-
-		if (!schoolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const termsForm: Ref = ref(null);
 		const isFormValid: Ref<boolean> = ref(false);

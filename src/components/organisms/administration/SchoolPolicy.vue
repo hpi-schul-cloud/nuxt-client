@@ -97,16 +97,7 @@
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
 import dayjs from "dayjs";
 import { mdiPencilOutline, mdiTrayArrowDown } from "@mdi/js";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	ref,
-	Ref,
-	watch,
-} from "vue";
-import SchoolsModule from "@/store/schools";
+import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
@@ -115,6 +106,7 @@ import {
 	AUTH_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 
 export default defineComponent({
@@ -126,12 +118,7 @@ export default defineComponent({
 		const { t } = useI18n();
 		const authModule = injectStrict(AUTH_MODULE_KEY);
 		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-
-		if (!schoolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
 

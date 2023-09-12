@@ -11,6 +11,7 @@ import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 
@@ -57,7 +58,7 @@ describe("SchoolPolicyFormDialog", () => {
 					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
-					schoolsModule,
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
 				propsData: mockProps,
 			}

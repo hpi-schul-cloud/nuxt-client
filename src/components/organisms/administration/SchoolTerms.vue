@@ -93,16 +93,7 @@
 import SchoolTermsFormDialog from "@/components/organisms/administration/SchoolTermsFormDialog.vue";
 import dayjs from "dayjs";
 import { mdiPencilOutline, mdiTrayArrowDown } from "@mdi/js";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	ref,
-	Ref,
-	watch,
-} from "vue";
-import SchoolsModule from "@/store/schools";
+import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
@@ -111,6 +102,7 @@ import {
 	injectStrict,
 	AUTH_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 
 export default defineComponent({
@@ -122,12 +114,7 @@ export default defineComponent({
 		const { t } = useI18n();
 		const authModule = injectStrict(AUTH_MODULE_KEY);
 		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-
-		if (!schoolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 
