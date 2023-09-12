@@ -53,7 +53,7 @@ import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { defineComponent, ref, computed, toRef, PropType } from "vue";
+import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 
