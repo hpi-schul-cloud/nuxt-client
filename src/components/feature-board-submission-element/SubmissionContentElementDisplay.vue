@@ -41,6 +41,7 @@
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
 			:submissionItems="submissionItems"
+			:editable="editable"
 			:loading="loading"
 		/>
 	</div>
@@ -71,6 +72,10 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		editable: {
+			type: Boolean,
+			required: true,
+		},
 		dueDate: {
 			type: String,
 			required: true,
@@ -93,16 +98,9 @@ export default defineComponent({
 			emit("update:completed", completed);
 		};
 
-		const editable = computed(() => {
-			const dueDate = toRef(props, "dueDate").value;
-			const today = dayjs();
-			return today.isBefore(dueDate);
-		});
-
 		return {
 			isStudent,
 			isTeacher,
-			editable,
 			dayjs,
 			updateCompleted,
 			mdiLightbulbOnOutline,

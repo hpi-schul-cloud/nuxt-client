@@ -1,9 +1,13 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
+import dayjs from "dayjs";
 
-export const useSubmissionContentElementState = (id: string) => {
+export const useSubmissionContentElementState = (
+	id: string,
+	dueDate: string
+) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
 		fetchSubmissionItemsCall,
@@ -46,6 +50,11 @@ export const useSubmissionContentElementState = (id: string) => {
 		}
 	};
 
+	const editable = computed(() => {
+		const today = dayjs();
+		return today.isBefore(dueDate);
+	});
+
 	onMounted(() => {
 		fetchSubmissionItems(id);
 	});
@@ -55,5 +64,6 @@ export const useSubmissionContentElementState = (id: string) => {
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,
+		editable,
 	};
 };

@@ -42,6 +42,7 @@
 		</div>
 		<SubmissionItemsTeacherDisplay
 			:submissionItems="submissionItems"
+			:editable="editable"
 			:loading="loading"
 		/>
 	</div>
@@ -65,6 +66,10 @@ export default defineComponent({
 		},
 		submissionItems: {
 			type: Array as PropType<SubmissionItemResponse[]>,
+			required: true,
+		},
+		editable: {
+			type: Boolean,
 			required: true,
 		},
 		loading: {

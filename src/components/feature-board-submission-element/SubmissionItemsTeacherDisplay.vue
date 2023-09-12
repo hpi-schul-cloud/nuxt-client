@@ -73,6 +73,10 @@ export default defineComponent({
 			type: Array as PropType<SubmissionItemResponse[]>,
 			required: true,
 		},
+		editable: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);

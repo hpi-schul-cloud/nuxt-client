@@ -16,6 +16,7 @@
 				:dueDate="element.content.dueDate"
 				:loading="loading"
 				:submissionItems="submissionItems"
+				:editable="editable"
 				@update:completed="updateCompleted"
 			/>
 			<SubmissionContentElementEdit
@@ -23,6 +24,7 @@
 				:dueDate="element.content.dueDate"
 				:loading="loading"
 				:submissionItems="submissionItems"
+				:editable="editable"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -35,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -71,8 +73,11 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissionItems, updateSubmissionItem } =
-			useSubmissionContentElementState(element.value.id);
+		const { loading, submissionItems, editable, updateSubmissionItem } =
+			useSubmissionContentElementState(
+				element.value.id,
+				element.value.content.dueDate
+			);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -110,6 +115,7 @@ export default defineComponent({
 			submissionContentElement,
 			submissionItems,
 			loading,
+			editable,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
