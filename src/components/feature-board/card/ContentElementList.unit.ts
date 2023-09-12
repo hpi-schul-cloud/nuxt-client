@@ -7,6 +7,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
+import { SubmissionContentElement } from "@feature-board-submission-element-do";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { createMock } from "@golevelup/ts-jest";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
@@ -55,6 +56,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.File,
 				component: FileContentElement,
+			},
+			{
+				elementType: ContentElementType.SubmissionContainer,
+				component: SubmissionContentElement,
 			},
 			{
 				elementType: ContentElementType.SubmissionContainer,

@@ -1,6 +1,11 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
+import {
+	mdiFormatText,
+	mdiCheckboxMarkedCircleOutline,
+	mdiTrayArrowUp,
+	mdiClipboardOutline,
+} from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -39,9 +44,16 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
 		options.push({
-			icon: mdiLightbulbOnOutline,
-			label:
-				"components.elementTypeSelection.elements.submissionElement.subtitle",
+			icon: mdiCheckboxMarkedCircleOutline,
+			label: "To-do",
+			action: () => onElementClick(ContentElementType.SubmissionContainer),
+			testId: "create-element-submission-container",
+		});
+	}
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+		options.push({
+			icon: mdiClipboardOutline,
+			label: "Abgabe",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
 		});
