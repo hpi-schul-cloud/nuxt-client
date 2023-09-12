@@ -20,6 +20,10 @@
 							$t("components.cardElement.submissionElement.completed")
 						}}</v-chip
 					>
+					<v-chip v-if="missed" class="grey lighten-3 mr-2" disabled small
+						>{{ missed }}
+						{{ $t("components.cardElement.submissionElement.missed") }}</v-chip
+					>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
 					<v-data-table
@@ -29,25 +33,20 @@
 						:hide-default-footer="true"
 						:multi-sort="true"
 					>
-						<template #[`item.completed`]="{ item }">
-							<v-chip
-								v-if="item.completed"
-								class="grey lighten-3"
-								disabled
-								small
-								>{{
-									$t("components.cardElement.submissionElement.completed")
-								}}</v-chip
-							>
-							<v-chip
-								v-if="!item.completed"
-								class="grey lighten-3"
-								disabled
-								small
-								>{{
-									$t("components.cardElement.submissionElement.open")
-								}}</v-chip
-							>
+						<template #[`item.status`]="{ item }">
+							<v-chip class="grey lighten-3" disabled small>
+								<span v-if="item.status === 'open'"
+									>{{ $t("components.cardElement.submissionElement.open") }}
+								</span>
+								<span v-if="item.status === 'completed'"
+									>{{
+										$t("components.cardElement.submissionElement.completed")
+									}}
+								</span>
+								<span v-if="item.status === 'missed'"
+									>{{ $t("components.cardElement.submissionElement.missed") }}
+								</span>
+							</v-chip>
 						</template>
 					</v-data-table>
 				</VExpansionPanelContent>
@@ -61,6 +60,13 @@ import { defineComponent, PropType, computed } from "vue";
 import { SubmissionItemResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+
+type Status = "completed" | "open" | "missed";
+type SubmissionInfo = {
+	status: Status;
+	firstName: string;
+	lastName: string;
+};
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
@@ -83,37 +89,53 @@ export default defineComponent({
 		const headers: DataTableHeader[] = [
 			{
 				text: i18n.t("common.labels.status").toString(),
-				value: "completed",
+				value: "status",
 			},
 			{
 				text: i18n.t("common.labels.lastName").toString(),
-				value: "lastname",
+				value: "lastName",
 			},
 			{
 				text: i18n.t("common.labels.firstName").toString(),
-				value: "firstname",
+				value: "firstName",
 			},
 		];
 
-		const items = computed(() => {
+		const items = computed<Array<SubmissionInfo>>(() => {
 			return props.submissionItems.map((item) => {
-				return {
-					completed: item.completed,
-					firstname: item.userData.firstName,
-					lastname: item.userData.lastName,
+				const submissionInfo: Partial<SubmissionInfo> = {
+					firstName: item.userData.firstName,
+					lastName: item.userData.lastName,
 				};
+				if (item.completed) {
+					submissionInfo.status = "completed";
+				}
+				if (!item.completed && props.editable) {
+					submissionInfo.status = "open";
+				}
+				if (!item.completed && !props.editable) {
+					submissionInfo.status = "missed";
+				}
+
+				return submissionInfo as SubmissionInfo;
 			});
 		});
 
-		const open = computed(() => {
-			return props.submissionItems.filter((item) => {
-				return !item.completed;
+		const open = computed<number>(() => {
+			return items.value.filter((item) => {
+				return item.status === "open";
 			}).length;
 		});
 
-		const completed = computed(() => {
-			return props.submissionItems.filter((item) => {
-				return item.completed;
+		const completed = computed<number>(() => {
+			return items.value.filter((item) => {
+				return item.status === "completed";
+			}).length;
+		});
+
+		const missed = computed<number>(() => {
+			return items.value.filter((item) => {
+				return item.status === "missed";
 			}).length;
 		});
 
@@ -122,6 +144,7 @@ export default defineComponent({
 			items,
 			open,
 			completed,
+			missed,
 		};
 	},
 });
