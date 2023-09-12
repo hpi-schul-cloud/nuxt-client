@@ -23,7 +23,7 @@
 			/>
 			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
 				<v-list-item-icon>
-					<v-icon>{{ pdfIcon }}</v-icon>
+					<v-icon>{{ "$file_pdf_outline" }}</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
 					<v-list-item-title class="text-body-1 black--text mb-2">
@@ -163,7 +163,6 @@ export default defineComponent({
 		const error: ComputedRef<BusinessError> = computed(
 			() => privacyPolicyModule.getBusinessError
 		);
-		const pdfIcon = "$file_pdf_outline";
 
 		const downloadFile = () => {
 			const link = document.createElement("a");
@@ -187,7 +186,6 @@ export default defineComponent({
 			error,
 			mdiPencilOutline,
 			mdiTrayArrowDown,
-			pdfIcon,
 			downloadFile,
 			dayjs,
 			closeDialog,
