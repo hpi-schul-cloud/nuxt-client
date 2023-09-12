@@ -4,7 +4,7 @@
 		<AlternativeText
 			v-if="isEditMode && fileProperties.previewUrl"
 			:element="fileProperties.element"
-		></AlternativeText>
+		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
