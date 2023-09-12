@@ -11,10 +11,14 @@
 			<VExpansionPanel>
 				<VExpansionPanelHeader class="pl-4 pr-4">
 					<v-chip v-if="open" class="grey lighten-3 mr-2" disabled small
-						>{{ open }} offen</v-chip
+						>{{ open }}
+						{{ $t("components.cardElement.submissionElement.open") }}</v-chip
 					>
-					<v-chip v-if="done" class="grey lighten-3 mr-2" disabled small
-						>{{ done }} erledigt</v-chip
+					<v-chip v-if="completed" class="grey lighten-3 mr-2" disabled small
+						>{{ completed }}
+						{{
+							$t("components.cardElement.submissionElement.completed")
+						}}</v-chip
 					>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
@@ -31,10 +35,18 @@
 								class="grey lighten-3"
 								disabled
 								small
-								>erledigt</v-chip
+								>{{
+									$t("components.cardElement.submissionElement.completed")
+								}}</v-chip
 							>
-							<v-chip v-else class="grey lighten-3" disabled small
-								>offen</v-chip
+							<v-chip
+								v-if="!item.completed"
+								class="grey lighten-3"
+								disabled
+								small
+								>{{
+									$t("components.cardElement.submissionElement.open")
+								}}</v-chip
 							>
 						</template>
 					</v-data-table>
@@ -95,7 +107,7 @@ export default defineComponent({
 			}).length;
 		});
 
-		const done = computed(() => {
+		const completed = computed(() => {
 			return props.submissionItems.filter((item) => {
 				return item.completed;
 			}).length;
@@ -105,7 +117,7 @@ export default defineComponent({
 			headers,
 			items,
 			open,
-			done,
+			completed,
 		};
 	},
 });
