@@ -102,13 +102,16 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
-import TermsOfUseModule from "@/store/terms-of-use";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 import { useI18n } from "@/composables/i18n.composable";
+import {
+	injectStrict,
+	AUTH_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+} from "@/utils/inject";
 
 export default defineComponent({
 	name: "SchoolTerms",
@@ -116,17 +119,15 @@ export default defineComponent({
 		SchoolTermsFormDialog,
 	},
 	setup() {
-		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
+		const { t } = useI18n();
+		const authModule = injectStrict(AUTH_MODULE_KEY);
+		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
-		const termsOfUseModule: TermsOfUseModule | undefined =
-			inject<TermsOfUseModule>("termsOfUseModule");
 
-		if (!authModule || !schoolsModule || !termsOfUseModule) {
+		if (!schoolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
-
-		const { t } = useI18n();
 
 		const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 

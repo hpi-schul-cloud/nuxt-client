@@ -77,8 +77,11 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import SchoolsModule from "@/store/schools";
-import TermsOfUseModule from "@/store/terms-of-use";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+} from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
@@ -99,17 +102,15 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
+		const { t } = useI18n();
+		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
-		const termsOfUseModule: TermsOfUseModule | undefined =
-			inject<TermsOfUseModule>("termsOfUseModule");
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-		if (!notifierModule || !schoolsModule || !termsOfUseModule) {
+		if (!schoolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
-
-		const { t } = useI18n();
 
 		const termsForm: Ref = ref(null);
 		const isFormValid: Ref<boolean> = ref(false);

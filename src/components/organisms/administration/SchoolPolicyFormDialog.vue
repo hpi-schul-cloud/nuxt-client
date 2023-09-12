@@ -79,8 +79,11 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
 import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+} from "@/utils/inject";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
@@ -101,17 +104,15 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
+		const { t } = useI18n();
+		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule: SchoolsModule | undefined =
 			inject<SchoolsModule>("schoolsModule");
-		const privacyPolicyModule: PrivacyPolicyModule | undefined =
-			inject<PrivacyPolicyModule>("privacyPolicyModule");
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-		if (!notifierModule || !schoolsModule || !privacyPolicyModule) {
+		if (!schoolsModule) {
 			throw new Error("Injection of dependencies failed");
 		}
-
-		const { t } = useI18n();
 
 		const policyForm: Ref = ref(null);
 		const isValid: Ref<boolean> = ref(false);

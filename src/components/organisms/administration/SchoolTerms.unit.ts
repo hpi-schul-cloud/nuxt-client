@@ -7,8 +7,13 @@ import { shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	I18N_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+} from "@/utils/inject";
 import Vue from "vue";
+import { i18nMock } from "@@/tests/test-utils";
 
 describe("SchoolTerms", () => {
 	let authModule: jest.Mocked<AuthModule>;
@@ -67,10 +72,10 @@ describe("SchoolTerms", () => {
 				i18n: true,
 			}),
 			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				authModule,
+				[I18N_KEY.valueOf()]: i18nMock,
+				[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				schoolsModule,
-				termsOfUseModule,
 			},
 		});
 
