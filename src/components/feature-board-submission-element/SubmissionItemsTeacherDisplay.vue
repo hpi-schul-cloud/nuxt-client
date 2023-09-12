@@ -9,7 +9,10 @@
 		/>
 		<VExpansionPanels v-else>
 			<VExpansionPanel>
-				<VExpansionPanelHeader> Click & see more </VExpansionPanelHeader>
+				<VExpansionPanelHeader class="pl-4 pr-4">
+					<v-chip class="grey lighten-3 mr-2" disabled small>1 offen</v-chip>
+					<v-chip class="grey lighten-3 mr-2" disabled small>2 erledigt</v-chip>
+				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
 					<v-data-table
 						:headers="headers"
@@ -19,8 +22,16 @@
 						:multi-sort="true"
 					>
 						<template #[`item.completed`]="{ item }">
-							<v-chip v-if="item.completed">erledigt</v-chip>
-							<v-chip v-else>offen</v-chip>
+							<v-chip
+								v-if="item.completed"
+								class="grey lighten-3"
+								disabled
+								small
+								>erledigt</v-chip
+							>
+							<v-chip v-else class="grey lighten-3" disabled small
+								>offen</v-chip
+							>
 						</template>
 					</v-data-table>
 				</VExpansionPanelContent>
@@ -93,6 +104,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+.v-chip {
+	opacity: 1;
+	flex: none;
+}
+
 ::v-deep {
 	.v-expansion-panel-content__wrap {
 		padding: 0;
