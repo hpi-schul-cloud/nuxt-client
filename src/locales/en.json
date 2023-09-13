@@ -783,7 +783,7 @@
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
-	"components.cardElement.fileElement.altDescription": "Please describe the picture to enable barrier-free viewing.",
+	"components.cardElement.fileElement.altDescription": "Please describe the picture to enable accessible viewing.",
 	"components.cardElement.fileElement.emptyAlt": "Here is an image with the following name",
 	"components.cardElement.fileElement.virusDetected": "File has been locked due to a suspected virus.",
 	"components.cardElement.fileElement.awaitingScan": "Preview is displayed after a successful virus scan. The file is currently being scanned.",
