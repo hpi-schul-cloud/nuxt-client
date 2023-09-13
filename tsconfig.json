@@ -47,5 +47,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules", "./src/components/base/_globals.js"]
+	"exclude": ["node_modules", "./src/components/base/components.js"]
 }

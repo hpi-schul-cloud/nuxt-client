@@ -69,12 +69,12 @@ import {
 export const app = createApp(App);
 
 // VUE3_UPGRADE -- Mounting Base Components - remove later
-import { mountLegacyComponents } from "@/components/base/components";
-mountLegacyComponents(app);
+import { mountBaseComponents } from "@/components/base/components";
+mountBaseComponents(app);
 
 // VUE3_UPGRADE -- Mounting Base Directives - remove later
-import { mountLegacyDirectives } from "@/plugins/directives";
-mountLegacyDirectives(app);
+import { mountDirectives } from "@/plugins/directives";
+mountDirectives(app);
 
 // app.config.productionTip = false;
 

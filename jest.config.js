@@ -35,7 +35,7 @@ module.exports = {
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
 		// Exclude
-		"!<rootDir>/src/components/base/_globals.js",
+		"!<rootDir>/src/components/base/components.js",
 		"!<rootDir>/src/components/icons/**/*",
 		"!<rootDir>/src/pages/ActivationCode.page.vue",
 		"!<rootDir>/src/pages/Imprint.page.vue",

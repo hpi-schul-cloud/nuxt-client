@@ -1,6 +1,6 @@
 // VUE3_UPGRADE - remove this when legacy directives are obsolete
 
-export const mountLegacyDirectives = (app) => {
+export const mountDirectives = (app) => {
 	app.directive("focus-on-mount", {
 		inserted: function (el, binding) {
 			if (binding.value) el.focus();

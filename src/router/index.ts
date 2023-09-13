@@ -1,10 +1,10 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "./routes";
 import { legacyCompatibilityGuard } from "@/router/guards/legacy-route-compatibility.guard";
 import { isAuthenticatedGuard } from "@/router/guards/is-authenticated.guard";
 
 const router = createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory("/"),
 	linkActiveClass: "nuxt-link-active",
 	linkExactActiveClass: "nuxt-link-exact-active",
 	routes,

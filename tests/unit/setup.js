@@ -1,17 +1,16 @@
-// import Vue from "vue";
-// VUE3_MIGRATION
+// VUE3_UPGRADE
 import { app } from "@/main";
 import VueI18n from "vue-i18n";
 import Vuelidate from "@vuelidate/core";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
-import fs from "fs";
-import path from "path";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
-import { mountBaseComponents } from "@/components/base/_globals";
+import { mountBaseComponents } from "@/components/base/components";
 import { setupI18n } from "@/plugins/i18n-test.js";
-import "@/plugins/directives";
+// VUE3_UPGRADE
+// import "@/plugins/directives";
+import { mountDirectives } from "@/plugins/directives";
 import globalStubs from "./stubs.js";
 import { htmlConfig } from "@feature-render-html";
 
@@ -20,11 +19,11 @@ import { htmlConfig } from "@feature-render-html";
 // for tests.
 app.config.productionTip = false;
 
+mountDirectives(app);
 // ===
 // Register global components
 // ===
 
-const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 app.use(Vuelidate);
 app.use(Vuex);
 
@@ -32,32 +31,7 @@ app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
-function readDirRecursiveSync(dir) {
-	const results = [];
-	const list = fs.readdirSync(dir);
-	list.forEach((file) => {
-		const filepath = path.join(dir, file);
-		const stat = fs.statSync(filepath);
-		if (stat && stat.isDirectory()) {
-			results.push(...readDirRecursiveSync(filepath));
-		} else {
-			results.push(filepath);
-		}
-	});
-	return results;
-}
-
-const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
-	// Only include "Base" prefixed .vue files
-	.filter((fileName) => /Base[A-Z][\w]+\.vue$/.test(fileName))
-	.map(
-		(fileName) =>
-			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
-	);
-
-mountBaseComponents(globalComponentFiles, (fileName) =>
-	require(path.join(baseComponentDir, fileName))
-);
+mountBaseComponents(app);
 
 // ===
 // Mock window properties not handled by jsdom
