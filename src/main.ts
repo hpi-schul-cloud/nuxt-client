@@ -38,7 +38,7 @@ import themeConfig from "@/theme.config";
 // NUXT_REMOVAL try to solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import VueMq from "vue-mq";
+import { Vue3Mq } from "vue3-mq";
 import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 // NUXT_REMOVAL change how global components are handled
@@ -68,9 +68,13 @@ import {
 
 export const app = createApp(App);
 
-// VUE3_MIGRATION -- Mounting Base Components
-import "@/components/base/_globals";
-import "@/plugins/directives";
+// VUE3_UPGRADE -- Mounting Base Components - remove later
+import { mountLegacyComponents } from "@/components/base/components";
+mountLegacyComponents(app);
+
+// VUE3_UPGRADE -- Mounting Base Directives - remove later
+import { mountLegacyDirectives } from "@/plugins/directives";
+mountLegacyDirectives(app);
 
 // app.config.productionTip = false;
 
@@ -79,10 +83,7 @@ app.config.errorHandler = handleApplicationError;
 app.config.globalProperties.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import VueMq from "vue-mq";
-app.use(VueMq, {
+app.use(Vue3Mq, {
 	breakpoints: {
 		mobile: 750,
 		tabletPortrait: 770,
