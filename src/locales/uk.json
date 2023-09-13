@@ -311,7 +311,7 @@
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
-	"components.cardElement.fileElement.altDescription": "Опишіть цю картинку для людей з вадами зору.",
+	"components.cardElement.fileElement.altDescription": "Будь ласка, опишіть зображення, щоб забезпечити безперешкодний перегляд.",
 	"components.cardElement.fileElement.emptyAlt": "Ось зображення з такою назвою",
 	"components.cardElement.fileElement.virusDetected": "Файл було заблоковано через підозру на вірус.",
 	"components.cardElement.fileElement.awaitingScan": "Попередній перегляд відображається після успішної перевірки на віруси. Наразі відбувається перевірка файлу.",
