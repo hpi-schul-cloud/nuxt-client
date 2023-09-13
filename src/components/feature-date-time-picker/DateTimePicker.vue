@@ -33,6 +33,7 @@ import { useVModel } from "@vueuse/core";
 import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, ref } from "vue";
+import dayjs from "dayjs";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -71,8 +72,11 @@ export default defineComponent({
 			});
 		};
 
-		const date = useVModel(props, "dateTime");
-		const time = ref(getTime(date.value));
+		const dateTime = useVModel(props, "dateTime");
+		const date = ref(
+			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
+		);
+		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
 		const dateError = ref(false);
 		const timeError = ref(false);
 		const dateIsToday = ref(isToday(date.value));

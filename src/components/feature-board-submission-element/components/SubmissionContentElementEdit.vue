@@ -16,6 +16,7 @@
 			:dateTime="dueDate"
 			:date-input-label="t('common.labels.date')"
 			:time-input-label="t('common.labels.time')"
+			@input="onDateTimeInput"
 		/>
 	</div>
 </template>
@@ -42,7 +43,12 @@ export default defineComponent({
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: ["delete:element", "move-down:element", "move-up:element"],
+	emits: [
+		"delete:element",
+		"move-down:element",
+		"move-up:element",
+		"update:dueDate",
+	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
@@ -58,11 +64,16 @@ export default defineComponent({
 			emit("delete:element");
 		};
 
+		const onDateTimeInput = (dateTime: string) => {
+			emit("update:dueDate", dateTime);
+		};
+
 		return {
 			t,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,
+			onDateTimeInput,
 		};
 	},
 });

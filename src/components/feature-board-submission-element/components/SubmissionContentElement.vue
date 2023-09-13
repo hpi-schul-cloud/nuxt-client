@@ -13,17 +13,18 @@
 		<div>
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
-				:dueDate="element.content.dueDate"
+				:dueDate="modelValue.dueDate"
 				:completed="completed"
 				:loading="loading"
 				@update:completed="updateCompletionState"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
-				:dueDate="element.content.dueDate"
+				:dueDate="modelValue.dueDate"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
+				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 				@move-down:element="onMoveSubmissionEditDown"
 				@move-up:element="onMoveSubmissionEditUp"
 				@delete:element="onDeleteElement"
@@ -33,14 +34,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -65,7 +66,7 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
@@ -73,6 +74,8 @@ export default defineComponent({
 			useSubmissionContentElementState(element.value.id);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+		const { modelValue } = useContentElementState(props);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -91,7 +94,7 @@ export default defineComponent({
 
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
-				i18n.t("components.cardElement.submissionElement").toString(),
+				t("components.cardElement.submissionElement").toString(),
 				"boardElement"
 			);
 
@@ -105,6 +108,7 @@ export default defineComponent({
 		};
 
 		return {
+			modelValue,
 			submissionContentElement,
 			completed,
 			loading,
