@@ -4,7 +4,7 @@ import {
 	mdiFormatText,
 	mdiCheckboxMarkedCircleOutline,
 	mdiTrayArrowUp,
-	mdiClipboardOutline,
+	mdiClipboardClockOutline,
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
@@ -52,8 +52,9 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	}
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
 		options.push({
-			icon: mdiClipboardOutline,
-			label: "Abgabe",
+			icon: mdiClipboardClockOutline,
+			label:
+				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
 		});

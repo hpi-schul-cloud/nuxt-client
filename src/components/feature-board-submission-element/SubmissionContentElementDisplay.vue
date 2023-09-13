@@ -11,7 +11,7 @@
 						class="grey--text text--darken-2"
 						data-testid="board-submission-element-display-icon"
 						medium
-						>{{ mdiClipboardOutline }}</v-icon
+						>{{ mdiClipboardClockOutline }}</v-icon
 					>
 				</v-list-item-icon>
 
@@ -45,7 +45,7 @@
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiClipboardOutline } from "@mdi/js";
+import { mdiClipboardClockOutline } from "@mdi/js";
 import { defineComponent, ref, computed, toRef } from "vue";
 import dayjs from "dayjs";
 
@@ -92,7 +92,7 @@ export default defineComponent({
 			editable,
 			dayjs,
 			updateCompleted,
-			mdiClipboardOutline,
+			mdiClipboardClockOutline,
 		};
 	},
 });
