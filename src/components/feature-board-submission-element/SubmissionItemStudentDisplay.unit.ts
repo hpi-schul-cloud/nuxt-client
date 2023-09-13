@@ -10,11 +10,15 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 ];
 
 describe("SubmissionItemStudentDisplay", () => {
-	const setup = (loading = false, submissionItems = mockedSubmissionItems) => {
+	const setup = (
+		loading = false,
+		submissionItems = mockedSubmissionItems,
+		editable = true
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			editable: true,
+			editable: editable,
 			loading: loading,
 			submissionItems: submissionItems,
 		};
@@ -107,6 +111,33 @@ describe("SubmissionItemStudentDisplay", () => {
 					.attributes("aria-checked");
 
 				expect(checked).toBe(mockedSubmissionItems[0].completed.toString());
+			});
+		});
+
+		describe("if submission can be edited", () => {
+			it("should render the checkbox as not disabled", async () => {
+				const loading = false;
+				const { wrapper } = setup(loading);
+
+				const disabled = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.props("disabled");
+
+				expect(disabled).toBe(false);
+			});
+		});
+
+		describe("if submission can't be edited any more", () => {
+			it("should render the checkbox as disabled", async () => {
+				const loading = false;
+				const editable = false;
+				const { wrapper } = setup(loading, mockedSubmissionItems, editable);
+
+				const disabled = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.props("disabled");
+
+				expect(disabled).toBe(true);
 			});
 		});
 	});
