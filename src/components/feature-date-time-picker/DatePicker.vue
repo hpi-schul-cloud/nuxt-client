@@ -6,7 +6,6 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="auto"
-			attach
 			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">

@@ -35,7 +35,10 @@ export default defineComponent({
 
 		const isAllowedTarget = (event: MouseEvent): boolean => {
 			if (!(event.target instanceof HTMLElement)) return true;
-			return !event.target?.className?.includes("v-list-item");
+			return (
+				!event.target?.className?.includes("v-list-item") &&
+				!event.target?.className?.includes("v-btn")
+			);
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
