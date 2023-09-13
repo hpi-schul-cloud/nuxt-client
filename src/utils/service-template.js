@@ -159,6 +159,8 @@ export default function (endpoint) {
 			// The qid must be manually assigned to `params.qid`
 			updatePaginationForQuery(state, { res, qid, query }) {
 				const { limit, skip, total } = res;
+
+				// VUE3_MIGRATION - TODO: because of 'vue.set()' is deprecated find a way to introduce it into the vue instance if it is being used somewhere.
 				Vue.set(state.pagination, qid, {
 					limit: parseInt(limit),
 					skip: parseInt(skip),
