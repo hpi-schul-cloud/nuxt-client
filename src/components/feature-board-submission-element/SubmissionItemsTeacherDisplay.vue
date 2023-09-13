@@ -179,5 +179,10 @@ export default defineComponent({
 		font-size: 0.75rem !important;
 		height: 30px;
 	}
+	.v-data-table-header {
+		span:first-child {
+			display: block;
+		}
+	}
 }
 </style>
