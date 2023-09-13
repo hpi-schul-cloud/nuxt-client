@@ -42,7 +42,6 @@ import VueMq from "vue-mq";
 import { htmlConfig } from "@feature-render-html";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 // NUXT_REMOVAL change how global components are handled
-import "@/plugins/directives";
 import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
@@ -71,6 +70,7 @@ export const app = createApp(App);
 
 // VUE3_MIGRATION -- Mounting Base Components
 import "@/components/base/_globals";
+import "@/plugins/directives";
 
 // app.config.productionTip = false;
 

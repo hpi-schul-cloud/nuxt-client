@@ -1,12 +1,14 @@
-import Vue from "vue";
+// import Vue from "vue";
+// VUE3_MIGRATION
+import { app } from "@/main";
 
-Vue.directive("focus-on-mount", {
+app.directive("focus-on-mount", {
 	inserted: function (el, binding) {
 		if (binding.value) el.focus();
 	},
 });
 
-Vue.directive("outside-click", {
+app.directive("outside-click", {
 	bind: function (el, binding, vnode) {
 		el.clickOutsideEvent = function (event) {
 			// here I check that click was outside the el and his childrens
