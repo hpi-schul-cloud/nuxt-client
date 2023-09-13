@@ -1,4 +1,6 @@
-import Vue from "vue";
+// import Vue from "vue";
+// VUE3_MIGRATION
+import { app } from "@/main";
 import VueI18n from "vue-i18n";
 import Vuelidate from "@vuelidate/core";
 import Vuex from "vuex";
@@ -16,17 +18,17 @@ import { htmlConfig } from "@feature-render-html";
 // Don't warn about not using the production build of Vue, as
 // we care more about the quality of errors than performance
 // for tests.
-Vue.config.productionTip = false;
+app.config.productionTip = false;
 
 // ===
 // Register global components
 // ===
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
-Vue.use(Vuelidate);
-Vue.use(Vuex);
+app.use(Vuelidate);
+app.use(Vuex);
 
-Vue.use(VueDOMPurifyHTML, {
+app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
@@ -53,10 +55,8 @@ const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
 	);
 
-mountBaseComponents(
-	globalComponentFiles,
-	(fileName) => require(path.join(baseComponentDir, fileName)),
-	Vue
+mountBaseComponents(globalComponentFiles, (fileName) =>
+	require(path.join(baseComponentDir, fileName))
 );
 
 // ===
@@ -195,7 +195,7 @@ global.createComponentMocks = ({
 		returnOptions.i18n = setupI18n();
 	}
 
-	Vue.use(Vuetify);
+	app.use(Vuetify);
 	returnOptions.vuetify = new Vuetify();
 
 	localVue.use(Vuelidate);

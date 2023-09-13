@@ -2,13 +2,13 @@
 // will be used very frequently. Components are registered using the
 // PascalCased version of their file name.
 
+import { app } from "@/main";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
 export const mountBaseComponents = (
 	globalComponentFiles,
-	getComponentConfig,
-	app
+	getComponentConfig
 ) => {
 	for (const fileName of globalComponentFiles) {
 		// Get Component Name
@@ -29,7 +29,7 @@ export const mountBaseComponents = (
 	}
 };
 
-const mountWithWebpack = (app) => {
+const mountWithWebpack = () => {
 	// https://webpack.js.org/guides/dependency-management/#require-context
 	const requireComponent = require.context(
 		// Look for files in the current directory
@@ -40,20 +40,12 @@ const mountWithWebpack = (app) => {
 		/Base\w+\.vue$/
 	);
 
-	mountBaseComponents(
-		requireComponent.keys(),
-		(fileName) => requireComponent(fileName),
-		app
+	mountBaseComponents(requireComponent.keys(), (fileName) =>
+		requireComponent(fileName)
 	);
 };
 
-// if (process.env.JEST_WORKER_ID === undefined) {
-// 	// don't use for tests (jest)
-// 	mountWithWebpack();
-// }
-
-// VUE3_MIGRATION -- Mounting Base Components
-export const mountBaseComponentsV3 = (app) => {
-	if (process.env.JEST_WORKER_ID !== undefined) return;
-	mountWithWebpack(app);
-};
+if (process.env.JEST_WORKER_ID === undefined) {
+	// don't use for tests (jest)
+	mountWithWebpack();
+}
