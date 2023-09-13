@@ -10,17 +10,32 @@
 		<VExpansionPanels v-else>
 			<VExpansionPanel>
 				<VExpansionPanelHeader class="pl-4 pr-4">
-					<v-chip v-if="open" class="grey lighten-3 mr-2" disabled small
+					<v-chip
+						ref="v-chip-open"
+						v-if="open"
+						class="grey lighten-3 mr-2"
+						disabled
+						small
 						>{{ open }}
 						{{ $t("components.cardElement.submissionElement.open") }}</v-chip
 					>
-					<v-chip v-if="completed" class="grey lighten-3 mr-2" disabled small
+					<v-chip
+						ref="v-chip-completed"
+						v-if="completed"
+						class="grey lighten-3 mr-2"
+						disabled
+						small
 						>{{ completed }}
 						{{
 							$t("components.cardElement.submissionElement.completed")
 						}}</v-chip
 					>
-					<v-chip v-if="expired" class="grey lighten-3 mr-2" disabled small
+					<v-chip
+						ref="v-chip-expired"
+						v-if="expired"
+						class="grey lighten-3 mr-2"
+						disabled
+						small
 						>{{ expired }}
 						{{ $t("components.cardElement.submissionElement.expired") }}</v-chip
 					>

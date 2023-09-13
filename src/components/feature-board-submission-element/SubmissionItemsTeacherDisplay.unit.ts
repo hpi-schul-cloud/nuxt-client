@@ -13,12 +13,17 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 ];
 
 describe("SubmissionItemsTeacherDisplay", () => {
-	const setup = (loading = false) => {
+	const setup = (
+		loading = false,
+		submissionItems = mockedSubmissionItems,
+		editable = true
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
+			editable: editable,
 			loading: loading,
-			submissionItems: mockedSubmissionItems,
+			submissionItems: submissionItems,
 		};
 
 		const wrapper = shallowMount(
@@ -81,6 +86,150 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				name: "v-expansion-panels",
 			});
 			expect(submissionItems.exists()).toBe(true);
+		});
+	});
+
+	describe("if dueDate has not expired", () => {
+		it("should show no chip with amount of expired items", () => {
+			const loading = false;
+			const { wrapper } = setup(loading);
+
+			const chip = wrapper.findComponent({
+				ref: "v-chip-expired",
+			});
+			expect(chip.exists()).toBe(false);
+		});
+
+		describe("if open submission items exist", () => {
+			it("should show chip with amount of open items", () => {
+				const loading = false;
+				const submissionItems: Array<SubmissionItemResponse> = [
+					submissionItemResponseFactory.build({ completed: false }),
+				];
+				const { wrapper } = setup(loading, submissionItems);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-open",
+				});
+				expect(chip.exists()).toBe(true);
+			});
+		});
+
+		describe("if open submission items do not exist", () => {
+			it("should not show chip with amount of open items", () => {
+				const loading = false;
+				const submissionItems: Array<SubmissionItemResponse> = [];
+				const { wrapper } = setup(loading, submissionItems);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-open",
+				});
+				expect(chip.exists()).toBe(false);
+			});
+		});
+
+		describe("if completed submission items exist", () => {
+			it("should show chip with amount of completed items", () => {
+				const loading = false;
+				const submissionItems: Array<SubmissionItemResponse> = [
+					submissionItemResponseFactory.build({ completed: true }),
+				];
+				const { wrapper } = setup(loading, submissionItems);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-completed",
+				});
+				expect(chip.exists()).toBe(true);
+			});
+		});
+
+		describe("if completed submission items do not exist", () => {
+			it("should not show chip with amount of completed items", () => {
+				const loading = false;
+				const submissionItems: Array<SubmissionItemResponse> = [];
+				const { wrapper } = setup(loading, submissionItems);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-completed",
+				});
+				expect(chip.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("if dueDate has expired", () => {
+		it("should show no chip with amount of open items", () => {
+			const loading = false;
+			const editable = false;
+			const submissionItems: Array<SubmissionItemResponse> = [
+				submissionItemResponseFactory.build({ completed: false }),
+			];
+			const { wrapper } = setup(loading, submissionItems, editable);
+
+			const chip = wrapper.findComponent({
+				ref: "v-chip-open",
+			});
+			expect(chip.exists()).toBe(false);
+		});
+
+		describe("if expired submission items exist", () => {
+			it("should show chip with amount of expired items", () => {
+				const loading = false;
+				const editable = false;
+				const submissionItems: Array<SubmissionItemResponse> = [
+					submissionItemResponseFactory.build({ completed: false }),
+				];
+				const { wrapper } = setup(loading, submissionItems, editable);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-expired",
+				});
+				expect(chip.exists()).toBe(true);
+			});
+		});
+
+		describe("if expired submission items do not exist", () => {
+			it("should not show chip with amount of expired items", () => {
+				const loading = false;
+				const editable = false;
+				const submissionItems: Array<SubmissionItemResponse> = [];
+				const { wrapper } = setup(loading, submissionItems, editable);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-expired",
+				});
+				expect(chip.exists()).toBe(false);
+			});
+		});
+
+		describe("if completed submission items exist", () => {
+			it("should show chip with amount of completed items", () => {
+				const loading = false;
+				const editable = false;
+				const submissionItems: Array<SubmissionItemResponse> = [
+					submissionItemResponseFactory.build({ completed: true }),
+				];
+				const { wrapper } = setup(loading, submissionItems, editable);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-completed",
+				});
+				expect(chip.exists()).toBe(true);
+			});
+		});
+
+		describe("if completed submission items do not exist", () => {
+			it("should not show chip with amount of completed items", () => {
+				const loading = false;
+				const editable = false;
+				const submissionItems: Array<SubmissionItemResponse> = [];
+				const { wrapper } = setup(loading, submissionItems, editable);
+
+				const chip = wrapper.findComponent({
+					ref: "v-chip-completed",
+				});
+				expect(chip.exists()).toBe(false);
+			});
 		});
 	});
 });
