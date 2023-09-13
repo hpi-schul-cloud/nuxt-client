@@ -89,6 +89,7 @@ export const useCardState = (
 
 	const addElement = async (
 		type: ContentElementType,
+		submissionType?: string,
 		atFirstPosition?: boolean
 	) => {
 		if (cardState.card === undefined) return;
@@ -99,6 +100,10 @@ export const useCardState = (
 				params.toPosition = 0;
 			}
 			const response = await createElementCall(cardState.card.id, params);
+
+			if (submissionType === "todo") {
+				response.data.type = ContentElementType.Todo;
+			}
 
 			if (atFirstPosition) {
 				cardState.card.elements.splice(0, 0, response.data);
@@ -116,7 +121,7 @@ export const useCardState = (
 	};
 
 	const addTextAfterTitle = async () => {
-		return await addElement(ContentElementType.RichText, true);
+		return await addElement(ContentElementType.RichText, undefined, true);
 	};
 
 	const moveElementDown = async (elementPayload: ElementMove) => {

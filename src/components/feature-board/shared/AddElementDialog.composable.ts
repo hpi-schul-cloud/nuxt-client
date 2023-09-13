@@ -11,7 +11,8 @@ import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.comp
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 type AddCardElement = (
-	type: ContentElementType
+	type: ContentElementType,
+	submissionType?: string
 ) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
@@ -21,9 +22,12 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const onElementClick = async (elementType: ContentElementType) => {
+	const onElementClick = async (
+		elementType: ContentElementType,
+		submissionType = "submission"
+	) => {
 		closeDialog();
-		const elementData = await addElementFunction(elementType);
+		const elementData = await addElementFunction(elementType, submissionType);
 		lastCreatedElementId.value = elementData?.id;
 	};
 
@@ -46,7 +50,8 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 		options.push({
 			icon: mdiCheckboxMarkedCircleOutline,
 			label: "To-do",
-			action: () => onElementClick(ContentElementType.SubmissionContainer),
+			action: () =>
+				onElementClick(ContentElementType.SubmissionContainer, "todo"),
 			testId: "create-element-submission-container",
 		});
 	}

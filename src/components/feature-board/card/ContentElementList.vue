@@ -34,6 +34,19 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 				@delete:element="onDeleteElement"
 			/>
+			<TodoElement
+				v-else-if="showTodoElement(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
+				:hasMultipleElements="hasMultipleElements"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
+				@delete:element="onDeleteElement"
+			/>
 		</template>
 	</VCardText>
 </template>
@@ -50,6 +63,8 @@ import { ElementMove } from "@/types/board/DragAndDrop";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import TodoElement from "../../feature-board-submission-element/TodoElement.vue";
 import { computed, defineComponent, PropType } from "vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
@@ -59,6 +74,7 @@ export default defineComponent({
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
+		TodoElement,
 	},
 	props: {
 		elements: {
@@ -105,6 +121,13 @@ export default defineComponent({
 			return (
 				envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
 				isSubmissionContainerElementResponse(element)
+			);
+		};
+
+		const showTodoElement = (element: AnyContentElement) => {
+			return (
+				envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+				element.type === ContentElementType.Todo
 			);
 		};
 
@@ -163,6 +186,7 @@ export default defineComponent({
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
 			showSubmissionContainerElement,
+			showTodoElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,
