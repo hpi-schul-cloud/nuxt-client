@@ -46,13 +46,14 @@
 </template>
 
 <script>
-import uidMixin from "@/mixins/uid";
+// VUE_UPGRADE do we need this?
+// import uidMixin from "@/mixins/uid";
 import ModalFooter from "@/components/molecules/ModalFooter";
 export default {
 	components: {
 		ModalFooter,
 	},
-	mixins: [uidMixin],
+	// mixins: [uidMixin],
 	props: {
 		active: {
 			type: Boolean,

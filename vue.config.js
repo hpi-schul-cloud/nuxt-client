@@ -14,6 +14,8 @@ const getDir = (subPath) => path.resolve(__dirname, subPath);
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
+	runtimeCompiler: true,
+
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {

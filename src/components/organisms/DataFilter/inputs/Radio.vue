@@ -15,10 +15,11 @@
 </template>
 
 <script>
-import uid from "@/mixins/uid";
+// VUE_UPGRADE do we need this?
+// import uid from "@/mixins/uid";
 
 export default {
-	mixins: [uid],
+	// mixins: [uid],
 	props: {
 		label: {
 			type: String,

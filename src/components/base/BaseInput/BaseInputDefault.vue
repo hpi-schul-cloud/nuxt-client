@@ -86,7 +86,8 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-import uidMixin from "@/mixins/uid";
+// VUE_UPGRADE do we need this?
+// import uidMixin from "@/mixins/uid";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
 
 export const supportedTypes = [
@@ -103,7 +104,7 @@ export const supportedTypes = [
 ];
 
 export default {
-	mixins: [uidMixin],
+	// mixins: [uidMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
