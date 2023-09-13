@@ -9,7 +9,7 @@
 		/>
 		<VExpansionPanels v-else>
 			<VExpansionPanel>
-				<VExpansionPanelHeader class="pl-4 pr-4">
+				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
 						ref="v-chip-open"
 						v-if="open"
