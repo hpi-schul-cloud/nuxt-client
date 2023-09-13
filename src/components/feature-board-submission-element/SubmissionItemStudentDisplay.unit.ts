@@ -59,8 +59,8 @@ describe("SubmissionItemStudentDisplay", () => {
 			const loading = true;
 			const { wrapper } = setup(loading);
 
-			const skeleton = wrapper.findComponent({ name: "v-checkbox" });
-			expect(skeleton.exists()).toBe(false);
+			const form = wrapper.findComponent({ name: "v-checkbox" });
+			expect(form.exists()).toBe(false);
 		});
 	});
 
@@ -77,8 +77,8 @@ describe("SubmissionItemStudentDisplay", () => {
 			const loading = false;
 			const { wrapper } = setup(loading);
 
-			const skeleton = wrapper.findComponent({ name: "v-checkbox" });
-			expect(skeleton.exists()).toBe(true);
+			const form = wrapper.findComponent({ name: "v-checkbox" });
+			expect(form.exists()).toBe(true);
 		});
 
 		describe("if student has no submissionItem yet", () => {
