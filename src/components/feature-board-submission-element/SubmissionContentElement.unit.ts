@@ -135,6 +135,18 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
+		it("should hand over editable state to SubmissionContentElementDisplay", async () => {
+			const { wrapper } = setup();
+
+			const editable = wrapper
+				.findComponent(SubmissionContentElementDisplay)
+				.props("editable");
+
+			expect(editable).toBe(
+				mockedUseSubmissionContentElementStateResponse.editable
+			);
+		});
+
 		it("should update completed state when it receives 'update:completed' event from child", async () => {
 			const { wrapper } = setup();
 
@@ -222,6 +234,42 @@ describe("SubmissionContentElement", () => {
 				.props("dueDate");
 
 			expect(dueDate).toBe(element.content.dueDate);
+		});
+
+		it("should hand over submissionItems to SubmissionContentElementEdit", async () => {
+			const { wrapper } = setup();
+
+			const completed = wrapper
+				.findComponent(SubmissionContentElementEdit)
+				.props("submissionItems");
+
+			expect(completed).toBe(
+				mockedUseSubmissionContentElementStateResponse.submissionItems
+			);
+		});
+
+		it("should hand over loading state to SubmissionContentElementEdit", async () => {
+			const { wrapper } = setup();
+
+			const loading = wrapper
+				.findComponent(SubmissionContentElementEdit)
+				.props("loading");
+
+			expect(loading).toBe(
+				mockedUseSubmissionContentElementStateResponse.loading
+			);
+		});
+
+		it("should hand over editable state to SubmissionContentElementEdit", async () => {
+			const { wrapper } = setup();
+
+			const editable = wrapper
+				.findComponent(SubmissionContentElementEdit)
+				.props("editable");
+
+			expect(editable).toBe(
+				mockedUseSubmissionContentElementStateResponse.editable
+			);
 		});
 
 		it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
