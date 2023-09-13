@@ -2,13 +2,14 @@
 // will be used very frequently. Components are registered using the
 // PascalCased version of their file name.
 
-import { app } from "@/main";
+// VUE3_MIGRATION
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
 export const mountBaseComponents = (
 	globalComponentFiles,
-	getComponentConfig
+	getComponentConfig,
+	app
 ) => {
 	for (const fileName of globalComponentFiles) {
 		// Get Component Name
@@ -22,14 +23,14 @@ export const mountBaseComponents = (
 			fileName.startsWith(`./${componentName}.vue`) || // standalone component
 			fileName.startsWith(`./${componentName}/`); // or root component of folder
 		// Globally register the component
-		if (isEntrypoint) {
+		if (isEntrypoint && app) {
 			const componentConfig = getComponentConfig(fileName);
 			app.component(componentName, componentConfig.default || componentConfig);
 		}
 	}
 };
 
-const mountWithWebpack = () => {
+const mountWithWebpack = (app) => {
 	// https://webpack.js.org/guides/dependency-management/#require-context
 	const requireComponent = require.context(
 		// Look for files in the current directory
@@ -40,12 +41,20 @@ const mountWithWebpack = () => {
 		/Base\w+\.vue$/
 	);
 
-	mountBaseComponents(requireComponent.keys(), (fileName) =>
-		requireComponent(fileName)
+	mountBaseComponents(
+		requireComponent.keys(),
+		(fileName) => requireComponent(fileName),
+		app
 	);
 };
 
-if (process.env.JEST_WORKER_ID === undefined) {
-	// don't use for tests (jest)
-	mountWithWebpack();
-}
+// if (process.env.JEST_WORKER_ID === undefined) {
+// 	// don't use for tests (jest)
+// 	mountWithWebpack();
+// }
+
+// VUE3_MIGRATION -- Mounting Base Components
+export const mountBaseComponentsV3 = (app) => {
+	if (process.env.JEST_WORKER_ID !== undefined) return;
+	mountWithWebpack(app);
+};

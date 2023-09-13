@@ -68,9 +68,11 @@ import {
 
 export const app = createApp(App);
 
-// VUE3_MIGRATION -- Mounting Base Components
-import "@/components/base/_globals";
-import "@/plugins/directives";
+// VUE3_MIGRATION -- Mounting Base Components And Directives
+import { mountBaseComponentsV3 } from "@/components/base/_globals";
+import { mountDirectives } from "@/plugins/directives";
+mountBaseComponentsV3(app);
+mountDirectives(app);
 
 // app.config.productionTip = false;
 

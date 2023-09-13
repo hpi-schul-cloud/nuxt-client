@@ -1,4 +1,3 @@
-// import Vue from "vue";
 // VUE3_MIGRATION
 import { app } from "@/main";
 import VueI18n from "vue-i18n";
@@ -11,7 +10,9 @@ import VueDOMPurifyHTML from "vue-dompurify-html";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import { mountBaseComponents } from "@/components/base/_globals";
 import { setupI18n } from "@/plugins/i18n-test.js";
-import "@/plugins/directives";
+// VUE3_MIGRATION
+// import "@/plugins/directives";
+import { mountDirectives } from "@/plugins/directives";
 import globalStubs from "./stubs.js";
 import { htmlConfig } from "@feature-render-html";
 
@@ -20,6 +21,7 @@ import { htmlConfig } from "@feature-render-html";
 // for tests.
 app.config.productionTip = false;
 
+mountDirectives(app);
 // ===
 // Register global components
 // ===
@@ -55,8 +57,10 @@ const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
 	);
 
-mountBaseComponents(globalComponentFiles, (fileName) =>
-	require(path.join(baseComponentDir, fileName))
+mountBaseComponents(
+	globalComponentFiles,
+	(fileName) => require(path.join(baseComponentDir, fileName)),
+	app
 );
 
 // ===
