@@ -647,7 +647,6 @@
 	"pages.administration.school.index.generalSettings.languageHint": "Якщо мову школи не встановлено, застосовується системна мова за замовчуванням (німецька).",
 	"pages.administration.school.index.generalSettings.save": "Зберегти загальні параметри",
 	"pages.administration.school.index.generalSettings.timezoneHint": "Щоб змінити часовий пояс, зверніться до одного з адміністраторів.",
-	"pages.administration.school.index.longText.provideStudentsAndTheirParents": "Надайте своїм учням та їхнім батькам індивідуальні посилання для надання згоди у цифровій або аналоговій формі. Після завершення реєстрації для учня буде створено пароль для входу.",
 	"pages.administration.school.index.privacySettings": "Параметри конфіденційності",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Активувати функцію чату",
 	"pages.administration.school.index.privacySettings.labels.lernStore": "Навчальний магазин для учнів",
