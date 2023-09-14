@@ -16,6 +16,7 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
+	termsOfUseModule,
 	roomModule,
 	roomsModule,
 	schoolExternalToolsModule,
@@ -67,6 +68,9 @@ import {
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "./utils/inject";
 
 Vue.config.productionTip = false;
@@ -153,11 +157,12 @@ Vue.use(VueDOMPurifyHTML, {
 			loadingStateModule,
 			newsModule,
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			privacyPolicyModule,
+			[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
+			[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
 			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-			schoolsModule,
+			[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,

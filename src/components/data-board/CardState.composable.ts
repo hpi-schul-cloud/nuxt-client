@@ -83,9 +83,7 @@ export const useCardState = (
 			await updateCardHeightCall(cardState.card.id, newHeight);
 			cardState.card.height = newHeight;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
+			handleError(error, {});
 		}
 	};
 

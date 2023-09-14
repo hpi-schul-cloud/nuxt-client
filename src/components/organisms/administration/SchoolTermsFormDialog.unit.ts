@@ -1,32 +1,32 @@
-import PrivacyPolicyModule from "@/store/privacy-policy";
+import TermsOfUseModule from "@/store/terms-of-use";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import NotifierModule from "@/store/notifier";
-import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
+import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
 import Vue from "vue";
 import {
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 
 describe("SchoolPolicyFormDialog", () => {
 	let notifierModule: jest.Mocked<NotifierModule>;
 	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
+	let termsOfUseModule: jest.Mocked<TermsOfUseModule>;
 
 	const mockProps = {
 		isOpen: true,
 	};
 
 	const setup = (
-		getters: Partial<PrivacyPolicyModule> = {
-			getPrivacyPolicy: null,
+		getters: Partial<TermsOfUseModule> = {
+			getTermsOfUse: null,
 			getBusinessError: {
 				statusCode: "",
 				message: "",
@@ -42,14 +42,14 @@ describe("SchoolPolicyFormDialog", () => {
 			getSchool: mockSchool,
 		});
 
-		privacyPolicyModule = createModuleMocks(PrivacyPolicyModule, {
+		termsOfUseModule = createModuleMocks(TermsOfUseModule, {
 			...getters,
 		});
 
 		notifierModule = createModuleMocks(NotifierModule);
 
 		const wrapper: Wrapper<Vue> = mount(
-			SchoolPolicyFormDialog as MountOptions<Vue>,
+			SchoolTermsFormDialog as MountOptions<Vue>,
 			{
 				...createComponentMocks({
 					i18n: true,
@@ -57,7 +57,7 @@ describe("SchoolPolicyFormDialog", () => {
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
+					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
 				propsData: mockProps,

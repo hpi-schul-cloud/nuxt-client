@@ -373,8 +373,8 @@ export default {
 			image: SafelyConnectedImage,
 			fileLinks: {
 				analogConsent: filePathsModule.getSpecificFiles.analogConsent,
-				termsOfUse: filePathsModule.getSpecificFiles.termsOfUseSchool,
-				dataProtection: "/datenschutz",
+				termsOfUse: "/termsofuse",
+				dataProtection: "/privacypolicy",
 			},
 			progressSteps: [
 				{
