@@ -1597,7 +1597,7 @@ export interface FileElementContent {
      * @type {string}
      * @memberof FileElementContent
      */
-    alternativeText: string;
+    alternativeText?: string;
 }
 /**
  * 

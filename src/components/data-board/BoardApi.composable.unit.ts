@@ -147,7 +147,7 @@ describe("BoardApi.composable", () => {
 				type: ContentElementType.File,
 				content: {
 					caption: "caption",
-					dueDate: new Date().toISOString(),
+					alternativeText: "alternative text",
 				},
 				timestamps: timestampsResponseFactory.build(),
 			};
