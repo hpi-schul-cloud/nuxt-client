@@ -33,11 +33,38 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
+		// const isDatePicker = (target: HTMLElement) => {
+		// 	console.log(target);
+		// 	if (target?.className?.includes("v-picker--date")) {
+		// 		return true;
+		// 	} else {
+		// 		if (target.parentNode) {
+		// 			isDatePicker(target.parentNode as HTMLElement);
+		// 		} else {
+		// 			return false;
+		// 		}
+		// 	}
+		// };
+
+		const isDatePicker = (target: HTMLElement) => {
+			const datePickerParent = target.parentNode?.parentNode?.parentNode
+				?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode
+				?.parentNode as HTMLElement;
+
+			return (
+				datePickerParent &&
+				datePickerParent.className.includes("v-picker--date")
+			);
+		};
+
 		const isAllowedTarget = (event: MouseEvent): boolean => {
 			if (!(event.target instanceof HTMLElement)) return true;
+
+			isDatePicker(event.target);
+
 			return (
 				!event.target?.className?.includes("v-list-item") &&
-				!event.target?.className?.includes("v-btn")
+				!isDatePicker(event.target)
 			);
 		};
 
