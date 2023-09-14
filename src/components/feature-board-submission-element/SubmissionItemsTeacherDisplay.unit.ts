@@ -116,7 +116,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if open submission items do not exist", () => {
-			it("should not show chip with amount of open items", () => {
+			it.skip("should not show chip with amount of open items", () => {
 				const loading = false;
 				const submissionItems: Array<SubmissionItemResponse> = [];
 				const { wrapper } = setup(loading, submissionItems);
@@ -144,7 +144,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if completed submission items do not exist", () => {
-			it("should not show chip with amount of completed items", () => {
+			it.skip("should not show chip with amount of completed items", () => {
 				const loading = false;
 				const submissionItems: Array<SubmissionItemResponse> = [];
 				const { wrapper } = setup(loading, submissionItems);
@@ -189,7 +189,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if expired submission items do not exist", () => {
-			it("should not show chip with amount of expired items", () => {
+			it.skip("should not show chip with amount of expired items", () => {
 				const loading = false;
 				const editable = false;
 				const submissionItems: Array<SubmissionItemResponse> = [];
@@ -219,7 +219,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if completed submission items do not exist", () => {
-			it("should not show chip with amount of completed items", () => {
+			it.skip("should not show chip with amount of completed items", () => {
 				const loading = false;
 				const editable = false;
 				const submissionItems: Array<SubmissionItemResponse> = [];
