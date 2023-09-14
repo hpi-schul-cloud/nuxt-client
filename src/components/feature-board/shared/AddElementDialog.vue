@@ -1,7 +1,7 @@
 <template>
 	<vCustomDialog
 		data-testid="element-type-selection"
-		:size="426"
+		:size="dialogWidth"
 		:has-buttons="true"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -13,7 +13,8 @@
 
 		<template slot="content">
 			<div
-				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
+				class="d-flex flex-sm-row flex-column align-items-center"
+				:class="{ 'justify-content-space-between': submissionsEnabled }"
 			>
 				<v-btn
 					v-for="(item, key) in elementTypeOptions"
@@ -46,6 +47,7 @@ import { ContentElementType } from "@/serverApi/v3";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "AddElementDialog",
@@ -53,6 +55,8 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const { isDialogOpen, closeDialog, elementTypeOptions } =
 			useSharedElementTypeSelection();
 
@@ -66,6 +70,11 @@ export default defineComponent({
 
 		const actionButtons = ["close"];
 
+		const submissionsEnabled =
+			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
+
+		const dialogWidth = submissionsEnabled ? 426 : 320;
+
 		return {
 			onAddElement,
 			onCloseDialog,
@@ -73,6 +82,8 @@ export default defineComponent({
 			elementTypeOptions,
 			isDialogOpen,
 			actionButtons,
+			submissionsEnabled,
+			dialogWidth,
 		};
 	},
 });

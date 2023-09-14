@@ -23,7 +23,7 @@
 			/>
 			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
 				<v-list-item-icon>
-					<v-icon>{{ pdfIcon }}</v-icon>
+					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
 					<v-list-item-title class="text-body-1 black--text mb-2">
@@ -34,7 +34,7 @@
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
 									date: dayjs(privacyPolicy.publishedAt).format(
-										"DD.MM.YYYY HH:mm"
+										t("format.dateTime")
 									),
 								})
 							}}
@@ -60,9 +60,7 @@
 							t('pages.administration.school.index.schoolPolicy.edit')
 						"
 					>
-						<v-icon>
-							{{ mdiPencilOutline }}
-						</v-icon>
+						<v-icon>$mdiPencilOutline</v-icon>
 					</v-btn>
 				</v-list-item-action>
 				<v-list-item-action
@@ -77,9 +75,7 @@
 							t('pages.administration.school.index.schoolPolicy.download')
 						"
 					>
-						<v-icon>
-							{{ mdiTrayArrowDown }}
-						</v-icon>
+						<v-icon>$mdiTrayArrowDown</v-icon>
 					</v-btn>
 				</v-list-item-action>
 			</v-list-item>
@@ -96,24 +92,17 @@
 <script lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
 import dayjs from "dayjs";
-import { mdiPencilOutline, mdiTrayArrowDown } from "@mdi/js";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	ref,
-	Ref,
-	watch,
-} from "vue";
-import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import VueI18n from "vue-i18n";
+import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
+import { useI18n } from "@/composables/i18n.composable";
+import {
+	AUTH_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	injectStrict,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -121,24 +110,10 @@ export default defineComponent({
 		SchoolPolicyFormDialog,
 	},
 	setup() {
-		const authModule: AuthModule | undefined = inject<AuthModule>("authModule");
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		const privacyPolicyModule: PrivacyPolicyModule | undefined =
-			inject<PrivacyPolicyModule>("privacyPolicyModule");
-		const i18n = injectStrict(I18N_KEY);
-
-		if (!authModule || !schoolsModule || !privacyPolicyModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
-
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
+		const authModule = injectStrict(AUTH_MODULE_KEY);
+		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
 
@@ -163,7 +138,6 @@ export default defineComponent({
 		const error: ComputedRef<BusinessError> = computed(
 			() => privacyPolicyModule.getBusinessError
 		);
-		const pdfIcon = "$file_pdf_outline";
 
 		const downloadFile = () => {
 			const link = document.createElement("a");
@@ -185,9 +159,6 @@ export default defineComponent({
 			privacyPolicy,
 			status,
 			error,
-			mdiPencilOutline,
-			mdiTrayArrowDown,
-			pdfIcon,
 			downloadFile,
 			dayjs,
 			closeDialog,

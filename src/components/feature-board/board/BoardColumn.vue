@@ -14,7 +14,6 @@
 		></BoardColumnHeader>
 		<div class="scrollable-column">
 			<Container
-				orientation="vertical"
 				group-name="cards"
 				drag-class="elevation-12"
 				drop-class="elevation-0"
@@ -35,6 +34,7 @@
 						:class="{ 'drag-disabled': !hasMovePermission }"
 						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
 						@delete:card="onDeleteCard"
+						@reload:board="onReloadBoard"
 					/>
 				</Draggable>
 			</Container>
@@ -89,6 +89,7 @@ export default defineComponent({
 		"delete:card",
 		"delete:column",
 		"move:column-keyboard",
+		"reload:board",
 		"update:card-position",
 		"update:column-title",
 	],
@@ -156,6 +157,10 @@ export default defineComponent({
 			emit("move:column-keyboard", event);
 		};
 
+		const onReloadBoard = () => {
+			emit("reload:board");
+		};
+
 		const onUpdateTitle = useDebounceFn((newTitle: string) => {
 			emit("update:column-title", newTitle);
 		}, 1000);
@@ -182,6 +187,7 @@ export default defineComponent({
 			onDragEnd,
 			onMoveCardKeyboard,
 			onMoveColumnKeyboard,
+			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
 			isDesktop,

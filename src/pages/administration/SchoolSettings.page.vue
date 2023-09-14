@@ -24,18 +24,12 @@
 			<h2 class="text-h4">
 				{{ currentSchoolYear }}
 			</h2>
-			<p>
-				{{
-					$t(
-						"pages.administration.school.index.longText.provideStudentsAndTheirParents"
-					)
-				}}
-			</p>
-			<v-divider class="my-sm-6 my-md-8"></v-divider>
+			<v-divider class="my-sm-6 my-md-3"></v-divider>
 			<v-row>
 				<v-col>
 					<general-settings />
 					<school-policy v-if="schoolPolicyEnabled" />
+					<school-terms-of-use v-if="schoolTermsOfUseEnabled" />
 					<admin-migration-section v-if="isOauthMigrationEnabled" />
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
@@ -57,6 +51,7 @@ import AuthSystems from "@/components/organisms/administration/AuthSystems";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection";
 import { buildPageTitle } from "@/utils/pageTitle";
+import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 
 export default {
 	components: {
@@ -64,6 +59,7 @@ export default {
 		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
+		SchoolTermsOfUse,
 		AuthSystems,
 		DefaultWireframe,
 	},
@@ -85,9 +81,6 @@ export default {
 		systems() {
 			return schoolsModule.getSystems;
 		},
-		currentYear() {
-			return schoolsModule.getCurrentYear;
-		},
 		loading() {
 			return schoolsModule.getLoading;
 		},
@@ -98,10 +91,13 @@ export default {
 			return schoolsModule.getError;
 		},
 		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
+		schoolTermsOfUseEnabled: () => envConfigModule.getSchoolTermsOfUseEnabled,
 		isOauthMigrationEnabled: () =>
 			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
 		currentSchoolYear() {
-			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
+			return `${this.$t("common.words.schoolYear")} ${
+				schoolsModule.getCurrentYear.name
+			}`;
 		},
 	},
 	watch: {
@@ -112,13 +108,10 @@ export default {
 				if (
 					!schoolsModule.getFederalState ||
 					!schoolsModule.getFederalState._id ||
-					!schoolsModule.currentYear ||
-					!schoolsModule.currentYear._id ||
 					!schoolsModule.systems ||
 					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 				) {
-					schoolsModule.fetchCurrentYear();
 					schoolsModule.fetchSystems();
 					schoolsModule.fetchFederalState();
 				}
