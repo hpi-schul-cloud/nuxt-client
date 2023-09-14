@@ -83,6 +83,110 @@ type SubmissionInfo = {
 	lastName: string;
 };
 
+type Student = {
+	userId: string;
+	firstName: string;
+	lastName: string;
+};
+
+const mockedAllStudents: Array<Student> = [
+	{
+		userId: "123",
+		firstName: "Hans",
+		lastName: "Jürgensen",
+	},
+	{
+		userId: "456",
+		firstName: "Ingrid",
+		lastName: "van der Fahrt",
+	},
+	{
+		userId: "789",
+		firstName: "Horst",
+		lastName: "Müller",
+	},
+	{
+		userId: "12348",
+		firstName: "Lena-Christiane",
+		lastName: "Meyer - Hallervorden",
+	},
+	{
+		userId: "12347",
+		firstName: "Christiano",
+		lastName: "von Schweinsteiger",
+	},
+	{
+		userId: "12346",
+		firstName: "Hannelore",
+		lastName: "Meyer",
+	},
+	{
+		userId: "12345",
+		firstName: "Max",
+		lastName: "Ix",
+	},
+	{
+		userId: "000",
+		firstName: "James",
+		lastName: "Bond",
+	},
+];
+
+const mockedSubmissionItems: Array<SubmissionItemResponse> = [
+	{
+		id: "1",
+		completed: true,
+		userData: {
+			userId: "12348",
+			firstName: "Lena-Christiane",
+			lastName: "Meyer - Hallervorden",
+		},
+		timestamps: {
+			lastUpdatedAt: "",
+			createdAt: "",
+		},
+	},
+	{
+		id: "2",
+		completed: true,
+		userData: {
+			userId: "12346",
+			firstName: "Hannelore",
+			lastName: "Meyer",
+		},
+		timestamps: {
+			lastUpdatedAt: "",
+			createdAt: "",
+		},
+	},
+	{
+		id: "3",
+		completed: false,
+		userData: {
+			userId: "12345",
+			firstName: "Max",
+			lastName: "Ix",
+		},
+		timestamps: {
+			lastUpdatedAt: "",
+			createdAt: "",
+		},
+	},
+	{
+		id: "4",
+		completed: true,
+		userData: {
+			userId: "123",
+			firstName: "Hans",
+			lastName: "Jürgensen",
+		},
+		timestamps: {
+			lastUpdatedAt: "",
+			createdAt: "",
+		},
+	},
+];
+
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
 	props: {
@@ -117,23 +221,48 @@ export default defineComponent({
 		];
 
 		const items = computed<Array<SubmissionInfo>>(() => {
-			return props.submissionItems.map((item) => {
-				const submissionInfo: Partial<SubmissionInfo> = {
-					firstName: item.userData.firstName,
-					lastName: item.userData.lastName,
-				};
-				if (item.completed) {
-					submissionInfo.status = "completed";
-				}
-				if (!item.completed && props.editable) {
-					submissionInfo.status = "open";
-				}
-				if (!item.completed && !props.editable) {
-					submissionInfo.status = "expired";
-				}
+			return mockedAllStudents
+				.map((student) => {
+					const submissionInfo: Partial<SubmissionInfo> = {
+						firstName: student.firstName,
+						lastName: student.lastName,
+					};
 
-				return submissionInfo as SubmissionInfo;
-			});
+					const submissionItem = mockedSubmissionItems.find(
+						(submissionItem) =>
+							submissionItem.userData.userId === student.userId
+					);
+
+					if (submissionItem) {
+						if (submissionItem.completed) {
+							submissionInfo.status = "completed";
+						}
+						if (!submissionItem.completed && props.editable) {
+							submissionInfo.status = "open";
+						}
+						if (!submissionItem.completed && !props.editable) {
+							submissionInfo.status = "expired";
+						}
+
+						return submissionInfo as SubmissionInfo;
+					}
+
+					submissionInfo.status = props.editable ? "open" : "expired";
+					return submissionInfo as SubmissionInfo;
+				})
+				.sort((a, b) => {
+					const nameA = a.lastName.toUpperCase(); // ignore upper and lowercase
+					const nameB = b.lastName.toUpperCase(); // ignore upper and lowercase
+					if (nameA < nameB) {
+						return -1;
+					}
+					if (nameA > nameB) {
+						return 1;
+					}
+
+					// names must be equal
+					return 0;
+				});
 		});
 
 		const open = computed<number>(() => {
@@ -179,6 +308,11 @@ export default defineComponent({
 		font-size: 0.75rem !important;
 		height: 30px;
 	}
+
+	.v-data-table__wrapper {
+		overflow-x: hidden;
+	}
+
 	.v-data-table-header {
 		span:first-child {
 			display: block;
