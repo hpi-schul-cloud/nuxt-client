@@ -185,7 +185,8 @@ export default defineComponent({
 		const canJoin: ComputedRef<boolean> = computed(
 			() =>
 				authModule.getUserPermissions.includes("join_meeting") &&
-				(!authModule.getUserRoles.includes("expert") ||
+				((authModule.getUserRoles.includes("expert") &&
+					authModule.getUserRoles.length > 1) ||
 					isWaitingRoomActive.value)
 		);
 
