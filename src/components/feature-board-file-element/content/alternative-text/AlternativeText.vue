@@ -1,5 +1,5 @@
 <template>
-	<v-card-text class="grey lighten-3 pa-2">
+	<v-card-text class="pa-2">
 		<v-textarea
 			rows="1"
 			auto-grow
