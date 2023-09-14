@@ -1,15 +1,15 @@
 <template>
 	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
 		<h4 class="text-h4 mt-0" slot="title">
-			{{ t("common.words.privacyPolicy") }}
+			{{ t("common.words.termsOfUse") }}
 		</h4>
 		<template slot="content">
-			<v-form ref="policyForm" v-model="isValid">
+			<v-form ref="termsForm" v-model="isValid">
 				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="replace-alert-text">
 						{{
 							t(
-								"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent"
+								"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent"
 							)
 						}}
 					</div>
@@ -23,12 +23,10 @@
 					accept="application/pdf"
 					truncate-length="30"
 					:label="
-						t(
-							'pages.administration.school.index.schoolPolicy.labels.uploadFile'
-						)
+						t('pages.administration.school.index.termsOfUse.labels.uploadFile')
 					"
 					:hint="
-						t('pages.administration.school.index.schoolPolicy.hints.uploadFile')
+						t('pages.administration.school.index.termsOfUse.hints.uploadFile')
 					"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
@@ -53,7 +51,7 @@
 							@click="cancel"
 							data-testid="cancel-button"
 						>
-							{{ t("pages.administration.school.index.schoolPolicy.cancel") }}
+							{{ t("pages.administration.school.index.termsOfUse.cancel") }}
 						</v-btn>
 						<v-btn
 							class="icon-button dialog-confirmed px-6"
@@ -65,7 +63,7 @@
 							data-testid="submit-button"
 						>
 							<v-icon dense class="mr-1">$mdiFileReplaceOutline</v-icon>
-							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
+							{{ t("pages.administration.school.index.termsOfUse.replace") }}
 						</v-btn>
 					</div>
 				</v-card-actions>
@@ -80,8 +78,8 @@ import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
@@ -90,7 +88,7 @@ import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
-	name: "SchoolPolicyFormDialog",
+	name: "SchoolTermsFormDialog",
 	components: {
 		vCustomDialog,
 	},
@@ -103,39 +101,37 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
-		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const policyForm: Ref = ref(null);
-		const isValid: Ref<boolean> = ref(false);
-		const isTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+		const termsForm: Ref = ref(null);
+		const isFormValid: Ref<boolean> = ref(false);
+		const isFormTouched: Ref<boolean> = ref(false);
+		const termsFile: Ref<File | null> = ref(null);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
-		const rules = {
+		const validationRules = {
 			required: (value: string) => !!value || t("common.validation.required"),
 			mustBePdf: (value: File) =>
 				!value ||
 				value.type === "application/pdf" ||
-				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
+				t("pages.administration.school.index.termsOfUse.validation.notPdf"),
 			maxSize: (bytes: number) => (value: File) =>
 				!value ||
 				value.size <= bytes ||
-				t(
-					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
-				),
+				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
 		};
 
 		const onBlur = () => {
-			isTouched.value = true;
+			isFormTouched.value = true;
 		};
 
 		const resetForm = () => {
-			policyForm.value.reset();
-			isValid.value = false;
-			isTouched.value = false;
+			termsForm.value.reset();
+			isFormValid.value = false;
+			isFormTouched.value = false;
 		};
 
 		const cancel = () => {
@@ -144,21 +140,21 @@ export default defineComponent({
 		};
 
 		const submit = async () => {
-			if (isValid.value) {
+			if (isFormValid.value) {
 				const newConsentVersion: CreateConsentVersionPayload = {
 					schoolId: school.value.id,
-					title: t("pages.administration.school.index.schoolPolicy.fileName"),
+					title: t("pages.administration.school.index.termsOfUse.fileName"),
 					consentText: "",
-					consentTypes: ["privacy"],
+					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value as File)) as string,
+					consentData: (await toBase64(termsFile.value as File)) as string,
 				};
 
 				emit("close");
-				await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
+				await termsOfUseModule.createTermsOfUse(newConsentVersion);
 
 				notifierModule.show({
-					text: t("pages.administration.school.index.schoolPolicy.success"),
+					text: t("pages.administration.school.index.termsOfUse.success"),
 					status: "success",
 					timeout: 10000,
 				});
@@ -169,14 +165,14 @@ export default defineComponent({
 
 		return {
 			t,
-			file,
-			rules,
+			file: termsFile,
+			rules: validationRules,
 			cancel,
 			submit,
 			onBlur,
-			isValid,
-			isTouched,
-			policyForm,
+			isValid: isFormValid,
+			isTouched: isFormTouched,
+			termsForm,
 			school,
 		};
 	},
