@@ -1,8 +1,13 @@
 <template>
 	<v-card data-testid="migration-warning-card">
-		<v-card-title class="card-title">{{ $t(title) }}</v-card-title>
+		<v-card-title
+			data-testid="migration-warning-card-title"
+			class="card-title"
+			>{{ $t(title) }}</v-card-title
+		>
 		<v-card-text>
 			<RenderHTML
+				data-testid="migration-warning-card-info-text"
 				:html="
 					$t(text, {
 						gracePeriod: gracePeriodInDays,
@@ -46,7 +51,7 @@
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, Ref, computed, defineComponent, ref } from "vue";
+import { ComputedRef, Ref, computed, defineComponent, ref, toRef } from "vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -72,9 +77,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const type: Ref<MigrationWarningCardTypeEnum> = ref(
-			props.value as MigrationWarningCardTypeEnum
-		);
+		const type = toRef(props, "value");
 		const isConfirmed: Ref<boolean> = ref(false);
 
 		let title =

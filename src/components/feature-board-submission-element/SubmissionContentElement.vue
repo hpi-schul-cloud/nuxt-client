@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		:outlined="isOutlined"
+		outlined
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -14,6 +14,9 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
+				:completed="completed"
+				:loading="loading"
+				@update:completed="updateCompletionState"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -30,10 +33,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useBoardFocusHandler } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -63,13 +67,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const submissionContentElement = ref(null);
-		useBoardFocusHandler(props.element.id, submissionContentElement);
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, submissionContentElement);
+		const { completed, updateSubmissionItem, loading } =
+			useSubmissionContentElementState(element.value.id);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
-
-		const isOutlined = computed(() => {
-			return props.isEditMode === true;
-		});
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -93,17 +96,23 @@ export default defineComponent({
 			);
 
 			if (shouldDelete) {
-				emit("delete:element", props.element.id);
+				emit("delete:element", element.value.id);
 			}
 		};
 
+		const updateCompletionState = (completed: boolean) => {
+			updateSubmissionItem(completed);
+		};
+
 		return {
-			isOutlined,
 			submissionContentElement,
+			completed,
+			loading,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
+			updateCompletionState,
 		};
 	},
 });
