@@ -49,7 +49,7 @@ export default defineComponent({
 	name: "DrawingContentElementMenu",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
-		elementId: { type: String, required: true },
+		drawingName: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },

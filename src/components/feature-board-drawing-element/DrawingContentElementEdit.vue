@@ -45,7 +45,7 @@
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
-				:elementId="elementId"
+				:drawingName="drawingName"
 				@open:element="onOpenElement"
 				@move-down:element="onMoveElementDown"
 				@move-up:element="onMoveElementUp"
@@ -69,7 +69,7 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		elementId: { type: String, required: true },
+		drawingName: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
@@ -88,7 +88,7 @@ export default defineComponent({
 		});
 
 		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.elementId}`;
+			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
 			window.open(urlWithRoom, "_blank");
 			emit("open:element");
 		};

@@ -16,7 +16,7 @@
 
 			<DrawingContentElementEdit
 				v-if="isEditMode"
-				:elementId="element.id"
+				:drawingName="element.content.drawingName"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
