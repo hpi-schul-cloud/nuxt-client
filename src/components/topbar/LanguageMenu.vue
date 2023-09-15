@@ -1,7 +1,6 @@
 <template>
-	<v-list role="menuitem">
+	<v-list role="menuitem" density="compact">
 		<v-list-item
-			dense
 			role="menu"
 			:data-testid="`selected-language-${selectedItem.language}`"
 			:aria-label="`${$t('global.topbar.language.select')} ${$t(
@@ -9,32 +8,28 @@
 			)} ${selectedItem.translatedName}`"
 			@click.stop.prevent="toggleMenu"
 		>
-			<v-list-item-icon>
-				<v-icon>{{ selectedItem.icon }}</v-icon>
-			</v-list-item-icon>
-			<v-list-item-content>
-				{{ selectedItem.longName }}
-			</v-list-item-content>
-			<v-list-item-action>
-				<v-icon>{{ mdiMenuDown }}</v-icon>
-			</v-list-item-action>
+			<template v-slot:prepend>
+				<v-icon :icon="selectedItem.icon"></v-icon>
+			</template>
+			<v-list-item-title>{{ selectedItem.longName }}</v-list-item-title>
+			<template v-slot:append>
+				<v-icon :icon="mdiMenuDown"></v-icon>
+			</template>
 		</v-list-item>
 		<template v-if="menuVisible">
 			<v-list-item
 				v-for="item in availableItems"
 				:key="item.language"
-				dense
 				role="menuitem"
 				:data-testid="`available-language-${item.language}`"
 				:aria-label="item.translatedName"
 				@click="changeLanguage(item)"
+				:prepend-icon="item.icon"
 			>
-				<v-list-item-icon>
-					<v-icon>{{ item.icon }}</v-icon>
-				</v-list-item-icon>
-				<v-list-item-content>
-					{{ item.longName }}
-				</v-list-item-content>
+				<template v-slot:prepend>
+					<v-icon :icon="item.icon"></v-icon>
+				</template>
+				<v-list-item-title>{{ item.longName }}</v-list-item-title>
 			</v-list-item>
 		</template>
 	</v-list>
@@ -109,9 +104,9 @@ export default defineComponent({
 	margin-left: var(--space-xs);
 }
 
-.v-list-item__action {
-	margin-top: var(--space-xs);
-	margin-bottom: var(--space-xs);
+.v-list-item__prepend > .v-icon {
+	opacity: 1;
+	margin-left: var(--space-xs);
 }
 
 .v-list-item:focus {
