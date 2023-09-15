@@ -116,6 +116,22 @@ export default defineComponent({
 			},
 		];
 
+		const sortByName = (
+			submissionA: SubmissionInfo,
+			submissionB: SubmissionInfo
+		) => {
+			const lastNameA = submissionA.lastName.toUpperCase();
+			const lastNameB = submissionB.lastName.toUpperCase();
+			if (lastNameA < lastNameB) {
+				return -1;
+			}
+			if (lastNameA > lastNameB) {
+				return 1;
+			}
+
+			return 0;
+		};
+
 		const items = computed<Array<SubmissionInfo>>(() => {
 			return props.submissions.users
 				.map((student) => {
@@ -124,40 +140,28 @@ export default defineComponent({
 						lastName: student.lastName,
 					};
 
-					const submissionItem = props.submissions.submissionItemsResponse.find(
-						(submissionItem) => submissionItem.userId === student.userId
+					const submission = props.submissions.submissionItemsResponse.find(
+						(submission) => submission.userId === student.userId
 					);
 
-					if (submissionItem) {
-						if (submissionItem.completed) {
-							submissionInfo.status = "completed";
-						}
-						if (!submissionItem.completed && props.editable) {
-							submissionInfo.status = "open";
-						}
-						if (!submissionItem.completed && !props.editable) {
-							submissionInfo.status = "expired";
-						}
-
+					if (!submission) {
+						submissionInfo.status = props.editable ? "open" : "expired";
 						return submissionInfo as SubmissionInfo;
 					}
 
-					submissionInfo.status = props.editable ? "open" : "expired";
-					return submissionInfo as SubmissionInfo;
-				})
-				.sort((a, b) => {
-					const nameA = a.lastName.toUpperCase(); // ignore upper and lowercase
-					const nameB = b.lastName.toUpperCase(); // ignore upper and lowercase
-					if (nameA < nameB) {
-						return -1;
+					if (submission.completed) {
+						submissionInfo.status = "completed";
 					}
-					if (nameA > nameB) {
-						return 1;
+					if (!submission.completed && props.editable) {
+						submissionInfo.status = "open";
+					}
+					if (!submission.completed && !props.editable) {
+						submissionInfo.status = "expired";
 					}
 
-					// names must be equal
-					return 0;
-				});
+					return submissionInfo as SubmissionInfo;
+				})
+				.sort(sortByName);
 		});
 
 		const open = computed<number>(() => {
