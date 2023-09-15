@@ -1,5 +1,5 @@
 import customIcons from "@/components/icons/custom";
-import materialIcons from "@/components/icons/material";
+import * as materialAliases from "@/components/icons/material";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
 export default {
@@ -52,7 +52,7 @@ export default {
 		defaultSet: "mdi",
 		aliases: {
 			...aliases,
-			...materialIcons,
+			...materialAliases,
 		},
 		sets: {
 			mdi,
