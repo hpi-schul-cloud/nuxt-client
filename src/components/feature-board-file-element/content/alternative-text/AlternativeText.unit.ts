@@ -3,7 +3,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import AlternativeText from "./AlternativeText.vue";
 
-const alternativeText = "alt text";
+const alternativeText = "text";
 jest.mock("@data-board", () => {
 	return {
 		useContentElementState: jest.fn(() => ({
@@ -36,14 +36,19 @@ describe("AlternativeText", () => {
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
-	it("should have the modelValue as value", async () => {
+	it("should emit if text changes", async () => {
 		const { wrapper } = setup();
 
 		const textarea = wrapper.find("v-textarea-stub");
+		const newText = "new text";
+		textarea.vm.$emit("input", "new text");
+		const emitted = wrapper.emitted();
 
-		const valueAttribute = textarea.attributes("value");
+		if (emitted["update:text"] === undefined) {
+			throw new Error("Emitted should be defined");
+		}
 
-		expect(valueAttribute).toBe(alternativeText);
+		expect(emitted["update:text"][0][0]).toContain(newText);
 	});
 
 	it("should have a hint translation", async () => {

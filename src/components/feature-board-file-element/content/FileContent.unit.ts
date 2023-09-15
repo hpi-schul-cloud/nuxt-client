@@ -78,14 +78,16 @@ describe("FileContent", () => {
 				expect(alternativeText.exists()).toBe(true);
 			});
 
-			it("Should pass element to alternative text", () => {
-				const { wrapper, fileProperties } = setup();
+			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
+				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(AlternativeText);
 
-				expect(alternativeText.props()).toEqual({
-					element: fileProperties.element,
-				});
+				alternativeText.vm.$emit("update:text");
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted()["update:text"] ?? ["new text"];
+
+				expect(emitted).toHaveLength(1);
 			});
 
 			describe("when alert emits on-status-reload", () => {
