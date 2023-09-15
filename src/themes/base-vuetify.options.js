@@ -11,40 +11,24 @@ export default {
 		},
 		themes: {
 			light: {
-				primary: {
-					base: "#9e292b",
-					darken1: "#800416",
-					lighten: "#f5eaea",
-				},
-				secondary: {
-					base: "#54616e",
-					lighten1: "#8a9199",
-					darken1: "#3a424b",
-				},
-				accent: {
-					base: "#e98404",
-				},
-				black: {
-					base: "#1b1b1b",
-				},
-				white: {
-					base: "#ffffff",
-				},
-				info: {
-					base: "#0a7ac9",
-					darken1: "#085c96",
-				},
-				success: {
-					base: "#13ba98",
-					darken1: "#0e8c71",
-				},
-				warning: {
-					base: "#ff8311",
-					lighten1: "#fff0e2",
-				},
-				error: {
-					base: "#ff1134",
-					darken1: "#bf0d26",
+				colors: {
+					primary: "#9e292b",
+					"primary-darken-1": "#800416",
+					"primary-lighten": "#f5eaea",
+					secondary: "#54616e",
+					"secondary-lighten-1": "#8a9199",
+					"secondary-darken-1": "#3a424b",
+					accent: "#e98404",
+					black: "#1b1b1b",
+					white: "#ffffff",
+					info: "#0a7ac9",
+					"info-darken-1": "#0e8c71",
+					success: "#13ba98",
+					"success-darken-1": "#0e8c71",
+					warning: "#ff8311",
+					"warning-lighten-1": "#fff0e2",
+					error: "#ff1134",
+					"error-darken-1": "#bf0d26",
 				},
 			},
 		},
