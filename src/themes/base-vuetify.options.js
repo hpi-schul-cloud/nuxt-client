@@ -50,11 +50,13 @@ export default {
 	},
 	icons: {
 		defaultSet: "mdi",
-		aliases,
+		aliases: {
+			...aliases,
+			...materialIcons,
+		},
 		sets: {
 			mdi,
 			...customIcons,
-			...materialIcons,
 		},
 	},
 };

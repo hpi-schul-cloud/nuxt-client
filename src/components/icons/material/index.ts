@@ -63,7 +63,7 @@ import {
 	mdiViewGridOutline,
 } from "@mdi/js";
 
-const materialIcons = {
+export {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
@@ -127,5 +127,3 @@ const materialIcons = {
 	mdiUndo,
 	mdiViewGridOutline,
 };
-
-export default materialIcons;
