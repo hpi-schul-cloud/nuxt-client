@@ -33,23 +33,11 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
-		// const isDatePicker = (target: HTMLElement) => {
-		// 	console.log(target);
-		// 	if (target?.className?.includes("v-picker--date")) {
-		// 		return true;
-		// 	} else {
-		// 		if (target.parentNode) {
-		// 			isDatePicker(target.parentNode as HTMLElement);
-		// 		} else {
-		// 			return false;
-		// 		}
-		// 	}
-		// };
-
 		const isDatePicker = (target: HTMLElement) => {
-			const datePickerParent = target.parentNode?.parentNode?.parentNode
-				?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode
-				?.parentNode as HTMLElement;
+			const datePickerParent =
+				target.parentElement?.parentElement?.parentElement?.parentElement
+					?.parentElement?.parentElement?.parentElement?.parentElement
+					?.parentElement;
 
 			return (
 				datePickerParent &&
