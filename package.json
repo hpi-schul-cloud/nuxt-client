@@ -27,7 +27,6 @@
 		"object-hash": "^3.0.0",
 		"universal-cookie": "^4.0.4",
 		"vue": "^3.3.4",
-		"@vue/compat": "3.3.4",
 		"vue-dndrop": "github:hpi-schul-cloud/vue-dndrop#d78a541aa4840063c70ced401310c822d6f06361",
 		"vue-dompurify-html": "^4.1.4",
 		"vue-filter-ui": "^0.8.0",
