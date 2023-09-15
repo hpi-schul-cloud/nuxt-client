@@ -1,5 +1,3 @@
-import { h } from "vue";
-import { IconProps, IconSet } from "vuetify/lib/framework.mjs";
 import brb from "./brb.vue";
 import classIcon from "./class.vue";
 import dBildungscloud from "./dBildungscloud.vue";
@@ -41,6 +39,8 @@ import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
+
+// VUE3_UPGRADE remove the aliases when refactored to type-safe icon imports
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const customAliases: Record<string, any> = {
@@ -87,13 +87,13 @@ const customAliases: Record<string, any> = {
 	thr: thr,
 };
 
-const customSet: IconSet = {
-	component: (props: IconProps) =>
-		h(props.tag, [
-			h(customAliases[props.icon as string], {
-				class: "v-icon__svg",
-			}),
-		]),
-};
+// const customSet: IconSet = {
+// 	component: (props: IconProps) =>
+// 		h(props.tag, [
+// 			h(customAliases[props.icon as string], {
+// 				class: "v-icon__svg",
+// 			}),
+// 		]),
+// };
 
-export { customSet, customAliases };
+export { customAliases };
