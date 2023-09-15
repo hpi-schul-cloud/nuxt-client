@@ -3,7 +3,8 @@
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
 		<AlternativeText
 			v-if="isEditMode && fileProperties.previewUrl"
-			:element="fileProperties.element"
+			:text="fileProperties.element.content.alternativeText"
+			@update:text="onUpdateText"
 		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
@@ -33,15 +34,16 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-
+	emits: ["fetch:file", "update:alternativeText"],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
 		};
-
+		const onUpdateText = (value: string) =>
+			emit("update:alternativeText", value);
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
 
-		return { onFetchFile, previewStatus };
+		return { onFetchFile, previewStatus, onUpdateText };
 	},
 });
 </script>

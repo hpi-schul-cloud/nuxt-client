@@ -15,6 +15,7 @@
 			:file-properties="fileProperties"
 			@fetch:file="onFetchFile"
 			:is-edit-mode="isEditMode"
+			@update:alternativeText="(value) => (modelValue.alternativeText = value)"
 		/>
 		<FileUpload
 			v-else-if="isEditMode"
