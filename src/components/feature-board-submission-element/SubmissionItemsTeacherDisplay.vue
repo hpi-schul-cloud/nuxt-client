@@ -136,11 +136,7 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 	{
 		id: "1",
 		completed: true,
-		userData: {
-			userId: "12348",
-			firstName: "Lena-Christiane",
-			lastName: "Meyer - Hallervorden",
-		},
+		userId: "12348",
 		timestamps: {
 			lastUpdatedAt: "",
 			createdAt: "",
@@ -149,11 +145,7 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 	{
 		id: "2",
 		completed: true,
-		userData: {
-			userId: "12346",
-			firstName: "Hannelore",
-			lastName: "Meyer",
-		},
+		userId: "12346",
 		timestamps: {
 			lastUpdatedAt: "",
 			createdAt: "",
@@ -162,11 +154,7 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 	{
 		id: "3",
 		completed: false,
-		userData: {
-			userId: "12345",
-			firstName: "Max",
-			lastName: "Ix",
-		},
+		userId: "12345",
 		timestamps: {
 			lastUpdatedAt: "",
 			createdAt: "",
@@ -175,11 +163,7 @@ const mockedSubmissionItems: Array<SubmissionItemResponse> = [
 	{
 		id: "4",
 		completed: true,
-		userData: {
-			userId: "123",
-			firstName: "Hans",
-			lastName: "Jürgensen",
-		},
+		userId: "123",
 		timestamps: {
 			lastUpdatedAt: "",
 			createdAt: "",
@@ -229,8 +213,7 @@ export default defineComponent({
 					};
 
 					const submissionItem = mockedSubmissionItems.find(
-						(submissionItem) =>
-							submissionItem.userData.userId === student.userId
+						(submissionItem) => submissionItem.userId === student.userId
 					);
 
 					if (submissionItem) {

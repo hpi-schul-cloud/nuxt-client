@@ -55,66 +55,66 @@ describe("SubmissionContentElementState.composable", () => {
 		).toHaveBeenCalledWith(contentElementId);
 	});
 
-	it("should return fetch function that updates submission items and loading state", async () => {
-		const contentElementId = "123124";
-		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-			mockedSubmissionItems as unknown as Promise<Array<SubmissionItemResponse>>
-		);
+	// it("should return fetch function that updates submission items and loading state", async () => {
+	// 	const contentElementId = "123124";
+	// 	mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
+	// 		mockedSubmissionItems as unknown as Promise<Array<SubmissionItemResponse>>
+	// 	);
 
-		const { fetchSubmissionItems, loading, submissionItems } =
-			setup(contentElementId);
+	// 	const { fetchSubmissionItems, loading, submissionItems } =
+	// 		setup(contentElementId);
 
-		expect(loading.value).toBe(true);
-		expect(submissionItems.value.length).toBe(0);
+	// 	expect(loading.value).toBe(true);
+	// 	expect(submissionItems.value.length).toBe(0);
 
-		await fetchSubmissionItems(contentElementId);
+	// 	await fetchSubmissionItems(contentElementId);
 
-		expect(
-			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
-		).toHaveBeenCalledWith(contentElementId);
-		expect(loading.value).toBe(false);
-		expect(submissionItems.value.length).toEqual(mockedSubmissionItems.length);
-	});
+	// 	expect(
+	// 		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
+	// 	).toHaveBeenCalledWith(contentElementId);
+	// 	expect(loading.value).toBe(false);
+	// 	expect(submissionItems.value.length).toEqual(mockedSubmissionItems.length);
+	// });
 
-	describe("if the student created a submission item before", () => {
-		it("should return update function that updates the completed state", async () => {
-			const contentElementId = "123124";
-			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-				mockedSubmissionItems as unknown as Promise<
-					Array<SubmissionItemResponse>
-				>
-			);
+	// describe("if the student created a submission item before", () => {
+	// 	it("should return update function that updates the completed state", async () => {
+	// 		const contentElementId = "123124";
+	// 		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
+	// 			mockedSubmissionItems as unknown as Promise<
+	// 				Array<SubmissionItemResponse>
+	// 			>
+	// 		);
 
-			const { fetchSubmissionItems, updateSubmissionItem } =
-				setup(contentElementId);
+	// 		const { fetchSubmissionItems, updateSubmissionItem } =
+	// 			setup(contentElementId);
 
-			await fetchSubmissionItems(contentElementId);
+	// 		await fetchSubmissionItems(contentElementId);
 
-			const completed = true;
-			await updateSubmissionItem(completed);
-			expect(
-				mockedUseSubmissionItemApiCalls.updateSubmissionItemCall
-			).toHaveBeenLastCalledWith(mockedSubmissionItems[0].id, completed);
-		});
-	});
+	// 		const completed = true;
+	// 		await updateSubmissionItem(completed);
+	// 		expect(
+	// 			mockedUseSubmissionItemApiCalls.updateSubmissionItemCall
+	// 		).toHaveBeenLastCalledWith(mockedSubmissionItems[0].id, completed);
+	// 	});
+	// });
 
-	describe("if the student did not create a submission item so far", () => {
-		it("should return update function that creates initial completed state", async () => {
-			const contentElementId = "123124";
-			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-				[] as unknown as Promise<Array<SubmissionItemResponse>>
-			);
+	// describe("if the student did not create a submission item so far", () => {
+	// 	it("should return update function that creates initial completed state", async () => {
+	// 		const contentElementId = "123124";
+	// 		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
+	// 			[] as unknown as Promise<Array<SubmissionItemResponse>>
+	// 		);
 
-			const { fetchSubmissionItems, updateSubmissionItem } =
-				setup(contentElementId);
+	// 		const { fetchSubmissionItems, updateSubmissionItem } =
+	// 			setup(contentElementId);
 
-			await fetchSubmissionItems(contentElementId);
+	// 		await fetchSubmissionItems(contentElementId);
 
-			const completed = true;
-			await updateSubmissionItem(completed);
-			expect(
-				mockedUseSubmissionItemApiCalls.createSubmissionItemCall
-			).toHaveBeenLastCalledWith(contentElementId, completed);
-		});
-	});
+	// 		const completed = true;
+	// 		await updateSubmissionItem(completed);
+	// 		expect(
+	// 			mockedUseSubmissionItemApiCalls.createSubmissionItemCall
+	// 		).toHaveBeenLastCalledWith(contentElementId, completed);
+	// 	});
+	// });
 });

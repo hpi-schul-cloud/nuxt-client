@@ -31,7 +31,6 @@ export * from "./toolConfigurationTemplateFactory";
 export * from "./toolLaunchRequestResponeFactory";
 export * from "./toolParameterFactory";
 export * from "./toolParameterEntryFactory";
-export * from "./userDataResponseFactory";
 export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";

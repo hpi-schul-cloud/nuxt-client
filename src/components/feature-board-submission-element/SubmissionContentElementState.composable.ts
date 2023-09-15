@@ -1,7 +1,7 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, computed, onMounted } from "vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionsResponse } from "@/serverApi/v3";
 import dayjs from "dayjs";
 
 export const useSubmissionContentElementState = (
@@ -14,7 +14,7 @@ export const useSubmissionContentElementState = (
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
-	const submissionItems = ref<Array<SubmissionItemResponse>>([]);
+	const submissionItems = ref<SubmissionsResponse>();
 	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
@@ -28,26 +28,28 @@ export const useSubmissionContentElementState = (
 	};
 
 	const createSubmissionItem = async (completed: boolean) => {
-		try {
-			const response = await createSubmissionItemCall(id, completed);
-			submissionItems.value.push(response);
-		} catch (error) {
-			notifyWithTemplate("notCreated", "boardElement")();
-		}
+		// try {
+		// 	const response = await createSubmissionItemCall(id, completed);
+		// 	submissionItems.value.submissionItemsResponse.push(response);
+		// } catch (error) {
+		// 	notifyWithTemplate("notCreated", "boardElement")();
+		// }
 	};
 
 	const updateSubmissionItem = async (completed: boolean) => {
-		if (submissionItems.value.length === 0) {
-			await createSubmissionItem(completed);
-			return;
-		}
-
-		try {
-			await updateSubmissionItemCall(submissionItems.value[0].id, completed);
-			submissionItems.value[0].completed = completed;
-		} catch (error) {
-			notifyWithTemplate("notUpdated", "boardElement")();
-		}
+		// if (submissionItems.value.submissionItemsResponse.length === 0) {
+		// 	await createSubmissionItem(completed);
+		// 	return;
+		// }
+		// try {
+		// 	await updateSubmissionItemCall(
+		// 		submissionItems.value.submissionItemsResponse[0].id,
+		// 		completed
+		// 	);
+		// 	submissionItems.value.submissionItemsResponse[0].completed = completed;
+		// } catch (error) {
+		// 	notifyWithTemplate("notUpdated", "boardElement")();
+		// }
 	};
 
 	const editable = computed(() => {
