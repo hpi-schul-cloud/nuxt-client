@@ -17,6 +17,7 @@ import {
 	businessErrorFactory,
 	mockApiResponse,
 	mockUser,
+	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -57,19 +58,6 @@ describe("UserLoginMigrationModule", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
-
-	const expectUserLoginMigration = (
-		userLoginMigrationResponse: UserLoginMigrationResponse
-	) => {
-		expect(module.getUserLoginMigration).toEqual<UserLoginMigration>({
-			sourceSystemId: userLoginMigrationResponse.sourceSystemId,
-			targetSystemId: userLoginMigrationResponse.targetSystemId,
-			startedAt: userLoginMigrationResponse.startedAt,
-			closedAt: userLoginMigrationResponse.closedAt,
-			finishedAt: userLoginMigrationResponse.finishedAt,
-			mandatorySince: userLoginMigrationResponse.mandatorySince,
-		});
-	};
 
 	describe("getter/setter", () => {
 		describe("Loading", () => {
@@ -148,24 +136,17 @@ describe("UserLoginMigrationModule", () => {
 			it("should return the default state", () => {
 				const userLoginMigration = module.getUserLoginMigration;
 
-				expect(userLoginMigration).toEqual<UserLoginMigration>({
-					sourceSystemId: undefined,
-					targetSystemId: "",
-					startedAt: "",
-					closedAt: undefined,
-					finishedAt: undefined,
-					mandatorySince: undefined,
-				});
+				expect(userLoginMigration).toEqual(undefined);
 			});
 
 			it("should return the changed state", () => {
-				const userLoginMigration = {
+				const userLoginMigration: UserLoginMigration = {
 					sourceSystemId: "sourceSystemId",
 					targetSystemId: "targetSystemId",
-					startedAt: "startedAt",
-					closedAt: "closedAt",
-					finishedAt: "finishedAt",
-					mandatorySince: "mandatorySince",
+					startedAt: new Date(2000, 1, 1, 0, 0),
+					closedAt: new Date(2000, 1, 1),
+					finishedAt: new Date(2000, 1, 14),
+					mandatorySince: new Date(2000, 1, 1),
 				};
 
 				module.setUserLoginMigration(userLoginMigration);
@@ -353,13 +334,23 @@ describe("UserLoginMigrationModule", () => {
 					const setup = () => {
 						authModule.setUser({ ...mockUser, id: "userId" });
 
-						const userLoginMigrationResponse: UserLoginMigrationResponse = {
+						const userLoginMigrationResponse: UserLoginMigrationResponse =
+							userLoginMigrationResponseFactory.build({
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+								closedAt: new Date(2000, 1, 1, 0, 0).toString(),
+								finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
+								mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
+							});
+
+						const userLoginMigration: UserLoginMigration = {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: "startedAt",
-							closedAt: "closedAt",
-							finishedAt: "finishedAt",
-							mandatorySince: "mandatorySince",
+							startedAt: new Date(2000, 1, 1, 0, 0),
+							closedAt: new Date(2000, 1, 1, 0, 0),
+							finishedAt: new Date(2000, 1, 14, 0, 0),
+							mandatorySince: new Date(2000, 1, 1, 0, 0),
 						};
 
 						const listResponse: UserLoginMigrationSearchListResponse = {
@@ -374,7 +365,7 @@ describe("UserLoginMigrationModule", () => {
 						);
 
 						return {
-							userLoginMigrationResponse,
+							userLoginMigration,
 							listResponse,
 						};
 					};
@@ -390,11 +381,11 @@ describe("UserLoginMigrationModule", () => {
 					});
 
 					it("should set the UserLoginMigration", async () => {
-						const { userLoginMigrationResponse } = setup();
+						const { userLoginMigration } = setup();
 
 						await module.fetchLatestUserLoginMigrationForCurrentUser();
 
-						expectUserLoginMigration(userLoginMigrationResponse);
+						expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 					});
 				});
 			});
@@ -467,16 +458,23 @@ describe("UserLoginMigrationModule", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
 					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							startedAt: "startedAtDate",
-						});
+						userLoginMigrationResponseFactory.build({});
 					apiMock.userLoginMigrationControllerStartMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
 					jest.spyOn(module, "setLoading");
 
+					const userLoginMigration = userLoginMigrationFactory.build({
+						startedAt: new Date(2000, 1, 1, 0, 0),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
+						sourceSystemId: "sourceSystemId",
+						targetSystemId: "targetSystemId",
+					});
+
 					return {
-						userLoginMigrationResponse,
+						userLoginMigration,
 					};
 				};
 
@@ -500,11 +498,14 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should set user login migration", async () => {
-					const { userLoginMigrationResponse } = setup();
+					const { userLoginMigration } = setup();
 
 					await module.startUserLoginMigration();
 
-					expectUserLoginMigration(userLoginMigrationResponse);
+					expect(module.getUserLoginMigration).toStrictEqual(
+						userLoginMigration
+					);
+					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 				});
 			});
 
@@ -551,16 +552,21 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					const userLoginMigrationResponse: UserLoginMigrationResponse =
 						userLoginMigrationResponseFactory.build({
-							startedAt: "startedAtDate",
-							mandatorySince: "mandatorySinceDate",
+							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+							mandatorySince: new Date(2000, 1, 1).toString(),
 						});
+
+					const userLoginMigration = userLoginMigrationFactory.build({
+						startedAt: new Date(2000, 1, 1, 0, 0),
+						mandatorySince: new Date(2000, 1, 1),
+					});
 					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
 					jest.spyOn(module, "setLoading");
 
 					return {
-						userLoginMigrationResponse,
+						userLoginMigration,
 					};
 				};
 
@@ -584,11 +590,11 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should set user login migration", async () => {
-					const { userLoginMigrationResponse } = setup();
+					const { userLoginMigration } = setup();
 
 					await module.setUserLoginMigrationMandatory(false);
 
-					expectUserLoginMigration(userLoginMigrationResponse);
+					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 				});
 			});
 
@@ -637,15 +643,20 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					const userLoginMigrationResponse: UserLoginMigrationResponse =
 						userLoginMigrationResponseFactory.build({
-							startedAt: "startedAtDate",
+							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
 						});
+
+					const userLoginMigration = userLoginMigrationFactory.build({
+						startedAt: new Date(2000, 1, 1, 0, 0),
+					});
+
 					apiMock.userLoginMigrationControllerRestartMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
 					jest.spyOn(module, "setLoading");
 
 					return {
-						userLoginMigrationResponse,
+						userLoginMigration,
 					};
 				};
 
@@ -669,11 +680,11 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should set user login migration", async () => {
-					const { userLoginMigrationResponse } = setup();
+					const { userLoginMigration } = setup();
 
 					await module.restartUserLoginMigration();
 
-					expectUserLoginMigration(userLoginMigrationResponse);
+					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 				});
 			});
 
@@ -720,16 +731,22 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					const userLoginMigrationResponse: UserLoginMigrationResponse =
 						userLoginMigrationResponseFactory.build({
-							startedAt: "startedAtDate",
-							closedAt: "closedAtDate",
+							closedAt: new Date(2000, 1, 2).toString(),
+							finishedAt: new Date(2000, 1, 14).toString(),
 						});
+
+					const userLoginMigration = userLoginMigrationFactory.build({
+						closedAt: new Date(2000, 1, 2),
+						finishedAt: new Date(2000, 1, 14),
+					});
+
 					apiMock.userLoginMigrationControllerCloseMigration.mockResolvedValue(
 						mockApiResponse({ data: userLoginMigrationResponse })
 					);
 					jest.spyOn(module, "setLoading");
 
 					return {
-						userLoginMigrationResponse,
+						userLoginMigration,
 					};
 				};
 
@@ -753,11 +770,11 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should set user login migration", async () => {
-					const { userLoginMigrationResponse } = setup();
+					const { userLoginMigration } = setup();
 
 					await module.closeUserLoginMigration();
 
-					expectUserLoginMigration(userLoginMigrationResponse);
+					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
 				});
 			});
 

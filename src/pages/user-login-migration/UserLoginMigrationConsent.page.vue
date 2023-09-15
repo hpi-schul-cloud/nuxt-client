@@ -39,7 +39,7 @@
 					color="primary"
 					depressed
 					data-testId="btn-proceed"
-					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
+					:href="`/login/oauth2/${userLoginMigration?.targetSystemId}?migration=true`"
 				>
 					{{ t("pages.userMigration.button.startMigration") }}
 				</v-btn>
@@ -122,7 +122,7 @@ export default defineComponent({
 			return (
 				systemsModule?.getSystems.find(
 					(system: System): boolean =>
-						system.id === userLoginMigration.value.targetSystemId
+						system.id === userLoginMigration.value?.targetSystemId
 				)?.name ?? ""
 			);
 		};
@@ -136,32 +136,31 @@ export default defineComponent({
 			() => userLoginMigrationModule?.getMigrationLinks.cancelLink
 		);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
-			() => userLoginMigrationModule?.getUserLoginMigration
-		);
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
+			computed(() => userLoginMigrationModule?.getUserLoginMigration);
 
 		const pageType: ComputedRef<MigrationPageOrigin> = computed(() => {
-			if (props.origin === userLoginMigration.value.targetSystemId) {
+			if (props.origin === userLoginMigration.value?.targetSystemId) {
 				return MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
 			} else {
-				return userLoginMigration.value.mandatorySince
+				return userLoginMigration.value?.mandatorySince
 					? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY
 					: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM;
 			}
 		});
 
 		const migrationDescription: ComputedRef<string> = computed(() => {
-			if (props.origin === userLoginMigration.value.targetSystemId) {
+			if (props.origin === userLoginMigration.value?.targetSystemId) {
 				return "pages.userMigration.description.fromTarget";
 			} else {
-				return userLoginMigration.value.mandatorySince
+				return userLoginMigration.value?.mandatorySince
 					? "pages.userMigration.description.fromSourceMandatory"
 					: "pages.userMigration.description.fromSource";
 			}
 		});
 
 		const canSkipMigration: ComputedRef<boolean> = computed(() => {
-			return !userLoginMigration.value.mandatorySince;
+			return !userLoginMigration.value?.mandatorySince;
 		});
 
 		const isLoading: Ref<boolean> = ref(true);
@@ -171,7 +170,7 @@ export default defineComponent({
 			await systemsModule?.fetchSystems();
 			if (
 				!isNewLoginFlowEnabled &&
-				userLoginMigration.value.sourceSystemId &&
+				userLoginMigration.value?.sourceSystemId &&
 				pageType.value
 			) {
 				await userLoginMigrationModule?.fetchMigrationLinks({

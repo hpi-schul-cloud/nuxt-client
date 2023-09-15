@@ -1,11 +1,11 @@
 import { Factory } from "fishery";
-import { UserLoginMigration } from "@/store/user-login-migration";
+import { UserLoginMigrationResponse } from "@/serverApi/v3";
 
 export const userLoginMigrationResponseFactory =
-	Factory.define<UserLoginMigration>(() => ({
+	Factory.define<UserLoginMigrationResponse>(() => ({
 		sourceSystemId: `sourceSystemId`,
 		targetSystemId: `targetSystemId`,
-		startedAt: `startedAt`,
+		startedAt: new Date(2000, 1, 1, 0, 0).toString(),
 		closedAt: undefined,
 		finishedAt: undefined,
 		mandatorySince: undefined,

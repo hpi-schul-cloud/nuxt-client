@@ -29,10 +29,10 @@ describe("AdminMigrationSection", () => {
 			getUserLoginMigration: {
 				sourceSystemId: "sourceSystemId",
 				targetSystemId: "targetSystemId",
-				startedAt: "",
-				closedAt: "",
-				finishedAt: "",
-				mandatorySince: "",
+				startedAt: new Date(2000, 1, 1, 0, 0),
+				closedAt: undefined,
+				finishedAt: undefined,
+				mandatorySince: undefined,
 			},
 			...userLoginMigrationGetters,
 		}) as jest.Mocked<UserLoginMigrationModule>;
@@ -127,10 +127,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -154,10 +154,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: new Date(2023, 1, 2).toString(),
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: new Date(2023, 1, 1),
+						finishedAt: new Date(2023, 1, 2),
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -183,14 +183,7 @@ describe("AdminMigrationSection", () => {
 					},
 				},
 				{
-					getUserLoginMigration: {
-						sourceSystemId: "sourceSystemId",
-						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
-					},
+					getUserLoginMigration: undefined,
 				}
 			);
 
@@ -216,10 +209,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -248,10 +241,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -273,14 +266,7 @@ describe("AdminMigrationSection", () => {
 					},
 				},
 				{
-					getUserLoginMigration: {
-						sourceSystemId: "sourceSystemId",
-						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
-					},
+					getUserLoginMigration: undefined,
 				}
 			);
 
@@ -305,10 +291,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -336,10 +322,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: new Date(2023, 1, 1).toString(),
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: new Date(2023, 1, 1),
 					},
 				}
 			);
@@ -360,14 +346,7 @@ describe("AdminMigrationSection", () => {
 					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 				},
 				{
-					getUserLoginMigration: {
-						sourceSystemId: "sourceSystemId",
-						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
-					},
+					getUserLoginMigration: undefined,
 				}
 			);
 
@@ -393,14 +372,7 @@ describe("AdminMigrationSection", () => {
 					},
 				},
 				{
-					getUserLoginMigration: {
-						sourceSystemId: "sourceSystemId",
-						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
-					},
+					getUserLoginMigration: undefined,
 				}
 			);
 
@@ -429,10 +401,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: new Date(2023, 1, 1).toString(),
-						finishedAt: new Date(2023, 1, 2).toString(),
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: new Date(2023, 1, 1),
+						finishedAt: new Date(2023, 1, 2),
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -459,14 +431,7 @@ describe("AdminMigrationSection", () => {
 					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 				},
 				{
-					getUserLoginMigration: {
-						sourceSystemId: "sourceSystemId",
-						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
-					},
+					getUserLoginMigration: undefined,
 				}
 			);
 
@@ -495,10 +460,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -529,10 +494,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -561,14 +526,7 @@ describe("AdminMigrationSection", () => {
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 					},
 					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
-						},
+						getUserLoginMigration: undefined,
 					}
 				);
 
@@ -594,14 +552,7 @@ describe("AdminMigrationSection", () => {
 							getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 						},
 						{
-							getUserLoginMigration: {
-								sourceSystemId: "sourceSystemId",
-								targetSystemId: "targetSystemId",
-								startedAt: "",
-								closedAt: "",
-								finishedAt: "",
-								mandatorySince: "",
-							},
+							getUserLoginMigration: undefined,
 						}
 					);
 					const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -636,14 +587,7 @@ describe("AdminMigrationSection", () => {
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 					},
 					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
-						},
+						getUserLoginMigration: undefined,
 					}
 				);
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
@@ -656,14 +600,9 @@ describe("AdminMigrationSection", () => {
 				await cardButtonDisagree.vm.$emit("click");
 
 				expect(cardComponent.exists()).toBe(false);
-				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual({
-					sourceSystemId: "sourceSystemId",
-					targetSystemId: "targetSystemId",
-					startedAt: "",
-					closedAt: "",
-					finishedAt: "",
-					mandatorySince: "",
-				});
+				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual(
+					undefined
+				);
 			});
 		});
 
@@ -684,10 +623,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					}
 				);
@@ -718,10 +657,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					}
 				);
@@ -759,10 +698,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					}
 				);
@@ -779,10 +718,10 @@ describe("AdminMigrationSection", () => {
 				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual({
 					sourceSystemId: "sourceSystemId",
 					targetSystemId: "targetSystemId",
-					startedAt: new Date(2023, 1, 1).toString(),
-					closedAt: "",
-					finishedAt: "",
-					mandatorySince: "",
+					startedAt: new Date(2023, 1, 1),
+					closedAt: undefined,
+					finishedAt: undefined,
+					mandatorySince: undefined,
 				});
 			});
 		});
@@ -804,10 +743,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					}
 				);
@@ -838,10 +777,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					}
 				);
@@ -882,10 +821,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1).toString(),
-						closedAt: new Date(2023, 1, 2).toString(),
-						finishedAt: new Date(2023, 1, 14).toString(),
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: new Date(2023, 1, 2),
+						finishedAt: new Date(2023, 1, 14),
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -918,10 +857,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: date,
-						closedAt: date,
-						finishedAt: laterDate,
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: new Date(2023, 1, 1),
+						finishedAt: new Date(2023, 1, 3),
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -950,10 +889,10 @@ describe("AdminMigrationSection", () => {
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: "",
-						closedAt: "",
-						finishedAt: "",
-						mandatorySince: "",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
 					},
 				}
 			);
@@ -1090,10 +1029,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: new Date(2023, 1, 1).toString(),
-							finishedAt: new Date(2023, 1, 2).toString(),
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: new Date(2023, 1, 1),
+							finishedAt: new Date(2023, 1, 2),
+							mandatorySince: undefined,
 						},
 					},
 					{
@@ -1123,14 +1062,7 @@ describe("AdminMigrationSection", () => {
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 					},
 					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
-						},
+						getUserLoginMigration: undefined,
 					},
 					{
 						getEnableLdapSyncDuringMigration: true,
@@ -1160,10 +1092,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					},
 					{
@@ -1193,14 +1125,7 @@ describe("AdminMigrationSection", () => {
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 					},
 					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
-						},
+						getUserLoginMigration: undefined,
 					},
 					{
 						getEnableLdapSyncDuringMigration: true,
@@ -1232,10 +1157,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: "",
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: new Date(2023, 1, 1),
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					},
 					{
@@ -1268,10 +1193,10 @@ describe("AdminMigrationSection", () => {
 						getUserLoginMigration: {
 							sourceSystemId: "sourceSystemId",
 							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1).toString(),
-							closedAt: "",
-							finishedAt: "",
-							mandatorySince: "",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
 						},
 					},
 					{

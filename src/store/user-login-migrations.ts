@@ -1,5 +1,5 @@
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	PageContentResponse,
@@ -38,14 +38,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 		error: undefined,
 	};
 
-	private userLoginMigration: UserLoginMigration = {
-		sourceSystemId: undefined,
-		targetSystemId: "",
-		startedAt: "",
-		closedAt: undefined,
-		finishedAt: undefined,
-		mandatorySince: undefined,
-	};
+	private userLoginMigration: UserLoginMigration | undefined;
 
 	private get userMigrationApi(): UserMigrationApiInterface {
 		return UserMigrationApiFactory(undefined, "v3", $axios);
@@ -80,8 +73,8 @@ export default class UserLoginMigrationModule extends VuexModule {
 	}
 
 	@Mutation
-	setUserLoginMigration(userLoginMigration: UserLoginMigration): void {
-		this.userLoginMigration = userLoginMigration;
+	setUserLoginMigration(userLoginMigration?: UserLoginMigration): void {
+		this.userLoginMigration = userLoginMigration ?? undefined;
 	}
 
 	get getLoading(): boolean {
@@ -92,7 +85,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 		return this.migrationLinks;
 	}
 
-	get getUserLoginMigration(): UserLoginMigration {
+	get getUserLoginMigration(): UserLoginMigration | undefined {
 		return this.userLoginMigration;
 	}
 
@@ -282,10 +275,14 @@ export default class UserLoginMigrationModule extends VuexModule {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
 
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+			if (response.data) {
+				const userLoginMigration: UserLoginMigration =
+					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
-			this.setUserLoginMigration(userLoginMigration);
+				this.setUserLoginMigration(userLoginMigration);
+			} else {
+				this.setUserLoginMigration(undefined);
+			}
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 

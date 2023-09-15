@@ -214,17 +214,16 @@ export default defineComponent({
 		const t = (key: string, values?: VueI18n.Values): string =>
 			i18n.tc(key, 0, values);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
-			() => userLoginMigrationModule.getUserLoginMigration
-		);
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
+			computed(() => userLoginMigrationModule.getUserLoginMigration);
 
 		const oauthMigration: ComputedRef<UserLoginMigrationFlags> = computed(
 			() => {
 				return {
 					startedAt: !!userLoginMigration.value?.startedAt,
 					mandatorySince: !!userLoginMigration.value?.mandatorySince,
-					closedAt: userLoginMigration.value?.closedAt,
-					finishedAt: userLoginMigration.value?.finishedAt,
+					closedAt: userLoginMigration.value?.closedAt?.toDateString(),
+					finishedAt: userLoginMigration.value?.finishedAt?.toDateString(),
 				};
 			}
 		);
@@ -296,7 +295,7 @@ export default defineComponent({
 		);
 
 		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
-			if (userLoginMigration.value.finishedAt) {
+			if (userLoginMigration.value && userLoginMigration.value.finishedAt) {
 				return (
 					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
 				);
