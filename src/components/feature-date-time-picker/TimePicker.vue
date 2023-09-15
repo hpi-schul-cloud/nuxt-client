@@ -10,6 +10,7 @@
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
+					pattern="[0-9]+"
 					ref="inputField"
 					v-model="modelValue"
 					v-bind="attrs"
@@ -22,6 +23,7 @@
 					validate-on-blur
 					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
+					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="handleError"
@@ -128,6 +130,7 @@ export default defineComponent({
 		};
 
 		const handleError = (hasError: boolean) => {
+			console.log(hasError);
 			hasError ? emit("error") : emit("valid");
 		};
 
@@ -141,6 +144,12 @@ export default defineComponent({
 			showTimeDialog.value = false;
 		}, 50);
 
+		const isNumberOrColon = (event: KeyboardEvent) => {
+			const char = String.fromCharCode(event.keyCode); // Get the character
+			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
+			else event.preventDefault(); // If not match, don't add to input text
+		};
+
 		return {
 			showTimeDialog,
 			timesOfDayList,
@@ -150,6 +159,7 @@ export default defineComponent({
 			handleSelect,
 			handleError,
 			handleMenuToggle,
+			isNumberOrColon,
 		};
 	},
 });
