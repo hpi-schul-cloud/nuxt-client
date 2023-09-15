@@ -2,6 +2,7 @@
 	<div v-outside-click="removePopup" class="popup">
 		<v-btn
 			icon
+			variant="text"
 			class="icon-button"
 			data-testid="initials"
 			role="menu"
@@ -86,15 +87,15 @@ export default defineComponent({
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	font-weight: var(--font-weight-bold);
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: var(--v-secondary-base);
+	background-color: rgba(var(--v-theme-secondary));
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--v-secondary-darken1);
+		background-color: rgba(var(--v-theme-secondary-darken-1));
 	}
 }
 
@@ -113,9 +114,9 @@ export default defineComponent({
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: var(--v-black-base);
+		color: rgba(var(--v-theme-black));
 		white-space: nowrap;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 		border: 1px solid map-get($grey, lighten-2);
 		border-radius: var(--radius-sm);
 

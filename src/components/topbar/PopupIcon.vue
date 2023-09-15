@@ -1,7 +1,12 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<v-btn icon class="icon-button" @click="popup">
-			<v-icon :color="color">{{ icon }}</v-icon>
+		<v-btn
+			:icon="icon"
+			:color="color"
+			class="icon-button"
+			variant="text"
+			@click="popup"
+		>
 		</v-btn>
 		<div
 			ref="popupContent"
@@ -24,7 +29,7 @@ export default defineComponent({
 		},
 		color: {
 			type: String,
-			default: "var(--v-secondary-darken1)",
+			default: "rgba(var(--v-theme-secondary-darken-1))",
 		},
 		centered: {
 			type: Boolean,
@@ -85,7 +90,7 @@ export default defineComponent({
 		right: 0%;
 		z-index: var(--layer-popover);
 		visibility: hidden;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 		border: 1px solid map-get($grey, lighten-3);
 		border-radius: var(--radius-sm);
 
@@ -144,7 +149,7 @@ export default defineComponent({
 		right: var(--arrow-offset);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--v-white-base) transparent;
+		border-color: transparent transparent rgba(var(--v-theme-white)) transparent;
 		border-style: solid;
 		border-width: var(--arrow-size);
 

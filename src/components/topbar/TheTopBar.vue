@@ -6,10 +6,11 @@
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
 			<v-btn
-				icon
+				icon="$mdiMenu"
 				height="60"
 				width="60"
-				color="secondary darken-1"
+				color="secondary-darken-1"
+				variant="text"
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-testid="top-menu-btn"
@@ -17,7 +18,6 @@
 				role="menu"
 				@click="sendEvent('expandMenu')"
 			>
-				<v-icon>$mdiMenu</v-icon>
 			</v-btn>
 			<div class="top-bar-actions">
 				<popup-icon
@@ -34,14 +34,14 @@
 				</popup-icon>
 				<v-btn
 					class="item"
-					icon
-					color="secondary darken-1"
+					icon="$mdiArrowExpand"
+					color="secondary-darken-1"
+					variant="text"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"
 					@click="sendEvent('fullscreen')"
 				>
-					<v-icon>$mdiArrowExpand</v-icon>
 				</v-btn>
 				<popup-icon
 					class="item"
@@ -103,16 +103,14 @@
 		</div>
 		<v-btn
 			v-else
-			color="secondary darken-1"
-			fab
-			dark
+			color="secondary-darken-1"
+			icon="$mdiArrowCollapse"
 			variant="flat"
 			width="40"
 			height="40"
 			class="fullscreen-button-active"
 			@click="sendEvent('fullscreen')"
 		>
-			<v-icon>$mdiArrowCollapse</v-icon>
 		</v-btn>
 	</div>
 </template>
@@ -204,8 +202,8 @@ export default defineComponent({
 					.length !== 0;
 
 			return statusAlertsIncludeDanger
-				? "var(--v-error-base)"
-				: "var(--v-info-base)";
+				? "rgba(var(--v-theme-error))"
+				: "rgba(var(--v-theme-info))";
 		});
 
 		return {
@@ -315,7 +313,7 @@ export default defineComponent({
 
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--v-secondary-base);
+	color: rgba(var(--v-theme-secondary));
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;
