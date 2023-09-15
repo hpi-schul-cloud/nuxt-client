@@ -24,7 +24,7 @@
 						ref="search"
 						v-model="searchText"
 						rounded
-						solo
+						variabt="solo"
 						:label="$t('pages.rooms.index.search.label')"
 						:append-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"

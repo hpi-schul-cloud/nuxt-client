@@ -28,7 +28,7 @@ export default {
 		},
 		iconColor() {
 			const typeStr = this.type.substring(3);
-			return `var(--v-${typeStr}-base)`;
+			return `rgba(var(--v-theme-${typeStr}))`;
 		},
 	},
 };
@@ -41,19 +41,19 @@ export default {
 }
 
 .info-message.bc-error {
-	color: var(--v-error-base);
+	color: rgba(var(--v-theme-error));
 }
 
 .info-message.bc-success {
-	color: var(--v-success-base);
+	color: rgba(var(--v-theme-success));
 }
 
 .info-message.bc-warning {
-	color: var(--v-warning-base);
+	color: rgba(var(--v-theme-warning));
 }
 
 .info-message.bc-info {
-	color: var(--v-info-base);
+	color: rgba(var(--v-theme-info));
 }
 
 .info-message .icon {

@@ -4,7 +4,7 @@
 		deletable-chips
 		multiple
 		clearable
-		solo
+		variant="solo"
 		rounded
 		:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 		v-bind="$attrs"

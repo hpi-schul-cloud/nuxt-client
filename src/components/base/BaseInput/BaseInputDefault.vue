@@ -64,8 +64,10 @@
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>
 					</v-btn>
-					<v-icon v-if="hasError" color="var(--v-error-base)">$mdiAlert</v-icon>
-					<v-icon v-if="success" color="var(--v-success-base)">
+					<v-icon v-if="hasError" color="rgba(var(--v-theme-error))"
+						>$mdiAlert</v-icon
+					>
+					<v-icon v-if="success" color="rgba(var(--v-theme-success))">
 						$mdiCheckCircleOutline
 					</v-icon>
 				</div>
@@ -207,7 +209,7 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--v-primary-base);
+			color: rgba(var(--v-theme-primary));
 		}
 
 		.help {
@@ -215,7 +217,7 @@ export default {
 		}
 
 		.visible {
-			fill: var(--v-primary-base);
+			fill: rgba(var(--v-theme-primary));
 		}
 	}
 }
@@ -226,11 +228,11 @@ export default {
 
 .top {
 	width: 100%;
-	border-bottom: var(--border-width) solid var(--v-black-base);
+	border-bottom: var(--border-width) solid rgba(var(--v-theme-black));
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom: var(--border-width-bold) solid var(--v-primary-base);
+		border-bottom: var(--border-width-bold) solid rgba(var(--v-theme-primary));
 		outline: none;
 
 		~ .bottom-line {
@@ -239,7 +241,7 @@ export default {
 	}
 
 	&.base-input-error {
-		border-bottom-color: var(--v-error-base);
+		border-bottom-color: rgba(var(--v-theme-error));
 	}
 
 	&.disabled {
@@ -320,7 +322,7 @@ export default {
 		color: map-get($grey, darken-3);
 		outline: none;
 		box-shadow:
-			0 0 0 3px var(--v-white-base),
+			0 0 0 3px rgba(var(--v-theme-white)),
 			0 0 0 6px map-get($grey, darken-3);
 	}
 }
@@ -332,7 +334,7 @@ export default {
 }
 
 .base-input-info.base-input-error {
-	color: var(--v-error-base);
+	color: rgba(var(--v-theme-error));
 }
 
 .fade-enter-active {

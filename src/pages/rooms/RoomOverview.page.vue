@@ -37,10 +37,10 @@
 						ref="search"
 						v-model="searchText"
 						class="room-search px-1"
-						solo
+						variant="solo"
 						rounded
 						:label="$t('pages.rooms.index.search.label')"
-						:append-icon="mdiMagnify"
+						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
 						data-testid="search-field"
 					/>

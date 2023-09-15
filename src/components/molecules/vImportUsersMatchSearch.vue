@@ -115,7 +115,7 @@
 								$t('components.molecules.importUsersMatch.notFound')
 							"
 							no-filter
-							solo
+							variant="solo"
 							rounded
 							small-chips
 						>

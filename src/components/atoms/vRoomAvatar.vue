@@ -13,7 +13,7 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="var(--v-primary-base)"
+			color="rgba(var(--v-theme-primary))"
 			icon="$mdiLock"
 			overlap
 			:value="displayBadge"
@@ -197,7 +197,7 @@ export default {
 .subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 	text-align: center;
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
@@ -217,7 +217,7 @@ export default {
 		margin-left: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
-		color: var(--v-black-base);
+		color: rgba(var(--v-theme-black));
 	}
 }
 

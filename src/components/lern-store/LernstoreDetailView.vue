@@ -2,7 +2,7 @@
 	<div class="resource">
 		<div ref="icons" class="icons">
 			<v-btn
-				fab
+				icon
 				small
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
