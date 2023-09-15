@@ -2,17 +2,15 @@ import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import { submissionItemResponseFactory } from "@@/tests/test-utils";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
-const mockedSubmissionItems: Array<SubmissionItemResponse> = [
-	submissionItemResponseFactory.build(),
-];
+const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionItemStudentDisplay", () => {
 	const setup = (
 		loading = false,
-		submissionItems = mockedSubmissionItems,
+		submissions = mockedSubmissions,
 		editable = true
 	) => {
 		document.body.setAttribute("data-app", "true");
@@ -20,7 +18,7 @@ describe("SubmissionItemStudentDisplay", () => {
 		const propsData = {
 			editable: editable,
 			loading: loading,
-			submissionItems: submissionItems,
+			submissions: submissions,
 		};
 
 		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
@@ -88,8 +86,11 @@ describe("SubmissionItemStudentDisplay", () => {
 		describe("if student has no submissionItem yet", () => {
 			it("should show state as not completed", async () => {
 				const loading = false;
-				const submissionItems: Array<SubmissionItemResponse> = [];
-				const { wrapper } = setup(loading, submissionItems);
+				const submissions: SubmissionsResponse = {
+					submissionItemsResponse: [],
+					users: [],
+				};
+				const { wrapper } = setup(loading, submissions);
 
 				const checked = wrapper
 					.findComponent({ name: "v-checkbox" })
@@ -110,7 +111,9 @@ describe("SubmissionItemStudentDisplay", () => {
 					.find("input")
 					.attributes("aria-checked");
 
-				expect(checked).toBe(mockedSubmissionItems[0].completed.toString());
+				expect(checked).toBe(
+					mockedSubmissions.submissionItemsResponse[0].completed.toString()
+				);
 			});
 		});
 
@@ -131,7 +134,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			it("should render the checkbox as disabled", async () => {
 				const loading = false;
 				const editable = false;
-				const { wrapper } = setup(loading, mockedSubmissionItems, editable);
+				const { wrapper } = setup(loading, mockedSubmissions, editable);
 
 				const disabled = wrapper
 					.findComponent({ name: "v-checkbox" })

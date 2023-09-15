@@ -3,19 +3,14 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { I18N_KEY } from "@/utils/inject";
-import { submissionItemResponseFactory } from "@@/tests/test-utils";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
 
-const mockedSubmissionItems: Array<SubmissionItemResponse> = [
-	submissionItemResponseFactory.build(),
-	submissionItemResponseFactory.build(),
-	submissionItemResponseFactory.build(),
-];
+const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionItemsTeacherDisplay", () => {
 	const setup = (
 		loading = false,
-		submissionItems = mockedSubmissionItems,
+		submissions = mockedSubmissions,
 		editable = true
 	) => {
 		document.body.setAttribute("data-app", "true");
@@ -23,7 +18,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		const propsData = {
 			editable: editable,
 			loading: loading,
-			submissionItems: submissionItems,
+			submissions: submissions,
 		};
 
 		const wrapper = shallowMount(
@@ -103,10 +98,10 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		describe("if open submission items exist", () => {
 			it("should show chip with amount of open items", () => {
 				const loading = false;
-				const submissionItems: Array<SubmissionItemResponse> = [
-					submissionItemResponseFactory.build({ completed: false }),
-				];
-				const { wrapper } = setup(loading, submissionItems);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse[0].completed = false;
+
+				const { wrapper } = setup(loading, submissions);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-open",
@@ -115,26 +110,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			});
 		});
 
-		describe("if open submission items do not exist", () => {
-			it.skip("should not show chip with amount of open items", () => {
-				const loading = false;
-				const submissionItems: Array<SubmissionItemResponse> = [];
-				const { wrapper } = setup(loading, submissionItems);
-
-				const chip = wrapper.findComponent({
-					ref: "v-chip-open",
-				});
-				expect(chip.exists()).toBe(false);
-			});
-		});
-
 		describe("if completed submission items exist", () => {
 			it("should show chip with amount of completed items", () => {
 				const loading = false;
-				const submissionItems: Array<SubmissionItemResponse> = [
-					submissionItemResponseFactory.build({ completed: true }),
-				];
-				const { wrapper } = setup(loading, submissionItems);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse[0].completed = true;
+
+				const { wrapper } = setup(loading, submissions);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-completed",
@@ -144,10 +126,12 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if completed submission items do not exist", () => {
-			it.skip("should not show chip with amount of completed items", () => {
+			it("should not show chip with amount of completed items", () => {
 				const loading = false;
-				const submissionItems: Array<SubmissionItemResponse> = [];
-				const { wrapper } = setup(loading, submissionItems);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse = [];
+
+				const { wrapper } = setup(loading, submissions);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-completed",
@@ -161,10 +145,10 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		it("should show no chip with amount of open items", () => {
 			const loading = false;
 			const editable = false;
-			const submissionItems: Array<SubmissionItemResponse> = [
-				submissionItemResponseFactory.build({ completed: false }),
-			];
-			const { wrapper } = setup(loading, submissionItems, editable);
+			const submissions = submissionsResponseFactory.build();
+			submissions.submissionItemsResponse[0].completed = false;
+
+			const { wrapper } = setup(loading, submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
@@ -176,10 +160,10 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			it("should show chip with amount of expired items", () => {
 				const loading = false;
 				const editable = false;
-				const submissionItems: Array<SubmissionItemResponse> = [
-					submissionItemResponseFactory.build({ completed: false }),
-				];
-				const { wrapper } = setup(loading, submissionItems, editable);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse[0].completed = false;
+
+				const { wrapper } = setup(loading, submissions, editable);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-expired",
@@ -188,28 +172,14 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			});
 		});
 
-		describe("if expired submission items do not exist", () => {
-			it.skip("should not show chip with amount of expired items", () => {
-				const loading = false;
-				const editable = false;
-				const submissionItems: Array<SubmissionItemResponse> = [];
-				const { wrapper } = setup(loading, submissionItems, editable);
-
-				const chip = wrapper.findComponent({
-					ref: "v-chip-expired",
-				});
-				expect(chip.exists()).toBe(false);
-			});
-		});
-
 		describe("if completed submission items exist", () => {
 			it("should show chip with amount of completed items", () => {
 				const loading = false;
 				const editable = false;
-				const submissionItems: Array<SubmissionItemResponse> = [
-					submissionItemResponseFactory.build({ completed: true }),
-				];
-				const { wrapper } = setup(loading, submissionItems, editable);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse[0].completed = true;
+
+				const { wrapper } = setup(loading, submissions, editable);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-completed",
@@ -219,11 +189,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		describe("if completed submission items do not exist", () => {
-			it.skip("should not show chip with amount of completed items", () => {
+			it("should not show chip with amount of completed items", () => {
 				const loading = false;
 				const editable = false;
-				const submissionItems: Array<SubmissionItemResponse> = [];
-				const { wrapper } = setup(loading, submissionItems, editable);
+				const submissions = submissionsResponseFactory.build();
+				submissions.submissionItemsResponse = [];
+
+				const { wrapper } = setup(loading, submissions, editable);
 
 				const chip = wrapper.findComponent({
 					ref: "v-chip-completed",

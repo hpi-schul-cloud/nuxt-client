@@ -41,7 +41,7 @@
 			</v-card-text>
 		</div>
 		<SubmissionItemsTeacherDisplay
-			:submissionItems="submissionItems"
+			:submissions="submissions"
 			:editable="editable"
 			:loading="loading"
 		/>
@@ -53,7 +53,7 @@ import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent, PropType } from "vue";
 import dayjs from "dayjs";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionsResponse } from "@/serverApi/v3";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 
 export default defineComponent({
@@ -64,8 +64,8 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		submissionItems: {
-			type: Array as PropType<SubmissionItemResponse[]>,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		editable: {

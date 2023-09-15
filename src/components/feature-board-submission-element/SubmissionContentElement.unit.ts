@@ -116,10 +116,10 @@ describe("SubmissionContentElement", () => {
 
 			const completed = wrapper
 				.findComponent(SubmissionContentElementDisplay)
-				.props("submissionItems");
+				.props("submissions");
 
 			expect(completed).toBe(
-				mockedUseSubmissionContentElementStateResponse.submissionItems
+				mockedUseSubmissionContentElementStateResponse.submissions
 			);
 		});
 
@@ -241,10 +241,10 @@ describe("SubmissionContentElement", () => {
 
 			const completed = wrapper
 				.findComponent(SubmissionContentElementEdit)
-				.props("submissionItems");
+				.props("submissions");
 
 			expect(completed).toBe(
-				mockedUseSubmissionContentElementStateResponse.submissionItems
+				mockedUseSubmissionContentElementStateResponse.submissions
 			);
 		});
 

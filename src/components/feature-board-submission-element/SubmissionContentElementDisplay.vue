@@ -33,14 +33,14 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:submissionItems="submissionItems"
+			:submissions="submissions"
 			:editable="editable"
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
-			:submissionItems="submissionItems"
+			:submissions="submissions"
 			:editable="editable"
 			:loading="loading"
 		/>
@@ -55,7 +55,7 @@ import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -64,8 +64,8 @@ export default defineComponent({
 		SubmissionItemsTeacherDisplay,
 	},
 	props: {
-		submissionItems: {
-			type: Array as PropType<SubmissionItemResponse[]>,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		loading: {

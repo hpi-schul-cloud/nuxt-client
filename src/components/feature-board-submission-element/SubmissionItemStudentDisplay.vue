@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
@@ -28,8 +28,8 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		submissionItems: {
-			type: Array as PropType<SubmissionItemResponse[]>,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		loading: {
@@ -41,11 +41,11 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = computed({
 			get() {
-				if (props.submissionItems.length === 0) {
+				if (props.submissions.submissionItemsResponse.length === 0) {
 					return false;
 				}
 
-				return props.submissionItems[0].completed;
+				return props.submissions.submissionItemsResponse[0].completed;
 			},
 			set(newValue) {
 				emit("update:completed", newValue);

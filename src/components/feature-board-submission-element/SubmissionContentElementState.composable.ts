@@ -14,12 +14,15 @@ export const useSubmissionContentElementState = (
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
-	const submissionItems = ref<SubmissionsResponse>();
+	const submissions = ref<SubmissionsResponse>({
+		submissionItemsResponse: [],
+		users: [],
+	});
 	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
-			submissionItems.value = await fetchSubmissionItemsCall(id);
+			submissions.value = await fetchSubmissionItemsCall(id);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -28,28 +31,28 @@ export const useSubmissionContentElementState = (
 	};
 
 	const createSubmissionItem = async (completed: boolean) => {
-		// try {
-		// 	const response = await createSubmissionItemCall(id, completed);
-		// 	submissionItems.value.submissionItemsResponse.push(response);
-		// } catch (error) {
-		// 	notifyWithTemplate("notCreated", "boardElement")();
-		// }
+		try {
+			const response = await createSubmissionItemCall(id, completed);
+			submissions.value.submissionItemsResponse.push(response);
+		} catch (error) {
+			notifyWithTemplate("notCreated", "boardElement")();
+		}
 	};
 
 	const updateSubmissionItem = async (completed: boolean) => {
-		// if (submissionItems.value.submissionItemsResponse.length === 0) {
-		// 	await createSubmissionItem(completed);
-		// 	return;
-		// }
-		// try {
-		// 	await updateSubmissionItemCall(
-		// 		submissionItems.value.submissionItemsResponse[0].id,
-		// 		completed
-		// 	);
-		// 	submissionItems.value.submissionItemsResponse[0].completed = completed;
-		// } catch (error) {
-		// 	notifyWithTemplate("notUpdated", "boardElement")();
-		// }
+		if (submissions.value.submissionItemsResponse.length === 0) {
+			await createSubmissionItem(completed);
+			return;
+		}
+		try {
+			await updateSubmissionItemCall(
+				submissions.value.submissionItemsResponse[0].id,
+				completed
+			);
+			submissions.value.submissionItemsResponse[0].completed = completed;
+		} catch (error) {
+			notifyWithTemplate("notUpdated", "boardElement")();
+		}
 	};
 
 	const editable = computed(() => {
@@ -62,7 +65,7 @@ export const useSubmissionContentElementState = (
 	});
 
 	return {
-		submissionItems,
+		submissions,
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,

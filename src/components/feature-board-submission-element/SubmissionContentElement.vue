@@ -15,7 +15,7 @@
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
 				:loading="loading"
-				:submissionItems="submissionItems"
+				:submissions="submissions"
 				:editable="editable"
 				@update:completed="updateCompleted"
 			/>
@@ -23,7 +23,7 @@
 				v-if="isEditMode"
 				:dueDate="element.content.dueDate"
 				:loading="loading"
-				:submissionItems="submissionItems"
+				:submissions="submissions"
 				:editable="editable"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
@@ -73,7 +73,7 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissionItems, editable, updateSubmissionItem } =
+		const { loading, submissions, editable, updateSubmissionItem } =
 			useSubmissionContentElementState(
 				element.value.id,
 				element.value.content.dueDate
@@ -113,7 +113,7 @@ export default defineComponent({
 
 		return {
 			submissionContentElement,
-			submissionItems,
+			submissions,
 			loading,
 			editable,
 			onDeleteElement,

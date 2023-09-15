@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionsResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
@@ -83,94 +83,6 @@ type SubmissionInfo = {
 	lastName: string;
 };
 
-type Student = {
-	userId: string;
-	firstName: string;
-	lastName: string;
-};
-
-const mockedAllStudents: Array<Student> = [
-	{
-		userId: "123",
-		firstName: "Hans",
-		lastName: "Jürgensen",
-	},
-	{
-		userId: "456",
-		firstName: "Ingrid",
-		lastName: "van der Fahrt",
-	},
-	{
-		userId: "789",
-		firstName: "Horst",
-		lastName: "Müller",
-	},
-	{
-		userId: "12348",
-		firstName: "Lena-Christiane",
-		lastName: "Meyer - Hallervorden",
-	},
-	{
-		userId: "12347",
-		firstName: "Christiano",
-		lastName: "von Schweinsteiger",
-	},
-	{
-		userId: "12346",
-		firstName: "Hannelore",
-		lastName: "Meyer",
-	},
-	{
-		userId: "12345",
-		firstName: "Max",
-		lastName: "Ix",
-	},
-	{
-		userId: "000",
-		firstName: "James",
-		lastName: "Bond",
-	},
-];
-
-const mockedSubmissionItems: Array<SubmissionItemResponse> = [
-	{
-		id: "1",
-		completed: true,
-		userId: "12348",
-		timestamps: {
-			lastUpdatedAt: "",
-			createdAt: "",
-		},
-	},
-	{
-		id: "2",
-		completed: true,
-		userId: "12346",
-		timestamps: {
-			lastUpdatedAt: "",
-			createdAt: "",
-		},
-	},
-	{
-		id: "3",
-		completed: false,
-		userId: "12345",
-		timestamps: {
-			lastUpdatedAt: "",
-			createdAt: "",
-		},
-	},
-	{
-		id: "4",
-		completed: true,
-		userId: "123",
-		timestamps: {
-			lastUpdatedAt: "",
-			createdAt: "",
-		},
-	},
-];
-
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
 	props: {
@@ -178,8 +90,8 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		submissionItems: {
-			type: Array as PropType<SubmissionItemResponse[]>,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		editable: {
@@ -205,14 +117,14 @@ export default defineComponent({
 		];
 
 		const items = computed<Array<SubmissionInfo>>(() => {
-			return mockedAllStudents
+			return props.submissions.users
 				.map((student) => {
 					const submissionInfo: Partial<SubmissionInfo> = {
 						firstName: student.firstName,
 						lastName: student.lastName,
 					};
 
-					const submissionItem = mockedSubmissionItems.find(
+					const submissionItem = props.submissions.submissionItemsResponse.find(
 						(submissionItem) => submissionItem.userId === student.userId
 					);
 
