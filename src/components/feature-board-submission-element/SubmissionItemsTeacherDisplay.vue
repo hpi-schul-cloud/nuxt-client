@@ -11,8 +11,8 @@
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
-						ref="v-chip-open"
 						v-if="open"
+						ref="v-chip-open"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
@@ -20,8 +20,8 @@
 						{{ $t("components.cardElement.submissionElement.open") }}</v-chip
 					>
 					<v-chip
-						ref="v-chip-completed"
 						v-if="completed"
+						ref="v-chip-completed"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
@@ -31,8 +31,8 @@
 						}}</v-chip
 					>
 					<v-chip
-						ref="v-chip-expired"
 						v-if="expired"
+						ref="v-chip-expired"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
