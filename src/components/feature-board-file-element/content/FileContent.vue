@@ -1,7 +1,11 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
-		<CaptionText v-if="isEditMode"></CaptionText>
+		<CaptionText
+			:is-edit-mode="isEditMode"
+			@update:text="onUpdateCaption"
+			text="Text text text"
+		></CaptionText>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
@@ -36,9 +40,11 @@ export default defineComponent({
 			emit("fetch:file");
 		};
 
+		const onUpdateCaption = (value: string) => emit("update:caption", value);
+
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
 
-		return { onFetchFile, previewStatus };
+		return { onFetchFile, previewStatus, onUpdateCaption };
 	},
 });
 </script>
