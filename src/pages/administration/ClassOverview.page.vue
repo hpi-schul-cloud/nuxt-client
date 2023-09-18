@@ -40,7 +40,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable.vue";
-import { computed, ComputedRef, defineComponent } from "vue";
+import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import GroupModule from "@/store/group";
 import { useI18n } from "@/composables/i18n.composable";
 import { Pagination } from "@/store/types/commons";
@@ -99,19 +99,25 @@ export default defineComponent({
 			},
 		];
 
-		const onUpdateSort = (sortBy: string, sortOrder: SortOrder) => {
+		const onUpdateSort = async (sortBy: string, sortOrder: SortOrder) => {
 			groupModule.setSortBy(sortBy);
 			groupModule.setSortOrder(sortOrder);
-			onUpdateCurrentPage();
-		};
-		const onUpdateCurrentPage = async () => {
-			groupModule.setPage((page.value - 1) * pagination.value.limit);
 			await groupModule.loadClassesForSchool();
 		};
-		const onUpdateRowsPerPage = async (limit: number) => {
-			groupModule.setPagination({ ...pagination.value, limit });
+		const onUpdateCurrentPage = async (_page: number) => {
+			groupModule.setPage(_page);
+			const _skip = (page.value - 1) * groupModule.getPagination.limit;
+			groupModule.setPagination({ ...pagination.value, skip: _skip });
 			await groupModule.loadClassesForSchool();
 		};
+		const onUpdateRowsPerPage = async (rowsPerPage: number) => {
+			groupModule.setPagination({ ...pagination.value, limit: rowsPerPage });
+			await groupModule.loadClassesForSchool();
+		};
+
+		onMounted(() => {
+			groupModule.loadClassesForSchool();
+		});
 
 		return {
 			t,
