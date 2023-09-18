@@ -34,6 +34,7 @@ import { getModule } from "vuex-module-decorators";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import VideoConferenceModule from "@/store/video-conference";
+import TermsOfUseModule from "@/store/terms-of-use";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -55,6 +56,7 @@ export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
+export let termsOfUseModule: TermsOfUseModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -85,6 +87,7 @@ export function initializeStores(store: Store<any>): void {
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
+	termsOfUseModule = getModule(TermsOfUseModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -118,6 +121,7 @@ export const modules = {
 	newsModule: NewsModule,
 	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
+	termsOfUseModule: TermsOfUseModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,

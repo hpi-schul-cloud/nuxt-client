@@ -1,7 +1,7 @@
 <template>
 	<div class="topbar">
 		<div
-			v-if="!fullscreen"
+			v-if="!fullscreenMode"
 			class="top-main"
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
@@ -118,14 +118,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	PropType,
-	onMounted,
-	computed,
-	ref,
-	watch,
-} from "vue";
+import { defineComponent, PropType, onMounted, computed } from "vue";
 import {
 	I18N_KEY,
 	STATUS_ALERTS_MODULE_KEY,
@@ -169,20 +162,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-		const fullscreen = ref(props.fullscreenMode);
 
 		onMounted(() => {
 			(async () => {
 				await statusAlertsModule.fetchStatusAlerts();
 			})();
 		});
-
-		watch(
-			() => props.fullscreenMode,
-			(newValue) => {
-				fullscreen.value = newValue;
-			}
-		);
 
 		const sendEvent = (eventName: string) => {
 			emit("action", eventName);
@@ -217,7 +202,6 @@ export default defineComponent({
 			statusAlerts,
 			showStatusAlertIcon,
 			statusAlertColor,
-			fullscreen,
 		};
 	},
 });

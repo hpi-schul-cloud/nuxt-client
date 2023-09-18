@@ -1,4 +1,4 @@
-import FileContentElement from "./components/FileContentElement.vue";
-import { useFileStorageApi } from "./FileStorageApi.composable";
+import FileContentElement from "./FileContentElement.vue";
+import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 
 export { FileContentElement, useFileStorageApi };
