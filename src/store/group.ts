@@ -1,4 +1,5 @@
 import {
+	ClassInfoResponse,
 	ClassInfoSearchListResponse,
 	GroupApiFactory,
 	GroupApiInterface,
@@ -16,39 +17,15 @@ import { SortOrder } from "./types/sort-order.enum";
 	stateFactory: true,
 })
 export default class GroupModule extends VuexModule {
-	// TODO: remove test data
-	private classes: ClassInfo[] = [
-		{ name: "1a", externalSourceName: "Klasse", teachers: ["Manni", "Max"] },
-		{
-			name: "1b",
-			externalSourceName: "Klasse",
-			teachers: ["Max", "Max", "Thomas"],
-		},
-		{ name: "2a", externalSourceName: "Klasse", teachers: ["Thomas"] },
-		{
-			name: "2b",
-			externalSourceName: "Klasse",
-			teachers: ["Adolfo", "Thomas"],
-		},
-		{ name: "3a", externalSourceName: "Klasse", teachers: ["Carlie"] },
-		{ name: "1a", externalSourceName: "Klasse", teachers: ["Manni"] },
-		{ name: "1b", externalSourceName: "Klasse", teachers: ["Max"] },
-		{ name: "2a", externalSourceName: "Klasse", teachers: ["Thomas"] },
-		{ name: "2b", externalSourceName: "Klasse", teachers: ["Adolfo"] },
-		{ name: "3a", externalSourceName: "Klasse", teachers: ["Carlie"] },
-		{ name: "1a", externalSourceName: "Klasse", teachers: ["Manni"] },
-		{ name: "1b", externalSourceName: "Klasse", teachers: ["Max"] },
-		{ name: "2a", externalSourceName: "Klasse", teachers: ["Thomas"] },
-		{ name: "2b", externalSourceName: "Klasse", teachers: ["Adolfo"] },
-		{ name: "3a", externalSourceName: "Klasse", teachers: ["Carlie"] },
-	];
+	private classes: ClassInfo[] = [];
+
 	private loading = false;
 	private error: object | null = null;
 
 	private pagination: Pagination = {
 		limit: 10,
 		skip: 0,
-		total: 0,
+		total: 300,
 	};
 
 	private sortBy = "name";
@@ -104,7 +81,7 @@ export default class GroupModule extends VuexModule {
 
 	@Mutation
 	setPagination(pagination: Pagination): void {
-		this.error = pagination;
+		this.pagination = pagination;
 	}
 
 	@Mutation
@@ -131,21 +108,28 @@ export default class GroupModule extends VuexModule {
 					? this.getSortBy
 					: undefined;
 
-			const classesInfoList: AxiosResponse<ClassInfoSearchListResponse> =
+			const response: AxiosResponse<ClassInfoSearchListResponse> =
 				await this.groupApi.groupControllerFindClassesForSchool(
 					this.pagination.skip,
 					this.pagination.limit,
 					this.getSortOrder,
 					sortBy
 				);
+			const mappedClasses: ClassInfo[] = response.data.data.map(
+				(classInfoResponse: ClassInfoResponse): ClassInfo => ({
+					name: classInfoResponse.name,
+					externalSourceName: classInfoResponse.externalSourceName,
+					teachers: classInfoResponse.teachers,
+				})
+			);
+			console.log(response.data);
 
 			this.setPagination({
-				limit: classesInfoList.data.limit,
-				skip: classesInfoList.data.skip,
-				total: classesInfoList.data.total,
+				...this.getPagination,
+				limit: response.data.limit,
+				skip: response.data.skip,
 			});
-			// TODO: mapping
-			this.setClasses(classesInfoList.data.data as ClassInfo[]);
+			this.setClasses(mappedClasses);
 		} catch (error) {
 			this.setError(error as Error);
 		}
