@@ -13,7 +13,7 @@
 
 		<template slot="content">
 			<div
-				class="d-flex flex-sm-row flex-column align-items-center"
+				class="d-flex flex-sm-row flex-column flex-wrap align-items-center"
 				:class="{ 'justify-content-space-between': submissionsEnabled }"
 			>
 				<v-btn
@@ -44,10 +44,10 @@
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiEmailOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "AddElementDialog",

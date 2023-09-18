@@ -57,7 +57,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			icon: mdiPuzzleOutline,
 			label:
 				"components.elementTypeSelection.elements.externalToolElement.subtitle",
-			action: () => onElementClick(ContentElementType.SubmissionContainer), // TODO
+			action: () => onElementClick(ContentElementType.ExternalTool),
 			testId: "create-element-external-tool-container",
 		});
 	}

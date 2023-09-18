@@ -1,10 +1,11 @@
 <template>
 	<v-card
-		class="mb-4 flex gap-8 pa-4"
+		v-show="hasLinkedTool || isEditMode"
+		class="mb-4 pa-4 flex gap-8"
 		data-testid="board-external-tool-element"
 		dense
 		elevation="0"
-		outlined
+		:outlined="isOutlined"
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
@@ -18,7 +19,9 @@
 			:src="toolDisplayData.logoUrl"
 		></v-img>
 		<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-		<p>{{ hasLinkedTool ? toolDisplayName : "Tool auswählen..." }}</p>
+		<span class="align-self-center title flex-1">
+			{{ hasLinkedTool ? toolDisplayName : "Tool auswählen..." }}
+		</span>
 		<ExternalToolElementMenu
 			v-if="isEditMode"
 			:isFirstElement="isFirstElement"
@@ -33,8 +36,14 @@
 </template>
 
 <script lang="ts">
+import { ExternalToolElementResponse } from "@/serverApi/v3";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import { useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
@@ -52,7 +61,7 @@ export default defineComponent({
 	components: { ExternalToolElementMenu },
 	props: {
 		element: {
-			type: Object as PropType<any>,
+			type: Object as PropType<ExternalToolElementResponse>,
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
@@ -67,20 +76,37 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const { modelValue } = useContentElementState(props);
+		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
+			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
+		);
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const autofocus: Ref<boolean> = ref(false);
-		const element: Ref<any> = toRef(props, "element");
+		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 
-		const toolDisplayData: Ref<ExternalToolDisplayData | undefined> =
-			ref(undefined);
+		const hasLinkedTool: ComputedRef<boolean> = computed(
+			() => !!element.value.content.contextExternalToolId
+		);
+
+		const toolDisplayData: Ref<ExternalToolDisplayData | undefined> = computed(
+			() =>
+				contextExternalToolsModule.getExternalToolDisplayDataList.find(
+					(externalToolDisplayData: ExternalToolDisplayData) =>
+						externalToolDisplayData.contextExternalToolId ===
+						element.value.content.contextExternalToolId
+				)
+		);
+
 		const toolDisplayName: ComputedRef<string> = computed(
 			() => toolDisplayData.value?.name ?? "..."
 		);
-		const hasLinkedTool: ComputedRef<boolean> = computed(() => false); // TODO
+
 		const isLoading = computed(
 			() => hasLinkedTool.value && !toolDisplayData.value
 		);
+
+		const isOutlined = computed(() => {
+			return toolDisplayData.value !== undefined || props.isEditMode;
+		});
 
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
@@ -117,19 +143,21 @@ export default defineComponent({
 		};
 
 		const onClickElement = () => {
-			if (!hasLinkedTool.value) {
-				// TODO Edit dialog
-			} else if (!props.isEditMode) {
+			if (props.isEditMode) {
+				if (!hasLinkedTool.value) {
+					// TODO Edit dialog
+				}
+			} else {
 				// TODO launch tool
 			}
 		};
 
 		return {
-			modelValue,
 			hasLinkedTool,
 			toolDisplayData,
 			toolDisplayName,
 			isLoading,
+			isOutlined,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
@@ -143,7 +171,16 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+/* d-flex without !important */
+.flex {
+	display: flex;
+}
+
 .gap-8 {
 	gap: 8px;
+}
+
+.flex-1 {
+	flex: 1;
 }
 </style>

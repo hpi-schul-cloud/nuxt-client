@@ -563,7 +563,8 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -929,7 +930,8 @@ export interface CreateCardBodyParams {
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1368,6 +1370,19 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalToolContentBody
+ */
+export interface ExternalToolContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolContentBody
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolCreateParams
  */
 export interface ExternalToolCreateParams {
@@ -1413,6 +1428,69 @@ export interface ExternalToolCreateParams {
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContent
+ */
+export interface ExternalToolElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementContent
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContentBody
+ */
+export interface ExternalToolElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolContentBody}
+     * @memberof ExternalToolElementContentBody
+     */
+    content: ExternalToolContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementResponse
+ */
+export interface ExternalToolElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolElementContent}
+     * @memberof ExternalToolElementResponse
+     */
+    content: ExternalToolElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof ExternalToolElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -4327,10 +4405,10 @@ export enum ToolReferenceResponseStatusEnum {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
+     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody;
 }
 /**
  * 
@@ -6387,7 +6465,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6467,7 +6545,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6541,7 +6619,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>;
 
     /**
      * 
