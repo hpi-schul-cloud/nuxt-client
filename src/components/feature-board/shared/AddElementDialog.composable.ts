@@ -1,9 +1,14 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { mdiFormatText, mdiLightbulbOnOutline, mdiTrayArrowUp } from "@mdi/js";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	mdiFormatText,
+	mdiLightbulbOnOutline,
+	mdiPuzzleOutline,
+	mdiTrayArrowUp,
+} from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 type AddCardElement = (
 	type: ContentElementType
@@ -44,6 +49,16 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		options.push({
+			icon: mdiPuzzleOutline,
+			label:
+				"components.elementTypeSelection.elements.externalToolElement.subtitle",
+			action: () => onElementClick(ContentElementType.SubmissionContainer), // TODO
+			testId: "create-element-external-tool-container",
 		});
 	}
 
