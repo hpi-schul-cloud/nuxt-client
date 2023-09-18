@@ -1573,6 +1573,12 @@ export interface FileContentBody {
      * @memberof FileContentBody
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileContentBody
+     */
+    alternativeText?: string;
 }
 /**
  * 
@@ -1586,6 +1592,12 @@ export interface FileElementContent {
      * @memberof FileElementContent
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    alternativeText?: string;
 }
 /**
  * 
