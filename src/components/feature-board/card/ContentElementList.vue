@@ -8,6 +8,13 @@
 				:isEditMode="isEditMode"
 				@delete:element="onDeleteElement"
 			/>
+			<LinkContentElement
+				v-if="isLinkElementResponse(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				@delete:element="onDeleteElement"
+			/>
 			<FileContentElement
 				v-else-if="isFileElementResponse(element)"
 				:key="element.id"
@@ -45,13 +52,17 @@ import {
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
+import {
+	AnyContentElement,
+	LinkElementResponse,
+} from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { LinkContentElement } from "@feature-board-link-element";
 
 export default defineComponent({
 	name: "ContentElementList",
@@ -59,6 +70,7 @@ export default defineComponent({
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
+		LinkContentElement,
 	},
 	props: {
 		elements: {
@@ -99,6 +111,12 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
 			return element.type === ContentElementType.SubmissionContainer;
+		};
+
+		const isLinkElementResponse = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return element.type === ContentElementType.Link;
 		};
 
 		const showSubmissionContainerElement = (element: AnyContentElement) => {
@@ -162,6 +180,7 @@ export default defineComponent({
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			isLinkElementResponse,
 			showSubmissionContainerElement,
 			lastElementId,
 			onDeleteElement,

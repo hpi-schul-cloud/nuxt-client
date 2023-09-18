@@ -42,6 +42,14 @@ export const useCardState = (
 	const fetchCard = async (id: string): Promise<void> => {
 		try {
 			cardState.card = await fetchCardFromApi(id);
+			cardState.card.elements.push({
+				id: "TEST_ID",
+				content: {
+					url: "https://de.wikipedia.org/wiki/Leonhard_Euler",
+				},
+				type: ContentElementType.Link,
+				timestamps: {},
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),

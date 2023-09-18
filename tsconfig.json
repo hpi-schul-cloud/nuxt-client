@@ -27,6 +27,9 @@
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],
+			"@feature-board-link-element": [
+				"src/components/feature-board-link-element"
+			],
 			"@feature-board": ["src/components/feature-board"],
 			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
 			"@feature-editor": ["src/components/feature-editor"],
