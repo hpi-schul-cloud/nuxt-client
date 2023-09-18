@@ -49,7 +49,12 @@
 						:multi-sort="true"
 					>
 						<template #[`item.status`]="{ item }">
-							<v-chip class="grey lighten-3" disabled small>
+							<v-chip
+								class="grey lighten-3"
+								disabled
+								small
+								data-testid="submission-item"
+							>
 								<span v-if="item.status === 'open'"
 									>{{ $t("components.cardElement.submissionElement.open") }}
 								</span>
