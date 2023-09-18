@@ -362,15 +362,40 @@ export enum ChangeLanguageParamsLanguageEnum {
 /**
  * 
  * @export
+ * @interface ClassInfoResponse
+ */
+export interface ClassInfoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    externalSourceName?: string;
+    /**
+     * 
+     * @type {Array<Array>}
+     * @memberof ClassInfoResponse
+     */
+    teachers: Array<Array>;
+}
+/**
+ * 
+ * @export
  * @interface ClassInfoSearchListResponse
  */
 export interface ClassInfoSearchListResponse {
     /**
      * The items for the current page.
-     * @type {Array<object>}
+     * @type {Array<ClassInfoResponse>}
      * @memberof ClassInfoSearchListResponse
      */
-    data: Array<object>;
+    data: Array<ClassInfoResponse>;
     /**
      * The total amount of items.
      * @type {number}
