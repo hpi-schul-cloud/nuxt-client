@@ -3,6 +3,7 @@
 		<div v-if="role === Roles.Teacher">
 			<draggable
 				v-model="roomData.elements"
+				item-key="id"
 				:animation="400"
 				:delay="touchDelay"
 				:sort="sortable"
@@ -13,72 +14,74 @@
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
-				<div v-for="(item, index) of roomData.elements" :key="index">
-					<RoomBoardCard
-						v-if="item.type === cardTypes.ColumnBoard"
-						:ref="`item_${index}`"
-						:key-drag="isDragging"
-						:drag-in-progress="dragInProgress"
-						:column-board-item="item.content"
-						:course-data="{
-							courseName: roomData.title,
-							courseId: roomData.roomId,
-						}"
-						@move-element="moveByKeyboard"
-						@on-drag="isDragging = !isDragging"
-						@tab-pressed="isDragging = false"
-					/>
-					<room-task-card
-						v-if="item.type === cardTypes.Task"
-						:ref="`item_${index}`"
-						:role="role"
-						:room="taskData"
-						:task="item.content"
-						:aria-label="
-							$t('pages.room.taskCard.aria', {
-								itemType: $t('common.words.tasks'),
-								itemName: item.content.name,
-							})
-						"
-						:key-drag="isDragging"
-						class="task-card"
-						:drag-in-progress="dragInProgress"
-						@post-task="postDraftElement(item.content.id)"
-						@revert-task="revertPublishedElement(item.content.id)"
-						@move-element="moveByKeyboard"
-						@on-drag="isDragging = !isDragging"
-						@tab-pressed="isDragging = false"
-						@delete-task="openItemDeleteDialog(item.content, item.type)"
-						@finish-task="finishTask(item.content.id)"
-						@restore-task="restoreTask(item.content.id)"
-						@copy-task="copyTask(item.content.id)"
-						@share-task="getSharedTask(item.content.id)"
-					/>
-					<room-lesson-card
-						v-if="item.type === cardTypes.Lesson"
-						:ref="`item_${index}`"
-						:role="role"
-						:lesson="item.content"
-						:room="lessonData"
-						:aria-label="
-							$t('pages.room.lessonCard.aria', {
-								itemType: $t('common.words.topic'),
-								itemName: item.content.name,
-							})
-						"
-						:key-drag="isDragging"
-						class="lesson-card"
-						:drag-in-progress="dragInProgress"
-						@post-lesson="postDraftElement(item.content.id)"
-						@revert-lesson="revertPublishedElement(item.content.id)"
-						@move-element="moveByKeyboard"
-						@on-drag="isDragging = !isDragging"
-						@tab-pressed="isDragging = false"
-						@open-modal="getSharedLesson"
-						@delete-lesson="openItemDeleteDialog(item.content, item.type)"
-						@copy-lesson="copyLesson(item.content.id)"
-					/>
-				</div>
+				<template #item="{ element: item, index }">
+					<div>
+						<RoomBoardCard
+							v-if="item.type === cardTypes.ColumnBoard"
+							:ref="`item_${index}`"
+							:key-drag="isDragging"
+							:drag-in-progress="dragInProgress"
+							:column-board-item="item.content"
+							:course-data="{
+								courseName: roomData.title,
+								courseId: roomData.roomId,
+							}"
+							@move-element="moveByKeyboard"
+							@on-drag="isDragging = !isDragging"
+							@tab-pressed="isDragging = false"
+						/>
+						<room-task-card
+							v-if="item.type === cardTypes.Task"
+							:ref="`item_${index}`"
+							:role="role"
+							:room="taskData"
+							:task="item.content"
+							:aria-label="
+								$t('pages.room.taskCard.aria', {
+									itemType: $t('common.words.tasks'),
+									itemName: item.content.name,
+								})
+							"
+							:key-drag="isDragging"
+							class="task-card"
+							:drag-in-progress="dragInProgress"
+							@post-task="postDraftElement(item.content.id)"
+							@revert-task="revertPublishedElement(item.content.id)"
+							@move-element="moveByKeyboard"
+							@on-drag="isDragging = !isDragging"
+							@tab-pressed="isDragging = false"
+							@delete-task="openItemDeleteDialog(item.content, item.type)"
+							@finish-task="finishTask(item.content.id)"
+							@restore-task="restoreTask(item.content.id)"
+							@copy-task="copyTask(item.content.id)"
+							@share-task="getSharedTask(item.content.id)"
+						/>
+						<room-lesson-card
+							v-if="item.type === cardTypes.Lesson"
+							:ref="`item_${index}`"
+							:role="role"
+							:lesson="item.content"
+							:room="lessonData"
+							:aria-label="
+								$t('pages.room.lessonCard.aria', {
+									itemType: $t('common.words.topic'),
+									itemName: item.content.name,
+								})
+							"
+							:key-drag="isDragging"
+							class="lesson-card"
+							:drag-in-progress="dragInProgress"
+							@post-lesson="postDraftElement(item.content.id)"
+							@revert-lesson="revertPublishedElement(item.content.id)"
+							@move-element="moveByKeyboard"
+							@on-drag="isDragging = !isDragging"
+							@tab-pressed="isDragging = false"
+							@open-modal="getSharedLesson"
+							@delete-lesson="openItemDeleteDialog(item.content, item.type)"
+							@copy-lesson="copyLesson(item.content.id)"
+						/>
+					</div>
+				</template>
 			</draggable>
 		</div>
 		<div v-if="role === Roles.Student">
