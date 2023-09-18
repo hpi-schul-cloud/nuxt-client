@@ -208,13 +208,13 @@ export default defineComponent({
 		padding: 0;
 	}
 
-	.text-start {
-		font-size: 0.75rem !important;
-		height: 30px;
-	}
-
 	.v-data-table__wrapper {
 		overflow-x: hidden;
+
+		table > thead > tr > th,
+		.text-start {
+			font-size: 0.75rem;
+		}
 	}
 
 	.v-data-table-header {
