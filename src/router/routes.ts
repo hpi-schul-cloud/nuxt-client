@@ -264,16 +264,6 @@ export const routes: Array<RouteConfig> = [
 		}),
 	},
 	{
-		// deprecated?
-		path: "/termsofuse",
-		component: () => import("@/pages/TermsOfUse.vue"),
-		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
-	{
 		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
 		component: () => import("../pages/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
