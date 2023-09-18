@@ -379,10 +379,10 @@ export interface ClassInfoResponse {
     externalSourceName?: string;
     /**
      * 
-     * @type {Array<Array>}
+     * @type {Array<string>}
      * @memberof ClassInfoResponse
      */
-    teachers: Array<Array>;
+    teachers: Array<string>;
 }
 /**
  * 
