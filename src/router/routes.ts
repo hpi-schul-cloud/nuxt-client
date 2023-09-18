@@ -96,6 +96,12 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: createPermissionGuard(["teacher_create"]),
 	},
 	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list"]),
+	},
+	{
 		path: "/cfiles",
 		component: () => import("@/pages/files/FilesOverview.page.vue"),
 		name: "files",

@@ -177,6 +177,13 @@ const getSidebarItems = (
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
 			},
+			{
+				title: "global.sidebar.classes.new",
+				icon: "$class",
+				href: "/administration/groups/classes",
+				testId: "Klassen (neu)",
+				activeForUrls: ["^/administration/groups/classes($|/.*)"],
+			},
 		],
 	},
 	{
@@ -214,6 +221,13 @@ const getSidebarItems = (
 				href: "/administration/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/classes($|/.*)"],
+			},
+			{
+				title: "global.sidebar.classes.new",
+				icon: "$class",
+				href: "/administration/groups/classes",
+				testId: "Klassen (neu)",
+				activeForUrls: ["^/administration/groups/classes($|/.*)"],
 			},
 			{
 				title: "global.sidebar.teams",
