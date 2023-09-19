@@ -92,7 +92,7 @@ import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import {
 	injectStrict,
 	AUTH_MODULE_KEY,

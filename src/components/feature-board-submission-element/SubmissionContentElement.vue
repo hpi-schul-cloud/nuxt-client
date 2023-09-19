@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
