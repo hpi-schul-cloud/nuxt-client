@@ -1,6 +1,7 @@
 <template>
 	<v-card-text class="pa-2">
 		<v-textarea
+			data-testid="file-alttext-input"
 			rows="1"
 			auto-grow
 			v-model="modelValue"
