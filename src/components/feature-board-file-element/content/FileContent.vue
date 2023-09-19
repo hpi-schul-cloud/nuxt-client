@@ -1,12 +1,10 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
-		<CaptionText v-if="isEditMode"></CaptionText>
-		<AlternativeText
-			v-if="isEditMode && fileProperties.previewUrl"
-			:text="fileProperties.element.content.alternativeText"
-			@update:text="onUpdateText"
-		/>
+		<ContentElementDescription
+			:file-properties="fileProperties"
+			:is-edit-mode="isEditMode"
+		></ContentElementDescription>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
@@ -17,8 +15,7 @@ import { computed, defineComponent, PropType } from "vue";
 import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
-import AlternativeText from "./alternative-text/AlternativeText.vue";
-import CaptionText from "./caption/CaptionText.vue";
+import ContentElementDescription from "././description/ContentElementDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
@@ -27,8 +24,7 @@ export default defineComponent({
 		FileDisplay,
 		ContentElementFooter,
 		FileAlert,
-		AlternativeText,
-		CaptionText,
+		ContentElementDescription,
 	},
 	props: {
 		fileProperties: {
@@ -37,16 +33,18 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["fetch:file", "update:alternativeText"],
+	emits: ["fetch:file", "update:alternativeText", "update:caption"],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
 		};
+		const onUpdateCaption = (value: string) => emit("update:caption", value);
+
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
 
-		return { onFetchFile, previewStatus, onUpdateText };
+		return { onFetchFile, previewStatus, onUpdateText, onUpdateCaption };
 	},
 });
 </script>
