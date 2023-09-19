@@ -804,6 +804,7 @@
 	"components.cardElement.fileElement.scanError": "Error during virus check. Preview cannot be created. Please upload the file again.",
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.scanWontCheck": "Due to the size, no preview can be generated.",
+	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.richTextElement": "Text element",
 	"components.cardElement.richTextElement.placeholder": "Add text",
 	"components.cardElement.submissionElement": "Submission",
