@@ -14,13 +14,17 @@
 		@click="onClickElement"
 	>
 		<v-img
-			v-if="toolDisplayData?.logoUrl"
+			v-if="toolDisplayData && toolDisplayData.logoUrl"
 			class="mr-1"
 			:src="toolDisplayData.logoUrl"
 		></v-img>
 		<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 		<span class="align-self-center title flex-1">
-			{{ hasLinkedTool ? toolDisplayName : "Tool auswählen..." }}
+			{{
+				hasLinkedTool
+					? toolDisplayName
+					: t("feature-board-external-tool-element.placeholder.selectTool")
+			}}
 		</span>
 		<ExternalToolElementMenu
 			v-if="isEditMode"
@@ -36,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool";
@@ -79,6 +84,7 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
+		const { t } = useI18n();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -153,6 +159,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			hasLinkedTool,
 			toolDisplayData,
 			toolDisplayName,

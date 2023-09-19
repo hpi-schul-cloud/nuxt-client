@@ -33,14 +33,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useBoardFocusHandler } from "@data-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
-import { useBoardFocusHandler } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "SubmissionContentElement",

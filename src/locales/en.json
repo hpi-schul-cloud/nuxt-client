@@ -995,5 +995,6 @@
 	"pages.videoConference.info.noPermission": "The video conference hasn't started yet or you don't have permission to join it.",
 	"pages.videoConference.action.refresh": "Update status",
 	"ui-confirmation-dialog.ask-delete.card": "Delete {type} {title}?",
-	"feature-board-file-element.placeholder.uploadFile": "Upload file"
+	"feature-board-file-element.placeholder.uploadFile": "Upload file",
+	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool..."
 }

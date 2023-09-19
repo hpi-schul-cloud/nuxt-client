@@ -184,6 +184,29 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with ExternalToolElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const PAYLOAD = {
+				id: "external-tool-element-id",
+				type: ContentElementType.ExternalTool,
+				content: {
+					contextExternalToolId: "context-external-tool-id",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: PAYLOAD.content,
+				type: ContentElementType.ExternalTool,
+			};
+
+			await updateElementCall(PAYLOAD);
+
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				PAYLOAD.id,
+				{ data }
+			);
+		});
+
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const PAYLOAD = {

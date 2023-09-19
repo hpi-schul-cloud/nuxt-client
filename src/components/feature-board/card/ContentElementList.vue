@@ -52,7 +52,6 @@
 </template>
 
 <script lang="ts">
-import { ExternalToolElement } from "@/components/feature-board-external-tool-element";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
@@ -63,6 +62,7 @@ import {
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
@@ -189,7 +189,6 @@ export default defineComponent({
 		});
 
 		return {
-			ContentElementType,
 			firstElementId,
 			hasMultipleElements,
 			isFileElementResponse,
