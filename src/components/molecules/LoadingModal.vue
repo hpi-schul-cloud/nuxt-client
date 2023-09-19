@@ -20,7 +20,7 @@
 					variant="flat"
 					@click="$emit('update:active', false)"
 				>
-					{{ btnText }}
+					{{ $t(btnText) }}
 				</v-btn>
 			</div>
 		</template>
@@ -48,7 +48,7 @@ export default defineComponent({
 		},
 		btnText: {
 			type: String,
-			default: this.$t("common.actions.cancel"),
+			default: "common.actions.cancel",
 		},
 	},
 	data() {
