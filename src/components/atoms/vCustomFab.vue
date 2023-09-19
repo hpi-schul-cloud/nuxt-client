@@ -17,7 +17,7 @@
 				v-model="isSpeedDialExpanded"
 				role="menu"
 				color="primary"
-				fab
+				icon
 				rounded
 				:small="isCollapsed"
 				class="transition"
@@ -41,7 +41,7 @@
 					{{ action.label }}
 				</span>
 				<v-btn
-					fab
+					icon
 					small
 					:href="action.href"
 					:to="action.to"
@@ -65,7 +65,7 @@
 	<v-btn
 		v-else
 		v-bind="$attrs"
-		fab
+		icon
 		fixed
 		right
 		:bottom="!positionAtTop"
@@ -225,10 +225,10 @@ export default {
 // }
 
 .fab-action-icon {
-	color: var(--v-primary-base) !important;
+	color: rgba(var(--v-theme-primary)) !important;
 }
 
 .fab-action:hover .fab-action-icon {
-	color: var(--v-primary-darken1) !important;
+	color: rgba(var(--v-theme-primary-darken-1)) !important;
 }
 </style>

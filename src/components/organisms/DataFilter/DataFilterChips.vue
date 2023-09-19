@@ -17,7 +17,7 @@
 			</span>
 			<v-btn
 				v-if="chip.deletable"
-				fab
+				icon
 				variant="flat"
 				color="secondary"
 				class="btn-delete"

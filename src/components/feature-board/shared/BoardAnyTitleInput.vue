@@ -3,7 +3,7 @@
 		<VTextarea
 			hide-details="auto"
 			v-model="modelValue"
-			solo
+			variant="solo"
 			dense
 			:rows="1"
 			auto-grow

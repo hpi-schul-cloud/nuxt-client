@@ -94,7 +94,7 @@ export default {
 		currentIconColor() {
 			return this.iconColor
 				? this.iconColor
-				: `var(--v-${this.actionDesign}-base)`;
+				: `rgba(var(--v-theme-${this.actionDesign}))`;
 		},
 	},
 	methods: {

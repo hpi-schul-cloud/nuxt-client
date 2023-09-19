@@ -136,18 +136,18 @@ export default {
 
 .link {
 	display: inline;
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 	cursor: pointer;
 	border-bottom: 2px solid var(--v-gray-base);
 
 	&:hover,
 	&:focus {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 
 	&:visited {
-		color: var(--v-primary-base);
+		color: rgba(var(--v-theme-primary));
 	}
 }
 
@@ -155,11 +155,11 @@ export default {
 	border: none;
 
 	&:active {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 
 	&:hover {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 }
 </style>

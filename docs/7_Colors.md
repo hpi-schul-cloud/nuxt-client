@@ -44,8 +44,8 @@ For colors defined in our vuetify options, vuetify generates css variables.
 
 ```SCSS
 .alert {
-  background-color: var(--v-secondary-darken1);
-  color: var(--v-white-base);
+  background-color: rgba(var(--v-theme-secondary-darken-1));
+  color: rgba(var(--v-theme-white));
 }
 ```
 

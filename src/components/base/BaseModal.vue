@@ -118,7 +118,7 @@ export default {
 	transition: opacity var(--duration-transition-medium) ease;
 
 	&.white {
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 	}
 }
 
@@ -136,7 +136,7 @@ export default {
 	max-height: calc(100vh - (2 * var(--space-lg)));
 	margin: 0 auto;
 	overflow: hidden;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	border-radius: var(--radius-md);
 	transition: all var(--duration-transition-medium) ease;
 

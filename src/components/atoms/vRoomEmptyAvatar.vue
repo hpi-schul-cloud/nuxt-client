@@ -3,7 +3,7 @@
 		<v-badge
 			class="ma-0 badge-component"
 			bordered
-			color="var(--v-primary-base)"
+			color="rgba(var(--v-theme-primary))"
 			icon="$mdiLock"
 			overlap
 			:value="false"
@@ -57,12 +57,12 @@ export default {
 <style scoped>
 .outlined {
 	border: 2px dashed;
-	border-color: var(--v-secondary-base);
+	border-color: rgba(var(--v-theme-secondary));
 }
 
 .hovered-avatar {
 	border: 2px solid;
-	border-color: var(--v-secondary-base);
+	border-color: rgba(var(--v-theme-secondary));
 }
 
 .avatar-component-empty {
