@@ -10,7 +10,6 @@
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
-					pattern="[0-9]+"
 					ref="inputField"
 					v-model="modelValue"
 					v-bind="attrs"
@@ -43,7 +42,6 @@
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
-
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
@@ -147,7 +145,7 @@ export default defineComponent({
 		const isNumberOrColon = (event: KeyboardEvent) => {
 			const char = String.fromCharCode(event.keyCode); // Get the character
 			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
-			else event.preventDefault(); // If not match, don't add to input text
+			else event.preventDefault(); // If it doesn't match, don't add to input text
 		};
 
 		return {
