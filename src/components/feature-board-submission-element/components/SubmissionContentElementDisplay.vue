@@ -47,6 +47,7 @@ export default defineComponent({
 	emits: ["update:completed"],
 	setup(props, { emit }) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const { t } = useI18n();
 		const userRoles = ref(authModule.getUserRoles);
 
 		const isStudent = computed(() => {
@@ -63,12 +64,18 @@ export default defineComponent({
 			return today.isBefore(dueDate);
 		});
 
-		const { t } = useI18n();
+		const formattedDueDate = computed(() => {
+			if (props.dueDate) {
+				dayjs.locale(authModule.getLocale);
+				const format = `dddd, ${t("format.date")} - HH:mm`;
 
-		const formattedDueDate = props.dueDate
-			? // eslint-disable-next-line vue/no-setup-props-destructure
-			  dayjs(props.dueDate).format(`dddd, ${t("format.date")} - HH:mm`)
-			: undefined;
+				return `${t("components.cardElement.submissionElement.until")} ${dayjs(
+					props.dueDate
+				).format(format)}`;
+			} else {
+				return undefined;
+			}
+		});
 
 		return {
 			isStudent,

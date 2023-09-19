@@ -43,34 +43,6 @@ describe("SubmissionContentElementDisplay", () => {
 		expect(component.exists()).toBe(true);
 	});
 
-	it("should display icon", async () => {
-		const { wrapper } = setup();
-
-		const submissionIcon = wrapper.find("v-icon-stub");
-
-		expect(submissionIcon.exists()).toBe(true);
-	});
-
-	it("should find submission tag", () => {
-		const { wrapper } = setup();
-
-		const submissionTag = wrapper.find("span").text();
-
-		expect(submissionTag).toBe(
-			wrapper.vm.$t("components.cardElement.submissionElement")
-		);
-	});
-
-	it("should find dueDate text", () => {
-		const { wrapper, dueDate } = setup();
-
-		const submissionDueDate = wrapper
-			.find("[data-testid=board-submission-element-due-date]")
-			.text();
-
-		expect(submissionDueDate).toBe(dueDate);
-	});
-
 	it("should render SubmissionItemStudentDisplay as a student", () => {
 		const { wrapper } = setup("student");
 

@@ -815,6 +815,7 @@
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.submissionElement": "Envío",
 	"components.cardElement.submissionElement.completed": "completado",
+	"components.cardElement.submissionElement.until": "hasta el",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",

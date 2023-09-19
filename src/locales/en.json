@@ -805,6 +805,7 @@
 	"components.cardElement.richTextElement.placeholder": "Add text",
 	"components.cardElement.submissionElement": "Submission",
 	"components.cardElement.submissionElement.completed": "completed",
+	"components.cardElement.submissionElement.until": "until",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.titleElement.placeholder": "Add title",
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
