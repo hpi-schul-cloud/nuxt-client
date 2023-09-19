@@ -25,6 +25,7 @@ export default defineComponent({
 
 <style scoped>
 .image {
+	pointer-events: none;
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
