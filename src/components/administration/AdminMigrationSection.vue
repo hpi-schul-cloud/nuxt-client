@@ -19,6 +19,7 @@
 			<div v-if="!oauthMigration.oauthMigrationPossible">
 				<v-alert light prominent variant="text" type="info">
 					<RenderHTML
+						data-testid="migration-info-text"
 						:html="
 							t('components.administration.adminMigrationSection.infoText')
 						"
@@ -123,7 +124,7 @@
 		/>
 		<v-switch
 			v-if="
-				!isCurrentDateAfterFinalFinish &
+				!isCurrentDateAfterFinalFinish &&
 				globalFeatureEnableLdapSyncDuringMigration
 			"
 			:label="
@@ -131,6 +132,7 @@
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
+			:disabled="!oauthMigration.oauthMigrationPossible"
 			v-model="school.features.enableLdapSyncDuringMigration"
 			inset
 			dense
@@ -167,23 +169,25 @@
 
 <script lang="ts">
 import { MigrationBody } from "@/serverApi/v3";
-import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
 	Ref,
 	watch,
 } from "vue";
-import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -192,35 +196,31 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		if (!schoolsModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		onMounted(async () => {
 			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
-		const { t } = useI18n();
-
 		const oauthMigration: ComputedRef<OauthMigration> = computed(
 			() => schoolsModule.getOauthMigration
 		);
 
-		const setMigration = (available: boolean, mandatory: boolean) => {
+		const setMigration = async (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,
 				oauthMigrationMandatory: mandatory,
 				oauthMigrationFinished: !available,
 			};
-			schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.fetchSchool();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(school, () => {
-			schoolsModule.fetchSchoolOAuthMigration();
+		watch(school, async () => {
+			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
 		const isShowEndWarning: Ref<boolean> = ref(false);
@@ -299,8 +299,8 @@ export default defineComponent({
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setSchoolFeatures = () => {
-			schoolsModule.update({
+		const setSchoolFeatures = async () => {
+			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
 			});

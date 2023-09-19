@@ -269,14 +269,4 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 			configId: to.params.configId,
 		}),
 	},
-	{
-		// deprecated?
-		path: "/termsofuse",
-		component: () => import("@/pages/TermsOfUse.vue"),
-		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
 ];

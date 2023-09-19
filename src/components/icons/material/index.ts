@@ -62,6 +62,8 @@ import {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiTrayArrowDown,
+	mdiFileReplaceOutline,
 } from "@mdi/js";
 
 // VUE3_UPGRADE remove the aliases when refactored to type-safe icon imports
@@ -130,4 +132,6 @@ export {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiTrayArrowDown,
+	mdiFileReplaceOutline,
 };

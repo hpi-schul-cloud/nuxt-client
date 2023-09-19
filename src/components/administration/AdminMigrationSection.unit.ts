@@ -1,7 +1,11 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Wrapper, mount, shallowMount } from "@vue/test-utils";
@@ -39,7 +43,7 @@ describe("AdminMigrationSection", () => {
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
-				schoolsModule,
+				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
 		});
@@ -430,6 +434,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: false,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -509,6 +514,7 @@ describe("AdminMigrationSection", () => {
 				oauthMigrationMandatory: false,
 				oauthMigrationFinished: true,
 			});
+			expect(schoolsModule.fetchSchool).toHaveBeenCalled();
 		});
 	});
 
@@ -783,8 +789,8 @@ describe("AdminMigrationSection", () => {
 			});
 		});
 
-		describe("when migration is not yet finished", () => {
-			it("should show switch button and description", () => {
+		describe("when migration is active", () => {
+			it("should show switch button", () => {
 				const { wrapper } = setup(
 					{
 						getOauthMigration: {
@@ -806,12 +812,93 @@ describe("AdminMigrationSection", () => {
 
 				expect(switchComponent.exists()).toBe(true);
 			});
+
+			it("should enable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: true,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual(undefined);
+			});
+		});
+
+		describe("when migration has not yet started", () => {
+			it("should disable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual("disabled");
+			});
+		});
+
+		describe("when migration has not yet closed", () => {
+			it("should disable the switch", () => {
+				const { wrapper } = setup(
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: false,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: new Date(2023, 1, 1).toDateString(),
+							oauthMigrationFinalFinish: "",
+						},
+					},
+					{
+						getEnableLdapSyncDuringMigration: true,
+					}
+				);
+
+				const switchComponent = wrapper.find(
+					'[data-testid="enable-sync-during-migration-switch"]'
+				);
+
+				expect(switchComponent.attributes("disabled")).toEqual("disabled");
+			});
 		});
 
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup(
-					{},
+					{
+						getOauthMigration: {
+							enableMigrationStart: true,
+							oauthMigrationPossible: true,
+							oauthMigrationMandatory: false,
+							oauthMigrationFinished: "",
+							oauthMigrationFinalFinish: "",
+						},
+					},
 					{
 						getEnableLdapSyncDuringMigration: true,
 					}

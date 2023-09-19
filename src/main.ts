@@ -16,6 +16,7 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
+	termsOfUseModule,
 	roomModule,
 	roomsModule,
 	schoolExternalToolsModule,
@@ -64,6 +65,9 @@ import {
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
@@ -158,13 +162,15 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("loadingStateModule", loadingStateModule);
 	app.provide("newsModule", newsModule);
 	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
-	app.provide("privacyPolicyModule", privacyPolicyModule);
+	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
+	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
 	app.provide(ROOM_MODULE_KEY.valueOf(), roomModule);
 	app.provide("roomsModule", roomsModule);
 	app.provide(
 		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
 		schoolExternalToolsModule
 	);
+	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide("schoolsModule", schoolsModule);
 	app.provide("shareModule", shareModule);
 	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);

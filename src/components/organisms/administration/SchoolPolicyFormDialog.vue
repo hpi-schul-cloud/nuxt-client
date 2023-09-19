@@ -47,9 +47,8 @@
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
 							data-testid="warning-icon"
-						>
-							{{ mdiAlert }}
-						</v-icon>
+							:icon="mdiAlert"
+						></v-icon>
 					</template>
 				</v-file-input>
 				<v-card-actions>
@@ -72,7 +71,7 @@
 							@click.prevent="submit"
 							data-testid="submit-button"
 						>
-							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
+							<v-icon dense class="mr-1" :icon="mdiFileReplaceOutline"></v-icon>
 							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
 						</v-btn>
 					</div>
@@ -84,10 +83,13 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { useI18n } from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
 import { School } from "@/store/types/schools";
@@ -108,16 +110,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		const privacyPolicyModule: PrivacyPolicyModule | undefined =
-			inject<PrivacyPolicyModule>("privacyPolicyModule");
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const { t } = useI18n();
-
-		if (!notifierModule || !schoolsModule || !privacyPolicyModule) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const policyForm: Ref = ref(null);
 		const isValid: Ref<boolean> = ref(false);
@@ -183,8 +179,6 @@ export default defineComponent({
 			t,
 			file,
 			rules,
-			mdiFileReplaceOutline,
-			mdiAlert,
 			cancel,
 			submit,
 			onBlur,
@@ -192,6 +186,8 @@ export default defineComponent({
 			isTouched,
 			policyForm,
 			school,
+			mdiAlert,
+			mdiFileReplaceOutline,
 		};
 	},
 });
