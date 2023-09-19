@@ -169,23 +169,25 @@
 
 <script lang="ts">
 import { MigrationBody } from "@/serverApi/v3";
-import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
 	Ref,
 	watch,
 } from "vue";
-import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -194,21 +196,13 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		if (!schoolsModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		onMounted(async () => {
 			await schoolsModule.fetchSchoolOAuthMigration();
 		});
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const oauthMigration: ComputedRef<OauthMigration> = computed(
 			() => schoolsModule.getOauthMigration

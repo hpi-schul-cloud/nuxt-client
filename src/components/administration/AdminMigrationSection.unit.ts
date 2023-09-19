@@ -1,7 +1,11 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Wrapper, mount, shallowMount } from "@vue/test-utils";
@@ -39,7 +43,7 @@ describe("AdminMigrationSection", () => {
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
-				schoolsModule,
+				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
 		});

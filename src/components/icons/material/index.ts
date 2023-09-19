@@ -92,6 +92,7 @@ import {
 	mdiFormatText,
 	mdiViewListOutline,
 	mdiReload,
+	mdiFileReplaceOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -188,6 +189,7 @@ const materialIcons = {
 	mdiFormatText,
 	mdiViewListOutline,
 	mdiReload,
+	mdiFileReplaceOutline,
 };
 
 export default materialIcons;
