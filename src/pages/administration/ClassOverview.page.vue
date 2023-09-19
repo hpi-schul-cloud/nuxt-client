@@ -5,25 +5,23 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<backend-data-table
-			:columns="tableColumns"
-			:current-page.sync="page"
-			:data="classes"
-			:paginated="true"
-			track-by=""
-			:total="pagination.total"
-			:rows-per-page.sync="pagination.limit"
+		<v-data-table
+			:headers="headers"
+			:items="classes"
+			:items-per-page.sync="pagination.limit"
+			:server-items-length="pagination.total"
 			:sort-by="sortBy"
-			:sort-order="sortOrder"
+			:sort-Order="sortOrder"
+			:page="page"
+			:footer-props="footerProps"
 			data-testid="admin-class-table"
-			@update:sort="onUpdateSort"
-			@update:current-page="onUpdateCurrentPage"
-			@update:rows-per-page="onUpdateRowsPerPage"
+			class="custom-table elevation-1"
+			@update:sort-by="onUpdateSortBy"
+			@update:sort-desc="updateSortOrder"
+			@update:items-per-page="onUpdateItemsPerPage"
+			@update:page="onUpdateCurrentPage"
 		>
-			<template #datacolumn-teachers="{ data }">
-				{{ (data || []).join(", ") }}
-			</template>
-		</backend-data-table>
+		</v-data-table>
 
 		<v-btn
 			class="my-5 button-start"
@@ -39,7 +37,6 @@
 <script lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable.vue";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import GroupModule from "@/store/group";
 import { useI18n } from "@/composables/i18n.composable";
@@ -49,11 +46,16 @@ import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SortOrder } from "@/store/types/sort-order.enum";
 
 export default defineComponent({
-	components: { DefaultWireframe, BackendDataTable },
+	components: { DefaultWireframe },
 	setup() {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 
 		const { t } = useI18n();
+
+		const footerProps = {
+			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
+			itemsPerPageOptions: [5, 10, 20, 50, 100],
+		};
 
 		const breadcrumbs: Breadcrumb[] = [
 			{
@@ -66,11 +68,12 @@ export default defineComponent({
 			},
 		];
 
-		const pagination: ComputedRef<Pagination> = computed(
-			() => groupModule.getPagination
-		);
 		const classes: ComputedRef<ClassInfo[]> = computed(
 			() => groupModule.getClasses
+		);
+
+		const pagination: ComputedRef<Pagination> = computed(
+			() => groupModule.getPagination
 		);
 
 		const sortBy: ComputedRef<string> = computed(
@@ -81,37 +84,41 @@ export default defineComponent({
 		);
 		const page: ComputedRef<number> = computed(() => groupModule.getPage || 1);
 
-		const tableColumns = [
+		const headers = [
 			{
-				field: "name", // classes
-				label: t("common.labels.classes"),
+				value: "name", // classes
+				text: t("common.labels.classes"),
 				sortable: true,
 			},
 			{
-				field: "externalSourceName",
-				label: t("common.labels.externalsource"),
+				value: "externalSourceName",
+				text: t("common.labels.externalsource"),
 				sortable: true,
 			},
 			{
-				field: "teachers",
-				label: t("common.labels.teacher"),
+				value: "teachers",
+				text: t("common.labels.teacher"),
 				sortable: true,
 			},
 		];
 
-		const onUpdateSort = async (sortBy: string, sortOrder: SortOrder) => {
+		const onUpdateSortBy = async (sortBy: string) => {
 			groupModule.setSortBy(sortBy);
+			await groupModule.loadClassesForSchool();
+		};
+		const updateSortOrder = async (sortDesc: boolean) => {
+			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
 			await groupModule.loadClassesForSchool();
 		};
-		const onUpdateCurrentPage = async (_page: number) => {
-			groupModule.setPage(_page);
-			const _skip = (page.value - 1) * groupModule.getPagination.limit;
-			groupModule.setPagination({ ...pagination.value, skip: _skip });
+		const onUpdateCurrentPage = async (currentPage: number) => {
+			groupModule.setPage(currentPage);
+			const skip = (page.value - 1) * groupModule.getPagination.limit;
+			groupModule.setPagination({ ...pagination.value, skip });
 			await groupModule.loadClassesForSchool();
 		};
-		const onUpdateRowsPerPage = async (rowsPerPage: number) => {
-			groupModule.setPagination({ ...pagination.value, limit: rowsPerPage });
+		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
+			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
 			await groupModule.loadClassesForSchool();
 		};
 
@@ -121,17 +128,24 @@ export default defineComponent({
 
 		return {
 			t,
+			footerProps,
 			breadcrumbs,
-			tableColumns,
+			headers,
 			classes,
 			page,
 			sortBy,
 			sortOrder,
 			pagination,
-			onUpdateSort,
+			onUpdateSortBy,
+			updateSortOrder,
 			onUpdateCurrentPage,
-			onUpdateRowsPerPage,
+			onUpdateItemsPerPage,
 		};
 	},
 });
 </script>
+<style scoped>
+.custom-table >>> .v-data-table-header {
+	background-color: #f5f5f5;
+}
+</style>
