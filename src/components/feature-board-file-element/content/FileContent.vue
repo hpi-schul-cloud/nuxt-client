@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
+		<CaptionText v-if="isEditMode"></CaptionText>
 		<AlternativeText
 			v-if="isEditMode && fileProperties.previewUrl"
 			:text="fileProperties.element.content.alternativeText"
@@ -17,6 +18,7 @@ import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
+import CaptionText from "./caption/CaptionText.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
@@ -26,6 +28,7 @@ export default defineComponent({
 		ContentElementFooter,
 		FileAlert,
 		AlternativeText,
+		CaptionText,
 	},
 	props: {
 		fileProperties: {
