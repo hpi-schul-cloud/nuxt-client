@@ -15,7 +15,7 @@
 <script>
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useVModel } from "@vueuse/core";
-import CKEditor from "@ckeditor/ckeditor5-vue2";
+import CKEditor from "@ckeditor/ckeditor5-vue";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
