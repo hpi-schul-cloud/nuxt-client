@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		v-show="hasLinkedTool || isEditMode"
-		class="mb-4 pa-4 flex gap-8"
+		class="mb-4 pa-4 flex gap-8 grey lighten-4"
 		data-testid="board-external-tool-element"
 		dense
 		elevation="0"
@@ -28,6 +28,7 @@
 		</span>
 		<ExternalToolElementMenu
 			v-if="isEditMode"
+			ref="externalToolElementMenu"
 			:isFirstElement="isFirstElement"
 			:isLastElement="isLastElement"
 			:hasMultipleElements="hasMultipleElements"
