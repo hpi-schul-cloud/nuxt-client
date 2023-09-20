@@ -17,7 +17,7 @@
 						disabled
 						small
 						>{{ open }}
-						{{ $t("components.cardElement.submissionElement.open") }}</v-chip
+						{{ t("components.cardElement.submissionElement.open") }}</v-chip
 					>
 					<v-chip
 						v-if="completed"
@@ -27,7 +27,7 @@
 						small
 						>{{ completed }}
 						{{
-							$t("components.cardElement.submissionElement.completed")
+							t("components.cardElement.submissionElement.completed")
 						}}</v-chip
 					>
 					<v-chip
@@ -37,7 +37,7 @@
 						disabled
 						small
 						>{{ expired }}
-						{{ $t("components.cardElement.submissionElement.expired") }}</v-chip
+						{{ t("components.cardElement.submissionElement.expired") }}</v-chip
 					>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
@@ -56,15 +56,13 @@
 								data-testid="submission-item"
 							>
 								<span v-if="item.status === 'open'"
-									>{{ $t("components.cardElement.submissionElement.open") }}
+									>{{ t("components.cardElement.submissionElement.open") }}
 								</span>
 								<span v-if="item.status === 'completed'"
-									>{{
-										$t("components.cardElement.submissionElement.completed")
-									}}
+									>{{ t("components.cardElement.submissionElement.completed") }}
 								</span>
 								<span v-if="item.status === 'expired'"
-									>{{ $t("components.cardElement.submissionElement.expired") }}
+									>{{ t("components.cardElement.submissionElement.expired") }}
 								</span>
 							</v-chip>
 						</template>
@@ -79,7 +77,7 @@
 import { defineComponent, PropType, computed } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { DataTableHeader } from "vuetify";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "@/composables/i18n.composable";
 
 type Status = "completed" | "open" | "expired";
 type SubmissionInfo = {
@@ -105,18 +103,19 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
+
 		const headers: DataTableHeader[] = [
 			{
-				text: i18n.t("common.labels.status").toString(),
+				text: t("common.labels.status"),
 				value: "status",
 			},
 			{
-				text: i18n.t("common.labels.lastName").toString(),
+				text: t("common.labels.lastName"),
 				value: "lastName",
 			},
 			{
-				text: i18n.t("common.labels.firstName").toString(),
+				text: t("common.labels.firstName"),
 				value: "firstName",
 			},
 		];
@@ -193,6 +192,7 @@ export default defineComponent({
 			open,
 			completed,
 			expired,
+			t,
 		};
 	},
 });

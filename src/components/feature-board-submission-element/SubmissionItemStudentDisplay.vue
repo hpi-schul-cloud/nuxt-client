@@ -12,13 +12,14 @@
 			v-model="modelValue"
 			class="px-4"
 			:disabled="!editable"
-			:label="$t('components.cardElement.submissionElement.completed')"
+			:label="t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
@@ -52,8 +53,11 @@ export default defineComponent({
 			},
 		});
 
+		const { t } = useI18n();
+
 		return {
 			modelValue,
+			t,
 		};
 	},
 });
