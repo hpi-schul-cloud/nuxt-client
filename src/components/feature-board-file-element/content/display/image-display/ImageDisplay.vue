@@ -6,8 +6,6 @@
 			:src="previewUrl"
 			:alt="alternativeText"
 		/>
-
-		<div v-if="isEditMode" class="menu-background"></div>
 	</div>
 </template>
 
