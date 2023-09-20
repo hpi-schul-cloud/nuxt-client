@@ -39,7 +39,9 @@
 					color="primary"
 					depressed
 					data-testId="btn-proceed"
-					:href="`/login/oauth2/${userLoginMigration?.targetSystemId}?migration=true`"
+					:href="`/login/oauth2/${
+						userLoginMigration ? userLoginMigration.targetSystemId : ''
+					}?migration=true`"
 				>
 					{{ t("pages.userMigration.button.startMigration") }}
 				</v-btn>
@@ -130,14 +132,14 @@ export default defineComponent({
 		const isNewLoginFlowEnabled = !!envConfigModule.getClientUserLoginMigration;
 
 		const proceedLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule?.getMigrationLinks.proceedLink
+			() => userLoginMigrationModule.getMigrationLinks.proceedLink
 		);
 		const cancelLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule?.getMigrationLinks.cancelLink
+			() => userLoginMigrationModule.getMigrationLinks.cancelLink
 		);
 
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule?.getUserLoginMigration);
+			computed(() => userLoginMigrationModule.getUserLoginMigration);
 
 		const pageType: ComputedRef<MigrationPageOrigin> = computed(() => {
 			if (props.origin === userLoginMigration.value?.targetSystemId) {
@@ -166,8 +168,8 @@ export default defineComponent({
 		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
-			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
-			await systemsModule?.fetchSystems();
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
+			await systemsModule.fetchSystems();
 			if (
 				!isNewLoginFlowEnabled &&
 				userLoginMigration.value?.sourceSystemId &&
