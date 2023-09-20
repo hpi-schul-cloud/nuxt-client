@@ -24,16 +24,16 @@ export const submissionsResponseFactory = Factory.define<
 	const users = userDataResponseFactory.buildList(numUsers);
 	const submissionItemsResponse: Array<SubmissionItemResponse> = [];
 
-	let c = 0;
-	while (c < numSubmissionItems) {
-		const userId = c < numUsers ? users[c].userId : "unmappedUserId";
+	let count = 0;
+	while (count < numSubmissionItems) {
+		const userId = count < numUsers ? users[count].userId : "unmappedUserId";
 		submissionItemsResponse.push(
 			submissionItemResponseFactory.build({
 				userId: userId,
 				completed: completed,
 			})
 		);
-		c++;
+		count++;
 	}
 
 	return {
