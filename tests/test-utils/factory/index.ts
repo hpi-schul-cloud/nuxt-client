@@ -5,6 +5,8 @@ export * from "./boardCardFactory";
 export * from "./boardResponseFactory";
 export * from "./businessErrorFactory";
 export * from "./cardSkeletonResponseFactory";
+export * from "./classInfoSearchListResponseFactory";
+export * from "./classInfoResponseFactory";
 export * from "./columnResponseFactory";
 export * from "./contextExternalToolConfigurationTemplate.factory";
 export * from "./contextExternalToolConfigurationTemplateResponseFactory";

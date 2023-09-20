@@ -54,7 +54,7 @@ export default defineComponent({
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
-			itemsPerPageOptions: [5, 10, 20, 50, 100],
+			itemsPerPageOptions: [5, 10, 25, 50, 100],
 		};
 
 		const breadcrumbs: Breadcrumb[] = [
@@ -82,11 +82,11 @@ export default defineComponent({
 		const sortOrder: ComputedRef<SortOrder> = computed(
 			() => groupModule.getSortOrder
 		);
-		const page: ComputedRef<number> = computed(() => groupModule.getPage || 1);
+		const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
 		const headers = [
 			{
-				value: "name", // classes
+				value: "name",
 				text: t("common.labels.classes"),
 				sortable: true,
 			},

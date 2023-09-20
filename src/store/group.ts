@@ -25,7 +25,7 @@ export default class GroupModule extends VuexModule {
 	private pagination: Pagination = {
 		limit: 10,
 		skip: 0,
-		total: 300,
+		total: 30,
 	};
 
 	private sortBy = "name";
@@ -80,6 +80,11 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Mutation
+	resetError(): void {
+		this.error = null;
+	}
+
+	@Mutation
 	setPagination(pagination: Pagination): void {
 		this.pagination = pagination;
 	}
@@ -122,12 +127,11 @@ export default class GroupModule extends VuexModule {
 					teachers: classInfoResponse.teachers,
 				})
 			);
-			console.log(response.data);
 
 			this.setPagination({
-				...this.getPagination,
 				limit: response.data.limit,
 				skip: response.data.skip,
+				total: response.data.total,
 			});
 			this.setClasses(mappedClasses);
 		} catch (error) {
