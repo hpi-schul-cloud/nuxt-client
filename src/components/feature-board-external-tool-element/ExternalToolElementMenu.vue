@@ -28,7 +28,6 @@
 		<BoardMenuAction
 			data-testid="board-external-tool-element-edit-menu-edit"
 			@click="onEdit"
-			disabled
 		>
 			<template #icon>
 				<VIcon>
