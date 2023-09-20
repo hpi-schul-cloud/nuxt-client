@@ -5,7 +5,7 @@
 		data-testid="board-external-tool-element"
 		dense
 		elevation="0"
-		:outlined="isOutlined"
+		outlined
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
@@ -111,10 +111,6 @@ export default defineComponent({
 			() => hasLinkedTool.value && !toolDisplayData.value
 		);
 
-		const isOutlined = computed(() => {
-			return toolDisplayData.value !== undefined || props.isEditMode;
-		});
-
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
 		});
@@ -165,7 +161,6 @@ export default defineComponent({
 			toolDisplayData,
 			toolDisplayName,
 			isLoading,
-			isOutlined,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
