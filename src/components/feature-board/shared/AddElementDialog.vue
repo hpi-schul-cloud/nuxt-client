@@ -31,8 +31,8 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ item.icon }}</v-icon></span
-						>
+							<v-icon large>{{ item.icon }}</v-icon>
+						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
 				</v-btn>
@@ -46,7 +46,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiEmailOutline } from "@mdi/js";
-import { defineComponent } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
@@ -73,7 +73,9 @@ export default defineComponent({
 		const submissionsEnabled =
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
 
-		const dialogWidth = submissionsEnabled ? 426 : 320;
+		const dialogWidth: ComputedRef<number> = computed(() =>
+			elementTypeOptions.value.length >= 3 ? 426 : 320
+		);
 
 		return {
 			onAddElement,
