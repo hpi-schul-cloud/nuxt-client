@@ -80,9 +80,11 @@
 					<v-file-input
 						class="school-logo"
 						:label="
-							$t(
-								'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
-							)
+							localSchool.logo_name
+								? localSchool.logo_name
+								: $t(
+										'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
+								  )
 						"
 						dense
 						prepend-icon=""
@@ -169,6 +171,7 @@ export default {
 			localSchool: {
 				name: "",
 				officialSchoolNumber: "",
+				logo_name: "",
 				logo: null,
 				county: {},
 				timezone: "",
@@ -243,11 +246,8 @@ export default {
 			this.localSchool.features[settingName] = value;
 		},
 		async onLogoChange(logo) {
-			if (logo) {
-				this.localSchool.logo = await toBase64(logo);
-			} else {
-				this.localSchool.logo = null;
-			}
+			this.localSchool.logo = logo ? await toBase64(logo) : null;
+			this.localSchool.logo_name = logo ? logo.name : "";
 		},
 		async save() {
 			const updatedSchool = {
@@ -271,11 +271,8 @@ export default {
 			) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
-			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = this.localSchool.logo;
-			} else {
-				updatedSchool.logo_dataUrl = "";
-			}
+			updatedSchool.logo_dataUrl = this.localSchool.logo || "";
+			updatedSchool.logo_name = this.localSchool.logo_name || "";
 			schoolsModule.update(updatedSchool);
 		},
 	},

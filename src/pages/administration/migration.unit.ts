@@ -46,6 +46,7 @@ const schoolMock = {
 	name: "Schule_100000",
 	fileStorageType: "awsS3",
 	federalState: "0000b186816abba584714c53",
+	logo_name: "Schule_logo",
 	county: {
 		antaresKey: "BRB",
 		_id: "5fa55eb53f472a2d986c8812",

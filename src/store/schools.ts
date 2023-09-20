@@ -65,6 +65,7 @@ export default class SchoolsModule extends VuexModule {
 	school: School = {
 		_id: "",
 		name: "",
+		logo_name: "",
 		fileStorageType: "",
 		federalState: "",
 		county: {
