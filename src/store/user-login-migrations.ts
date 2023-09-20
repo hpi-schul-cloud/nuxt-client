@@ -274,13 +274,14 @@ export default class UserLoginMigrationModule extends VuexModule {
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
-
-			if (response.data) {
+			console.log(response.data);
+			if (response.data.closedAt) {
 				const userLoginMigration: UserLoginMigration =
 					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-
+				console.log(userLoginMigration);
 				this.setUserLoginMigration(userLoginMigration);
 			} else {
+				console.log(this.userLoginMigration);
 				this.setUserLoginMigration(undefined);
 			}
 		} catch (error: unknown) {

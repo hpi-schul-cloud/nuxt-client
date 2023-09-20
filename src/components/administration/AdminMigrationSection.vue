@@ -105,7 +105,7 @@
 		/>
 
 		<RenderHTML
-			v-if="oauthMigration.finishedAt"
+			v-if="oauthMigration && oauthMigration.finishedAt"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			:html="
@@ -222,8 +222,8 @@ export default defineComponent({
 				return {
 					startedAt: !!userLoginMigration.value?.startedAt,
 					mandatorySince: !!userLoginMigration.value?.mandatorySince,
-					closedAt: userLoginMigration.value?.closedAt?.toDateString(),
-					finishedAt: userLoginMigration.value?.finishedAt?.toDateString(),
+					closedAt: userLoginMigration.value?.closedAt,
+					finishedAt: userLoginMigration.value?.finishedAt,
 				};
 			}
 		);
