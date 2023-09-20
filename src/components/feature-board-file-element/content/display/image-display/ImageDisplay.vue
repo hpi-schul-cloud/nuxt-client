@@ -11,6 +11,7 @@
 </template>
 
 <script lang="ts">
+import { PreviewOutputMimeTypes } from "@/fileStorageApi/v3";
 import { useLightBox } from "@ui-light-box";
 import { defineComponent } from "vue";
 
@@ -26,8 +27,12 @@ export default defineComponent({
 		const { open } = useLightBox();
 
 		const onClick = () => {
+			const previewUrl =
+				props.url.replace("download", "preview") +
+				`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}`;
+
 			const options = {
-				url: props.url,
+				url: previewUrl,
 				alt: props.name,
 				name: props.name,
 			};
