@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		v-show="hasLinkedTool || isEditMode"
-		class="mb-4 pa-4 flex gap-8 grey lighten-4"
+		class="mb-4"
 		data-testid="board-external-tool-element"
 		dense
 		elevation="0"
@@ -13,30 +13,32 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<v-img
-			v-if="toolDisplayData && toolDisplayData.logoUrl"
-			class="mr-1"
-			:src="toolDisplayData.logoUrl"
-		></v-img>
-		<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-		<span class="align-self-center title flex-1">
-			{{
-				hasLinkedTool
-					? toolDisplayName
-					: t("feature-board-external-tool-element.placeholder.selectTool")
-			}}
-		</span>
-		<ExternalToolElementMenu
-			v-if="isEditMode"
-			ref="externalToolElementMenu"
-			:isFirstElement="isFirstElement"
-			:isLastElement="isLastElement"
-			:hasMultipleElements="hasMultipleElements"
-			@move-down:element="onMoveElementDown"
-			@move-up:element="onMoveElementUp"
-			@delete:element="onDeleteElement"
-			@edit:element="onEditElement"
-		></ExternalToolElementMenu>
+		<div class="pa-4 d-flex gap-8 grey lighten-4">
+			<v-img
+				v-if="toolDisplayData && toolDisplayData.logoUrl"
+				class="mr-1"
+				:src="toolDisplayData.logoUrl"
+			></v-img>
+			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
+			<span class="align-self-center title flex-1">
+				{{
+					hasLinkedTool
+						? toolDisplayName
+						: t("feature-board-external-tool-element.placeholder.selectTool")
+				}}
+			</span>
+			<ExternalToolElementMenu
+				v-if="isEditMode"
+				ref="externalToolElementMenu"
+				:isFirstElement="isFirstElement"
+				:isLastElement="isLastElement"
+				:hasMultipleElements="hasMultipleElements"
+				@move-down:element="onMoveElementDown"
+				@move-up:element="onMoveElementUp"
+				@delete:element="onDeleteElement"
+				@edit:element="onEditElement"
+			></ExternalToolElementMenu>
+		</div>
 	</v-card>
 </template>
 
@@ -174,11 +176,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-/* d-flex without !important */
-.flex {
-	display: flex;
-}
-
 .gap-8 {
 	gap: 8px;
 }
