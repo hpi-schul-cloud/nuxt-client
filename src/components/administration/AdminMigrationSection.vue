@@ -202,7 +202,9 @@ export default defineComponent({
 		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const userLoginMigrationModule: = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
+		const userLoginMigrationModule = injectStrict(
+			USER_LOGIN_MIGRATION_MODULE_KEY
+		);
 
 		onMounted(async () => {
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
@@ -305,7 +307,6 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
-
 
 		const officialSchoolNumber: ComputedRef<string | undefined> = computed(
 			() => schoolsModule.getSchool.officialSchoolNumber

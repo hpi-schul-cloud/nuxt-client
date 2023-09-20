@@ -71,7 +71,6 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
 } from "./utils/inject";
 
 Vue.config.productionTip = false;
