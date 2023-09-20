@@ -4,6 +4,9 @@
 		<ContentElementDescription
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"
+			@update:text="onUpdateText"
+			@update:caption="onUpdateCaption"
+			@update:description="onUpdateDescription"
 		></ContentElementDescription>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
@@ -33,18 +36,33 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["fetch:file", "update:alternativeText", "update:caption"],
+	emits: [
+		"fetch:file",
+		"update:alternativeText",
+		"update:captionText",
+		"update:descriptionText",
+	],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
 		};
-		const onUpdateCaption = (value: string) => emit("update:caption", value);
-
+		const onUpdateCaption = (value: string) => {
+			emit("update:captionText", value);
+		};
+		const onUpdateDescription = (value: string) => {
+			emit("update:descriptionText", value);
+		};
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
 
-		return { onFetchFile, previewStatus, onUpdateText, onUpdateCaption };
+		return {
+			onFetchFile,
+			previewStatus,
+			onUpdateText,
+			onUpdateCaption,
+			onUpdateDescription,
+		};
 	},
 });
 </script>
