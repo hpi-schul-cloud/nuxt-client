@@ -33,6 +33,7 @@
 			"@feature-render-html": ["src/components/feature-render-html"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
 			"@page-board": ["src/components/page-board"],
 			"@/*": ["src/*"],

@@ -5,20 +5,39 @@
 			loading="lazy"
 			:src="previewUrl"
 			:alt="name"
+			@click="onClick"
 		/>
 		<div v-if="isEditMode" class="menu-background"></div>
 	</div>
 </template>
 
 <script lang="ts">
+import { useLightBox } from "@ui-light-box";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "ImageDisplay",
 	props: {
+		url: { type: String, required: true },
 		previewUrl: { type: String, required: true },
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
+	},
+	setup(props) {
+		const { open } = useLightBox();
+
+		const onClick = () => {
+			const options = {
+				url: props.url,
+				alt: props.name,
+				name: props.name,
+			};
+			open(options);
+		};
+
+		return {
+			onClick,
+		};
 	},
 });
 </script>
