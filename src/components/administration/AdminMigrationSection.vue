@@ -19,6 +19,7 @@
 			<div v-if="isShowStartButton">
 				<v-alert light prominent text type="info">
 					<RenderHTML
+						data-testid="migration-info-text"
 						:html="
 							t('components.administration.adminMigrationSection.infoText')
 						"
@@ -166,7 +167,6 @@
 
 <script lang="ts">
 import { MigrationBody } from "@/serverApi/v3";
-import SchoolsModule from "@/store/schools";
 import { OauthMigration, School } from "@/store/types/schools";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -185,9 +185,9 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "@/composables/i18n.composable";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { UserLoginMigrationFlags } from "@/store/user-login-migration/user-login-migration-flags";
@@ -199,20 +199,14 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			injectStrict(SCHOOLS_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule | undefined =
-			injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const userLoginMigrationModule: = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
 
 		onMounted(async () => {
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
 			computed(() => userLoginMigrationModule.getUserLoginMigration);
@@ -311,6 +305,7 @@ export default defineComponent({
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
+
 
 		const officialSchoolNumber: ComputedRef<string | undefined> = computed(
 			() => schoolsModule.getSchool.officialSchoolNumber

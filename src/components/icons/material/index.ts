@@ -61,6 +61,8 @@ import {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiTrayArrowDown,
+	mdiFileReplaceOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -126,6 +128,8 @@ const materialIcons = {
 	mdiTune,
 	mdiUndo,
 	mdiViewGridOutline,
+	mdiTrayArrowDown,
+	mdiFileReplaceOutline,
 };
 
 export default materialIcons;
