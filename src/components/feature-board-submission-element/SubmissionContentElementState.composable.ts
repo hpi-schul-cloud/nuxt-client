@@ -2,7 +2,6 @@ import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, computed, onMounted } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import dayjs from "dayjs";
 
 export const useSubmissionContentElementState = (
 	id: string,
@@ -56,8 +55,7 @@ export const useSubmissionContentElementState = (
 	};
 
 	const editable = computed(() => {
-		const today = dayjs();
-		return today.isBefore(dueDate);
+		return new Date() < new Date(dueDate);
 	});
 
 	onMounted(() => {
