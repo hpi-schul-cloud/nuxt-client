@@ -46,7 +46,9 @@ export default defineComponent({
 					return false;
 				}
 
-				return props.submissions.submissionItemsResponse[0].completed;
+				const completionState =
+					props.submissions.submissionItemsResponse[0].completed;
+				return completionState;
 			},
 			set(newValue) {
 				emit("update:completed", newValue);
