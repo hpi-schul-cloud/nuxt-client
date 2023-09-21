@@ -82,10 +82,15 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 		it("should show one submissionItem per student", async () => {
 			const loading = false;
-			const numStudents = 10;
+			const numbersOfStudents = 10;
 			const submissions = submissionsResponseFactory.build(
 				{},
-				{ transient: { numSubmissionItems: 1, numUsers: numStudents } }
+				{
+					transient: {
+						numberOfSubmissionItems: 1,
+						numberOfUsers: numbersOfStudents,
+					},
+				}
 			);
 			const { wrapper } = setup(loading, submissions);
 
@@ -100,7 +105,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				'[data-testid="submission-item"]'
 			);
 
-			expect(submissionItems).toHaveLength(numStudents);
+			expect(submissionItems).toHaveLength(numbersOfStudents);
 		});
 	});
 
@@ -111,8 +116,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}
@@ -131,8 +136,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}
@@ -151,8 +156,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: true,
 					},
 				}
@@ -171,8 +176,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: true,
 					},
 				}
@@ -191,8 +196,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}
@@ -214,8 +219,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}
@@ -235,8 +240,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}
@@ -256,8 +261,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: true,
 					},
 				}
@@ -277,8 +282,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: true,
 					},
 				}
@@ -298,8 +303,8 @@ describe("SubmissionItemsTeacherDisplay", () => {
 				{},
 				{
 					transient: {
-						numSubmissionItems: 1,
-						numUsers: 1,
+						numberOfSubmissionItems: 1,
+						numberOfUsers: 1,
 						completed: false,
 					},
 				}

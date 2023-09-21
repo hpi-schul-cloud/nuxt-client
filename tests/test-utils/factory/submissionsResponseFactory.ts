@@ -6,8 +6,8 @@ import {
 } from "@@/tests/test-utils";
 
 type TransientParams = {
-	numSubmissionItems: number;
-	numUsers: number;
+	numberOfSubmissionItems: number;
+	numberOfUsers: number;
 	completed: boolean;
 };
 
@@ -16,17 +16,18 @@ export const submissionsResponseFactory = Factory.define<
 	TransientParams
 >(({ transientParams }) => {
 	const {
-		numSubmissionItems = 1,
-		numUsers = 1,
+		numberOfSubmissionItems = 1,
+		numberOfUsers = 1,
 		completed = true,
 	} = transientParams;
 
-	const users = userDataResponseFactory.buildList(numUsers);
+	const users = userDataResponseFactory.buildList(numberOfUsers);
 	const submissionItemsResponse: Array<SubmissionItemResponse> = [];
 
 	let count = 0;
-	while (count < numSubmissionItems) {
-		const userId = count < numUsers ? users[count].userId : "unmappedUserId";
+	while (count < numberOfSubmissionItems) {
+		const userId =
+			count < numberOfUsers ? users[count].userId : "unmappedUserId";
 		submissionItemsResponse.push(
 			submissionItemResponseFactory.build({
 				userId: userId,
