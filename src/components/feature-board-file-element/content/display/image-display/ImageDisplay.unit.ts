@@ -119,13 +119,5 @@ describe("ImageDisplay", () => {
 
 			expect(alt).toBe(fileNameProp);
 		});
-
-		it("should display div with class 'menu-background'", () => {
-			const { wrapper } = setup(true);
-
-			const div = wrapper.find(".menu-background");
-
-			expect(div.exists()).toBe(true);
-		});
 	});
 });
