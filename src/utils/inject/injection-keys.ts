@@ -17,7 +17,6 @@ import PrivacyPolicyModule from "@/store/privacy-policy";
 import TermsOfUseModule from "@/store/terms-of-use";
 import SchoolsModule from "@/store/schools";
 
-
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
 export const I18N_KEY: InjectionKey<VueI18n> = Symbol("i18n");
