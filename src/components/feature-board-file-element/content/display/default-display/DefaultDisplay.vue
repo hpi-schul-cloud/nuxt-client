@@ -1,27 +1,31 @@
 <template>
-	<v-list-item
-		class="grey lighten-3 px-2 rounded-t-sm"
-		data-testid="board-file-element-display"
-		inactive
-		:ripple="false"
-	>
-		<v-list-item-icon class="my-2 mr-2">
-			<v-icon
-				class="grey--text"
-				data-testid="board-file-element-display-file-icon"
-				large
-				>{{ mdiFileDocumentOutline }}</v-icon
-			>
-		</v-list-item-icon>
+	<div class="grey lighten-4">
+		<v-card-title
+			v-if="showTitle"
+			data-testid="board-file-element-display"
+			inactive
+		>
+			<div class="d-flex flex-no-wrap align-center text-truncate">
+				<v-icon
+					color="black"
+					class="mr-2"
+					size="18"
+					data-testid="board-file-element-display-file-icon"
+					>{{ mdiFileDocumentOutline }}</v-icon
+				>
 
-		<v-list-item-content class="mr-9">
-			<span
-				class="subtitle-1 d-inline-block text-truncate"
-				data-testid="board-file-element-display-file-name"
-				>{{ name }}</span
-			>
-		</v-list-item-content>
-	</v-list-item>
+				<span
+					class="subtitle-1 font-weight-bold text-truncate"
+					data-testid="board-file-element-display-file-name"
+					>{{ name }}</span
+				>
+			</div>
+		</v-card-title>
+
+		<v-card-text>
+			{{ caption }}
+		</v-card-text>
+	</div>
 </template>
 
 <script lang="ts">
@@ -32,6 +36,8 @@ export default defineComponent({
 	name: "DefaultDisplay",
 	props: {
 		name: { type: String, required: true },
+		caption: { type: String, required: false },
+		showTitle: { type: Boolean, required: true },
 	},
 	setup() {
 		return {

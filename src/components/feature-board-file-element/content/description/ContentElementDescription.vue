@@ -1,13 +1,11 @@
 <template>
-	<div>
+	<div v-if="isEditMode">
 		<CaptionText
-			:is-edit-mode="isEditMode"
-			@update:caption="onUpdateCaption"
-			@update:descriptionText="onUpdateDescriptionText"
 			:caption="fileProperties.element.content.caption"
+			@update:caption="onUpdateCaption"
 		></CaptionText>
 		<AlternativeText
-			v-if="isEditMode && fileProperties.previewUrl"
+			v-if="fileProperties.previewUrl"
 			:text="fileProperties.element.content.alternativeText"
 			@update:text="onUpdateText"
 		/>
@@ -33,16 +31,13 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["update:alternativeText", "update:caption", "update:description"],
+	emits: ["update:alternativeText", "update:caption"],
 	setup(props, { emit }) {
 		const onUpdateCaption = (value: string) => emit("update:caption", value);
-		const onUpdateDescriptionText = (value: string) =>
-			emit("update:description", value);
-
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 
-		return { onUpdateText, onUpdateCaption, onUpdateDescriptionText };
+		return { onUpdateText, onUpdateCaption };
 	},
 });
 </script>

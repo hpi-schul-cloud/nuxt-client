@@ -7,7 +7,11 @@
 			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
 		/>
-		<DefaultDisplay v-else :name="fileProperties.name" />
+		<DefaultDisplay
+			:name="fileProperties.name"
+			:caption="fileProperties.element.content.caption"
+			:show-title="!fileProperties.previewUrl"
+		/>
 	</div>
 </template>
 
