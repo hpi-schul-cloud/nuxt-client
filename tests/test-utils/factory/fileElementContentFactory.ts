@@ -4,5 +4,6 @@ import { Factory } from "fishery";
 export const fileElementContent = Factory.define<FileElementContent>(
 	({ sequence }) => ({
 		caption: "caption",
+		alternativeText: "alternativeText",
 	})
 );
