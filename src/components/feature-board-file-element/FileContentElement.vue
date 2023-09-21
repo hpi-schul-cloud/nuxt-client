@@ -105,6 +105,7 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
+				mimeType: fileRecord.value.mimeType,
 			};
 		});
 
