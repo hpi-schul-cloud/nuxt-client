@@ -11,6 +11,7 @@
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
 			:show-title="!fileProperties.previewUrl"
+			:is-edit-mode="isEditMode"
 		/>
 	</div>
 </template>

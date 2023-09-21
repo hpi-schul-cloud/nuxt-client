@@ -22,7 +22,7 @@
 			</div>
 		</v-card-title>
 
-		<v-card-text v-if="caption">
+		<v-card-text v-if="caption && !isEditMode">
 			{{ caption }}
 		</v-card-text>
 	</div>
@@ -38,6 +38,7 @@ export default defineComponent({
 		name: { type: String, required: true },
 		caption: { type: String, required: false },
 		showTitle: { type: Boolean, required: true },
+		isEditMode: { type: Boolean, required: true },
 	},
 	setup() {
 		return {
