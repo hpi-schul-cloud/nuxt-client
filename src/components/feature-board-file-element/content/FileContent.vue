@@ -1,13 +1,12 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
-		<ContentElementDescription
+		<FileInputs
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"
 			@update:text="onUpdateText"
 			@update:caption="onUpdateCaption"
-			@update:description="onUpdateDescription"
-		></ContentElementDescription>
+		></FileInputs>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>
@@ -18,12 +17,12 @@ import { computed, defineComponent, PropType } from "vue";
 import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
-import ContentElementDescription from "././description/ContentElementDescription.vue";
+import FileInputs from "././inputs/FileInputs.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
 	components: {
-		ContentElementDescription,
+		FileInputs,
 		FileDisplay,
 		ContentElementFooter,
 		FileAlert,
@@ -48,9 +47,6 @@ export default defineComponent({
 		const onUpdateCaption = (value: string) => {
 			emit("update:captionText", value);
 		};
-		const onUpdateDescription = (value: string) => {
-			emit("update:descriptionText", value);
-		};
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
@@ -60,7 +56,6 @@ export default defineComponent({
 			previewStatus,
 			onUpdateText,
 			onUpdateCaption,
-			onUpdateDescription,
 		};
 	},
 });

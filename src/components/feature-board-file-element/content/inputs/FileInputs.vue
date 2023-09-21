@@ -19,7 +19,7 @@ import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
 
 export default defineComponent({
-	name: "ContentElementDescription",
+	name: "FileInputs",
 	components: {
 		AlternativeText,
 		CaptionText,
