@@ -101,7 +101,7 @@ describe("SubmissionItemStudentDisplay", () => {
 					.find("input")
 					.attributes("aria-checked");
 
-				expect(checked).toBe("false");
+				expect(checked).toEqual("false");
 			});
 		});
 
@@ -115,7 +115,7 @@ describe("SubmissionItemStudentDisplay", () => {
 					.find("input")
 					.attributes("aria-checked");
 
-				expect(checked).toBe(
+				expect(checked).toEqual(
 					mockedSubmissions.submissionItemsResponse[0].completed.toString()
 				);
 			});
