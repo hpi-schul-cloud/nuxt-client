@@ -1,8 +1,13 @@
+import Vue from "vue";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
+
+const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionContentElementEdit", () => {
 	const setup = () => {
@@ -13,14 +18,20 @@ describe("SubmissionContentElementEdit", () => {
 			isFirstElement: false,
 			isLastElement: false,
 			hasMultipleElements: false,
+			submissions: mockedSubmissions,
+			editable: true,
+			loading: true,
 		};
-		const wrapper = shallowMount(SubmissionContentElementEdit, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-		});
+		const wrapper = shallowMount(
+			SubmissionContentElementEdit as MountOptions<Vue>,
+			{
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				provide: {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				},
+			}
+		);
 
 		return {
 			wrapper,
@@ -104,6 +115,36 @@ describe("SubmissionContentElementEdit", () => {
 			.props("hasMultipleElements");
 
 		expect(hasMultipleElements).toBe(hasMultipleElementsProp);
+	});
+
+	it("should hand over submissions prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const submissions = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("submissions");
+
+		expect(submissions).toBe(mockedSubmissions);
+	});
+
+	it("should hand over loading prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const loading = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("loading");
+
+		expect(loading).toBe(true);
+	});
+
+	it("should hand over editable prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const editable = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("editable");
+
+		expect(editable).toBe(true);
 	});
 
 	it("should forward delete:element from SubmissionContentElementMenu", () => {
