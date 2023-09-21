@@ -76,9 +76,7 @@ export default defineComponent({
 			() => groupModule.getPagination
 		);
 
-		const sortBy: ComputedRef<string> = computed(
-			() => groupModule.getSortBy || "name"
-		);
+		const sortBy: ComputedRef<string> = computed(() => groupModule.getSortBy);
 		const sortOrder: ComputedRef<SortOrder> = computed(
 			() => groupModule.getSortOrder
 		);
@@ -113,7 +111,7 @@ export default defineComponent({
 		};
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
-			const skip = (page.value - 1) * groupModule.getPagination.limit;
+			const skip = (currentPage - 1) * groupModule.getPagination.limit;
 			groupModule.setPagination({ ...pagination.value, skip });
 			await groupModule.loadClassesForSchool();
 		};
