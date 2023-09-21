@@ -493,8 +493,8 @@ describe("UserLoginMigrationModule", () => {
 
 					await module.startUserLoginMigration();
 
-					expect(module.setLoading).toHaveBeenCalledWith(true);
-					expect(module.setLoading).toHaveBeenCalledWith(false);
+					expect(module.setLoading).toHaveBeenNthCalledWith(1, true);
+					expect(module.setLoading).toHaveBeenNthCalledWith(2, false);
 				});
 
 				it("should set user login migration", async () => {
