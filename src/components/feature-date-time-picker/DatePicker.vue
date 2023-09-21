@@ -82,7 +82,7 @@ export default defineComponent({
 			return "unknown translation-key:" + key;
 		};
 
-		// eslint-disable-next-line vue/no-setup-props-destructure
+		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 		const model = ref(props.date);
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
