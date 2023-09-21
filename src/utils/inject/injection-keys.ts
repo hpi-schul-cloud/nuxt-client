@@ -13,6 +13,10 @@ import SchoolExternalToolsModule from "@/store/school-external-tools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import SystemsModule from "@/store/systems";
 import GroupModule from "@/store/group";
+import PrivacyPolicyModule from "@/store/privacy-policy";
+import TermsOfUseModule from "@/store/terms-of-use";
+import SchoolsModule from "@/store/schools";
+
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -39,3 +43,9 @@ export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> =
 	Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> =
 	Symbol("groupModule");
+export const PRIVACY_POLICY_MODULE_KEY: InjectionKey<PrivacyPolicyModule> =
+	Symbol("privacyPolicyModule");
+export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
+	Symbol("termsOfUseModule");
+export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
+	Symbol("schoolsModule");

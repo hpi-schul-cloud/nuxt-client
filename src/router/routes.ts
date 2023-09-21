@@ -267,14 +267,4 @@ export const routes: Array<RouteConfig> = [
 			configId: route.params.configId,
 		}),
 	},
-	{
-		// deprecated?
-		path: "/termsofuse",
-		component: () => import("@/pages/TermsOfUse.vue"),
-		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
 ];
