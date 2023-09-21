@@ -1578,7 +1578,7 @@ export interface FileContentBody {
      * @type {string}
      * @memberof FileContentBody
      */
-    alternativeText?: string;
+    alternativeText: string;
 }
 /**
  * 
@@ -1597,7 +1597,7 @@ export interface FileElementContent {
      * @type {string}
      * @memberof FileElementContent
      */
-    alternativeText?: string;
+    alternativeText: string;
 }
 /**
  * 
