@@ -17,7 +17,7 @@
 				:loading="loading"
 				:submissions="submissions"
 				:editable="editable"
-				@update:completed="updateCompleted"
+				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
@@ -107,7 +107,7 @@ export default defineComponent({
 			}
 		};
 
-		const updateCompleted = (completed: boolean) => {
+		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);
 		};
 
@@ -120,7 +120,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
-			updateCompleted,
+			onUpdateCompleted,
 		};
 	},
 });
