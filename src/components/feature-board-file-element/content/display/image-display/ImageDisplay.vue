@@ -1,12 +1,17 @@
 <template>
-	<div class="image-display-container">
+	<div
+		class="image-display-container"
+		tabindex="0"
+		@click="onClick"
+		@keydown.enter.self="onClick"
+		@keydown.space.prevent="onClick"
+	>
 		<v-icon class="image-display-icon" size="44">{{ mdiMagnifyExpand }}</v-icon>
 		<img
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
 			:src="previewUrl"
 			:alt="name"
-			@click="onClick"
 		/>
 	</div>
 </template>
@@ -54,16 +59,12 @@ export default defineComponent({
 	position: relative;
 }
 
-.image-display-container:hover .image-display-icon {
+.image-display-container:hover .image-display-icon,
+.image-display-container:focus .image-display-icon {
 	display: block;
 }
-.image-display-image {
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
-}
-
-.image-display-image:hover {
+.image-display-container:hover,
+.image-display-container:focus {
 	border-radius: 3px 3px 0px 0px;
 	opacity: 0.54;
 	background: var(--shades-v-black-base, #1b1b1b);
@@ -77,5 +78,11 @@ export default defineComponent({
 	transform: translate(-50%, -50%);
 	display: none;
 	color: var(--shades-v-white-base, #fff);
+}
+
+.image-display-image {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
 }
 </style>
