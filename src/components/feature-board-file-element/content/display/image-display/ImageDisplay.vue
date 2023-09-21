@@ -6,8 +6,6 @@
 			:src="previewUrl"
 			:alt="alternativeText"
 		/>
-
-		<div v-if="isEditMode" class="menu-background"></div>
 	</div>
 </template>
 
@@ -47,17 +45,9 @@ export default defineComponent({
 
 <style scoped>
 .image {
+	pointer-events: none;
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
-}
-.menu-background {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 52px;
-	background-color: var(--v-white-base);
-	opacity: 80%;
 }
 </style>

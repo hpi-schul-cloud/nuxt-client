@@ -11190,9 +11190,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        legacySchoolControllerGetMigration: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('schoolControllerGetMigration', 'schoolId', schoolId)
+            assertParamExists('legacySchoolControllerGetMigration', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/migration`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11228,11 +11228,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration: async (schoolId: string, migrationBody: MigrationBody, options: any = {}): Promise<RequestArgs> => {
+        legacySchoolControllerSetMigration: async (schoolId: string, migrationBody: MigrationBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('schoolControllerSetMigration', 'schoolId', schoolId)
+            assertParamExists('legacySchoolControllerSetMigration', 'schoolId', schoolId)
             // verify required parameter 'migrationBody' is not null or undefined
-            assertParamExists('schoolControllerSetMigration', 'migrationBody', migrationBody)
+            assertParamExists('legacySchoolControllerSetMigration', 'migrationBody', migrationBody)
             const localVarPath = `/school/{schoolId}/migration`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11280,8 +11280,8 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMigration(schoolId, options);
+        async legacySchoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.legacySchoolControllerGetMigration(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -11291,8 +11291,8 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMigration(schoolId, migrationBody, options);
+        async legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.legacySchoolControllerSetMigration(schoolId, migrationBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -11311,8 +11311,8 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
-            return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
+        legacySchoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
+            return localVarFp.legacySchoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11321,8 +11321,8 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
-            return localVarFp.schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
+        legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
+            return localVarFp.legacySchoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -11340,7 +11340,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
+    legacySchoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
 
     /**
      * 
@@ -11350,7 +11350,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
+    legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
 
 }
 
@@ -11368,8 +11368,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetMigration(schoolId: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
+    public legacySchoolControllerGetMigration(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).legacySchoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11380,8 +11380,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(this.axios, this.basePath));
+    public legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any) {
+        return SchoolApiFp(this.configuration).legacySchoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

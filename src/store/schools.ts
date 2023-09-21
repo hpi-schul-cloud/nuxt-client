@@ -393,7 +393,9 @@ export default class SchoolsModule extends VuexModule {
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
+				await this.schoolApi.legacySchoolControllerGetMigration(
+					this.getSchool.id
+				);
 			this.setOauthMigration({
 				enableMigrationStart: oauthMigration.data.enableMigrationStart,
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
@@ -422,7 +424,7 @@ export default class SchoolsModule extends VuexModule {
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerSetMigration(
+				await this.schoolApi.legacySchoolControllerSetMigration(
 					this.school._id,
 					migrationFlags
 				);

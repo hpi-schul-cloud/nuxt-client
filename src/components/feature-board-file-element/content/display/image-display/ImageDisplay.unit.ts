@@ -89,15 +89,6 @@ describe("ImageDisplay", () => {
 			);
 		});
 
-		it("should not display div with class 'menu-background'", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const div = wrapper.find(".menu-background");
-			console.log(wrapper.props());
-
-			expect(div.exists()).toBe(false);
-		});
-
 		describe("When alternative text is defined", () => {
 			it("should have set alt correctly", () => {
 				const alternativeText = "alternative text";
@@ -148,14 +139,6 @@ describe("ImageDisplay", () => {
 			const src = wrapper.find(imageSelektor).attributes("src");
 
 			expect(src).toBe(previewUrl);
-		});
-
-		it("should display div with class 'menu-background'", () => {
-			const { wrapper } = setup({ isEditMode: true });
-
-			const div = wrapper.find(".menu-background");
-
-			expect(div.exists()).toBe(true);
 		});
 
 		describe("When alternative text is defined", () => {
