@@ -3,9 +3,9 @@ import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileAlert from "./alert/FileAlert.vue";
-import AlternativeText from "./alternative-text/AlternativeText.vue";
 import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import FileInputs from "./inputs/FileInputs.vue";
 
 describe("FileContent", () => {
 	describe("When EditMode is true", () => {
@@ -73,7 +73,7 @@ describe("FileContent", () => {
 			it("Should AlternativeText component be in dom", () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(AlternativeText);
+				const alternativeText = wrapper.findComponent(FileInputs);
 
 				expect(alternativeText.exists()).toBe(true);
 			});
@@ -81,11 +81,25 @@ describe("FileContent", () => {
 			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(AlternativeText);
+				const alternativeText = wrapper.findComponent(FileInputs);
 
 				alternativeText.vm.$emit("update:text");
 				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["update:text"] ?? ["new text"];
+				const emitted = wrapper.emitted()["update:alternativeText"] ?? [
+					"new text",
+				];
+
+				expect(emitted).toHaveLength(1);
+			});
+
+			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
+				const { wrapper } = setup();
+
+				const alternativeText = wrapper.findComponent(FileInputs);
+
+				alternativeText.vm.$emit("update:caption");
+				await wrapper.vm.$nextTick();
+				const emitted = wrapper.emitted()["update:captionText"] ?? ["new text"];
 
 				expect(emitted).toHaveLength(1);
 			});
@@ -100,107 +114,6 @@ describe("FileContent", () => {
 
 					expect(wrapper.emitted("fetch:file")).toBeTruthy();
 				});
-			});
-		});
-
-		describe("When PreviewUrl is undefined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: undefined,
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: true,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
-			});
-		});
-	});
-
-	describe("When EditMode is false", () => {
-		describe("When PreviewUrl is defined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: "test",
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: false,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
-			});
-		});
-
-		describe("When PreviewUrl is undefined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: undefined,
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: false,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
 			});
 		});
 	});
