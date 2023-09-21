@@ -1,8 +1,9 @@
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
 import { mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
 import { SubmissionsResponse } from "@/serverApi/v3";
 
 const mockedSubmissions = submissionsResponseFactory.build();
@@ -24,6 +25,9 @@ describe("SubmissionItemStudentDisplay", () => {
 		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			propsData,
+			provide: {
+				[I18N_KEY.valueOf()]: i18nMock,
+			},
 		});
 
 		return {
