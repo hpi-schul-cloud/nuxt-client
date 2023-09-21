@@ -15,16 +15,16 @@
 				>
 
 				<span
-					class="subtitle-1 font-weight-bold text-truncate"
+					class="subtitle-1 font-weight-bold text-truncate mr-8"
 					data-testid="board-file-element-display-file-name"
 					>{{ name }}</span
 				>
 			</div>
 		</v-card-title>
 
-		<v-card-text v-if="caption && !isEditMode">
+		<v-card-subtitle v-if="caption && !isEditMode">
 			{{ caption }}
-		</v-card-text>
+		</v-card-subtitle>
 	</div>
 </template>
 

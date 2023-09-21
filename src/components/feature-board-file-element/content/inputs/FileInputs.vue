@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isEditMode" class="pa-2">
+	<div v-if="isEditMode" class="pa-4">
 		<CaptionText
 			:caption="fileProperties.element.content.caption"
 			@update:caption="onUpdateCaption"
