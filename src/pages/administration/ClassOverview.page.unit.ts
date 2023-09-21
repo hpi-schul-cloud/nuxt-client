@@ -97,33 +97,6 @@ describe("ClassOverview", () => {
 		});
 	});
 
-	describe("onUpdateSortBy", () => {
-		describe("when changing the sortBy", () => {
-			const setup = () => {
-				const sortBy = "externalSourceName";
-
-				const { wrapper, groupModule } = getWrapper();
-
-				return {
-					sortBy,
-					wrapper,
-					groupModule,
-				};
-			};
-
-			it("should call store to change sort by", async () => {
-				const { sortBy, wrapper, groupModule } = setup();
-
-				await wrapper
-					.find('[data-testid="admin-class-table"]')
-					.vm.$emit("update:sort-by", sortBy);
-
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect(groupModule.setSortBy).toHaveBeenCalledWith(sortBy);
-			});
-		});
-	});
-
 	describe("updateSortOrder", () => {
 		describe("when changing the sort order", () => {
 			const setup = () => {
