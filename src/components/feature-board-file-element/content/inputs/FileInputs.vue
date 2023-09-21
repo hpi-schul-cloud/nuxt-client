@@ -3,7 +3,7 @@
 		<CaptionText
 			:caption="fileProperties.element.content.caption"
 			@update:caption="onUpdateCaption"
-		></CaptionText>
+		/>
 		<AlternativeText
 			v-if="fileProperties.previewUrl"
 			:text="fileProperties.element.content.alternativeText"
