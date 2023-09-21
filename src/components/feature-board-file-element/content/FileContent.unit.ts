@@ -83,13 +83,9 @@ describe("FileContent", () => {
 
 				const alternativeText = wrapper.findComponent(FileInputs);
 
-				alternativeText.vm.$emit("update:text");
-				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["update:alternativeText"] ?? [
-					"new text",
-				];
+				alternativeText.vm.$emit("update:alternativeText");
 
-				expect(emitted).toHaveLength(1);
+				expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 			});
 
 			it("Should call onUpdateText when it receives update:text event from caption text component", async () => {
@@ -98,10 +94,8 @@ describe("FileContent", () => {
 				const alternativeText = wrapper.findComponent(FileInputs);
 
 				alternativeText.vm.$emit("update:caption");
-				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["update:captionText"] ?? ["new text"];
 
-				expect(emitted).toHaveLength(1);
+				expect(wrapper.emitted("update:captionText")).toHaveLength(1);
 			});
 
 			describe("when alert emits on-status-reload", () => {

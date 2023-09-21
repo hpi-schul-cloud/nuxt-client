@@ -4,7 +4,7 @@
 		<FileInputs
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"
-			@update:text="onUpdateText"
+			@update:alternativeText="onUpdateText"
 			@update:caption="onUpdateCaption"
 		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
