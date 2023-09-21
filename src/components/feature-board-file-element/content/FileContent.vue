@@ -6,7 +6,7 @@
 			:is-edit-mode="isEditMode"
 			@update:text="onUpdateText"
 			@update:caption="onUpdateCaption"
-		></FileInputs>
+		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
 		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
 	</div>

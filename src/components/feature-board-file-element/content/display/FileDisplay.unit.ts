@@ -57,9 +57,9 @@ describe("FileDisplay", () => {
 		it("should render file description display component", () => {
 			const { wrapper } = setup();
 
-			const defaultDisplay = wrapper.findComponent(FileDescription);
+			const fileDescription = wrapper.findComponent(FileDescription);
 
-			expect(defaultDisplay.exists()).toBe(true);
+			expect(fileDescription.exists()).toBe(true);
 		});
 	});
 
@@ -96,9 +96,9 @@ describe("FileDisplay", () => {
 		it("should render file description display component", () => {
 			const { wrapper } = setup();
 
-			const defaultDisplay = wrapper.findComponent(FileDescription);
+			const fileDescription = wrapper.findComponent(FileDescription);
 
-			expect(defaultDisplay.exists()).toBe(true);
+			expect(fileDescription.exists()).toBe(true);
 		});
 
 		it("should not render image display component", () => {

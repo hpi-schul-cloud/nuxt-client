@@ -92,7 +92,7 @@ describe("FileContent", () => {
 				expect(emitted).toHaveLength(1);
 			});
 
-			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
+			it("Should call onUpdateText when it receives update:text event from caption text component", async () => {
 				const { wrapper } = setup();
 
 				const alternativeText = wrapper.findComponent(FileInputs);
