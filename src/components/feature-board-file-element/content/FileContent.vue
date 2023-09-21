@@ -22,12 +22,11 @@ import ContentElementDescription from "././description/ContentElementDescription
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 
 export default defineComponent({
-	name: "FileContent",
 	components: {
+		ContentElementDescription,
 		FileDisplay,
 		ContentElementFooter,
 		FileAlert,
-		ContentElementDescription,
 	},
 	props: {
 		fileProperties: {
