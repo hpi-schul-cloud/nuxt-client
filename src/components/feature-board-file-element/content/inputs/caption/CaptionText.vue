@@ -1,13 +1,11 @@
 <template>
-	<div class="pa-2">
-		<v-textarea
-			data-testid="file-caption-input"
-			rows="1"
-			auto-grow
-			v-model="modelValue"
-			:label="$t('components.cardElement.fileElement.caption')"
-		/>
-	</div>
+	<v-textarea
+		data-testid="file-caption-input"
+		rows="1"
+		auto-grow
+		v-model="modelValue"
+		:label="$t('components.cardElement.fileElement.caption')"
+	/>
 </template>
 
 <script lang="ts">

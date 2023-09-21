@@ -1,16 +1,14 @@
 <template>
-	<v-card-text class="pa-2">
-		<v-textarea
-			data-testid="file-alttext-input"
-			rows="1"
-			auto-grow
-			v-model="modelValue"
-			class="v-secondary-lighten1"
-			:persistent-hint="true"
-			:hint="$t('components.cardElement.fileElement.altDescription')"
-			:label="$t('components.cardElement.fileElement.alternativeText')"
-		/>
-	</v-card-text>
+	<v-textarea
+		data-testid="file-alttext-input"
+		rows="1"
+		auto-grow
+		v-model="modelValue"
+		class="v-secondary-lighten1"
+		:persistent-hint="true"
+		:hint="$t('components.cardElement.fileElement.altDescription')"
+		:label="$t('components.cardElement.fileElement.alternativeText')"
+	/>
 </template>
 
 <script lang="ts">
