@@ -1,7 +1,7 @@
-import SchoolPolicy from "./SchoolPolicy.vue";
+import SchoolTerms from "./SchoolTerms.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
+import TermsOfUseModule from "@/store/terms-of-use";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -10,18 +10,18 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
 import Vue from "vue";
 import { i18nMock } from "@@/tests/test-utils";
 
-describe("SchoolPolicy", () => {
+describe("SchoolTerms", () => {
 	let authModule: jest.Mocked<AuthModule>;
 	let schoolsModule: jest.Mocked<SchoolsModule>;
-	let privacyPolicyModule: jest.Mocked<PrivacyPolicyModule>;
+	let termsOfUseModule: jest.Mocked<TermsOfUseModule>;
 
-	const mockPolicy: ConsentVersion = {
+	const mockTerms: ConsentVersion = {
 		_id: "123",
 		schoolId: "mockSchoolId",
 		title: "sometitle",
@@ -29,7 +29,7 @@ describe("SchoolPolicy", () => {
 		publishedAt: "somedate",
 		createdAt: "somedate",
 		updatedAt: "somedate",
-		consentTypes: ["privacy"],
+		consentTypes: ["termsOfUse"],
 		consentData: {
 			_id: "999",
 			schoolId: "333",
@@ -42,8 +42,8 @@ describe("SchoolPolicy", () => {
 	};
 
 	const setup = (
-		getters: Partial<PrivacyPolicyModule> = {
-			getPrivacyPolicy: mockPolicy,
+		getters: Partial<TermsOfUseModule> = {
+			getTermsOfUse: mockTerms,
 			getBusinessError: {
 				statusCode: "",
 				message: "",
@@ -64,17 +64,17 @@ describe("SchoolPolicy", () => {
 			getSchool: mockSchool,
 		});
 
-		privacyPolicyModule = createModuleMocks(PrivacyPolicyModule, {
+		termsOfUseModule = createModuleMocks(TermsOfUseModule, {
 			...getters,
 		});
 
-		const wrapper: Wrapper<Vue> = shallowMount(SchoolPolicy, {
+		const wrapper: Wrapper<Vue> = shallowMount(SchoolTerms, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
-				[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
+				[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			},
@@ -84,14 +84,14 @@ describe("SchoolPolicy", () => {
 	};
 
 	describe("when school is set", () => {
-		it("should call fetch privacy policy", () => {
+		it("should call fetch terms of use", () => {
 			setup();
 
-			expect(privacyPolicyModule.fetchPrivacyPolicy).toHaveBeenCalled();
+			expect(termsOfUseModule.fetchTermsOfUse).toHaveBeenCalled();
 		});
 	});
 
-	describe("when privacy policy is loading", () => {
+	describe("when terms of use is loading", () => {
 		it("should render progress bar", () => {
 			const wrapper = setup({ getStatus: "pending" });
 
@@ -99,15 +99,15 @@ describe("SchoolPolicy", () => {
 		});
 	});
 
-	describe("when privacy policy is loaded", () => {
-		it("should render privacy policy list item", () => {
+	describe("when terms of use are loaded", () => {
+		it("should render terms of use list item", () => {
 			const wrapper = setup();
 
-			expect(wrapper.find('[data-testid="policy-item"]').exists()).toBe(true);
+			expect(wrapper.find('[data-testid="terms-item"]').exists()).toBe(true);
 		});
 	});
 
-	describe("when privacy policy is found", () => {
+	describe("when terms of use are found", () => {
 		it("should render download button", () => {
 			const wrapper = setup();
 
@@ -117,10 +117,10 @@ describe("SchoolPolicy", () => {
 		});
 	});
 
-	describe("when privacy policy is not found", () => {
+	describe("when terms of use are not found", () => {
 		it("should not render download button", () => {
 			const wrapper = setup({
-				getPrivacyPolicy: null,
+				getTermsOfUse: null,
 			});
 
 			expect(wrapper.find('[data-testid="download-button"]').exists()).toBe(
@@ -158,16 +158,16 @@ describe("SchoolPolicy", () => {
 	});
 
 	describe("when user clicks edit button", () => {
-		it("should change isSchoolPolicyFormDialogOpen to true", () => {
+		it("should change isSchoolTermsFormDialogOpen to true", () => {
 			const wrapper = setup();
 
-			expect((wrapper.vm as any).isSchoolPolicyFormDialogOpen).toBe(false);
+			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect((wrapper.vm as any).isSchoolPolicyFormDialogOpen).toBe(true);
+			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(true);
 		});
 	});
 
-	describe("when error is thrown in privacyPolicyModule", () => {
+	describe("when error is thrown in termsOfUseModule", () => {
 		it("should render error alert", () => {
 			const wrapper = setup({
 				getStatus: "error",
