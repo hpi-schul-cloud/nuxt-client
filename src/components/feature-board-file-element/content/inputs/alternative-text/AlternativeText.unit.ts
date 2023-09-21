@@ -1,19 +1,25 @@
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import AlternativeText from "./AlternativeText.vue";
 
-const alternativeText = "text";
-jest.mock("@data-board", () => {
-	return {
-		useContentElementState: jest.fn(() => ({
-			modelValue: { alternativeText },
-		})),
-	};
-});
-
 describe("AlternativeText", () => {
-	const setup = () => {
+	const mountSetup = () => {
+		document.body.setAttribute("data-app", "true");
+
+		const propsData = { element: fileElementResponseFactory.build() };
+
+		const wrapper = mount(AlternativeText, {
+			propsData,
+			...createComponentMocks({}),
+		});
+
+		return {
+			wrapper,
+		};
+	};
+
+	const shallowMountSetup = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = { element: fileElementResponseFactory.build() };
@@ -29,7 +35,7 @@ describe("AlternativeText", () => {
 	};
 
 	it("should be found in dom", () => {
-		const { wrapper } = setup();
+		const { wrapper } = shallowMountSetup();
 
 		const fileContentElement = wrapper.findComponent(AlternativeText);
 
@@ -37,22 +43,18 @@ describe("AlternativeText", () => {
 	});
 
 	it("should emit if text changes", async () => {
-		const { wrapper } = setup();
+		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textarea = wrapper.findComponent({ name: "v-textarea" });
 		const newText = "new text";
-		textarea.vm.$emit("input", "new text");
-		const emitted = wrapper.emitted();
+		textarea.vm.$emit("input", newText);
 
-		if (emitted["update:text"] === undefined) {
-			throw new Error("Emitted should be defined");
-		}
-
-		expect(emitted["update:text"][0][0]).toContain(newText);
+		expect(wrapper.emitted("update:text")).toHaveLength(1);
+		expect(wrapper.emitted("update:text")?.[0][0]).toBe(newText);
 	});
 
 	it("should have a hint translation", async () => {
-		const { wrapper } = setup();
+		const { wrapper } = shallowMountSetup();
 
 		const textarea = wrapper.find("v-textarea-stub");
 
@@ -66,7 +68,7 @@ describe("AlternativeText", () => {
 	});
 
 	it("should have a label translation", async () => {
-		const { wrapper } = setup();
+		const { wrapper } = shallowMountSetup();
 
 		const textarea = wrapper.find("v-textarea-stub");
 
