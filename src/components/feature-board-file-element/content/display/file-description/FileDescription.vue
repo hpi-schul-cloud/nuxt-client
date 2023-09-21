@@ -22,7 +22,7 @@
 			</div>
 		</v-card-title>
 
-		<v-card-text>
+		<v-card-text v-if="caption">
 			{{ caption }}
 		</v-card-text>
 	</div>
