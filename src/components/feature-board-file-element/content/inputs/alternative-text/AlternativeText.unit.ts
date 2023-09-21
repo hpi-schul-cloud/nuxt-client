@@ -1,4 +1,3 @@
-import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, shallowMount } from "@vue/test-utils";
 import AlternativeText from "./AlternativeText.vue";
@@ -7,10 +6,10 @@ describe("AlternativeText", () => {
 	const mountSetup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = { element: fileElementResponseFactory.build() };
+		const text = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			propsData,
+			propsData: { text },
 			...createComponentMocks({}),
 		});
 
@@ -22,15 +21,16 @@ describe("AlternativeText", () => {
 	const shallowMountSetup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = { element: fileElementResponseFactory.build() };
+		const text = "test text";
 
 		const wrapper = shallowMount(AlternativeText, {
-			propsData,
+			propsData: { text },
 			...createComponentMocks({}),
 		});
 
 		return {
 			wrapper,
+			text,
 		};
 	};
 
@@ -51,6 +51,16 @@ describe("AlternativeText", () => {
 
 		expect(wrapper.emitted("update:text")).toHaveLength(1);
 		expect(wrapper.emitted("update:text")?.[0][0]).toBe(newText);
+	});
+
+	it("should pass text value to textarea", async () => {
+		const { wrapper, text } = shallowMountSetup();
+
+		const textarea = wrapper.find("v-textarea-stub");
+
+		const hint = textarea.attributes("value");
+
+		expect(hint).toBe(text);
 	});
 
 	it("should have a hint translation", async () => {
