@@ -10,9 +10,21 @@
 					background: var(--shades-v-white-base, #fff);
 					display: flex;
 					height: 80px;
-					justify-content: space-between;
+					justify-content: start;
 				"
 			>
+				<div
+					style="
+						align-items: center;
+						display: flex;
+						justify-content: center;
+						padding: 16px;
+					"
+				>
+					<v-btn icon style="color: var(--v-secondary-base)" @click="close">
+						<v-icon>{{ mdiClose }}</v-icon>
+					</v-btn>
+				</div>
 				<div
 					style="
 						align-items: center;
@@ -39,18 +51,6 @@
 					>
 						{{ name }}
 					</span>
-				</div>
-				<div
-					style="
-						align-items: center;
-						display: flex;
-						justify-content: center;
-						padding: 16px;
-					"
-				>
-					<v-btn icon style="color: var(--v-secondary-base)" @click="close">
-						<v-icon>{{ mdiClose }}</v-icon>
-					</v-btn>
 				</div>
 			</div>
 			<div
