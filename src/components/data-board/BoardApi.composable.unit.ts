@@ -147,6 +147,7 @@ describe("BoardApi.composable", () => {
 				type: ContentElementType.File,
 				content: {
 					caption: "caption",
+					alternativeText: "alternative text",
 				},
 				timestamps: timestampsResponseFactory.build(),
 			};
