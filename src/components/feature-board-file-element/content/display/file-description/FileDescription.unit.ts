@@ -1,14 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mdiFileDocumentOutline } from "@mdi/js";
 import { shallowMount } from "@vue/test-utils";
-import DefaultDisplay from "./DefaultDisplay.vue";
+import FileDescription from "./FileDescription.vue";
 
-describe("DefaultDisplay", () => {
+describe("FileDescription", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = { name: "test-name" };
-		const wrapper = shallowMount(DefaultDisplay, {
+		const wrapper = shallowMount(FileDescription, {
 			propsData,
 			...createComponentMocks({}),
 		});
@@ -22,7 +22,7 @@ describe("DefaultDisplay", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const defaultDisplay = wrapper.findComponent(DefaultDisplay);
+		const defaultDisplay = wrapper.findComponent(FileDescription);
 
 		expect(defaultDisplay.exists()).toBe(true);
 	});

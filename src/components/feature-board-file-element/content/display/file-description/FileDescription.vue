@@ -33,7 +33,7 @@ import { mdiFileDocumentOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: "DefaultDisplay",
+	name: "FileDescription",
 	props: {
 		name: { type: String, required: true },
 		caption: { type: String, required: false },

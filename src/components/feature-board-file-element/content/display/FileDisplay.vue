@@ -7,7 +7,7 @@
 			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
 		/>
-		<DefaultDisplay
+		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
 			:show-title="!fileProperties.previewUrl"
@@ -18,12 +18,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
-import DefaultDisplay from "./default-display/DefaultDisplay.vue";
+import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, DefaultDisplay },
+	components: { ImageDisplay, FileDescription },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
