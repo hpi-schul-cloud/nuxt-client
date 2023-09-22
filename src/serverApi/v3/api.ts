@@ -792,10 +792,14 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
+    Card = 'CARD',
+    Column = 'COLUMN',
+    Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
     File = 'FILE',
+    FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -810,6 +814,9 @@ export enum CopyApiResponseTypeEnum {
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
+    RichtextElement = 'RICHTEXT_ELEMENT',
+    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
+    SubmissionItem = 'SUBMISSION_ITEM',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
     TaskGroup = 'TASK_GROUP',
@@ -1573,6 +1580,12 @@ export interface FileContentBody {
      * @memberof FileContentBody
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileContentBody
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -1586,6 +1599,12 @@ export interface FileElementContent {
      * @memberof FileElementContent
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -3978,16 +3997,16 @@ export interface SubmissionStatusResponse {
 export interface SubmissionsResponse {
     /**
      * 
-     * @type {Array<SubmissionItemResponse>}
+     * @type {Array<Array>}
      * @memberof SubmissionsResponse
      */
-    submissionItemsResponse: Array<SubmissionItemResponse>;
+    submissionItemsResponse: Array<Array>;
     /**
      * 
-     * @type {Array<UserDataResponse>}
+     * @type {Array<Array>}
      * @memberof SubmissionsResponse
      */
-    users: Array<UserDataResponse>;
+    users: Array<Array>;
 }
 /**
  * 
@@ -4439,31 +4458,6 @@ export interface UpdateSubmissionItemBodyParams {
      * @memberof UpdateSubmissionItemBodyParams
      */
     completed: boolean;
-}
-/**
- * 
- * @export
- * @interface UserDataResponse
- */
-export interface UserDataResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof UserDataResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserDataResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserDataResponse
-     */
-    userId: string;
 }
 /**
  * 
@@ -10330,7 +10324,7 @@ export const PseudonymApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @summary Returns Pseudonym
+         * @summary Returns the related user and tool information to a pseudonym
          * @param {string} pseudonym 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10378,7 +10372,7 @@ export const PseudonymApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Returns Pseudonym
+         * @summary Returns the related user and tool information to a pseudonym
          * @param {string} pseudonym 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10399,7 +10393,7 @@ export const PseudonymApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @summary Returns Pseudonym
+         * @summary Returns the related user and tool information to a pseudonym
          * @param {string} pseudonym 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10418,7 +10412,7 @@ export const PseudonymApiFactory = function (configuration?: Configuration, base
 export interface PseudonymApiInterface {
     /**
      * 
-     * @summary Returns Pseudonym
+     * @summary Returns the related user and tool information to a pseudonym
      * @param {string} pseudonym 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10437,7 +10431,7 @@ export interface PseudonymApiInterface {
 export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
     /**
      * 
-     * @summary Returns Pseudonym
+     * @summary Returns the related user and tool information to a pseudonym
      * @param {string} pseudonym 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
