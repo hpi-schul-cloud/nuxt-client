@@ -3909,10 +3909,10 @@ export interface SubmissionItemResponse {
     completed: boolean;
     /**
      * 
-     * @type {UserDataResponse}
+     * @type {string}
      * @memberof SubmissionItemResponse
      */
-    userData: UserDataResponse;
+    userId: string;
 }
 /**
  * 
@@ -3969,6 +3969,25 @@ export interface SubmissionStatusResponse {
      * @memberof SubmissionStatusResponse
      */
     submittingCourseGroupName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionsResponse
+ */
+export interface SubmissionsResponse {
+    /**
+     * 
+     * @type {Array<SubmissionItemResponse>}
+     * @memberof SubmissionsResponse
+     */
+    submissionItemsResponse: Array<SubmissionItemResponse>;
+    /**
+     * 
+     * @type {Array<UserDataResponse>}
+     * @memberof SubmissionsResponse
+     */
+    users: Array<UserDataResponse>;
 }
 /**
  * 
@@ -7611,7 +7630,7 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SubmissionItemResponse>>> {
+        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7644,7 +7663,7 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>> {
+        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse> {
             return localVarFp.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7675,7 +7694,7 @@ export interface BoardSubmissionApiInterface {
      * @throws {RequiredError}
      * @memberof BoardSubmissionApiInterface
      */
-    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>>;
+    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse>;
 
     /**
      * 
