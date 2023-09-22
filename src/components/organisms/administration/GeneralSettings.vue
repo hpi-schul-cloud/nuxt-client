@@ -85,7 +85,7 @@
 							)
 						"
 						dense
-						v-model="file"
+						v-model="logoFile"
 						prepend-icon=""
 						@change="onLogoChange"
 					></v-file-input>
@@ -225,7 +225,7 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			this.file = this.school.logo_dataUrl
+			this.logoFile = this.school.logo_dataUrl
 				? new File([""], schoolCopy.logo_name)
 				: null;
 
