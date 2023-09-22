@@ -79,16 +79,16 @@ export default defineComponent({
 		};
 
 		const formattedDueDate = computed(() => {
-			if (props.dueDate) {
-				dayjs.locale(authModule.getLocale);
-				const format = `dddd, ${t("format.date")} - HH:mm`;
-
-				return `${t("components.cardElement.submissionElement.until")} ${dayjs(
-					props.dueDate
-				).format(format)}`;
-			} else {
+			if (!props.dueDate) {
 				return undefined;
 			}
+
+			dayjs.locale(authModule.getLocale);
+			const format = `dddd, ${t("format.date")} - HH:mm`;
+
+			return `${t("components.cardElement.submissionElement.until")} ${dayjs(
+				props.dueDate
+			).format(format)}`;
 		});
 
 		return {
