@@ -46,6 +46,7 @@ export default {
 			mdiInformation,
 		};
 	},
+	inject: ["mq"],
 	computed: {
 		notifierData() {
 			return notifierModule.getNotifier;
@@ -54,7 +55,7 @@ export default {
 			return this.notifierData?.status;
 		},
 		isMobile() {
-			return this.$mq === "mobile";
+			return this.mq === "mobile";
 		},
 		text() {
 			return this.notifierData?.text;

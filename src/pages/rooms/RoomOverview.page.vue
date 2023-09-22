@@ -147,6 +147,7 @@ export default {
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
 		i18n: { from: I18N_KEY },
+		mq: "mq",
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -224,8 +225,8 @@ export default {
 	},
 	methods: {
 		getDeviceDims() {
-			this.device = this.$mq;
-			switch (this.$mq) {
+			this.device = this.mq;
+			switch (this.mq) {
 				case "tablet":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";

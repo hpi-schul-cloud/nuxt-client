@@ -32,7 +32,7 @@ export default {
 		TheFooter,
 	},
 
-	inject: { envConfigModule: { from: ENV_CONFIG_MODULE_KEY } },
+	inject: { envConfigModule: { from: ENV_CONFIG_MODULE_KEY }, mq: "mq" },
 
 	computed: {
 		ghostBaseUrl() {
@@ -58,7 +58,7 @@ export default {
 			];
 		},
 		isMobile() {
-			return this.$mq === "mobile";
+			return this.mq === "mobile";
 		},
 	},
 };
