@@ -792,14 +792,10 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
-    Card = 'CARD',
-    Column = 'COLUMN',
-    Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
     File = 'FILE',
-    FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -814,9 +810,6 @@ export enum CopyApiResponseTypeEnum {
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
-    RichtextElement = 'RICHTEXT_ELEMENT',
-    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
-    SubmissionItem = 'SUBMISSION_ITEM',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
     TaskGroup = 'TASK_GROUP',
@@ -1585,7 +1578,7 @@ export interface FileContentBody {
      * @type {string}
      * @memberof FileContentBody
      */
-    alternativeText: string;
+    alternativeText?: string;
 }
 /**
  * 
@@ -1604,7 +1597,7 @@ export interface FileElementContent {
      * @type {string}
      * @memberof FileElementContent
      */
-    alternativeText: string;
+    alternativeText?: string;
 }
 /**
  * 
@@ -3171,31 +3164,6 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
- * @interface PseudonymResponse
- */
-export interface PseudonymResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    toolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    userId: string;
-}
-/**
- * 
- * @export
  * @interface PublicSystemListResponse
  */
 export interface PublicSystemListResponse {
@@ -3997,16 +3965,16 @@ export interface SubmissionStatusResponse {
 export interface SubmissionsResponse {
     /**
      * 
-     * @type {Array<Array>}
+     * @type {Array<SubmissionItemResponse>}
      * @memberof SubmissionsResponse
      */
-    submissionItemsResponse: Array<Array>;
+    submissionItemsResponse: Array<SubmissionItemResponse>;
     /**
      * 
-     * @type {Array<Array>}
+     * @type {Array<UserDataResponse>}
      * @memberof SubmissionsResponse
      */
-    users: Array<Array>;
+    users: Array<UserDataResponse>;
 }
 /**
  * 
@@ -4458,6 +4426,31 @@ export interface UpdateSubmissionItemBodyParams {
      * @memberof UpdateSubmissionItemBodyParams
      */
     completed: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UserDataResponse
+ */
+export interface UserDataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDataResponse
+     */
+    userId: string;
 }
 /**
  * 
@@ -10312,133 +10305,6 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      */
     public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * PseudonymApi - axios parameter creator
- * @export
- */
-export const PseudonymApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Returns the related user and tool information to a pseudonym
-         * @param {string} pseudonym 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        pseudonymControllerGetPseudonym: async (pseudonym: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'pseudonym' is not null or undefined
-            assertParamExists('pseudonymControllerGetPseudonym', 'pseudonym', pseudonym)
-            const localVarPath = `/pseudonyms/{pseudonym}`
-                .replace(`{${"pseudonym"}}`, encodeURIComponent(String(pseudonym)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * PseudonymApi - functional programming interface
- * @export
- */
-export const PseudonymApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = PseudonymApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Returns the related user and tool information to a pseudonym
-         * @param {string} pseudonym 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async pseudonymControllerGetPseudonym(pseudonym: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.pseudonymControllerGetPseudonym(pseudonym, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * PseudonymApi - factory interface
- * @export
- */
-export const PseudonymApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = PseudonymApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Returns the related user and tool information to a pseudonym
-         * @param {string} pseudonym 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse> {
-            return localVarFp.pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * PseudonymApi - interface
- * @export
- * @interface PseudonymApi
- */
-export interface PseudonymApiInterface {
-    /**
-     * 
-     * @summary Returns the related user and tool information to a pseudonym
-     * @param {string} pseudonym 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PseudonymApiInterface
-     */
-    pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse>;
-
-}
-
-/**
- * PseudonymApi - object-oriented interface
- * @export
- * @class PseudonymApi
- * @extends {BaseAPI}
- */
-export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
-    /**
-     * 
-     * @summary Returns the related user and tool information to a pseudonym
-     * @param {string} pseudonym 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PseudonymApi
-     */
-    public pseudonymControllerGetPseudonym(pseudonym: string, options?: any) {
-        return PseudonymApiFp(this.configuration).pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
