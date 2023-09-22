@@ -14,14 +14,17 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="modelValue.dueDate"
-				:completed="completed"
 				:loading="loading"
-				@update:completed="updateCompletionState"
+				:submissions="submissions"
+				:editable="editable"
+				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
 				:dueDate="modelValue.dueDate"
-				:isFirstElement="isFirstElement"
+				:loading="loading"
+				:submissions="submissions"
+				:editable="editable"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
@@ -70,8 +73,11 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { completed, updateSubmissionItem, loading } =
-			useSubmissionContentElementState(element.value.id);
+		const { loading, submissions, editable, updateSubmissionItem } =
+			useSubmissionContentElementState(
+				element.value.id,
+				element.value.content.dueDate
+			);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -103,20 +109,21 @@ export default defineComponent({
 			}
 		};
 
-		const updateCompletionState = (completed: boolean) => {
+		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);
 		};
 
 		return {
 			modelValue,
 			submissionContentElement,
-			completed,
+			submissions,
 			loading,
+			editable,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
-			updateCompletionState,
+			onUpdateCompleted,
 		};
 	},
 });

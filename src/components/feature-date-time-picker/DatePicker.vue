@@ -72,7 +72,7 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const locale = i18n.locale;
 
-		// eslint-disable-next-line vue/no-setup-props-destructure
+		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 		const model = ref(props.date);
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);

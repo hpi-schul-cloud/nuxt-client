@@ -6,6 +6,7 @@ import AuthModule from "@/store/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role: "teacher" | "student" = "teacher") => {
@@ -43,27 +44,55 @@ describe("SubmissionContentElementDisplay", () => {
 		expect(component.exists()).toBe(true);
 	});
 
-	it("should render SubmissionItemStudentDisplay as a student", () => {
-		const { wrapper } = setup("student");
+	it("should find dueDate text", () => {
+		const { wrapper, dueDate } = setup();
 
-		const component = wrapper.findComponent(SubmissionItemStudentDisplay);
-		expect(component.exists()).toBe(true);
+		const submissionDueDate = wrapper
+			.find("[data-testid=board-submission-element-due-date]")
+			.text();
+
+		expect(submissionDueDate).toBe(dueDate);
 	});
 
-	it("should emit 'update:completed' when student changes completed state", async () => {
-		const { wrapper } = setup("student");
+	describe("As a student", () => {
+		it("should render SubmissionItemStudentDisplay", () => {
+			const { wrapper } = setup("student");
 
-		const component = wrapper.findComponent(SubmissionItemStudentDisplay);
-		component.vm.$emit("update:completed");
+			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
+			expect(component.exists()).toBe(true);
+		});
 
-		const emitted = wrapper.emitted();
-		expect(emitted["update:completed"]).toBeDefined();
+		it("should not render SubmissionItemsTeacherDisplay", () => {
+			const { wrapper } = setup("student");
+
+			const component = wrapper.findComponent(SubmissionItemsTeacherDisplay);
+			expect(component.exists()).toBe(false);
+		});
+
+		it("should emit 'update:completed' when completed state changes", async () => {
+			const { wrapper } = setup("student");
+
+			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
+			component.vm.$emit("update:completed");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["update:completed"]).toBeDefined();
+		});
 	});
 
-	it("should not render SubmissionItemStudentDisplay as a teacher", () => {
-		const { wrapper } = setup("teacher");
+	describe("As a teacher", () => {
+		it("should render SubmissionItemsTeacherDisplay", () => {
+			const { wrapper } = setup("teacher");
 
-		const component = wrapper.findComponent(SubmissionItemStudentDisplay);
-		expect(component.exists()).toBe(false);
+			const component = wrapper.findComponent(SubmissionItemsTeacherDisplay);
+			expect(component.exists()).toBe(true);
+		});
+
+		it("should not render SubmissionItemStudentDisplay", () => {
+			const { wrapper } = setup("teacher");
+
+			const component = wrapper.findComponent(SubmissionItemStudentDisplay);
+			expect(component.exists()).toBe(false);
+		});
 	});
 });

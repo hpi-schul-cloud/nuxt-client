@@ -11,10 +11,16 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:completed="completed"
+			:submissions="submissions"
 			:editable="editable"
 			:loading="loading"
 			@update:completed="updateCompleted"
+		/>
+		<SubmissionItemsTeacherDisplay
+			v-if="isTeacher"
+			:submissions="submissions"
+			:editable="editable"
+			:loading="loading"
 		/>
 	</div>
 </template>
@@ -22,21 +28,31 @@
 <script lang="ts">
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { defineComponent, ref, computed, toRef } from "vue";
+import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
 import { useI18n } from "@/composables/i18n.composable";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
-	components: { SubmissionContentElementTitle, SubmissionItemStudentDisplay },
+	components: {
+		SubmissionContentElementTitle,
+		SubmissionItemStudentDisplay,
+		SubmissionItemsTeacherDisplay,
+	},
 	props: {
-		completed: {
-			type: Boolean,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		loading: {
+			type: Boolean,
+			required: true,
+		},
+		editable: {
 			type: Boolean,
 			required: true,
 		},
@@ -54,15 +70,13 @@ export default defineComponent({
 			return userRoles.value.includes("student");
 		});
 
+		const isTeacher = computed(() => {
+			return userRoles.value.includes("teacher");
+		});
+
 		const updateCompleted = (completed: boolean) => {
 			emit("update:completed", completed);
 		};
-
-		const editable = computed(() => {
-			const dueDate = toRef(props, "dueDate").value;
-			const today = dayjs();
-			return today.isBefore(dueDate);
-		});
 
 		const formattedDueDate = computed(() => {
 			if (props.dueDate) {
@@ -79,7 +93,7 @@ export default defineComponent({
 
 		return {
 			isStudent,
-			editable,
+			isTeacher,
 			dayjs,
 			updateCompleted,
 			formattedDueDate,
