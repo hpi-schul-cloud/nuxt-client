@@ -77,6 +77,7 @@
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
 	"common.labels.notVisible": "Не видно",
+	"common.labels.settings": "Налаштування",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email": "clara.fall@mail.de",
@@ -179,6 +180,7 @@
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Подання",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Більше інструментів",
 	"componente.molecules.CoursesGrid.emptystate": "Наразі тут курсів немає.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "година | години (годин)",
@@ -1025,5 +1027,6 @@
 	"pages.videoConference.info.noPermission": "Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.action.refresh": "оновити статус",
 	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
-	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo"
+	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент..."
 }

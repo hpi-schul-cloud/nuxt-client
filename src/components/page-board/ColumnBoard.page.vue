@@ -3,27 +3,30 @@
 		<Board :board-id="boardId"></Board>
 	</DefaultWireframe>
 </template>
+
 <script lang="ts">
-import { Board } from "@feature-board";
-import { useSharedBoardPageInformation } from "@data-board";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useSharedBoardPageInformation } from "@data-board";
+import { Board } from "@feature-board";
 import { useTitle } from "@vueuse/core";
 import { defineComponent } from "vue";
-import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
 	name: "ColumnBoardPage",
 	components: { Board, DefaultWireframe },
+	props: {
+		boardId: {
+			type: String,
+			required: true,
+		},
+	},
 	setup() {
-		const route = useRoute();
-		const boardId = route.params?.id;
 		const { breadcrumbs, pageTitle } = useSharedBoardPageInformation();
 
 		useTitle(pageTitle);
 
 		return {
 			breadcrumbs,
-			boardId,
 		};
 	},
 });

@@ -77,6 +77,7 @@
 	"common.labels.visibility": "Visibility",
 	"common.labels.visible": "Visible",
 	"common.labels.notVisible": "Not visible",
+	"common.labels.settings": "Setting",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email": "clara.fall@mail.de",
@@ -178,6 +179,7 @@
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Submission",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "More Tools",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}",
 	"components.legacy.footer.accessibility.report": "Accessibility feedback",
 	"components.legacy.footer.accessibility.statement": "Accessibility statement",
@@ -999,5 +1001,6 @@
 	"pages.videoConference.info.noPermission": "The video conference hasn't started yet or you don't have permission to join it.",
 	"pages.videoConference.action.refresh": "Update status",
 	"ui-confirmation-dialog.ask-delete.card": "Delete {type} {title}?",
-	"feature-board-file-element.placeholder.uploadFile": "Upload file"
+	"feature-board-file-element.placeholder.uploadFile": "Upload file",
+	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool..."
 }
