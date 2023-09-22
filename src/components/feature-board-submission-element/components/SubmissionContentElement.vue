@@ -25,6 +25,7 @@
 				:loading="loading"
 				:submissions="submissions"
 				:editable="editable"
+				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
