@@ -6,8 +6,8 @@
 		/>
 		<AlternativeText
 			v-if="fileProperties.previewUrl"
-			:text="fileProperties.element.content.alternativeText"
-			@update:text="onUpdateText"
+			:alternativeText="fileProperties.element.content.alternativeText"
+			@update:alternativeText="onUpdateText"
 		/>
 	</div>
 </template>

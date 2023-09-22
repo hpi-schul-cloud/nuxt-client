@@ -6,10 +6,10 @@ describe("AlternativeText", () => {
 	const mountSetup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const text = "test text";
+		const alternativeText = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			propsData: { text },
+			propsData: { alternativeText },
 			...createComponentMocks({}),
 		});
 
@@ -21,16 +21,16 @@ describe("AlternativeText", () => {
 	const shallowMountSetup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const text = "test text";
+		const alternativeText = "test text";
 
 		const wrapper = shallowMount(AlternativeText, {
-			propsData: { text },
+			propsData: { alternativeText },
 			...createComponentMocks({}),
 		});
 
 		return {
 			wrapper,
-			text,
+			alternativeText,
 		};
 	};
 
@@ -42,25 +42,25 @@ describe("AlternativeText", () => {
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
-	it("should emit if text changes", async () => {
+	it("should emit update:alternativeText if text changes", async () => {
 		const { wrapper } = mountSetup();
 
 		const textarea = wrapper.findComponent({ name: "v-textarea" });
 		const newText = "new text";
 		textarea.vm.$emit("input", newText);
 
-		expect(wrapper.emitted("update:text")).toHaveLength(1);
-		expect(wrapper.emitted("update:text")?.[0][0]).toBe(newText);
+		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
 	});
 
 	it("should pass text value to textarea", async () => {
-		const { wrapper, text } = shallowMountSetup();
+		const { wrapper, alternativeText } = shallowMountSetup();
 
 		const textarea = wrapper.find("v-textarea-stub");
 
 		const hint = textarea.attributes("value");
 
-		expect(hint).toBe(text);
+		expect(hint).toBe(alternativeText);
 	});
 
 	it("should have a hint translation", async () => {

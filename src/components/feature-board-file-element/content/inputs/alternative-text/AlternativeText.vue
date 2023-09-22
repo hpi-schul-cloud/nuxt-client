@@ -18,14 +18,14 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "AlternativeText",
 	props: {
-		text: {
+		alternativeText: {
 			type: String,
 			required: false,
 		},
 	},
-	emits: ["update:text"],
+	emits: ["update:alternativeText"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "text", emit);
+		const modelValue = useVModel(props, "alternativeText", emit);
 
 		return {
 			modelValue,

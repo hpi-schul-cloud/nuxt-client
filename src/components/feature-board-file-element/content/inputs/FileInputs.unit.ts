@@ -3,6 +3,8 @@ import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import FileInputs from "./FileInputs.vue";
+import AlternativeText from "./alternative-text/AlternativeText.vue";
+import CaptionText from "./caption/CaptionText.vue";
 
 describe("FileInputs", () => {
 	const setup = (props: { previewUrl?: string; isEditMode: boolean }) => {
@@ -33,14 +35,16 @@ describe("FileInputs", () => {
 		it("should render CaptionText Component", () => {
 			const { wrapper } = setup({ isEditMode: true });
 
-			expect(wrapper.find("CaptionText-stub").exists()).toBe(true);
+			const captionText = wrapper.findComponent(CaptionText);
+
+			expect(captionText.exists()).toBe(true);
 		});
 
 		describe("when CaptionText emits update:caption", () => {
 			it("should emit update:caption", () => {
 				const { wrapper } = setup({ isEditMode: true });
-				const captionText = wrapper.find("CaptionText-stub");
 
+				const captionText = wrapper.findComponent(CaptionText);
 				captionText.vm.$emit("update:caption", "test");
 
 				expect(wrapper.emitted("update:caption")).toEqual([["test"]]);
@@ -51,15 +55,17 @@ describe("FileInputs", () => {
 			it("should render AlternativeText Component", () => {
 				const { wrapper } = setup({ isEditMode: true, previewUrl: "test" });
 
-				expect(wrapper.find("AlternativeText-stub").exists()).toBe(true);
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(true);
 			});
 
-			describe("when AlternativeText emits update:text", () => {
+			describe("when AlternativeText emits update:alternativeText", () => {
 				it("should emit update:alternativeText", () => {
 					const { wrapper } = setup({ isEditMode: true, previewUrl: "test" });
-					const captionText = wrapper.find("AlternativeText-stub");
 
-					captionText.vm.$emit("update:text", "test");
+					const alternativeText = wrapper.findComponent(AlternativeText);
+					alternativeText.vm.$emit("update:alternativeText", "test");
 
 					expect(wrapper.emitted("update:alternativeText")).toEqual([["test"]]);
 				});
@@ -70,7 +76,9 @@ describe("FileInputs", () => {
 			it("should not render AlternativeText Component", () => {
 				const { wrapper } = setup({ isEditMode: true });
 
-				expect(wrapper.find("AlternativeText-stub").exists()).toBe(false);
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(false);
 			});
 		});
 	});
@@ -79,14 +87,18 @@ describe("FileInputs", () => {
 		it("should not render CaptionText Component", () => {
 			const { wrapper } = setup({ isEditMode: false });
 
-			expect(wrapper.find("CaptionText-stub").exists()).toBe(false);
+			const captionText = wrapper.findComponent(CaptionText);
+
+			expect(captionText.exists()).toBe(false);
 		});
 
 		describe("when previewUrl is defined", () => {
 			it("should not render AlternativeText Component", () => {
 				const { wrapper } = setup({ isEditMode: false, previewUrl: "test" });
 
-				expect(wrapper.find("AlternativeText-stub").exists()).toBe(false);
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(false);
 			});
 		});
 
@@ -94,7 +106,9 @@ describe("FileInputs", () => {
 			it("should not render AlternativeText Component", () => {
 				const { wrapper } = setup({ isEditMode: false });
 
-				expect(wrapper.find("AlternativeText-stub").exists()).toBe(false);
+				const alternativeText = wrapper.findComponent(AlternativeText);
+
+				expect(alternativeText.exists()).toBe(false);
 			});
 		});
 	});
