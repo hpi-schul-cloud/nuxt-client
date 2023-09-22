@@ -5,14 +5,12 @@ import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { SubmissionItemResponse } from "@/serverApi/v3";
-import { submissionItemResponseFactory } from "@@/tests/test-utils";
+import { SubmissionsResponse } from "@/serverApi/v3";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
-const mockedSubmissionItems: Array<SubmissionItemResponse> = [
-	submissionItemResponseFactory.build(),
-];
+const mockedSubmissionsResponse = submissionsResponseFactory.build();
 
 jest.mock("./SubmissionItemApi.composable");
 const mockedUseSubmissionItemApi = jest.mocked(useSubmissionItemApi);
@@ -32,9 +30,12 @@ describe("SubmissionContentElementState.composable", () => {
 		jest.resetAllMocks();
 	});
 
-	const setup = (contentElementId = "123123") => {
+	const setup = (
+		contentElementId = "123123",
+		dueDate = "2100-12-31T00:00:00.000Z"
+	) => {
 		return mountComposable(
-			() => useSubmissionContentElementState(contentElementId),
+			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -55,14 +56,14 @@ describe("SubmissionContentElementState.composable", () => {
 	it("should return fetch function that updates submission items and loading state", async () => {
 		const contentElementId = "123124";
 		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-			mockedSubmissionItems as unknown as Promise<Array<SubmissionItemResponse>>
+			mockedSubmissionsResponse as unknown as Promise<SubmissionsResponse>
 		);
 
-		const { fetchSubmissionItems, loading, submissionItems } =
+		const { fetchSubmissionItems, loading, submissions } =
 			setup(contentElementId);
 
 		expect(loading.value).toBe(true);
-		expect(submissionItems.value.length).toBe(0);
+		expect(submissions.value.submissionItemsResponse.length).toBe(0);
 
 		await fetchSubmissionItems(contentElementId);
 
@@ -70,16 +71,16 @@ describe("SubmissionContentElementState.composable", () => {
 			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
 		).toHaveBeenCalledWith(contentElementId);
 		expect(loading.value).toBe(false);
-		expect(submissionItems.value.length).toEqual(mockedSubmissionItems.length);
+		expect(submissions.value.submissionItemsResponse.length).toEqual(
+			mockedSubmissionsResponse.submissionItemsResponse.length
+		);
 	});
 
 	describe("if the student created a submission item before", () => {
 		it("should return update function that updates the completed state", async () => {
 			const contentElementId = "123124";
 			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-				mockedSubmissionItems as unknown as Promise<
-					Array<SubmissionItemResponse>
-				>
+				mockedSubmissionsResponse as unknown as Promise<SubmissionsResponse>
 			);
 
 			const { fetchSubmissionItems, updateSubmissionItem } =
@@ -91,15 +92,20 @@ describe("SubmissionContentElementState.composable", () => {
 			await updateSubmissionItem(completed);
 			expect(
 				mockedUseSubmissionItemApiCalls.updateSubmissionItemCall
-			).toHaveBeenLastCalledWith(mockedSubmissionItems[0].id, completed);
+			).toHaveBeenLastCalledWith(
+				mockedSubmissionsResponse.submissionItemsResponse[0].id,
+				completed
+			);
 		});
 	});
 
 	describe("if the student did not create a submission item so far", () => {
 		it("should return update function that creates initial completed state", async () => {
 			const contentElementId = "123124";
+			const submissions = submissionsResponseFactory.build();
+			submissions.submissionItemsResponse = [];
 			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
-				[] as unknown as Promise<Array<SubmissionItemResponse>>
+				submissions as unknown as Promise<SubmissionsResponse>
 			);
 
 			const { fetchSubmissionItems, updateSubmissionItem } =

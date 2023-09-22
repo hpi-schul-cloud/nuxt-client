@@ -73,7 +73,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		// eslint-disable-next-line vue/no-setup-props-destructure
+		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 		const model = ref(props.time);
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);

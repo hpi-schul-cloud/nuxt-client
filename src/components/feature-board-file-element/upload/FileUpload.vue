@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="!fileWasPicked" class="grey lighten-3">
+		<div v-if="!fileWasPicked">
 			<FilePicker
 				class="mr-12"
 				@update:file="onFileSelect"

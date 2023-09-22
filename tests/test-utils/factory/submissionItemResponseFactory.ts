@@ -1,14 +1,11 @@
 import { SubmissionItemResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import {
-	timestampsResponseFactory,
-	userDataResponseFactory,
-} from "@@/tests/test-utils/factory";
+import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 
 export const submissionItemResponseFactory =
 	Factory.define<SubmissionItemResponse>(({ sequence }) => ({
 		id: `id${sequence}`,
-		userData: userDataResponseFactory.build(),
+		userId: `userId${sequence}`,
 		completed: true,
 		timestamps: timestampsResponseFactory.build(),
 	}));

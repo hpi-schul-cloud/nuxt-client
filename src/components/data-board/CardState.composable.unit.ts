@@ -7,6 +7,7 @@ import NotifierModule from "@/store/notifier";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { delay } from "@/utils/helpers";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
@@ -39,6 +40,9 @@ const setup = (cardId = "123123", emitFn = emitMock) => {
 
 jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
+
+jest.mock("@/utils/helpers");
+const mockedDelay = jest.mocked(delay);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -85,6 +89,7 @@ describe("CardState composable", () => {
 	let testCard: BoardCard;
 
 	beforeEach(() => {
+		jest.useFakeTimers();
 		mockedSharedCardCalls =
 			createMock<ReturnType<typeof useSharedCardRequestPool>>();
 
@@ -114,7 +119,8 @@ describe("CardState composable", () => {
 			const cardId = "123124";
 
 			setup(cardId);
-
+			// jest.runAllTimers();
+			await nextTick();
 			expect(mockedSharedCardCalls.fetchCard).toHaveBeenCalledWith(cardId);
 		});
 
@@ -269,15 +275,15 @@ describe("CardState composable", () => {
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
 			mockedBoardApiCalls.updateCardHeightCall = jest
 				.fn()
-				.mockResolvedValue({ status: 300 });
+				.mockResolvedValue({ status: 500 });
 			const boardCard = boardCardFactory.build();
 			const { updateCardHeight, card } = setup(boardCard.id);
 			card.value = boardCard;
 
+			await nextTick();
 			await updateCardHeight(300);
-
-			expect(boardCard.height).toEqual(200);
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+			expect(boardCard.height).toEqual(200);
 		});
 	});
 

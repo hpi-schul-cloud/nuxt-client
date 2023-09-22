@@ -2,6 +2,7 @@ import {
 	BoardElementApiFactory,
 	BoardSubmissionApiFactory,
 	SubmissionItemResponse,
+	SubmissionsResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -32,7 +33,7 @@ export const useSubmissionItemApi = () => {
 
 	const fetchSubmissionItemsCall = async (
 		submissionContainerId: string
-	): Promise<Array<SubmissionItemResponse>> => {
+	): Promise<SubmissionsResponse> => {
 		const response =
 			await submissionItemApi.boardSubmissionControllerGetSubmissionItems(
 				submissionContainerId
