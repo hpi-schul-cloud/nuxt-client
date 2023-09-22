@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isEditMode" class="pa-4">
+	<v-card-text v-if="isEditMode">
 		<CaptionText
 			:caption="fileProperties.element.content.caption"
 			@update:caption="onUpdateCaption"
@@ -9,7 +9,7 @@
 			:alternativeText="fileProperties.element.content.alternativeText"
 			@update:alternativeText="onUpdateText"
 		/>
-	</div>
+	</v-card-text>
 </template>
 
 <script lang="ts">
