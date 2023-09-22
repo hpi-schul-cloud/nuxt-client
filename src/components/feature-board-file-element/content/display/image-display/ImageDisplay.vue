@@ -1,31 +1,35 @@
 <template>
-	<div
-		class="image-display-container"
-		tabindex="0"
-		@click="onClick"
-		@keydown.enter.self="onClick"
-		@keydown.space.prevent="onClick"
-	>
-		<div class="image-display-overlay">
-			<v-icon class="image-display-icon" size="44">{{
-				mdiMagnifyExpand
-			}}</v-icon>
-		</div>
+	<v-hover v-slot="{ hover }">
+		<div
+			class="image-display-container"
+			ref="containerRef"
+			tabindex="0"
+			@click="onClick"
+			@keydown.enter.self="onClick"
+			@keydown.space.prevent="onClick"
+		>
+			<div v-if="hover || focused" class="image-display-overlay rounded-t-sm">
+				<v-icon class="image-display-icon" size="44">{{
+					mdiMagnifyExpand
+				}}</v-icon>
+			</div>
 
-		<img
-			class="image-display-image rounded-t-sm"
-			loading="lazy"
-			:src="previewUrl"
-			:alt="name"
-		/>
-	</div>
+			<img
+				class="image-display-image rounded-t-sm"
+				loading="lazy"
+				:src="previewUrl"
+				:alt="name"
+			/>
+		</div>
+	</v-hover>
 </template>
 
 <script lang="ts">
 import { PreviewOutputMimeTypes } from "@/fileStorageApi/v3";
 import { mdiMagnifyExpand } from "@mdi/js";
 import { useLightBox } from "@ui-light-box";
-import { defineComponent } from "vue";
+import { useFocus } from "@vueuse/core";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -36,6 +40,9 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
+		const containerRef = ref<HTMLDivElement | undefined>();
+
+		const { focused } = useFocus(containerRef);
 		const { open } = useLightBox();
 
 		const onClick = () => {
@@ -52,6 +59,8 @@ export default defineComponent({
 		};
 
 		return {
+			containerRef,
+			focused,
 			mdiMagnifyExpand,
 			onClick,
 		};
@@ -64,11 +73,6 @@ export default defineComponent({
 	position: relative;
 }
 
-.image-display-container:hover .image-display-overlay,
-.image-display-container:focus .image-display-overlay {
-	display: block;
-}
-
 .image-display-overlay {
 	position: absolute;
 	top: 0;
@@ -76,7 +80,6 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	z-index: var(--layer-page);
-	display: none;
 	background: rgba(27, 27, 27, 0.54);
 }
 
@@ -87,7 +90,6 @@ export default defineComponent({
 	transform: translate(-50%, -50%);
 	color: var(--v-white-base);
 }
-
 .image-display-image {
 	display: block;
 	margin-right: auto;
