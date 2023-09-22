@@ -1,7 +1,7 @@
 @import "./utility/breakpoints";
 @import "./utility/colors";
 @import "./utility/fonts";
-@import "./utility/resets";
+// @import "./utility/resets";
 @import "./utility/spacing";
 @import "./utility/typography";
 @import "./utility/body";
@@ -13,6 +13,8 @@
 @import "./css-variables/sizes";
 @import "./css-variables/spacing";
 @import "./css-variables/typography";
+
+@import "./vuetify-settings";
 
 // we need the path alias here to enable theme override
 @import "@/styles/legacy.scss";
