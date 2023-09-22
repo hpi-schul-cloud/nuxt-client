@@ -1,8 +1,8 @@
 <template>
 	<VListItem data-testid="board-menu-action" @click.prevent="onClick">
-		<VListItemIcon class="mr-2" data-testid="board-menu-action-icon">
-			<slot name="icon"></slot>
-		</VListItemIcon>
+		<template v-slot:prepend>
+			<slot name="icon" data-testid="board-menu-action-icon"></slot>
+		</template>
 		<VListItemTitle data-testid="board-menu-action-title">
 			<slot></slot>
 		</VListItemTitle>

@@ -1,10 +1,9 @@
 <template>
 	<VMenu offset-y left min-width="250">
-		<template v-slot:activator="{ on, attrs }">
+		<template v-slot:activator="{ props }">
 			<VBtn
 				data-testid="board-menu-button"
-				v-bind="attrs"
-				v-on="on"
+				v-bind="props"
 				:ripple="false"
 				:class="{ white: hasBackground }"
 				icon
