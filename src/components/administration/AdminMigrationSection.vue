@@ -3,10 +3,7 @@
 		<h2 class="text-h4 mb-10">
 			{{ t("components.administration.adminMigrationSection.headers") }}
 		</h2>
-		<div
-			v-if="!isCurrentDateAfterFinalFinish"
-			data-testId="migration-control-section"
-		>
+		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
 			<RenderHTML
 				data-testid="text-description"
 				:html="
@@ -16,7 +13,7 @@
 				"
 				component="p"
 			/>
-			<div v-if="isShowStartButton">
+			<div v-if="isStartButtonVisible">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						data-testid="migration-info-text"
@@ -27,7 +24,7 @@
 					/>
 				</v-alert>
 			</div>
-			<div v-else-if="isShowActiveMigration">
+			<div v-else-if="isMigrationActive">
 				<v-alert light prominent text type="info">
 					<RenderHTML
 						data-testid="migration-active-status"
@@ -41,7 +38,7 @@
 				</v-alert>
 			</div>
 			<v-btn
-				v-if="isShowStartButton"
+				v-if="isStartButtonVisible"
 				class="my-5 button-start"
 				color="primary"
 				depressed
@@ -56,7 +53,7 @@
 				}}
 			</v-btn>
 			<v-btn
-				v-if="isShowEndButton"
+				v-if="isEndButtonVisible"
 				class="my-5 button-end"
 				color="primary"
 				depressed
@@ -91,7 +88,7 @@
 
 		<migration-warning-card
 			value="start"
-			v-if="isShowStartWarning"
+			v-if="isStartWarningVisible"
 			data-testid="migration-start-warning-card"
 			@start="onToggleShowStartWarning"
 			@set="onStartMigration()"
@@ -99,7 +96,7 @@
 
 		<migration-warning-card
 			value="end"
-			v-if="isShowEndWarning"
+			v-if="isEndWarningVisible"
 			data-testid="migration-end-warning-card"
 			@end="onToggleShowEndWarning"
 			@set="onCloseMigration()"
@@ -121,16 +118,13 @@
 		/>
 
 		<v-switch
-			v-if="
-				!isCurrentDateAfterFinalFinish &
-				globalFeatureEnableLdapSyncDuringMigration
-			"
+			v-if="!isGracePeriodExpired & globalFeatureEnableLdapSyncDuringMigration"
 			:label="
 				t(
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
-			:disabled="!isShowActiveMigration"
+			:disabled="!isMigrationActive"
 			v-model="school.features.enableLdapSyncDuringMigration"
 			inset
 			dense
@@ -188,7 +182,6 @@ import {
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { RenderHTML } from "@feature-render-html";
 import { useI18n } from "@/composables/i18n.composable";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { UserLoginMigrationFlags } from "@/store/user-login-migration/user-login-migration-flags";
 
@@ -207,6 +200,8 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
+			// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
+			await schoolsModule.fetchSchoolOAuthMigration();
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
@@ -224,7 +219,7 @@ export default defineComponent({
 			}
 		);
 
-		const isShowActiveMigration: ComputedRef<boolean> = computed(
+		const isMigrationActive: ComputedRef<boolean> = computed(
 			() => oauthMigration.value.startedAt && !oauthMigration.value.closedAt
 		);
 
@@ -244,6 +239,7 @@ export default defineComponent({
 			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
+		// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
 		const setMigration = async (available: boolean, mandatory: boolean) => {
 			const migrationFlags: MigrationBody = {
 				oauthMigrationPossible: available,
@@ -259,39 +255,38 @@ export default defineComponent({
 			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
-		const isShowEndWarning: Ref<boolean> = ref(false);
+		const isEndWarningVisible: Ref<boolean> = ref(false);
 
 		const onToggleShowEndWarning = () => {
-			isShowEndWarning.value = !isShowEndWarning.value;
+			isEndWarningVisible.value = !isEndWarningVisible.value;
 		};
 
-		const isShowStartWarning: Ref<boolean> = ref(false);
+		const isStartWarningVisible: Ref<boolean> = ref(false);
 
 		const onToggleShowStartWarning = () => {
-			isShowStartWarning.value = !isShowStartWarning.value;
+			isStartWarningVisible.value = !isStartWarningVisible.value;
 		};
 
-		const isShowEndButton: ComputedRef<boolean> = computed(
+		const isEndButtonVisible: ComputedRef<boolean> = computed(
 			() =>
-				oauthMigration.value.startedAt &&
-				!oauthMigration.value.closedAt &&
-				!isShowEndWarning.value &&
-				!isShowStartWarning.value
+				isMigrationActive.value &&
+				!isEndWarningVisible.value &&
+				!isStartWarningVisible.value
 		);
 
-		const isShowStartButton: ComputedRef<boolean> = computed(
+		const isStartButtonVisible: ComputedRef<boolean> = computed(
 			() =>
-				!isShowEndButton.value &&
-				!isShowEndWarning.value &&
-				!isShowStartWarning.value
+				!isEndButtonVisible.value &&
+				!isEndWarningVisible.value &&
+				!isStartWarningVisible.value
 		);
 
 		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
-			() => !isShowEndWarning.value && !isShowStartWarning.value
+			() => !isEndWarningVisible.value && !isStartWarningVisible.value
 		);
 
-		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
-			if (userLoginMigration.value && userLoginMigration.value.finishedAt) {
+		const isGracePeriodExpired: ComputedRef<boolean> = computed(() => {
+			if (userLoginMigration.value?.finishedAt) {
 				return (
 					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
 				);
@@ -301,7 +296,7 @@ export default defineComponent({
 		});
 
 		const finalFinishText: ComputedRef<string> = computed(() => {
-			if (isCurrentDateAfterFinalFinish.value) {
+			if (isGracePeriodExpired.value) {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
 			} else {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
@@ -350,14 +345,14 @@ export default defineComponent({
 			setMigrationMandatory,
 			onCloseMigration,
 			t,
-			isShowEndWarning,
+			isEndWarningVisible,
 			onToggleShowEndWarning,
-			isShowStartWarning,
+			isStartWarningVisible,
 			onToggleShowStartWarning,
-			isShowStartButton,
-			isShowEndButton,
+			isStartButtonVisible,
+			isEndButtonVisible,
 			isShowMandatorySwitch,
-			isCurrentDateAfterFinalFinish,
+			isGracePeriodExpired,
 			finalFinishText,
 			dayjs,
 			supportLink,
@@ -366,7 +361,7 @@ export default defineComponent({
 			globalFeatureShowOutdatedUsers,
 			globalFeatureEnableLdapSyncDuringMigration,
 			officialSchoolNumber,
-			isShowActiveMigration,
+			isMigrationActive,
 		};
 	},
 });
