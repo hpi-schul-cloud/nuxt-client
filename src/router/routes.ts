@@ -25,6 +25,11 @@ export const routes: Array<RouteConfig> = [
 		},
 	},
 	{
+		path: "/ux",
+		component: () => import("../pages/ux.vue"),
+		name: "ux",
+	},
+	{
 		path: "/administration/ldap/activate",
 		component: () => import("@/pages/administration/LDAPActivate.page.vue"),
 		name: "administration-ldap-activate",
