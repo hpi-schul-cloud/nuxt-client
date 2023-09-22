@@ -4,7 +4,7 @@
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -32,25 +32,7 @@
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
-					max-width="312"
-					elevation="0"
-					outlined
-				>
-					<v-img
-						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFw3rV31_OwEu8gQF0czauXCdgr4RSCKwpgXGyJE9jlxmG6as1611TIU2NhHsEmVtueMQ&usqp=CAU"
-					></v-img>
-					<v-card-text class="text--primary">
-						<div>
-							Supernase Hund! Darum können Hunde so exzellent riechen...
-						</div>
-					</v-card-text>
-				</v-card>
-			</div>
-			<div>
-				<v-card
-					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -81,7 +63,7 @@
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -111,7 +93,7 @@
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -141,7 +123,7 @@
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -152,27 +134,27 @@
 					></v-img> -->
 					<v-card-subtitle class="pb-1 text--primary font-weight-bold">
 						<v-icon color="black" class="mr-0" small left>
-							{{ mdiFileOutline }}
+							{{ mdiLink }}
 						</v-icon>
-						Dateiname
+						Meeresschildkröte – Wikipedia
 					</v-card-subtitle>
-					<!-- <v-card-text class="text--primary">
-						<div>Whitehaven Beach</div>
-					</v-card-text> -->
-					<div>
+					<v-card-text class="text--primary">
+						<div>de.wikipedia.org</div>
+					</v-card-text>
+					<!-- <div>
 						<v-card-text class="white">
 							<v-chip small outlined>
 								<v-icon small left> {{ mdiFilePdfBox }} </v-icon>
 								Name_einer_Datei.pdf
-							</v-chip></v-card-text
-						>
-					</div>
+							</v-chip>
+						</v-card-text>
+					</div> -->
 				</v-card>
 			</div>
 			<div>
 				<v-card
 					class="mx-auto ma-6"
-					color="grey lighten-3"
+					color="grey lighten-4"
 					max-width="312"
 					elevation="0"
 					outlined
@@ -208,6 +190,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { mdiFilePdfBox } from "@mdi/js";
 import { mdiPresentation } from "@mdi/js";
 import { mdiFileOutline } from "@mdi/js";
+import { mdiLink } from "@mdi/js";
 
 export default {
 	components: {
@@ -218,6 +201,7 @@ export default {
 			mdiPresentation: mdiPresentation,
 			mdiFilePdfBox: mdiFilePdfBox,
 			mdiFileOutline: mdiFileOutline,
+			mdiLink: mdiLink,
 			dialog: false,
 		};
 	},
