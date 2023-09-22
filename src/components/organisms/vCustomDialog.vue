@@ -1,10 +1,10 @@
 <template>
 	<v-dialog
 		ref="vDialog"
-		:value="isOpen"
+		v-model="isDialogOpen"
 		:max-width="size"
-		@click:outside="$emit('dialog-closed', false)"
-		@keydown.esc="$emit('dialog-closed', false)"
+		@click:outside="closeDialog"
+		@keydown.esc="closeDialog"
 	>
 		<v-card :ripple="false">
 			<v-card-title data-testid="dialog-title">
@@ -19,7 +19,7 @@
 				<div class="button-section button-left">
 					<v-btn
 						v-if="checkButtons('back')"
-						data-testId="dialog-back"
+						data-test-id="dialog-back"
 						variant="outlined"
 						@click="$emit('back')"
 					>
@@ -27,7 +27,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('edit')"
-						data-testId="dialog-edit"
+						data-test-id="dialog-edit"
 						variant="flat"
 						@click="$emit('dialog-edit')"
 					>
@@ -37,7 +37,7 @@
 				<div class="button-section button-right">
 					<v-btn
 						v-if="checkButtons('cancel')"
-						data-testId="dialog-cancel"
+						data-test-id="dialog-cancel"
 						class="dialog-closed"
 						variant="text"
 						@click="cancelDialog"
@@ -46,7 +46,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('confirm')"
-						data-testId="dialog-confirm"
+						data-test-id="dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
 						variant="flat"
@@ -56,7 +56,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
-						data-testId="dialog-close"
+						data-test-id="dialog-close"
 						variant="outlined"
 						@click="closeDialog"
 					>
@@ -64,7 +64,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
-						data-testId="dialog-next"
+						data-test-id="dialog-next"
 						color="primary"
 						variant="flat"
 						:disabled="nextBtnDisabled"
@@ -77,61 +77,74 @@
 	</v-dialog>
 </template>
 
-<script>
-export default {
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
+<script setup lang="ts">
+import { computed } from "vue";
+
+const props = defineProps({
+	isOpen: { type: Boolean, required: true },
+	size: {
+		type: Number,
+		default: 480,
 	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		size: {
-			type: Number,
-			default: 480,
-		},
-		hasButtons: {
-			type: Boolean,
-		},
-		confirmBtnTitleKey: {
-			type: String,
-			default: "common.actions.confirm",
-		},
-		confirmBtnDisabled: {
-			type: Boolean,
-		},
-		nextBtnTitleKey: {
-			type: String,
-			default: "common.actions.continue",
-		},
-		nextBtnDisabled: {
-			type: Boolean,
-		},
-		buttons: {
-			type: Array,
-			default: () => ["cancel", "confirm"],
-		},
+	hasButtons: {
+		type: Boolean,
 	},
-	methods: {
-		confirmDialog() {
-			this.$emit("dialog-confirmed");
-			this.$emit("dialog-closed", false);
-		},
-		cancelDialog() {
-			this.$emit("dialog-canceled");
-			this.$emit("dialog-closed", false);
-		},
-		closeDialog(event) {
-			this.$emit("dialog-closed", false, event);
-		},
-		checkButtons(buttonName) {
-			return this.buttons.some((button) => button == buttonName);
-		},
+	confirmBtnTitleKey: {
+		type: String,
+		default: "common.actions.confirm",
 	},
+	confirmBtnDisabled: {
+		type: Boolean,
+	},
+	nextBtnTitleKey: {
+		type: String,
+		default: "common.actions.continue",
+	},
+	nextBtnDisabled: {
+		type: Boolean,
+	},
+	buttons: {
+		type: Array,
+		default: () => ["cancel", "confirm"],
+	},
+});
+
+const emit = defineEmits([
+	"dialog-closed",
+	"dialog-confirmed",
+	"dialog-canceled",
+	"back",
+	"dialog-edit",
+]);
+
+const isDialogOpen = computed({
+	get() {
+		return props.isOpen;
+	},
+	set(value) {
+		if (value === true) closeDialog();
+	},
+});
+
+const confirmDialog = () => {
+	emit("dialog-confirmed");
+	closeDialog();
+};
+
+const cancelDialog = () => {
+	emit("dialog-canceled");
+	closeDialog();
+};
+
+const closeDialog = () => {
+	emit("dialog-closed");
+};
+
+const checkButtons = (buttonName: string) => {
+	return props.buttons.some((button) => button == buttonName);
 };
 </script>
+
 <style lang="scss" scoped>
 .button-left {
 	width: 25%;
