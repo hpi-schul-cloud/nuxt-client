@@ -12,6 +12,7 @@ import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import { i18nMock } from "@@/tests/test-utils";
 
 jest.mock("@data-board", () => {
 	return {
@@ -29,7 +30,7 @@ const useDeleteConfirmationDialogMock = jest.mocked(
 );
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
-jest.mock("./SubmissionContentElementState.composable");
+jest.mock("../composables/SubmissionContentElementState.composable");
 const mockedUseSubmissionContentElementState = jest.mocked(
 	useSubmissionContentElementState
 );
@@ -54,7 +55,7 @@ describe("SubmissionContentElement", () => {
 			{
 				...createComponentMocks({ i18n: true }),
 				provide: {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: { ...props },
