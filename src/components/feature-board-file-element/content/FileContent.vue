@@ -34,13 +34,13 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["fetch:file", "update:alternativeText", "update:captionText"],
+	emits: ["fetch:file", "update:alternativeText", "update:caption"],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
 		};
 		const onUpdateCaption = (value: string) => {
-			emit("update:captionText", value);
+			emit("update:caption", value);
 		};
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);

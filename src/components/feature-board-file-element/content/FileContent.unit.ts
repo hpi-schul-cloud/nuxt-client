@@ -2,8 +2,8 @@ import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileAlert from "./alert/FileAlert.vue";
 import FileContent from "./FileContent.vue";
+import FileAlert from "./alert/FileAlert.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 
@@ -60,7 +60,7 @@ describe("FileContent", () => {
 				});
 			});
 
-			it("Should pass props to FileAlert", () => {
+			it("should pass props to FileAlert", () => {
 				const { wrapper, fileProperties } = setup();
 
 				const fileAlert = wrapper.findComponent(FileAlert);
@@ -70,36 +70,36 @@ describe("FileContent", () => {
 				});
 			});
 
-			it("Should AlternativeText component be in dom", () => {
+			it("should FileInputs component be in dom", () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(FileInputs);
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-				expect(alternativeText.exists()).toBe(true);
+				expect(fileInputs.exists()).toBe(true);
 			});
 
-			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
+			it("should emit update:alternativeText event, when it receives update:text event from file inputs component", async () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(FileInputs);
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-				alternativeText.vm.$emit("update:alternativeText");
+				fileInputs.vm.$emit("update:alternativeText");
 
 				expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 			});
 
-			it("Should call onUpdateText when it receives update:text event from caption text component", async () => {
+			it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(FileInputs);
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-				alternativeText.vm.$emit("update:caption");
+				fileInputs.vm.$emit("update:caption");
 
-				expect(wrapper.emitted("update:captionText")).toHaveLength(1);
+				expect(wrapper.emitted("update:caption")).toHaveLength(1);
 			});
 
 			describe("when alert emits on-status-reload", () => {
-				it("should emit delete event", async () => {
+				it("should emit fetch:file event", async () => {
 					const { wrapper } = setup();
 
 					const fileAlert = wrapper.findComponent(FileAlert);

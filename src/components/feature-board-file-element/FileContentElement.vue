@@ -16,7 +16,7 @@
 			@fetch:file="onFetchFile"
 			:is-edit-mode="isEditMode"
 			@update:alternativeText="onUpdateAlternativeText"
-			@update:captionText="onUpdateCaptionText"
+			@update:caption="onUpdateCaptionText"
 		/>
 		<FileUpload
 			v-else-if="isEditMode"
@@ -44,10 +44,10 @@ import {
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
+	PropType,
 	computed,
 	defineComponent,
 	onMounted,
-	PropType,
 	ref,
 	toRef,
 } from "vue";
