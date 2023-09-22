@@ -34,7 +34,6 @@ describe("SubmissionContentElementDisplay", () => {
 
 		return {
 			wrapper,
-			dueDate: propsData.dueDate,
 		};
 	};
 
@@ -46,13 +45,15 @@ describe("SubmissionContentElementDisplay", () => {
 	});
 
 	it("should find dueDate text", () => {
-		const { wrapper, dueDate } = setup();
+		const { wrapper } = setup();
 
 		const submissionDueDate = wrapper
 			.find("[data-testid=board-submission-element-due-date]")
 			.text();
 
-		expect(submissionDueDate).toBe(dueDate);
+		expect(submissionDueDate).toEqual(
+			"components.cardElement.submissionElement.until Sunday, for23amt.0amte - 01:23"
+		);
 	});
 
 	describe("As a student", () => {
