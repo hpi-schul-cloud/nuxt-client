@@ -16,7 +16,7 @@
 			@fetch:file="onFetchFile"
 			:is-edit-mode="isEditMode"
 			@update:alternativeText="onUpdateAlternativeText"
-			@update:caption="onUpdateCaptionText"
+			@update:caption="onUpdateCaption"
 		/>
 		<FileUpload
 			v-else-if="isEditMode"
@@ -183,7 +183,7 @@ export default defineComponent({
 			modelValue.value.alternativeText = value;
 		};
 
-		const onUpdateCaptionText = (value: string) => {
+		const onUpdateCaption = (value: string) => {
 			modelValue.value.caption = value;
 		};
 
@@ -201,7 +201,7 @@ export default defineComponent({
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
-			onUpdateCaptionText,
+			onUpdateCaption,
 			elementPositionProps,
 		};
 	},
