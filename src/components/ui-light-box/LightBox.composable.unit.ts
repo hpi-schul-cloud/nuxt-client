@@ -1,20 +1,17 @@
 import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { useConfirmationDialog } from "./Confirmation.composable";
+import { useLightBox } from "./LightBox.composable";
 
 describe("Confirmation composable", () => {
-	describe("askConfirmation", () => {
+	describe("open", () => {
 		const setup = () => {
-			const { askConfirmation, isDialogOpen } = mountComposable(
-				() => useConfirmationDialog(),
-				{
-					[I18N_KEY.valueOf()]: { t: (k: string) => k },
-				}
-			);
+			const { open, isLightBoxOpen } = mountComposable(() => useLightBox(), {
+				[I18N_KEY.valueOf()]: { t: (k: string) => k },
+			});
 
 			return {
-				askConfirmation,
-				isDialogOpen,
+				open,
+				isLightBoxOpen,
 			};
 		};
 
@@ -22,15 +19,20 @@ describe("Confirmation composable", () => {
 			jest.clearAllMocks();
 		});
 
-		describe("when askConfirmation is called", () => {
-			it("should open the confirmation dialog", async () => {
-				const { askConfirmation, isDialogOpen } = setup();
+		describe("when open is called", () => {
+			it("should open the LightBox", async () => {
+				const { open, isLightBoxOpen } = setup();
 
-				expect(isDialogOpen.value).toBe(false);
+				expect(isLightBoxOpen.value).toBe(false);
 
-				askConfirmation({ message: "super?" });
+				const data = {
+					url: "url-string",
+					alt: "alt-string",
+					name: "name-string",
+				};
+				open(data);
 
-				expect(isDialogOpen.value).toBe(true);
+				expect(isLightBoxOpen.value).toBe(true);
 			});
 		});
 	});

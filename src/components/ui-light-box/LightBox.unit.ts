@@ -1,67 +1,40 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { ref } from "vue";
-import { useInternalConfirmationDialog } from "./Confirmation.composable";
-import DeleteConfirmation from "./ConfirmationDialog.vue";
-import { I18N_KEY } from "@/utils/inject";
-jest.mock("./Confirmation.composable");
+import { useInternalLightBox } from "./LightBox.composable";
+import LightBox from "./LightBox.vue";
+jest.mock("./LightBox.composable");
 
-const mockedUseInternalConfirmationDialog = jest.mocked(
-	useInternalConfirmationDialog
-);
+const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
 
-describe(DeleteConfirmation.name, () => {
-	const confirmSpy = jest.fn();
-	const cancelSpy = jest.fn();
-	const setup = (options: {
-		isDeleteModalOpen?: boolean;
-		title?: string;
-		typeName?: string;
-	}) => {
+describe("LightBox", () => {
+	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		mockedUseInternalConfirmationDialog.mockReturnValue({
-			confirm: confirmSpy,
-			cancel: cancelSpy,
-			askInternal: jest.fn(),
-			dialogOptions: ref({ message: "TestMessage" }),
-			isDialogOpen: ref(true),
+		mockedUseInternalLightBox.mockReturnValue({
+			close: jest.fn(),
+			lightBoxOptions: ref({
+				url: "test-url",
+				alt: "test-alt",
+				name: "test-name",
+			}),
+			isLightBoxOpen: ref(true),
+			openInternal: jest.fn(),
 		});
 
-		const wrapper = shallowMount(DeleteConfirmation as MountOptions<Vue>, {
+		const wrapper = shallowMount(LightBox as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-			propsData: {
-				isDeleteModalOpen: options?.isDeleteModalOpen ?? true,
-				title: options.title ?? "title",
-				typeName: options.typeName ?? "card",
-			},
 		});
 		return wrapper;
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const wrapper = setup({});
-			expect(wrapper.findComponent(DeleteConfirmation).exists()).toBe(true);
-		});
-	});
+			const wrapper = setup();
 
-	describe("when a dialog button clicked", () => {
-		it("should broadcast 'confirm' if 'remove' button clicked", () => {
-			const wrapper = setup({});
-			const dialog = wrapper.findComponent({ name: "vCustomDialog" });
-			dialog.vm.$emit("dialog-confirmed");
-			expect(confirmSpy).toHaveBeenCalled();
-		});
+			const lightBox = wrapper.findComponent(LightBox);
 
-		it("should emit 'dialog-cancel' if 'cancel' button clicked", () => {
-			const wrapper = setup({});
-			const dialog = wrapper.findComponent({ name: "vCustomDialog" });
-			dialog.vm.$emit("dialog-closed");
-			expect(cancelSpy).toHaveBeenCalled();
+			expect(lightBox.exists()).toBe(true);
 		});
 	});
 });
