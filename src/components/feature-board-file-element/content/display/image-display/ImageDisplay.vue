@@ -6,7 +6,12 @@
 		@keydown.enter.self="onClick"
 		@keydown.space.prevent="onClick"
 	>
-		<v-icon class="image-display-icon" size="44">{{ mdiMagnifyExpand }}</v-icon>
+		<div class="image-display-overlay">
+			<v-icon class="image-display-icon" size="44">{{
+				mdiMagnifyExpand
+			}}</v-icon>
+		</div>
+
 		<img
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
@@ -59,25 +64,28 @@ export default defineComponent({
 	position: relative;
 }
 
-.image-display-container:hover .image-display-icon,
-.image-display-container:focus .image-display-icon {
+.image-display-container:hover .image-display-overlay,
+.image-display-container:focus .image-display-overlay {
 	display: block;
 }
-.image-display-container:hover,
-.image-display-container:focus {
-	border-radius: 3px 3px 0px 0px;
-	opacity: 0.54;
-	background: var(--shades-v-black-base, #1b1b1b);
+
+.image-display-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: var(--layer-page);
+	display: none;
+	background: rgba(27, 27, 27, 0.54);
 }
 
 .image-display-icon {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	z-index: var(--layer-page);
 	transform: translate(-50%, -50%);
-	display: none;
-	color: var(--shades-v-white-base, #fff);
+	color: var(--v-white-base);
 }
 
 .image-display-image {

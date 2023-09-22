@@ -1,76 +1,35 @@
 <template>
-	<v-overlay z-index="1000" :value="isLightBoxOpen">
-		<div
-			tabindex="0"
-			style="display: flex; flex-direction: column; width: 100vw; height: 100vh"
-		>
-			<div
-				style="
-					align-items: stretch;
-					background: var(--shades-v-white-base, #fff);
-					display: flex;
-					height: 80px;
-					justify-content: start;
-				"
-			>
-				<div
-					style="
-						align-items: center;
-						display: flex;
-						justify-content: center;
-						padding: 16px;
-					"
-				>
-					<v-btn icon style="color: var(--v-secondary-base)" @click="close">
-						<v-icon>{{ mdiClose }}</v-icon>
-					</v-btn>
-				</div>
-				<div
-					style="
-						align-items: center;
-						display: flex;
-						gap: 4px;
-						justify-content: center;
-						padding: 16px;
-					"
-				>
-					<v-icon style="color: var(--shades-v-black-base, #1b1b1b)">{{
+	<v-dialog fullscreen :value="isLightBoxOpen">
+		<v-card style="background: rgba(27, 27, 27, 0.54)">
+			<v-toolbar flat>
+				<v-btn icon @click="close">
+					<v-icon>{{ mdiClose }}</v-icon>
+				</v-btn>
+				<v-toolbar-title class="d-flex align-items-center">
+					<v-icon color="black" class="mr-2" size="18">{{
 						mdiFileDocumentOutline
 					}}</v-icon>
-					<span
-						style="
-							color: var(--shades-v-black-base, #1b1b1b);
-							/* Emphasis/text-subtitle-1_bold */
-							font-family: PT Sans Narrow;
-							font-size: 16px;
-							font-style: normal;
-							font-weight: 700;
-							line-height: 24px; /* 150% */
-							letter-spacing: 0.15px;
-						"
-					>
-						{{ name }}
-					</span>
-				</div>
-			</div>
-			<div
-				style="
-					align-items: center;
-					display: flex;
-					height: calc(100% - 80px);
-					justify-content: center;
-				"
+
+					<span class="subtitle-1 font-weight-bold text-truncate mr-8">{{
+						name
+					}}</span>
+				</v-toolbar-title>
+			</v-toolbar>
+			<v-card-text
+				class="d-flex align-items-center justify-content-center pt-5"
+				style="height: calc(100vh - 64px)"
+				@click="close"
 			>
 				<img
-					style="max-height: 90%; max-width: 90%"
 					loading="lazy"
 					:src="url"
 					:alt="alt"
-					v-click-outside="close"
+					style="max-height: 100%; max-width: 100%"
+					@click.stop
 				/>
-			</div>
-		</div>
-	</v-overlay>
+			</v-card-text>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script lang="ts">
