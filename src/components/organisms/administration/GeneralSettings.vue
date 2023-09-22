@@ -178,7 +178,6 @@ export default {
 				permissions: {},
 				features: {},
 			},
-			logoFile: new File([""], ""),
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
