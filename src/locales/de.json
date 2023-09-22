@@ -813,6 +813,8 @@
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
 	"components.cardElement.submissionElement": "Abgabe",
 	"components.cardElement.submissionElement.completed": "erledigt",
+	"components.cardElement.submissionElement.open": "offen",
+	"components.cardElement.submissionElement.expired": "abgelaufen",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",

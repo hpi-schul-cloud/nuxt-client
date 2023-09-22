@@ -14,13 +14,17 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="element.content.dueDate"
-				:completed="completed"
 				:loading="loading"
-				@update:completed="updateCompletionState"
+				:submissions="submissions"
+				:editable="editable"
+				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
 				:dueDate="element.content.dueDate"
+				:loading="loading"
+				:submissions="submissions"
+				:editable="editable"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
@@ -33,14 +37,14 @@
 </template>
 
 <script lang="ts">
-import { SubmissionContainerElementResponse } from "@/serverApi/v3";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useBoardFocusHandler } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, PropType, ref, toRef } from "vue";
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
+import { useBoardFocusHandler } from "@data-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -69,8 +73,11 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { completed, updateSubmissionItem, loading } =
-			useSubmissionContentElementState(element.value.id);
+		const { loading, submissions, editable, updateSubmissionItem } =
+			useSubmissionContentElementState(
+				element.value.id,
+				element.value.content.dueDate
+			);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -100,19 +107,20 @@ export default defineComponent({
 			}
 		};
 
-		const updateCompletionState = (completed: boolean) => {
+		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);
 		};
 
 		return {
 			submissionContentElement,
-			completed,
+			submissions,
 			loading,
+			editable,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveSubmissionEditDown,
 			onMoveSubmissionEditUp,
-			updateCompletionState,
+			onUpdateCompleted,
 		};
 	},
 });
