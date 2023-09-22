@@ -164,7 +164,6 @@ import { MigrationBody } from "@/serverApi/v3";
 import { OauthMigration, School } from "@/store/types/schools";
 import {
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
@@ -340,7 +339,6 @@ export default defineComponent({
 
 		return {
 			oauthMigration,
-			setMigration,
 			onStartMigration,
 			setMigrationMandatory,
 			onCloseMigration,

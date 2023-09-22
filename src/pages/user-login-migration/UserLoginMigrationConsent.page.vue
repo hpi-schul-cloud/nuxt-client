@@ -17,7 +17,7 @@
 				component="p"
 			/>
 			<div
-				v-if="isNewLoginFlowEnabled"
+				v-if="isNewLoginFlowEnabled && userLoginMigration"
 				class="d-flex flex-wrap justify-center mt-8"
 			>
 				<v-btn
@@ -39,9 +39,7 @@
 					color="primary"
 					depressed
 					data-testId="btn-proceed"
-					:href="`/login/oauth2/${
-						userLoginMigration ? userLoginMigration.targetSystemId : ''
-					}?migration=true`"
+					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
 					{{ t("pages.userMigration.button.startMigration") }}
 				</v-btn>
@@ -175,7 +173,7 @@ export default defineComponent({
 				userLoginMigration.value?.sourceSystemId &&
 				pageType.value
 			) {
-				await userLoginMigrationModule?.fetchMigrationLinks({
+				await userLoginMigrationModule.fetchMigrationLinks({
 					pageType: pageType.value,
 					sourceSystem: userLoginMigration.value.sourceSystemId,
 					targetSystem: userLoginMigration.value.targetSystemId,

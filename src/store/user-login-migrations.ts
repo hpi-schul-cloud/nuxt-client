@@ -74,7 +74,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 	@Mutation
 	setUserLoginMigration(userLoginMigration?: UserLoginMigration): void {
-		this.userLoginMigration = userLoginMigration ?? undefined;
+		this.userLoginMigration = userLoginMigration;
 	}
 
 	get getLoading(): boolean {
