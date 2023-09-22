@@ -144,16 +144,16 @@ export default defineComponent({
 		};
 
 		const onEditElement = () => {
-			// TODO Edit dialog
+			// TODO N21-1248: Edit dialog
 		};
 
 		const onClickElement = () => {
 			if (props.isEditMode) {
 				if (!hasLinkedTool.value) {
-					// TODO Edit dialog
+					// TODO N21-1248: Edit dialog
 				}
 			} else {
-				// TODO launch tool
+				// TODO N21-1285: launch tool
 			}
 		};
 
