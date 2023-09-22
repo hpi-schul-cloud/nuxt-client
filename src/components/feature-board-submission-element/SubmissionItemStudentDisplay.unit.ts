@@ -1,25 +1,34 @@
 import Vue from "vue";
+import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, MountOptions } from "@vue/test-utils";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import { SubmissionsResponse } from "@/serverApi/v3";
+
+const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionItemStudentDisplay", () => {
-	const setup = (loading = false) => {
+	const setup = (
+		loading = false,
+		submissions = mockedSubmissions,
+		editable = true
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			editable: true,
-			completed: false,
+			editable: editable,
 			loading: loading,
+			submissions: submissions,
 		};
 
-		const wrapper = shallowMount(
-			SubmissionItemStudentDisplay as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
-				propsData,
-			}
-		);
+		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
+			...createComponentMocks({ i18n: true }),
+			propsData,
+			provide: {
+				[I18N_KEY.valueOf()]: i18nMock,
+			},
+		});
 
 		return {
 			wrapper,
@@ -56,8 +65,8 @@ describe("SubmissionItemStudentDisplay", () => {
 			const loading = true;
 			const { wrapper } = setup(loading);
 
-			const skeleton = wrapper.findComponent({ name: "v-checkbox" });
-			expect(skeleton.exists()).toBe(false);
+			const form = wrapper.findComponent({ name: "v-checkbox" });
+			expect(form.exists()).toBe(false);
 		});
 	});
 
@@ -74,8 +83,69 @@ describe("SubmissionItemStudentDisplay", () => {
 			const loading = false;
 			const { wrapper } = setup(loading);
 
-			const skeleton = wrapper.findComponent({ name: "v-checkbox" });
-			expect(skeleton.exists()).toBe(true);
+			const form = wrapper.findComponent({ name: "v-checkbox" });
+			expect(form.exists()).toBe(true);
+		});
+
+		describe("if student has no submissionItem yet", () => {
+			it("should show state as not completed", async () => {
+				const loading = false;
+				const submissions: SubmissionsResponse = {
+					submissionItemsResponse: [],
+					users: [],
+				};
+				const { wrapper } = setup(loading, submissions);
+
+				const checked = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.find("input")
+					.attributes("aria-checked");
+
+				expect(checked).toEqual("false");
+			});
+		});
+
+		describe("if student has a submissionItem yet", () => {
+			it("should show the completed state of the belonging submissionItem", async () => {
+				const loading = false;
+				const { wrapper } = setup(loading);
+
+				const checked = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.find("input")
+					.attributes("aria-checked");
+
+				expect(checked).toEqual(
+					mockedSubmissions.submissionItemsResponse[0].completed.toString()
+				);
+			});
+		});
+
+		describe("if submission can be edited", () => {
+			it("should render the checkbox as not disabled", async () => {
+				const loading = false;
+				const { wrapper } = setup(loading);
+
+				const disabled = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.props("disabled");
+
+				expect(disabled).toBe(false);
+			});
+		});
+
+		describe("if submission can't be edited any more", () => {
+			it("should render the checkbox as disabled", async () => {
+				const loading = false;
+				const editable = false;
+				const { wrapper } = setup(loading, mockedSubmissions, editable);
+
+				const disabled = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.props("disabled");
+
+				expect(disabled).toBe(true);
+			});
 		});
 	});
 });

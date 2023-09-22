@@ -152,6 +152,7 @@ describe("FileContentElement", () => {
 					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
 					size: fileRecordResponse.size,
 					previewStatus: fileRecordResponse.previewStatus,
+					element,
 				};
 
 				const { wrapper, deleteElementMock } = getWrapper({
@@ -600,6 +601,7 @@ describe("FileContentElement", () => {
 					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
 					size: fileRecordResponse.size,
 					previewStatus: fileRecordResponse.previewStatus,
+					element,
 				};
 
 				const { wrapper, deleteElementMock } = getWrapper({

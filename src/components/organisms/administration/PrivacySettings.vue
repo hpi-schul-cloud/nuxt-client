@@ -33,6 +33,10 @@
 							? $t(
 									"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg"
 							  )
+							: theme === "n21"
+							? $t(
+									"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen"
+							  )
 							: $t(
 									"pages.administration.school.index.privacySettings.longText.studentVisibility"
 							  )
