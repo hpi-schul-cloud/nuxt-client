@@ -6,7 +6,7 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="auto"
-			@input="handleMenuToggle"
+			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -28,7 +28,7 @@
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
 					@keydown.tab="showDateDialog = false"
-					@update:error="handleError"
+					@update:error="onError"
 				/>
 			</template>
 			<v-date-picker
@@ -41,7 +41,7 @@
 				:min="minDate"
 				:max="maxDate"
 				show-adjacent-months
-				@input="handleInput"
+				@input="onInput"
 			/>
 		</v-menu>
 	</div>
@@ -111,16 +111,16 @@ export default defineComponent({
 			emit("input", date);
 		}, 200);
 
-		const handleInput = async () => {
+		const onInput = async () => {
 			inputField.value?.focus();
 			await closeMenu();
 		};
 
-		const handleError = (hasError: boolean) => {
+		const onError = (hasError: boolean) => {
 			hasError ? emit("error") : emit("valid");
 		};
 
-		const handleMenuToggle = () => {
+		const onMenuToggle = () => {
 			if (showDateDialog.value) {
 				emit("valid");
 			}
@@ -140,9 +140,9 @@ export default defineComponent({
 			inputField,
 			focusDatePicker,
 			handleBlur,
-			handleInput,
-			handleError,
-			handleMenuToggle,
+			onInput,
+			onError,
+			onMenuToggle,
 		};
 	},
 });
