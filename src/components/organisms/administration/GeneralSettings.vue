@@ -80,14 +80,11 @@
 					<v-file-input
 						class="school-logo"
 						:label="
-							localSchool.logo_name
-								? localSchool.logo_name
-								: $t(
-										'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
-								  )
+							$t(
+								'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
+							)
 						"
-						v-model="localSchool.logo_dataUrl"
-						dense
+						v-model="file"
 						prepend-icon=""
 						@change="onLogoChange"
 					></v-file-input>
@@ -180,6 +177,7 @@ export default {
 				permissions: {},
 				features: {},
 			},
+			logoFile: new File([""], ""),
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
@@ -226,9 +224,10 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = this.school.logo_dataUrl;
-			}
+			this.file = this.school.logo_dataUrl
+				? new File([""], schoolCopy.logo_name)
+				: null;
+
 			this.localSchool = schoolCopy;
 		},
 		printDate,
