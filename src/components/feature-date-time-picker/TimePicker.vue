@@ -6,7 +6,7 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="180"
-			@input="handleMenuToggle"
+			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -19,13 +19,12 @@
 					placeholder="HH:MM"
 					append-icon="$mdiClockOutline"
 					:rules="rules"
-					validate-on-blur
 					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@update:error="handleError"
+					@update:error="onError"
 				/>
 			</template>
 			<v-list height="200" class="col-12 pt-1 px-0">
@@ -37,7 +36,7 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="handleSelect(timeOfDay.value)"
+							@click="onSelect(timeOfDay.value)"
 							:disabled="timeOfDay.disabled"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
@@ -51,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { useDebounceFn, useVModel } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
@@ -66,13 +65,23 @@ export default defineComponent({
 		required: { type: Boolean },
 		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["update:time", "error", "valid"],
+	emits: ["update:time"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		const modelValue = useVModel(props, "time", emit);
+		const modelValue = computed({
+			get() {
+				return props.time;
+			},
+			set: useDebounceFn((newValue) => {
+				if (valid.value) {
+					emit("update:time", newValue);
+				}
+			}, 50),
+		});
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
+		const valid = ref(true);
 
 		const { timesOfDayList, timeInPast } = useTimePickerState(
 			toRef(props, "allowPast")
@@ -121,20 +130,20 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleSelect = async (selected: string) => {
+		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
 			modelValue.value = selected;
+			valid.value = true;
 			await closeMenu();
 		};
 
-		const handleError = (hasError: boolean) => {
-			console.log(hasError);
-			hasError ? emit("error") : emit("valid");
+		const onError = (hasError: boolean) => {
+			valid.value = !hasError;
 		};
 
-		const handleMenuToggle = () => {
+		const onMenuToggle = () => {
 			if (showTimeDialog.value) {
-				emit("valid");
+				valid.value = true;
 			}
 		};
 
@@ -154,9 +163,9 @@ export default defineComponent({
 			modelValue,
 			rules,
 			inputField,
-			handleSelect,
-			handleError,
-			handleMenuToggle,
+			onSelect,
+			onError,
+			onMenuToggle,
 			isNumberOrColon,
 		};
 	},
@@ -170,12 +179,6 @@ export default defineComponent({
 	letter-spacing: $btn-letter-spacing;
 }
 ::v-deep {
-	.menu-open {
-		.v-text-field__details {
-			display: none;
-		}
-	}
-
 	.v-input__icon--append .v-icon {
 		width: 20px;
 		height: 20px;
