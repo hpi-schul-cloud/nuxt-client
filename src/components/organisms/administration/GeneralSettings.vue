@@ -84,6 +84,7 @@
 								'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
 							)
 						"
+						dense
 						v-model="file"
 						prepend-icon=""
 						@change="onLogoChange"
