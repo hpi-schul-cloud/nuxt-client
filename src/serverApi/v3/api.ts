@@ -298,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<RichTextElementResponse>}
+     * @type {Array<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<RichTextElementResponse>;
+    elements: Array<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -792,10 +792,14 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
+    Card = 'CARD',
+    Column = 'COLUMN',
+    Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
     File = 'FILE',
+    FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -810,6 +814,9 @@ export enum CopyApiResponseTypeEnum {
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
+    RichtextElement = 'RICHTEXT_ELEMENT',
+    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
+    SubmissionItem = 'SUBMISSION_ITEM',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
     TaskGroup = 'TASK_GROUP',
@@ -1578,7 +1585,7 @@ export interface FileContentBody {
      * @type {string}
      * @memberof FileContentBody
      */
-    alternativeText?: string;
+    alternativeText: string;
 }
 /**
  * 
@@ -1597,7 +1604,7 @@ export interface FileElementContent {
      * @type {string}
      * @memberof FileElementContent
      */
-    alternativeText?: string;
+    alternativeText: string;
 }
 /**
  * 
@@ -3814,7 +3821,7 @@ export interface SubmissionContainerContentBody {
  */
 export interface SubmissionContainerElementContent {
     /**
-     * 
+     * The dueDate as date string or null of not set
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */

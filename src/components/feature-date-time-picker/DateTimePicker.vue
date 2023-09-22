@@ -8,9 +8,7 @@
 			:aria-label="dateInputAriaLabel"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			@input="handleDateInput"
-			@error="handleDateError"
-			@valid="handleDateValid"
+			@update:date="handleDateInput"
 		/>
 		<time-picker
 			class="picker-width"
@@ -20,8 +18,6 @@
 			:aria-label="timeInputAriaLabel"
 			:allow-past="allowPast || !dateIsToday"
 			@update:time="handleTimeInput"
-			@error="handleTimeError"
-			@valid="handleTimeValid"
 		/>
 	</div>
 </template>
@@ -32,7 +28,7 @@ import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
 import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -77,8 +73,6 @@ export default defineComponent({
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
-		const dateError = ref(false);
-		const timeError = ref(false);
 		const dateIsToday = ref(isToday(date.value));
 
 		const emitDateTime = () => {
@@ -96,46 +90,22 @@ export default defineComponent({
 		const handleDateInput = (newDate: string) => {
 			date.value = newDate;
 			dateIsToday.value = isToday(date.value);
-			if (valid.value) {
-				emitDateTime();
-			}
-		};
 
-		const handleDateError = () => {
-			dateError.value = true;
-		};
-
-		const handleDateValid = () => {
-			dateError.value = false;
+			emitDateTime();
 		};
 
 		const handleTimeInput = (newTime: string) => {
 			time.value = newTime;
-			if (valid.value) {
-				emitDateTime();
-			}
-		};
 
-		const handleTimeError = () => {
-			timeError.value = true;
+			emitDateTime();
 		};
-
-		const handleTimeValid = () => {
-			timeError.value = false;
-		};
-
-		const valid = computed(() => !dateError.value && !timeError.value);
 
 		return {
 			date,
 			time,
 			dateIsToday,
 			handleDateInput,
-			handleDateError,
-			handleDateValid,
 			handleTimeInput,
-			handleTimeError,
-			handleTimeValid,
 		};
 	},
 });

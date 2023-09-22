@@ -21,9 +21,7 @@
 					append-icon="$mdiCalendar"
 					readonly
 					:rules="rules"
-					validate-on-blur
 					data-testid="date-input"
-					@blur="handleBlur"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -32,7 +30,7 @@
 				/>
 			</template>
 			<v-date-picker
-				v-model="model"
+				v-model="modelValue"
 				:aria-expanded="showDateDialog"
 				color="primary"
 				no-title
@@ -66,19 +64,30 @@ export default defineComponent({
 		minDate: { type: String },
 		maxDate: { type: String },
 	},
-	emits: ["input", "error", "valid"],
+	emits: ["update:date"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const i18n = injectStrict(I18N_KEY);
 		const locale = i18n.locale;
 
-		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-		const model = ref(props.date);
+		const modelValue = computed({
+			get() {
+				return props.date;
+			},
+			set: useDebounceFn((newValue) => {
+				if (valid.value) {
+					emit("update:date", newValue);
+				}
+			}, 50),
+		});
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
+		const valid = ref(true);
 
 		const formattedDate = computed(() => {
-			return model.value ? dayjs(model.value).format(t("format.date")) : "";
+			return modelValue.value
+				? dayjs(modelValue.value).format(t("format.date"))
+				: "";
 		});
 
 		const focusDatePicker = () => {
@@ -106,23 +115,18 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleBlur = useDebounceFn(() => {
-			const date = model.value || "";
-			emit("input", date);
-		}, 200);
-
 		const onInput = async () => {
 			inputField.value?.focus();
 			await closeMenu();
 		};
 
 		const onError = (hasError: boolean) => {
-			hasError ? emit("error") : emit("valid");
+			valid.value = !hasError;
 		};
 
 		const onMenuToggle = () => {
 			if (showDateDialog.value) {
-				emit("valid");
+				valid.value = true;
 			}
 		};
 
@@ -133,13 +137,12 @@ export default defineComponent({
 		return {
 			mdiCalendarClock,
 			locale,
-			model,
+			modelValue,
 			rules,
 			showDateDialog,
 			formattedDate,
 			inputField,
 			focusDatePicker,
-			handleBlur,
 			onInput,
 			onError,
 			onMenuToggle,
