@@ -97,7 +97,8 @@ export default defineComponent({
 	width: 100%;
 	height: 100%;
 	z-index: var(--layer-page);
-	background: rgba(27, 27, 27, 0.54);
+	background: var(--v-black-base);
+	opacity: 0.2;
 }
 
 .image-display-image {
