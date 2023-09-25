@@ -25,7 +25,6 @@
 				@click="close"
 			>
 				<img
-					loading="lazy"
 					:src="previewUrl"
 					:alt="alt"
 					style="max-height: 100%; max-width: 100%"
