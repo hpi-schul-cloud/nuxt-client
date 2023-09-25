@@ -36,14 +36,15 @@ export default defineComponent({
 		const isDatePicker = (target: HTMLElement): any => {
 			if (target.className?.includes("v-picker--date")) {
 				return true;
+			}
+
+			if (
+				target.className?.includes("v-menu__content") ||
+				!target.parentElement
+			) {
+				return false;
 			} else {
-				if (target.className?.includes("v-menu__content")) {
-					return false;
-				} else {
-					if (target.parentElement) {
-						return isDatePicker(target.parentElement);
-					}
-				}
+				return isDatePicker(target.parentElement);
 			}
 		};
 
