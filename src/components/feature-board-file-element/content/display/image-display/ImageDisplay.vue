@@ -18,18 +18,20 @@
 				class="image-display-image rounded-t-sm"
 				loading="lazy"
 				:src="previewUrl"
-				:alt="name"
+				:alt="alternativeText"
 			/>
 		</div>
 	</v-hover>
 </template>
 
 <script lang="ts">
+import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiMagnifyExpand } from "@mdi/js";
 import { useLightBox } from "@ui-light-box";
 import { useFocus } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
+import { PropType, computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -38,12 +40,26 @@ export default defineComponent({
 		previewUrl: { type: String, required: true },
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
+		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
 	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
+
 		const containerRef = ref<HTMLDivElement | undefined>();
 
 		const { focused } = useFocus(containerRef);
 		const { open } = useLightBox();
+
+		const alternativeText = computed(() => {
+			const altTranslation = i18n.t(
+				"components.cardElement.fileElement.emptyAlt"
+			);
+			const altText = props.element.content.alternativeText
+				? props.element.content.alternativeText
+				: `${altTranslation} ${props.name}`;
+
+			return altText;
+		});
 
 		const onClick = () => {
 			const width = undefined;
@@ -58,6 +74,7 @@ export default defineComponent({
 		};
 
 		return {
+			alternativeText,
 			containerRef,
 			focused,
 			mdiMagnifyExpand,
@@ -90,6 +107,7 @@ export default defineComponent({
 	color: var(--v-white-base);
 }
 .image-display-image {
+	pointer-events: none;
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
