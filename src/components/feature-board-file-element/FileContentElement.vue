@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -95,7 +95,7 @@ export default defineComponent({
 			}
 
 			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
-				? convertDownloadToPreviewUrl(fileRecord.value.url)
+				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
 			return {
