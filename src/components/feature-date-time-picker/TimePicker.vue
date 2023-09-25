@@ -73,7 +73,7 @@ export default defineComponent({
 			get() {
 				return props.time;
 			},
-			set: async (newValue) => {
+			set: (newValue) => {
 				emitTimeDebounced(newValue);
 			},
 		});
