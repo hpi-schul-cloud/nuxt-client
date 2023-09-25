@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="image-wrapper">
 		<img
 			class="rounded-t-sm image"
 			loading="lazy"
@@ -44,6 +44,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.image-wrapper {
+	min-height: 52px;
+	display: flex;
+	align-items: center;
+}
 .image {
 	pointer-events: none;
 	display: block;
