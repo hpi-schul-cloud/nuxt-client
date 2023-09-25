@@ -9,7 +9,7 @@
 			@keydown.space.prevent="onClick"
 		>
 			<div
-				v-if="hover || focused"
+				v-if="!isEditMode && (hover || focused)"
 				class="image-display-overlay rounded-t-sm"
 			></div>
 
@@ -60,14 +60,16 @@ export default defineComponent({
 		});
 
 		const onClick = () => {
-			const previewUrl = convertDownloadToPreviewUrl(props.url);
+			if (!props.isEditMode) {
+				const previewUrl = convertDownloadToPreviewUrl(props.url);
 
-			const options = {
-				url: previewUrl,
-				alt: alternativeText.value,
-				name: props.name,
-			};
-			open(options);
+				const options = {
+					url: previewUrl,
+					alt: alternativeText.value,
+					name: props.name,
+				};
+				open(options);
+			}
 		};
 
 		return {
