@@ -86,6 +86,9 @@ export default defineComponent({
 <style scoped>
 .image-display-container {
 	position: relative;
+	min-height: 52px;
+	display: flex;
+	align-items: center;
 }
 
 .image-display-overlay {
