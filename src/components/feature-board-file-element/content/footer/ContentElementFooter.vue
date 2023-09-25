@@ -1,5 +1,5 @@
 <template>
-	<v-card-actions>
+	<v-card-actions class="pa-4">
 		<ContentElementChips
 			:fileSize="fileProperties.size"
 			:fileName="fileProperties.name"
