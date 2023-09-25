@@ -64,7 +64,8 @@ export default defineComponent({
 				const previewUrl = convertDownloadToPreviewUrl(props.url);
 
 				const options = {
-					url: previewUrl,
+					url: props.url,
+					previewUrl: previewUrl,
 					alt: alternativeText.value,
 					name: props.name,
 				};

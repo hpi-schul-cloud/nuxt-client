@@ -14,6 +14,10 @@
 						name
 					}}</span>
 				</v-toolbar-title>
+				<v-spacer />
+				<v-btn icon @click="download">
+					<v-icon>{{ mdiTrayArrowDown }}</v-icon>
+				</v-btn>
 			</v-toolbar>
 			<v-card-text
 				class="d-flex align-items-center justify-content-center pt-5"
@@ -22,7 +26,7 @@
 			>
 				<img
 					loading="lazy"
-					:src="url"
+					:src="previewUrl"
 					:alt="alt"
 					style="max-height: 100%; max-width: 100%"
 					@click.stop
@@ -33,7 +37,8 @@
 </template>
 
 <script lang="ts">
-import { mdiClose, mdiFileDocumentOutline } from "@mdi/js";
+import { downloadFile } from "@/utils/fileHelper";
+import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
 import { computed, defineComponent } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
@@ -47,24 +52,36 @@ export default defineComponent({
 			lightBoxOptions.value ? lightBoxOptions.value.url : ""
 		);
 
+		const previewUrl = computed(() =>
+			lightBoxOptions.value ? lightBoxOptions.value.previewUrl : ""
+		);
+
 		const alt = computed(() =>
 			lightBoxOptions.value ? lightBoxOptions.value.alt : ""
 		);
 
 		const name = computed(() =>
-			lightBoxOptions.value ? lightBoxOptions.value.name : ""
+			lightBoxOptions.value && lightBoxOptions.value.name
+				? lightBoxOptions.value.name
+				: ""
 		);
 
 		onKeyStroke("Escape", (e) => close(), { eventName: "keydown" });
 
+		const download = async () => {
+			await downloadFile(url.value, name.value);
+		};
+
 		return {
 			alt,
 			close,
+			download,
 			isLightBoxOpen,
 			mdiClose,
 			mdiFileDocumentOutline,
+			mdiTrayArrowDown,
 			name,
-			url,
+			previewUrl,
 		};
 	},
 });

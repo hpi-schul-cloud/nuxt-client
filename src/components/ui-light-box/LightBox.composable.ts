@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 interface LightBoxOptions {
 	url: string;
+	previewUrl: string;
 	alt: string;
 	name?: string;
 }
