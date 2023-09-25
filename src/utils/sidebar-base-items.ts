@@ -1,3 +1,5 @@
+import { Envs } from "@/store/types/env-config";
+
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
@@ -5,6 +7,7 @@ export type SidebarItemBase = {
 	permission?: string;
 	excludedPermission?: string;
 	activeForUrls: string[];
+	feature?: keyof Envs;
 };
 
 export type SidebarItemExternalLink = {
@@ -183,6 +186,7 @@ const getSidebarItems = (
 				href: "/administration/groups/classes",
 				testId: "Klassen (neu)",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 			},
 		],
 	},
@@ -228,6 +232,7 @@ const getSidebarItems = (
 				href: "/administration/groups/classes",
 				testId: "Klassen (neu)",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 			},
 			{
 				title: "global.sidebar.teams",
