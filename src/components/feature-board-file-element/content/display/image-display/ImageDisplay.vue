@@ -63,7 +63,6 @@ export default defineComponent({
 
 		const onClick = () => {
 			const previewUrl = convertDownloadToPreviewUrl(props.url);
-			console.log("previewUrl", previewUrl);
 
 			const options = {
 				url: previewUrl,
