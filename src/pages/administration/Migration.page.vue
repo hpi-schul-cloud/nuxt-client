@@ -32,58 +32,58 @@
 			</h1>
 			<v-stepper v-model="migrationStep" flat class="stepper">
 				<v-stepper-header>
-					<v-stepper-step
+					<v-stepper-item
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(1)"
-						:step="1"
+						:value="1"
 						data-testid="migration_tutorial_head"
 					>
 						{{ $t("pages.administration.migration.step1") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step
+					<v-stepper-item
 						:complete="isMigrationFinished"
 						:editable="isStepEditable(2)"
-						:step="2"
+						:value="2"
 						data-testid="migration_importUsers_head"
 					>
 						{{ $t("pages.administration.migration.step2") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step
+					<v-stepper-item
 						:editable="isStepEditable(3)"
 						:complete="isMigrationFinished"
-						:step="3"
+						:value="3"
 						data-testid="migration_summary_head"
 					>
 						{{ $t("pages.administration.migration.step3") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step
+					<v-stepper-item
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(4)"
-						:step="4"
+						:value="4"
 						data-testid="migration_finish_head"
 					>
 						{{ $t("pages.administration.migration.step4") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step
-						:step="5"
+					<v-stepper-item
+						:value="5"
 						:editable="isStepEditable(5)"
 						:complete="migrationStep === 5"
 						data-testid="migration_waitForSync_head"
 					>
 						{{ $t("pages.administration.migration.step5") }}
-					</v-stepper-step>
+					</v-stepper-item>
 				</v-stepper-header>
 			</v-stepper>
 		</template>
 
 		<div>
 			<v-stepper v-model="migrationStep" v-ripple="false" flat>
-				<v-stepper-items>
-					<v-stepper-content step="1" data-testid="migration_tutorial">
+				<v-stepper-window>
+					<v-stepper-window-item value="1" data-testid="migration_tutorial">
 						<v-container>
 							<v-card
 								:ripple="false"
@@ -151,9 +151,9 @@
 								</v-card-actions>
 							</v-card>
 						</v-container>
-					</v-stepper-content>
+					</v-stepper-window-item>
 
-					<v-stepper-content step="2" data-testid="migration_importUsers">
+					<v-stepper-window-item value="2" data-testid="migration_importUsers">
 						<import-users />
 						<div class="text-right">
 							<v-btn color="secondary" @click="migrationStep = 1">
@@ -169,11 +169,11 @@
 								{{ $t("pages.administration.migration.next") }}
 							</v-btn>
 						</div>
-					</v-stepper-content>
+					</v-stepper-window-item>
 
-					<v-stepper-content
+					<v-stepper-window-item
 						v-if="canPerformMigration && !isMigrationFinished"
-						step="3"
+						value="3"
 						data-testid="migration_summary"
 					>
 						<v-container>
@@ -234,9 +234,9 @@
 								</div>
 							</v-card>
 						</v-container>
-					</v-stepper-content>
+					</v-stepper-window-item>
 
-					<v-stepper-content data-testid="migration_finish" step="4">
+					<v-stepper-window-item data-testid="migration_finish" value="4">
 						<div v-if="canFinishMaintenance">
 							<v-container>
 								<v-card
@@ -322,9 +322,9 @@
 								</v-card>
 							</v-container>
 						</div>
-					</v-stepper-content>
+					</v-stepper-window-item>
 
-					<v-stepper-content step="5" data-testid="migration_waitForSync">
+					<v-stepper-window-item value="5" data-testid="migration_waitForSync">
 						<v-container>
 							<v-card
 								:ripple="false"
@@ -389,8 +389,8 @@
 								</div>
 							</v-card>
 						</v-container>
-					</v-stepper-content>
-				</v-stepper-items>
+					</v-stepper-window-item>
+				</v-stepper-window>
 			</v-stepper>
 		</div>
 	</default-wireframe>
