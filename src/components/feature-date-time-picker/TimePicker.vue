@@ -27,7 +27,7 @@
 					@update:error="onError"
 				/>
 			</template>
-			<v-list height="200" class="col-12 pt-1 px-0">
+			<v-list height="200" class="col-12 pt-1 px-0 overflow-y-auto">
 				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
@@ -185,6 +185,11 @@ export default defineComponent({
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
 }
+
+.overflow-y-auto {
+	overflow-y: auto;
+}
+
 ::v-deep {
 	.v-input__icon--append .v-icon {
 		width: 20px;
