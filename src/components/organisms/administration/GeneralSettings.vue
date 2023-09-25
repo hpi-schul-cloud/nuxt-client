@@ -84,10 +84,9 @@
 								'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
 							)
 						"
-						dense
 						v-model="logoFile"
+						dense
 						prepend-icon=""
-						@change="onLogoChange"
 					></v-file-input>
 				</v-col>
 			</v-row>
@@ -170,7 +169,6 @@ export default {
 			localSchool: {
 				name: "",
 				officialSchoolNumber: "",
-				logo_name: "",
 				logo: null,
 				county: {},
 				timezone: "",
@@ -178,6 +176,7 @@ export default {
 				permissions: {},
 				features: {},
 			},
+			logoFile: null,
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
@@ -209,6 +208,25 @@ export default {
 		school: {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
+					const convertDataUrlToFile = () => {
+						const dataUrlParts = newSchool.logo_dataUrl.split(",");
+						const mimeType = dataUrlParts[0].match(/:(.*?);/)[1];
+						const binaryString = atob(dataUrlParts[1]);
+						let binaryStringLength = binaryString.length;
+						const uint8Array = new Uint8Array(binaryStringLength);
+						while (binaryStringLength--) {
+							uint8Array[binaryStringLength] =
+								binaryString.charCodeAt(binaryStringLength);
+						}
+						const logoFile = new File([uint8Array], newSchool.logo_name, {
+							type: mimeType,
+						});
+						return logoFile;
+					};
+					this.logoFile = newSchool.logo_dataUrl
+						? convertDataUrlToFile()
+						: null;
+
 					await this.copyToLocalSchool();
 				}
 			},
@@ -224,10 +242,9 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			this.logoFile = this.school.logo_dataUrl
-				? new File([""], schoolCopy.logo_name)
-				: null;
-
+			if (this.school.logo_dataUrl) {
+				schoolCopy.logo = this.school.logo_dataUrl;
+			}
 			this.localSchool = schoolCopy;
 		},
 		printDate,
@@ -244,10 +261,6 @@ export default {
 		},
 		onUpdateFeatureSettings(value, settingName) {
 			this.localSchool.features[settingName] = value;
-		},
-		async onLogoChange(logo) {
-			this.localSchool.logo = logo ? await toBase64(logo) : null;
-			this.localSchool.logo_name = logo ? logo.name : "";
 		},
 		async save() {
 			const updatedSchool = {
@@ -271,8 +284,10 @@ export default {
 			) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
-			updatedSchool.logo_dataUrl = this.localSchool.logo || "";
-			updatedSchool.logo_name = this.localSchool.logo_name || "";
+			if (!updatedSchool.logo_dataUrl) {
+				updatedSchool.logo_dataUrl = (await toBase64(this.logoFile)) || "";
+				updatedSchool.logo_name = this.localSchool.logo_name || "";
+			}
 			schoolsModule.update(updatedSchool);
 		},
 	},
