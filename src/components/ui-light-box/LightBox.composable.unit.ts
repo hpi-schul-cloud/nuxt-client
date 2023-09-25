@@ -27,6 +27,7 @@ describe("LightBox composable", () => {
 
 				const data = {
 					url: "url-string",
+					previewUrl: "previewUrl-string",
 					alt: "alt-string",
 					name: "name-string",
 				};

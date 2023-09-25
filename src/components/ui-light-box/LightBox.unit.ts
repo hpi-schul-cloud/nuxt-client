@@ -1,9 +1,12 @@
+import { downloadFile } from "@/utils/fileHelper";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { nextTick, ref } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
+
 jest.mock("./LightBox.composable");
+jest.mock("@/utils/fileHelper");
 
 const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
 
@@ -19,9 +22,12 @@ describe("LightBox", () => {
 		const isLightBoxOpen = ref(true);
 		const lightBoxOptions = ref({
 			url: "test-url",
+			previewUrl: "test-previewUrl",
 			alt: "test-alt",
 			name: "test-name",
 		});
+
+		const mockedDownloadFile = jest.mocked(downloadFile).mockReturnValueOnce();
 
 		mockedUseInternalLightBox.mockReturnValue({
 			close: close,
@@ -38,6 +44,7 @@ describe("LightBox", () => {
 			close,
 			isLightBoxOpen,
 			lightBoxOptions,
+			mockedDownloadFile,
 			wrapper,
 		};
 	};
@@ -56,15 +63,7 @@ describe("LightBox", () => {
 
 			const src = wrapper.find("img").attributes("src");
 
-			expect(src).toEqual(lightBoxOptions.value.url);
-		});
-
-		it("should set image src correctly", () => {
-			const { lightBoxOptions, wrapper } = setup();
-
-			const src = wrapper.find("img").attributes("src");
-
-			expect(src).toEqual(lightBoxOptions.value.url);
+			expect(src).toEqual(lightBoxOptions.value.previewUrl);
 		});
 
 		it("should set image alt correctly", () => {
@@ -112,10 +111,24 @@ describe("LightBox", () => {
 		it("should call close function", async () => {
 			const { close, wrapper } = setup();
 
-			const button = wrapper.findComponent({ name: "v-btn" });
+			const button = wrapper.findAllComponents({ name: "v-btn" }).at(0);
 			await button.vm.$emit("click");
 
 			expect(close).toBeCalled();
+		});
+	});
+
+	describe("when download button on the toolbar is clicked", () => {
+		it("should call downloadFile function", async () => {
+			const { lightBoxOptions, mockedDownloadFile, wrapper } = setup();
+
+			const button = wrapper.findAllComponents({ name: "v-btn" }).at(1);
+			await button.vm.$emit("click");
+
+			expect(mockedDownloadFile).toBeCalledWith(
+				lightBoxOptions.value.url,
+				lightBoxOptions.value.name
+			);
 		});
 	});
 
