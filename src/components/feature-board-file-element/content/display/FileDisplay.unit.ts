@@ -1,6 +1,7 @@
+import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import DefaultDisplay from "./default-display/DefaultDisplay.vue";
+import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 
@@ -9,6 +10,7 @@ describe("FileDisplay", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
+			const element = fileElementResponseFactory.build();
 			const propsData = {
 				fileProperties: {
 					name: "test",
@@ -17,6 +19,7 @@ describe("FileDisplay", () => {
 					previewUrl: "test",
 					previewStatus: "test",
 					isDownloadAllowed: true,
+					element,
 				},
 				isEditMode: true,
 			};
@@ -51,12 +54,12 @@ describe("FileDisplay", () => {
 			expect(props.iseditmode).toBe("true");
 		});
 
-		it("should not render default display component", () => {
+		it("should render file description display component", () => {
 			const { wrapper } = setup();
 
-			const defaultDisplay = wrapper.findComponent(DefaultDisplay);
+			const fileDescription = wrapper.findComponent(FileDescription);
 
-			expect(defaultDisplay.exists()).toBe(false);
+			expect(fileDescription.exists()).toBe(true);
 		});
 	});
 
@@ -64,6 +67,7 @@ describe("FileDisplay", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
+			const element = fileElementResponseFactory.build();
 			const propsData = {
 				fileProperties: {
 					name: "test",
@@ -72,6 +76,7 @@ describe("FileDisplay", () => {
 					previewUrl: undefined,
 					previewStatus: "test",
 					isDownloadAllowed: true,
+					element,
 				},
 				isEditMode: true,
 			};
@@ -88,12 +93,12 @@ describe("FileDisplay", () => {
 			};
 		};
 
-		it("should pass correct props to default display component", () => {
-			const { wrapper, fileNameProp } = setup();
+		it("should render file description display component", () => {
+			const { wrapper } = setup();
 
-			const props = wrapper.findComponent(DefaultDisplay).attributes();
+			const fileDescription = wrapper.findComponent(FileDescription);
 
-			expect(props.name).toBe(fileNameProp);
+			expect(fileDescription.exists()).toBe(true);
 		});
 
 		it("should not render image display component", () => {

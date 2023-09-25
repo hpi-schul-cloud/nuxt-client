@@ -817,6 +817,7 @@
 	"components.cardElement.fileElement.scanError": "Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"components.cardElement.fileElement.scanWontCheck": "Debido al tamaño, no se puede generar una vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
+	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.richTextElement": "Elemento texto",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.submissionElement": "Envío",
