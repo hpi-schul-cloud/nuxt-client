@@ -6,7 +6,7 @@
 			color="rgba(var(--v-theme-primary))"
 			icon="$mdiLock"
 			overlap
-			:value="false"
+			:model-value="false"
 		>
 			<v-avatar
 				class="ma-0 pa-1 avatar-component-empty"

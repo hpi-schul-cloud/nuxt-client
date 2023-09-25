@@ -15,7 +15,7 @@
 			color="var(--v-primary-base)"
 			icon="$mdiLock"
 			overlap
-			:value="hasNotifications"
+			:model-value="hasNotifications"
 		>
 			<v-card
 				:height="size"

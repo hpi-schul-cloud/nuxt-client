@@ -16,7 +16,7 @@
 			color="rgba(var(--v-theme-primary))"
 			icon="$mdiLock"
 			overlap
-			:value="displayBadge"
+			:model-value="displayBadge"
 		>
 			<v-avatar
 				:color="avatarColor"
