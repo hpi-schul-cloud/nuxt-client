@@ -15,7 +15,7 @@
 				>
 
 				<span
-					class="subtitle-1 font-weight-bold text-truncate mr-8"
+					class="subtitle-1 font-weight-bold text-truncate mr-10"
 					data-testid="board-file-element-display-file-name"
 					>{{ name }}</span
 				>
