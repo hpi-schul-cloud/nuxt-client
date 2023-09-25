@@ -74,10 +74,7 @@ export default defineComponent({
 				return props.time;
 			},
 			set: async (newValue) => {
-				const valid = await isValid();
-				if (valid) {
-					emit("update:time", newValue);
-				}
+				emitTimeDebounced(newValue);
 			},
 		});
 		const showTimeDialog = ref(false);
@@ -145,8 +142,10 @@ export default defineComponent({
 		/**
 		 * Necessary because we need to wait for update:error
 		 */
-		const isValid = useDebounceFn(() => {
-			return valid.value;
+		const emitTimeDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:time", newValue);
+			}
 		}, 50);
 
 		const onMenuToggle = () => {

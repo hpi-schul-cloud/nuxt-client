@@ -74,11 +74,8 @@ export default defineComponent({
 			get() {
 				return props.date;
 			},
-			set: async (newValue) => {
-				const valid = await isValid();
-				if (valid) {
-					emit("update:date", newValue);
-				}
+			set: (newValue) => {
+				emitDateDebounced(newValue);
 			},
 		});
 		const showDateDialog = ref(false);
@@ -128,8 +125,10 @@ export default defineComponent({
 		/**
 		 * Necessary because we need to wait for update:error
 		 */
-		const isValid = useDebounceFn(() => {
-			return valid.value;
+		const emitDateDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:date", newValue);
+			}
 		}, 50);
 
 		const onMenuToggle = () => {
