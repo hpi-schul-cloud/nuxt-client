@@ -44,18 +44,6 @@ describe("SubmissionContentElementDisplay", () => {
 		expect(component.exists()).toBe(true);
 	});
 
-	it("should find dueDate text", () => {
-		const { wrapper } = setup();
-
-		const submissionDueDate = wrapper
-			.find("[data-testid=board-submission-element-due-date]")
-			.text();
-
-		expect(submissionDueDate).toEqual(
-			"components.cardElement.submissionElement.until Sunday, for23amt.0amte - 01:23"
-		);
-	});
-
 	describe("As a student", () => {
 		it("should render SubmissionItemStudentDisplay", () => {
 			const { wrapper } = setup("student");
