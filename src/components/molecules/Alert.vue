@@ -14,7 +14,7 @@
 			closable
 			max-width="400"
 			min-width="200"
-			variant="text"
+			variant="tonal"
 			:close-icon="mdiClose"
 			:close-label="$t('common.labels.close')"
 			border="start"
