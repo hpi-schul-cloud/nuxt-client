@@ -66,7 +66,7 @@ export default defineComponent({
 
 			const options = {
 				url: previewUrl,
-				alt: props.name,
+				alt: alternativeText.value,
 				name: props.name,
 			};
 			open(options);

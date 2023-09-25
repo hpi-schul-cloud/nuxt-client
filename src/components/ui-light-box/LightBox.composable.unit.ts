@@ -2,7 +2,7 @@ import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useLightBox } from "./LightBox.composable";
 
-describe("Confirmation composable", () => {
+describe("LightBox composable", () => {
 	describe("open", () => {
 		const setup = () => {
 			const { open, isLightBoxOpen } = mountComposable(() => useLightBox(), {

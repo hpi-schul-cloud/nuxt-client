@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import Vue, { nextTick, ref } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 jest.mock("./LightBox.composable");
@@ -8,33 +8,125 @@ jest.mock("./LightBox.composable");
 const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
 
 describe("LightBox", () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
+		const close = jest.fn();
+		const isLightBoxOpen = ref(true);
+		const lightBoxOptions = ref({
+			url: "test-url",
+			alt: "test-alt",
+			name: "test-name",
+		});
+
 		mockedUseInternalLightBox.mockReturnValue({
-			close: jest.fn(),
-			lightBoxOptions: ref({
-				url: "test-url",
-				alt: "test-alt",
-				name: "test-name",
-			}),
-			isLightBoxOpen: ref(true),
+			close: close,
+			isLightBoxOpen: isLightBoxOpen,
+			lightBoxOptions: lightBoxOptions,
 			openInternal: jest.fn(),
 		});
 
 		const wrapper = shallowMount(LightBox as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 		});
-		return wrapper;
+
+		return {
+			close,
+			isLightBoxOpen,
+			lightBoxOptions,
+			wrapper,
+		};
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			const lightBox = wrapper.findComponent(LightBox);
 
 			expect(lightBox.exists()).toBe(true);
+		});
+
+		it("should set image src correctly", () => {
+			const { lightBoxOptions, wrapper } = setup();
+
+			const src = wrapper.find("img").attributes("src");
+
+			expect(src).toEqual(lightBoxOptions.value.url);
+		});
+
+		it("should set image src correctly", () => {
+			const { lightBoxOptions, wrapper } = setup();
+
+			const src = wrapper.find("img").attributes("src");
+
+			expect(src).toEqual(lightBoxOptions.value.url);
+		});
+
+		it("should set image alt correctly", () => {
+			const { lightBoxOptions, wrapper } = setup();
+
+			const alt = wrapper.find("img").attributes("alt");
+
+			expect(alt).toEqual(lightBoxOptions.value.alt);
+		});
+
+		it("should set file name correctly", () => {
+			const { lightBoxOptions, wrapper } = setup();
+
+			const name = wrapper.find(".subtitle-1").text();
+
+			expect(name).toEqual(lightBoxOptions.value.name);
+		});
+	});
+
+	describe("when Escape button is pressed", () => {
+		it("should call close function", async () => {
+			const { close } = setup();
+
+			// simulate keypress on document
+			const event = new KeyboardEvent("keydown", { key: "Escape" });
+			window.dispatchEvent(event);
+			await nextTick();
+
+			expect(close).toBeCalled();
+		});
+	});
+
+	describe("when area outside of the image is clicked", () => {
+		it("should call close function", async () => {
+			const { close, wrapper } = setup();
+
+			const cardText = wrapper.findComponent({ name: "v-card-text" });
+			await cardText.trigger("click");
+
+			expect(close).toBeCalled();
+		});
+	});
+
+	describe("when close button on the toolbar is clicked", () => {
+		it("should call close function", async () => {
+			const { close, wrapper } = setup();
+
+			const button = wrapper.findComponent({ name: "v-btn" });
+			await button.vm.$emit("click");
+
+			expect(close).toBeCalled();
+		});
+	});
+
+	describe("when isLightBoxOpen is set to false", () => {
+		it("should hide the LightBox", async () => {
+			const { isLightBoxOpen, wrapper } = setup();
+
+			isLightBoxOpen.value = false;
+			const lightBox = wrapper.findComponent(LightBox);
+
+			expect(lightBox.isVisible()).toBe(true);
 		});
 	});
 });
