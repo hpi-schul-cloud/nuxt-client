@@ -1,13 +1,22 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { ClassInfoSearchListResponse, GroupApiInterface } from "@/serverApi/v3";
-import { classInfoSearchListResponseFactory } from "@@/tests/test-utils";
+import {
+	ClassInfoResponse,
+	ClassInfoSearchListResponse,
+	GroupApiInterface,
+} from "@/serverApi/v3";
+import {
+	axiosErrorFactory,
+	businessErrorFactory,
+	classInfoResponseFactory,
+	classInfoSearchListResponseFactory,
+} from "@@/tests/test-utils";
 import { ClassInfo } from "./types/class-info";
-import { Pagination } from "./types/commons";
+import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
 import GroupModule from "./group";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { AxiosError } from "axios";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
@@ -43,26 +52,28 @@ describe("GroupModule", () => {
 
 		describe("Error", () => {
 			it("should return the default state", () => {
-				const result = module.getError;
+				const result = module.getBusinessError;
 
 				expect(result).toBeNull();
 			});
 
 			it("should return the changed state", () => {
-				const error = new Error();
+				const businessError = businessErrorFactory.build({
+					message: "error message",
+				});
 
-				module.setError(error);
+				module.setBusinessError(businessError);
 
-				expect(module.getError).toEqual(error);
+				expect(module.getBusinessError).toEqual(businessError);
 			});
 
 			it("should reset the error", () => {
-				const error = new Error();
-				module.setError(error);
+				const businessError = businessErrorFactory.build();
 
-				module.resetError();
+				module.setBusinessError(businessError);
+				module.resetBusinessError();
 
-				expect(module.getError).toBeNull();
+				expect(module.getBusinessError).toBeNull();
 			});
 		});
 
@@ -91,7 +102,7 @@ describe("GroupModule", () => {
 				expect(pagination).toEqual<Pagination>({
 					limit: 10,
 					skip: 0,
-					total: 30,
+					total: 0,
 				});
 			});
 
@@ -160,16 +171,22 @@ describe("GroupModule", () => {
 	describe("loadClassesForSchool", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const response: ClassInfoSearchListResponse =
-					classInfoSearchListResponseFactory.build();
-
+				const classes: ClassInfoResponse[] = [classInfoResponseFactory.build()];
 				const sortBy = "name";
 				const sortOrder: SortOrder = SortOrder.ASC;
 				const pagination: Pagination = {
 					limit: 10,
 					skip: 0,
-					total: 30,
+					total: 25,
 				};
+
+				const response: ClassInfoSearchListResponse =
+					classInfoSearchListResponseFactory.build({
+						data: classes,
+						total: pagination.total,
+						skip: pagination.skip,
+						limit: pagination.limit,
+					});
 
 				apiMock.groupControllerFindClassesForSchool.mockResolvedValue(
 					mockApiResponse({ data: response })
@@ -177,6 +194,7 @@ describe("GroupModule", () => {
 
 				return {
 					response,
+					classes,
 					sortBy,
 					sortOrder,
 					pagination,
@@ -197,23 +215,39 @@ describe("GroupModule", () => {
 					sortBy
 				);
 			});
+
+			it("should set the state", async () => {
+				const { classes, pagination } = setup();
+
+				await module.loadClassesForSchool();
+
+				expect(module.getClasses).toEqual<ClassInfoResponse[]>(classes);
+				expect(module.getPagination).toEqual<Pagination>(pagination);
+			});
 		});
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const error = new AxiosError();
+				const error = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(error);
 
 				apiMock.groupControllerFindClassesForSchool.mockRejectedValue(error);
 
-				return { error };
+				return {
+					apiError,
+				};
 			};
 
 			it("should update the stores error", async () => {
-				const { error } = setup();
+				const { apiError } = setup();
 
 				await module.loadClassesForSchool();
 
-				expect(module.getError).toEqual(error);
+				expect(module.getBusinessError).toEqual<BusinessError>({
+					error: apiError,
+					statusCode: apiError.code,
+					message: `${apiError.type}: ${apiError.message}`,
+				});
 			});
 		});
 	});

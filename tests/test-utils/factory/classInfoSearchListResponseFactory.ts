@@ -7,5 +7,5 @@ export const classInfoSearchListResponseFactory =
 		data: [classInfoResponseFactory.build()],
 		limit: 10,
 		skip: 0,
-		total: 0,
+		total: 25,
 	}));

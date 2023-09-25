@@ -15,7 +15,8 @@
 			:page="page"
 			:footer-props="footerProps"
 			data-testid="admin-class-table"
-			class="custom-table elevation-1"
+			class="elevation-1"
+			:no-data-text="t('common.nodata')"
 			@update:sort-by="onUpdateSortBy"
 			@update:sort-desc="updateSortOrder"
 			@update:items-per-page="onUpdateItemsPerPage"
@@ -120,8 +121,8 @@ export default defineComponent({
 			await groupModule.loadClassesForSchool();
 		};
 
-		onMounted(() => {
-			groupModule.loadClassesForSchool();
+		onMounted(async () => {
+			await groupModule.loadClassesForSchool();
 		});
 
 		return {
@@ -142,8 +143,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.custom-table >>> .v-data-table-header {
-	background-color: #f5f5f5;
-}
-</style>

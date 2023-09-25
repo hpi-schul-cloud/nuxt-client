@@ -1,15 +1,15 @@
 import {
-	ClassInfoResponse,
 	ClassInfoSearchListResponse,
 	GroupApiFactory,
 	GroupApiInterface,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { ClassInfo } from "./types/class-info";
-import { Pagination } from "./types/commons";
+import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
+import { GroupMapper } from "./group/group.mapper";
 
 @Module({
 	name: "groupModule",
@@ -20,12 +20,12 @@ export default class GroupModule extends VuexModule {
 	private classes: ClassInfo[] = [];
 
 	private loading = false;
-	private error: object | null = null;
+	private businessError: BusinessError | null = null;
 
 	private pagination: Pagination = {
 		limit: 10,
 		skip: 0,
-		total: 30,
+		total: 0,
 	};
 
 	private sortBy = "name";
@@ -44,8 +44,8 @@ export default class GroupModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): object | null {
-		return this.error;
+	get getBusinessError(): BusinessError | null {
+		return this.businessError;
 	}
 
 	get getPagination(): Pagination {
@@ -75,13 +75,13 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: object | null): void {
-		this.error = error;
+	setBusinessError(businessError: BusinessError | null): void {
+		this.businessError = businessError;
 	}
 
 	@Mutation
-	resetError(): void {
-		this.error = null;
+	resetBusinessError(): void {
+		this.businessError = null;
 	}
 
 	@Mutation
@@ -120,12 +120,8 @@ export default class GroupModule extends VuexModule {
 					this.getSortOrder,
 					sortBy
 				);
-			const mappedClasses: ClassInfo[] = response.data.data.map(
-				(classInfoResponse: ClassInfoResponse): ClassInfo => ({
-					name: classInfoResponse.name,
-					externalSourceName: classInfoResponse.externalSourceName,
-					teachers: classInfoResponse.teachers,
-				})
+			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
+				response.data.data
 			);
 
 			this.setPagination({
@@ -135,7 +131,15 @@ export default class GroupModule extends VuexModule {
 			});
 			this.setClasses(mappedClasses);
 		} catch (error) {
-			this.setError(error as Error);
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: `${apiError.type}: ${apiError.message}`,
+			});
 		}
 		this.setLoading(false);
 	}
