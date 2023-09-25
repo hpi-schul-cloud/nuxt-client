@@ -11,11 +11,8 @@ interface LightBoxOptions {
 export const useLightBox = () => {
 	const { isLightBoxOpen, openInternal } = useInternalLightBox();
 
-	const open = async (data: LightBoxOptions): Promise<boolean> => {
-		const promise = new Promise<boolean>((resolve) => {
-			openInternal(data, resolve);
-		});
-		return promise;
+	const open = (data: LightBoxOptions) => {
+		openInternal(data);
 	};
 
 	return {
@@ -25,26 +22,17 @@ export const useLightBox = () => {
 };
 
 export const useInternalLightBox = createSharedComposable(() => {
-	let returnResult: ((value: boolean) => void) | undefined = undefined;
-
 	const isLightBoxOpen = ref<boolean>(false);
 	const lightBoxOptions = ref<LightBoxOptions | undefined>(undefined);
 
 	const close = () => {
-		if (returnResult) {
-			returnResult(false);
-		}
 		lightBoxOptions.value = undefined;
 		isLightBoxOpen.value = false;
 	};
 
-	const openInternal = (
-		options: LightBoxOptions,
-		resolve: (value: boolean) => void
-	) => {
+	const openInternal = (options: LightBoxOptions) => {
 		lightBoxOptions.value = options;
 		isLightBoxOpen.value = true;
-		returnResult = resolve;
 	};
 
 	return {
