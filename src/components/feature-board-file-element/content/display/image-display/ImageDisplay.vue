@@ -8,11 +8,10 @@
 			@keydown.enter.self="onClick"
 			@keydown.space.prevent="onClick"
 		>
-			<div v-if="hover || focused" class="image-display-overlay rounded-t-sm">
-				<v-icon class="image-display-icon" size="44">{{
-					mdiMagnifyExpand
-				}}</v-icon>
-			</div>
+			<div
+				v-if="hover || focused"
+				class="image-display-overlay rounded-t-sm"
+			></div>
 
 			<img
 				class="image-display-image rounded-t-sm"
@@ -28,7 +27,6 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiMagnifyExpand } from "@mdi/js";
 import { useLightBox } from "@ui-light-box";
 import { useFocus } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
@@ -76,7 +74,6 @@ export default defineComponent({
 			alternativeText,
 			containerRef,
 			focused,
-			mdiMagnifyExpand,
 			onClick,
 		};
 	},
@@ -101,13 +98,6 @@ export default defineComponent({
 	background: rgba(27, 27, 27, 0.54);
 }
 
-.image-display-icon {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	color: var(--v-white-base);
-}
 .image-display-image {
 	pointer-events: none;
 	display: block;
