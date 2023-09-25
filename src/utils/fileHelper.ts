@@ -54,11 +54,14 @@ export function getFileExtension(fileName: string): string {
 
 export function convertDownloadToPreviewUrl(
 	downloadUrl: string,
-	width: PreviewWidth = PreviewWidth._500
+	width: PreviewWidth | undefined = PreviewWidth._500
 ): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
-		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${width}`;
+		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}` +
+		width
+			? `&width=${width}`
+			: "";
 
 	return previewUrl;
 }

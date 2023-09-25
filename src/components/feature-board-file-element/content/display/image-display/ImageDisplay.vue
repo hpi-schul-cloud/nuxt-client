@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { PreviewOutputMimeTypes } from "@/fileStorageApi/v3";
+import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { mdiMagnifyExpand } from "@mdi/js";
 import { useLightBox } from "@ui-light-box";
 import { useFocus } from "@vueuse/core";
@@ -46,9 +46,8 @@ export default defineComponent({
 		const { open } = useLightBox();
 
 		const onClick = () => {
-			const previewUrl =
-				props.url.replace("download", "preview") +
-				`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}`;
+			const width = undefined;
+			const previewUrl = convertDownloadToPreviewUrl(props.url, width);
 
 			const options = {
 				url: previewUrl,
