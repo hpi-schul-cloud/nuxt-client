@@ -15,6 +15,8 @@
 			:file-properties="fileProperties"
 			@fetch:file="onFetchFile"
 			:is-edit-mode="isEditMode"
+			@update:alternativeText="onUpdateAlternativeText"
+			@update:caption="onUpdateCaption"
 		/>
 		<FileUpload
 			v-else-if="isEditMode"
@@ -42,10 +44,10 @@ import {
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
+	PropType,
 	computed,
 	defineComponent,
 	onMounted,
-	PropType,
 	ref,
 	toRef,
 } from "vue";
@@ -105,6 +107,7 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
+				element: props.element,
 			};
 		});
 
@@ -176,6 +179,14 @@ export default defineComponent({
 			await fetchFile();
 		};
 
+		const onUpdateAlternativeText = (value: string) => {
+			modelValue.value.alternativeText = value;
+		};
+
+		const onUpdateCaption = (value: string) => {
+			modelValue.value.caption = value;
+		};
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -189,6 +200,8 @@ export default defineComponent({
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
+			onUpdateAlternativeText,
+			onUpdateCaption,
 			elementPositionProps,
 		};
 	},

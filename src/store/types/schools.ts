@@ -38,8 +38,10 @@ export type School = {
 	features: {
 		rocketChat: boolean;
 		videoconference: boolean;
+		nextcloud: boolean;
 		studentVisibility: boolean;
 		ldapUniventionMigrationSchool: boolean;
+		oauthProvisioningEnabled: boolean;
 		showOutdatedUsers: boolean;
 		enableLdapSyncDuringMigration: boolean;
 	};

@@ -1,7 +1,7 @@
-import { Route, RouteConfig } from "vue-router";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import {
 	isEnum,
 	isMongoId,
@@ -11,7 +11,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { Route, RouteConfig } from "vue-router";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -225,6 +225,9 @@ export const routes: Array<RouteConfig> = [
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
+		props: (route: Route) => ({
+			boardId: route.params.id,
+		}),
 	},
 	{
 		path: "/rooms-list",
