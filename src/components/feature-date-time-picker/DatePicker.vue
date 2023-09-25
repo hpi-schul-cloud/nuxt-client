@@ -70,15 +70,16 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const locale = i18n.locale;
 
-		const modelValue = computed({
+		const modelValue = computed<string>({
 			get() {
 				return props.date;
 			},
-			set: useDebounceFn((newValue) => {
-				if (valid.value) {
+			set: async (newValue) => {
+				const valid = await isValid();
+				if (valid) {
 					emit("update:date", newValue);
 				}
-			}, 50),
+			},
 		});
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
@@ -123,6 +124,13 @@ export default defineComponent({
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
 		};
+
+		/**
+		 * Necessary because we need to wait for update:error
+		 */
+		const isValid = useDebounceFn(() => {
+			return valid.value;
+		}, 50);
 
 		const onMenuToggle = () => {
 			if (showDateDialog.value) {
