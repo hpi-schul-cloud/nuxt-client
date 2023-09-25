@@ -1341,6 +1341,37 @@ export interface DashboardResponse {
 /**
  * 
  * @export
+ * @interface DemoSchoolResponse
+ */
+export interface DemoSchoolResponse {
+    /**
+     * 
+     * @type {object}
+     * @memberof DemoSchoolResponse
+     */
+    id?: object;
+    /**
+     * Title of the Board
+     * @type {object}
+     * @memberof DemoSchoolResponse
+     */
+    key?: object;
+    /**
+     * Title of the Board
+     * @type {string}
+     * @memberof DemoSchoolResponse
+     */
+    type: string;
+    /**
+     * Title of the Board
+     * @type {object}
+     * @memberof DemoSchoolResponse
+     */
+    children?: object;
+}
+/**
+ * 
+ * @export
  * @interface EntityNotFoundError
  */
 export interface EntityNotFoundError {
@@ -8614,6 +8645,125 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public serverControllerGetHello(options?: any) {
         return DefaultApiFp(this.configuration).serverControllerGetHello(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DemoSchoolApi - axios parameter creator
+ * @export
+ */
+export const DemoSchoolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a demo school.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        demoSchoolControllerCreateDemoSchool: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/demo-schools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DemoSchoolApi - functional programming interface
+ * @export
+ */
+export const DemoSchoolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DemoSchoolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a demo school.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async demoSchoolControllerCreateDemoSchool(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DemoSchoolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.demoSchoolControllerCreateDemoSchool(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DemoSchoolApi - factory interface
+ * @export
+ */
+export const DemoSchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DemoSchoolApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a demo school.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        demoSchoolControllerCreateDemoSchool(options?: any): AxiosPromise<DemoSchoolResponse> {
+            return localVarFp.demoSchoolControllerCreateDemoSchool(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DemoSchoolApi - interface
+ * @export
+ * @interface DemoSchoolApi
+ */
+export interface DemoSchoolApiInterface {
+    /**
+     * 
+     * @summary Create a demo school.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DemoSchoolApiInterface
+     */
+    demoSchoolControllerCreateDemoSchool(options?: any): AxiosPromise<DemoSchoolResponse>;
+
+}
+
+/**
+ * DemoSchoolApi - object-oriented interface
+ * @export
+ * @class DemoSchoolApi
+ * @extends {BaseAPI}
+ */
+export class DemoSchoolApi extends BaseAPI implements DemoSchoolApiInterface {
+    /**
+     * 
+     * @summary Create a demo school.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DemoSchoolApi
+     */
+    public demoSchoolControllerCreateDemoSchool(options?: any) {
+        return DemoSchoolApiFp(this.configuration).demoSchoolControllerCreateDemoSchool(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
