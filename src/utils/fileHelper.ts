@@ -54,7 +54,7 @@ export function getFileExtension(fileName: string): string {
 
 export function convertDownloadToPreviewUrl(
 	downloadUrl: string,
-	width: PreviewWidth | undefined = PreviewWidth._500
+	width?: PreviewWidth
 ): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
