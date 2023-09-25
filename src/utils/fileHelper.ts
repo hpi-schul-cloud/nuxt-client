@@ -59,9 +59,7 @@ export function convertDownloadToPreviewUrl(
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
 		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}` +
-		width
-			? `&width=${width}`
-			: "";
+		(width ? `&width=${width}` : "");
 
 	return previewUrl;
 }
