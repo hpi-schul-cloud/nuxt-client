@@ -9,15 +9,10 @@ describe("SubmissionContentElementTitle", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = {
-			dueDate: "01.01.2023 01:23",
-		};
-
 		const wrapper = shallowMount(
 			SubmissionContentElementTitle as MountOptions<Vue>,
 			{
 				...createComponentMocks({ i18n: true }),
-				propsData,
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
 				},
@@ -26,7 +21,6 @@ describe("SubmissionContentElementTitle", () => {
 
 		return {
 			wrapper,
-			dueDate: propsData.dueDate,
 		};
 	};
 
