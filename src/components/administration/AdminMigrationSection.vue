@@ -107,7 +107,7 @@
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			:html="
-				t(finalFinishText, {
+				t(latestMigration, {
 					date: dayjs(oauthMigration.closedAt).format('DD.MM.YYYY'),
 					time: dayjs(oauthMigration.closedAt).format('HH:mm'),
 					finishDate: dayjs(oauthMigration.finishedAt).format('DD.MM.YYYY'),
@@ -294,7 +294,7 @@ export default defineComponent({
 			}
 		});
 
-		const finalFinishText: ComputedRef<string> = computed(() => {
+		const latestMigration: ComputedRef<string> = computed(() => {
 			if (isGracePeriodExpired.value) {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
 			} else {
@@ -351,7 +351,7 @@ export default defineComponent({
 			isEndButtonVisible,
 			isShowMandatorySwitch,
 			isGracePeriodExpired,
-			finalFinishText,
+			latestMigration,
 			dayjs,
 			supportLink,
 			school,

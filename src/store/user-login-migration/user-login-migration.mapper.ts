@@ -6,7 +6,7 @@ export class UserLoginMigrationMapper {
 		if (!apiDateString) {
 			return undefined;
 		}
-		const date = new Date(apiDateString.replace("Z", ""));
+		const date = new Date(apiDateString);
 
 		return date;
 	}
@@ -17,7 +17,7 @@ export class UserLoginMigrationMapper {
 		return {
 			sourceSystemId: userLoginMigration.sourceSystemId,
 			targetSystemId: userLoginMigration.targetSystemId,
-			startedAt: new Date(userLoginMigration.startedAt.replace("Z", "")),
+			startedAt: new Date(userLoginMigration.startedAt),
 			closedAt: this.mapToDate(userLoginMigration.closedAt),
 			finishedAt: this.mapToDate(userLoginMigration.finishedAt),
 			mandatorySince: this.mapToDate(userLoginMigration.mandatorySince),
