@@ -12,24 +12,25 @@
 			v-model="modelValue"
 			class="px-4"
 			:disabled="!editable"
-			:label="$t('components.cardElement.submissionElement.completed')"
+			:label="t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useVModel } from "@vueuse/core";
+import { defineComponent, PropType, computed } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
-	name: "SubmissionContentElementDisplayStudent",
+	name: "SubmissionItemStudentDisplay",
 	props: {
 		editable: {
 			type: Boolean,
 			required: true,
 		},
-		completed: {
-			type: Boolean,
+		submissions: {
+			type: Object as PropType<SubmissionsResponse>,
 			required: true,
 		},
 		loading: {
@@ -39,10 +40,26 @@ export default defineComponent({
 	},
 	emits: ["update:completed"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "completed", emit);
+		const modelValue = computed({
+			get() {
+				if (props.submissions.submissionItemsResponse.length === 0) {
+					return false;
+				}
+
+				const completionState =
+					props.submissions.submissionItemsResponse[0].completed;
+				return completionState;
+			},
+			set(newValue) {
+				emit("update:completed", newValue);
+			},
+		});
+
+		const { t } = useI18n();
 
 		return {
 			modelValue,
+			t,
 		};
 	},
 });

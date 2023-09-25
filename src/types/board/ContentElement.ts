@@ -1,4 +1,5 @@
 import {
+	ExternalToolElementResponse,
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
@@ -7,4 +8,5 @@ import {
 export type AnyContentElement =
 	| RichTextElementResponse
 	| FileElementResponse
-	| SubmissionContainerElementResponse;
+	| SubmissionContainerElementResponse
+	| ExternalToolElementResponse;
