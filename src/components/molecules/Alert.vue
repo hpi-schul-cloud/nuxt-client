@@ -110,12 +110,12 @@ export default {
 .alert {
 	margin: 0 var(--space-sm);
 	overflow: hidden;
-	background-color: var(--v-white-base) !important;
+	background-color: rgba(var(--v-theme-white)) !important;
 }
 
 :deep(.v-btn__content .v-icon),
 .alert_text {
-	color: var(--v-black-base) !important;
+	color: var(--v-theme-black) !important;
 }
 
 :deep(.v-alert__border) {
