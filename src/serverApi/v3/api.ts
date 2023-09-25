@@ -3929,7 +3929,7 @@ export interface SubmissionContainerElementContent {
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */
-    dueDate?: string;
+    dueDate: string;
 }
 /**
  * 
