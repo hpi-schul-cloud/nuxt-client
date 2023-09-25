@@ -563,7 +563,8 @@ export interface ConsentSessionResponse {
 export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -798,6 +799,7 @@ export enum CopyApiResponseTypeEnum {
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
@@ -936,7 +938,8 @@ export interface CreateCardBodyParams {
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1375,6 +1378,19 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalToolContentBody
+ */
+export interface ExternalToolContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolContentBody
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolCreateParams
  */
 export interface ExternalToolCreateParams {
@@ -1420,6 +1436,69 @@ export interface ExternalToolCreateParams {
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContent
+ */
+export interface ExternalToolElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementContent
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContentBody
+ */
+export interface ExternalToolElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolContentBody}
+     * @memberof ExternalToolElementContentBody
+     */
+    content: ExternalToolContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementResponse
+ */
+export interface ExternalToolElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolElementContent}
+     * @memberof ExternalToolElementResponse
+     */
+    content: ExternalToolElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof ExternalToolElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -3171,6 +3250,31 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
+ * @interface PseudonymResponse
+ */
+export interface PseudonymResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    toolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface PublicSystemListResponse
  */
 export interface PublicSystemListResponse {
@@ -4365,10 +4469,10 @@ export enum ToolReferenceResponseStatusEnum {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
+     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody;
 }
 /**
  * 
@@ -6425,7 +6529,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6505,7 +6609,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6579,7 +6683,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>;
 
     /**
      * 
@@ -10312,6 +10416,133 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      */
     public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * PseudonymApi - axios parameter creator
+ * @export
+ */
+export const PseudonymApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym: async (pseudonym: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pseudonym' is not null or undefined
+            assertParamExists('pseudonymControllerGetPseudonym', 'pseudonym', pseudonym)
+            const localVarPath = `/pseudonyms/{pseudonym}`
+                .replace(`{${"pseudonym"}}`, encodeURIComponent(String(pseudonym)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PseudonymApi - functional programming interface
+ * @export
+ */
+export const PseudonymApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PseudonymApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pseudonymControllerGetPseudonym(pseudonym: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pseudonymControllerGetPseudonym(pseudonym, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PseudonymApi - factory interface
+ * @export
+ */
+export const PseudonymApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PseudonymApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse> {
+            return localVarFp.pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PseudonymApi - interface
+ * @export
+ * @interface PseudonymApi
+ */
+export interface PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApiInterface
+     */
+    pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse>;
+
+}
+
+/**
+ * PseudonymApi - object-oriented interface
+ * @export
+ * @class PseudonymApi
+ * @extends {BaseAPI}
+ */
+export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApi
+     */
+    public pseudonymControllerGetPseudonym(pseudonym: string, options?: any) {
+        return PseudonymApiFp(this.configuration).pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
