@@ -18,29 +18,29 @@
 		<template #content>
 			<v-stepper v-model="step" alt-labels flat class="mb-4 ma-0 pa-0 stepper">
 				<v-stepper-header>
-					<v-stepper-step
-						step="1"
+					<v-stepper-item
+						value="1"
 						:complete="step > 1"
 						:complete-icon="mdiCheck"
 						class="step"
 						@click="onClickStepper(1)"
 					>
 						{{ $t("pages.rooms.importCourse.step_1.text") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step
-						step="2"
+					<v-stepper-item
+						value="2"
 						:complete="step > 2"
 						:complete-icon="mdiCheck"
 						class="step"
 						@click="onClickStepper(2)"
 					>
 						{{ $t("pages.rooms.importCourse.step_2.text") }}
-					</v-stepper-step>
+					</v-stepper-item>
 					<v-divider></v-divider>
-					<v-stepper-step step="3" class="step">
+					<v-stepper-item value="3" class="step">
 						{{ $t("pages.rooms.importCourse.step_3.text") }}
-					</v-stepper-step>
+					</v-stepper-item>
 				</v-stepper-header>
 			</v-stepper>
 
