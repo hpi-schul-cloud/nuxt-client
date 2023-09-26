@@ -58,7 +58,7 @@ export default {
 			];
 		},
 		isMobile() {
-			return this.mq === "mobile";
+			return this.mq.current === "mobile";
 		},
 	},
 };

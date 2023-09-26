@@ -234,7 +234,9 @@ export default {
 			return this.resource.preview.url;
 		},
 		closeButtonStyleSelector() {
-			return this.mq === "tabletPortrait" || this.mq === "mobile";
+			return (
+				this.mq.current === "tabletPortrait" || this.mq.current === "mobile"
+			);
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(

@@ -87,13 +87,15 @@ app.config.errorHandler = handleApplicationError;
 app.config.globalProperties.$theme = themeConfig;
 
 // NUXT_REMOVAL try to solve without vue-mq dependency
+// VUE3_UPGRADE in vue3-mw we have to specify a min value for each breakpoint
+// https://vue3-mq.info/migration/from-version-2.html#now-using-minimum-widths-for-breakpoints
 app.use(Vue3Mq, {
 	breakpoints: {
-		mobile: 750,
-		tabletPortrait: 770,
-		tablet: 991,
-		desktop: 1200,
-		large: Infinity,
+		mobile: 0,
+		tabletPortrait: 750,
+		tablet: 770,
+		desktop: 991,
+		large: 1200,
 	},
 	defaultBreakpoint: "mobile",
 });

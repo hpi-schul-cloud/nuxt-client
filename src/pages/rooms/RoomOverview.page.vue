@@ -225,8 +225,8 @@ export default {
 	},
 	methods: {
 		getDeviceDims() {
-			this.device = this.mq;
-			switch (this.mq) {
+			this.device = this.mq.current;
+			switch (this.device) {
 				case "tablet":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";

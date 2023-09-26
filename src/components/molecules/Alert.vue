@@ -55,7 +55,7 @@ export default {
 			return this.notifierData?.status;
 		},
 		isMobile() {
-			return this.mq === "mobile";
+			return this.mq.current === "mobile";
 		},
 		text() {
 			return this.notifierData?.text;

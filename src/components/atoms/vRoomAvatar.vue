@@ -14,7 +14,7 @@
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="rgba(var(--v-theme-primary))"
-			icon="$mdiLock"
+			:icon="mdiLock"
 			overlap
 			:model-value="displayBadge"
 		>
@@ -22,8 +22,8 @@
 				:color="avatarColor"
 				:class="avatarClass"
 				:aria-label="avatarAriaLabel"
+				:rounded="condenseLayout ? 0 : 'lg'"
 				:size="size"
-				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
 				@dragleave="dragLeave"
@@ -36,19 +36,22 @@
 					item.shortTitle
 				}}</span>
 			</v-avatar>
-			<div
-				v-if="!condenseLayout"
-				aria-hidden="true"
-				:class="titleClasses"
-				data-testid="course-title"
-			>
-				{{ title }}
-			</div>
 		</v-badge>
+		<div
+			v-if="!condenseLayout"
+			aria-hidden="true"
+			:class="titleClasses"
+			data-testid="course-title"
+		>
+			{{ title }}
+		</div>
 	</div>
 </template>
 <script>
-export default {
+import { defineComponent } from "vue";
+import { mdiLock } from "@/components/icons/material";
+
+export default defineComponent({
 	props: {
 		item: {
 			type: Object,
@@ -72,6 +75,7 @@ export default {
 		return {
 			hovered: false,
 			isDragging: false,
+			mdiLock,
 		};
 	},
 	computed: {
@@ -169,7 +173,7 @@ export default {
 			this.$emit("drop");
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
