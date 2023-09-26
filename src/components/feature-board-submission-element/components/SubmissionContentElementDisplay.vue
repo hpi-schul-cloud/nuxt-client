@@ -1,35 +1,13 @@
 <template>
 	<div>
-		<div class="grey lighten-4 px-4 py-3 rounded-t-sm">
-			<v-list-item
-				class="px-0"
-				data-testid="board-submission-element-display"
-				inactive
-			>
-				<v-list-item-icon class="mr-2 my-2">
-					<v-icon
-						class="grey--text text--darken-2"
-						data-testid="board-submission-element-display-icon"
-						medium
-						>{{ mdiLightbulbOnOutline }}</v-icon
-					>
-				</v-list-item-icon>
-
-				<v-list-item-content class="py-0">
-					<span
-						class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
-						data-testid="board-submission-element-display-content"
-						>{{ $t("components.cardElement.submissionElement") }}</span
-					>
-				</v-list-item-content>
-			</v-list-item>
-
-			<v-card-text
-				class="pa-0 subtitle-1 font-weight-bold"
+		<div class="grey lighten-4 pa-4 rounded-t">
+			<SubmissionContentElementTitle />
+			<v-card-subtitle
+				class="pa-0 mt-1 subtitle-1"
 				data-testid="board-submission-element-due-date"
 			>
-				{{ dayjs(dueDate).format("DD.MM.YYYY HH:mm") }}
-			</v-card-text>
+				{{ formattedDueDate }}
+			</v-card-subtitle>
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
@@ -48,18 +26,20 @@
 </template>
 
 <script lang="ts">
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiLightbulbOnOutline } from "@mdi/js";
 import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
+import { useI18n } from "@/composables/i18n.composable";
+import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
 	components: {
+		SubmissionContentElementTitle,
 		SubmissionItemStudentDisplay,
 		SubmissionItemsTeacherDisplay,
 	},
@@ -78,12 +58,12 @@ export default defineComponent({
 		},
 		dueDate: {
 			type: String,
-			required: true,
 		},
 	},
 	emits: ["update:completed"],
 	setup(props, { emit }) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const { t } = useI18n();
 		const userRoles = ref(authModule.getUserRoles);
 
 		const isStudent = computed(() => {
@@ -98,12 +78,25 @@ export default defineComponent({
 			emit("update:completed", completed);
 		};
 
+		const formattedDueDate = computed(() => {
+			if (!props.dueDate) {
+				return undefined;
+			}
+
+			dayjs.locale(authModule.getLocale);
+			const format = `dddd, ${t("format.date")} - HH:mm`;
+
+			return `${t("components.cardElement.submissionElement.until")} ${dayjs(
+				props.dueDate
+			).format(format)}`;
+		});
+
 		return {
 			isStudent,
 			isTeacher,
 			dayjs,
 			updateCompleted,
-			mdiLightbulbOnOutline,
+			formattedDueDate,
 		};
 	},
 });

@@ -298,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<RichTextElementResponse>}
+     * @type {Array<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<RichTextElementResponse>;
+    elements: Array<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -3912,11 +3912,11 @@ export interface SingleColumnBoardResponse {
  */
 export interface SubmissionContainerContentBody {
     /**
-     * 
+     * The point in time until when a submission can be handed in.
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
-    dueDate: string;
+    dueDate?: string;
 }
 /**
  * 
@@ -3925,7 +3925,7 @@ export interface SubmissionContainerContentBody {
  */
 export interface SubmissionContainerElementContent {
     /**
-     * 
+     * The dueDate as date string or null of not set
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */

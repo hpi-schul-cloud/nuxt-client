@@ -5,7 +5,7 @@ import { SubmissionsResponse } from "@/serverApi/v3";
 
 export const useSubmissionContentElementState = (
 	id: string,
-	dueDate: string
+	dueDate?: string
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
@@ -55,7 +55,7 @@ export const useSubmissionContentElementState = (
 	};
 
 	const editable = computed(() => {
-		return new Date() < new Date(dueDate);
+		return !dueDate || new Date() < new Date(dueDate);
 	});
 
 	onMounted(() => {
