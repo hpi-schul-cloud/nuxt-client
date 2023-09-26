@@ -1,8 +1,8 @@
 export interface UserLoginMigration {
 	sourceSystemId?: string;
 	targetSystemId: string;
-	mandatorySince?: string;
-	startedAt: string;
-	closedAt?: string;
-	finishedAt?: string;
+	mandatorySince?: Date;
+	startedAt: Date;
+	closedAt?: Date;
+	finishedAt?: Date;
 }
