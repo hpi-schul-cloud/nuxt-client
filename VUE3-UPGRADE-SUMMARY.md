@@ -85,7 +85,9 @@ https://vue3-mq.info/migration/from-version-2.html#removal-of-global-properties-
   | Vue.set                    | ?? used in (src/utils/service-template.js) |
 
 
+## Slots
 
+If you are still using the [deprecated named / scoped slot syntax](https://v2.vuejs.org/v2/guide/components-slots.html#Deprecated-Syntax), update it to the latest syntax first (which is already supported in 2.6).
 
 ## Component Notes
 
