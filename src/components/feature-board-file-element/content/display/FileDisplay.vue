@@ -8,16 +8,15 @@
 			:element="fileProperties.element"
 		/>
 		<FileDescription
-			:name="fileProperties.name"
+			:name="name"
 			:caption="fileProperties.element.content.caption"
-			:show-title="!fileProperties.previewUrl"
 			:is-edit-mode="isEditMode"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
@@ -31,6 +30,19 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+	},
+	setup(props) {
+		const name = computed(() => {
+			const result = props.fileProperties.previewUrl
+				? undefined
+				: props.fileProperties.name;
+
+			return result;
+		});
+
+		return {
+			name,
+		};
 	},
 });
 </script>
