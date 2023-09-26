@@ -1,154 +1,87 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mdiFileDocumentOutline } from "@mdi/js";
+import Card from "@ui-card";
 import { shallowMount } from "@vue/test-utils";
-import FileDescription from "./FileDescription.vue";
 
-describe("FileDescription", () => {
+describe("Card", () => {
 	const setup = (props: {
-		isEditMode: boolean;
-		showTitle: boolean;
-		name?: string;
-		caption?: string;
+		title?: string;
+		subtitle?: string;
+		icon?: string;
+		shortenTitle?: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = {
-			name: props.name ?? "testName",
-			caption: props.caption ?? "testCaption",
-			isEditMode: props.isEditMode,
-			showTitle: props.showTitle,
-		};
-		const wrapper = shallowMount(FileDescription, {
-			propsData,
+		const wrapper = shallowMount(Card, {
+			propsData: props,
 			...createComponentMocks({}),
 		});
 
 		return {
+			...props,
 			wrapper,
-			name: propsData.name,
-			caption: propsData.caption,
 		};
 	};
 
-	describe("when isEditMode is true", () => {
-		describe("when showTitle is true", () => {
-			it("should render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
+	describe("when title is passed", () => {
+		it("should render title", () => {
+			const { title, wrapper } = setup({ title: "title" });
 
-				const text = wrapper.text();
-
-				expect(text).toContain(name);
-			});
-
-			it("should render icon", () => {
-				const { wrapper } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
-
-				const icon = wrapper.find("v-icon-stub").text();
-
-				expect(icon).toBe(mdiFileDocumentOutline);
-			});
-
-			it("should not render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(caption);
-			});
-		});
-
-		describe("when showTitle is false", () => {
-			it("should not render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: true,
-					showTitle: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(name);
-			});
-
-			it("should not render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: true,
-					showTitle: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(caption);
-			});
+			expect(wrapper.html()).toContain(title);
 		});
 	});
 
-	describe("when isEditMode is false", () => {
-		describe("when showTitle is true", () => {
-			it("should render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
+	describe("when subtitle is passed", () => {
+		it("should render subtitle", () => {
+			const { subtitle, wrapper } = setup({ subtitle: "subtitle" });
 
-				const text = wrapper.text();
-
-				expect(text).toContain(name);
-			});
-
-			it("should render icon", () => {
-				const { wrapper } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
-
-				const icon = wrapper.find("v-icon-stub").text();
-
-				expect(icon).toBe(mdiFileDocumentOutline);
-			});
-
-			it("should render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).toContain(caption);
-			});
+			expect(wrapper.html()).toContain(subtitle);
 		});
+	});
 
-		describe("when showTitle is false", () => {
-			it("should not render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: false,
-					showTitle: false,
-				});
+	describe("when icon is passed", () => {
+		it("should render icon", () => {
+			const { icon, wrapper } = setup({ icon: "icon" });
 
-				const text = wrapper.text();
+			expect(wrapper.html()).toContain(icon);
+		});
+	});
 
-				expect(text).not.toContain(name);
+	describe("when no title or icon is passed", () => {
+		it("should not render v-card-title", () => {
+			const { wrapper } = setup({});
+
+			expect(wrapper.html()).not.toContain("v-card-title");
+		});
+	});
+
+	describe("when no subtitle is passed", () => {
+		it("should not render v-card-subtitle", () => {
+			const { wrapper } = setup({});
+
+			expect(wrapper.html()).not.toContain("v-card-subtitle");
+		});
+	});
+
+	describe("when shortenTitle is true", () => {
+		it("should render span with margin right class", () => {
+			const { wrapper } = setup({
+				title: "title",
+				shortenTitle: true,
+			});
+			console.log(wrapper.html());
+
+			expect(wrapper.find("span").classes().includes("mr-10")).toBe(true);
+		});
+	});
+
+	describe("when shortenTitle is false", () => {
+		it("should not render span with margin right class", () => {
+			const { wrapper } = setup({
+				title: "title",
+				shortenTitle: false,
 			});
 
-			it("should render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: false,
-					showTitle: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).toContain(caption);
-			});
+			expect(wrapper.find("span").classes().includes("mr-10")).toBe(false);
 		});
 	});
 });
