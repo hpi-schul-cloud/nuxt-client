@@ -120,7 +120,7 @@ export default defineComponent({
 	position: sticky;
 	top: 0;
 	z-index: var(--layer-sticky-header);
-	background-color: var(--v-white-base);
+	background-color: rgb(var(--v-theme-white));
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {
