@@ -48,7 +48,6 @@ describe("FileDisplay", () => {
 			const { wrapper, fileNameProp, previewUrlProp } = setup();
 
 			const props = wrapper.findComponent(ImageDisplay).attributes();
-			console.log(props);
 			expect(props.name).toBe(fileNameProp);
 			expect(props.previewurl).toBe(previewUrlProp);
 			expect(props.iseditmode).toBe("true");

@@ -7,18 +7,15 @@ import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/f
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import Vue, { nextTick, ref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import { useContentElementState } from "@data-board";
+import { i18nMock } from "@@/tests/test-utils";
 
-jest.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-	};
-});
+jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
 
 jest.mock("@ui-confirmation-dialog");
@@ -29,7 +26,16 @@ const useDeleteConfirmationDialogMock = jest.mocked(
 );
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
-jest.mock("./SubmissionContentElementState.composable");
+jest.mock("@data-board/ContentElementState.composable");
+const mockedUseContentElementState = jest.mocked(useContentElementState);
+const mockedUseContentElementStateResponse =
+	createMock<ReturnType<typeof useContentElementState>>();
+
+mockedUseContentElementState.mockReturnValue(
+	mockedUseContentElementStateResponse
+);
+
+jest.mock("../composables/SubmissionContentElementState.composable");
 const mockedUseSubmissionContentElementState = jest.mocked(
 	useSubmissionContentElementState
 );
@@ -54,7 +60,7 @@ describe("SubmissionContentElement", () => {
 			{
 				...createComponentMocks({ i18n: true }),
 				provide: {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: { ...props },
@@ -71,6 +77,12 @@ describe("SubmissionContentElement", () => {
 
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
+
+			mockedUseContentElementState.mockReturnValue({
+				modelValue: ref({
+					dueDate: element.content.dueDate,
+				}),
+			});
 
 			const { wrapper } = getWrapper({
 				element,
@@ -107,7 +119,6 @@ describe("SubmissionContentElement", () => {
 			const dueDate = wrapper
 				.findComponent(SubmissionContentElementDisplay)
 				.props("dueDate");
-
 			expect(dueDate).toBe(element.content.dueDate);
 		});
 
@@ -166,6 +177,12 @@ describe("SubmissionContentElement", () => {
 
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
+
+			mockedUseContentElementState.mockReturnValue({
+				modelValue: ref({
+					dueDate: element.content.dueDate,
+				}),
+			});
 
 			const { wrapper } = getWrapper({
 				element,
