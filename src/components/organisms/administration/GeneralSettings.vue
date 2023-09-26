@@ -208,23 +208,11 @@ export default {
 		school: {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
-					const convertDataUrlToFile = () => {
-						const dataUrlParts = newSchool.logo_dataUrl.split(",");
-						const mimeType = dataUrlParts[0].match(/:(.*?);/)[1];
-						const binaryString = atob(dataUrlParts[1]);
-						let binaryStringLength = binaryString.length;
-						const uint8Array = new Uint8Array(binaryStringLength);
-						while (binaryStringLength--) {
-							uint8Array[binaryStringLength] =
-								binaryString.charCodeAt(binaryStringLength);
-						}
-						const logoFile = new File([uint8Array], newSchool.logo_name, {
-							type: mimeType,
-						});
-						return logoFile;
-					};
 					this.logoFile = newSchool.logo_dataUrl
-						? convertDataUrlToFile()
+						? this.convertDataUrlToFile(
+								newSchool.logo_dataUrl,
+								newSchool.logo_name
+						  )
 						: null;
 
 					await this.copyToLocalSchool();
@@ -237,6 +225,21 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
+		convertDataUrlToFile(dataURL, fileName) {
+			const dataUrlParts = dataURL.split(",");
+			const mimeType = dataUrlParts[0].match(/:(.*?);/)[1];
+			const binaryString = atob(dataUrlParts[1]);
+			let binaryStringLength = binaryString.length;
+			const uint8Array = new Uint8Array(binaryStringLength);
+			while (binaryStringLength--) {
+				uint8Array[binaryStringLength] =
+					binaryString.charCodeAt(binaryStringLength);
+			}
+			const logoFile = new File([uint8Array], fileName, {
+				type: mimeType,
+			});
+			return logoFile;
+		},
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
@@ -284,10 +287,12 @@ export default {
 			) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
-			if (!updatedSchool.logo_dataUrl) {
-				updatedSchool.logo_dataUrl = (await toBase64(this.logoFile)) || "";
-				updatedSchool.logo_name = this.localSchool.logo_name || "";
-			}
+
+			updatedSchool.logo_dataUrl = this.logoFile
+				? await toBase64(this.logoFile)
+				: "";
+			updatedSchool.logo_name = this.logoFile ? this.logoFile.name : "";
+
 			schoolsModule.update(updatedSchool);
 		},
 	},
