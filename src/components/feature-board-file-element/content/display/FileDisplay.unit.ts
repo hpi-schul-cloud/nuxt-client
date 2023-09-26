@@ -60,6 +60,15 @@ describe("FileDisplay", () => {
 
 			expect(fileDescription.exists()).toBe(true);
 		});
+
+		it("should not pass name to file description component", () => {
+			const { wrapper } = setup();
+
+			const fileDescription = wrapper
+				.findComponent(FileDescription)
+				.attributes();
+			expect(fileDescription.name).toBeUndefined();
+		});
 	});
 
 	describe("when previewUrl is undefined", () => {
@@ -106,6 +115,15 @@ describe("FileDisplay", () => {
 			const imageDisplay = wrapper.findComponent(ImageDisplay);
 
 			expect(imageDisplay.exists()).toBe(false);
+		});
+
+		it("should pass name to file description component", () => {
+			const { wrapper, fileNameProp } = setup();
+
+			const fileDescription = wrapper
+				.findComponent(FileDescription)
+				.attributes();
+			expect(fileDescription.name).toBe(fileNameProp);
 		});
 	});
 });

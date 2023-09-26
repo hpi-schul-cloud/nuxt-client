@@ -5,150 +5,63 @@ import FileDescription from "./FileDescription.vue";
 
 describe("FileDescription", () => {
 	const setup = (props: {
-		isEditMode: boolean;
-		showTitle: boolean;
+		isEditMode?: boolean;
 		name?: string;
 		caption?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const propsData = {
-			name: props.name ?? "testName",
-			caption: props.caption ?? "testCaption",
-			isEditMode: props.isEditMode,
-			showTitle: props.showTitle,
-		};
 		const wrapper = shallowMount(FileDescription, {
-			propsData,
+			propsData: { ...props },
 			...createComponentMocks({}),
 		});
 
 		return {
 			wrapper,
-			name: propsData.name,
-			caption: propsData.caption,
+			...props,
 		};
 	};
 
-	describe("when isEditMode is true", () => {
-		describe("when showTitle is true", () => {
-			it("should render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
+	describe("when name is defined", () => {
+		it("should pass name to card", () => {
+			const { name, wrapper } = setup({ name: "testName" });
 
-				const text = wrapper.text();
-
-				expect(text).toContain(name);
-			});
-
-			it("should render icon", () => {
-				const { wrapper } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
-
-				const icon = wrapper.find("v-icon-stub").text();
-
-				expect(icon).toBe(mdiFileDocumentOutline);
-			});
-
-			it("should not render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: true,
-					showTitle: true,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(caption);
-			});
+			const card = wrapper.find("card-stub");
+			expect(card.attributes("title")).toBe(name);
 		});
 
-		describe("when showTitle is false", () => {
-			it("should not render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: true,
-					showTitle: false,
-				});
+		it("should pass icon mdiFileDocumentOutline to card", () => {
+			const { wrapper } = setup({ name: "testName" });
 
-				const text = wrapper.text();
-
-				expect(text).not.toContain(name);
-			});
-
-			it("should not render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: true,
-					showTitle: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(caption);
-			});
+			const card = wrapper.find("card-stub");
+			expect(card.attributes("icon")).toBe(mdiFileDocumentOutline);
 		});
 	});
 
-	describe("when isEditMode is false", () => {
-		describe("when showTitle is true", () => {
-			it("should render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
+	describe("when name is undefined", () => {
+		it("should not pass icon mdiFileDocumentOutline to card", () => {
+			const { wrapper } = setup({});
 
-				const text = wrapper.text();
-
-				expect(text).toContain(name);
-			});
-
-			it("should render icon", () => {
-				const { wrapper } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
-
-				const icon = wrapper.find("v-icon-stub").text();
-
-				expect(icon).toBe(mdiFileDocumentOutline);
-			});
-
-			it("should render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: false,
-					showTitle: true,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).toContain(caption);
-			});
+			const card = wrapper.find("card-stub");
+			expect(card.attributes("icon")).toBeUndefined();
 		});
+	});
 
-		describe("when showTitle is false", () => {
-			it("should not render title", () => {
-				const { wrapper, name } = setup({
-					isEditMode: false,
-					showTitle: false,
-				});
+	describe("when editmode is true", () => {
+		it("should not pass caption to card", () => {
+			const { wrapper } = setup({ isEditMode: true });
 
-				const text = wrapper.text();
+			const card = wrapper.find("card-stub");
+			expect(card.attributes("subtitle")).toBeUndefined();
+		});
+	});
 
-				expect(text).not.toContain(name);
-			});
+	describe("when editmode is false", () => {
+		it("should pass caption to card", () => {
+			const { caption, wrapper } = setup({ isEditMode: false });
 
-			it("should render caption", () => {
-				const { wrapper, caption } = setup({
-					isEditMode: false,
-					showTitle: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).toContain(caption);
-			});
+			const card = wrapper.find("card-stub");
+			expect(card.attributes("subtitle")).toBe(caption);
 		});
 	});
 });
