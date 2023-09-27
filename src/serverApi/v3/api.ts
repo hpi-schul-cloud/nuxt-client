@@ -1351,19 +1351,19 @@ export interface DemoSchoolResponse {
      */
     id?: object;
     /**
-     * Title of the Board
+     * relevant identifier for the object (course.name, user.email, ...)
      * @type {object}
      * @memberof DemoSchoolResponse
      */
     key?: object;
     /**
-     * Title of the Board
+     * type of the created entity
      * @type {string}
      * @memberof DemoSchoolResponse
      */
     type: string;
     /**
-     * Title of the Board
+     * child entities that were also created
      * @type {object}
      * @memberof DemoSchoolResponse
      */
@@ -3943,7 +3943,7 @@ export interface SingleColumnBoardResponse {
  */
 export interface SubmissionContainerContentBody {
     /**
-     * 
+     *
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
@@ -3956,7 +3956,7 @@ export interface SubmissionContainerContentBody {
  */
 export interface SubmissionContainerElementContent {
     /**
-     * 
+     *
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */
