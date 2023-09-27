@@ -1025,6 +1025,20 @@ export interface CreateSubmissionItemBodyParams {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum CreationProtocolEntityType {
+    School = 'SCHOOL',
+    Password = 'PASSWORD',
+    Postfix = 'POSTFIX',
+    User = 'USER',
+    Course = 'COURSE',
+    Lesson = 'LESSON'
+}
+
+/**
+ * 
+ * @export
  * @interface CustomParameterEntryParam
  */
 export interface CustomParameterEntryParam {
@@ -1357,11 +1371,11 @@ export interface DemoSchoolResponse {
      */
     key?: object;
     /**
-     * type of the created entity
-     * @type {string}
+     * 
+     * @type {CreationProtocolEntityType}
      * @memberof DemoSchoolResponse
      */
-    type: string;
+    type: CreationProtocolEntityType;
     /**
      * child entities that were also created
      * @type {object}
