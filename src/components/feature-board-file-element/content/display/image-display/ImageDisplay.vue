@@ -27,7 +27,7 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { useLightBox } from "@ui-light-box";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { useFocus } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 
@@ -75,8 +75,8 @@ export default defineComponent({
 		const openLightBox = () => {
 			const previewUrl = convertDownloadToPreviewUrl(props.url);
 
-			const options = {
-				url: props.url,
+			const options: LightBoxOptions = {
+				downloadUrl: props.url,
 				previewUrl: previewUrl,
 				alt: alternativeText.value,
 				name: props.name,

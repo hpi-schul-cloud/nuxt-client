@@ -1,11 +1,11 @@
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
-interface LightBoxOptions {
-	url: string;
+export interface LightBoxOptions {
+	downloadUrl: string;
 	previewUrl: string;
 	alt: string;
-	name?: string;
+	name: string;
 }
 
 export const useLightBox = () => {
@@ -23,10 +23,20 @@ export const useLightBox = () => {
 
 export const useInternalLightBox = createSharedComposable(() => {
 	const isLightBoxOpen = ref<boolean>(false);
-	const lightBoxOptions = ref<LightBoxOptions | undefined>(undefined);
+	const lightBoxOptions = ref<LightBoxOptions>({
+		downloadUrl: "",
+		previewUrl: "",
+		alt: "",
+		name: "",
+	});
 
 	const close = () => {
-		lightBoxOptions.value = undefined;
+		lightBoxOptions.value = {
+			downloadUrl: "",
+			previewUrl: "",
+			alt: "",
+			name: "",
+		};
 		isLightBoxOpen.value = false;
 	};
 

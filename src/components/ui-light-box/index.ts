@@ -1,4 +1,4 @@
-import { useLightBox } from "./LightBox.composable";
+import { LightBoxOptions, useLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
-export { LightBox, useLightBox };
+export { LightBox, LightBoxOptions, useLightBox };

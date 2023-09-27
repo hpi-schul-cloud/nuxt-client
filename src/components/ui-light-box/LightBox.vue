@@ -5,17 +5,20 @@
 				<v-btn icon @click="close">
 					<v-icon>{{ mdiClose }}</v-icon>
 				</v-btn>
-				<v-toolbar-title class="d-flex align-items-center">
+				<v-toolbar-title
+					v-if="lightBoxOptions.name !== ''"
+					class="d-flex align-items-center"
+				>
 					<v-icon color="black" class="mr-2" size="18">{{
 						mdiFileDocumentOutline
 					}}</v-icon>
 
 					<span class="subtitle-1 font-weight-bold text-truncate mr-8">{{
-						name
+						lightBoxOptions.name
 					}}</span>
 				</v-toolbar-title>
 				<v-spacer />
-				<v-btn icon @click="download">
+				<v-btn v-if="lightBoxOptions.downloadUrl !== ''" icon @click="download">
 					<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 				</v-btn>
 			</v-toolbar>
@@ -25,8 +28,8 @@
 				@click="close"
 			>
 				<img
-					:src="previewUrl"
-					:alt="alt"
+					:src="lightBoxOptions.previewUrl"
+					:alt="lightBoxOptions.alt"
 					style="max-height: 100%; max-width: 100%"
 					@click.stop
 				/>
@@ -39,7 +42,7 @@
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
 
 export default defineComponent({
@@ -47,40 +50,23 @@ export default defineComponent({
 	setup() {
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
 
-		const url = computed(() =>
-			lightBoxOptions.value ? lightBoxOptions.value.url : ""
-		);
-
-		const previewUrl = computed(() =>
-			lightBoxOptions.value ? lightBoxOptions.value.previewUrl : ""
-		);
-
-		const alt = computed(() =>
-			lightBoxOptions.value ? lightBoxOptions.value.alt : ""
-		);
-
-		const name = computed(() =>
-			lightBoxOptions.value && lightBoxOptions.value.name
-				? lightBoxOptions.value.name
-				: ""
-		);
-
 		onKeyStroke("Escape", (e) => close(), { eventName: "keydown" });
 
 		const download = async () => {
-			await downloadFile(url.value, name.value);
+			await downloadFile(
+				lightBoxOptions.value.downloadUrl,
+				lightBoxOptions.value.name
+			);
 		};
 
 		return {
-			alt,
 			close,
 			download,
 			isLightBoxOpen,
+			lightBoxOptions,
 			mdiClose,
 			mdiFileDocumentOutline,
 			mdiTrayArrowDown,
-			name,
-			previewUrl,
 		};
 	},
 });
