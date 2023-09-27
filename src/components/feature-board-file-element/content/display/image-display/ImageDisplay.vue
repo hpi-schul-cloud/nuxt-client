@@ -5,8 +5,8 @@
 			ref="containerRef"
 			tabindex="0"
 			@click="onClick"
-			@keydown.enter.self="onClick"
-			@keydown.space.prevent="onClick"
+			@keydown.enter.self="onKeyDown"
+			@keydown.space.prevent="onKeyDown"
 		>
 			<div
 				v-if="!isEditMode && (hover || focused)"
@@ -61,16 +61,28 @@ export default defineComponent({
 
 		const onClick = () => {
 			if (!props.isEditMode) {
-				const previewUrl = convertDownloadToPreviewUrl(props.url);
-
-				const options = {
-					url: props.url,
-					previewUrl: previewUrl,
-					alt: alternativeText.value,
-					name: props.name,
-				};
-				open(options);
+				openLightBox();
 			}
+			containerRef.value?.blur();
+		};
+
+		const onKeyDown = () => {
+			if (!props.isEditMode) {
+				openLightBox();
+			}
+		};
+
+		const openLightBox = () => {
+			const previewUrl = convertDownloadToPreviewUrl(props.url);
+
+			const options = {
+				url: props.url,
+				previewUrl: previewUrl,
+				alt: alternativeText.value,
+				name: props.name,
+			};
+
+			open(options);
 		};
 
 		return {
@@ -78,6 +90,7 @@ export default defineComponent({
 			containerRef,
 			focused,
 			onClick,
+			onKeyDown,
 		};
 	},
 });
