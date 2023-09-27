@@ -121,8 +121,10 @@ export default defineComponent({
 			await groupModule.loadClassesForSchool();
 		};
 
-		onMounted(async () => {
-			await groupModule.loadClassesForSchool();
+		onMounted(() => {
+			(async () => {
+				await groupModule.loadClassesForSchool();
+			})();
 		});
 
 		return {
