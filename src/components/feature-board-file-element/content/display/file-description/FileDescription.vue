@@ -15,7 +15,7 @@
 				>
 
 				<span
-					class="subtitle-1 font-weight-bold text-truncate mr-8"
+					:class="spanClasses"
 					data-testid="board-file-element-display-file-name"
 					>{{ name }}</span
 				>
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileDescription",
@@ -40,9 +40,17 @@ export default defineComponent({
 		showTitle: { type: Boolean, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup() {
+	setup(props) {
+		const spanClasses = computed(() => {
+			const marginClass = props.isEditMode ? " mr-10" : "";
+			const classes = `subtitle-1 font-weight-bold text-truncate${marginClass}`;
+
+			return classes;
+		});
+
 		return {
 			mdiFileDocumentOutline,
+			spanClasses,
 		};
 	},
 });
