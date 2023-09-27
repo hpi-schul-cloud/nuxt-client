@@ -50,20 +50,31 @@ import {
 	mdiTrayArrowDown,
 } from "@mdi/js";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "ContentElementMenu",
 	components: { BoardMenu, BoardMenuAction },
 	props: {
+		elementId: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: ["delete:element", "move-down:element", "move-up:element"],
 	setup(props, { emit }) {
-		const onDelete = () => {
-			emit("delete:element");
+		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+		const onDelete = async (): Promise<void> => {
+			const shouldDelete = await askDeleteConfirmation(
+				undefined,
+				"boardElement"
+			);
+
+			if (shouldDelete) {
+				emit("delete:element", props.elementId);
+			}
 		};
 		const onMoveElementDown = () => {
 			emit("move-down:element");

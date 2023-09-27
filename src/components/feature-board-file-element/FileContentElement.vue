@@ -23,13 +23,7 @@
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		/>
-		<ContentElementMenu
-			v-if="isEditMode"
-			v-bind="elementPositionProps"
-			@move-down:element="onMoveElementDown"
-			@move-up:element="onMoveElementUp"
-			@delete:element="onDeleteElement"
-		/>
+		<slot v-if="isEditMode"></slot>
 	</v-card>
 </template>
 
@@ -42,17 +36,15 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
-	PropType,
 	computed,
 	defineComponent,
 	onMounted,
+	PropType,
 	ref,
 	toRef,
 } from "vue";
 import FileContent from "./content/FileContent.vue";
-import ContentElementMenu from "./menu/ContentElementMenu.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -61,21 +53,12 @@ export default defineComponent({
 	components: {
 		FileUpload,
 		FileContent,
-		ContentElementMenu,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-down:edit",
-		"move-up:edit",
-		"move-keyboard:edit",
-	],
+	emits: ["move-keyboard:edit", "delete:element"],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
@@ -87,7 +70,6 @@ export default defineComponent({
 			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -119,14 +101,6 @@ export default defineComponent({
 			return fileRecord.value !== undefined || props.isEditMode === true;
 		});
 
-		const elementPositionProps = computed(() => {
-			return {
-				isFirstElement: props.isFirstElement,
-				isLastElement: props.isLastElement,
-				hasMultipleElements: props.hasMultipleElements,
-			};
-		});
-
 		onMounted(() => {
 			(async () => {
 				await fetchFile();
@@ -138,32 +112,6 @@ export default defineComponent({
 			if (props.isEditMode) {
 				event.preventDefault();
 				emit("move-keyboard:edit", event);
-			}
-		};
-
-		const onMoveElementDown = () => {
-			emit("move-down:edit");
-		};
-
-		const onMoveElementUp = () => {
-			emit("move-up:edit");
-		};
-
-		const onDeleteElement = async (
-			deleteDirectly: true | undefined
-		): Promise<void> => {
-			if (deleteDirectly === true) {
-				emit("delete:element", element.value.id);
-				return;
-			}
-
-			const shouldDelete = await askDeleteConfirmation(
-				fileRecord.value?.name,
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
 			}
 		};
 
@@ -194,15 +142,11 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
-			onDeleteElement,
-			onMoveElementDown,
-			onMoveElementUp,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
-			elementPositionProps,
 		};
 	},
 });
