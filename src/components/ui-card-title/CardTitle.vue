@@ -1,24 +1,20 @@
 <template>
 	<div class="grey lighten-4">
-		<v-card-title
-			v-if="title || icon"
-			data-testid="board-file-element-display"
-			inactive
-		>
+		<v-card-title v-if="title || icon" data-testid="card-title" inactive>
 			<div class="d-flex flex-no-wrap align-center text-truncate">
 				<v-icon
 					v-if="icon"
 					color="black"
 					class="mr-2"
 					size="18"
-					data-testid="board-file-element-display-file-icon"
+					data-testid="card-title-icon"
 					>{{ icon }}</v-icon
 				>
 
 				<span
 					v-if="title"
 					:class="spanClasses"
-					data-testid="board-file-element-display-file-name"
+					data-testid="card-title-string"
 					>{{ title }}</span
 				>
 			</div>
