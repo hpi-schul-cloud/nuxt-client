@@ -203,8 +203,8 @@ describe("LightBox", () => {
 		it("should call close function", async () => {
 			const { close, wrapper } = setup({});
 
-			const cardText = wrapper.findComponent({ name: "v-card-text" });
-			await cardText.trigger("click");
+			const overlay = wrapper.findComponent({ name: "v-overlay" });
+			await overlay.vm.$emit("click");
 
 			expect(close).toBeCalled();
 		});
