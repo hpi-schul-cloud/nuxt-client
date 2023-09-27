@@ -15,15 +15,18 @@
 				:isEditMode="isEditMode"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 			>
-				<ContentElementMenu
-					:elementId="element.id"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveElementDown(index, element)"
-					@move-up:element="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
+				<template #default="{ elementName }">
+					<ContentElementMenu
+						:elementId="element.id"
+						:name="elementName"
+						:isFirstElement="firstElementId === element.id"
+						:isLastElement="lastElementId === element.id"
+						:hasMultipleElements="hasMultipleElements"
+						@move-down:element="onMoveElementDown(index, element)"
+						@move-up:element="onMoveElementUp(index, element)"
+						@delete:element="onDeleteElement"
+					/>
+				</template>
 			</FileContentElement>
 			<SubmissionContentElement
 				v-else-if="showSubmissionContainerElement(element)"

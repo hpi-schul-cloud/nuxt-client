@@ -58,6 +58,7 @@ export default defineComponent({
 	components: { BoardMenu, BoardMenuAction },
 	props: {
 		elementId: { type: String, required: true },
+		name: { type: String, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },
@@ -68,7 +69,7 @@ export default defineComponent({
 
 		const onDelete = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
-				undefined,
+				props.name,
 				"boardElement"
 			);
 

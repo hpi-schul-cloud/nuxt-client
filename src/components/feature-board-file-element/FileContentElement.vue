@@ -23,7 +23,7 @@
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		/>
-		<slot v-if="isEditMode"></slot>
+		<slot v-if="isEditMode" :elementName="fileProperties?.name"></slot>
 	</v-card>
 </template>
 
