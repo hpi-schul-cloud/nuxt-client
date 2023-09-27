@@ -1,5 +1,5 @@
 <template>
-	<Card
+	<CardTitle
 		:title="name"
 		:subtitle="subtitle"
 		:icon="icon"
@@ -9,12 +9,12 @@
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import Card from "@ui-card";
+import CardTitle from "@ui-card-title";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileDescription",
-	components: { Card },
+	components: { CardTitle },
 	props: {
 		name: { type: String, required: false },
 		caption: { type: String, required: false },

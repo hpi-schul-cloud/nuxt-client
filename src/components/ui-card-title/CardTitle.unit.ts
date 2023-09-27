@@ -1,8 +1,8 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Card from "@ui-card";
+import CardTitle from "@ui-card-title";
 import { shallowMount } from "@vue/test-utils";
 
-describe("Card", () => {
+describe("CardTitle", () => {
 	const setup = (props: {
 		title?: string;
 		subtitle?: string;
@@ -11,7 +11,7 @@ describe("Card", () => {
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(Card, {
+		const wrapper = shallowMount(CardTitle, {
 			propsData: props,
 			...createComponentMocks({}),
 		});

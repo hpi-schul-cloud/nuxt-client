@@ -34,7 +34,7 @@
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
-	name: "Card",
+	name: "CardTitle",
 	props: {
 		title: { type: String, required: false },
 		subtitle: { type: String, required: false },

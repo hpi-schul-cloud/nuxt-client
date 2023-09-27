@@ -39,7 +39,7 @@ module.exports = defineConfig({
 				),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
-				"@ui-card": getDir("src/components/ui-card"),
+				"@ui-card-title": getDir("src/components/ui-card-title"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
