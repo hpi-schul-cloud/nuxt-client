@@ -2,23 +2,23 @@ import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
-import ContentElementChips from "./ContentElementChips.vue";
+import FileAttributes from "./FileAttributes.vue";
 
 jest.mock("@/utils/fileHelper");
 
-describe("ContentElementChips", () => {
+describe("FileAttributes", () => {
 	const setup = () => {
 		const fileSize = 3800;
 		const fileName = "pic.jpeg";
-		const convertedSize = 3800;
 		const unit = "KB";
+		const extension = "ext";
 		const convertFileSizeMock = jest
 			.mocked(convertFileSize)
-			.mockReturnValueOnce({ convertedSize, unit });
+			.mockReturnValueOnce({ convertedSize: fileSize, unit });
 		const getFileExtensionMock = jest
 			.mocked(getFileExtension)
-			.mockReturnValueOnce("ext");
-		const wrapper = mount(ContentElementChips, {
+			.mockReturnValueOnce(extension);
+		const wrapper = mount(FileAttributes, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -36,6 +36,7 @@ describe("ContentElementChips", () => {
 		return {
 			wrapper,
 			fileSize,
+			extension: extension.toUpperCase(),
 			fileName,
 			convertFileSizeMock,
 			getFileExtensionMock,
@@ -50,9 +51,9 @@ describe("ContentElementChips", () => {
 	it("should be found in dom", () => {
 		const { wrapper } = setup();
 
-		const chipsComponent = wrapper.findComponent(ContentElementChips);
+		const fileAttributes = wrapper.findComponent(FileAttributes);
 
-		expect(chipsComponent.exists()).toBe(true);
+		expect(fileAttributes.exists()).toBe(true);
 	});
 
 	it("should call convertFileSize", () => {
@@ -62,12 +63,12 @@ describe("ContentElementChips", () => {
 		expect(convertFileSizeMock).toHaveBeenCalledWith(fileSize);
 	});
 
-	it("should show correctly human readable file size", () => {
-		const { wrapper, fileSize, unit } = setup();
+	it("should display file extension and size", async () => {
+		const { wrapper, fileSize, unit, extension } = setup();
 
-		const chipsComponent = wrapper.findAllComponents({ name: "v-chip" }).at(1);
-
-		expect(chipsComponent.text()).toBe(fileSize + "fileSize" + " " + unit);
+		expect(wrapper.html()).toContain(
+			`${extension} ⋅ ${fileSize}fileSize ${unit}`
+		);
 	});
 
 	it("should call getFileExtension", () => {
@@ -75,12 +76,5 @@ describe("ContentElementChips", () => {
 
 		expect(getFileExtensionMock).toHaveBeenCalledTimes(1);
 		expect(getFileExtensionMock).toHaveBeenCalledWith(fileName);
-	});
-
-	it("should show correctly file extension", () => {
-		const { wrapper } = setup();
-		const chipsComponent = wrapper.findAllComponents({ name: "v-chip" }).at(0);
-
-		expect(chipsComponent.text()).toBe("EXT");
 	});
 });

@@ -33,6 +33,8 @@ export * from "./toolLaunchRequestResponeFactory";
 export * from "./toolParameterFactory";
 export * from "./toolParameterEntryFactory";
 export * from "./userDataResponseFactory";
+export * from "./userLoginMigration.factory";
+export * from "./userLoginMigrationResponse.factory";
 export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";
