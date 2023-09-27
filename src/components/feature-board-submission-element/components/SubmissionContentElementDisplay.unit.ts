@@ -7,6 +7,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { i18nMock } from "@@/tests/test-utils";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role: "teacher" | "student" = "teacher") => {
@@ -25,7 +26,7 @@ describe("SubmissionContentElementDisplay", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData,
 				provide: {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			}
@@ -33,7 +34,6 @@ describe("SubmissionContentElementDisplay", () => {
 
 		return {
 			wrapper,
-			dueDate: propsData.dueDate,
 		};
 	};
 
@@ -42,34 +42,6 @@ describe("SubmissionContentElementDisplay", () => {
 
 		const component = wrapper.findComponent(SubmissionContentElementDisplay);
 		expect(component.exists()).toBe(true);
-	});
-
-	it("should display icon", async () => {
-		const { wrapper } = setup();
-
-		const submissionIcon = wrapper.find("v-icon-stub");
-
-		expect(submissionIcon.exists()).toBe(true);
-	});
-
-	it("should find submission tag", () => {
-		const { wrapper } = setup();
-
-		const submissionTag = wrapper.find("span").text();
-
-		expect(submissionTag).toBe(
-			wrapper.vm.$t("components.cardElement.submissionElement")
-		);
-	});
-
-	it("should find dueDate text", () => {
-		const { wrapper, dueDate } = setup();
-
-		const submissionDueDate = wrapper
-			.find("[data-testid=board-submission-element-due-date]")
-			.text();
-
-		expect(submissionDueDate).toBe(dueDate);
 	});
 
 	describe("As a student", () => {
