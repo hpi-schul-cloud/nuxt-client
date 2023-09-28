@@ -1,4 +1,6 @@
-# FILES NEED TO BE REFACTORED
+# REFACTORING LIST AND ESTIMATIONS
+
+## FILES MUST BE REFACTORED
 
 1. `src/components/organisms/DataFilter/DataFilter.vue`
    - The component uses `vue-filter-ui` dependency which is not competible with vue-3. And seems there is no info or plan to upgrade the dependeny in its repository. 
@@ -18,4 +20,63 @@
    - **Recommended Solution:** Wait until it's upcoming release.
    - **Estimation time for refactoring:** _TBD_
 
-4. 
+4. [v-model breaking change](https://v3-migration.vuejs.org/breaking-changes/v-model.html)
+   - Some components use `model property` inside which is changed in vue-3 and they need some tiny refactorings.
+   - These components:
+     - `src/components/atoms/vCustomAutocomplete.vue`
+     - `src/components/atoms/vCustomSwitch.vue`
+     - `src/components/base/BaseInput/BaseInput.vue`
+     - `src/components/base/BaseInput/BaseInputCheckbox.vue`
+     - `src/components/base/BaseInput/BaseInputDefault.vue`
+     - `src/components/base/BaseInput/BaseInputHidden.vue`
+     - `src/components/base/BaseInput/BaseInputRadio.vue`
+     - `src/components/molecules/ImportModal.vue`
+     - `src/components/molecules/RoomModal.vue`
+     - `src/components/molecules/TextEditor.vue`
+     - `src/components/molecules/TitleInput.vue`
+     - `src/components/organisms/FormNews.vue`
+     - `src/components/organisms/Pagination.vue`
+     - `src/components/organisms/vCustomDialog.vue`
+   - **Estimation time for refactoring:** _TBD_
+
+## VUETIFY BASED REFACTORINGS
+
+
+1. Vuetify Labs Component
+   - Some vuetify-3 components are not released yet. 
+   - These components:
+     - `v-calendar`
+     - `v-date-picker`
+     - `v-data-table`
+     - `v-skeleton-loader`
+     - `v-stepper`
+     - `v-time-picker`
+     - `v-tree-view`
+   - **Recommended Solution-1:** Wait until it's upcoming release.
+   - **Recommended Solution-2:** Imported from vuelabs to use until they're released. But it needs another refactoring after then.
+   - **Estimation time for refactoring:** _TBD depending on selected solution_
+
+
+
+2. Some vuetify components props' usage have been changed. The detailed list can be found at TODO: add other md file link here
+   - These components:
+     - `v-menu`
+     - `v-list`
+     - `v-list-item`
+     - `v-alert`
+     - `v-btn`
+     - `v-input`
+     - `v-checkbox`
+     - `v-radio`
+     - `v-switch`
+     - `v-tabs`
+     - `v-menu`
+     - `v-select`
+     - `v-combobox`
+     - `v-autocomplete`
+     - `v-expansion-panel`
+     - `v-card`
+     - `v-dialog`
+   - They need tiny refactoring with changing renaming their props etc.
+   - **Estimation time for refactoring:** _TBD_
+
