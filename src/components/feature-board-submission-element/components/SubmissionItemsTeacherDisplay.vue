@@ -55,14 +55,14 @@
 								small
 								data-testid="submission-item"
 							>
-								<span v-if="item.status === 'open'"
-									>{{ t("components.cardElement.submissionElement.open") }}
+								<span v-if="item.status === 'open'">
+									{{ t("components.cardElement.submissionElement.open") }}
 								</span>
-								<span v-if="item.status === 'completed'"
-									>{{ t("components.cardElement.submissionElement.completed") }}
+								<span v-if="item.status === 'completed'">
+									{{ t("components.cardElement.submissionElement.completed") }}
 								</span>
-								<span v-if="item.status === 'expired'"
-									>{{ t("components.cardElement.submissionElement.expired") }}
+								<span v-if="item.status === 'expired'">
+									{{ t("components.cardElement.submissionElement.expired") }}
 								</span>
 							</v-chip>
 						</template>
@@ -211,15 +211,15 @@ export default defineComponent({
 	.v-data-table__wrapper {
 		overflow-x: hidden;
 
-		table > thead > tr > th,
 		.text-start {
 			font-size: 0.75rem;
 		}
-	}
 
-	.v-data-table-header {
-		span:first-child {
-			display: block;
+		table > thead > tr > th > .v-icon {
+			font-size: 0.75rem !important;
+			height: 0.75rem !important;
+			width: 0.75rem !important;
+			margin-left: 2px;
 		}
 	}
 }
