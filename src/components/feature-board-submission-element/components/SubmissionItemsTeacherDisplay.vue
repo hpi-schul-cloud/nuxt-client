@@ -1,5 +1,5 @@
 <template>
-	<div class="white rounded-b-sm">
+	<div class="rounded-b-sm">
 		<v-skeleton-loader
 			v-if="loading"
 			class="mt-5 ml-5 mb-6"
@@ -7,7 +7,7 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels v-else>
+		<VExpansionPanels v-else class="rounded-0 rounded-b-sm">
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
@@ -216,10 +216,10 @@ export default defineComponent({
 		}
 	}
 
-	// .v-data-table-header {
-	// 	span:first-child {
-	// 		display: block;
-	// 	}
-	// }
+	.v-data-table-header {
+		span:first-child {
+			display: block;
+		}
+	}
 }
 </style>
