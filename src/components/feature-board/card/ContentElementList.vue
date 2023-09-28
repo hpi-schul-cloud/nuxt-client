@@ -15,7 +15,7 @@
 				:isEditMode="isEditMode"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 			>
-				<template #default="{ elementName }">
+				<template #menu="{ elementName }">
 					<ContentElementMenu
 						:elementId="element.id"
 						:name="elementName"
