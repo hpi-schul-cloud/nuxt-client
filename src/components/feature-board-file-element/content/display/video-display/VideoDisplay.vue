@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<video class="video" loading="lazy" :src="src" :alt="name" />
+		<video controls class="video" loading="lazy" :src="src" :alt="name" />
 	</div>
 </template>
 
