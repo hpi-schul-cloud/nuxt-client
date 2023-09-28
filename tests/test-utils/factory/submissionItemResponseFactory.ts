@@ -1,4 +1,4 @@
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { ContentElementType, SubmissionItemResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 
@@ -8,4 +8,5 @@ export const submissionItemResponseFactory =
 		userId: `userId${sequence}`,
 		completed: true,
 		timestamps: timestampsResponseFactory.build(),
+		type: ContentElementType.SubmissionItem,
 	}));
