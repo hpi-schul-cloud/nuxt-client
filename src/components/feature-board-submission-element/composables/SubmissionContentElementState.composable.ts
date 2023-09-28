@@ -56,8 +56,6 @@ export const useSubmissionContentElementState = (
 			return;
 		}
 		try {
-			// todo handle this like every other elements content change
-			// remove endpoint from API!
 			await updateSubmissionItemCall(
 				submissions.value.submissionItemsResponse[0].id,
 				completed
