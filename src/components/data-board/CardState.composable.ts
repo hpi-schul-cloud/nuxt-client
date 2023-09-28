@@ -85,6 +85,7 @@ export const useCardState = (
 								},
 								completed: true,
 								userId: "0000d224816abba584714c9c",
+								type: ContentElementType.SubmissionItem,
 							},
 						],
 					},
