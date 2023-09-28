@@ -31,19 +31,8 @@ export const useSubmissionItemApi = () => {
 		);
 	};
 
-	const fetchSubmissionItemsCall = async (
-		submissionContainerId: string
-	): Promise<SubmissionsResponse> => {
-		const response =
-			await submissionItemApi.boardSubmissionControllerGetSubmissionItems(
-				submissionContainerId
-			);
-		return response.data;
-	};
-
 	return {
 		createSubmissionItemCall,
-		fetchSubmissionItemsCall,
 		updateSubmissionItemCall,
 	};
 };

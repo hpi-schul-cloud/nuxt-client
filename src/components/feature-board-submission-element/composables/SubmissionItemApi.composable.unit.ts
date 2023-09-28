@@ -49,16 +49,4 @@ describe("SubmissionItemApi.composable", () => {
 			});
 		});
 	});
-
-	describe("fetch submissionItems", () => {
-		it("should call boardSubmissionControllerGetSubmissionItems api", async () => {
-			const { fetchSubmissionItemsCall } = useSubmissionItemApi();
-			const elementId = "123124";
-
-			await fetchSubmissionItemsCall(elementId);
-			expect(
-				submissionItemApi.boardSubmissionControllerGetSubmissionItems
-			).toHaveBeenCalledWith(elementId);
-		});
-	});
 });
