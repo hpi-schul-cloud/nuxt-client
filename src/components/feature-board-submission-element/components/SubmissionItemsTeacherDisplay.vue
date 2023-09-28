@@ -11,41 +11,42 @@
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
-						v-if="open"
+						v-if="openCount"
 						ref="v-chip-open"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
-						>{{ open }}
-						{{ t("components.cardElement.submissionElement.open") }}</v-chip
 					>
+						{{ openCount }}
+						{{ t("components.cardElement.submissionElement.open") }}
+					</v-chip>
 					<v-chip
-						v-if="completed"
+						v-if="completedCount"
 						ref="v-chip-completed"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
-						>{{ completed }}
-						{{
-							t("components.cardElement.submissionElement.completed")
-						}}</v-chip
 					>
+						{{ completedCount }}
+						{{ t("components.cardElement.submissionElement.completed") }}
+					</v-chip>
 					<v-chip
-						v-if="expired"
+						v-if="expiredCount"
 						ref="v-chip-expired"
 						class="grey lighten-3 mr-2"
 						disabled
 						small
-						>{{ expired }}
-						{{ t("components.cardElement.submissionElement.expired") }}</v-chip
 					>
+						{{ expiredCount }}
+						{{ t("components.cardElement.submissionElement.expired") }}
+					</v-chip>
 				</VExpansionPanelHeader>
 				<VExpansionPanelContent>
 					<v-data-table
 						:headers="headers"
 						:items="items"
-						:disable-pagination="true"
-						:hide-default-footer="true"
+						disable-pagination
+						hide-default-footer
 					>
 						<template #[`item.status`]="{ item }">
 							<v-chip
@@ -167,19 +168,19 @@ export default defineComponent({
 				.sort(sortByName);
 		});
 
-		const open = computed<number>(() => {
+		const openCount = computed<number>(() => {
 			return items.value.filter((item) => {
 				return item.status === "open";
 			}).length;
 		});
 
-		const completed = computed<number>(() => {
+		const completedCount = computed<number>(() => {
 			return items.value.filter((item) => {
 				return item.status === "completed";
 			}).length;
 		});
 
-		const expired = computed<number>(() => {
+		const expiredCount = computed<number>(() => {
 			return items.value.filter((item) => {
 				return item.status === "expired";
 			}).length;
@@ -188,9 +189,9 @@ export default defineComponent({
 		return {
 			headers,
 			items,
-			open,
-			completed,
-			expired,
+			openCount,
+			completedCount,
+			expiredCount,
 			t,
 		};
 	},
