@@ -1,21 +1,27 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, onMounted, computed } from "vue";
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { ref, computed, onMounted } from "vue";
+import { SubmissionsResponse } from "@/serverApi/v3";
 
-export const useSubmissionContentElementState = (id: string) => {
+export const useSubmissionContentElementState = (
+	id: string,
+	dueDate?: string
+) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
 		fetchSubmissionItemsCall,
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
-	const submissionItems = ref<Array<SubmissionItemResponse>>([]);
+	const submissions = ref<SubmissionsResponse>({
+		submissionItemsResponse: [],
+		users: [],
+	});
 	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
-			submissionItems.value = await fetchSubmissionItemsCall(id);
+			submissions.value = await fetchSubmissionItemsCall(id);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -26,32 +32,30 @@ export const useSubmissionContentElementState = (id: string) => {
 	const createSubmissionItem = async (completed: boolean) => {
 		try {
 			const response = await createSubmissionItemCall(id, completed);
-			submissionItems.value.push(response);
+			submissions.value.submissionItemsResponse.push(response);
 		} catch (error) {
 			notifyWithTemplate("notCreated", "boardElement")();
 		}
 	};
 
 	const updateSubmissionItem = async (completed: boolean) => {
-		if (submissionItems.value.length === 0) {
+		if (submissions.value.submissionItemsResponse.length === 0) {
 			await createSubmissionItem(completed);
 			return;
 		}
-
 		try {
-			await updateSubmissionItemCall(submissionItems.value[0].id, completed);
-			submissionItems.value[0].completed = completed;
+			await updateSubmissionItemCall(
+				submissions.value.submissionItemsResponse[0].id,
+				completed
+			);
+			submissions.value.submissionItemsResponse[0].completed = completed;
 		} catch (error) {
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}
 	};
 
-	const completed = computed(() => {
-		if (submissionItems.value.length === 0) {
-			return false;
-		}
-
-		return submissionItems.value[0].completed;
+	const editable = computed(() => {
+		return !dueDate || new Date() < new Date(dueDate);
 	});
 
 	onMounted(() => {
@@ -59,10 +63,10 @@ export const useSubmissionContentElementState = (id: string) => {
 	});
 
 	return {
-		submissionItems,
+		submissions,
 		fetchSubmissionItems,
 		updateSubmissionItem,
-		completed,
 		loading,
+		editable,
 	};
 };

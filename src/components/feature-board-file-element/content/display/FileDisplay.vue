@@ -5,26 +5,32 @@
 			:preview-url="fileProperties.previewUrl"
 			:name="fileProperties.name"
 			:is-edit-mode="isEditMode"
+			:element="fileProperties.element"
 		/>
 		<VideoDisplay
 			v-else-if="canPlayVideo"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
 		/>
-		<DefaultDisplay v-else :name="fileProperties.name" />
+		<FileDescription
+			:name="fileProperties.name"
+			:caption="fileProperties.element.content.caption"
+			:show-title="!fileProperties.previewUrl"
+			:is-edit-mode="isEditMode"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
-import DefaultDisplay from "./default-display/DefaultDisplay.vue";
+import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, DefaultDisplay, VideoDisplay },
+	components: { ImageDisplay, FileDescription, VideoDisplay },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,

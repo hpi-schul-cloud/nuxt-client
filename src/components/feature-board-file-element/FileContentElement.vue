@@ -15,6 +15,8 @@
 			:file-properties="fileProperties"
 			@fetch:file="onFetchFile"
 			:is-edit-mode="isEditMode"
+			@update:alternativeText="onUpdateAlternativeText"
+			@update:caption="onUpdateCaption"
 		/>
 		<FileUpload
 			v-else-if="isEditMode"
@@ -106,6 +108,7 @@ export default defineComponent({
 					fileRecord.value.securityCheckStatus
 				),
 				mimeType: fileRecord.value.mimeType,
+				element: props.element,
 			};
 		});
 
@@ -177,6 +180,14 @@ export default defineComponent({
 			await fetchFile();
 		};
 
+		const onUpdateAlternativeText = (value: string) => {
+			modelValue.value.alternativeText = value;
+		};
+
+		const onUpdateCaption = (value: string) => {
+			modelValue.value.caption = value;
+		};
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -190,6 +201,8 @@ export default defineComponent({
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
+			onUpdateAlternativeText,
+			onUpdateCaption,
 			elementPositionProps,
 		};
 	},

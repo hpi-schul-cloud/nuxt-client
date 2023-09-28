@@ -1,11 +1,13 @@
 <template>
-	<v-icon
-		data-testid="board-file-element-edit-menu-download"
+	<v-btn
 		@click="onDownload"
 		:disabled="!isDownloadAllowed"
+		data-testid="board-file-element-edit-menu-download"
 		class="float-right"
-		>{{ mdiTrayArrowDown }}
-	</v-icon>
+		icon
+	>
+		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
+	</v-btn>
 </template>
 
 <script lang="ts">

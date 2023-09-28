@@ -4,7 +4,9 @@ import { Envs } from "@/store/types/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
@@ -25,6 +27,7 @@ describe("ContentElementList", () => {
 		const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: createMock<Envs>({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			}),
 		});
 
@@ -32,7 +35,7 @@ describe("ContentElementList", () => {
 			...createComponentMocks({}),
 			propsData: { ...props },
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
 		});
@@ -60,6 +63,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.SubmissionContainer,
 				component: SubmissionContentElement,
 			},
+			{
+				elementType: ContentElementType.ExternalTool,
+				component: ExternalToolElement,
+			},
 		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
@@ -83,6 +90,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.SubmissionContainer,
 				component: SubmissionContentElement,
+			},
+			{
+				elementType: ContentElementType.ExternalTool,
+				component: ExternalToolElement,
 			},
 		])(
 			"should propagate isEditMode to child elements",

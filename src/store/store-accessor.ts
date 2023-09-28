@@ -16,6 +16,7 @@ import EnvConfigModule from "@/store/env-config";
 import ExternalToolsModule from "@/store/external-tools";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
+import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
@@ -51,6 +52,7 @@ export let envConfigModule: EnvConfigModule;
 export let externalToolsModule: ExternalToolsModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
+export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
@@ -82,6 +84,7 @@ export function initializeStores(store: Store<any>): void {
 	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
+	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
@@ -116,6 +119,7 @@ export const modules = {
 	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
+	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,

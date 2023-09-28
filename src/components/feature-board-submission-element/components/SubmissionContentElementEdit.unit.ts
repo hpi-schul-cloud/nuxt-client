@@ -1,8 +1,14 @@
+import Vue from "vue";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { DateTimePicker } from "@feature-date-time-picker";
+
+const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionContentElementEdit", () => {
 	const setup = () => {
@@ -13,14 +19,20 @@ describe("SubmissionContentElementEdit", () => {
 			isFirstElement: false,
 			isLastElement: false,
 			hasMultipleElements: false,
+			submissions: mockedSubmissions,
+			editable: true,
+			loading: true,
 		};
-		const wrapper = shallowMount(SubmissionContentElementEdit, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-		});
+		const wrapper = shallowMount(
+			SubmissionContentElementEdit as MountOptions<Vue>,
+			{
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				provide: {
+					[I18N_KEY.valueOf()]: i18nMock,
+				},
+			}
+		);
 
 		return {
 			wrapper,
@@ -40,32 +52,12 @@ describe("SubmissionContentElementEdit", () => {
 		expect(submissionContentElement.exists()).toBe(true);
 	});
 
-	it("should display icon", async () => {
+	it("should render DateTimePicker", () => {
 		const { wrapper } = setup();
 
-		const submissionIcon = wrapper.find("v-icon-stub");
+		const dateTimePicker = wrapper.findComponent(DateTimePicker);
 
-		expect(submissionIcon.exists()).toBe(true);
-	});
-
-	it("should find submission tag", () => {
-		const { wrapper } = setup();
-
-		const submissionTag = wrapper.find("span").text();
-
-		expect(submissionTag).toBe(
-			wrapper.vm.$t("components.cardElement.submissionElement")
-		);
-	});
-
-	it("should find dueDate text", () => {
-		const { wrapper, dueDate } = setup();
-
-		const submissionDueDate = wrapper
-			.find("[data-testid=board-submission-element-due-date]")
-			.text();
-
-		expect(submissionDueDate).toBe(dueDate);
+		expect(dateTimePicker.exists()).toBe(true);
 	});
 
 	it("should render the SubmissionContentElementMenu", () => {
@@ -104,6 +96,36 @@ describe("SubmissionContentElementEdit", () => {
 			.props("hasMultipleElements");
 
 		expect(hasMultipleElements).toBe(hasMultipleElementsProp);
+	});
+
+	it("should hand over submissions prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const submissions = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("submissions");
+
+		expect(submissions).toBe(mockedSubmissions);
+	});
+
+	it("should hand over loading prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const loading = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("loading");
+
+		expect(loading).toBe(true);
+	});
+
+	it("should hand over editable prop to SubmissionItemsTeacherDisplay", () => {
+		const { wrapper } = setup();
+
+		const editable = wrapper
+			.findComponent(SubmissionItemsTeacherDisplay)
+			.props("editable");
+
+		expect(editable).toBe(true);
 	});
 
 	it("should forward delete:element from SubmissionContentElementMenu", () => {

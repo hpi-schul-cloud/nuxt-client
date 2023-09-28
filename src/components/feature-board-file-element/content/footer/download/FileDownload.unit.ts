@@ -35,6 +35,14 @@ describe("FileDownload", () => {
 		expect(icon.exists()).toBe(true);
 	});
 
+	it("should display button", () => {
+		const { wrapper } = setup();
+
+		const button = wrapper.find("v-btn");
+
+		expect(button.exists()).toBe(true);
+	});
+
 	describe("when download is allowed", () => {
 		describe("when download icon is clicked", () => {
 			const setup = () => {
@@ -105,10 +113,10 @@ describe("FileDownload", () => {
 			};
 		};
 
-		it("should download icon be disabled", () => {
+		it("should be disabled", () => {
 			const { wrapper } = setup();
-			const icon = wrapper.find("v-icon");
-			expect(icon.attributes().disabled).toEqual("true");
+			const button = wrapper.find("v-btn");
+			expect(button.attributes().disabled).toEqual("true");
 		});
 	});
 });

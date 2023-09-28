@@ -186,6 +186,7 @@ export default defineComponent({
 			() =>
 				authModule.getUserPermissions.includes("join_meeting") &&
 				(!authModule.getUserRoles.includes("expert") ||
+					authModule.getUserRoles.length > 1 ||
 					isWaitingRoomActive.value)
 		);
 

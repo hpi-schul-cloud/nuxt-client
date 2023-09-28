@@ -6,36 +6,31 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="auto"
-			attach
-			@input="handleMenuToggle"
+			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
+					ref="inputField"
 					:value="formattedDate"
+					v-bind="attrs"
+					v-on="on"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="$t('common.placeholder.dateformat')"
-					data-testid="date-input"
-					readonly
-					filled
-					clearable
-					v-bind="attrs"
-					v-on="on"
-					:rules="rules"
-					validate-on-blur
-					autocomplete="off"
-					ref="inputField"
 					:class="{ 'menu-open': showDateDialog }"
-					@blur="handleBlur"
+					append-icon="$mdiCalendar"
+					readonly
+					:rules="rules"
+					data-testid="date-input"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
 					@keydown.tab="showDateDialog = false"
-					@update:error="handleError"
+					@update:error="onError"
 				/>
 			</template>
 			<v-date-picker
-				v-model="model"
+				v-model="modelValue"
 				:aria-expanded="showDateDialog"
 				color="primary"
 				no-title
@@ -44,7 +39,7 @@
 				:min="minDate"
 				:max="maxDate"
 				show-adjacent-months
-				@input="handleInput"
+				@input="onInput"
 			/>
 		</v-menu>
 	</div>
@@ -57,6 +52,7 @@ import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -68,27 +64,28 @@ export default defineComponent({
 		minDate: { type: String },
 		maxDate: { type: String },
 	},
-	emits: ["input", "error", "valid"],
+	emits: ["update:date"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const i18n = injectStrict(I18N_KEY);
-
 		const locale = i18n.locale;
 
-		const t = (key: string) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
-
-		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-		const model = ref(props.date);
+		const modelValue = computed<string>({
+			get() {
+				return props.date;
+			},
+			set: (newValue) => {
+				emitDateDebounced(newValue);
+			},
+		});
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
+		const valid = ref(true);
 
 		const formattedDate = computed(() => {
-			return model.value ? dayjs(model.value).format(t("format.date")) : "";
+			return modelValue.value
+				? dayjs(modelValue.value).format(t("format.date"))
+				: "";
 		});
 
 		const focusDatePicker = () => {
@@ -116,23 +113,27 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleBlur = useDebounceFn(() => {
-			const date = model.value || "";
-			emit("input", date);
-		}, 200);
-
-		const handleInput = async () => {
+		const onInput = async () => {
 			inputField.value?.focus();
 			await closeMenu();
 		};
 
-		const handleError = (hasError: boolean) => {
-			hasError ? emit("error") : emit("valid");
+		const onError = (hasError: boolean) => {
+			valid.value = !hasError;
 		};
 
-		const handleMenuToggle = () => {
+		/**
+		 * Necessary because we need to wait for update:error
+		 */
+		const emitDateDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:date", newValue);
+			}
+		}, 50);
+
+		const onMenuToggle = () => {
 			if (showDateDialog.value) {
-				emit("valid");
+				valid.value = true;
 			}
 		};
 
@@ -143,32 +144,31 @@ export default defineComponent({
 		return {
 			mdiCalendarClock,
 			locale,
-			model,
+			modelValue,
 			rules,
 			showDateDialog,
 			formattedDate,
 			inputField,
 			focusDatePicker,
-			handleBlur,
-			handleInput,
-			handleError,
-			handleMenuToggle,
+			onInput,
+			onError,
+			onMenuToggle,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/components/VTextField/_variables.scss";
-
 ::v-deep {
 	.menu-open {
-		label {
-			transform: $text-field-filled-full-width-label-active-transform;
-		}
 		.v-text-field__details {
 			display: none;
 		}
+	}
+
+	.v-input__icon--append .v-icon {
+		width: 20px;
+		height: 20px;
 	}
 }
 </style>
