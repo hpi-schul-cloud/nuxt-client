@@ -12,4 +12,6 @@ export const submissionContainerElementResponseFactory =
 		type: ContentElementType.SubmissionContainer,
 		content: submissionContainerElementContent.build(),
 		timestamps: timestampsResponseFactory.build(),
+		users: [],
+		elements: [],
 	}));

@@ -43,7 +43,53 @@ export const useCardState = (
 	const fetchCard = async (id: string): Promise<void> => {
 		await delay(100);
 		try {
-			cardState.card = await fetchCardFromApi(id);
+			// cardState.card = await fetchCardFromApi(id);
+
+			cardState.card = {
+				id: "649549787e10d74311c95097",
+				title: "mocked Card",
+				height: 478.296875,
+				visibility: {
+					publishedAt: "",
+				},
+				elements: [
+					{
+						id: "650d87a82424490eaa268d99",
+						content: {
+							dueDate: "2023-10-26T23:00:00.000Z",
+						},
+						timestamps: {
+							lastUpdatedAt: "2023-09-28T11:24:41.483Z",
+							createdAt: "2023-09-28T11:24:41.482Z",
+						},
+						type: ContentElementType.SubmissionContainer,
+						// users not included in students response! or empty?
+						users: [
+							{
+								firstName: "Marla",
+								lastName: "Mathe",
+								userId: "0000d224816abba584714c9c",
+							},
+							{
+								firstName: "Susi",
+								lastName: "Sonnenschein",
+								userId: "xyz",
+							},
+						],
+						elements: [
+							{
+								id: "64fed193e397ef5955d4fee9",
+								timestamps: {
+									lastUpdatedAt: "2023-09-28T11:24:41.483Z",
+									createdAt: "2023-09-28T11:24:41.482Z",
+								},
+								completed: true,
+								userId: "0000d224816abba584714c9c",
+							},
+						],
+					},
+				],
+			};
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),

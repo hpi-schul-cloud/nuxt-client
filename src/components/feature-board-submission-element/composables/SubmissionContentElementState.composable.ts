@@ -1,10 +1,16 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, computed, onMounted } from "vue";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import {
+	SubmissionsResponse,
+	SubmissionItemResponse,
+	UserDataResponse,
+} from "@/serverApi/v3";
 
 export const useSubmissionContentElementState = (
 	id: string,
+	elements: Array<SubmissionItemResponse>,
+	users: Array<UserDataResponse>,
 	dueDate?: string
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
@@ -18,6 +24,12 @@ export const useSubmissionContentElementState = (
 		users: [],
 	});
 	const loading = ref(true);
+
+	submissions.value = {
+		submissionItemsResponse: elements,
+		users: users,
+	};
+	loading.value = false;
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
@@ -44,6 +56,8 @@ export const useSubmissionContentElementState = (
 			return;
 		}
 		try {
+			// todo handle this like every other elements content change
+			// remove endpoint from API!
 			await updateSubmissionItemCall(
 				submissions.value.submissionItemsResponse[0].id,
 				completed
@@ -59,7 +73,7 @@ export const useSubmissionContentElementState = (
 	});
 
 	onMounted(() => {
-		fetchSubmissionItems(id);
+		// fetchSubmissionItems(id);
 	});
 
 	return {

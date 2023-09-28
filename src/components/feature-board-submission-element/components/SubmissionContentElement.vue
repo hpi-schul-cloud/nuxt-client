@@ -77,6 +77,8 @@ export default defineComponent({
 		const { loading, submissions, editable, updateSubmissionItem } =
 			useSubmissionContentElementState(
 				element.value.id,
+				element.value.elements,
+				element.value.users || [],
 				element.value.content.dueDate
 			);
 
