@@ -65,7 +65,7 @@
 
 
 
-2. Some vuetify components props' usage have been changed. The detailed list can be found at TODO: add other md file link here
+2. Some vuetify components props' usage have been changed. The detailed list can be found [here](VUE3-UPGRADE-SUMMARY.md)
    - These components:
      - `v-menu`
      - `v-list`
