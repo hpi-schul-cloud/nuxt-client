@@ -7,7 +7,7 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels v-else class="rounded-0 rounded-b-sm">
+		<VExpansionPanels v-else flat class="rounded-0 rounded-b-sm">
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
