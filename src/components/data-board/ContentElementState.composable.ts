@@ -18,7 +18,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const { updateElementCall } = useBoardApi();
 
 	watchDebounced(
-		elementRef.value,
+		modelValue.value,
 		async (elementRef) => {
 			await updateElement(unref(elementRef));
 		},
