@@ -56,7 +56,7 @@ export default defineComponent({
 	components: { BoardMenu, BoardMenuAction },
 	props: {
 		elementId: { type: String, required: true },
-		name: { type: String, required: true },
+		name: { type: String, required: false },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
 		hasMultipleElements: { type: Boolean, required: true },

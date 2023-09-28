@@ -21,7 +21,7 @@
 			<slot
 				v-if="isEditMode"
 				name="menu"
-				:elementName="fileProperties?.name"
+				:elementName="fileProperties.name"
 			></slot>
 		</FileContent>
 		<FileUpload
@@ -29,11 +29,7 @@
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		>
-			<slot
-				v-if="isEditMode"
-				name="menu"
-				:elementName="fileProperties?.name"
-			></slot>
+			<slot name="menu"></slot>
 		</FileUpload>
 	</v-card>
 </template>
