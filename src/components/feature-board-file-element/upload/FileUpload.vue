@@ -1,8 +1,7 @@
 <template>
-	<div>
-		<div v-if="!fileWasPicked">
+	<v-app-bar flat color="rgba(0, 0, 0, 0)">
+		<div v-if="!fileWasPicked" class="w-100">
 			<FilePicker
-				class="mr-10"
 				@update:file="onFileSelect"
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
@@ -13,7 +12,11 @@
 				indeterminate
 			/>
 		</div>
-	</div>
+
+		<v-spacer />
+
+		<slot></slot>
+	</v-app-bar>
 </template>
 
 <script lang="ts">
@@ -64,7 +67,7 @@ export default defineComponent({
 <style scoped>
 .progress-bar {
 	min-height: 52px;
-	margin: 0px 48px 0px 16px;
+	margin-left: 16px;
 	display: flex;
 	align-items: center;
 }

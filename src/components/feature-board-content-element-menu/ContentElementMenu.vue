@@ -1,43 +1,41 @@
 <template>
-	<div class="menu">
-		<BoardMenu scope="element">
-			<BoardMenuAction
-				v-if="hasMultipleElements && !isFirstElement"
-				data-testid="board-file-element-edit-menu-move-up"
-				@click="onMoveElementUp"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiArrowCollapseUp }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.moveUp") }}
-			</BoardMenuAction>
-			<BoardMenuAction
-				v-if="hasMultipleElements && !isLastElement"
-				data-testid="board-file-element-edit-menu-move-down"
-				@click="onMoveElementDown"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiArrowCollapseDown }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.moveDown") }}
-			</BoardMenuAction>
-			<BoardMenuAction
-				data-testid="board-file-element-edit-menu-delete"
-				@click="onDelete"
-			>
-				<template #icon>
-					<VIcon>
-						{{ mdiTrashCanOutline }}
-					</VIcon>
-				</template>
-				{{ $t("components.board.action.delete") }}
-			</BoardMenuAction>
-		</BoardMenu>
-	</div>
+	<BoardMenu scope="element">
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isFirstElement"
+			data-testid="board-file-element-edit-menu-move-up"
+			@click="onMoveElementUp"
+		>
+			<template #icon>
+				<VIcon>
+					{{ mdiArrowCollapseUp }}
+				</VIcon>
+			</template>
+			{{ $t("components.board.action.moveUp") }}
+		</BoardMenuAction>
+		<BoardMenuAction
+			v-if="hasMultipleElements && !isLastElement"
+			data-testid="board-file-element-edit-menu-move-down"
+			@click="onMoveElementDown"
+		>
+			<template #icon>
+				<VIcon>
+					{{ mdiArrowCollapseDown }}
+				</VIcon>
+			</template>
+			{{ $t("components.board.action.moveDown") }}
+		</BoardMenuAction>
+		<BoardMenuAction
+			data-testid="board-file-element-edit-menu-delete"
+			@click="onDelete"
+		>
+			<template #icon>
+				<VIcon>
+					{{ mdiTrashCanOutline }}
+				</VIcon>
+			</template>
+			{{ $t("components.board.action.delete") }}
+		</BoardMenuAction>
+	</BoardMenu>
 </template>
 
 <script lang="ts">
@@ -97,11 +95,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.menu {
-	position: absolute;
-	top: 8px;
-	right: 16px;
-}
-</style>

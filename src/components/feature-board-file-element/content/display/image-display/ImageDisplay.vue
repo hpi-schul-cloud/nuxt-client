@@ -6,6 +6,10 @@
 			:src="previewUrl"
 			:alt="alternativeText"
 		/>
+		<v-app-bar flat color="rgba(0, 0, 0, 0)" class="menu w-100">
+			<v-spacer></v-spacer>
+			<slot></slot>
+		</v-app-bar>
 	</div>
 </template>
 
@@ -54,5 +58,9 @@ export default defineComponent({
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
+}
+.menu {
+	position: absolute;
+	top: 0px;
 }
 </style>
