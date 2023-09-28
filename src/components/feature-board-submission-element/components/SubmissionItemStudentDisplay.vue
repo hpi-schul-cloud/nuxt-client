@@ -1,14 +1,6 @@
 <template>
 	<div class="rounded-b border-top">
-		<v-skeleton-loader
-			v-if="loading"
-			class="mt-5 ml-5 mb-6"
-			type="image"
-			width="120"
-			height="22"
-		/>
 		<v-checkbox
-			v-else
 			v-model="modelValue"
 			class="px-4"
 			:disabled="!editable"
@@ -31,10 +23,6 @@ export default defineComponent({
 		},
 		submissions: {
 			type: Object as PropType<SubmissionsResponse>,
-			required: true,
-		},
-		loading: {
-			type: Boolean,
 			required: true,
 		},
 	},

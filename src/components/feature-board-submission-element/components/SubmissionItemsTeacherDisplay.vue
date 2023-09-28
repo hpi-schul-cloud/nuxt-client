@@ -1,13 +1,6 @@
 <template>
 	<div class="white rounded-b-sm">
-		<v-skeleton-loader
-			v-if="loading"
-			class="mt-5 ml-5 mb-6"
-			type="image"
-			width="120"
-			height="22"
-		/>
-		<VExpansionPanels v-else>
+		<VExpansionPanels>
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
@@ -89,10 +82,6 @@ type SubmissionInfo = {
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
 	props: {
-		loading: {
-			type: Boolean,
-			required: true,
-		},
 		submissions: {
 			type: Object as PropType<SubmissionsResponse>,
 			required: true,

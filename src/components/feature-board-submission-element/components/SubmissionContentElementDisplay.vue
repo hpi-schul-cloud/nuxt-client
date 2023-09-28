@@ -13,14 +13,12 @@
 			v-if="isStudent"
 			:submissions="submissions"
 			:editable="editable"
-			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
 			:submissions="submissions"
 			:editable="editable"
-			:loading="loading"
 		/>
 	</div>
 </template>
@@ -46,10 +44,6 @@ export default defineComponent({
 	props: {
 		submissions: {
 			type: Object as PropType<SubmissionsResponse>,
-			required: true,
-		},
-		loading: {
-			type: Boolean,
 			required: true,
 		},
 		editable: {

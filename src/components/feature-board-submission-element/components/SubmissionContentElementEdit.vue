@@ -23,7 +23,6 @@
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
 			:editable="editable"
-			:loading="loading"
 		/>
 	</div>
 </template>
@@ -54,10 +53,6 @@ export default defineComponent({
 			required: true,
 		},
 		editable: {
-			type: Boolean,
-			required: true,
-		},
-		loading: {
 			type: Boolean,
 			required: true,
 		},

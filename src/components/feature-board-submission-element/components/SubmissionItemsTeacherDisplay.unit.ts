@@ -8,16 +8,11 @@ import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
 const mockedSubmissions = submissionsResponseFactory.build();
 
 describe("SubmissionItemsTeacherDisplay", () => {
-	const setup = (
-		loading = false,
-		submissions = mockedSubmissions,
-		editable = true
-	) => {
+	const setup = (submissions = mockedSubmissions, editable = true) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
 			editable: editable,
-			loading: loading,
 			submissions: submissions,
 		};
 
@@ -41,77 +36,44 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		expect(component.exists()).toBe(true);
 	});
 
-	describe("while loading", () => {
-		it("should show loading skeleton", () => {
-			const loading = true;
-			const { wrapper } = setup(loading);
+	it("should show submissionItems", () => {
+		const loading = false;
+		const { wrapper } = setup();
 
-			const skeleton = wrapper.findComponent({ name: "v-skeleton-loader" });
-			expect(skeleton.exists()).toBe(true);
+		const submissionItems = wrapper.findComponent({
+			name: "v-expansion-panels",
 		});
-
-		it("should not show submissionItems", () => {
-			const loading = true;
-			const { wrapper } = setup(loading);
-
-			const submissionItems = wrapper.findComponent({
-				name: "v-expansion-panels",
-			});
-			expect(submissionItems.exists()).toBe(false);
-		});
+		expect(submissionItems.exists()).toBe(true);
 	});
 
-	describe("after loading", () => {
-		it("should not show loading skeleton", () => {
-			const loading = false;
-			const { wrapper } = setup(loading);
+	it("should show one submissionItem per student", async () => {
+		const loading = false;
+		const numbersOfStudents = 10;
+		const submissions = submissionsResponseFactory.build(
+			{},
+			{
+				transient: {
+					numberOfSubmissionItems: 1,
+					numberOfUsers: numbersOfStudents,
+				},
+			}
+		);
+		const { wrapper } = setup(submissions);
 
-			const skeleton = wrapper.findComponent({ name: "v-skeleton-loader" });
-			expect(skeleton.exists()).toBe(false);
+		const panelHeader = wrapper.findComponent({
+			name: "v-expansion-panel-header",
 		});
+		expect(panelHeader.exists()).toBe(true);
 
-		it("should show submissionItems", () => {
-			const loading = false;
-			const { wrapper } = setup(loading);
+		await panelHeader.trigger("click");
 
-			const submissionItems = wrapper.findComponent({
-				name: "v-expansion-panels",
-			});
-			expect(submissionItems.exists()).toBe(true);
-		});
+		const submissionItems = wrapper.findAll('[data-testid="submission-item"]');
 
-		it("should show one submissionItem per student", async () => {
-			const loading = false;
-			const numbersOfStudents = 10;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: numbersOfStudents,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
-
-			const panelHeader = wrapper.findComponent({
-				name: "v-expansion-panel-header",
-			});
-			expect(panelHeader.exists()).toBe(true);
-
-			await panelHeader.trigger("click");
-
-			const submissionItems = wrapper.findAll(
-				'[data-testid="submission-item"]'
-			);
-
-			expect(submissionItems).toHaveLength(numbersOfStudents);
-		});
+		expect(submissionItems).toHaveLength(numbersOfStudents);
 	});
 
 	describe("if dueDate has not expired yet", () => {
 		it("should show no expired-chip", () => {
-			const loading = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
 				{
@@ -122,7 +84,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions);
+			const { wrapper } = setup(submissions);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
@@ -131,7 +93,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show open-chip if there are open submissionItems", () => {
-			const loading = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
 				{
@@ -142,7 +103,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions);
+			const { wrapper } = setup(submissions);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
@@ -151,7 +112,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show no open-chip if there are no open submissionItems", () => {
-			const loading = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
 				{
@@ -162,7 +122,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions);
+			const { wrapper } = setup(submissions);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
@@ -171,7 +131,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show completed-chip if there are completed submissionItems", () => {
-			const loading = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
 				{
@@ -182,7 +141,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions);
+			const { wrapper } = setup(submissions);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
@@ -191,7 +150,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show no completed-chip if there are no completed submissionItems", () => {
-			const loading = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
 				{
@@ -202,7 +160,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions);
+			const { wrapper } = setup(submissions);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
@@ -213,7 +171,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("if dueDate has expired", () => {
 		it("should show no open-chip", () => {
-			const loading = false;
 			const editable = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
@@ -225,7 +182,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions, editable);
+			const { wrapper } = setup(submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
@@ -234,7 +191,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show expired-chip if there are expired submissionItems", () => {
-			const loading = false;
 			const editable = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
@@ -246,7 +202,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions, editable);
+			const { wrapper } = setup(submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
@@ -255,7 +211,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show no expired-chip if there are no expired submissionItems", () => {
-			const loading = false;
 			const editable = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
@@ -267,7 +222,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions, editable);
+			const { wrapper } = setup(submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
@@ -276,7 +231,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show completed-chip if there are completed submissionItems", () => {
-			const loading = false;
 			const editable = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
@@ -288,7 +242,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions, editable);
+			const { wrapper } = setup(submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
@@ -297,7 +251,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show no completed-chip if there are no completed submissionItems", () => {
-			const loading = false;
 			const editable = false;
 			const submissions = submissionsResponseFactory.build(
 				{},
@@ -309,7 +262,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 					},
 				}
 			);
-			const { wrapper } = setup(loading, submissions, editable);
+			const { wrapper } = setup(submissions, editable);
 
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",

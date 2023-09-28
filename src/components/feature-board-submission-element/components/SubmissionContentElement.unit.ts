@@ -134,18 +134,6 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over loading state to SubmissionContentElementDisplay", async () => {
-			const { wrapper } = setup();
-
-			const loading = wrapper
-				.findComponent(SubmissionContentElementDisplay)
-				.props("loading");
-
-			expect(loading).toBe(
-				mockedUseSubmissionContentElementStateResponse.loading
-			);
-		});
-
 		it("should hand over editable state to SubmissionContentElementDisplay", async () => {
 			const { wrapper } = setup();
 
@@ -262,18 +250,6 @@ describe("SubmissionContentElement", () => {
 
 			expect(completed).toBe(
 				mockedUseSubmissionContentElementStateResponse.submissions
-			);
-		});
-
-		it("should hand over loading state to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const loading = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("loading");
-
-			expect(loading).toBe(
-				mockedUseSubmissionContentElementStateResponse.loading
 			);
 		});
 

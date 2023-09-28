@@ -14,7 +14,6 @@
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
 				:dueDate="modelValue.dueDate"
-				:loading="loading"
 				:submissions="submissions"
 				:editable="editable"
 				@update:completed="onUpdateCompleted"
@@ -22,7 +21,6 @@
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
 				:dueDate="modelValue.dueDate"
-				:loading="loading"
 				:submissions="submissions"
 				:editable="editable"
 				:isFirstElement="isFirstElement"
@@ -74,7 +72,7 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissions, editable, updateSubmissionItem } =
+		const { submissions, editable, updateSubmissionItem } =
 			useSubmissionContentElementState(
 				element.value.id,
 				element.value.elements,
@@ -120,7 +118,6 @@ export default defineComponent({
 			modelValue,
 			submissionContentElement,
 			submissions,
-			loading,
 			editable,
 			onDeleteElement,
 			onKeydownArrow,

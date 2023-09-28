@@ -21,7 +21,6 @@ describe("SubmissionContentElementEdit", () => {
 			hasMultipleElements: false,
 			submissions: mockedSubmissions,
 			editable: true,
-			loading: true,
 		};
 		const wrapper = shallowMount(
 			SubmissionContentElementEdit as MountOptions<Vue>,
@@ -106,16 +105,6 @@ describe("SubmissionContentElementEdit", () => {
 			.props("submissions");
 
 		expect(submissions).toBe(mockedSubmissions);
-	});
-
-	it("should hand over loading prop to SubmissionItemsTeacherDisplay", () => {
-		const { wrapper } = setup();
-
-		const loading = wrapper
-			.findComponent(SubmissionItemsTeacherDisplay)
-			.props("loading");
-
-		expect(loading).toBe(true);
 	});
 
 	it("should hand over editable prop to SubmissionItemsTeacherDisplay", () => {
