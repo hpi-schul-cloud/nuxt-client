@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar flat color="rgba(0, 0, 0, 0)">
+	<v-app-bar flat color="transparent">
 		<div v-if="!fileWasPicked" class="w-100">
 			<FilePicker
 				@update:file="onFileSelect"

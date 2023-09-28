@@ -1,6 +1,6 @@
 <template>
 	<div class="grey lighten-4">
-		<v-app-bar v-if="showTitle" flat color="rgba(0, 0, 0, 0)">
+		<v-app-bar v-if="showTitle" flat color="transparent">
 			<v-toolbar-title data-testid="board-file-element-display" inactive>
 				<v-icon
 					color="black"

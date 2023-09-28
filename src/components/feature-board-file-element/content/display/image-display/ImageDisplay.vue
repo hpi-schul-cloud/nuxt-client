@@ -6,7 +6,7 @@
 			:src="previewUrl"
 			:alt="alternativeText"
 		/>
-		<v-app-bar flat color="rgba(0, 0, 0, 0)" class="menu w-100">
+		<v-app-bar flat color="transparent" class="menu w-100">
 			<v-spacer></v-spacer>
 			<slot></slot>
 		</v-app-bar>
