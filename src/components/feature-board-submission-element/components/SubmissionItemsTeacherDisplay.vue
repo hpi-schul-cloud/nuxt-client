@@ -46,7 +46,6 @@
 						:items="items"
 						:disable-pagination="true"
 						:hide-default-footer="true"
-						:multi-sort="true"
 					>
 						<template #[`item.status`]="{ item }">
 							<v-chip
@@ -217,10 +216,10 @@ export default defineComponent({
 		}
 	}
 
-	.v-data-table-header {
-		span:first-child {
-			display: block;
-		}
-	}
+	// .v-data-table-header {
+	// 	span:first-child {
+	// 		display: block;
+	// 	}
+	// }
 }
 </style>
