@@ -6,14 +6,14 @@
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>
 		</div>
-		<div class="progress-bar" v-else>
+		<div class="progress-bar w-100" v-else>
 			<v-progress-linear
 				data-testid="board-file-element-progress-bar"
 				indeterminate
 			/>
 		</div>
 
-		<v-spacer />
+		<v-spacer></v-spacer>
 
 		<slot></slot>
 	</v-app-bar>
