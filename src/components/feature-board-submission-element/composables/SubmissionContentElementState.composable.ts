@@ -1,6 +1,6 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import {
 	SubmissionsResponse,
 	SubmissionItemResponse,
@@ -9,37 +9,17 @@ import {
 
 export const useSubmissionContentElementState = (
 	id: string,
-	elements: Array<SubmissionItemResponse>,
+	submissionItems: Array<SubmissionItemResponse>,
 	users: Array<UserDataResponse>,
 	dueDate?: string
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
-	const {
-		fetchSubmissionItemsCall,
-		createSubmissionItemCall,
-		updateSubmissionItemCall,
-	} = useSubmissionItemApi();
+	const { createSubmissionItemCall, updateSubmissionItemCall } =
+		useSubmissionItemApi();
 	const submissions = ref<SubmissionsResponse>({
-		submissionItemsResponse: [],
-		users: [],
-	});
-	const loading = ref(true);
-
-	submissions.value = {
-		submissionItemsResponse: elements,
+		submissionItemsResponse: submissionItems,
 		users: users,
-	};
-	loading.value = false;
-
-	const fetchSubmissionItems = async (id: string): Promise<void> => {
-		try {
-			submissions.value = await fetchSubmissionItemsCall(id);
-		} catch (error) {
-			notifyWithTemplate("notLoaded", "boardElement")();
-		} finally {
-			loading.value = false;
-		}
-	};
+	});
 
 	const createSubmissionItem = async (completed: boolean) => {
 		try {
@@ -70,15 +50,9 @@ export const useSubmissionContentElementState = (
 		return !dueDate || new Date() < new Date(dueDate);
 	});
 
-	onMounted(() => {
-		// fetchSubmissionItems(id);
-	});
-
 	return {
 		submissions,
-		fetchSubmissionItems,
 		updateSubmissionItem,
-		loading,
 		editable,
 	};
 };
