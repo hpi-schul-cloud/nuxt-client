@@ -620,6 +620,7 @@ export enum ContentElementType {
     File = 'file',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
+    SubmissionItem = 'submissionItem',
     ExternalTool = 'externalTool'
 }
 
@@ -4070,6 +4071,8 @@ export interface SubmissionItemResponse {
      * @memberof SubmissionItemResponse
      */
     userId: string;
+
+    type: ContentElementType;
 }
 /**
  *
