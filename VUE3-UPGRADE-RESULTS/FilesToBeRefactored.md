@@ -20,7 +20,12 @@
    - **Recommended Solution:** Wait until it's upcoming release.
    - **Estimation time for refactoring:** _TBD_
 
-4. [v-model breaking change](https://v3-migration.vuejs.org/breaking-changes/v-model.html)
+4. `src/pages/rooms/RoomOverview.page.vue`
+   - The moving avatar components are based on the `this.$refs` selector. The `$refs` object's properties have been changed in vue-3. So we need to find another way to spot the dragging object properties instead of using `$refs`. This whole page refactoring might be necessary.
+   - **Recommended Solution:** Find another way to spot the dragging component properties. Especially `getElementNameByRef` method should be replaced.
+   - **Estimation time for refactoring:** _TBD_
+
+5. [v-model breaking change](https://v3-migration.vuejs.org/breaking-changes/v-model.html)
    - Some components use `model property` inside which is changed in vue-3 and they need some tiny refactorings.
    - These components:
      - `src/components/atoms/vCustomAutocomplete.vue`
@@ -38,6 +43,8 @@
      - `src/components/organisms/Pagination.vue`
      - `src/components/organisms/vCustomDialog.vue`
    - **Estimation time for refactoring:** _TBD_
+
+
 
 ## VUETIFY BASED REFACTORINGS
 
