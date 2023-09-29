@@ -208,6 +208,22 @@ export default defineComponent({
 		background-color: transparent;
 	}
 
+	.v-data-table
+		> .v-data-table__wrapper
+		tbody
+		tr:first-child:hover
+		td:last-child {
+		border-top-right-radius: 0;
+	}
+
+	.v-data-table
+		> .v-data-table__wrapper
+		tbody
+		tr:first-child:hover
+		td:first-child {
+		border-top-left-radius: 0;
+	}
+
 	.v-expansion-panel-content__wrap {
 		padding: 0;
 	}
