@@ -40,7 +40,8 @@ export const useSubmissionContentElementState = (
 				submissions.value.submissionItemsResponse[0].id,
 				completed
 			);
-			submissions.value.submissionItemsResponse[0].completed = completed;
+			submissions.value.submissionItemsResponse[0].content.completed =
+				completed;
 		} catch (error) {
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}

@@ -142,13 +142,13 @@ export default defineComponent({
 						return submissionInfo as SubmissionInfo;
 					}
 
-					if (submission.completed) {
+					if (submission.content.completed) {
 						submissionInfo.status = "completed";
 					}
-					if (!submission.completed && props.editable) {
+					if (!submission.content.completed && props.editable) {
 						submissionInfo.status = "open";
 					}
-					if (!submission.completed && !props.editable) {
+					if (!submission.content.completed && !props.editable) {
 						submissionInfo.status = "expired";
 					}
 

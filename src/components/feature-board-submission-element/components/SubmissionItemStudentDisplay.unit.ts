@@ -81,7 +81,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				.attributes("aria-checked");
 
 			expect(checked).toEqual(
-				mockedSubmissions.submissionItemsResponse[0].completed.toString()
+				mockedSubmissions.submissionItemsResponse[0].content.completed.toString()
 			);
 		});
 	});

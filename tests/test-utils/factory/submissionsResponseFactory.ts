@@ -31,7 +31,9 @@ export const submissionsResponseFactory = Factory.define<
 		submissionItemsResponse.push(
 			submissionItemResponseFactory.build({
 				userId: userId,
-				completed: completed,
+				content: {
+					completed: completed,
+				},
 			})
 		);
 		count++;

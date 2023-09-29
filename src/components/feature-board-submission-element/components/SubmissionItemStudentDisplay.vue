@@ -35,7 +35,7 @@ export default defineComponent({
 				}
 
 				const completionState =
-					props.submissions.submissionItemsResponse[0].completed;
+					props.submissions.submissionItemsResponse[0].content.completed;
 				return completionState;
 			},
 			set(newValue) {

@@ -63,7 +63,7 @@ export const useCardState = (
 							createdAt: "2023-09-28T11:24:41.482Z",
 						},
 						type: ContentElementType.SubmissionContainer,
-						// users not included in students response! or empty?
+						// users probably empty in students response
 						users: [
 							{
 								firstName: "Marla",
@@ -83,7 +83,9 @@ export const useCardState = (
 									lastUpdatedAt: "2023-09-28T11:24:41.483Z",
 									createdAt: "2023-09-28T11:24:41.482Z",
 								},
-								completed: true,
+								content: {
+									completed: true,
+								},
 								userId: "0000d224816abba584714c9c",
 								type: ContentElementType.SubmissionItem,
 							},

@@ -3534,6 +3534,19 @@ export interface RichTextElementContent {
 /**
  *
  * @export
+ * @interface SubmissionItemElementContent
+ */
+export interface SubmissionItemElementContent {
+    /**
+     *
+     * @type {boolean}
+     * @memberof SubmissionItemElementContent
+     */
+    completed: boolean;
+}
+/**
+ *
+ * @export
  * @interface RichTextElementContentBody
  */
 export interface RichTextElementContentBody {
@@ -4038,7 +4051,7 @@ export interface SubmissionContainerElementResponse {
      */
     timestamps: TimestampsResponse;
 
-    users?: Array<UserDataResponse>;
+    users: Array<UserDataResponse>;
     elements: Array<SubmissionItemResponse>;
 }
 /**
@@ -4061,17 +4074,21 @@ export interface SubmissionItemResponse {
     timestamps: TimestampsResponse;
     /**
      *
-     * @type {boolean}
+     * @type {SubmissionItemElementContent}
      * @memberof SubmissionItemResponse
      */
-    completed: boolean;
+    content: SubmissionItemElementContent;
     /**
      *
      * @type {string}
      * @memberof SubmissionItemResponse
      */
     userId: string;
-
+    /**
+     *
+     * @type {ContentElementType}
+     * @memberof SubmissionItemResponse
+     */
     type: ContentElementType;
 }
 /**

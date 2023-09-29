@@ -6,7 +6,9 @@ export const submissionItemResponseFactory =
 	Factory.define<SubmissionItemResponse>(({ sequence }) => ({
 		id: `id${sequence}`,
 		userId: `userId${sequence}`,
-		completed: true,
+		content: {
+			completed: true,
+		},
 		timestamps: timestampsResponseFactory.build(),
 		type: ContentElementType.SubmissionItem,
 	}));

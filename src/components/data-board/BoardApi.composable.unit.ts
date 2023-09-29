@@ -166,12 +166,14 @@ describe("BoardApi.composable", () => {
 		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
-				id: "file-element-id",
+				id: "submission-container-element-id",
 				type: ContentElementType.SubmissionContainer,
 				content: {
 					dueDate: new Date().toISOString(),
 				},
 				timestamps: timestampsResponseFactory.build(),
+				users: [],
+				elements: [],
 			};
 			const data = {
 				content: payload.content,
