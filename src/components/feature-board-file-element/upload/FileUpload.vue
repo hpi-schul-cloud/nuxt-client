@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div v-if="!fileWasPicked" class="grey lighten-3">
+		<div v-if="!fileWasPicked">
 			<FilePicker
-				class="mr-12"
+				class="mr-10"
 				@update:file="onFileSelect"
 				:isFilePickerOpen.sync="isFilePickerOpen"
 			/>

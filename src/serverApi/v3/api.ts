@@ -298,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<RichTextElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | LinkElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<RichTextElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | LinkElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -359,6 +359,62 @@ export enum ChangeLanguageParamsLanguageEnum {
     Uk = 'uk'
 }
 
+/**
+ * 
+ * @export
+ * @interface ClassInfoResponse
+ */
+export interface ClassInfoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    externalSourceName?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ClassInfoResponse
+     */
+    teachers: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface ClassInfoSearchListResponse
+ */
+export interface ClassInfoSearchListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<ClassInfoResponse>}
+     * @memberof ClassInfoSearchListResponse
+     */
+    data: Array<ClassInfoResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    limit: number;
+}
 /**
  * 
  * @export
@@ -562,9 +618,10 @@ export interface ConsentSessionResponse {
  */
 export enum ContentElementType {
     File = 'file',
+    Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    Link = 'link'
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -793,10 +850,15 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
+    Card = 'CARD',
+    Column = 'COLUMN',
+    Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
+    FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -809,8 +871,12 @@ export enum CopyApiResponseTypeEnum {
     LessonContentText = 'LESSON_CONTENT_TEXT',
     LernstoreMaterial = 'LERNSTORE_MATERIAL',
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
+    LinkElement = 'LINK_ELEMENT',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
+    RichtextElement = 'RICHTEXT_ELEMENT',
+    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
+    SubmissionItem = 'SUBMISSION_ITEM',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
     TaskGroup = 'TASK_GROUP',
@@ -929,8 +995,10 @@ export interface CreateCardBodyParams {
     */
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
+    Link = 'link',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1369,6 +1437,19 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalToolContentBody
+ */
+export interface ExternalToolContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolContentBody
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolCreateParams
  */
 export interface ExternalToolCreateParams {
@@ -1414,6 +1495,69 @@ export interface ExternalToolCreateParams {
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContent
+ */
+export interface ExternalToolElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementContent
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContentBody
+ */
+export interface ExternalToolElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolContentBody}
+     * @memberof ExternalToolElementContentBody
+     */
+    content: ExternalToolContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementResponse
+ */
+export interface ExternalToolElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolElementContent}
+     * @memberof ExternalToolElementResponse
+     */
+    content: ExternalToolElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof ExternalToolElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -1574,6 +1718,12 @@ export interface FileContentBody {
      * @memberof FileContentBody
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileContentBody
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -1587,6 +1737,12 @@ export interface FileElementContent {
      * @memberof FileElementContent
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -1815,6 +1971,56 @@ export interface LessonCopyApiParams {
      * @memberof LessonCopyApiParams
      */
     courseId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementContent
+ */
+export interface LinkElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    url: string;
+    /**
+     * 
+     * @type {OpenGraphData}
+     * @memberof LinkElementContent
+     */
+    openGraphData?: OpenGraphData;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementResponse
+ */
+export interface LinkElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof LinkElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {LinkElementContent}
+     * @memberof LinkElementResponse
+     */
+    content: LinkElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof LinkElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -3153,6 +3359,31 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
+ * @interface PseudonymResponse
+ */
+export interface PseudonymResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    toolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface PublicSystemListResponse
  */
 export interface PublicSystemListResponse {
@@ -3790,11 +4021,11 @@ export interface SingleColumnBoardResponse {
  */
 export interface SubmissionContainerContentBody {
     /**
-     * 
+     * The point in time until when a submission can be handed in.
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
-    dueDate: string;
+    dueDate?: string;
 }
 /**
  * 
@@ -3803,7 +4034,7 @@ export interface SubmissionContainerContentBody {
  */
 export interface SubmissionContainerElementContent {
     /**
-     * 
+     * The dueDate as date string or null of not set
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */
@@ -3885,10 +4116,10 @@ export interface SubmissionItemResponse {
     completed: boolean;
     /**
      * 
-     * @type {UserDataResponse}
+     * @type {string}
      * @memberof SubmissionItemResponse
      */
-    userData: UserDataResponse;
+    userId: string;
 }
 /**
  * 
@@ -3945,6 +4176,25 @@ export interface SubmissionStatusResponse {
      * @memberof SubmissionStatusResponse
      */
     submittingCourseGroupName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionsResponse
+ */
+export interface SubmissionsResponse {
+    /**
+     * 
+     * @type {Array<SubmissionItemResponse>}
+     * @memberof SubmissionsResponse
+     */
+    submissionItemsResponse: Array<SubmissionItemResponse>;
+    /**
+     * 
+     * @type {Array<UserDataResponse>}
+     * @memberof SubmissionsResponse
+     */
+    users: Array<UserDataResponse>;
 }
 /**
  * 
@@ -4328,10 +4578,10 @@ export enum ToolReferenceResponseStatusEnum {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody;
 }
 /**
  * 
@@ -6388,7 +6638,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6468,7 +6718,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6542,7 +6792,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>;
 
     /**
      * 
@@ -7587,7 +7837,7 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SubmissionItemResponse>>> {
+        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7620,7 +7870,7 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>> {
+        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse> {
             return localVarFp.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7651,7 +7901,7 @@ export interface BoardSubmissionApiInterface {
      * @throws {RequiredError}
      * @memberof BoardSubmissionApiInterface
      */
-    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>>;
+    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse>;
 
     /**
      * 
@@ -8473,6 +8723,161 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public serverControllerGetHello(options?: any) {
         return DefaultApiFp(this.configuration).serverControllerGetHello(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * GroupApi - axios parameter creator
+ * @export
+ */
+export const GroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerFindClassesForSchool: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/groups/class`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (sortOrder !== undefined) {
+                localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GroupApi - functional programming interface
+ * @export
+ */
+export const GroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * GroupApi - factory interface
+ * @export
+ */
+export const GroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GroupApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GroupApi - interface
+ * @export
+ * @interface GroupApi
+ */
+export interface GroupApiInterface {
+    /**
+     * 
+     * @summary Get a list of classes and groups of type class for the current users school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+
+}
+
+/**
+ * GroupApi - object-oriented interface
+ * @export
+ * @class GroupApi
+ * @extends {BaseAPI}
+ */
+export class GroupApi extends BaseAPI implements GroupApiInterface {
+    /**
+     * 
+     * @summary Get a list of classes and groups of type class for the current users school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10280,6 +10685,133 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
 
 
 /**
+ * PseudonymApi - axios parameter creator
+ * @export
+ */
+export const PseudonymApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym: async (pseudonym: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pseudonym' is not null or undefined
+            assertParamExists('pseudonymControllerGetPseudonym', 'pseudonym', pseudonym)
+            const localVarPath = `/pseudonyms/{pseudonym}`
+                .replace(`{${"pseudonym"}}`, encodeURIComponent(String(pseudonym)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PseudonymApi - functional programming interface
+ * @export
+ */
+export const PseudonymApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PseudonymApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pseudonymControllerGetPseudonym(pseudonym: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pseudonymControllerGetPseudonym(pseudonym, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PseudonymApi - factory interface
+ * @export
+ */
+export const PseudonymApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PseudonymApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse> {
+            return localVarFp.pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PseudonymApi - interface
+ * @export
+ * @interface PseudonymApi
+ */
+export interface PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApiInterface
+     */
+    pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse>;
+
+}
+
+/**
+ * PseudonymApi - object-oriented interface
+ * @export
+ * @class PseudonymApi
+ * @extends {BaseAPI}
+ */
+export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApi
+     */
+    public pseudonymControllerGetPseudonym(pseudonym: string, options?: any) {
+        return PseudonymApiFp(this.configuration).pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * RoomsApi - axios parameter creator
  * @export
  */
@@ -11179,9 +11711,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        legacySchoolControllerGetMigration: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('schoolControllerGetMigration', 'schoolId', schoolId)
+            assertParamExists('legacySchoolControllerGetMigration', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/migration`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11217,11 +11749,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration: async (schoolId: string, migrationBody: MigrationBody, options: any = {}): Promise<RequestArgs> => {
+        legacySchoolControllerSetMigration: async (schoolId: string, migrationBody: MigrationBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('schoolControllerSetMigration', 'schoolId', schoolId)
+            assertParamExists('legacySchoolControllerSetMigration', 'schoolId', schoolId)
             // verify required parameter 'migrationBody' is not null or undefined
-            assertParamExists('schoolControllerSetMigration', 'migrationBody', migrationBody)
+            assertParamExists('legacySchoolControllerSetMigration', 'migrationBody', migrationBody)
             const localVarPath = `/school/{schoolId}/migration`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11269,8 +11801,8 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMigration(schoolId, options);
+        async legacySchoolControllerGetMigration(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.legacySchoolControllerGetMigration(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -11280,8 +11812,8 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMigration(schoolId, migrationBody, options);
+        async legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MigrationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.legacySchoolControllerSetMigration(schoolId, migrationBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -11300,8 +11832,8 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
-            return localVarFp.schoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
+        legacySchoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse> {
+            return localVarFp.legacySchoolControllerGetMigration(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11310,8 +11842,8 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
-            return localVarFp.schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
+        legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse> {
+            return localVarFp.legacySchoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -11329,7 +11861,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
+    legacySchoolControllerGetMigration(schoolId: string, options?: any): AxiosPromise<MigrationResponse>;
 
     /**
      * 
@@ -11339,7 +11871,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
+    legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any): AxiosPromise<MigrationResponse>;
 
 }
 
@@ -11357,8 +11889,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetMigration(schoolId: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
+    public legacySchoolControllerGetMigration(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).legacySchoolControllerGetMigration(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11369,8 +11901,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(this.axios, this.basePath));
+    public legacySchoolControllerSetMigration(schoolId: string, migrationBody: MigrationBody, options?: any) {
+        return SchoolApiFp(this.configuration).legacySchoolControllerSetMigration(schoolId, migrationBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

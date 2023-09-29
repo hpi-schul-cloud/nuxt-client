@@ -1,76 +1,114 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileAlert from "./alert/FileAlert.vue";
 import FileContent from "./FileContent.vue";
+import FileAlert from "./alert/FileAlert.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import FileInputs from "./inputs/FileInputs.vue";
 
 describe("FileContent", () => {
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
+	describe("When EditMode is true", () => {
+		describe("When PreviewUrl is defined", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
 
-		const fileProperties = {
-			name: "test",
-			size: 100,
-			url: "test",
-			previewUrl: "test",
-			previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-			isDownloadAllowed: true,
-		};
-		const wrapper = shallowMount(FileContent, {
-			propsData: {
-				fileProperties,
-				isEditMode: true,
-			},
-			...createComponentMocks({}),
-		});
+				const element = fileElementResponseFactory.build();
 
-		return {
-			wrapper,
-			fileProperties,
-		};
-	};
+				const fileProperties = {
+					name: "test",
+					size: 100,
+					url: "test",
+					previewUrl: "test",
+					previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+					isDownloadAllowed: true,
+					element,
+				};
+				const wrapper = shallowMount(FileContent, {
+					propsData: {
+						fileProperties,
+						isEditMode: true,
+					},
+					...createComponentMocks({}),
+				});
 
-	it("should pass props to FileContent", () => {
-		const { wrapper, fileProperties } = setup();
+				return {
+					wrapper,
+					fileProperties,
+				};
+			};
 
-		const fileContent = wrapper.findComponent(FileContent);
+			it("should pass props to FileContent", () => {
+				const { wrapper, fileProperties } = setup();
 
-		expect(fileContent.props()).toEqual({
-			fileProperties,
-			isEditMode: true,
-		});
-	});
+				const fileContent = wrapper.findComponent(FileContent);
 
-	it("should pass props to ContentElementFooter", () => {
-		const { wrapper, fileProperties } = setup();
+				expect(fileContent.props()).toEqual({
+					fileProperties,
+					isEditMode: true,
+				});
+			});
 
-		const contentElementFooter = wrapper.findComponent(ContentElementFooter);
+			it("should pass props to ContentElementFooter", () => {
+				const { wrapper, fileProperties } = setup();
 
-		expect(contentElementFooter.props()).toEqual({
-			fileProperties,
-		});
-	});
+				const contentElementFooter =
+					wrapper.findComponent(ContentElementFooter);
 
-	it("Should pass props to FileAlert", () => {
-		const { wrapper, fileProperties } = setup();
+				expect(contentElementFooter.props()).toEqual({
+					fileProperties,
+				});
+			});
 
-		const fileAlert = wrapper.findComponent(FileAlert);
+			it("should pass props to FileAlert", () => {
+				const { wrapper, fileProperties } = setup();
 
-		expect(fileAlert.props()).toEqual({
-			previewStatus: fileProperties.previewStatus,
-		});
-	});
+				const fileAlert = wrapper.findComponent(FileAlert);
 
-	describe("when alert emits on-status-reload", () => {
-		it("should emit delete event", async () => {
-			const { wrapper } = setup();
+				expect(fileAlert.props()).toEqual({
+					previewStatus: fileProperties.previewStatus,
+				});
+			});
 
-			const fileAlert = wrapper.findComponent(FileAlert);
+			it("should FileInputs component be in dom", () => {
+				const { wrapper } = setup();
 
-			await fileAlert.vm.$emit("on-status-reload");
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-			expect(wrapper.emitted("fetch:file")).toBeTruthy();
+				expect(fileInputs.exists()).toBe(true);
+			});
+
+			it("should emit update:alternativeText event, when it receives update:text event from file inputs component", async () => {
+				const { wrapper } = setup();
+
+				const fileInputs = wrapper.findComponent(FileInputs);
+
+				fileInputs.vm.$emit("update:alternativeText");
+
+				expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+			});
+
+			it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
+				const { wrapper } = setup();
+
+				const fileInputs = wrapper.findComponent(FileInputs);
+
+				fileInputs.vm.$emit("update:caption");
+
+				expect(wrapper.emitted("update:caption")).toHaveLength(1);
+			});
+
+			describe("when alert emits on-status-reload", () => {
+				it("should emit fetch:file event", async () => {
+					const { wrapper } = setup();
+
+					const fileAlert = wrapper.findComponent(FileAlert);
+
+					await fileAlert.vm.$emit("on-status-reload");
+
+					expect(wrapper.emitted("fetch:file")).toBeTruthy();
+				});
+			});
 		});
 	});
 });

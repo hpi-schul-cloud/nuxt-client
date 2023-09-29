@@ -90,6 +90,6 @@ export default defineComponent({
 .menu {
 	position: absolute;
 	top: 8px;
-	right: 2px;
+	right: 16px;
 }
 </style>

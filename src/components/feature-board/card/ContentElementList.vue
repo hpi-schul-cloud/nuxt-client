@@ -41,6 +41,19 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 				@delete:element="onDeleteElement"
 			/>
+			<ExternalToolElement
+				v-else-if="showExternalToolElement(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
+				:hasMultipleElements="hasMultipleElements"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
+				@delete:element="onDeleteElement"
+			/>
 		</template>
 	</VCardText>
 </template>
@@ -48,6 +61,7 @@
 <script lang="ts">
 import {
 	ContentElementType,
+	ExternalToolElementResponse,
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
@@ -57,16 +71,18 @@ import {
 	LinkElementResponse,
 } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { LinkContentElement } from "@feature-board-link-element";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		ExternalToolElement,
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
@@ -119,10 +135,27 @@ export default defineComponent({
 			return element.type === ContentElementType.Link;
 		};
 
-		const showSubmissionContainerElement = (element: AnyContentElement) => {
+		const showSubmissionContainerElement = (
+			element: AnyContentElement
+		): element is SubmissionContainerElementResponse => {
 			return (
-				envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
 				isSubmissionContainerElementResponse(element)
+			);
+		};
+
+		const isExternalToolElementResponse = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return element.type === ContentElementType.ExternalTool;
+		};
+
+		const showExternalToolElement = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
+				isExternalToolElementResponse(element)
 			);
 		};
 
@@ -174,7 +207,6 @@ export default defineComponent({
 		});
 
 		return {
-			ContentElementType,
 			firstElementId,
 			hasMultipleElements,
 			isFileElementResponse,
@@ -182,6 +214,8 @@ export default defineComponent({
 			isSubmissionContainerElementResponse,
 			isLinkElementResponse,
 			showSubmissionContainerElement,
+			isExternalToolElementResponse,
+			showExternalToolElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,
