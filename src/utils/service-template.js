@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { reactive } from "vue";
 import { $axios } from "@/utils/api";
 
 export default function (endpoint) {
@@ -161,11 +161,20 @@ export default function (endpoint) {
 				const { limit, skip, total } = res;
 
 				// VUE3_UPGRADE - TODO: because of 'vue.set()' is deprecated find a way to introduce it into the vue instance if it is being used somewhere.
-				Vue.set(state.pagination, qid, {
-					limit: parseInt(limit),
-					skip: parseInt(skip),
-					total: parseInt(total),
-					query: parseInt(query),
+				// Vue.set(state.pagination, qid, {
+				// 	limit: parseInt(limit),
+				// 	skip: parseInt(skip),
+				// 	total: parseInt(total),
+				// 	query: parseInt(query),
+				// });
+				state.pagination = reactive({
+					...state.pagination,
+					[qid]: {
+						limit: parseInt(limit),
+						skip: parseInt(skip),
+						total: parseInt(total),
+						query: parseInt(query),
+					},
 				});
 			},
 			setStatus(state, status) {
