@@ -2,7 +2,7 @@
 	<div class="d-flex flex-row">
 		<date-picker
 			class="mr-2 picker-width"
-			:required="required"
+			:required="dateRequired"
 			:date="date"
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
@@ -12,7 +12,7 @@
 		/>
 		<time-picker
 			class="picker-width"
-			:required="required"
+			:required="timeRequired"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
@@ -26,7 +26,7 @@ import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -46,9 +46,6 @@ export default defineComponent({
 		timeInputAriaLabel: { type: String, default: "" },
 		minDate: { type: String },
 		maxDate: { type: String },
-		required: {
-			type: Boolean,
-		},
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
@@ -70,6 +67,9 @@ export default defineComponent({
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
+
+		const dateRequired = computed(() => time.value !== "");
+		const timeRequired = computed(() => date.value !== "");
 
 		const emitDateTime = () => {
 			if (date.value !== "" && time.value !== "") {
@@ -98,6 +98,8 @@ export default defineComponent({
 			time,
 			onDateUpdate,
 			onTimeUpdate,
+			dateRequired,
+			timeRequired,
 		};
 	},
 });

@@ -36,30 +36,63 @@ describe("DateTimePicker", () => {
 		expect(wrapper.findComponent(DateTimePicker).exists()).toBe(true);
 	});
 
-	it("should emit input event on date input", async () => {
-		setup({ dateTime: new Date().toISOString() });
+	describe("if date and time are set", () => {
+		it("should emit input event on date input", async () => {
+			setup({ dateTime: new Date().toISOString() });
 
-		const datePicker = wrapper.findComponent({ name: "date-picker" });
-		expect(datePicker.exists()).toBe(true);
-		const tomorrow = new Date();
-		tomorrow.setDate(tomorrow.getDate() + 1);
-		datePicker.vm.$emit("update:date", tomorrow);
+			const datePicker = wrapper.findComponent({ name: "date-picker" });
+			expect(datePicker.exists()).toBe(true);
+			const tomorrow = new Date();
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			datePicker.vm.$emit("update:date", tomorrow);
 
-		await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
 
-		expect(wrapper.emitted("input")).toHaveLength(1);
+			expect(wrapper.emitted("input")).toHaveLength(1);
+		});
+
+		it("should emit input event on time input", async () => {
+			jest.useFakeTimers();
+			setup({ dateTime: new Date().toISOString() });
+
+			const timePicker = wrapper.findComponent({ name: "time-picker" });
+			expect(timePicker.exists()).toBe(true);
+			timePicker.vm.$emit("update:time", "00:00");
+
+			jest.advanceTimersByTime(1000);
+
+			expect(wrapper.emitted("input")).toHaveLength(1);
+		});
 	});
 
-	it("should emit input event on time input", async () => {
-		jest.useFakeTimers();
-		setup({ dateTime: new Date().toISOString() });
+	describe("if only date is set", () => {
+		it("should emit no input event", async () => {
+			setup({ dateTime: "" });
 
-		const timePicker = wrapper.findComponent({ name: "time-picker" });
-		expect(timePicker.exists()).toBe(true);
-		timePicker.vm.$emit("update:time", "00:00");
+			const datePicker = wrapper.findComponent({ name: "date-picker" });
+			expect(datePicker.exists()).toBe(true);
+			const tomorrow = new Date();
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			datePicker.vm.$emit("update:date", tomorrow);
 
-		jest.advanceTimersByTime(1000);
+			await wrapper.vm.$nextTick();
 
-		expect(wrapper.emitted("input")).toHaveLength(1);
+			expect(wrapper.emitted("input")).toBe(undefined);
+		});
+	});
+
+	describe("if only time is set", () => {
+		it("should emit no input event", async () => {
+			jest.useFakeTimers();
+			setup({ dateTime: "" });
+
+			const timePicker = wrapper.findComponent({ name: "time-picker" });
+			expect(timePicker.exists()).toBe(true);
+			timePicker.vm.$emit("update:time", "00:00");
+
+			jest.advanceTimersByTime(1000);
+
+			expect(wrapper.emitted("input")).toBe(undefined);
+		});
 	});
 });
