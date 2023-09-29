@@ -160,8 +160,7 @@
 </template>
 
 <script lang="ts">
-import { MigrationBody } from "@/serverApi/v3";
-import { OauthMigration, School } from "@/store/types/schools";
+import { School } from "@/store/types/schools";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -199,8 +198,6 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
-			// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
-			await schoolsModule.fetchSchoolOAuthMigration();
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
@@ -236,17 +233,6 @@ export default defineComponent({
 
 		const onCloseMigration = () => {
 			userLoginMigrationModule.closeUserLoginMigration();
-		};
-
-		// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
-		const setMigration = async (available: boolean, mandatory: boolean) => {
-			const migrationFlags: MigrationBody = {
-				oauthMigrationPossible: available,
-				oauthMigrationMandatory: mandatory,
-				oauthMigrationFinished: !available,
-			};
-			await schoolsModule.setSchoolOauthMigration(migrationFlags);
-			await schoolsModule.fetchSchool();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
