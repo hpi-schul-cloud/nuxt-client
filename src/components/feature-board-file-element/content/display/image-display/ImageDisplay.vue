@@ -1,11 +1,15 @@
 <template>
-	<div>
+	<div class="image-wrapper">
 		<img
 			class="rounded-t-sm image"
 			loading="lazy"
 			:src="previewUrl"
 			:alt="alternativeText"
 		/>
+		<v-app-bar flat color="transparent" class="menu">
+			<v-spacer></v-spacer>
+			<slot></slot>
+		</v-app-bar>
 	</div>
 </template>
 
@@ -42,10 +46,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.image-wrapper {
+	min-height: 52px;
+	display: flex;
+	align-items: center;
+}
 .image {
 	pointer-events: none;
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
+}
+.menu {
+	position: absolute;
+	top: 0px;
 }
 </style>

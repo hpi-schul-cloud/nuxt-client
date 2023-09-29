@@ -3,21 +3,22 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
-	ColumnResponse,
-	ContentElementType,
-	CreateContentElementBodyParams,
-	FileElementContent,
-	RichTextElementContent,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
-	RoomsApiFactory,
 	BoardResponse,
 	CardResponse,
+	ColumnResponse,
+	ContentElementType,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	CreateContentElementBodyParams,
+	ExternalToolElementContent,
+	FileElementContent,
+	RichTextElementContent,
+	RoomsApiFactory,
 	SubmissionContainerElementContent,
 } from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { AxiosPromise } from "axios";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AxiosPromise } from "axios";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -87,6 +88,13 @@ export const useBoardApi = () => {
 			return {
 				content: element.content as SubmissionContainerElementContent,
 				type: ContentElementType.SubmissionContainer,
+			};
+		}
+
+		if (element.type === ContentElementType.ExternalTool) {
+			return {
+				content: element.content as ExternalToolElementContent,
+				type: ContentElementType.ExternalTool,
 			};
 		}
 

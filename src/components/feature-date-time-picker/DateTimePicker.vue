@@ -1,8 +1,5 @@
 <template>
 	<div class="d-flex flex-row">
-		<v-icon :color="iconColor" class="icon mr-2">
-			{{ mdiCalendarClock }}
-		</v-icon>
 		<date-picker
 			class="mr-2 picker-width"
 			:required="required"
@@ -11,9 +8,7 @@
 			:aria-label="dateInputAriaLabel"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			@input="handleDateInput"
-			@error="handleDateError"
-			@valid="handleDateValid"
+			@update:date="handleDateInput"
 		/>
 		<time-picker
 			class="picker-width"
@@ -22,9 +17,7 @@
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
 			:allow-past="allowPast || !dateIsToday"
-			@input="handleTimeInput"
-			@error="handleTimeError"
-			@valid="handleTimeValid"
+			@update:time="handleTimeInput"
 		/>
 	</div>
 </template>
@@ -34,9 +27,9 @@ import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
 import { isToday } from "@/plugins/datetime";
-import { mdiCalendarClock } from "@mdi/js";
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import dayjs from "dayjs";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -51,14 +44,14 @@ export default defineComponent({
 		},
 		dateInputLabel: { type: String, default: "" },
 		dateInputAriaLabel: { type: String, default: "" },
-		minDate: { type: String },
-		maxDate: { type: String },
 		timeInputLabel: { type: String, default: "" },
 		timeInputAriaLabel: { type: String, default: "" },
+		minDate: { type: String },
+		maxDate: { type: String },
 		required: {
 			type: Boolean,
 		},
-		allowPast: { type: Boolean, default: false },
+		allowPast: { type: Boolean },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
@@ -74,10 +67,11 @@ export default defineComponent({
 			});
 		};
 
-		const date = useVModel(props, "dateTime");
-		const time = ref(getTime(date.value));
-		const dateError = ref(false);
-		const timeError = ref(false);
+		const dateTime = useVModel(props, "dateTime");
+		const date = ref(
+			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
+		);
+		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
 		const dateIsToday = ref(isToday(date.value));
 
 		const emitDateTime = () => {
@@ -95,62 +89,28 @@ export default defineComponent({
 		const handleDateInput = (newDate: string) => {
 			date.value = newDate;
 			dateIsToday.value = isToday(date.value);
-			if (valid.value) {
-				emitDateTime();
-			}
-		};
 
-		const handleDateError = () => {
-			dateError.value = true;
-		};
-
-		const handleDateValid = () => {
-			dateError.value = false;
+			emitDateTime();
 		};
 
 		const handleTimeInput = (newTime: string) => {
 			time.value = newTime;
-			if (valid.value) {
-				emitDateTime();
-			}
+
+			emitDateTime();
 		};
-
-		const handleTimeError = () => {
-			timeError.value = true;
-		};
-
-		const handleTimeValid = () => {
-			timeError.value = false;
-		};
-
-		const valid = computed(() => !dateError.value && !timeError.value);
-
-		const iconColor = computed(() => {
-			return valid.value ? "" : "error";
-		});
 
 		return {
 			date,
 			time,
 			dateIsToday,
 			handleDateInput,
-			handleDateError,
-			handleDateValid,
 			handleTimeInput,
-			handleTimeError,
-			handleTimeValid,
-			iconColor,
-			mdiCalendarClock,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-.icon {
-	top: 18px;
-}
-
 .picker-width {
 	width: 225px;
 }

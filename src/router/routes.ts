@@ -1,6 +1,7 @@
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import {
 	isEnum,
 	isMongoId,
@@ -10,8 +11,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
-import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
+import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
 
 // routes configuration sorted in alphabetical order
 export const routes: Readonly<RouteRecordRaw[]> = [
@@ -98,6 +98,12 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list"]),
 	},
 	{
 		path: "/cfiles",
@@ -223,6 +229,9 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
+		props: (route: RouteLocationNormalized) => ({
+			boardId: route.params.id,
+		}),
 	},
 	{
 		path: "/rooms-list",

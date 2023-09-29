@@ -6,31 +6,27 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="180"
-			attach
-			@input="handleMenuToggle"
+			@input="onMenuToggle"
 		>
 			<template #activator="{ props }">
 				<v-text-field
-					v-model="model"
-					data-testid="time-input"
-					placeholder="HH:MM"
-					filled
-					clearable
+					ref="inputField"
+					v-model="modelValue"
+					v-bind="props"
 					:label="label"
 					:aria-label="ariaLabel"
-					v-bind="props"
+					placeholder="HH:MM"
+					append-icon="$mdiClockOutline"
 					:rules="rules"
-					validate-on-blur
-					autocomplete="off"
-					ref="inputField"
+					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
-					@blur="handleBlur"
+					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@update:error="handleError"
+					@update:error="onError"
 				/>
 			</template>
-			<v-list height="200" class="col-12 pt-1 px-0">
+			<v-list height="200" class="col-12 pt-1 px-0 overflow-y-auto">
 				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
@@ -39,12 +35,11 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="handleSelect(timeOfDay.value)"
+							@click="onSelect(timeOfDay.value)"
 							:disabled="timeOfDay.disabled"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
-
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
@@ -69,14 +64,21 @@ export default defineComponent({
 		required: { type: Boolean },
 		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["input", "error", "valid"],
+	emits: ["update:time"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-		const model = ref(props.time);
+		const modelValue = computed({
+			get() {
+				return props.time;
+			},
+			set: (newValue) => {
+				emitTimeDebounced(newValue);
+			},
+		});
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
+		const valid = ref(true);
 
 		const { timesOfDayList, timeInPast } = useTimePickerState(
 			toRef(props, "allowPast")
@@ -125,26 +127,29 @@ export default defineComponent({
 			return rules;
 		});
 
-		const handleBlur = useDebounceFn(() => {
-			const time = model.value || "";
-			if (time.match(timeRegex)) {
-				emit("input", time);
-			}
-		}, 200);
-
-		const handleSelect = async (selected: string) => {
+		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
-			model.value = selected;
+			modelValue.value = selected;
+			valid.value = true;
 			await closeMenu();
 		};
 
-		const handleError = (hasError: boolean) => {
-			hasError ? emit("error") : emit("valid");
+		const onError = (hasError: boolean) => {
+			valid.value = !hasError;
 		};
 
-		const handleMenuToggle = () => {
+		/**
+		 * Necessary because we need to wait for update:error
+		 */
+		const emitTimeDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:time", newValue);
+			}
+		}, 50);
+
+		const onMenuToggle = () => {
 			if (showTimeDialog.value) {
-				emit("valid");
+				valid.value = true;
 			}
 		};
 
@@ -152,37 +157,44 @@ export default defineComponent({
 			showTimeDialog.value = false;
 		}, 50);
 
+		const isNumberOrColon = (event: KeyboardEvent) => {
+			const char = String.fromCharCode(event.keyCode); // Get the character
+			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
+			else event.preventDefault(); // If it doesn't match, don't add to input text
+		};
+
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			model,
+			modelValue,
 			rules,
 			inputField,
-			handleBlur,
-			handleSelect,
-			handleError,
-			handleMenuToggle,
+			onSelect,
+			onError,
+			onMenuToggle,
+			isNumberOrColon,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/components/VTextField/_variables.scss";
+@import "@/styles/variables";
 
 .time-list-item {
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
 }
-:deep() {
-	.menu-open {
-		label {
-			transform: $text-field-filled-full-width-label-active-transform;
-		}
-		.v-text-field__details {
-			display: none;
-		}
+
+.overflow-y-auto {
+	overflow-y: auto;
+}
+
+:deep {
+	.v-input__icon--append .v-icon {
+		width: 20px;
+		height: 20px;
 	}
 }
 </style>

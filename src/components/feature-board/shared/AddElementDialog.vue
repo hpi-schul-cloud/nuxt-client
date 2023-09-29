@@ -15,7 +15,7 @@
 
 		<template #content>
 			<div
-				class="d-flex flex-sm-row flex-column align-items-center"
+				class="d-flex flex-sm-row flex-column flex-wrap align-items-center"
 				:class="{ 'justify-content-space-between': submissionsEnabled }"
 			>
 				<v-btn
@@ -33,8 +33,8 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ item.icon }}</v-icon></span
-						>
+							<v-icon large>{{ item.icon }}</v-icon>
+						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
 				</v-btn>
@@ -46,10 +46,10 @@
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
-import { mdiEmailOutline } from "@mdi/js";
-import { defineComponent } from "vue";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { mdiEmailOutline } from "@mdi/js";
+import { computed, ComputedRef, defineComponent } from "vue";
+import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "AddElementDialog",
@@ -75,7 +75,9 @@ export default defineComponent({
 		const submissionsEnabled =
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
 
-		const dialogWidth = submissionsEnabled ? 426 : 320;
+		const dialogWidth: ComputedRef<number> = computed(() =>
+			elementTypeOptions.value.length >= 3 ? 426 : 320
+		);
 
 		return {
 			onAddElement,

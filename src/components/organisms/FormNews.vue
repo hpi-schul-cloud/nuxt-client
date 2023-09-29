@@ -21,7 +21,7 @@
 						:error="errors.content"
 						:required="true"
 						:placeholder="
-							$t('components.organisms.FormNews.editor.placeholder')
+							$t('components.organisms.FormNews.editor.placeholder').toString()
 						"
 					/>
 					<transition name="fade">
@@ -32,7 +32,7 @@
 							<base-input
 								v-model="data.date.date"
 								type="date"
-								:label="$t('components.organisms.FormNews.label.date')"
+								:label="$t('common.labels.date')"
 								:class="{ hideCurrentDate: !data.date.date }"
 								data-testid="news_date"
 								placeholder="JJJJ-MM-TT"
@@ -40,7 +40,7 @@
 							<base-input
 								v-model="data.date.time"
 								type="time"
-								:label="$t('components.organisms.FormNews.label.time')"
+								:label="$t('common.labels.time')"
 								:class="{ hideCurrentTime: !data.date.time }"
 								data-testid="news_time"
 								placeholder="HH:MM"
