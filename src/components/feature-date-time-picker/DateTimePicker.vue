@@ -8,7 +8,7 @@
 			:aria-label="dateInputAriaLabel"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			@update:date="handleDateInput"
+			@update:date="onDateUpdate"
 		/>
 		<time-picker
 			class="picker-width"
@@ -16,8 +16,7 @@
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
-			:allow-past="allowPast || !dateIsToday"
-			@update:time="handleTimeInput"
+			@update:time="onTimeUpdate"
 		/>
 	</div>
 </template>
@@ -26,7 +25,6 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
-import { isToday } from "@/plugins/datetime";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { defineComponent, ref } from "vue";
 import dayjs from "dayjs";
@@ -51,7 +49,6 @@ export default defineComponent({
 		required: {
 			type: Boolean,
 		},
-		allowPast: { type: Boolean },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
@@ -73,7 +70,6 @@ export default defineComponent({
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
-		const dateIsToday = ref(isToday(date.value));
 
 		const emitDateTime = () => {
 			if (date.value !== "" && time.value !== "") {
@@ -87,25 +83,21 @@ export default defineComponent({
 			}
 		};
 
-		const handleDateInput = (newDate: string) => {
+		const onDateUpdate = (newDate: string) => {
 			date.value = newDate;
-			dateIsToday.value = isToday(date.value);
-
 			emitDateTime();
 		};
 
-		const handleTimeInput = (newTime: string) => {
+		const onTimeUpdate = (newTime: string) => {
 			time.value = newTime;
-
 			emitDateTime();
 		};
 
 		return {
 			date,
 			time,
-			dateIsToday,
-			handleDateInput,
-			handleTimeInput,
+			onDateUpdate,
+			onTimeUpdate,
 		};
 	},
 });

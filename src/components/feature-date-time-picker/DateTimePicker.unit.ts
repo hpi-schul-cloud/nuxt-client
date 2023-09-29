@@ -62,20 +62,4 @@ describe("DateTimePicker", () => {
 
 		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
-
-	it("should restrict timepicker when date is today", async () => {
-		setup({ dateTime: new Date().toISOString() });
-
-		const timePicker = wrapper.findComponent({ name: "time-picker" });
-		expect(timePicker.exists()).toBe(true);
-		expect(timePicker.props("allowPast")).toBe(false);
-	});
-
-	it("should not restrict timepicker when date is in the future", async () => {
-		setup({ dateTime: new Date("2300-01-01T00:00:00").toISOString() });
-
-		const timePicker = wrapper.findComponent({ name: "time-picker" });
-		expect(timePicker.exists()).toBe(true);
-		expect(timePicker.props("allowPast")).toBe(true);
-	});
 });
