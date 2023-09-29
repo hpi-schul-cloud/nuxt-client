@@ -2,7 +2,7 @@
 	<BoardMenu scope="element">
 		<BoardMenuAction
 			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-file-element-edit-menu-move-up"
+			data-testid="content-element-menu-move-up"
 			@click="onMoveElementUp"
 		>
 			<template #icon>
@@ -14,7 +14,7 @@
 		</BoardMenuAction>
 		<BoardMenuAction
 			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-file-element-edit-menu-move-down"
+			data-testid="content-element-menu-move-down"
 			@click="onMoveElementDown"
 		>
 			<template #icon>
@@ -25,7 +25,7 @@
 			{{ $t("components.board.action.moveDown") }}
 		</BoardMenuAction>
 		<BoardMenuAction
-			data-testid="board-file-element-edit-menu-delete"
+			data-testid="content-element-menu-delete"
 			@click="onDelete"
 		>
 			<template #icon>
@@ -40,12 +40,9 @@
 
 <script lang="ts">
 import {
-	mdiAlertCircle,
 	mdiArrowCollapseDown,
 	mdiArrowCollapseUp,
-	mdiFileDocumentOutline,
 	mdiTrashCanOutline,
-	mdiTrayArrowDown,
 } from "@mdi/js";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -82,12 +79,9 @@ export default defineComponent({
 			emit("move-up:element");
 		};
 		return {
-			mdiAlertCircle,
-			mdiFileDocumentOutline,
 			mdiArrowCollapseUp,
 			mdiArrowCollapseDown,
 			mdiTrashCanOutline,
-			mdiTrayArrowDown,
 			onDelete,
 			onMoveElementDown,
 			onMoveElementUp,
