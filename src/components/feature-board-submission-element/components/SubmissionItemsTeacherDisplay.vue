@@ -204,6 +204,10 @@ export default defineComponent({
 }
 
 ::v-deep {
+	.theme--light.v-expansion-panels .v-expansion-panel {
+		background-color: transparent;
+	}
+
 	.v-expansion-panel-content__wrap {
 		padding: 0;
 	}
