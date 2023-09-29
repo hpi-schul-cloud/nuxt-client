@@ -37,7 +37,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 	});
 
 	it("should show submissionItems", () => {
-		const loading = false;
 		const { wrapper } = setup();
 
 		const submissionItems = wrapper.findComponent({
@@ -47,7 +46,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 	});
 
 	it("should show one submissionItem per student", async () => {
-		const loading = false;
 		const numbersOfStudents = 10;
 		const submissions = submissionsResponseFactory.build(
 			{},
