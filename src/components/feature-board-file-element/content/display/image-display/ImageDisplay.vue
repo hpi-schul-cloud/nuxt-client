@@ -1,5 +1,5 @@
 <template>
-	<v-hover v-slot="{ hover }">
+	<v-hover v-model="hovered">
 		<div
 			class="image-display-container"
 			ref="containerRef"
@@ -9,7 +9,7 @@
 			@keydown.space.prevent="onKeyDown"
 		>
 			<div
-				v-if="!isEditMode && (hover || focused)"
+				v-if="!isEditMode && (hovered || focused)"
 				class="image-display-overlay rounded-t-sm"
 			></div>
 
@@ -44,6 +44,8 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const containerRef = ref<HTMLDivElement | undefined>();
+
+		const hovered = ref(false);
 
 		const { focused } = useFocus(containerRef);
 		const { open } = useLightBox();
@@ -89,6 +91,7 @@ export default defineComponent({
 			alternativeText,
 			containerRef,
 			focused,
+			hovered,
 			onClick,
 			onKeyDown,
 		};

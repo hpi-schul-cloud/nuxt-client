@@ -2,6 +2,7 @@ import { I18N_KEY } from "@/utils/inject";
 import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import ImageDisplay from "./ImageDisplay.vue";
 
 describe("ImageDisplay", () => {
@@ -12,8 +13,9 @@ describe("ImageDisplay", () => {
 			content: { alternativeText: props.alternativeText },
 		});
 		const propsData = {
-			name: "file-record #1.txt",
+			url: "url/1/file-record #1.txt",
 			previewUrl: "preview/1/file-record #1.txt",
+			name: "file-record #1.txt",
 			isEditMode: props.isEditMode,
 			element,
 		};
@@ -88,6 +90,33 @@ describe("ImageDisplay", () => {
 				"components.cardElement.fileElement.emptyAlt " + fileNameProp
 			);
 		});
+
+		it("should show overlay, when the user hovers over image", async () => {
+			const { wrapper } = setup({ isEditMode: false });
+
+			wrapper.setData({ hovered: true });
+			await nextTick();
+
+			const overlay = wrapper.find(".image-display-overlay");
+
+			expect(overlay.exists()).toBe(true);
+			expect(overlay.isVisible()).toBe(true);
+		});
+
+		// it("should show overlay, when the user focuses image", async () => {
+		// 	const { wrapper } = setup({ isEditMode: false });
+
+		// 	wrapper.setData({ focused: true });
+		// 	console.log(wrapper.vm.focused);
+		// 	await nextTick();
+
+		// 	console.log(wrapper.overview());
+
+		// 	const overlay = wrapper.find(".image-display-overlay");
+
+		// 	expect(overlay.exists()).toBe(true);
+		// 	expect(overlay.isVisible()).toBe(true);
+		// });
 
 		describe("When alternative text is defined", () => {
 			it("should have set alt correctly", () => {
