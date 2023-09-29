@@ -1,22 +1,27 @@
 <template>
-	<div class="d-flex flex-row">
-		<date-picker
-			class="mr-2 picker-width"
-			:required="dateRequired"
-			:date="date"
-			:label="dateInputLabel"
-			:aria-label="dateInputAriaLabel"
-			:minDate="minDate"
-			:maxDate="maxDate"
-			@update:date="onDateUpdate"
-		/>
-		<time-picker
-			class="picker-width"
-			:time="time"
-			:label="timeInputLabel"
-			:aria-label="timeInputAriaLabel"
-			@update:time="onTimeUpdate"
-		/>
+	<div>
+		<div class="d-flex flex-row">
+			<date-picker
+				class="mr-2 picker-width"
+				:required="dateRequired"
+				:date="date"
+				:label="dateInputLabel"
+				:aria-label="dateInputAriaLabel"
+				:minDate="minDate"
+				:maxDate="maxDate"
+				@update:date="onDateUpdate"
+			/>
+			<time-picker
+				class="picker-width"
+				:time="time"
+				:label="timeInputLabel"
+				:aria-label="timeInputAriaLabel"
+				@update:time="onTimeUpdate"
+			/>
+		</div>
+		<div v-if="dateTimeInPast" class="date-hint">
+			Das Datum liegt in der Vergangenheit
+		</div>
 	</div>
 </template>
 
@@ -66,7 +71,7 @@ export default defineComponent({
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
-
+		const dateTimeInPast = ref(false);
 		const dateRequired = computed(() => time.value !== "");
 
 		const emitDateTime = () => {
@@ -83,6 +88,8 @@ export default defineComponent({
 					parseInt(hoursAndMinutes[1])
 				);
 				emit("input", dateTime.toISOString());
+
+				dateTimeInPast.value = dateTime < new Date();
 			}
 		};
 
@@ -102,6 +109,7 @@ export default defineComponent({
 			onDateUpdate,
 			onTimeUpdate,
 			dateRequired,
+			dateTimeInPast,
 		};
 	},
 });
@@ -110,5 +118,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .picker-width {
 	width: 225px;
+}
+.date-hint {
+	color: red;
+	display: block;
 }
 </style>
