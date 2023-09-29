@@ -180,6 +180,7 @@
 	"components.base.showPassword": "Показати пароль",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.linkElement.subtitle": "посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Подання",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Більше інструментів",

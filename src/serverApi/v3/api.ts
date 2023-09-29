@@ -298,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | LinkElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | LinkElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -1975,6 +1975,19 @@ export interface LessonCopyApiParams {
 /**
  * 
  * @export
+ * @interface LinkContentBody
+ */
+export interface LinkContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkContentBody
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
  * @interface LinkElementContent
  */
 export interface LinkElementContent {
@@ -1990,6 +2003,25 @@ export interface LinkElementContent {
      * @memberof LinkElementContent
      */
     openGraphData?: OpenGraphData;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementContentBody
+ */
+export interface LinkElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof LinkElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {LinkContentBody}
+     * @memberof LinkElementContentBody
+     */
+    content: LinkContentBody;
 }
 /**
  * 
@@ -3241,6 +3273,68 @@ export interface OidcContextResponse {
      * @memberof OidcContextResponse
      */
     ui_locales: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface OpenGraphData
+ */
+export interface OpenGraphData {
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenGraphData
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenGraphData
+     */
+    description: string;
+    /**
+     * 
+     * @type {OpenGraphImageData}
+     * @memberof OpenGraphData
+     */
+    image?: OpenGraphImageData;
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenGraphData
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
+ * @interface OpenGraphImageData
+ */
+export interface OpenGraphImageData {
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenGraphImageData
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenGraphImageData
+     */
+    type?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof OpenGraphImageData
+     */
+    width?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OpenGraphImageData
+     */
+    height?: number;
 }
 /**
  * 
@@ -6638,7 +6732,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6718,7 +6812,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6792,7 +6886,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 

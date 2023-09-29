@@ -179,6 +179,7 @@
 	"components.base.showPassword": "Mostrar contraseña",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Más herramientas",

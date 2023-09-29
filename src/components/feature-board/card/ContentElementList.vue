@@ -9,7 +9,7 @@
 				@delete:element="onDeleteElement"
 			/>
 			<LinkContentElement
-				v-if="isLinkElementResponse(element)"
+				v-if="showLinkElement(element)"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
@@ -65,11 +65,9 @@ import {
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
-} from "@/serverApi/v3";
-import {
-	AnyContentElement,
 	LinkElementResponse,
-} from "@/types/board/ContentElement";
+} from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
@@ -129,18 +127,27 @@ export default defineComponent({
 			return element.type === ContentElementType.SubmissionContainer;
 		};
 
-		const isLinkElementResponse = (
-			element: AnyContentElement
-		): element is LinkElementResponse => {
-			return element.type === ContentElementType.Link;
-		};
-
 		const showSubmissionContainerElement = (
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
 			return (
 				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
 				isSubmissionContainerElementResponse(element)
+			);
+		};
+
+		const isLinkElementResponse = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return element.type === ContentElementType.Link;
+		};
+
+		const showLinkElement = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return (
+				// WIP add env flag
+				true && isLinkElementResponse(element)
 			);
 		};
 
@@ -216,6 +223,7 @@ export default defineComponent({
 			showSubmissionContainerElement,
 			isExternalToolElementResponse,
 			showExternalToolElement,
+			showLinkElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,

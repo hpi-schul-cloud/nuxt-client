@@ -47,6 +47,7 @@ module.exports = defineConfig({
 					"src/components/ui-confirmation-dialog"
 				),
 				"@util-board": getDir("src/components/util-board"),
+				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],

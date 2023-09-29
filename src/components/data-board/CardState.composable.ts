@@ -44,14 +44,6 @@ export const useCardState = (
 		await delay(100);
 		try {
 			cardState.card = await fetchCardFromApi(id);
-			cardState.card.elements.push({
-				id: "TEST_ID",
-				content: {
-					url: "https://de.wikipedia.org/wiki/Leonhard_Euler",
-				},
-				type: ContentElementType.Link,
-				timestamps: {},
-			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
