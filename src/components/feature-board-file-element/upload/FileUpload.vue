@@ -1,21 +1,16 @@
 <template>
 	<v-app-bar flat color="transparent">
-		<div v-if="!fileWasPicked" class="w-100">
-			<FilePicker
-				@update:file="onFileSelect"
-				:isFilePickerOpen.sync="isFilePickerOpen"
-			/>
-		</div>
+		<FilePicker
+			v-if="!fileWasPicked"
+			@update:file="onFileSelect"
+			:isFilePickerOpen.sync="isFilePickerOpen"
+		/>
 
 		<v-progress-linear
 			v-else
 			data-testid="board-file-element-progress-bar"
 			indeterminate
-			class="w-100"
 		/>
-
-		<v-spacer></v-spacer>
-
 		<slot></slot>
 	</v-app-bar>
 </template>
