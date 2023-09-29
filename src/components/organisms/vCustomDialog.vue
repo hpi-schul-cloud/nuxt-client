@@ -19,7 +19,7 @@
 				<div class="button-section button-left">
 					<v-btn
 						v-if="checkButtons('back')"
-						data-test-id="dialog-back"
+						data-testid="dialog-back"
 						variant="outlined"
 						@click="$emit('back')"
 					>
@@ -27,7 +27,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('edit')"
-						data-test-id="dialog-edit"
+						data-testid="dialog-edit"
 						variant="flat"
 						@click="$emit('dialog-edit')"
 					>
@@ -37,7 +37,7 @@
 				<div class="button-section button-right">
 					<v-btn
 						v-if="checkButtons('cancel')"
-						data-test-id="dialog-cancel"
+						data-testid="dialog-cancel"
 						class="dialog-closed"
 						variant="text"
 						@click="cancelDialog"
@@ -46,7 +46,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('confirm')"
-						data-test-id="dialog-confirm"
+						data-testid="dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
 						variant="flat"
@@ -56,7 +56,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
-						data-test-id="dialog-close"
+						data-testid="dialog-close"
 						variant="outlined"
 						@click="closeDialog"
 					>
@@ -64,7 +64,7 @@
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
-						data-test-id="dialog-next"
+						data-testid="dialog-next"
 						color="primary"
 						variant="flat"
 						:disabled="nextBtnDisabled"
@@ -113,6 +113,7 @@ const emit = defineEmits([
 	"dialog-closed",
 	"dialog-confirmed",
 	"dialog-canceled",
+	"next",
 	"back",
 	"dialog-edit",
 ]);
