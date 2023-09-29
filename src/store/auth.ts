@@ -182,38 +182,6 @@ export default class AuthModule extends VuexModule {
 		return !!this.accessToken;
 	}
 
-	// @Action
-	// async populateUser(): Promise<void> {
-	// 	const user = (await $axios.get("/v1/me")).data;
-	// 	// @ts-ignore
-	// 	const roles = (await $axios.get(`/v1/roles/user/${user.id}`)).data;
-
-	// 	// @ts-ignore
-	// 	user.permissions = roles.reduce(
-	// 		(acc: any, role: any) => [...new Set(acc.concat(role.permissions))],
-	// 		[]
-	// 	);
-	// 	// @ts-ignore
-	// 	this.setUser(user);
-	// 	// @ts-ignore
-	// 	if (user.schoolId) {
-	// 		schoolsModule.fetchSchool();
-	// 	}
-	// 	// @ts-ignore
-	// 	if (user.language) {
-	// 		// @ts-ignore
-	// 		this.setLocale(user.language);
-	// 	}
-
-	// 	//TODO Remove once added to User permissions SC-2401
-	// 	if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
-	// 		this.addUserPermmission("ADDONS_ENABLED");
-	// 	}
-	// 	if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
-	// 		this.addUserPermmission("TEAMS_ENABLED");
-	// 	}
-	// }
-
 	@Action
 	async login(jwt: string) {
 		const user: User | undefined = await $axios.get("/v1/me").then(
