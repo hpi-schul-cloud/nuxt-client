@@ -1,18 +1,18 @@
 <template>
 	<div class="grey lighten-4">
 		<v-app-bar v-if="showTitle" flat color="transparent">
-			<v-toolbar-title data-testid="board-file-element-display" inactive>
+			<v-toolbar-title data-testid="file-description-toolbar" inactive>
 				<v-icon
 					color="black"
 					class="mr-2"
 					size="18"
-					data-testid="board-file-element-display-file-icon"
+					data-testid="file-description-icon"
 					>{{ mdiFileDocumentOutline }}</v-icon
 				>
 
 				<span
 					class="subtitle-1 font-weight-bold"
-					data-testid="board-file-element-display-file-name"
+					data-testid="file-description-name"
 					>{{ name }}</span
 				>
 			</v-toolbar-title>
