@@ -83,6 +83,8 @@ export const mockSchool: School = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},

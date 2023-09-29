@@ -5,7 +5,7 @@ export const userLoginMigrationFactory = Factory.define<UserLoginMigration>(
 	() => ({
 		sourceSystemId: `sourceSystemId`,
 		targetSystemId: `targetSystemId`,
-		startedAt: `startedAt`,
+		startedAt: new Date(2000, 1, 1, 0, 0),
 		closedAt: undefined,
 		finishedAt: undefined,
 		mandatorySince: undefined,

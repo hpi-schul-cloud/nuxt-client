@@ -2,10 +2,10 @@ import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileAlert from "./alert/FileAlert.vue";
-import AlternativeText from "./alternative-text/AlternativeText.vue";
 import FileContent from "./FileContent.vue";
+import FileAlert from "./alert/FileAlert.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import FileInputs from "./inputs/FileInputs.vue";
 
 describe("FileContent", () => {
 	describe("When EditMode is true", () => {
@@ -60,7 +60,7 @@ describe("FileContent", () => {
 				});
 			});
 
-			it("Should pass props to FileAlert", () => {
+			it("should pass props to FileAlert", () => {
 				const { wrapper, fileProperties } = setup();
 
 				const fileAlert = wrapper.findComponent(FileAlert);
@@ -70,28 +70,36 @@ describe("FileContent", () => {
 				});
 			});
 
-			it("Should AlternativeText component be in dom", () => {
+			it("should FileInputs component be in dom", () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(AlternativeText);
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-				expect(alternativeText.exists()).toBe(true);
+				expect(fileInputs.exists()).toBe(true);
 			});
 
-			it("Should call onUpdateText when it receives update:text event from alternative text component", async () => {
+			it("should emit update:alternativeText event, when it receives update:text event from file inputs component", async () => {
 				const { wrapper } = setup();
 
-				const alternativeText = wrapper.findComponent(AlternativeText);
+				const fileInputs = wrapper.findComponent(FileInputs);
 
-				alternativeText.vm.$emit("update:text");
-				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["update:text"] ?? ["new text"];
+				fileInputs.vm.$emit("update:alternativeText");
 
-				expect(emitted).toHaveLength(1);
+				expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+			});
+
+			it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
+				const { wrapper } = setup();
+
+				const fileInputs = wrapper.findComponent(FileInputs);
+
+				fileInputs.vm.$emit("update:caption");
+
+				expect(wrapper.emitted("update:caption")).toHaveLength(1);
 			});
 
 			describe("when alert emits on-status-reload", () => {
-				it("should emit delete event", async () => {
+				it("should emit fetch:file event", async () => {
 					const { wrapper } = setup();
 
 					const fileAlert = wrapper.findComponent(FileAlert);
@@ -100,107 +108,6 @@ describe("FileContent", () => {
 
 					expect(wrapper.emitted("fetch:file")).toBeTruthy();
 				});
-			});
-		});
-
-		describe("When PreviewUrl is undefined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: undefined,
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: true,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
-			});
-		});
-	});
-
-	describe("When EditMode is false", () => {
-		describe("When PreviewUrl is defined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: "test",
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: false,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
-			});
-		});
-
-		describe("When PreviewUrl is undefined", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-
-				const fileProperties = {
-					previewUrl: undefined,
-					element,
-				};
-				const wrapper = shallowMount(FileContent, {
-					propsData: {
-						fileProperties,
-						isEditMode: false,
-					},
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileProperties,
-				};
-			};
-
-			it("Should AlternativeText component not be in dom", () => {
-				const { wrapper } = setup();
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(false);
 			});
 		});
 	});

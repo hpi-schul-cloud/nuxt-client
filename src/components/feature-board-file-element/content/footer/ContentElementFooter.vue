@@ -1,6 +1,6 @@
 <template>
-	<v-card-actions>
-		<ContentElementChips
+	<v-card-actions class="py-2 px-4">
+		<FileAttributes
 			:fileSize="fileProperties.size"
 			:fileName="fileProperties.name"
 		/>
@@ -18,13 +18,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
-import ContentElementChips from "./chips/ContentElementChips.vue";
+import FileAttributes from "./attributes/FileAttributes.vue";
 import FileDownload from "./download/FileDownload.vue";
 
 export default defineComponent({
 	name: "ContentElementFooter",
 	components: {
-		ContentElementChips,
+		FileAttributes,
 		FileDownload,
 	},
 	props: {

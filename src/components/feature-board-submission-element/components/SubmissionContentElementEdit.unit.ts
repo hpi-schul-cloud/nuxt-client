@@ -5,7 +5,8 @@ import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { DateTimePicker } from "@feature-date-time-picker";
 
 const mockedSubmissions = submissionsResponseFactory.build();
 
@@ -28,7 +29,7 @@ describe("SubmissionContentElementEdit", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData,
 				provide: {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					[I18N_KEY.valueOf()]: i18nMock,
 				},
 			}
 		);
@@ -51,32 +52,12 @@ describe("SubmissionContentElementEdit", () => {
 		expect(submissionContentElement.exists()).toBe(true);
 	});
 
-	it("should display icon", async () => {
+	it("should render DateTimePicker", () => {
 		const { wrapper } = setup();
 
-		const submissionIcon = wrapper.find("v-icon-stub");
+		const dateTimePicker = wrapper.findComponent(DateTimePicker);
 
-		expect(submissionIcon.exists()).toBe(true);
-	});
-
-	it("should find submission tag", () => {
-		const { wrapper } = setup();
-
-		const submissionTag = wrapper.find("span").text();
-
-		expect(submissionTag).toBe(
-			wrapper.vm.$t("components.cardElement.submissionElement")
-		);
-	});
-
-	it("should find dueDate text", () => {
-		const { wrapper, dueDate } = setup();
-
-		const submissionDueDate = wrapper
-			.find("[data-testid=board-submission-element-due-date]")
-			.text();
-
-		expect(submissionDueDate).toBe(dueDate);
+		expect(dateTimePicker.exists()).toBe(true);
 	});
 
 	it("should render the SubmissionContentElementMenu", () => {

@@ -1,5 +1,5 @@
 <template>
-	<div class="white rounded-b-sm">
+	<div class="rounded-b border-top">
 		<v-skeleton-loader
 			v-if="loading"
 			class="mt-5 ml-5 mb-6"
@@ -64,3 +64,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.border-top {
+	border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+</style>

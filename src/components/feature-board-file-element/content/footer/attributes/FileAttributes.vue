@@ -1,12 +1,7 @@
 <template>
-	<div>
-		<v-chip class="grey lighten-3 mr-2" disabled small>{{
-			fileExtension
-		}}</v-chip>
-		<v-chip class="grey lighten-3 mr-2" disabled small>{{
-			humanReadableFileSize
-		}}</v-chip>
-	</div>
+	<span class="text-caption">
+		{{ `${fileExtension} ⋅ ${humanReadableFileSize}` }}
+	</span>
 </template>
 
 <script lang="ts">
@@ -15,7 +10,7 @@ import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
-	name: "ContentElementChips",
+	name: "FileAttributes",
 	props: {
 		fileSize: {
 			type: Number,
@@ -49,9 +44,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.v-chip {
-	opacity: 1;
-}
-</style>
