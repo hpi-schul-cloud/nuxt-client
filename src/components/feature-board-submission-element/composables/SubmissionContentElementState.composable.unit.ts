@@ -2,6 +2,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -32,7 +33,7 @@ describe("SubmissionContentElementState.composable", () => {
 
 	const setup = (
 		contentElementId = "123123",
-		dueDate = "2100-12-31T00:00:00.000Z"
+		dueDate = ref({ dueDate: "2100-12-31T00:00:00.000Z" })
 	) => {
 		return mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),

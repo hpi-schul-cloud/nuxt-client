@@ -74,15 +74,13 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissions, editable, updateSubmissionItem } =
-			useSubmissionContentElementState(
-				element.value.id,
-				element.value.content.dueDate
-			);
 
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { modelValue } = useContentElementState(props);
+
+		const { loading, submissions, editable, updateSubmissionItem } =
+			useSubmissionContentElementState(element.value.id, modelValue);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
