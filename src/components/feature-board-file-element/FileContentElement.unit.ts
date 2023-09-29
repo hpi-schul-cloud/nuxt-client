@@ -12,13 +12,10 @@ import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStora
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { createMock } from "@golevelup/ts-jest";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
-import ContentElementMenu from "./menu/ContentElementMenu.vue";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -30,36 +27,27 @@ jest.mock("@data-board", () => {
 });
 jest.mock("@feature-board");
 jest.mock("./shared/composables/FileStorageApi.composable");
-jest.mock("@ui-confirmation-dialog");
-
-const useDeleteConfirmationDialogMock = jest.mocked(
-	useDeleteConfirmationDialog
-);
-const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
-useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
-		fileName: string;
 		element: AnyContentElement;
 		isEditMode: boolean;
-		isFirstElement: boolean;
-		isLastElement: boolean;
-		hasMultipleElements: boolean;
 	}) => {
-		const deleteElementMock = jest.fn();
-
+		const menu = "slot-menu";
 		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
-			propsData: { ...props, deleteElement: deleteElementMock },
+			propsData: { ...props },
+			slots: {
+				menu,
+			},
 		});
 
-		return { wrapper, deleteElementMock };
+		return { wrapper, menu };
 	};
 
 	describe("when component is not in edit mode", () => {
@@ -70,25 +58,21 @@ describe("FileContentElement", () => {
 
 				setupFileStorageApiMock({});
 
-				const { wrapper, deleteElementMock } = getWrapper({
-					fileName: "myfile",
+				const { wrapper, menu } = getWrapper({
 					element,
 					isEditMode: false,
-					isFirstElement: false,
-					isLastElement: false,
-					hasMultipleElements: false,
 				});
 
 				return {
 					wrapper,
-					deleteElementMock,
 					element,
-					mockedUse,
+					menu,
 				};
 			};
 
 			it("should be found in dom", () => {
 				const { wrapper } = setup();
+
 				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 			});
 
@@ -118,14 +102,12 @@ describe("FileContentElement", () => {
 				expect(fileUpload.exists()).toBe(false);
 			});
 
-			it("should not render ContentElementMenu component", async () => {
-				const { wrapper } = setup();
+			it("should not render slot menu component", async () => {
+				const { wrapper, menu } = setup();
 
 				await wrapper.vm.$nextTick();
 
-				const contentElementMenu = wrapper.findComponent(ContentElementMenu);
-
-				expect(contentElementMenu.exists()).toBe(false);
+				expect(wrapper.html()).not.toContain(menu);
 			});
 		});
 
@@ -162,13 +144,9 @@ describe("FileContentElement", () => {
 					element,
 				};
 
-				const { wrapper, deleteElementMock } = getWrapper({
-					fileName: "abc.jpg",
+				const { wrapper, menu } = getWrapper({
 					element,
 					isEditMode: false,
-					isFirstElement: false,
-					isLastElement: false,
-					hasMultipleElements: false,
 				});
 
 				return {
@@ -176,8 +154,8 @@ describe("FileContentElement", () => {
 					fetchFile,
 					fileRecordResponse,
 					element,
-					deleteElementMock,
 					expectedFileProperties,
+					menu,
 				};
 			};
 
@@ -289,13 +267,11 @@ describe("FileContentElement", () => {
 					expect(fileUpload.exists()).toBe(false);
 				});
 
-				it("should not render ContentElementMenu component", async () => {
-					const { wrapper } = setup();
+				it("should not render slot menu component", async () => {
+					const { wrapper, menu } = setup();
 					await wrapper.vm.$nextTick();
 
-					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
-
-					expect(contentElementMenu.exists()).toBe(false);
+					expect(wrapper.html()).not.toContain(menu);
 				});
 			});
 
@@ -334,16 +310,13 @@ describe("FileContentElement", () => {
 						isLastElement: true,
 						hasMultipleElements: false,
 					};
-					const { wrapper, deleteElementMock } = getWrapper({
-						fileName: "myfile",
+					const { wrapper } = getWrapper({
 						element,
 						isEditMode: true,
-						...elementPositionProps,
 					});
 
 					return {
 						wrapper,
-						deleteElementMock,
 						upload,
 						element,
 						elementPositionProps,
@@ -405,131 +378,6 @@ describe("FileContentElement", () => {
 						expect(upload).toHaveBeenCalledTimes(1);
 					});
 				});
-
-				it("should render ContentElementMenu component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
-
-					expect(contentElementMenu.exists()).toBe(true);
-				});
-
-				it("should pass correct props to ContentElementMenu component", async () => {
-					const { wrapper } = setup();
-
-					await wrapper.vm.$nextTick();
-
-					const props = wrapper.findComponent(ContentElementMenu).props();
-
-					expect(props.isFirstElement).toBe(false);
-					expect(props.isLastElement).toBe(true);
-					expect(props.hasMultipleElements).toBe(false);
-				});
-
-				describe("when ContentElementMenu emits move-down:element event", () => {
-					it("should emit move-down:edit event", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const contentElementMenu =
-							wrapper.findComponent(ContentElementMenu);
-						contentElementMenu.vm.$emit("move-down:element");
-
-						await wrapper.vm.$nextTick();
-
-						expect(wrapper.emitted("move-down:edit")).toHaveLength(1);
-					});
-				});
-
-				describe("when ContentElementMenu emits move-up:element event", () => {
-					it("should emit move-up:edit event", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const contentElementMenu =
-							wrapper.findComponent(ContentElementMenu);
-						contentElementMenu.vm.$emit("move-up:element");
-
-						await wrapper.vm.$nextTick();
-
-						expect(wrapper.emitted("move-up:edit")).toHaveLength(1);
-					});
-				});
-
-				describe("when ContentElementMenu emits delete:element event with deleteDirectly prop = true", () => {
-					it("should emit delete:element event", async () => {
-						const { wrapper } = setup();
-
-						await wrapper.vm.$nextTick();
-
-						const contentElementMenu =
-							wrapper.findComponent(ContentElementMenu);
-						contentElementMenu.vm.$emit("delete:element", true);
-
-						await wrapper.vm.$nextTick();
-
-						expect(wrapper.emitted("delete:element")).toHaveLength(1);
-					});
-				});
-
-				describe("when ContentElementMenu emits delete:element event with deleteDirectly prop = false", () => {
-					describe("when askDeleteConfirmation returns true", () => {
-						it("should emit delete:element event", async () => {
-							const { wrapper } = setup();
-
-							mockedUse.askDeleteConfirmation.mockReset();
-							mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-							useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
-
-							await wrapper.vm.$nextTick();
-
-							const contentElementMenu =
-								wrapper.findComponent(ContentElementMenu);
-							contentElementMenu.vm.$emit("delete:element");
-
-							await wrapper.vm.$nextTick();
-							await wrapper.vm.$nextTick();
-
-							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledTimes(1);
-							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledWith(
-								undefined,
-								"boardElement"
-							);
-							expect(wrapper.emitted("delete:element")).toHaveLength(1);
-						});
-					});
-
-					describe("when askDeleteConfirmation returns false", () => {
-						it("should emit delete:element event", async () => {
-							const { wrapper } = setup();
-
-							mockedUse.askDeleteConfirmation.mockReset();
-							mockedUse.askDeleteConfirmation.mockResolvedValue(false);
-							useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
-
-							await wrapper.vm.$nextTick();
-
-							const contentElementMenu =
-								wrapper.findComponent(ContentElementMenu);
-							contentElementMenu.vm.$emit("delete:element");
-
-							await wrapper.vm.$nextTick();
-							await wrapper.vm.$nextTick();
-
-							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledTimes(1);
-							expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledWith(
-								undefined,
-								"boardElement"
-							);
-
-							expect(wrapper.emitted("delete:element")).toBeUndefined();
-						});
-					});
-				});
 			});
 
 			describe("when upload returns error", () => {
@@ -542,18 +390,13 @@ describe("FileContentElement", () => {
 						uploadMock,
 					});
 
-					const { wrapper, deleteElementMock } = getWrapper({
-						fileName: "myfile",
+					const { wrapper } = getWrapper({
 						element,
 						isEditMode: true,
-						isFirstElement: false,
-						isLastElement: false,
-						hasMultipleElements: false,
 					});
 
 					return {
 						wrapper,
-						deleteElementMock,
 						element,
 					};
 				};
@@ -614,13 +457,9 @@ describe("FileContentElement", () => {
 					element,
 				};
 
-				const { wrapper, deleteElementMock } = getWrapper({
-					fileName: "abc.jpg",
+				const { wrapper, menu } = getWrapper({
 					element,
 					isEditMode: true,
-					isFirstElement: false,
-					isLastElement: false,
-					hasMultipleElements: false,
 				});
 
 				return {
@@ -628,8 +467,8 @@ describe("FileContentElement", () => {
 					fetchFile,
 					fileRecordResponse,
 					element,
-					deleteElementMock,
 					expectedFileProperties,
+					menu,
 				};
 			};
 
@@ -741,13 +580,11 @@ describe("FileContentElement", () => {
 					expect(fileUpload.exists()).toBe(false);
 				});
 
-				it("should not render ContentElementMenu component", async () => {
-					const { wrapper } = setup();
+				it("should render slot menu component", async () => {
+					const { wrapper, menu } = setup();
 					await wrapper.vm.$nextTick();
 
-					const contentElementMenu = wrapper.findComponent(ContentElementMenu);
-
-					expect(contentElementMenu.exists()).toBe(true);
+					expect(wrapper.html()).toContain(menu);
 				});
 			});
 

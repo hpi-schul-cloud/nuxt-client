@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode" />
+		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode">
+			<slot></slot>
+		</FileDisplay>
 		<FileInputs
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"

@@ -30,6 +30,9 @@ module.exports = defineConfig({
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
+				"@feature-board-content-element-menu": getDir(
+					"src/components/feature-board-content-element-menu"
+				),
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
 				),
