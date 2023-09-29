@@ -1,7 +1,7 @@
 <template>
 	<vCustomDialog
 		data-testid="element-type-selection"
-		:size="426"
+		:size="dialogWidth"
 		:has-buttons="true"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -13,7 +13,8 @@
 
 		<template slot="content">
 			<div
-				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
+				class="d-flex flex-sm-row flex-column flex-wrap align-items-center"
+				:class="{ 'justify-content-space-between': submissionsEnabled }"
 			>
 				<v-btn
 					v-for="(item, key) in elementTypeOptions"
@@ -30,8 +31,8 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ item.icon }}</v-icon></span
-						>
+							<v-icon large>{{ item.icon }}</v-icon>
+						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
 				</v-btn>
@@ -43,7 +44,9 @@
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
-import { defineComponent } from "vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { mdiEmailOutline } from "@mdi/js";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
@@ -52,6 +55,8 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	setup(props, { emit }) {
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const { isDialogOpen, closeDialog, elementTypeOptions } =
 			useSharedElementTypeSelection();
 
@@ -65,12 +70,22 @@ export default defineComponent({
 
 		const actionButtons = ["close"];
 
+		const submissionsEnabled =
+			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
+
+		const dialogWidth: ComputedRef<number> = computed(() =>
+			elementTypeOptions.value.length >= 3 ? 426 : 320
+		);
+
 		return {
 			onAddElement,
 			onCloseDialog,
+			mdiEmailOutline,
 			elementTypeOptions,
 			isDialogOpen,
 			actionButtons,
+			submissionsEnabled,
+			dialogWidth,
 		};
 	},
 });

@@ -17,7 +17,7 @@
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			>
-				<v-icon>$mdiDotsVertical</v-icon>
+				<v-icon>{{ mdiDotsVertical }}</v-icon>
 			</v-btn>
 		</template>
 		<v-list v-if="menuItems.length">
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { mdiDotsVertical } from "@mdi/js";
+
 export default {
 	components: {},
 	props: {
@@ -58,6 +60,7 @@ export default {
 	},
 	data() {
 		return {
+			mdiDotsVertical,
 			showMenu: false,
 		};
 	},

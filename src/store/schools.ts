@@ -1,7 +1,3 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { $axios } from "@/utils/api";
-import { authModule } from "@/store";
-import { FederalState, OauthMigration, School, Year } from "./types/schools";
 import {
 	MigrationBody,
 	MigrationResponse,
@@ -11,9 +7,13 @@ import {
 	UserImportApiInterface,
 	ValidationError,
 } from "@/serverApi/v3";
+import { authModule } from "@/store";
+import { $axios } from "@/utils/api";
 import { AxiosError, AxiosResponse } from "axios";
-import { ApplicationError } from "./types/application-error";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
+import { ApplicationError } from "./types/application-error";
+import { FederalState, OauthMigration, School, Year } from "./types/schools";
 
 /**
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
@@ -24,8 +24,10 @@ declare type SchoolPayload = { features: string[] } & Omit<School, "features">;
 const SCHOOL_FEATURES: (keyof School["features"])[] = [
 	"rocketChat",
 	"videoconference",
+	"nextcloud",
 	"studentVisibility", // deprecated
 	"ldapUniventionMigrationSchool",
+	"oauthProvisioningEnabled",
 	"showOutdatedUsers",
 	"enableLdapSyncDuringMigration",
 ];
@@ -78,7 +80,13 @@ export default class SchoolsModule extends VuexModule {
 		updatedAt: "",
 		createdAt: "",
 		__v: 0,
-		currentYear: "",
+		currentYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+			__v: 0,
+		},
 		purpose: "",
 		features: {
 			rocketChat: false,
@@ -87,6 +95,8 @@ export default class SchoolsModule extends VuexModule {
 			ldapUniventionMigrationSchool: false,
 			showOutdatedUsers: false,
 			enableLdapSyncDuringMigration: false,
+			oauthProvisioningEnabled: false,
+			nextcloud: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},
@@ -95,15 +105,6 @@ export default class SchoolsModule extends VuexModule {
 		documentBaseDir: "",
 		isExternal: false,
 		id: "",
-		years: {},
-		isTeamCreationByStudentsEnabled: false,
-	};
-	currentYear: Year = {
-		_id: "",
-		name: "",
-		startDate: "",
-		endDate: "",
-		__v: 0,
 		years: {},
 		isTeamCreationByStudentsEnabled: false,
 	};
@@ -136,11 +137,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setCurrentYear(currentYear: Year): void {
-		this.currentYear = currentYear;
-	}
-
-	@Mutation
 	setFederalState(federalState: FederalState): void {
 		this.federalState = federalState;
 	}
@@ -170,7 +166,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get getCurrentYear(): Year {
-		return this.currentYear;
+		return this.school.currentYear;
 	}
 
 	get getFederalState(): FederalState {
@@ -220,8 +216,6 @@ export default class SchoolsModule extends VuexModule {
 
 				this.setSchool(transformSchoolServerToClient(school));
 
-				await this.fetchCurrentYear();
-
 				this.setLoading(false);
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
@@ -248,28 +242,6 @@ export default class SchoolsModule extends VuexModule {
 			).data;
 
 			this.setFederalState(data);
-			this.setLoading(false);
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async fetchCurrentYear(): Promise<void> {
-		this.setLoading(true);
-		try {
-			const currentYear = (
-				await $axios.get<Year>(`/v1/years/${this.school.currentYear}`)
-			).data;
-			this.setCurrentYear(currentYear);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
@@ -425,7 +397,9 @@ export default class SchoolsModule extends VuexModule {
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
+				await this.schoolApi.legacySchoolControllerGetMigration(
+					this.getSchool.id
+				);
 			this.setOauthMigration({
 				enableMigrationStart: oauthMigration.data.enableMigrationStart,
 				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
@@ -454,7 +428,7 @@ export default class SchoolsModule extends VuexModule {
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerSetMigration(
+				await this.schoolApi.legacySchoolControllerSetMigration(
 					this.school._id,
 					migrationFlags
 				);

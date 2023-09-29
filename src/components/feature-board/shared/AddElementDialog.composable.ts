@@ -1,5 +1,12 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	mdiFormatText,
+	mdiLightbulbOnOutline,
+	mdiPuzzleOutline,
+	mdiTrayArrowUp,
+} from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
@@ -8,6 +15,7 @@ type AddCardElement = (
 ) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
@@ -21,25 +29,38 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	const options = [
 		{
-			icon: "$mdiFormatText",
+			icon: mdiFormatText,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
 			action: () => onElementClick(ContentElementType.RichText),
 			testId: "create-element-text",
 		},
 		{
-			icon: "$mdiTrayArrowUp",
+			icon: mdiTrayArrowUp,
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
-		{
-			icon: "$mdiLightbulbOnOutline",
+	];
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+		options.push({
+			icon: mdiLightbulbOnOutline,
 			label:
 				"components.elementTypeSelection.elements.submissionElement.subtitle",
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
-		},
-	];
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		options.push({
+			icon: mdiPuzzleOutline,
+			label:
+				"components.elementTypeSelection.elements.externalToolElement.subtitle",
+			action: () => onElementClick(ContentElementType.ExternalTool),
+			testId: "create-element-external-tool-container",
+		});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;

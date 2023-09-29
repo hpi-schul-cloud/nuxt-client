@@ -13,6 +13,26 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+			>
+				<template #menu="{ elementName }">
+					<ContentElementMenu
+						:elementId="element.id"
+						:name="elementName"
+						:isFirstElement="firstElementId === element.id"
+						:isLastElement="lastElementId === element.id"
+						:hasMultipleElements="hasMultipleElements"
+						@move-down:element="onMoveElementDown(index, element)"
+						@move-up:element="onMoveElementUp(index, element)"
+						@delete:element="onDeleteElement"
+					/>
+				</template>
+			</FileContentElement>
+			<SubmissionContentElement
+				v-else-if="showSubmissionContainerElement(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
@@ -21,8 +41,8 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 				@delete:element="onDeleteElement"
 			/>
-			<SubmissionContentElement
-				v-else-if="isSubmissionContainerElementResponse(element)"
+			<ExternalToolElement
+				v-else-if="showExternalToolElement(element)"
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
@@ -41,12 +61,16 @@
 <script lang="ts">
 import {
 	ContentElementType,
+	ExternalToolElementResponse,
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import ContentElementMenu from "@feature-board-content-element-menu";
+import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
@@ -55,9 +79,11 @@ import { computed, defineComponent, PropType } from "vue";
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		ExternalToolElement,
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
+		ContentElementMenu,
 	},
 	props: {
 		elements: {
@@ -76,6 +102,8 @@ export default defineComponent({
 		"move-keyboard:element",
 	],
 	setup(props, { emit }) {
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const onDeleteElement = (elementId: string) => {
 			emit("delete:element", elementId);
 		};
@@ -96,6 +124,30 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is SubmissionContainerElementResponse => {
 			return element.type === ContentElementType.SubmissionContainer;
+		};
+
+		const showSubmissionContainerElement = (
+			element: AnyContentElement
+		): element is SubmissionContainerElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+				isSubmissionContainerElementResponse(element)
+			);
+		};
+
+		const isExternalToolElementResponse = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return element.type === ContentElementType.ExternalTool;
+		};
+
+		const showExternalToolElement = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
+				isExternalToolElementResponse(element)
+			);
 		};
 
 		const onMoveElementDown = (
@@ -146,12 +198,14 @@ export default defineComponent({
 		});
 
 		return {
-			ContentElementType,
 			firstElementId,
 			hasMultipleElements,
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			showSubmissionContainerElement,
+			isExternalToolElementResponse,
+			showExternalToolElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,

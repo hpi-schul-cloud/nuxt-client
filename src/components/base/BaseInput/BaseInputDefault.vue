@@ -87,6 +87,7 @@
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
 import uidMixin from "@/mixins/uid";
+import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
 
 export const supportedTypes = [
 	"email",
@@ -131,6 +132,8 @@ export default {
 	},
 	data() {
 		return {
+			mdiEyeOffOutline,
+			mdiEyeOutline,
 			hasFocus: false,
 			passwordVisible: false,
 			minDate: inputRangeDate(-100, "y"),
@@ -159,7 +162,7 @@ export default {
 			);
 		},
 		visibilityIcon() {
-			return this.passwordVisible ? "$mdiEyeOutline" : "$mdiEyeOffOutline";
+			return this.passwordVisible ? mdiEyeOutline : mdiEyeOffOutline;
 		},
 	},
 	methods: {

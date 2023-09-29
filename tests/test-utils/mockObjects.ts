@@ -67,7 +67,13 @@ export const mockSchool: School = {
 	updatedAt: "",
 	createdAt: "",
 	__v: 0,
-	currentYear: "",
+	currentYear: {
+		_id: "",
+		name: "",
+		startDate: "",
+		endDate: "",
+		__v: 0,
+	},
 	purpose: "",
 	features: {
 		rocketChat: false,
@@ -76,6 +82,8 @@ export const mockSchool: School = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},

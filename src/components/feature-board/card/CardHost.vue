@@ -35,7 +35,9 @@
 					<BoardMenu v-if="hasDeletePermission" scope="card">
 						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
 							<template #icon>
-								<VIcon> $mdiPencilOutline </VIcon>
+								<VIcon>
+									{{ mdiPencilOutline }}
+								</VIcon>
 							</template>
 							{{ $t("common.actions.edit") }}
 						</BoardMenuAction>
@@ -44,7 +46,9 @@
 							data-test-id="board-menu-action-delete"
 						>
 							<template #icon>
-								<VIcon> $mdiTrashCanOutline </VIcon>
+								<VIcon>
+									{{ mdiTrashCanOutline }}
+								</VIcon>
 							</template>
 							{{ $t("components.board.action.delete") }}
 						</BoardMenuAction>
@@ -69,13 +73,14 @@
 </template>
 
 <script lang="ts">
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	useDebounceFn,
 	useElementHover,
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, toRef } from "vue";
 import ContentElementList from "./ContentElementList.vue";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -111,11 +116,12 @@ export default defineComponent({
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move:card-keyboard", "delete:card"],
+	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
+		const cardId = toRef(props, "cardId");
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-			props.cardId,
+			cardId.value,
 			cardHost
 		);
 		const isHovered = useElementHover(cardHost);
@@ -129,10 +135,11 @@ export default defineComponent({
 			moveElementUp,
 			deleteElement,
 			addTextAfterTitle,
-		} = useCardState(props.cardId);
+		} = useCardState(cardId.value, emit);
+
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			props.cardId
+			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
@@ -227,6 +234,8 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
+			mdiTrashCanOutline,
+			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},

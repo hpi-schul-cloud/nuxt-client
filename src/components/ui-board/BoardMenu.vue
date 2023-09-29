@@ -11,8 +11,9 @@
 				@dblclick.stop="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
+				style="height: 36px; width: 36px"
 			>
-				<VIcon data-testid="board-menu-icon">$mdiDotsVertical</VIcon>
+				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
 					<template v-if="scope === 'board'">{{
 						$t("components.board.menu.board")
@@ -36,6 +37,7 @@
 </template>
 
 <script lang="ts">
+import { mdiDotsVertical } from "@mdi/js";
 import { computed, defineComponent, PropType } from "vue";
 
 export default defineComponent({
@@ -47,10 +49,13 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const hasBackground = computed<boolean>(() => props.scope === "card");
+		const hasBackground = computed<boolean>(
+			() => props.scope === "card" || props.scope === "element"
+		);
 
 		return {
 			hasBackground,
+			mdiDotsVertical,
 		};
 	},
 });

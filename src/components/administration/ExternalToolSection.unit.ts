@@ -12,7 +12,8 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { Wrapper, mount } from "@vue/test-utils";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolSection from "./ExternalToolSection.vue";
 
@@ -49,6 +50,9 @@ describe("ExternalToolSection", () => {
 				[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
+			},
+			stubs: {
+				VIcon: true,
 			},
 		});
 
@@ -155,14 +159,14 @@ describe("ExternalToolSection", () => {
 					"components.externalTools.status.latest"
 				);
 				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					"$mdiCheckCircle"
+					mdiCheckCircle
 				);
 				expect(secondRow.at(1).find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
 				expect(
 					secondRow.at(1).findComponent({ name: "v-icon" }).text()
-				).toEqual("$mdiRefreshCircle");
+				).toEqual(mdiRefreshCircle);
 			});
 
 			describe("when actions buttons are rendered", () => {

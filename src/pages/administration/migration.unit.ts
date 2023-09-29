@@ -1,11 +1,11 @@
+import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import setupStores from "@@/tests/test-utils/setupStores";
-import migrationIndex from "@/pages/administration/Migration.page.vue";
-import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount, shallowMount } from "@vue/test-utils";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -61,7 +61,13 @@ const schoolMock = {
 	updatedAt: "2022-02-10T11:56:22.817Z",
 	createdAt: "2017-01-01T00:06:37.148Z",
 	__v: 1,
-	currentYear: "5ebd6dc14a431f75ec9a3e77",
+	currentYear: {
+		_id: "5ebd6dc14a431f75ec9a3e77",
+		name: "2021/22",
+		startDate: "2021-08-01T00:00:00.000Z",
+		endDate: "2022-07-31T00:00:00.000Z",
+		__v: 0,
+	},
 	purpose: "demo",
 	features: {
 		rocketChat: true,
@@ -70,6 +76,8 @@ const schoolMock = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },

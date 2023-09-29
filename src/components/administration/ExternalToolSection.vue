@@ -18,8 +18,12 @@
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.outdated" color="error"> $mdiRefreshCircle </v-icon>
-				<v-icon v-else color="success"> $mdiCheckCircle </v-icon>
+				<v-icon v-if="item.outdated" color="error">
+					{{ mdiRefreshCircle }}
+				</v-icon>
+				<v-icon v-else color="success">
+					{{ mdiCheckCircle }}
+				</v-icon>
 				<span>
 					{{ item.status }}
 				</span>
@@ -99,6 +103,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { mdiCheckCircle, mdiRefreshCircle } from "@mdi/js";
 import {
 	computed,
 	ComputedRef,
@@ -206,6 +211,8 @@ export default defineComponent({
 			onCloseDeleteDialog,
 			itemToDelete,
 			getItemName,
+			mdiRefreshCircle,
+			mdiCheckCircle,
 		};
 	},
 });

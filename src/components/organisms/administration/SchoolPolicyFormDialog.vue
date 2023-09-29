@@ -5,7 +5,7 @@
 		</h4>
 		<template slot="content">
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" :icon="$mdiAlert">
+				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="replace-alert-text">
 						{{
 							t(
@@ -39,9 +39,8 @@
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
 							data-testid="warning-icon"
+							>$mdiAlert</v-icon
 						>
-							$mdiAlert
-						</v-icon>
 					</template>
 				</v-file-input>
 				<v-card-actions>
@@ -77,15 +76,18 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import VueI18n from "vue-i18n";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SchoolPolicyFormDialog",
@@ -100,24 +102,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		const privacyPolicyModule: PrivacyPolicyModule | undefined =
-			inject<PrivacyPolicyModule>("privacyPolicyModule");
+		const { t } = useI18n();
+		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const i18n = injectStrict(I18N_KEY);
-
-		if (!notifierModule || !schoolsModule || !privacyPolicyModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
-
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const policyForm: Ref = ref(null);
 		const isValid: Ref<boolean> = ref(false);
