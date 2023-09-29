@@ -5,8 +5,8 @@
 			ref="containerRef"
 			tabindex="0"
 			@click="onClick"
-			@keydown.enter.self="onKeyDown"
-			@keydown.space.prevent="onKeyDown"
+			@keydown.enter.stop="onKeyDown"
+			@keydown.space.stop="onKeyDown"
 		>
 			<div
 				v-if="!isEditMode && (hovered || focused)"
