@@ -57,13 +57,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: "/termsofuse",
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					href: "/privacypolicy",
+					href: filePathsModule.getSpecificFiles.privacy,
 					text: this.$t("components.legacy.footer.privacy_policy_thr"),
 					target: "_blank",
 					rel: "noopener",
@@ -77,6 +77,7 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 			];
+
 			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
 				links.push({
 					href: envConfigModule.getEnv.ALERT_STATUS_URL,
@@ -85,6 +86,7 @@ export default {
 					rel: "noopener",
 				});
 			}
+
 			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
 				links.push({
 					href:
@@ -97,12 +99,14 @@ export default {
 					rel: "noopener",
 				});
 			}
+
 			links.push({
 				href: filePathsModule.getSpecificFiles.accessibilityStatement,
 				text: this.$t("components.legacy.footer.accessibility.statement"),
 				target: "_blank",
 				rel: "noopener",
 			});
+
 			return links;
 		},
 	},
