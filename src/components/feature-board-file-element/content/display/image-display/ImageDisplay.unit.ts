@@ -21,6 +21,7 @@ describe("ImageDisplay", () => {
 		};
 
 		const wrapper = shallowMount(ImageDisplay, {
+			attachTo: document.body,
 			propsData,
 			...createComponentMocks({ i18n: true }),
 			provide: {
@@ -103,20 +104,24 @@ describe("ImageDisplay", () => {
 			expect(overlay.isVisible()).toBe(true);
 		});
 
-		// it("should show overlay, when the user focuses image", async () => {
-		// 	const { wrapper } = setup({ isEditMode: false });
+		it("should show overlay, when the user focuses image", async () => {
+			const { wrapper } = setup({ isEditMode: false });
 
-		// 	wrapper.setData({ focused: true });
-		// 	console.log(wrapper.vm.focused);
-		// 	await nextTick();
+			const container = wrapper.find(".image-display-container")
+				.element as HTMLDivElement;
 
-		// 	console.log(wrapper.overview());
+			expect(document.activeElement).toBe(document.body);
 
-		// 	const overlay = wrapper.find(".image-display-overlay");
+			container.focus();
+			await nextTick();
 
-		// 	expect(overlay.exists()).toBe(true);
-		// 	expect(overlay.isVisible()).toBe(true);
-		// });
+			expect(document.activeElement).toBe(container);
+
+			const overlay = wrapper.find(".image-display-overlay");
+
+			expect(overlay.exists()).toBe(true);
+			expect(overlay.isVisible()).toBe(true);
+		});
 
 		describe("When alternative text is defined", () => {
 			it("should have set alt correctly", () => {

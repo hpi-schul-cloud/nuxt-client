@@ -7,6 +7,8 @@
 			@click="onClick"
 			@keydown.enter.stop="onKeyDown"
 			@keydown.space.stop="onKeyDown"
+			@focusin="focused = true"
+			@focusout="focused = false"
 		>
 			<div
 				v-if="!isEditMode && (hovered || focused)"
@@ -28,7 +30,6 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { useFocus } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -44,10 +45,9 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const containerRef = ref<HTMLDivElement | undefined>();
-
+		const focused = ref(false);
 		const hovered = ref(false);
 
-		const { focused } = useFocus(containerRef);
 		const { open } = useLightBox();
 
 		const alternativeText = computed(() => {
