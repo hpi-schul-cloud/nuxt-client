@@ -66,7 +66,7 @@ describe("DateTimePicker", () => {
 	});
 
 	describe("if only date is set", () => {
-		it("should emit no input event", async () => {
+		it("should emit input event with default time", async () => {
 			setup({ dateTime: "" });
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
@@ -77,7 +77,7 @@ describe("DateTimePicker", () => {
 
 			await wrapper.vm.$nextTick();
 
-			expect(wrapper.emitted("input")).toBe(undefined);
+			expect(wrapper.emitted("input")).toHaveLength(1);
 		});
 	});
 

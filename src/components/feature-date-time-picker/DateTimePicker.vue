@@ -12,7 +12,6 @@
 		/>
 		<time-picker
 			class="picker-width"
-			:required="timeRequired"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
@@ -69,12 +68,16 @@ export default defineComponent({
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
 
 		const dateRequired = computed(() => time.value !== "");
-		const timeRequired = computed(() => date.value !== "");
 
 		const emitDateTime = () => {
-			if (date.value !== "" && time.value !== "") {
+			let timeValue = time.value;
+			if (timeValue === "") {
+				timeValue = "23:59";
+			}
+
+			if (date.value !== "") {
 				const dateTime = new Date(date.value);
-				const hoursAndMinutes = time.value.split(":");
+				const hoursAndMinutes = timeValue.split(":");
 				dateTime.setHours(
 					parseInt(hoursAndMinutes[0]),
 					parseInt(hoursAndMinutes[1])
@@ -99,7 +102,6 @@ export default defineComponent({
 			onDateUpdate,
 			onTimeUpdate,
 			dateRequired,
-			timeRequired,
 		};
 	},
 });
