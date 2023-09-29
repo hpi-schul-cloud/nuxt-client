@@ -61,6 +61,20 @@ _should be replaced by `vue-draggable` (based on sortable.js) because of re-rend
 
 https://vue3-mq.info/migration/from-version-2.html#removal-of-global-properties-and-functions
 
+### Vuelidate
+We will have to refactor the components to using `useVuelidate` composition API:
+
+- src/components/organisms/FormCreateUser.vue
+- src/components/organisms/Ldap/LdapConnectionSection.vue
+- src/components/organisms/Ldap/LdapRolesSection.vue
+- src/components/organisms/Ldap/LdapRolesSection.vue
+- src/components/organisms/Ldap/LdapUsersSection.vue
+- src/components/organisms/Ldap/LdapUsersSection.vue
+- src/utils/ldapConstants.js
+
+https://vuelidate-next.netlify.app/#getting-started-1
+
+
 ## BREAKING CHANGES
 
 - [Vue.2x -> Vue.3x](https://v3-migration.vuejs.org/breaking-changes/)
@@ -295,3 +309,30 @@ In order to access the dialog components in tests we have to use `findComponent`
 
 For a further explanation see:
 https://test-utils.vuejs.org/guide/advanced/teleport.html
+
+### Testing router
+
+```typescript
+const mockRoute = {
+  params: {
+    id: 1
+  }
+}
+const mockRouter = {
+  push: jest.fn()
+}
+
+const wrapper = mount(Component, {
+  props: {
+    isAuthenticated: true
+  },
+  global: {
+    mocks: {
+      $route: mockRoute,
+      $router: mockRouter
+    }
+  }
+})
+```
+
+https://test-utils.vuejs.org/guide/advanced/vue-router.html
