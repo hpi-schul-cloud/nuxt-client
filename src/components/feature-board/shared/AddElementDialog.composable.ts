@@ -81,14 +81,14 @@ export const useAddElementDialog = (
 			testId: "create-element-submission-container",
 		});
 	}
-	// if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
-	// 	options.push({
-	// 		icon: mdiPresentation,
-	// 		label: "components.elementTypeSelection.elements.boardElement.subtitle",
-	// 		action: () => onElementClick(ContentElementType.Drawing),
-	// 		testId: "create-element-drawing-element",
-	// 	});
-	// }
+	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+		options.push({
+			icon: mdiPresentation,
+			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			action: () => onElementClick(ContentElementType.Drawing),
+			testId: "create-element-drawing-element",
+		});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;

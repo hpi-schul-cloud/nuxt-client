@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, computed } from "vue";
 import image from "@/assets/img/tldraw.png";
 import dayjs from "dayjs";
 
