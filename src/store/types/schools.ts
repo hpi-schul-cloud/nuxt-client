@@ -26,6 +26,8 @@ export type FederalState = {
 export type School = {
 	_id: string;
 	name: string;
+	logo_name?: string;
+	logo_dataUrl?: string;
 	fileStorageType: string;
 	federalState: string;
 	county: County;
