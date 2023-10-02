@@ -1,18 +1,30 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createMock } from "@golevelup/ts-jest";
 import { BoardMenuAction } from "@ui-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import FileContentElementMenu from "./ContentElementMenu.vue";
 
 jest.mock("@/utils/fileHelper");
 
+jest.mock("@ui-confirmation-dialog");
+
+const useDeleteConfirmationDialogMock = jest.mocked(
+	useDeleteConfirmationDialog
+);
+const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
+useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
 describe("FileContentElementMenu", () => {
+	const name = "test-name";
 	const setupProps = () => ({
 		fileName: "file-record #1.txt",
 		url: "1/file-record #1.txt",
 		isFirstElement: false,
 		isLastElement: false,
 		hasMultipleElements: false,
+		name,
 	});
 
 	const setup = () => {
@@ -29,6 +41,7 @@ describe("FileContentElementMenu", () => {
 
 		return {
 			wrapper,
+			name,
 		};
 	};
 
@@ -56,6 +69,9 @@ describe("FileContentElementMenu", () => {
 			const wrapper = shallowMount(FileContentElementMenu, {
 				...createComponentMocks({ i18n: true }),
 				propsData: multipleElementsSetupProps,
+				provide: {
+					[I18N_KEY as symbol]: { t: (key: string) => key },
+				},
 			});
 
 			return {
@@ -143,6 +159,9 @@ describe("FileContentElementMenu", () => {
 					const wrapper = shallowMount(FileContentElementMenu, {
 						...createComponentMocks({ i18n: true }),
 						propsData: firstElementSetupProps,
+						provide: {
+							[I18N_KEY as symbol]: { t: (key: string) => key },
+						},
 					});
 
 					return {
@@ -195,6 +214,9 @@ describe("FileContentElementMenu", () => {
 					const wrapper = shallowMount(FileContentElementMenu, {
 						...createComponentMocks({ i18n: true }),
 						propsData: lastElementSetupProps,
+						provide: {
+							[I18N_KEY as symbol]: { t: (key: string) => key },
+						},
 					});
 
 					return {
@@ -248,6 +270,9 @@ describe("FileContentElementMenu", () => {
 				const wrapper = shallowMount(FileContentElementMenu, {
 					...createComponentMocks({ i18n: true }),
 					propsData: singleElementSetupProps,
+					provide: {
+						[I18N_KEY as symbol]: { t: (key: string) => key },
+					},
 				});
 
 				return {
@@ -302,19 +327,59 @@ describe("FileContentElementMenu", () => {
 		});
 
 		describe("when delete board menu action is clicked", () => {
-			it("should emit delete:element event", async () => {
-				const { wrapper } = setup();
+			describe("when delete confirmation dialog is confirmed", () => {
+				it("should emit delete:element event", async () => {
+					const { wrapper } = setup();
 
-				const deleteTranslation = wrapper.vm
-					.$t("components.board.action.delete")
-					.toString();
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(deleteTranslation))
-					.at(0);
-				childComponent.vm.$emit("click");
+					mockedUse.askDeleteConfirmation.mockReset();
+					mockedUse.askDeleteConfirmation.mockResolvedValue(true);
+					useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
-				expect(wrapper.emitted("delete:element")?.length).toBe(1);
+					const deleteTranslation = wrapper.vm
+						.$t("components.board.action.delete")
+						.toString();
+					const childComponent = wrapper
+						.findAllComponents(BoardMenuAction)
+						.filter((c) => c.text().includes(deleteTranslation))
+						.at(0);
+
+					childComponent.vm.$emit("click");
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					expect(wrapper.emitted("delete:element")?.length).toBe(1);
+				});
+			});
+
+			describe("when delete confirmation dialog is not confirmed", () => {
+				it("should emit delete:element event", async () => {
+					const { wrapper, name } = setup();
+
+					mockedUse.askDeleteConfirmation.mockReset();
+					mockedUse.askDeleteConfirmation.mockResolvedValue(false);
+					useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
+
+					const deleteTranslation = wrapper.vm
+						.$t("components.board.action.delete")
+						.toString();
+					const childComponent = wrapper
+						.findAllComponents(BoardMenuAction)
+						.filter((c) => c.text().includes(deleteTranslation))
+						.at(0);
+
+					childComponent.vm.$emit("click");
+
+					await wrapper.vm.$nextTick();
+					await wrapper.vm.$nextTick();
+
+					expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledTimes(1);
+					expect(mockedUse.askDeleteConfirmation).toHaveBeenCalledWith(
+						name,
+						"boardElement"
+					);
+					expect(wrapper.emitted("delete:element")?.length).toBeUndefined();
+				});
 			});
 		});
 	});

@@ -1,14 +1,11 @@
 <template>
-	<div class="pb-3">
-		<v-file-input
-			class="px-5 mt-0"
-			ref="inputRef"
-			@change="onFileChange"
-			prepend-icon="$mdiTrayArrowUp"
-			:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
-			hide-details="true"
-		/>
-	</div>
+	<v-file-input
+		ref="inputRef"
+		@change="onFileChange"
+		prepend-icon="$mdiTrayArrowUp"
+		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
+		hide-details="true"
+	/>
 </template>
 
 <script lang="ts">
