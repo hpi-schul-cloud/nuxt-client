@@ -20,7 +20,7 @@
 <script lang="ts">
 import { RichTextElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 
@@ -41,12 +41,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { modelValue } = useContentElementState(props);
 		const autofocus = ref(false);
-		useBoardFocusHandler(props.element.id, ref(null), () => {
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
 		});
 
 		const onDeleteElement = () => {
-			emit("delete:element", props.element.id);
+			emit("delete:element", element.value.id);
 		};
 
 		return {

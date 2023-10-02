@@ -10,6 +10,7 @@ import {
 } from "@/serverApi/v3";
 import { BoardCard } from "@/types/board/Card";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { delay } from "@/utils/helpers";
 import { useSharedEditMode } from "@data-board";
 import { nextTick, onMounted, reactive, toRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
@@ -40,6 +41,7 @@ export const useCardState = (
 	const { setEditModeId } = useSharedEditMode();
 
 	const fetchCard = async (id: string): Promise<void> => {
+		await delay(100);
 		try {
 			cardState.card = await fetchCardFromApi(id);
 		} catch (error) {
@@ -83,9 +85,7 @@ export const useCardState = (
 			await updateCardHeightCall(cardState.card.id, newHeight);
 			cardState.card.height = newHeight;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
+			handleError(error, {});
 		}
 	};
 

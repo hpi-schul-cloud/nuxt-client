@@ -22,6 +22,7 @@ import {
 	mdiCheckCircleOutline,
 	mdiChevronLeft,
 	mdiClose,
+	mdiClockOutline,
 	mdiCogOutline,
 	mdiDeleteOutline,
 	mdiDnsOutline,
@@ -92,6 +93,9 @@ import {
 	mdiLightbulbOnOutline,
 	mdiFormatText,
 	mdiPresentation,
+	mdiViewListOutline,
+	mdiReload,
+	mdiFileReplaceOutline,
 } from "@mdi/js";
 
 const materialIcons = {
@@ -118,6 +122,7 @@ const materialIcons = {
 	mdiCheckCircleOutline,
 	mdiChevronLeft,
 	mdiClose,
+	mdiClockOutline,
 	mdiCogOutline,
 	mdiDeleteOutline,
 	mdiDnsOutline,
@@ -188,6 +193,9 @@ const materialIcons = {
 	mdiLightbulbOnOutline,
 	mdiFormatText,
 	mdiPresentation,
+	mdiViewListOutline,
+	mdiReload,
+	mdiFileReplaceOutline,
 };
 
 export default materialIcons;

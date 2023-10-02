@@ -33,6 +33,12 @@ module.exports = defineConfig({
 				"@feature-board-drawing-element": getDir(
 					"src/components/feature-board-drawing-element"
 				),
+				"@feature-board-content-element-menu": getDir(
+					"src/components/feature-board-content-element-menu"
+				),
+				"@feature-board-external-tool-element": getDir(
+					"src/components/feature-board-external-tool-element"
+				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-date-time-picker": getDir(
 					"src/components/feature-date-time-picker"
@@ -62,6 +68,14 @@ module.exports = defineConfig({
 				options: {
 					configFile: TSCONFIG_PATH,
 				},
+			});
+		// avoid auto format on vue-loader to fix prettier errors
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				options.prettify = false;
+				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {
 			args[0].typescript.configFile = TSCONFIG_PATH;
