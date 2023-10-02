@@ -66,6 +66,14 @@ module.exports = defineConfig({
 					configFile: TSCONFIG_PATH,
 				},
 			});
+		// avoid auto format on vue-loader to fix prettier errors
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				options.prettify = false;
+				return options;
+			});
 		config.plugin("fork-ts-checker").tap((args) => {
 			args[0].typescript.configFile = TSCONFIG_PATH;
 			return args;
