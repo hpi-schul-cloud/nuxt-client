@@ -1,19 +1,18 @@
 import NotifierModule from "@/store/notifier";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import Vue, { ref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useContentElementState } from "@data-board";
-import { i18nMock } from "@@/tests/test-utils";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
@@ -51,16 +50,12 @@ describe("SubmissionContentElement", () => {
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
-		isFirstElement: boolean;
-		isLastElement: boolean;
-		hasMultipleElements: boolean;
 	}) => {
 		const wrapper = shallowMount(
 			SubmissionContentElement as MountOptions<Vue>,
 			{
 				...createComponentMocks({ i18n: true }),
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: { ...props },
@@ -87,9 +82,6 @@ describe("SubmissionContentElement", () => {
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: false,
-				isFirstElement: false,
-				isLastElement: false,
-				hasMultipleElements: false,
 			});
 
 			return {
@@ -187,9 +179,6 @@ describe("SubmissionContentElement", () => {
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: true,
-				isFirstElement: false,
-				isLastElement: false,
-				hasMultipleElements: false,
 			});
 
 			return {
@@ -211,36 +200,6 @@ describe("SubmissionContentElement", () => {
 
 			const component = wrapper.findComponent(SubmissionContentElementEdit);
 			expect(component.exists()).toBe(true);
-		});
-
-		it("should hand over isFirstElement property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const isFirstElement = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("isFirstElement");
-
-			expect(isFirstElement).toBe(false);
-		});
-
-		it("should hand over isLastElement property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const isLastElement = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("isLastElement");
-
-			expect(isLastElement).toBe(false);
-		});
-
-		it("should hand over hasMultipleElements property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const hasMultipleElements = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("hasMultipleElements");
-
-			expect(hasMultipleElements).toBe(false);
 		});
 
 		it("should hand over dueDate to SubmissionContentElementEdit", async () => {
@@ -287,41 +246,6 @@ describe("SubmissionContentElement", () => {
 			expect(editable).toBe(
 				mockedUseSubmissionContentElementStateResponse.editable
 			);
-		});
-
-		it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
-			const { wrapper } = setup();
-
-			const component = wrapper.findComponent(SubmissionContentElementEdit);
-			component.vm.$emit("move-down:element");
-
-			const emitted = wrapper.emitted();
-			expect(emitted["move-down:edit"]).toBeDefined();
-		});
-
-		it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
-			const { wrapper } = setup();
-
-			const component = wrapper.findComponent(SubmissionContentElementEdit);
-			component.vm.$emit("move-up:element");
-
-			const emitted = wrapper.emitted();
-			expect(emitted["move-up:edit"]).toBeDefined();
-		});
-
-		it("should pass delete:element event from child to parent", async () => {
-			const { wrapper } = setup();
-
-			await nextTick();
-			await nextTick();
-
-			const child = wrapper.findComponent(SubmissionContentElementEdit);
-			child.vm.$emit("delete:element");
-
-			await nextTick();
-			await nextTick();
-
-			expect(wrapper.emitted("delete:element")).toHaveLength(1);
 		});
 
 		it("should emit 'move-keyboard:edit' when arrow key down is pressed", async () => {
