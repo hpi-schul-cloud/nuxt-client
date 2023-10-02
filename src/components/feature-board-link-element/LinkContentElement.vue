@@ -1,9 +1,9 @@
 <template>
-	<div>
-		Link Element
+	<div class="mb-4">
 		<LinkContentElementDisplay
 			v-if="modelValue.url"
 			:url="modelValue.url"
+			:openGraphData="modelValue.openGraphData"
 		></LinkContentElementDisplay>
 		<LinkContentElementEdit v-if="!modelValue.url" @create:url="onCreateUrl">
 		</LinkContentElementEdit>
