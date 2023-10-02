@@ -1,5 +1,5 @@
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AxiosError, AxiosResponse } from "axios";
+import { $axios } from "@/utils/api";
+import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	PageContentResponse,
@@ -12,13 +12,14 @@ import {
 } from "@/serverApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { ApplicationError } from "@/store/types/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	MigrationLinkRequest,
 	MigrationLinks,
 	UserLoginMigration,
 	UserLoginMigrationMapper,
 } from "./user-login-migration";
-import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -32,13 +33,16 @@ export default class UserLoginMigrationModule extends VuexModule {
 	};
 	private loading = false;
 
-	private businessError: BusinessError = {
-		statusCode: "",
-		message: "",
-		error: undefined,
-	};
+	private error: object | null = null;
 
-	private userLoginMigration: UserLoginMigration | undefined;
+	private userLoginMigration: UserLoginMigration = {
+		sourceSystemId: undefined,
+		targetSystemId: "",
+		startedAt: "",
+		closedAt: undefined,
+		finishedAt: undefined,
+		mandatorySince: undefined,
+	};
 
 	private get userMigrationApi(): UserMigrationApiInterface {
 		return UserMigrationApiFactory(undefined, "v3", $axios);
@@ -59,21 +63,12 @@ export default class UserLoginMigrationModule extends VuexModule {
 	}
 
 	@Mutation
-	setBusinessError(businessError: BusinessError): void {
-		this.businessError = businessError;
+	setError(error: object | null): void {
+		this.error = error;
 	}
 
 	@Mutation
-	resetBusinessError(): void {
-		this.businessError = {
-			statusCode: "",
-			message: "",
-			error: undefined,
-		};
-	}
-
-	@Mutation
-	setUserLoginMigration(userLoginMigration?: UserLoginMigration): void {
+	setUserLoginMigration(userLoginMigration: UserLoginMigration): void {
 		this.userLoginMigration = userLoginMigration;
 	}
 
@@ -85,20 +80,17 @@ export default class UserLoginMigrationModule extends VuexModule {
 		return this.migrationLinks;
 	}
 
-	get getUserLoginMigration(): UserLoginMigration | undefined {
+	get getUserLoginMigration(): UserLoginMigration {
 		return this.userLoginMigration;
 	}
 
-	get getBusinessError(): BusinessError {
-		return this.businessError;
+	get getError(): object | null {
+		return this.error;
 	}
 
 	@Action
 	async fetchMigrationLinks(request: MigrationLinkRequest): Promise<void> {
 		this.setLoading(true);
-
-		this.resetBusinessError();
-
 		try {
 			const links: AxiosResponse<PageContentResponse> =
 				await this.userMigrationApi.userMigrationControllerGetMigrationPageDetails(
@@ -111,18 +103,9 @@ export default class UserLoginMigrationModule extends VuexModule {
 				proceedLink: links.data.proceedButtonUrl,
 				cancelLink: links.data.cancelButtonUrl,
 			};
-
 			this.setMigrationLinks(mappedLinks);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+		} catch (error) {
+			this.setError(error as Error);
 		}
 		this.setLoading(false);
 	}
@@ -131,8 +114,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 	async fetchLatestUserLoginMigrationForCurrentUser(): Promise<void> {
 		this.setLoading(true);
 
-		this.resetBusinessError();
-
 		if (authModule.getUser?.id) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationSearchListResponse> =
@@ -140,163 +121,27 @@ export default class UserLoginMigrationModule extends VuexModule {
 						authModule.getUser.id
 					);
 
-				if (response.data.total > 1) {
-					throw new Error("More than one migration found for user.");
+				if (response.data.total !== 1) {
+					throw createApplicationError(HttpStatusCode.BadRequest);
 				}
 
-				if (response.data.data.length === 1) {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						response.data.data[0];
-
-					const userLoginMigration: UserLoginMigration =
-						UserLoginMigrationMapper.mapToUserLoginMigration(
-							userLoginMigrationResponse
-						);
-
-					this.setUserLoginMigration(userLoginMigration);
-				}
-			} catch (error: unknown) {
-				const apiError = mapAxiosErrorToResponseError(error);
-
-				console.log(apiError);
-
-				this.setBusinessError({
-					error: apiError,
-					statusCode: apiError.code,
-					message: apiError.message,
-				});
-
-				throw createApplicationError(apiError.code);
-			}
-		}
-
-		this.setLoading(false);
-	}
-
-	@Action
-	async startUserLoginMigration(): Promise<void> {
-		this.setLoading(true);
-
-		this.resetBusinessError();
-
-		try {
-			const response: AxiosResponse<UserLoginMigrationResponse> =
-				await this.userLoginMigrationApi.userLoginMigrationControllerStartMigration();
-
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-
-			this.setUserLoginMigration(userLoginMigration);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-
-			throw createApplicationError(apiError.code);
-		}
-		this.setLoading(false);
-	}
-
-	@Action
-	async setUserLoginMigrationMandatory(mandatory: boolean): Promise<void> {
-		this.setLoading(true);
-
-		this.resetBusinessError();
-
-		try {
-			const response: AxiosResponse<UserLoginMigrationResponse> =
-				await this.userLoginMigrationApi.userLoginMigrationControllerSetMigrationMandatory(
-					{ mandatory }
-				);
-
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-
-			this.setUserLoginMigration(userLoginMigration);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-
-			throw createApplicationError(apiError.code);
-		}
-		this.setLoading(false);
-	}
-
-	@Action
-	async restartUserLoginMigration(): Promise<void> {
-		this.setLoading(true);
-
-		this.resetBusinessError();
-
-		try {
-			const response: AxiosResponse<UserLoginMigrationResponse> =
-				await this.userLoginMigrationApi.userLoginMigrationControllerRestartMigration();
-
-			const userLoginMigration: UserLoginMigration =
-				UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-
-			this.setUserLoginMigration(userLoginMigration);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-
-			throw createApplicationError(apiError.code);
-		}
-		this.setLoading(false);
-	}
-
-	@Action
-	async closeUserLoginMigration(): Promise<void> {
-		this.setLoading(true);
-
-		this.resetBusinessError();
-
-		try {
-			const response: AxiosResponse<UserLoginMigrationResponse> =
-				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
-			console.log(response.data);
-			if (response.data.closedAt) {
+				const userLoginMigrationResponse: UserLoginMigrationResponse =
+					response.data.data[0];
 				const userLoginMigration: UserLoginMigration =
-					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-				console.log(userLoginMigration);
+					UserLoginMigrationMapper.mapToUserLoginMigration(
+						userLoginMigrationResponse
+					);
+
 				this.setUserLoginMigration(userLoginMigration);
-			} else {
-				console.log(this.userLoginMigration);
-				this.setUserLoginMigration(undefined);
+			} catch (error: unknown) {
+				if (error instanceof ApplicationError) {
+					throw error;
+				} else {
+					throw createApplicationError(HttpStatusCode.InternalServerError);
+				}
 			}
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-
-			throw createApplicationError(apiError.code);
 		}
+
 		this.setLoading(false);
 	}
 }

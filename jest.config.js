@@ -44,6 +44,7 @@ module.exports = {
 		"!<rootDir>/src/pages/NewsCreate.page.vue",
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",
+		"!<rootDir>/src/pages/TermsOfUse.vue",
 	],
 
 	// maxWorkers: 2, // limited for not taking all workers within of a single github action

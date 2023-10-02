@@ -1,3 +1,3 @@
-import SubmissionContentElement from "./components/SubmissionContentElement.vue";
+import SubmissionContentElement from "./SubmissionContentElement.vue";
 
 export { SubmissionContentElement };

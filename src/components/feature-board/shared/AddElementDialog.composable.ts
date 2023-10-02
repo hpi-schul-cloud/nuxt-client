@@ -1,16 +1,14 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import {
-	mdiPresentation,
-
 	mdiFormatText,
 	mdiLightbulbOnOutline,
-	mdiPuzzleOutline,
+	mdiPresentation,
 	mdiTrayArrowUp,
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { notifierModule } from "@/store/store-accessor";
 import VueI18n from "vue-i18n";
 
@@ -89,16 +87,6 @@ export const useAddElementDialog = (
 			label: "components.elementTypeSelection.elements.boardElement.subtitle",
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
-		});
-	}
-
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
-		options.push({
-			icon: mdiPuzzleOutline,
-			label:
-				"components.elementTypeSelection.elements.externalToolElement.subtitle",
-			action: () => onElementClick(ContentElementType.ExternalTool),
-			testId: "create-element-external-tool-container",
 		});
 	}
 

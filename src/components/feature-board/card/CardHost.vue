@@ -80,7 +80,7 @@ import {
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, ref, toRef } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import ContentElementList from "./ContentElementList.vue";
 import { BoardMenu, BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -119,9 +119,8 @@ export default defineComponent({
 	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
-		const cardId = toRef(props, "cardId");
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-			cardId.value,
+			props.cardId,
 			cardHost
 		);
 		const isHovered = useElementHover(cardHost);
@@ -135,11 +134,11 @@ export default defineComponent({
 			moveElementUp,
 			deleteElement,
 			addTextAfterTitle,
-		} = useCardState(cardId.value, emit);
+		} = useCardState(props.cardId, emit);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			cardId.value
+			props.cardId
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();

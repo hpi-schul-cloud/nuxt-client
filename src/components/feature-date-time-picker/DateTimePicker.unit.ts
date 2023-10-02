@@ -3,7 +3,6 @@ import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import DateTimePicker from "./DateTimePicker.vue";
 import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
 
 type DateTimePickerProps = {
 	dateTime: string;
@@ -25,7 +24,7 @@ describe("DateTimePicker", () => {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 		});
 	};
@@ -43,7 +42,7 @@ describe("DateTimePicker", () => {
 		expect(datePicker.exists()).toBe(true);
 		const tomorrow = new Date();
 		tomorrow.setDate(tomorrow.getDate() + 1);
-		datePicker.vm.$emit("update:date", tomorrow);
+		datePicker.vm.$emit("input", tomorrow);
 
 		await wrapper.vm.$nextTick();
 
@@ -56,7 +55,7 @@ describe("DateTimePicker", () => {
 
 		const timePicker = wrapper.findComponent({ name: "time-picker" });
 		expect(timePicker.exists()).toBe(true);
-		timePicker.vm.$emit("update:time", "00:00");
+		timePicker.vm.$emit("input", "00:00");
 
 		jest.advanceTimersByTime(1000);
 

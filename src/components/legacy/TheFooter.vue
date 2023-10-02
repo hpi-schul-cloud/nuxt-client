@@ -5,9 +5,9 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link">
+						{{ link.text }}
+					</base-link>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { authModule, envConfigModule } from "@/store";
+import { authModule, envConfigModule, filePathsModule } from "@/store";
 
 export default {
 	computed: {
@@ -58,13 +58,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: "/termsofuse",
+					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					to: "/privacypolicy",
+					to: "/datenschutz",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",

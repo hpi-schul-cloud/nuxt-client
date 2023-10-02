@@ -4,10 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<RenderHTML
-			:html="t('components.administration.externalToolsSection.description')"
-			component="p"
-		/>
+		<RenderHTML :html="t('pages.tool.description')" component="p" />
 		<v-spacer class="mt-10" />
 		<external-tool-configurator
 			:templates="configurationTemplates"

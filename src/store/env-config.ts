@@ -44,7 +44,6 @@ export default class EnvConfigModule extends VuexModule {
 		FILES_STORAGE__MAX_FILE_SIZE: 0,
 		FEATURE_SHOW_OUTDATED_USERS: false,
 		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
-		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -125,11 +124,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getSchoolPolicyEnabled() {
-		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
-	}
-
-	get getSchoolTermsOfUseEnabled() {
-		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
+		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
 	}
 
 	get getLoginLinkEnabled() {
@@ -185,10 +180,6 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getCtlContextConfigurationEnabled(): boolean {
 		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED ?? false;
-	}
-
-	get getShowNewClassViewEnabled(): boolean {
-		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {

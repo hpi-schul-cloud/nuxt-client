@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="d-flex justify-center align-center"
-		:style="{ 'min-height': height - 24 + 'px' }"
+		:style="{ 'min-height': height + 'px' }"
 	>
 		<VProgressCircular
 			color="primary"

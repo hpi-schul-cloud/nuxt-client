@@ -1,27 +1,28 @@
 <template>
 	<ckeditor
 		ref="ck"
-		v-model="modelValue"
+		v-model="content"
 		:config="config"
 		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@blur="handleBlur"
 		@focus="handleFocus"
+		@input="handleInput"
 		@ready="handleReady"
 	/>
 </template>
 
 <script>
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useMediaQuery, useVModel } from "@vueuse/core";
+import { useMediaQuery } from "@vueuse/core";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 window.katex = require("katex");
 
 export default defineComponent({
@@ -29,7 +30,7 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["ready", "focus", "update:value", "blur", "keyboard:delete"],
+	emits: ["ready", "focus", "input", "blur", "keyboard:delete"],
 	props: {
 		value: {
 			type: String,
@@ -55,8 +56,7 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const ck = ref(null);
-		const modelValue = useVModel(props, "value", emit);
-
+		const content = ref(props.value);
 		const language = i18n.locale;
 		const charCount = ref(0);
 
@@ -125,6 +125,13 @@ export default defineComponent({
 			"TableToolbar",
 			"WordCount",
 		];
+
+		watch(
+			() => props.value,
+			(newValue) => {
+				content.value = newValue;
+			}
+		);
 
 		const config = computed(() => {
 			return {
@@ -229,8 +236,10 @@ export default defineComponent({
 			};
 		});
 
+		const handleInput = () => emit("input", content.value);
 		const handleFocus = () => emit("focus");
 		const handleBlur = () => emit("blur");
+
 		const handleDelete = () => {
 			if (charCount.value === 0) {
 				emit("keyboard:delete");
@@ -263,12 +272,13 @@ export default defineComponent({
 
 		return {
 			ck,
-			modelValue,
+			content,
 			CustomCKEditor,
 			config,
 			charCount,
 			handleBlur,
 			handleFocus,
+			handleInput,
 			handleDelete,
 			handleReady,
 		};

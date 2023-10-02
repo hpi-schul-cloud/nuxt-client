@@ -84,9 +84,9 @@
 								'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
 							)
 						"
-						v-model="logoFile"
 						dense
 						prepend-icon=""
+						@change="onLogoChange"
 					></v-file-input>
 				</v-col>
 			</v-row>
@@ -176,7 +176,6 @@ export default {
 				permissions: {},
 				features: {},
 			},
-			logoFile: null,
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
@@ -208,13 +207,6 @@ export default {
 		school: {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
-					this.logoFile = newSchool.logo_dataUrl
-						? this.convertDataUrlToFile(
-								newSchool.logo_dataUrl,
-								newSchool.logo_name
-						  )
-						: null;
-
 					await this.copyToLocalSchool();
 				}
 			},
@@ -225,21 +217,6 @@ export default {
 		await this.copyToLocalSchool();
 	},
 	methods: {
-		convertDataUrlToFile(dataURL, fileName) {
-			const dataUrlParts = dataURL.split(",");
-			const mimeType = (dataUrlParts[0].match(/^data:(.*?);/) || [])[1];
-			const binaryString = atob(dataUrlParts[1]);
-			let binaryStringLength = binaryString.length;
-			const uint8Array = new Uint8Array(binaryStringLength);
-			while (binaryStringLength--) {
-				uint8Array[binaryStringLength] =
-					binaryString.charCodeAt(binaryStringLength);
-			}
-			const logoFile = new File([uint8Array], fileName, {
-				type: mimeType,
-			});
-			return logoFile;
-		},
 		async copyToLocalSchool() {
 			if (!this.school) {
 				return;
@@ -265,6 +242,13 @@ export default {
 		onUpdateFeatureSettings(value, settingName) {
 			this.localSchool.features[settingName] = value;
 		},
+		async onLogoChange(logo) {
+			if (logo) {
+				this.localSchool.logo = await toBase64(logo);
+			} else {
+				this.localSchool.logo = null;
+			}
+		},
 		async save() {
 			const updatedSchool = {
 				id: this.localSchool.id,
@@ -287,12 +271,11 @@ export default {
 			) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
-
-			updatedSchool.logo_dataUrl = this.logoFile
-				? await toBase64(this.logoFile)
-				: "";
-			updatedSchool.logo_name = this.logoFile ? this.logoFile.name : "";
-
+			if (this.localSchool.logo) {
+				updatedSchool.logo_dataUrl = this.localSchool.logo;
+			} else {
+				updatedSchool.logo_dataUrl = "";
+			}
 			schoolsModule.update(updatedSchool);
 		},
 	},

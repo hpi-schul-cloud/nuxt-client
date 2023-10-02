@@ -3,7 +3,6 @@ import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-	UserMigrationApiInterface,
 } from "@/serverApi/v3/api";
 import {
 	MigrationLinkRequest,
@@ -12,43 +11,27 @@ import {
 	UserLoginMigration,
 } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
-import {
-	axiosErrorFactory,
-	businessErrorFactory,
-	mockApiResponse,
-	mockUser,
-	userLoginMigrationFactory,
-	userLoginMigrationResponseFactory,
-} from "@@/tests/test-utils";
+import { mockApiResponse, mockUser } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import { authModule } from "@/store/store-accessor";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { BusinessError } from "./types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
 	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
 
-	let userMigrationApiMock: DeepMocked<UserMigrationApiInterface>;
-
 	beforeEach(() => {
 		module = new UserLoginMigrationModule({});
 
-		userMigrationApiMock = createMock<UserMigrationApiInterface>();
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
 		jest
 			.spyOn(serverApi, "UserLoginMigrationApiFactory")
 			.mockReturnValue(apiMock);
-
-		jest
-			.spyOn(serverApi, "UserMigrationApiFactory")
-			.mockReturnValue(userMigrationApiMock);
 
 		setupStores({
 			authModule: AuthModule,
@@ -96,39 +79,19 @@ describe("UserLoginMigrationModule", () => {
 			});
 		});
 
-		describe("getBusinessError", () => {
-			describe("when the store has no error", () => {
-				it("should return the default state", () => {
-					const businessError: BusinessError = module.getBusinessError;
+		describe("Error", () => {
+			it("should return the default state", () => {
+				const error: object | null = module.getError;
 
-					expect(businessError).toEqual<BusinessError>({
-						statusCode: "",
-						message: "",
-						error: undefined,
-					});
-				});
+				expect(error).toEqual(null);
 			});
 
-			describe("when an error was set", () => {
-				const setup = () => {
-					const businessError = businessErrorFactory.build({
-						message: "error message",
-					});
+			it("should return the changed state", () => {
+				const error: object | null = new Error();
 
-					module.setBusinessError(businessError);
+				module.setError(error);
 
-					return {
-						businessError,
-					};
-				};
-
-				it("should return the error", () => {
-					const { businessError } = setup();
-
-					const error: BusinessError = module.getBusinessError;
-
-					expect(error).toEqual(businessError);
-				});
+				expect(module.getError).toEqual(error);
 			});
 		});
 
@@ -136,17 +99,24 @@ describe("UserLoginMigrationModule", () => {
 			it("should return the default state", () => {
 				const userLoginMigration = module.getUserLoginMigration;
 
-				expect(userLoginMigration).toEqual(undefined);
+				expect(userLoginMigration).toEqual<UserLoginMigration>({
+					sourceSystemId: undefined,
+					targetSystemId: "",
+					startedAt: "",
+					closedAt: undefined,
+					finishedAt: undefined,
+					mandatorySince: undefined,
+				});
 			});
 
 			it("should return the changed state", () => {
-				const userLoginMigration: UserLoginMigration = {
+				const userLoginMigration = {
 					sourceSystemId: "sourceSystemId",
 					targetSystemId: "targetSystemId",
-					startedAt: new Date(2000, 1, 1, 0, 0),
-					closedAt: new Date(2000, 1, 1),
-					finishedAt: new Date(2000, 1, 14),
-					mandatorySince: new Date(2000, 1, 1),
+					startedAt: "startedAt",
+					closedAt: "closedAt",
+					finishedAt: "finishedAt",
+					mandatorySince: "mandatorySince",
 				};
 
 				module.setUserLoginMigration(userLoginMigration);
@@ -158,87 +128,74 @@ describe("UserLoginMigrationModule", () => {
 
 	describe("actions", () => {
 		describe("fetchMigrationLinks", () => {
-			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const migrationLinkRequest: MigrationLinkRequest = {
-						pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						targetSystem: "targetSystemId",
-						sourceSystem: "sourceSystemId",
-					};
-
-					const response = {
-						proceedButtonUrl: "proceedLink",
-						cancelButtonUrl: "cancelLink",
-					};
-
-					userMigrationApiMock.userMigrationControllerGetMigrationPageDetails.mockResolvedValue(
-						mockApiResponse({ data: response })
-					);
-
-					return {
-						migrationLinkRequest,
-						response,
-					};
+			const setup = () => {
+				const migrationLinkRequest: MigrationLinkRequest = {
+					pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
+					targetSystem: "targetSystemId",
+					sourceSystem: "sourceSystemId",
 				};
 
-				it("should call the userMigrationApi.userMigrationControllerGetMigrationPageDetails", async () => {
-					const { migrationLinkRequest } = setup();
+				const response = {
+					proceedButtonUrl: "proceedLink",
+					cancelButtonUrl: "cancelLink",
+				};
 
-					await module.fetchMigrationLinks(migrationLinkRequest);
+				const mockApi = {
+					userMigrationControllerGetMigrationPageDetails: jest
+						.fn()
+						.mockResolvedValue({
+							data: response,
+						}),
+				};
 
-					expect(
-						userMigrationApiMock.userMigrationControllerGetMigrationPageDetails
-					).toHaveBeenCalledWith(
-						MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						"sourceSystemId",
-						"targetSystemId"
+				jest
+					.spyOn(serverApi, "UserMigrationApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.UserMigrationApiInterface
 					);
-				});
 
-				it("should set the MigrationLinks", async () => {
-					const { migrationLinkRequest, response } = setup();
+				return {
+					apiMock: mockApi,
+					migrationLinkRequest,
+					response,
+				};
+			};
 
-					await module.fetchMigrationLinks(migrationLinkRequest);
+			it("should call the userMigrationApi.userMigrationControllerGetMigrationPageDetails", async () => {
+				const { apiMock, migrationLinkRequest } = setup();
 
-					expect(module.getMigrationLinks).toEqual<MigrationLinks>({
-						proceedLink: response.proceedButtonUrl,
-						cancelLink: response.cancelButtonUrl,
-					});
+				await module.fetchMigrationLinks(migrationLinkRequest);
+
+				expect(
+					apiMock.userMigrationControllerGetMigrationPageDetails
+				).toHaveBeenCalledWith(
+					MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
+					"sourceSystemId",
+					"targetSystemId"
+				);
+			});
+
+			it("should set the MigrationLinks", async () => {
+				const { migrationLinkRequest, response } = setup();
+
+				await module.fetchMigrationLinks(migrationLinkRequest);
+
+				expect(module.getMigrationLinks).toEqual<MigrationLinks>({
+					proceedLink: response.proceedButtonUrl,
+					cancelLink: response.cancelButtonUrl,
 				});
 			});
 
-			describe("when an error occurs", () => {
-				const setup = () => {
-					const migrationLinkRequest: MigrationLinkRequest = {
-						pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						targetSystem: "targetSystemId",
-						sourceSystem: "sourceSystemId",
-					};
+			it("should set an error", async () => {
+				const { apiMock, migrationLinkRequest } = setup();
+				const error: Error = new Error();
+				apiMock.userMigrationControllerGetMigrationPageDetails.mockRejectedValue(
+					error
+				);
 
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
+				await module.fetchMigrationLinks(migrationLinkRequest);
 
-					userMigrationApiMock.userMigrationControllerGetMigrationPageDetails.mockRejectedValue(
-						error
-					);
-
-					return {
-						apiError,
-						migrationLinkRequest,
-					};
-				};
-
-				it("should set the businessError", async () => {
-					const { apiError, migrationLinkRequest } = setup();
-
-					await module.fetchMigrationLinks(migrationLinkRequest);
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
+				expect(module.getError).toEqual(error);
 			});
 		});
 
@@ -260,132 +217,57 @@ describe("UserLoginMigrationModule", () => {
 			});
 
 			describe("when user is available", () => {
-				describe("when there is no migration for a user", () => {
-					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
+				const setup = () => {
+					authModule.setUser({ ...mockUser, id: "userId" });
 
-						const listResponse: UserLoginMigrationSearchListResponse = {
-							data: [],
-							total: 0,
-							skip: 0,
-							limit: 1,
-						};
-
-						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-							mockApiResponse({ data: listResponse })
-						);
-
-						jest.spyOn(module, "setUserLoginMigration");
+					const migrationResponse: UserLoginMigrationResponse = {
+						sourceSystemId: "sourceSystemId",
+						targetSystemId: "targetSystemId",
+						startedAt: "startedAt",
+						closedAt: "closedAt",
+						finishedAt: "finishedAt",
+						mandatorySince: "mandatorySince",
 					};
 
-					it("should not set the user login migration", async () => {
-						setup();
+					const listResponse: UserLoginMigrationSearchListResponse = {
+						data: [migrationResponse],
+						total: 1,
+						skip: 0,
+						limit: 1,
+					};
 
-						await module.fetchLatestUserLoginMigrationForCurrentUser();
+					apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
+						mockApiResponse({ data: listResponse })
+					);
 
-						expect(module.setUserLoginMigration).not.toHaveBeenCalled();
-					});
+					return {
+						migrationResponse,
+						listResponse,
+					};
+				};
+
+				it("should call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
+					setup();
+
+					await module.fetchLatestUserLoginMigrationForCurrentUser();
+
+					expect(
+						apiMock.userLoginMigrationControllerGetMigrations
+					).toHaveBeenCalled();
 				});
 
-				describe("when there are more than one migration for a user", () => {
-					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
+				it("should set the UserLoginMigration", async () => {
+					const { migrationResponse } = setup();
 
-						const listResponse: UserLoginMigrationSearchListResponse = {
-							data: [
-								userLoginMigrationResponseFactory.build(),
-								userLoginMigrationResponseFactory.build(),
-							],
-							total: 2,
-							skip: 0,
-							limit: 2,
-						};
+					await module.fetchLatestUserLoginMigrationForCurrentUser();
 
-						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-							mockApiResponse({ data: listResponse })
-						);
-
-						jest.spyOn(module, "setUserLoginMigration");
-					};
-
-					it("should not set user login migration", async () => {
-						setup();
-
-						await expect(
-							module.fetchLatestUserLoginMigrationForCurrentUser()
-						).rejects.toThrow();
-
-						expect(module.setUserLoginMigration).not.toHaveBeenCalled();
-					});
-
-					it("should throw an error", async () => {
-						setup();
-
-						const func = () =>
-							module.fetchLatestUserLoginMigrationForCurrentUser();
-
-						await expect(func()).rejects.toEqual(
-							createApplicationError(HttpStatusCode.BadRequest)
-						);
-					});
-				});
-
-				describe("when there is one migration for a user", () => {
-					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
-
-						const userLoginMigrationResponse: UserLoginMigrationResponse =
-							userLoginMigrationResponseFactory.build({
-								sourceSystemId: "sourceSystemId",
-								targetSystemId: "targetSystemId",
-								startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								closedAt: new Date(2000, 1, 1, 0, 0).toString(),
-								finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
-								mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
-							});
-
-						const userLoginMigration: UserLoginMigration = {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: new Date(2000, 1, 1, 0, 0),
-							closedAt: new Date(2000, 1, 1, 0, 0),
-							finishedAt: new Date(2000, 1, 14, 0, 0),
-							mandatorySince: new Date(2000, 1, 1, 0, 0),
-						};
-
-						const listResponse: UserLoginMigrationSearchListResponse = {
-							data: [userLoginMigrationResponse],
-							total: 1,
-							skip: 0,
-							limit: 1,
-						};
-
-						apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
-							mockApiResponse({ data: listResponse })
-						);
-
-						return {
-							userLoginMigration,
-							listResponse,
-						};
-					};
-
-					it("should call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
-						setup();
-
-						await module.fetchLatestUserLoginMigrationForCurrentUser();
-
-						expect(
-							apiMock.userLoginMigrationControllerGetMigrations
-						).toHaveBeenCalled();
-					});
-
-					it("should set the UserLoginMigration", async () => {
-						const { userLoginMigration } = setup();
-
-						await module.fetchLatestUserLoginMigrationForCurrentUser();
-
-						expect(module.getUserLoginMigration).toEqual(userLoginMigration);
+					expect(module.getUserLoginMigration).toEqual<UserLoginMigration>({
+						sourceSystemId: migrationResponse.sourceSystemId,
+						targetSystemId: migrationResponse.targetSystemId,
+						startedAt: migrationResponse.startedAt,
+						closedAt: migrationResponse.closedAt,
+						finishedAt: migrationResponse.finishedAt,
+						mandatorySince: migrationResponse.mandatorySince,
 					});
 				});
 			});
@@ -394,40 +276,19 @@ describe("UserLoginMigrationModule", () => {
 				const setup = () => {
 					authModule.setUser({ ...mockUser, id: "userId" });
 
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
 					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
-						error
+						new Error()
 					);
-
-					return {
-						apiError,
-					};
 				};
 
-				it("should set the businessError", async () => {
-					const { apiError } = setup();
-
-					await expect(
-						module.fetchLatestUserLoginMigrationForCurrentUser()
-					).rejects.toThrow();
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-
-				it("should throw application error", async () => {
+				it("should throw an error", async () => {
 					setup();
 
 					const func = () =>
 						module.fetchLatestUserLoginMigrationForCurrentUser();
 
 					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
+						createApplicationError(HttpStatusCode.InternalServerError)
 					);
 				});
 			});
@@ -452,365 +313,45 @@ describe("UserLoginMigrationModule", () => {
 					);
 				});
 			});
-		});
 
-		describe("startUserLoginMigration", () => {
-			describe("when it successfully calls the api", () => {
+			describe("when there are more than one migration for a user", () => {
 				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({});
-					apiMock.userLoginMigrationControllerStartMigration.mockResolvedValue(
-						mockApiResponse({ data: userLoginMigrationResponse })
-					);
-					jest.spyOn(module, "setLoading");
+					authModule.setUser({ ...mockUser, id: "userId" });
 
-					const userLoginMigration = userLoginMigrationFactory.build({
-						startedAt: new Date(2000, 1, 1, 0, 0),
-						closedAt: undefined,
-						finishedAt: undefined,
-						mandatorySince: undefined,
+					const migrationResponse: UserLoginMigrationResponse = {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-					});
-
-					return {
-						userLoginMigration,
+						startedAt: "startedAt",
+						closedAt: "closedAt",
+						finishedAt: "finishedAt",
+						mandatorySince: "mandatorySince",
 					};
-				};
 
-				it("should call api to start migration", async () => {
-					setup();
+					const listResponse: UserLoginMigrationSearchListResponse = {
+						data: [migrationResponse, migrationResponse],
+						total: 2,
+						skip: 0,
+						limit: 2,
+					};
 
-					await module.startUserLoginMigration();
-
-					expect(
-						apiMock.userLoginMigrationControllerStartMigration
-					).toHaveBeenCalled();
-				});
-
-				it("should set loading", async () => {
-					setup();
-
-					await module.startUserLoginMigration();
-
-					expect(module.setLoading).toHaveBeenNthCalledWith(1, true);
-					expect(module.setLoading).toHaveBeenNthCalledWith(2, false);
-				});
-
-				it("should set user login migration", async () => {
-					const { userLoginMigration } = setup();
-
-					await module.startUserLoginMigration();
-
-					expect(module.getUserLoginMigration).toStrictEqual(
-						userLoginMigration
-					);
-					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
-				});
-			});
-
-			describe("when the api throws an error", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					apiMock.userLoginMigrationControllerStartMigration.mockRejectedValue(
-						error
+					apiMock.userLoginMigrationControllerGetMigrations.mockResolvedValue(
+						mockApiResponse({ data: listResponse })
 					);
 
 					return {
-						apiError,
+						migrationResponse,
+						listResponse,
 					};
 				};
 
-				it("should set the businessError", async () => {
-					const { apiError } = setup();
+				it("should throw an error", async () => {
+					setup();
 
-					await expect(module.startUserLoginMigration()).rejects.toThrow();
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-
-				it("should throw application error", async () => {
-					const { apiError } = setup();
-
-					const func = () => module.startUserLoginMigration();
+					const func = () =>
+						module.fetchLatestUserLoginMigrationForCurrentUser();
 
 					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
-				});
-			});
-		});
-
-		describe("setUserLoginMigrationMandatory", () => {
-			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-							mandatorySince: new Date(2000, 1, 1).toString(),
-						});
-
-					const userLoginMigration = userLoginMigrationFactory.build({
-						startedAt: new Date(2000, 1, 1, 0, 0),
-						mandatorySince: new Date(2000, 1, 1),
-					});
-					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockResolvedValue(
-						mockApiResponse({ data: userLoginMigrationResponse })
-					);
-					jest.spyOn(module, "setLoading");
-
-					return {
-						userLoginMigration,
-					};
-				};
-
-				it("should call api to set the migration mandatory", async () => {
-					setup();
-
-					await module.setUserLoginMigrationMandatory(true);
-
-					expect(
-						apiMock.userLoginMigrationControllerSetMigrationMandatory
-					).toHaveBeenCalledWith({ mandatory: true });
-				});
-
-				it("should set loading", async () => {
-					setup();
-
-					await module.setUserLoginMigrationMandatory(false);
-
-					expect(module.setLoading).toHaveBeenCalledWith(true);
-					expect(module.setLoading).toHaveBeenCalledWith(false);
-				});
-
-				it("should set user login migration", async () => {
-					const { userLoginMigration } = setup();
-
-					await module.setUserLoginMigrationMandatory(false);
-
-					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
-				});
-			});
-
-			describe("when the api throws an error", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					apiMock.userLoginMigrationControllerSetMigrationMandatory.mockRejectedValue(
-						error
-					);
-
-					return {
-						apiError,
-					};
-				};
-
-				it("should set the businessError", async () => {
-					const { apiError } = setup();
-
-					await expect(
-						module.setUserLoginMigrationMandatory(true)
-					).rejects.toThrow();
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-
-				it("should throw application error", async () => {
-					const { apiError } = setup();
-
-					const func = () => module.setUserLoginMigrationMandatory(false);
-
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
-				});
-			});
-		});
-
-		describe("restartUserLoginMigration", () => {
-			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							startedAt: new Date(2000, 1, 1, 0, 0).toString(),
-						});
-
-					const userLoginMigration = userLoginMigrationFactory.build({
-						startedAt: new Date(2000, 1, 1, 0, 0),
-					});
-
-					apiMock.userLoginMigrationControllerRestartMigration.mockResolvedValue(
-						mockApiResponse({ data: userLoginMigrationResponse })
-					);
-					jest.spyOn(module, "setLoading");
-
-					return {
-						userLoginMigration,
-					};
-				};
-
-				it("should call api to restart migration", async () => {
-					setup();
-
-					await module.restartUserLoginMigration();
-
-					expect(
-						apiMock.userLoginMigrationControllerRestartMigration
-					).toHaveBeenCalled();
-				});
-
-				it("should set loading", async () => {
-					setup();
-
-					await module.restartUserLoginMigration();
-
-					expect(module.setLoading).toHaveBeenCalledWith(true);
-					expect(module.setLoading).toHaveBeenCalledWith(false);
-				});
-
-				it("should set user login migration", async () => {
-					const { userLoginMigration } = setup();
-
-					await module.restartUserLoginMigration();
-
-					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
-				});
-			});
-
-			describe("when the api throws an error", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					apiMock.userLoginMigrationControllerRestartMigration.mockRejectedValue(
-						error
-					);
-
-					return {
-						apiError,
-					};
-				};
-
-				it("should set the businessError", async () => {
-					const { apiError } = setup();
-
-					await expect(module.restartUserLoginMigration()).rejects.toThrow();
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-
-				it("should throw application error", async () => {
-					const { apiError } = setup();
-
-					const func = () => module.restartUserLoginMigration();
-
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
-					);
-				});
-			});
-		});
-
-		describe("closeUserLoginMigration", () => {
-			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const userLoginMigrationResponse: UserLoginMigrationResponse =
-						userLoginMigrationResponseFactory.build({
-							closedAt: new Date(2000, 1, 2).toString(),
-							finishedAt: new Date(2000, 1, 14).toString(),
-						});
-
-					const userLoginMigration = userLoginMigrationFactory.build({
-						closedAt: new Date(2000, 1, 2),
-						finishedAt: new Date(2000, 1, 14),
-					});
-
-					apiMock.userLoginMigrationControllerCloseMigration.mockResolvedValue(
-						mockApiResponse({ data: userLoginMigrationResponse })
-					);
-					jest.spyOn(module, "setLoading");
-
-					return {
-						userLoginMigration,
-					};
-				};
-
-				it("should call api to close the migration", async () => {
-					setup();
-
-					await module.closeUserLoginMigration();
-
-					expect(
-						apiMock.userLoginMigrationControllerCloseMigration
-					).toHaveBeenCalled();
-				});
-
-				it("should set loading", async () => {
-					setup();
-
-					await module.closeUserLoginMigration();
-
-					expect(module.setLoading).toHaveBeenCalledWith(true);
-					expect(module.setLoading).toHaveBeenCalledWith(false);
-				});
-
-				it("should set user login migration", async () => {
-					const { userLoginMigration } = setup();
-
-					await module.closeUserLoginMigration();
-
-					expect(module.getUserLoginMigration).toEqual(userLoginMigration);
-				});
-			});
-
-			describe("when the api throws an error", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					apiMock.userLoginMigrationControllerCloseMigration.mockRejectedValue(
-						error
-					);
-
-					return {
-						apiError,
-					};
-				};
-
-				it("should set the businessError", async () => {
-					const { apiError } = setup();
-
-					await expect(module.closeUserLoginMigration()).rejects.toThrow();
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-
-				it("should throw application error", async () => {
-					const { apiError } = setup();
-
-					const func = () => module.closeUserLoginMigration();
-
-					await expect(func()).rejects.toEqual(
-						createApplicationError(apiError.code)
+						createApplicationError(HttpStatusCode.BadRequest)
 					);
 				});
 			});

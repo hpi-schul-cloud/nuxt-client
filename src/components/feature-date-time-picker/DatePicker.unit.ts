@@ -3,7 +3,6 @@ import { MountOptions, mount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import DatePicker from "./DatePicker.vue";
 import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
 
 type DatePickerProps = {
 	date: string;
@@ -33,7 +32,7 @@ describe("DatePicker", () => {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
 			attachTo: "#root",
 		});
@@ -44,7 +43,7 @@ describe("DatePicker", () => {
 		expect(wrapper.findComponent(DatePicker).exists()).toBe(true);
 	});
 
-	it("should emit update:date event on input", async () => {
+	it("should emit input event on input", async () => {
 		jest.useFakeTimers();
 		setup({ date: new Date().toISOString() });
 
@@ -57,25 +56,28 @@ describe("DatePicker", () => {
 		const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
 		expect(dateSelector.exists()).toBe(true);
 		dateSelector.vm.$emit("input", new Date().toISOString());
+		await textField.trigger("blur");
 
 		jest.advanceTimersByTime(1000);
-		expect(wrapper.emitted("update:date")).toHaveLength(1);
+		expect(wrapper.emitted("input")).toHaveLength(1);
 	});
 
 	describe("when date is required", () => {
-		it("should not emit update:date event on empty input", async () => {
+		it("should emit error event on validation fail", async () => {
 			setup({
 				date: new Date().toISOString(),
 				required: true,
 			});
 
 			const textField = wrapper.findComponent({ name: "v-text-field" });
+			const clearBtn = textField.find(".v-icon");
 			const input = textField.find("input");
-
-			await input.setValue("");
+			expect(clearBtn.exists()).toBe(true);
+			await clearBtn.trigger("click");
+			await input.trigger("blur");
 			await wrapper.vm.$nextTick();
 
-			expect(wrapper.emitted("update:date")).toBeUndefined();
+			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
 	});
 

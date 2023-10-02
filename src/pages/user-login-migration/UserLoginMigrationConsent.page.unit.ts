@@ -149,7 +149,7 @@ describe("UserLoginMigrationConsent", () => {
 					{
 						origin: "sourceSystemId",
 					},
-					{ mandatorySince: new Date(2000, 1, 1) }
+					{ mandatorySince: "someDate" }
 				);
 
 				const descriptionText: string = wrapper
@@ -166,7 +166,7 @@ describe("UserLoginMigrationConsent", () => {
 					{
 						origin: "sourceSystemId",
 					},
-					{ mandatorySince: new Date(2000, 1, 1) }
+					{ mandatorySince: "someDate" }
 				);
 
 				const button = wrapper.find("[data-testId=btn-cancel]");
@@ -221,10 +221,7 @@ describe("UserLoginMigrationConsent", () => {
 					{
 						origin: "sourceSystemId",
 					},
-					{
-						sourceSystemId: "sourceSystemId",
-						mandatorySince: new Date(2000, 1, 1),
-					}
+					{ sourceSystemId: "sourceSystemId", mandatorySince: "someDate" }
 				);
 
 				await Vue.nextTick();
@@ -245,10 +242,7 @@ describe("UserLoginMigrationConsent", () => {
 					{
 						origin: "targetSystemId",
 					},
-					{
-						targetSystemId: "targetSystemId",
-						mandatorySince: new Date(2000, 1, 1),
-					}
+					{ targetSystemId: "targetSystemId", mandatorySince: "someDate" }
 				);
 
 				await Vue.nextTick();

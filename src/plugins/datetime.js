@@ -4,8 +4,6 @@ import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
-import "dayjs/locale/es";
-import "dayjs/locale/uk";
 import { authModule, envConfigModule } from "@/store";
 
 dayjs.extend(customParseFormat);

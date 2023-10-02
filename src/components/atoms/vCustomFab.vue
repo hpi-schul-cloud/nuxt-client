@@ -199,9 +199,7 @@ export default {
 
 <style lang="scss" scoped>
 .transition {
-	transition:
-		width 0.2s ease-in-out,
-		height 0.2s ease-in-out;
+	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 
 ::v-deep .v-speed-dial__list {
@@ -215,9 +213,7 @@ export default {
 .extended-fab {
 	width: 120px !important;
 	padding: 0 12px 0 8px; // stylelint-disable sh-waqar/declaration-use-variable
-	transition:
-		width 0.2s ease-in-out,
-		height 0.2s ease-in-out;
+	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 
 // ::v-deep .v-btn--has-bg {

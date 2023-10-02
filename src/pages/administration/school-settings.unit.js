@@ -81,8 +81,7 @@ const envs = {
 	FEATURE_TEAMS_ENABLED: true,
 	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
-	FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
-	FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
+	FEATURE_SCHOOL_POLICY_ENABLED: true,
 	FEATURE_VIDEOCONFERENCE_ENABLED: true,
 	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 	ROCKETCHAT_SERVICE_ENABLED: true,
@@ -165,7 +164,6 @@ describe("SchoolSettingPage", () => {
 		schoolsModule.setFederalState(federalState);
 		envConfigModule.setEnvs(envs);
 	});
-
 	it("tests env var school policy being true", () => {
 		const wrapper = shallowMount(SchoolPage, {
 			...createComponentMocks({
@@ -180,7 +178,7 @@ describe("SchoolSettingPage", () => {
 
 	it("tests env var school policy being false", () => {
 		envConfigModule.setEnvs({
-			FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
+			FEATURE_SCHOOL_POLICY_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
 		});
 		const wrapper = shallowMount(SchoolPage, {
@@ -192,34 +190,6 @@ describe("SchoolSettingPage", () => {
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeFalsy();
-	});
-
-	it("tests env var terms of use being true", () => {
-		const wrapper = shallowMount(SchoolPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-		});
-
-		expect(wrapper.vm.schoolTermsOfUseEnabled).toBeTruthy();
-	});
-
-	it("tests env var terms of use being false", () => {
-		envConfigModule.setEnvs({
-			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
-			I18N__AVAILABLE_LANGUAGES: "de,en,es",
-		});
-		const wrapper = shallowMount(SchoolPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-		});
-
-		expect(wrapper.vm.schoolTermsOfUseEnabled).toBeFalsy();
 	});
 
 	it("tests env var school oauth migration being true", () => {

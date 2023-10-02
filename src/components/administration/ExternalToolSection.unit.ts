@@ -51,9 +51,6 @@ describe("ExternalToolSection", () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
-			stubs: {
-				VIcon: true,
-			},
 		});
 
 		return {
@@ -155,17 +152,25 @@ describe("ExternalToolSection", () => {
 				const firstRow = tableRows.at(0).findAll("td");
 				const secondRow = tableRows.at(1).findAll("td");
 
-				expect(firstRow.at(1).find("span").text()).toEqual(
+				expect(firstRow.at(1).text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					mdiCheckCircle
-				);
-				expect(secondRow.at(1).find("span").text()).toEqual(
+				expect(
+					firstRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
+				).toEqual(mdiCheckCircle);
+				expect(secondRow.at(1).text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
 				expect(
-					secondRow.at(1).findComponent({ name: "v-icon" }).text()
+					secondRow
+						.at(1)
+						.findComponent({ name: "v-icon" })
+						.find("path")
+						.attributes("d")
 				).toEqual(mdiRefreshCircle);
 			});
 

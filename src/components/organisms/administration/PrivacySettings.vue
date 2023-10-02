@@ -29,17 +29,9 @@
 				/>
 				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
 					{{
-						theme === "brb"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg"
-							  )
-							: theme === "n21"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen"
-							  )
-							: $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibility"
-							  )
+						$t(
+							"pages.administration.school.index.privacySettings.longText.studentVisibility"
+						)
 					}}
 				</p>
 				<p v-else class="body-2 mb-0">
@@ -169,7 +161,6 @@ export default {
 			envConfigModule.getTeacherStudentVisibilityIsVisible,
 		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
 		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
-		theme: () => envConfigModule.getTheme,
 		studentVisibility() {
 			if (this.isTeacherStudentVisibilityConfigurable) {
 				return this.permissions?.teacher

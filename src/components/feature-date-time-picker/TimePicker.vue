@@ -6,28 +6,32 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="180"
-			@input="onMenuToggle"
+			attach
+			@input="handleMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
-					ref="inputField"
-					v-model="modelValue"
-					v-bind="attrs"
-					v-on="on"
+					v-model="model"
+					data-testid="time-input"
+					placeholder="HH:MM"
+					filled
+					clearable
 					:label="label"
 					:aria-label="ariaLabel"
-					placeholder="HH:MM"
-					append-icon="$mdiClockOutline"
+					v-bind="attrs"
+					v-on="on"
 					:rules="rules"
-					data-testid="time-input"
+					validate-on-blur
+					autocomplete="off"
+					ref="inputField"
 					:class="{ 'menu-open': showTimeDialog }"
-					@keypress="isNumberOrColon"
+					@blur="handleBlur"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@update:error="onError"
+					@update:error="handleError"
 				/>
 			</template>
-			<v-list height="200" class="col-12 pt-1 px-0 overflow-y-auto">
+			<v-list height="200" class="col-12 pt-1 px-0">
 				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
@@ -36,11 +40,12 @@
 						<v-list-item
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
-							@click="onSelect(timeOfDay.value)"
+							@click="handleSelect(timeOfDay.value)"
 							:disabled="timeOfDay.disabled"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
+
 						<v-divider v-if="index < timesOfDayList.length - 1" />
 					</div>
 				</v-list-item-group>
@@ -50,11 +55,11 @@
 </template>
 
 <script lang="ts">
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
-import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -65,21 +70,21 @@ export default defineComponent({
 		required: { type: Boolean },
 		allowPast: { type: Boolean, default: true },
 	},
-	emits: ["update:time"],
+	emits: ["input", "error", "valid"],
 	setup(props, { emit }) {
-		const { t } = useI18n();
+		const i18n = injectStrict(I18N_KEY);
 
-		const modelValue = computed({
-			get() {
-				return props.time;
-			},
-			set: (newValue) => {
-				emitTimeDebounced(newValue);
-			},
-		});
+		const t = (key: string) => {
+			const translateResult = i18n.t(key);
+			if (typeof translateResult === "string") {
+				return translateResult;
+			}
+			return "unknown translation-key:" + key;
+		};
+
+		const model = ref(props.time);
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
-		const valid = ref(true);
 
 		const { timesOfDayList, timeInPast } = useTimePickerState(
 			toRef(props, "allowPast")
@@ -128,29 +133,26 @@ export default defineComponent({
 			return rules;
 		});
 
-		const onSelect = async (selected: string) => {
+		const handleBlur = useDebounceFn(() => {
+			const time = model.value || "";
+			if (time.match(timeRegex)) {
+				emit("input", time);
+			}
+		}, 200);
+
+		const handleSelect = async (selected: string) => {
 			inputField.value?.focus();
-			modelValue.value = selected;
-			valid.value = true;
+			model.value = selected;
 			await closeMenu();
 		};
 
-		const onError = (hasError: boolean) => {
-			valid.value = !hasError;
+		const handleError = (hasError: boolean) => {
+			hasError ? emit("error") : emit("valid");
 		};
 
-		/**
-		 * Necessary because we need to wait for update:error
-		 */
-		const emitTimeDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				emit("update:time", newValue);
-			}
-		}, 50);
-
-		const onMenuToggle = () => {
+		const handleMenuToggle = () => {
 			if (showTimeDialog.value) {
-				valid.value = true;
+				emit("valid");
 			}
 		};
 
@@ -158,42 +160,37 @@ export default defineComponent({
 			showTimeDialog.value = false;
 		}, 50);
 
-		const isNumberOrColon = (event: KeyboardEvent) => {
-			const char = String.fromCharCode(event.keyCode); // Get the character
-			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
-			else event.preventDefault(); // If it doesn't match, don't add to input text
-		};
-
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			modelValue,
+			model,
 			rules,
 			inputField,
-			onSelect,
-			onError,
-			onMenuToggle,
-			isNumberOrColon,
+			handleBlur,
+			handleSelect,
+			handleError,
+			handleMenuToggle,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/src/components/VTextField/_variables.scss";
+
 .time-list-item {
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
 }
-
-.overflow-y-auto {
-	overflow-y: auto;
-}
-
 ::v-deep {
-	.v-input__icon--append .v-icon {
-		width: 20px;
-		height: 20px;
+	.menu-open {
+		label {
+			transform: $text-field-filled-full-width-label-active-transform;
+		}
+		.v-text-field__details {
+			display: none;
+		}
 	}
 }
 </style>

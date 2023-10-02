@@ -3,22 +3,21 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
-	BoardResponse,
-	CardResponse,
 	ColumnResponse,
 	ContentElementType,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	ExternalToolElementContent,
 	FileElementContent,
 	RichTextElementContent,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	RoomsApiFactory,
+	BoardResponse,
+	CardResponse,
 	SubmissionContainerElementContent,
 } from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { AxiosPromise } from "axios";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -91,13 +90,6 @@ export const useBoardApi = () => {
 			};
 		}
 
-		if (element.type === ContentElementType.ExternalTool) {
-			return {
-				content: element.content as ExternalToolElementContent,
-				type: ContentElementType.ExternalTool,
-			};
-		}
-
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
@@ -167,8 +159,9 @@ export const useBoardApi = () => {
 	const getContextInfo = async (
 		boardId: string
 	): Promise<ContextInfo | undefined> => {
-		const contextResponse =
-			await boardApi.boardControllerGetBoardContext(boardId);
+		const contextResponse = await boardApi.boardControllerGetBoardContext(
+			boardId
+		);
 		if (contextResponse.status !== 200) {
 			return undefined;
 		}

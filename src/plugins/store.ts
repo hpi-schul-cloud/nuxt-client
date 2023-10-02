@@ -12,6 +12,7 @@ import classes from "@/store/classes";
 import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
 import lessons from "@/store/lessons";
+import termsAndConditions from "@/store/terms-and-conditions";
 import uiState from "@/store/uiState";
 import users from "@/store/users";
 
@@ -37,6 +38,7 @@ export default new Store({
 		courses,
 		"ldap-config": ldapConfig,
 		lessons,
+		"terms-and-conditions": termsAndConditions,
 		uiState,
 		users,
 	},

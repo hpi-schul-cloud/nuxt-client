@@ -54,7 +54,6 @@ export const mockUser: User = {
 export const mockSchool: School = {
 	_id: "mockSchoolId",
 	name: "",
-	logo_name: "",
 	fileStorageType: "",
 	federalState: "",
 	county: {
@@ -83,8 +82,6 @@ export const mockSchool: School = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
-		nextcloud: false,
-		oauthProvisioningEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},

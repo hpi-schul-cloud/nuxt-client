@@ -17,7 +17,7 @@
 				component="p"
 			/>
 			<div
-				v-if="isNewLoginFlowEnabled && userLoginMigration"
+				v-if="isNewLoginFlowEnabled"
 				class="d-flex flex-wrap justify-center mt-8"
 			>
 				<v-btn
@@ -122,7 +122,7 @@ export default defineComponent({
 			return (
 				systemsModule?.getSystems.find(
 					(system: System): boolean =>
-						system.id === userLoginMigration.value?.targetSystemId
+						system.id === userLoginMigration.value.targetSystemId
 				)?.name ?? ""
 			);
 		};
@@ -130,50 +130,51 @@ export default defineComponent({
 		const isNewLoginFlowEnabled = !!envConfigModule.getClientUserLoginMigration;
 
 		const proceedLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule.getMigrationLinks.proceedLink
+			() => userLoginMigrationModule?.getMigrationLinks.proceedLink
 		);
 		const cancelLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule.getMigrationLinks.cancelLink
+			() => userLoginMigrationModule?.getMigrationLinks.cancelLink
 		);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
+			() => userLoginMigrationModule?.getUserLoginMigration
+		);
 
 		const pageType: ComputedRef<MigrationPageOrigin> = computed(() => {
-			if (props.origin === userLoginMigration.value?.targetSystemId) {
+			if (props.origin === userLoginMigration.value.targetSystemId) {
 				return MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
 			} else {
-				return userLoginMigration.value?.mandatorySince
+				return userLoginMigration.value.mandatorySince
 					? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY
 					: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM;
 			}
 		});
 
 		const migrationDescription: ComputedRef<string> = computed(() => {
-			if (props.origin === userLoginMigration.value?.targetSystemId) {
+			if (props.origin === userLoginMigration.value.targetSystemId) {
 				return "pages.userMigration.description.fromTarget";
 			} else {
-				return userLoginMigration.value?.mandatorySince
+				return userLoginMigration.value.mandatorySince
 					? "pages.userMigration.description.fromSourceMandatory"
 					: "pages.userMigration.description.fromSource";
 			}
 		});
 
 		const canSkipMigration: ComputedRef<boolean> = computed(() => {
-			return !userLoginMigration.value?.mandatorySince;
+			return !userLoginMigration.value.mandatorySince;
 		});
 
 		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
-			await systemsModule.fetchSystems();
+			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
+			await systemsModule?.fetchSystems();
 			if (
 				!isNewLoginFlowEnabled &&
-				userLoginMigration.value?.sourceSystemId &&
+				userLoginMigration.value.sourceSystemId &&
 				pageType.value
 			) {
-				await userLoginMigrationModule.fetchMigrationLinks({
+				await userLoginMigrationModule?.fetchMigrationLinks({
 					pageType: pageType.value,
 					sourceSystem: userLoginMigration.value.sourceSystemId,
 					targetSystem: userLoginMigration.value.targetSystemId,

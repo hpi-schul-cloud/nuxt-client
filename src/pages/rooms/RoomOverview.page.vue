@@ -389,22 +389,19 @@ export default {
 		},
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
-			setTimeout(
-				async () => {
-					await roomsModule.fetch({ indicateLoading: false });
-					if (this.hasRoomsBeingCopied) {
-						this.initCoursePolling(count + 1, started ?? new Date());
-					} else {
-						this.notifierModule?.show({
-							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
-							status: "success",
-							autoClose: true,
-							timeout: 10000,
-						});
-					}
-				},
-				Math.min(nextTimeout, 30000)
-			);
+			setTimeout(async () => {
+				await roomsModule.fetch({ indicateLoading: false });
+				if (this.hasRoomsBeingCopied) {
+					this.initCoursePolling(count + 1, started ?? new Date());
+				} else {
+					this.notifierModule?.show({
+						text: this.$t("components.molecules.copyResult.timeoutSuccess"),
+						status: "success",
+						autoClose: true,
+						timeout: 10000,
+					});
+				}
+			}, Math.min(nextTimeout, 30000));
 		},
 	},
 	mounted() {

@@ -91,7 +91,7 @@ export default defineComponent({
 			return (
 				systemsModule?.getSystems.find(
 					(system: System): boolean =>
-						system.id === userLoginMigration.value?.targetSystemId
+						system.id === userLoginMigration.value.targetSystemId
 				)?.name ?? ""
 			);
 		};
@@ -113,8 +113,9 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
-			computed(() => userLoginMigrationModule.getUserLoginMigration);
+		const userLoginMigration: ComputedRef<UserLoginMigration> = computed(
+			() => userLoginMigrationModule.getUserLoginMigration
+		);
 
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
