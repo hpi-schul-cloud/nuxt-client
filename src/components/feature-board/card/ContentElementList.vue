@@ -34,7 +34,20 @@
 				:element="element"
 				:isEditMode="isEditMode"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-			/>
+			>
+				<template #menu="{ elementName }">
+					<ContentElementMenu
+						:elementId="element.id"
+						:name="elementName"
+						:isFirstElement="firstElementId === element.id"
+						:isLastElement="lastElementId === element.id"
+						:hasMultipleElements="hasMultipleElements"
+						@move-down:element="onMoveElementDown(index, element)"
+						@move-up:element="onMoveElementUp(index, element)"
+						@delete:element="onDeleteElement"
+					/>
+				</template>
+			</SubmissionContentElement>
 			<ExternalToolElement
 				v-else-if="showExternalToolElement(element)"
 				:key="element.id"

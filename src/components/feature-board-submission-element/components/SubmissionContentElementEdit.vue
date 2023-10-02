@@ -2,7 +2,9 @@
 	<div>
 		<div class="grey lighten-4 pa-4 rounded">
 			<SubmissionContentElementTitle />
-			<slot name="menu"></slot>
+			<div class="menu">
+				<slot></slot>
+			</div>
 			<date-time-picker
 				class="mt-1"
 				:dateTime="dueDate"
@@ -66,3 +68,11 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.menu {
+	position: absolute;
+	right: 4px;
+	top: 4px;
+}
+</style>

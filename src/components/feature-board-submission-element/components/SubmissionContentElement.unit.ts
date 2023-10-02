@@ -1,6 +1,6 @@
 import NotifierModule from "@/store/notifier";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
@@ -13,6 +13,7 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useContentElementState } from "@data-board";
+import { i18nMock } from "@@/tests/test-utils";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
@@ -56,6 +57,7 @@ describe("SubmissionContentElement", () => {
 			{
 				...createComponentMocks({ i18n: true }),
 				provide: {
+					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 				propsData: { ...props },

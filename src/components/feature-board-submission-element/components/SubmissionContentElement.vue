@@ -26,7 +26,12 @@
 				:submissions="submissions"
 				:editable="editable"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
-			/>
+			>
+				<slot
+					name="menu"
+					:elementName="t('components.cardElement.submissionElement')"
+				></slot>
+			</SubmissionContentElementEdit>
 		</div>
 	</v-card>
 </template>
@@ -38,6 +43,7 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -54,6 +60,7 @@ export default defineComponent({
 	},
 	emits: ["move-keyboard:edit"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
@@ -82,6 +89,7 @@ export default defineComponent({
 			editable,
 			onKeydownArrow,
 			onUpdateCompleted,
+			t,
 		};
 	},
 });
