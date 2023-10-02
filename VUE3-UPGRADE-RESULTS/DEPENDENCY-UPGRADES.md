@@ -25,6 +25,7 @@
 ## Added
 
 - "vue3-mq": "^3.1.3"
+- "resize-observer-polyfill": "^1.5.1"
 
 ## Can not be upgraded
 
