@@ -1,7 +1,8 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import {
+	mdiPresentation,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiPuzzleOutline,
@@ -9,13 +10,19 @@ import {
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { notifierModule } from "@/store/store-accessor";
+import VueI18n from "vue-i18n";
 
 type AddCardElement = (
 	type: ContentElementType
 ) => Promise<AnyContentElement | undefined>;
 
-export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+export const useAddElementDialog = (
+	addElementFunction: AddCardElement,
+	elements: any
+) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+	const i18n = injectStrict(I18N_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
@@ -23,6 +30,23 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
+		const t = (key: string, values?: VueI18n.Values): string =>
+			i18n.tc(key, 0, values);
+		const drawingExists = elements.value.elements.some(
+			(element: { type: ContentElementType }) =>
+				element.type === ContentElementType.Drawing
+		);
+		if (elementType === ContentElementType.Drawing) {
+			if (drawingExists) {
+				notifierModule.show({
+					text: t(
+						"components.administration.externalToolsSection.notification.infoCreation"
+					),
+					status: "error",
+				});
+				return;
+			}
+		}
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
 	};
@@ -39,6 +63,12 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.elementTypeSelection.elements.fileElement.subtitle",
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
+		},
+		{
+			icon: mdiPresentation,
+			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			action: () => onElementClick(ContentElementType.Drawing),
+			testId: "create-element-drawing-element",
 		},
 	];
 
@@ -61,6 +91,15 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			testId: "create-element-external-tool-container",
 		});
 	}
+
+	// if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+	// 	options.push({
+	// 		icon: mdiPresentation,
+	// 		label: "components.elementTypeSelection.elements.boardElement.subtitle",
+	// 		action: () => onElementClick(ContentElementType.Drawing),
+	// 		testId: "create-element-drawing-element",
+	// 	});
+	// }
 
 	const askType = () => {
 		elementTypeOptions.value = options;

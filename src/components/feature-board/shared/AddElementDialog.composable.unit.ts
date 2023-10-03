@@ -15,6 +15,7 @@ mockedInjectStrict.mockImplementation(() => {
 		getEnv: {
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
+			FEATURE_TLDRAW_ENABLED: false,
 		},
 	};
 });
@@ -34,8 +35,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should call add Element", async () => {
 				const { addElementMock, elementType } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock);
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					{ value: { elements: [] } }
+				);
 
 				await onElementClick(elementType);
 
@@ -47,8 +50,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should close dialog", async () => {
 				const { addElementMock, elementType } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock);
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					{ value: { elements: [] } }
+				);
 
 				await onElementClick(elementType);
 
@@ -68,7 +73,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should return error", async () => {
 				const { addElementMock, elementType, error } = setup();
 
-				const { onElementClick } = useAddElementDialog(addElementMock);
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					{ value: { elements: [] } }
+				);
 
 				await expect(onElementClick(elementType)).rejects.toThrowError(error);
 			});
@@ -79,7 +87,9 @@ describe("ElementTypeSelection Composable", () => {
 		it("should set isDialogOpen to true", () => {
 			const addElementMock = jest.fn();
 			const { isDialogOpen } = setupSharedElementTypeSelectionMock();
-			const { askType } = useAddElementDialog(addElementMock);
+			const { askType } = useAddElementDialog(addElementMock, {
+				value: { elements: [] },
+			});
 
 			askType();
 			expect(isDialogOpen.value).toBe(true);
@@ -111,7 +121,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the RichTextElement action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -124,8 +136,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
-
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 				askType();
 
 				const action = elementTypeOptions.value[0].action;
@@ -138,7 +151,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the FileElement action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -151,7 +166,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -165,8 +182,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the SubmissionElement action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
-
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -180,8 +198,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
-
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -194,7 +213,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when the ExternalTool action is called", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -207,7 +228,9 @@ describe("ElementTypeSelection Composable", () => {
 
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				askType();
 
@@ -217,5 +240,35 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
 		});
+		// describe("when the DrawingElement action is called", () => {
+		// 	it("should call drawing element function with right argument", async () => {
+		// 		const { elementTypeOptions, addElementMock } = setup();
+		// 		const { askType } = useAddElementDialog(addElementMock, {
+		// 			value: { elements: [] },
+		// 		});
+
+		// 		askType();
+
+		// 		const action = elementTypeOptions.value[2].action;
+		// 		action();
+
+		// 		expect(addElementMock).toBeCalledTimes(1);
+		// 		expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+		// 	});
+
+		// 	it("should set isDialogOpen to false", async () => {
+		// 		const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+		// 		const { askType } = useAddElementDialog(addElementMock, {
+		// 			value: { elements: [] },
+		// 		});
+
+		// 		askType();
+
+		// 		const action = elementTypeOptions.value[2].action;
+		// 		action();
+
+		// 		expect(closeDialogMock).toBeCalledTimes(1);
+		// 	});
+		// });
 	});
 });

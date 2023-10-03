@@ -54,6 +54,19 @@
 				@move-up:edit="onMoveElementUp(index, element)"
 				@delete:element="onDeleteElement"
 			/>
+			<DrawingContentElement
+				v-else-if="isDrawingElementResponse(element)"
+				:key="element.id"
+				:element="element"
+				:isEditMode="isEditMode"
+				:isFirstElement="firstElementId === element.id"
+				:isLastElement="lastElementId === element.id"
+				:hasMultipleElements="hasMultipleElements"
+				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+				@move-down:edit="onMoveElementDown(index, element)"
+				@move-up:edit="onMoveElementUp(index, element)"
+				@delete:element="onDeleteElement"
+			/>
 		</template>
 	</VCardText>
 </template>
@@ -65,6 +78,7 @@ import {
 	FileElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	DrawingElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
@@ -74,6 +88,7 @@ import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { DrawingContentElement } from "@feature-board-drawing-element";
 import { computed, defineComponent, PropType } from "vue";
 
 export default defineComponent({
@@ -84,6 +99,7 @@ export default defineComponent({
 		RichTextContentElement,
 		SubmissionContentElement,
 		ContentElementMenu,
+		DrawingContentElement,
 	},
 	props: {
 		elements: {
@@ -150,6 +166,19 @@ export default defineComponent({
 			);
 		};
 
+		const isDrawingElementResponse = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
+			return element.type === ContentElementType.Drawing;
+		};
+
+		const showDrawingElement = (element: AnyContentElement) => {
+			return (
+				envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
+				isDrawingElementResponse(element)
+			);
+		};
+
 		const onMoveElementDown = (
 			elementIndex: number,
 			element: AnyContentElement
@@ -206,6 +235,8 @@ export default defineComponent({
 			showSubmissionContainerElement,
 			isExternalToolElementResponse,
 			showExternalToolElement,
+			showDrawingElement,
+			isDrawingElementResponse,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,

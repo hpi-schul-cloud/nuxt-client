@@ -36,6 +36,9 @@ module.exports = defineConfig({
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
 				),
+				"@feature-board-drawing-element": getDir(
+					"src/components/feature-board-drawing-element"
+				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-date-time-picker": getDir(
 					"src/components/feature-date-time-picker"

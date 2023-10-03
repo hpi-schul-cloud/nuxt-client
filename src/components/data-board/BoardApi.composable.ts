@@ -9,6 +9,7 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
+	DrawingElementContent,
 	ExternalToolElementContent,
 	FileElementContent,
 	RichTextElementContent,
@@ -95,6 +96,13 @@ export const useBoardApi = () => {
 			return {
 				content: element.content as ExternalToolElementContent,
 				type: ContentElementType.ExternalTool,
+			};
+		}
+
+		if (element.type === ContentElementType.Drawing) {
+			return {
+				content: element.content as DrawingElementContent,
+				type: ContentElementType.Drawing,
 			};
 		}
 

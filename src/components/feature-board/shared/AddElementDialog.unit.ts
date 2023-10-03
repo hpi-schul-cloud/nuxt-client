@@ -41,7 +41,11 @@ describe("ElementTypeSelection", () => {
 	const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 		EnvConfigModule,
 		{
-			getEnv: { ...mockEnvs, FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true },
+			getEnv: {
+				...mockEnvs,
+				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: true,
+			},
 		}
 	);
 

@@ -350,7 +350,7 @@ describe("ContextExternalToolConfigurator", () => {
 						{
 							contextExternalToolId: string;
 							contextExternalTool: ContextExternalToolSave;
-						}
+						},
 					]
 				>({
 					contextExternalToolId: contextExternalToolId,
