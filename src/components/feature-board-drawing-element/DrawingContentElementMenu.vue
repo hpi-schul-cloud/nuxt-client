@@ -28,7 +28,6 @@
 			<template #icon>
 				<VIcon>$mdiTrashCanOutline</VIcon>
 			</template>
-			{{ $t("common.labels.settings") }}
 			{{ $t("components.board.action.delete") }}
 		</BoardMenuAction>
 		<BoardMenuAction

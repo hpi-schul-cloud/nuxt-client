@@ -64,12 +64,6 @@ export const useAddElementDialog = (
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
-		{
-			icon: mdiPresentation,
-			label: "components.elementTypeSelection.elements.boardElement.subtitle",
-			action: () => onElementClick(ContentElementType.Drawing),
-			testId: "create-element-drawing-element",
-		},
 	];
 
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
@@ -92,14 +86,14 @@ export const useAddElementDialog = (
 		});
 	}
 
-	// if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
-	// 	options.push({
-	// 		icon: mdiPresentation,
-	// 		label: "components.elementTypeSelection.elements.boardElement.subtitle",
-	// 		action: () => onElementClick(ContentElementType.Drawing),
-	// 		testId: "create-element-drawing-element",
-	// 	});
-	// }
+	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+		options.push({
+			icon: mdiPresentation,
+			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			action: () => onElementClick(ContentElementType.Drawing),
+			testId: "create-element-drawing-element",
+		});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;

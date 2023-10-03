@@ -6,6 +6,7 @@ import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
@@ -28,6 +29,7 @@ describe("ContentElementList", () => {
 			getEnv: createMock<Envs>({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: true,
 			}),
 		});
 
@@ -67,6 +69,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.ExternalTool,
 				component: ExternalToolElement,
 			},
+			{
+				elementType: ContentElementType.Drawing,
+				component: DrawingContentElement,
+			},
 		])(
 			"should render elements based on type %s",
 			({ elementType, component }) => {
@@ -94,6 +100,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.ExternalTool,
 				component: ExternalToolElement,
+			},
+			{
+				elementType: ContentElementType.Drawing,
+				component: DrawingContentElement,
 			},
 		])(
 			"should propagate isEditMode to child elements",

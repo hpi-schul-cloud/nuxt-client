@@ -44,7 +44,6 @@ describe("ElementTypeSelection", () => {
 			getEnv: {
 				...mockEnvs,
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-				FEATURE_TLDRAW_ENABLED: true,
 			},
 		}
 	);

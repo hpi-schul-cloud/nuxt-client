@@ -172,9 +172,11 @@ export default defineComponent({
 			return element.type === ContentElementType.Drawing;
 		};
 
-		const showDrawingElement = (element: AnyContentElement) => {
+		const showDrawingElement = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
 			return (
-				envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
+				!!envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
 				isDrawingElementResponse(element)
 			);
 		};
