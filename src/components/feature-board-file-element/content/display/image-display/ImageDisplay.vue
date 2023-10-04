@@ -1,33 +1,33 @@
 <template>
-	<v-hover v-model="isHovered">
+	<div
+		class="image-display-container"
+		ref="containerRef"
+		:tabindex="isDesktop ? 0 : -1"
+		@click.stop.prevent="onClick"
+		@focusin.stop.prevent="onFocusIn"
+		@focusout.stop.prevent="onFocusOut"
+		@keydown.enter.stop.prevent="onKeyDown"
+		@keydown.space.stop.prevent="onKeyDown"
+		@mouseenter.stop.prevent="onMouseEnter"
+		@mouseleave.stop.prevent="onMouseLeave"
+	>
 		<div
-			class="image-display-container"
-			ref="containerRef"
-			:tabindex="isDesktop ? 0 : -1"
-			@click.stop.prevent="onClick"
-			@keydown.enter.stop="onKeyDown"
-			@keydown.space.stop="onKeyDown"
-			@focusin="isFocused = true"
-			@focusout="isFocused = false"
-		>
-			<div
-				v-if="!isEditMode && isDesktop && (isFocused || isHovered)"
-				class="image-display-overlay rounded-t-sm"
-			></div>
+			v-if="!isEditMode && isDesktop && (isFocused || isHovered)"
+			class="image-display-overlay rounded-t-sm"
+		></div>
 
-			<img
-				class="image-display-image rounded-t-sm"
-				loading="lazy"
-				:src="previewUrl"
-				:alt="alternativeText"
-			/>
+		<img
+			class="image-display-image rounded-t-sm"
+			loading="lazy"
+			:src="previewUrl"
+			:alt="alternativeText"
+		/>
 
-			<v-app-bar flat color="transparent" class="menu">
-				<v-spacer></v-spacer>
-				<slot></slot>
-			</v-app-bar>
-		</div>
-	</v-hover>
+		<v-app-bar flat color="transparent" class="menu">
+			<v-spacer></v-spacer>
+			<slot></slot>
+		</v-app-bar>
+	</div>
 </template>
 
 <script lang="ts">
@@ -79,9 +79,33 @@ export default defineComponent({
 			}
 		};
 
+		const onFocusIn = () => {
+			if (isDesktop) {
+				isFocused.value = true;
+			}
+		};
+
+		const onFocusOut = () => {
+			if (isDesktop) {
+				isFocused.value = false;
+			}
+		};
+
 		const onKeyDown = () => {
 			if (!props.isEditMode) {
 				openLightBox();
+			}
+		};
+
+		const onMouseEnter = () => {
+			if (isDesktop) {
+				isHovered.value = true;
+			}
+		};
+
+		const onMouseLeave = () => {
+			if (isDesktop) {
+				isHovered.value = false;
 			}
 		};
 
@@ -105,7 +129,11 @@ export default defineComponent({
 			isHovered,
 			isDesktop,
 			onClick,
+			onFocusIn,
+			onFocusOut,
 			onKeyDown,
+			onMouseEnter,
+			onMouseLeave,
 		};
 	},
 });
