@@ -48,7 +48,7 @@ describe("SchoolPolicyFormDialog", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<Vue> = mount(
+		const wrapper: Wrapper<any> = mount(
 			SchoolTermsFormDialog as MountOptions<Vue>,
 			{
 				...createComponentMocks({
@@ -78,7 +78,7 @@ describe("SchoolPolicyFormDialog", () => {
 
 		it("should render warning icon", async () => {
 			const wrapper = setup();
-			(wrapper.vm as any).isTouched = true;
+			wrapper.vm.isTouched = true;
 			await Vue.nextTick();
 			expect(wrapper.find('[data-testid="warning-icon"]').exists()).toBe(true);
 		});

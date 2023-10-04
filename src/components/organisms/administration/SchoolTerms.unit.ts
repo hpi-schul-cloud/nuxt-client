@@ -13,7 +13,6 @@ import {
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
-import Vue from "vue";
 import { i18nMock } from "@@/tests/test-utils";
 
 describe("SchoolTerms", () => {
@@ -68,7 +67,7 @@ describe("SchoolTerms", () => {
 			...getters,
 		});
 
-		const wrapper: Wrapper<Vue> = shallowMount(SchoolTerms, {
+		const wrapper: Wrapper<any> = shallowMount(SchoolTerms, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -161,9 +160,9 @@ describe("SchoolTerms", () => {
 		it("should change isSchoolTermsFormDialogOpen to true", () => {
 			const wrapper = setup();
 
-			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(false);
+			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(true);
+			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(true);
 		});
 	});
 

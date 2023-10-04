@@ -13,7 +13,6 @@ import {
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import Vue from "vue";
 import { i18nMock } from "@@/tests/test-utils";
 
 describe("SchoolPolicy", () => {
@@ -68,7 +67,7 @@ describe("SchoolPolicy", () => {
 			...getters,
 		});
 
-		const wrapper: Wrapper<Vue> = shallowMount(SchoolPolicy, {
+		const wrapper: Wrapper<any> = shallowMount(SchoolPolicy, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -161,9 +160,9 @@ describe("SchoolPolicy", () => {
 		it("should change isSchoolPolicyFormDialogOpen to true", () => {
 			const wrapper = setup();
 
-			expect((wrapper.vm as any).isSchoolPolicyFormDialogOpen).toBe(false);
+			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect((wrapper.vm as any).isSchoolPolicyFormDialogOpen).toBe(true);
+			expect(wrapper.vm.isSchoolPolicyFormDialogOpen).toBe(true);
 		});
 	});
 
