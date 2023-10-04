@@ -7,23 +7,26 @@
 			width="120"
 			height="22"
 		/>
-		<v-checkbox
+		<FileContentElement
 			v-else
-			v-model="modelValue"
-			class="px-4"
-			:disabled="!editable"
-			:label="t('components.cardElement.submissionElement.completed')"
+			:key="mockedFileElement.id"
+			:element="mockedFileElement"
+			:isEditMode="false"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
+import { defineComponent, PropType, computed, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { FileContentElement } from "@feature-board-file-element";
+import { SubmissionsResponse, ContentElementType } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
+	components: {
+		FileContentElement,
+	},
 	props: {
 		editable: {
 			type: Boolean,
@@ -57,8 +60,22 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
+		const mockedFileElement = ref({
+			id: "64ec3a777045469716f7d4dd",
+			type: ContentElementType.File,
+			timestamps: {
+				createdAt: "",
+				lastUpdatedAt: "",
+			},
+			content: {
+				caption: "Caption",
+				alternativeText: "Alternativer Text",
+			},
+		});
+
 		return {
 			modelValue,
+			mockedFileElement,
 			t,
 		};
 	},
