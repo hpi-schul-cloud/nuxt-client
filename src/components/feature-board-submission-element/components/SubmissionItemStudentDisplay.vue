@@ -61,7 +61,7 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const mockedFileElement = ref({
-			id: "64ec3a777045469716f7d4dd",
+			id: "651d7cf82436e17a07740748",
 			type: ContentElementType.File,
 			timestamps: {
 				createdAt: "",
