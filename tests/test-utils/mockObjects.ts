@@ -82,6 +82,7 @@ export const mockSchool: School = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
+		isTeamCreationByStudentsEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: {},
@@ -91,5 +92,4 @@ export const mockSchool: School = {
 	isExternal: false,
 	id: "mockSchoolId",
 	years: {},
-	isTeamCreationByStudentsEnabled: false,
 };

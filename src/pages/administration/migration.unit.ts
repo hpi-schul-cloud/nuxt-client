@@ -76,6 +76,7 @@ const schoolMock = {
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
+		isTeamCreationByStudentsEnabled: false,
 	},
 	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
@@ -134,7 +135,7 @@ const schoolMock = {
 			__v: 0,
 		},
 	},
-	isTeamCreationByStudentsEnabled: false,
+
 	enableMigrationStart: false,
 };
 

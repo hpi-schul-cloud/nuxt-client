@@ -93,6 +93,7 @@ export default class SchoolsModule extends VuexModule {
 			ldapUniventionMigrationSchool: false,
 			showOutdatedUsers: false,
 			enableLdapSyncDuringMigration: false,
+			isTeamCreationByStudentsEnabled: false,
 		},
 		enableStudentTeamCreation: false,
 		permissions: {},
@@ -102,7 +103,6 @@ export default class SchoolsModule extends VuexModule {
 		isExternal: false,
 		id: "",
 		years: {},
-		isTeamCreationByStudentsEnabled: false,
 	};
 	federalState: FederalState = {
 		_id: "",
@@ -209,6 +209,8 @@ export default class SchoolsModule extends VuexModule {
 				const school = (
 					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
 				).data;
+
+				console.log(school);
 
 				this.setSchool(transformSchoolServerToClient(school));
 

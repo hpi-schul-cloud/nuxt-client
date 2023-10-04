@@ -42,6 +42,7 @@ export type School = {
 		ldapUniventionMigrationSchool: boolean;
 		showOutdatedUsers: boolean;
 		enableLdapSyncDuringMigration: boolean;
+		isTeamCreationByStudentsEnabled: boolean;
 	};
 	enableStudentTeamCreation: boolean;
 	permissions: unknown;
@@ -53,7 +54,6 @@ export type School = {
 	officialSchoolNumber?: string;
 	years: unknown;
 	language?: string;
-	isTeamCreationByStudentsEnabled: boolean;
 };
 
 export type OauthMigration = {
