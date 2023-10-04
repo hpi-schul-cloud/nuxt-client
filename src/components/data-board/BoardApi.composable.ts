@@ -167,9 +167,8 @@ export const useBoardApi = () => {
 	const getContextInfo = async (
 		boardId: string
 	): Promise<ContextInfo | undefined> => {
-		const contextResponse = await boardApi.boardControllerGetBoardContext(
-			boardId
-		);
+		const contextResponse =
+			await boardApi.boardControllerGetBoardContext(boardId);
 		if (contextResponse.status !== 200) {
 			return undefined;
 		}

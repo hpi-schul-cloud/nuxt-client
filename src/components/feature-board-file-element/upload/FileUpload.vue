@@ -1,19 +1,18 @@
 <template>
-	<div>
-		<div v-if="!fileWasPicked">
-			<FilePicker
-				class="mr-10"
-				@update:file="onFileSelect"
-				:isFilePickerOpen.sync="isFilePickerOpen"
-			/>
-		</div>
-		<div class="progress-bar" v-else>
-			<v-progress-linear
-				data-testid="board-file-element-progress-bar"
-				indeterminate
-			/>
-		</div>
-	</div>
+	<v-app-bar flat color="transparent">
+		<FilePicker
+			v-if="!fileWasPicked"
+			@update:file="onFileSelect"
+			:isFilePickerOpen.sync="isFilePickerOpen"
+		/>
+
+		<v-progress-linear
+			v-else
+			data-testid="board-file-element-progress-bar"
+			indeterminate
+		/>
+		<slot></slot>
+	</v-app-bar>
 </template>
 
 <script lang="ts">
@@ -61,11 +60,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.progress-bar {
-	min-height: 52px;
-	margin: 0px 48px 0px 16px;
-	display: flex;
-	align-items: center;
-}
-</style>

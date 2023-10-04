@@ -1,26 +1,26 @@
 <template>
 	<div class="grey lighten-4">
-		<v-card-title
-			v-if="showTitle"
-			data-testid="board-file-element-display"
-			inactive
-		>
-			<div class="d-flex flex-no-wrap align-center text-truncate">
+		<v-app-bar v-if="showTitle" flat color="transparent">
+			<v-toolbar-title data-testid="file-description-toolbar" inactive>
 				<v-icon
 					color="black"
 					class="mr-2"
 					size="18"
-					data-testid="board-file-element-display-file-icon"
+					data-testid="file-description-icon"
 					>{{ mdiFileDocumentOutline }}</v-icon
 				>
 
 				<span
-					:class="spanClasses"
-					data-testid="board-file-element-display-file-name"
+					class="subtitle-1 font-weight-bold"
+					data-testid="file-description-name"
 					>{{ name }}</span
 				>
-			</div>
-		</v-card-title>
+			</v-toolbar-title>
+
+			<v-spacer></v-spacer>
+
+			<slot></slot>
+		</v-app-bar>
 
 		<v-card-subtitle v-if="caption && !isEditMode">
 			{{ caption }}
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "FileDescription",
@@ -40,17 +40,9 @@ export default defineComponent({
 		showTitle: { type: Boolean, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	setup(props) {
-		const spanClasses = computed(() => {
-			const marginClass = props.isEditMode ? " mr-10" : "";
-			const classes = `subtitle-1 font-weight-bold text-truncate${marginClass}`;
-
-			return classes;
-		});
-
+	setup() {
 		return {
 			mdiFileDocumentOutline,
-			spanClasses,
 		};
 	},
 });
