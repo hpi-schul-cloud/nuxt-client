@@ -3,7 +3,7 @@
 		<h4 class="text-h4 mt-0" slot="title">
 			{{ t("common.words.termsOfUse") }}
 		</h4>
-		<template slot="content">
+		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
 				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="replace-alert-text">
