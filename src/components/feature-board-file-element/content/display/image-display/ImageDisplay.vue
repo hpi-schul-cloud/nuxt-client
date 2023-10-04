@@ -1,17 +1,17 @@
 <template>
-	<v-hover v-model="hovered">
+	<v-hover v-model="isHovered">
 		<div
 			class="image-display-container"
 			ref="containerRef"
-			tabindex="0"
+			:tabindex="isDesktop ? 0 : -1"
 			@click="onClick"
 			@keydown.enter.stop="onKeyDown"
 			@keydown.space.stop="onKeyDown"
-			@focusin="focused = true"
-			@focusout="focused = false"
+			@focusin="isFocused = true"
+			@focusout="isFocused = false"
 		>
 			<div
-				v-if="!isEditMode && (hovered || focused)"
+				v-if="!isEditMode && isDesktop && (isFocused || isHovered)"
 				class="image-display-overlay rounded-t-sm"
 			></div>
 
@@ -32,9 +32,11 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import { useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -50,8 +52,10 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 
 		const containerRef = ref<HTMLDivElement | undefined>();
-		const focused = ref(false);
-		const hovered = ref(false);
+		const isFocused = ref(false);
+		const isHovered = ref(false);
+
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const { open } = useLightBox();
 
@@ -95,8 +99,9 @@ export default defineComponent({
 		return {
 			alternativeText,
 			containerRef,
-			focused,
-			hovered,
+			isFocused,
+			isHovered,
+			isDesktop,
 			onClick,
 			onKeyDown,
 		};
