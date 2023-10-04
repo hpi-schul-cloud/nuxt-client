@@ -14,6 +14,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const elementRef: Ref<T> = toRef(props, "element");
 	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
+	const responseValue = ref<T>(unref<T>(elementRef));
 
 	const { updateElementCall } = useBoardApi();
 
@@ -33,7 +34,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 		};
 		try {
 			const response = await updateElementCall(payload);
-			modelValue.value = response.data.content;
+			responseValue.value = response.data;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notUpdated", "boardElement"),
@@ -47,5 +48,6 @@ export const useContentElementState = <T extends AnyContentElement>(
 		 * Will be saved automatically after a debounce
 		 */
 		modelValue,
+		responseValue,
 	};
 };

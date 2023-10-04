@@ -1,12 +1,12 @@
 <template>
 	<div class="mb-4">
 		<LinkContentElementDisplay
-			v-if="modelValue.url"
-			:url="modelValue.url"
-			:title="modelValue.title"
-			:imageUrl="modelValue.imageUrl"
+			v-if="computedModel.url"
+			:url="computedModel.url"
+			:title="computedModel.title"
+			:imageUrl="computedModel.imageUrl"
 		></LinkContentElementDisplay>
-		<LinkContentElementEdit v-if="!modelValue.url" @create:url="onCreateUrl">
+		<LinkContentElementEdit v-if="!computedModel.url" @create:url="onCreateUrl">
 		</LinkContentElementEdit>
 	</div>
 </template>
@@ -14,7 +14,7 @@
 <script lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
 import { useContentElementState } from "@data-board";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { PropType } from "vue/types/umd";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import LinkContentElementEdit from "./LinkContentElementEdit.vue";
@@ -34,15 +34,21 @@ export default defineComponent({
 	},
 	emits: ["delete:element"],
 	setup(props, { emit }) {
-		const { modelValue } = useContentElementState(props, {
+		const { modelValue, responseValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
+
+		const computedModel = computed(() => ({
+			...modelValue.value,
+			...responseValue.value.content,
+			url: modelValue.value.url,
+		}));
 
 		const onCreateUrl = (url: string) => {
 			modelValue.value.url = url;
 		};
 
-		return { modelValue, onCreateUrl };
+		return { computedModel, modelValue, onCreateUrl };
 	},
 });
 </script>
