@@ -4,7 +4,7 @@
 			class="image-display-container"
 			ref="containerRef"
 			:tabindex="isDesktop ? 0 : -1"
-			@click="onClick"
+			@click.stop.prevent="onClick"
 			@keydown.enter.stop="onKeyDown"
 			@keydown.space.stop="onKeyDown"
 			@focusin="isFocused = true"
@@ -74,7 +74,9 @@ export default defineComponent({
 			if (!props.isEditMode) {
 				openLightBox();
 			}
-			containerRef.value?.blur();
+			if (isDesktop) {
+				containerRef.value?.blur();
+			}
 		};
 
 		const onKeyDown = () => {
