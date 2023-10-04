@@ -4,7 +4,7 @@
 			data-testid="board-link-element"
 			dense
 			elevation="0"
-			outlined="true"
+			:outlined="true"
 			:ripple="false"
 			tabindex="0"
 		>
