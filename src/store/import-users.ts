@@ -304,9 +304,8 @@ export default class ImportUsersModule extends VuexModule {
 	@Action
 	async deleteMatch(importUserId: string): Promise<ImportUserResponse | void> {
 		try {
-			const response = await this.importUserApi.importUserControllerRemoveMatch(
-				importUserId
-			);
+			const response =
+				await this.importUserApi.importUserControllerRemoveMatch(importUserId);
 			this.deleteMatchMutation(importUserId);
 			return response.data;
 		} catch (error: any) {
