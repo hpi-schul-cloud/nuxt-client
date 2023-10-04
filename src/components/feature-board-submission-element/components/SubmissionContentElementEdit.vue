@@ -19,6 +19,11 @@
 				:time-input-label="t('common.labels.time')"
 				@input="onDateTimeInput"
 			/>
+			<FileContentElement
+				:key="mockedFileElement.id"
+				:element="mockedFileElement"
+				isEditMode
+			/>
 		</div>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
@@ -29,13 +34,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { SubmissionsResponse, ContentElementType } from "@/serverApi/v3";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import { DateTimePicker } from "@feature-date-time-picker";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import { FileContentElement } from "@feature-board-file-element";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
@@ -44,6 +50,7 @@ export default defineComponent({
 		SubmissionContentElementTitle,
 		DateTimePicker,
 		SubmissionItemsTeacherDisplay,
+		FileContentElement,
 	},
 	props: {
 		dueDate: {
@@ -90,12 +97,26 @@ export default defineComponent({
 			emit("update:dueDate", dateTime);
 		};
 
+		const mockedFileElement = ref({
+			id: "651d7cf82436e17a07740748",
+			type: ContentElementType.File,
+			timestamps: {
+				createdAt: "",
+				lastUpdatedAt: "",
+			},
+			content: {
+				caption: "Caption",
+				alternativeText: "Alternativer Text",
+			},
+		});
+
 		return {
 			t,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,
 			onDateTimeInput,
+			mockedFileElement,
 		};
 	},
 });
