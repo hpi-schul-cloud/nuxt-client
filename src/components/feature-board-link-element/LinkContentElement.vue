@@ -3,7 +3,8 @@
 		<LinkContentElementDisplay
 			v-if="modelValue.url"
 			:url="modelValue.url"
-			:openGraphData="modelValue.openGraphData"
+			:title="modelValue.title"
+			:imageUrl="modelValue.imageUrl"
 		></LinkContentElementDisplay>
 		<LinkContentElementEdit v-if="!modelValue.url" @create:url="onCreateUrl">
 		</LinkContentElementEdit>

@@ -20,7 +20,7 @@
 						:style="{ fontWeight: 700, marginLeft: '10px' }"
 						data-testid="board-link-element-display-content"
 					>
-						{{ linkTitle }}
+						{{ title }}
 					</div>
 				</div>
 				<div class="text-truncate">
@@ -43,18 +43,16 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		openGraphData: {
-			type: Object,
+		title: {
+			type: String,
+			require: true,
+		},
+		imageUrl: {
+			type: String,
 			required: false,
 		},
 	},
 	setup(props) {
-		const imageUrl: ComputedRef<string> = computed(() => {
-			return props.openGraphData?.image?.url;
-		});
-		const linkTitle: ComputedRef<string> = computed(() => {
-			return props.openGraphData?.title;
-		});
 		const urlWithoutProtocol: ComputedRef<string> = computed(() => {
 			try {
 				const urlObject = new URL(props.url);
@@ -64,7 +62,7 @@ export default defineComponent({
 			}
 			return props.url;
 		});
-		return { linkTitle, mdiLink, imageUrl, urlWithoutProtocol };
+		return { mdiLink, urlWithoutProtocol };
 	},
 });
 </script>
