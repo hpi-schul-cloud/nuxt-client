@@ -1,35 +1,27 @@
 <template>
-	<div class="grey lighten-4">
-		<v-app-bar v-if="showTitle" flat color="transparent">
-			<v-toolbar-title data-testid="file-description-toolbar" inactive>
-				<v-icon
-					color="black"
-					class="mr-2"
-					size="18"
-					data-testid="file-description-icon"
-					>{{ mdiFileDocumentOutline }}</v-icon
-				>
+	<ContentElementBar
+		:hasGreyBackground="!isEditMode"
+		:icon="showTitle ? mdiFileDocumentOutline : undefined"
+	>
+		<template #title>
+			<ContentElementTitle v-if="showTitle">{{ name }}</ContentElementTitle>
+		</template>
 
-				<span
-					class="subtitle-1 font-weight-bold"
-					data-testid="file-description-name"
-					>{{ name }}</span
-				>
-			</v-toolbar-title>
+		<template #menu>
+			<slot v-if="showTitle"></slot>
+		</template>
 
-			<v-spacer></v-spacer>
-
-			<slot></slot>
-		</v-app-bar>
-
-		<v-card-subtitle v-if="caption && !isEditMode">
-			{{ caption }}
-		</v-card-subtitle>
-	</div>
+		<template #subtitle>
+			<span v-if="caption && !isEditMode">
+				{{ caption }}
+			</span>
+		</template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
+import { ContentElementBar, ContentElementTitle } from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -45,5 +37,6 @@ export default defineComponent({
 			mdiFileDocumentOutline,
 		};
 	},
+	components: { ContentElementBar, ContentElementTitle },
 });
 </script>
