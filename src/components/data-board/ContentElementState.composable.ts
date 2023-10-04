@@ -1,4 +1,4 @@
-import { toValue, watchDebounced } from "@vueuse/core";
+import { watchDebounced } from "@vueuse/core";
 import { Ref, ref, toRef, unref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -32,7 +32,8 @@ export const useContentElementState = <T extends AnyContentElement>(
 			content: { ...content },
 		};
 		try {
-			await updateElementCall(payload);
+			const response = await updateElementCall(payload);
+			modelValue.value = response.data.content;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notUpdated", "boardElement"),
