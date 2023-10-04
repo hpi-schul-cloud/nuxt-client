@@ -1,6 +1,7 @@
 <template>
 	<VCardText>
 		<template v-for="(element, index) in elements">
+			{{ element.id }}
 			<RichTextContentElement
 				v-if="isRichTextElementResponse(element)"
 				:key="element.id"
