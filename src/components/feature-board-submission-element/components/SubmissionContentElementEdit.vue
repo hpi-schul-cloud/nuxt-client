@@ -12,6 +12,9 @@
 				:time-input-label="t('common.labels.time')"
 				@input="onDateTimeInput"
 			/>
+			<div v-if="dateTimeInPast" class="date-hint">
+				Das Datum liegt in der Vergangenheit
+			</div>
 		</div>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
@@ -22,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
@@ -57,13 +60,17 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
+		const dateTimeInPast = ref(false);
+
 		const onDateTimeInput = (dateTime: string) => {
+			dateTimeInPast.value = new Date(dateTime) < new Date();
 			emit("update:dueDate", dateTime);
 		};
 
 		return {
 			t,
 			onDateTimeInput,
+			dateTimeInPast,
 		};
 	},
 });
@@ -74,5 +81,9 @@ export default defineComponent({
 	position: absolute;
 	right: 4px;
 	top: 4px;
+}
+.date-hint {
+	color: red;
+	display: block;
 }
 </style>
