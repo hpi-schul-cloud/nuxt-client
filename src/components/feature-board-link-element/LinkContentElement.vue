@@ -1,12 +1,16 @@
 <template>
 	<div class="mb-4">
 		<LinkContentElementDisplay
-			v-if="computedModel.url"
-			:url="computedModel.url"
-			:title="computedModel.title"
-			:imageUrl="computedModel.imageUrl"
+			v-if="computedElement.content.url"
+			:url="computedElement.content.url"
+			:title="computedElement.content.title"
+			:imageUrl="computedElement.content.imageUrl"
+			:isLoading="isLoading"
 		></LinkContentElementDisplay>
-		<LinkContentElementEdit v-if="!computedModel.url" @create:url="onCreateUrl">
+		<LinkContentElementEdit
+			v-if="!computedElement.content.url"
+			@create:url="onCreateUrl"
+		>
 		</LinkContentElementEdit>
 	</div>
 </template>
@@ -14,7 +18,7 @@
 <script lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
 import { useContentElementState } from "@data-board";
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import { PropType } from "vue/types/umd";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import LinkContentElementEdit from "./LinkContentElementEdit.vue";
@@ -34,21 +38,21 @@ export default defineComponent({
 	},
 	emits: ["delete:element"],
 	setup(props, { emit }) {
-		const { modelValue, responseValue } = useContentElementState(props, {
-			autoSaveDebounce: 0,
-		});
-
-		const computedModel = computed(() => ({
-			...modelValue.value,
-			...responseValue.value.content,
-			url: modelValue.value.url,
-		}));
+		const { modelValue, computedElement, isLoading } = useContentElementState(
+			props,
+			{ autoSaveDebounce: 0 }
+		);
 
 		const onCreateUrl = (url: string) => {
 			modelValue.value.url = url;
 		};
 
-		return { computedModel, modelValue, onCreateUrl };
+		return {
+			computedElement,
+			modelValue,
+			onCreateUrl,
+			isLoading,
+		};
 	},
 });
 </script>

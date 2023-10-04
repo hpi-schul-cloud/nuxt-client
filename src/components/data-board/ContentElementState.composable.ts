@@ -1,5 +1,5 @@
 import { watchDebounced } from "@vueuse/core";
-import { Ref, ref, toRef, unref } from "vue";
+import { computed, ComputedRef, Ref, ref, toRef, unref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -11,12 +11,20 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
-	const { handleError, notifyWithTemplate } = useErrorHandler();
-	const elementRef: Ref<T> = toRef(props, "element");
-	const modelValue = ref<T["content"]>(unref<T>(elementRef).content);
-	const responseValue = ref<T>(unref<T>(elementRef));
+	const _elementRef: Ref<T> = toRef(props, "element");
+	const _responseValue = ref<T>(unref<T>(_elementRef));
 
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { updateElementCall } = useBoardApi();
+
+	const modelValue = ref<T["content"]>(unref<T>(_elementRef).content);
+
+	const computedElement: ComputedRef<T> = computed(() => ({
+		..._elementRef.value,
+		..._responseValue.value,
+	}));
+
+	const isLoading = ref<boolean>(false);
 
 	watchDebounced<T["content"]>(
 		modelValue.value,
@@ -28,17 +36,20 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	// TODO: refactor this to be properly typed
 	const updateElement = async (content: T["content"]) => {
+		isLoading.value = true;
 		const payload = {
-			...elementRef.value,
+			...computedElement.value,
 			content: { ...content },
 		};
 		try {
 			const response = await updateElementCall(payload);
-			responseValue.value = response.data;
+			_responseValue.value = response.data;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notUpdated", "boardElement"),
 			});
+		} finally {
+			isLoading.value = false;
 		}
 	};
 
@@ -48,6 +59,10 @@ export const useContentElementState = <T extends AnyContentElement>(
 		 * Will be saved automatically after a debounce
 		 */
 		modelValue,
-		responseValue,
+		/**
+		 * Contains the whole element as it is currently known in the backend
+		 */
+		computedElement,
+		isLoading,
 	};
 };

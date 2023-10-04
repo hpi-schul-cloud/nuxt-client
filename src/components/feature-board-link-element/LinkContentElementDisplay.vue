@@ -7,6 +7,7 @@
 			:outlined="true"
 			:ripple="false"
 			tabindex="0"
+			:loading="isLoading ? 'primary' : false"
 		>
 			<v-img v-if="imageUrl" :src="imageUrl"></v-img>
 
@@ -50,6 +51,10 @@ export default defineComponent({
 		imageUrl: {
 			type: String,
 			required: false,
+		},
+		isLoading: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	setup(props) {
