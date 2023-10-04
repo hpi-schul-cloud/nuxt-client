@@ -20,11 +20,7 @@
 			</v-alert>
 			<v-alert light text type="info" class="mb-12">
 				<div class="alert-text">
-					{{
-						t("pages.administration.school.index.info", {
-							instanceTitle: getInstituteTitle(),
-						})
-					}}
+					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
 			</v-alert>
 			<template>
@@ -264,10 +260,8 @@ export default defineComponent({
 			computed(() => envConfigModule.getSchoolPolicyEnabled);
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
 			computed(() => envConfigModule.getSchoolTermsOfUseEnabled);
-		const theme: ComputedRef<string> = computed(() => envConfigModule.getTheme);
-
-		const getInstituteTitle = () => {
-			switch (theme.value) {
+		const instituteTitle: ComputedRef<string> = computed(() => {
+			switch (envConfigModule.getTheme) {
 				case "n21":
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 				case "thr":
@@ -277,7 +271,7 @@ export default defineComponent({
 				default:
 					return "Dataport";
 			}
-		};
+		});
 
 		return {
 			t,
@@ -290,7 +284,7 @@ export default defineComponent({
 			isFeatureOauthMigrationEnabled,
 			isFeatureSchoolPolicyEnabled,
 			isFeatureSchoolTermsOfUseEnabled,
-			getInstituteTitle,
+			instituteTitle,
 		};
 	},
 });
