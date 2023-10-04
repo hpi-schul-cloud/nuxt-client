@@ -19,9 +19,6 @@
 				@update:time="onTimeUpdate"
 			/>
 		</div>
-		<div v-if="dateTimeInPast" class="date-hint">
-			Das Datum liegt in der Vergangenheit
-		</div>
 	</div>
 </template>
 
@@ -29,8 +26,8 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent, ref } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -53,8 +50,7 @@ export default defineComponent({
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-		const locale = i18n.locale;
+		const { locale } = useI18n();
 
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {
@@ -71,7 +67,6 @@ export default defineComponent({
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
-		const dateTimeInPast = ref(false);
 		const dateRequired = computed(() => time.value !== "");
 
 		const emitDateTime = () => {
@@ -88,8 +83,6 @@ export default defineComponent({
 					parseInt(hoursAndMinutes[1])
 				);
 				emit("input", dateTime.toISOString());
-
-				dateTimeInPast.value = dateTime < new Date();
 			}
 		};
 
@@ -109,7 +102,6 @@ export default defineComponent({
 			onDateUpdate,
 			onTimeUpdate,
 			dateRequired,
-			dateTimeInPast,
 		};
 	},
 });
@@ -118,9 +110,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .picker-width {
 	width: 225px;
-}
-.date-hint {
-	color: red;
-	display: block;
 }
 </style>

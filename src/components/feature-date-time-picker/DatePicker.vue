@@ -46,7 +46,6 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
@@ -66,9 +65,7 @@ export default defineComponent({
 	},
 	emits: ["update:date"],
 	setup(props, { emit }) {
-		const { t } = useI18n();
-		const i18n = injectStrict(I18N_KEY);
-		const locale = i18n.locale;
+		const { t, locale } = useI18n();
 
 		const modelValue = computed<string>({
 			get() {
