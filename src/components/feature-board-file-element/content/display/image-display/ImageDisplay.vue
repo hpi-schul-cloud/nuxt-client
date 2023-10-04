@@ -2,7 +2,7 @@
 	<div
 		class="image-display-container"
 		ref="containerRef"
-		:tabindex="isDesktop ? 0 : -1"
+		:tabindex="addTabIndex ? 0 : -1"
 		@click.stop.prevent="onClick"
 		@focusin.stop.prevent="onFocusIn"
 		@focusout.stop.prevent="onFocusOut"
@@ -11,10 +11,7 @@
 		@mouseenter.stop.prevent="onMouseEnter"
 		@mouseleave.stop.prevent="onMouseLeave"
 	>
-		<div
-			v-if="!isEditMode && isDesktop && (isFocused || isHovered)"
-			class="image-display-overlay rounded-t-sm"
-		></div>
+		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm"></div>
 
 		<img
 			class="image-display-image rounded-t-sm"
@@ -50,14 +47,12 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-
 		const containerRef = ref<HTMLDivElement | undefined>();
+		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 		const isFocused = ref(false);
 		const isHovered = ref(false);
 
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
-
-		const { open } = useLightBox();
+		const addTabIndex = computed(() => !props.isEditMode && isDesktop.value);
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
@@ -70,41 +65,50 @@ export default defineComponent({
 			return altText;
 		});
 
+		const showOverlay = computed(
+			() =>
+				!props.isEditMode &&
+				isDesktop.value &&
+				(isFocused.value || isHovered.value)
+		);
+
+		const { open } = useLightBox();
+
 		const onClick = () => {
 			if (!props.isEditMode) {
 				openLightBox();
 			}
-			if (isDesktop) {
+			if (!props.isEditMode && isDesktop) {
 				containerRef.value?.blur();
 			}
 		};
 
 		const onFocusIn = () => {
-			if (isDesktop) {
+			if (!props.isEditMode && isDesktop) {
 				isFocused.value = true;
 			}
 		};
 
 		const onFocusOut = () => {
-			if (isDesktop) {
+			if (!props.isEditMode && isDesktop) {
 				isFocused.value = false;
 			}
 		};
 
 		const onKeyDown = () => {
-			if (!props.isEditMode) {
+			if (!props.isEditMode && isDesktop) {
 				openLightBox();
 			}
 		};
 
 		const onMouseEnter = () => {
-			if (isDesktop) {
+			if (!props.isEditMode && isDesktop) {
 				isHovered.value = true;
 			}
 		};
 
 		const onMouseLeave = () => {
-			if (isDesktop) {
+			if (!props.isEditMode && isDesktop) {
 				isHovered.value = false;
 			}
 		};
@@ -123,11 +127,10 @@ export default defineComponent({
 		};
 
 		return {
+			addTabIndex,
 			alternativeText,
 			containerRef,
-			isFocused,
-			isHovered,
-			isDesktop,
+			showOverlay,
 			onClick,
 			onFocusIn,
 			onFocusOut,
