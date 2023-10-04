@@ -1,5 +1,5 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { envConfigModule, accountsModule } from "@/store";
+import { accountsModule, envConfigModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
@@ -48,30 +48,27 @@ const decrementRemainingTime: any = (
 };
 
 const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
-	return setInterval(
-		async () => {
-			try {
-				const res: any = await accountsModule.getTTL();
-				if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
-					setRemainingTimeInSeconds(res.ttl);
-				} else {
-					console.error("Update remaining session time failed!");
-				}
-			} catch (error) {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				if (error.response && error.response.status === 405) {
-					console.warn(
-						"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
-					);
-					clearInterval(polling);
-				} else {
-					console.error("Update remaining session time failed!");
-				}
+	return setInterval(async () => {
+		try {
+			const res: any = await accountsModule.getTTL();
+			if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
+				setRemainingTimeInSeconds(res.ttl);
+			} else {
+				console.error("Update remaining session time failed!");
 			}
-		},
-		1000 * 60 * updateIntervallMin
-	);
+		} catch (error) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			if (error.response && error.response.status === 405) {
+				console.warn(
+					"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
+				);
+				clearInterval(polling);
+			} else {
+				console.error("Update remaining session time failed!");
+			}
+		}
+	}, 1000 * 60 * updateIntervallMin);
 };
 
 const extendSession = async (
@@ -110,20 +107,17 @@ const extendSession = async (
 				// retry 4 times before showing error
 				if (retry < 4) {
 					retry += 1;
-					setTimeout(
-						() => {
-							extendSession(
-								remainingTimeInSeconds,
-								setRemainingTimeInSeconds,
-								active,
-								showWarningOnRemainingSeconds,
-								setActive,
-								defaultRemainingTimeInSeconds,
-								setToastValue
-							);
-						},
-						2 ** retry * 1000
-					);
+					setTimeout(() => {
+						extendSession(
+							remainingTimeInSeconds,
+							setRemainingTimeInSeconds,
+							active,
+							showWarningOnRemainingSeconds,
+							setActive,
+							defaultRemainingTimeInSeconds,
+							setToastValue
+						);
+					}, 2 ** retry * 1000);
 				} else {
 					retry = 0;
 					if (totalRetry) {

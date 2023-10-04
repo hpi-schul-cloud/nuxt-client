@@ -85,8 +85,8 @@
 	</div>
 </template>
 <script>
-import { inputRangeDate } from "@/plugins/datetime";
 import uidMixin from "@/mixins/uid";
+import { inputRangeDate } from "@/plugins/datetime";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
 
 export const supportedTypes = [
@@ -316,8 +316,7 @@ export default {
 	&:focus {
 		color: map-get($grey, darken-3);
 		outline: none;
-		box-shadow:
-			0 0 0 3px var(--v-white-base),
+		box-shadow: 0 0 0 3px var(--v-white-base),
 			0 0 0 6px map-get($grey, darken-3);
 	}
 }

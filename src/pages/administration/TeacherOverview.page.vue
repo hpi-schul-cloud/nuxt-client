@@ -121,29 +121,29 @@
 </template>
 <script>
 /* eslint-disable max-lines */
+import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import ProgressModal from "@/components/molecules/ProgressModal";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import UserHasPermission from "@/mixins/UserHasPermission";
+import print from "@/mixins/print";
+import { printDate } from "@/plugins/datetime";
 import {
 	authModule,
 	envConfigModule,
 	notifierModule,
 	schoolsModule,
 } from "@/store";
-import { mapGetters } from "vuex";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter";
 import { teacherFilter } from "@/utils/adminFilter";
-import print from "@/mixins/print";
-import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	mdiAccountPlus,
 	mdiCloudDownload,
 	mdiPencilOutline,
 	mdiPlus,
 } from "@mdi/js";
-import { buildPageTitle } from "@/utils/pageTitle";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -700,9 +700,7 @@ span {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow:
-		0 0 0 0 var(--v-white-base),
-		0 0 0 3px var(--button-background);
+	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
 }
 
 .search-section {

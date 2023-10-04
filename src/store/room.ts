@@ -1,8 +1,4 @@
-import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	SingleColumnBoardResponse,
 	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
@@ -10,10 +6,14 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
