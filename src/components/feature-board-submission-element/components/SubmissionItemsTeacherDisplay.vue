@@ -75,7 +75,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { TeacherViewSubmission } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
 
@@ -94,7 +94,7 @@ export default defineComponent({
 			required: true,
 		},
 		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+			type: Object as PropType<Array<TeacherViewSubmission>>,
 			required: true,
 		},
 		editable: {
@@ -120,52 +120,8 @@ export default defineComponent({
 			},
 		];
 
-		const sortByName = (
-			submissionA: SubmissionInfo,
-			submissionB: SubmissionInfo
-		) => {
-			const lastNameA = submissionA.lastName.toUpperCase();
-			const lastNameB = submissionB.lastName.toUpperCase();
-			if (lastNameA < lastNameB) {
-				return -1;
-			}
-			if (lastNameA > lastNameB) {
-				return 1;
-			}
-
-			return 0;
-		};
-
 		const items = computed<Array<SubmissionInfo>>(() => {
-			return props.submissions.users
-				.map((student) => {
-					const submissionInfo: Partial<SubmissionInfo> = {
-						firstName: student.firstName,
-						lastName: student.lastName,
-					};
-
-					const submission = props.submissions.submissionItemsResponse.find(
-						(submission) => submission.userId === student.userId
-					);
-
-					if (!submission) {
-						submissionInfo.status = props.editable ? "open" : "expired";
-						return submissionInfo as SubmissionInfo;
-					}
-
-					if (submission.completed) {
-						submissionInfo.status = "completed";
-					}
-					if (!submission.completed && props.editable) {
-						submissionInfo.status = "open";
-					}
-					if (!submission.completed && !props.editable) {
-						submissionInfo.status = "expired";
-					}
-
-					return submissionInfo as SubmissionInfo;
-				})
-				.sort(sortByName);
+			return props.submissions;
 		});
 
 		const openCount = computed<number>(() => {

@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { StudentViewSubmission } from "../types/submission";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
@@ -30,7 +30,7 @@ export default defineComponent({
 			required: true,
 		},
 		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+			type: Object as PropType<Array<StudentViewSubmission>>,
 			required: true,
 		},
 		loading: {
@@ -42,13 +42,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = computed({
 			get() {
-				if (props.submissions.submissionItemsResponse.length === 0) {
-					return false;
-				}
-
-				const completionState =
-					props.submissions.submissionItemsResponse[0].completed;
-				return completionState;
+				return props.submissions[0].completed;
 			},
 			set(newValue) {
 				emit("update:completed", newValue);
