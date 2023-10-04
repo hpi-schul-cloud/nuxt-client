@@ -23,6 +23,7 @@ const vueRoutes = [
 	`^/administration/school-settings/tool-configuration/?$`,
 	`^/administration/school-settings/tool-configuration/${mongoId}/?$`,
 	`^/administration/migration/?$`,
+	`^/administration/groups/classes/?$`,
 	`^/cfiles/?$`,
 	`^/cfiles/teams/?$`,
 	`^/cfiles/teams/.+`,

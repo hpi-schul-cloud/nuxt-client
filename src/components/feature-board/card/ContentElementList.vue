@@ -20,14 +20,21 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
+			>
+				<template #menu="{ elementName }">
+					<ContentElementMenu
+						:elementId="element.id"
+						:name="elementName"
+						:isFirstElement="firstElementId === element.id"
+						:isLastElement="lastElementId === element.id"
+						:hasMultipleElements="hasMultipleElements"
+						@move-down:element="onMoveElementDown(index, element)"
+						@move-up:element="onMoveElementUp(index, element)"
+						@delete:element="onDeleteElement"
+					/>
+				</template>
+			</FileContentElement>
 			<SubmissionContentElement
 				v-else-if="showSubmissionContainerElement(element)"
 				:key="element.id"
@@ -70,6 +77,7 @@ import {
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import ContentElementMenu from "@feature-board-content-element-menu";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
@@ -85,6 +93,7 @@ export default defineComponent({
 		RichTextContentElement,
 		SubmissionContentElement,
 		LinkContentElement,
+		ContentElementMenu,
 	},
 	props: {
 		elements: {
