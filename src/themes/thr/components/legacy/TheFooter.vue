@@ -57,13 +57,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: "/termsofuse",
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					href: filePathsModule.getSpecificFiles.privacy,
+					href: "/privacypolicy",
 					text: this.$t("components.legacy.footer.privacy_policy_thr"),
 					target: "_blank",
 					rel: "noopener",
