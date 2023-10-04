@@ -52,6 +52,6 @@ export type RoomData = {
 		{
 			type: string;
 			content: Task | Lesson | object;
-		}
+		},
 	];
 };
