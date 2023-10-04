@@ -1999,10 +1999,22 @@ export interface LinkElementContent {
     url: string;
     /**
      * 
-     * @type {OpenGraphData}
+     * @type {string}
      * @memberof LinkElementContent
      */
-    openGraphData?: OpenGraphData;
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    imageUrl?: string;
 }
 /**
  * 
@@ -3273,68 +3285,6 @@ export interface OidcContextResponse {
      * @memberof OidcContextResponse
      */
     ui_locales: Array<string>;
-}
-/**
- * 
- * @export
- * @interface OpenGraphData
- */
-export interface OpenGraphData {
-    /**
-     * 
-     * @type {string}
-     * @memberof OpenGraphData
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OpenGraphData
-     */
-    description: string;
-    /**
-     * 
-     * @type {OpenGraphImageData}
-     * @memberof OpenGraphData
-     */
-    image?: OpenGraphImageData;
-    /**
-     * 
-     * @type {string}
-     * @memberof OpenGraphData
-     */
-    url: string;
-}
-/**
- * 
- * @export
- * @interface OpenGraphImageData
- */
-export interface OpenGraphImageData {
-    /**
-     * 
-     * @type {string}
-     * @memberof OpenGraphImageData
-     */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OpenGraphImageData
-     */
-    type?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof OpenGraphImageData
-     */
-    width?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OpenGraphImageData
-     */
-    height?: number;
 }
 /**
  * 
@@ -7655,7 +7605,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7709,7 +7659,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -7762,7 +7712,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
 
 }
 
