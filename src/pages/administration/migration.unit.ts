@@ -82,7 +82,6 @@ const schoolMock = {
 	permissions: { teacher: { STUDENT_LIST: true } },
 	officialSchoolNumber: "100000",
 	documentBaseDirType: "",
-	inMaintenanceSince: "2022-02-10T11:55:50.344Z",
 	inUserMigration: true,
 	ldapSchoolIdentifier: "100000",
 	inMaintenance: true,
