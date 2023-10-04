@@ -27,6 +27,10 @@
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],
+			"@feature-board-content-element-menu": [
+				"src/components/feature-board-content-element-menu"
+			],
+			
 			"@feature-board-external-tool-element": [
 				"src/components/feature-board-external-tool-element"
 			],
