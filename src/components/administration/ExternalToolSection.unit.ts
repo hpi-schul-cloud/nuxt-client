@@ -209,7 +209,7 @@ describe("ExternalToolSection", () => {
 
 						await deleteButton.trigger("click");
 
-						expect(wrapper.find("p").text()).toContain(firstToolName);
+						expect(wrapper.findAll("p").at(1).text()).toContain(firstToolName);
 					});
 				});
 
