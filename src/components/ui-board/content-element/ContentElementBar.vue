@@ -23,7 +23,7 @@
 			<slot name="menu"></slot>
 		</v-app-bar>
 
-		<div class="pt-0 pb-4 px-4">
+		<div v-if="$slots.subtitle" class="pt-0 pb-4 px-4">
 			<slot name="subtitle"></slot>
 		</div>
 	</div>
