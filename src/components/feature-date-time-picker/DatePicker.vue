@@ -20,6 +20,7 @@
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
 					readonly
+					:messages="infos"
 					:rules="rules"
 					data-testid="date-input"
 					@keydown.space="showDateDialog = true"
@@ -62,6 +63,7 @@ export default defineComponent({
 		required: { type: Boolean },
 		minDate: { type: String },
 		maxDate: { type: String },
+		dateTimeInPast: { type: Boolean, default: false },
 	},
 	emits: ["update:date"],
 	setup(props, { emit }) {
@@ -138,6 +140,14 @@ export default defineComponent({
 			showDateDialog.value = false;
 		}, 50);
 
+		const infos = computed(() => {
+			if (props.dateTimeInPast) {
+				return "Das Datum liegt in der Vergangenheit";
+			}
+
+			return [];
+		});
+
 		return {
 			mdiCalendarClock,
 			locale,
@@ -150,6 +160,7 @@ export default defineComponent({
 			onInput,
 			onError,
 			onMenuToggle,
+			infos,
 		};
 	},
 });
@@ -166,6 +177,10 @@ export default defineComponent({
 	.v-input__icon--append .v-icon {
 		width: 20px;
 		height: 20px;
+	}
+
+	.v-messages__message {
+		line-height: 14px;
 	}
 }
 </style>

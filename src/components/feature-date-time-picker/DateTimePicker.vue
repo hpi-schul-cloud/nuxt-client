@@ -9,6 +9,7 @@
 				:aria-label="dateInputAriaLabel"
 				:minDate="minDate"
 				:maxDate="maxDate"
+				:date-time-in-past="dateTimeInPast"
 				@update:date="onDateUpdate"
 			/>
 			<time-picker
@@ -52,6 +53,8 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { locale } = useI18n();
 
+		const dateTimeInPast = ref(false);
+
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {
 				return "";
@@ -82,6 +85,7 @@ export default defineComponent({
 					parseInt(hoursAndMinutes[0]),
 					parseInt(hoursAndMinutes[1])
 				);
+				dateTimeInPast.value = dateTime < new Date();
 				emit("input", dateTime.toISOString());
 			}
 		};
@@ -102,6 +106,7 @@ export default defineComponent({
 			onDateUpdate,
 			onTimeUpdate,
 			dateRequired,
+			dateTimeInPast,
 		};
 	},
 });

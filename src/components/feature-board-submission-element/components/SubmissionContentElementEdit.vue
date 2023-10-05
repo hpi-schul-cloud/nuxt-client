@@ -12,9 +12,6 @@
 				:time-input-label="t('common.labels.time')"
 				@input="onDateTimeInput"
 			/>
-			<div v-if="dateTimeInPast" class="date-hint">
-				Das Datum liegt in der Vergangenheit
-			</div>
 		</div>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
@@ -60,17 +57,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		const dateTimeInPast = ref(false);
-
 		const onDateTimeInput = (dateTime: string) => {
-			dateTimeInPast.value = new Date(dateTime) < new Date();
 			emit("update:dueDate", dateTime);
 		};
 
 		return {
 			t,
 			onDateTimeInput,
-			dateTimeInPast,
 		};
 	},
 });
