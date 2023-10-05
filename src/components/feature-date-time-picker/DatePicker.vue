@@ -20,7 +20,7 @@
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
 					readonly
-					:messages="infos"
+					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
 					@keydown.space="showDateDialog = true"
@@ -140,9 +140,9 @@ export default defineComponent({
 			showDateDialog.value = false;
 		}, 50);
 
-		const infos = computed(() => {
+		const messages = computed(() => {
 			if (props.dateTimeInPast) {
-				return "Das Datum liegt in der Vergangenheit";
+				return t("components.datePicker.messages.future");
 			}
 
 			return [];
@@ -160,7 +160,7 @@ export default defineComponent({
 			onInput,
 			onError,
 			onMenuToggle,
-			infos,
+			messages,
 		};
 	},
 });
