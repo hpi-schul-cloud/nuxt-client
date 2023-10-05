@@ -3,7 +3,7 @@
 		<ContentElementBar
 			v-if="showTitle"
 			:hasGreyBackground="!isEditMode"
-			:icon="showTitle ? mdiFileDocumentOutline : undefined"
+			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
 				<ContentElementTitle>{{ name }}</ContentElementTitle>
