@@ -1,42 +1,14 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-submission-element-edit-menu-move-up"
+		<BoardMenuActionMoveUp
 			@click="onMoveElementUp"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseUp }}
-				</VIcon>
-			</template>
-
-			{{ $t("components.board.action.moveUp") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-submission-element-edit-menu-move-down"
+			v-if="hasMultipleElements && !isFirstElement"
+		/>
+		<BoardMenuActionMoveDown
 			@click="onMoveElementDown"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseDown }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.moveDown") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			data-testid="board-submission-element-edit-menu-delete"
-			@click="onDelete"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiTrashCanOutline }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.delete") }}
-		</BoardMenuAction>
-		
+			v-if="hasMultipleElements && !isLastElement"
+		/>
+		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -47,11 +19,21 @@ import {
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "SubmissionContentElementMenu",
-	components: { BoardMenu, BoardMenuAction },
+	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
+	},
 	props: {
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
