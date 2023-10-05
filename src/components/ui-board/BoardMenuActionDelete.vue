@@ -30,13 +30,13 @@ export default defineComponent({
 		const getLanguageKeyTypeName = (scope: string) => {
 			switch (scope) {
 				case "column":
-					return "boardColumn";
+					return "components.boardColumn";
 				case "card":
-					return "boardCard";
+					return "components.boardCard";
 				case "element":
-					return "boardElement";
+					return "components.boardElement";
 				default:
-					return "board";
+					return "components.board";
 			}
 		};
 

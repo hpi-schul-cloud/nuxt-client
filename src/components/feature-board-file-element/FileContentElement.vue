@@ -176,7 +176,7 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
-		const onDelete = () => emit("delete:element");
+		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
 

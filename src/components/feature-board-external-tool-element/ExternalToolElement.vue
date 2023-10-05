@@ -53,7 +53,6 @@ import {
 } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@mdi/js";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	computed,
 	ComputedRef,
@@ -88,7 +87,6 @@ export default defineComponent({
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const { t } = useI18n();
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 
@@ -132,16 +130,7 @@ export default defineComponent({
 			emit("move-up:edit");
 		};
 
-		const onDeleteElement = async () => {
-			const shouldDelete = await askDeleteConfirmation(
-				toolDisplayData.value?.name,
-				"components.boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
-			}
-		};
+		const onDeleteElement = () => emit("delete:element", element.value.id);
 
 		const onEditElement = () => {
 			// TODO N21-1248: Edit dialog
