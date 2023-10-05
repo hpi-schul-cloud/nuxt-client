@@ -29,11 +29,10 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { detectMobile } from "@/utils/helpers";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { useMediaQuery } from "@vueuse/core";
 import { PropType, computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -48,11 +47,11 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const containerRef = ref<HTMLDivElement | undefined>();
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
-		const isFocused = ref(false);
-		const isHovered = ref(false);
+		const isMobile = detectMobile();
+		let isFocused = false;
+		let isHovered = false;
 
-		const addTabIndex = computed(() => !props.isEditMode && isDesktop.value);
+		const addTabIndex = computed(() => !props.isEditMode && !isMobile);
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
@@ -66,10 +65,7 @@ export default defineComponent({
 		});
 
 		const showOverlay = computed(
-			() =>
-				!props.isEditMode &&
-				isDesktop.value &&
-				(isFocused.value || isHovered.value)
+			() => !props.isEditMode && !isMobile && (isFocused || isHovered)
 		);
 
 		const { open } = useLightBox();
@@ -78,38 +74,38 @@ export default defineComponent({
 			if (!props.isEditMode) {
 				openLightBox();
 			}
-			if (!props.isEditMode && isDesktop) {
+			if (!props.isEditMode && !isMobile) {
 				containerRef.value?.blur();
 			}
 		};
 
 		const onFocusIn = () => {
-			if (!props.isEditMode && isDesktop) {
-				isFocused.value = true;
+			if (!props.isEditMode && !isMobile) {
+				isFocused = true;
 			}
 		};
 
 		const onFocusOut = () => {
-			if (!props.isEditMode && isDesktop) {
-				isFocused.value = false;
+			if (!props.isEditMode && !isMobile) {
+				isFocused = false;
 			}
 		};
 
 		const onKeyDown = () => {
-			if (!props.isEditMode && isDesktop) {
+			if (!props.isEditMode && !isMobile) {
 				openLightBox();
 			}
 		};
 
 		const onMouseEnter = () => {
-			if (!props.isEditMode && isDesktop) {
-				isHovered.value = true;
+			if (!props.isEditMode && !isMobile) {
+				isHovered = true;
 			}
 		};
 
 		const onMouseLeave = () => {
-			if (!props.isEditMode && isDesktop) {
-				isHovered.value = false;
+			if (!props.isEditMode && !isMobile) {
+				isHovered = false;
 			}
 		};
 
