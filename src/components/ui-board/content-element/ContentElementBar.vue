@@ -1,11 +1,6 @@
 <template>
 	<div :class="backgroundClass">
-		<v-app-bar
-			v-if="$slots.icon || $slots.title || $slots.menu"
-			dense
-			flat
-			color="transparent"
-		>
+		<v-app-bar dense flat color="transparent">
 			<v-icon
 				v-if="icon"
 				color="black"
@@ -28,14 +23,7 @@
 			<slot name="menu"></slot>
 		</v-app-bar>
 
-		<div
-			v-if="$slots.subtitle && ($slots.icon || $slots.title || $slots.menu)"
-			class="pt-0 pb-4 px-4"
-		>
-			<slot name="subtitle"></slot>
-		</div>
-
-		<div v-else-if="$slots.subtitle" class="pa-4">
+		<div class="pt-0 pb-4 px-4">
 			<slot name="subtitle"></slot>
 		</div>
 	</div>

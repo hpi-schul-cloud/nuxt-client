@@ -1,22 +1,29 @@
 <template>
-	<ContentElementBar
-		:hasGreyBackground="!isEditMode"
-		:icon="showTitle ? mdiFileDocumentOutline : undefined"
-	>
-		<template #title>
-			<ContentElementTitle v-if="showTitle">{{ name }}</ContentElementTitle>
-		</template>
+	<div>
+		<ContentElementBar
+			v-if="showTitle"
+			:hasGreyBackground="!isEditMode"
+			:icon="showTitle ? mdiFileDocumentOutline : undefined"
+		>
+			<template #title>
+				<ContentElementTitle>{{ name }}</ContentElementTitle>
+			</template>
 
-		<template #menu>
-			<slot v-if="showTitle"></slot>
-		</template>
+			<template #menu>
+				<slot></slot>
+			</template>
 
-		<template #subtitle>
-			<span v-if="caption && !isEditMode">
-				{{ caption }}
-			</span>
-		</template>
-	</ContentElementBar>
+			<template #subtitle>
+				<span v-if="!isEditMode">
+					{{ caption }}
+				</span>
+			</template>
+		</ContentElementBar>
+
+		<div v-else-if="caption && !isEditMode" class="px-4 py-4 grey lighten-4">
+			<span>{{ caption }}</span>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
