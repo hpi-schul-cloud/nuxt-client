@@ -8,7 +8,9 @@
 			@click="onMoveDown"
 			v-if="hasMultipleElements && !isLastElement"
 		/>
-		<BoardMenuActionEdit @click="onEdit" />
+		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
+			{{ $t("common.labels.settings") }}
+		</BoardMenuAction>
 		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
@@ -22,7 +24,7 @@ import {
 } from "@mdi/js";
 import {
 	BoardMenu,
-	BoardMenuActionEdit,
+	BoardMenuAction,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
@@ -33,7 +35,7 @@ export default defineComponent({
 	components: {
 		BoardMenu,
 		BoardMenuActionDelete,
-		BoardMenuActionEdit,
+		BoardMenuAction,
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 	},

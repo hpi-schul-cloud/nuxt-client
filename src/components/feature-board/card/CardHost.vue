@@ -33,13 +33,7 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction
-							v-if="!isEditMode"
-							@click="onStartEditMode"
-							:icon="mdiPencilOutline"
-						>
-							{{ $t("common.actions.edit") }}
-						</BoardMenuAction>
+						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
 						<BoardMenuActionDelete
 							@click="onDeleteCard"
 							data-test-id="board-menu-action-delete"
@@ -78,8 +72,11 @@ import {
 	useCardState,
 	useEditMode,
 } from "@data-board";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { BoardMenu, BoardMenuAction, BoardMenuActionDelete } from "@ui-board";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+} from "@ui-board";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -100,7 +97,7 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
@@ -210,8 +207,6 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},

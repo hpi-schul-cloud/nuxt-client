@@ -21,13 +21,7 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction
-						v-if="!isEditMode"
-						@click="onStartEditMode"
-						:icon="mdiPencilOutline"
-					>
-						{{ $t("common.actions.edit") }}
-					</BoardMenuAction>
+					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
 					<BoardMenuActionDelete @click="onDelete" :name="title">
 					</BoardMenuActionDelete>
 				</BoardMenu>
@@ -44,7 +38,11 @@ import {
 	useEditMode,
 } from "@data-board";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { BoardMenu, BoardMenuAction, BoardMenuActionDelete } from "@ui-board";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+} from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
@@ -54,7 +52,7 @@ export default defineComponent({
 	components: {
 		BoardMenu,
 		BoardAnyTitleInput,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
 		BoardMenuActionDelete,
 	},

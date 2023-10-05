@@ -1,7 +1,7 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
+	BoardMenuAction,
 	BoardMenuActionDelete,
-	BoardMenuActionEdit,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
@@ -146,7 +146,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to edit", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionEdit);
+			const menuItem = wrapper.findComponent(BoardMenuAction);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -154,7 +154,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the edit event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionEdit);
+			const menuItem = wrapper.findComponent(BoardMenuAction);
 
 			menuItem.vm.$emit("click");
 
