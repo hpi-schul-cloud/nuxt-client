@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
