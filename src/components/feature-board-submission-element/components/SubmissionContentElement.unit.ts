@@ -7,7 +7,7 @@ import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/f
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import Vue, { computed, nextTick, ref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -82,6 +82,8 @@ describe("SubmissionContentElement", () => {
 				modelValue: ref({
 					dueDate: element.content.dueDate,
 				}),
+				computedElement: computed(() => element),
+				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({
@@ -182,6 +184,8 @@ describe("SubmissionContentElement", () => {
 				modelValue: ref({
 					dueDate: element.content.dueDate,
 				}),
+				computedElement: computed(() => element),
+				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({
