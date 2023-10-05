@@ -62,7 +62,7 @@ _should be replaced by `vue-draggable` (based on sortable.js) because of re-rend
 
 `$mq` has to be replaced by injection
 
-https://vue3-mq.info/migration/from-version-2.html#removal-of-global-properties-and-functions
+<https://vue3-mq.info/migration/from-version-2.html#removal-of-global-properties-and-functions>
 
 ### vue-filter-ui
 

@@ -19,7 +19,7 @@ class .custom-bg {
 }
 ```
 
-https://vuetifyjs.com/en/features/theme/#custom-theme-colors
+<https://vuetifyjs.com/en/features/theme/#custom-theme-colors>
 
 Files affected in our code: ~90. Can be done via search and replace.
 
