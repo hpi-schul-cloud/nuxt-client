@@ -16,6 +16,7 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
+				:submission="submission"
 				:editable="editable"
 				@update:completed="onUpdateCompleted"
 			/>
@@ -74,7 +75,7 @@ export default defineComponent({
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissions, editable, updateSubmissionItem } =
+		const { loading, submissions, submission, editable, updateSubmissionItem } =
 			useSubmissionContentElementState(
 				element.value.id,
 				element.value.content.dueDate
@@ -118,6 +119,7 @@ export default defineComponent({
 			modelValue,
 			submissionContentElement,
 			submissions,
+			submission,
 			loading,
 			editable,
 			onDeleteElement,

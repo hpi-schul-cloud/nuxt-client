@@ -3,10 +3,7 @@ import { useErrorHandler } from "@/components/error-handling/ErrorHandler.compos
 import { ref, computed, onMounted } from "vue";
 import { authModule } from "@/store";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import {
-	TeacherViewSubmission,
-	StudentViewSubmission,
-} from "../types/submission";
+import { TeacherSubmission, StudentSubmission } from "../types/submission";
 
 export const useSubmissionContentElementState = (
 	id: string,
@@ -22,15 +19,19 @@ export const useSubmissionContentElementState = (
 		submissionItemsResponse: [],
 		users: [],
 	});
-	const submissions = ref<Array<TeacherViewSubmission | StudentViewSubmission>>(
-		[]
-	);
+	const submissions = ref<Array<TeacherSubmission>>([]);
+	const submission = ref<StudentSubmission>({ completed: false });
 	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
 			const response = await fetchSubmissionItemsCall(id);
-			submissions.value = mapSubmissionResponse(response);
+
+			if (isStudent.value) {
+				submission.value = mapStudentSubmission(response);
+			} else {
+				submissions.value = mapTeacherSubmission(response);
+			}
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -77,8 +78,8 @@ export const useSubmissionContentElementState = (
 	});
 
 	const sortByName = (
-		submissionA: TeacherViewSubmission,
-		submissionB: TeacherViewSubmission
+		submissionA: TeacherSubmission,
+		submissionB: TeacherSubmission
 	) => {
 		const lastNameA = submissionA.lastName.toUpperCase();
 		const lastNameB = submissionB.lastName.toUpperCase();
@@ -92,50 +93,51 @@ export const useSubmissionContentElementState = (
 		return 0;
 	};
 
-	const mapSubmissionResponse = (submissionsResponse: SubmissionsResponse) => {
-		if (isStudent.value) {
-			if (submissionsResponse.submissionItemsResponse.length === 0) {
-				return [{ completed: false }];
-			}
-
-			const completionState =
-				submissionsResponse.submissionItemsResponse[0].completed;
-			return [{ completed: completionState }];
-		} else {
-			return submissionsResponse.users
-				.map((student) => {
-					const submissionInfo: Partial<TeacherViewSubmission> = {
-						firstName: student.firstName,
-						lastName: student.lastName,
-					};
-
-					const submission = submissionsResponse.submissionItemsResponse.find(
-						(submission) => submission.userId === student.userId
-					);
-
-					if (!submission) {
-						submissionInfo.status = editable.value ? "open" : "expired";
-						return submissionInfo as TeacherViewSubmission;
-					}
-
-					if (submission.completed) {
-						submissionInfo.status = "completed";
-					}
-					if (!submission.completed && editable.value) {
-						submissionInfo.status = "open";
-					}
-					if (!submission.completed && !editable.value) {
-						submissionInfo.status = "expired";
-					}
-
-					return submissionInfo as TeacherViewSubmission;
-				})
-				.sort(sortByName);
+	const mapStudentSubmission = (submissionsResponse: SubmissionsResponse) => {
+		if (submissionsResponse.submissionItemsResponse.length === 0) {
+			return { completed: false };
 		}
+
+		const completionState =
+			submissionsResponse.submissionItemsResponse[0].completed;
+		return { completed: completionState };
+	};
+
+	const mapTeacherSubmission = (submissionsResponse: SubmissionsResponse) => {
+		return submissionsResponse.users
+			.map((student) => {
+				const submissionInfo: Partial<TeacherSubmission> = {
+					firstName: student.firstName,
+					lastName: student.lastName,
+				};
+
+				const submission = submissionsResponse.submissionItemsResponse.find(
+					(submission) => submission.userId === student.userId
+				);
+
+				if (!submission) {
+					submissionInfo.status = editable.value ? "open" : "expired";
+					return submissionInfo as TeacherSubmission;
+				}
+
+				if (submission.completed) {
+					submissionInfo.status = "completed";
+				}
+				if (!submission.completed && editable.value) {
+					submissionInfo.status = "open";
+				}
+				if (!submission.completed && !editable.value) {
+					submissionInfo.status = "expired";
+				}
+
+				return submissionInfo as TeacherSubmission;
+			})
+			.sort(sortByName);
 	};
 
 	return {
 		submissions,
+		submission,
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,

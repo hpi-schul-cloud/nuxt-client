@@ -31,7 +31,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { TeacherSubmission } from "../types/submission";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import { DateTimePicker } from "@feature-date-time-picker";
@@ -50,7 +50,7 @@ export default defineComponent({
 			type: String,
 		},
 		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
 		editable: {

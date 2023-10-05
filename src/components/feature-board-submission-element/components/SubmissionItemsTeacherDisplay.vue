@@ -75,7 +75,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { TeacherViewSubmission } from "../types/submission";
+import { TeacherSubmission } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
 
@@ -94,7 +94,7 @@ export default defineComponent({
 			required: true,
 		},
 		submissions: {
-			type: Object as PropType<Array<TeacherViewSubmission>>,
+			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
 		editable: {
