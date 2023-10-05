@@ -36,6 +36,7 @@
 			</template>
 			{{ $t("components.board.action.delete") }}
 		</BoardMenuAction>
+		
 	</BoardMenu>
 </template>
 

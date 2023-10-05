@@ -103,6 +103,7 @@ describe("FileContentElement", () => {
 
 				await wrapper.vm.$nextTick();
 
+				console.log(wrapper.html());
 				expect(wrapper.html()).not.toContain(menu);
 			});
 		});

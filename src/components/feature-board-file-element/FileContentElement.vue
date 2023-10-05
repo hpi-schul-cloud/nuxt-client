@@ -19,8 +19,14 @@
 			@update:caption="onUpdateCaption"
 		>
 			<BoardMenu scope="element" v-if="isEditMode">
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionMoveUp
+					@click="onMoveUp"
+					v-if="hasMultipleElements && !isFirstElement"
+				/>
+				<BoardMenuActionMoveDown
+					@click="onMoveDown"
+					v-if="hasMultipleElements && !isLastElement"
+				/>
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
@@ -30,8 +36,14 @@
 			@upload:file="onUploadFile"
 		>
 			<BoardMenu scope="element">
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionMoveUp
+					@click="onMoveUp"
+					v-if="hasMultipleElements && !isFirstElement"
+				/>
+				<BoardMenuActionMoveDown
+					@click="onMoveDown"
+					v-if="hasMultipleElements && !isLastElement"
+				/>
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
@@ -78,6 +90,9 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isFirstElement: { type: Boolean, required: true },
+		isLastElement: { type: Boolean, required: true },
+		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
