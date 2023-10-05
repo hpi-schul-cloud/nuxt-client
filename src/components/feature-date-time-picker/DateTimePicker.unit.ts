@@ -66,18 +66,21 @@ describe("DateTimePicker", () => {
 	});
 
 	describe("if only date is set", () => {
-		it("should emit input event with default time", async () => {
+		it("should emit input event with time set to 23:59", async () => {
 			jest.useFakeTimers();
 			setup({ dateTime: "" });
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
-			datePicker.vm.$emit("update:date", new Date("2030-01-01"));
+			const date = new Date("2030-01-01");
+			datePicker.vm.$emit("update:date", date);
 
 			jest.advanceTimersByTime(1000);
 
 			const emits = wrapper.emitted("input");
 			expect(emits?.length).toEqual(1);
-			expect(emits?.[0]).toEqual(["2030-01-01T22:59:00.000Z"]);
+			date.setHours(23);
+			date.setMinutes(59);
+			expect(emits?.[0]).toEqual([date.toISOString()]);
 		});
 	});
 
