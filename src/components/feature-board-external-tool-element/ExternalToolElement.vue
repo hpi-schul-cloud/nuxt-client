@@ -135,7 +135,7 @@ export default defineComponent({
 		const onDeleteElement = async () => {
 			const shouldDelete = await askDeleteConfirmation(
 				toolDisplayData.value?.name,
-				"boardElement"
+				"components.boardElement"
 			);
 
 			if (shouldDelete) {

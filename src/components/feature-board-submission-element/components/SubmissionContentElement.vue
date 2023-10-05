@@ -102,7 +102,7 @@ export default defineComponent({
 		const onDeleteElement = async (): Promise<void> => {
 			const shouldDelete = await askDeleteConfirmation(
 				t("components.cardElement.submissionElement").toString(),
-				"boardElement"
+				"components.boardElement"
 			);
 
 			if (shouldDelete) {
