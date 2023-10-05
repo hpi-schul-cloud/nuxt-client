@@ -2,7 +2,7 @@
 	<div
 		class="image-display-container"
 		ref="containerRef"
-		:tabindex="addTabIndex ? 0 : -1"
+		:tabindex="tabIndex"
 		@click.stop.prevent="onClick"
 		@focusin.stop.prevent="onFocusIn"
 		@focusout.stop.prevent="onFocusOut"
@@ -30,7 +30,6 @@
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { detectMobile } from "@/utils/helpers";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent, ref } from "vue";
@@ -49,9 +48,8 @@ export default defineComponent({
 		const containerRef = ref<HTMLDivElement | undefined>();
 		const isFocused = ref(false);
 		const isHovered = ref(false);
-		const isMobile = ref(detectMobile());
 
-		const addTabIndex = computed(() => !props.isEditMode && !isMobile.value);
+		const tabIndex = computed(() => (!props.isEditMode ? 0 : -1));
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
@@ -65,47 +63,44 @@ export default defineComponent({
 		});
 
 		const showOverlay = computed(
-			() =>
-				!props.isEditMode &&
-				!isMobile.value &&
-				(isFocused.value || isHovered.value)
+			() => !props.isEditMode && (isFocused.value || isHovered.value)
 		);
 
 		const onClick = () => {
 			if (!props.isEditMode) {
 				openLightBox();
 			}
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				containerRef.value?.blur();
 			}
 		};
 
 		const onFocusIn = () => {
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				isFocused.value = true;
 			}
 		};
 
 		const onFocusOut = () => {
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				isFocused.value = false;
 			}
 		};
 
 		const onKeyDown = () => {
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				openLightBox();
 			}
 		};
 
 		const onMouseEnter = () => {
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				isHovered.value = true;
 			}
 		};
 
 		const onMouseLeave = () => {
-			if (!props.isEditMode && !isMobile.value) {
+			if (!props.isEditMode) {
 				isHovered.value = false;
 			}
 		};
@@ -126,10 +121,10 @@ export default defineComponent({
 		};
 
 		return {
-			addTabIndex,
 			alternativeText,
 			containerRef,
 			showOverlay,
+			tabIndex,
 			onClick,
 			onFocusIn,
 			onFocusOut,
