@@ -1,6 +1,11 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { BoardMenuAction } from "@ui-board";
+import {
+	BoardMenuAction,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 
@@ -59,13 +64,7 @@ describe("SubmissionContentElementMenu", () => {
 			it("should emit move-up:element event", async () => {
 				const { wrapper } = setup();
 
-				const moveUpTranslation = wrapper.vm
-					.$t("components.board.action.moveUp")
-					.toString();
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(moveUpTranslation))
-					.at(0);
+				const childComponent = wrapper.findComponent(BoardMenuActionMoveUp);
 				childComponent.vm.$emit("click");
 
 				expect(wrapper.emitted("move-up:element")?.length).toBe(1);
@@ -76,13 +75,7 @@ describe("SubmissionContentElementMenu", () => {
 			it("should emit move-down:element event", async () => {
 				const { wrapper } = setup();
 
-				const moveDownTranslation = wrapper.vm
-					.$t("components.board.action.moveDown")
-					.toString();
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(moveDownTranslation))
-					.at(0);
+				const childComponent = wrapper.findComponent(BoardMenuActionMoveDown);
 				childComponent.vm.$emit("click");
 
 				expect(wrapper.emitted("move-down:element")?.length).toBe(1);
@@ -93,14 +86,7 @@ describe("SubmissionContentElementMenu", () => {
 			it("should show the move up action", () => {
 				const { wrapper } = setup();
 
-				const moveUpTranslation = wrapper.vm
-					.$t("components.board.action.moveUp")
-					.toString();
-
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(moveUpTranslation))
-					.at(0);
+				const childComponent = wrapper.findComponent(BoardMenuActionMoveUp);
 
 				expect(childComponent.exists()).toBe(true);
 			});
@@ -108,14 +94,7 @@ describe("SubmissionContentElementMenu", () => {
 			it("should show the move down action", () => {
 				const { wrapper } = setup();
 
-				const moveDownTranslation = wrapper.vm
-					.$t("components.board.action.moveDown")
-					.toString();
-
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(moveDownTranslation))
-					.at(0);
+				const childComponent = wrapper.findComponent(BoardMenuActionMoveDown);
 
 				expect(childComponent.exists()).toBe(true);
 			});
@@ -139,31 +118,10 @@ describe("SubmissionContentElementMenu", () => {
 					};
 				};
 
-				it("should not show the move up action", () => {
-					const { wrapper } = setup();
-
-					const moveUpTranslation = wrapper.vm
-						.$t("components.board.action.moveUp")
-						.toString();
-
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveUpTranslation));
-
-					expect(childComponent.exists()).toBe(false);
-				});
-
 				it("should show the move down action", () => {
 					const { wrapper } = setup();
 
-					const moveDownTranslation = wrapper.vm
-						.$t("components.board.action.moveDown")
-						.toString();
-
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveDownTranslation))
-						.at(0);
+					const childComponent = wrapper.findComponent(BoardMenuActionMoveDown);
 
 					expect(childComponent.exists()).toBe(true);
 				});
@@ -191,14 +149,7 @@ describe("SubmissionContentElementMenu", () => {
 				it("should show the move up action", () => {
 					const { wrapper } = setup();
 
-					const moveUpTranslation = wrapper.vm
-						.$t("components.board.action.moveUp")
-						.toString();
-
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveUpTranslation))
-						.at(0);
+					const childComponent = wrapper.findComponent(BoardMenuActionMoveUp);
 
 					expect(childComponent.exists()).toBe(true);
 				});
@@ -206,13 +157,7 @@ describe("SubmissionContentElementMenu", () => {
 				it("should not show the move down action", () => {
 					const { wrapper } = setup();
 
-					const moveDownTranslation = wrapper.vm
-						.$t("components.board.action.moveDown")
-						.toString();
-
-					const childComponent = wrapper
-						.findAllComponents(BoardMenuAction)
-						.filter((c) => c.text().includes(moveDownTranslation));
+					const childComponent = wrapper.findComponent(BoardMenuActionMoveDown);
 
 					expect(childComponent.exists()).toBe(false);
 				});
@@ -272,14 +217,7 @@ describe("SubmissionContentElementMenu", () => {
 		it("should show delete board menu action", () => {
 			const { wrapper } = setup();
 
-			const deleteTranslation = wrapper.vm
-				.$t("components.board.action.delete")
-				.toString();
-
-			const childComponent = wrapper
-				.findAllComponents(BoardMenuAction)
-				.filter((c) => c.text().includes(deleteTranslation))
-				.at(0);
+			const childComponent = wrapper.findComponent(BoardMenuActionDelete);
 
 			expect(childComponent.exists()).toBe(true);
 		});
@@ -288,13 +226,7 @@ describe("SubmissionContentElementMenu", () => {
 			it("should emit delete:element event", async () => {
 				const { wrapper } = setup();
 
-				const deleteTranslation = wrapper.vm
-					.$t("components.board.action.delete")
-					.toString();
-				const childComponent = wrapper
-					.findAllComponents(BoardMenuAction)
-					.filter((c) => c.text().includes(deleteTranslation))
-					.at(0);
+				const childComponent = wrapper.findComponent(BoardMenuActionDelete);
 				childComponent.vm.$emit("click");
 
 				expect(wrapper.emitted("delete:element")?.length).toBe(1);

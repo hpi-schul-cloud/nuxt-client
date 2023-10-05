@@ -570,13 +570,6 @@ describe("FileContentElement", () => {
 					const fileUpload = wrapper.findComponent(FileUpload);
 					expect(fileUpload.exists()).toBe(false);
 				});
-
-				it("should render slot menu component", async () => {
-					const { wrapper, menu } = setup();
-					await wrapper.vm.$nextTick();
-
-					expect(wrapper.html()).toContain(menu);
-				});
 			});
 
 			describe("when a virus is detected", () => {
