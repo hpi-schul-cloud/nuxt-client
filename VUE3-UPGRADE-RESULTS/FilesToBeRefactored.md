@@ -46,7 +46,7 @@
   - `src/components/molecules/TitleInput.vue`
   - `src/components/organisms/FormNews.vue`
   - `src/components/organisms/Pagination.vue`
-  - `src/components/organisms/vCustomDialog.vue`
+  + `src/components/organisms/vCustomDialog.vue`
 - **Estimation time for refactoring:** _TBD_
 
 ## VUETIFY BASED REFACTORINGS
