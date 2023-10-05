@@ -47,11 +47,11 @@ export default defineComponent({
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const containerRef = ref<HTMLDivElement | undefined>();
-		const isMobile = detectMobile();
-		let isFocused = false;
-		let isHovered = false;
+		const isFocused = ref(false);
+		const isHovered = ref(false);
+		const isMobile = ref(detectMobile());
 
-		const addTabIndex = computed(() => !props.isEditMode && !isMobile);
+		const addTabIndex = computed(() => !props.isEditMode && !isMobile.value);
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
@@ -65,45 +65,48 @@ export default defineComponent({
 		});
 
 		const showOverlay = computed(
-			() => !props.isEditMode && !isMobile && (isFocused || isHovered)
+			() =>
+				!props.isEditMode &&
+				!isMobile.value &&
+				(isFocused.value || isHovered.value)
 		);
 
 		const onClick = () => {
 			if (!props.isEditMode) {
 				openLightBox();
 			}
-			if (!props.isEditMode && !isMobile) {
+			if (!props.isEditMode && !isMobile.value) {
 				containerRef.value?.blur();
 			}
 		};
 
 		const onFocusIn = () => {
-			if (!props.isEditMode && !isMobile) {
-				isFocused = true;
+			if (!props.isEditMode && !isMobile.value) {
+				isFocused.value = true;
 			}
 		};
 
 		const onFocusOut = () => {
-			if (!props.isEditMode && !isMobile) {
-				isFocused = false;
+			if (!props.isEditMode && !isMobile.value) {
+				isFocused.value = false;
 			}
 		};
 
 		const onKeyDown = () => {
-			if (!props.isEditMode && !isMobile) {
+			if (!props.isEditMode && !isMobile.value) {
 				openLightBox();
 			}
 		};
 
 		const onMouseEnter = () => {
-			if (!props.isEditMode && !isMobile) {
-				isHovered = true;
+			if (!props.isEditMode && !isMobile.value) {
+				isHovered.value = true;
 			}
 		};
 
 		const onMouseLeave = () => {
-			if (!props.isEditMode && !isMobile) {
-				isHovered = false;
+			if (!props.isEditMode && !isMobile.value) {
+				isHovered.value = false;
 			}
 		};
 
