@@ -30,9 +30,6 @@
 			"@feature-board-link-element": [
 				"src/components/feature-board-link-element"
 			],
-			"@feature-board-content-element-menu": [
-				"src/components/feature-board-content-element-menu"
-			],
 			"@feature-board-external-tool-element": [
 				"src/components/feature-board-external-tool-element"
 			],

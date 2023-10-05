@@ -1,52 +1,29 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuAction
+		<BoardMenuActionMoveUp
 			v-if="hasMultipleElements && !isFirstElement"
 			data-testid="board-external-tool-element-edit-menu-move-up"
 			@click="onMoveElementUp"
 		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseUp }}
-				</VIcon>
-			</template>
-
-			{{ $t("components.board.action.moveUp") }}
-		</BoardMenuAction>
-		<BoardMenuAction
+		</BoardMenuActionMoveUp>
+		<BoardMenuActionMoveDown
 			v-if="hasMultipleElements && !isLastElement"
 			data-testid="board-external-tool-element-edit-menu-move-down"
 			@click="onMoveElementDown"
 		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseDown }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.moveDown") }}
-		</BoardMenuAction>
+		</BoardMenuActionMoveDown>
 		<BoardMenuAction
 			data-testid="board-external-tool-element-edit-menu-edit"
 			@click="onEdit"
+			:icon="mdiCogOutline"
 		>
-			<template #icon>
-				<VIcon>
-					{{ mdiCogOutline }}
-				</VIcon>
-			</template>
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuAction
+		<BoardMenuActionDelete
 			data-testid="board-external-tool-element-edit-menu-delete"
 			@click="onDelete"
 		>
-			<template #icon>
-				<VIcon>
-					{{ mdiTrashCanOutline }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.delete") }}
-		</BoardMenuAction>
+		</BoardMenuActionDelete>
 	</BoardMenu>
 </template>
 
@@ -57,11 +34,23 @@ import {
 	mdiCogOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
+import {
+	BoardMenu,
+	BoardMenuAction,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	components: { BoardMenu, BoardMenuAction },
+	components: {
+		BoardMenu,
+		BoardMenuAction,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
+	},
 	props: {
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },

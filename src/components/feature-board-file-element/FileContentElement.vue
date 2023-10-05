@@ -18,18 +18,22 @@
 			@update:alternativeText="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
 		>
-			<slot
-				v-if="isEditMode"
-				name="menu"
-				:elementName="fileProperties.name"
-			></slot>
+			<BoardMenu scope="element" v-if="isEditMode">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+			</BoardMenu>
 		</FileContent>
 		<FileUpload
 			v-else-if="isEditMode"
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		>
-			<slot name="menu"></slot>
+			<BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
 		</FileUpload>
 	</v-card>
 </template>
@@ -43,6 +47,12 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import {
 	computed,
 	defineComponent,
@@ -60,12 +70,21 @@ export default defineComponent({
 	components: {
 		FileUpload,
 		FileContent,
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["move-keyboard:edit", "delete:element"],
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
@@ -142,6 +161,10 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
+		const onDelete = () => emit("delete:element");
+		const onMoveUp = () => emit("move-up:edit");
+		const onMoveDown = () => emit("move-down:edit");
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -154,6 +177,9 @@ export default defineComponent({
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
+			onDelete,
+			onMoveUp,
+			onMoveDown,
 		};
 	},
 });
