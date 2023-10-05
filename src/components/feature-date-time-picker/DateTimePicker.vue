@@ -1,25 +1,23 @@
 <template>
-	<div>
-		<div class="d-flex flex-row">
-			<date-picker
-				class="mr-2 picker-width"
-				:required="dateRequired"
-				:date="date"
-				:label="dateInputLabel"
-				:aria-label="dateInputAriaLabel"
-				:minDate="minDate"
-				:maxDate="maxDate"
-				:date-time-in-past="dateTimeInPast"
-				@update:date="onDateUpdate"
-			/>
-			<time-picker
-				class="picker-width"
-				:time="time"
-				:label="timeInputLabel"
-				:aria-label="timeInputAriaLabel"
-				@update:time="onTimeUpdate"
-			/>
-		</div>
+	<div class="d-flex flex-row">
+		<date-picker
+			class="mr-2 picker-width"
+			:required="dateRequired"
+			:date="date"
+			:label="dateInputLabel"
+			:aria-label="dateInputAriaLabel"
+			:minDate="minDate"
+			:maxDate="maxDate"
+			:date-time-in-past="dateTimeInPast"
+			@update:date="onDateUpdate"
+		/>
+		<time-picker
+			class="picker-width"
+			:time="time"
+			:label="timeInputLabel"
+			:aria-label="timeInputAriaLabel"
+			@update:time="onTimeUpdate"
+		/>
 	</div>
 </template>
 
