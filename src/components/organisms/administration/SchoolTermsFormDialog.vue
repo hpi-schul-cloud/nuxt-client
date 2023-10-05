@@ -6,7 +6,7 @@
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
 				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
-					<div class="replace-alert-text">
+					<div class="alert-text">
 						{{
 							t(
 								"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent"
@@ -32,7 +32,7 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
 				>
-					<template v-slot:append>
+					<template #append>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
@@ -180,8 +180,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.replace-alert-text {
+.alert-text {
 	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
 }
 
 .button-left {
