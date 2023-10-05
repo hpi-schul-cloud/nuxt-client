@@ -67,17 +67,17 @@ describe("DateTimePicker", () => {
 
 	describe("if only date is set", () => {
 		it("should emit input event with default time", async () => {
+			jest.useFakeTimers();
 			setup({ dateTime: "" });
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
-			expect(datePicker.exists()).toBe(true);
-			const tomorrow = new Date();
-			tomorrow.setDate(tomorrow.getDate() + 1);
-			datePicker.vm.$emit("update:date", tomorrow);
+			datePicker.vm.$emit("update:date", new Date("2030-01-01"));
 
-			await wrapper.vm.$nextTick();
+			jest.advanceTimersByTime(1000);
 
-			expect(wrapper.emitted("input")).toHaveLength(1);
+			const emits = wrapper.emitted("input");
+			expect(emits?.length).toEqual(1);
+			expect(emits?.[0]).toEqual(["2030-01-01T22:59:00.000Z"]);
 		});
 	});
 
@@ -87,7 +87,6 @@ describe("DateTimePicker", () => {
 			setup({ dateTime: "" });
 
 			const timePicker = wrapper.findComponent({ name: "time-picker" });
-			expect(timePicker.exists()).toBe(true);
 			timePicker.vm.$emit("update:time", "00:00");
 
 			jest.advanceTimersByTime(1000);
