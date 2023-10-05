@@ -68,8 +68,6 @@ export default defineComponent({
 			() => !props.isEditMode && !isMobile && (isFocused || isHovered)
 		);
 
-		const { open } = useLightBox();
-
 		const onClick = () => {
 			if (!props.isEditMode) {
 				openLightBox();
@@ -118,6 +116,8 @@ export default defineComponent({
 				alt: alternativeText.value,
 				name: props.name,
 			};
+
+			const { open } = useLightBox();
 
 			open(options);
 		};
