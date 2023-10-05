@@ -75,8 +75,4 @@ export default defineComponent({
 	right: 4px;
 	top: 4px;
 }
-.date-hint {
-	color: red;
-	display: block;
-}
 </style>
