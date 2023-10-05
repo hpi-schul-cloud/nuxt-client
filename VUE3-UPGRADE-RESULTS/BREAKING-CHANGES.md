@@ -18,4 +18,4 @@
   | Vue.use                    | app.use                                    |
   | Vue.prototype              | app.config.globalProperties                |
   | Vue.extend                 | **removed**                                |
-  | Vue.set                    | ?? used in (src/utils/service-template.js) |
+  | Vue.set                    | can be replaced by just setting `reactive` properties (used in `src/utils/service-template.js`) |
