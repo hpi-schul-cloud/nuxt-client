@@ -30,13 +30,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, PropType } from "vue";
+import { VuetifyIcon } from "vuetify/types/services/icons";
 
 export default defineComponent({
 	name: "ContentElementBar",
 	props: {
 		hasGreyBackground: { type: Boolean, required: false },
-		icon: { type: String, required: false },
+		icon: { type: String as PropType<VuetifyIcon>, required: false },
 	},
 	setup(props) {
 		const backgroundClass = computed(() => {
