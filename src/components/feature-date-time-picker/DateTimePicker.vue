@@ -71,21 +71,23 @@ export default defineComponent({
 		const dateRequired = computed(() => time.value !== "");
 
 		const emitDateTime = () => {
+			if (date.value === "") {
+				return;
+			}
+
 			let timeValue = time.value;
 			if (timeValue === "") {
 				timeValue = "23:59";
 			}
 
-			if (date.value !== "") {
-				const dateTime = new Date(date.value);
-				const hoursAndMinutes = timeValue.split(":");
-				dateTime.setHours(
-					parseInt(hoursAndMinutes[0]),
-					parseInt(hoursAndMinutes[1])
-				);
-				dateTimeInPast.value = dateTime < new Date();
-				emit("input", dateTime.toISOString());
-			}
+			const dateTime = new Date(date.value);
+			const hoursAndMinutes = timeValue.split(":");
+			dateTime.setHours(
+				parseInt(hoursAndMinutes[0]),
+				parseInt(hoursAndMinutes[1])
+			);
+			dateTimeInPast.value = dateTime < new Date();
+			emit("input", dateTime.toISOString());
 		};
 
 		const onDateUpdate = (newDate: string) => {
