@@ -49,12 +49,7 @@
 						hide-default-footer
 					>
 						<template #[`item.status`]="{ item }">
-							<v-chip
-								class="grey lighten-3"
-								disabled
-								small
-								data-testid="submission-item"
-							>
+							<span data-testid="submission-item">
 								<span v-if="item.status === 'open'">
 									{{ t("components.cardElement.submissionElement.open") }}
 								</span>
@@ -64,7 +59,7 @@
 								<span v-if="item.status === 'expired'">
 									{{ t("components.cardElement.submissionElement.expired") }}
 								</span>
-							</v-chip>
+							</span>
 						</template>
 					</v-data-table>
 				</VExpansionPanelContent>
