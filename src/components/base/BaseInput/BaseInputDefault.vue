@@ -316,7 +316,8 @@ export default {
 	&:focus {
 		color: map-get($grey, darken-3);
 		outline: none;
-		box-shadow: 0 0 0 3px var(--v-white-base),
+		box-shadow:
+			0 0 0 3px var(--v-white-base),
 			0 0 0 6px map-get($grey, darken-3);
 	}
 }
