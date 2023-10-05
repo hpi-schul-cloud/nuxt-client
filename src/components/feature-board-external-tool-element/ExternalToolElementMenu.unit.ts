@@ -1,4 +1,10 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	BoardMenuActionDelete,
+	BoardMenuActionEdit,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
@@ -46,9 +52,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to move up", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-up"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -56,9 +60,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the move up event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-up"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
 
 			menuItem.vm.$emit("click");
 
@@ -82,9 +84,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to move down", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-down"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -92,9 +92,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the move down event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-down"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
 
 			menuItem.vm.$emit("click");
 
@@ -118,9 +116,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should not have a menu option to move up", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-up"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
 
 			expect(menuItem.exists()).toEqual(false);
 		});
@@ -128,9 +124,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should not have a menu option to move down", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-move-down"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
 
 			expect(menuItem.exists()).toEqual(false);
 		});
@@ -152,9 +146,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to edit", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-edit"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionEdit);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -162,9 +154,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the edit event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-edit"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionEdit);
 
 			menuItem.vm.$emit("click");
 
@@ -188,9 +178,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-delete"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -198,9 +186,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the delete event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.find(
-				'[data-testid="board-external-tool-element-edit-menu-delete"]'
-			);
+			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
 
 			menuItem.vm.$emit("click");
 

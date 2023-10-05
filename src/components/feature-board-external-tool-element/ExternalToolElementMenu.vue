@@ -1,29 +1,15 @@
 <template>
 	<BoardMenu scope="element">
 		<BoardMenuActionMoveUp
+			@click="onMoveUp"
 			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-external-tool-element-edit-menu-move-up"
-			@click="onMoveElementUp"
-		>
-		</BoardMenuActionMoveUp>
+		/>
 		<BoardMenuActionMoveDown
+			@click="onMoveDown"
 			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-external-tool-element-edit-menu-move-down"
-			@click="onMoveElementDown"
-		>
-		</BoardMenuActionMoveDown>
-		<BoardMenuAction
-			data-testid="board-external-tool-element-edit-menu-edit"
-			@click="onEdit"
-			:icon="mdiCogOutline"
-		>
-			{{ $t("common.labels.settings") }}
-		</BoardMenuAction>
-		<BoardMenuActionDelete
-			data-testid="board-external-tool-element-edit-menu-delete"
-			@click="onDelete"
-		>
-		</BoardMenuActionDelete>
+		/>
+		<BoardMenuActionEdit @click="onEdit" />
+		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -36,7 +22,7 @@ import {
 } from "@mdi/js";
 import {
 	BoardMenu,
-	BoardMenuAction,
+	BoardMenuActionEdit,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
@@ -46,10 +32,10 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		BoardMenu,
-		BoardMenuAction,
+		BoardMenuActionDelete,
+		BoardMenuActionEdit,
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
 	},
 	props: {
 		isFirstElement: { type: Boolean, required: true },
@@ -63,21 +49,13 @@ export default defineComponent({
 		"move-up:element",
 	],
 	setup(_, { emit }) {
-		const onEdit = () => {
-			emit("edit:element");
-		};
+		const onEdit = () => emit("edit:element");
 
-		const onDelete = () => {
-			emit("delete:element");
-		};
+		const onDelete = () => emit("delete:element");
 
-		const onMoveElementDown = () => {
-			emit("move-down:element");
-		};
+		const onMoveDown = () => emit("move-down:element");
 
-		const onMoveElementUp = () => {
-			emit("move-up:element");
-		};
+		const onMoveUp = () => emit("move-up:element");
 
 		return {
 			mdiArrowCollapseUp,
@@ -86,8 +64,8 @@ export default defineComponent({
 			mdiCogOutline,
 			onEdit,
 			onDelete,
-			onMoveElementDown,
-			onMoveElementUp,
+			onMoveDown,
+			onMoveUp,
 		};
 	},
 });
