@@ -9,6 +9,7 @@ const specificFiles = {
 	privacyExemplary:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
+
 	termsOfUseExemplary:
 		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
 	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
@@ -18,6 +19,7 @@ const specificFiles = {
 };
 
 const termsOfUseSchoolThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+const privacyThr = "Onlineeinwilligung/Datenschutzhinweise.pdf";
 
 const globalFiles = {
 	BeschreibungDerSchulCloud: "Dokumente/Beschreibung-der-HPI-Schul-Cloud.pdf",
@@ -114,6 +116,7 @@ export default class FilePathsModule extends VuexModule {
 			const theme = envConfigModule.getTheme;
 			if (theme === "thr") {
 				specificFiles.termsOfUseSchool = termsOfUseSchoolThr;
+				specificFiles.privacy = privacyThr;
 			}
 			const baseDir =
 				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
