@@ -14,8 +14,8 @@
 						v-if="openCount"
 						ref="v-chip-open"
 						class="grey lighten-3 mr-2"
-						disabled
 						small
+						@click.stop="() => setFilter('open')"
 					>
 						{{ openCount }}
 						{{ t("components.cardElement.submissionElement.open") }}
@@ -24,8 +24,8 @@
 						v-if="completedCount"
 						ref="v-chip-completed"
 						class="grey lighten-3 mr-2"
-						disabled
 						small
+						@click.stop="() => setFilter('completed')"
 					>
 						{{ completedCount }}
 						{{ t("components.cardElement.submissionElement.completed") }}
@@ -34,8 +34,8 @@
 						v-if="expiredCount"
 						ref="v-chip-expired"
 						class="grey lighten-3 mr-2"
-						disabled
 						small
+						@click.stop="() => setFilter('expired')"
 					>
 						{{ expiredCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
@@ -44,7 +44,7 @@
 				<VExpansionPanelContent>
 					<v-data-table
 						:headers="headers"
-						:items="items"
+						:items="filteredSubmissions"
 						disable-pagination
 						hide-default-footer
 					>
@@ -69,17 +69,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
-import { TeacherSubmission } from "../types/submission";
+import { defineComponent, PropType, computed, ref, toRef, watch } from "vue";
+import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
 
-type Status = "completed" | "open" | "expired";
-type SubmissionInfo = {
-	status: Status;
-	firstName: string;
-	lastName: string;
-};
+type StatusFilter = "all" | Status;
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
@@ -115,34 +110,68 @@ export default defineComponent({
 			},
 		];
 
-		const items = computed<Array<SubmissionInfo>>(() => {
+		const allSubmissions = computed<Array<TeacherSubmission>>(() => {
 			return props.submissions;
+		});
+		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
+
+		watch(allSubmissions, (newValue) => {
+			filteredSubmissions.value = newValue;
 		});
 
 		const openCount = computed<number>(() => {
-			return items.value.filter((item) => {
+			return allSubmissions.value.filter((item) => {
 				return item.status === "open";
 			}).length;
 		});
 
 		const completedCount = computed<number>(() => {
-			return items.value.filter((item) => {
+			return allSubmissions.value.filter((item) => {
 				return item.status === "completed";
 			}).length;
 		});
 
 		const expiredCount = computed<number>(() => {
-			return items.value.filter((item) => {
+			return allSubmissions.value.filter((item) => {
 				return item.status === "expired";
 			}).length;
 		});
 
+		const activeFilter = ref<StatusFilter>("all");
+
+		const filterByStatus = (statusFilter: StatusFilter) => {
+			if (statusFilter === "all") {
+				filteredSubmissions.value = allSubmissions.value;
+				return;
+			}
+
+			filteredSubmissions.value = allSubmissions.value.filter(
+				(item: TeacherSubmission) => {
+					return item.status === statusFilter;
+				}
+			);
+		};
+
+		const setFilter = (filter: StatusFilter) => {
+			if (filter === activeFilter.value) {
+				activeFilter.value = "all";
+			} else {
+				activeFilter.value = filter;
+			}
+		};
+
+		watch(activeFilter, (newFilter) => {
+			filterByStatus(newFilter);
+		});
+
 		return {
 			headers,
-			items,
+			filteredSubmissions,
 			openCount,
 			completedCount,
 			expiredCount,
+			activeFilter,
+			setFilter,
 			t,
 		};
 	},
