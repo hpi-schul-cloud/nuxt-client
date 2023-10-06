@@ -149,6 +149,47 @@ describe("privacy policy module", () => {
 				expect(policyModule.privacyPolicy).toBe(getRequestReturn.data);
 			});
 		});
+
+		describe("deletePrivacyPolicy", () => {
+			it("should call backend and set correct state", async () => {
+				const policyModule = new PrivacyPolicyModule({});
+
+				policyModule.privacyPolicy = {
+					_id: "123",
+					schoolId: "333",
+					title: "sometitle",
+					consentText: "",
+					publishedAt: "somedate",
+					createdAt: "somedate",
+					updatedAt: "somedate",
+					consentTypes: ["privacy"],
+					consentData: {
+						_id: "999",
+						schoolId: "333",
+						createdAt: "someotherdate",
+						updatedAt: "someotherdate",
+						fileType: "pdf",
+						fileName: "somefilename",
+						data: "data:application/pdf;base64,SOMEFILEDATA",
+					},
+				};
+
+				const setPrivacyPolicySpy = jest.spyOn(
+					policyModule,
+					"setPrivacyPolicy"
+				);
+				const setStatusSpy = jest.spyOn(policyModule, "setStatus");
+
+				await policyModule.deletePrivacyPolicy();
+
+				expect(receivedRequests.length).toBe(1);
+				expect(receivedRequests[0].path).toBe("/v1/consentVersions/123");
+				expect(setStatusSpy).toHaveBeenCalledWith("pending");
+				expect(setStatusSpy).toHaveBeenCalledWith("completed");
+				expect(setPrivacyPolicySpy).toHaveBeenCalledWith(null);
+				expect(policyModule.privacyPolicy).toBe(null);
+			});
+		});
 	});
 
 	describe("mutations", () => {

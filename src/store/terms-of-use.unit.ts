@@ -143,6 +143,44 @@ describe("terms of use module", () => {
 				expect(termsOfUseModule.termsOfUse).toBe(getRequestReturn.data);
 			});
 		});
+
+		describe("deleteTermsOfUse", () => {
+			it("should call backend and set correct state", async () => {
+				const termsOfUseModule = new TermsOfUseModule({});
+
+				termsOfUseModule.termsOfUse = {
+					_id: "123",
+					schoolId: "333",
+					title: "sometitle",
+					consentText: "",
+					publishedAt: "somedate",
+					createdAt: "somedate",
+					updatedAt: "somedate",
+					consentTypes: ["termsOfUse"],
+					consentData: {
+						_id: "999",
+						schoolId: "333",
+						createdAt: "someotherdate",
+						updatedAt: "someotherdate",
+						fileType: "pdf",
+						fileName: "somefilename",
+						data: "data:application/pdf;base64,SOMEFILEDATA",
+					},
+				};
+
+				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
+				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
+
+				await termsOfUseModule.deleteTermsOfUse();
+
+				expect(receivedRequests.length).toBe(1);
+				expect(receivedRequests[0].path).toBe("/v1/consentVersions/123");
+				expect(setStatusSpy).toHaveBeenCalledWith("pending");
+				expect(setStatusSpy).toHaveBeenCalledWith("completed");
+				expect(setTermsOfUseSpy).toHaveBeenCalledWith(null);
+				expect(termsOfUseModule.termsOfUse).toBe(null);
+			});
+		});
 	});
 
 	describe("mutations", () => {
