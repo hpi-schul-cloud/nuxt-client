@@ -10,3 +10,5 @@ export * from "./tool-configuration-status.enum";
 export * from "./school-external-tool";
 export * from "./tool-parameter-location.enum";
 export * from "./context-external-tool-template-list-item";
+export * from "./tool-launch-request";
+export * from "./tool-launch-request-method.enum";
