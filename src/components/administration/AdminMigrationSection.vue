@@ -198,6 +198,7 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
+			await schoolsModule.fetchSchool();
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
@@ -237,7 +238,8 @@ export default defineComponent({
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(school, async () => {
-			await schoolsModule.fetchSchoolOAuthMigration();
+			schoolsModule.fetchSchool();
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
 		const isEndWarningVisible: Ref<boolean> = ref(false);
