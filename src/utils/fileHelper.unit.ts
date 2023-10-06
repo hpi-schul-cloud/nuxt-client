@@ -1,4 +1,8 @@
-import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
+import {
+	FileRecordScanStatus,
+	PreviewStatus,
+	PreviewWidth,
+} from "@/fileStorageApi/v3";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
@@ -152,45 +156,79 @@ describe("@/utils/fileHelper", () => {
 	});
 
 	describe("convertDownloadToPreviewUrl", () => {
-		it("should return the preview url", () => {
-			const url = "/file/download/233/text.txt";
+		describe("when second argument width is undefined", () => {
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
 
-			const result = convertDownloadToPreviewUrl(url);
+				const result = convertDownloadToPreviewUrl(url);
 
-			expect(result).toEqual(
-				`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
-			);
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp`
+				);
+			});
+
+			it("should return the preview url with two download words in source", () => {
+				const url = "/file/download/233/download";
+
+				const result = convertDownloadToPreviewUrl(url);
+
+				expect(result).toEqual(
+					`/file/preview/233/download?outputFormat=image/webp`
+				);
+			});
+
+			it("should return the preview url with two download words in source with extension", () => {
+				const url = "/file/download/233/download.txt";
+
+				const result = convertDownloadToPreviewUrl(url);
+
+				expect(result).toEqual(
+					`/file/preview/233/download.txt?outputFormat=image/webp`
+				);
+			});
 		});
 
-		it("should return the preview url with two download words in source", () => {
-			const url = "/file/download/233/download";
+		describe("when second argument width is set", () => {
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
 
-			const result = convertDownloadToPreviewUrl(url);
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
 
-			expect(result).toEqual(
-				`/file/preview/233/download?outputFormat=image/webp&width=500`
-			);
-		});
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
+				);
+			});
 
-		it("should return the preview url with two download words in source with extension", () => {
-			const url = "/file/download/233/download.txt";
+			it("should return the preview url with two download words in source", () => {
+				const url = "/file/download/233/download";
 
-			const result = convertDownloadToPreviewUrl(url);
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
 
-			expect(result).toEqual(
-				`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
-			);
-		});
+				expect(result).toEqual(
+					`/file/preview/233/download?outputFormat=image/webp&width=500`
+				);
+			});
 
-		it("should return the preview url", () => {
-			const url = "/file/download/233/text.txt";
+			it("should return the preview url with two download words in source with extension", () => {
+				const url = "/file/download/233/download.txt";
 
-			// @ts-expect-error Enum only provides on value currently but will provide more in the future
-			const result = convertDownloadToPreviewUrl(url, 1000);
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
 
-			expect(result).toEqual(
-				`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
-			);
+				expect(result).toEqual(
+					`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
+				);
+			});
+
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
+
+				// @ts-expect-error Enum only provides on value currently but will provide more in the future
+				const result = convertDownloadToPreviewUrl(url, 1000);
+
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
+				);
+			});
 		});
 	});
 
