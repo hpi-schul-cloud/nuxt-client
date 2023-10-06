@@ -4,7 +4,7 @@ import {
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 
-export const toolLaunchRequestResponeFactory =
+export const toolLaunchRequestResponseFactory =
 	Factory.define<ToolLaunchRequestResponse>(() => ({
 		method: ToolLaunchRequestResponseMethodEnum.Get,
 		payload: '{ "key": "value" }',
