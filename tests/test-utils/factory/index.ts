@@ -31,7 +31,7 @@ export * from "./submissionsResponseFactory";
 export * from "./taskResponseFactory";
 export * from "./timestampsResponseFactory";
 export * from "./toolConfigurationTemplateFactory";
-export * from "./toolLaunchRequestResponeFactory";
+export * from "./toolLaunchRequestResponseFactory";
 export * from "./toolParameterFactory";
 export * from "./toolParameterEntryFactory";
 export * from "./userDataResponseFactory";

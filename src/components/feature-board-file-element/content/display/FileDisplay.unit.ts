@@ -1,8 +1,8 @@
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
+import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 
 describe("FileDisplay", () => {
@@ -48,6 +48,7 @@ describe("FileDisplay", () => {
 			const { wrapper, fileNameProp, previewUrlProp } = setup();
 
 			const props = wrapper.findComponent(ImageDisplay).attributes();
+
 			expect(props.name).toBe(fileNameProp);
 			expect(props.previewurl).toBe(previewUrlProp);
 			expect(props.iseditmode).toBe("true");
