@@ -1,5 +1,3 @@
-const NUXT_REMOVAL = true;
-
 module.exports = {
 	root: true,
 	env: {
@@ -20,21 +18,23 @@ module.exports = {
 		// ----
 		"no-useless-escape": "error",
 		"no-irregular-whitespace": "error",
-		"vue/no-useless-template-attributes": "error",
-		"@typescript-eslint/no-empty-function": "error",
-		"vue/multi-word-component-names": NUXT_REMOVAL ? "warn" : "error",
-		"@typescript-eslint/ban-ts-comment": "error",
-		"vue/no-mutating-props": "error",
-		"no-undef": NUXT_REMOVAL ? "warn" : "error",
-		"prefer-const": "error",
-		"@typescript-eslint/no-inferrable-types": "error",
-		"@typescript-eslint/ban-types": "error",
-		"prettier/prettier": "error",
-		"no-var": "error",
-		"vue/no-v-text-v-html-on-component": "error",
-		"vue/no-v-html": "error",
+		"no-undef": "warn",
 		"no-prototype-builtins": "error",
 		"no-empty": "error",
+		"no-var": "error",
+		"prefer-const": "error",
+		"prettier/prettier": "error",
+		"@typescript-eslint/no-empty-function": "error",
+		"@typescript-eslint/ban-ts-comment": "error",
+		"@typescript-eslint/no-inferrable-types": "error",
+		"@typescript-eslint/ban-types": "error",
+		"vue/no-v-text-v-html-on-component": "error",
+		"vue/no-v-html": "error",
+		"vue/html-self-closing": "error",
+		"vue/no-setup-props-reactivity-loss": "error",
+		"vue/no-useless-template-attributes": "error",
+		"vue/no-mutating-props": "error",
+		"vue/multi-word-component-names": "warn",
 		"@typescript-eslint/no-restricted-imports": [
 			"warn",
 			{
