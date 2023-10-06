@@ -7,7 +7,12 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels v-else flat class="rounded-0 rounded-b-sm">
+		<VExpansionPanels
+			v-else
+			v-model="panel"
+			flat
+			class="rounded-0 rounded-b-sm"
+		>
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
@@ -133,11 +138,6 @@ export default defineComponent({
 		const allSubmissions = computed<Array<TeacherSubmission>>(() => {
 			return props.submissions;
 		});
-		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
-
-		watch(allSubmissions, (newValue) => {
-			filteredSubmissions.value = newValue;
-		});
 
 		const openCount = computed<number>(() => {
 			return allSubmissions.value.filter((item) => {
@@ -157,7 +157,14 @@ export default defineComponent({
 			}).length;
 		});
 
+		//	Filter Functionality
+		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
 		const activeFilter = ref<StatusFilter>("all");
+		const panel = ref<number | undefined>(undefined);
+
+		watch(allSubmissions, (newValue) => {
+			filteredSubmissions.value = newValue;
+		});
 
 		const filterByStatus = (statusFilter: StatusFilter) => {
 			if (statusFilter === "all") {
@@ -182,9 +189,17 @@ export default defineComponent({
 
 		watch(activeFilter, (newFilter) => {
 			filterByStatus(newFilter);
+			openPanel();
 		});
 
+		const openPanel = () => {
+			if (panel.value === undefined && activeFilter.value !== "all") {
+				panel.value = 0;
+			}
+		};
+
 		return {
+			panel,
 			headers,
 			filteredSubmissions,
 			openCount,
