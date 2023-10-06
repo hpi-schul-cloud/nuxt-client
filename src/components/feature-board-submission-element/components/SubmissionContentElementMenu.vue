@@ -1,13 +1,7 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuActionMoveUp
-			@click="onMoveElementUp"
-			v-if="hasMultipleElements && !isFirstElement"
-		/>
-		<BoardMenuActionMoveDown
-			@click="onMoveElementDown"
-			v-if="hasMultipleElements && !isLastElement"
-		/>
+		<BoardMenuActionMoveUp @click="onMoveElementUp" />
+		<BoardMenuActionMoveDown @click="onMoveElementDown" />
 		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>

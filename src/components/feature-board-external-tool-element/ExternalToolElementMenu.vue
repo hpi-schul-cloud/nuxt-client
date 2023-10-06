@@ -1,13 +1,7 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuActionMoveUp
-			@click="onMoveUp"
-			v-if="hasMultipleElements && !isFirstElement"
-		/>
-		<BoardMenuActionMoveDown
-			@click="onMoveDown"
-			v-if="hasMultipleElements && !isLastElement"
-		/>
+		<BoardMenuActionMoveUp @click="onMoveUp" />
+		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>

@@ -19,14 +19,8 @@
 			@update:caption="onUpdateCaption"
 		>
 			<BoardMenu scope="element" v-if="isEditMode">
-				<BoardMenuActionMoveUp
-					@click="onMoveUp"
-					v-if="hasMultipleElements && !isFirstElement"
-				/>
-				<BoardMenuActionMoveDown
-					@click="onMoveDown"
-					v-if="hasMultipleElements && !isLastElement"
-				/>
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
@@ -36,14 +30,8 @@
 			@upload:file="onUploadFile"
 		>
 			<BoardMenu scope="element">
-				<BoardMenuActionMoveUp
-					@click="onMoveUp"
-					v-if="hasMultipleElements && !isFirstElement"
-				/>
-				<BoardMenuActionMoveDown
-					@click="onMoveDown"
-					v-if="hasMultipleElements && !isLastElement"
-				/>
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>

@@ -1,13 +1,22 @@
 <template>
-	<BoardMenuAction :icon="mdiArrowCollapseDown" @click="onClick">
+	<BoardMenuAction
+		:icon="mdiArrowCollapseDown"
+		@click="onClick"
+		v-if="isVisible"
+	>
 		{{ $t("components.board.action.moveDown") }}
 	</BoardMenuAction>
 </template>
 
 <script lang="ts">
+import { injectStrict } from "@/utils/inject";
 import { mdiArrowCollapseDown } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
-import { defineComponent } from "vue";
+import {
+	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,
+	BOARD_CARD_IS_LAST_ELEMENT,
+} from "@util-board";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "BoardMenuActionMoveDown",
@@ -16,10 +25,16 @@ export default defineComponent({
 	},
 	emits: ["click"],
 	setup(props, { emit }) {
+		const hasMultipleElements = injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS);
+		const isLastElement = injectStrict(BOARD_CARD_IS_LAST_ELEMENT);
+		const isVisible = ref(hasMultipleElements && !isLastElement);
+
 		const onClick = ($event: Event) => emit("click", $event);
+
 		return {
 			onClick,
 			mdiArrowCollapseDown,
+			isVisible,
 		};
 	},
 });

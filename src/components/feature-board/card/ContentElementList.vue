@@ -1,62 +1,61 @@
 <template>
 	<VCardText>
 		<template v-for="(element, index) in elements">
-			<ContentElement>
+			<ContentElement
+				:key="element.id"
+				:index="index"
+				:elementCount="elements.length"
+			>
 				<RichTextContentElement
 					v-if="isRichTextElementResponse(element)"
-					:key="element.id"
 					:element="element"
 					:isEditMode="isEditMode"
 					@delete:element="onDeleteElement"
 				/>
+				<LinkContentElement
+					v-if="showLinkElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@delete:element="onDeleteElement"
+				/>
+				<FileContentElement
+					v-else-if="isFileElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				>
+				</FileContentElement>
+				<SubmissionContentElement
+					v-else-if="showSubmissionContainerElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+				<ExternalToolElement
+					v-else-if="showExternalToolElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 			</ContentElement>
-			<LinkContentElement
-				v-if="showLinkElement(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				@delete:element="onDeleteElement"
-			/>
-			<FileContentElement
-				v-else-if="isFileElementResponse(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			>
-			</FileContentElement>
-			<SubmissionContentElement
-				v-else-if="showSubmissionContainerElement(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
-			<ExternalToolElement
-				v-else-if="showExternalToolElement(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
 		</template>
 	</VCardText>
 </template>
@@ -79,10 +78,12 @@ import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
 import { LinkContentElement } from "@feature-board-link-element";
+import ContentElement from "./ContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		ContentElement,
 		ExternalToolElement,
 		FileContentElement,
 		RichTextContentElement,
