@@ -148,7 +148,7 @@ describe("SubmissionContentElement", () => {
 				.props("editable");
 
 			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+				!mockedUseSubmissionContentElementStateResponse.isOverdue
 			);
 		});
 
@@ -246,7 +246,7 @@ describe("SubmissionContentElement", () => {
 				.props("editable");
 
 			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+				!mockedUseSubmissionContentElementStateResponse.isOverdue
 			);
 		});
 

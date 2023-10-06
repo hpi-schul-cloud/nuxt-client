@@ -54,10 +54,10 @@ export const useSubmissionContentElementState = (
 		}
 	};
 
-	const editable = computed(() => {
+	const isOverdue = computed(() => {
 		return (
 			!modelValue.value.dueDate ||
-			new Date() < new Date(modelValue.value.dueDate)
+			new Date() > new Date(modelValue.value.dueDate)
 		);
 	});
 
@@ -70,6 +70,6 @@ export const useSubmissionContentElementState = (
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,
-		editable,
+		isOverdue,
 	};
 };

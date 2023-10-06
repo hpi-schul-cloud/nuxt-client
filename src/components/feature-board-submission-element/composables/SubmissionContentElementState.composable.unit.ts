@@ -54,23 +54,23 @@ describe("SubmissionContentElementState.composable", () => {
 		).toHaveBeenCalledWith(contentElementId);
 	});
 
-	describe("editable state", () => {
-		it("should be true if dueDate is in future", async () => {
+	describe("isOverdue state", () => {
+		it("should be true if dueDate is in past", async () => {
+			const contentElementId = "123124";
+			const dueDateInPast = ref({ dueDate: "2000-12-31T00:00:00.000Z" });
+
+			const { isOverdue } = setup(contentElementId, dueDateInPast);
+
+			expect(isOverdue.value).toBe(true);
+		});
+
+		it("should be false if dueDate is in future", async () => {
 			const contentElementId = "123124";
 			const dueDateInFuture = ref({ dueDate: "2100-12-31T00:00:00.000Z" });
 
-			const { editable } = setup(contentElementId, dueDateInFuture);
+			const { isOverdue } = setup(contentElementId, dueDateInFuture);
 
-			expect(editable.value).toBe(true);
-		});
-
-		it("should be false if dueDate is in past", async () => {
-			const contentElementId = "123124";
-			const dueDateInFuture = ref({ dueDate: "2000-12-31T00:00:00.000Z" });
-
-			const { editable } = setup(contentElementId, dueDateInFuture);
-
-			expect(editable.value).toBe(false);
+			expect(isOverdue.value).toBe(false);
 		});
 	});
 
