@@ -1,25 +1,23 @@
 import Vue from "vue";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { i18nMock } from "@@/tests/test-utils";
 import { mount, MountOptions } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import { SubmissionsResponse } from "@/serverApi/v3";
-
-const mockedSubmissions = submissionsResponseFactory.build();
+import { StudentSubmission } from "../types/submission";
 
 describe("SubmissionItemStudentDisplay", () => {
 	const setup = (
 		loading = false,
-		submissions = mockedSubmissions,
+		submission = { completed: true },
 		editable = true
 	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			editable: editable,
-			loading: loading,
-			submissions: submissions,
+			editable,
+			loading,
+			submission,
 		};
 
 		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
@@ -90,11 +88,10 @@ describe("SubmissionItemStudentDisplay", () => {
 		describe("if student has no submissionItem yet", () => {
 			it("should show state as not completed", async () => {
 				const loading = false;
-				const submissions: SubmissionsResponse = {
-					submissionItemsResponse: [],
-					users: [],
+				const submission: StudentSubmission = {
+					completed: false,
 				};
-				const { wrapper } = setup(loading, submissions);
+				const { wrapper } = setup(loading, submission);
 
 				const checked = wrapper
 					.findComponent({ name: "v-checkbox" })
@@ -105,7 +102,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			});
 		});
 
-		describe("if student has a submissionItem yet", () => {
+		describe("if student has a submissionItem", () => {
 			it("should show the completed state of the belonging submissionItem", async () => {
 				const loading = false;
 				const { wrapper } = setup(loading);
@@ -115,9 +112,7 @@ describe("SubmissionItemStudentDisplay", () => {
 					.find("input")
 					.attributes("aria-checked");
 
-				expect(checked).toEqual(
-					mockedSubmissions.submissionItemsResponse[0].completed.toString()
-				);
+				expect(checked).toEqual("true");
 			});
 		});
 
@@ -138,7 +133,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			it("should render the checkbox as disabled", async () => {
 				const loading = false;
 				const editable = false;
-				const { wrapper } = setup(loading, mockedSubmissions, editable);
+				const { wrapper } = setup(loading, { completed: true }, editable);
 
 				const disabled = wrapper
 					.findComponent({ name: "v-checkbox" })
