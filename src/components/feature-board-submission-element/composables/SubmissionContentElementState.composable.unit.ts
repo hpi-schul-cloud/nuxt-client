@@ -6,7 +6,7 @@ import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -37,7 +37,7 @@ describe("SubmissionContentElementState.composable", () => {
 		return mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			}
 		);
