@@ -151,30 +151,12 @@ export default {
 					dataTestId: "content-card-lesson-menu-edit",
 				});
 
-				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
-					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiContentCopy,
-						action: () => this.copyCard(),
-						name: this.$t("common.actions.copy"),
-						dataTestId: "content-card-lesson-menu-copy",
-					});
-				}
-
 				if (!this.isHidden) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.revertPublishedCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-lesson-menu-revert",
-					});
-				}
-
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariantOutline,
-						action: () => this.$emit("open-modal", this.lesson.id),
-						name: this.$t("pages.room.lessonCard.label.shareLesson"),
-						dataTestId: "content-card-lesson-menu-share",
 					});
 				}
 
@@ -192,6 +174,7 @@ export default {
 
 			return roleBasedMoreActions;
 		},
+
 		showChip() {
 			return (
 				(this.lesson.numberOfPublishedTasks !== 0 &&
