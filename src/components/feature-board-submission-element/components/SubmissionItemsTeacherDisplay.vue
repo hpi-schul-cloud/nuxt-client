@@ -75,15 +75,9 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<span v-if="item.status === 'open'">
-									{{ t("components.cardElement.submissionElement.open") }}
-								</span>
-								<span v-if="item.status === 'completed'">
-									{{ t("components.cardElement.submissionElement.completed") }}
-								</span>
-								<span v-if="item.status === 'expired'">
-									{{ t("components.cardElement.submissionElement.expired") }}
-								</span>
+								<v-icon color="black" small>
+									{{ item.status === "completed" ? "$mdiCheck" : "$mdiClose" }}
+								</v-icon>
 							</span>
 						</template>
 					</v-data-table>
@@ -94,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref, toRef, watch } from "vue";
+import { defineComponent, PropType, computed, ref, watch } from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
