@@ -204,7 +204,8 @@ export default defineComponent({
 }
 
 ::v-deep {
-	.theme--light.v-expansion-panels .v-expansion-panel {
+	.theme--light.v-expansion-panels .v-expansion-panel,
+	.v-expansion-panel-header:before {
 		background-color: transparent;
 	}
 
