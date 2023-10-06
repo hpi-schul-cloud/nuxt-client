@@ -30,7 +30,14 @@ module.exports = {
 		"@typescript-eslint/ban-types": "error",
 		"vue/no-v-text-v-html-on-component": "error",
 		"vue/no-v-html": "error",
-		"vue/html-self-closing": "error",
+		"vue/html-self-closing": [
+			"error",
+			{
+				html: {
+					void: "always",
+				},
+			},
+		],
 		"vue/no-setup-props-reactivity-loss": "error",
 		"vue/no-useless-template-attributes": "error",
 		"vue/no-mutating-props": "error",
