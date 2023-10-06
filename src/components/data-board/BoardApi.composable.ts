@@ -15,7 +15,6 @@ import {
 	RichTextElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContent,
-	UpdateElementContentBodyParams,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";

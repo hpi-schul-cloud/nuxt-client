@@ -11,13 +11,14 @@ export const isValidUrl = (errMsg: string) => (value: string) => {
 	try {
 		const urlWithProtocol = value.match(/:\/\//) ? value : `https://${value}`;
 		const urlObject = new URL(urlWithProtocol);
+
 		if (!["http:", "https:"].includes(urlObject.protocol)) {
 			throw new Error("Wrong protocol");
 		}
 		if (!urlObject.hostname.includes(".")) {
 			throw new Error("TopLevelDomain missing");
 		}
-		if (/^-|--|-$/.test(urlObject.hostname)) {
+		if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
 			throw new Error("IDN hyphen rules violated");
 		}
 	} catch (e) {
