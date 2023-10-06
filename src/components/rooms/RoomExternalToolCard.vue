@@ -87,7 +87,7 @@ export default defineComponent({
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
-			emit("click", toolLaunchData, props.tool);
+			emit("click", toolLaunchRequest.value, props.tool);
 		};
 
 		const handleEdit = () => {
@@ -120,14 +120,14 @@ export default defineComponent({
 			() => props.tool.status === ToolConfigurationStatus.Outdated
 		);
 
-		const toolLaunchData: Ref<ToolLaunchRequest | undefined> = ref();
+		const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
 
 		onMounted(async () => {
 			const response: ToolLaunchRequestResponse | undefined =
 				await externalToolsModule.loadToolLaunchData(
 					props.tool.contextExternalToolId
 				);
-			toolLaunchData.value = response
+			toolLaunchRequest.value = response
 				? ExternalToolMapper.mapToToolLaunchRequest(response)
 				: undefined;
 		});

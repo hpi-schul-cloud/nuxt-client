@@ -99,7 +99,6 @@ import {
 import {
 	computed,
 	ComputedRef,
-	defineAsyncComponent,
 	defineComponent,
 	PropType,
 	ref,
@@ -113,14 +112,13 @@ import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
 } from "@/store/external-tool";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
 	components: {
 		VCustomDialog,
-		RoomExternalToolCard: defineAsyncComponent(
-			() => import("@/components/rooms/RoomExternalToolCard.vue")
-		),
+		RoomExternalToolCard,
 		RenderHTML,
 	},
 	props: {
@@ -201,15 +199,15 @@ export default defineComponent({
 		};
 
 		const onClickTool = async (
-			toolLanchData: Ref<ToolLaunchRequest>,
+			toolLaunchRequest: ToolLaunchRequest,
 			displayData: ExternalToolDisplayData
 		) => {
-			switch (toolLanchData?.value.method) {
+			switch (toolLaunchRequest?.method) {
 				case ToolLaunchRequestMethodEnum.Get:
-					handleGetLaunchRequest(toolLanchData.value);
+					handleGetLaunchRequest(toolLaunchRequest);
 					break;
 				case ToolLaunchRequestMethodEnum.Post:
-					handlePostLaunchRequest(toolLanchData.value);
+					handlePostLaunchRequest(toolLaunchRequest);
 					break;
 				default:
 					handleLaunchError(displayData);
