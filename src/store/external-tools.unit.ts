@@ -3,7 +3,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import {
 	axiosErrorFactory,
 	businessErrorFactory,
-	toolLaunchRequestResponeFactory,
+	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
@@ -52,7 +52,7 @@ describe("ExternalToolsModule", () => {
 			describe("when receiving an api response", () => {
 				const setup = () => {
 					const mockResponse: ToolLaunchRequestResponse =
-						toolLaunchRequestResponeFactory.build();
+						toolLaunchRequestResponseFactory.build();
 
 					apiMock.toolLaunchControllerGetToolLaunchRequest.mockResolvedValue(
 						mockApiResponse({
