@@ -3,7 +3,7 @@
 		<div class="grey lighten-4 pa-4 rounded">
 			<SubmissionContentElementTitle />
 			<div class="menu">
-				<slot></slot>
+				<slot />
 			</div>
 			<date-time-picker
 				class="mt-1"

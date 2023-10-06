@@ -30,7 +30,7 @@
 				<slot
 					name="menu"
 					:elementName="t('components.cardElement.submissionElement')"
-				></slot>
+				/>
 			</SubmissionContentElementEdit>
 		</div>
 	</v-card>
