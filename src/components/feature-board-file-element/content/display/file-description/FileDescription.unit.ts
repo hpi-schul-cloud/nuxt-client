@@ -198,7 +198,7 @@ describe("FileDescription", () => {
 						showTitle: false,
 					});
 
-					const captionDiv = wrapper.find(".px-4.py-4.grey.lighten-4");
+					const captionDiv = wrapper.find(".pa-4.grey.lighten-4");
 
 					expect(captionDiv.exists()).toBeFalsy();
 				});

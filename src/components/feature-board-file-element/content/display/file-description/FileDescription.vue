@@ -14,13 +14,13 @@
 			</template>
 
 			<template #subtitle>
-				<span v-if="!isEditMode">
+				<span v-if="caption && !isEditMode">
 					{{ caption }}
 				</span>
 			</template>
 		</ContentElementBar>
 
-		<div v-else-if="caption && !isEditMode" class="px-4 py-4 grey lighten-4">
+		<div v-else-if="caption && !isEditMode" class="pa-4 grey lighten-4">
 			<span>{{ caption }}</span>
 		</div>
 	</div>
