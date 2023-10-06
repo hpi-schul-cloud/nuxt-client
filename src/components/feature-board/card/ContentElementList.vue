@@ -1,13 +1,15 @@
 <template>
 	<VCardText>
 		<template v-for="(element, index) in elements">
-			<RichTextContentElement
-				v-if="isRichTextElementResponse(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				@delete:element="onDeleteElement"
-			/>
+			<ContentElement>
+				<RichTextContentElement
+					v-if="isRichTextElementResponse(element)"
+					:key="element.id"
+					:element="element"
+					:isEditMode="isEditMode"
+					@delete:element="onDeleteElement"
+				/>
+			</ContentElement>
 			<LinkContentElement
 				v-if="showLinkElement(element)"
 				:key="element.id"
