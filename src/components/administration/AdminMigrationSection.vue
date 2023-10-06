@@ -160,7 +160,8 @@
 </template>
 
 <script lang="ts">
-import { School } from "@/store/types/schools";
+import { MigrationBody } from "@/serverApi/v3";
+import { OauthMigration, School } from "@/store/types/schools";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -198,7 +199,8 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
-			await schoolsModule.fetchSchool();
+			// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
+			await schoolsModule.fetchSchoolOAuthMigration();
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 		});
 
@@ -236,10 +238,20 @@ export default defineComponent({
 			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
+		// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
+		const setMigration = async (available: boolean, mandatory: boolean) => {
+			const migrationFlags: MigrationBody = {
+				oauthMigrationPossible: available,
+				oauthMigrationMandatory: mandatory,
+				oauthMigrationFinished: !available,
+			};
+			await schoolsModule.setSchoolOauthMigration(migrationFlags);
+			await schoolsModule.fetchSchool();
+		};
+
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(school, async () => {
-			schoolsModule.fetchSchool();
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
+			await schoolsModule.fetchSchoolOAuthMigration();
 		});
 
 		const isEndWarningVisible: Ref<boolean> = ref(false);
