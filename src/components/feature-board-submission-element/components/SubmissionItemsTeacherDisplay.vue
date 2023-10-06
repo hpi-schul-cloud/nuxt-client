@@ -13,8 +13,14 @@
 					<v-chip
 						v-if="openCount"
 						ref="v-chip-open"
-						class="grey lighten-3 mr-2"
+						class="mr-2"
 						small
+						label
+						:color="
+							activeFilter === 'open' ? 'grey lighten-2' : 'grey black--text'
+						"
+						:outlined="activeFilter !== 'open'"
+						:ripple="false"
 						@click.stop="() => setFilter('open')"
 					>
 						{{ openCount }}
@@ -23,8 +29,16 @@
 					<v-chip
 						v-if="completedCount"
 						ref="v-chip-completed"
-						class="grey lighten-3 mr-2"
+						class="mr-2"
 						small
+						label
+						:color="
+							activeFilter === 'completed'
+								? 'grey lighten-2'
+								: 'grey black--text'
+						"
+						:outlined="activeFilter !== 'completed'"
+						:ripple="false"
 						@click.stop="() => setFilter('completed')"
 					>
 						{{ completedCount }}
@@ -33,8 +47,14 @@
 					<v-chip
 						v-if="expiredCount"
 						ref="v-chip-expired"
-						class="grey lighten-3 mr-2"
+						class="mr-2"
 						small
+						label
+						:color="
+							activeFilter === 'expired' ? 'grey lighten-2' : 'grey black--text'
+						"
+						:outlined="activeFilter !== 'expired'"
+						:ripple="false"
 						@click.stop="() => setFilter('expired')"
 					>
 						{{ expiredCount }}
