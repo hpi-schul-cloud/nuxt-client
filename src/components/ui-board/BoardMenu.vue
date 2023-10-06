@@ -31,7 +31,7 @@
 			</VBtn>
 		</template>
 		<VList>
-			<slot></slot>
+			<slot />
 		</VList>
 	</VMenu>
 </template>

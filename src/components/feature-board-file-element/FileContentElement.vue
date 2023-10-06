@@ -18,18 +18,14 @@
 			@update:alternativeText="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
 		>
-			<slot
-				v-if="isEditMode"
-				name="menu"
-				:elementName="fileProperties.name"
-			></slot>
+			<slot v-if="isEditMode" name="menu" :elementName="fileProperties.name" />
 		</FileContent>
 		<FileUpload
 			v-else-if="isEditMode"
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		>
-			<slot name="menu"></slot>
+			<slot name="menu" />
 		</FileUpload>
 	</v-card>
 </template>

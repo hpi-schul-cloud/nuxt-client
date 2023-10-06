@@ -14,7 +14,7 @@
 					data-testid="input_create-student_birthdate"
 					:class="{ hideCurrentDate: !date }"
 					type="date"
-				></v-text-field>
+				/>
 				<v-checkbox
 					v-model="sendRegistration"
 					name="switch"
@@ -28,7 +28,7 @@
 					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
 					type="bc-error"
-				></info-message>
+				/>
 			</template>
 		</form-create-user>
 	</default-wireframe>

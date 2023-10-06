@@ -11,7 +11,7 @@
 			@edit="onEditTool"
 			@click="onClickTool"
 			:data-testid="`external-tool-card-${index}`"
-		></room-external-tool-card>
+		/>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -32,7 +32,7 @@
 					:html="errorDialogText"
 					component="p"
 					class="text-md mt-2"
-				></RenderHTML>
+				/>
 			</template>
 		</v-custom-dialog>
 
@@ -59,7 +59,7 @@
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						depressed

@@ -28,8 +28,7 @@
 					@update:value="onUpdateCardTitle"
 					:isFocused="isFocusedById"
 					@enter="addTextAfterTitle"
-				>
-				</CardTitle>
+				/>
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
@@ -62,11 +61,8 @@
 					@move-down:element="onMoveContentElementDown"
 					@move-up:element="onMoveContentElementUp"
 					@move-keyboard:element="onMoveContentElementKeyboard"
-				></ContentElementList>
-				<CardAddElementMenu
-					@add-element="onAddElement"
-					v-if="isEditMode"
-				></CardAddElementMenu>
+				/>
+				<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
 			</template>
 		</VCard>
 	</CardHostInteractionHandler>

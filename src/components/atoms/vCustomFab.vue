@@ -55,12 +55,7 @@
 				</v-btn>
 			</div>
 		</template>
-		<v-overlay
-			:value="showOverlay"
-			color="#fff"
-			z-index="-1"
-			opacity="0.9"
-		></v-overlay>
+		<v-overlay :value="showOverlay" color="#fff" z-index="-1" opacity="0.9" />
 	</v-speed-dial>
 	<v-btn
 		v-else

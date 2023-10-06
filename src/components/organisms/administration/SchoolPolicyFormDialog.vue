@@ -44,7 +44,7 @@
 					</template>
 				</v-file-input>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<div class="button-section button-right">
 						<v-btn
 							class="dialog-closed"

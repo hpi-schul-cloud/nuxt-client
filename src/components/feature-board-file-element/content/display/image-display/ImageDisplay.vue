@@ -11,7 +11,7 @@
 		@mouseenter.stop.prevent="onMouseEnter"
 		@mouseleave.stop.prevent="onMouseLeave"
 	>
-		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm"></div>
+		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm" />
 
 		<img
 			class="image-display-image rounded-t-sm"
@@ -21,8 +21,8 @@
 		/>
 
 		<v-app-bar flat color="transparent" class="menu">
-			<v-spacer></v-spacer>
-			<slot></slot>
+			<v-spacer />
+			<slot />
 		</v-app-bar>
 	</div>
 </template>

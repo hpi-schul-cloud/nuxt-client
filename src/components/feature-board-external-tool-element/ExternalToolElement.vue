@@ -18,7 +18,7 @@
 				v-if="toolDisplayData && toolDisplayData.logoUrl"
 				class="mr-1"
 				:src="toolDisplayData.logoUrl"
-			></v-img>
+			/>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 			<span class="align-self-center title flex-1">
 				{{
@@ -37,7 +37,7 @@
 				@move-up:element="onMoveElementUp"
 				@delete:element="onDeleteElement"
 				@edit:element="onEditElement"
-			></ExternalToolElementMenu>
+			/>
 		</div>
 	</v-card>
 </template>

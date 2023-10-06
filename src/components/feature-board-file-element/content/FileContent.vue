@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode">
-			<slot></slot>
+			<slot />
 		</FileDisplay>
 		<FileInputs
 			:file-properties="fileProperties"

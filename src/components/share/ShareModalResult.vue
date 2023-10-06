@@ -5,7 +5,7 @@
 			:value="shareUrl"
 			readonly
 			:label="`${$t(`components.molecules.share.${type}.result.linkLabel`)}`"
-		></v-text-field>
+		/>
 		<div class="mb-4">
 			<div
 				v-if="!isShowQrCode"
@@ -93,7 +93,7 @@
 			v-if="isShowQrCode"
 			class="d-flex justify-content-center overflow-hidden"
 		>
-			<base-qr-code :url="shareUrl" data-testid="qrCode"></base-qr-code>
+			<base-qr-code :url="shareUrl" data-testid="qrCode" />
 		</div>
 	</div>
 </template>

@@ -28,18 +28,15 @@
 			:active="loading"
 			data-testId="progress-bar"
 			indeterminate
-		></v-progress-linear>
+		/>
 
 		<room-video-conference-section
 			v-if="isVideoConferenceAvailable"
 			class="mb-4"
 			:room-id="roomId"
-		></room-video-conference-section>
+		/>
 
-		<room-external-tools-section
-			:tools="tools"
-			:room-id="roomId"
-		></room-external-tools-section>
+		<room-external-tools-section :tools="tools" :room-id="roomId" />
 	</div>
 </template>
 

@@ -17,9 +17,9 @@
 				>
 			</v-toolbar-title>
 
-			<v-spacer></v-spacer>
+			<v-spacer />
 
-			<slot></slot>
+			<slot />
 		</v-app-bar>
 
 		<v-card-subtitle v-if="caption && !isEditMode">

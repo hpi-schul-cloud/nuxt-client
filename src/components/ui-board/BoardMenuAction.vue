@@ -1,10 +1,10 @@
 <template>
 	<VListItem data-testid="board-menu-action" @click.prevent="onClick">
 		<VListItemIcon class="mr-2" data-testid="board-menu-action-icon">
-			<slot name="icon"></slot>
+			<slot name="icon" />
 		</VListItemIcon>
 		<VListItemTitle data-testid="board-menu-action-title">
-			<slot></slot>
+			<slot />
 		</VListItemTitle>
 	</VListItem>
 </template>
