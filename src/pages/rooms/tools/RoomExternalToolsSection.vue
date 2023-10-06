@@ -85,11 +85,6 @@
 
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
-import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
-import {
-	ToolLaunchRequestResponse,
-	ToolLaunchRequestResponseMethodEnum,
-} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
@@ -104,6 +99,7 @@ import {
 import {
 	computed,
 	ComputedRef,
+	defineAsyncComponent,
 	defineComponent,
 	PropType,
 	ref,
@@ -112,13 +108,19 @@ import {
 import VueI18n from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useRouter } from "vue-router/composables";
-import { ToolContextType } from "@/store/external-tool";
+import {
+	ToolContextType,
+	ToolLaunchRequest,
+	ToolLaunchRequestMethodEnum,
+} from "@/store/external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
 	components: {
 		VCustomDialog,
-		RoomExternalToolCard,
+		RoomExternalToolCard: defineAsyncComponent(
+			() => import("@/components/rooms/RoomExternalToolCard.vue")
+		),
 		RenderHTML,
 	},
 	props: {
@@ -198,26 +200,24 @@ export default defineComponent({
 			});
 		};
 
-		const onClickTool = async (tool: ExternalToolDisplayData) => {
-			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(
-					tool.contextExternalToolId
-				);
-
-			switch (launchToolResponse?.method) {
-				case ToolLaunchRequestResponseMethodEnum.Get:
-					handleGetLaunchRequest(launchToolResponse);
+		const onClickTool = async (
+			toolLanchData: Ref<ToolLaunchRequest>,
+			displayData: ExternalToolDisplayData
+		) => {
+			switch (toolLanchData?.value.method) {
+				case ToolLaunchRequestMethodEnum.Get:
+					handleGetLaunchRequest(toolLanchData.value);
 					break;
-				case ToolLaunchRequestResponseMethodEnum.Post:
-					handlePostLaunchRequest(launchToolResponse);
+				case ToolLaunchRequestMethodEnum.Post:
+					handlePostLaunchRequest(toolLanchData.value);
 					break;
 				default:
-					handleLaunchError(tool);
+					handleLaunchError(displayData);
 					break;
 			}
 		};
 
-		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			if (toolLaunch.openNewTab) {
 				window.open(toolLaunch.url, "_blank");
 				return;
@@ -225,7 +225,7 @@ export default defineComponent({
 			window.location.href = toolLaunch.url;
 		};
 
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			const form: HTMLFormElement = document.createElement("form");
 			form.method = "POST";
 			form.action = toolLaunch.url;
@@ -248,7 +248,7 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const handleLaunchError = (tool: ExternalToolDisplayData) => {
+		const handleLaunchError = (displayData: ExternalToolDisplayData) => {
 			const businessErrorMessage = externalToolsModule.getBusinessError.message;
 
 			if (
@@ -256,7 +256,7 @@ export default defineComponent({
 					(keyword) => businessErrorMessage.includes(keyword)
 				)
 			) {
-				selectedItem.value = tool;
+				selectedItem.value = displayData;
 				isErrorDialogOpen.value = true;
 			}
 		};

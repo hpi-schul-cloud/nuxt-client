@@ -33,14 +33,33 @@
 </template>
 
 <script lang="ts">
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	PropType,
+	ref,
+	Ref,
+} from "vue";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import {
+	ToolConfigurationStatus,
+	ToolLaunchRequest,
+} from "@/store/external-tool";
 import EnvConfigModule from "@/store/env-config";
 import RoomBaseCard from "./RoomBaseCard.vue";
+import ExternalToolsModule from "@/store/external-tools";
+import { ExternalToolMapper } from "@/store/external-tool/mapper";
+import { ToolLaunchRequestResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -61,11 +80,14 @@ export default defineComponent({
 		const envConfigModule: EnvConfigModule = injectStrict(
 			ENV_CONFIG_MODULE_KEY
 		);
+		const externalToolsModule: ExternalToolsModule = injectStrict(
+			EXTERNAL_TOOLS_MODULE_KEY
+		);
 
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
-			emit("click", props.tool);
+			emit("click", toolLaunchData, props.tool);
 		};
 
 		const handleEdit = () => {
@@ -97,6 +119,18 @@ export default defineComponent({
 		const isToolOutdated: ComputedRef = computed(
 			() => props.tool.status === ToolConfigurationStatus.Outdated
 		);
+
+		const toolLaunchData: Ref<ToolLaunchRequest | undefined> = ref();
+
+		onMounted(async () => {
+			const response: ToolLaunchRequestResponse | undefined =
+				await externalToolsModule.loadToolLaunchData(
+					props.tool.contextExternalToolId
+				);
+			toolLaunchData.value = response
+				? ExternalToolMapper.mapToToolLaunchRequest(response)
+				: undefined;
+		});
 
 		return {
 			t,

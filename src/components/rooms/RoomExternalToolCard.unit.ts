@@ -6,16 +6,30 @@ import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/exte
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+} from "@/utils/inject";
+import {
+	ToolConfigurationStatus,
+	ToolLaunchRequest,
+} from "@/store/external-tool";
+import ExternalToolsModule from "@/store/external-tools";
+import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
 
 describe("RoomExternalToolCard", () => {
+	let externalToolsModule: jest.Mocked<ExternalToolsModule>;
+
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getCtlContextConfigurationEnabled: true,
 		});
+
+		externalToolsModule = createModuleMocks(ExternalToolsModule);
 
 		const wrapper: Wrapper<Vue> = mount(
 			RoomExternalToolCard as MountOptions<Vue>,
@@ -33,6 +47,7 @@ describe("RoomExternalToolCard", () => {
 						tc: (key: string): string => key,
 					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 			}
 		);
@@ -98,23 +113,33 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user clicks the card", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
+			const toolDisplayData: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
+			const launchRequest: ToolLaunchRequest = toolLaunchRequestFactory.build();
+
+			const wrapper: Wrapper<Vue> = getWrapper(toolDisplayData, true);
+
+			externalToolsModule.loadToolLaunchData.mockResolvedValueOnce(
+				toolLaunchRequestResponseFactory.build()
+			);
 
 			return {
 				wrapper,
-				tool,
+				toolDisplayData,
+				launchRequest,
 			};
 		};
 
 		it("should emit the click event", async () => {
-			const { wrapper, tool } = setup();
+			const { wrapper, toolDisplayData, launchRequest } = setup();
 
 			await wrapper.trigger("click");
 
-			expect(wrapper.emitted("click")).toContainEqual([tool]);
+			expect(wrapper.emitted("click")).toContainEqual([
+				launchRequest,
+				toolDisplayData,
+			]);
 		});
 	});
 
