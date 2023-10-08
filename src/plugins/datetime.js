@@ -239,6 +239,11 @@ export const createInputDateTime = (date) => {
 	];
 };
 
+export const setDayjsLocale = () => {
+	const locale = authModule.getLocale || "de";
+	dayjs.locale(locale);
+};
+
 /**
  * Returns date difference to current local time
  * @param {String} date
@@ -252,6 +257,23 @@ export const fromNow = (date, isLocalTimeZone) => {
 	return fromUTC(date).fromNow();
 };
 
+export const formatDateForAlerts = (date, isLocalTimeZone = false) => {
+	const time = isLocalTimeZone ? dayjs(date) : dayjs.tz(date, "UTC");
+	const current = isLocalTimeZone ? dayjs() : dayjs.utc();
+
+	setDayjsLocale();
+
+	const totalDaysDiff = Math.abs(current.diff(time, "day"));
+	const MAX_DAYS_BEFORE_SHOWING_FULL_DATE = 7;
+
+	if (totalDaysDiff < MAX_DAYS_BEFORE_SHOWING_FULL_DATE) {
+		// If it is less than 7 days, we use fromNow
+		return fromNow(date, isLocalTimeZone);
+	} else {
+		// If it is 7 days or more, we return in European format.
+		return time.format("DD.MM.YYYY");
+	}
+};
 /**
  * Returns future date difference to current local time
  * @param {String} date
@@ -289,6 +311,5 @@ export default ({ app, store }) => {
 	initDefaultTimezone(app, store);
 	setDefaultFormats(app);
 
-	const locale = authModule.getLocale || "de";
-	dayjs.locale(locale);
+	setDayjsLocale();
 };

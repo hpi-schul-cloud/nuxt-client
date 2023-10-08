@@ -4,6 +4,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import dayjs from "dayjs";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -59,18 +60,43 @@ describe("@/components/topbar/StatusAlerts", () => {
 	});
 });
 
-describe("getCreatedDate", () => {
-	it("should be getCreatedDate function on the template", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const alertElement = wrapper.find(".alert-date");
-		expect(alertElement.element.innerHTML).toContain(expectedDate);
+describe("formatDate", () => {
+	const wrapper = getWrapper(testProps);
+	it("returns 'a few seconds ago' for seconds difference", () => {
+		const pastDate = dayjs.utc().subtract(30, "seconds").toISOString();
+		const expectedDate = "a few seconds ago";
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
 	});
 
-	it("should returns expected result", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const dateTime = "May 5, 2023 12:34 PM";
-		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
+	it("returns correct format for hours difference", () => {
+		const pastDate = dayjs.utc().subtract(5, "hours").toISOString();
+		const expectedDate = "5 hours ago";
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
+	});
+
+	it("returns European format after 7 days", () => {
+		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
+		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
+	});
+});
+describe("formatDate", () => {
+	const wrapper = getWrapper(testProps);
+	it("returns 'a few seconds ago' for seconds difference", () => {
+		const pastDate = dayjs.utc().subtract(30, "seconds").toISOString();
+		const expectedDate = "a few seconds ago";
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
+	});
+
+	it("returns correct format for hours difference", () => {
+		const pastDate = dayjs.utc().subtract(5, "hours").toISOString();
+		const expectedDate = "5 hours ago";
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
+	});
+
+	it("returns European format after 7 days", () => {
+		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
+		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
 	});
 });
