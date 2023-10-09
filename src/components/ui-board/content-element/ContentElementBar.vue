@@ -1,14 +1,7 @@
 <template>
 	<div :class="backgroundClass">
 		<v-app-bar dense flat color="transparent">
-			<v-icon
-				v-if="icon"
-				color="black"
-				class="mr-2"
-				size="18"
-				data-testid="file-description-icon"
-				>{{ icon }}</v-icon
-			>
+			<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
 			<v-toolbar-title
 				v-if="$slots.title"
@@ -32,6 +25,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
+import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 
 export default defineComponent({
 	name: "ContentElementBar",
@@ -39,6 +33,7 @@ export default defineComponent({
 		hasGreyBackground: { type: Boolean, required: false },
 		icon: { type: String as PropType<VuetifyIcon>, required: false },
 	},
+	components: { ContentElementTitleIcon },
 	setup(props) {
 		const backgroundClass = computed(() => {
 			return props.hasGreyBackground ? "grey lighten-4" : "";

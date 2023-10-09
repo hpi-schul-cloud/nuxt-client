@@ -1,26 +1,20 @@
 <template>
 	<v-dialog fullscreen hide-overlay :value="isLightBoxOpen">
-		<v-app-bar>
+		<v-toolbar flat>
 			<v-btn icon @click="close">
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
 
-			<ContentElementBar :icon="mdiFileDocumentOutline" class="flex-grow-1">
-				<template #title>
-					<ContentElementTitle>{{ lightBoxOptions.name }}</ContentElementTitle>
-				</template>
+			<ContentElementTitleIcon :icon="mdiFileDocumentOutline" class="mr-2" />
 
-				<template #menu>
-					<v-btn
-						v-if="lightBoxOptions.downloadUrl !== ''"
-						icon
-						@click="download"
-					>
-						<v-icon>{{ mdiTrayArrowDown }}</v-icon>
-					</v-btn>
-				</template>
-			</ContentElementBar>
-		</v-app-bar>
+			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
+				<ContentElementTitle>{{ lightBoxOptions.name }}</ContentElementTitle>
+			</v-toolbar-title>
+			<v-spacer />
+			<v-btn v-if="lightBoxOptions.downloadUrl !== ''" icon @click="download">
+				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
+			</v-btn>
+		</v-toolbar>
 
 		<v-overlay absolute class="mt-16 pa-4" @click="close">
 			<div
@@ -44,11 +38,11 @@ import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
 import { defineComponent } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
-import { ContentElementBar, ContentElementTitle } from "@ui-board";
+import { ContentElementTitleIcon, ContentElementTitle } from "@ui-board";
 
 export default defineComponent({
 	name: "LightBox",
-	components: { ContentElementBar, ContentElementTitle },
+	components: { ContentElementTitle, ContentElementTitleIcon },
 	setup() {
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
 
