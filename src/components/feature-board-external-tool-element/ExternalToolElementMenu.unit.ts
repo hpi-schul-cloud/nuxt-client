@@ -1,10 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import {
-	BoardMenuAction,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+import { BoardMenuAction, BoardMenuActionDelete } from "@ui-board";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
