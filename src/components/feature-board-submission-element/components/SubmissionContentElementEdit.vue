@@ -12,14 +12,14 @@
 					@delete:element="onDeleteElement"
 				/>
 			</div>
-			<date-time-picker
-				class="mt-1"
-				:dateTime="dueDate"
-				:date-input-label="t('common.labels.date')"
-				:time-input-label="t('common.labels.time')"
-				@input="onDateTimeInput"
-			/>
 		</div>
+		<date-time-picker
+			class="mt-1 mx-4"
+			:dateTime="dueDate"
+			:date-input-label="t('common.labels.date')"
+			:time-input-label="t('common.labels.time')"
+			@input="onDateTimeInput"
+		/>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
 			:isOverdue="isOverdue"
