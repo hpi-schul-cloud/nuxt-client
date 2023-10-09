@@ -35,6 +35,7 @@ import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -84,7 +85,7 @@ export default defineComponent({
 			}
 
 			dayjs.locale(authModule.getLocale);
-			const format = `dddd, ${t("format.date")} - HH:mm`;
+			const format = `dddd, ${DATETIME_FORMAT.date} - HH:mm`;
 
 			return `${t("components.cardElement.submissionElement.until")} ${dayjs(
 				props.dueDate

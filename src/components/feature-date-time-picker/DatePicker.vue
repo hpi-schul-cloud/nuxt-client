@@ -51,6 +51,7 @@ import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "vue-i18n";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -80,7 +81,7 @@ export default defineComponent({
 
 		const formattedDate = computed(() => {
 			return modelValue.value
-				? dayjs(modelValue.value).format(t("format.date"))
+				? dayjs(modelValue.value).format(DATETIME_FORMAT.date)
 				: "";
 		});
 

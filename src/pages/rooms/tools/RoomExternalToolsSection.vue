@@ -86,11 +86,6 @@
 
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
-import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
-import {
-	ToolLaunchRequestResponse,
-	ToolLaunchRequestResponseMethodEnum,
-} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
@@ -111,8 +106,13 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ToolContextType } from "@/store/external-tool";
 import { useRouter } from "vue-router";
+import {
+	ToolContextType,
+	ToolLaunchRequest,
+	ToolLaunchRequestMethodEnum,
+} from "@/store/external-tool";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -195,26 +195,24 @@ export default defineComponent({
 			});
 		};
 
-		const onClickTool = async (tool: ExternalToolDisplayData) => {
-			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(
-					tool.contextExternalToolId
-				);
-
-			switch (launchToolResponse?.method) {
-				case ToolLaunchRequestResponseMethodEnum.Get:
-					handleGetLaunchRequest(launchToolResponse);
+		const onClickTool = async (
+			toolLaunchRequest: ToolLaunchRequest,
+			displayData: ExternalToolDisplayData
+		) => {
+			switch (toolLaunchRequest?.method) {
+				case ToolLaunchRequestMethodEnum.Get:
+					handleGetLaunchRequest(toolLaunchRequest);
 					break;
-				case ToolLaunchRequestResponseMethodEnum.Post:
-					handlePostLaunchRequest(launchToolResponse);
+				case ToolLaunchRequestMethodEnum.Post:
+					handlePostLaunchRequest(toolLaunchRequest);
 					break;
 				default:
-					handleLaunchError(tool);
+					handleLaunchError(displayData);
 					break;
 			}
 		};
 
-		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			if (toolLaunch.openNewTab) {
 				window.open(toolLaunch.url, "_blank");
 				return;
@@ -222,7 +220,7 @@ export default defineComponent({
 			window.location.href = toolLaunch.url;
 		};
 
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			const form: HTMLFormElement = document.createElement("form");
 			form.method = "POST";
 			form.action = toolLaunch.url;
@@ -245,7 +243,7 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const handleLaunchError = (tool: ExternalToolDisplayData) => {
+		const handleLaunchError = (displayData: ExternalToolDisplayData) => {
 			const businessErrorMessage = externalToolsModule.getBusinessError.message;
 
 			if (
@@ -253,7 +251,7 @@ export default defineComponent({
 					(keyword) => businessErrorMessage.includes(keyword)
 				)
 			) {
-				selectedItem.value = tool;
+				selectedItem.value = displayData;
 				isErrorDialogOpen.value = true;
 			}
 		};

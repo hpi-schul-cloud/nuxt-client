@@ -41,32 +41,13 @@
 				></BoardColumnGhost>
 				<ConfirmationDialog></ConfirmationDialog>
 				<AddElementDialog></AddElementDialog>
+				<LightBox></LightBox>
 			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { useMediaQuery } from "@vueuse/core";
-import {
-	computed,
-	defineComponent,
-	onMounted,
-	onUnmounted,
-	watch,
-	toRef,
-} from "vue";
-import {
-	useBoardState,
-	useBoardPermissions,
-	useSharedEditMode,
-	useSharedBoardPageInformation,
-} from "@data-board";
-import { useBoardNotifier } from "@util-board";
-import { useBodyScrolling } from "../shared/BodyScrolling.composable";
-import AddElementDialog from "../shared/AddElementDialog.vue";
 import {
 	CardMove,
 	ColumnMove,
@@ -74,6 +55,27 @@ import {
 	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
 } from "@/types/board/DragAndDrop";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import {
+	useBoardPermissions,
+	useBoardState,
+	useSharedBoardPageInformation,
+	useSharedEditMode,
+} from "@data-board";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { LightBox } from "@ui-light-box";
+import { useBoardNotifier } from "@util-board";
+import { useMediaQuery } from "@vueuse/core";
+import {
+	computed,
+	defineComponent,
+	onMounted,
+	onUnmounted,
+	toRef,
+	watch,
+} from "vue";
+import AddElementDialog from "../shared/AddElementDialog.vue";
+import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useI18n } from "vue-i18n";
@@ -88,6 +90,7 @@ export default defineComponent({
 		BoardColumnGhost,
 		ConfirmationDialog,
 		AddElementDialog,
+		LightBox,
 	},
 	props: {
 		boardId: { type: String, required: true },

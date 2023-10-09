@@ -1,15 +1,18 @@
 import {
 	CustomParameterResponse,
+	ToolLaunchRequestResponse,
 	ToolReferenceListResponse,
 } from "@/serverApi/v3";
 import { ExternalToolDisplayData } from "../external-tool-display-data";
 import { ToolParameter } from "../tool-parameter";
 import {
 	ToolConfigurationStatusMapping,
+	ToolLaunchRequestMethodMapping,
 	ToolParamLocationMapping,
 	ToolParamScopeMapping,
 	ToolParamTypeMapping,
 } from "./common-tool.mapper";
+import { ToolLaunchRequest } from "../tool-launch-request";
 
 export class ExternalToolMapper {
 	static mapToToolParameter(response: CustomParameterResponse): ToolParameter {
@@ -41,6 +44,19 @@ export class ExternalToolMapper {
 				openInNewTab: tool.openInNewTab,
 			})
 		);
+
+		return mapped;
+	}
+
+	static mapToToolLaunchRequest(
+		response: ToolLaunchRequestResponse
+	): ToolLaunchRequest {
+		const mapped: ToolLaunchRequest = {
+			method: ToolLaunchRequestMethodMapping[response.method],
+			url: response.url,
+			payload: response.payload,
+			openNewTab: response.openNewTab,
+		};
 
 		return mapped;
 	}

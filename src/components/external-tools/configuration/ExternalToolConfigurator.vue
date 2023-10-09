@@ -1,9 +1,11 @@
 <template>
 	<div>
-		<v-select
+		<v-autocomplete
 			:label="t('pages.tool.select.label')"
-			item-title="name"
+			item-text="name"
 			item-value="id"
+			hide-selected
+			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
 			:no-data-text="t('common.nodata')"
@@ -24,7 +26,7 @@
 			<template #item="{ item }">
 				<external-tool-selection-row :item="item" />
 			</template>
-		</v-select>
+		</v-autocomplete>
 		<h2
 			v-if="
 				selectedTemplate &&

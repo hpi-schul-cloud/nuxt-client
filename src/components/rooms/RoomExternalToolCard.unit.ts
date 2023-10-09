@@ -6,8 +6,19 @@ import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/exte
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+} from "@/utils/inject";
+import {
+	ToolConfigurationStatus,
+	ToolLaunchRequest,
+} from "@/store/external-tool";
+import ExternalToolsModule from "@/store/external-tools";
+import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import flushPromises from "flush-promises";
 
 describe("RoomExternalToolCard", () => {
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
@@ -16,6 +27,12 @@ describe("RoomExternalToolCard", () => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getCtlContextConfigurationEnabled: true,
 		});
+
+		const externalToolsModule = createModuleMocks(ExternalToolsModule);
+
+		externalToolsModule.loadToolLaunchData.mockResolvedValue(
+			toolLaunchRequestResponseFactory.build()
+		);
 
 		const wrapper: Wrapper<Vue> = mount(
 			RoomExternalToolCard as MountOptions<Vue>,
@@ -33,11 +50,15 @@ describe("RoomExternalToolCard", () => {
 						tc: (key: string): string => key,
 					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 			}
 		);
 
-		return wrapper;
+		return {
+			wrapper,
+			externalToolsModule,
+		};
 	};
 
 	afterEach(() => {
@@ -52,7 +73,7 @@ describe("RoomExternalToolCard", () => {
 						status: ToolConfigurationStatus.Outdated,
 					});
 
-				const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+				const { wrapper } = getWrapper(tool, false);
 
 				return {
 					wrapper,
@@ -76,7 +97,7 @@ describe("RoomExternalToolCard", () => {
 						status: ToolConfigurationStatus.Latest,
 					});
 
-				const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+				const { wrapper } = getWrapper(tool, false);
 
 				return {
 					wrapper,
@@ -98,23 +119,31 @@ describe("RoomExternalToolCard", () => {
 
 	describe("when the user clicks the card", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
+			const toolDisplayData: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
+			const launchRequest: ToolLaunchRequest = toolLaunchRequestFactory.build();
+
+			const { wrapper } = getWrapper(toolDisplayData, true);
 
 			return {
 				wrapper,
-				tool,
+				toolDisplayData,
+				launchRequest,
 			};
 		};
 
 		it("should emit the click event", async () => {
-			const { wrapper, tool } = setup();
+			const { wrapper, toolDisplayData, launchRequest } = setup();
+
+			await flushPromises();
 
 			await wrapper.trigger("click");
 
-			expect(wrapper.emitted("click")).toContainEqual([tool]);
+			expect(wrapper.emitted("click")).toContainEqual([
+				launchRequest,
+				toolDisplayData,
+			]);
 		});
 	});
 
@@ -123,7 +152,7 @@ describe("RoomExternalToolCard", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
+			const { wrapper } = getWrapper(tool, true);
 
 			return {
 				wrapper,
@@ -203,7 +232,7 @@ describe("RoomExternalToolCard", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+			const { wrapper } = getWrapper(tool, false);
 
 			return { wrapper };
 		};
