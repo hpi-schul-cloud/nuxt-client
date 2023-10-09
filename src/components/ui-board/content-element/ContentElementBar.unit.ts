@@ -43,7 +43,6 @@ describe("ContentElementBar", () => {
 			const { wrapper, icon } = setup({
 				icon: "mdi-test-icon",
 			});
-			console.log(wrapper.html());
 
 			const iconProp = wrapper
 				.find("contentelementtitleicon-stub")
