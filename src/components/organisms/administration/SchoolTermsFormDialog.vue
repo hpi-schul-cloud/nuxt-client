@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
+	<v-custom-dialog :is-open="isOpen" :size="375" @dialog-closed="cancel">
 		<h4 class="text-h4 mt-0" slot="title">
 			{{ t("common.words.termsOfUse") }}
 		</h4>

@@ -22,7 +22,7 @@
 				data-testid="progress-bar"
 			/>
 			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
-				<v-list-item-icon>
+				<v-list-item-icon class="me-4">
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
@@ -34,7 +34,7 @@
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
 									date: dayjs(privacyPolicy.publishedAt).format(
-										t("format.dateTime")
+										t("format.date")
 									),
 								})
 							}}
@@ -50,7 +50,6 @@
 				</v-list-item-content>
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
-					class="edit-icon"
 					data-testid="edit-button"
 					@click="isSchoolPolicyFormDialogOpen = true"
 				>
@@ -60,22 +59,21 @@
 							t('pages.administration.school.index.schoolPolicy.edit')
 						"
 					>
-						<v-icon>$mdiPencilOutline</v-icon>
+						<v-icon>$mdiTrayArrowUp</v-icon>
 					</v-btn>
 				</v-list-item-action>
 				<v-list-item-action
 					v-if="privacyPolicy"
-					class="download-icon"
-					data-testid="download-button"
-					@click="downloadFile"
+					data-testid="delete-button"
+					@click="isDeletePolicyDialogOpen = true"
 				>
 					<v-btn
 						icon
 						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.download')
+							t('pages.administration.school.index.schoolPolicy.delete.title')
 						"
 					>
-						<v-icon>$mdiTrayArrowDown</v-icon>
+						<v-icon>$mdiTrashCanOutline</v-icon>
 					</v-btn>
 				</v-list-item-action>
 			</v-list-item>
@@ -85,6 +83,28 @@
 				@close="closeDialog"
 				data-testid="form-dialog"
 			/>
+			<v-custom-dialog
+				v-model="isDeletePolicyDialogOpen"
+				:size="375"
+				has-buttons
+				confirm-btn-title-key="common.actions.delete"
+				confirm-btn-icon="$mdiTrashCanOutline"
+				@dialog-confirmed="deleteFile"
+				data-testid="delete-dialog"
+			>
+				<h4 class="text-h4 mt-0" slot="title">
+					{{ t("pages.administration.school.index.schoolPolicy.delete.title") }}
+				</h4>
+				<template #content>
+					<v-alert light text type="info" class="mb-0">
+						<div class="alert-text">
+							{{
+								t("pages.administration.school.index.schoolPolicy.delete.text")
+							}}
+						</div>
+					</v-alert>
+				</template>
+			</v-custom-dialog>
 		</template>
 	</section>
 </template>
@@ -102,11 +122,14 @@ import {
 	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	name: "SchoolPolicy",
 	components: {
+		vCustomDialog,
 		SchoolPolicyFormDialog,
 	},
 	setup() {
@@ -114,8 +137,10 @@ export default defineComponent({
 		const authModule = injectStrict(AUTH_MODULE_KEY);
 		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
+		const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(
@@ -139,13 +164,16 @@ export default defineComponent({
 			() => privacyPolicyModule.getBusinessError
 		);
 
-		const downloadFile = () => {
-			const link = document.createElement("a");
-			link.href = privacyPolicy.value?.consentData.data as string;
-			link.download = t(
-				"pages.administration.school.index.schoolPolicy.fileName"
-			);
-			link.click();
+		const deleteFile = async () => {
+			await privacyPolicyModule.deletePrivacyPolicy();
+
+			notifierModule.show({
+				text: t(
+					"pages.administration.school.index.schoolPolicy.delete.success"
+				),
+				status: "success",
+				timeout: 10000,
+			});
 		};
 
 		const closeDialog = () => {
@@ -155,11 +183,12 @@ export default defineComponent({
 		return {
 			t,
 			isSchoolPolicyFormDialogOpen,
+			isDeletePolicyDialogOpen,
 			hasSchoolEditPermission,
 			privacyPolicy,
 			status,
 			error,
-			downloadFile,
+			deleteFile,
 			dayjs,
 			closeDialog,
 		};

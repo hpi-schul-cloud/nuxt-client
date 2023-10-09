@@ -22,7 +22,7 @@
 				data-testid="progress-bar"
 			/>
 			<v-list-item v-else two-line dense class="mb-6" data-testid="terms-item">
-				<v-list-item-icon>
+				<v-list-item-icon class="me-4">
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
@@ -33,9 +33,7 @@
 						<template v-if="termsOfUse">
 							{{
 								t("pages.administration.school.index.termsOfUse.uploadedOn", {
-									date: dayjs(termsOfUse.publishedAt).format(
-										t("format.dateTime")
-									),
+									date: dayjs(termsOfUse.publishedAt).format(t("format.date")),
 								})
 							}}
 						</template>
@@ -48,7 +46,6 @@
 				</v-list-item-content>
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
-					class="edit-icon"
 					data-testid="edit-button"
 					@click="isSchoolTermsFormDialogOpen = true"
 				>
@@ -56,22 +53,21 @@
 						icon
 						:aria-label="t('pages.administration.school.index.termsOfUse.edit')"
 					>
-						<v-icon>$mdiPencilOutline</v-icon>
+						<v-icon>$mdiTrayArrowUp</v-icon>
 					</v-btn>
 				</v-list-item-action>
 				<v-list-item-action
 					v-if="termsOfUse"
-					class="download-icon"
-					data-testid="download-button"
-					@click="downloadFile"
+					data-testid="delete-button"
+					@click="isDeleteTermsDialogOpen = true"
 				>
 					<v-btn
 						icon
 						:aria-label="
-							t('pages.administration.school.index.termsOfUse.download')
+							t('pages.administration.school.index.termsOfUse.delete.title')
 						"
 					>
-						<v-icon>$mdiTrayArrowDown</v-icon>
+						<v-icon>$mdiTrashCanOutline</v-icon>
 					</v-btn>
 				</v-list-item-action>
 			</v-list-item>
@@ -81,6 +77,28 @@
 				@close="closeDialog"
 				data-testid="form-dialog"
 			/>
+			<v-custom-dialog
+				v-model="isDeleteTermsDialogOpen"
+				:size="375"
+				has-buttons
+				confirm-btn-title-key="common.actions.delete"
+				confirm-btn-icon="$mdiTrashCanOutline"
+				@dialog-confirmed="deleteFile"
+				data-testid="delete-dialog"
+			>
+				<h4 class="text-h4 mt-0" slot="title">
+					{{ t("pages.administration.school.index.termsOfUse.delete.title") }}
+				</h4>
+				<template #content>
+					<v-alert light text type="info" class="mb-0">
+						<div class="alert-text">
+							{{
+								t("pages.administration.school.index.termsOfUse.delete.text")
+							}}
+						</div>
+					</v-alert>
+				</template>
+			</v-custom-dialog>
 		</template>
 	</section>
 </template>
@@ -98,11 +116,14 @@ import {
 	AUTH_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	name: "SchoolTerms",
 	components: {
+		vCustomDialog,
 		SchoolTermsFormDialog,
 	},
 	setup() {
@@ -110,8 +131,10 @@ export default defineComponent({
 		const authModule = injectStrict(AUTH_MODULE_KEY);
 		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
+		const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(
@@ -135,13 +158,14 @@ export default defineComponent({
 			() => termsOfUseModule.getBusinessError
 		);
 
-		const downloadFile = () => {
-			const link = document.createElement("a");
-			link.href = termsOfUse.value?.consentData.data as string;
-			link.download = t(
-				"pages.administration.school.index.termsOfUse.fileName"
-			);
-			link.click();
+		const deleteFile = async () => {
+			await termsOfUseModule.deleteTermsOfUse();
+
+			notifierModule.show({
+				text: t("pages.administration.school.index.termsOfUse.delete.success"),
+				status: "success",
+				timeout: 10000,
+			});
 		};
 
 		const closeDialog = () => {
@@ -151,11 +175,12 @@ export default defineComponent({
 		return {
 			t,
 			isSchoolTermsFormDialogOpen,
+			isDeleteTermsDialogOpen,
 			hasSchoolEditPermission,
 			termsOfUse,
 			status,
 			error,
-			downloadFile,
+			deleteFile,
 			dayjs,
 			closeDialog,
 		};
