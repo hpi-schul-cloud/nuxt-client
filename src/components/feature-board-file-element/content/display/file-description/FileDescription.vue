@@ -13,15 +13,13 @@
 				<slot></slot>
 			</template>
 
-			<template #subtitle>
-				<span v-if="caption && !isEditMode">
-					{{ caption }}
-				</span>
+			<template #subtitle v-if="caption && !isEditMode">
+				{{ caption }}
 			</template>
 		</ContentElementBar>
 
 		<div v-else-if="caption && !isEditMode" class="pa-4 grey lighten-4">
-			<span>{{ caption }}</span>
+			{{ caption }}
 		</div>
 	</div>
 </template>
