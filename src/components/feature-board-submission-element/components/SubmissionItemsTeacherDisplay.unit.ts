@@ -103,15 +103,12 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 			await panelHeader.trigger("click");
 
-			const panelContent = wrapper.find(".v-expansion-panel-content");
+			const tableContent = wrapper.find("tbody");
+			expect(tableContent.exists()).toBe(true);
 
-			expect(panelContent.exists()).toBe(true);
+			const submissionItems = tableContent.findAll("tr");
 
-			const submissionItems = wrapper.findAll(
-				'[data-testid="submission-item"]'
-			);
-
-			// expect(submissionItems).toHaveLength(1);
+			expect(submissionItems).toHaveLength(1);
 		});
 	});
 
