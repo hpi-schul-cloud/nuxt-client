@@ -24,6 +24,7 @@
 						"
 						small
 						label
+						:disabled="openCount === 0"
 						:outlined="activeFilter !== 'open'"
 						:ripple="false"
 						@click.stop="() => setFilter('open')"
@@ -39,6 +40,7 @@
 						"
 						small
 						label
+						:disabled="completedCount === 0"
 						:outlined="activeFilter !== 'completed'"
 						:ripple="false"
 						@click.stop="() => setFilter('completed')"
@@ -55,6 +57,7 @@
 						"
 						small
 						label
+						:disabled="overdueCount === 0"
 						:outlined="activeFilter !== 'expired'"
 						:ripple="false"
 						@click.stop="() => setFilter('expired')"
