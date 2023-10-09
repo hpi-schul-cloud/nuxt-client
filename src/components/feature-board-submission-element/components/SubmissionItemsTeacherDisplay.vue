@@ -75,9 +75,7 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" small>
-									{{ item.status === "completed" ? "$mdiCheck" : "$mdiClose" }}
-								</v-icon>
+								<v-icon color="black" small> {{ getStatusIcon(item) }} </v-icon>
 							</span>
 						</template>
 					</v-data-table>
@@ -151,6 +149,18 @@ export default defineComponent({
 			}).length;
 		});
 
+		const getStatusIcon = (item: TeacherSubmission) => {
+			if (item.status === "open") {
+				return "$mdiCircleOutline";
+			}
+			if (item.status === "completed") {
+				return "$mdiCheck";
+			}
+			if (item.status === "expired") {
+				return "$mdiClose";
+			}
+		};
+
 		//	Filter Functionality
 		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
 		const activeFilter = ref<StatusFilter>("all");
@@ -193,6 +203,7 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			panel,
 			headers,
 			filteredSubmissions,
@@ -201,7 +212,7 @@ export default defineComponent({
 			overdueCount,
 			activeFilter,
 			setFilter,
-			t,
+			getStatusIcon,
 		};
 	},
 });
