@@ -4,6 +4,7 @@ import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
 import ExternalToolsModule from "./external-tools";
+import { AxiosError } from "axios";
 
 describe("ExternalToolsModule", () => {
 	let module: ExternalToolsModule;
@@ -67,6 +68,25 @@ describe("ExternalToolsModule", () => {
 						await module.loadToolLaunchData("contextToolId");
 
 					expect(response).toEqual(mockResponse);
+				});
+			});
+
+			describe("when receiving an api error", () => {
+				const setup = () => {
+					apiMock.toolLaunchControllerGetToolLaunchRequest.mockRejectedValue(
+						new AxiosError("error")
+					);
+				};
+
+				it("should throw an error", async () => {
+					setup();
+
+					try {
+						await module.loadToolLaunchData("contextToolId");
+					} catch (error) {
+						expect(error).toBeDefined();
+						expect(module.getLoading).toBeFalsy();
+					}
 				});
 			});
 		});
