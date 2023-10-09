@@ -10,17 +10,27 @@ import { BusinessError } from "@/store/types/commons";
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
 
-const axiosInitializer = () => {
+const axiosInitializer = (error?: boolean) => {
 	initializeAxios({
 		get: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
+
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
@@ -189,6 +199,37 @@ describe("privacy policy module", () => {
 				expect(setPrivacyPolicySpy).toHaveBeenCalledWith(null);
 				expect(policyModule.privacyPolicy).toBe(null);
 			});
+		});
+
+		it("should catch error and set correct state", async () => {
+			axiosInitializer(true);
+			const policyModule = new PrivacyPolicyModule({});
+
+			const policyToSet: ConsentVersion = {
+				_id: "123",
+				schoolId: "333",
+				title: "sometitle",
+				consentText: "",
+				publishedAt: "somedate",
+				createdAt: "somedate",
+				updatedAt: "somedate",
+				consentTypes: ["privacy"],
+				consentData: {
+					_id: "999",
+					schoolId: "333",
+					createdAt: "someotherdate",
+					updatedAt: "someotherdate",
+					fileType: "pdf",
+					fileName: "somefilename",
+					data: "data:application/pdf;base64,SOMEFILEDATA",
+				},
+			};
+
+			policyModule.setPrivacyPolicy(policyToSet);
+			await policyModule.deletePrivacyPolicy();
+
+			expect(policyModule.getBusinessError).not.toBe(null);
+			expect(policyModule.getStatus).toBe("error");
 		});
 	});
 

@@ -10,17 +10,27 @@ import { BusinessError } from "@/store/types/commons";
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
 
-const axiosInitializer = () => {
+const axiosInitializer = (error?: boolean) => {
 	initializeAxios({
 		get: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
+
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
+			if (error) {
+				throw new Error("expected error");
+			}
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
@@ -179,6 +189,36 @@ describe("terms of use module", () => {
 				expect(setStatusSpy).toHaveBeenCalledWith("completed");
 				expect(setTermsOfUseSpy).toHaveBeenCalledWith(null);
 				expect(termsOfUseModule.termsOfUse).toBe(null);
+			});
+
+			it("should catch error and set correct state", async () => {
+				axiosInitializer(true);
+				const termsOfUseModule = new TermsOfUseModule({});
+
+				const termsToSet: ConsentVersion = {
+					_id: "123",
+					schoolId: "333",
+					title: "sometitle",
+					consentText: "",
+					publishedAt: "somedate",
+					createdAt: "somedate",
+					updatedAt: "somedate",
+					consentTypes: ["termsOfUse"],
+					consentData: {
+						_id: "999",
+						schoolId: "333",
+						createdAt: "someotherdate",
+						updatedAt: "someotherdate",
+						fileType: "pdf",
+						fileName: "somefilename",
+						data: "data:application/pdf;base64,SOMEFILEDATA",
+					},
+				};
+				termsOfUseModule.setTermsOfUse(termsToSet);
+				await termsOfUseModule.deleteTermsOfUse();
+
+				expect(termsOfUseModule.getBusinessError).not.toBe(null);
+				expect(termsOfUseModule.getStatus).toBe("error");
 			});
 		});
 	});
