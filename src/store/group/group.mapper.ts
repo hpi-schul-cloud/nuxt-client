@@ -8,6 +8,8 @@ export class GroupMapper {
 				name: classInfoResponse.name,
 				externalSourceName: classInfoResponse.externalSourceName,
 				teachers: classInfoResponse.teachers,
+				type: classInfoResponse.type,
+				id: classInfoResponse.id,
 			})
 		);
 
