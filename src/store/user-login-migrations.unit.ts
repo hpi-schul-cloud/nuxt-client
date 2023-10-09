@@ -248,7 +248,7 @@ describe("UserLoginMigrationModule", () => {
 					authModule.setUser({ ...mockUser, id: "" });
 				};
 
-				it("should not call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
+				it("should not get latest user login migration ", async () => {
 					setup();
 
 					await module.fetchLatestUserLoginMigrationForCurrentUser();
