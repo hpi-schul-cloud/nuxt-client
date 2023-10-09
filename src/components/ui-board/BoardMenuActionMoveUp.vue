@@ -12,7 +12,7 @@ import {
 	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,
 	BOARD_CARD_IS_FIRST_ELEMENT,
 } from "@util-board";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "BoardMenuActionMoveUp",
@@ -20,10 +20,10 @@ export default defineComponent({
 		BoardMenuAction,
 	},
 	emits: ["click"],
-	setup(props, { emit }) {
+	setup(_, { emit }) {
 		const hasMultipleElements = injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS);
 		const isFirstElement = injectStrict(BOARD_CARD_IS_FIRST_ELEMENT);
-		const isVisible = ref(hasMultipleElements && !isFirstElement);
+		const isVisible = computed(() => hasMultipleElements && !isFirstElement);
 
 		const onClick = ($event: Event) => emit("click", $event);
 
