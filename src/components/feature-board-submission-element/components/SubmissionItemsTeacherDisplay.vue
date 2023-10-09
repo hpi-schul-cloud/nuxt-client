@@ -19,11 +19,11 @@
 						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
+						:class="
+							activeFilter === 'open' ? 'active-chip' : 'grey black--text'
+						"
 						small
 						label
-						:color="
-							activeFilter === 'open' ? 'grey lighten-2' : 'grey black--text'
-						"
 						:outlined="activeFilter !== 'open'"
 						:ripple="false"
 						@click.stop="() => setFilter('open')"
@@ -34,13 +34,11 @@
 					<v-chip
 						ref="v-chip-completed"
 						class="mr-2"
+						:class="
+							activeFilter === 'completed' ? 'active-chip' : 'grey black--text'
+						"
 						small
 						label
-						:color="
-							activeFilter === 'completed'
-								? 'grey lighten-2'
-								: 'grey black--text'
-						"
 						:outlined="activeFilter !== 'completed'"
 						:ripple="false"
 						@click.stop="() => setFilter('completed')"
@@ -52,11 +50,11 @@
 						v-if="isOverdue"
 						ref="v-chip-expired"
 						class="mr-2"
+						:class="
+							activeFilter === 'expired' ? 'active-chip' : 'grey black--text'
+						"
 						small
 						label
-						:color="
-							activeFilter === 'expired' ? 'grey lighten-2' : 'grey black--text'
-						"
 						:outlined="activeFilter !== 'expired'"
 						:ripple="false"
 						@click.stop="() => setFilter('expired')"
@@ -206,6 +204,10 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+.active-chip {
+	background-color: map-get($grey, lighten-2);
+	border: 1px solid map-get($grey, lighten-2);
+}
 .v-chip {
 	opacity: 1;
 	flex: none;
@@ -250,6 +252,10 @@ export default defineComponent({
 			width: 0.75rem !important;
 			margin-left: 2px;
 		}
+	}
+
+	.v-chip--clickable:active {
+		box-shadow: unset;
 	}
 }
 </style>
