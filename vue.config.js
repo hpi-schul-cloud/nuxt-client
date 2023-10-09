@@ -30,6 +30,9 @@ module.exports = defineConfig({
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
+				"@feature-board-content-element-menu": getDir(
+					"src/components/feature-board-content-element-menu"
+				),
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
 				),
@@ -43,6 +46,7 @@ module.exports = defineConfig({
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
 				"@page-board": getDir("src/components/page-board"),
 			},
@@ -62,6 +66,14 @@ module.exports = defineConfig({
 				options: {
 					configFile: TSCONFIG_PATH,
 				},
+			});
+		// avoid auto format on vue-loader to fix prettier errors
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				options.prettify = false;
+				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {
 			args[0].typescript.configFile = TSCONFIG_PATH;

@@ -27,6 +27,10 @@
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],
+			"@feature-board-content-element-menu": [
+				"src/components/feature-board-content-element-menu"
+			],
+			
 			"@feature-board-external-tool-element": [
 				"src/components/feature-board-external-tool-element"
 			],
@@ -36,6 +40,7 @@
 			"@feature-render-html": ["src/components/feature-render-html"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
 			"@page-board": ["src/components/page-board"],
 			"@/*": ["src/*"],

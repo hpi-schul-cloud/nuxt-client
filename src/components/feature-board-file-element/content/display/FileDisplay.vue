@@ -2,11 +2,14 @@
 	<div>
 		<ImageDisplay
 			v-if="fileProperties.previewUrl"
+			:url="fileProperties.url"
 			:preview-url="fileProperties.previewUrl"
 			:name="fileProperties.name"
 			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
-		/>
+		>
+			<slot></slot>
+		</ImageDisplay>
 		<VideoDisplay
 			v-else-if="canPlayVideo"
 			:src="fileProperties.url"
@@ -17,7 +20,9 @@
 			:caption="fileProperties.element.content.caption"
 			:show-title="!fileProperties.previewUrl"
 			:is-edit-mode="isEditMode"
-		/>
+		>
+			<slot></slot>
+		</FileDescription>
 	</div>
 </template>
 
