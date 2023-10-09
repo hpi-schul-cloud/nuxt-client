@@ -370,6 +370,18 @@ export interface ClassInfoResponse {
      * @type {string}
      * @memberof ClassInfoResponse
      */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    type: ClassInfoResponseTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
     name: string;
     /**
      * 
@@ -383,7 +395,23 @@ export interface ClassInfoResponse {
      * @memberof ClassInfoResponse
      */
     teachers: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    schoolYear?: string;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ClassInfoResponseTypeEnum {
+    Class = 'class',
+    Group = 'group'
+}
+
 /**
  * 
  * @export
