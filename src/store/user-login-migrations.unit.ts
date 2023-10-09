@@ -371,7 +371,7 @@ describe("UserLoginMigrationModule", () => {
 						};
 					};
 
-					it("should call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
+					it("should get latest user login migrations", async () => {
 						setup();
 
 						await module.fetchLatestUserLoginMigrationForCurrentUser();
@@ -461,7 +461,7 @@ describe("UserLoginMigrationModule", () => {
 					authModule.setUser({ ...mockUser, schoolId: "" });
 				};
 
-				it("should not call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForSchool", async () => {
+				it("should not get latest user login migrations", async () => {
 					setup();
 
 					await module.fetchLatestUserLoginMigrationForSchool();
@@ -532,7 +532,7 @@ describe("UserLoginMigrationModule", () => {
 						};
 					};
 
-					it("should call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForSchool", async () => {
+					it("should get latest user login migrations", async () => {
 						setup();
 
 						await module.fetchLatestUserLoginMigrationForSchool();
