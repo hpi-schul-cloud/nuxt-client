@@ -11,7 +11,7 @@
 			<slot></slot>
 		</ImageDisplay>
 		<VideoDisplay
-			v-else-if="canPlayVideo"
+			v-else-if="showVideoDisplay"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
 		>
@@ -46,16 +46,19 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const canPlayVideo = computed(() => {
-			const videoElement = document.createElement("video");
-			const canPlayMimeType =
-				videoElement.canPlayType(props.fileProperties.mimeType) === "maybe";
+		const showVideoDisplay = computed(() => {
+			const { mimeType } = props.fileProperties;
+			const result =
+				mimeType.startsWith("video/") ||
+				mimeType === "application/x-mpegURL" ||
+				mimeType === "application/vnd.ms-asf" ||
+				mimeType === "application/ogg";
 
-			return canPlayMimeType;
+			return result;
 		});
 
 		return {
-			canPlayVideo,
+			showVideoDisplay,
 		};
 	},
 });
