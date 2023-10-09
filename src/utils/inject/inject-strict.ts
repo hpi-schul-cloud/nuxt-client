@@ -4,7 +4,7 @@ export const injectStrict = <T>(key: InjectionKey<T>, fallback?: T): T => {
 	const resolved = inject(key, fallback);
 
 	if (resolved === undefined) {
-		throw new Error(`Could not resolve ${key.description}`);
+		throw new Error(`InjectStrict: Could not resolve ${key.description}`);
 	}
 
 	return resolved;
