@@ -11,7 +11,7 @@
 			v-else
 			v-model="modelValue"
 			class="px-4"
-			:disabled="!editable"
+			:disabled="isOverdue"
 			:label="t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
@@ -25,7 +25,7 @@ import { StudentSubmission } from "../types/submission";
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
 	props: {
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},

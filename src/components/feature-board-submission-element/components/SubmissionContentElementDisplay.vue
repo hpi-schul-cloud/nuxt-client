@@ -12,14 +12,14 @@
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
 			:submission="submission"
-			:editable="editable"
+			:isOverdue="isOverdue"
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
 			:submissions="submissions"
-			:editable="editable"
+			:isOverdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>
@@ -57,7 +57,7 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},

@@ -22,7 +22,7 @@
 		</div>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
-			:editable="editable"
+			:isOverdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>
@@ -53,7 +53,7 @@ export default defineComponent({
 			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},

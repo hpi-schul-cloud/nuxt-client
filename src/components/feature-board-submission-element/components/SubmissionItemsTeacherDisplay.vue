@@ -16,7 +16,7 @@
 			<VExpansionPanel>
 				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
-						v-if="openCount"
+						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
 						small
@@ -32,7 +32,6 @@
 						{{ t("components.cardElement.submissionElement.open") }}
 					</v-chip>
 					<v-chip
-						v-if="completedCount"
 						ref="v-chip-completed"
 						class="mr-2"
 						small
@@ -50,7 +49,7 @@
 						{{ t("components.cardElement.submissionElement.completed") }}
 					</v-chip>
 					<v-chip
-						v-if="expiredCount"
+						v-if="isOverdue"
 						ref="v-chip-expired"
 						class="mr-2"
 						small
@@ -62,7 +61,7 @@
 						:ripple="false"
 						@click.stop="() => setFilter('expired')"
 					>
-						{{ expiredCount }}
+						{{ overdueCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
 					</v-chip>
 				</VExpansionPanelHeader>
@@ -106,7 +105,7 @@ export default defineComponent({
 			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},
@@ -145,7 +144,7 @@ export default defineComponent({
 			}).length;
 		});
 
-		const expiredCount = computed<number>(() => {
+		const overdueCount = computed<number>(() => {
 			return allSubmissions.value.filter((item) => {
 				return item.status === "expired";
 			}).length;
@@ -198,7 +197,7 @@ export default defineComponent({
 			filteredSubmissions,
 			openCount,
 			completedCount,
-			expiredCount,
+			overdueCount,
 			activeFilter,
 			setFilter,
 			t,

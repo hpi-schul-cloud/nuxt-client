@@ -17,7 +17,7 @@
 				:loading="loading"
 				:submissions="submissions"
 				:submission="submission"
-				:editable="editable"
+				:isOverdue="!editable"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
@@ -25,7 +25,7 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="editable"
+				:isOverdue="!editable"
 				:isFirstElement="isFirstElement"
 				:isLastElement="isLastElement"
 				:hasMultipleElements="hasMultipleElements"
