@@ -43,10 +43,13 @@ describe("ContentElementBar", () => {
 			const { wrapper, icon } = setup({
 				icon: "mdi-test-icon",
 			});
+			console.log(wrapper.html());
 
-			const iconElement = wrapper.find("v-icon-stub").text();
+			const iconProp = wrapper
+				.find("contentelementtitleicon-stub")
+				.attributes("icon");
 
-			expect(iconElement).toBe(icon);
+			expect(iconProp).toBe(icon);
 		});
 	});
 
@@ -54,7 +57,7 @@ describe("ContentElementBar", () => {
 		it("should not render icon", () => {
 			const { wrapper } = setup({});
 
-			const iconElement = wrapper.find("v-icon-stub").exists();
+			const iconElement = wrapper.find("contentelementtitleicon-stub").exists();
 
 			expect(iconElement).toBe(false);
 		});
