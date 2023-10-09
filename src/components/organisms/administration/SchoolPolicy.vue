@@ -195,3 +195,10 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>
