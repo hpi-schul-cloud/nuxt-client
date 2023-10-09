@@ -10,12 +10,12 @@ describe("SubmissionItemStudentDisplay", () => {
 	const setup = (
 		loading = false,
 		submission = { completed: true },
-		editable = true
+		isOverdue = false
 	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			editable,
+			isOverdue,
 			loading,
 			submission,
 		};
@@ -132,8 +132,8 @@ describe("SubmissionItemStudentDisplay", () => {
 		describe("if submission can't be edited any more", () => {
 			it("should render the checkbox as disabled", async () => {
 				const loading = false;
-				const editable = false;
-				const { wrapper } = setup(loading, { completed: true }, editable);
+				const isOverdue = true;
+				const { wrapper } = setup(loading, { completed: true }, isOverdue);
 
 				const disabled = wrapper
 					.findComponent({ name: "v-checkbox" })
