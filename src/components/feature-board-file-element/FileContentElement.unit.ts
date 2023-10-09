@@ -1,4 +1,8 @@
-import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
+import {
+	FileRecordScanStatus,
+	PreviewStatus,
+	PreviewWidth,
+} from "@/fileStorageApi/v3";
 import NotifierModule from "@/store/notifier";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
@@ -10,8 +14,8 @@ import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElem
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
-import FileContent from "./content/FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
+import FileContent from "./content/FileContent.vue";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -131,7 +135,10 @@ describe("FileContentElement", () => {
 					name: fileRecordResponse.name,
 					isDownloadAllowed: true,
 					url: fileRecordResponse.url,
-					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+					previewUrl: convertDownloadToPreviewUrl(
+						fileRecordResponse.url,
+						PreviewWidth._500
+					),
 					size: fileRecordResponse.size,
 					previewStatus: fileRecordResponse.previewStatus,
 					element,
@@ -441,7 +448,10 @@ describe("FileContentElement", () => {
 					name: fileRecordResponse.name,
 					isDownloadAllowed: true,
 					url: fileRecordResponse.url,
-					previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+					previewUrl: convertDownloadToPreviewUrl(
+						fileRecordResponse.url,
+						PreviewWidth._500
+					),
 					size: fileRecordResponse.size,
 					previewStatus: fileRecordResponse.previewStatus,
 					element,
