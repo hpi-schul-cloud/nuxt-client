@@ -5,7 +5,6 @@ import {
 	ToolApiInterface,
 	ToolLaunchRequestResponse,
 } from "@/serverApi/v3";
-import { BusinessError } from "./types/commons";
 import { AxiosResponse } from "axios";
 
 @Module({
@@ -16,12 +15,6 @@ import { AxiosResponse } from "axios";
 export default class ExternalToolsModule extends VuexModule {
 	private loading = false;
 
-	private businessError: BusinessError = {
-		statusCode: "",
-		message: "",
-		error: undefined,
-	};
-
 	private get toolApi(): ToolApiInterface {
 		return ToolApiFactory(undefined, "v3", $axios);
 	}
@@ -30,27 +23,9 @@ export default class ExternalToolsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getBusinessError() {
-		return this.businessError;
-	}
-
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
-	}
-
-	@Mutation
-	setBusinessError(businessError: BusinessError): void {
-		this.businessError = businessError;
-	}
-
-	@Mutation
-	resetBusinessError(): void {
-		this.businessError = {
-			statusCode: "",
-			message: "",
-			error: undefined,
-		};
 	}
 
 	@Action
@@ -70,16 +45,10 @@ export default class ExternalToolsModule extends VuexModule {
 			return resp.data;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
 			console.log(apiError);
+			this.setLoading(false);
 
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}`,
-			});
+			throw apiError;
 		}
-
-		this.setLoading(false);
 	}
 }
