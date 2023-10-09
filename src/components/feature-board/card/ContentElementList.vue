@@ -150,8 +150,8 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is LinkElementResponse => {
 			return (
-				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
-				isLinkElementResponse(element)
+				// !!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
+				true && isLinkElementResponse(element)
 			);
 		};
 
