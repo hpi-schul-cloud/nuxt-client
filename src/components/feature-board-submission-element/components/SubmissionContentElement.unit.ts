@@ -146,15 +146,15 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over editable state to SubmissionContentElementDisplay", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementDisplay", async () => {
 			const { wrapper } = setup();
 
-			const editable = wrapper
+			const isOverdue = wrapper
 				.findComponent(SubmissionContentElementDisplay)
-				.props("editable");
+				.props("isOverdue");
 
-			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+			expect(isOverdue).toBe(
+				!mockedUseSubmissionContentElementStateResponse.editable
 			);
 		});
 
@@ -277,15 +277,15 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over editable state to SubmissionContentElementEdit", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementEdit", async () => {
 			const { wrapper } = setup();
 
-			const editable = wrapper
+			const isOverdue = wrapper
 				.findComponent(SubmissionContentElementEdit)
-				.props("editable");
+				.props("isOverdue");
 
-			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+			expect(isOverdue).toBe(
+				!mockedUseSubmissionContentElementStateResponse.editable
 			);
 		});
 
