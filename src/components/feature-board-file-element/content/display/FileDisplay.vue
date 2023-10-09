@@ -14,7 +14,9 @@
 			v-else-if="canPlayVideo"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
-		/>
+		>
+			<slot></slot>
+		</VideoDisplay>
 		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
