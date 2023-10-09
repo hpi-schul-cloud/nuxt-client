@@ -14,6 +14,7 @@
 			v-else-if="showVideoDisplay"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
+			@error="showVideoDisplay = false"
 		>
 			<slot></slot>
 		</VideoDisplay>
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
@@ -46,16 +47,18 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const showVideoDisplay = computed(() => {
-			const { mimeType } = props.fileProperties;
-			const result =
-				mimeType.startsWith("video/") ||
-				mimeType === "application/x-mpegURL" ||
-				mimeType === "application/vnd.ms-asf" ||
-				mimeType === "application/ogg";
+		const showVideoDisplay = ref(false);
 
-			return result;
-		});
+		const { mimeType } = props.fileProperties;
+		const hasVideoMimeType =
+			mimeType.startsWith("video/") ||
+			mimeType === "application/x-mpegURL" ||
+			mimeType === "application/vnd.ms-asf" ||
+			mimeType === "application/ogg";
+
+		if (hasVideoMimeType) {
+			showVideoDisplay.value = true;
+		}
 
 		return {
 			showVideoDisplay,

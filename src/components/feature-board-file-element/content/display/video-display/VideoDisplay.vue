@@ -16,13 +16,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 
 export default defineComponent({
 	name: "VideoDisplay",
 	props: {
 		src: { type: String, required: true },
 		name: { type: String, required: true },
+	},
+	setup(props, { emit }) {
+		const formatError = ref(false);
+		const videoRef = ref<HTMLVideoElement | null>(null);
+
+		onMounted(() => {
+			videoRef.value?.addEventListener("error", () => {
+				emit("error");
+			});
+		});
+
+		return {
+			formatError,
+			videoRef,
+		};
 	},
 });
 </script>
