@@ -2,6 +2,7 @@ import SchoolTerms from "./SchoolTerms.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
+import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -10,6 +11,7 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
@@ -20,6 +22,7 @@ describe("SchoolTerms", () => {
 	let authModule: jest.Mocked<AuthModule>;
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 	let termsOfUseModule: jest.Mocked<TermsOfUseModule>;
+	let notifierModule: jest.Mocked<NotifierModule>;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",
@@ -68,6 +71,8 @@ describe("SchoolTerms", () => {
 			...getters,
 		});
 
+		notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper: Wrapper<Vue> = shallowMount(SchoolTerms, {
 			...createComponentMocks({
 				i18n: true,
@@ -77,6 +82,7 @@ describe("SchoolTerms", () => {
 				[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 
@@ -108,22 +114,20 @@ describe("SchoolTerms", () => {
 	});
 
 	describe("when terms of use are found", () => {
-		it("should render download button", () => {
+		it("should render delete button", () => {
 			const wrapper = setup();
 
-			expect(wrapper.find('[data-testid="download-button"]').exists()).toBe(
-				true
-			);
+			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(true);
 		});
 	});
 
 	describe("when terms of use are not found", () => {
-		it("should not render download button", () => {
+		it("should not render delete button", () => {
 			const wrapper = setup({
 				getTermsOfUse: null,
 			});
 
-			expect(wrapper.find('[data-testid="download-button"]').exists()).toBe(
+			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(
 				false
 			);
 		});
@@ -164,6 +168,16 @@ describe("SchoolTerms", () => {
 			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
 			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(true);
+		});
+	});
+
+	describe("when user clicks delete button", () => {
+		it("should change isDeleteTermsDialogOpen to true", () => {
+			const wrapper = setup();
+
+			expect((wrapper.vm as any).isDeleteTermsDialogOpen).toBe(false);
+			wrapper.find('[data-testid="delete-button"]').trigger("click");
+			expect((wrapper.vm as any).isDeleteTermsDialogOpen).toBe(true);
 		});
 	});
 
