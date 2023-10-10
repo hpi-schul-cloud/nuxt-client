@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-form @submit="onSubmit(url)" ref="form" :lazy-validation="true">
+		<v-form @submit.prevent="onSubmit(url)" ref="form" :lazy-validation="true">
 			<v-text-field
 				v-model="url"
 				:rules="[rules.isRequired, rules.isValidUrl]"

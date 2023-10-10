@@ -1,13 +1,15 @@
+type FormValidatorFn<T> = (errMsg: string) => (value: T) => string | true;
+
 /**
  * Checks if given value is not a nullish value
  */
-export const isRequired = (errMsg: string) => (value: unknown) =>
+export const isRequired: FormValidatorFn<unknown> = (errMsg) => (value) =>
 	!!value || errMsg;
 
 /**
  * Checks if given value is a valid URL
  */
-export const isValidUrl = (errMsg: string) => (value: string) => {
+export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 	try {
 		const urlWithProtocol = value.match(/:\/\//) ? value : `https://${value}`;
 		const urlObject = new URL(urlWithProtocol);
