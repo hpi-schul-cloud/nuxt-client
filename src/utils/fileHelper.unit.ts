@@ -10,6 +10,7 @@ import {
 	getFileExtension,
 	isDownloadAllowed,
 	isPreviewPossible,
+	isVideoMimeType,
 } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
@@ -302,6 +303,76 @@ describe("@/utils/fileHelper", () => {
 				const result = isPreviewPossible(
 					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
 				);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isVideoMimeType", () => {
+		describe("when file has video mime type", () => {
+			describe("when file mime type has video/ prefix", () => {
+				it("should return true", () => {
+					const result = isVideoMimeType("video/mp4");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("video/");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("video/ ");
+
+					expect(result).toBe(true);
+				});
+			});
+
+			describe("when file miem type has application/ prefix", () => {
+				it("should return true", () => {
+					const result = isVideoMimeType("application/x-mpegURL");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("application/vnd.ms-asf");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("application/ogg");
+
+					expect(result).toBe(true);
+				});
+			});
+		});
+
+		describe("when file has no video mime type", () => {
+			it("should return false", () => {
+				const result = isVideoMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType("");
 
 				expect(result).toBe(false);
 			});

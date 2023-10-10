@@ -1,13 +1,6 @@
 <template>
 	<div>
-		<video
-			ref="videoRef"
-			controls
-			class="video"
-			loading="lazy"
-			:src="src"
-			:alt="name"
-		/>
+		<video controls class="video" loading="lazy" :src="src" :alt="name" />
 		<v-app-bar flat color="transparent" class="menu">
 			<v-spacer></v-spacer>
 			<slot></slot>
@@ -16,28 +9,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "VideoDisplay",
 	props: {
 		src: { type: String, required: true },
 		name: { type: String, required: true },
-	},
-	setup(props, { emit }) {
-		const formatError = ref(false);
-		const videoRef = ref<HTMLVideoElement | null>(null);
-
-		onMounted(() => {
-			videoRef.value?.addEventListener("error", () => {
-				emit("error");
-			});
-		});
-
-		return {
-			formatError,
-			videoRef,
-		};
 	},
 });
 </script>
