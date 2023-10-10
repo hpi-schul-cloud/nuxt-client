@@ -75,7 +75,9 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" small> {{ getStatusIcon(item) }} </v-icon>
+								<v-icon color="black" small>
+									{{ getStatusIcon(item) }}
+								</v-icon>
 							</span>
 						</template>
 					</v-data-table>
@@ -151,7 +153,7 @@ export default defineComponent({
 
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
-				return "$mdiCircleOutline";
+				return "$mdiMinus";
 			}
 			if (item.status === "completed") {
 				return "$mdiCheck";
