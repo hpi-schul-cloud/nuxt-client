@@ -286,7 +286,7 @@
 	"global.sidebar.addons": "Add-ons",
 	"global.sidebar.calendar": "calendar",
 	"global.sidebar.classes": "Classes",
-	"global.sidebar.classes": "Classes (new)",
+	"global.sidebar.classes.new": "Classes (new)",
 	"global.sidebar.courses": "Courses",
 	"global.sidebar.files-old": "My Files",
 	"global.sidebar.files": "Files",
