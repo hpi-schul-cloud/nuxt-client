@@ -33,11 +33,6 @@ export default defineComponent({
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 	},
-	props: {
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
-	},
 	emits: [
 		"edit:element",
 		"delete:element",
