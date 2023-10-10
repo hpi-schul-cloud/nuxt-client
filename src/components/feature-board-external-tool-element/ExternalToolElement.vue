@@ -30,9 +30,6 @@
 			<ExternalToolElementMenu
 				v-if="isEditMode"
 				ref="externalToolElementMenu"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
 				@move-down:element="onMoveElementDown"
 				@move-up:element="onMoveElementUp"
 				@delete:element="onDeleteElement"
