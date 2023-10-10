@@ -64,7 +64,7 @@ import { ToolLaunchRequestResponse } from "@/serverApi/v3";
 export default defineComponent({
 	name: "RoomExternalToolCard",
 	components: { RoomBaseCard, RoomDotMenu },
-	emits: ["edit", "delete", "click"],
+	emits: ["edit", "delete", "click", "error"],
 	props: {
 		tool: {
 			type: Object as PropType<ExternalToolDisplayData>,
@@ -87,6 +87,11 @@ export default defineComponent({
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
+			if (loadingError.value) {
+				emit("error", props.tool);
+				return;
+			}
+
 			emit("click", toolLaunchRequest.value, props.tool);
 		};
 
@@ -122,14 +127,27 @@ export default defineComponent({
 
 		const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
 
+		const loadingError: Ref<boolean> = ref(false);
+		const loadLaunchRequest = async () => {
+			loadingError.value = false;
+			try {
+				const response: ToolLaunchRequestResponse | undefined =
+					await externalToolsModule.loadToolLaunchData(
+						props.tool.contextExternalToolId
+					);
+				toolLaunchRequest.value = response
+					? ExternalToolMapper.mapToToolLaunchRequest(response)
+					: undefined;
+			} catch (e: unknown) {
+				loadingError.value = true;
+			}
+		};
+
 		onMounted(async () => {
-			const response: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(
-					props.tool.contextExternalToolId
-				);
-			toolLaunchRequest.value = response
-				? ExternalToolMapper.mapToToolLaunchRequest(response)
-				: undefined;
+			if (isToolOutdated.value) {
+				return;
+			}
+			await loadLaunchRequest();
 		});
 
 		return {
