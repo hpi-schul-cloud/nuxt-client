@@ -10,8 +10,6 @@
 				required
 				validate-on="lazy"
 			>
-				<!-- @keydown.enter="onKeydownSubmit($event, url)" -->
-				<!-- @click:append="onSubmit(url)" -->
 				<template v-slot:append>
 					<button type="submit">
 						<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>

@@ -1,5 +1,5 @@
 <template>
-	<a :href="url" target="_blank">
+	<a :href="sanitizedUrl" target="_blank">
 		<v-card
 			data-testid="board-link-element"
 			dense
@@ -35,6 +35,7 @@
 <script lang="ts">
 import { ComputedRef, computed, defineComponent } from "vue";
 import { mdiLink } from "@mdi/js";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
@@ -67,7 +68,10 @@ export default defineComponent({
 			}
 			return props.url;
 		});
-		return { mdiLink, urlWithoutProtocol };
+
+		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
+
+		return { mdiLink, urlWithoutProtocol, sanitizedUrl };
 	},
 });
 </script>
