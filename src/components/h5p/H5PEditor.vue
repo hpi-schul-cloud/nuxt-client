@@ -93,9 +93,8 @@ export default defineComponent({
 				return data;
 			} else {
 				// Save new content
-				const { data } = await h5pEditorApi.h5PEditorControllerCreateH5pContent(
-					createParams
-				);
+				const { data } =
+					await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
 
 				return data;
 			}
