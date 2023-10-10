@@ -1,7 +1,6 @@
 import { Layouts } from "@/layouts/types";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import {
 	isEnum,
@@ -14,7 +13,6 @@ import {
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
