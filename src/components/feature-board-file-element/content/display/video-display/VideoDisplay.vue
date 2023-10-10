@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<video controls class="video" loading="lazy" :src="src" :alt="name" />
-		<v-app-bar flat color="transparent" class="menu">
-			<v-spacer></v-spacer>
-			<slot></slot>
-		</v-app-bar>
+		<ContentElementBar class="menu">
+			<template #menu><slot></slot></template>
+		</ContentElementBar>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "VideoDisplay",
@@ -17,6 +17,7 @@ export default defineComponent({
 		src: { type: String, required: true },
 		name: { type: String, required: true },
 	},
+	components: { ContentElementBar },
 });
 </script>
 <style scoped>

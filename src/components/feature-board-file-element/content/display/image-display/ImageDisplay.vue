@@ -20,10 +20,9 @@
 			:alt="alternativeText"
 		/>
 
-		<v-app-bar flat color="transparent" class="menu">
-			<v-spacer></v-spacer>
-			<slot></slot>
-		</v-app-bar>
+		<ContentElementBar class="menu">
+			<template #menu><slot></slot></template>
+		</ContentElementBar>
 	</div>
 </template>
 
@@ -33,6 +32,7 @@ import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent, ref } from "vue";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -43,6 +43,7 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
+	components: { ContentElementBar },
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
 		const containerRef = ref<HTMLDivElement | undefined>();
@@ -164,5 +165,6 @@ export default defineComponent({
 .menu {
 	position: absolute;
 	top: 0px;
+	right: 0px;
 }
 </style>
