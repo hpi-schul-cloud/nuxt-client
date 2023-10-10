@@ -33,14 +33,21 @@
 				:key="element.id"
 				:element="element"
 				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
+			>
+				<template #menu="{ elementName }">
+					<ContentElementMenu
+						:elementId="element.id"
+						:name="elementName"
+						:isFirstElement="firstElementId === element.id"
+						:isLastElement="lastElementId === element.id"
+						:hasMultipleElements="hasMultipleElements"
+						@move-down:element="onMoveElementDown(index, element)"
+						@move-up:element="onMoveElementUp(index, element)"
+						@delete:element="onDeleteElement"
+					/>
+				</template>
+			</SubmissionContentElement>
 			<ExternalToolElement
 				v-else-if="showExternalToolElement(element)"
 				:key="element.id"

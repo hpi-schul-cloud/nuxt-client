@@ -16,7 +16,7 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="editable"
+				:editable="!isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
@@ -24,15 +24,14 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="editable"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
+				:editable="!isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
-				@move-down:element="onMoveSubmissionEditDown"
-				@move-up:element="onMoveSubmissionEditUp"
-				@delete:element="onDeleteElement"
-			/>
+			>
+				<slot
+					name="menu"
+					:elementName="t('components.cardElement.submissionElement')"
+				/>
+			</SubmissionContentElementEdit>
 		</div>
 	</v-card>
 </template>
@@ -44,7 +43,6 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
@@ -59,54 +57,23 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-down:edit",
-		"move-up:edit",
-		"move-keyboard:edit",
-	],
+	emits: ["move-keyboard:edit"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissions, editable, updateSubmissionItem } =
-			useSubmissionContentElementState(
-				element.value.id,
-				element.value.content.dueDate
-			);
-
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { modelValue } = useContentElementState(props);
+
+		const { loading, submissions, isOverdue, updateSubmissionItem } =
+			useSubmissionContentElementState(element.value.id, modelValue);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
 				emit("move-keyboard:edit", event);
-			}
-		};
-
-		const onMoveSubmissionEditDown = () => {
-			emit("move-down:edit");
-		};
-
-		const onMoveSubmissionEditUp = () => {
-			emit("move-up:edit");
-		};
-
-		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteConfirmation(
-				t("components.cardElement.submissionElement").toString(),
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
 			}
 		};
 
@@ -119,12 +86,10 @@ export default defineComponent({
 			submissionContentElement,
 			submissions,
 			loading,
-			editable,
-			onDeleteElement,
+			isOverdue,
 			onKeydownArrow,
-			onMoveSubmissionEditDown,
-			onMoveSubmissionEditUp,
 			onUpdateCompleted,
+			t,
 		};
 	},
 });
