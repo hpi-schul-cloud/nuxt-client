@@ -1,13 +1,13 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted } from "vue";
 import { authModule } from "@/store";
+import { ref, computed, onMounted, Ref } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { TeacherSubmission, StudentSubmission } from "../types/submission";
 
 export const useSubmissionContentElementState = (
 	id: string,
-	dueDate?: string
+	modelValue: Ref<{ dueDate?: string }>
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
@@ -69,8 +69,11 @@ export const useSubmissionContentElementState = (
 		return authModule.getUserRoles.includes("student");
 	});
 
-	const editable = computed(() => {
-		return !dueDate || new Date() < new Date(dueDate);
+	const isOverdue = computed(() => {
+		return (
+			!modelValue.value.dueDate ||
+			new Date() > new Date(modelValue.value.dueDate)
+		);
 	});
 
 	onMounted(() => {
@@ -116,17 +119,17 @@ export const useSubmissionContentElementState = (
 				);
 
 				if (!submission) {
-					submissionInfo.status = editable.value ? "open" : "expired";
+					submissionInfo.status = !isOverdue.value ? "open" : "expired";
 					return submissionInfo as TeacherSubmission;
 				}
 
 				if (submission.completed) {
 					submissionInfo.status = "completed";
 				}
-				if (!submission.completed && editable.value) {
+				if (!submission.completed && !isOverdue.value) {
 					submissionInfo.status = "open";
 				}
-				if (!submission.completed && !editable.value) {
+				if (!submission.completed && isOverdue.value) {
 					submissionInfo.status = "expired";
 				}
 
@@ -141,6 +144,6 @@ export const useSubmissionContentElementState = (
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,
-		editable,
+		isOverdue,
 	};
 };
