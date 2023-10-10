@@ -10,6 +10,7 @@
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@click="onClickTool"
+			@error="onError"
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
 
@@ -85,19 +86,12 @@
 
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
-import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
-import {
-	ToolLaunchRequestResponse,
-	ToolLaunchRequestResponseMethodEnum,
-} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import ExternalToolsModule from "@/store/external-tools";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
@@ -112,7 +106,13 @@ import {
 import VueI18n from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useRouter } from "vue-router/composables";
-import { ToolContextType } from "@/store/external-tool";
+import {
+	ToolConfigurationStatus,
+	ToolContextType,
+	ToolLaunchRequest,
+	ToolLaunchRequestMethodEnum,
+} from "@/store/external-tool";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -134,9 +134,6 @@ export default defineComponent({
 	setup(props) {
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-		);
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
@@ -183,8 +180,6 @@ export default defineComponent({
 
 		const onCloseErrorDialog = () => {
 			isErrorDialogOpen.value = false;
-
-			externalToolsModule.resetBusinessError();
 		};
 
 		const onEditTool = (tool: ExternalToolDisplayData) => {
@@ -198,26 +193,37 @@ export default defineComponent({
 			});
 		};
 
-		const onClickTool = async (tool: ExternalToolDisplayData) => {
-			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(
-					tool.contextExternalToolId
-				);
-
-			switch (launchToolResponse?.method) {
-				case ToolLaunchRequestResponseMethodEnum.Get:
-					handleGetLaunchRequest(launchToolResponse);
-					break;
-				case ToolLaunchRequestResponseMethodEnum.Post:
-					handlePostLaunchRequest(launchToolResponse);
-					break;
-				default:
-					handleLaunchError(tool);
-					break;
+		const onClickTool = async (
+			toolLaunchRequest: ToolLaunchRequest,
+			displayData: ExternalToolDisplayData
+		) => {
+			if (isToolLaunchable(displayData)) {
+				switch (toolLaunchRequest?.method) {
+					case ToolLaunchRequestMethodEnum.Get:
+						handleGetLaunchRequest(toolLaunchRequest);
+						break;
+					case ToolLaunchRequestMethodEnum.Post:
+						handlePostLaunchRequest(toolLaunchRequest);
+						break;
+					default:
+						isToolLaunchable(displayData);
+						break;
+				}
 			}
 		};
 
-		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const onError = (displayData: ExternalToolDisplayData): void => {
+			showErrorDialog(displayData);
+		};
+
+		const showErrorDialog = (
+			displayData: ExternalToolDisplayData | undefined
+		) => {
+			selectedItem.value = displayData;
+			isErrorDialogOpen.value = true;
+		};
+
+		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			if (toolLaunch.openNewTab) {
 				window.open(toolLaunch.url, "_blank");
 				return;
@@ -225,7 +231,7 @@ export default defineComponent({
 			window.location.href = toolLaunch.url;
 		};
 
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
+		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
 			const form: HTMLFormElement = document.createElement("form");
 			form.method = "POST";
 			form.action = toolLaunch.url;
@@ -248,17 +254,15 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const handleLaunchError = (tool: ExternalToolDisplayData) => {
-			const businessErrorMessage = externalToolsModule.getBusinessError.message;
-
-			if (
-				["TOOL_STATUS_OUTDATED", "MISSING_TOOL_PARAMETER_VALUE"].some(
-					(keyword) => businessErrorMessage.includes(keyword)
-				)
-			) {
-				selectedItem.value = tool;
-				isErrorDialogOpen.value = true;
+		const isToolLaunchable = (
+			displayData: ExternalToolDisplayData
+		): boolean => {
+			if (displayData.status === ToolConfigurationStatus.Latest) {
+				return true;
 			}
+			showErrorDialog(displayData);
+
+			return false;
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
@@ -283,6 +287,7 @@ export default defineComponent({
 			isErrorDialogOpen,
 			onCloseErrorDialog,
 			errorDialogText,
+			onError,
 		};
 	},
 });
