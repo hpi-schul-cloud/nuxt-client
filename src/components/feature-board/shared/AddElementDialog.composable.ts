@@ -63,14 +63,14 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 		});
 	}
 
-	// WIP: if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
-	options.push({
-		icon: mdiLink,
-		label: "components.elementTypeSelection.elements.linkElement.subtitle",
-		action: () => onElementClick(ContentElementType.Link),
-		testId: "create-element-link",
-	});
-	// }
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		options.push({
+			icon: mdiLink,
+			label: "components.elementTypeSelection.elements.linkElement.subtitle",
+			action: () => onElementClick(ContentElementType.Link),
+			testId: "create-element-link",
+		});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;
