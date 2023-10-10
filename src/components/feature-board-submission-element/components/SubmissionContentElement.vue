@@ -45,10 +45,20 @@ import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useI18n } from "@/composables/i18n.composable";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
 	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 		SubmissionContentElementDisplay,
 		SubmissionContentElementEdit,
 	},
