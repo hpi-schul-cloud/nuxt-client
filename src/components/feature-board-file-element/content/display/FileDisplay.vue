@@ -11,7 +11,7 @@
 			<slot></slot>
 		</ImageDisplay>
 		<VideoDisplay
-			v-else-if="showVideoDisplay"
+			v-else-if="hasVideoMimeType"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
 		>
@@ -20,7 +20,7 @@
 		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
-			:show-title="!fileProperties.previewUrl"
+			:show-title="showTitle"
 			:is-edit-mode="isEditMode"
 		>
 			<slot></slot>
@@ -47,12 +47,17 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const showVideoDisplay = computed(() => {
+		const hasVideoMimeType = computed(() => {
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
+		const showTitle = computed(() => {
+			return !props.fileProperties.previewUrl && !hasVideoMimeType.value;
+		});
+
 		return {
-			showVideoDisplay,
+			hasVideoMimeType,
+			showTitle,
 		};
 	},
 });
