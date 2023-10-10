@@ -20,6 +20,7 @@
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
 					readonly
+					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
 					@keydown.space="showDateDialog = true"
@@ -46,13 +47,13 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -63,12 +64,11 @@ export default defineComponent({
 		required: { type: Boolean },
 		minDate: { type: String },
 		maxDate: { type: String },
+		dateTimeInPast: { type: Boolean, default: false },
 	},
 	emits: ["update:date"],
 	setup(props, { emit }) {
-		const { t } = useI18n();
-		const i18n = injectStrict(I18N_KEY);
-		const locale = i18n.locale;
+		const { t, locale } = useI18n();
 
 		const modelValue = computed<string>({
 			get() {
@@ -84,7 +84,7 @@ export default defineComponent({
 
 		const formattedDate = computed(() => {
 			return modelValue.value
-				? dayjs(modelValue.value).format(t("format.date"))
+				? dayjs(modelValue.value).format(DATETIME_FORMAT.date)
 				: "";
 		});
 
@@ -141,6 +141,14 @@ export default defineComponent({
 			showDateDialog.value = false;
 		}, 50);
 
+		const messages = computed(() => {
+			if (props.dateTimeInPast) {
+				return t("components.datePicker.messages.future");
+			}
+
+			return [];
+		});
+
 		return {
 			mdiCalendarClock,
 			locale,
@@ -153,6 +161,7 @@ export default defineComponent({
 			onInput,
 			onError,
 			onMenuToggle,
+			messages,
 		};
 	},
 });
@@ -169,6 +178,10 @@ export default defineComponent({
 	.v-input__icon--append .v-icon {
 		width: 20px;
 		height: 20px;
+	}
+
+	.v-messages__message {
+		line-height: 14px;
 	}
 }
 </style>

@@ -6,11 +6,23 @@ import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/exte
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	EXTERNAL_TOOLS_MODULE_KEY,
+	I18N_KEY,
+} from "@/utils/inject";
 import { ToolConfigurationStatus } from "@/store/external-tool";
+import ExternalToolsModule from "@/store/external-tools";
+import flushPromises from "flush-promises";
+import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import { ToolLaunchRequestResponse } from "@/serverApi/v3";
 
 describe("RoomExternalToolCard", () => {
-	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
+	const getWrapper = (
+		tool: ExternalToolDisplayData,
+		canEdit: boolean,
+		externalToolsModuleMock = createModuleMocks(ExternalToolsModule)
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -33,11 +45,14 @@ describe("RoomExternalToolCard", () => {
 						tc: (key: string): string => key,
 					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModuleMock,
 				},
 			}
 		);
 
-		return wrapper;
+		return {
+			wrapper,
+		};
 	};
 
 	afterEach(() => {
@@ -52,7 +67,7 @@ describe("RoomExternalToolCard", () => {
 						status: ToolConfigurationStatus.Outdated,
 					});
 
-				const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+				const { wrapper } = getWrapper(tool, false);
 
 				return {
 					wrapper,
@@ -76,7 +91,7 @@ describe("RoomExternalToolCard", () => {
 						status: ToolConfigurationStatus.Latest,
 					});
 
-				const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+				const { wrapper } = getWrapper(tool, false);
 
 				return {
 					wrapper,
@@ -97,24 +112,81 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	describe("when the user clicks the card", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("when there was no error while loading launch request", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
+				const launchRequest: ToolLaunchRequestResponse =
+					toolLaunchRequestResponseFactory.build();
 
-			return {
-				wrapper,
-				tool,
+				const externalToolsModuleMock = createModuleMocks(ExternalToolsModule);
+				externalToolsModuleMock.loadToolLaunchData.mockResolvedValueOnce(
+					launchRequest
+				);
+
+				const { wrapper } = getWrapper(
+					toolDisplayData,
+					true,
+					externalToolsModuleMock
+				);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					toolDisplayData,
+					launchRequest,
+				};
 			};
-		};
 
-		it("should emit the click event", async () => {
-			const { wrapper, tool } = setup();
+			it("should emit the click event", async () => {
+				const { wrapper, toolDisplayData, launchRequest } = await setup();
 
-			await wrapper.trigger("click");
+				await wrapper.trigger("click");
 
-			expect(wrapper.emitted("click")).toContainEqual([tool]);
+				expect(wrapper.emitted("click")).toContainEqual([
+					launchRequest,
+					toolDisplayData,
+				]);
+			});
+		});
+
+		describe("when loading error is set", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
+
+				const launchRequest: ToolLaunchRequestResponse =
+					toolLaunchRequestResponseFactory.build();
+
+				const externalToolsModuleMock = createModuleMocks(ExternalToolsModule);
+				externalToolsModuleMock.loadToolLaunchData.mockRejectedValueOnce(
+					new Error()
+				);
+
+				const { wrapper } = getWrapper(
+					toolDisplayData,
+					true,
+					externalToolsModuleMock
+				);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					toolDisplayData,
+					launchRequest,
+				};
+			};
+
+			it("should emit the error event", async () => {
+				const { wrapper, toolDisplayData } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(wrapper.emitted("error")).toContainEqual([toolDisplayData]);
+			});
 		});
 	});
 
@@ -123,7 +195,7 @@ describe("RoomExternalToolCard", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, true);
+			const { wrapper } = getWrapper(tool, true);
 
 			return {
 				wrapper,
@@ -203,7 +275,7 @@ describe("RoomExternalToolCard", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const wrapper: Wrapper<Vue> = getWrapper(tool, false);
+			const { wrapper } = getWrapper(tool, false);
 
 			return { wrapper };
 		};

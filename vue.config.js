@@ -46,6 +46,7 @@ module.exports = defineConfig({
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),

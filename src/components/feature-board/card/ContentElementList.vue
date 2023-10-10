@@ -10,34 +10,33 @@
 					v-if="isRichTextElementResponse(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
 				<LinkContentElement
-					v-if="showLinkElement(element)"
+					v-else-if="showLinkElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
 				<FileContentElement
 					v-else-if="isFileElementResponse(element)"
 					:element="element"
 					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
-				>
-				</FileContentElement>
+				/>
 				<SubmissionContentElement
 					v-else-if="showSubmissionContainerElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -47,9 +46,6 @@
 					v-else-if="showExternalToolElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
