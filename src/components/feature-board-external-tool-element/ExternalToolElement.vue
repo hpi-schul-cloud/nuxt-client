@@ -72,9 +72,6 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
