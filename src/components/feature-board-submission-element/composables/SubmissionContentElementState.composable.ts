@@ -1,11 +1,11 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, Ref } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 
 export const useSubmissionContentElementState = (
 	id: string,
-	dueDate?: string
+	modelValue: Ref<{ dueDate?: string }>
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
@@ -54,8 +54,11 @@ export const useSubmissionContentElementState = (
 		}
 	};
 
-	const editable = computed(() => {
-		return !dueDate || new Date() < new Date(dueDate);
+	const isOverdue = computed(() => {
+		return (
+			!modelValue.value.dueDate ||
+			new Date() > new Date(modelValue.value.dueDate)
+		);
 	});
 
 	onMounted(() => {
@@ -67,6 +70,6 @@ export const useSubmissionContentElementState = (
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,
-		editable,
+		isOverdue,
 	};
 };
