@@ -15,6 +15,7 @@
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'"
 	},
 	"dependencies": {
+		"@braintree/sanitize-url": "^6.0.4",
 		"@ckeditor/ckeditor5-vue2": "^3.0.1",
 		"@hpi-schul-cloud/ckeditor": "0.4.0",
 		"@mdi/js": "^7.2.96",
