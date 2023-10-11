@@ -171,7 +171,7 @@ export default defineComponent({
 		const downloadTerms = () => {
 			if (termsOfUse.value) {
 				downloadFile(
-					termsOfUse.value.consentData.data as string,
+					termsOfUse.value.consentData.data,
 					t("pages.administration.school.index.termsOfUse.fileName")
 				);
 			}

@@ -175,7 +175,7 @@ export default defineComponent({
 		const downloadPolicy = () => {
 			if (privacyPolicy.value) {
 				downloadFile(
-					privacyPolicy.value.consentData.data as string,
+					privacyPolicy.value.consentData.data,
 					t("pages.administration.school.index.schoolPolicy.fileName")
 				);
 			}
