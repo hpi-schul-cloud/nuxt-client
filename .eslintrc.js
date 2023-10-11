@@ -13,8 +13,8 @@ module.exports = {
 		ecmaVersion: 2020,
 	},
 	rules: {
-		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-		"no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
+		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
 		// ----
 		"no-useless-escape": "error",
 		"no-irregular-whitespace": "error",
