@@ -101,7 +101,7 @@ describe("ElementTypeSelection Composable", () => {
 			env: Partial<Envs> = {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-				FEATURE_TLDRAW_ENABLED: false,
+				FEATURE_TLDRAW_ENABLED: true,
 			}
 		) => {
 			const addElementMock = jest.fn();
@@ -241,35 +241,35 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
 		});
-		// describe("when the DrawingElement action is called", () => {
-		// 	it("should call drawing element function with right argument", async () => {
-		// 		const { elementTypeOptions, addElementMock } = setup();
-		// 		const { askType } = useAddElementDialog(addElementMock, {
-		// 			value: { elements: [] },
-		// 		});
+		describe("when the DrawingElement action is called", () => {
+			it("should call drawing element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
-		// 		askType();
+				askType();
 
-		// 		const action = elementTypeOptions.value[4].action;
-		// 		action();
+				const action = elementTypeOptions.value[4].action;
+				action();
 
-		// 		expect(addElementMock).toBeCalledTimes(1);
-		// 		expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
-		// 	});
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+			});
 
-		// 	it("should set isDialogOpen to false", async () => {
-		// 		const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-		// 		const { askType } = useAddElementDialog(addElementMock, {
-		// 			value: { elements: [] },
-		// 		});
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
-		// 		askType();
+				askType();
 
-		// 		const action = elementTypeOptions.value[4].action;
-		// 		action();
+				const action = elementTypeOptions.value[4].action;
+				action();
 
-		// 		expect(closeDialogMock).toBeCalledTimes(1);
-		// 	});
-		// });
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
 	});
 });
