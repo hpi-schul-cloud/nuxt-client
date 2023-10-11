@@ -117,10 +117,6 @@
 					item-text="name"
 					item-value="abbreviation"
 					dense
-					:hint="
-						$t('pages.administration.school.index.generalSettings.languageHint')
-					"
-					persistent-hint
 				>
 					<template #item="{ item }">
 						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
@@ -249,6 +245,10 @@ export default {
 				schoolCopy.logo = this.school.logo_dataUrl;
 			}
 			this.localSchool = schoolCopy;
+
+			if (!this.localSchool.language) {
+				this.localSchool.language = "de";
+			}
 		},
 		printDate,
 		toBase64,
