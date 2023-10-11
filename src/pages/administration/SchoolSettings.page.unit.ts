@@ -13,6 +13,7 @@ import {
 } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import { useApplicationError } from "@/composables/application-error.composable";
+import VueRouter from "vue-router";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -75,15 +76,19 @@ describe("SchoolSettingsPage", () => {
 			...envConfigGetters,
 		});
 
+		const componentOptions = createComponentMocks({ i18n: true });
+		const { localVue } = componentOptions;
+		localVue.use(VueRouter);
+		const router = new VueRouter({ routes: [{ path: "home" }] });
+
 		const wrapper: Wrapper<any> = shallowMount(SchoolSettings, {
-			...createComponentMocks({
-				i18n: true,
-			}),
+			...componentOptions,
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
+			router,
 		});
 
 		return wrapper;

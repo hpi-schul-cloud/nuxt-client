@@ -82,26 +82,6 @@ describe("ExternalToolSection", () => {
 		});
 	});
 
-	describe("headers is called", () => {
-		describe("when table is rendered", () => {
-			it("should display dataTableHeaders in v-data-table", () => {
-				const { wrapper } = setup();
-
-				const vueWrapperArray = wrapper
-					.find(".v-data-table-header")
-					.findAll("th");
-
-				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
-					"common.labels.name"
-				);
-				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status"
-				);
-				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
-			});
-		});
-	});
-
 	describe("items is called", () => {
 		const setupItems = () => {
 			const firstToolName = "Test";
@@ -135,6 +115,24 @@ describe("ExternalToolSection", () => {
 				secondToolName,
 			};
 		};
+
+		describe("when table is rendered", () => {
+			it("should display dataTableHeaders in v-data-table", () => {
+				const { wrapper } = setupItems();
+
+				const vueWrapperArray = wrapper
+					.find(".v-data-table-header")
+					.findAll("th");
+
+				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
+					"common.labels.name"
+				);
+				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
+					"components.administration.externalToolsSection.table.header.status"
+				);
+				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
+			});
+		});
 
 		describe("when external tools were loaded", () => {
 			it("names should be rendered in the datatable", () => {
