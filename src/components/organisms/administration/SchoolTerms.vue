@@ -42,7 +42,7 @@
 						<template v-if="termsOfUse">
 							{{
 								t("pages.administration.school.index.termsOfUse.uploadedOn", {
-									date: dayjs(termsOfUse.publishedAt).format(t("format.date")),
+									date: dayjs(termsOfUse.publishedAt).format("DD.MM.YYYY"),
 								})
 							}}
 						</template>
@@ -56,7 +56,7 @@
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
 					data-testid="edit-button"
-					@click="isSchoolTermsFormDialogOpen = true"
+					@click.stop="isSchoolTermsFormDialogOpen = true"
 				>
 					<v-btn
 						icon
@@ -68,7 +68,7 @@
 				<v-list-item-action
 					v-if="termsOfUse"
 					data-testid="delete-button"
-					@click="isDeleteTermsDialogOpen = true"
+					@click.stop="isDeleteTermsDialogOpen = true"
 				>
 					<v-btn
 						icon

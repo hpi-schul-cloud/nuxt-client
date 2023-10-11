@@ -42,9 +42,7 @@
 						<template v-if="privacyPolicy">
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: dayjs(privacyPolicy.publishedAt).format(
-										t("format.date")
-									),
+									date: dayjs(privacyPolicy.publishedAt).format("DD.MM.YYYY"),
 								})
 							}}
 						</template>
@@ -60,7 +58,7 @@
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
 					data-testid="edit-button"
-					@click="isSchoolPolicyFormDialogOpen = true"
+					@click.stop="isSchoolPolicyFormDialogOpen = true"
 				>
 					<v-btn
 						icon
@@ -74,7 +72,7 @@
 				<v-list-item-action
 					v-if="privacyPolicy"
 					data-testid="delete-button"
-					@click="isDeletePolicyDialogOpen = true"
+					@click.stop="isDeletePolicyDialogOpen = true"
 				>
 					<v-btn
 						icon
