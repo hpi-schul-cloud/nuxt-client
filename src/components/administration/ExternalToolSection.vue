@@ -4,6 +4,7 @@
 			{{ t("components.administration.externalToolsSection.info") }}
 		</p>
 		<v-data-table
+			v-if="items.length"
 			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
