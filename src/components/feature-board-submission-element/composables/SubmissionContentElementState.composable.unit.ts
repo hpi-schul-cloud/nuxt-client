@@ -84,7 +84,7 @@ describe("SubmissionContentElementState.composable", () => {
 			setup(contentElementId);
 
 		expect(loading.value).toBe(true);
-		expect(submissions.value.submissionItemsResponse.length).toBe(0);
+		expect(submissions.value.length).toBe(0);
 
 		await fetchSubmissionItems(contentElementId);
 
@@ -92,7 +92,7 @@ describe("SubmissionContentElementState.composable", () => {
 			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
 		).toHaveBeenCalledWith(contentElementId);
 		expect(loading.value).toBe(false);
-		expect(submissions.value.submissionItemsResponse.length).toEqual(
+		expect(submissions.value.length).toEqual(
 			mockedSubmissionsResponse.submissionItemsResponse.length
 		);
 	});
