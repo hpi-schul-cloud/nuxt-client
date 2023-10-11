@@ -22,6 +22,20 @@
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
+			<template v-if="showIcons" v-slot:[`item.actions`]="{ item }">
+				<v-icon size="small" @click="manageClass(item)">
+					{{ mdiAccountMultipleOutline }}
+				</v-icon>
+				<v-icon size="small" @click="editItem(item)">
+					{{ mdiPencilOutline }}
+				</v-icon>
+				<v-icon size="small" @click="deleteItem(item)">
+					{{ mdiTrashCanOutline }}
+				</v-icon>
+				<v-icon size="small" @click="createSuccessor(item)">
+					{{ mdiArrowUpBoldOutline }}
+				</v-icon>
+			</template>
 		</v-data-table>
 
 		<v-btn
@@ -45,6 +59,13 @@ import { Pagination } from "@/store/types/commons";
 import { ClassInfo } from "@/store/types/class-info";
 import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import { authModule } from "@/store";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiArrowUpBoldOutline,
+	mdiAccountMultipleOutline,
+} from "@mdi/js";
 
 export default defineComponent({
 	components: { DefaultWireframe },
@@ -73,6 +94,25 @@ export default defineComponent({
 			() => groupModule.getClasses
 		);
 
+		/*const showIcons = (item: ClassInfo): boolean => {
+			try {
+				return (
+					!item.externalSourceName &&
+					authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+				);
+			} catch (error) {
+				return false;
+			}
+		};*/
+
+		const showIcons: ComputedRef<boolean> = computed((item) => {
+			console.log(item);
+			return (
+				!item.externalSourceName &&
+				authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+			);
+		});
+
 		const pagination: ComputedRef<Pagination> = computed(
 			() => groupModule.getPagination
 		);
@@ -99,7 +139,32 @@ export default defineComponent({
 				text: t("common.labels.teacher"),
 				sortable: true,
 			},
+			{
+				value: "actions",
+				text: "Hier könnte ihre Werbung stehen", // "actions"? does not exist in old table
+				sortable: false, // does it make sense to sort here?
+			},
 		];
+
+		const manageClass = (item: ClassInfo) => {
+			console.log("manage: ", item);
+		};
+
+		const editItem = (item: ClassInfo) => {
+			console.log(
+				"edit: ",
+				item,
+				authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+			);
+		};
+
+		const deleteItem = (item: ClassInfo) => {
+			console.log("delete: ", item);
+		};
+
+		const createSuccessor = (item: ClassInfo) => {
+			console.log("successor: ", item);
+		};
 
 		const onUpdateSortBy = async (sortBy: string) => {
 			groupModule.setSortBy(sortBy);
@@ -133,14 +198,23 @@ export default defineComponent({
 			breadcrumbs,
 			headers,
 			classes,
+			showIcons,
 			page,
 			sortBy,
 			sortOrder,
 			pagination,
+			manageClass,
+			editItem,
+			deleteItem,
+			createSuccessor,
 			onUpdateSortBy,
 			updateSortOrder,
 			onUpdateCurrentPage,
 			onUpdateItemsPerPage,
+			mdiAccountMultipleOutline,
+			mdiPencilOutline,
+			mdiTrashCanOutline,
+			mdiArrowUpBoldOutline,
 		};
 	},
 });
