@@ -1,5 +1,5 @@
 <template>
-	<div class="mb-4">
+	<div class="mb-4" @keydown.up.down="onKeydownArrow">
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
 			:url="computedElement.content.url"
@@ -36,7 +36,7 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["delete:element"],
+	emits: ["delete:element", "move-keyboard:edit"],
 	setup(props, { emit }) {
 		const { modelValue, computedElement, isLoading } = useContentElementState(
 			props,
@@ -47,10 +47,18 @@ export default defineComponent({
 			modelValue.value.url = url;
 		};
 
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:edit", event);
+			}
+		};
+
 		return {
 			computedElement,
 			modelValue,
 			onCreateUrl,
+			onKeydownArrow,
 			isLoading,
 		};
 	},
