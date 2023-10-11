@@ -25,7 +25,14 @@
 			</v-alert>
 			<template>
 				<v-divider></v-divider>
-				<v-expansion-panels hover accordion flat multiple class="mb-9">
+				<v-expansion-panels
+					hover
+					accordion
+					flat
+					multiple
+					class="mb-9"
+					v-model="openedPanels"
+				>
 					<v-expansion-panel data-testid="general-settings-panel">
 						<v-expansion-panel-header hide-actions>
 							<template v-slot:default="{ open }">
@@ -191,6 +198,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -207,6 +215,7 @@ export default defineComponent({
 		const { t } = useI18n();
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const route = useRoute();
 
 		const headline: Ref<string> = ref(
 			t("pages.administration.school.index.title")
@@ -245,6 +254,27 @@ export default defineComponent({
 			{ immediate: true }
 		);
 
+		const openedPanels: ComputedRef<number[]> = computed(() => {
+			// those need to be in order of code appearance since index is needed for panels v-model
+			const panels: string[] = [
+				"general",
+				"privacy",
+				"terms",
+				"migration",
+				"authentication",
+				"tools",
+			];
+
+			let openedPanelsArr: number[] = [];
+			if (route.query.openPanels) {
+				openedPanelsArr = route.query.openPanels
+					.toString()
+					.split(",")
+					.map((panelName) => panels.findIndex((p) => p === panelName));
+			}
+
+			return openedPanelsArr;
+		});
 		const systems: ComputedRef<any[]> = computed(
 			() => schoolsModule.getSystems
 		);
@@ -277,6 +307,7 @@ export default defineComponent({
 			t,
 			headline,
 			breadcrumbs,
+			openedPanels,
 			school,
 			systems,
 			isLoading,

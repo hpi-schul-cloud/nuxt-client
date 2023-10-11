@@ -126,7 +126,7 @@
 					$t("pages.administration.school.index.authSystems.deleteAuthSystem")
 				}}
 			</h2>
-			<template slot="content">
+			<template #content>
 				<p class="text-md mt-2">
 					{{
 						$t(
