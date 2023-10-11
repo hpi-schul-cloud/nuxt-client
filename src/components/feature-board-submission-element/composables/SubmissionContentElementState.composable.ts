@@ -1,6 +1,5 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { authModule } from "@/store";
 import { ref, computed, onMounted, Ref } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { TeacherSubmission, StudentSubmission } from "../types/submission";
@@ -27,11 +26,8 @@ export const useSubmissionContentElementState = (
 		try {
 			const response = await fetchSubmissionItemsCall(id);
 
-			if (isStudent.value) {
-				submission.value = mapStudentSubmission(response);
-			} else {
-				submissions.value = mapTeacherSubmission(response);
-			}
+			submissions.value = mapTeacherSubmission(response);
+			submission.value = mapStudentSubmission(response);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -64,10 +60,6 @@ export const useSubmissionContentElementState = (
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}
 	};
-
-	const isStudent = computed(() => {
-		return authModule.getUserRoles.includes("student");
-	});
 
 	const isOverdue = computed(() => {
 		if (!modelValue.value.dueDate) {
