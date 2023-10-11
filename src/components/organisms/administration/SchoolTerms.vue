@@ -21,7 +21,16 @@
 				class="mb-6"
 				data-testid="progress-bar"
 			/>
-			<v-list-item v-else two-line dense class="mb-6" data-testid="terms-item">
+			<v-list-item
+				v-else
+				two-line
+				dense
+				class="mb-6"
+				data-testid="terms-item"
+				@click="downloadFile"
+				:class="{ 'item-no-action': !termsOfUse }"
+				:ripple="termsOfUse !== null"
+			>
 				<v-list-item-icon class="me-4">
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
@@ -158,6 +167,17 @@ export default defineComponent({
 			() => termsOfUseModule.getBusinessError
 		);
 
+		const downloadFile = () => {
+			if (termsOfUse.value) {
+				const link = document.createElement("a");
+				link.href = termsOfUse.value.consentData.data as string;
+				link.download = t(
+					"pages.administration.school.index.termsOfUse.fileName"
+				);
+				link.click();
+			}
+		};
+
 		const deleteFile = async () => {
 			await termsOfUseModule.deleteTermsOfUse();
 
@@ -180,6 +200,7 @@ export default defineComponent({
 			termsOfUse,
 			status,
 			error,
+			downloadFile,
 			deleteFile,
 			dayjs,
 			closeDialog,
@@ -192,5 +213,14 @@ export default defineComponent({
 .alert-text {
 	color: var(--v-black-base) !important;
 	line-height: var(--line-height-lg) !important;
+}
+
+.item-no-action {
+	&:hover {
+		cursor: default;
+	}
+	&:before {
+		background-color: unset;
+	}
 }
 </style>

@@ -21,7 +21,16 @@
 				class="mb-6"
 				data-testid="progress-bar"
 			/>
-			<v-list-item v-else two-line dense class="mb-6" data-testid="policy-item">
+			<v-list-item
+				v-else
+				two-line
+				dense
+				class="mb-6"
+				data-testid="policy-item"
+				@click="downloadFile"
+				:class="{ 'item-no-action': !privacyPolicy }"
+				:ripple="privacyPolicy !== null"
+			>
 				<v-list-item-icon class="me-4">
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
@@ -164,6 +173,17 @@ export default defineComponent({
 			() => privacyPolicyModule.getBusinessError
 		);
 
+		const downloadFile = () => {
+			if (privacyPolicy.value) {
+				const link = document.createElement("a");
+				link.href = privacyPolicy.value.consentData.data as string;
+				link.download = t(
+					"pages.administration.school.index.schoolPolicy.fileName"
+				);
+				link.click();
+			}
+		};
+
 		const deleteFile = async () => {
 			await privacyPolicyModule.deletePrivacyPolicy();
 
@@ -188,6 +208,7 @@ export default defineComponent({
 			privacyPolicy,
 			status,
 			error,
+			downloadFile,
 			deleteFile,
 			dayjs,
 			closeDialog,
@@ -200,5 +221,14 @@ export default defineComponent({
 .alert-text {
 	color: var(--v-black-base) !important;
 	line-height: var(--line-height-lg) !important;
+}
+
+.item-no-action {
+	&:hover {
+		cursor: default;
+	}
+	&:before {
+		background-color: unset;
+	}
 }
 </style>
