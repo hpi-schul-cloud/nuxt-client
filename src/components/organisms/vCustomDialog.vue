@@ -13,7 +13,7 @@
 			<v-card-text class="text--primary">
 				<slot name="content"></slot>
 			</v-card-text>
-			<v-card-actions v-if="hasButtons">
+			<v-card-actions v-if="hasButtons" class="pe-6">
 				<v-spacer></v-spacer>
 
 				<div class="button-section button-left">

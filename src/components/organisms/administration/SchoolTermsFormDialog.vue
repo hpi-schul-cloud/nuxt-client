@@ -1,12 +1,21 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :size="375" @dialog-closed="cancel">
+	<v-custom-dialog
+		:is-open="isOpen"
+		:size="375"
+		@dialog-closed="cancel"
+		has-buttons
+		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
+		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-disabled="!isValid"
+		@dialog-confirmed="submit"
+	>
 		<h4 class="text-h4 mt-0" slot="title">
 			{{ t("common.words.termsOfUse") }}
 		</h4>
-		<template slot="content">
+		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
 				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
-					<div class="replace-alert-text">
+					<div class="alert-text">
 						{{
 							t(
 								"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent"
@@ -41,32 +50,6 @@
 						>
 					</template>
 				</v-file-input>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<div class="button-section button-right">
-						<v-btn
-							class="dialog-closed"
-							depressed
-							text
-							@click="cancel"
-							data-testid="cancel-button"
-						>
-							{{ t("pages.administration.school.index.termsOfUse.cancel") }}
-						</v-btn>
-						<v-btn
-							class="icon-button dialog-confirmed px-6"
-							type="submit"
-							color="primary"
-							depressed
-							:disabled="!isValid"
-							@click.prevent="submit"
-							data-testid="submit-button"
-						>
-							<v-icon dense class="mr-1">$mdiFileReplaceOutline</v-icon>
-							{{ t("pages.administration.school.index.termsOfUse.replace") }}
-						</v-btn>
-					</div>
-				</v-card-actions>
 			</v-form>
 		</template>
 	</v-custom-dialog>
@@ -180,7 +163,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.replace-alert-text {
+.alert-text {
 	color: var(--v-black-base) !important;
 }
 
