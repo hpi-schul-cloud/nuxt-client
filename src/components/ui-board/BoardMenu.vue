@@ -31,24 +31,28 @@
 			</VBtn>
 		</template>
 		<VList>
-			<slot></slot>
+			<slot :scope="scope"></slot>
 		</VList>
 	</VMenu>
 </template>
 
 <script lang="ts">
 import { mdiDotsVertical } from "@mdi/js";
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, provide } from "vue";
+import { BoardMenuScope } from "./board-menu-scope";
+import { MENU_SCOPE } from "./injection-tokens";
 
 export default defineComponent({
 	name: "BoardMenu",
 	props: {
 		scope: {
-			type: String as PropType<"element" | "card" | "column" | "board">,
+			type: String as PropType<BoardMenuScope>,
 			required: true,
 		},
 	},
 	setup(props) {
+		provide(MENU_SCOPE, props.scope);
+
 		const hasBackground = computed<boolean>(
 			() => props.scope === "card" || props.scope === "element"
 		);
