@@ -70,10 +70,10 @@ export const useSubmissionContentElementState = (
 	});
 
 	const isOverdue = computed(() => {
-		return (
-			!modelValue.value.dueDate ||
-			new Date() > new Date(modelValue.value.dueDate)
-		);
+		if (!modelValue.value.dueDate) {
+			return false;
+		}
+		return new Date() > new Date(modelValue.value.dueDate);
 	});
 
 	onMounted(() => {
