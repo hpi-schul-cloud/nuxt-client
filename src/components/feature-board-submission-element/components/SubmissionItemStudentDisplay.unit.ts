@@ -77,7 +77,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			expect(skeleton.exists()).toBe(false);
 		});
 
-		it("should show form", () => {
+		it("should show checkbox", () => {
 			const loading = false;
 			const { wrapper } = setup(loading);
 
@@ -116,7 +116,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			});
 		});
 
-		describe("if submission can be edited", () => {
+		describe("if submission is open", () => {
 			it("should render the checkbox as not disabled", async () => {
 				const loading = false;
 				const { wrapper } = setup(loading);
@@ -129,7 +129,7 @@ describe("SubmissionItemStudentDisplay", () => {
 			});
 		});
 
-		describe("if submission can't be edited any more", () => {
+		describe("if submission is overdue", () => {
 			it("should render the checkbox as disabled", async () => {
 				const loading = false;
 				const isOverdue = true;
@@ -140,6 +140,19 @@ describe("SubmissionItemStudentDisplay", () => {
 					.props("disabled");
 
 				expect(disabled).toBe(true);
+			});
+		});
+
+		describe("if submission has no due date", () => {
+			it("should render the checkbox as not disabled", async () => {
+				const loading = false;
+				const { wrapper } = setup(loading);
+
+				const disabled = wrapper
+					.findComponent({ name: "v-checkbox" })
+					.props("disabled");
+
+				expect(disabled).toBe(false);
 			});
 		});
 	});

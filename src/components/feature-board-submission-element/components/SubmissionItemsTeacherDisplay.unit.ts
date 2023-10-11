@@ -12,7 +12,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		isOverdue = false
 	) => {
 		document.body.setAttribute("data-app", "true");
-		console.log(isOverdue);
 
 		const propsData = {
 			isOverdue,
@@ -178,5 +177,35 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			});
 			expect(chip.exists()).toBe(true);
 		});
+	});
+
+	describe("when a filter is clicked", () => {
+		let wrapper: Wrapper<Vue>;
+
+		beforeAll(() => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+			];
+			wrapper = setup(submissions).wrapper;
+		});
+
+		it.todo("should expand panel", async () => {
+			const chip = wrapper.findComponent({
+				ref: "v-chip-completed",
+			});
+			expect(chip.exists()).toBe(true);
+
+			await chip.trigger("click");
+
+			const tableContent = wrapper.find(".v-expansion-panel-content");
+			expect(tableContent.exists()).toBe(true);
+
+			// const submissionItems = tableContent.findAll("tr");
+
+			// expect(submissionItems).toHaveLength(1);
+		});
+
+		it.todo("should only show filtered submissions", async () => {});
 	});
 });
