@@ -1,13 +1,13 @@
+import { isVideoMimeType } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import { isVideoMimeType } from "../../../../utils/fileHelper";
 import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 
-jest.mock("../../../../utils/fileHelper");
+jest.mock("@/utils/fileHelper");
 const isVideoMimeTypeMock = jest.mocked(isVideoMimeType);
 
 describe("FileDisplay", () => {

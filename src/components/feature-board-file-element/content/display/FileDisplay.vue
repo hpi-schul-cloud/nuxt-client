@@ -34,7 +34,7 @@ import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { isVideoMimeType } from "../../../../utils/fileHelper";
+import { isVideoMimeType } from "@/utils/fileHelper";
 
 export default defineComponent({
 	name: "FileDisplay",
