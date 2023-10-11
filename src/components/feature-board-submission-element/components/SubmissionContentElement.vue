@@ -26,9 +26,6 @@
 				:loading="loading"
 				:submissions="submissions"
 				:isOverdue="isOverdue"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
 				<slot
