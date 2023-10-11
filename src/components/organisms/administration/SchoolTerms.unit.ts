@@ -15,8 +15,10 @@ import {
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
-import Vue from "vue";
 import { i18nMock } from "@@/tests/test-utils";
+import { downloadFile } from "@/utils/fileHelper";
+
+jest.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
 	let authModule: jest.Mocked<AuthModule>;
@@ -73,7 +75,7 @@ describe("SchoolTerms", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<Vue> = shallowMount(SchoolTerms, {
+		const wrapper: Wrapper<any> = shallowMount(SchoolTerms, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -165,9 +167,9 @@ describe("SchoolTerms", () => {
 		it("should change isSchoolTermsFormDialogOpen to true", () => {
 			const wrapper = setup();
 
-			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(false);
+			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(false);
 			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect((wrapper.vm as any).isSchoolTermsFormDialogOpen).toBe(true);
+			expect(wrapper.vm.isSchoolTermsFormDialogOpen).toBe(true);
 		});
 	});
 
@@ -175,9 +177,20 @@ describe("SchoolTerms", () => {
 		it("should change isDeleteTermsDialogOpen to true", () => {
 			const wrapper = setup();
 
-			expect((wrapper.vm as any).isDeleteTermsDialogOpen).toBe(false);
+			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(false);
 			wrapper.find('[data-testid="delete-button"]').trigger("click");
-			expect((wrapper.vm as any).isDeleteTermsDialogOpen).toBe(true);
+			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(true);
+		});
+	});
+
+	describe("when user clicks terms item", () => {
+		it("should call downloadFile method", () => {
+			const wrapper = setup();
+
+			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+
+			wrapper.find('[data-testid="terms-item"]').vm.$emit("click");
+			expect(downloadFileMock).toHaveBeenCalledTimes(1);
 		});
 	});
 
