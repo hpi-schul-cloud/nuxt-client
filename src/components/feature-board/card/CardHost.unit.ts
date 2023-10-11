@@ -16,6 +16,7 @@ import {
 	useCardState,
 	useEditMode,
 } from "@data-board";
+import { BoardMenuActionDelete } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { computed, ref } from "vue";
@@ -177,11 +178,9 @@ describe("CardHost", () => {
 			it("should emit 'delete:card'", async () => {
 				setup({ card: CARD_WITHOUT_ELEMENTS });
 
-				const firstMenuItem = wrapper.findComponent({
-					name: "BoardMenuAction",
-				});
+				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
 
-				firstMenuItem.vm.$emit("click");
+				deleteButton.vm.$emit("click");
 
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
