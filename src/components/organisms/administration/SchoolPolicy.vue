@@ -27,7 +27,7 @@
 				dense
 				class="mb-6"
 				data-testid="policy-item"
-				@click="downloadFile"
+				@click="downloadPolicy"
 				:class="{ 'item-no-action': !privacyPolicy }"
 				:ripple="privacyPolicy !== null"
 			>
@@ -132,6 +132,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { downloadFile } from "@/utils/fileHelper";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -171,14 +172,12 @@ export default defineComponent({
 			() => privacyPolicyModule.getBusinessError
 		);
 
-		const downloadFile = () => {
+		const downloadPolicy = () => {
 			if (privacyPolicy.value) {
-				const link = document.createElement("a");
-				link.href = privacyPolicy.value.consentData.data as string;
-				link.download = t(
-					"pages.administration.school.index.schoolPolicy.fileName"
+				downloadFile(
+					privacyPolicy.value.consentData.data as string,
+					t("pages.administration.school.index.schoolPolicy.fileName")
 				);
-				link.click();
 			}
 		};
 
@@ -206,7 +205,7 @@ export default defineComponent({
 			privacyPolicy,
 			status,
 			error,
-			downloadFile,
+			downloadPolicy,
 			deleteFile,
 			dayjs,
 			closeDialog,

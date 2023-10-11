@@ -27,7 +27,7 @@
 				dense
 				class="mb-6"
 				data-testid="terms-item"
-				@click="downloadFile"
+				@click="downloadTerms"
 				:class="{ 'item-no-action': !termsOfUse }"
 				:ripple="termsOfUse !== null"
 			>
@@ -128,6 +128,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { downloadFile } from "@/utils/fileHelper";
 
 export default defineComponent({
 	name: "SchoolTerms",
@@ -167,14 +168,12 @@ export default defineComponent({
 			() => termsOfUseModule.getBusinessError
 		);
 
-		const downloadFile = () => {
+		const downloadTerms = () => {
 			if (termsOfUse.value) {
-				const link = document.createElement("a");
-				link.href = termsOfUse.value.consentData.data as string;
-				link.download = t(
-					"pages.administration.school.index.termsOfUse.fileName"
+				downloadFile(
+					termsOfUse.value.consentData.data as string,
+					t("pages.administration.school.index.termsOfUse.fileName")
 				);
-				link.click();
 			}
 		};
 
@@ -200,7 +199,7 @@ export default defineComponent({
 			termsOfUse,
 			status,
 			error,
-			downloadFile,
+			downloadTerms,
 			deleteFile,
 			dayjs,
 			closeDialog,
