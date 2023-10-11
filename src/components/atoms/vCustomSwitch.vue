@@ -1,42 +1,38 @@
 <template>
 	<v-switch
-		:input-value="value"
+		:input-value="modelValue"
 		:label="label"
 		:aria-label="ariaLabel"
 		inset
 		flat
-		dense
+		density="compact"
 		:color="color"
 		v-bind="$attrs"
-		@change="($event) => $emit('input-changed', $event)"
+		@update:modelValue="updateValue"
 	></v-switch>
 </template>
 
-<script>
-export default {
-	model: {
-		prop: "value",
-		event: "input-changed",
+<script setup lang="ts">
+defineProps({
+	// v-switch accepts any type as a value, thus we shouldn't restrict it
+	modelValue: { required: true },
+	label: {
+		type: String,
+		required: true,
 	},
-	props: {
-		// v-switch accepts any type as a value, thus we shouldn't restrict it
-		// eslint-disable-next-line vue/require-prop-types
-		value: {
-			required: true,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		ariaLabel: {
-			type: String,
-			required: false,
-			default: () => "toggle switch",
-		},
-		color: {
-			type: String,
-			default: () => "primary",
-		},
+	ariaLabel: {
+		type: String,
+		required: false,
+		default: () => "toggle switch",
 	},
+	color: {
+		type: String,
+		default: () => "primary",
+	},
+});
+const emit = defineEmits(["update:modelValue"]);
+
+const updateValue = (value: unknown) => {
+	emit("update:modelValue", value);
 };
 </script>
