@@ -831,6 +831,7 @@
 	"components.cardElement.submissionElement.until": "hasta el",
 	"components.cardElement.submissionElement.open": "abrir",
 	"components.cardElement.submissionElement.expired": "expirado",
+	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",

@@ -823,6 +823,7 @@
 	"components.cardElement.submissionElement.until": "bis",
 	"components.cardElement.submissionElement.open": "offen",
 	"components.cardElement.submissionElement.expired": "abgelaufen",
+	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
@@ -1009,5 +1010,6 @@
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
-	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen..."
+	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
+	"util-validators-invalid-url": "Bitte geben Sie eine gültige URL ein."
 }

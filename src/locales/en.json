@@ -821,6 +821,7 @@
 	"components.cardElement.submissionElement.until": "until",
 	"components.cardElement.submissionElement.open": "open",
 	"components.cardElement.submissionElement.expired": "expired",
+	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.titleElement.placeholder": "Add title",
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",

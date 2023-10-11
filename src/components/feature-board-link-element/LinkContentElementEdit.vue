@@ -4,7 +4,7 @@
 			<v-text-field
 				v-model="url"
 				:rules="[rules.isRequired, rules.isValidUrl]"
-				label="Add URL todo-i18n"
+				:label="$t('components.cardElement.LinkElement.label')"
 				type="text"
 				:autofocus="true"
 				required
@@ -13,7 +13,7 @@
 				<template v-slot:append>
 					<button type="submit">
 						<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-						<span class="d-sr-only">Submit todo-i18n</span>
+						<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 					</button>
 				</template>
 			</v-text-field>
@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
 import { isRequired, isValidUrl } from "@util-validators";
 import { mdiCheck } from "@mdi/js";
 
@@ -39,11 +40,12 @@ export default defineComponent({
 	components: {},
 	emits: ["create:url"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const url = ref<string>("");
 		const form = ref<VuetifyFormApi | null>(null);
 		const rules = {
-			isRequired: isRequired("Error required"),
-			isValidUrl: isValidUrl("Error Url"),
+			isRequired: isRequired(t("common.validation.required2")),
+			isValidUrl: isValidUrl(t("util-validators-invalid-url")),
 		};
 
 		const onSubmit = (url: string) => {
