@@ -3,14 +3,7 @@
 		<div class="grey lighten-4 pa-4 rounded">
 			<SubmissionContentElementTitle />
 			<div class="menu">
-				<SubmissionContentElementMenu
-					:isFirstElement="isFirstElement"
-					:isLastElement="isLastElement"
-					:hasMultipleElements="hasMultipleElements"
-					@move-down:element="onMoveElementDown"
-					@move-up:element="onMoveElementUp"
-					@delete:element="onDeleteElement"
-				/>
+				<slot />
 			</div>
 			<date-time-picker
 				class="mt-1"
@@ -32,7 +25,6 @@
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import SubmissionContentElementMenu from "./SubmissionContentElementMenu.vue";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import { DateTimePicker } from "@feature-date-time-picker";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
@@ -40,7 +32,6 @@ import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
 	components: {
-		SubmissionContentElementMenu,
 		SubmissionContentElementTitle,
 		DateTimePicker,
 		SubmissionItemsTeacherDisplay,
@@ -61,30 +52,10 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"update:dueDate",
-	],
+	emits: ["update:dueDate"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
-
-		const onMoveElementDown = () => {
-			emit("move-down:element");
-		};
-
-		const onMoveElementUp = () => {
-			emit("move-up:element");
-		};
-
-		const onDeleteElement = () => {
-			emit("delete:element");
-		};
 
 		const onDateTimeInput = (dateTime: string) => {
 			emit("update:dueDate", dateTime);
@@ -92,9 +63,6 @@ export default defineComponent({
 
 		return {
 			t,
-			onMoveElementDown,
-			onMoveElementUp,
-			onDeleteElement,
 			onDateTimeInput,
 		};
 	},

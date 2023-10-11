@@ -1,52 +1,11 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-external-tool-element-edit-menu-move-up"
-			@click="onMoveElementUp"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseUp }}
-				</VIcon>
-			</template>
-
-			{{ $t("components.board.action.moveUp") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-external-tool-element-edit-menu-move-down"
-			@click="onMoveElementDown"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiArrowCollapseDown }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.moveDown") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			data-testid="board-external-tool-element-edit-menu-edit"
-			@click="onEdit"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiCogOutline }}
-				</VIcon>
-			</template>
+		<BoardMenuActionMoveUp @click="onMoveUp" />
+		<BoardMenuActionMoveDown @click="onMoveDown" />
+		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuAction
-			data-testid="board-external-tool-element-edit-menu-delete"
-			@click="onDelete"
-		>
-			<template #icon>
-				<VIcon>
-					{{ mdiTrashCanOutline }}
-				</VIcon>
-			</template>
-			{{ $t("components.board.action.delete") }}
-		</BoardMenuAction>
+		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -57,15 +16,22 @@ import {
 	mdiCogOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
+import {
+	BoardMenu,
+	BoardMenuAction,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	components: { BoardMenu, BoardMenuAction },
-	props: {
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
+	components: {
+		BoardMenu,
+		BoardMenuActionDelete,
+		BoardMenuAction,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
 	},
 	emits: [
 		"edit:element",
@@ -74,21 +40,13 @@ export default defineComponent({
 		"move-up:element",
 	],
 	setup(_, { emit }) {
-		const onEdit = () => {
-			emit("edit:element");
-		};
+		const onEdit = () => emit("edit:element");
 
-		const onDelete = () => {
-			emit("delete:element");
-		};
+		const onDelete = () => emit("delete:element");
 
-		const onMoveElementDown = () => {
-			emit("move-down:element");
-		};
+		const onMoveDown = () => emit("move-down:element");
 
-		const onMoveElementUp = () => {
-			emit("move-up:element");
-		};
+		const onMoveUp = () => emit("move-up:element");
 
 		return {
 			mdiArrowCollapseUp,
@@ -97,8 +55,8 @@ export default defineComponent({
 			mdiCogOutline,
 			onEdit,
 			onDelete,
-			onMoveElementDown,
-			onMoveElementUp,
+			onMoveDown,
+			onMoveUp,
 		};
 	},
 });
