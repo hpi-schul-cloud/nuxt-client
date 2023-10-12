@@ -9,22 +9,14 @@
 			<v-list-item-content class="py-0">
 				<div class="board-last-updated">
 					<span
-						class="subtitle-1 d-inline-block text-truncate grey--text text--darken-2"
-						:style="{ fontWeight: 400, padding: '10px 10px 0px 20px' }"
+						class="subtitle-1 text-edit d-inline-block text-truncate grey--text text--darken-2"
 						data-testid="board-drawing-element-display-last-updated"
 					>
 						{{ $t("components.cardElement.lastUpdatedAt") }}
 						{{ formattedLastUpdatedAt }}
 					</span>
 				</div>
-				<div
-					class="board-content"
-					:style="{
-						display: 'flex',
-						alignItems: 'center',
-						padding: '10px 0px 20px 20px',
-					}"
-				>
+				<div class="board-content">
 					<v-icon
 						class="grey--text text--darken-2"
 						data-testid="board-submission-element-display-icon"
@@ -33,8 +25,7 @@
 						$mdiPresentation
 					</v-icon>
 					<span
-						class="subtitle-1 d-inline-block text-truncate black--text text--darken-2"
-						:style="{ fontWeight: 700, marginLeft: '10px' }"
+						class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
 						data-testid="board-drawing-element-display-content"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
@@ -109,3 +100,21 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.text-edit {
+	font-weight: 400;
+	padding: 10px 10px 0px 20px;
+}
+
+.board-content {
+	display: flex;
+	align-items: center;
+	padding: 10px 0px 20px 20px;
+}
+
+.board-subtitle {
+	font-weight: 700;
+	margin-left: 10px;
+}
+</style>
+>
