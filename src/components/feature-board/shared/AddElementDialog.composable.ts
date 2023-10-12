@@ -95,7 +95,7 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (!envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
 		options.push({
 			icon: mdiPresentation,
 			label: "components.elementTypeSelection.elements.boardElement.subtitle",
@@ -116,7 +116,3 @@ export const useAddElementDialog = (
 		onElementClick,
 	};
 };
-
-function $t(arg0: string): string | undefined {
-	throw new Error("Function not implemented.");
-}

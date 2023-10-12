@@ -15,7 +15,7 @@ mockedInjectStrict.mockImplementation(() => {
 		getEnv: {
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
-			// FEATURE_TLDRAW_ENABLED: false,
+			FEATURE_TLDRAW_ENABLED: false,
 		},
 	};
 });
@@ -73,7 +73,7 @@ describe("ElementTypeSelection Composable", () => {
 			it("should return error", async () => {
 				const { addElementMock, elementType, error } = setup();
 
-				const { isDialogOpen, onElementClick } = useAddElementDialog(
+				const { onElementClick } = useAddElementDialog(
 					addElementMock,
 					{ value: { elements: [] } }
 				);
@@ -101,7 +101,7 @@ describe("ElementTypeSelection Composable", () => {
 			env: Partial<Envs> = {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-				FEATURE_TLDRAW_ENABLED: false,
+				FEATURE_TLDRAW_ENABLED: true,
 			}
 		) => {
 			const addElementMock = jest.fn();
