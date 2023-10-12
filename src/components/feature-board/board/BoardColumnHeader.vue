@@ -21,22 +21,9 @@
 					class="w-100"
 				></BoardAnyTitleInput>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
-						<template #icon>
-							<VIcon>
-								{{ mdiPencilOutline }}
-							</VIcon>
-						</template>
-						{{ $t("common.actions.edit") }}
-					</BoardMenuAction>
-					<BoardMenuAction @click="onTryDelete">
-						<template #icon>
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
-						</template>
-						{{ $t("components.board.action.delete") }}
-					</BoardMenuAction>
+					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+					<BoardMenuActionDelete @click="onDelete" :name="title">
+					</BoardMenuActionDelete>
 				</BoardMenu>
 			</div>
 			<VDivider aria-hidden="true" color="black"></VDivider>
@@ -51,8 +38,11 @@ import {
 	useEditMode,
 } from "@data-board";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+} from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
@@ -62,8 +52,9 @@ export default defineComponent({
 	components: {
 		BoardMenu,
 		BoardAnyTitleInput,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
+		BoardMenuActionDelete,
 	},
 	props: {
 		columnId: {
@@ -82,7 +73,6 @@ export default defineComponent({
 	emits: ["delete:column", "move:column-keyboard", "update:title"],
 	setup(props, { emit }) {
 		const columnId = toRef(props, "columnId");
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			columnId.value
 		);
@@ -106,16 +96,7 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onTryDelete = async () => {
-			const shouldDelete = await askDeleteConfirmation(
-				props.title,
-				"boardColumn"
-			);
-
-			if (shouldDelete) {
-				emit("delete:column", props.columnId);
-			}
-		};
+		const onDelete = () => emit("delete:column", props.columnId);
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 			emit("move:column-keyboard", event.code);
@@ -135,7 +116,7 @@ export default defineComponent({
 			mdiPencilOutline,
 			onStartEditMode,
 			onEndEditMode,
-			onTryDelete,
+			onDelete,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 		};
