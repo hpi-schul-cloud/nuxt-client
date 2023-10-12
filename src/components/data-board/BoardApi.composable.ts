@@ -11,6 +11,7 @@ import {
 	CreateContentElementBodyParams,
 	ExternalToolElementContent,
 	FileElementContent,
+	LinkElementContent,
 	RichTextElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContent,
@@ -73,7 +74,7 @@ export const useBoardApi = () => {
 		if (element.type === ContentElementType.RichText) {
 			return {
 				content: element.content as RichTextElementContent,
-				type: ContentElementType.RichText,
+				type: element.type,
 			};
 		}
 
@@ -95,6 +96,13 @@ export const useBoardApi = () => {
 			return {
 				content: element.content as ExternalToolElementContent,
 				type: ContentElementType.ExternalTool,
+			};
+		}
+
+		if (element.type === ContentElementType.Link) {
+			return {
+				content: element.content as LinkElementContent,
+				type: ContentElementType.Link,
 			};
 		}
 
