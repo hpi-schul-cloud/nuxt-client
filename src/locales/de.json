@@ -736,6 +736,8 @@
 	"pages.administration.school.index.authSystems.delete": "{system} löschen",
 	"pages.administration.classes.index.title": "Klassen verwalten",
 	"pages.administration.classes.index.add": "Klasse hinzufügen",
+	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
+	"pages.administration.classes.deleteDialog.content": "\"Möchten Sie wirklich die Klasse '<i>{itemName}</i>' löschen?\"",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements": "Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
 	"pages.content._id.metadata.author": "Autor",

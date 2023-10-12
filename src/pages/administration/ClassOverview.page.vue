@@ -23,17 +23,29 @@
 			@update:page="onUpdateCurrentPage"
 		>
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon size="small" @click="manageClass(item)">
+				<v-icon
+					v-if="hasPermission && !item.externalSourceName"
+					size="small"
+					@click="manageClass(item)"
+				>
 					{{ mdiAccountMultipleOutline }}
 				</v-icon>
-				<v-icon v-if="showIcons(item)" size="small" @click="editItem(item)">
+				<v-icon
+					v-if="hasPermission && !item.externalSourceName"
+					size="small"
+					@click="editItem(item)"
+				>
 					{{ mdiPencilOutline }}
 				</v-icon>
-				<v-icon v-if="showIcons(item)" size="small" @click="deleteItem(item)">
+				<v-icon
+					v-if="hasPermission && !item.externalSourceName"
+					size="small"
+					@click="onOpenDeleteDialog(item)"
+				>
 					{{ mdiTrashCanOutline }}
 				</v-icon>
 				<v-icon
-					v-if="showIcons(item)"
+					v-if="hasPermission && !item.externalSourceName"
 					size="small"
 					@click="createSuccessor(item)"
 				>
@@ -41,6 +53,51 @@
 				</v-icon>
 			</template>
 		</v-data-table>
+
+		<v-dialog
+			v-model="isDeleteDialogOpen"
+			max-width="360"
+			data-testId="delete-dialog"
+		>
+			<v-card :ripple="false">
+				<v-card-title>
+					<h2 class="text-h4 my-2">
+						{{ t("pages.administration.classes.deleteDialog.title") }}
+					</h2>
+				</v-card-title>
+				<v-card-text class="text--primary">
+					<RenderHTML
+						class="text-md mt-2"
+						:html="
+							t('pages.administration.classes.deleteDialog.content', {
+								itemName: selectedItemName,
+							})
+						"
+						component="p"
+					/>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						data-testId="dialog-cancel"
+						depressed
+						text
+						@click="onCloseDeleteDialog"
+					>
+						{{ t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						data-testId="dialog-confirm"
+						class="px-6"
+						color="primary"
+						depressed
+						@click="onDeleteClass"
+					>
+						{{ t("common.actions.confirm") }}
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 
 		<v-btn
 			class="my-5 button-start"
@@ -54,9 +111,17 @@
 </template>
 
 <script lang="ts">
+import { RenderHTML } from "@feature-render-html";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { computed, ComputedRef, defineComponent, onMounted } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	ref,
+	Ref,
+} from "vue";
 import GroupModule from "@/store/group";
 import { useI18n } from "@/composables/i18n.composable";
 import { Pagination } from "@/store/types/commons";
@@ -70,9 +135,12 @@ import {
 	mdiArrowUpBoldOutline,
 	mdiAccountMultipleOutline,
 } from "@mdi/js";
+import VueRouter from "vue-router";
+import { useRouter } from "vue-router/composables";
+import axios from "axios";
 
 export default defineComponent({
-	components: { DefaultWireframe },
+	components: { DefaultWireframe, RenderHTML },
 	setup() {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 
@@ -98,9 +166,27 @@ export default defineComponent({
 			() => groupModule.getClasses
 		);
 
-		const showIcons = (item: ClassInfo): boolean =>
-			!item.externalSourceName &&
-			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase());
+		const hasPermission: ComputedRef<boolean> = computed(() =>
+			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+		);
+
+		const isDeleteDialogOpen: Ref<boolean> = ref(false);
+
+		const selectedItem: Ref<ClassInfo | undefined> = ref();
+
+		const selectedItemName: ComputedRef<string> = computed(
+			() => selectedItem.value?.name || "???"
+		);
+
+		const onOpenDeleteDialog = (selectedClass: ClassInfo) => {
+			selectedItem.value = selectedClass;
+			isDeleteDialogOpen.value = true;
+		};
+
+		const onCloseDeleteDialog = () => {
+			selectedItem.value = undefined;
+			isDeleteDialogOpen.value = false;
+		};
 
 		const pagination: ComputedRef<Pagination> = computed(
 			() => groupModule.getPagination
@@ -130,29 +216,41 @@ export default defineComponent({
 			},
 			{
 				value: "actions",
-				text: "Hier könnte ihre Werbung stehen", // "actions"? does not exist in old table
-				sortable: false, // does it make sense to sort here?
+				text: "",
+				sortable: false,
 			},
 		];
 
-		const manageClass = (item: ClassInfo) => {
-			console.log("manage: ", item);
+		const router: VueRouter = useRouter();
+
+		const tempClassId = "6527efc4535aa75bf803e31b";
+
+		const manageClass = async (item: ClassInfo) => {
+			await router.push({
+				path: `/administration/classes/${tempClassId}/manage`,
+			}); //TODO replace tempClassId with item.id after N21-939 is merged
 		};
 
-		const editItem = (item: ClassInfo) => {
-			console.log(
-				"edit: ",
-				item,
-				authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-			);
+		const editItem = async (item: ClassInfo) => {
+			await router.push({
+				path: `/administration/classes/${tempClassId}/edit`,
+			}); //TODO replace tempClassId with item.id after N21-939 is merged
 		};
 
-		const deleteItem = (item: ClassInfo) => {
-			console.log("delete: ", item);
+		const onDeleteClass = async () => {
+			if (selectedItem.value) {
+				await axios.delete(`/v1/classes/${tempClassId}`);
+				await groupModule.loadClassesForSchool();
+				//TODO replace tempClassId with item.id after N21-939 is merged
+			}
+
+			onCloseDeleteDialog();
 		};
 
-		const createSuccessor = (item: ClassInfo) => {
-			console.log("successor: ", item);
+		const createSuccessor = async (item: ClassInfo) => {
+			await router.push({
+				path: `/administration/classes/${tempClassId}/createSuccessor`, //TODO replace tempClassId with item.id after N21-939 is merged
+			});
 		};
 
 		const onUpdateSortBy = async (sortBy: string) => {
@@ -187,14 +285,19 @@ export default defineComponent({
 			breadcrumbs,
 			headers,
 			classes,
-			showIcons,
+			hasPermission,
 			page,
 			sortBy,
 			sortOrder,
 			pagination,
+			selectedItem,
+			selectedItemName,
+			isDeleteDialogOpen,
+			onOpenDeleteDialog,
+			onCloseDeleteDialog,
+			onDeleteClass,
 			manageClass,
 			editItem,
-			deleteItem,
 			createSuccessor,
 			onUpdateSortBy,
 			updateSortOrder,

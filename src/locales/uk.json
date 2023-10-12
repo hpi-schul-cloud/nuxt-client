@@ -811,6 +811,8 @@
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
 	"pages.administration.classes.index.title": "Керувати заняттями",
 	"pages.administration.classes.index.add": "Додати клас",
+	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
+	"pages.administration.classes.deleteDialog.content": "\"Ви впевнені, що хочете видалити клас \"<i>{itemName}<i>\"?\"",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements": "Виберіть елементи, які треба додати до теми",
 	"pages.content._id.metadata.author": "Автор",
