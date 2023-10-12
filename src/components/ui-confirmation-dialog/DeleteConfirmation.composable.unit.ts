@@ -9,8 +9,9 @@ describe("DeleteConfirmation composable", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";
 			const titleString = `"${title}"`;
-			const type: "boardCard" | "boardElement" = "boardElement";
-			const typeString = `components.${type}`;
+			const typeLanguageKey:
+				| "components.boardCard"
+				| "components.boardElement" = "components.boardElement";
 			const titleTranslationKey = "ui-confirmation-dialog.ask-delete";
 			const data = {
 				elementId: "elementId",
@@ -35,8 +36,7 @@ describe("DeleteConfirmation composable", () => {
 				askConfirmation,
 				data,
 				translateMock,
-				type,
-				typeString,
+				typeLanguageKey,
 				title,
 				titleString,
 				titleTranslationKey,
@@ -52,19 +52,18 @@ describe("DeleteConfirmation composable", () => {
 				const {
 					askDeleteConfirmation,
 					translateMock,
-					type,
-					typeString,
+					typeLanguageKey,
 					title,
 					titleString,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteConfirmation(title, type);
+				await askDeleteConfirmation(title, typeLanguageKey);
 
-				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
+				expect(translateMock).toHaveBeenNthCalledWith(1, typeLanguageKey);
 				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
 					title: titleString,
-					type: typeString,
+					type: typeLanguageKey,
 				});
 			});
 
@@ -73,11 +72,11 @@ describe("DeleteConfirmation composable", () => {
 					askDeleteConfirmation,
 					askConfirmation,
 					title,
-					type,
+					typeLanguageKey,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteConfirmation(title, type);
+				await askDeleteConfirmation(title, typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
 					message: titleTranslationKey,
@@ -85,9 +84,9 @@ describe("DeleteConfirmation composable", () => {
 			});
 
 			it("should return result", async () => {
-				const { askDeleteConfirmation, title, type } = setup(true);
+				const { askDeleteConfirmation, title, typeLanguageKey } = setup(true);
 
-				const result = await askDeleteConfirmation(title, type);
+				const result = await askDeleteConfirmation(title, typeLanguageKey);
 
 				expect(result).toBe(true);
 			});
@@ -98,17 +97,16 @@ describe("DeleteConfirmation composable", () => {
 				const {
 					askDeleteConfirmation,
 					translateMock,
-					type,
-					typeString,
+					typeLanguageKey,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteConfirmation("", type);
+				await askDeleteConfirmation("", typeLanguageKey);
 
-				expect(translateMock).toHaveBeenNthCalledWith(1, typeString);
+				expect(translateMock).toHaveBeenNthCalledWith(1, typeLanguageKey);
 				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
 					title: "",
-					type: typeString,
+					type: typeLanguageKey,
 				});
 			});
 
@@ -116,11 +114,11 @@ describe("DeleteConfirmation composable", () => {
 				const {
 					askDeleteConfirmation,
 					askConfirmation,
-					type,
+					typeLanguageKey,
 					titleTranslationKey,
 				} = setup(true);
 
-				await askDeleteConfirmation("", type);
+				await askDeleteConfirmation("", typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
 					message: titleTranslationKey,
@@ -128,9 +126,9 @@ describe("DeleteConfirmation composable", () => {
 			});
 
 			it("should return result", async () => {
-				const { askDeleteConfirmation, type } = setup(true);
+				const { askDeleteConfirmation, typeLanguageKey } = setup(true);
 
-				const result = await askDeleteConfirmation("", type);
+				const result = await askDeleteConfirmation("", typeLanguageKey);
 
 				expect(result).toBe(true);
 			});
