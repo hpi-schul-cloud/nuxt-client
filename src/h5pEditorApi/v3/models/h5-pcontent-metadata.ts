@@ -25,13 +25,12 @@ export interface H5PContentMetadata {
      * @type {string}
      * @memberof H5PContentMetadata
      */
-    title: string;
+    'title': string;
     /**
      * 
      * @type {string}
      * @memberof H5PContentMetadata
      */
-    mainLibrary: string;
+    'mainLibrary': string;
 }
-
 
