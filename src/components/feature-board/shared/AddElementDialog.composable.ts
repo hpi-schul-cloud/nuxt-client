@@ -5,6 +5,7 @@ import {
 	mdiPresentation,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
+	mdiLink,
 	mdiPuzzleOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
@@ -86,6 +87,15 @@ export const useAddElementDialog = (
 		});
 	}
 
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		options.push({
+			icon: mdiLink,
+			label: "components.elementTypeSelection.elements.linkElement.subtitle",
+			action: () => onElementClick(ContentElementType.Link),
+			testId: "create-element-link",
+		});
+	}
+
 	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
 		options.push({
 			icon: mdiPresentation,
@@ -94,7 +104,7 @@ export const useAddElementDialog = (
 			testId: "create-element-drawing-element",
 		});
 	}
-
+	
 	const askType = () => {
 		elementTypeOptions.value = options;
 		isDialogOpen.value = true;

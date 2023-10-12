@@ -33,25 +33,13 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
-							<template #icon>
-								<VIcon>
-									{{ mdiPencilOutline }}
-								</VIcon>
-							</template>
-							{{ $t("common.actions.edit") }}
-						</BoardMenuAction>
-						<BoardMenuAction
+						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+						<BoardMenuActionDelete
 							@click="onDeleteCard"
 							data-test-id="board-menu-action-delete"
+							:name="card.title"
 						>
-							<template #icon>
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
-							</template>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
+						</BoardMenuActionDelete>
 					</BoardMenu>
 				</div>
 
@@ -73,7 +61,22 @@
 </template>
 
 <script lang="ts">
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "@/types/board/DragAndDrop";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useCardState,
+	useEditMode,
+} from "@data-board";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+} from "@ui-board";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -81,25 +84,12 @@ import {
 	watchDebounced,
 } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
-import ContentElementList from "./ContentElementList.vue";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
-import {
-	useEditMode,
-	useCardState,
-	useBoardPermissions,
-	useBoardFocusHandler,
-} from "@data-board";
-import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
-} from "@/types/board/DragAndDrop";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -107,10 +97,11 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		BoardMenuActionDelete,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -142,7 +133,6 @@ export default defineComponent({
 			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { askType } = useAddElementDialog(addElement, card);
 
@@ -151,32 +141,15 @@ export default defineComponent({
 		};
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
-		const onDeleteCard = async () => {
-			const shouldDelete = await askDeleteConfirmation(
-				card.value?.title,
-				"boardCard"
-			);
+		const onDeleteCard = () => emit("delete:card", card.value?.id);
 
-			if (shouldDelete) {
-				emit("delete:card", card.value?.id);
-			}
-		};
+		const onAddElement = () => askType();
 
-		const onAddElement = () => {
-			askType();
-		};
+		const onDeleteElement = (elementId: string) => deleteElement(elementId);
 
-		const onDeleteElement = (elementId: string) => {
-			deleteElement(elementId);
-		};
+		const onStartEditMode = () => startEditMode();
 
-		const onStartEditMode = () => {
-			startEditMode();
-		};
-
-		const onEndEditMode = () => {
-			stopEditMode();
-		};
+		const onEndEditMode = () => stopEditMode();
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
 			await moveElementDown(payload);
@@ -234,8 +207,6 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},
@@ -265,4 +236,3 @@ export default defineComponent({
 	outline-offset: 0;
 }
 </style>
-@data-board"; @data-board"; @data-board";

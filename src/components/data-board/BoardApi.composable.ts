@@ -12,6 +12,7 @@ import {
 	DrawingElementContent,
 	ExternalToolElementContent,
 	FileElementContent,
+	LinkElementContent,
 	RichTextElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContent,
@@ -74,7 +75,7 @@ export const useBoardApi = () => {
 		if (element.type === ContentElementType.RichText) {
 			return {
 				content: element.content as RichTextElementContent,
-				type: ContentElementType.RichText,
+				type: element.type,
 			};
 		}
 
@@ -99,13 +100,19 @@ export const useBoardApi = () => {
 			};
 		}
 
+		if (element.type === ContentElementType.Link) {
+			return {
+				content: element.content as LinkElementContent,
+				type: ContentElementType.Link,
+			};
+		}
+
 		if (element.type === ContentElementType.Drawing) {
 			return {
 				content: element.content as DrawingElementContent,
 				type: ContentElementType.Drawing,
 			};
 		}
-
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
