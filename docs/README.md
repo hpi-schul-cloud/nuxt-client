@@ -13,20 +13,23 @@ First steps to get your Frontend-Server up and running.
 
 Code Conventions defined for the project like **file naming**, **directory structure** , **data-testid(s)** and others...
 
+**[Project Structure](./2_Projectstructure.md)**
 
-**[Git Conventions](./2_GitConventions.md)**
+Project structures defined for the project like **definition of building-blocks**, **types of building-blocks** and others
+
+**[Git Conventions](./3_GitConventions.md)**
 
 Git Conventions on how to name your **branches** and how to create and name **PullRequests**.
 
-**[How To...](./3_HowTo.md)**
+**[How To...](./4_HowTo.md)**
 
 Collection of information on how to use **Feature Flags**, the **generated API**, **user-permissions on pages**, **exception handling** and more.
 
-**[Writing Tests](./4_WritingTests.md)**
+**[Writing Tests](./5_WritingTests.md)**
 
 Detailed description on **how to write tests**.
 
-**[Accessibility](./5_Accessibility.md)**
+**[Accessibility](./6_Accessibility.md)**
 
 Collection of information and links on how we want to achieve a great accessibility.
 
