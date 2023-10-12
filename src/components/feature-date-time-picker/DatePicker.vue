@@ -39,7 +39,6 @@
 				first-day-of-week="1"
 				:min="minDate"
 				:max="maxDate"
-				show-adjacent-months
 				@input="onInput"
 			/>
 		</v-menu>
