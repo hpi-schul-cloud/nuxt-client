@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode">
+		<FileDisplay
+			:file-properties="fileProperties"
+			:is-edit-mode="isEditMode"
+			@video-error="onError"
+		>
 			<slot></slot>
 		</FileDisplay>
 		<FileInputs
@@ -10,12 +14,12 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
-		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
+		<FileAlert :alerts="alerts" />
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, Component, Ref, ref } from "vue";
 import FileAlert from "../content/alert/FileAlert.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
@@ -47,12 +51,19 @@ export default defineComponent({
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 		const previewStatus = computed(() => props.fileProperties.previewStatus);
+		const alerts: Ref<Component[]> = ref([]);
+
+		const onError = (payload: Component) => {
+			alerts.value.push(payload);
+		};
 
 		return {
 			onFetchFile,
 			previewStatus,
 			onUpdateText,
 			onUpdateCaption,
+			alerts,
+			onError,
 		};
 	},
 });

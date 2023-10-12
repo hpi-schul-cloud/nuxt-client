@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<video controls class="video" loading="lazy" :src="src" :alt="name" />
+		<video
+			controls
+			ref="videoRef"
+			class="video"
+			loading="lazy"
+			:src="src"
+			:alt="name"
+		/>
 		<ContentElementBar class="menu">
 			<template #menu><slot></slot></template>
 		</ContentElementBar>
@@ -8,8 +15,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
+import VideoFormatAlert from "./VideoFormatAlert.vue";
 
 export default defineComponent({
 	name: "VideoDisplay",
@@ -18,6 +26,20 @@ export default defineComponent({
 		name: { type: String, required: true },
 	},
 	components: { ContentElementBar },
+	emits: ["error"],
+	setup(props, { emit }) {
+		const videoRef = ref<HTMLVideoElement | null>(null);
+
+		onMounted(() => {
+			videoRef.value?.addEventListener("error", () => {
+				emit("error", VideoFormatAlert);
+			});
+		});
+
+		return {
+			videoRef,
+		};
+	},
 });
 </script>
 <style scoped>
