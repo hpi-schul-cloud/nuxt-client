@@ -22,17 +22,21 @@
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
-			<template v-if="showIcons" v-slot:[`item.actions`]="{ item }">
+			<template v-slot:[`item.actions`]="{ item }">
 				<v-icon size="small" @click="manageClass(item)">
 					{{ mdiAccountMultipleOutline }}
 				</v-icon>
-				<v-icon size="small" @click="editItem(item)">
+				<v-icon v-if="showIcons(item)" size="small" @click="editItem(item)">
 					{{ mdiPencilOutline }}
 				</v-icon>
-				<v-icon size="small" @click="deleteItem(item)">
+				<v-icon v-if="showIcons(item)" size="small" @click="deleteItem(item)">
 					{{ mdiTrashCanOutline }}
 				</v-icon>
-				<v-icon size="small" @click="createSuccessor(item)">
+				<v-icon
+					v-if="showIcons(item)"
+					size="small"
+					@click="createSuccessor(item)"
+				>
 					{{ mdiArrowUpBoldOutline }}
 				</v-icon>
 			</template>
@@ -94,7 +98,7 @@ export default defineComponent({
 			() => groupModule.getClasses
 		);
 
-		/*const showIcons = (item: ClassInfo): boolean => {
+		const showIcons = (item: ClassInfo): boolean => {
 			try {
 				return (
 					!item.externalSourceName &&
@@ -103,15 +107,15 @@ export default defineComponent({
 			} catch (error) {
 				return false;
 			}
-		};*/
+		};
 
-		const showIcons: ComputedRef<boolean> = computed((item) => {
+		/*const showIcons: ComputedRef<boolean> = computed((item) => {
 			console.log(item);
 			return (
 				!item.externalSourceName &&
 				authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 			);
-		});
+		});*/
 
 		const pagination: ComputedRef<Pagination> = computed(
 			() => groupModule.getPagination
