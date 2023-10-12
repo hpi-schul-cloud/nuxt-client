@@ -11,7 +11,7 @@ import {
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
 } from "@@/tests/test-utils";
-import { ClassInfo } from "./types/class-info";
+import { ClassInfo, ClassRootType } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
 import GroupModule from "./group";
@@ -91,7 +91,7 @@ describe("GroupModule", () => {
 						name: "3a",
 						externalSourceName: "Klasse",
 						teachers: ["Carlie"],
-						type: ClassInfoResponseTypeEnum.Class,
+						type: ClassRootType.Class,
 						id: "id",
 					},
 				];
