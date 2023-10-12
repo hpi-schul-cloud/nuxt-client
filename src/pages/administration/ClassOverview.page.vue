@@ -98,24 +98,9 @@ export default defineComponent({
 			() => groupModule.getClasses
 		);
 
-		const showIcons = (item: ClassInfo): boolean => {
-			try {
-				return (
-					!item.externalSourceName &&
-					authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-				);
-			} catch (error) {
-				return false;
-			}
-		};
-
-		/*const showIcons: ComputedRef<boolean> = computed((item) => {
-			console.log(item);
-			return (
-				!item.externalSourceName &&
-				authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-			);
-		});*/
+		const showIcons = (item: ClassInfo): boolean =>
+			!item.externalSourceName &&
+			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase());
 
 		const pagination: ComputedRef<Pagination> = computed(
 			() => groupModule.getPagination
