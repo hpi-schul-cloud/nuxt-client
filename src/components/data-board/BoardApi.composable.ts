@@ -3,21 +3,23 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
-	ColumnResponse,
-	ContentElementType,
-	CreateContentElementBodyParams,
-	FileElementContent,
-	RichTextElementContent,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
-	RoomsApiFactory,
 	BoardResponse,
 	CardResponse,
+	ColumnResponse,
+	ContentElementType,
+	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	CreateContentElementBodyParams,
+	ExternalToolElementContent,
+	FileElementContent,
+	LinkElementContent,
+	RichTextElementContent,
+	RoomsApiFactory,
 	SubmissionContainerElementContent,
 } from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { AxiosPromise } from "axios";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AxiosPromise } from "axios";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -72,7 +74,7 @@ export const useBoardApi = () => {
 		if (element.type === ContentElementType.RichText) {
 			return {
 				content: element.content as RichTextElementContent,
-				type: ContentElementType.RichText,
+				type: element.type,
 			};
 		}
 
@@ -87,6 +89,20 @@ export const useBoardApi = () => {
 			return {
 				content: element.content as SubmissionContainerElementContent,
 				type: ContentElementType.SubmissionContainer,
+			};
+		}
+
+		if (element.type === ContentElementType.ExternalTool) {
+			return {
+				content: element.content as ExternalToolElementContent,
+				type: ContentElementType.ExternalTool,
+			};
+		}
+
+		if (element.type === ContentElementType.Link) {
+			return {
+				content: element.content as LinkElementContent,
+				type: ContentElementType.Link,
 			};
 		}
 
@@ -159,9 +175,8 @@ export const useBoardApi = () => {
 	const getContextInfo = async (
 		boardId: string
 	): Promise<ContextInfo | undefined> => {
-		const contextResponse = await boardApi.boardControllerGetBoardContext(
-			boardId
-		);
+		const contextResponse =
+			await boardApi.boardControllerGetBoardContext(boardId);
 		if (contextResponse.status !== 200) {
 			return undefined;
 		}

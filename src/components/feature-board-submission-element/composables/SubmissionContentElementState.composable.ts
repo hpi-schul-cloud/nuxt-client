@@ -1,0 +1,75 @@
+import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { ref, computed, onMounted, Ref } from "vue";
+import { SubmissionsResponse } from "@/serverApi/v3";
+
+export const useSubmissionContentElementState = (
+	id: string,
+	modelValue: Ref<{ dueDate?: string }>
+) => {
+	const { notifyWithTemplate } = useErrorHandler();
+	const {
+		fetchSubmissionItemsCall,
+		createSubmissionItemCall,
+		updateSubmissionItemCall,
+	} = useSubmissionItemApi();
+	const submissions = ref<SubmissionsResponse>({
+		submissionItemsResponse: [],
+		users: [],
+	});
+	const loading = ref(true);
+
+	const fetchSubmissionItems = async (id: string): Promise<void> => {
+		try {
+			submissions.value = await fetchSubmissionItemsCall(id);
+		} catch (error) {
+			notifyWithTemplate("notLoaded", "boardElement")();
+		} finally {
+			loading.value = false;
+		}
+	};
+
+	const createSubmissionItem = async (completed: boolean) => {
+		try {
+			const response = await createSubmissionItemCall(id, completed);
+			submissions.value.submissionItemsResponse.push(response);
+		} catch (error) {
+			notifyWithTemplate("notCreated", "boardElement")();
+		}
+	};
+
+	const updateSubmissionItem = async (completed: boolean) => {
+		if (submissions.value.submissionItemsResponse.length === 0) {
+			await createSubmissionItem(completed);
+			return;
+		}
+		try {
+			await updateSubmissionItemCall(
+				submissions.value.submissionItemsResponse[0].id,
+				completed
+			);
+			submissions.value.submissionItemsResponse[0].completed = completed;
+		} catch (error) {
+			notifyWithTemplate("notUpdated", "boardElement")();
+		}
+	};
+
+	const isOverdue = computed(() => {
+		return (
+			!modelValue.value.dueDate ||
+			new Date() > new Date(modelValue.value.dueDate)
+		);
+	});
+
+	onMounted(() => {
+		fetchSubmissionItems(id);
+	});
+
+	return {
+		submissions,
+		fetchSubmissionItems,
+		updateSubmissionItem,
+		loading,
+		isOverdue,
+	};
+};

@@ -1,6 +1,7 @@
 import { Layouts } from "@/layouts/types";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import {
 	isEnum,
 	isMongoId,
@@ -12,7 +13,6 @@ import {
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
@@ -96,6 +96,12 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list"]),
 	},
 	{
 		path: "/cfiles",
@@ -221,6 +227,9 @@ export const routes: Array<RouteConfig> = [
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
+		props: (route: Route) => ({
+			boardId: route.params.id,
+		}),
 	},
 	{
 		path: "/rooms-list",

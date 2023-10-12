@@ -29,7 +29,6 @@ import { useTitle } from "@vueuse/core";
 import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ErrorContent",
 	components: { PermissionErrorSvg },

@@ -1,6 +1,6 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import ContentElementChips from "./chips/ContentElementChips.vue";
+import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
 
@@ -39,10 +39,10 @@ describe("ContentElementFooter", () => {
 		expect(fileContentElement.exists()).toBe(true);
 	});
 
-	it("should render chips component with proper props", () => {
+	it("should render attributes component with proper props", () => {
 		const { wrapper, fileNameProp, fileSizeProp } = setup();
 
-		const props = wrapper.findComponent(ContentElementChips).attributes();
+		const props = wrapper.findComponent(FileAttributes).attributes();
 
 		expect(props.filename).toEqual(fileNameProp);
 		expect(props.filesize).toBe(fileSizeProp.toString());
