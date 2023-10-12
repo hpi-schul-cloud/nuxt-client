@@ -30,9 +30,6 @@
 			<ExternalToolElementMenu
 				v-if="isEditMode"
 				ref="externalToolElementMenu"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
 				@move-down:element="onMoveElementDown"
 				@move-up:element="onMoveElementUp"
 				@delete:element="onDeleteElement"
@@ -59,7 +56,6 @@ import { ContextExternalTool } from "@/store/external-tool/context-external-tool
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { mdiPuzzleOutline } from "@mdi/js";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	computed,
 	ComputedRef,
@@ -84,9 +80,6 @@ export default defineComponent({
 		},
 		cardId: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
@@ -96,7 +89,6 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const { modelValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
@@ -150,16 +142,7 @@ export default defineComponent({
 			emit("move-up:edit");
 		};
 
-		const onDeleteElement = async () => {
-			const shouldDelete = await askDeleteConfirmation(
-				toolDisplayData.value?.name,
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
-			}
-		};
+		const onDeleteElement = () => emit("delete:element", element.value.id);
 
 		const onEditElement = () => {
 			isConfigurationDialogOpen.value = true;

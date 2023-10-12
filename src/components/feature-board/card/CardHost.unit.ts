@@ -16,6 +16,7 @@ import {
 	useCardState,
 	useEditMode,
 } from "@data-board";
+import { BoardMenuActionDelete } from "@ui-board";
 import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -202,11 +203,9 @@ describe("CardHost", () => {
 			it("should emit 'delete:card'", async () => {
 				setup({ card: CARD_WITHOUT_ELEMENTS });
 
-				const firstMenuItem = wrapper.findComponent({
-					name: "BoardMenuAction",
-				});
+				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
 
-				firstMenuItem.vm.$emit("click");
+				deleteButton.vm.$emit("click");
 
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();

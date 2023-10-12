@@ -8,6 +8,7 @@ import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { createMock } from "@golevelup/ts-jest";
@@ -28,6 +29,7 @@ describe("ContentElementList", () => {
 		const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: createMock<Envs>({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			}),
 		});
@@ -52,7 +54,7 @@ describe("ContentElementList", () => {
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
 
-		it.each([
+		const elementComponents = [
 			{
 				elementType: ContentElementType.RichText,
 				component: RichTextContentElement,
@@ -62,6 +64,10 @@ describe("ContentElementList", () => {
 				component: FileContentElement,
 			},
 			{
+				elementType: ContentElementType.Link,
+				component: LinkContentElement,
+			},
+			{
 				elementType: ContentElementType.SubmissionContainer,
 				component: SubmissionContentElement,
 			},
@@ -69,8 +75,10 @@ describe("ContentElementList", () => {
 				elementType: ContentElementType.ExternalTool,
 				component: ExternalToolElement,
 			},
-		])(
-			"should render elements based on type %s",
+		];
+
+		it.each(elementComponents)(
+			"should render $elementType-elements",
 			({ elementType, component }) => {
 				setup({
 					elements: [{ type: elementType } as AnyContentElement],
@@ -81,25 +89,8 @@ describe("ContentElementList", () => {
 			}
 		);
 
-		it.each([
-			{
-				elementType: ContentElementType.RichText,
-				component: RichTextContentElement,
-			},
-			{
-				elementType: ContentElementType.File,
-				component: FileContentElement,
-			},
-			{
-				elementType: ContentElementType.SubmissionContainer,
-				component: SubmissionContentElement,
-			},
-			{
-				elementType: ContentElementType.ExternalTool,
-				component: ExternalToolElement,
-			},
-		])(
-			"should propagate isEditMode to child elements",
+		it.each(elementComponents)(
+			"should propagate isEditMode to children of $elementType-elements",
 			({ elementType, component }) => {
 				const isEditModeResult = true;
 

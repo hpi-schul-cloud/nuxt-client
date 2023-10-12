@@ -426,49 +426,6 @@ describe("ExternalToolElement", () => {
 				expect(menu.exists()).toEqual(false);
 			});
 		});
-
-		describe("when deleting the element", () => {
-			const setup = () => {
-				const contextExternalToolId = "context-external-tool-id";
-				const toolDisplayData = externalToolDisplayDataFactory.build({
-					contextExternalToolId,
-					logoUrl: "logo-url",
-				});
-
-				const { wrapper, useDeleteConfirmationDialogReturnValue } = getWrapper(
-					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
-							content: { contextExternalToolId },
-						},
-						isEditMode: true,
-					},
-					toolDisplayData
-				);
-
-				return {
-					wrapper,
-					useDeleteConfirmationDialogReturnValue,
-					toolDisplayData,
-				};
-			};
-
-			it("should display a delete dialog", () => {
-				const {
-					wrapper,
-					useDeleteConfirmationDialogReturnValue,
-					toolDisplayData,
-				} = setup();
-
-				const menu = wrapper.findComponent({ ref: "externalToolElementMenu" });
-
-				menu.vm.$emit("delete:element");
-
-				expect(
-					useDeleteConfirmationDialogReturnValue.askDeleteConfirmation
-				).toHaveBeenCalledWith(toolDisplayData.name, "boardElement");
-			});
-		});
 	});
 
 	describe("Dialog", () => {

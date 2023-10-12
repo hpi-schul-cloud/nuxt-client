@@ -29,10 +29,9 @@
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],
-			"@feature-board-content-element-menu": [
-				"src/components/feature-board-content-element-menu"
+			"@feature-board-link-element": [
+				"src/components/feature-board-link-element"
 			],
-			
 			"@feature-board-external-tool-element": [
 				"src/components/feature-board-external-tool-element"
 			],
@@ -44,6 +43,7 @@
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
+			"@util-validators": ["src/components/util-validators"],
 			"@page-board": ["src/components/page-board"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]

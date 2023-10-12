@@ -33,25 +33,13 @@
 
 				<div class="board-menu" :class="boardMenuClasses">
 					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction v-if="!isEditMode" @click="onStartEditMode">
-							<template #icon>
-								<VIcon>
-									{{ mdiPencilOutline }}
-								</VIcon>
-							</template>
-							{{ $t("common.actions.edit") }}
-						</BoardMenuAction>
-						<BoardMenuAction
+						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+						<BoardMenuActionDelete
 							@click="onDeleteCard"
 							data-test-id="board-menu-action-delete"
+							:name="card.title"
 						>
-							<template #icon>
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
-							</template>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
+						</BoardMenuActionDelete>
 					</BoardMenu>
 				</div>
 
@@ -86,9 +74,11 @@ import {
 	useEditMode,
 } from "@data-board";
 import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+} from "@ui-board";
 import {
 	useDebounceFn,
 	useElementHover,
@@ -109,10 +99,11 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
+		BoardMenuActionDelete,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -144,7 +135,6 @@ export default defineComponent({
 			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { askType } = useAddElementDialog(addElement);
 
@@ -153,32 +143,15 @@ export default defineComponent({
 		};
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
-		const onDeleteCard = async () => {
-			const shouldDelete = await askDeleteConfirmation(
-				card.value?.title,
-				"boardCard"
-			);
+		const onDeleteCard = () => emit("delete:card", card.value?.id);
 
-			if (shouldDelete) {
-				emit("delete:card", card.value?.id);
-			}
-		};
+		const onAddElement = () => askType();
 
-		const onAddElement = () => {
-			askType();
-		};
+		const onDeleteElement = (elementId: string) => deleteElement(elementId);
 
-		const onDeleteElement = (elementId: string) => {
-			deleteElement(elementId);
-		};
+		const onStartEditMode = () => startEditMode();
 
-		const onStartEditMode = () => {
-			startEditMode();
-		};
-
-		const onEndEditMode = () => {
-			stopEditMode();
-		};
+		const onEndEditMode = () => stopEditMode();
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
 			await moveElementDown(payload);
@@ -242,8 +215,6 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
 			addTextAfterTitle,
 		};
 	},
@@ -273,4 +244,3 @@ export default defineComponent({
 	outline-offset: 0;
 }
 </style>
-@data-board"; @data-board"; @data-board";
