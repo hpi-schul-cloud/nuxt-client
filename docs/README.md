@@ -13,7 +13,7 @@ First steps to get your Frontend-Server up and running.
 
 Code Conventions defined for the project like **file naming**, **directory structure** , **data-testid(s)** and others...
 
-**[Project Structure](./2_Projectstructure.md)**
+**[Project Structure](./2_ProjectStructure.md)**
 
 Project structures defined for the project like **definition of building-blocks**, **types of building-blocks** and others
 
