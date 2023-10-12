@@ -56,6 +56,7 @@
 				</div>
 
 				<ContentElementList
+					:card-id="cardId"
 					:elements="card.elements"
 					:isEditMode="isEditMode"
 					@delete:element="onDeleteElement"
@@ -73,33 +74,34 @@
 </template>
 
 <script lang="ts">
+import {
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
+} from "@/types/board/DragAndDrop";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useCardState,
+	useEditMode,
+} from "@data-board";
+import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { BoardMenu, BoardMenuAction } from "@ui-board";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	useDebounceFn,
 	useElementHover,
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, ref, toRef } from "vue";
-import ContentElementList from "./ContentElementList.vue";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
-import {
-	useEditMode,
-	useCardState,
-	useBoardPermissions,
-	useBoardFocusHandler,
-} from "@data-board";
-import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
-} from "@/types/board/DragAndDrop";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
+import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -213,6 +215,12 @@ export default defineComponent({
 				maxWait: 2000,
 			}
 		);
+
+		onMounted(async () => {
+			const { fetchDisplayData } = useSharedExternalToolElementDisplayState();
+
+			await fetchDisplayData(props.cardId);
+		});
 
 		return {
 			boardMenuClasses,

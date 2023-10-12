@@ -56,6 +56,7 @@
 				:isFirstElement="firstElementId === element.id"
 				:isLastElement="lastElementId === element.id"
 				:hasMultipleElements="hasMultipleElements"
+				:card-id="cardId"
 				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 				@move-down:edit="onMoveElementDown(index, element)"
 				@move-up:edit="onMoveElementUp(index, element)"
@@ -93,6 +94,10 @@ export default defineComponent({
 		ContentElementMenu,
 	},
 	props: {
+		cardId: {
+			type: String,
+			required: true,
+		},
 		elements: {
 			type: Array as PropType<AnyContentElement[]>,
 			required: true,

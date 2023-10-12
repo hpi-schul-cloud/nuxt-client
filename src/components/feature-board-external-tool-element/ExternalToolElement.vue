@@ -39,19 +39,25 @@
 				@edit:element="onEditElement"
 			></ExternalToolElementMenu>
 		</div>
+		<ExternalToolElementConfigurationDialog
+			:is-open="isConfigurationDialogOpen"
+			:card-id="cardId"
+			:config-id="element.content.contextExternalToolId"
+			@close="onConfigurationDialogClose"
+			@save="onConfigurationDialogSave"
+			ref="board-external-tool-element-configuration-dialog"
+		>
+		</ExternalToolElementConfigurationDialog>
 	</v-card>
 </template>
 
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { useBoardFocusHandler } from "@data-board";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
@@ -63,15 +69,20 @@ import {
 	ref,
 	toRef,
 } from "vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 export default defineComponent({
-	components: { ExternalToolElementMenu },
+	components: {
+		ExternalToolElementConfigurationDialog,
+		ExternalToolElementMenu,
+	},
 	props: {
 		element: {
 			type: Object as PropType<ExternalToolElementResponse>,
 			required: true,
 		},
+		cardId: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		isFirstElement: { type: Boolean, required: true },
 		isLastElement: { type: Boolean, required: true },
@@ -84,25 +95,31 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-		);
 		const { t } = useI18n();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+		const { modelValue } = useContentElementState(props, {
+			autoSaveDebounce: 0,
+		});
+		const displayState = useSharedExternalToolElementDisplayState();
+
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, ref(null), () => {
+			autofocus.value = true;
+		});
 
 		const hasLinkedTool: ComputedRef<boolean> = computed(
-			() => !!element.value.content.contextExternalToolId
+			() => !!modelValue.value.contextExternalToolId
 		);
 
 		const toolDisplayData: Ref<ExternalToolDisplayData | undefined> = computed(
 			() =>
-				contextExternalToolsModule.getExternalToolDisplayDataList.find(
-					(externalToolDisplayData: ExternalToolDisplayData) =>
-						externalToolDisplayData.contextExternalToolId ===
-						element.value.content.contextExternalToolId
-				)
+				modelValue.value.contextExternalToolId
+					? displayState.findDisplayData(
+							props.cardId,
+							modelValue.value.contextExternalToolId
+					  )
+					: undefined
 		);
 
 		const toolDisplayName: ComputedRef<string> = computed(
@@ -110,12 +127,13 @@ export default defineComponent({
 		);
 
 		const isLoading = computed(
-			() => hasLinkedTool.value && !toolDisplayData.value
+			() =>
+				hasLinkedTool.value &&
+				!toolDisplayData.value &&
+				displayState.isLoading.value
 		);
 
-		useBoardFocusHandler(element.value.id, ref(null), () => {
-			autofocus.value = true;
-		});
+		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -144,17 +162,27 @@ export default defineComponent({
 		};
 
 		const onEditElement = () => {
-			// TODO N21-1248: Edit dialog
+			isConfigurationDialogOpen.value = true;
 		};
 
 		const onClickElement = () => {
 			if (props.isEditMode) {
 				if (!hasLinkedTool.value) {
-					// TODO N21-1248: Edit dialog
+					isConfigurationDialogOpen.value = true;
 				}
 			} else {
 				// TODO N21-1285: launch tool
 			}
+		};
+
+		const onConfigurationDialogClose = () => {
+			isConfigurationDialogOpen.value = false;
+		};
+
+		const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
+			modelValue.value.contextExternalToolId = tool.id;
+
+			await displayState.fetchDisplayData(props.cardId);
 		};
 
 		return {
@@ -163,6 +191,7 @@ export default defineComponent({
 			toolDisplayData,
 			toolDisplayName,
 			isLoading,
+			isConfigurationDialogOpen,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
@@ -170,6 +199,8 @@ export default defineComponent({
 			onDeleteElement,
 			onEditElement,
 			onClickElement,
+			onConfigurationDialogClose,
+			onConfigurationDialogSave,
 		};
 	},
 });

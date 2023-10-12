@@ -1009,5 +1009,6 @@
 	"pages.videoConference.action.refresh": "Update status",
 	"ui-confirmation-dialog.ask-delete.card": "Delete {type} {title}?",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
-	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool..."
+	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool...",
+	"feature-board-external-tool-element.dialog.title": "Selection & Settings"
 }

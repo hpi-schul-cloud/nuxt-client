@@ -21,6 +21,7 @@ describe("ContentElementList", () => {
 	const setup = (props: {
 		elements: AnyContentElement[];
 		isEditMode: boolean;
+		cardId: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -46,6 +47,7 @@ describe("ContentElementList", () => {
 			setup({
 				elements: [],
 				isEditMode: false,
+				cardId: "cardId",
 			});
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
@@ -73,6 +75,7 @@ describe("ContentElementList", () => {
 				setup({
 					elements: [{ type: elementType } as AnyContentElement],
 					isEditMode: false,
+					cardId: "cardId",
 				});
 				expect(wrapper.findComponent(component).exists()).toBe(true);
 			}
@@ -103,6 +106,7 @@ describe("ContentElementList", () => {
 				setup({
 					elements: [{ type: elementType } as AnyContentElement],
 					isEditMode: isEditModeResult,
+					cardId: "cardId",
 				});
 
 				const childComponent = wrapper.findComponent(component);

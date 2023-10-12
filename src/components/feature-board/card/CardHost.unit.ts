@@ -16,8 +16,11 @@ import {
 	useCardState,
 	useEditMode,
 } from "@data-board";
+import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import flushPromises from "flush-promises";
 import Vue, { computed, ref } from "vue";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
@@ -28,6 +31,7 @@ jest.mock("@data-board/BoardPermissions.composable");
 jest.mock("../shared/AddElementDialog.composable");
 jest.mock("@ui-confirmation-dialog");
 jest.mock("@data-board");
+jest.mock("@data-board-external-tool-element");
 
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -51,6 +55,10 @@ const CARD_WITH_FILE_ELEMENT: BoardCard = boardCardFactory.build({
 
 describe("CardHost", () => {
 	let wrapper: Wrapper<Vue>;
+
+	let useSharedExternalToolElementDisplayStateMock: DeepMocked<
+		ReturnType<typeof useSharedExternalToolElementDisplayState>
+	>;
 
 	const setup = (options?: {
 		card: BoardCard;
@@ -111,6 +119,13 @@ describe("CardHost", () => {
 			isDeleteDialogOpen: ref(false),
 		});
 
+		useSharedExternalToolElementDisplayStateMock =
+			createMock<ReturnType<typeof useSharedExternalToolElementDisplayState>>();
+
+		jest
+			.mocked(useSharedExternalToolElementDisplayState)
+			.mockReturnValue(useSharedExternalToolElementDisplayStateMock);
+
 		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: CARD_SKELETON,
@@ -126,6 +141,16 @@ describe("CardHost", () => {
 		it("should be found in dom", () => {
 			setup({ card: CARD_WITHOUT_ELEMENTS });
 			expect(wrapper.findComponent(CardHost).exists()).toBe(true);
+		});
+
+		it("should fetch all external tool display data for the card", async () => {
+			setup({ card: CARD_WITHOUT_ELEMENTS });
+
+			await flushPromises();
+
+			expect(
+				useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+			).toHaveBeenCalledWith(CARD_SKELETON.cardId);
 		});
 
 		describe("'CardSkeleton' component", () => {

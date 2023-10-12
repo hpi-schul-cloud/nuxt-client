@@ -2,10 +2,12 @@ import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolPostParams,
 	ToolApiInterface,
+	ToolContextType,
 	ToolReferenceResponse,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { mockApiResponse } from "@@/tests/test-utils";
 import {
 	axiosErrorFactory,
 	businessErrorFactory,
@@ -15,22 +17,20 @@ import {
 	externalToolDisplayDataFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mockApiResponse } from "@@/tests/test-utils";
+import { contextExternalToolResponseFactory } from "@@/tests/test-utils/factory/contextExternalToolResponseFactory";
 import { toolReferenceResponseFactory } from "@@/tests/test-utils/factory/toolReferenceResponseFactory";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import ContextExternalToolsModule from "./context-external-tools";
 import {
 	ContextExternalToolConfigurationTemplate,
 	ExternalToolDisplayData,
 	ToolConfigurationStatus,
-	ToolContextType,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
 } from "./external-tool";
-import { BusinessError } from "./types/commons";
 import { ContextExternalTool } from "./external-tool/context-external-tool";
-import { contextExternalToolResponseFactory } from "@@/tests/test-utils/factory/contextExternalToolResponseFactory";
+import { BusinessError } from "./types/commons";
 
 describe("ContextExternalToolsModule", () => {
 	let module: ContextExternalToolsModule;
@@ -163,7 +163,7 @@ describe("ContextExternalToolsModule", () => {
 						apiMock.toolContextControllerCreateContextExternalTool
 					).toHaveBeenCalledWith<[ContextExternalToolPostParams]>({
 						contextId: contextExternalTool.contextId,
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 						parameters: [
 							{
 								name: contextExternalTool.parameters[0].name,
@@ -211,7 +211,7 @@ describe("ContextExternalToolsModule", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
 					const contextId = "contextId";
-					const contextType = ToolContextType.COURSE;
+					const contextType = ToolContextType.Course;
 
 					const displayData: ToolReferenceResponse =
 						toolReferenceResponseFactory.build({ logoUrl: "logoUrl" });
@@ -260,7 +260,7 @@ describe("ContextExternalToolsModule", () => {
 			describe("when an error occurs", () => {
 				const setup = () => {
 					const contextId = "contextId";
-					const contextType = ToolContextType.COURSE;
+					const contextType = ToolContextType.Course;
 
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
@@ -388,12 +388,12 @@ describe("ContextExternalToolsModule", () => {
 
 					await module.loadAvailableToolsForContext({
 						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 					});
 
 					expect(
 						apiMock.toolConfigurationControllerGetAvailableToolsForContext
-					).toHaveBeenCalledWith(ToolContextType.COURSE, "contextId");
+					).toHaveBeenCalledWith(ToolContextType.Course, "contextId");
 				});
 
 				it("should set the state", async () => {
@@ -401,7 +401,7 @@ describe("ContextExternalToolsModule", () => {
 
 					await module.loadAvailableToolsForContext({
 						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 					});
 
 					expect(module.getContextExternalToolConfigurationTemplates).toEqual<
@@ -457,7 +457,7 @@ describe("ContextExternalToolsModule", () => {
 
 					await module.loadAvailableToolsForContext({
 						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 					});
 
 					expect(module.getBusinessError).toEqual<BusinessError>({
@@ -611,7 +611,7 @@ describe("ContextExternalToolsModule", () => {
 					expect(result).toEqual<ContextExternalTool>({
 						id: contextExternalTool.id,
 						contextId: contextExternalTool.contextId,
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 						schoolToolId: contextExternalTool.schoolToolId,
 						displayName: contextExternalTool.displayName,
 						toolVersion: contextExternalTool.toolVersion,
