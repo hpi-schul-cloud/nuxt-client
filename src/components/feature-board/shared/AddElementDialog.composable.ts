@@ -4,6 +4,7 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
+	mdiLink,
 	mdiPuzzleOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
@@ -59,6 +60,15 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 				"components.elementTypeSelection.elements.externalToolElement.subtitle",
 			action: () => onElementClick(ContentElementType.ExternalTool),
 			testId: "create-element-external-tool-container",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		options.push({
+			icon: mdiLink,
+			label: "components.elementTypeSelection.elements.linkElement.subtitle",
+			action: () => onElementClick(ContentElementType.Link),
+			testId: "create-element-link",
 		});
 	}
 

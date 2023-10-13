@@ -65,7 +65,7 @@ export const useErrorHandler = () => {
 		if (handlerFunction) {
 			handlerFunction(responseError);
 		} else {
-			console.error(responseError);
+			console.error(error);
 		}
 	};
 

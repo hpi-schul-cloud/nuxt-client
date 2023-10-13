@@ -137,6 +137,7 @@
 	"common.words.languages.en": "Englisch",
 	"common.words.languages.es": "Spanisch",
 	"common.words.languages.uk": "Ukrainisch",
+	"components.datePicker.messages.future": "Bitte Datum und Uhrzeit in der Zukunft angeben.",
 	"components.datePicker.validation.required": "Bitte Datum angeben.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
@@ -181,6 +182,7 @@
 	"components.base.showPassword": "Passwort anzeigen",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Weitere Tools",
@@ -733,8 +735,8 @@
 	"pages.administration.school.index.authSystems.copyLink": "Link kopieren",
 	"pages.administration.school.index.authSystems.edit": "{system} bearbeiten",
 	"pages.administration.school.index.authSystems.delete": "{system} löschen",
-	"pages.administration.classes.index.title":  "Klassen verwalten",
-	"pages.administration.classes.index.add":  "Klasse hinzufügen",
+	"pages.administration.classes.index.title": "Klassen verwalten",
+	"pages.administration.classes.index.add": "Klasse hinzufügen",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements": "Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
 	"pages.content._id.metadata.author": "Autor",
@@ -821,6 +823,7 @@
 	"components.cardElement.submissionElement.until": "bis",
 	"components.cardElement.submissionElement.open": "offen",
 	"components.cardElement.submissionElement.expired": "abgelaufen",
+	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
@@ -1008,5 +1011,6 @@
 	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"pages.h5p.api.success.save": "Inhalt wurde erfolgreich gespeichert.",
-	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen..."
+	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
+	"util-validators-invalid-url": "Bitte geben Sie eine gültige URL ein."
 }
