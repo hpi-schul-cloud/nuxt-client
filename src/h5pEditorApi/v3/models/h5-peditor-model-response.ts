@@ -25,18 +25,19 @@ export interface H5PEditorModelResponse {
      * @type {object}
      * @memberof H5PEditorModelResponse
      */
-    'integration': object;
+    integration: object;
     /**
      * 
      * @type {Array<string>}
      * @memberof H5PEditorModelResponse
      */
-    'scripts': Array<string>;
+    scripts: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof H5PEditorModelResponse
      */
-    'styles': Array<string>;
+    styles: Array<string>;
 }
+
 

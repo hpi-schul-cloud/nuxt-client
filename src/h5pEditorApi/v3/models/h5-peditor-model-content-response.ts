@@ -25,36 +25,37 @@ export interface H5PEditorModelContentResponse {
      * @type {object}
      * @memberof H5PEditorModelContentResponse
      */
-    'integration': object;
+    integration: object;
     /**
      * 
      * @type {Array<string>}
      * @memberof H5PEditorModelContentResponse
      */
-    'scripts': Array<string>;
+    scripts: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof H5PEditorModelContentResponse
      */
-    'styles': Array<string>;
+    styles: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof H5PEditorModelContentResponse
      */
-    'library': string;
+    library: string;
     /**
      * 
      * @type {object}
      * @memberof H5PEditorModelContentResponse
      */
-    'metadata': object;
+    metadata: object;
     /**
      * 
      * @type {object}
      * @memberof H5PEditorModelContentResponse
      */
-    'params': object;
+    params: object;
 }
+
 

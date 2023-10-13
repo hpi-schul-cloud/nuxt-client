@@ -13,8 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
 import { H5PContentParentType } from './h5-pcontent-parent-type';
 
 /**
@@ -28,26 +26,25 @@ export interface PostH5PContentCreateParams {
      * @type {H5PContentParentType}
      * @memberof PostH5PContentCreateParams
      */
-    'parentType': H5PContentParentType;
+    parentType: H5PContentParentType;
     /**
      * 
      * @type {string}
      * @memberof PostH5PContentCreateParams
      */
-    'parentId': string;
+    parentId: string;
     /**
      * 
      * @type {object}
      * @memberof PostH5PContentCreateParams
      */
-    'params': object;
+    params: object;
     /**
      * 
      * @type {string}
      * @memberof PostH5PContentCreateParams
      */
-    'library': string;
+    library: string;
 }
-
 
 

@@ -13,9 +13,8 @@
  */
 
 
-import type { Configuration } from '../configuration';
-import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
-import globalAxios from 'axios';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
@@ -45,10 +44,10 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerCreateH5pContent: async (postH5PContentCreateParams: PostH5PContentCreateParams, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerCreateH5pContent: async (postH5PContentCreateParams: PostH5PContentCreateParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'postH5PContentCreateParams' is not null or undefined
             assertParamExists('h5PEditorControllerCreateH5pContent', 'postH5PContentCreateParams', postH5PContentCreateParams)
-            const localVarPath = `/h5p-editor/content`;
+            const localVarPath = `/h5p-editor/edit`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -68,7 +67,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(postH5PContentCreateParams, localVarRequestOptions, configuration)
@@ -85,12 +84,12 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerDeleteH5pContent: async (language: LanguageType, contentId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerDeleteH5pContent: async (language: LanguageType, contentId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerDeleteH5pContent', 'language', language)
             // verify required parameter 'contentId' is not null or undefined
             assertParamExists('h5PEditorControllerDeleteH5pContent', 'contentId', contentId)
-            const localVarPath = `/h5p-editor/content/{contentId}`
+            const localVarPath = `/h5p-editor/delete/{contentId}`
                 .replace(`{${"language"}}`, encodeURIComponent(String(language)))
                 .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -100,7 +99,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -110,7 +109,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -124,7 +123,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetAjax: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetAjax: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/h5p-editor/ajax`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -143,7 +142,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -159,7 +158,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetContentFile: async (id: string, filename: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetContentFile: async (id: string, filename: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('h5PEditorControllerGetContentFile', 'id', id)
             // verify required parameter 'filename' is not null or undefined
@@ -184,7 +183,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -199,7 +198,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetContentParameters: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetContentParameters: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('h5PEditorControllerGetContentParameters', 'id', id)
             const localVarPath = `/h5p-editor/params/{id}`
@@ -221,7 +220,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -237,12 +236,12 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetH5PEditor: async (contentId: string, language: LanguageType, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetH5PEditor: async (contentId: string, language: LanguageType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentId' is not null or undefined
             assertParamExists('h5PEditorControllerGetH5PEditor', 'contentId', contentId)
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerGetH5PEditor', 'language', language)
-            const localVarPath = `/h5p-editor/editor/{contentId}/{language}`
+            const localVarPath = `/h5p-editor/edit/{contentId}/{language}`
                 .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)))
                 .replace(`{${"language"}}`, encodeURIComponent(String(language)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -262,7 +261,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -278,7 +277,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetLibraryFile: async (ubername: string, file: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetLibraryFile: async (ubername: string, file: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ubername' is not null or undefined
             assertParamExists('h5PEditorControllerGetLibraryFile', 'ubername', ubername)
             // verify required parameter 'file' is not null or undefined
@@ -303,7 +302,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -318,10 +317,10 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetNewH5PEditor: async (language: LanguageType, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetNewH5PEditor: async (language: LanguageType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerGetNewH5PEditor', 'language', language)
-            const localVarPath = `/h5p-editor/editor/{language}`
+            const localVarPath = `/h5p-editor/edit/{language}`
                 .replace(`{${"language"}}`, encodeURIComponent(String(language)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -340,7 +339,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -357,7 +356,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetPlayer: async (language: LanguageType, contentId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetPlayer: async (language: LanguageType, contentId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'language' is not null or undefined
             assertParamExists('h5PEditorControllerGetPlayer', 'language', language)
             // verify required parameter 'contentId' is not null or undefined
@@ -382,7 +381,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -397,7 +396,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerGetTemporaryFile: async (file: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerGetTemporaryFile: async (file: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('h5PEditorControllerGetTemporaryFile', 'file', file)
             const localVarPath = `/h5p-editor/temp-files/{file}`
@@ -419,7 +418,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -433,7 +432,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerPostAjax: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerPostAjax: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/h5p-editor/ajax`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -452,7 +451,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -468,12 +467,12 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        h5PEditorControllerSaveH5pContent: async (contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        h5PEditorControllerSaveH5pContent: async (contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentId' is not null or undefined
             assertParamExists('h5PEditorControllerSaveH5pContent', 'contentId', contentId)
             // verify required parameter 'postH5PContentCreateParams' is not null or undefined
             assertParamExists('h5PEditorControllerSaveH5pContent', 'postH5PContentCreateParams', postH5PContentCreateParams)
-            const localVarPath = `/h5p-editor/content/{contentId}`
+            const localVarPath = `/h5p-editor/edit/{contentId}`
                 .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -482,7 +481,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -494,7 +493,7 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(postH5PContentCreateParams, localVarRequestOptions, configuration)
@@ -520,7 +519,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PSaveResponse>> {
+        async h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PSaveResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerCreateH5pContent(postH5PContentCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -531,7 +530,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerDeleteH5pContent(language, contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -540,7 +539,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetAjax(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async h5PEditorControllerGetAjax(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetAjax(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -551,7 +550,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetContentFile(id: string, filename: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async h5PEditorControllerGetContentFile(id: string, filename: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetContentFile(id, filename, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -561,7 +560,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetContentParameters(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async h5PEditorControllerGetContentParameters(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetContentParameters(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -572,7 +571,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelContentResponse>> {
+        async h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelContentResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetH5PEditor(contentId, language, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -583,7 +582,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetLibraryFile(ubername, file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -593,7 +592,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelResponse>> {
+        async h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PEditorModelResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetNewH5PEditor(language, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -605,7 +604,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetPlayer(language, contentId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -615,7 +614,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerGetTemporaryFile(file: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async h5PEditorControllerGetTemporaryFile(file: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerGetTemporaryFile(file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -624,7 +623,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerPostAjax(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async h5PEditorControllerPostAjax(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerPostAjax(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -635,7 +634,7 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PSaveResponse>> {
+        async h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<H5PSaveResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.h5PEditorControllerSaveH5pContent(contentId, postH5PContentCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -778,7 +777,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig): AxiosPromise<H5PSaveResponse>;
+    h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<H5PSaveResponse>;
 
     /**
      * 
@@ -788,7 +787,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: AxiosRequestConfig): AxiosPromise<boolean>;
+    h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -796,7 +795,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetAjax(options?: AxiosRequestConfig): AxiosPromise<object>;
+    h5PEditorControllerGetAjax(options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -806,7 +805,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetContentFile(id: string, filename: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    h5PEditorControllerGetContentFile(id: string, filename: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -815,7 +814,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetContentParameters(id: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    h5PEditorControllerGetContentParameters(id: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -825,7 +824,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: AxiosRequestConfig): AxiosPromise<H5PEditorModelContentResponse>;
+    h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any): AxiosPromise<H5PEditorModelContentResponse>;
 
     /**
      * 
@@ -835,7 +834,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -844,7 +843,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: AxiosRequestConfig): AxiosPromise<H5PEditorModelResponse>;
+    h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any): AxiosPromise<H5PEditorModelResponse>;
 
     /**
      * 
@@ -855,7 +854,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: AxiosRequestConfig): AxiosPromise<object>;
+    h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -864,7 +863,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerGetTemporaryFile(file: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    h5PEditorControllerGetTemporaryFile(file: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -872,7 +871,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerPostAjax(options?: AxiosRequestConfig): AxiosPromise<object>;
+    h5PEditorControllerPostAjax(options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -882,7 +881,7 @@ export interface H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApiInterface
      */
-    h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig): AxiosPromise<H5PSaveResponse>;
+    h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any): AxiosPromise<H5PSaveResponse>;
 
 }
 
@@ -900,7 +899,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig) {
+    public h5PEditorControllerCreateH5pContent(postH5PContentCreateParams: PostH5PContentCreateParams, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerCreateH5pContent(postH5PContentCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -912,7 +911,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerDeleteH5pContent(language: LanguageType, contentId: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerDeleteH5pContent(language, contentId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -922,7 +921,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetAjax(options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetAjax(options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetAjax(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -934,7 +933,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetContentFile(id: string, filename: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetContentFile(id: string, filename: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetContentFile(id, filename, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -945,7 +944,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetContentParameters(id: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetContentParameters(id: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetContentParameters(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -957,7 +956,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetH5PEditor(contentId: string, language: LanguageType, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetH5PEditor(contentId, language, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -969,7 +968,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetLibraryFile(ubername: string, file: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetLibraryFile(ubername, file, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -980,7 +979,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetNewH5PEditor(language: LanguageType, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetNewH5PEditor(language, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -993,7 +992,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetPlayer(language: LanguageType, contentId: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetPlayer(language, contentId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1004,7 +1003,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerGetTemporaryFile(file: string, options?: AxiosRequestConfig) {
+    public h5PEditorControllerGetTemporaryFile(file: string, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerGetTemporaryFile(file, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1014,7 +1013,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerPostAjax(options?: AxiosRequestConfig) {
+    public h5PEditorControllerPostAjax(options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerPostAjax(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1026,8 +1025,7 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      * @throws {RequiredError}
      * @memberof H5pEditorApi
      */
-    public h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: AxiosRequestConfig) {
+    public h5PEditorControllerSaveH5pContent(contentId: string, postH5PContentCreateParams: PostH5PContentCreateParams, options?: any) {
         return H5pEditorApiFp(this.configuration).h5PEditorControllerSaveH5pContent(contentId, postH5PContentCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
-

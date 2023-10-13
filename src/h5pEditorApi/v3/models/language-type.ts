@@ -19,15 +19,12 @@
  * @export
  * @enum {string}
  */
-
-export const LanguageType = {
-    DE: 'de',
-    EN: 'en',
-    ES: 'es',
-    UK: 'uk'
-} as const;
-
-export type LanguageType = typeof LanguageType[keyof typeof LanguageType];
+export enum LanguageType {
+    DE = 'de',
+    EN = 'en',
+    ES = 'es',
+    UK = 'uk'
+}
 
 
 

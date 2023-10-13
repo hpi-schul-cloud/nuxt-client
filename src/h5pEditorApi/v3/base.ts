@@ -13,11 +13,10 @@
  */
 
 
-import type { Configuration } from './configuration';
+import { Configuration } from "./configuration";
 // Some imports not used depending on template conditions
 // @ts-ignore
-import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
-import globalAxios from 'axios';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
 export const BASE_PATH = "http://localhost:4448/api/v3".replace(/\/+$/, "");
 
@@ -39,7 +38,7 @@ export const COLLECTION_FORMATS = {
  */
 export interface RequestArgs {
     url: string;
-    options: AxiosRequestConfig;
+    options: any;
 }
 
 /**
@@ -65,8 +64,8 @@ export class BaseAPI {
  * @extends {Error}
  */
 export class RequiredError extends Error {
+    name: "RequiredError" = "RequiredError";
     constructor(public field: string, msg?: string) {
         super(msg);
-        this.name = "RequiredError"
     }
 }
