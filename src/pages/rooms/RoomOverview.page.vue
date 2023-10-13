@@ -21,12 +21,16 @@
 						</v-btn>
 					</div>
 					<div class="toggle-div">
-						<v-custom-switch
+						<v-switch
 							v-if="isTouchDevice"
 							v-model="allowDragging"
 							class="enable-disable"
 							:label="$t('pages.rooms.index.courses.arrangeCourses')"
 							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+							inset
+							flat
+							density="compact"
+							color="primary"
 						/>
 					</div>
 				</div>
@@ -122,7 +126,6 @@
 </template>
 
 <script>
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
@@ -141,7 +144,6 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
-		vCustomSwitch,
 		ImportFlow,
 	},
 	inject: {

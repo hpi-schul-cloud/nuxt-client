@@ -7,15 +7,19 @@
 		<template #header>
 			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
 			<div v-if="showSubstituteFilter">
-				<v-custom-switch
-					:model-value="isSubstituteFilterEnabled"
+				<v-switch
+					v-model="isSubstituteFilterEnabled"
+					@update:model-value="setSubstituteFilter"
 					:label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
 					:aria-label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
-					@update:model-value="setSubstituteFilter"
+					inset
+					flat
+					density="compact"
+					color="primary"
 				/>
 			</div>
 			<div v-else class="substitute-filter-placeholder"></div>
@@ -93,7 +97,6 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 // import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
 	mdiPlus,
@@ -117,7 +120,6 @@ export default {
 		// vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
-		vCustomSwitch,
 		CopyResultModal,
 	},
 	props: {

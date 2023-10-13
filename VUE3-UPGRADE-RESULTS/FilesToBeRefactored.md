@@ -34,7 +34,7 @@
 - Some components use `model property` inside which is changed in vue-3 and they need some tiny refactorings.
 - These components:
   - `src/components/atoms/vCustomAutocomplete.vue` -- completely removed, vuetify autocomplete component is used instead
-  - `src/components/atoms/vCustomSwitch.vue`
+  - `src/components/atoms/vCustomSwitch.vue` -- removed, vuetify v-switch will be used
   - `src/components/base/BaseInput/BaseInput.vue`
   - `src/components/base/BaseInput/BaseInputCheckbox.vue`
   - `src/components/base/BaseInput/BaseInputDefault.vue`

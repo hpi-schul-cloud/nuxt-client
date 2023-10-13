@@ -8,9 +8,9 @@
 			v-if="isTeacherStudentVisibilityVisible"
 		>
 			<v-col>
-				<v-custom-switch
+				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
-					:value="studentVisibility"
+					:input-value="studentVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
@@ -21,8 +21,12 @@
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
+					inset
+					flat
+					density="compact"
+					color="primary"
 					class="ml-1 mt-0"
-					@input-changed="
+					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
@@ -53,8 +57,8 @@
 		</v-row>
 		<v-row v-if="toggleStudentLernstoreViewEnabled" class="learnstore-switch">
 			<v-col>
-				<v-custom-switch
-					:value="lernStoreVisibility"
+				<v-switch
+					:input-value="lernStoreVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.lernStore'
@@ -66,10 +70,14 @@
 						)
 					"
 					class="ml-1 mt-0"
-					@input-changed="
+					@update:model-value="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
+					inset
+					flat
+					density="compact"
+					color="primary"
 				/>
 				<p class="body-2 mb-0">
 					{{
@@ -82,8 +90,8 @@
 		</v-row>
 		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
 			<v-col>
-				<v-custom-switch
-					:value="features.rocketChat"
+				<v-switch
+					:input-value="features.rocketChat"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
@@ -96,9 +104,13 @@
 					"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@input-changed="
+					@update:model-value="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
+					inset
+					flat
+					density="compact"
+					color="primary"
 				/>
 				<p class="body-2 mb-0">
 					{{
@@ -111,8 +123,8 @@
 		</v-row>
 		<v-row v-if="videoConferenceEnabled" class="videoconference-switch">
 			<v-col>
-				<v-custom-switch
-					:value="features.videoconference"
+				<v-switch
+					:input-value="features.videoconference"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
@@ -125,10 +137,14 @@
 					"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@input-changed="
+					@update:model-value="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
+					inset
+					flat
+					density="compact"
+					color="primary"
 				/>
 				<p class="body-2 mb-0">
 					{{
@@ -142,48 +158,53 @@
 	</section>
 </template>
 
-<script>
+<script setup lang="ts">
 import { envConfigModule } from "@/store";
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import { computed } from "vue";
 
-export default {
-	components: {
-		vCustomSwitch,
+const props = defineProps({
+	permissions: {
+		type: Object,
+		required: true,
 	},
-	props: {
-		permissions: {
-			type: Object,
-			required: true,
-		},
-		features: {
-			type: Object,
-			required: true,
-		},
+	features: {
+		type: Object,
+		required: true,
 	},
-	computed: {
-		toggleStudentLernstoreViewEnabled: () =>
-			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
-		isTeacherStudentVisibilityConfigurable: () =>
-			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
-		isTeacherStudentVisibilityVisible: () =>
-			envConfigModule.getTeacherStudentVisibilityIsVisible,
-		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
-		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
-		theme: () => envConfigModule.getTheme,
-		studentVisibility() {
-			if (this.isTeacherStudentVisibilityConfigurable) {
-				return this.permissions?.teacher
-					? this.permissions.teacher.STUDENT_LIST
-					: false;
-			} else {
-				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
-			}
-		},
-		lernStoreVisibility() {
-			return this.permissions.student
-				? this.permissions.student.LERNSTORE_VIEW
-				: true;
-		},
-	},
-};
+});
+
+const toggleStudentLernstoreViewEnabled = computed(
+	() => envConfigModule.getAdminToggleStudentLernstoreViewEnabled
+);
+
+const isTeacherStudentVisibilityConfigurable = computed(
+	() => envConfigModule.getTeacherStudentVisibilityIsConfigurable
+);
+
+const isTeacherStudentVisibilityVisible = computed(
+	() => envConfigModule.getTeacherStudentVisibilityIsVisible
+);
+
+const videoConferenceEnabled = computed(
+	() => envConfigModule.getVideoConferenceEnabled
+);
+
+const rocketChatEnabled = computed(() => envConfigModule.getRocketChatEnabled);
+
+const theme = computed(() => envConfigModule.getTheme);
+
+const studentVisibility = computed(() => {
+	if (isTeacherStudentVisibilityConfigurable.value) {
+		return props.permissions?.value.teacher
+			? props.permissions.teacher.STUDENT_LIST
+			: false;
+	} else {
+		return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
+	}
+});
+const lernStoreVisibility = computed(() => {
+	return props.permissions.student
+		? props.permissions.student.LERNSTORE_VIEW
+		: true;
+});
 </script>
