@@ -1,6 +1,10 @@
 import GroupModule from "@/store/group";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { classInfoResponseFactory, i18nMock } from "@@/tests/test-utils";
+import {
+	classInfoResponseFactory,
+	i18nMock,
+	mockUser,
+} from "@@/tests/test-utils";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import ClassOverview from "./ClassOverview.page.vue";
 import { GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
@@ -8,6 +12,14 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { Pagination } from "@/store/types/commons";
+import setupStores from "../../../tests/test-utils/setupStores";
+import AuthModule from "../../store/auth";
+import { ClassInfo } from "../../store/types/class-info";
+import { authModule } from "../../store";
+
+const $router = {
+	push: jest.fn(),
+};
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
@@ -31,6 +43,7 @@ describe("ClassOverview", () => {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 			},
+			mocks: { $router },
 		});
 
 		return {
@@ -38,6 +51,13 @@ describe("ClassOverview", () => {
 			groupModule,
 		};
 	};
+
+	beforeEach(() => {
+		$router.push.mockReset();
+		setupStores({
+			authModule: AuthModule,
+		});
+	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -199,6 +219,38 @@ describe("ClassOverview", () => {
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
 				expect(groupModule.setPage).toHaveBeenCalledWith(page);
 				expect(groupModule.setPagination).toHaveBeenCalledWith(pagination);
+			});
+		});
+	});
+
+	describe("manageClass", () => {
+		describe("when clicking on the manage class icon", () => {
+			const setup = () => {
+				const clazz: ClassInfo = classInfoResponseFactory.build({
+					externalSourceName: undefined,
+				});
+
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper, groupModule } = getWrapper();
+
+				groupModule.setClasses([clazz]);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should redirect to legacy class manage page", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="class-table-manage-icon"]')
+					.trigger("click");
+
+				expect($router.push).toHaveBeenCalledWith(
+					`/administration/classes/6527efc4535aa75bf803e31b/manage`
+				);
 			});
 		});
 	});

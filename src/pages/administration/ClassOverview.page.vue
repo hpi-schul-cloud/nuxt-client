@@ -26,6 +26,7 @@
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
 					size="small"
+					data-testid="class-table-manage-icon"
 					@click="manageClass(item)"
 				>
 					{{ mdiAccountMultipleOutline }}
@@ -33,6 +34,7 @@
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
 					size="small"
+					data-testid="class-table-edit-icon"
 					@click="editItem(item)"
 				>
 					{{ mdiPencilOutline }}
@@ -40,6 +42,7 @@
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
 					size="small"
+					data-testid="class-table-delete-icon"
 					@click="onOpenDeleteDialog(item)"
 				>
 					{{ mdiTrashCanOutline }}
@@ -47,6 +50,7 @@
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
 					size="small"
+					data-testid="class-table-sucessor-icon"
 					@click="createSuccessor(item)"
 				>
 					{{ mdiArrowUpBoldOutline }}
