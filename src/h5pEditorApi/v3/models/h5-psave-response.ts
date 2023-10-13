@@ -13,6 +13,8 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
 import { H5PContentMetadata } from './h5-pcontent-metadata';
 
 /**
@@ -26,13 +28,12 @@ export interface H5PSaveResponse {
      * @type {string}
      * @memberof H5PSaveResponse
      */
-    contentId: string;
+    'contentId': string;
     /**
      * 
      * @type {H5PContentMetadata}
      * @memberof H5PSaveResponse
      */
-    metadata: H5PContentMetadata;
+    'metadata': H5PContentMetadata;
 }
-
 

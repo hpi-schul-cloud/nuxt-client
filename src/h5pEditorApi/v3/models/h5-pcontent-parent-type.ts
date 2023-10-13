@@ -19,9 +19,12 @@
  * @export
  * @enum {string}
  */
-export enum H5PContentParentType {
-    LESSONS = 'lessons'
-}
+
+export const H5PContentParentType = {
+    LESSONS: 'lessons'
+} as const;
+
+export type H5PContentParentType = typeof H5PContentParentType[keyof typeof H5PContentParentType];
 
 
 
