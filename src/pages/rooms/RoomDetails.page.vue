@@ -69,7 +69,7 @@
 		</keep-alive>
 
 		<v-custom-dialog
-			v-model="dialog.isOpen"
+			v-model:is-open="dialog.isOpen"
 			data-testid="title-dialog"
 			has-buttons
 			:buttons="['close']"

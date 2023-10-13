@@ -147,7 +147,7 @@
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
 		<v-custom-dialog
-			v-model="itemDelete.isOpen"
+			v-model:isOpen="itemDelete.isOpen"
 			data-testid="delete-dialog-item"
 			:size="375"
 			has-buttons

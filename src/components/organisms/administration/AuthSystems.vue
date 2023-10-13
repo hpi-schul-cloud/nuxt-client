@@ -118,7 +118,7 @@
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
 		<v-custom-dialog
-			v-model="confirmDeleteDialog.isOpen"
+			v-model:isOpen="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
 			has-buttons

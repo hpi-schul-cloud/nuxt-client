@@ -110,6 +110,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
+	"update:isOpen",
 	"dialog-closed",
 	"dialog-confirmed",
 	"dialog-canceled",
@@ -123,6 +124,7 @@ const isDialogOpen = computed({
 		return props.isOpen;
 	},
 	set(value) {
+		emit("update:isOpen", value);
 		if (value === true) closeDialog();
 	},
 });

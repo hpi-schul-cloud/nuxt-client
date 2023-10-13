@@ -107,7 +107,7 @@
 			</v-list>
 		</v-menu>
 		<v-custom-dialog
-			v-model="confirmDeleteDialogIsOpen"
+			v-model:isOpen="confirmDeleteDialogIsOpen"
 			:size="375"
 			has-buttons
 			confirm-btn-title-key="common.actions.remove"

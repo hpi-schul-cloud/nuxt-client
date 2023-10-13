@@ -110,7 +110,7 @@
 			</template>
 		</room-wrapper>
 		<room-modal
-			v-model="groupDialog.isOpen"
+			v-model:isOpen="groupDialog.isOpen"
 			aria-describedby="folder open"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
