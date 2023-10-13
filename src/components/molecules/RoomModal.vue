@@ -45,10 +45,6 @@ export default defineComponent({
 		vCustomDialog,
 		RoomAvatarIterator,
 	},
-	model: {
-		prop: "isOpen",
-		event: "update:isOpen",
-	},
 	props: {
 		isOpen: {
 			type: Boolean,
