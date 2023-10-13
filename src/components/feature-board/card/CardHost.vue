@@ -37,8 +37,7 @@
 							@click="onDeleteCard"
 							data-test-id="board-menu-action-delete"
 							:name="card.title"
-						>
-						</BoardMenuActionDelete>
+						/>
 					</BoardMenu>
 				</div>
 

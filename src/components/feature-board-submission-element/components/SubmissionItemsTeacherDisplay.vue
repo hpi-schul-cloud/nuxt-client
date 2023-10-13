@@ -24,6 +24,7 @@
 						"
 						small
 						label
+						filter
 						:disabled="openCount === 0"
 						:outlined="activeFilter !== 'open'"
 						:ripple="false"
