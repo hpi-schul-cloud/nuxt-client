@@ -2,8 +2,8 @@ import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import BaseaAlert from "./alert/alerts/BaseaAlert.vue";
 import FileContent from "./FileContent.vue";
-import FileAlert from "./alert/FileAlert.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 
@@ -63,7 +63,7 @@ describe("FileContent", () => {
 			it("should pass props to FileAlert", () => {
 				const { wrapper, fileProperties } = setup();
 
-				const fileAlert = wrapper.findComponent(FileAlert);
+				const fileAlert = wrapper.findComponent(BaseaAlert);
 
 				expect(fileAlert.props()).toEqual({
 					previewStatus: fileProperties.previewStatus,
@@ -102,7 +102,7 @@ describe("FileContent", () => {
 				it("should emit fetch:file event", async () => {
 					const { wrapper } = setup();
 
-					const fileAlert = wrapper.findComponent(FileAlert);
+					const fileAlert = wrapper.findComponent(BaseaAlert);
 
 					await fileAlert.vm.$emit("on-status-reload");
 

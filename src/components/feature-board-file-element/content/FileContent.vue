@@ -3,7 +3,7 @@
 		<FileDisplay
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"
-			@video-error="onError"
+			@add:alert="onAddAlert"
 		>
 			<slot></slot>
 		</FileDisplay>
@@ -14,24 +14,25 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
-		<FileAlert :alerts="alerts" />
+		<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Component, Ref, ref } from "vue";
-import FileAlert from "../content/alert/FileAlert.vue";
+import { defineComponent, PropType } from "vue";
+import FileAlerts from "./alert/FileAlerts.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import FileInputs from "././inputs/FileInputs.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import { FileAlert } from "../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	components: {
 		FileInputs,
 		FileDisplay,
 		ContentElementFooter,
-		FileAlert,
+		FileAlerts,
 	},
 	props: {
 		fileProperties: {
@@ -39,8 +40,14 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		alerts: { type: Array as PropType<FileAlert[]>, required: true },
 	},
-	emits: ["fetch:file", "update:alternativeText", "update:caption"],
+	emits: [
+		"fetch:file",
+		"update:alternativeText",
+		"update:caption",
+		"add:alert",
+	],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
@@ -50,20 +57,16 @@ export default defineComponent({
 		};
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
-		const previewStatus = computed(() => props.fileProperties.previewStatus);
-		const alerts: Ref<Component[]> = ref([]);
 
-		const onError = (payload: Component) => {
-			alerts.value.push(payload);
+		const onAddAlert = (alert: FileAlert) => {
+			emit("add:alert", alert);
 		};
 
 		return {
 			onFetchFile,
-			previewStatus,
 			onUpdateText,
 			onUpdateCaption,
-			alerts,
-			onError,
+			onAddAlert,
 		};
 	},
 });

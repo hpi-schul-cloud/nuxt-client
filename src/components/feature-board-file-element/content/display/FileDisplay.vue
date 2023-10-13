@@ -14,7 +14,7 @@
 			v-else-if="hasVideoMimeType"
 			:src="fileProperties.url"
 			:name="fileProperties.name"
-			@error="onVideoError"
+			@error="onAddAlert"
 		>
 			<slot></slot>
 		</VideoDisplay>
@@ -30,12 +30,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, Component } from "vue";
+import { defineComponent, PropType, computed } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 import { isVideoMimeType } from "@/utils/fileHelper";
+import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "FileDisplay",
@@ -47,7 +48,7 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["video-error"],
+	emits: ["video-error", "add:alert"],
 	setup(props, { emit }) {
 		const hasVideoMimeType = computed(() => {
 			return isVideoMimeType(props.fileProperties.mimeType);
@@ -57,14 +58,14 @@ export default defineComponent({
 			return !props.fileProperties.previewUrl && !hasVideoMimeType.value;
 		});
 
-		const onVideoError = (payload: Component) => {
-			emit("video-error", payload);
+		const onAddAlert = (alert: FileAlert) => {
+			emit("add:alert", alert);
 		};
 
 		return {
 			hasVideoMimeType,
 			showTitle,
-			onVideoError,
+			onAddAlert,
 		};
 	},
 });

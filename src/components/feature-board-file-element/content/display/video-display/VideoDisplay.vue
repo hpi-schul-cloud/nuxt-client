@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
-import VideoFormatAlert from "./VideoFormatAlert.vue";
+import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "VideoDisplay",
@@ -32,7 +32,7 @@ export default defineComponent({
 
 		onMounted(() => {
 			videoRef.value?.addEventListener("error", () => {
-				emit("error", VideoFormatAlert);
+				emit("error", FileAlert.VIDEO_FORMAT_ERROR);
 			});
 		});
 

@@ -13,10 +13,12 @@
 		<FileContent
 			v-if="fileProperties"
 			:file-properties="fileProperties"
-			@fetch:file="onFetchFile"
+			:alerts="alerts"
 			:is-edit-mode="isEditMode"
+			@fetch:file="onFetchFile"
 			@update:alternativeText="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@add:alert="onAddAlert"
 		>
 			<slot
 				v-if="isEditMode"
@@ -51,8 +53,10 @@ import {
 	ref,
 	toRef,
 } from "vue";
+import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
@@ -77,6 +81,8 @@ export default defineComponent({
 			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
+
+		const { alerts, emittedAlerts } = useFileAlerts(fileRecord);
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -143,6 +149,10 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
+		const onAddAlert = (alert: FileAlert) => {
+			emittedAlerts.value.push(alert);
+		};
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -150,11 +160,13 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
+			alerts,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
+			onAddAlert,
 		};
 	},
 });
