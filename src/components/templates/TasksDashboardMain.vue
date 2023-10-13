@@ -45,15 +45,26 @@
 			</div>
 		</template>
 		<div class="content-max-width mx-auto mt-5 mb-14">
-			<v-custom-autocomplete
+			<v-autocomplete
 				v-if="showCourseFilter"
-				:value="selectedCourseFilters"
+				v-model="selectedCourseFilters"
+				small-chips
+				closable-chips
+				multiple
+				clearable
+				variant="solo"
+				rounded
+				chips
+				data-testid="courseFilter"
+				item-title="text"
+				item-value="value"
+				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:aria-label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
-				@selected-item="setCourseFilters"
+				@update:model-value="setCourseFilters"
 			/>
 			<div v-else class="course-filter-placeholder"></div>
 			<tasks-dashboard-student
@@ -81,7 +92,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
+// import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
@@ -103,7 +114,7 @@ const roleBasedRoutes = {
 export default {
 	components: {
 		DefaultWireframe,
-		vCustomAutocomplete,
+		// vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
 		vCustomSwitch,
@@ -214,7 +225,7 @@ export default {
 					? `${this.$t("common.words.substitute")} `
 					: "";
 				filter.text = `${substitution}${name} (${count})`;
-
+				// debugger;
 				return filter;
 			});
 
@@ -325,6 +336,7 @@ export default {
 			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
+			debugger;
 			if (this.tab === this.tabRoutes[0]) {
 				return this.isStudent
 					? this.tasksCountStudent.open[courseName]
