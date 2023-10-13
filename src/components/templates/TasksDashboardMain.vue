@@ -8,14 +8,14 @@
 			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
 			<div v-if="showSubstituteFilter">
 				<v-custom-switch
-					:value="isSubstituteFilterEnabled"
+					:model-value="isSubstituteFilterEnabled"
 					:label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
 					:aria-label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
-					@input-changed="setSubstituteFilter"
+					@update:model-value="setSubstituteFilter"
 				/>
 			</div>
 			<div v-else class="substitute-filter-placeholder"></div>
@@ -321,6 +321,7 @@ export default {
 			this.tasksModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
+			console.log("setSubi");
 			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
