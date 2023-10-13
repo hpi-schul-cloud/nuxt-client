@@ -1,6 +1,7 @@
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolPostParams,
+	ContextExternalToolResponseContextTypeEnum,
 	ToolApiInterface,
 	ToolContextType,
 	ToolReferenceResponse,
@@ -29,7 +30,10 @@ import {
 	ToolParameterScope,
 	ToolParameterType,
 } from "./external-tool";
-import { ContextExternalTool } from "./external-tool/context-external-tool";
+import {
+	ContextExternalTool,
+	ContextExternalToolSave,
+} from "./external-tool/context-external-tool";
 import { BusinessError } from "./types/commons";
 
 describe("ContextExternalToolsModule", () => {
@@ -149,8 +153,20 @@ describe("ContextExternalToolsModule", () => {
 						}),
 					});
 
+					const contextExternalToolResponse =
+						contextExternalToolResponseFactory.build({
+							contextType: ContextExternalToolResponseContextTypeEnum.Course,
+						});
+
+					apiMock.toolContextControllerCreateContextExternalTool.mockResolvedValue(
+						mockApiResponse({
+							data: contextExternalToolResponse,
+						})
+					);
+
 					return {
 						contextExternalTool,
+						contextExternalToolResponse,
 					};
 				};
 
@@ -173,6 +189,23 @@ describe("ContextExternalToolsModule", () => {
 						toolVersion: contextExternalTool.toolVersion,
 						schoolToolId: contextExternalTool.schoolToolId,
 						displayName: contextExternalTool.displayName,
+					});
+				});
+
+				it("should return the saved context external tool", async () => {
+					const { contextExternalTool, contextExternalToolResponse } = setup();
+
+					const result =
+						await module.createContextExternalTool(contextExternalTool);
+
+					expect(result).toEqual<ContextExternalTool>({
+						id: contextExternalToolResponse.id,
+						contextId: contextExternalToolResponse.contextId,
+						contextType: ToolContextType.Course,
+						displayName: contextExternalToolResponse.displayName,
+						parameters: contextExternalToolResponse.parameters,
+						schoolToolId: contextExternalToolResponse.schoolToolId,
+						toolVersion: contextExternalToolResponse.toolVersion,
 					});
 				});
 			});
@@ -656,12 +689,25 @@ describe("ContextExternalToolsModule", () => {
 		describe("updateContextExternalTool is called", () => {
 			describe("when it successfully calls the api", () => {
 				const setup = () => {
-					const contextExternalTool = contextExternalToolSaveFactory.build({
-						parameters: [{ name: "testParam", value: "testParam" }],
-					});
+					const contextExternalTool: ContextExternalToolSave =
+						contextExternalToolSaveFactory.build({
+							parameters: [{ name: "testParam", value: "testParam" }],
+						});
+
+					const contextExternalToolResponse =
+						contextExternalToolResponseFactory.build({
+							contextType: ContextExternalToolResponseContextTypeEnum.Course,
+						});
+
+					apiMock.toolContextControllerUpdateContextExternalTool.mockResolvedValue(
+						mockApiResponse({
+							data: contextExternalToolResponse,
+						})
+					);
 
 					return {
 						contextExternalTool,
+						contextExternalToolResponse,
 					};
 				};
 
@@ -691,6 +737,25 @@ describe("ContextExternalToolsModule", () => {
 							],
 						}
 					);
+				});
+
+				it("should return the saved context external tool", async () => {
+					const { contextExternalTool, contextExternalToolResponse } = setup();
+
+					const result = await module.updateContextExternalTool({
+						contextExternalToolId: "contextExternalToolId",
+						contextExternalTool: contextExternalTool,
+					});
+
+					expect(result).toEqual<ContextExternalTool>({
+						id: contextExternalToolResponse.id,
+						contextId: contextExternalToolResponse.contextId,
+						contextType: ToolContextType.Course,
+						displayName: contextExternalToolResponse.displayName,
+						parameters: contextExternalToolResponse.parameters,
+						schoolToolId: contextExternalToolResponse.schoolToolId,
+						toolVersion: contextExternalToolResponse.toolVersion,
+					});
 				});
 			});
 
