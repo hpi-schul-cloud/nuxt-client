@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { mdiDotsVertical } from "@mdi/js";
-import { computed, defineComponent, PropType, provide } from "vue";
+import { computed, defineComponent, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
 
@@ -51,10 +51,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		provide(MENU_SCOPE, props.scope);
+		const scope = toRef(props, "scope");
+		provide(MENU_SCOPE, scope.value);
 
 		const hasBackground = computed<boolean>(
-			() => props.scope === "card" || props.scope === "element"
+			() => scope.value === "card" || scope.value === "element"
 		);
 
 		return {
