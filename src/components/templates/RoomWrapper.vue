@@ -30,7 +30,7 @@
 			<slot name="page-content"></slot>
 		</template>
 		<import-modal
-			v-model="importDialog.isOpen"
+			v-model:isOpen="importDialog.isOpen"
 			class="import-modal"
 			@update-rooms="updateRooms"
 		>
