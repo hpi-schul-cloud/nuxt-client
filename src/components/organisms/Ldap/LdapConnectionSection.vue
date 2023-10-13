@@ -6,7 +6,7 @@
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"
-			:vmodel="value.url"
+			:modelValue="value.url"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.server.url')"
@@ -14,7 +14,7 @@
 			:info="$t('pages.administration.ldap.connection.server.info')"
 			:validation-model="$v.value.url"
 			:validation-messages="urlValidationMessages"
-			@update:vmodel="$emit('input', { ...value, url: $event })"
+			@update:modelValue="$emit('input', { ...value, url: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiDnsOutline</v-icon>
@@ -22,7 +22,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionBasisPath"
-			:vmodel="value.basisPath"
+			:modelValue="value.basisPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.basis.path')"
@@ -30,7 +30,7 @@
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
 			:validation-model="$v.value.basisPath"
 			:validation-messages="pathSearchValidationMessages"
-			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
+			@update:modelValue="$emit('input', { ...value, basisPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -38,7 +38,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUser"
-			:vmodel="value.searchUser"
+			:modelValue="value.searchUser"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user')"
@@ -46,7 +46,7 @@
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
 			:validation-model="$v.value.searchUser"
 			:validation-messages="pathSearchValidationMessages"
-			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
+			@update:modelValue="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -54,7 +54,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUserPassword"
-			:vmodel="value.searchUserPassword"
+			:modelValue="value.searchUserPassword"
 			type="password"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
@@ -63,7 +63,9 @@
 			"
 			:validation-model="$v.value.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
-			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
+			@update:modelValue="
+				$emit('input', { ...value, searchUserPassword: $event })
+			"
 			><template #icon>
 				<v-icon :color="fillColor">$mdiLockOutline</v-icon>
 			</template>

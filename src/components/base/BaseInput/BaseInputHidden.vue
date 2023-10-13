@@ -3,8 +3,8 @@
 		v-show="false"
 		v-bind="$attrs"
 		:type="type"
-		:value="vmodel"
-		@input="$emit('input', $event.target.value)"
+		:value="modelValue"
+		@input="$emit('update:modelValue', $event.target.value)"
 	/>
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
 		event: "input",
 	},
 	props: {
-		vmodel: {
+		modelValue: {
 			type: String,
 			required: true,
 		},

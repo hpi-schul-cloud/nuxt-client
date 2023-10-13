@@ -9,7 +9,7 @@
 
 		<base-input
 			data-testid="ldapDataUsersUserPath"
-			:vmodel="value.userPath"
+			:modelValue="value.userPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.title')"
@@ -18,7 +18,7 @@
 			:validation-model="$v.value.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
-			@update:vmodel="$emit('input', { ...value, userPath: $event })"
+			@update:modelValue="$emit('input', { ...value, userPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -29,14 +29,14 @@
 		</p>
 		<base-input
 			data-testid="ldapDataUsersFirstName"
-			:vmodel="value.firstName"
+			:modelValue="value.firstName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.firstname')"
 			:validation-model="$v.value.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
-			@update:vmodel="$emit('input', { ...value, firstName: $event })"
+			@update:modelValue="$emit('input', { ...value, firstName: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -44,14 +44,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersFamilyName"
-			:vmodel="value.familyName"
+			:modelValue="value.familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.lastname')"
 			:validation-model="$v.value.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
-			@update:vmodel="$emit('input', { ...value, familyName: $event })"
+			@update:modelValue="$emit('input', { ...value, familyName: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -59,14 +59,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersEmail"
-			:vmodel="value.email"
+			:modelValue="value.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
 			:validation-model="$v.value.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
-			@update:vmodel="$emit('input', { ...value, email: $event })"
+			@update:modelValue="$emit('input', { ...value, email: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiEmailOutline</v-icon>
@@ -74,7 +74,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUid"
-			:vmodel="value.uid"
+			:modelValue="value.uid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uid.title')"
@@ -82,7 +82,7 @@
 			:validation-model="$v.value.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
-			@update:vmodel="$emit('input', { ...value, uid: $event })"
+			@update:modelValue="$emit('input', { ...value, uid: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiCardAccountDetailsOutline</v-icon>
@@ -90,7 +90,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUuid"
-			:vmodel="value.uuid"
+			:modelValue="value.uuid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
@@ -98,7 +98,7 @@
 			:validation-model="$v.value.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
-			@update:vmodel="$emit('input', { ...value, uuid: $event })"
+			@update:modelValue="$emit('input', { ...value, uuid: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountBoxOutline</v-icon>

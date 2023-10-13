@@ -1,7 +1,7 @@
 <template>
 	<base-input
 		v-bind="{ ...$attrs, ...$props }"
-		:vmodel="vmodel"
+		:model-value="vmodel"
 		classes="h1"
 		:label-hidden="true"
 	/>

@@ -14,7 +14,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:vmodel="classPathValue"
+			:modelValue="classPathValue"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -24,7 +24,7 @@
 			:validation-model="$v.value.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:vmodel="$emit('input', { ...value, classPath: $event })"
+			@update:modelValue="$emit('input', { ...value, classPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
@@ -35,7 +35,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
-			:vmodel="value.nameAttribute"
+			:modelValue="value.nameAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -43,7 +43,7 @@
 			:validation-model="$v.value.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
-			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
+			@update:modelValue="$emit('input', { ...value, nameAttribute: $event })"
 		>
 			<template #icon>
 				<v-icon :color="classesActivatedColor" class="custom-icon"
@@ -53,7 +53,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
-			:vmodel="value.participantAttribute"
+			:modelValue="value.participantAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -61,7 +61,7 @@
 			:validation-model="$v.value.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
-			@update:vmodel="
+			@update:modelValue="
 				$emit('input', { ...value, participantAttribute: $event })
 			"
 		>

@@ -35,7 +35,7 @@
 							v-bind="$attrs"
 							:placeholder="placeholder"
 							:type="appliedType"
-							:value="vmodel"
+							:value="modelValue"
 							:disabled="disabled"
 							:class="classes"
 							:min="appliedType === 'date' && birthDate ? minDate : ''"
@@ -107,12 +107,8 @@ export const supportedTypes = [
 
 export default {
 	// mixins: [uidMixin],
-	model: {
-		prop: "vmodel",
-		event: "input",
-	},
 	props: {
-		vmodel: { type: [String, Number], default: undefined },
+		modelValue: { type: [String, Number], default: undefined },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
@@ -174,7 +170,7 @@ export default {
 			if (this.type === "number") {
 				newVal = parseInt(newVal, 10);
 			}
-			this.$emit("input", newVal);
+			this.$emit("update:modelValue", newVal);
 		},
 		togglePasswordVisibility() {
 			this.passwordVisible = !this.passwordVisible;

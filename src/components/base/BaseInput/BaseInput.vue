@@ -1,11 +1,11 @@
 <template>
 	<component
 		:is="component"
-		:vmodel="vmodel"
 		:validation-error="validationMessage"
 		v-bind="{ ...$attrs, ...$props }"
+		:model-value="modelValue"
 		class="input"
-		@input="handleInput($event)"
+		@update:model-value="handleInput($event)"
 		@blur="handleBlur($event)"
 		@focus="handleFocus($event)"
 	>
@@ -52,7 +52,7 @@ export default {
 		event: "update:vmodel",
 	},
 	props: {
-		vmodel: {
+		modelValue: {
 			type: [Array, String, Number, Boolean],
 			default: undefined,
 		},
@@ -116,7 +116,7 @@ export default {
 				);
 			}
 
-			this.$emit("update:vmodel", event);
+			this.$emit("update:modelValue", event);
 			this.$emit("input", event);
 		},
 		handleBlur(event) {

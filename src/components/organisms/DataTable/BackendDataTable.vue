@@ -79,6 +79,7 @@ import Pagination from "@/components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
 import controllableData from "@/mixins/controllableData";
+import { getCurrentInstance } from "vue";
 
 export default {
 	components: {
@@ -328,8 +329,8 @@ export default {
 					obj[key] = true;
 					return obj;
 				}, {});
-				this.$set(this, "selectionKeys", newSelectionKeys);
-				this.$forceUpdate();
+				this.selectionKeys = newSelectionKeys;
+				getCurrentInstance().appContext.forceUpdate();
 			},
 			immediate: true,
 		},
@@ -342,20 +343,22 @@ export default {
 	methods: {
 		getValueByPath,
 		selectAllRowsOfAllPages() {
-			this.$set(this, "selectionKeys", {});
+			this.selectionKeys = {};
 			this.$_controllableDataSelectionType = "exclusive";
 		},
 		unselectAllRowsOfAllPages() {
-			this.$set(this, "selectionKeys", {});
+			this.selectionKeys = {};
 			this.$_controllableDataSelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
-			const method = (newState) => (newState ? "$set" : "$delete");
-			this[
-				method(
-					this.$_controllableDataSelectionType === "inclusive" ? state : !state
-				)
-			](this.selectionKeys, getValueByPath(row, this.trackBy), true);
+			const newState =
+				this.$_controllableDataSelectionType === "inclusive" ? state : !state;
+
+			if (newState) {
+				this.selectionKeys[getValueByPath(row, this.trackBy)] = true;
+			} else {
+				delete this.selectionKeys[getValueByPath(row, this.trackBy)];
+			}
 		},
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);

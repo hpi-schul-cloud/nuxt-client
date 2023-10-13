@@ -55,7 +55,7 @@
 						<base-input
 							:error="birthdayWarning && !slotProps.data ? inputError : null"
 							class="date base-input"
-							:vmodel="inputDateFromDeUTC(slotProps.data)"
+							:modelValue="inputDateFromDeUTC(slotProps.data)"
 							type="date"
 							label=""
 							data-testid="birthday-input"
@@ -70,7 +70,7 @@
 					</template>
 					<template #datacolumn-password="slotProps">
 						<base-input
-							:vmodel="slotProps.data"
+							:modelValue="slotProps.data"
 							type="text"
 							label=""
 							data-testid="password-input"
