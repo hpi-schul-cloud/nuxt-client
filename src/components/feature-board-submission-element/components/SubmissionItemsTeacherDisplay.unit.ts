@@ -181,12 +181,12 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("when a filter is clicked", () => {
 		let wrapper: Wrapper<Vue>;
-		const submissions = [
-			{ firstName: "Max", lastName: "Meyer", status: "open" },
-			{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
-		];
 
 		beforeAll(() => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+			];
 			wrapper = setup(submissions).wrapper;
 		});
 
@@ -197,16 +197,10 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			expect(chip.exists()).toBe(true);
 
 			await chip.trigger("click");
-			// also wait for next rendering
 			await nextTick();
 
 			const tableContent = wrapper.find(".v-expansion-panel-content");
 			expect(tableContent.exists()).toBe(true);
-
-			// dont get first tr (skip the one in table head)
-			const submissionItems = tableContent.findAll("tbody > tr");
-
-			expect(submissionItems).toHaveLength(1);
 		});
 
 		it("should only show filtered submissions", async () => {
@@ -222,11 +216,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			expect(tableContent.exists()).toBe(true);
 
 			const submissionItems = tableContent.findAll("tbody > tr");
-
-			const filteredSubmissions = submissions.filter(
-				(submission) => submission.status === "open"
-			);
-			expect(submissionItems).toHaveLength(filteredSubmissions.length);
+			expect(submissionItems).toHaveLength(1);
 		});
 	});
 });
