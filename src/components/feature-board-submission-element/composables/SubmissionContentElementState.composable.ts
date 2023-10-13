@@ -20,11 +20,11 @@ export const useSubmissionContentElementState = (
 	};
 	const submissions = ref<Array<TeacherSubmission>>([]);
 	const submission = ref<StudentSubmission>({ completed: false });
-	const loading = ref(true);
+	const loading = ref(false);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
-			// just assign here to "global" variable so that we can get the correct length in following methods below
+			loading.value = true;
 			submissionsResponse = await fetchSubmissionItemsCall(id);
 
 			submissions.value = mapTeacherSubmission(submissionsResponse);
