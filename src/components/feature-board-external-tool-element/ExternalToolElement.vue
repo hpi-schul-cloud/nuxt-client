@@ -13,12 +13,18 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<div class="pa-4 d-flex gap-8 grey lighten-4">
-			<v-img
+		<div class="card d-flex gap-8 grey lighten-4">
+			<div
 				v-if="toolDisplayData && toolDisplayData.logoUrl"
-				class="mr-1"
-				:src="toolDisplayData.logoUrl"
-			></v-img>
+				class="logo-container my-auto mr-1"
+			>
+				<v-img
+					height="100%"
+					class="mx-auto"
+					:src="toolDisplayData.logoUrl"
+					contain
+				></v-img>
+			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 			<span class="align-self-center title flex-1">
 				{{
@@ -190,6 +196,20 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+$card-padding: 16px;
+$logo-size: 24px;
+
+.card {
+	max-width: 100%;
+	min-height: calc($card-padding * 2 + $logo-size);
+	padding: $card-padding;
+}
+
+.logo-container {
+	width: $logo-size;
+	height: $logo-size;
+}
+
 .gap-8 {
 	gap: 8px;
 }
