@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { nextTick } from "vue";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
@@ -181,31 +181,52 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("when a filter is clicked", () => {
 		let wrapper: Wrapper<Vue>;
+		const submissions = [
+			{ firstName: "Max", lastName: "Meyer", status: "open" },
+			{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+		];
 
 		beforeAll(() => {
-			const submissions = [
-				{ firstName: "Max", lastName: "Meyer", status: "open" },
-				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
-			];
 			wrapper = setup(submissions).wrapper;
 		});
 
-		it.todo("should expand panel", async () => {
+		it("should expand panel", async () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
 			expect(chip.exists()).toBe(true);
 
 			await chip.trigger("click");
+			// also wait for next rendering
+			await nextTick();
 
 			const tableContent = wrapper.find(".v-expansion-panel-content");
 			expect(tableContent.exists()).toBe(true);
 
-			// const submissionItems = tableContent.findAll("tr");
+			// dont get first tr (skip the one in table head)
+			const submissionItems = tableContent.findAll("tbody > tr");
 
-			// expect(submissionItems).toHaveLength(1);
+			expect(submissionItems).toHaveLength(1);
 		});
 
-		it.todo("should only show filtered submissions", async () => {});
+		it("should only show filtered submissions", async () => {
+			const chip = wrapper.findComponent({
+				ref: "v-chip-open",
+			});
+			expect(chip.exists()).toBe(true);
+
+			await chip.trigger("click");
+			await nextTick();
+
+			const tableContent = wrapper.find(".v-expansion-panel-content");
+			expect(tableContent.exists()).toBe(true);
+
+			const submissionItems = tableContent.findAll("tbody > tr");
+
+			const filteredSubmissions = submissions.filter(
+				(submission) => submission.status === "open"
+			);
+			expect(submissionItems).toHaveLength(filteredSubmissions.length);
+		});
 	});
 });
