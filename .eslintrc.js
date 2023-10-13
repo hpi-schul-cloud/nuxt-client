@@ -73,7 +73,7 @@ module.exports = {
 					{
 						group: ["@components/page-*", "*/../page-*", "../**/page-*/*"],
 						message:
-							"page-Modules have to be imported using the pattern '@page-<name>'",
+							"Page-Modules have to be imported using the pattern '@page-<name>'",
 					},
 					{
 						group: ["@components/ui-*", "*/../ui-*", "../**/ui-*/*"],

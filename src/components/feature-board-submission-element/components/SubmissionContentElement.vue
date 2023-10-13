@@ -28,10 +28,11 @@
 				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
-				<slot
-					name="menu"
-					:elementName="t('components.cardElement.submissionElement')"
-				/>
+				<BoardMenu scope="element">
+					<BoardMenuActionMoveUp @click="onMoveElementUp" />
+					<BoardMenuActionMoveDown @click="onMoveElementDown" />
+					<BoardMenuActionDelete @click="onDeleteElement" />
+				</BoardMenu>
 			</SubmissionContentElementEdit>
 		</div>
 	</v-card>
@@ -45,10 +46,20 @@ import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useI18n } from "@/composables/i18n.composable";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
 	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 		SubmissionContentElementDisplay,
 		SubmissionContentElementEdit,
 	},
@@ -59,7 +70,12 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["move-keyboard:edit"],
+	emits: [
+		"move-keyboard:edit",
+		"move-down:edit",
+		"move-up:edit",
+		"delete:element",
+	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const submissionContentElement = ref(null);
@@ -83,6 +99,12 @@ export default defineComponent({
 			}
 		};
 
+		const onMoveElementDown = () => emit("move-down:edit");
+
+		const onMoveElementUp = () => emit("move-up:edit");
+
+		const onDeleteElement = () => emit("delete:element", element.value.id);
+
 		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);
 		};
@@ -95,6 +117,9 @@ export default defineComponent({
 			loading,
 			isOverdue,
 			onKeydownArrow,
+			onMoveElementDown,
+			onMoveElementUp,
+			onDeleteElement,
 			onUpdateCompleted,
 			t,
 		};
