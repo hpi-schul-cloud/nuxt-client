@@ -14,20 +14,21 @@ export const useSubmissionContentElementState = (
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
-	const submissionsResponse = ref<SubmissionsResponse>({
+	let submissionsResponse: SubmissionsResponse = {
 		submissionItemsResponse: [],
 		users: [],
-	});
+	};
 	const submissions = ref<Array<TeacherSubmission>>([]);
 	const submission = ref<StudentSubmission>({ completed: false });
 	const loading = ref(true);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
-			const response = await fetchSubmissionItemsCall(id);
+			// just assign here to "global" variable so that we can get the correct length in following methods below
+			submissionsResponse = await fetchSubmissionItemsCall(id);
 
-			submissions.value = mapTeacherSubmission(response);
-			submission.value = mapStudentSubmission(response);
+			submissions.value = mapTeacherSubmission(submissionsResponse);
+			submission.value = mapStudentSubmission(submissionsResponse);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -38,24 +39,23 @@ export const useSubmissionContentElementState = (
 	const createSubmissionItem = async (completed: boolean) => {
 		try {
 			const response = await createSubmissionItemCall(id, completed);
-			submissionsResponse.value.submissionItemsResponse.push(response);
+			submissionsResponse.submissionItemsResponse.push(response);
 		} catch (error) {
 			notifyWithTemplate("notCreated", "boardElement")();
 		}
 	};
 
 	const updateSubmissionItem = async (completed: boolean) => {
-		if (submissionsResponse.value.submissionItemsResponse.length === 0) {
+		if (submissionsResponse.submissionItemsResponse.length === 0) {
 			await createSubmissionItem(completed);
 			return;
 		}
 		try {
 			await updateSubmissionItemCall(
-				submissionsResponse.value.submissionItemsResponse[0].id,
+				submissionsResponse.submissionItemsResponse[0].id,
 				completed
 			);
-			submissionsResponse.value.submissionItemsResponse[0].completed =
-				completed;
+			submissionsResponse.submissionItemsResponse[0].completed = completed;
 		} catch (error) {
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}
