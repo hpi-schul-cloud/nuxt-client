@@ -239,11 +239,6 @@ export const createInputDateTime = (date) => {
 	];
 };
 
-export const setDayjsLocale = () => {
-	const locale = authModule.getLocale || "de";
-	dayjs.locale(locale);
-};
-
 /**
  * Returns date difference to current local time
  * @param {String} date
@@ -274,6 +269,12 @@ export const formatDateForAlerts = (date, isLocalTimeZone = false) => {
 		return time.format("DD.MM.YYYY");
 	}
 };
+
+export const setDayjsLocale = () => {
+	const locale = authModule?.getLocale || "de";
+	dayjs.locale(locale);
+};
+
 /**
  * Returns future date difference to current local time
  * @param {String} date

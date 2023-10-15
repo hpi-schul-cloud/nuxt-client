@@ -5,6 +5,7 @@ import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import dayjs from "dayjs";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -62,38 +63,12 @@ describe("@/components/topbar/StatusAlerts", () => {
 
 describe("formatDate", () => {
 	const wrapper = getWrapper(testProps);
-	it("returns 'a few seconds ago' for seconds difference", () => {
-		const pastDate = dayjs.utc().subtract(30, "seconds").toISOString();
-		const expectedDate = "a few seconds ago";
-		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
+	it("returns 'vor ein paar Sekunden' for seconds difference", () => {
+		const fewSecondsAgo = dayjs().subtract(30, "seconds");
+		const expectedOutput = "vor ein paar Sekunden";
+		const result = formatDateForAlerts(fewSecondsAgo);
+		expect(result).toBe(expectedOutput);
 	});
-
-	it("returns correct format for hours difference", () => {
-		const pastDate = dayjs.utc().subtract(5, "hours").toISOString();
-		const expectedDate = "5 hours ago";
-		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
-	});
-
-	it("returns European format after 7 days", () => {
-		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
-		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
-		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
-	});
-});
-describe("formatDate", () => {
-	const wrapper = getWrapper(testProps);
-	it("returns 'a few seconds ago' for seconds difference", () => {
-		const pastDate = dayjs.utc().subtract(30, "seconds").toISOString();
-		const expectedDate = "a few seconds ago";
-		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
-	});
-
-	it("returns correct format for hours difference", () => {
-		const pastDate = dayjs.utc().subtract(5, "hours").toISOString();
-		const expectedDate = "5 hours ago";
-		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
-	});
-
 	it("returns European format after 7 days", () => {
 		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
 		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
