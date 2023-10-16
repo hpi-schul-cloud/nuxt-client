@@ -8,11 +8,7 @@ export const useFileAlerts = (
 	const emittedAlerts: Ref<FileAlert[]> = ref([]);
 
 	const previewStatusAlert = computed(() => {
-		if (fileRecord.value === undefined) {
-			return;
-		}
-
-		return mapPreviewStatusToFileAlert(fileRecord.value.previewStatus);
+		return mapPreviewStatusToFileAlert(fileRecord?.value?.previewStatus);
 	});
 
 	const alerts = computed(() => {

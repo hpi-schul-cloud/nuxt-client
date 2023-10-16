@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import VideoDisplay from ".//VideoDisplay.vue";
 
 describe("VideoDisplay", () => {
@@ -13,7 +13,7 @@ describe("VideoDisplay", () => {
 			name,
 		};
 
-		const wrapper = shallowMount(VideoDisplay, {
+		const wrapper = mount(VideoDisplay, {
 			attachTo: document.body,
 			propsData,
 			slots: {
@@ -49,5 +49,16 @@ describe("VideoDisplay", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.text()).toContain("test-slot-content");
+	});
+
+	describe("when video dispatches error event", () => {
+		it("should emit error event", () => {
+			const { wrapper } = setup();
+
+			const video = wrapper.find("video");
+			video.trigger("error");
+
+			expect(wrapper.emitted("error")).toBeTruthy();
+		});
 	});
 });
