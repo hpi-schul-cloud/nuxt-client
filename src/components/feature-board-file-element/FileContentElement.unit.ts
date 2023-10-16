@@ -188,11 +188,6 @@ describe("FileContentElement", () => {
 					const fileContent = wrapper.findComponent(FileContent);
 					const alert = FileAlert.VIDEO_FORMAT_ERROR;
 					fileContent.vm.$emit("add:alert", alert);
-					console.log(fileContent.emitted());
-
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
 
 					expect(addAlertMock).toHaveBeenCalledWith(alert);
 				});
@@ -208,8 +203,6 @@ describe("FileContentElement", () => {
 
 					const fileContent = wrapper.findComponent(FileContent);
 					fileContent.vm.$emit("fetch:file");
-
-					await wrapper.vm.$nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(2);
 				});
