@@ -25,7 +25,7 @@
 				class="search-section"
 				label=""
 				data-testid="searchbar"
-				@update:vmodel="barSearch"
+				@update:model-value="barSearch"
 			>
 				<template #icon>
 					<v-icon>$mdiMagnify</v-icon>
