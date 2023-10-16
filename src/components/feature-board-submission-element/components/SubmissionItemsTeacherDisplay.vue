@@ -25,11 +25,13 @@
 						:class="getFilterClass('open')"
 						small
 						label
-						filter
-						:disabled="openCount === 0"
-						:outlined="activeFilter !== 'open'"
 						:ripple="false"
+						:outlined="activeFilter !== 'open'"
+						:disabled="isDisabled(openCount)"
+						:tabindex="getTabIndex(isDisabled(openCount))"
 						@click.stop="() => setFilter('open')"
+						@keydown.space.stop.prevent="() => setFilter('open')"
+						@keydown.enter.stop.prevent="() => setFilter('open')"
 					>
 						{{ openCount }}
 						{{ t("components.cardElement.submissionElement.open") }}
@@ -40,10 +42,13 @@
 						:class="getFilterClass('completed')"
 						small
 						label
-						:disabled="completedCount === 0"
-						:outlined="activeFilter !== 'completed'"
 						:ripple="false"
+						:outlined="activeFilter !== 'completed'"
+						:disabled="isDisabled(completedCount)"
+						:tabindex="getTabIndex(isDisabled(completedCount))"
 						@click.stop="() => setFilter('completed')"
+						@keydown.space.stop.prevent="() => setFilter('completed')"
+						@keydown.enter.stop.prevent="() => setFilter('completed')"
 					>
 						{{ completedCount }}
 						{{ t("components.cardElement.submissionElement.completed") }}
@@ -55,10 +60,13 @@
 						:class="getFilterClass('expired')"
 						small
 						label
-						:disabled="overdueCount === 0"
-						:outlined="activeFilter !== 'expired'"
 						:ripple="false"
+						:outlined="activeFilter !== 'expired'"
+						:disabled="isDisabled(overdueCount)"
+						:tabindex="getTabIndex(isDisabled(overdueCount))"
 						@click.stop="() => setFilter('expired')"
+						@keydown.space.stop.prevent="() => setFilter('expired')"
+						@keydown.enter.stop.prevent="() => setFilter('expired')"
 					>
 						{{ overdueCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
@@ -86,16 +94,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	PropType,
-	computed,
-	ref,
-	watch,
-	onMounted,
-	onUpdated,
-	unref,
-} from "vue";
+import { defineComponent, PropType, computed, ref, watch, unref } from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
@@ -174,6 +173,14 @@ export default defineComponent({
 			return activeFilter.value === filter ? "active-chip" : "grey black--text";
 		};
 
+		const isDisabled = (count: number) => {
+			return count === 0;
+		};
+
+		const getTabIndex = (isDisabled: boolean) => {
+			return isDisabled ? -1 : 0;
+		};
+
 		//	Filter Functionality
 		const filteredSubmissions = ref<Array<TeacherSubmission>>(
 			unref(allSubmissions)
@@ -229,6 +236,8 @@ export default defineComponent({
 			setFilter,
 			getStatusIcon,
 			getFilterClass,
+			isDisabled,
+			getTabIndex,
 		};
 	},
 });
@@ -236,11 +245,13 @@ export default defineComponent({
 <style lang="scss" scoped>
 ::v-deep {
 	.theme--light.v-expansion-panels .v-expansion-panel,
-	.v-expansion-panel-header:before {
+	.v-expansion-panel-header:before,
+	.v-chip:focus::before {
 		background-color: transparent;
 	}
 
-	.v-expansion-panel-header:focus {
+	.v-expansion-panel-header:focus,
+	.v-chip:focus {
 		outline: 2px solid var(--v-secondary-lighten1) !important;
 	}
 
