@@ -190,6 +190,9 @@ export default class ContextExternalToolsModule extends VuexModule {
 		return null;
 	}
 
+	/**
+	 * @deprecated useContextExternalToolApi.fetchDisplayDataCall
+	 */
 	@Action
 	async loadExternalToolDisplayData(payload: {
 		contextId: string;
