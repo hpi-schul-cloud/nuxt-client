@@ -264,11 +264,6 @@ export default defineComponent({
 	.v-chip--clickable:active {
 		box-shadow: unset;
 	}
-
-	.v-chip--disabled {
-		color: map-get($grey, base) !important;
-		border-color: map-get($grey, base) !important;
-	}
 }
 
 .active-chip {
@@ -276,7 +271,6 @@ export default defineComponent({
 	border: 1px solid map-get($grey, lighten-2);
 }
 .v-chip {
-	opacity: 1;
 	flex: none;
 }
 </style>
