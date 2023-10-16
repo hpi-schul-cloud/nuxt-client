@@ -1,12 +1,15 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<v-select
-			return-object
-			:value="perPageSelected"
+			:model-value="perPageSelected"
 			:items="perPageOptions"
+			item-title="text"
 			:aria-label="$t('components.organisms.Pagination.recordsPerPage')"
 			class="select-input-width"
-			@change="setPagination"
+			item-value="value"
+			return-object
+			active
+			@update:model-value="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
@@ -59,9 +62,6 @@
 <script>
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 export default {
-	model: {
-		event: "update",
-	},
 	props: {
 		currentPage: {
 			type: Number,
@@ -120,7 +120,7 @@ export default {
 	},
 	methods: {
 		setPagination(val) {
-			this.$emit("update:per-page", val);
+			this.$emit("update:per-page", val.value);
 			this.$emit("update:current-page", 1);
 		},
 		previousPage() {
