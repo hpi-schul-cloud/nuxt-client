@@ -196,11 +196,13 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			});
 			expect(chip.exists()).toBe(true);
 
+			const panel = wrapper.findComponent({ name: "v-expansion-panel" });
+			expect(panel.classes()).toEqual(["v-expansion-panel"]);
+
 			await chip.trigger("click");
 			await nextTick();
 
-			const tableContent = wrapper.find(".v-expansion-panel-content");
-			expect(tableContent.exists()).toBe(true);
+			expect(panel.classes()).toContain("v-expansion-panel--active");
 		});
 
 		it("should only show filtered submissions", async () => {
