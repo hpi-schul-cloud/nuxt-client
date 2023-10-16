@@ -17,6 +17,8 @@ import GroupModule from "./group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { classInfoFactory } from "../../tests/test-utils/factory/classInfoFactory";
+import axios from "axios/index";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
@@ -248,6 +250,65 @@ describe("GroupModule", () => {
 				const { apiError } = setup();
 
 				await module.loadClassesForSchool();
+
+				expect(module.getBusinessError).toEqual<BusinessError>({
+					error: apiError,
+					statusCode: apiError.code,
+					message: `${apiError.type}: ${apiError.message}`,
+				});
+			});
+		});
+	});
+
+	// TODO test deleteClass method by mocking the v1 axios call
+	describe("deleteClass", () => {
+		describe("when called", () => {
+			const setup = () => {
+				const clazz: ClassInfo = classInfoFactory.build();
+				const classId = clazz.id;
+
+				return {
+					classId,
+				};
+			};
+
+			it("should delete the class", async () => {
+				const { classId } = setup();
+
+				await module.deleteClass(classId);
+
+				expect(axios.delete).toHaveBeenCalled();
+			});
+
+			it("should load classes", async () => {
+				const { classId } = setup();
+
+				await module.deleteClass(classId);
+
+				expect(module.loadClassesForSchool).toHaveBeenCalled();
+				expect(module.getClasses).toEqual([]);
+			});
+		});
+
+		describe("when error is returned", () => {
+			const setup = () => {
+				const error = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(error);
+				const clazz: ClassInfo = classInfoFactory.build();
+				const classId = clazz.id;
+
+				module.loadClassesForSchool.mockRejectedValue(error);
+
+				return {
+					apiError,
+					classId,
+				};
+			};
+
+			it("should update the stores error", async () => {
+				const { apiError, classId } = setup();
+
+				await module.deleteClass(classId);
 
 				expect(module.getBusinessError).toEqual<BusinessError>({
 					error: apiError,

@@ -29,7 +29,7 @@
 					data-testid="class-table-manage-icon"
 					@click="manageClass(item)"
 				>
-					{{ mdiAccountMultipleOutline }}
+					{{ mdiAccountGroupOutline }}
 				</v-icon>
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
@@ -49,11 +49,12 @@
 				</v-icon>
 				<v-icon
 					v-if="hasPermission && !item.externalSourceName"
+					:disabled="!item.isUpgradable"
 					size="small"
-					data-testid="class-table-sucessor-icon"
+					data-testid="class-table-successor-icon"
 					@click="createSuccessor(item)"
 				>
-					{{ mdiArrowUpBoldOutline }}
+					{{ mdiArrowUp }}
 				</v-icon>
 			</template>
 		</v-data-table>
@@ -136,12 +137,11 @@ import { authModule } from "@/store";
 import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-	mdiArrowUpBoldOutline,
-	mdiAccountMultipleOutline,
+	mdiArrowUp,
+	mdiAccountGroupOutline,
 } from "@mdi/js";
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
-import axios from "axios";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML },
@@ -227,25 +227,21 @@ export default defineComponent({
 
 		const router: VueRouter = useRouter();
 
-		const tempClassId = "6527efc4535aa75bf803e31b";
-
 		const manageClass = async (item: ClassInfo) => {
 			await router.push({
-				path: `/administration/classes/${tempClassId}/manage`,
-			}); //TODO replace tempClassId with item.id after N21-939 is merged
+				path: `/administration/classes/${item.id}/manage`,
+			});
 		};
 
 		const editItem = async (item: ClassInfo) => {
 			await router.push({
-				path: `/administration/classes/${tempClassId}/edit`,
-			}); //TODO replace tempClassId with item.id after N21-939 is merged
+				path: `/administration/classes/${item.id}/edit`,
+			});
 		};
 
 		const onDeleteClass = async () => {
 			if (selectedItem.value) {
-				await axios.delete(`/v1/classes/${tempClassId}`);
-				await groupModule.loadClassesForSchool();
-				//TODO replace tempClassId with item.id after N21-939 is merged
+				await groupModule.deleteClass(selectedItem.value.id);
 			}
 
 			onCloseDeleteDialog();
@@ -253,7 +249,7 @@ export default defineComponent({
 
 		const createSuccessor = async (item: ClassInfo) => {
 			await router.push({
-				path: `/administration/classes/${tempClassId}/createSuccessor`, //TODO replace tempClassId with item.id after N21-939 is merged
+				path: `/administration/classes/${item.id}/createSuccessor`,
 			});
 		};
 
@@ -307,10 +303,10 @@ export default defineComponent({
 			updateSortOrder,
 			onUpdateCurrentPage,
 			onUpdateItemsPerPage,
-			mdiAccountMultipleOutline,
+			mdiAccountGroupOutline,
 			mdiPencilOutline,
 			mdiTrashCanOutline,
-			mdiArrowUpBoldOutline,
+			mdiArrowUp,
 		};
 	},
 });

@@ -1,9 +1,6 @@
 import GroupModule from "@/store/group";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import {
-	classInfoFactory,
-	i18nMock,
-} from "@@/tests/test-utils";
+import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import ClassOverview from "./ClassOverview.page.vue";
 import { GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
@@ -13,7 +10,6 @@ import { SortOrder } from "@/store/types/sort-order.enum";
 import { Pagination } from "@/store/types/commons";
 import setupStores from "../../../tests/test-utils/setupStores";
 import AuthModule from "../../store/auth";
-import { ClassInfo } from "../../store/types/class-info";
 import { authModule } from "../../store";
 
 const $router = {
@@ -25,7 +21,13 @@ describe("ClassOverview", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const groupModule = createModuleMocks(GroupModule, {
-			getClasses: [classInfoFactory.build()],
+			getClasses: [
+				classInfoFactory.build(),
+				classInfoFactory.build({
+					externalSourceName: "",
+					isUpgradable: true,
+				}),
+			],
 			getPagination: {
 				limit: 10,
 				skip: 0,
@@ -222,34 +224,255 @@ describe("ClassOverview", () => {
 		});
 	});
 
-	describe("manageClass", () => {
-		describe("when clicking on the manage class icon", () => {
+	describe("action icons", () => {
+		describe("when classes are available", () => {
 			const setup = () => {
-				const clazz: ClassInfo = classInfoResponseFactory.build({
-					externalSourceName: undefined,
-				});
-
 				authModule.addUserPermmission("CLASS_EDIT");
 
-				const { wrapper, groupModule } = getWrapper();
-
-				groupModule.setClasses([clazz]);
+				const { wrapper } = getWrapper();
 
 				return {
 					wrapper,
 				};
 			};
 
-			it("should redirect to legacy class manage page", async () => {
+			it("should render 4 icons", () => {
 				const { wrapper } = setup();
+
+				const manageIcon = wrapper.find(
+					'[data-testid="class-table-manage-icon"]'
+				);
+
+				const editIcon = wrapper.find('[data-testid="class-table-edit-icon"]');
+
+				const deleteIcon = wrapper.find(
+					'[data-testid="class-table-delete-icon"]'
+				);
+
+				const successorIcon = wrapper.find(
+					'[data-testid="class-table-successor-icon"]'
+				);
+
+				expect(manageIcon.exists()).toBeTruthy();
+				expect(editIcon.exists()).toBeTruthy();
+				expect(deleteIcon.exists()).toBeTruthy();
+				expect(successorIcon.exists()).toBeTruthy();
+			});
+		});
+
+		describe("when no classes are available", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper } = getWrapper({
+					getClasses: [classInfoFactory.build()],
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render any icons", () => {
+				const { wrapper } = setup();
+
+				const manageIcon = wrapper.find(
+					'[data-testid="class-table-manage-icon"]'
+				);
+
+				const editIcon = wrapper.find('[data-testid="class-table-edit-icon"]');
+
+				const deleteIcon = wrapper.find(
+					'[data-testid="class-table-delete-icon"]'
+				);
+
+				const successorIcon = wrapper.find(
+					'[data-testid="class-table-successor-icon"]'
+				);
+
+				expect(manageIcon.exists()).toBeFalsy();
+				expect(editIcon.exists()).toBeFalsy();
+				expect(deleteIcon.exists()).toBeFalsy();
+				expect(successorIcon.exists()).toBeFalsy();
+			});
+		});
+
+		describe("when clicking on the manage class icon", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper, groupModule } = getWrapper();
+
+				const classId: string = groupModule.getClasses[1].id;
+
+				return {
+					wrapper,
+					classId,
+				};
+			};
+
+			it("should redirect to legacy class manage page", async () => {
+				const { wrapper, classId } = setup();
 
 				await wrapper
 					.find('[data-testid="class-table-manage-icon"]')
 					.trigger("click");
 
-				expect($router.push).toHaveBeenCalledWith(
-					`/administration/classes/6527efc4535aa75bf803e31b/manage`
-				);
+				expect($router.push).toHaveBeenCalledWith({
+					path: `/administration/classes/${classId}/manage`,
+				});
+			});
+		});
+
+		describe("when clicking on the edit class icon", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper, groupModule } = getWrapper();
+
+				const classId: string = groupModule.getClasses[1].id;
+
+				return {
+					wrapper,
+					classId,
+				};
+			};
+
+			it("should redirect to legacy class edit page", async () => {
+				const { wrapper, classId } = setup();
+
+				await wrapper
+					.find('[data-testid="class-table-edit-icon"]')
+					.trigger("click");
+
+				expect($router.push).toHaveBeenCalledWith({
+					path: `/administration/classes/${classId}/edit`,
+				});
+			});
+		});
+
+		describe("when class is upgradable", () => {
+			describe("when clicking on the upgrade class icon", () => {
+				const setup = () => {
+					authModule.addUserPermmission("CLASS_EDIT");
+
+					const { wrapper, groupModule } = getWrapper();
+
+					const classId: string = groupModule.getClasses[1].id;
+
+					return {
+						wrapper,
+						classId,
+					};
+				};
+
+				it("should redirect to legacy class upgrade page", async () => {
+					const { wrapper, classId } = setup();
+
+					await wrapper
+						.find('[data-testid="class-table-successor-icon"]')
+						.trigger("click");
+
+					expect($router.push).toHaveBeenCalledWith({
+						path: `/administration/classes/${classId}/createSuccessor`,
+					});
+				});
+			});
+		});
+
+		describe("when class is not upgradable", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper } = getWrapper({
+					getClasses: [
+						classInfoFactory.build({
+							externalSourceName: undefined,
+							isUpgradable: false,
+						}),
+					],
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display the upgrade icon as disabled", () => {
+				const { wrapper } = setup();
+
+				const icon = wrapper.find('[data-testid="class-table-successor-icon"]');
+
+				expect(icon.attributes().disabled).toBe("disabled");
+			});
+		});
+
+		describe("when clicking on the delete class icon", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should open the delete dialog", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="class-table-delete-icon"]')
+					.trigger("click");
+
+				const dialog = wrapper.find('[data-testid="delete-dialog"]');
+
+				expect(dialog.exists()).toBeTruthy();
+			});
+		});
+
+		describe("when delete dialog is open", () => {
+			const setup = () => {
+				authModule.addUserPermmission("CLASS_EDIT");
+
+				const { wrapper, groupModule } = getWrapper();
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			describe("when clicking on cancel button", () => {
+				it("should not delete class", async () => {
+					const { wrapper, groupModule } = setup();
+
+					await wrapper
+						.find('[data-testid="class-table-delete-icon"]')
+						.trigger("click");
+
+					const dialog = wrapper.find('[data-testid="delete-dialog"]');
+
+					await dialog.find('[data-testid="dialog-cancel"').trigger("click");
+
+					expect(groupModule.deleteClass).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when clicking on confirm button", () => {
+				it("should delete class", async () => {
+					const { wrapper, groupModule } = setup();
+
+					await wrapper
+						.find('[data-testid="class-table-delete-icon"]')
+						.trigger("click");
+
+					const dialog = wrapper.find('[data-testid="delete-dialog"]');
+
+					await dialog.find('[data-testid="dialog-confirm"').trigger("click");
+
+					expect(groupModule.deleteClass).toHaveBeenCalled();
+				});
 			});
 		});
 	});

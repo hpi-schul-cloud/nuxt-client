@@ -401,6 +401,12 @@ export interface ClassInfoResponse {
      * @memberof ClassInfoResponse
      */
     schoolYear?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClassInfoResponse
+     */
+    isUpgradable?: boolean;
 }
 
 /**
@@ -3263,7 +3269,7 @@ export interface OauthConfigResponse {
      * @type {string}
      * @memberof OauthConfigResponse
      */
-    logoutEndpoint: string;
+    logoutEndpoint?: string;
     /**
      * Issuer
      * @type {string}
