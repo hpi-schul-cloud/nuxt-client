@@ -59,6 +59,7 @@
 				@update:current-page="onUpdateCurrentPage"
 				@update:rows-per-page="onUpdateRowsPerPage"
 				:rows-per-page="limit"
+				:current-page="page"
 			>
 				<template #datacolumn-birthday="{ data }">
 					<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
