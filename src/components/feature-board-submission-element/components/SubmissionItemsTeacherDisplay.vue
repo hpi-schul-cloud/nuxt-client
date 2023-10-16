@@ -14,7 +14,10 @@
 			class="rounded-0 rounded-b-sm"
 		>
 			<VExpansionPanel>
-				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
+				<VExpansionPanelHeader
+					@dblclick.stop="() => {}"
+					class="pl-4 pr-4 rounded-tr-0 rounded-tl-0"
+				>
 					<v-chip
 						v-if="!isOverdue"
 						ref="v-chip-open"
@@ -224,6 +227,10 @@ export default defineComponent({
 	.theme--light.v-expansion-panels .v-expansion-panel,
 	.v-expansion-panel-header:before {
 		background-color: transparent;
+	}
+
+	.v-expansion-panel-header:focus {
+		outline: 2px solid var(--v-secondary-lighten1) !important;
 	}
 
 	.v-data-table
