@@ -24,16 +24,7 @@ import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import setupStores from "../../tests/test-utils/setupStores";
-// import AuthModule from "@/store/auth";
-import { authModule } from "@/store";
-
-jest.mock("@/store", () => ({
-	authModule: {
-		get getLocale() {
-			return "en";
-		},
-	},
-}));
+import AuthModule from "@/store/auth";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
