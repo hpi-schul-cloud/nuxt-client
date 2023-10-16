@@ -13,7 +13,7 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<div class="card d-flex gap-8 grey lighten-4">
+		<div class="card-container d-flex gap-8 grey lighten-4">
 			<div
 				v-if="toolDisplayData && toolDisplayData.logoUrl"
 				class="logo-container my-auto mr-1"
@@ -199,7 +199,7 @@ export default defineComponent({
 $card-padding: 16px;
 $logo-size: 24px;
 
-.card {
+.card-container {
 	max-width: 100%;
 	min-height: calc($card-padding * 2 + $logo-size);
 	padding: $card-padding;
