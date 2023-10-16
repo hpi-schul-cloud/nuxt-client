@@ -117,7 +117,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		beforeAll(() => {
 			const submissions = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
-				{ firstName: "Max", lastName: "Meyer", status: "completed" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
 			];
 			wrapper = setup(submissions).wrapper;
 		});
@@ -152,7 +152,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			const isOverdue = true;
 			const submissions = [
 				{ firstName: "Max", lastName: "Meyer", status: "expired" },
-				{ firstName: "Max", lastName: "Meyer", status: "completed" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
 			];
 			wrapper = setup(submissions, loading, isOverdue).wrapper;
 		});
