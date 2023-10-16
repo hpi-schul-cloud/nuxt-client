@@ -53,7 +53,7 @@
 							data-testId="every-attendee-joins-muted"
 							class="my-0"
 							inset
-							dense
+							density="compact"
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
@@ -69,7 +69,7 @@
 							data-testId="moderator-must-approve-join-requests"
 							class="my-0"
 							inset
-							dense
+							density="compact"
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
@@ -85,7 +85,7 @@
 							data-testId="everybody-joins-as-moderator"
 							class="my-0"
 							inset
-							dense
+							density="compact"
 						></v-switch>
 					</div>
 				</v-card-text>

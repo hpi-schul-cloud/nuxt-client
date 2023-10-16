@@ -77,12 +77,14 @@
 				:disabled="!oauthMigration.startedAt"
 				:true-value="true"
 				:false-value="false"
-				:value="oauthMigration.mandatorySince"
+				:input-value="oauthMigration.mandatorySince"
 				inset
-				dense
+				density="compact"
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(!oauthMigration.mandatorySince)"
+				@update:model-value="
+					setMigrationMandatory(!oauthMigration.mandatorySince)
+				"
 			/>
 		</div>
 
@@ -127,10 +129,10 @@
 			:disabled="!isMigrationActive"
 			v-model="school.features.enableLdapSyncDuringMigration"
 			inset
-			dense
+			density="compact"
 			class="ml-1"
 			data-testid="enable-sync-during-migration-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
@@ -144,7 +146,7 @@
 			dense
 			class="ml-1"
 			data-testid="show-outdated-users-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
