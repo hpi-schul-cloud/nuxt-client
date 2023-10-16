@@ -4,7 +4,7 @@
 		hover
 		tabindex="0"
 		role="button"
-		color="var(--v-primary-lighten)"
+		color="rgba(var(--v-theme-primary-lighten))"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -15,7 +15,7 @@
 		<VCardText>
 			<div class="mb-0">
 				<div class="d-flex align-center mb-3">
-					<VIcon size="14" class="mr-1">{{ mdiViewDashboard }}</VIcon>
+					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard"></VIcon>
 					<span class="title-board-card">
 						{{ $t("pages.room.boardCard.label.columnBoard") }}
 					</span>
@@ -28,55 +28,43 @@
 	</VCard>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiViewDashboard } from "@mdi/js";
-import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
-export default defineComponent({
-	name: "RoomBoardCard",
-	props: {
-		columnBoardItem: { type: Object, required: true },
-		courseData: { type: Object, required: true },
-		keyDrag: { type: Boolean, required: true },
-		dragInProgress: { type: Boolean, required: true },
-	},
-	emits: ["tab-pressed", "on-drag", "move-element"],
-	setup(props, { emit }) {
-		const router = useRouter();
-
-		const openBoard = async () => {
-			if (!props.dragInProgress) {
-				await router.push(`${props.columnBoardItem.columnBoardId}/board`);
-			}
-		};
-
-		const moveCardDown = () => {
-			if (props.keyDrag) {
-				emit("move-element", {
-					id: props.columnBoardItem.id,
-					moveIndex: 1,
-				});
-			}
-		};
-
-		const moveCardUp = () => {
-			if (props.keyDrag) {
-				emit("move-element", {
-					id: props.columnBoardItem.id,
-					moveIndex: -1,
-				});
-			}
-		};
-
-		return {
-			mdiViewDashboard,
-			moveCardDown,
-			moveCardUp,
-			openBoard,
-		};
-	},
+const props = defineProps({
+	columnBoardItem: { type: Object, required: true },
+	courseData: { type: Object, required: true },
+	keyDrag: { type: Boolean, required: true },
+	dragInProgress: { type: Boolean, required: true },
 });
+const emit = defineEmits(["tab-pressed", "on-drag", "move-element"]);
+
+const router = useRouter();
+
+const openBoard = async () => {
+	if (!props.dragInProgress) {
+		await router.push(`${props.columnBoardItem.columnBoardId}/board`);
+	}
+};
+
+const moveCardDown = () => {
+	if (props.keyDrag) {
+		emit("move-element", {
+			id: props.columnBoardItem.id,
+			moveIndex: 1,
+		});
+	}
+};
+
+const moveCardUp = () => {
+	if (props.keyDrag) {
+		emit("move-element", {
+			id: props.columnBoardItem.id,
+			moveIndex: -1,
+		});
+	}
+};
 </script>
 
 <style lang="scss" scoped>

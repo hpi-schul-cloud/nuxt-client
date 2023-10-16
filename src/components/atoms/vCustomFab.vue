@@ -18,8 +18,7 @@
 				role="menu"
 				color="primary"
 				icon
-				rounded
-				:small="isCollapsed"
+				:size="isCollapsed ? 'small' : 'default'"
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
 				:aria-label="ariaLabel ? ariaLabel : title"
@@ -51,7 +50,7 @@
 					:aria-label="action.ariaLabel ? action.ariaLabel : action.label"
 					@click="onCustomEvent(action.customEvent || null)"
 				>
-					<v-icon small class="fab-action-icon">{{ action.icon }}</v-icon>
+					<v-icon siesmall class="fab-action-icon">{{ action.icon }}</v-icon>
 				</v-btn>
 			</div>
 		</template>
@@ -64,16 +63,14 @@
 	</v-speed-dial>
 	<v-btn
 		v-else
-		v-bind="$attrs"
-		icon
-		fixed
+		v-bind="$props"
+		postion="fixed"
 		right
 		:bottom="!positionAtTop"
 		:top="positionAtTop"
 		color="primary"
-		dark
-		rounded
-		:small="extended"
+		rounded="xl"
+		:size="extended ? 'small' : 'default'"
 		:href="href"
 		:class="classes"
 		:aria-label="ariaLabel ? ariaLabel : title"

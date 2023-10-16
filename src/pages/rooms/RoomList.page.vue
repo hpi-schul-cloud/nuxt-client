@@ -9,7 +9,7 @@
 					<v-btn
 						color="secondary"
 						variant="outlined"
-						small
+						size="small"
 						to="/rooms-overview"
 						data-testid="go-to-active-courses"
 						>{{ $t("pages.rooms.index.courses.active") }}
@@ -24,9 +24,9 @@
 						ref="search"
 						v-model="searchText"
 						rounded
-						variabt="solo"
+						variant="solo"
 						:label="$t('pages.rooms.index.search.label')"
-						:append-icon="mdiMagnify"
+						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
 					>
 					</v-text-field>

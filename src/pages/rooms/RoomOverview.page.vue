@@ -13,7 +13,7 @@
 						<v-btn
 							color="secondary"
 							variant="outlined"
-							small
+							size="small"
 							to="/rooms-list"
 							data-testid="go-to-all-courses"
 						>

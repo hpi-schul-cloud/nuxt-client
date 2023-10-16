@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isDraft"
+		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-task"
 		role="button"
@@ -19,9 +19,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" data-testid="tagline">
-					<v-icon size="14" class="fill">
-						{{ titleIcon }}
-					</v-icon>
+					<v-icon size="14" class="fill" :icon="titleIcon"> </v-icon>
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -52,16 +50,15 @@
 					v-for="(chip, index) in chipItems[role]"
 					:key="index"
 					:class="[chip.class]"
-					small
+					size="small"
 					:data-testid="[chip.testid]"
 				>
 					<v-icon
 						v-if="chip.icon"
 						left
-						small
+						size="small"
 						class="fill"
 						color="rgba(0, 0, 0, 0.87)"
-						d
 					>
 						{{ chip.icon }}
 					</v-icon>
@@ -83,6 +80,7 @@
 					.split(' ')
 					.join('-')}`"
 				variant="text"
+				color="primary"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -467,10 +465,6 @@ export default {
 
 .text-description {
 	font-size: var(--text-md);
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .chip-items-group {

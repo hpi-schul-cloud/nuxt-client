@@ -9,13 +9,15 @@
 		<template #under-title>
 			<div v-if="isToolOutdated" class="mt-1">
 				<v-chip
-					small
+					size="small"
 					class="py-1"
 					color="warning lighten-1"
 					text-color="black"
 					data-testId="tool-card-status"
 				>
-					<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
+					<v-icon size="small" class="mr-1" color="warning">{{
+						mdiAlert
+					}}</v-icon>
 					{{ t("pages.rooms.tools.outdated") }}
 				</v-chip>
 			</div>
