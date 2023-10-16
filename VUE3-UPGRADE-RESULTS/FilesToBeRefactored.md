@@ -62,6 +62,7 @@
   - `v-stepper`
   - `v-time-picker`
   - `v-tree-view`
+  - `v-data-iterator`
 - **Recommended Solution-1:** Wait until it's upcoming release.
 - **Recommended Solution-2:** Imported from vuelabs to use until they're released. But it needs another refactoring after then.
 - **Estimation time for refactoring:** _TBD depending on selected solution_
