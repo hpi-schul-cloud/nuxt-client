@@ -13,8 +13,8 @@ import { VuetifyIcon } from "vuetify/types/services/icons";
 export default defineComponent({
 	name: "BaseAlert",
 	props: {
-		color: { type: String, required: false },
-		icon: { type: String as PropType<VuetifyIcon>, required: false },
+		color: { type: String },
+		icon: { type: String as PropType<VuetifyIcon> },
 	},
 });
 </script>
