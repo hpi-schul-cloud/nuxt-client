@@ -21,7 +21,7 @@
 						:error="errors.content"
 						:required="true"
 						:placeholder="
-							$t('components.organisms.FormNews.editor.placeholder').toString()
+							$t('components.organisms.FormNews.editor.placeholder')
 						"
 					/>
 					<transition name="fade">
@@ -102,10 +102,6 @@ export default defineComponent({
 		TextEditor,
 		TitleInput,
 		FormActions,
-	},
-	model: {
-		prop: "news",
-		event: "update:news",
 	},
 	props: {
 		news: {

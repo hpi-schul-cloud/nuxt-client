@@ -1,27 +1,29 @@
 <template>
 	<base-input
 		v-bind="{ ...$attrs, ...$props }"
-		:model-value="vmodel"
+		v-model="value"
 		classes="h1"
 		:label-hidden="true"
 	/>
 </template>
-<script>
-export default {
-	inheritAttrs: false,
-	model: {
-		prop: "vmodel",
-		event: "update:vmodel",
+<script setup lang="ts">
+import { computed } from "vue";
+
+const props = defineProps({
+	modelValue: {
+		type: [String, Number],
+		required: true,
 	},
-	props: {
-		vmodel: {
-			type: [String, Number],
-			required: true,
-		},
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const value = computed({
+	get() {
+		return props.modelValue;
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+	set(value) {
+		emit("update:modelValue", value);
 	},
-};
+});
 </script>
