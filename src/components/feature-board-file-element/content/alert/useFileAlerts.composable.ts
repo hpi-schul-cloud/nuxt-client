@@ -20,9 +20,13 @@ export const useFileAlerts = (
 		return alerts;
 	});
 
+	const addAlert = (alert: FileAlert) => {
+		emittedAlerts.value.push(alert);
+	};
+
 	return {
 		alerts,
-		emittedAlerts,
+		addAlert,
 	};
 };
 

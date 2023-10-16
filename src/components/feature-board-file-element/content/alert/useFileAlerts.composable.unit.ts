@@ -11,13 +11,10 @@ describe("useFileAlerts", () => {
 	describe("when filerecord is undefined", () => {
 		const setup = () => {
 			const fileRecord = ref();
-			const { alerts, emittedAlerts } = mountComposable(() =>
-				useFileAlerts(fileRecord)
-			);
+			const { alerts } = mountComposable(() => useFileAlerts(fileRecord));
 
 			return {
 				alerts,
-				emittedAlerts,
 			};
 		};
 
@@ -32,14 +29,14 @@ describe("useFileAlerts", () => {
 			const fileRecord = ref(
 				fileRecordResponseFactory.build({ previewStatus })
 			);
-			const { alerts, emittedAlerts } = mountComposable(() =>
+			const { alerts, addAlert } = mountComposable(() =>
 				useFileAlerts(fileRecord)
 			);
 
 			return {
 				alerts,
-				emittedAlerts,
 				fileRecord,
+				addAlert,
 			};
 		};
 
@@ -92,13 +89,11 @@ describe("useFileAlerts", () => {
 			});
 		});
 
-		describe("when alert is added to emitted alerts", () => {
+		describe("when alert is added", () => {
 			it("should return correct alerts array", () => {
-				const { alerts, emittedAlerts } = setup(
-					PreviewStatus.AWAITING_SCAN_STATUS
-				);
+				const { alerts, addAlert } = setup(PreviewStatus.AWAITING_SCAN_STATUS);
 
-				emittedAlerts.value = [FileAlert.VIDEO_FORMAT_ERROR];
+				addAlert(FileAlert.VIDEO_FORMAT_ERROR);
 
 				expect(alerts.value).toEqual([
 					FileAlert.VIDEO_FORMAT_ERROR,

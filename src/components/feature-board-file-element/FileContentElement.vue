@@ -101,7 +101,7 @@ export default defineComponent({
 			FileRecordParentType.BOARDNODES
 		);
 
-		const { alerts, emittedAlerts } = useFileAlerts(fileRecord);
+		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -169,7 +169,7 @@ export default defineComponent({
 		};
 
 		const onAddAlert = (alert: FileAlert) => {
-			emittedAlerts.value.push(alert);
+			addAlert(alert);
 		};
 		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");
