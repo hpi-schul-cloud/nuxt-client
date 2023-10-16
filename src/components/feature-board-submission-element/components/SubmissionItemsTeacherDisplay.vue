@@ -86,7 +86,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref, watch } from "vue";
+import {
+	defineComponent,
+	PropType,
+	computed,
+	ref,
+	watch,
+	onMounted,
+	onUpdated,
+	unref,
+} from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
@@ -166,7 +175,9 @@ export default defineComponent({
 		};
 
 		//	Filter Functionality
-		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
+		const filteredSubmissions = ref<Array<TeacherSubmission>>(
+			unref(allSubmissions)
+		);
 		const activeFilter = ref<StatusFilter>("all");
 		const panel = ref<number | undefined>(undefined);
 
