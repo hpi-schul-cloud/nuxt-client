@@ -19,9 +19,7 @@
 						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
-						:class="
-							activeFilter === 'open' ? 'active-chip' : 'grey black--text'
-						"
+						:class="getFilterClass('open')"
 						small
 						label
 						filter
@@ -36,9 +34,7 @@
 					<v-chip
 						ref="v-chip-completed"
 						class="mr-2"
-						:class="
-							activeFilter === 'completed' ? 'active-chip' : 'grey black--text'
-						"
+						:class="getFilterClass('completed')"
 						small
 						label
 						:disabled="completedCount === 0"
@@ -53,9 +49,7 @@
 						v-if="isOverdue"
 						ref="v-chip-expired"
 						class="mr-2"
-						:class="
-							activeFilter === 'expired' ? 'active-chip' : 'grey black--text'
-						"
+						:class="getFilterClass('expired')"
 						small
 						label
 						:disabled="overdueCount === 0"
@@ -164,6 +158,10 @@ export default defineComponent({
 			}
 		};
 
+		const getFilterClass = (filter: StatusFilter) => {
+			return activeFilter.value === filter ? "active-chip" : "grey black--text";
+		};
+
 		//	Filter Functionality
 		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
 		const activeFilter = ref<StatusFilter>("all");
@@ -216,6 +214,7 @@ export default defineComponent({
 			activeFilter,
 			setFilter,
 			getStatusIcon,
+			getFilterClass,
 		};
 	},
 });
