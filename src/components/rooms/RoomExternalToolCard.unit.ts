@@ -11,28 +11,23 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 } from "@/utils/inject";
-import {
-	ToolConfigurationStatus,
-	ToolLaunchRequest,
-} from "@/store/external-tool";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import ExternalToolsModule from "@/store/external-tools";
-import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import { flushPromises } from "@vue/test-utils";
 import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
-import flushPromises from "flush-promises";
+import { ToolLaunchRequestResponse } from "@/serverApi/v3";
 
 describe("RoomExternalToolCard", () => {
-	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
+	const getWrapper = (
+		tool: ExternalToolDisplayData,
+		canEdit: boolean,
+		externalToolsModuleMock = createModuleMocks(ExternalToolsModule)
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getCtlContextConfigurationEnabled: true,
 		});
-
-		const externalToolsModule = createModuleMocks(ExternalToolsModule);
-
-		externalToolsModule.loadToolLaunchData.mockResolvedValue(
-			toolLaunchRequestResponseFactory.build()
-		);
 
 		const wrapper: Wrapper<Vue> = mount(
 			RoomExternalToolCard as MountOptions<Vue>,
@@ -50,14 +45,13 @@ describe("RoomExternalToolCard", () => {
 						tc: (key: string): string => key,
 					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModuleMock,
 				},
 			}
 		);
 
 		return {
 			wrapper,
-			externalToolsModule,
 		};
 	};
 
@@ -118,32 +112,81 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	describe("when the user clicks the card", () => {
-		const setup = () => {
-			const toolDisplayData: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("when there was no error while loading launch request", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
 
-			const launchRequest: ToolLaunchRequest = toolLaunchRequestFactory.build();
+				const launchRequest: ToolLaunchRequestResponse =
+					toolLaunchRequestResponseFactory.build();
 
-			const { wrapper } = getWrapper(toolDisplayData, true);
+				const externalToolsModuleMock = createModuleMocks(ExternalToolsModule);
+				externalToolsModuleMock.loadToolLaunchData.mockResolvedValueOnce(
+					launchRequest
+				);
 
-			return {
-				wrapper,
-				toolDisplayData,
-				launchRequest,
+				const { wrapper } = getWrapper(
+					toolDisplayData,
+					true,
+					externalToolsModuleMock
+				);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					toolDisplayData,
+					launchRequest,
+				};
 			};
-		};
 
-		it("should emit the click event", async () => {
-			const { wrapper, toolDisplayData, launchRequest } = setup();
+			it("should emit the click event", async () => {
+				const { wrapper, toolDisplayData, launchRequest } = await setup();
 
-			await flushPromises();
+				await wrapper.trigger("click");
 
-			await wrapper.trigger("click");
+				expect(wrapper.emitted("click")).toContainEqual([
+					launchRequest,
+					toolDisplayData,
+				]);
+			});
+		});
 
-			expect(wrapper.emitted("click")).toContainEqual([
-				launchRequest,
-				toolDisplayData,
-			]);
+		describe("when loading error is set", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
+
+				const launchRequest: ToolLaunchRequestResponse =
+					toolLaunchRequestResponseFactory.build();
+
+				const externalToolsModuleMock = createModuleMocks(ExternalToolsModule);
+				externalToolsModuleMock.loadToolLaunchData.mockRejectedValueOnce(
+					new Error()
+				);
+
+				const { wrapper } = getWrapper(
+					toolDisplayData,
+					true,
+					externalToolsModuleMock
+				);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					toolDisplayData,
+					launchRequest,
+				};
+			};
+
+			it("should emit the error event", async () => {
+				const { wrapper, toolDisplayData } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(wrapper.emitted("error")).toContainEqual([toolDisplayData]);
+			});
 		});
 	});
 

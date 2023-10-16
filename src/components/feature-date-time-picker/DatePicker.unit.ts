@@ -78,18 +78,4 @@ describe("DatePicker", () => {
 			expect(wrapper.emitted("update:date")).toBeUndefined();
 		});
 	});
-
-	describe("when date is not required", () => {
-		it("should not emit error event", async () => {
-			setup({ date: new Date().toISOString() });
-
-			const textField = wrapper.findComponent({ name: "v-text-field" });
-
-			textField.vm.$emit("blur", {
-				target: { value: new Date().toISOString() },
-			});
-			await wrapper.vm.$nextTick();
-			expect(wrapper.emitted("error")).toBe(undefined);
-		});
-	});
 });

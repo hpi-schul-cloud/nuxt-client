@@ -36,7 +36,6 @@
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
 							@click="onSelect(timeOfDay.value)"
-							:disabled="timeOfDay.disabled"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
@@ -50,7 +49,7 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref, toRef } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "vue-i18n";
@@ -62,7 +61,6 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
-		allowPast: { type: Boolean, default: true },
 	},
 	emits: ["update:time"],
 	setup(props, { emit }) {
@@ -80,9 +78,7 @@ export default defineComponent({
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
 
-		const { timesOfDayList, timeInPast } = useTimePickerState(
-			toRef(props, "allowPast")
-		);
+		const { timesOfDayList } = useTimePickerState();
 
 		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
@@ -101,19 +97,6 @@ export default defineComponent({
 				: true;
 		};
 
-		const allowPastRule: ValidationRule = (value: string | null) => {
-			if (value === "" || value === null) {
-				return true;
-			}
-			const hoursAndMinutes = value.split(":");
-			return timeInPast(
-				parseInt(hoursAndMinutes[0]),
-				parseInt(hoursAndMinutes[1])
-			)
-				? t("components.timePicker.validation.future")
-				: true;
-		};
-
 		const rules = computed<ValidationRule[]>(() => {
 			const rules: ValidationRule[] = [];
 
@@ -121,9 +104,7 @@ export default defineComponent({
 				rules.push(requiredRule);
 			}
 			rules.push(formatRule);
-			if (!props.allowPast) {
-				rules.push(allowPastRule);
-			}
+
 			return rules;
 		});
 

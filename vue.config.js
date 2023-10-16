@@ -32,8 +32,8 @@ module.exports = defineConfig({
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
-				"@feature-board-content-element-menu": getDir(
-					"src/components/feature-board-content-element-menu"
+				"@feature-board-link-element": getDir(
+					"src/components/feature-board-link-element"
 				),
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
@@ -50,6 +50,7 @@ module.exports = defineConfig({
 				),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
+				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],

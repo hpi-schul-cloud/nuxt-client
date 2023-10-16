@@ -7,10 +7,10 @@ export const useDeleteConfirmationDialog = () => {
 
 	const askDeleteConfirmation = async (
 		title: string | undefined,
-		type: "boardColumn" | "boardCard" | "boardElement"
+		typeLanguageKey: string
 	): Promise<boolean> => {
 		const titleString = title ? `"${title}"` : "";
-		const typeString = t(`components.${type}`);
+		const typeString = t(typeLanguageKey);
 
 		const message = t("ui-confirmation-dialog.ask-delete", {
 			title: titleString,

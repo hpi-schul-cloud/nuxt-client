@@ -40,7 +40,6 @@ export const mapAxiosErrorToResponseError = (
 			apiError.title = error.response?.statusText || apiError.title;
 		}
 	}
-
 	return apiError;
 };
 

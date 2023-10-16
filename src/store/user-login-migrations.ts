@@ -1,5 +1,5 @@
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, HttpStatusCode } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	PageContentResponse,
@@ -157,6 +157,48 @@ export default class UserLoginMigrationModule extends VuexModule {
 				}
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
+
+				console.log(apiError);
+
+				this.setBusinessError({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
+
+				throw createApplicationError(apiError.code);
+			}
+		}
+
+		this.setLoading(false);
+	}
+
+	@Action
+	async fetchLatestUserLoginMigrationForSchool(): Promise<void> {
+		this.setLoading(true);
+
+		this.resetBusinessError();
+
+		if (authModule.getUser?.schoolId) {
+			try {
+				const response: AxiosResponse<UserLoginMigrationResponse> =
+					await this.userLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool(
+						authModule.getUser?.schoolId
+					);
+
+				if (response.data.startedAt) {
+					const userLoginMigration: UserLoginMigration =
+						UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+
+					this.setUserLoginMigration(userLoginMigration);
+				}
+			} catch (error: unknown) {
+				const apiError = mapAxiosErrorToResponseError(error);
+
+				if (apiError.code === HttpStatusCode.NotFound) {
+					this.setUserLoginMigration(undefined);
+					return;
+				}
 
 				console.log(apiError);
 

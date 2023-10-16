@@ -10,6 +10,7 @@
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@click="onClickTool"
+			@error="onError"
 			:data-testid="`external-tool-card-${index}`"
 		></room-external-tool-card>
 
@@ -89,11 +90,9 @@ import { RenderHTML } from "@feature-render-html";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import ExternalToolsModule from "@/store/external-tools";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import {
@@ -108,6 +107,7 @@ import { useI18n } from "vue-i18n";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useRouter } from "vue-router";
 import {
+	ToolConfigurationStatus,
 	ToolContextType,
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -135,9 +135,7 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
-		);
+
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
@@ -180,8 +178,6 @@ export default defineComponent({
 
 		const onCloseErrorDialog = () => {
 			isErrorDialogOpen.value = false;
-
-			externalToolsModule.resetBusinessError();
 		};
 
 		const onEditTool = (tool: ExternalToolDisplayData) => {
@@ -199,17 +195,30 @@ export default defineComponent({
 			toolLaunchRequest: ToolLaunchRequest,
 			displayData: ExternalToolDisplayData
 		) => {
-			switch (toolLaunchRequest?.method) {
-				case ToolLaunchRequestMethodEnum.Get:
-					handleGetLaunchRequest(toolLaunchRequest);
-					break;
-				case ToolLaunchRequestMethodEnum.Post:
-					handlePostLaunchRequest(toolLaunchRequest);
-					break;
-				default:
-					handleLaunchError(displayData);
-					break;
+			if (isToolLaunchable(displayData)) {
+				switch (toolLaunchRequest?.method) {
+					case ToolLaunchRequestMethodEnum.Get:
+						handleGetLaunchRequest(toolLaunchRequest);
+						break;
+					case ToolLaunchRequestMethodEnum.Post:
+						handlePostLaunchRequest(toolLaunchRequest);
+						break;
+					default:
+						isToolLaunchable(displayData);
+						break;
+				}
 			}
+		};
+
+		const onError = (displayData: ExternalToolDisplayData): void => {
+			showErrorDialog(displayData);
+		};
+
+		const showErrorDialog = (
+			displayData: ExternalToolDisplayData | undefined
+		) => {
+			selectedItem.value = displayData;
+			isErrorDialogOpen.value = true;
 		};
 
 		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
@@ -243,17 +252,15 @@ export default defineComponent({
 			form.submit();
 		};
 
-		const handleLaunchError = (displayData: ExternalToolDisplayData) => {
-			const businessErrorMessage = externalToolsModule.getBusinessError.message;
-
-			if (
-				["TOOL_STATUS_OUTDATED", "MISSING_TOOL_PARAMETER_VALUE"].some(
-					(keyword) => businessErrorMessage.includes(keyword)
-				)
-			) {
-				selectedItem.value = displayData;
-				isErrorDialogOpen.value = true;
+		const isToolLaunchable = (
+			displayData: ExternalToolDisplayData
+		): boolean => {
+			if (displayData.status === ToolConfigurationStatus.Latest) {
+				return true;
 			}
+			showErrorDialog(displayData);
+
+			return false;
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
@@ -278,6 +285,7 @@ export default defineComponent({
 			isErrorDialogOpen,
 			onCloseErrorDialog,
 			errorDialogText,
+			onError,
 		};
 	},
 });

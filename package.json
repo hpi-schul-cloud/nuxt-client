@@ -15,11 +15,12 @@
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'"
 	},
 	"dependencies": {
+		"@braintree/sanitize-url": "^6.0.4",	
 		"@ckeditor/ckeditor5-vue": "^5.1.0",
 		"@hpi-schul-cloud/ckeditor": "0.4.0",
 		"@vuelidate/core": "^2.0.3",
 		"@vuelidate/validators": "^2.0.4",
-		"@vueuse/components": "^10.3.0",
+		"@vueuse/components": "^10.5.0",
 		"@vueuse/core": "^10.4.1",
 		"axios": "^1.5.0",
 		"dayjs": "^1.11.9",
@@ -42,8 +43,8 @@
 	"devDependencies": {
 		"@golevelup/ts-jest": "^0.4.0",
 		"@mdi/js": "^7.2.96",
-		"@openapitools/openapi-generator-cli": "^2.5.2",
-		"@types/jest": "^27.0.3",
+		"@openapitools/openapi-generator-cli": "^2.7.0",
+		"@types/jest": "^27.5.2",
 		"@types/object-hash": "^2.2.1",
 		"@typescript-eslint/eslint-plugin": "^6.5.0",
 		"@typescript-eslint/parser": "^6.5.0",

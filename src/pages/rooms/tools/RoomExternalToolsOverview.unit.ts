@@ -3,7 +3,7 @@ import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-dis
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
+import { flushPromises } from "@vue/test-utils";
 import Vue from "vue";
 import RoomModule from "@/store/room";
 import {
@@ -147,7 +147,7 @@ describe("RoomExternalToolOverview", () => {
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
-			// await flushPromises();
+			await flushPromises();
 
 			return {
 				wrapper,

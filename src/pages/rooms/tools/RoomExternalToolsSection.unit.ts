@@ -1,7 +1,6 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { AxiosError } from "axios";
 import Vue from "vue";
 import {
 	AUTH_MODULE_KEY,
@@ -13,42 +12,40 @@ import {
 import {
 	businessErrorFactory,
 	externalToolDisplayDataFactory,
+	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	ExternalToolDisplayData,
+	ToolConfigurationStatus,
 	ToolContextType,
 } from "@/store/external-tool";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import ExternalToolsModule from "@/store/external-tools";
-import { BusinessError } from "@/store/types/commons";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import VueRouter from "vue-router";
 import * as routerComposables from "vue-router";
-import EnvConfigModule from "../../../store/env-config";
+import EnvConfigModule from "@/store/env-config";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import ExternalToolsModule from "@/store/external-tools";
+import { flushPromises } from "@vue/test-utils";
+import { BusinessError } from "@/store/types/commons";
+import { AxiosError } from "axios";
 
 describe("RoomExternalToolsSection", () => {
 	let router: DeepMocked<VueRouter>;
 
 	const getWrapper = (
-		props: { tools: ExternalToolDisplayData[]; roomId: string },
-		externalToolsModuleGetter?: Partial<ExternalToolsModule>
+		props: {
+			tools: ExternalToolDisplayData[];
+			roomId: string;
+		},
+		externalToolsModuleMock = createModuleMocks(ExternalToolsModule)
 	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule
 		);
-
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getBusinessError: {
-				statusCode: "",
-				message: "",
-				error: undefined,
-			},
-			...externalToolsModuleGetter,
-		});
 
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
@@ -77,7 +74,7 @@ describe("RoomExternalToolsSection", () => {
 					},
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
+					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModuleMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
@@ -87,7 +84,6 @@ describe("RoomExternalToolsSection", () => {
 		return {
 			wrapper,
 			contextExternalToolsModule,
-			externalToolsModule,
 			authModule,
 		};
 	};
@@ -256,135 +252,132 @@ describe("RoomExternalToolsSection", () => {
 	});
 
 	describe("when clicking on a tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("when the tool has missing auto parameters and loading requestData throw an error", () => {
+			const setup = async () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Latest,
+					});
 
-			const { wrapper, externalToolsModule } = getWrapper({
-				tools: [tool],
-				roomId: "roomId",
-			});
+				const error: BusinessError = businessErrorFactory.build({
+					error: new AxiosError("this error is expected"),
+					message: "MISSING_TOOL_PARAMETER_VALUE some value is missing",
+				});
 
-			return {
-				wrapper,
-				externalToolsModule,
-				tool,
+				const externalToolsModule = createModuleMocks(ExternalToolsModule);
+				externalToolsModule.loadToolLaunchData.mockRejectedValueOnce(error);
+
+				const { wrapper } = getWrapper(
+					{ tools: [tool], roomId: "roomId" },
+					externalToolsModule
+				);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					tool,
+				};
 			};
-		};
 
-		it("should fetch the launch data", async () => {
-			const { wrapper, externalToolsModule, tool } = setup();
+			it("should open up the error dialog", async () => {
+				const { wrapper } = await setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				const card = wrapper.findComponent({
+					name: "room-external-tool-card",
+				});
+
+				await card.trigger("click");
+
+				const dialog = wrapper.find('[data-testId="error-dialog"]');
+				expect(dialog.exists()).toBeTruthy();
+				expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
 			});
-
-			await card.trigger("click");
-
-			expect(externalToolsModule.loadToolLaunchData).toHaveBeenCalledWith(
-				tool.contextExternalToolId
-			);
 		});
-	});
 
-	describe("when clicking on a tool which has missing auto parameters", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("when the tool is launchable", () => {
+			const setup = async () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Latest,
+					});
 
-			const error: BusinessError = businessErrorFactory.build({
-				error: new AxiosError("this error is expected"),
-				message: "MISSING_TOOL_PARAMETER_VALUE some value is missing",
-			});
+				const externalToolsModule = createModuleMocks(ExternalToolsModule);
+				externalToolsModule.loadToolLaunchData.mockResolvedValue(
+					toolLaunchRequestResponseFactory.build()
+				);
 
-			const { wrapper } = getWrapper(
-				{ tools: [tool], roomId: "roomId" },
-				{
-					getBusinessError: error,
-				}
-			);
+				const { wrapper } = getWrapper(
+					{
+						tools: [tool],
+						roomId: "roomId",
+					},
+					externalToolsModule
+				);
 
-			return {
-				wrapper,
-				tool,
+				await flushPromises();
+
+				return {
+					wrapper,
+				};
 			};
-		};
 
-		it("should display a dialog", async () => {
-			const { wrapper, tool } = setup();
+			it("should not open up the error dialog", async () => {
+				const { wrapper } = await setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				const card = wrapper.findComponent({
+					name: "room-external-tool-card",
+				});
+
+				await card.trigger("click");
+
+				wrapper.find('[data-testId="error-dialog"]');
+
+				expect(wrapper.vm.isErrorDialogOpen).toBeFalsy();
 			});
-			await card.vm.$emit("click", tool);
-
-			const dialog = wrapper.find('[data-testId="error-dialog"]');
-
-			expect(dialog.exists()).toBeTruthy();
-			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
 		});
-	});
 
-	describe("when click on a outdated tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("and tool is not launchable because it is outdated", () => {
+			const setup = async () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Outdated,
+					});
 
-			const error: BusinessError = businessErrorFactory.build({
-				error: new AxiosError("this error is expected"),
-				message: "TOOL_STATUS_OUTDATED this tool is outdated",
-			});
+				const externalToolsModule = createModuleMocks(ExternalToolsModule);
+				externalToolsModule.loadToolLaunchData.mockResolvedValueOnce(
+					toolLaunchRequestResponseFactory.build()
+				);
 
-			const { wrapper } = getWrapper(
-				{ tools: [tool], roomId: "roomId" },
-				{
-					getBusinessError: error,
-				}
-			);
+				const { wrapper } = getWrapper(
+					{
+						tools: [tool],
+						roomId: "roomId",
+					},
+					externalToolsModule
+				);
 
-			return {
-				wrapper,
-				tool,
+				await flushPromises();
+
+				return {
+					wrapper,
+				};
 			};
-		};
 
-		it("should display a dialog", async () => {
-			const { wrapper, tool } = setup();
+			it("should open up the error dialog", async () => {
+				const { wrapper } = await setup();
 
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				const card = wrapper.findComponent({
+					name: "room-external-tool-card",
+				});
+
+				await card.trigger("click");
+
+				const dialog = wrapper.find('[data-testId="error-dialog"]');
+
+				expect(dialog.exists()).toBeTruthy();
+				expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
 			});
-			await card.vm.$emit("click", tool);
-
-			const dialog = wrapper.find('[data-testId="error-dialog"]');
-
-			expect(dialog.exists()).toBeTruthy();
-			expect(wrapper.vm.isErrorDialogOpen).toBeTruthy();
-		});
-	});
-
-	describe("when click on a latest tool", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
-
-			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
-
-			return {
-				wrapper,
-				tool,
-			};
-		};
-
-		it("should not display a dialog", async () => {
-			const { wrapper, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-			await card.vm.$emit("click", tool);
-
-			expect(wrapper.vm.isErrorDialogOpen).toBeFalsy();
 		});
 	});
 });
