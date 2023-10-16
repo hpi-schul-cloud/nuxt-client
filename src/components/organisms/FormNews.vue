@@ -15,7 +15,7 @@
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
-					<text-editor
+					<!-- <text-editor
 						v-model="data.content"
 						class="mb--md mt--xl-3"
 						:error="errors.content"
@@ -23,7 +23,15 @@
 						:placeholder="
 							$t('components.organisms.FormNews.editor.placeholder')
 						"
+					/> -->
+
+					<ck-editor
+						v-model="data.content"
+						:placeholder="
+							$t($t('components.organisms.FormNews.editor.placeholder'))
+						"
 					/>
+
 					<transition name="fade">
 						<div v-if="data.content">
 							<p class="mt--xl-3">
@@ -90,7 +98,7 @@
 import { defineComponent } from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import TextEditor from "@/components/molecules/TextEditor.vue";
+import { CkEditor } from "@feature-editor";
 import TitleInput from "@/components/molecules/TitleInput.vue";
 import FormActions from "@/components/molecules/FormActions.vue";
 import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
@@ -99,7 +107,7 @@ import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
-		TextEditor,
+		CkEditor,
 		TitleInput,
 		FormActions,
 	},
