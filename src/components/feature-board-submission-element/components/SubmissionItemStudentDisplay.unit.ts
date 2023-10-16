@@ -9,7 +9,7 @@ import { StudentSubmission } from "../types/submission";
 describe("SubmissionItemStudentDisplay", () => {
 	const setup = (
 		loading = false,
-		submission = { completed: true },
+		studentSubmission = { completed: true },
 		isOverdue = false
 	) => {
 		document.body.setAttribute("data-app", "true");
@@ -17,7 +17,7 @@ describe("SubmissionItemStudentDisplay", () => {
 		const propsData = {
 			isOverdue,
 			loading,
-			submission,
+			studentSubmission,
 		};
 
 		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
@@ -88,10 +88,10 @@ describe("SubmissionItemStudentDisplay", () => {
 		describe("if student has no submissionItem yet", () => {
 			it("should show state as not completed", async () => {
 				const loading = false;
-				const submission: StudentSubmission = {
+				const studentSubmission: StudentSubmission = {
 					completed: false,
 				};
-				const { wrapper } = setup(loading, submission);
+				const { wrapper } = setup(loading, studentSubmission);
 
 				const checked = wrapper
 					.findComponent({ name: "v-checkbox" })
