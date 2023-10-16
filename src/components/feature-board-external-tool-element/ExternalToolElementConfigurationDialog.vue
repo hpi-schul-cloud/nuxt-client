@@ -2,7 +2,6 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:has-buttons="false"
-		data-testId="tool-element-configuration-dialog"
 		@dialog-closed="onCancel"
 	>
 		<h2 slot="title" class="text-h4 my-2">

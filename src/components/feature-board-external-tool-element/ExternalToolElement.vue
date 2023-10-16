@@ -26,7 +26,7 @@
 				></v-img>
 			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-			<span class="align-self-center title flex-1">
+			<span class="align-self-center title flex-1 break-word">
 				{{
 					hasLinkedTool
 						? toolDisplayName
@@ -48,7 +48,7 @@
 			:config-id="element.content.contextExternalToolId"
 			@close="onConfigurationDialogClose"
 			@save="onConfigurationDialogSave"
-			ref="board-external-tool-element-configuration-dialog"
+			data-testid="board-external-tool-element-configuration-dialog"
 		>
 		</ExternalToolElementConfigurationDialog>
 	</v-card>
@@ -216,5 +216,9 @@ $logo-size: 24px;
 
 .flex-1 {
 	flex: 1;
+}
+
+.break-word {
+	word-break: break-word;
 }
 </style>

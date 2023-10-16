@@ -451,9 +451,9 @@ describe("ExternalToolElement", () => {
 				card.vm.$emit("click");
 				await Vue.nextTick();
 
-				const dialog = wrapper.findComponent({
-					ref: "board-external-tool-element-configuration-dialog",
-				});
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
 
 				expect(dialog.props("isOpen")).toEqual(true);
 			});
@@ -478,9 +478,9 @@ describe("ExternalToolElement", () => {
 			it("should update the elements content", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.findComponent({
-					ref: "board-external-tool-element-configuration-dialog",
-				});
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
 
 				dialog.vm.$emit("save", savedTool);
 				await Vue.nextTick();
@@ -493,9 +493,9 @@ describe("ExternalToolElement", () => {
 			it("should fetch the display data", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.findComponent({
-					ref: "board-external-tool-element-configuration-dialog",
-				});
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
 
 				dialog.vm.$emit("save", savedTool);
 				await Vue.nextTick();
