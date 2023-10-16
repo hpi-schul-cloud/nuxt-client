@@ -164,7 +164,7 @@ export default {
 		detectScrollingDirection() {
 			if (this.title === "" || typeof window === "undefined") return;
 
-			const top = window.pageYOffset || 0;
+			const top = window.scrollY || 0;
 
 			if (top >= this.pageOffset) {
 				this.extended = false;
