@@ -11,7 +11,7 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:submission="submission"
+			:studentSubmission="studentSubmission"
 			:isOverdue="isOverdue"
 			:loading="loading"
 			@update:completed="updateCompleted"
@@ -49,7 +49,7 @@ export default defineComponent({
 			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
-		submission: {
+		studentSubmission: {
 			type: Object as PropType<StudentSubmission>,
 			required: true,
 		},

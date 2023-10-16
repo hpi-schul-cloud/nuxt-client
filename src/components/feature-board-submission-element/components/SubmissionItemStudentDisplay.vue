@@ -29,7 +29,7 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		submission: {
+		studentSubmission: {
 			type: Object as PropType<StudentSubmission>,
 			required: true,
 		},
@@ -42,7 +42,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = computed({
 			get() {
-				return props.submission.completed;
+				return props.studentSubmission.completed;
 			},
 			set(newValue) {
 				emit("update:completed", newValue);

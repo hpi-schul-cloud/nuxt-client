@@ -19,7 +19,7 @@ export const useSubmissionContentElementState = (
 		users: [],
 	};
 	const submissions = ref<Array<TeacherSubmission>>([]);
-	const submission = ref<StudentSubmission>({ completed: false });
+	const studentSubmission = ref<StudentSubmission>({ completed: false });
 	const loading = ref(false);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
@@ -28,7 +28,7 @@ export const useSubmissionContentElementState = (
 			submissionsResponse = await fetchSubmissionItemsCall(id);
 
 			submissions.value = mapTeacherSubmission(submissionsResponse);
-			submission.value = mapStudentSubmission(submissionsResponse);
+			studentSubmission.value = mapStudentSubmission(submissionsResponse);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -132,7 +132,7 @@ export const useSubmissionContentElementState = (
 
 	return {
 		submissions,
-		submission,
+		studentSubmission,
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,

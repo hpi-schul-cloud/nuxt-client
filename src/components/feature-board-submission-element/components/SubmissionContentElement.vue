@@ -16,7 +16,7 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:submission="submission"
+				:studentSubmission="studentSubmission"
 				:isOverdue="isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
@@ -87,7 +87,7 @@ export default defineComponent({
 		const {
 			loading,
 			submissions,
-			submission,
+			studentSubmission,
 			isOverdue,
 			updateSubmissionItem,
 		} = useSubmissionContentElementState(element.value.id, modelValue);
@@ -113,7 +113,7 @@ export default defineComponent({
 			modelValue,
 			submissionContentElement,
 			submissions,
-			submission,
+			studentSubmission,
 			loading,
 			isOverdue,
 			onKeydownArrow,
