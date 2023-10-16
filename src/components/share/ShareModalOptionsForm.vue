@@ -11,7 +11,7 @@
 				input-value="true"
 				class="my-0 mr-n3"
 				inset
-				dense
+				density="compact"
 			></v-switch>
 		</div>
 		<div class="d-flex justify-space-between">
@@ -25,7 +25,7 @@
 				input-value="true"
 				class="my-0 mr-n3"
 				inset
-				dense
+				density="compact"
 			></v-switch>
 		</div>
 	</div>

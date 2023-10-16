@@ -7,7 +7,7 @@
 			v-model="checked"
 			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
-			dense
+			density="compact"
 		></v-switch>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
