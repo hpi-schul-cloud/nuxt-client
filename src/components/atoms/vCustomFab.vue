@@ -42,7 +42,7 @@
 				</span>
 				<v-btn
 					icon
-					small
+					size="small"
 					:href="action.href"
 					:to="action.to"
 					class="fab-action"

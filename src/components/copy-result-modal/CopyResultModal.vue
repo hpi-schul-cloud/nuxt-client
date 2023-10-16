@@ -15,9 +15,7 @@
 
 		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
 					<div class="mx-2">
 						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>

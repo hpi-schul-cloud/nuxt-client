@@ -18,11 +18,9 @@
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 1 && isOpen">
-					<div
-						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-					>
+					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
+							<v-icon color="info" :icon="mdiInformation"></v-icon>
 						</div>
 						<div>
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
