@@ -12,7 +12,7 @@
 					<label
 						v-show="showLabel"
 						:class="{ label: true, 'base-input-info': true }"
-						:for="`input-${$uid}`"
+						:for="`input-${uid}`"
 					>
 						{{ label }}
 					</label>
@@ -28,7 +28,7 @@
 				<div class="core">
 					<slot>
 						<input
-							:id="`input-${$uid}`"
+							:id="`input-${uid}`"
 							ref="input"
 							v-focus-on-mount="focus"
 							:aria-label="showLabel ? undefined : label"
@@ -88,9 +88,9 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-// VUE_UPGRADE do we need this?
-// import uidMixin from "@/mixins/uid";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import { defineComponent } from "vue";
+import { useUid } from "@/utils/uid";
 
 export const supportedTypes = [
 	"email",
@@ -105,8 +105,14 @@ export const supportedTypes = [
 	"time",
 ];
 
-export default {
-	// mixins: [uidMixin],
+export default defineComponent({
+	setup() {
+		const { uid } = useUid();
+
+		return {
+			uid,
+		};
+	},
 	props: {
 		modelValue: { type: [String, Number], default: undefined },
 		type: {
@@ -184,7 +190,7 @@ export default {
 			this.$emit("blur", event);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

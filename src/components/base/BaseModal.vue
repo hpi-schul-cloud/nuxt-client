@@ -5,8 +5,8 @@
 			:class="['modal-mask', design]"
 			role="dialog"
 			:aria-modal="active"
-			:aria-labelledby="`modal-${$uid}-title`"
-			:aria-describedby="`modal-${$uid}-body`"
+			:aria-labelledby="`modal-${uid}-title`"
+			:aria-describedby="`modal-${uid}-body`"
 		>
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
@@ -19,12 +19,12 @@
 					<slot>
 						<h2
 							v-if="$slots.header"
-							:id="`modal-${$uid}-title`"
+							:id="`modal-${uid}-title`"
 							class="h4 modal-header"
 						>
 							<slot name="header" />
 						</h2>
-						<div :id="`modal-${$uid}-body`" class="modal-body">
+						<div :id="`modal-${uid}-body`" class="modal-body">
 							<slot name="body" />
 						</div>
 
@@ -46,14 +46,19 @@
 </template>
 
 <script>
-// VUE_UPGRADE do we need this?
-// import uidMixin from "@/mixins/uid";
 import ModalFooter from "@/components/molecules/ModalFooter";
-export default {
+import { defineComponent } from "vue";
+import { useUid } from "@/utils/uid";
+
+export default defineComponent({
+	setup() {
+		const { uid } = useUid();
+
+		return { uid };
+	},
 	components: {
 		ModalFooter,
 	},
-	// mixins: [uidMixin],
 	props: {
 		active: {
 			type: Boolean,
@@ -95,7 +100,7 @@ export default {
 			this.$emit("update:active", false);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

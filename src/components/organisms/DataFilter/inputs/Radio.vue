@@ -7,7 +7,7 @@
 			v-model="vmodelProxy"
 			class="input-radio"
 			type="radio"
-			:name="$uid"
+			:name="uid"
 			:value="option.value"
 			:label="option.label"
 		/>
@@ -15,11 +15,15 @@
 </template>
 
 <script>
-// VUE_UPGRADE do we need this?
-// import uid from "@/mixins/uid";
+import { useUid } from "@/utils/uid";
+import { defineComponent } from "vue";
 
-export default {
-	// mixins: [uid],
+export default defineComponent({
+	setup() {
+		const { uid } = useUid();
+
+		return { uid };
+	},
 	props: {
 		label: {
 			type: String,
@@ -58,7 +62,7 @@ export default {
 			},
 		},
 	},
-};
+});
 </script>
 <style lang="scss" scoped>
 fieldset {
