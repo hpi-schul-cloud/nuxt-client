@@ -20,6 +20,7 @@
 					flat
 					density="compact"
 					color="primary"
+					:true-icon="mdiCheck"
 				/>
 			</div>
 			<div v-else class="substitute-filter-placeholder"></div>
@@ -104,6 +105,7 @@ import {
 	mdiArchiveOutline,
 	mdiCheckCircleOutline,
 	mdiPlaylistEdit,
+	mdiCheck,
 } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
@@ -132,6 +134,7 @@ export default {
 	data() {
 		return {
 			mdiPlus,
+			mdiCheck,
 		};
 	},
 	inject: [

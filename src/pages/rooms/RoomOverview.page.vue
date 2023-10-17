@@ -27,6 +27,7 @@
 							class="enable-disable"
 							:label="$t('pages.rooms.index.courses.arrangeCourses')"
 							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+							:true-icon="mdiCheck"
 							inset
 							flat
 							density="compact"
@@ -134,7 +135,7 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify, mdiCheck } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
@@ -177,6 +178,7 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
+			mdiCheck,
 		};
 	},
 	computed: {

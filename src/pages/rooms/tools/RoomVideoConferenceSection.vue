@@ -54,6 +54,7 @@
 							class="my-0"
 							inset
 							density="compact"
+							:true-icon="mdiCheck"
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
@@ -70,6 +71,7 @@
 							class="my-0"
 							inset
 							density="compact"
+							:true-icon="mdiCheck"
 						></v-switch>
 					</div>
 					<div class="d-flex justify-space-between">
@@ -86,6 +88,7 @@
 							class="my-0"
 							inset
 							density="compact"
+							:true-icon="mdiCheck"
 						></v-switch>
 					</div>
 				</v-card-text>
@@ -143,6 +146,7 @@ import {
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomModule from "@/store/room";
 import { useI18n } from "vue-i18n";
+import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -299,6 +303,7 @@ export default defineComponent({
 			isErrorDialogOpen,
 			onCloseErrorDialog,
 			roomName,
+			mdiCheck,
 		};
 	},
 });

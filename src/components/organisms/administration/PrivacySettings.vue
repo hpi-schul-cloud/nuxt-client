@@ -21,6 +21,7 @@
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
+					:true-icon="mdiCheck"
 					inset
 					flat
 					density="compact"
@@ -78,6 +79,7 @@
 					flat
 					density="compact"
 					color="primary"
+					:true-icon="mdiCheck"
 				/>
 				<p class="body-2 mb-0">
 					{{
@@ -102,6 +104,7 @@
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
+					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
 					@update:model-value="
@@ -135,6 +138,7 @@
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
 					"
+					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
 					@update:model-value="
@@ -161,6 +165,7 @@
 <script setup lang="ts">
 import { envConfigModule } from "@/store";
 import { computed } from "vue";
+import { mdiCheck } from "@mdi/js";
 
 const props = defineProps({
 	permissions: {
