@@ -1,68 +1,62 @@
 <template>
-	<v-data-iterator
-		:items="items"
-		:items-per-page="maxItems"
-		hide-default-footer
-		no-data-text=""
-	>
-		<template #default="props">
-			<v-container>
-				<v-row align="center">
-					<v-col
-						v-for="item in props.items"
-						:key="item.id"
-						class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
-						:cols="colCount"
-					>
-						<vRoomAvatar
-							:draggable="canDraggable"
-							class="room-avatar"
-							:item="item"
-							:size="itemSize"
-							:show-badge="true"
-							:condense-layout="condenseLayout"
-							@startDrag="$emit('startDrag', $event)"
-						></vRoomAvatar>
-					</v-col>
-				</v-row>
-			</v-container>
-		</template>
-	</v-data-iterator>
+	<v-container>
+		<v-row align="center">
+			<v-col
+				v-for="item in items"
+				:key="item.id"
+				class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
+				:cols="colCount"
+			>
+				<vRoomAvatar
+					:draggable="canDraggable"
+					class="room-avatar"
+					:item="item"
+					:size="itemSize"
+					:show-badge="true"
+					:condense-layout="condenseLayout"
+					@startDrag="$emit('startDrag', $event)"
+				></vRoomAvatar>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	components: {
-		vRoomAvatar,
+type ItemType = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+	xPosition: number;
+	yPosition: number;
+	to: string;
+};
+
+defineProps({
+	items: {
+		type: Array<ItemType>,
+		default: () => [{}],
 	},
-	props: {
-		items: {
-			type: Array,
-			default: () => [{}],
-		},
-		colCount: {
-			type: Number,
-			default: 4,
-		},
-		condenseLayout: {
-			type: Boolean,
-		},
-		itemSize: {
-			type: String,
-			default: "3em",
-		},
-		maxItems: {
-			type: Number,
-			default: 9,
-		},
-		canDraggable: {
-			type: Boolean,
-		},
+	colCount: {
+		type: Number,
+		default: 4,
 	},
-	emits: ["startDrag"],
+	condenseLayout: {
+		type: Boolean,
+	},
+	itemSize: {
+		type: String,
+		default: "3em",
+	},
+	maxItems: {
+		type: Number,
+		default: 9,
+	},
+	canDraggable: {
+		type: Boolean,
+	},
 });
+defineEmits(["startDrag"]);
 </script>
