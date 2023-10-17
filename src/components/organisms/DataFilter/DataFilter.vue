@@ -1,4 +1,12 @@
 <template>
+	<v-alert
+		type="info"
+		title="Note"
+		text="The DataFilter component has been temporarily disabled, see ticket
+		BC-5557"
+	></v-alert>
+</template>
+<!-- <template>
 	<div>
 		<vue-filter-ui
 			:label-add="$t('components.organisms.DataFilter.add')"
@@ -127,4 +135,4 @@ export default {
 	// this fixes some vuetify global styles side-effect in the filterUI
 	display: block;
 }
-</style>
+</style> -->
