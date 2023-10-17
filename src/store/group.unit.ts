@@ -10,11 +10,11 @@ import {
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
 } from "@@/tests/test-utils";
-import { ClassInfo } from "./types/class-info";
+import { ClassInfo, ClassRootType } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
 import GroupModule from "./group";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 
@@ -86,7 +86,13 @@ describe("GroupModule", () => {
 
 			it("should return the changed state", () => {
 				const classes: ClassInfo[] = [
-					{ name: "3a", externalSourceName: "Klasse", teachers: ["Carlie"] },
+					{
+						name: "3a",
+						externalSourceName: "Klasse",
+						teachers: ["Carlie"],
+						type: ClassRootType.Class,
+						id: "id",
+					},
 				];
 
 				module.setClasses(classes);

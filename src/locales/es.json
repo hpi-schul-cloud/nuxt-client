@@ -289,7 +289,7 @@
 	"global.sidebar.addons": "Complementos",
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",
-	"global.sidebar.classes": "Clases (nuevas)",
+	"global.sidebar.classes.new": "Clases (nuevas)",
 	"global.sidebar.courses": "Cursos",
 	"global.sidebar.files-old": "Mis archivos",
 	"global.sidebar.files": "Archivos",
