@@ -465,7 +465,7 @@
 	"global.sidebar.addons": "Додаткові компоненти",
 	"global.sidebar.calendar": "календар",
 	"global.sidebar.classes": "Класи",
-	"global.sidebar.classes": "Класи (новий)",
+	"global.sidebar.classes.new": "Класи (новий)",
 	"global.sidebar.courses": "Курси",
 	"global.sidebar.files-old": "Мої файли",
 	"global.sidebar.files": "файли",
