@@ -1,5 +1,4 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ToolContextType } from "@/serverApi/v3";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils";
 import { useContextExternalToolApi } from "@data-external-tool";
@@ -9,7 +8,7 @@ import { useExternalToolElementDisplayState } from "./ExternalToolElementDisplay
 jest.mock("@data-external-tool");
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 
-describe("SharedExternalToolElementDisplayState.composable", () => {
+describe("ExternalToolElementDisplayState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<
 		ReturnType<typeof useContextExternalToolApi>
 	>;
@@ -60,7 +59,7 @@ describe("SharedExternalToolElementDisplayState.composable", () => {
 
 			expect(
 				useContextExternalToolApiMock.fetchDisplayDataCall
-			).toHaveBeenCalledWith("contextId", ToolContextType.BoardElement);
+			).toHaveBeenCalledWith("contextId");
 		});
 
 		it("should set the display data in the state", async () => {
