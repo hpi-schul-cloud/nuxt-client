@@ -12,11 +12,11 @@
 			<v-btn
 				v-bind="props"
 				class="three-dot-button"
-				icon
+				:icon="mdiDotsVertical"
+				variant="text"
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			>
-				<v-icon>{{ mdiDotsVertical }}</v-icon>
 			</v-btn>
 		</template>
 		<v-list v-if="menuItems.length">

@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isHidden"
+		:variant="isHiddden ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
@@ -53,6 +53,7 @@
 					.split(' ')
 					.join('-')}`"
 				variant="text"
+				color="primary"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -103,7 +104,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--v-secondary-base",
+			defaultTitleColor: "rgba(var(--v-theme-secondary))",
 		};
 	},
 	computed: {
@@ -328,10 +329,6 @@ export default {
 			color: rgba(0, 0, 0, 0.87);
 		}
 	}
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .v-card__text {

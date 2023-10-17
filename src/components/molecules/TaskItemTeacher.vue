@@ -39,7 +39,7 @@
 				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
 					<v-chip
 						v-if="hasUnpublishedLesson"
-						x-small
+						size="x-small"
 						data-testid="task-lesson-chip-small"
 					>
 						{{
@@ -63,7 +63,7 @@
 				data-testid="task-lesson-chip-large"
 				class="hidden-xs-only mr-8 pl-4"
 			>
-				<v-chip small>
+				<v-chip size="small">
 					{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 				</v-chip>
 			</section>

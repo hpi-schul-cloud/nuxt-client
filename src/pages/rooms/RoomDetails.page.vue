@@ -22,7 +22,7 @@
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
-				<v-chip v-if="roomData.isArchived" label small class="mt-1">
+				<v-chip v-if="roomData.isArchived" label size="small" class="mt-1">
 					{{ $t("pages.rooms.headerSection.archived") }}
 				</v-chip>
 			</div>
@@ -32,7 +32,7 @@
 						color="secondary"
 						class="back-button"
 						variant="outlined"
-						small
+						size="small"
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
 						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tabIndex" class="tabs-max-width" grow>
+				<v-tabs v-model="tabIndex" class="tabs-max-width" grow color="primary">
 					<v-tab
 						v-for="(tabItem, index) in tabItems"
 						:key="index"

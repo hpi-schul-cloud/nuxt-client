@@ -2,7 +2,7 @@
 	<v-chip
 		v-if="type === 'warning'"
 		color="orange lighten-3"
-		small
+		size="small"
 		data-test-id="dueDateHintLabel"
 	>
 		<v-icon left small> {{ mdiTimerSandComplete }} </v-icon>

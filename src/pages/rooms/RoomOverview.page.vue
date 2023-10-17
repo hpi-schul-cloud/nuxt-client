@@ -13,7 +13,7 @@
 						<v-btn
 							color="secondary"
 							variant="outlined"
-							small
+							size="small"
 							to="/rooms-list"
 							data-testid="go-to-all-courses"
 						>
@@ -383,7 +383,7 @@ export default {
 		},
 		showImportSuccess(name) {
 			this.notifierModule?.show({
-				text: this.i18n.t("components.molecules.import.options.success", {
+				text: this.$t("components.molecules.import.options.success", {
 					name,
 				}),
 				status: "success",
