@@ -87,26 +87,5 @@ describe("DrawingContentElement", () => {
 
 		testMoveEvent("move-down");
 		testMoveEvent("move-up");
-
-		const propsToTest = [
-			"isFirstElement",
-			"isLastElement",
-			"hasMultipleElements",
-		];
-
-		propsToTest.forEach((prop) => {
-			it(`should pass ${prop} property to DrawingContentElementEdit`, async () => {
-				setup({
-					element: DRAWING_ELEMENT,
-					isEditMode: true,
-				});
-
-				const propValue = wrapper
-					.findComponent(DrawingContentElementEdit)
-					.props(prop);
-
-				expect(propValue).toBe(false);
-			});
-		});
 	});
 });

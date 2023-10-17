@@ -136,7 +136,7 @@ describe("DrawingContentElementMenu", () => {
 			const moveDownTranslation = wrapper.vm
 				.$t("components.board.action.moveDown")
 				.toString();
-
+		
 			const childComponent = wrapper
 				.findAllComponents(BoardMenuAction)
 				.filter((c) => c.text().includes(moveDownTranslation));

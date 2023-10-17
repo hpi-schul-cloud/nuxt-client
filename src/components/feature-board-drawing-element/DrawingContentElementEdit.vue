@@ -1,6 +1,13 @@
 <template>
-	<div>
-		<v-img :src="imageSrc" height="185px" cover></v-img>
+	<div @click="onOpenElement">
+		<div class="board-image-mask">
+			<v-img :src="imageSrc" height="185px" cover>
+				<DrawingContentElementMenu
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+			/></v-img>
+		</div>
 		<v-list-item
 			class="px-0"
 			data-testid="drawing-element-edit"
@@ -19,7 +26,7 @@
 				<div class="board-content">
 					<v-icon
 						class="grey--text text--darken-2"
-						data-testid="board-submission-element-display-icon"
+						data-testid="board-drawing-element-display-icon"
 						medium
 					>
 						$mdiPresentation
@@ -32,16 +39,6 @@
 					</span>
 				</div>
 			</v-list-item-content>
-			<DrawingContentElementMenu
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				:drawingName="drawingName"
-				@open:element="onOpenElement"
-				@move-down:element="onMoveElementDown"
-				@move-up:element="onMoveElementUp"
-				@delete:element="onDeleteElement"
-			/>
 		</v-list-item>
 	</div>
 </template>
@@ -60,9 +57,6 @@ export default defineComponent({
 			required: true,
 		},
 		drawingName: { type: String, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
@@ -75,11 +69,6 @@ export default defineComponent({
 		const formattedLastUpdatedAt = computed(() => {
 			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
 		});
-		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
-			window.open(urlWithRoom, "_blank");
-			emit("open:element");
-		};
 		const onMoveElementDown = () => {
 			emit("move-down:element");
 		};
@@ -89,18 +78,35 @@ export default defineComponent({
 		const onDeleteElement = () => {
 			emit("delete:element");
 		};
+		const onOpenElement = () => {
+			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
+			window.open(urlWithRoom, "_blank");
+			emit("open:element");
+		};
 		return {
 			imageSrc,
 			formattedLastUpdatedAt,
-			onOpenElement,
 			onMoveElementDown,
 			onMoveElementUp,
 			onDeleteElement,
+			onOpenElement,
 		};
 	},
 });
 </script>
-<style scoped>
+<style scoped lang="scss">
+.board-image-mask {
+	padding: 3px;
+	text-align: right;
+	height: 185px;
+	overflow: hidden;
+
+	&:hover {
+		filter: brightness(50%);
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+}
 .text-edit {
 	font-weight: 400;
 	padding: 10px 10px 0px 20px;

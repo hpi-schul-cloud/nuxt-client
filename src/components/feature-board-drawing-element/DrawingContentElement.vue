@@ -12,6 +12,7 @@
 			<DrawingContentElementDisplay
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
+				:drawing-name="element.content.drawingName"
 			/>
 
 			<DrawingContentElementEdit
@@ -63,7 +64,6 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const drawingElement = ref<HTMLElement | null>(null);
 		useBoardFocusHandler(props.element.id, drawingElement);
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 		const isOutlined = ref(props.isEditMode);
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -78,13 +78,7 @@ export default defineComponent({
 			emit("move-up:edit");
 		};
 		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteConfirmation(
-				i18n.t("components.cardElement.drawingElement").toString(),
-				"boardElement"
-			);
-			if (shouldDelete) {
-				emit("delete:element", props.element.id);
-			}
+			emit("delete:element", props.element.id);
 		};
 		return {
 			isOutlined,

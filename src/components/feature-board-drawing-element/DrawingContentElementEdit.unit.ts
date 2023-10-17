@@ -46,18 +46,6 @@ describe("DrawingContentElementEdit", () => {
 		expect(menu.exists()).toBe(true);
 	});
 
-	const propNames = ["isFirstElement", "isLastElement", "hasMultipleElements"];
-
-	propNames.forEach((propName) => {
-		it(`should pass ${propName} prop correctly to DrawingContentElementMenu`, () => {
-			const { wrapper } = setup();
-			const propValue = wrapper
-				.findComponent(DrawingContentElementMenu)
-				.props(propName);
-			expect(propValue).toBe(false);
-		});
-	});
-
 	const eventTests = [
 		{ eventName: "delete:element", emitName: "delete:element" },
 		{ eventName: "move-down:element", emitName: "move-down:element" },

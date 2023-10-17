@@ -1,59 +1,33 @@
 <template>
 	<BoardMenu scope="element">
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isFirstElement"
-			data-testid="board-drawing-element-edit-menu-move-up"
-			@click="onMoveElementUp"
-		>
-			<template #icon>
-				<VIcon>$mdiArrowCollapseUp</VIcon>
-			</template>
-
-			{{ $t("components.board.action.moveUp") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			v-if="hasMultipleElements && !isLastElement"
-			data-testid="board-drawing-element-edit-menu-move-down"
-			@click="onMoveElementDown"
-		>
-			<template #icon>
-				<VIcon>$mdiArrowCollapseDown</VIcon>
-			</template>
-			{{ $t("components.board.action.moveDown") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			data-testid="board-drawing-element-edit-menu-delete"
-			@click="onDelete"
-		>
-			<template #icon>
-				<VIcon>$mdiTrashCanOutline</VIcon>
-			</template>
-			{{ $t("components.board.action.delete") }}
-		</BoardMenuAction>
-		<BoardMenuAction
-			data-testid="board-drawing-element-edit-menu-open"
-			@click="onOpenElement"
-		>
-			<template #icon>
-				<VIcon>$mdiOpenInNew</VIcon>
-			</template>
-			{{ $t("components.board.action.open") }}
-		</BoardMenuAction>
+		<BoardMenuActionMoveUp @click="onMoveElementUp" />
+		<BoardMenuActionMoveDown @click="onMoveElementDown" />
+		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { BoardMenu, BoardMenuAction } from "@ui-board";
+import {
+	mdiArrowCollapseDown,
+	mdiArrowCollapseUp,
+	mdiCogOutline,
+	mdiTrashCanOutline,
+} from "@mdi/js";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "DrawingContentElementMenu",
-	components: { BoardMenu, BoardMenuAction },
-	props: {
-		drawingName: { type: String, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
+	components: {
+		BoardMenu,
+		BoardMenuActionDelete,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
 	},
 	emits: [
 		"edit:element",
@@ -79,6 +53,10 @@ export default defineComponent({
 			emit("move-up:element");
 		};
 		return {
+			mdiArrowCollapseUp,
+			mdiArrowCollapseDown,
+			mdiTrashCanOutline,
+			mdiCogOutline,
 			onEdit,
 			onOpenElement,
 			onDelete,
