@@ -65,7 +65,7 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	border: 2px solid var(--v-secondary-base);
+	border: 2px solid rgba(var(--v-theme-secondary));
 	border-radius: var(--radius-round);
 }
 
@@ -82,7 +82,7 @@ input:checked + .radio {
 		margin: 20% auto;
 		/* stylelint-enable */
 		content: "";
-		background: var(--v-secondary-base);
+		background: rgba(var(--v-theme-secondary));
 		border-radius: var(--radius-round);
 	}
 }

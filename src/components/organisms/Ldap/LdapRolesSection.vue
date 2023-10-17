@@ -48,7 +48,6 @@
 			:placeholder="
 				$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
-			style="margin-bottom: var(--space-xl)"
 			:validation-model="v$.modelValue.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
