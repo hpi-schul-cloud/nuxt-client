@@ -18,6 +18,10 @@
 		>
 			<slot></slot>
 		</VideoDisplay>
+		<AudioDisplay
+			v-else-if="hasAudioMimeType"
+			:src="fileProperties.url"
+		></AudioDisplay>
 		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
@@ -30,17 +34,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
+import { isAudioMimeType, isVideoMimeType } from "@/utils/fileHelper";
+import { computed, defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
+import { FileAlert } from "../../shared/types/FileAlert.enum";
+import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { isVideoMimeType } from "@/utils/fileHelper";
-import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, FileDescription, VideoDisplay },
+	components: { ImageDisplay, FileDescription, VideoDisplay, AudioDisplay },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
@@ -54,8 +59,16 @@ export default defineComponent({
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
+		const hasAudioMimeType = computed(() => {
+			return isAudioMimeType(props.fileProperties.mimeType);
+		});
+
 		const showTitle = computed(() => {
-			return !props.fileProperties.previewUrl && !hasVideoMimeType.value;
+			return (
+				!props.fileProperties.previewUrl &&
+				!hasVideoMimeType.value &&
+				!hasAudioMimeType.value
+			);
 		});
 
 		const onAddAlert = (alert: FileAlert) => {
@@ -64,6 +77,7 @@ export default defineComponent({
 
 		return {
 			hasVideoMimeType,
+			hasAudioMimeType,
 			showTitle,
 			onAddAlert,
 		};
