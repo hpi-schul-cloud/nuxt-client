@@ -15,13 +15,12 @@
 		</div>
 		<v-alert
 			v-if="apiError && apiError.message"
-			light
 			prominent
-			variant="text"
+			variant="tonal"
 			type="error"
 			data-testId="context-tool-error"
+			:text="apiError.message"
 		>
-			{{ apiError.message }}
 		</v-alert>
 
 		<v-progress-linear

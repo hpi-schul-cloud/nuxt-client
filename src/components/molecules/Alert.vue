@@ -115,10 +115,10 @@ export default {
 
 :deep(.v-btn__content .v-icon),
 .alert_text {
-	color: var(--v-theme-black) !important;
+	color: rgba(var(--v-theme-black)) !important;
 }
 
-:deep(.v-alert__border) {
+:deep(.v-alert_border) {
 	opacity: 1;
 }
 </style>

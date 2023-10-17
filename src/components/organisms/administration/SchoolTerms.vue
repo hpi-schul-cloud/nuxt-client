@@ -5,14 +5,13 @@
 		</h4>
 		<v-alert
 			v-if="status === 'error'"
-			light
 			prominent
-			text
+			variant="tonal"
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
+			:text="t('pages.administration.school.index.termsOfUse.error')"
 		>
-			{{ t("pages.administration.school.index.termsOfUse.error") }}
 		</v-alert>
 		<template v-else>
 			<v-progress-linear
@@ -54,6 +53,7 @@
 				>
 					<v-btn
 						icon
+						variant="text"
 						:aria-label="t('pages.administration.school.index.termsOfUse.edit')"
 					>
 						<v-icon>$mdiPencilOutline</v-icon>
@@ -67,6 +67,7 @@
 				>
 					<v-btn
 						icon
+						variant="text"
 						:aria-label="
 							t('pages.administration.school.index.termsOfUse.download')
 						"

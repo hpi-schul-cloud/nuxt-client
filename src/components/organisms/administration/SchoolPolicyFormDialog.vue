@@ -7,13 +7,7 @@
 		</template>
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert
-					light
-					variant="text"
-					type="warning"
-					class="mb-10"
-					:icon="mdiAlert"
-				>
+				<v-alert variant="tonal" type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="replace-alert-text">
 						{{
 							t(
@@ -42,7 +36,7 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
 				>
-					<template v-slot:append>
+					<template v-slot:append-inner>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
@@ -56,7 +50,7 @@
 					<div class="button-section button-right">
 						<v-btn
 							class="dialog-closed"
-							variant="text"
+							variant="tonal"
 							@click="cancel"
 							data-testid="cancel-button"
 						>
@@ -66,7 +60,7 @@
 							class="icon-button dialog-confirmed px-6"
 							type="submit"
 							color="primary"
-							variant="flat"
+							flat
 							:disabled="!isValid"
 							@click.prevent="submit"
 							data-testid="submit-button"
@@ -195,7 +189,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .replace-alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 }
 
 .button-left {

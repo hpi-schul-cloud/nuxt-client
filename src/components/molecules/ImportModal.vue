@@ -79,8 +79,12 @@
 						:disabled="isImportError"
 					></v-text-field>
 					<div v-if="businessError.message !== ''">
-						<v-alert dense variant="outlined" type="error" class="import-error">
-							{{ $t("pages.rooms.importCourse.importError") }}
+						<v-alert
+							density="compact"
+							variant="outlined"
+							type="error"
+							:text="$t('pages.rooms.importCourse.importError')"
+						>
 						</v-alert>
 					</div>
 				</div>
@@ -208,7 +212,7 @@ export default {
 .step-sections {
 	min-height: var(--sidebar-width);
 	font-size: var(--space-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 
 .step {
