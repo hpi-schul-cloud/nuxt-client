@@ -23,8 +23,9 @@
 					<v-text-field
 						ref="search"
 						v-model="searchText"
-						rounded
 						variant="solo"
+						rounded
+						single-line
 						:label="$t('pages.rooms.index.search.label')"
 						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
