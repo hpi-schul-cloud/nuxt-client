@@ -1,32 +1,30 @@
 <template>
 	<div>
-		<ContentElementBar class="menu">
-			<template #title>
-				<audio
-					controls
-					ref="audioRef"
-					class="audio"
-					loading="lazy"
-					:src="src"
-					v-on:error="onError"
-				/>
-			</template>
-			<template #menu><slot></slot></template>
-		</ContentElementBar>
+		ar
+		<template>
+			<audio
+				controls
+				ref="audioRef"
+				class="audio"
+				loading="lazy"
+				:src="src"
+				v-on:error="onError"
+			/>
+		</template>
+
+		<template class="menu"><slot></slot></template>
 	</div>
 </template>
 
 <script lang="ts">
-import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
-	name: "VideoDisplay",
+	name: "AudioDisplay",
 	props: {
 		src: { type: String, required: true },
 	},
-	components: { ContentElementBar },
 	emits: ["error"],
 	setup(props, { emit }) {
 		const onError = () => {
@@ -36,3 +34,14 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped>
+.audio {
+	width: 85%;
+	padding: 10px;
+}
+.menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+</style>
