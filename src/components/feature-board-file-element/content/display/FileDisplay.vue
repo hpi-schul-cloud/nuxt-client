@@ -21,6 +21,7 @@
 		<AudioDisplay
 			v-else-if="hasAudioMimeType"
 			:src="fileProperties.url"
+			@error="onAddAlert"
 		></AudioDisplay>
 		<FileDescription
 			:name="fileProperties.name"
