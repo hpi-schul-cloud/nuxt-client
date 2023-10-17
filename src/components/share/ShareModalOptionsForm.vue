@@ -12,6 +12,7 @@
 				class="my-0 mr-n3"
 				inset
 				density="compact"
+				:true-icon="mdiCheck"
 			></v-switch>
 		</div>
 		<div class="d-flex justify-space-between">
@@ -26,6 +27,7 @@
 				class="my-0 mr-n3"
 				inset
 				density="compact"
+				:true-icon="mdiCheck"
 			></v-switch>
 		</div>
 	</div>
@@ -34,6 +36,7 @@
 <script>
 import { defineComponent, reactive, watch } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { mdiCheck } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -60,6 +63,7 @@ export default defineComponent({
 		emit("share-options-change", shareOptions);
 		return {
 			shareOptions,
+			mdiCheck,
 		};
 	},
 });

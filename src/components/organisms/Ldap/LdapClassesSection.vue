@@ -7,6 +7,7 @@
 			v-model="checked"
 			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
+			:true-icon="mdiCheck"
 			density="compact"
 			color="primary"
 		></v-switch>
@@ -80,6 +81,7 @@ import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
+import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
 	setup() {
@@ -110,6 +112,7 @@ export default defineComponent({
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
+			mdiCheck,
 		};
 	},
 	computed: {
