@@ -35,7 +35,6 @@ import { DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
