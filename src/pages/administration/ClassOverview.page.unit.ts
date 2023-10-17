@@ -1,6 +1,6 @@
 import GroupModule from "@/store/group";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { classInfoResponseFactory, i18nMock } from "@@/tests/test-utils";
+import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import ClassOverview from "./ClassOverview.page.vue";
 import { GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
@@ -14,7 +14,7 @@ describe("ClassOverview", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const groupModule = createModuleMocks(GroupModule, {
-			getClasses: [classInfoResponseFactory.build()],
+			getClasses: [classInfoFactory.build()],
 			getPagination: {
 				limit: 10,
 				skip: 0,
