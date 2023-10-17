@@ -6,15 +6,15 @@
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"
-			:modelValue="value.url"
+			:modelValue="modelValue.url"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
-			:validation-model="v$.value.url"
+			:validation-model="v$.modelValue.url"
 			:validation-messages="urlValidationMessages"
-			@update:modelValue="$emit('input', { ...value, url: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, url: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiDnsOutline</v-icon>
@@ -22,15 +22,15 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionBasisPath"
-			:modelValue="value.basisPath"
+			:modelValue="modelValue.basisPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.basis.path')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.path')"
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
-			:validation-model="v$.value.basisPath"
+			:validation-model="v$.modelValue.basisPath"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="$emit('input', { ...value, basisPath: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, basisPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -38,15 +38,15 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUser"
-			:modelValue="value.searchUser"
+			:modelValue="modelValue.searchUser"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
-			:validation-model="v$.value.searchUser"
+			:validation-model="v$.modelValue.searchUser"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="$emit('input', { ...value, searchUser: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, searchUser: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -54,17 +54,17 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUserPassword"
-			:modelValue="value.searchUserPassword"
+			:modelValue="modelValue.searchUserPassword"
 			type="password"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
-			:validation-model="v$.value.searchUserPassword"
+			:validation-model="v$.modelValue.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:modelValue="
-				$emit('input', { ...value, searchUserPassword: $event })
+				$emit('input', { ...modelValue, searchUserPassword: $event })
 			"
 			><template #icon>
 				<v-icon :color="fillColor">$mdiLockOutline</v-icon>
@@ -88,7 +88,7 @@ export default defineComponent({
 		return { v$: useVuelidate() };
 	},
 	props: {
-		value: {
+		modelValue: {
 			type: Object,
 			default() {
 				return {};
@@ -134,7 +134,7 @@ export default defineComponent({
 	},
 	validations() {
 		return {
-			value: {
+			modelValue: {
 				url: {
 					required,
 					ldapURLValidator: this.insecureLDAPURLAllowed

@@ -9,16 +9,16 @@
 
 		<base-input
 			data-testid="ldapDataUsersUserPath"
-			:modelValue="value.userPath"
+			:modelValue="modelValue.userPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.title')"
 			:placeholder="$t('pages.administration.ldap.users.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="v$.value.userPath"
+			:validation-model="v$.modelValue.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
-			@update:modelValue="$emit('input', { ...value, userPath: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, userPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -29,14 +29,14 @@
 		</p>
 		<base-input
 			data-testid="ldapDataUsersFirstName"
-			:modelValue="value.firstName"
+			:modelValue="modelValue.firstName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.firstname')"
-			:validation-model="v$.value.firstName"
+			:validation-model="v$.modelValue.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
-			@update:modelValue="$emit('input', { ...value, firstName: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, firstName: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -44,14 +44,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersFamilyName"
-			:modelValue="value.familyName"
+			:modelValue="modelValue.familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.lastname')"
-			:validation-model="v$.value.familyName"
+			:validation-model="v$.modelValue.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
-			@update:modelValue="$emit('input', { ...value, familyName: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, familyName: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -59,14 +59,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersEmail"
-			:modelValue="value.email"
+			:modelValue="modelValue.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
-			:validation-model="v$.value.email"
+			:validation-model="v$.modelValue.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
-			@update:modelValue="$emit('input', { ...value, email: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, email: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiEmailOutline</v-icon>
@@ -74,15 +74,15 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUid"
-			:modelValue="value.uid"
+			:modelValue="modelValue.uid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
-			:validation-model="v$.value.uid"
+			:validation-model="v$.modelValue.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
-			@update:modelValue="$emit('input', { ...value, uid: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, uid: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiCardAccountDetailsOutline</v-icon>
@@ -90,15 +90,15 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUuid"
-			:modelValue="value.uuid"
+			:modelValue="modelValue.uuid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
-			:validation-model="v$.value.uuid"
+			:validation-model="v$.modelValue.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
-			@update:modelValue="$emit('input', { ...value, uuid: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, uuid: $event })"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountBoxOutline</v-icon>
@@ -118,7 +118,7 @@ export default defineComponent({
 		return { v$: useVuelidate() };
 	},
 	props: {
-		value: {
+		modelValue: {
 			type: Object,
 			default() {
 				return {};
@@ -155,7 +155,7 @@ export default defineComponent({
 	},
 	validations() {
 		return {
-			value: {
+			modelValue: {
 				userPath: { required, ldapPathRegexValidator },
 				firstName: { required },
 				familyName: { required },

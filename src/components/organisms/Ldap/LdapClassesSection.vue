@@ -22,10 +22,10 @@
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
 			:label="$t('pages.administration.ldap.classes.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="v$.value.classPath"
+			:validation-model="v$.modelValue.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:modelValue="$emit('input', { ...value, classPath: $event })"
+			@update:modelValue="$emit('input', { ...modelValue, classPath: $event })"
 		>
 			<template #icon>
 				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
@@ -36,15 +36,17 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
-			:modelValue="value.nameAttribute"
+			:modelValue="modelValue.nameAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			:validation-model="v$.value.nameAttribute"
+			:validation-model="v$.modelValue.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
-			@update:modelValue="$emit('input', { ...value, nameAttribute: $event })"
+			@update:modelValue="
+				$emit('input', { ...modelValue, nameAttribute: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="classesActivatedColor" class="custom-icon"
@@ -54,16 +56,16 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
-			:modelValue="value.participantAttribute"
+			:modelValue="modelValue.participantAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="v$.value.participantAttribute"
+			:validation-model="v$.modelValue.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:modelValue="
-				$emit('input', { ...value, participantAttribute: $event })
+				$emit('input', { ...modelValue, participantAttribute: $event })
 			"
 		>
 			<template #icon>
@@ -84,7 +86,7 @@ export default defineComponent({
 		return { v$: useVuelidate() };
 	},
 	props: {
-		value: {
+		modelValue: {
 			type: Object,
 			default() {
 				return {};
@@ -115,10 +117,10 @@ export default defineComponent({
 			if (this.checked === false) {
 				return "";
 			}
-			return this.value.classPath;
+			return this.modelValue.classPath;
 		},
 		classPathChanged() {
-			return this.value.classPath;
+			return this.modelValue.classPath;
 		},
 	},
 	watch: {
@@ -136,16 +138,16 @@ export default defineComponent({
 			}
 		},
 		classPathChanged: function () {
-			this.checked = !!this.value.classPath;
+			this.checked = !!this.modelValue.classPath;
 		},
 	},
 	beforeMount() {
-		if (this.value.classPath) this.checked = true;
+		if (this.modelValue.classPath) this.checked = true;
 	},
 	validations() {
 		if (this.checked === true) {
 			return {
-				value: {
+				modelValue: {
 					classPath: {
 						required,
 						ldapPathRegexValidator: ldapPathRegexValidator,
@@ -156,7 +158,7 @@ export default defineComponent({
 			};
 		}
 		return {
-			value: {},
+			modelValue: {},
 		};
 	},
 });
