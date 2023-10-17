@@ -81,6 +81,7 @@
 				inset
 				density="compact"
 				class="ml-1"
+				color="primary"
 				data-testid="migration-mandatory-switch"
 				@update:model-value="
 					setMigrationMandatory(!oauthMigration.mandatorySince)
@@ -131,6 +132,7 @@
 			inset
 			density="compact"
 			class="ml-1"
+			color="primary"
 			data-testid="enable-sync-during-migration-switch"
 			@update:model-value="setSchoolFeatures"
 		/>
@@ -143,8 +145,9 @@
 			"
 			v-model="school.features.showOutdatedUsers"
 			inset
-			dense
+			density="compact"
 			class="ml-1"
+			color="primary"
 			data-testid="show-outdated-users-switch"
 			@update:model-value="setSchoolFeatures"
 		/>
@@ -333,6 +336,7 @@ export default defineComponent({
 		);
 
 		const setSchoolFeatures = async () => {
+			console.log("I am working");
 			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
