@@ -24,10 +24,6 @@
 export const supportedTypes = ["checkbox"];
 
 export default {
-	model: {
-		prop: "vmodel",
-		event: "input",
-	},
 	props: {
 		modelValue: {
 			type: [Array, Boolean, undefined],

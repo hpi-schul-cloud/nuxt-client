@@ -47,10 +47,6 @@ export const supportedTypes = Object.keys(componentDictionary);
 export const validationDelay = 800;
 
 export default {
-	model: {
-		prop: "vmodel",
-		event: "update:vmodel",
-	},
 	props: {
 		modelValue: {
 			type: [Array, String, Number, Boolean],

@@ -11,10 +11,6 @@
 export const supportedTypes = ["hidden"];
 
 export default {
-	model: {
-		prop: "vmodel",
-		event: "input",
-	},
 	props: {
 		modelValue: {
 			type: String,

@@ -155,7 +155,7 @@ export default {
 			return (
 				(this.hasFocus ||
 					this.disabled ||
-					Boolean(this.vmodel) ||
+					Boolean(this.modelValue) ||
 					!this.placeholder) &&
 				!this.labelHidden
 			);
