@@ -43,9 +43,9 @@ describe("SharedExternalToolElementDisplayState.composable", () => {
 			const displayDataMock: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			useContextExternalToolApiMock.fetchDisplayDataCall.mockResolvedValue([
-				displayDataMock,
-			]);
+			useContextExternalToolApiMock.fetchDisplayDataCall.mockResolvedValue(
+				displayDataMock
+			);
 
 			return {
 				displayDataMock,

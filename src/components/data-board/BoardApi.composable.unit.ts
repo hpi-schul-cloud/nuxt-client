@@ -195,10 +195,6 @@ describe("BoardApi.composable", () => {
 				type: ContentElementType.ExternalTool,
 				content: {
 					contextExternalToolId: "context-external-tool-id",
-					displayData: {
-						name: "name",
-						logoUrl: "logoUrl",
-					},
 				},
 				timestamps: timestampsResponseFactory.build(),
 			};
