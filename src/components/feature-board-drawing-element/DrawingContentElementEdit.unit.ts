@@ -2,7 +2,6 @@ import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
-import DrawingContentElementMenu from "./DrawingContentElementMenu.vue";
 
 describe("DrawingContentElementEdit", () => {
 	const propsData = {
@@ -38,26 +37,5 @@ describe("DrawingContentElementEdit", () => {
 		const { wrapper } = setup();
 		const drawingIcon = wrapper.find("v-icon-stub");
 		expect(drawingIcon.exists()).toBe(true);
-	});
-
-	it("should render the DrawingContentElementMenu", () => {
-		const { wrapper } = setup();
-		const menu = wrapper.findComponent(DrawingContentElementMenu);
-		expect(menu.exists()).toBe(true);
-	});
-
-	const eventTests = [
-		{ eventName: "delete:element", emitName: "delete:element" },
-		{ eventName: "move-down:element", emitName: "move-down:element" },
-		{ eventName: "move-up:element", emitName: "move-up:element" },
-	];
-
-	eventTests.forEach(({ eventName, emitName }) => {
-		it(`should forward ${eventName} from DrawingContentElementMenu`, () => {
-			const { wrapper } = setup();
-			const menu = wrapper.findComponent(DrawingContentElementMenu);
-			menu.vm.$emit(eventName);
-			expect(wrapper.emitted(emitName)).toHaveLength(1);
-		});
 	});
 });

@@ -19,28 +19,37 @@
 				v-if="isEditMode"
 				:drawingName="element.content.drawingName"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
-				@move-down:element="onMoveDrawingElementEditDown"
-				@move-up:element="onMoveDrawingElementEditUp"
-				@delete:element="onDeleteElement"
-			/>
+				><BoardMenu scope="element">
+					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
+					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
+					<BoardMenuActionDelete @click="onDeleteElement" />
+				</BoardMenu>
+			</DrawingContentElementEdit>
 		</div>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, toRef } from "vue";
 import { DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
+
 export default defineComponent({
 	name: "DrawingContentElement",
 	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 		DrawingContentElementDisplay,
 		DrawingContentElementEdit,
 	},
@@ -50,9 +59,6 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
@@ -61,10 +67,12 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
 		const drawingElement = ref<HTMLElement | null>(null);
-		useBoardFocusHandler(props.element.id, drawingElement);
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, drawingElement);
+
 		const isOutlined = ref(props.isEditMode);
+
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();

@@ -69,23 +69,5 @@ describe("DrawingContentElement", () => {
 				true
 			);
 		});
-
-		const testMoveEvent = (eventName: string) => {
-			it(`should emit '${eventName}:edit' when it receives ${eventName}:element event from child`, async () => {
-				setup({
-					element: DRAWING_ELEMENT,
-					isEditMode: true,
-				});
-
-				const component = wrapper.findComponent(DrawingContentElementEdit);
-				component.vm.$emit(`${eventName}:element`);
-
-				const emitted = wrapper.emitted();
-				expect(emitted[`${eventName}:edit`]).toBeDefined();
-			});
-		};
-
-		testMoveEvent("move-down");
-		testMoveEvent("move-up");
 	});
 });

@@ -1,12 +1,10 @@
 <template>
 	<div @click="onOpenElement">
 		<div class="board-image-mask">
-			<v-img :src="imageSrc" height="185px" cover>
-				<DrawingContentElementMenu
-					@move-down:element="onMoveElementDown"
-					@move-up:element="onMoveElementUp"
-					@delete:element="onDeleteElement"
-			/></v-img>
+			<v-img :src="imageSrc" height="185px" cover></v-img>
+			<div class="menu">
+				<slot />
+			</div>
 		</div>
 		<v-list-item
 			class="px-0"
@@ -45,12 +43,11 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import DrawingContentElementMenu from "@/components/feature-board-drawing-element/DrawingContentElementMenu.vue";
 import image from "@/assets/img/tldraw.png";
 import dayjs from "dayjs";
 export default defineComponent({
 	name: "DrawingContentElementDisplay",
-	components: { DrawingContentElementMenu },
+
 	props: {
 		lastUpdatedAt: {
 			type: String,
@@ -58,26 +55,13 @@ export default defineComponent({
 		},
 		drawingName: { type: String, required: true },
 	},
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"open:element",
-	],
+
 	setup(props, { emit }) {
 		const imageSrc = image;
 		const formattedLastUpdatedAt = computed(() => {
 			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
 		});
-		const onMoveElementDown = () => {
-			emit("move-down:element");
-		};
-		const onMoveElementUp = () => {
-			emit("move-up:element");
-		};
-		const onDeleteElement = () => {
-			emit("delete:element");
-		};
+
 		const onOpenElement = () => {
 			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
 			window.open(urlWithRoom, "_blank");
@@ -86,9 +70,6 @@ export default defineComponent({
 		return {
 			imageSrc,
 			formattedLastUpdatedAt,
-			onMoveElementDown,
-			onMoveElementUp,
-			onDeleteElement,
 			onOpenElement,
 		};
 	},
@@ -96,7 +77,6 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 .board-image-mask {
-	padding: 3px;
 	text-align: right;
 	height: 185px;
 	overflow: hidden;
@@ -105,6 +85,11 @@ export default defineComponent({
 		filter: brightness(50%);
 		border-top-left-radius: 4px;
 		border-top-right-radius: 4px;
+	}
+	.menu {
+		position: absolute;
+		right: 4px;
+		top: 4px;
 	}
 }
 .text-edit {
@@ -123,4 +108,3 @@ export default defineComponent({
 	margin-left: 10px;
 }
 </style>
->
