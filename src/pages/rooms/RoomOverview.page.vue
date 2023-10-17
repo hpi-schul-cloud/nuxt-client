@@ -383,7 +383,7 @@ export default {
 		},
 		showImportSuccess(name) {
 			this.notifierModule?.show({
-				text: this.i18n.t("components.molecules.import.options.success", {
+				text: this.$t("components.molecules.import.options.success", {
 					name,
 				}),
 				status: "success",
