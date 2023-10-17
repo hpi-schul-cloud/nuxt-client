@@ -14,7 +14,7 @@
 				component="p"
 			/>
 			<div v-if="isStartButtonVisible">
-				<v-alert light prominent variant="text" type="info">
+				<v-alert prominent variant="tonal" type="info">
 					<RenderHTML
 						data-testid="migration-info-text"
 						:html="
@@ -83,6 +83,7 @@
 				class="ml-1"
 				color="primary"
 				data-testid="migration-mandatory-switch"
+				:true-icon="mdiCheck"
 				@update:model-value="
 					setMigrationMandatory(!oauthMigration.mandatorySince)
 				"
@@ -133,6 +134,7 @@
 			density="compact"
 			class="ml-1"
 			color="primary"
+			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
 			@update:model-value="setSchoolFeatures"
 		/>
@@ -148,6 +150,7 @@
 			density="compact"
 			class="ml-1"
 			color="primary"
+			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
 			@update:model-value="setSchoolFeatures"
 		/>
@@ -188,6 +191,7 @@ import { RenderHTML } from "@feature-render-html";
 import { useI18n } from "vue-i18n";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { UserLoginMigrationFlags } from "@/store/user-login-migration/user-login-migration-flags";
+import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -365,6 +369,7 @@ export default defineComponent({
 			globalFeatureEnableLdapSyncDuringMigration,
 			officialSchoolNumber,
 			isMigrationActive,
+			mdiCheck,
 		};
 	},
 });

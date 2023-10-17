@@ -4,8 +4,13 @@
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<v-alert v-if="schoolError" light prominent variant="text" type="error">
-			{{ $t(schoolError.translationKey) }}
+		<v-alert
+			v-if="schoolError"
+			prominent
+			variant="tonal"
+			type="error"
+			:text="$t(schoolError.translationKey)"
+		>
 		</v-alert>
 		<img
 			v-if="schoolError"
@@ -15,7 +20,7 @@
 			src="@/assets/img/pc_repair.png"
 		/>
 		<div v-if="!schoolError" class="no-school-error">
-			<v-alert light prominent variant="text" type="info">
+			<v-alert prominent variant="tonal" type="info">
 				{{ $t("pages.administration.school.index.info") }}
 				<a href="/administration/school/">
 					{{ $t("pages.administration.school.index.back") }}

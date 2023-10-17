@@ -14,8 +14,8 @@
 		<template #footer>
 			<div v-show="!isRunning" class="mt-2">
 				<v-alert
-					dense
-					variant="text"
+					density="compact"
+					variant="tonal"
 					class="ma-0"
 					type="info"
 					data-testId="vc-info-box"

@@ -11,7 +11,7 @@
 			:timeout="errorTimeout"
 			top
 			centered
-			color="error darken-3"
+			color="error-darken-3"
 		>
 			{{ $t("pages.administration.migration.error") }}
 			<template #action="{ attrs }">
@@ -89,7 +89,7 @@
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
 								<v-progress-linear
 									v-if="school.inUserMigration && totalImportUsers === 0"
@@ -99,11 +99,11 @@
 									<iframe class="full" :src="helpPageUri"></iframe>
 									<v-alert
 										v-if="!school.inUserMigration || totalImportUsers === 0"
-										dense
+										density="compact"
 										variant="outlined"
 										type="info"
+										:text="$t('pages.administration.migration.tutorialWait')"
 									>
-										{{ $t("pages.administration.migration.tutorialWait") }}
 									</v-alert>
 								</v-card-text>
 								<v-card-actions>
@@ -181,7 +181,7 @@
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
 								<div v-if="!isLoading">
 									<v-card-text>
@@ -330,7 +330,7 @@
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
 								<p>
 									{{ $t("pages.administration.migration.step5.syncReady1") }}
