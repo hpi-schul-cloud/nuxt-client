@@ -21,7 +21,7 @@
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
 			:label="$t('pages.administration.ldap.classes.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="$v.value.classPath"
+			:validation-model="v$.value.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
 			@update:modelValue="$emit('input', { ...value, classPath: $event })"
@@ -40,7 +40,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			:validation-model="$v.value.nameAttribute"
+			:validation-model="v$.value.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:modelValue="$emit('input', { ...value, nameAttribute: $event })"
@@ -58,7 +58,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="$v.value.participantAttribute"
+			:validation-model="v$.value.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:modelValue="
@@ -75,8 +75,13 @@
 <script>
 import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	props: {
 		value: {
 			type: Object,
@@ -117,11 +122,11 @@ export default {
 	},
 	watch: {
 		validate: function () {
-			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "classes");
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "classes");
 		},
 		checked: function () {
-			this.$emit("update:errors", this.$v.$invalid, "classes");
+			this.$emit("update:errors", this.v$.$invalid, "classes");
 			if (this.checked === false) {
 				this.classesActivatedColor = "currentColor";
 				this.$emit("update:inputs");
@@ -153,7 +158,7 @@ export default {
 			value: {},
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -12,7 +12,7 @@
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
-			:validation-model="$v.value.url"
+			:validation-model="v$.value.url"
 			:validation-messages="urlValidationMessages"
 			@update:modelValue="$emit('input', { ...value, url: $event })"
 		>
@@ -28,7 +28,7 @@
 			:label="$t('pages.administration.ldap.connection.basis.path')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.path')"
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
-			:validation-model="$v.value.basisPath"
+			:validation-model="v$.value.basisPath"
 			:validation-messages="pathSearchValidationMessages"
 			@update:modelValue="$emit('input', { ...value, basisPath: $event })"
 		>
@@ -44,7 +44,7 @@
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
-			:validation-model="$v.value.searchUser"
+			:validation-model="v$.value.searchUser"
 			:validation-messages="pathSearchValidationMessages"
 			@update:modelValue="$emit('input', { ...value, searchUser: $event })"
 		>
@@ -61,7 +61,7 @@
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
-			:validation-model="$v.value.searchUserPassword"
+			:validation-model="v$.value.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:modelValue="
 				$emit('input', { ...value, searchUserPassword: $event })
@@ -80,8 +80,13 @@ import {
 	ldapURLRegexValidator,
 	ldapSecuredURLRegexValidator,
 } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	props: {
 		value: {
 			type: Object,
@@ -123,8 +128,8 @@ export default {
 	},
 	watch: {
 		validate: function () {
-			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "connection");
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "connection");
 		},
 	},
 	validations() {
@@ -142,7 +147,7 @@ export default {
 			},
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

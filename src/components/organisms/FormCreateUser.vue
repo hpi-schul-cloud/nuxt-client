@@ -10,24 +10,24 @@
 			:label="$t('common.labels.firstName')"
 			:hint="$t('common.placeholder.firstName')"
 			data-testid="input_create-user_firstname"
-			:error-messages="getErrors('firstName', $v.userData.firstName)"
-			@blur="$v.userData.firstName.$touch"
+			:error-messages="getErrors('firstName', v$.userData.firstName)"
+			@blur="v$.userData.firstName.$touch"
 		></v-text-field>
 		<v-text-field
 			v-model="userData.lastName"
 			:label="$t('common.labels.lastName')"
 			:hint="$t('common.placeholder.lastName')"
 			data-testid="input_create-user_lastname"
-			:error-messages="getErrors('lastName', $v.userData.lastName)"
-			@blur="$v.userData.lastName.$touch"
+			:error-messages="getErrors('lastName', v$.userData.lastName)"
+			@blur="v$.userData.lastName.$touch"
 		></v-text-field>
 		<v-text-field
 			v-model="userData.email"
 			:label="$t('common.labels.email')"
 			:hint="$t('common.placeholder.email')"
 			data-testid="input_create-user_email"
-			:error-messages="getErrors('email', $v.userData.email)"
-			@blur="$v.userData.email.$touch"
+			:error-messages="getErrors('email', v$.userData.email)"
+			@blur="v$.userData.email.$touch"
 		></v-text-field>
 		<slot name="inputs" />
 
@@ -54,9 +54,14 @@
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	inheritAttrs: false,
 	data() {
 		return {
@@ -70,9 +75,9 @@ export default {
 	},
 	methods: {
 		submitHandler() {
-			this.$v.$touch();
+			this.v$.$touch();
 			this.$emit("trigger-validation", this.$v);
-			if (!this.$v.$invalid) {
+			if (!this.v$.$invalid) {
 				this.$emit("create-user", this.userData);
 			}
 		},
@@ -103,5 +108,5 @@ export default {
 			email: { required, email },
 		},
 	},
-};
+});
 </script>

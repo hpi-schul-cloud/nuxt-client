@@ -45,7 +45,7 @@
 				$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl)"
-			:validation-model="$v.value.member"
+			:validation-model="v$.value.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
 			@update:modelValue="$emit('input', { ...value, member: $event })"
@@ -63,7 +63,7 @@
 				$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="$t('pages.administration.ldapEdit.roles.info.student')"
-			:validation-model="$v.value.student"
+			:validation-model="v$.value.student"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
 			@update:modelValue="$emit('input', { ...value, student: $event })"
@@ -80,7 +80,7 @@
 				$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="$t('pages.administration.ldapEdit.roles.info.teacher')"
-			:validation-model="$v.value.teacher"
+			:validation-model="v$.value.teacher"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
 			@update:modelValue="$emit('input', { ...value, teacher: $event })"
@@ -95,7 +95,7 @@
 			:label="$t('pages.administration.ldapEdit.roles.labels.admin')"
 			:placeholder="$t('pages.administration.ldapEdit.roles.placeholder.admin')"
 			:info="$t('pages.administration.ldapEdit.roles.info.admin')"
-			:validation-model="$v.value.admin"
+			:validation-model="v$.value.admin"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
 			@update:modelValue="$emit('input', { ...value, admin: $event })"
@@ -123,8 +123,13 @@
 <script>
 import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	props: {
 		value: {
 			type: Object,
@@ -161,15 +166,15 @@ export default {
 	},
 	watch: {
 		validate: function () {
-			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "roles");
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "roles");
 		},
 		groupOption: function () {
 			this.groupOption === "user_attribute"
 				? (this.ldapActivatedColor = this.fillColor)
 				: (this.ldapActivatedColor = "currentColor");
 
-			this.$emit("update:errors", this.$v.$invalid, "roles");
+			this.$emit("update:errors", this.v$.$invalid, "roles");
 		},
 	},
 	validations() {
@@ -187,7 +192,7 @@ export default {
 			value: {},
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

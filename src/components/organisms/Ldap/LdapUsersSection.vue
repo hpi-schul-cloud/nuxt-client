@@ -15,7 +15,7 @@
 			:label="$t('pages.administration.ldap.users.path.title')"
 			:placeholder="$t('pages.administration.ldap.users.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="$v.value.userPath"
+			:validation-model="v$.value.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
 			@update:modelValue="$emit('input', { ...value, userPath: $event })"
@@ -33,7 +33,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.firstname')"
-			:validation-model="$v.value.firstName"
+			:validation-model="v$.value.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
 			@update:modelValue="$emit('input', { ...value, firstName: $event })"
@@ -48,7 +48,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.lastname')"
-			:validation-model="$v.value.familyName"
+			:validation-model="v$.value.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
 			@update:modelValue="$emit('input', { ...value, familyName: $event })"
@@ -63,7 +63,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
-			:validation-model="$v.value.email"
+			:validation-model="v$.value.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
 			@update:modelValue="$emit('input', { ...value, email: $event })"
@@ -79,7 +79,7 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
-			:validation-model="$v.value.uid"
+			:validation-model="v$.value.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
 			@update:modelValue="$emit('input', { ...value, uid: $event })"
@@ -95,7 +95,7 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
-			:validation-model="$v.value.uuid"
+			:validation-model="v$.value.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
 			@update:modelValue="$emit('input', { ...value, uuid: $event })"
@@ -110,8 +110,13 @@
 <script>
 import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	props: {
 		value: {
 			type: Object,
@@ -144,8 +149,8 @@ export default {
 	},
 	watch: {
 		validate: function () {
-			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "users");
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "users");
 		},
 	},
 	validations() {
@@ -160,7 +165,7 @@ export default {
 			},
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
