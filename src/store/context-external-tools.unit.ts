@@ -249,7 +249,7 @@ describe("ContextExternalToolsModule", () => {
 					const displayData: ToolReferenceResponse =
 						toolReferenceResponseFactory.build({ logoUrl: "logoUrl" });
 
-					apiMock.toolControllerGetToolReferences.mockResolvedValue(
+					apiMock.toolReferenceControllerGetToolReferencesForContext.mockResolvedValue(
 						mockApiResponse({ data: { data: [displayData] } })
 					);
 
@@ -265,10 +265,9 @@ describe("ContextExternalToolsModule", () => {
 
 					await module.loadExternalToolDisplayData({ contextId, contextType });
 
-					expect(apiMock.toolControllerGetToolReferences).toHaveBeenCalledWith(
-						contextId,
-						contextType
-					);
+					expect(
+						apiMock.toolReferenceControllerGetToolReferencesForContext
+					).toHaveBeenCalledWith(contextId, contextType);
 				});
 
 				it("should set the state", async () => {
@@ -298,7 +297,9 @@ describe("ContextExternalToolsModule", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 
-					apiMock.toolControllerGetToolReferences.mockRejectedValue(error);
+					apiMock.toolReferenceControllerGetToolReferencesForContext.mockRejectedValue(
+						error
+					);
 
 					return {
 						apiError,

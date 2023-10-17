@@ -54,7 +54,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 
 		const propsData = {
 			isOpen: false,
-			cardId: "cardId",
+			contextId: "contextId",
 			...props,
 		};
 
@@ -117,8 +117,8 @@ describe("ExternalToolElementConfigurationDialog", () => {
 				expect(
 					contextExternalToolsModule.loadAvailableToolsForContext
 				).toHaveBeenCalledWith({
-					contextId: "cardId",
-					contextType: ToolContextType.BoardCard,
+					contextId: "contextId",
+					contextType: ToolContextType.BoardElement,
 				});
 			});
 		});
@@ -127,7 +127,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			const setup = async () => {
 				const contextExternalTool = contextExternalToolFactory.build({
 					displayName: "testName",
-					contextType: ToolContextType.BoardCard,
+					contextType: ToolContextType.BoardElement,
 				});
 
 				const { contextExternalToolsModule, wrapper } = await getWrapper({
@@ -208,8 +208,8 @@ describe("ExternalToolElementConfigurationDialog", () => {
 				expect(
 					contextExternalToolsModule.createContextExternalTool
 				).toHaveBeenCalledWith<[ContextExternalToolSave]>({
-					contextId: "cardId",
-					contextType: ToolContextType.BoardCard,
+					contextId: "contextId",
+					contextType: ToolContextType.BoardElement,
 					displayName: template.name,
 					schoolToolId: template.schoolExternalToolId,
 					toolVersion: template.version,
@@ -302,8 +302,8 @@ describe("ExternalToolElementConfigurationDialog", () => {
 				>({
 					contextExternalToolId: contextExternalToolId,
 					contextExternalTool: {
-						contextId: "cardId",
-						contextType: ToolContextType.BoardCard,
+						contextId: "contextId",
+						contextType: ToolContextType.BoardElement,
 						displayName: template.name,
 						parameters: [],
 						toolVersion: template.version,

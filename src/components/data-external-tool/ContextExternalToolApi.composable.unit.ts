@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { ToolContextType, ToolReferenceResponse } from "@/serverApi/v3/api";
+import { ToolReferenceResponse } from "@/serverApi/v3/api";
 import {
 	ExternalToolDisplayData,
 	ToolConfigurationStatus,
@@ -29,8 +29,8 @@ describe("ContextExternalToolApi.composable", () => {
 			const displayData: ToolReferenceResponse =
 				toolReferenceResponseFactory.build({ logoUrl: "mockLogoUrl" });
 
-			toolApi.toolControllerGetToolReferences.mockResolvedValue(
-				mockApiResponse({ data: { data: [displayData] } })
+			toolApi.toolReferenceControllerGetToolReference.mockResolvedValue(
+				mockApiResponse({ data: displayData })
 			);
 
 			return {
@@ -42,34 +42,29 @@ describe("ContextExternalToolApi.composable", () => {
 			setup();
 
 			await useContextExternalToolApi().fetchDisplayDataCall(
-				"cardId",
-				ToolContextType.BoardCard
+				"contextExternalToolId"
 			);
 
-			expect(toolApi.toolControllerGetToolReferences).toHaveBeenCalledWith(
-				"cardId",
-				ToolContextType.BoardCard
-			);
+			expect(
+				toolApi.toolReferenceControllerGetToolReference
+			).toHaveBeenCalledWith("contextExternalToolId");
 		});
 
 		it("should return an array of display data", async () => {
 			const { displayData } = setup();
 
-			const result: ExternalToolDisplayData[] =
+			const result: ExternalToolDisplayData =
 				await useContextExternalToolApi().fetchDisplayDataCall(
-					"courseId",
-					ToolContextType.Course
+					"contextExternalToolId"
 				);
 
-			expect(result).toEqual<ExternalToolDisplayData[]>([
-				{
-					contextExternalToolId: displayData.contextToolId,
-					name: displayData.displayName,
-					logoUrl: displayData.logoUrl,
-					status: ToolConfigurationStatus.Latest,
-					openInNewTab: displayData.openInNewTab,
-				},
-			]);
+			expect(result).toEqual<ExternalToolDisplayData>({
+				contextExternalToolId: displayData.contextToolId,
+				name: displayData.displayName,
+				logoUrl: displayData.logoUrl,
+				status: ToolConfigurationStatus.Latest,
+				openInNewTab: displayData.openInNewTab,
+			});
 		});
 	});
 });

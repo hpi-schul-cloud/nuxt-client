@@ -15,13 +15,13 @@
 	>
 		<div class="card-container d-flex gap-8 grey lighten-4">
 			<div
-				v-if="toolDisplayData && toolDisplayData.logoUrl"
+				v-if="displayData && displayData.logoUrl"
 				class="logo-container my-auto mr-1"
 			>
 				<v-img
 					height="100%"
 					class="mx-auto"
-					:src="toolDisplayData.logoUrl"
+					:src="displayData.logoUrl"
 					contain
 				></v-img>
 			</div>
@@ -44,7 +44,7 @@
 		</div>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
-			:card-id="cardId"
+			:context-id="element.id"
 			:config-id="element.content.contextExternalToolId"
 			@close="onConfigurationDialogClose"
 			@save="onConfigurationDialogSave"
@@ -57,15 +57,15 @@
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
+import { useExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { mdiPuzzleOutline } from "@mdi/js";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
+	onMounted,
 	PropType,
 	Ref,
 	ref,
@@ -84,7 +84,6 @@ export default defineComponent({
 			type: Object as PropType<ExternalToolElementResponse>,
 			required: true,
 		},
-		cardId: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
 	emits: [
@@ -98,7 +97,11 @@ export default defineComponent({
 		const { modelValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
-		const displayState = useSharedExternalToolElementDisplayState();
+		const {
+			fetchDisplayData,
+			displayData,
+			isLoading: isDisplayDataLoading,
+		} = useExternalToolElementDisplayState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -110,25 +113,13 @@ export default defineComponent({
 			() => !!modelValue.value.contextExternalToolId
 		);
 
-		const toolDisplayData: Ref<ExternalToolDisplayData | undefined> = computed(
-			() =>
-				modelValue.value.contextExternalToolId
-					? displayState.findDisplayData(
-							props.cardId,
-							modelValue.value.contextExternalToolId
-					  )
-					: undefined
-		);
-
 		const toolDisplayName: ComputedRef<string> = computed(
-			() => toolDisplayData.value?.name ?? "..."
+			() => displayData.value?.name ?? "..."
 		);
 
 		const isLoading = computed(
 			() =>
-				hasLinkedTool.value &&
-				!toolDisplayData.value &&
-				displayState.isLoading.value
+				hasLinkedTool.value && !displayData.value && isDisplayDataLoading.value
 		);
 
 		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
@@ -171,14 +162,20 @@ export default defineComponent({
 		const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
 			modelValue.value.contextExternalToolId = tool.id;
 
-			await displayState.fetchDisplayData(props.cardId);
+			await fetchDisplayData(modelValue.value.contextExternalToolId);
 		};
+
+		onMounted(async () => {
+			if (modelValue.value.contextExternalToolId) {
+				await fetchDisplayData(modelValue.value.contextExternalToolId);
+			}
+		});
 
 		return {
 			t,
 			hasLinkedTool,
-			toolDisplayData,
 			toolDisplayName,
+			displayData,
 			isLoading,
 			isConfigurationDialogOpen,
 			mdiPuzzleOutline,

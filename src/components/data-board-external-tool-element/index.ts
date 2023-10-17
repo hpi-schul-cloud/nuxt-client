@@ -1,1 +1,1 @@
-export * from "./SharedExternalToolElementDisplayState.composable";
+export * from "./ExternalToolElementDisplayState.composable";

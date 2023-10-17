@@ -44,7 +44,6 @@
 				</div>
 
 				<ContentElementList
-					:card-id="cardId"
 					:elements="card.elements"
 					:isEditMode="isEditMode"
 					@delete:element="onDeleteElement"
@@ -73,11 +72,10 @@ import {
 	useCardState,
 	useEditMode,
 } from "@data-board";
-import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import {
 	BoardMenu,
-	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	BoardMenuActionEdit,
 } from "@ui-board";
 import {
 	useDebounceFn,
@@ -85,7 +83,7 @@ import {
 	useElementSize,
 	watchDebounced,
 } from "@vueuse/core";
-import { computed, defineComponent, onMounted, ref, toRef } from "vue";
+import { computed, defineComponent, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
@@ -188,12 +186,6 @@ export default defineComponent({
 				maxWait: 2000,
 			}
 		);
-
-		onMounted(async () => {
-			const { fetchDisplayData } = useSharedExternalToolElementDisplayState();
-
-			await fetchDisplayData(props.cardId);
-		});
 
 		return {
 			boardMenuClasses,

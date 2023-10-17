@@ -51,7 +51,15 @@ import {
 	injectStrict,
 } from "@/utils/inject";
 import { useBoardNotifier } from "@util-board";
-import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	PropType,
+	ref,
+	Ref,
+	watch,
+} from "vue";
 import ExternalToolConfigurator from "../external-tools/configuration/ExternalToolConfigurator.vue";
 import VCustomDialog from "../organisms/vCustomDialog.vue";
 
@@ -63,9 +71,13 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		cardId: {
+		contextId: {
 			type: String,
 			required: true,
+		},
+		contextType: {
+			type: String as PropType<ToolContextType>,
+			default: ToolContextType.BoardElement,
 		},
 		configId: {
 			type: String,
@@ -122,8 +134,8 @@ export default defineComponent({
 				ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
 					template,
 					configuredParameterValues,
-					props.cardId,
-					ToolContextType.BoardCard,
+					props.contextId,
+					props.contextType,
 					displayName.value
 				);
 
@@ -182,8 +194,8 @@ export default defineComponent({
 				displayName.value = configuration.value?.displayName;
 			} else {
 				await contextExternalToolsModule.loadAvailableToolsForContext({
-					contextId: props.cardId,
-					contextType: ToolContextType.BoardCard,
+					contextId: props.contextId,
+					contextType: props.contextType,
 				});
 			}
 

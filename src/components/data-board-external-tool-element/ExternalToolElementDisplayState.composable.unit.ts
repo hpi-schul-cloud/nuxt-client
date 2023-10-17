@@ -4,17 +4,10 @@ import { ExternalToolDisplayData } from "@/store/external-tool";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils";
 import { useContextExternalToolApi } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { Ref } from "vue";
-import { useSharedExternalToolElementDisplayState } from "./SharedExternalToolElementDisplayState.composable";
+import { useExternalToolElementDisplayState } from "./ExternalToolElementDisplayState.composable";
 
 jest.mock("@data-external-tool");
 jest.mock("@/components/error-handling/ErrorHandler.composable");
-jest.mock<typeof import("@/utils/create-shared-composable")>(
-	"@/utils/create-shared-composable",
-	() => ({
-		createTestableSharedComposable: (composable) => composable,
-	})
-);
 
 describe("SharedExternalToolElementDisplayState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<
@@ -38,82 +31,44 @@ describe("SharedExternalToolElementDisplayState.composable", () => {
 	});
 
 	describe("when no data is loaded", () => {
-		it("should have no data lists", async () => {
-			const displayDataState = useSharedExternalToolElementDisplayState();
+		it("should not have data", async () => {
+			const { displayData } = useExternalToolElementDisplayState();
 
-			const result: Ref<ExternalToolDisplayData[]> | undefined =
-				displayDataState.getDisplayDataList("cardId");
-
-			expect(result).toBeUndefined();
-		});
-
-		it("should not find data", async () => {
-			const displayDataState = useSharedExternalToolElementDisplayState();
-
-			const result: ExternalToolDisplayData | undefined =
-				displayDataState.findDisplayData("cardId", "contextExternalToolId");
-
-			expect(result).toBeUndefined();
+			expect(displayData.value).toBeUndefined();
 		});
 	});
 
 	describe("when data is loaded", () => {
 		const setup = () => {
-			const displayData: ExternalToolDisplayData =
+			const displayDataMock: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
 			useContextExternalToolApiMock.fetchDisplayDataCall.mockResolvedValue([
-				displayData,
+				displayDataMock,
 			]);
 
 			return {
-				displayData,
-				...useSharedExternalToolElementDisplayState(),
+				displayDataMock,
+				...useExternalToolElementDisplayState(),
 			};
 		};
 
 		it("should call the api for display data of the card", async () => {
 			const { fetchDisplayData } = setup();
 
-			await fetchDisplayData("cardId");
+			await fetchDisplayData("contextId");
 
 			expect(
 				useContextExternalToolApiMock.fetchDisplayDataCall
-			).toHaveBeenCalledWith("cardId", ToolContextType.BoardCard);
+			).toHaveBeenCalledWith("contextId", ToolContextType.BoardElement);
 		});
 
 		it("should set the display data in the state", async () => {
-			const { fetchDisplayData, getDisplayDataList, displayData } = setup();
+			const { fetchDisplayData, displayData, displayDataMock } = setup();
 
-			await fetchDisplayData("cardId");
-			const result: Ref<ExternalToolDisplayData[]> | undefined =
-				getDisplayDataList("cardId");
+			await fetchDisplayData("contextId");
 
-			expect(result?.value).toEqual([displayData]);
-		});
-
-		it("should find the display data for a specific tool", async () => {
-			const { fetchDisplayData, findDisplayData, displayData } = setup();
-
-			await fetchDisplayData("cardId");
-			const result: ExternalToolDisplayData | undefined = findDisplayData(
-				"cardId",
-				displayData.contextExternalToolId
-			);
-
-			expect(result).toEqual(displayData);
-		});
-
-		it("should not find data for non-existing tools", async () => {
-			const { fetchDisplayData, findDisplayData } = setup();
-
-			await fetchDisplayData("cardId");
-			const result: ExternalToolDisplayData | undefined = findDisplayData(
-				"cardId",
-				"otherId"
-			);
-
-			expect(result).toBeUndefined();
+			expect(displayData.value).toEqual(displayDataMock);
 		});
 	});
 
@@ -127,14 +82,14 @@ describe("SharedExternalToolElementDisplayState.composable", () => {
 
 			return {
 				error,
-				...useSharedExternalToolElementDisplayState(),
+				...useExternalToolElementDisplayState(),
 			};
 		};
 
 		it("should handle the error", async () => {
 			const { fetchDisplayData, error } = setup();
 
-			await fetchDisplayData("cardId");
+			await fetchDisplayData("contextId");
 
 			expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
 		});

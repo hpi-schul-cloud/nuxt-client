@@ -13,7 +13,7 @@ import {
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useSharedExternalToolElementDisplayState } from "@data-board-external-tool-element";
+import { useExternalToolElementDisplayState } from "@data-board-external-tool-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -42,7 +42,7 @@ describe("ExternalToolElement", () => {
 		ReturnType<typeof useBoardFocusHandler>
 	>;
 	let useSharedExternalToolElementDisplayStateMock: DeepMocked<
-		ReturnType<typeof useSharedExternalToolElementDisplayState>
+		ReturnType<typeof useExternalToolElementDisplayState>
 	>;
 
 	beforeEach(() => {
@@ -51,14 +51,14 @@ describe("ExternalToolElement", () => {
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useSharedExternalToolElementDisplayStateMock =
-			createMock<ReturnType<typeof useSharedExternalToolElementDisplayState>>();
+			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
 
 		jest
 			.mocked(useContentElementState)
 			.mockReturnValue(useContentElementStateMock);
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest
-			.mocked(useSharedExternalToolElementDisplayState)
+			.mocked(useExternalToolElementDisplayState)
 			.mockReturnValue(useSharedExternalToolElementDisplayStateMock);
 	});
 
@@ -82,9 +82,7 @@ describe("ExternalToolElement", () => {
 			.mockReturnValue(useDeleteConfirmationDialogReturnValue);
 
 		useContentElementStateMock.modelValue = ref(props.element.content);
-		useSharedExternalToolElementDisplayStateMock.findDisplayData.mockReturnValue(
-			displayData
-		);
+		useSharedExternalToolElementDisplayStateMock.displayData = ref(displayData);
 
 		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolElement as MountOptions<Vue>,
@@ -116,6 +114,37 @@ describe("ExternalToolElement", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("when the element is mounted", () => {
+		describe("when the element has a tool attached", () => {
+			it("should load the display data", () => {
+				getWrapper({
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId: "contextExternalToolId" },
+					},
+					isEditMode: false,
+				});
+
+				expect(
+					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).toHaveBeenCalledWith("contextExternalToolId");
+			});
+		});
+
+		describe("when the element deos not have a tool attached", () => {
+			it("should not load the display data", () => {
+				getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: false,
+				});
+
+				expect(
+					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).not.toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("when no tool is selected", () => {
@@ -461,8 +490,11 @@ describe("ExternalToolElement", () => {
 
 		describe("when the dialog is saving a tool", () => {
 			const setup = () => {
-				const savedTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const savedTool: ContextExternalTool = contextExternalToolFactory.build(
+					{
+						id: "contextExternalToolId",
+					}
+				);
 
 				const { wrapper } = getWrapper({
 					element: EMPTY_TEST_ELEMENT,
@@ -502,7 +534,7 @@ describe("ExternalToolElement", () => {
 
 				expect(
 					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
-				).toHaveBeenCalledWith("cardId");
+				).toHaveBeenCalledWith(savedTool.id);
 			});
 		});
 	});

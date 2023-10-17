@@ -25,6 +25,9 @@ import {
 } from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
 
+/**
+ * @deprecated prefer using useContextExternalToolApi
+ */
 @Module({
 	name: "contextExternalToolsModule",
 	namespaced: true,
@@ -190,9 +193,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		return null;
 	}
 
-	/**
-	 * @deprecated useContextExternalToolApi.fetchDisplayDataCall
-	 */
 	@Action
 	async loadExternalToolDisplayData(payload: {
 		contextId: string;
@@ -203,13 +203,13 @@ export default class ContextExternalToolsModule extends VuexModule {
 
 		try {
 			const response: AxiosResponse<ToolReferenceListResponse> =
-				await this.toolApi.toolControllerGetToolReferences(
+				await this.toolApi.toolReferenceControllerGetToolReferencesForContext(
 					payload.contextId,
 					payload.contextType
 				);
 
 			const mapped: ExternalToolDisplayData[] =
-				ExternalToolMapper.mapToExternalToolDisplayData(response.data);
+				ExternalToolMapper.mapToExternalToolDisplayDataList(response.data);
 
 			this.setExternalToolDisplayDataList(mapped);
 		} catch (error: unknown) {
