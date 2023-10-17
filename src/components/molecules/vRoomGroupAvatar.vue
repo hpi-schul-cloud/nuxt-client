@@ -45,10 +45,10 @@
 					tabindex="-1"
 				/>
 			</v-card>
-			<div aria-hidden="true" class="justify-left mt-1 subtitle">
-				{{ data.title }}
-			</div>
 		</v-badge>
+		<div aria-hidden="true" class="mt-2 subtitle">
+			{{ data.title }}
+		</div>
 	</div>
 </template>
 <script>
