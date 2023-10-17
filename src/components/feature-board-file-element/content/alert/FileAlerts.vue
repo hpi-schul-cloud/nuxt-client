@@ -4,6 +4,10 @@
 			{{ t("components.cardElement.fileElement.videoFormatError") }}
 		</InfoAlert>
 
+		<InfoAlert v-if="alerts.includes(FileAlert.AUDIO_FORMAT_ERROR)">
+			{{ t("components.cardElement.fileElement.audioFormatError") }}
+		</InfoAlert>
+
 		<InfoAlert v-if="alerts.includes(FileAlert.AWAITING_SCAN_STATUS)">
 			<div>
 				{{ t("components.cardElement.fileElement.awaitingScan") }}
@@ -28,10 +32,10 @@
 </template>
 
 <script lang="ts">
+import { useI18n } from "@/composables/i18n.composable";
+import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { defineComponent, PropType } from "vue";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
-import { InfoAlert, ErrorAlert, WarningAlert } from "@ui-alert";
-import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "FileAlerts",
