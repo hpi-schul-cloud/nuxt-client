@@ -30,7 +30,7 @@
 					<general-settings />
 					<school-policy v-if="schoolPolicyEnabled" />
 					<school-terms-of-use v-if="schoolTermsOfUseEnabled" />
-					<admin-migration-section v-if="true" />
+					<admin-migration-section v-if="isOauthMigrationEnabled" />
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
 					</template>

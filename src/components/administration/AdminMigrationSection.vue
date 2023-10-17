@@ -336,7 +336,6 @@ export default defineComponent({
 		);
 
 		const setSchoolFeatures = async () => {
-			console.log("I am working");
 			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
