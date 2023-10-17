@@ -23,8 +23,8 @@ describe("ImageDisplay", () => {
 			content: { alternativeText: props.alternativeText },
 		});
 		const propsData = {
-			url: "url/1/file-record #1.txt",
-			previewUrl: "preview/1/file-record #1.txt",
+			src: "url/1/file-record #1.txt",
+			previewSrc: "preview/1/file-record #1.txt",
 			name: "file-record #1.txt",
 			isEditMode: props.isEditMode,
 			element,
@@ -49,9 +49,9 @@ describe("ImageDisplay", () => {
 
 		return {
 			wrapper,
-			urlProp: propsData.url,
+			src: propsData.src,
 			nameProp: propsData.name,
-			previewUrlProp: propsData.previewUrl,
+			previewSrc: propsData.previewSrc,
 			element,
 			open,
 		};
@@ -95,11 +95,11 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should have set src correctly", () => {
-			const { wrapper, previewUrlProp } = setup({ isEditMode: false });
+			const { wrapper, previewSrc } = setup({ isEditMode: false });
 
 			const src = wrapper.find(imageSelektor).attributes("src");
 
-			expect(src).toBe(previewUrlProp);
+			expect(src).toBe(previewSrc);
 		});
 
 		it("should have set alt correctly", () => {
@@ -140,13 +140,13 @@ describe("ImageDisplay", () => {
 
 		it("should call open function, when the container is clicked", () => {
 			const alternativeText = "alternative text";
-			const { wrapper, urlProp, nameProp, open } = setup({
+			const { wrapper, src, nameProp, open } = setup({
 				isEditMode: false,
 				alternativeText,
 			});
 			const options: LightBoxOptions = {
-				downloadUrl: urlProp,
-				previewUrl: urlProp,
+				downloadUrl: src,
+				previewUrl: src,
 				alt: alternativeText,
 				name: nameProp,
 			};
@@ -160,13 +160,13 @@ describe("ImageDisplay", () => {
 
 		it("should call open function, when the image is clicked", () => {
 			const alternativeText = "alternative text";
-			const { wrapper, urlProp, nameProp, open } = setup({
+			const { wrapper, src, nameProp, open } = setup({
 				isEditMode: false,
 				alternativeText,
 			});
 			const options: LightBoxOptions = {
-				downloadUrl: urlProp,
-				previewUrl: urlProp,
+				downloadUrl: src,
+				previewUrl: src,
 				alt: alternativeText,
 				name: nameProp,
 			};
@@ -180,13 +180,13 @@ describe("ImageDisplay", () => {
 
 		it("should call open function, when the overlay is clicked", async () => {
 			const alternativeText = "alternative text";
-			const { wrapper, urlProp, nameProp, open } = setup({
+			const { wrapper, src, nameProp, open } = setup({
 				isEditMode: false,
 				alternativeText,
 			});
 			const options: LightBoxOptions = {
-				downloadUrl: urlProp,
-				previewUrl: urlProp,
+				downloadUrl: src,
+				previewUrl: src,
 				alt: alternativeText,
 				name: nameProp,
 			};
@@ -254,13 +254,13 @@ describe("ImageDisplay", () => {
 
 		it("should call open function, when Enter key is pressed", async () => {
 			const alternativeText = "alternative text";
-			const { wrapper, urlProp, nameProp, open } = setup({
+			const { wrapper, src, nameProp, open } = setup({
 				isEditMode: false,
 				alternativeText,
 			});
 			const options: LightBoxOptions = {
-				downloadUrl: urlProp,
-				previewUrl: urlProp,
+				downloadUrl: src,
+				previewUrl: src,
 				alt: alternativeText,
 				name: nameProp,
 			};
@@ -275,13 +275,13 @@ describe("ImageDisplay", () => {
 
 		it("should call open function, when Space key is pressed", async () => {
 			const alternativeText = "alternative text";
-			const { wrapper, urlProp, nameProp, open } = setup({
+			const { wrapper, src, nameProp, open } = setup({
 				isEditMode: false,
 				alternativeText,
 			});
 			const options: LightBoxOptions = {
-				downloadUrl: urlProp,
-				previewUrl: urlProp,
+				downloadUrl: src,
+				previewUrl: src,
 				alt: alternativeText,
 				name: nameProp,
 			};
@@ -332,11 +332,13 @@ describe("ImageDisplay", () => {
 		});
 
 		it("should have set src correctly", () => {
-			const { wrapper, previewUrlProp } = setup({ isEditMode: true });
+			const { wrapper, previewSrc } = setup({
+				isEditMode: true,
+			});
 
 			const src = wrapper.find(imageSelektor).attributes("src");
 
-			expect(src).toBe(previewUrlProp);
+			expect(src).toBe(previewSrc);
 		});
 
 		describe("When alternative text is defined", () => {
