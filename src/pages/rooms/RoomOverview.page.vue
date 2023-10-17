@@ -63,13 +63,14 @@
 							<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
 								<vRoomEmptyAvatar
 									v-if="isEmptyGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomEmptyAvatar"
 								/>
 								<vRoomGroupAvatar
 									v-else-if="hasGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									class="room-group-avatar"
 									:data="getDataObject(rowIndex, colIndex)"
 									:size="dimensions.cellWidth"
@@ -81,10 +82,11 @@
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 									@dragend="onDragend"
 									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomGroupAvatar"
 								/>
 								<vRoomAvatar
 									v-else
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									class="room-avatar"
 									:item="getDataObject(rowIndex, colIndex)"
 									:size="dimensions.cellWidth"
@@ -93,14 +95,16 @@
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 									@dragend="onDragend"
 									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
 								/>
 							</template>
 							<template v-else>
 								<vRoomEmptyAvatar
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
 									:show-outline="dragging"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomEmptyAvatar"
 								/>
 							</template>
 						</div>
@@ -137,8 +141,23 @@ import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify, mdiCheck } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { defineComponent } from "vue";
+import { reactive } from "vue";
 
-export default {
+export default defineComponent({
+	setup() {
+		const refs = reactive({});
+
+		const setElementRef = (rowIndex, colIndex, el) => {
+			refs[`${rowIndex}-${colIndex}`] = el;
+		};
+
+		const getElementNameByRef = (pos) => {
+			return refs[`${pos.y}-${pos.x}`].$attrs["data-avatar-type"];
+		};
+
+		return { setElementRef, getElementNameByRef };
+	},
 	components: {
 		RoomWrapper,
 		vRoomAvatar,
@@ -345,9 +364,6 @@ export default {
 			}
 			this.dragging = false;
 		},
-		getElementNameByRef(pos) {
-			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
-		},
 		dragFromGroup(element) {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
@@ -417,7 +433,7 @@ export default {
 			this.$t("pages.rooms.index.courses.active")
 		);
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
