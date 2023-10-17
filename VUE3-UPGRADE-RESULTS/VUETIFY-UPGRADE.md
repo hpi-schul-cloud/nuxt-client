@@ -150,3 +150,15 @@ _Currently broken:_ is using `v-speed-dial` which is not available in vuetify 3 
 - Has been refactored to use required `v-model` API for `VDialog`
 - `v-confirmation-dialog` already works
 - _TODO:_ refactor all Dialogs that use the `v-custom-dialog` component
+
+## Vuetify 3 Bugs
+
+# v-switch
+
+- vertical height not adjusted when inset with density is used
+- GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/18334
+
+# v-card
+
+- hover breaks variant elevated
+- GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
