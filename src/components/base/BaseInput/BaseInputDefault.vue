@@ -109,16 +109,16 @@ export default defineComponent({
 	setup() {
 		const { uid } = useUid();
 
-		const vFocusOnMount = {
+		return {
+			uid,
+		};
+	},
+	directives: {
+		focusOnMount: {
 			mounted(el, binding) {
 				if (binding.value) el.focus();
 			},
-		};
-
-		return {
-			uid,
-			vFocusOnMount,
-		};
+		},
 	},
 	props: {
 		modelValue: { type: [String, Number], default: undefined },
