@@ -13,6 +13,7 @@ import {
 } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
 import {
+	apiResponseErrorFactory,
 	axiosErrorFactory,
 	businessErrorFactory,
 	mockApiResponse,
@@ -248,7 +249,7 @@ describe("UserLoginMigrationModule", () => {
 					authModule.setUser({ ...mockUser, id: "" });
 				};
 
-				it("should not call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
+				it("should not get latest user login migration ", async () => {
 					setup();
 
 					await module.fetchLatestUserLoginMigrationForCurrentUser();
@@ -370,7 +371,7 @@ describe("UserLoginMigrationModule", () => {
 						};
 					};
 
-					it("should call the userMigrationApi.userMigrationControllerGetLatestUserLoginMigrationForCurrentUser", async () => {
+					it("should get latest user login migrations", async () => {
 						setup();
 
 						await module.fetchLatestUserLoginMigrationForCurrentUser();
@@ -446,6 +447,165 @@ describe("UserLoginMigrationModule", () => {
 
 					const func = () =>
 						module.fetchLatestUserLoginMigrationForCurrentUser();
+
+					await expect(func()).rejects.toEqual(
+						createApplicationError(HttpStatusCode.BadRequest)
+					);
+				});
+			});
+		});
+
+		describe("getLatestUserLoginMigrationForSchool", () => {
+			describe("when school id is not available", () => {
+				const setup = () => {
+					authModule.setUser({ ...mockUser, schoolId: "" });
+				};
+
+				it("should not get latest user login migrations", async () => {
+					setup();
+
+					await module.fetchLatestUserLoginMigrationForSchool();
+
+					expect(
+						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool
+					).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when school is available", () => {
+				describe("when there is no migration for a school", () => {
+					const setup = () => {
+						authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+
+						const error = axiosErrorFactory.build({
+							response: {
+								data: apiResponseErrorFactory.build({
+									code: HttpStatusCode.NotFound,
+								}),
+							},
+						});
+
+						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
+							error
+						);
+					};
+
+					it("should set the user login migration to undefined", async () => {
+						setup();
+
+						await module.fetchLatestUserLoginMigrationForSchool();
+
+						expect(module.getUserLoginMigration).toBeUndefined();
+					});
+				});
+
+				describe("when there is a migration for the school", () => {
+					const setup = () => {
+						authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+
+						const userLoginMigrationResponse: UserLoginMigrationResponse =
+							userLoginMigrationResponseFactory.build({
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2000, 1, 1, 0, 0).toString(),
+								closedAt: new Date(2000, 1, 1, 0, 0).toString(),
+								finishedAt: new Date(2000, 1, 14, 0, 0).toString(),
+								mandatorySince: new Date(2000, 1, 1, 0, 0).toString(),
+							});
+
+						const userLoginMigration: UserLoginMigration = {
+							sourceSystemId: "sourceSystemId",
+							targetSystemId: "targetSystemId",
+							startedAt: new Date(2000, 1, 1, 0, 0),
+							closedAt: new Date(2000, 1, 1, 0, 0),
+							finishedAt: new Date(2000, 1, 14, 0, 0),
+							mandatorySince: new Date(2000, 1, 1, 0, 0),
+						};
+
+						apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockResolvedValue(
+							mockApiResponse({ data: userLoginMigrationResponse })
+						);
+
+						return {
+							userLoginMigration,
+							userLoginMigrationResponse,
+						};
+					};
+
+					it("should get latest user login migrations", async () => {
+						setup();
+
+						await module.fetchLatestUserLoginMigrationForSchool();
+
+						expect(
+							apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool
+						).toHaveBeenCalled();
+					});
+
+					it("should set the UserLoginMigration", async () => {
+						const { userLoginMigration } = setup();
+
+						await module.fetchLatestUserLoginMigrationForSchool();
+
+						expect(module.getUserLoginMigration).toEqual(userLoginMigration);
+					});
+				});
+			});
+
+			describe("when the api throws an error", () => {
+				const setup = () => {
+					authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+
+					const error = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(error);
+
+					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
+						error
+					);
+
+					return {
+						apiError,
+					};
+				};
+
+				it("should set the businessError", async () => {
+					const { apiError } = setup();
+
+					await expect(
+						module.fetchLatestUserLoginMigrationForSchool()
+					).rejects.toThrow();
+
+					expect(module.getBusinessError).toEqual<BusinessError>({
+						error: apiError,
+						statusCode: apiError.code,
+						message: apiError.message,
+					});
+				});
+
+				it("should throw application error", async () => {
+					setup();
+
+					const func = () => module.fetchLatestUserLoginMigrationForSchool();
+
+					await expect(func()).rejects.toEqual(
+						createApplicationError(HttpStatusCode.BadRequest)
+					);
+				});
+			});
+
+			describe("when the api returns a bad request", () => {
+				const setup = () => {
+					authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+
+					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
+						createApplicationError(HttpStatusCode.BadRequest)
+					);
+				};
+
+				it("should throw an error with status code BadRequest when an ApplicationError is thrown", async () => {
+					setup();
+
+					const func = () => module.fetchLatestUserLoginMigrationForSchool();
 
 					await expect(func()).rejects.toEqual(
 						createApplicationError(HttpStatusCode.BadRequest)

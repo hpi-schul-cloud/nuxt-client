@@ -4,6 +4,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import dayjs from "dayjs";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -59,18 +61,17 @@ describe("@/components/topbar/StatusAlerts", () => {
 	});
 });
 
-describe("getCreatedDate", () => {
-	it("should be getCreatedDate function on the template", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const alertElement = wrapper.find(".alert-date");
-		expect(alertElement.element.innerHTML).toContain(expectedDate);
+describe("formatDate", () => {
+	const wrapper = getWrapper(testProps);
+	it("returns 'vor ein paar Sekunden' for seconds difference", () => {
+		const fewSecondsAgo = dayjs().subtract(30, "seconds");
+		const expectedOutput = "vor ein paar Sekunden";
+		const result = formatDateForAlerts(fewSecondsAgo);
+		expect(result).toBe(expectedOutput);
 	});
-
-	it("should returns expected result", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const dateTime = "May 5, 2023 12:34 PM";
-		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
+	it("returns European format after 7 days", () => {
+		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
+		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
 	});
 });
