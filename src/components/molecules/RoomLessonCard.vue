@@ -6,7 +6,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		:variant="isHiddden ? 'outlined' : 'elevated'"
-		hover
+		:hover="vuetifyHover"
 		data-testid="content-card-lesson"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
@@ -15,6 +15,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
+		<!-- check hover-->
 		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section" tabindex="0">
@@ -105,6 +106,13 @@ export default {
 				mdiContentCopy,
 			},
 			defaultTitleColor: "rgba(var(--v-theme-secondary))",
+			/**
+			 * VUE3_UPGRADE
+			 * - There is a bug report on Vuetify that using the hover attribute on v-card components is problematic.
+			 * - https://github.com/vuetifyjs/vuetify/issues/17574
+			 * - Remove this 'vuetifyHover' control after the upcoming Vuetify release if the issue is solved.
+			 */
+			vuetifyHover: false,
 		};
 	},
 	computed: {
