@@ -1,7 +1,7 @@
 <template>
 	<v-custom-dialog
 		:is-open="isOpen"
-		:size="375"
+		:size="425"
 		@dialog-closed="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"

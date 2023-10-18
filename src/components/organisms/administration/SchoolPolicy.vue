@@ -92,7 +92,7 @@
 			/>
 			<v-custom-dialog
 				v-model="isDeletePolicyDialogOpen"
-				:size="375"
+				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
 				confirm-btn-icon="$mdiTrashCanOutline"
