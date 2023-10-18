@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		class="mx-auto mb-4 board-card"
-		hover
+		:hover="vuetifyHover"
 		tabindex="0"
 		role="button"
 		color="rgba(var(--v-theme-primary-lighten))"
@@ -31,6 +31,14 @@
 <script setup lang="ts">
 import { mdiViewDashboard } from "@mdi/js";
 import { useRouter } from "vue-router";
+
+/**
+ * VUE3_UPGRADE
+ * - There is a bug report on Vuetify that using the hover attribute on v-card components is problematic.
+ * - https://github.com/vuetifyjs/vuetify/issues/17574
+ * - Remove this 'vuetifyHover' flag after the upcoming Vuetify release if the issue is solved.
+ */
+const vuetifyHover = false;
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },

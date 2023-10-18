@@ -2,7 +2,7 @@
 	<v-card
 		class="card d-flex align-items-center"
 		:aria-label="title"
-		hover
+		:hover="vuetifyHover"
 		@click="onClick"
 		:data-testId="testId"
 	>
@@ -70,10 +70,19 @@ export default defineComponent({
 			emit("click");
 		};
 
+		/**
+		 * VUE3_UPGRADE
+		 * - There is a bug report on Vuetify that using the hover attribute on v-card components is problematic.
+		 * - https://github.com/vuetifyjs/vuetify/issues/17574
+		 * - Remove this 'vuetifyHover' flag after the upcoming Vuetify release if the issue is solved.
+		 */
+		const vuetifyHover = false;
+
 		return {
 			t,
 			onClick,
 			mdiOpenInNew,
+			vuetifyHover,
 		};
 	},
 });

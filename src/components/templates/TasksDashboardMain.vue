@@ -230,7 +230,6 @@ export default {
 					? `${this.$t("common.words.substitute")} `
 					: "";
 				filter.text = `${substitution}${name} (${count})`;
-				// debugger;
 				return filter;
 			});
 
@@ -341,7 +340,6 @@ export default {
 			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
-			debugger;
 			if (this.tab === this.tabRoutes[0]) {
 				return this.isStudent
 					? this.tasksCountStudent.open[courseName]
