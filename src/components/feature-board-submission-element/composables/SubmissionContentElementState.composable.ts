@@ -1,6 +1,6 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted, Ref } from "vue";
+import { ref, computed, onMounted, Ref, watch } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { TeacherSubmission, StudentSubmission } from "../types/submission";
 
@@ -61,15 +61,23 @@ export const useSubmissionContentElementState = (
 		}
 	};
 
+	onMounted(() => {
+		fetchSubmissionItems(id);
+	});
+
+	watch(
+		() => modelValue.value.dueDate,
+		() => {
+			submissions.value = mapTeacherSubmission(submissionsResponse);
+			studentSubmission.value = mapStudentSubmission(submissionsResponse);
+		}
+	);
+
 	const isOverdue = computed(() => {
 		if (!modelValue.value.dueDate) {
 			return false;
 		}
 		return new Date() > new Date(modelValue.value.dueDate);
-	});
-
-	onMounted(() => {
-		fetchSubmissionItems(id);
 	});
 
 	const sortByName = (
