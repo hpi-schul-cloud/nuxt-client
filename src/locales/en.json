@@ -821,6 +821,7 @@
 	"components.cardElement.fileElement.reloadStatus": "Update status",
 	"components.cardElement.fileElement.scanWontCheck": "Due to the size, no preview can be generated.",
 	"components.cardElement.fileElement.caption": "Caption",
+	"components.cardElement.fileElement.videoFormatError": "The video format is not supported by this browser/operating system.",
 	"components.cardElement.richTextElement": "Text element",
 	"components.cardElement.richTextElement.placeholder": "Add text",
 	"components.cardElement.submissionElement": "Submission",

@@ -8,5 +8,6 @@ export interface FileProperties {
 	previewUrl?: string;
 	previewStatus: PreviewStatus;
 	isDownloadAllowed: boolean;
+	mimeType: string;
 	element: FileElementResponse;
 }
