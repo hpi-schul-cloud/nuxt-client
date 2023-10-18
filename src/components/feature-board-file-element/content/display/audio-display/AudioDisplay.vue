@@ -1,27 +1,26 @@
 <template>
-	<div>
-		ar
-		<template>
+	<ContentElementBar class="my-2">
+		<template #element>
 			<audio
 				controls
-				ref="audioRef"
-				class="audio"
 				loading="lazy"
 				:src="src"
 				v-on:error="onError"
+				class="audio mr-2"
 			/>
 		</template>
-
-		<template class="menu"><slot></slot></template>
-	</div>
+		<template #menu><slot></slot></template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
+import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "AudioDisplay",
+	components: { ContentElementBar },
 	props: {
 		src: { type: String, required: true },
 	},
@@ -36,12 +35,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .audio {
-	width: 85%;
-	padding: 10px;
-}
-.menu {
-	position: absolute;
-	top: 0;
-	right: 0;
+	width: 100%;
 }
 </style>

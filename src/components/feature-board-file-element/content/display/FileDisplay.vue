@@ -22,7 +22,9 @@
 			v-else-if="hasAudioMimeType"
 			:src="fileProperties.url"
 			@error="onAddAlert"
-		></AudioDisplay>
+		>
+			<slot></slot>
+		</AudioDisplay>
 		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
