@@ -36,7 +36,7 @@ export default defineComponent({
 	props: {
 		color: {
 			type: String,
-			default: "var(--v-primary-base)",
+			default: "rgba(var(--v-theme-primary))",
 		},
 		title: {
 			type: String,

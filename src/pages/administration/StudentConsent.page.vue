@@ -649,16 +649,16 @@ export default {
 }
 
 .print-title {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	border: none;
 }
 
 .warning {
-	color: var(--v-error-base);
+	color: rgba(var(--v-theme-error));
 }
 
 :deep(.link) {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 }
 

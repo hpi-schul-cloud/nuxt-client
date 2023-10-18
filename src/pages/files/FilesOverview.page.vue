@@ -16,8 +16,8 @@
 					class="material-icon"
 					:color="
 						item.icon.colored
-							? 'var(--v-primary-base)'
-							: 'var(--v-secondary-base)'
+							? 'rgba(var(--v-theme-primary))'
+							: 'rgba(var(--v-theme-secondary))'
 					"
 					>{{ item.icon.name }}
 				</v-icon>

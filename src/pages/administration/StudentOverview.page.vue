@@ -83,19 +83,19 @@
 						<v-icon
 							v-if="status === 'ok'"
 							class="material-icon"
-							color="var(--v-success-base)"
+							color="rgba(var(--v-theme-success))"
 							>$mdiCheckAll</v-icon
 						>
 						<v-icon
 							v-else-if="status === 'parentsAgreed'"
 							class="material-icon"
-							color="var(--v-warning-base)"
+							color="rgba(var(--v-theme-warning))"
 							>$mdiCheck</v-icon
 						>
 						<v-icon
 							v-else-if="status === 'missing'"
 							class="material-icon"
-							color="var(--v-error-base)"
+							color="rgba(var(--v-theme-error))"
 							>$mdiClose</v-icon
 						>
 					</span>
@@ -103,6 +103,7 @@
 				<template #datacolumn-_id="{ data, selected, highlighted }">
 					<v-btn
 						icon
+						variant="text"
 						:class="{
 							'action-button': true,
 							'row-selected': selected,
@@ -385,14 +386,14 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "$mdiCheckAll",
-				color: "var(--v-success-base)",
+				color: "rgba(var(--v-theme-success))",
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
 
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: "$mdiCheck",
-					color: "var(--v-warning-base)",
+					color: "rgba(var(--v-theme-warning))",
 					label: this.$t(
 						"utils.adminFilter.consent.label.parentsAgreementMissing"
 					),
@@ -401,7 +402,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "$mdiClose",
-				color: "var(--v-error-base)",
+				color: "rgba(var(--v-theme-error))",
 				label: this.$t("utils.adminFilter.consent.label.missing"),
 			});
 
@@ -636,7 +637,7 @@ export default {
 				),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "$mdiAlert",
-				iconColor: "var(--v-error-base)",
+				iconColor: "rgba(var(--v-theme-error))",
 				actionDesign: "danger",
 				onConfirm,
 				onCancel,
@@ -690,14 +691,14 @@ export default {
 
 a.action-button {
 	&.row-highlighted:hover {
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 	}
 
 	&.row-selected {
-		color: var(--v-white-base);
+		color: rgba(var(--v-theme-white));
 
 		&:hover {
-			background-color: var(--v-secondary-darken1);
+			background-color: rgba(var(--v-theme-secondary-darken-1));
 			box-shadow: none;
 		}
 	}

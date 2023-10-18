@@ -3,7 +3,7 @@
 		<permission-error-svg
 			v-if="isPermissionError"
 			:svg-width="$vuetify.display.xs ? 200 : undefined"
-			fill="var(--v-primary-base)"
+			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-permission"
 		/>
 
