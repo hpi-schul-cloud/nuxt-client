@@ -48,7 +48,7 @@ describe("SchoolPolicyFormDialog", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<Vue> = mount(
+		const wrapper: Wrapper<any> = mount(
 			SchoolTermsFormDialog as MountOptions<Vue>,
 			{
 				...createComponentMocks({
@@ -72,13 +72,13 @@ describe("SchoolPolicyFormDialog", () => {
 			const wrapper = setup();
 
 			expect(
-				wrapper.find('[data-testid="submit-button"]').attributes().disabled
+				wrapper.find('[data-testid="dialog-confirm"]').attributes().disabled
 			).toBeDefined();
 		});
 
 		it("should render warning icon", async () => {
 			const wrapper = setup();
-			(wrapper.vm as any).isTouched = true;
+			wrapper.vm.isTouched = true;
 			await Vue.nextTick();
 			expect(wrapper.find('[data-testid="warning-icon"]').exists()).toBe(true);
 		});
@@ -88,7 +88,7 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should emit 'close'", () => {
 			const wrapper = setup();
 
-			wrapper.find('[data-testid="cancel-button"]').trigger("click");
+			wrapper.find('[data-testid="dialog-cancel"]').trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
