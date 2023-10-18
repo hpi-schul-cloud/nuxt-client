@@ -174,12 +174,12 @@ export default defineComponent({
 
 /** Edge */
 :deep(textarea)::-ms-input-placeholder {
-	color: var(--v-secondary-base) !important;
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 /** Other common browsers */
 :deep(textarea)::placeholder {
-	color: var(--v-secondary-base) !important;
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 </style>

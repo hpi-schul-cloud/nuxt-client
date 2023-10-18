@@ -232,7 +232,7 @@ export default defineComponent({
 			this.dialogConfirm({
 				icon: "$mdiAlert",
 				actionDesign: "success",
-				iconColor: "var(--v-error-base)",
+				iconColor: "rgba(var(--v-theme-error))",
 				invertedDesign: true,
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
@@ -259,7 +259,7 @@ export default defineComponent({
 					"components.organisms.FormNews.cancel.confirm.confirm"
 				),
 				actionDesign: "success",
-				iconColor: "var(--v-error-base)",
+				iconColor: "rgba(var(--v-theme-error))",
 				invertedDesign: true,
 				onConfirm: () => this.$emit("cancel"),
 			});

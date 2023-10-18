@@ -58,9 +58,9 @@ export default {
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 	cursor: pointer;
-	background: var(--v-success-base);
+	background: rgba(var(--v-theme-success));
 	border: none;
 	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 	transition: all var(--duration-transition-medium)
@@ -68,17 +68,17 @@ export default {
 
 	&:hover,
 	&:focus {
-		background: var(--v-success-darken1);
+		background: rgba(var(--v-theme-success-darken-1));
 	}
 }
 
 .error {
 	.btn-confirm {
-		background: var(--v-error-base);
+		background: rgba(var(--v-theme-error));
 
 		&:hover,
 		&:focus {
-			background: var(--v-error-darken1);
+			background: rgba(var(--v-theme-error-darken-1));
 		}
 	}
 }

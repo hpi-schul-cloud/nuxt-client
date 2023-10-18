@@ -66,7 +66,7 @@
 								}}
 								<br />
 								<br />
-								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
 								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
@@ -77,7 +77,10 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--v-white-base); text-decoration: underline"
+									style="
+										color: rgba(var(--v-theme-white));
+										text-decoration: underline;
+									"
 									to="/"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
@@ -106,7 +109,7 @@
 									<base-link
 										class="link-style"
 										style="
-											color: var(--v-white-base);
+											color: rgba(var(--v-theme-white));
 											text-decoration: underline;
 										"
 										to="/"
@@ -353,7 +356,8 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base);
+		border-bottom: calc(2 * var(--border-width)) solid
+			rgba(var(--v-theme-secondary));
 
 		&.is-current-sort {
 			opacity: 1;
@@ -370,7 +374,7 @@ export default {
 
 			svg {
 				font-size: calc(1.5 * var(--text-lg));
-				color: var(--v-secondary-base);
+				color: rgba(var(--v-theme-secondary));
 			}
 		}
 
@@ -413,7 +417,7 @@ export default {
 		z-index: var(--layer-fab);
 		outline: none;
 		box-shadow:
-			0 0 0 0 var(--v-white-base),
+			0 0 0 0 rgba(var(--v-theme-white)),
 			0 0 0 3px var(--button-background);
 	}
 }

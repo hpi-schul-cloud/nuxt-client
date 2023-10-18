@@ -168,7 +168,7 @@ export default {
 .content-modal {
 	&__body {
 		min-height: 300px;
-		color: var(--v-black-base) !important;
+		color: rgba(var(--v-theme-black)) !important;
 		&--select {
 			margin-top: var(--space-xl);
 		}

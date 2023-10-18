@@ -107,7 +107,7 @@ $vertically-center: auto 0;
 }
 
 .link-style {
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 	text-decoration: underline;
 }
 

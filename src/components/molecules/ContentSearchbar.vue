@@ -149,7 +149,7 @@ export default {
 			}
 
 			&:hover {
-				border-bottom: 2px var(--v-black-base) solid;
+				border-bottom: 2px rgba(var(--v-theme-black)) solid;
 			}
 		}
 
@@ -159,7 +159,7 @@ export default {
 			justify-content: center;
 			height: 100%;
 			font-size: var(--heading-4);
-			color: var(--v-black-base);
+			color: rgba(var(--v-theme-black));
 			cursor: pointer;
 
 			.icon {

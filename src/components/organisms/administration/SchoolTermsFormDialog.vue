@@ -37,7 +37,7 @@
 					<template v-slot:append-inner>
 						<v-icon
 							v-if="!isValid && isTouched"
-							color="var(--v-error-base)"
+							color="rgba(var(--v-theme-error))"
 							data-testid="warning-icon"
 							>$mdiAlert</v-icon
 						>

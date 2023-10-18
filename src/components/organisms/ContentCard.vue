@@ -20,7 +20,10 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="color: var(--v-white-base); margin: -1px 8px 4px -4px"
+									style="
+										color: rgba(var(--v-theme-white));
+										margin: -1px 8px 4px -4px;
+									"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -152,8 +155,8 @@ export default {
 	padding: var(--space-xs);
 	margin: var(--space-sm);
 	font-size: var(--text-xs);
-	color: var(--v-black-base);
-	background: var(--v-white-base);
+	color: rgba(var(--v-theme-black));
+	background: rgba(var(--v-theme-white));
 	filter: drop-shadow(0 2px 4px black);
 	border-radius: var(--radius-xs);
 	opacity: 0.9;
@@ -168,8 +171,8 @@ export default {
 .img-container {
 	position: relative;
 	height: 200px;
-	color: var(--v-white-base);
-	background-color: var(--v-black-base);
+	color: rgba(var(--v-theme-white));
+	background-color: rgba(var(--v-theme-black));
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
@@ -178,7 +181,7 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: var(--v-secondary-base);
+	background-color: rgba(var(--v-theme-secondary));
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
@@ -195,7 +198,7 @@ export default {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--v-white-base);
+			background-color: rgba(var(--v-theme-white));
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -231,7 +234,7 @@ export default {
 			top: 5%;
 			left: 90%;
 			z-index: var(--layer-page);
-			color: var(--v-white-base);
+			color: rgba(var(--v-theme-white));
 			cursor: pointer;
 		}
 	}
@@ -239,7 +242,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 
 		@include excerpt(
 			$font-size: var(--heading-6),
@@ -280,7 +283,7 @@ export default {
 
 		&-icon {
 			font-size: var(--text-lg);
-			color: var(--v-secondary-base);
+			color: rgba(var(--v-theme-secondary));
 		}
 	}
 

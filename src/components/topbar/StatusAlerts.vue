@@ -13,7 +13,9 @@
 			class="alert-item"
 		>
 			<v-list-item-icon class="mt-3 mr-3">
-				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
+				<v-icon
+					:color="`rgba(var(--v-theme-${getIconTag(item.status).color}))`"
+				>
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
 			</v-list-item-icon>

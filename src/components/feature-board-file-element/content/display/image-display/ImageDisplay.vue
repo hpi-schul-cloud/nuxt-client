@@ -148,7 +148,7 @@ export default defineComponent({
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: var(--v-black-base);
+	background: rgba(var(--v-theme-black));
 	opacity: 0.2;
 }
 

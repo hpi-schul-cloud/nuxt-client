@@ -703,7 +703,7 @@ button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
 	box-shadow:
-		0 0 0 0 var(--v-white-base),
+		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
 }
 

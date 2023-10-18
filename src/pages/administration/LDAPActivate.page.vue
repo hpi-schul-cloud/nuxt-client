@@ -170,7 +170,7 @@
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
 					<template #icon>
-						<v-icon color="var(--v-success-base)" class="material-icon">
+						<v-icon color="rgba(var(--v-theme-success))" class="material-icon">
 							$mdiCheckCircle
 						</v-icon>
 					</template>
@@ -178,7 +178,7 @@
 			</template>
 			<template #footer>
 				<modal-footer-confirm
-					backgroundcolor="var(--v-success-base)"
+					backgroundcolor="rgba(var(--v-theme-success))"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
 					@click="okButtonHandler"

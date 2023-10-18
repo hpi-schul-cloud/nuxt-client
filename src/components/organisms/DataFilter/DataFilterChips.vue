@@ -64,11 +64,11 @@ $mobile: 750px; // css variables do not work with media queries
 	padding: var(--space-xs-3) var(--space-sm);
 	margin-right: var(--space-sm);
 	line-height: var(--line-height);
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 	white-space: nowrap;
 	cursor: pointer;
-	background-color: var(--v-white-base);
-	border: 1px solid var(--v-secondary-base);
+	background-color: rgba(var(--v-theme-white));
+	border: 1px solid rgba(var(--v-theme-secondary));
 	border-radius: var(--radius-round);
 	transition: $transition;
 
@@ -81,14 +81,14 @@ $mobile: 750px; // css variables do not work with media queries
 	}
 
 	&:hover {
-		box-shadow: 0 0 0 1px var(--v-secondary-base);
+		box-shadow: 0 0 0 1px rgba(var(--v-theme-secondary));
 	}
 
 	&:focus {
 		outline: none;
 		box-shadow:
-			0 0 0 3px var(--v-white-base),
-			0 0 0 6px var(--v-secondary-darken1);
+			0 0 0 3px rgba(var(--v-theme-white)),
+			0 0 0 6px rgba(var(--v-theme-secondary-darken-1));
 	}
 
 	.btn-delete {
@@ -101,24 +101,24 @@ $mobile: 750px; // css variables do not work with media queries
 		margin: 0;
 		margin-right: calc(-1 * var(--space-xs-4));
 		margin-left: var(--space-xs);
-		color: var(--v-white-base);
+		color: rgba(var(--v-theme-white));
 		cursor: pointer;
-		background-color: var(--v-secondary-base);
+		background-color: rgba(var(--v-theme-secondary));
 		border: none;
 		border-radius: var(--radius-round);
 		transition: $transition;
 
 		&:hover,
 		&:focus {
-			color: var(--v-white-base);
-			background: var(--v-secondary-darken1);
+			color: rgba(var(--v-theme-white));
+			background: rgba(var(--v-theme-secondary-darken-1));
 		}
 
 		&:focus {
 			outline: none;
 			box-shadow:
-				0 0 0 3px var(--v-white-base),
-				0 0 0 6px var(--v-secondary-darken1);
+				0 0 0 3px rgba(var(--v-theme-white)),
+				0 0 0 6px rgba(var(--v-theme-secondary-darken-1));
 		}
 	}
 
@@ -126,7 +126,7 @@ $mobile: 750px; // css variables do not work with media queries
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 	}
 }
 

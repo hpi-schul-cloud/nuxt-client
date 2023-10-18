@@ -65,7 +65,7 @@ const handleClick = (optionId) => {
 <style lang="scss" scoped>
 .menu {
 	position: relative;
-	color: var(--v-secondary-base);
+	color: rgba(var(--v-theme-secondary));
 }
 
 .filter-icon {
@@ -73,6 +73,6 @@ const handleClick = (optionId) => {
 }
 
 .button.is-medium.is-text {
-	color: var(--v-secondary-base);
+	color: rgba(var(--v-theme-secondary));
 }
 </style>
