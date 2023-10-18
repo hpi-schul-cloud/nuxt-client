@@ -42,7 +42,7 @@
 						<template v-if="termsOfUse">
 							{{
 								t("pages.administration.school.index.termsOfUse.uploadedOn", {
-									date: dayjs(termsOfUse.publishedAt).format("DD.MM.YYYY"),
+									date: formatDate(termsOfUse.publishedAt),
 								})
 							}}
 						</template>
@@ -114,7 +114,6 @@
 
 <script lang="ts">
 import SchoolTermsFormDialog from "@/components/organisms/administration/SchoolTermsFormDialog.vue";
-import dayjs from "dayjs";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -129,6 +128,7 @@ import {
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "SchoolTerms",
@@ -168,6 +168,9 @@ export default defineComponent({
 			() => termsOfUseModule.getBusinessError
 		);
 
+		const formatDate = (dateTime: string) =>
+			formatDateForAlerts(dateTime, true);
+
 		const downloadTerms = () => {
 			if (termsOfUse.value) {
 				downloadFile(
@@ -201,7 +204,7 @@ export default defineComponent({
 			error,
 			downloadTerms,
 			deleteFile,
-			dayjs,
+			formatDate,
 			closeDialog,
 		};
 	},

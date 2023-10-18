@@ -42,7 +42,7 @@
 						<template v-if="privacyPolicy">
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: dayjs(privacyPolicy.publishedAt).format("DD.MM.YYYY"),
+									date: formatDate(privacyPolicy.publishedAt),
 								})
 							}}
 						</template>
@@ -118,7 +118,6 @@
 
 <script lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
-import dayjs from "dayjs";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -133,6 +132,7 @@ import {
 } from "@/utils/inject";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -172,6 +172,9 @@ export default defineComponent({
 			() => privacyPolicyModule.getBusinessError
 		);
 
+		const formatDate = (dateTime: string) =>
+			formatDateForAlerts(dateTime, true);
+
 		const downloadPolicy = () => {
 			if (privacyPolicy.value) {
 				downloadFile(
@@ -207,7 +210,7 @@ export default defineComponent({
 			error,
 			downloadPolicy,
 			deleteFile,
-			dayjs,
+			formatDate,
 			closeDialog,
 		};
 	},
