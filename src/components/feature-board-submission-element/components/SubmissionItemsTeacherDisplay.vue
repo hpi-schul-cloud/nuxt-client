@@ -22,11 +22,10 @@
 						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
-						:class="getFilterClass('open')"
+						:class="getFilterClass('open', openCount)"
 						small
 						label
 						:ripple="false"
-						:outlined="activeFilter !== 'open'"
 						:disabled="isDisabled(openCount)"
 						:tabindex="getTabIndex(isDisabled(openCount))"
 						@click.stop="() => setFilter('open')"
@@ -39,11 +38,10 @@
 					<v-chip
 						ref="v-chip-completed"
 						class="mr-2"
-						:class="getFilterClass('completed')"
+						:class="getFilterClass('completed', completedCount)"
 						small
 						label
 						:ripple="false"
-						:outlined="activeFilter !== 'completed'"
 						:disabled="isDisabled(completedCount)"
 						:tabindex="getTabIndex(isDisabled(completedCount))"
 						@click.stop="() => setFilter('completed')"
@@ -57,11 +55,10 @@
 						v-if="isOverdue"
 						ref="v-chip-expired"
 						class="mr-2"
-						:class="getFilterClass('expired')"
+						:class="getFilterClass('expired', overdueCount)"
 						small
 						label
 						:ripple="false"
-						:outlined="activeFilter !== 'expired'"
 						:disabled="isDisabled(overdueCount)"
 						:tabindex="getTabIndex(isDisabled(overdueCount))"
 						@click.stop="() => setFilter('expired')"
@@ -169,8 +166,13 @@ export default defineComponent({
 			}
 		};
 
-		const getFilterClass = (filter: StatusFilter) => {
-			return activeFilter.value === filter ? "active-chip" : "grey black--text";
+		const getFilterClass = (filter: StatusFilter, count: number) => {
+			if (isDisabled(count)) {
+				return "filter-chip--disabled";
+			}
+			return activeFilter.value === filter
+				? "filter-chip--active"
+				: "filter-chip";
 		};
 
 		const isDisabled = (count: number) => {
@@ -244,15 +246,8 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 ::v-deep {
-	.theme--light.v-expansion-panels .v-expansion-panel,
-	.v-expansion-panel-header:before,
-	.v-chip:focus::before {
+	.theme--light.v-expansion-panels .v-expansion-panel {
 		background-color: transparent;
-	}
-
-	.v-expansion-panel-header:focus,
-	.v-chip:focus {
-		outline: 2px solid var(--v-secondary-lighten1) !important;
 	}
 
 	.v-data-table
@@ -295,10 +290,24 @@ export default defineComponent({
 	}
 }
 
-.active-chip {
+.filter-chip {
+	background-color: var(--v-white-base) !important;
+	border: 1px solid map-get($grey, base);
+	border-color: map-get($grey, base);
+}
+
+.filter-chip--active {
 	background-color: map-get($grey, lighten-2);
 	border: 1px solid map-get($grey, lighten-2);
 }
+
+.filter-chip--disabled {
+	opacity: 1;
+	background-color: var(--v-white-base) !important;
+	color: rgba(map-get($grey, base), 0.9);
+	border: 1px solid rgba(map-get($grey, base), 0.4);
+}
+
 .v-chip {
 	flex: none;
 }
