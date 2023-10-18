@@ -30,6 +30,7 @@
 		</div>
 		<v-container
 			:class="{
+				container: true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
 			}"
