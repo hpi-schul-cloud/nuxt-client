@@ -9,33 +9,28 @@
 			}}
 		</p>
 		<div role="group" class="section-sub-header">
-			<base-input
-				:modelValue="groupOption"
-				type="radio"
-				:label="
-					$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
-				"
+			<v-radio-group
+				inline
 				name="group"
-				style="margin-right: var(--space-sm)"
-				value="group"
+				:model-value="groupOption"
 				@update:modelValue="
-					$emit('input', { ...modelValue, groupOption: $event })
+					$emit('update:modelValue', { ...modelValue, groupOption: $event })
 				"
 			>
-			</base-input>
-			<base-input
-				:modelValue="groupOption"
-				type="radio"
-				:label="
-					$t('pages.administration.ldapEdit.roles.labels.radio.userAttribute')
-				"
-				name="group"
-				value="user_attribute"
-				@update:modelValue="
-					$emit('input', { ...modelValue, groupOption: $event })
-				"
-			>
-			</base-input>
+				<v-radio
+					:label="
+						$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
+					"
+					value="group"
+					class="ml-n2"
+				></v-radio>
+				<v-radio
+					:label="
+						$t('pages.administration.ldapEdit.roles.labels.radio.userAttribute')
+					"
+					value="user_attribute"
+				></v-radio>
+			</v-radio-group>
 			<p class="text-sm" style="margin-top: var(--space-xs)">
 				{{ $t("pages.administration.ldapEdit.roles.labels.radio.description") }}
 			</p>
@@ -51,7 +46,9 @@
 			:validation-model="v$.modelValue.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
-			@update:modelValue="$emit('input', { ...modelValue, member: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, member: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="ldapActivatedColor">$mdiAccountOutline</v-icon>
@@ -69,7 +66,9 @@
 			:validation-model="v$.modelValue.student"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
-			@update:modelValue="$emit('input', { ...modelValue, student: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, student: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountSchoolOutline</v-icon>
@@ -86,7 +85,9 @@
 			:validation-model="v$.modelValue.teacher"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
-			@update:modelValue="$emit('input', { ...modelValue, teacher: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, teacher: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor" class="custom-icon">$teacher</v-icon>
@@ -101,7 +102,9 @@
 			:validation-model="v$.modelValue.admin"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
-			@update:modelValue="$emit('input', { ...modelValue, admin: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, admin: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiShieldAccountVariantOutline</v-icon>
@@ -114,7 +117,9 @@
 			:placeholder="$t('pages.administration.ldapEdit.roles.placeholder.user')"
 			:info="$t('pages.administration.ldapEdit.roles.info.user')"
 			data-testid="ldapDataRolesUser"
-			@update:modelValue="$emit('input', { ...modelValue, user: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, user: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountOffOutline</v-icon>
@@ -131,7 +136,9 @@ import useVuelidate from "@vuelidate/core";
 
 export default defineComponent({
 	setup() {
-		return { v$: useVuelidate() };
+		const v$ = useVuelidate();
+
+		return { v$ };
 	},
 	props: {
 		modelValue: {
@@ -164,7 +171,7 @@ export default defineComponent({
 		},
 
 		fillColor() {
-			return "var(--v-black-base)";
+			return "var(--v-theme-black)";
 		},
 	},
 	watch: {
@@ -192,7 +199,7 @@ export default defineComponent({
 			};
 		}
 		return {
-			value: {},
+			modelValue: {},
 		};
 	},
 });
