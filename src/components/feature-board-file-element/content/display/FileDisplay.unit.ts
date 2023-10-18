@@ -42,6 +42,7 @@ describe("FileDisplay", () => {
 					wrapper,
 					fileNameProp: propsData.fileProperties.name,
 					previewUrlProp: propsData.fileProperties.previewUrl,
+					srcProp: propsData.fileProperties.url,
 				};
 			};
 
@@ -53,14 +54,15 @@ describe("FileDisplay", () => {
 				expect(fileDisplay.exists()).toBe(true);
 			});
 
-			it("should pass correct props to image display component", () => {
-				const { wrapper, fileNameProp, previewUrlProp } = setup();
+			it("should pass correct props to image display component", async () => {
+				const { wrapper, fileNameProp, previewUrlProp, srcProp } = setup();
 
 				const props = wrapper.findComponent(ImageDisplay).attributes();
-
 				expect(props.name).toBe(fileNameProp);
-				expect(props.previewurl).toBe(previewUrlProp);
+				expect(props.previewsrc).toBe(previewUrlProp);
+				expect(props.src).toBe(srcProp);
 				expect(props.iseditmode).toBe("true");
+				expect(props.element).toBeDefined();
 			});
 
 			it("should render file description display component", () => {
@@ -102,6 +104,7 @@ describe("FileDisplay", () => {
 					wrapper,
 					fileNameProp: propsData.fileProperties.name,
 					previewUrlProp: propsData.fileProperties.previewUrl,
+					srcProp: propsData.fileProperties.url,
 				};
 			};
 
@@ -114,13 +117,15 @@ describe("FileDisplay", () => {
 			});
 
 			it("should pass correct props to image display component", () => {
-				const { wrapper, fileNameProp, previewUrlProp } = setup();
+				const { wrapper, fileNameProp, previewUrlProp, srcProp } = setup();
 
 				const props = wrapper.findComponent(ImageDisplay).attributes();
 
 				expect(props.name).toBe(fileNameProp);
-				expect(props.previewurl).toBe(previewUrlProp);
+				expect(props.previewsrc).toBe(previewUrlProp);
+				expect(props.src).toBe(srcProp);
 				expect(props.iseditmode).toBe("true");
+				expect(props.element).toBeDefined();
 			});
 
 			it("should render file description display component", () => {
@@ -180,7 +185,6 @@ describe("FileDisplay", () => {
 				const { wrapper, fileNameProp, url } = setup();
 
 				const props = wrapper.findComponent(VideoDisplay).attributes();
-				console.log(wrapper.html());
 
 				expect(props.src).toBe(url);
 				expect(props.name).toBe(fileNameProp);

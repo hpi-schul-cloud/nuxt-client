@@ -7,6 +7,7 @@
 			loading="lazy"
 			:src="src"
 			:alt="name"
+			v-on:error="onError"
 		/>
 		<ContentElementBar class="menu">
 			<template #menu><slot></slot></template>
@@ -15,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
@@ -28,16 +29,12 @@ export default defineComponent({
 	components: { ContentElementBar },
 	emits: ["error"],
 	setup(props, { emit }) {
-		const videoRef = ref<HTMLVideoElement | null>(null);
-
-		onMounted(() => {
-			videoRef.value?.addEventListener("error", () => {
-				emit("error", FileAlert.VIDEO_FORMAT_ERROR);
-			});
-		});
+		const onError = () => {
+			emit("error", FileAlert.VIDEO_FORMAT_ERROR);
+		};
 
 		return {
-			videoRef,
+			onError,
 		};
 	},
 });

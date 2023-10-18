@@ -2,8 +2,8 @@
 	<div>
 		<ImageDisplay
 			v-if="fileProperties.previewUrl"
-			:url="fileProperties.url"
-			:preview-url="fileProperties.previewUrl"
+			:src="fileProperties.url"
+			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
 			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"

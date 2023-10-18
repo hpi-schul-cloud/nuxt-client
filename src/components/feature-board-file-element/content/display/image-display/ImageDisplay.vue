@@ -16,7 +16,7 @@
 		<img
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
-			:src="previewUrl"
+			:src="previewSrc"
 			:alt="alternativeText"
 		/>
 
@@ -37,8 +37,8 @@ import { ContentElementBar } from "@ui-board";
 export default defineComponent({
 	name: "ImageDisplay",
 	props: {
-		url: { type: String, required: true },
-		previewUrl: { type: String, required: true },
+		src: { type: String, required: true },
+		previewSrc: { type: String, required: true },
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
@@ -107,10 +107,10 @@ export default defineComponent({
 		};
 
 		const openLightBox = () => {
-			const previewUrl = convertDownloadToPreviewUrl(props.url);
+			const previewUrl = convertDownloadToPreviewUrl(props.src);
 
 			const options: LightBoxOptions = {
-				downloadUrl: props.url,
+				downloadUrl: props.src,
 				previewUrl: previewUrl,
 				alt: alternativeText.value,
 				name: props.name,

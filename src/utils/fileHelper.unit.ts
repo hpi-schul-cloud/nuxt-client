@@ -331,7 +331,7 @@ describe("@/utils/fileHelper", () => {
 				});
 			});
 
-			describe("when file miem type has application/ prefix", () => {
+			describe("when file mime type has application/ prefix", () => {
 				it("should return true", () => {
 					const result = isVideoMimeType("application/x-mpegURL");
 
