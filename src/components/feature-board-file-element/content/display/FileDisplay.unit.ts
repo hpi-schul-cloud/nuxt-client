@@ -97,6 +97,9 @@ describe("FileDisplay", () => {
 				isVideoMimeTypeMock.mockReset();
 				isVideoMimeTypeMock.mockReturnValueOnce(true);
 
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
+
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
 					...createComponentMocks({}),
@@ -170,6 +173,9 @@ describe("FileDisplay", () => {
 				isVideoMimeTypeMock.mockReset();
 				isVideoMimeTypeMock.mockReturnValueOnce(true);
 
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
+
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
 					...createComponentMocks({}),
@@ -225,6 +231,9 @@ describe("FileDisplay", () => {
 					},
 					isEditMode: true,
 				};
+
+				isVideoMimeTypeMock.mockReset();
+				isVideoMimeTypeMock.mockReturnValueOnce(false);
 
 				isAudioMimeTypeMock.mockReset();
 				isAudioMimeTypeMock.mockReturnValueOnce(true);
@@ -302,7 +311,7 @@ describe("FileDisplay", () => {
 
 			it("should pass showTitle true to file description", () => {
 				const { wrapper } = setup();
-				console.log(wrapper.html());
+
 				const props = wrapper.findComponent(FileDescription).attributes();
 
 				expect(props.showtitle).toBeTruthy();
