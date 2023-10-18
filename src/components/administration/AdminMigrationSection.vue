@@ -202,7 +202,7 @@ export default defineComponent({
 		onMounted(async () => {
 			// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
 			await schoolsModule.fetchSchoolOAuthMigration();
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool();
 		});
 
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =

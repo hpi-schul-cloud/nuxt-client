@@ -567,7 +567,7 @@ describe("AdminMigrationSection", () => {
 						userLoginMigrationModule.startUserLoginMigration
 					).toHaveBeenCalled();
 					expect(
-						userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser
+						userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool
 					).toHaveBeenCalled();
 				});
 			});
@@ -676,7 +676,7 @@ describe("AdminMigrationSection", () => {
 					userLoginMigrationModule.closeUserLoginMigration
 				).toHaveBeenCalled();
 				expect(
-					userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser
+					userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool
 				).toHaveBeenCalled();
 			});
 		});

@@ -3,6 +3,7 @@ import {
 	currentDate,
 	fromInputDateTime,
 	fromNow,
+	formatDateForAlerts,
 	fromNowToFuture,
 	createInputDateTime,
 	inputRangeDate,
@@ -152,6 +153,13 @@ describe("@/plugins/datetime", () => {
 	it("fromNow", () => {
 		const result = fromNow(dateNow.clone().add(7, "days"));
 		expect(result).toBe("in 7 days");
+	});
+
+	it("formatDateForAlerts", () => {
+		const sevenDaysAgo = dayjs().subtract(7, "days");
+		const expectedDate = sevenDaysAgo.format("DD.MM.YYYY");
+		const result = formatDateForAlerts(sevenDaysAgo);
+		expect(result).toBe(expectedDate);
 	});
 
 	it("fromNowToFuture", () => {
