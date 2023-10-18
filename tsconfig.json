@@ -45,6 +45,7 @@
 			"@util-board": ["src/components/util-board"],
 			"@util-validators": ["src/components/util-validators"],
 			"@page-board": ["src/components/page-board"],
+			"@page-class-members": ["src/components/page-class-members"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

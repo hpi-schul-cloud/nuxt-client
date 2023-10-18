@@ -99,7 +99,16 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/groups/classes",
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
-		beforeEnter: createPermissionGuard(["class_list"]),
+		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+	},
+	{
+		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		component: async () =>
+			(await import("@page-class-members")).ClassMembersPage,
+		beforeEnter: createPermissionGuard(["group_view"]),
+		props: (route: Route) => ({
+			groupId: route.params.groupId,
+		}),
 	},
 	{
 		path: "/cfiles",

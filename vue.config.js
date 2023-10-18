@@ -51,6 +51,7 @@ module.exports = defineConfig({
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
+				"@page-class-members": getDir("src/components/page-class-members"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
