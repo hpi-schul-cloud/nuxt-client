@@ -13,10 +13,12 @@
 		<FileContent
 			v-if="fileProperties"
 			:file-properties="fileProperties"
-			@fetch:file="onFetchFile"
+			:alerts="alerts"
 			:is-edit-mode="isEditMode"
+			@fetch:file="onFetchFile"
 			@update:alternativeText="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@add:alert="onAddAlert"
 		>
 			<BoardMenu scope="element" v-if="isEditMode">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
@@ -61,8 +63,10 @@ import {
 	ref,
 	toRef,
 } from "vue";
+import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
@@ -97,6 +101,8 @@ export default defineComponent({
 			FileRecordParentType.BOARDNODES
 		);
 
+		const { alerts, addAlert } = useFileAlerts(fileRecord);
+
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
@@ -115,6 +121,7 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
+				mimeType: fileRecord.value.mimeType,
 				element: props.element,
 			};
 		});
@@ -161,6 +168,9 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
+		const onAddAlert = (alert: FileAlert) => {
+			addAlert(alert);
+		};
 		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
@@ -172,11 +182,13 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
+			alerts,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
+			onAddAlert,
 			onDelete,
 			onMoveUp,
 			onMoveDown,

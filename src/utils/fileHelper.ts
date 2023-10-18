@@ -71,3 +71,12 @@ export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
 export function isPreviewPossible(previewStatus: PreviewStatus): boolean {
 	return previewStatus === PreviewStatus.PREVIEW_POSSIBLE;
 }
+
+export function isVideoMimeType(mimeType: string): boolean {
+	return (
+		mimeType.startsWith("video/") ||
+		mimeType === "application/x-mpegURL" ||
+		mimeType === "application/vnd.ms-asf" ||
+		mimeType === "application/ogg"
+	);
+}
