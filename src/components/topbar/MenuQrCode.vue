@@ -30,7 +30,7 @@ export default defineComponent({
 			const win = window.open();
 
 			if (qrCode.value !== null) {
-				win?.document.write(qrCode.value.innerHTML);
+				win?.document.write(qrCode.value.$el.innerHTML);
 				win?.print();
 				win?.close();
 			}
