@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<FileDisplay :file-properties="fileProperties" :is-edit-mode="isEditMode">
+		<FileDisplay
+			:file-properties="fileProperties"
+			:is-edit-mode="isEditMode"
+			@add:alert="onAddAlert"
+		>
 			<slot />
 		</FileDisplay>
 		<FileInputs
@@ -10,24 +14,25 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<ContentElementFooter :fileProperties="fileProperties" />
-		<FileAlert :previewStatus="previewStatus" @on-status-reload="onFetchFile" />
+		<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import FileAlert from "../content/alert/FileAlert.vue";
+import { defineComponent, PropType } from "vue";
+import FileAlerts from "./alert/FileAlerts.vue";
 import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import FileInputs from "././inputs/FileInputs.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
+import { FileAlert } from "../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	components: {
 		FileInputs,
 		FileDisplay,
 		ContentElementFooter,
-		FileAlert,
+		FileAlerts,
 	},
 	props: {
 		fileProperties: {
@@ -35,8 +40,14 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		alerts: { type: Array as PropType<FileAlert[]>, required: true },
 	},
-	emits: ["fetch:file", "update:alternativeText", "update:caption"],
+	emits: [
+		"fetch:file",
+		"update:alternativeText",
+		"update:caption",
+		"add:alert",
+	],
 	setup(props, { emit }) {
 		const onFetchFile = () => {
 			emit("fetch:file");
@@ -46,13 +57,16 @@ export default defineComponent({
 		};
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
-		const previewStatus = computed(() => props.fileProperties.previewStatus);
+
+		const onAddAlert = (alert: FileAlert) => {
+			emit("add:alert", alert);
+		};
 
 		return {
 			onFetchFile,
-			previewStatus,
 			onUpdateText,
 			onUpdateCaption,
+			onAddAlert,
 		};
 	},
 });
