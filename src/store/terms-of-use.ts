@@ -104,4 +104,22 @@ export default class TermsOfUseModule extends VuexModule {
 			this.setStatus("error");
 		}
 	}
+
+	@Action
+	async deleteTermsOfUse(): Promise<void> {
+		try {
+			this.resetBusinessError();
+			this.setStatus("pending");
+
+			if (this.termsOfUse) {
+				await $axios.delete(`/v1/consentVersions/${this.termsOfUse._id}`);
+			}
+
+			this.setTermsOfUse(null);
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
 }
