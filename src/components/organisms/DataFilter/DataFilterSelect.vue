@@ -19,51 +19,46 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 import ContextMenu from "@/components/molecules/ContextMenu";
 import { decode } from "html-entities";
+import { vOnClickOutside } from "@vueuse/components";
+import { ref } from "vue";
+import { computed } from "vue";
 
-export default {
-	components: {
-		ContextMenu,
+const vOutsideClick = vOnClickOutside;
+
+const props = defineProps({
+	labelAdd: {
+		type: String,
+		default: "Add +",
 	},
-	props: {
-		labelAdd: {
-			type: String,
-			default: "Add +",
-		},
-		options: {
-			type: Array,
-			required: true,
-		},
+	options: {
+		type: Array,
+		required: true,
 	},
-	data() {
-		return {
-			visible: false,
-		};
-	},
-	computed: {
-		contextOptions() {
-			return this.options.map((option) => ({
-				text: decode(option.title),
-				event: "click",
-				arguments: option.id,
-				dataTestid: option.dataTestid,
-			}));
-		},
-	},
-	methods: {
-		showMenu() {
-			this.visible = true;
-		},
-		hideMenu() {
-			this.visible = false;
-		},
-		handleClick(optionId) {
-			this.hideMenu();
-			this.$emit("openFilter", optionId);
-		},
-	},
+});
+
+const visible = ref(false);
+
+const contextOptions = computed(() => {
+	return props.options.map((option) => ({
+		text: decode(option.title),
+		event: "click",
+		arguments: option.id,
+		dataTestid: option.dataTestid,
+	}));
+});
+
+const showMenu = () => {
+	this.visible = true;
+};
+const hideMenu = () => {
+	this.visible = false;
+};
+const handleClick = (optionId) => {
+	this.hideMenu();
+	this.$emit("openFilter", optionId);
 };
 </script>
 

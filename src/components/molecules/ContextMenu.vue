@@ -41,7 +41,12 @@
 </template>
 
 <script>
+import { vOnClickOutside } from "@vueuse/components";
+
 export default {
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		/**
 		 * defines whether the menu is visible or not. Should be used with the .sync modifier

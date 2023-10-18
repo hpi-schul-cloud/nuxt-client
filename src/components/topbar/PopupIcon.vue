@@ -18,53 +18,44 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-export default defineComponent({
-	name: "PopupIcon",
-	props: {
-		icon: {
-			type: String,
-			required: true,
-		},
-		color: {
-			type: String,
-			default: "rgba(var(--v-theme-secondary-darken-1))",
-		},
-		centered: {
-			type: Boolean,
-		},
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { vOnClickOutside } from "@vueuse/components";
+
+const vOutsideClick = vOnClickOutside;
+
+defineProps({
+	icon: {
+		type: String,
+		required: true,
 	},
-	setup() {
-		const visible = ref(false);
-		const expandToLeft = ref(false);
-		const popupContent = ref<HTMLDivElement | null>(null);
-
-		onMounted(() => {
-			if (popupContent.value !== null) {
-				expandToLeft.value =
-					popupContent.value.getBoundingClientRect().right >
-					window.innerWidth + 10;
-			}
-		});
-
-		const popup = () => {
-			visible.value = !visible.value;
-		};
-
-		const removePopup = () => {
-			visible.value = false;
-		};
-
-		return {
-			visible,
-			expandToLeft,
-			popupContent,
-			popup,
-			removePopup,
-		};
+	color: {
+		type: String,
+		default: "rgba(var(--v-theme-secondary-darken-1))",
+	},
+	centered: {
+		type: Boolean,
 	},
 });
+
+const visible = ref(false);
+const expandToLeft = ref(false);
+const popupContent = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+	if (popupContent.value !== null) {
+		expandToLeft.value =
+			popupContent.value.getBoundingClientRect().right > window.innerWidth + 10;
+	}
+});
+
+const popup = () => {
+	visible.value = !visible.value;
+};
+
+const removePopup = () => {
+	visible.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

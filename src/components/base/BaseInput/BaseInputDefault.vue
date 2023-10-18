@@ -109,8 +109,15 @@ export default defineComponent({
 	setup() {
 		const { uid } = useUid();
 
+		const vFocusOnMount = {
+			mounted(el, binding) {
+				if (binding.value) el.focus();
+			},
+		};
+
 		return {
 			uid,
+			vFocusOnMount,
 		};
 	},
 	props: {

@@ -29,48 +29,40 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { vOnClickOutside } from "@vueuse/components";
 
-export default defineComponent({
-	name: "PopupIconInitials",
-	props: {
-		firstName: {
-			type: String,
-			default: "Unknown",
-		},
-		lastName: {
-			type: String,
-			default: "Unknown",
-		},
-		userRole: {
-			type: String,
-			default: "",
-		},
+const vOutsideClick = vOnClickOutside;
+
+const props = defineProps({
+	firstName: {
+		type: String,
+		default: "Unknown",
 	},
-	setup(props) {
-		const visible = ref(false);
-
-		const initials = computed(() => {
-			return props.firstName.slice(0, 1) + props.lastName.slice(0, 1);
-		});
-
-		const popup = () => {
-			visible.value = !visible.value;
-		};
-
-		const removePopup = () => {
-			visible.value = false;
-		};
-
-		return {
-			visible,
-			initials,
-			popup,
-			removePopup,
-		};
+	lastName: {
+		type: String,
+		default: "Unknown",
+	},
+	userRole: {
+		type: String,
+		default: "",
 	},
 });
+
+const visible = ref(false);
+
+const initials = computed(() => {
+	return props.firstName.slice(0, 1) + props.lastName.slice(0, 1);
+});
+
+const popup = () => {
+	visible.value = !visible.value;
+};
+
+const removePopup = () => {
+	visible.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

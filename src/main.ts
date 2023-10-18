@@ -78,10 +78,6 @@ export const app = createApp(App);
 import { mountBaseComponents } from "@/components/base/components";
 mountBaseComponents(app);
 
-// VUE3_UPGRADE -- Mounting Base Directives - remove later
-import { mountDirectives } from "@/plugins/directives";
-mountDirectives(app);
-
 // app.config.productionTip = false;
 
 app.config.errorHandler = handleApplicationError;

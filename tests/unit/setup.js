@@ -8,9 +8,6 @@ import VueDOMPurifyHTML from "vue-dompurify-html";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import { mountBaseComponents } from "@/components/base/components";
 import { setupI18n } from "@/plugins/i18n-test.js";
-// VUE3_UPGRADE
-// import "@/plugins/directives";
-import { mountDirectives } from "@/plugins/directives";
 import globalStubs from "./stubs.js";
 import { htmlConfig } from "@feature-render-html";
 
@@ -19,7 +16,6 @@ import { htmlConfig } from "@feature-render-html";
 // for tests.
 app.config.productionTip = false;
 
-mountDirectives(app);
 // ===
 // Register global components
 // ===
