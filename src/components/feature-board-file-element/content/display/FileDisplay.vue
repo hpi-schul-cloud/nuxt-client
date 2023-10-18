@@ -16,7 +16,7 @@
 			:name="fileProperties.name"
 			@error="onAddAlert"
 		>
-			<slot></slot>
+			<slot />
 		</VideoDisplay>
 		<FileDescription
 			:name="fileProperties.name"
