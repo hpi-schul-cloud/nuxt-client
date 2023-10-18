@@ -224,7 +224,7 @@ export default {
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
-	background-color: var(--v-white-base);
+	background-color: rgb(var(--v-theme-white));
 	border-radius: var(--radius-sm);
 
 	> :hover {
@@ -242,13 +242,13 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--v-secondary-base);
+			color: rgb(var(--v-theme-secondary));
 		}
 
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
-			color: var(--v-black-base);
+			color: rgb(var(--v-theme-black));
 			text-align: left;
 			white-space: normal;
 

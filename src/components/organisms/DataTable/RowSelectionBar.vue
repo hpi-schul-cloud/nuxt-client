@@ -122,8 +122,8 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-xs) var(--space-md);
-	color: var(--v-white-base);
-	background-color: var(--v-secondary-lighten1);
+	color: rgb(var(--v-theme-white));
+	background-color: rgb(var(--v-theme-secondary-lighten-1));
 }
 
 .actions {
@@ -141,12 +141,12 @@ export default {
 }
 
 .select-all-rows {
-	color: var(--v-white-base);
+	color: rgb(var(--v-theme-white));
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 .close {
-	color: var(--v-white-base);
+	color: rgb(var(--v-theme-white));
 }
 </style>
