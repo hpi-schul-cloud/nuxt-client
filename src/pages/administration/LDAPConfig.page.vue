@@ -251,7 +251,7 @@ export default {
 @import "@/styles/mixins";
 
 .link-style {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 }
 
