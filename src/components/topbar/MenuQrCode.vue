@@ -24,7 +24,7 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const qrCode = ref<ComponentPublicInstance<HTMLInputElement>>();
+		const qrCode = ref<ComponentPublicInstance<HTMLDivElement>>();
 
 		const openPrintMenu = () => {
 			const win = window.open();
