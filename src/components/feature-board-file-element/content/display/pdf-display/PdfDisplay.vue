@@ -21,7 +21,7 @@
 				class="d-flex align-items-center justify-content-center"
 				style="height: 100%"
 			>
-				<embed :src="src" type="application/pdf" width="100%" height="100%" />
+				<iframe :src="src" type="application/pdf" width="100%" height="100%" />
 			</div>
 		</v-overlay>
 	</v-dialog>
