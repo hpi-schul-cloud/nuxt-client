@@ -18,6 +18,7 @@
 		>
 			<slot></slot>
 		</VideoDisplay>
+		<PdfDisplay v-else-if="hasPdfMimeType" :src="fileProperties.url" />
 		<FileDescription
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
@@ -35,12 +36,13 @@ import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import { isVideoMimeType } from "@/utils/fileHelper";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, FileDescription, VideoDisplay },
+	components: { ImageDisplay, FileDescription, VideoDisplay, PdfDisplay },
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
@@ -54,6 +56,11 @@ export default defineComponent({
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
+		const hasPdfMimeType = computed(() => {
+			console.log(props.fileProperties.mimeType);
+			return props.fileProperties.mimeType === "application/pdf";
+		});
+
 		const showTitle = computed(() => {
 			return !props.fileProperties.previewUrl && !hasVideoMimeType.value;
 		});
@@ -64,6 +71,7 @@ export default defineComponent({
 
 		return {
 			hasVideoMimeType,
+			hasPdfMimeType,
 			showTitle,
 			onAddAlert,
 		};
