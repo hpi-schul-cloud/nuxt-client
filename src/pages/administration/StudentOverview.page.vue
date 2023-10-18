@@ -149,6 +149,7 @@ import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { reactive } from "vue";
 
 export default {
 	components: {
@@ -608,7 +609,7 @@ export default {
 				}
 			};
 			const onCancel = () => {
-				this.$set(this, "tableSelection", []);
+				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";
 			};
 			let message;

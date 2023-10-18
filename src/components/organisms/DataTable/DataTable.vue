@@ -24,6 +24,7 @@ import { getValueByPath } from "@/utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 
 import controllableData from "@/mixins/controllableData";
+import { reactive } from "vue";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -131,10 +132,10 @@ export default {
 	methods: {
 		handleParentSelectionUpdate(selection) {
 			if (selection.length === this.data.length) {
-				this.$set(this, "backendTableSelectionIds", []);
+				this.backendTableSelectionIds = reactive([]);
 				this.backendTableSelectionType = "exclusive";
 			} else {
-				this.$set(this, "backendTableSelectionIds", selection);
+				this.backendTableSelectionIds = reactive(selection);
 				this.backendTableSelectionType = "inclusive";
 			}
 		},
