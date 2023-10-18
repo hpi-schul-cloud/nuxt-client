@@ -72,7 +72,7 @@ describe("SchoolPolicyFormDialog", () => {
 			const wrapper = setup();
 
 			expect(
-				wrapper.find('[data-testid="submit-button"]').attributes().disabled
+				wrapper.find('[data-testid="dialog-confirm"]').attributes().disabled
 			).toBeDefined();
 		});
 
@@ -88,7 +88,7 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should emit 'close'", () => {
 			const wrapper = setup();
 
-			wrapper.find('[data-testid="cancel-button"]').trigger("click");
+			wrapper.find('[data-testid="dialog-cancel"]').trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});

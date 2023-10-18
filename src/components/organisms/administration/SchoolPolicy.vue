@@ -19,8 +19,17 @@
 				class="mb-6"
 				data-testid="progress-bar"
 			/>
-			<v-list-item v-else two-line dense data-testid="policy-item">
-				<v-list-item-icon>
+			<v-list-item
+				v-else
+				two-line
+				dense
+				class="mb-6"
+				data-testid="policy-item"
+				@click="downloadPolicy"
+				:class="{ 'item-no-action': !privacyPolicy }"
+				:ripple="privacyPolicy !== null"
+			>
+				<v-list-item-icon class="me-4">
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
@@ -31,9 +40,7 @@
 						<template v-if="privacyPolicy">
 							{{
 								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: dayjs(privacyPolicy.publishedAt).format(
-										t("format.dateTime")
-									),
+									date: formatDate(privacyPolicy.publishedAt),
 								})
 							}}
 						</template>
@@ -48,9 +55,8 @@
 				</v-list-item-content>
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
-					class="edit-icon"
 					data-testid="edit-button"
-					@click="isSchoolPolicyFormDialogOpen = true"
+					@click.stop="isSchoolPolicyFormDialogOpen = true"
 				>
 					<v-btn
 						icon
@@ -58,22 +64,21 @@
 							t('pages.administration.school.index.schoolPolicy.edit')
 						"
 					>
-						<v-icon>$mdiPencilOutline</v-icon>
+						<v-icon>$mdiTrayArrowUp</v-icon>
 					</v-btn>
 				</v-list-item-action>
 				<v-list-item-action
 					v-if="privacyPolicy"
-					class="download-icon"
-					data-testid="download-button"
-					@click="downloadFile"
+					data-testid="delete-button"
+					@click.stop="isDeletePolicyDialogOpen = true"
 				>
 					<v-btn
 						icon
 						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.download')
+							t('pages.administration.school.index.schoolPolicy.delete.title')
 						"
 					>
-						<v-icon>$mdiTrayArrowDown</v-icon>
+						<v-icon>$mdiTrashCanOutline</v-icon>
 					</v-btn>
 				</v-list-item-action>
 			</v-list-item>
@@ -83,13 +88,34 @@
 				@close="closeDialog"
 				data-testid="form-dialog"
 			/>
+			<v-custom-dialog
+				v-model="isDeletePolicyDialogOpen"
+				:size="430"
+				has-buttons
+				confirm-btn-title-key="common.actions.delete"
+				confirm-btn-icon="$mdiTrashCanOutline"
+				@dialog-confirmed="deleteFile"
+				data-testid="delete-dialog"
+			>
+				<h4 class="text-h4 mt-0" slot="title">
+					{{ t("pages.administration.school.index.schoolPolicy.delete.title") }}
+				</h4>
+				<template #content>
+					<v-alert light text type="info" class="mb-0">
+						<div class="alert-text">
+							{{
+								t("pages.administration.school.index.schoolPolicy.delete.text")
+							}}
+						</div>
+					</v-alert>
+				</template>
+			</v-custom-dialog>
 		</template>
 	</div>
 </template>
 
 <script lang="ts">
 import SchoolPolicyFormDialog from "@/components/organisms/administration/SchoolPolicyFormDialog.vue";
-import dayjs from "dayjs";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -100,11 +126,16 @@ import {
 	PRIVACY_POLICY_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { downloadFile } from "@/utils/fileHelper";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "SchoolPolicy",
 	components: {
+		vCustomDialog,
 		SchoolPolicyFormDialog,
 	},
 	setup() {
@@ -112,8 +143,10 @@ export default defineComponent({
 		const authModule = injectStrict(AUTH_MODULE_KEY);
 		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
+		const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(
@@ -137,13 +170,28 @@ export default defineComponent({
 			() => privacyPolicyModule.getBusinessError
 		);
 
-		const downloadFile = () => {
-			const link = document.createElement("a");
-			link.href = privacyPolicy.value?.consentData.data as string;
-			link.download = t(
-				"pages.administration.school.index.schoolPolicy.fileName"
-			);
-			link.click();
+		const formatDate = (dateTime: string) =>
+			formatDateForAlerts(dateTime, true);
+
+		const downloadPolicy = () => {
+			if (privacyPolicy.value) {
+				downloadFile(
+					privacyPolicy.value.consentData.data,
+					t("pages.administration.school.index.schoolPolicy.fileName")
+				);
+			}
+		};
+
+		const deleteFile = async () => {
+			await privacyPolicyModule.deletePrivacyPolicy();
+
+			notifierModule.show({
+				text: t(
+					"pages.administration.school.index.schoolPolicy.delete.success"
+				),
+				status: "success",
+				timeout: 10000,
+			});
 		};
 
 		const closeDialog = () => {
@@ -153,12 +201,14 @@ export default defineComponent({
 		return {
 			t,
 			isSchoolPolicyFormDialogOpen,
+			isDeletePolicyDialogOpen,
 			hasSchoolEditPermission,
 			privacyPolicy,
 			status,
 			error,
-			downloadFile,
-			dayjs,
+			downloadPolicy,
+			deleteFile,
+			formatDate,
 			closeDialog,
 		};
 	},
@@ -169,5 +219,14 @@ export default defineComponent({
 .alert-text {
 	color: var(--v-black-base) !important;
 	line-height: var(--line-height-lg) !important;
+}
+
+.item-no-action {
+	&:hover {
+		cursor: default;
+	}
+	&:before {
+		background-color: unset;
+	}
 }
 </style>

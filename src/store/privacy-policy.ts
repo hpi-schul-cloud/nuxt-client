@@ -106,4 +106,22 @@ export default class PrivacyPolicyModule extends VuexModule {
 			this.setStatus("error");
 		}
 	}
+
+	@Action
+	async deletePrivacyPolicy(): Promise<void> {
+		try {
+			this.resetBusinessError();
+			this.setStatus("pending");
+
+			if (this.privacyPolicy) {
+				await $axios.delete(`/v1/consentVersions/${this.privacyPolicy._id}`);
+			}
+
+			this.setPrivacyPolicy(null);
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error as BusinessError);
+			this.setStatus("error");
+		}
+	}
 }
