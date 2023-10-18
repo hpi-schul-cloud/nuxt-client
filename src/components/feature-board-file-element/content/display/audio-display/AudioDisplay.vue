@@ -3,6 +3,7 @@
 		<template #element>
 			<audio
 				controls
+				controlsList="nodownload noplaybackrate"
 				loading="lazy"
 				:src="src"
 				v-on:error="onError"
