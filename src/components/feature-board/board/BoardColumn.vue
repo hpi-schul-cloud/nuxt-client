@@ -227,12 +227,12 @@ export default defineComponent({
 	border-radius: 5px;
 }
 .column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
-	background-color: var(--v-secondary-lighten1);
+	background-color: rgba(var(--v-theme-secondary-lighten-1));
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: var(--v-secondary-base) !important;
+	background: rgba(var(--v-theme-secondary)) !important;
 }
 </style>

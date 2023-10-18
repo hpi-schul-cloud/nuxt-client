@@ -152,9 +152,9 @@ export default {
 .pagination-link-wrapper .pagination-link {
 	padding: var(--space-xs);
 	margin-left: var(--space-sm);
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 	cursor: pointer;
-	background-color: var(--v-secondary-base);
+	background-color: rgba(var(--v-theme-secondary));
 	border-radius: var(--radius-sm);
 }
 

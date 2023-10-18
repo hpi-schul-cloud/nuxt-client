@@ -137,7 +137,7 @@ export default defineComponent({
 				this.classesActivatedColor = "currentColor";
 				this.$emit("update:inputs");
 			} else {
-				this.classesActivatedColor = "var(--v-black-base)";
+				this.classesActivatedColor = "rgba(var(--v-theme-black))";
 			}
 		},
 		classPathChanged: function () {

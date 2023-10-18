@@ -285,7 +285,7 @@ export default {};
 		outline: none;
 
 		&:focus {
-			border-bottom: 1px solid var(--v-primary-base);
+			border-bottom: 1px solid rgba(var(--v-theme-primary));
 		}
 	}
 

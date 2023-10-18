@@ -383,13 +383,13 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			color: var(--v-white-base);
+			color: rgba(var(--v-theme-white));
 			background-color: map-get($grey, darken-3);
 		}
 
 		.close-transparent {
-			color: var(--v-black-base);
-			background-color: var(--v-white-base);
+			color: rgba(var(--v-theme-black));
+			background-color: rgba(var(--v-theme-white));
 		}
 	}
 
@@ -433,7 +433,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--v-secondary-base);
+				background-color: rgba(var(--v-theme-secondary));
 			}
 
 			.preview-background {
@@ -483,7 +483,7 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
@@ -506,7 +506,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--v-error-base);
+			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -534,7 +534,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--v-secondary-base);
+				color: rgba(var(--v-theme-secondary));
 				text-decoration: underline;
 			}
 		}
@@ -581,15 +581,15 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--v-secondary-base);
+					color: rgba(var(--v-theme-secondary));
 				}
 
 				.tertiary-color {
-					color: var(--v-black-base);
+					color: rgba(var(--v-theme-black));
 					text-decoration: none;
 
 					:hover {
-						color: var(--v-black-base);
+						color: rgba(var(--v-theme-black));
 					}
 				}
 			}

@@ -42,7 +42,7 @@ describe("@/components/molecules/NotificationModal", () => {
 		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
-				"background-color: var(--v-success-base)"
+				"background-color:rgba(var(--v-theme-success))"
 			);
 		}, 200);
 	});
@@ -61,7 +61,7 @@ describe("@/components/molecules/NotificationModal", () => {
 		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
-				"background-color: var(--v-error-base)"
+				"background-color: rgba(var(--v-theme-error))"
 			);
 		}, 200);
 	});

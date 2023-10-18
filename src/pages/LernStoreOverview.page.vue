@@ -241,7 +241,7 @@ export default {
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 		cursor: pointer;
 	}
 

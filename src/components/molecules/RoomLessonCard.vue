@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:variant="isHiddden ? 'outlined' : 'elevated'"
+		:variant="isHidden ? 'outlined' : 'elevated'"
 		:hover="vuetifyHover"
 		data-testid="content-card-lesson"
 		@click="handleClick"

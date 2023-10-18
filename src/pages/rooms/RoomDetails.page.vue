@@ -522,7 +522,7 @@ export default defineComponent({
 
 .modal-text {
 	font-size: var(--space-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {

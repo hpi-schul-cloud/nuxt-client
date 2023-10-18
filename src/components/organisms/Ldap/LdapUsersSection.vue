@@ -144,7 +144,7 @@ export default defineComponent({
 	},
 	computed: {
 		fillColor() {
-			return "var(--v-black-base)";
+			return "rgba(var(--v-theme-black))";
 		},
 	},
 	watch: {

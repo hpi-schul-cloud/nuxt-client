@@ -369,7 +369,7 @@ export default {
 
 .share-info-text {
 	font-size: var(--space-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 
 .share-cancel-button {

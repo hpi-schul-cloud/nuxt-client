@@ -232,7 +232,7 @@ export default defineComponent({
 }
 
 .v-card:focus {
-	outline: 2px solid var(--v-secondary-lighten1);
+	outline: 2px solid rgba(var(--v-theme-secondary-lighten-1));
 	outline-offset: 0;
 }
 </style>

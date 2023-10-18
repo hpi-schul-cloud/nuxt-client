@@ -51,7 +51,9 @@ describe("@/components/base/BaseDialog", () => {
 				// We can not test if the style gets applied because
 				// the BaseIcon is not rendered (solvable)
 				// and css custom properties get ignored by vue-test-utils
-				expect(wrapper.vm.currentIconColor).toBe(`var(--v-${design}-base)`);
+				expect(wrapper.vm.currentIconColor).toBe(
+					`rgba(var(--v-theme${design}))`
+				);
 			};
 			await Promise.all(designs.map(testWithDesign));
 		});

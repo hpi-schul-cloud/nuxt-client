@@ -100,9 +100,9 @@ export default {
 	justify-content: center;
 	width: 100%;
 	line-height: var(--line-height-lg);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 	text-align: center;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 }
@@ -216,7 +216,7 @@ export default {
 	padding: var(--space-xs) var(--space-md);
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 
 	@include breakpoint(tablet) {
 		display: flex;
@@ -234,13 +234,13 @@ export default {
 
 a.active {
 	font-weight: var(--font-weight-bold);
-	color: var(--v-white-base);
-	background-color: var(--v-accent-base);
+	color: rgba(var(--v-theme-white));
+	background-color: rgba(var(--v-theme-accent));
 	border-radius: var(--radius-sm);
 
 	&:hover {
-		color: var(--v-white-base);
-		background-color: var(--v-accent-base);
+		color: rgba(var(--v-theme-white));
+		background-color: rgba(var(--v-theme-accent));
 		border-radius: var(--radius-sm);
 	}
 }

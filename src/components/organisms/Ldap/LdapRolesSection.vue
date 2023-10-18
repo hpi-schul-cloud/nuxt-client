@@ -171,7 +171,7 @@ export default defineComponent({
 		},
 
 		fillColor() {
-			return "var(--v-theme-black)";
+			return "rgba(var(--v-theme-black))";
 		},
 	},
 	watch: {
