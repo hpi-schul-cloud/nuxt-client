@@ -1,4 +1,4 @@
-import { ToolContextType } from "./tool-context-type.enum";
+import { ToolContextType } from "@/serverApi/v3";
 import { ToolParameterEntry } from "./tool-parameter-entry";
 
 export interface ContextExternalToolSave {
