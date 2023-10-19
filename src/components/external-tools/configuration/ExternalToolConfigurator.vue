@@ -37,13 +37,13 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot name="aboveParameters" :selectedTemplate="selectedTemplate"></slot>
+		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
 		<external-tool-config-settings
 			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
 			:template="selectedTemplate"
 			v-model="parameterConfiguration"
 		/>
-		<v-spacer class="mt-10"></v-spacer>
+		<v-spacer class="mt-10" />
 		<v-alert v-if="error && error.message" light prominent text type="error">
 			{{ t(getBusinessErrorTranslationKey(error)) }}
 		</v-alert>

@@ -10,7 +10,7 @@
 						})
 					}}
 				</v-toolbar-title>
-				<v-spacer></v-spacer>
+				<v-spacer />
 				<v-toolbar-items>
 					<v-btn v-if="isDialog" icon dark @click="closeEdit">
 						<v-icon>{{ mdiClose }}</v-icon>
@@ -148,7 +148,7 @@
 								</v-list-item-content>
 							</template>
 							<template #append-item>
-								<div v-intersect="endIntersect" class="pa-2"></div>
+								<div v-intersect="endIntersect" class="pa-2" />
 							</template>
 						</v-autocomplete>
 					</v-col>
