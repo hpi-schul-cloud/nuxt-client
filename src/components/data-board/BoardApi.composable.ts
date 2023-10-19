@@ -9,7 +9,7 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	ExternalToolElementContent,
+	ExternalToolElementResponse,
 	FileElementContent,
 	LinkElementContent,
 	RichTextElementContent,
@@ -92,9 +92,12 @@ export const useBoardApi = () => {
 			};
 		}
 
-		if (element.type === ContentElementType.ExternalTool) {
+		if (isExternalToolElement(element)) {
 			return {
-				content: element.content as ExternalToolElementContent,
+				content: {
+					contextExternalToolId:
+						element.content.contextExternalToolId ?? undefined,
+				},
 				type: ContentElementType.ExternalTool,
 			};
 		}
@@ -107,6 +110,12 @@ export const useBoardApi = () => {
 		}
 
 		throw new Error("element.type mapping is undefined for updateElementCall");
+	};
+
+	const isExternalToolElement = (
+		element: AnyContentElement
+	): element is ExternalToolElementResponse => {
+		return element.type === ContentElementType.ExternalTool;
 	};
 
 	const createElementCall = async (

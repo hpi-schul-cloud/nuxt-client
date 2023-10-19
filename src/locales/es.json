@@ -1016,5 +1016,6 @@
 	"pages.videoConference.action.refresh": "Estado de actualización",
 	"ui-confirmation-dialog.ask-delete.card": "¿Eliminar {type} {title}?",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
-	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección..."
+	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
+	"feature-board-external-tool-element.dialog.title": "Selección y configuración"
 }

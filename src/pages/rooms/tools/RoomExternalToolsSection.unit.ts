@@ -1,7 +1,13 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
+import { ToolContextType } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import EnvConfigModule from "@/store/env-config";
+import {
+	ExternalToolDisplayData,
+	ToolConfigurationStatus,
+} from "@/store/external-tool";
+import ExternalToolsModule from "@/store/external-tools";
+import { BusinessError } from "@/store/types/commons";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -9,27 +15,21 @@ import {
 	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	businessErrorFactory,
 	externalToolDisplayDataFactory,
 	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils/factory";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-	ToolContextType,
-} from "@/store/external-tool";
-import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { AxiosError } from "axios";
+import flushPromises from "flush-promises";
+import Vue from "vue";
 import VueRouter from "vue-router";
 import * as routerComposables from "vue-router/composables";
-import EnvConfigModule from "@/store/env-config";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import ExternalToolsModule from "@/store/external-tools";
-import flushPromises from "flush-promises";
-import { BusinessError } from "@/store/types/commons";
-import { AxiosError } from "axios";
 
 describe("RoomExternalToolsSection", () => {
 	let router: DeepMocked<VueRouter>;
@@ -173,7 +173,7 @@ describe("RoomExternalToolsSection", () => {
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: roomId,
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				},
 			});
 		});
