@@ -85,9 +85,16 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
+import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import {
+	ToolConfigurationStatus,
+	ToolLaunchRequest,
+	ToolLaunchRequestMethodEnum,
+} from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import {
 	AUTH_MODULE_KEY,
@@ -95,6 +102,7 @@ import {
 	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import {
 	computed,
 	ComputedRef,
@@ -104,15 +112,7 @@ import {
 	Ref,
 } from "vue";
 import VueI18n from "vue-i18n";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useRouter } from "vue-router/composables";
-import {
-	ToolConfigurationStatus,
-	ToolContextType,
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
-import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -188,7 +188,7 @@ export default defineComponent({
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: props.roomId,
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				},
 			});
 		};

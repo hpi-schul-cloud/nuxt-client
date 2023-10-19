@@ -2,59 +2,87 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import { CONTEXT_EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { I18N_KEY } from "@/utils/inject";
 import {
+	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	i18nMock,
 	timestampsResponseFactory,
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { createMock } from "@golevelup/ts-jest";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useExternalToolElementDisplayState } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import Vue, { ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
 
-jest.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: jest.fn(),
-	};
-});
+jest.mock("@data-board");
+jest.mock("@data-external-tool");
 jest.mock("@ui-confirmation-dialog");
 
-const TEST_ELEMENT: ExternalToolElementResponse = {
+const EMPTY_TEST_ELEMENT: ExternalToolElementResponse = {
 	id: "external-tool-element-id",
-	content: {},
+	content: {
+		contextExternalToolId: null,
+	},
 	type: ContentElementType.ExternalTool,
 	timestamps: timestampsResponseFactory.build(),
 };
 
 describe("ExternalToolElement", () => {
+	let useContentElementStateMock: DeepMocked<
+		ReturnType<typeof useContentElementState>
+	>;
+	let useBoardFocusHandlerMock: DeepMocked<
+		ReturnType<typeof useBoardFocusHandler>
+	>;
+	let useSharedExternalToolElementDisplayStateMock: DeepMocked<
+		ReturnType<typeof useExternalToolElementDisplayState>
+	>;
+
+	beforeEach(() => {
+		useContentElementStateMock =
+			createMock<ReturnType<typeof useContentElementState>>();
+		useBoardFocusHandlerMock =
+			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useSharedExternalToolElementDisplayStateMock =
+			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
+
+		jest
+			.mocked(useContentElementState)
+			.mockReturnValue(useContentElementStateMock);
+		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		jest
+			.mocked(useExternalToolElementDisplayState)
+			.mockReturnValue(useSharedExternalToolElementDisplayStateMock);
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	const getWrapper = (
 		props: {
 			element: ExternalToolElementResponse;
 			isEditMode: boolean;
 		},
-		displayData: ExternalToolDisplayData[] = []
+		displayData?: ExternalToolDisplayData
 	) => {
 		document.body.setAttribute("data-app", "true");
-
-		const contextExternalToolsModule = createModuleMocks(
-			ContextExternalToolsModule,
-			{
-				getExternalToolDisplayDataList: displayData,
-			}
-		);
 
 		const useDeleteConfirmationDialogReturnValue =
 			createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
 		jest
 			.mocked(useDeleteConfirmationDialog)
 			.mockReturnValue(useDeleteConfirmationDialogReturnValue);
+
+		useContentElementStateMock.modelValue = ref(props.element.content);
+		useSharedExternalToolElementDisplayStateMock.displayData = ref(displayData);
 
 		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolElement as MountOptions<Vue>,
@@ -66,19 +94,20 @@ describe("ExternalToolElement", () => {
 					isFirstElement: false,
 					isLastElement: false,
 					hasMultipleElements: false,
+					cardId: "cardId",
 					...props,
 				},
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
-					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						contextExternalToolsModule,
+				},
+				stubs: {
+					ExternalToolElementConfigurationDialog: true,
 				},
 			}
 		);
 
 		return {
 			wrapper,
-			contextExternalToolsModule,
 			useDeleteConfirmationDialogReturnValue,
 		};
 	};
@@ -87,11 +116,42 @@ describe("ExternalToolElement", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("when the element is mounted", () => {
+		describe("when the element has a tool attached", () => {
+			it("should load the display data", () => {
+				getWrapper({
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId: "contextExternalToolId" },
+					},
+					isEditMode: false,
+				});
+
+				expect(
+					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).toHaveBeenCalledWith("contextExternalToolId");
+			});
+		});
+
+		describe("when the element deos not have a tool attached", () => {
+			it("should not load the display data", () => {
+				getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: false,
+				});
+
+				expect(
+					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).not.toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("when no tool is selected", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: TEST_ELEMENT,
+					element: EMPTY_TEST_ELEMENT,
 					isEditMode: false,
 				});
 
@@ -112,7 +172,7 @@ describe("ExternalToolElement", () => {
 		describe("when in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: TEST_ELEMENT,
+					element: EMPTY_TEST_ELEMENT,
 					isEditMode: true,
 				});
 
@@ -139,17 +199,15 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: {
-							...TEST_ELEMENT,
+							...EMPTY_TEST_ELEMENT,
 							content: { contextExternalToolId },
 						},
 						isEditMode: false,
 					},
-					[
-						externalToolDisplayDataFactory.build({
-							contextExternalToolId,
-							logoUrl: undefined,
-						}),
-					]
+					externalToolDisplayDataFactory.build({
+						contextExternalToolId,
+						logoUrl: undefined,
+					})
 				);
 
 				return {
@@ -175,17 +233,15 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: {
-							...TEST_ELEMENT,
+							...EMPTY_TEST_ELEMENT,
 							content: { contextExternalToolId },
 						},
 						isEditMode: false,
 					},
-					[
-						externalToolDisplayDataFactory.build({
-							contextExternalToolId,
-							logoUrl: "logo-url",
-						}),
-					]
+					externalToolDisplayDataFactory.build({
+						contextExternalToolId,
+						logoUrl: "logo-url",
+					})
 				);
 
 				return {
@@ -209,7 +265,7 @@ describe("ExternalToolElement", () => {
 		describe("when no tool is selected", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: TEST_ELEMENT,
+					element: EMPTY_TEST_ELEMENT,
 					isEditMode: true,
 				});
 
@@ -235,16 +291,13 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
-				const { wrapper } = getWrapper(
-					{
-						element: {
-							...TEST_ELEMENT,
-							content: { contextExternalToolId },
-						},
-						isEditMode: false,
+				const { wrapper } = getWrapper({
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId },
 					},
-					[]
-				);
+					isEditMode: false,
+				});
 
 				return {
 					wrapper,
@@ -273,12 +326,12 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: {
-							...TEST_ELEMENT,
+							...EMPTY_TEST_ELEMENT,
 							content: { contextExternalToolId },
 						},
 						isEditMode: false,
 					},
-					[toolDisplayData]
+					toolDisplayData
 				);
 
 				return {
@@ -304,16 +357,15 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
-				const { wrapper } = getWrapper(
-					{
-						element: {
-							...TEST_ELEMENT,
-							content: { contextExternalToolId },
-						},
-						isEditMode: false,
+				useSharedExternalToolElementDisplayStateMock.isLoading = ref(true);
+
+				const { wrapper } = getWrapper({
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId },
 					},
-					[]
-				);
+					isEditMode: false,
+				});
 
 				return {
 					wrapper,
@@ -323,9 +375,9 @@ describe("ExternalToolElement", () => {
 			it("should display a loading state", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent({ ref: "externalToolElement" });
+				const card = wrapper.findComponent({ ref: "externalToolElement" });
 
-				expect(title.attributes("loading")).toEqual("true");
+				expect(card.attributes("loading")).toEqual("true");
 			});
 		});
 
@@ -333,15 +385,17 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
+				useSharedExternalToolElementDisplayStateMock.isLoading = ref(false);
+
 				const { wrapper } = getWrapper(
 					{
 						element: {
-							...TEST_ELEMENT,
+							...EMPTY_TEST_ELEMENT,
 							content: { contextExternalToolId },
 						},
 						isEditMode: false,
 					},
-					[externalToolDisplayDataFactory.build({ contextExternalToolId })]
+					externalToolDisplayDataFactory.build({ contextExternalToolId })
 				);
 
 				return {
@@ -363,7 +417,7 @@ describe("ExternalToolElement", () => {
 		describe("when in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: TEST_ELEMENT,
+					element: EMPTY_TEST_ELEMENT,
 					isEditMode: true,
 				});
 
@@ -384,7 +438,7 @@ describe("ExternalToolElement", () => {
 		describe("when in display mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: TEST_ELEMENT,
+					element: EMPTY_TEST_ELEMENT,
 					isEditMode: false,
 				});
 
@@ -399,6 +453,88 @@ describe("ExternalToolElement", () => {
 				const menu = wrapper.findComponent({ ref: "externalToolElementMenu" });
 
 				expect(menu.exists()).toEqual(false);
+			});
+		});
+	});
+
+	describe("Dialog", () => {
+		describe("when clicking on a un-configured tool card in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display the configuration dialog", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({
+					ref: "externalToolElement",
+				});
+
+				card.vm.$emit("click");
+				await Vue.nextTick();
+
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
+
+				expect(dialog.props("isOpen")).toEqual(true);
+			});
+		});
+
+		describe("when the dialog is saving a tool", () => {
+			const setup = () => {
+				const savedTool: ContextExternalTool = contextExternalToolFactory.build(
+					{
+						id: "contextExternalToolId",
+					}
+				);
+
+				const { wrapper } = getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+					savedTool,
+				};
+			};
+
+			it("should update the elements content", async () => {
+				const { wrapper, savedTool } = setup();
+
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
+
+				dialog.vm.$emit("save", savedTool);
+				await Vue.nextTick();
+
+				expect(useContentElementStateMock.modelValue.value).toEqual({
+					contextExternalToolId: savedTool.id,
+				});
+			});
+
+			it("should fetch the display data", async () => {
+				const { wrapper, savedTool } = setup();
+
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
+
+				dialog.vm.$emit("save", savedTool);
+				await Vue.nextTick();
+
+				expect(
+					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).toHaveBeenCalledWith(savedTool.id);
 			});
 		});
 	});

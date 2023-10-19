@@ -69,8 +69,8 @@ import {
 } from "@data-board";
 import {
 	BoardMenu,
-	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	BoardMenuActionEdit,
 } from "@ui-board";
 import {
 	useDebounceFn,
