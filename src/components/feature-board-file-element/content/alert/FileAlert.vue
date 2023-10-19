@@ -4,7 +4,7 @@
 		class="mb-0 py-4 rounded-t-0"
 		:color="alertProperties.color"
 		data-testid="board-file-element-alert"
-		dense
+		density="compact"
 		:icon="alertProperties.icon"
 		variant="tonal"
 	>
