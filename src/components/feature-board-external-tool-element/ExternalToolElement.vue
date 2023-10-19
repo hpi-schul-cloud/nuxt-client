@@ -23,7 +23,7 @@
 					class="mx-auto"
 					:src="displayData.logoUrl"
 					contain
-				></v-img>
+				/>
 			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 			<span class="align-self-center title flex-1 break-word">
@@ -40,7 +40,7 @@
 				@move-up:element="onMoveElementUp"
 				@delete:element="onDeleteElement"
 				@edit:element="onEditElement"
-			></ExternalToolElementMenu>
+			/>
 		</div>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
@@ -49,8 +49,7 @@
 			@close="onConfigurationDialogClose"
 			@save="onConfigurationDialogSave"
 			data-testid="board-external-tool-element-configuration-dialog"
-		>
-		</ExternalToolElementConfigurationDialog>
+		/>
 	</v-card>
 </template>
 

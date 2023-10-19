@@ -5,13 +5,13 @@
 			:fileName="fileProperties.name"
 		/>
 
-		<v-spacer></v-spacer>
+		<v-spacer />
 
 		<FileDownload
 			:fileName="fileProperties.name"
 			:isDownloadAllowed="fileProperties.isDownloadAllowed"
 			:url="fileProperties.url"
-		></FileDownload>
+		/>
 	</v-card-actions>
 </template>
 

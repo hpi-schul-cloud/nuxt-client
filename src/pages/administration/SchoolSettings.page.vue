@@ -24,7 +24,7 @@
 			<h2 class="text-h4">
 				{{ currentSchoolYear }}
 			</h2>
-			<v-divider class="my-sm-6 my-md-3"></v-divider>
+			<v-divider class="my-sm-6 my-md-3" />
 			<v-row>
 				<v-col>
 					<general-settings />

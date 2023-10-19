@@ -6,12 +6,11 @@
 			:title="computedElement.content.title"
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
-		></LinkContentElementDisplay>
+		/>
 		<LinkContentElementEdit
 			v-if="!computedElement.content.url"
 			@create:url="onCreateUrl"
-		>
-		</LinkContentElementEdit>
+		/>
 	</div>
 </template>
 

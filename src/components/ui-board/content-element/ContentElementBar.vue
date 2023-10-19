@@ -8,18 +8,18 @@
 				data-testid="content-element-title"
 				inactive
 			>
-				<slot name="title"></slot>
+				<slot name="title" />
 			</v-toolbar-title>
 
-			<slot name="element"></slot>
+			<slot name="element" />
 
-			<v-spacer></v-spacer>
+			<v-spacer />
 
-			<slot name="menu"></slot>
+			<slot name="menu" />
 		</v-app-bar>
 
 		<div v-if="$slots.subtitle" class="pt-0 pb-4 px-4">
-			<slot name="subtitle"></slot>
+			<slot name="subtitle" />
 		</div>
 	</div>
 </template>

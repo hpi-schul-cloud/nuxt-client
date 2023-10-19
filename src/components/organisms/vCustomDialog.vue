@@ -8,14 +8,13 @@
 	>
 		<v-card :ripple="false">
 			<v-card-title data-testid="dialog-title">
-				<slot name="title"></slot>
+				<slot name="title" />
 			</v-card-title>
 			<v-card-text class="text--primary">
-				<slot name="content"></slot>
+				<slot name="content" />
 			</v-card-text>
 			<v-card-actions v-if="hasButtons" class="pe-6">
-				<v-spacer></v-spacer>
-
+				<v-spacer />
 				<div class="button-section button-left">
 					<v-btn
 						v-if="checkButtons('back')"

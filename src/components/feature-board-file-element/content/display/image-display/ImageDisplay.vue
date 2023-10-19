@@ -11,7 +11,7 @@
 		@mouseenter.stop.prevent="onMouseEnter"
 		@mouseleave.stop.prevent="onMouseLeave"
 	>
-		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm"></div>
+		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm" />
 
 		<img
 			class="image-display-image rounded-t-sm"
@@ -21,7 +21,7 @@
 		/>
 
 		<ContentElementBar class="menu">
-			<template #menu><slot></slot></template>
+			<template #menu><slot /></template>
 		</ContentElementBar>
 	</div>
 </template>

@@ -32,7 +32,7 @@
 					v-model="newName"
 					:label="$t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
-				></v-text-field>
+				/>
 			</div>
 		</template>
 	</v-custom-dialog>

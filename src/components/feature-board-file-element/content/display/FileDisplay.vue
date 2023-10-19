@@ -8,7 +8,7 @@
 			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
 		>
-			<slot></slot>
+			<slot />
 		</ImageDisplay>
 		<VideoDisplay
 			v-else-if="hasVideoMimeType"
@@ -16,7 +16,7 @@
 			:name="fileProperties.name"
 			@error="onAddAlert"
 		>
-			<slot></slot>
+			<slot />
 		</VideoDisplay>
 		<AudioDisplay
 			v-else-if="hasAudioMimeType"
@@ -31,7 +31,7 @@
 			:show-title="showTitle"
 			:is-edit-mode="isEditMode"
 		>
-			<slot></slot>
+			<slot />
 		</FileDescription>
 	</div>
 </template>

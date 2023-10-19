@@ -1,7 +1,7 @@
 <template>
 	<div class="body-container">
 		<div class="icon">
-			<slot name="icon"></slot>
+			<slot name="icon" />
 		</div>
 		<h1 class="h4 modal-title">
 			<slot name="title">
