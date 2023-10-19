@@ -38,6 +38,7 @@
 	"common.labels.consent": "Consentimiento",
 	"common.labels.createdAt": "Creado en",
 	"common.labels.course": "Curso",
+	"common.labels.class": "Clase",
 	"common.labels.expand": "expandir",
 	"common.labels.expanded": "expandido",
 	"common.labels.email": "Correo electrónico",
@@ -82,6 +83,8 @@
 	"common.labels.notVisible": "No visible",
 	"common.labels.externalsource": "Fuente",
 	"common.labels.settings": "Ajustes",
+	"common.labels.role": "Papel",
+	"common.labels.unknown": "Desconocido",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email": "clara.fall@mail.de",
@@ -1016,5 +1019,6 @@
 	"ui-confirmation-dialog.ask-delete.card": "¿Eliminar {type} {title}?",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
-	"feature-board-external-tool-element.dialog.title": "Selección y configuración"
+	"feature-board-external-tool-element.dialog.title": "Selección y configuración",
+	"page-class-members.title.info": "importado desde un sistema externo"
 }

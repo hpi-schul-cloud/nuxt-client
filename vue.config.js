@@ -23,6 +23,7 @@ module.exports = defineConfig({
 				"@data-board": getDir("src/components/data-board"),
 				"@data-external-tool": getDir("src/components/data-external-tool"),
 				"@data-group": getDir("src/components/data-group"),
+				"@data-system": getDir("src/components/data-system"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),

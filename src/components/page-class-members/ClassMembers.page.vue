@@ -7,10 +7,10 @@
 	>
 		<template #header>
 			<h1 class="text-h3">
-				Klasse ABC
-				<span class="text-subtitle-1"
-					>(importiert aus einem externen System)</span
-				>
+				{{ title }}
+				<span v-show="isExternal" class="text-subtitle-1">
+					({{ t("page-class-members.title.info") }})
+				</span>
 			</h1>
 		</template>
 		<v-data-table
@@ -23,17 +23,24 @@
 			:no-data-text="t('common.nodata')"
 			data-testid="class-members-table"
 		></v-data-table>
-		<ClassMembersInfoBox style="margin-top: 50px" />
+		<ClassMembersInfoBox class="mt-12" :system-id="externalSystemId" />
 	</DefaultWireframe>
 </template>
 
 <script lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { defineComponent, onMounted, ref } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import ClassMembersInfoBox from "@/components/ui-class-members/ClassMembersInfoBox.vue";
-import { useGroupState } from "@data-group";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { GroupMapper, GroupUser, useGroupState } from "@data-group";
+import { computed, ComputedRef, defineComponent, onMounted } from "vue";
+import { DataTableHeader } from "vuetify";
+import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+
+interface GroupUserTableData {
+	firstName: string;
+	lastName: string;
+	roleName: string;
+}
 
 export default defineComponent({
 	components: { ClassMembersInfoBox, DefaultWireframe },
@@ -52,7 +59,15 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const breadcrumbs: Breadcrumb[] = [
+		const groupName: ComputedRef<string> = computed(
+			() => group.value?.name ?? ""
+		);
+
+		const title: ComputedRef<string> = computed(
+			() => `${t("common.labels.class")} "${groupName.value}"`
+		);
+
+		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 			{
 				text: t("pages.administration.index.title"),
 				href: "/administration/",
@@ -62,33 +77,58 @@ export default defineComponent({
 				href: "/administration/groups/classes/",
 			},
 			{
-				text: "Klasse",
+				text: title.value,
 				disabled: true,
-			},
-		];
-
-		const items = ref(group.value?.users ?? []);
-		const headers = ref([
-			{
-				text: "Name",
-				value: "name",
-			},
-			{
-				text: "Vorname",
-				value: "vorname",
-			},
-			{
-				text: "Rolle",
-				value: "role",
 			},
 		]);
 
+		const externalSystemId: ComputedRef<string | undefined> = computed(
+			() => group.value?.externalSource?.systemId
+		);
+
+		const items: ComputedRef<GroupUserTableData[]> = computed(
+			() => group.value?.users.map(mapGroupUserToTableData) ?? []
+		);
+
+		const mapGroupUserToTableData = (
+			groupUser: GroupUser
+		): GroupUserTableData => {
+			return {
+				firstName: groupUser.firstName,
+				lastName: groupUser.lastName,
+				roleName: t(GroupMapper.getTranslationKey(groupUser.role)),
+			};
+		};
+
+		const headers: DataTableHeader[] = [
+			{
+				text: t("common.labels.name"),
+				value: "lastName",
+			},
+			{
+				text: t("common.labels.firstName"),
+				value: "firstName",
+			},
+			{
+				text: t("common.labels.role"),
+				value: "roleName",
+			},
+		];
+
+		const isExternal: ComputedRef<boolean> = computed(
+			() => !!group.value?.externalSource
+		);
+
 		return {
 			t,
+			title,
+			externalSystemId,
+			groupName,
 			breadcrumbs,
 			items,
 			isLoading,
 			headers,
+			isExternal,
 		};
 	},
 });

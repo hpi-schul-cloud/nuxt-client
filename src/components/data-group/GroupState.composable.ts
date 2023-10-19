@@ -1,9 +1,9 @@
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, Ref } from "vue";
 import { Group, useGroupApi } from "./index";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useGroupState = () => {
-	const { handleError } = useErrorHandler();
+	const { handleError } = useErrorHandler(); // TODO: This error handler is board specific
 	const { getGroup } = useGroupApi();
 
 	const isLoading: Ref<boolean> = ref(false);

@@ -1,12 +1,8 @@
 <template>
 	<div data-testid="class-members-info-box">
-		<v-alert light text type="info" class="mb-0">
+		<v-alert v-show="hasSystem" light text type="info" class="mb-0">
 			<div class="alert-text">
-				Daten der Klasse werden mit moin.schule synchronisiert. Die Klassenliste
-				kann vorübergehend veraltet sein, bis sie dem neusten Stand in
-				moin.schule abgeglichen wird. Die Daten werden nach jeder Anmeldung
-				eines Klassenmitglieds in der Niedersächsischen Bildungscloud
-				aktualisiert.
+				{{ t("page-class-members.systemInfoText") }}
 			</div>
 		</v-alert>
 		<h2 class="text-h4">
@@ -47,4 +43,58 @@
 		</ul>
 	</div>
 </template>
-<script setup lang="ts"></script>
+<script lang="ts">
+import { useI18n } from "@/composables/i18n.composable";
+import { System, useSystemApi } from "@data-system";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	ref,
+	Ref,
+	watch,
+} from "vue";
+
+export default defineComponent({
+	props: {
+		systemId: {
+			type: String,
+			default: "",
+		},
+	},
+	setup(props) {
+		const { getSystem } = useSystemApi();
+		const { t } = useI18n();
+
+		const system: Ref<System | undefined> = ref();
+
+		onMounted(async () => {
+			if (props.systemId) {
+				system.value = await getSystem(props.systemId);
+			}
+		});
+
+		watch(
+			() => props.systemId,
+			async (value, oldValue) => {
+				if (value && value !== oldValue) {
+					system.value = await getSystem(props.systemId);
+				}
+			}
+		);
+
+		const hasSystem: ComputedRef<boolean> = computed(() => !!system.value);
+
+		const systemName: ComputedRef<string> = computed(() => {
+			return system.value?.displayName ?? "";
+		});
+
+		return {
+			t,
+			hasSystem,
+			systemName,
+		};
+	},
+});
+</script>

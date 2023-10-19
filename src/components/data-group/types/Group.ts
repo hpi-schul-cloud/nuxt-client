@@ -1,12 +1,17 @@
 import { ExternalSourceResponse } from "@/serverApi/v3";
-import { GroupUser } from "@/components/data-group/types/GroupUser";
-import { GroupType } from "@/components/data-group/types/GroupType";
+import { GroupType } from "./GroupType";
+import { GroupUser } from "./GroupUser";
 
 export type Group = {
 	id: string;
+
 	name: string;
+
 	type: GroupType;
-	users: Array<GroupUser>;
+
+	users: GroupUser[];
+
 	externalSource?: ExternalSourceResponse;
+
 	organizationId?: string;
 };

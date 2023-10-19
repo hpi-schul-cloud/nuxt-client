@@ -1,8 +1,11 @@
-import { GroupUserRole } from "@/components/data-group/types/GroupUserRole";
+import { GroupUserRole } from "./GroupUserRole";
 
 export type GroupUser = {
 	id: string;
+
 	firstName: string;
+
 	lastName: string;
+
 	role: GroupUserRole;
 };

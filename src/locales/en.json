@@ -38,6 +38,7 @@
 	"common.labels.consent": "Consent",
 	"common.labels.createdAt": "Created At",
 	"common.labels.course": "Course",
+	"common.labels.class": "Class",
 	"common.labels.expand": "expand",
 	"common.labels.expanded": "expanded",
 	"common.labels.email": "Email",
@@ -82,6 +83,8 @@
 	"common.labels.notVisible": "Not visible",
 	"common.labels.externalsource": "Source",
 	"common.labels.settings": "Setting",
+	"common.labels.role": "Role",
+	"common.labels.unknown": "Unknown",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email": "clara.fall@mail.de",
@@ -1020,5 +1023,6 @@
 	"ui-confirmation-dialog.ask-delete.card": "Delete {type} {title}?",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool...",
-	"feature-board-external-tool-element.dialog.title": "Selection & Settings"
+	"feature-board-external-tool-element.dialog.title": "Selection & Settings",
+	"page-class-members.title.info": "imported from an external system"
 }

@@ -37,6 +37,7 @@
 	"common.labels.complete.lastName": "Повне прізвище",
 	"common.labels.consent": "Згода",
 	"common.labels.course": "Курс",
+	"common.labels.class": "Клас",
 	"common.labels.createdAt": "Створено в",
 	"common.labels.description": "Опис",
 	"common.labels.email": "Електронна пошта",
@@ -82,6 +83,8 @@
 	"common.labels.notVisible": "Не видно",
 	"common.labels.externalsource": "Джерело",
 	"common.labels.settings": "Налаштування",
+	"common.labels.role": "Роль",
+	"common.labels.unknown": "Невідомий",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email": "clara.fall@mail.de",
@@ -1046,5 +1049,6 @@
 	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент...",
-	"feature-board-external-tool-element.dialog.title": "Вибір і налаштування"
+	"feature-board-external-tool-element.dialog.title": "Вибір і налаштування",
+	"page-class-members.title.info": "імпортовані із зовнішньої системи"
 }
