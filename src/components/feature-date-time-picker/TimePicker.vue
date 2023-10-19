@@ -21,7 +21,7 @@
 					:rules="rules"
 					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
-					@keypress="isNumberOrColon"
+					@keypress="preventInvalidCharacters"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="onError"
@@ -67,27 +67,11 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		// const modelValue = computed({
-		// 	get() {
-		// 		return props.time;
-		// 	},
-		// 	set: (newValue) => {
-		// 		emitTimeDebounced(newValue);
-		// 	},
-		// });
 		const timeValue = ref("");
 
 		watchEffect(() => {
-			console.log("watchEffect");
 			timeValue.value = props.time;
 		});
-
-		// watch(
-		// 	() => props.time,
-		// 	(newVal) => {
-		// 		timeValue.value = newVal;
-		// 	}
-		// );
 
 		watch(timeValue, (newVal) => {
 			emitTimeDebounced(newVal);
@@ -145,7 +129,7 @@ export default defineComponent({
 			return rules;
 		});
 
-		const isNumberOrColon = (event: KeyboardEvent) => {
+		const preventInvalidCharacters = (event: KeyboardEvent) => {
 			const char = String.fromCharCode(event.keyCode); // Get the character
 			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
 			else event.preventDefault(); // If it doesn't match, don't add to input text
@@ -153,7 +137,6 @@ export default defineComponent({
 
 		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
-			// modelValue.value = selected;
 			timeValue.value = selected;
 			valid.value = true;
 			await closeMenu();
@@ -176,14 +159,13 @@ export default defineComponent({
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			// modelValue,
 			timeValue,
 			rules,
 			inputField,
 			onSelect,
 			onError,
 			onMenuToggle,
-			isNumberOrColon,
+			preventInvalidCharacters,
 		};
 	},
 });
