@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch, watchEffect } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
@@ -77,12 +77,17 @@ export default defineComponent({
 		// });
 		const timeValue = ref("");
 
-		watch(
-			() => props.time,
-			(newVal) => {
-				timeValue.value = newVal;
-			}
-		);
+		watchEffect(() => {
+			console.log("watchEffect");
+			timeValue.value = props.time;
+		});
+
+		// watch(
+		// 	() => props.time,
+		// 	(newVal) => {
+		// 		timeValue.value = newVal;
+		// 	}
+		// );
 
 		watch(timeValue, (newVal) => {
 			emitTimeDebounced(newVal);
@@ -113,10 +118,10 @@ export default defineComponent({
 			}
 
 			// add zero
-			const noZeroPrefixRegex = /^\d[0-5]\d$/g;
-			if (value.match(noZeroPrefixRegex)) {
-				timeValue.value = "0" + value;
-			}
+			// const noZeroPrefixRegex = /^\d[0-5]\d$/g;
+			// if (value.match(noZeroPrefixRegex)) {
+			// 	timeValue.value = "0" + value;
+			// }
 
 			// add colon
 			const noColonRegex = /^([01]\d|2[0-3])[0-5]\d$/g;
