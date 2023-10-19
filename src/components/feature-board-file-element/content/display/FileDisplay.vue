@@ -57,7 +57,6 @@ export default defineComponent({
 		});
 
 		const hasPdfMimeType = computed(() => {
-			console.log(props.fileProperties.mimeType);
 			return props.fileProperties.mimeType === "application/pdf";
 		});
 
