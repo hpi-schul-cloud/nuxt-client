@@ -40,7 +40,7 @@
 		</div>
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
-				<div class="actions"></div>
+				<div class="actions" />
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}

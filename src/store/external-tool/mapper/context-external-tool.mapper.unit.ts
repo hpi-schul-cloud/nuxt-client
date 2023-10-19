@@ -1,7 +1,7 @@
+import { ToolContextType } from "@/serverApi/v3";
+import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
 import { ContextExternalToolSave } from "../context-external-tool";
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
-import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
-import { ToolContextType } from "@/store/external-tool";
 
 describe("ContextExternalToolMapper", () => {
 	describe("mapTemplateToContextExternalToolSave", () => {
@@ -10,7 +10,7 @@ describe("ContextExternalToolMapper", () => {
 				const template =
 					contextExternalToolConfigurationTemplateFactory.build();
 				const contextId = "contextId";
-				const contextType = ToolContextType.COURSE;
+				const contextType = ToolContextType.Course;
 				const displayName = "Test Name";
 
 				return {
@@ -47,7 +47,7 @@ describe("ContextExternalToolMapper", () => {
 					name: "toolName",
 				});
 				const contextId = "contextId";
-				const contextType = ToolContextType.COURSE;
+				const contextType = ToolContextType.Course;
 
 				return {
 					template,

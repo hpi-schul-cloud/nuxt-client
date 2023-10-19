@@ -6,7 +6,7 @@
 			:max-width="$props.maxWidth"
 			:src="item.logoUrl"
 			class="mx-2"
-		></v-img>
+		/>
 		<span> {{ item.name }} </span>
 	</v-row>
 </template>

@@ -8,7 +8,7 @@
 			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
 			dense
-		></v-switch>
+		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
