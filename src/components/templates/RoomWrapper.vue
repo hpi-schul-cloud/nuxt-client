@@ -7,7 +7,7 @@
 		@fabButtonEvent="fabClick"
 	>
 		<template slot="header">
-			<slot name="header"></slot>
+			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
 			<v-container fluid class="px-0"
@@ -27,14 +27,13 @@
 			/>
 		</template>
 		<template v-else>
-			<slot name="page-content"></slot>
+			<slot name="page-content" />
 		</template>
 		<import-modal
 			v-model="importDialog.isOpen"
 			class="import-modal"
 			@update-rooms="updateRooms"
-		>
-		</import-modal>
+		/>
 	</default-wireframe>
 </template>
 

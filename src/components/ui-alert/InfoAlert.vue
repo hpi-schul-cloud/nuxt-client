@@ -1,5 +1,5 @@
 <template>
-	<BaseAlert color="info" :icon="mdiInformation"> <slot></slot> </BaseAlert>
+	<BaseAlert color="info" :icon="mdiInformation"> <slot /> </BaseAlert>
 </template>
 
 <script lang="ts">

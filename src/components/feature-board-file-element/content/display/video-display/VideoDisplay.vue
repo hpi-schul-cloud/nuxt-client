@@ -10,7 +10,7 @@
 			v-on:error="onError"
 		/>
 		<ContentElementBar class="menu">
-			<template #menu><slot></slot></template>
+			<template #menu><slot /></template>
 		</ContentElementBar>
 	</div>
 </template>

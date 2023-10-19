@@ -14,7 +14,7 @@
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
-		></BoardAnyTitleInput>
+		/>
 	</VCardTitle>
 </template>
 <script lang="ts">

@@ -1,8 +1,10 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ToolContextType } from "@/store/external-tool";
+import EnvConfigModule from "@/store/env-config";
 import { ContextExternalToolSave } from "@/store/external-tool/context-external-tool";
 import NotifierModule from "@/store/notifier";
+import RoomModule from "@/store/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -20,8 +22,6 @@ import {
 } from "@@/tests/test-utils/factory";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import RoomModule from "@/store/room";
-import EnvConfigModule from "@/store/env-config";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
 
 describe("ContextExternalToolConfigurator", () => {
@@ -110,7 +110,7 @@ describe("ContextExternalToolConfigurator", () => {
 		it("should render static breadcrumbs", () => {
 			const { wrapper, roomTitle } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.COURSE,
+				contextType: ToolContextType.Course,
 			});
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
@@ -124,7 +124,7 @@ describe("ContextExternalToolConfigurator", () => {
 		it("should render title", () => {
 			const { wrapper } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.COURSE,
+				contextType: ToolContextType.Course,
 			});
 
 			expect(wrapper.find("h1").exists()).toBeTruthy();
@@ -136,7 +136,7 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should load the available tools for a context", async () => {
 				const { contextExternalToolsModule } = getWrapper({
 					contextId: "contextId",
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				});
 
 				await Vue.nextTick();
@@ -145,7 +145,7 @@ describe("ContextExternalToolConfigurator", () => {
 					contextExternalToolsModule.loadAvailableToolsForContext
 				).toHaveBeenCalledWith({
 					contextId: "contextId",
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				});
 			});
 		});
@@ -159,7 +159,7 @@ describe("ContextExternalToolConfigurator", () => {
 				const { contextExternalToolsModule, wrapper } = getWrapper({
 					configId: "configId",
 					contextId: "contextId",
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				});
 
 				await Vue.nextTick();
@@ -197,7 +197,7 @@ describe("ContextExternalToolConfigurator", () => {
 		it("should change page when cancel button was clicked", async () => {
 			const { wrapper } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.COURSE,
+				contextType: ToolContextType.Course,
 			});
 
 			await wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
@@ -213,7 +213,7 @@ describe("ContextExternalToolConfigurator", () => {
 		describe("when creating a new configuration", () => {
 			const setup = () => {
 				const contextId = "contextId";
-				const contextType: ToolContextType = ToolContextType.COURSE;
+				const contextType: ToolContextType = ToolContextType.Course;
 				const template = contextExternalToolConfigurationTemplateFactory.build({
 					parameters: toolParameterFactory.buildList(1),
 				});
@@ -303,7 +303,7 @@ describe("ContextExternalToolConfigurator", () => {
 					contextExternalToolConfigurationTemplateFactory.build();
 
 				const contextId = "contextId";
-				const contextType: ToolContextType = ToolContextType.COURSE;
+				const contextType: ToolContextType = ToolContextType.Course;
 				const contextExternalToolId = "configId";
 
 				const { wrapper, contextExternalToolsModule, notifierModule } =
@@ -350,7 +350,7 @@ describe("ContextExternalToolConfigurator", () => {
 						{
 							contextExternalToolId: string;
 							contextExternalTool: ContextExternalToolSave;
-						}
+						},
 					]
 				>({
 					contextExternalToolId: contextExternalToolId,
@@ -397,7 +397,7 @@ describe("ContextExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper(
 					{
 						contextId: "contextId",
-						contextType: ToolContextType.COURSE,
+						contextType: ToolContextType.Course,
 					},
 					{
 						getBusinessError: businessErrorFactory.build(),

@@ -31,7 +31,7 @@
 					<share-modal-options-form
 						:type="type"
 						@share-options-change="onShareOptionsChange"
-					></share-modal-options-form>
+					/>
 				</div>
 
 				<div v-if="step === 2 && isOpen">
@@ -40,7 +40,7 @@
 						:type="type"
 						@done="onDone"
 						@copied="onCopy"
-					></share-modal-result>
+					/>
 				</div>
 			</v-fade-transition>
 		</template>

@@ -21,8 +21,7 @@
 			@update:sort-desc="updateSortOrder"
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
-		>
-		</v-data-table>
+		/>
 
 		<v-btn
 			class="my-5 button-start"

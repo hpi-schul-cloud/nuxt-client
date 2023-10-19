@@ -38,10 +38,10 @@
 					v-if="hasCreateColumnPermission"
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
-				></BoardColumnGhost>
-				<ConfirmationDialog></ConfirmationDialog>
-				<AddElementDialog></AddElementDialog>
-				<LightBox></LightBox>
+				/>
+				<ConfirmationDialog />
+				<AddElementDialog />
+				<LightBox />
 			</template>
 		</div>
 	</div>
