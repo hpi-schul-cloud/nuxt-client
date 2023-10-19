@@ -40,6 +40,7 @@
 
 			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
+			"@ui-color-overlay": ["src/components/ui-color-overlay"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],

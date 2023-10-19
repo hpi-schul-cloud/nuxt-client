@@ -44,6 +44,7 @@ module.exports = defineConfig({
 				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
+				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
