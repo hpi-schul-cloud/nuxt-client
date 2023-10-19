@@ -8,7 +8,7 @@
 		:icon="alertProperties.icon"
 		variant="tonal"
 	>
-		<div class="black--text" v-if="alertProperties.text">
+		<div class="text-black" v-if="alertProperties.text">
 			{{ $t(alertProperties.text) }}
 			<a
 				href="#"

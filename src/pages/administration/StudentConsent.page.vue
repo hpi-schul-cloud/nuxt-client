@@ -85,7 +85,7 @@
 					</template>
 				</backend-data-table>
 
-				<p v-if="birthdayWarning" class="error--text" data-testid="error-text">
+				<p v-if="birthdayWarning" class="text-error" data-testid="error-text">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
@@ -155,7 +155,7 @@
 					</label>
 				</div>
 
-				<p v-if="checkWarning" class="error--text" data-testid="confirm-error">
+				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{
 						$t(

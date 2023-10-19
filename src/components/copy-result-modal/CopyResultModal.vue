@@ -24,7 +24,7 @@
 							<p
 								v-if="warning.isShow"
 								:key="index"
-								class="black--text mb-0 aligned-with-icon"
+								class="text-black mb-0 aligned-with-icon"
 								data-testid="warning-title"
 							>
 								<strong>{{ warning.title }}</strong>
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 
-			<div v-if="hasErrors" class="black--text">
+			<div v-if="hasErrors" class="text-black">
 				<p>{{ $t("components.molecules.copyResult.information") }}</p>
 			</div>
 			<copy-result-modal-list :items="items"></copy-result-modal-list>
