@@ -1,31 +1,33 @@
 <template>
 	<div class="board-open" @click="onOpenElement">
 		<div class="board-image-mask">
-			<v-img :src="imageSrc" height="185px" cover></v-img>
+			<v-img :src="imageSrc" height="185px" cover />
 		</div>
-		<div class="board-last-updated">
-			<span
-				class="subtitle-1 text-edit d-inline-block text-truncate grey--text text--darken-2"
-				data-testid="board-drawing-element-display-last-updated"
-			>
-				{{ $t("components.cardElement.lastUpdatedAt") }}
-				{{ formattedLastUpdatedAt }}
-			</span>
-		</div>
-		<div class="board-content">
-			<v-icon
-				class="grey--text text--darken-2"
-				data-testid="board-drawing-element-display-icon"
-				medium
-			>
-				$mdiPresentation
-			</v-icon>
-			<span
-				class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
-				data-testid="board-drawing-element-display-content"
-			>
-				{{ $t("components.cardElement.drawingElement") }}
-			</span>
+		<div class="grey lighten-4">
+			<div class="board-content">
+				<v-icon
+					class="grey--text text--darken-3"
+					data-testid="board-drawing-element-display-icon"
+					medium
+				>
+					$mdiPresentation
+				</v-icon>
+				<span
+					class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
+					data-testid="board-drawing-element-display-content"
+				>
+					{{ $t("components.cardElement.drawingElement") }}
+				</span>
+			</div>
+			<div class="board-last-updated">
+				<span
+					class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
+					data-testid="board-drawing-element-display-last-updated"
+				>
+					{{ $t("components.cardElement.lastUpdatedAt") }}
+					{{ formattedLastUpdatedAt }}
+				</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -73,12 +75,12 @@ export default defineComponent({
 
 .text-edit {
 	font-weight: 400;
-	padding: 10px 10px 0px 20px;
+	padding: 5px 0px 5px 15px;
 }
 .board-content {
 	display: flex;
 	align-items: center;
-	padding: 10px 0px 20px 20px;
+	padding: 10px 0px 0px 15px;
 }
 
 .board-subtitle {

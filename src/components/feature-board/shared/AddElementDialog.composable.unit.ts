@@ -73,10 +73,9 @@ describe("ElementTypeSelection Composable", () => {
 			it("should return error", async () => {
 				const { addElementMock, elementType, error } = setup();
 
-				const { onElementClick } = useAddElementDialog(
-					addElementMock,
-					{ value: { elements: [] } }
-				);
+				const { onElementClick } = useAddElementDialog(addElementMock, {
+					value: { elements: [] },
+				});
 
 				await expect(onElementClick(elementType)).rejects.toThrowError(error);
 			});

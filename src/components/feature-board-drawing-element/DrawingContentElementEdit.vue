@@ -1,29 +1,19 @@
 <template>
 	<div @click="onOpenElement">
-		<div class="board-image-mask">
-			<v-img :src="imageSrc" height="185px" cover></v-img>
-			<div class="menu">
-				<slot />
-			</div>
+		<div class="board-image-mask" />
+		<v-img :src="imageSrc" class="hover-image" height="185px" cover />
+		<div class="menu">
+			<slot />
 		</div>
 		<v-list-item
 			class="px-0"
 			data-testid="drawing-element-edit"
 			:inactive="true"
 		>
-			<v-list-item-content class="py-0">
-				<div class="board-last-updated">
-					<span
-						class="subtitle-1 text-edit d-inline-block text-truncate grey--text text--darken-2"
-						data-testid="board-drawing-element-display-last-updated"
-					>
-						{{ $t("components.cardElement.lastUpdatedAt") }}
-						{{ formattedLastUpdatedAt }}
-					</span>
-				</div>
+			<v-list-item-content class="py-0 grey lighten-4">
 				<div class="board-content">
 					<v-icon
-						class="grey--text text--darken-2"
+						class="grey--text text--darken-3"
 						data-testid="board-drawing-element-display-icon"
 						medium
 					>
@@ -34,6 +24,15 @@
 						data-testid="board-drawing-element-display-content"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
+					</span>
+				</div>
+				<div class="board-last-updated">
+					<span
+						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
+						data-testid="board-drawing-element-display-last-updated"
+					>
+						{{ $t("components.cardElement.lastUpdatedAt") }}
+						{{ formattedLastUpdatedAt }}
 					</span>
 				</div>
 			</v-list-item-content>
@@ -77,30 +76,31 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 .board-image-mask {
-	text-align: right;
-	height: 185px;
-	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
 
-	&:hover {
-		filter: brightness(50%);
-		border-top-left-radius: 4px;
-		border-top-right-radius: 4px;
-	}
-	.menu {
-		position: absolute;
-		right: 4px;
-		top: 4px;
-	}
+.hover-image:hover {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	filter: brightness(50%);
+}
+.menu {
+	position: absolute;
+	padding: 5px;
+	right: 0;
+	top: 0;
 }
 .text-edit {
 	font-weight: 400;
-	padding: 10px 10px 0px 20px;
+	padding: 5px 0px 5px 15px;
 }
 
 .board-content {
 	display: flex;
 	align-items: center;
-	padding: 10px 0px 20px 20px;
+	padding: 10px 0px 0px 15px;
 }
 
 .board-subtitle {
