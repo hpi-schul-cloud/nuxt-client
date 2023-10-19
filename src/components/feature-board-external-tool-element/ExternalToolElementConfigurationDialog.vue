@@ -28,7 +28,7 @@
 						persistent-hint
 						validate-on-blur
 						data-testId="parameter-display-name"
-					></v-text-field>
+					/>
 				</template>
 			</external-tool-configurator>
 		</template>
