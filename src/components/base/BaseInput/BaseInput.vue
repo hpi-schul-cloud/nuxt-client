@@ -21,27 +21,17 @@
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
 } from "./BaseInputDefault";
-import BaseInputHidden, {
-	supportedTypes as hiddenInputTypes,
-} from "./BaseInputHidden";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
-import BaseInputRadio, {
-	supportedTypes as radioInputTypes,
-} from "./BaseInputRadio";
 
 const componentDictionary = {};
 defaultInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputDefault)
 );
-hiddenInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputHidden)
-);
 checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)
 );
-radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
 export const supportedTypes = Object.keys(componentDictionary);
 
 export const validationDelay = 800;
@@ -113,7 +103,7 @@ export default {
 			}
 
 			this.$emit("update:modelValue", event);
-			this.$emit("input", event);
+			// this.$emit("input", event);
 		},
 		handleBlur(event) {
 			this.validationModel && this.validationModel.$touch();
