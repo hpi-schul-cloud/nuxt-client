@@ -16,7 +16,8 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="!isOverdue"
+				:studentSubmission="studentSubmission"
+				:isOverdue="isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
@@ -24,7 +25,7 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="!isOverdue"
+				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
 				<BoardMenu scope="element">
@@ -83,8 +84,13 @@ export default defineComponent({
 
 		const { modelValue } = useContentElementState(props);
 
-		const { loading, submissions, isOverdue, updateSubmissionItem } =
-			useSubmissionContentElementState(element.value.id, modelValue);
+		const {
+			loading,
+			submissions,
+			studentSubmission,
+			isOverdue,
+			updateSubmissionItem,
+		} = useSubmissionContentElementState(element.value.id, modelValue);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -107,6 +113,7 @@ export default defineComponent({
 			modelValue,
 			submissionContentElement,
 			submissions,
+			studentSubmission,
 			loading,
 			isOverdue,
 			onKeydownArrow,

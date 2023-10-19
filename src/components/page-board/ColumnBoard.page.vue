@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
-		<Board :board-id="boardId"></Board>
+		<Board :board-id="boardId" />
 	</DefaultWireframe>
 </template>
 
