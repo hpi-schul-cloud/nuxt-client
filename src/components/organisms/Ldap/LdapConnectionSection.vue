@@ -14,7 +14,9 @@
 			:info="$t('pages.administration.ldap.connection.server.info')"
 			:validation-model="v$.modelValue.url"
 			:validation-messages="urlValidationMessages"
-			@update:modelValue="$emit('input', { ...modelValue, url: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, url: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiDnsOutline</v-icon>
@@ -30,7 +32,9 @@
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
 			:validation-model="v$.modelValue.basisPath"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="$emit('input', { ...modelValue, basisPath: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, basisPath: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -46,7 +50,9 @@
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
 			:validation-model="v$.modelValue.searchUser"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="$emit('input', { ...modelValue, searchUser: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, searchUser: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -64,7 +70,10 @@
 			:validation-model="v$.modelValue.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:modelValue="
-				$emit('input', { ...modelValue, searchUserPassword: $event })
+				$emit('update:modelValue', {
+					...modelValue,
+					searchUserPassword: $event,
+				})
 			"
 			><template #icon>
 				<v-icon :color="fillColor">$mdiLockOutline</v-icon>

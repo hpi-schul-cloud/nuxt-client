@@ -72,7 +72,10 @@ export default {
 		validationMessage() {
 			if (this.validationModel && this.validationModel.$dirty) {
 				for (const entry of this.validationMessages) {
-					if (!this.validationModel[entry.key]) {
+					const error = this.validationModel.$errors.find(
+						(e) => e.$validator === entry.key
+					);
+					if (error) {
 						return entry.message;
 					}
 				}

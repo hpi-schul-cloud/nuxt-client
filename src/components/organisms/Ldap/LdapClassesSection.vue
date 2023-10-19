@@ -26,7 +26,9 @@
 			:validation-model="v$.modelValue.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:modelValue="$emit('input', { ...modelValue, classPath: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, classPath: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
@@ -46,7 +48,7 @@
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:modelValue="
-				$emit('input', { ...modelValue, nameAttribute: $event })
+				$emit('update:modelValue', { ...modelValue, nameAttribute: $event })
 			"
 		>
 			<template #icon>
@@ -66,7 +68,10 @@
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:modelValue="
-				$emit('input', { ...modelValue, participantAttribute: $event })
+				$emit('update:modelValue', {
+					...modelValue,
+					participantAttribute: $event,
+				})
 			"
 		>
 			<template #icon>

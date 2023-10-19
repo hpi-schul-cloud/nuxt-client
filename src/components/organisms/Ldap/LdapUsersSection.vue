@@ -18,7 +18,9 @@
 			:validation-model="v$.modelValue.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
-			@update:modelValue="$emit('input', { ...modelValue, userPath: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, userPath: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
@@ -36,7 +38,9 @@
 			:validation-model="v$.modelValue.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
-			@update:modelValue="$emit('input', { ...modelValue, firstName: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, firstName: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -51,7 +55,9 @@
 			:validation-model="v$.modelValue.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
-			@update:modelValue="$emit('input', { ...modelValue, familyName: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, familyName: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
@@ -66,7 +72,9 @@
 			:validation-model="v$.modelValue.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
-			@update:modelValue="$emit('input', { ...modelValue, email: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, email: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiEmailOutline</v-icon>
@@ -82,7 +90,9 @@
 			:validation-model="v$.modelValue.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
-			@update:modelValue="$emit('input', { ...modelValue, uid: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, uid: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiCardAccountDetailsOutline</v-icon>
@@ -98,7 +108,9 @@
 			:validation-model="v$.modelValue.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
-			@update:modelValue="$emit('input', { ...modelValue, uuid: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, uuid: $event })
+			"
 		>
 			<template #icon>
 				<v-icon :color="fillColor">$mdiAccountBoxOutline</v-icon>
