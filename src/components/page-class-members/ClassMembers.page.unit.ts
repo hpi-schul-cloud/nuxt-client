@@ -4,20 +4,24 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import ClassMembersPage from "@/components/page-class-members/ClassMembers.page.vue";
-import { useGroupState } from "@data-group";
+import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import flushPromises from "flush-promises";
+import { groupFactory } from "@@/tests/test-utils/factory";
+import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
 
 jest.mock("@data-group");
 
-// TODO: write tests
 describe("@pages/ClassMembers.page.vue", () => {
 	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
 
-	const getWrapper = (propsData: { groupId: string }) => {
+	const getWrapper = (
+		propsData: { groupId: string },
+		group: Group = groupFactory.build()
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		useGroupStateMock.isLoading = ref(false);
+		useGroupStateMock.group = ref(group);
 
 		const wrapper = mount(ClassMembersPage as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
@@ -42,11 +46,60 @@ describe("@pages/ClassMembers.page.vue", () => {
 		jest.clearAllMocks();
 	});
 
+	describe("title", () => {
+		const setup = () => {
+			const group: Group = groupFactory.build();
+
+			const { wrapper } = getWrapper(
+				{
+					groupId: "groupId",
+				},
+				group
+			);
+
+			return {
+				wrapper,
+				group,
+			};
+		};
+
+		it("should render static title", () => {
+			const { wrapper, group } = setup();
+
+			const title = wrapper.find("h1");
+
+			expect(title.text()).toContain(`common.labels.class '${group.name}'`);
+		});
+
+		it("should show subtitle that group is from external system", () => {
+			const { wrapper } = setup();
+
+			const title = wrapper.find("h1");
+			const subtitle = title.find("span");
+
+			expect(subtitle.text()).toEqual("(page-class-members.title.info)");
+		});
+	});
+
 	describe("breadcrumbs", () => {
+		const setup = () => {
+			const group: Group = groupFactory.build();
+
+			const { wrapper } = getWrapper(
+				{
+					groupId: "groupId",
+				},
+				group
+			);
+
+			return {
+				wrapper,
+				group,
+			};
+		};
+
 		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper({
-				groupId: "groupId",
-			});
+			const { wrapper } = setup();
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
@@ -58,49 +111,95 @@ describe("@pages/ClassMembers.page.vue", () => {
 			);
 		});
 
-		it("should render dynamic breadcrumb", () => {
-			const { wrapper } = getWrapper({
-				groupId: "groupId",
-			});
+		it("should render dynamic class name breadcrumb", () => {
+			const { wrapper, group } = setup();
 
 			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(2);
 
-			expect(breadcrumb.text()).toBeDefined();
-		});
-	});
-
-	describe("title", () => {
-		it("should render title", () => {
-			const { wrapper } = getWrapper({
-				groupId: "groupId",
-			});
-
-			// TODO: adjust
-			expect(wrapper.find("h3").exists()).toBeTruthy();
+			expect(breadcrumb.text()).toEqual(`common.labels.class '${group.name}'`);
 		});
 	});
 
 	describe("onMounted", () => {
 		it("should load the group for given groupId", async () => {
-			const { wrapper } = getWrapper({
+			getWrapper({
 				groupId: "groupId",
 			});
 
-			flushPromises();
-
-			// TODO: adjust
+			expect(useGroupStateMock.fetchGroup).toHaveBeenCalledWith("groupId");
 		});
 	});
 
 	describe("datatable", () => {
+		const setup = () => {
+			const group = groupFactory.build();
+
+			const { wrapper } = getWrapper(
+				{
+					groupId: "groupId",
+				},
+				group
+			);
+
+			return {
+				wrapper,
+				group,
+			};
+		};
+
 		it("should render datatable", () => {
+			const { wrapper } = setup();
+
+			const datatable = wrapper.findComponent({ name: "v-data-table" });
+
+			expect(datatable.exists()).toBeTruthy();
+		});
+
+		it("should render datatable with correct headers", () => {
+			const { wrapper } = setup();
+
+			const datatable = wrapper.findComponent({ name: "v-data-table" });
+
+			expect(datatable.props("headers")).toEqual([
+				{
+					text: "common.labels.name",
+					value: "lastName",
+				},
+				{
+					text: "common.labels.firstName",
+					value: "firstName",
+				},
+				{
+					text: "common.labels.role",
+					value: "roleName",
+				},
+			]);
+		});
+
+		it("should render datatable with correct items", () => {
+			const { wrapper, group } = setup();
+
+			const datatable = wrapper.findComponent({ name: "v-data-table" });
+
+			expect(datatable.props("items")).toEqual([
+				{
+					firstName: group.users[0].firstName,
+					lastName: group.users[0].lastName,
+					roleName: "undefined",
+				},
+			]);
+		});
+	});
+
+	describe("ClassMembersInfoBox", () => {
+		it("should render ClassMembersInfoBox", () => {
 			const { wrapper } = getWrapper({
 				groupId: "groupId",
 			});
 
-			const datatable = wrapper.findComponent({ name: "DataTable" });
+			const infoBox = wrapper.findComponent(ClassMembersInfoBox);
 
-			expect(datatable.exists()).toBeTruthy();
+			expect(infoBox.exists()).toBeTruthy();
 		});
 	});
 });
