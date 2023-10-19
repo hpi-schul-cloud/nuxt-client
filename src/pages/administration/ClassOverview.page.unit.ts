@@ -8,9 +8,9 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { Pagination } from "@/store/types/commons";
-import setupStores from "../../../tests/test-utils/setupStores";
-import AuthModule from "../../store/auth";
-import { authModule } from "../../store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
+import { authModule } from "@/store";
 
 const $router = {
 	push: jest.fn(),
@@ -427,7 +427,7 @@ describe("ClassOverview", () => {
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
 
-				expect(dialog.exists()).toBeTruthy();
+				expect(dialog.props("value")).toBeTruthy();
 			});
 		});
 

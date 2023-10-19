@@ -23,39 +23,57 @@
 			@update:page="onUpdateCurrentPage"
 		>
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon
-					v-if="hasPermission && !item.externalSourceName"
-					size="small"
-					data-testid="class-table-manage-icon"
-					@click="manageClass(item)"
-				>
-					{{ mdiAccountGroupOutline }}
-				</v-icon>
-				<v-icon
-					v-if="hasPermission && !item.externalSourceName"
-					size="small"
-					data-testid="class-table-edit-icon"
-					@click="editItem(item)"
-				>
-					{{ mdiPencilOutline }}
-				</v-icon>
-				<v-icon
-					v-if="hasPermission && !item.externalSourceName"
-					size="small"
-					data-testid="class-table-delete-icon"
-					@click="onOpenDeleteDialog(item)"
-				>
-					{{ mdiTrashCanOutline }}
-				</v-icon>
-				<v-icon
-					v-if="hasPermission && !item.externalSourceName"
-					:disabled="!item.isUpgradable"
-					size="small"
-					data-testid="class-table-successor-icon"
-					@click="createSuccessor(item)"
-				>
-					{{ mdiArrowUp }}
-				</v-icon>
+				<template v-if="showClassAction(item)">
+					<v-btn
+						:aria-label="$t('pages.administration.classes.manage')"
+						data-testid="class-table-manage-icon"
+						outlined
+						color="secondary"
+						small
+						:href="`/administration/classes/${item.id}/manage`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:aria-label="$t('pages.administration.classes.edit')"
+						data-testid="class-table-edit-icon"
+						outlined
+						color="secondary"
+						small
+						:href="`/administration/classes/${item.id}/edit`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiPencilOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:aria-label="$t('pages.administration.classes.delete')"
+						data-testid="class-table-delete-icon"
+						outlined
+						color="secondary"
+						small
+						@click="onClickDeleteIcon(item)"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:disabled="!item.isUpgradable"
+						:aria-label="$t('pages.administration.classes.createSuccessor')"
+						data-testid="class-table-successor-icon"
+						outlined
+						color="secondary"
+						small
+						:href="`/administration/classes/${item.id}/createSuccessor`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiArrowUp }}</v-icon>
+					</v-btn>
+				</template>
 			</template>
 		</v-data-table>
 
@@ -82,12 +100,12 @@
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						depressed
 						text
-						@click="onCloseDeleteDialog"
+						@click="onCancelClassDeletion"
 					>
 						{{ t("common.actions.cancel") }}
 					</v-btn>
@@ -96,7 +114,7 @@
 						class="px-6"
 						color="primary"
 						depressed
-						@click="onDeleteClass"
+						@click="onConfirmClassDeletion"
 					>
 						{{ t("common.actions.confirm") }}
 					</v-btn>
@@ -130,18 +148,16 @@ import {
 import GroupModule from "@/store/group";
 import { useI18n } from "@/composables/i18n.composable";
 import { Pagination } from "@/store/types/commons";
-import { ClassInfo } from "@/store/types/class-info";
+import { ClassInfo, ClassRootType } from "@/store/types/class-info";
 import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { authModule } from "@/store";
 import {
+	mdiAccountGroupOutline,
+	mdiArrowUp,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-	mdiArrowUp,
-	mdiAccountGroupOutline,
 } from "@mdi/js";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML },
@@ -174,6 +190,9 @@ export default defineComponent({
 			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 		);
 
+		const showClassAction = (item: ClassInfo) =>
+			hasPermission.value && item.type === ClassRootType.Class;
+
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 		const selectedItem: Ref<ClassInfo | undefined> = ref();
@@ -182,12 +201,12 @@ export default defineComponent({
 			() => selectedItem.value?.name || "???"
 		);
 
-		const onOpenDeleteDialog = (selectedClass: ClassInfo) => {
+		const onClickDeleteIcon = (selectedClass: ClassInfo) => {
 			selectedItem.value = selectedClass;
 			isDeleteDialogOpen.value = true;
 		};
 
-		const onCloseDeleteDialog = () => {
+		const onCancelClassDeletion = () => {
 			selectedItem.value = undefined;
 			isDeleteDialogOpen.value = false;
 		};
@@ -225,32 +244,12 @@ export default defineComponent({
 			},
 		];
 
-		const router: VueRouter = useRouter();
-
-		const manageClass = async (item: ClassInfo) => {
-			await router.push({
-				path: `/administration/classes/${item.id}/manage`,
-			});
-		};
-
-		const editItem = async (item: ClassInfo) => {
-			await router.push({
-				path: `/administration/classes/${item.id}/edit`,
-			});
-		};
-
-		const onDeleteClass = async () => {
+		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
 				await groupModule.deleteClass(selectedItem.value.id);
 			}
 
-			onCloseDeleteDialog();
-		};
-
-		const createSuccessor = async (item: ClassInfo) => {
-			await router.push({
-				path: `/administration/classes/${item.id}/createSuccessor`,
-			});
+			onCancelClassDeletion();
 		};
 
 		const onUpdateSortBy = async (sortBy: string) => {
@@ -286,6 +285,7 @@ export default defineComponent({
 			headers,
 			classes,
 			hasPermission,
+			showClassAction,
 			page,
 			sortBy,
 			sortOrder,
@@ -293,12 +293,9 @@ export default defineComponent({
 			selectedItem,
 			selectedItemName,
 			isDeleteDialogOpen,
-			onOpenDeleteDialog,
-			onCloseDeleteDialog,
-			onDeleteClass,
-			manageClass,
-			editItem,
-			createSuccessor,
+			onClickDeleteIcon,
+			onCancelClassDeletion,
+			onConfirmClassDeletion,
 			onUpdateSortBy,
 			updateSortOrder,
 			onUpdateCurrentPage,

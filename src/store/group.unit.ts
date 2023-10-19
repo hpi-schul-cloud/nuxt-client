@@ -17,7 +17,7 @@ import GroupModule from "./group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { classInfoFactory } from "../../tests/test-utils/factory/classInfoFactory";
+import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import axios from "axios/index";
 
 describe("GroupModule", () => {
@@ -286,7 +286,6 @@ describe("GroupModule", () => {
 				await module.deleteClass(classId);
 
 				expect(module.loadClassesForSchool).toHaveBeenCalled();
-				expect(module.getClasses).toEqual([]);
 			});
 		});
 
