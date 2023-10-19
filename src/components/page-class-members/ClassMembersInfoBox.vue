@@ -1,46 +1,22 @@
 <template>
 	<div data-testid="class-members-info-box">
-		<v-alert v-show="hasSystem" light text type="info" class="mb-0">
+		<v-alert v-show="hasSystem" light prominent text type="info" class="mb-0">
 			<div class="alert-text">
-				{{ t("page-class-members.systemInfoText") }}
+				{{
+					t("page-class-members.systemInfoText", {
+						systemName,
+					})
+				}}
 			</div>
 		</v-alert>
 		<h2 class="text-h4">
-			Schüler:innen sind noch nicht in der Niedersächsischen Bildungscloud?
+			{{ t("page-class-members.classMembersInfoBox.title") }}
 		</h2>
-		<p>
-			Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss
-			nicht eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud
-			ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.
-		</p>
-		<p>
-			Falls die Schule die Daten der Nutzenden über ein externes System bezieht
-			bzw. übermittelt bekommt, sind keine weiteren Schritte in der Cloud
-			notwendig. Die Registrierung erfolgt über das externe System.
-		</p>
-		<p>
-			Anderenfalls können über den Verwaltungsbereich der Cloud Einladungen zur
-			Registrierung per Link versendet werden:
-		</p>
-		<ul>
-			<li>
-				Versand von Registrierungslinks an die hinterlegten E-Mail-Adressen
-				(auch direkt beim Importieren/Anlegen möglich)
-			</li>
-			<li>
-				Registrierungslinks als QR-Druckbogen drucken, ausschneiden und
-				QR-Zettel an Schüler:innen verteilen
-			</li>
-			<li>
-				Einen oder mehrere Nutzer:innen auswählen, z.B. alle Schüler:innen einer
-				Klasse, und dann die gewünschte Aktion durchführen
-			</li>
-			<li>
-				Alternativ möglich: Wechseln in den Bearbeiten-Modus des Nutzerprofils
-				und den individuellen Registrierungslink direkt abrufen, um ihn händisch
-				zu versenden
-			</li>
-		</ul>
+		<RenderHTML
+			:html="t('page-class-members.classMembersInfoBox.text')"
+			data-testid="class-members-info-box-text"
+			component="div"
+		/>
 	</div>
 </template>
 <script lang="ts">
@@ -55,8 +31,10 @@ import {
 	Ref,
 	watch,
 } from "vue";
+import { RenderHTML } from "@feature-render-html";
 
 export default defineComponent({
+	components: { RenderHTML },
 	props: {
 		systemId: {
 			type: String,

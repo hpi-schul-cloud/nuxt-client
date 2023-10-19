@@ -1,23 +1,23 @@
 import { mount, MountOptions } from "@vue/test-utils";
-import Vue from "vue";
+import Vue, { ref } from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import ClassMembersPage from "@/components/page-class-members/ClassMembers.page.vue";
+import { useGroupState } from "@data-group";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import flushPromises from "flush-promises";
 
+jest.mock("@data-group");
+
+// TODO: write tests
 describe("@pages/ClassMembers.page.vue", () => {
-	const routerPush = jest.fn();
-
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
 
 	const getWrapper = (propsData: { groupId: string }) => {
 		document.body.setAttribute("data-app", "true");
 
-		const $router = {
-			push: routerPush,
-		};
+		useGroupStateMock.isLoading = ref(false);
 
 		const wrapper = mount(ClassMembersPage as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
@@ -25,15 +25,22 @@ describe("@pages/ClassMembers.page.vue", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 			},
-			mocks: {
-				$router,
-			},
 		});
 
 		return {
 			wrapper,
 		};
 	};
+
+	beforeEach(() => {
+		useGroupStateMock = createMock<ReturnType<typeof useGroupState>>();
+
+		jest.mocked(useGroupState).mockReturnValue(useGroupStateMock);
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", () => {
@@ -51,15 +58,14 @@ describe("@pages/ClassMembers.page.vue", () => {
 			);
 		});
 
-		it("should render dynamic breadcrumbs", () => {
+		it("should render dynamic breadcrumb", () => {
 			const { wrapper } = getWrapper({
 				groupId: "groupId",
 			});
 
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
+			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(2);
 
-			// TODO: adjust
-			expect(breadcrumbs.at(2).text()).toBeDefined();
+			expect(breadcrumb.text()).toBeDefined();
 		});
 	});
 
@@ -80,7 +86,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 				groupId: "groupId",
 			});
 
-			await Vue.nextTick();
+			flushPromises();
 
 			// TODO: adjust
 		});

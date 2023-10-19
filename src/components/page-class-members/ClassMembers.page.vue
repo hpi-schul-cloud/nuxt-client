@@ -14,16 +14,14 @@
 			</h1>
 		</template>
 		<v-data-table
-			:disable-pagination="true"
-			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
 			:loading-text="t('common.loading.text')"
 			:no-data-text="t('common.nodata')"
 			data-testid="class-members-table"
-		></v-data-table>
-		<ClassMembersInfoBox class="mt-12" :system-id="externalSystemId" />
+		/>
+		<ClassMembersInfoBox class="mt-5" :system-id="externalSystemId" />
 	</DefaultWireframe>
 </template>
 
@@ -64,7 +62,7 @@ export default defineComponent({
 		);
 
 		const title: ComputedRef<string> = computed(
-			() => `${t("common.labels.class")} "${groupName.value}"`
+			() => `${t("common.labels.class")} '${groupName.value}'`
 		);
 
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
