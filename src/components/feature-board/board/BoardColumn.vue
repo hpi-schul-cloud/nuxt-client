@@ -11,7 +11,7 @@
 			@move:column-keyboard="onMoveColumnKeyboard"
 			@update:title="onUpdateTitle"
 			class="pl-2"
-		></BoardColumnHeader>
+		/>
 		<div class="scrollable-column">
 			<Container
 				group-name="cards"
@@ -42,7 +42,7 @@
 		<BoardAddCardButton
 			v-if="hasCreateColumnPermission && !isDragging"
 			@add-card="onCreateCard"
-		></BoardAddCardButton>
+		/>
 	</div>
 </template>
 

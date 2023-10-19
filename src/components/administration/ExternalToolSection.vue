@@ -66,7 +66,7 @@
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						class="dialog-closed"

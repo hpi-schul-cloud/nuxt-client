@@ -19,14 +19,13 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
-				></BoardAnyTitleInput>
+				/>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionDelete @click="onDelete" :name="title">
-					</BoardMenuActionDelete>
+					<BoardMenuActionDelete @click="onDelete" :name="title" />
 				</BoardMenu>
 			</div>
-			<VDivider aria-hidden="true" color="black"></VDivider>
+			<VDivider aria-hidden="true" color="black" />
 		</div>
 	</BoardColumnInteractionHandler>
 </template>

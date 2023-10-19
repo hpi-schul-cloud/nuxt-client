@@ -6,7 +6,7 @@
 				v-model="inputValues[index]"
 			/>
 		</div>
-		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
+		<v-progress-linear :active="loading" indeterminate />
 	</div>
 </template>
 

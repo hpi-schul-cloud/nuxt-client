@@ -11,7 +11,7 @@
 			v-else
 			v-model="modelValue"
 			class="px-4"
-			:disabled="!editable"
+			:disabled="isOverdue"
 			:label="t('components.cardElement.submissionElement.completed')"
 		/>
 	</div>
@@ -20,17 +20,17 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { StudentSubmission } from "../types/submission";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",
 	props: {
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},
-		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+		studentSubmission: {
+			type: Object as PropType<StudentSubmission>,
 			required: true,
 		},
 		loading: {
@@ -42,13 +42,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const modelValue = computed({
 			get() {
-				if (props.submissions.submissionItemsResponse.length === 0) {
-					return false;
-				}
-
-				const completionState =
-					props.submissions.submissionItemsResponse[0].completed;
-				return completionState;
+				return props.studentSubmission.completed;
 			},
 			set(newValue) {
 				emit("update:completed", newValue);

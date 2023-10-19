@@ -21,6 +21,7 @@ module.exports = defineConfig({
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
+				"@data-external-tool": getDir("src/components/data-external-tool"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -42,6 +43,7 @@ module.exports = defineConfig({
 				),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"

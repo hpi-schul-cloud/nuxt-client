@@ -1,7 +1,7 @@
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
 	isMongoId,
