@@ -108,8 +108,13 @@ export default class GroupModule extends VuexModule {
 	async deleteClass(classId: string): Promise<void> {
 		this.setLoading(true);
 		try {
+			const classes = this.getClasses;
 			await $axios.delete(`/v1/classes/${classId}`);
-			await this.loadClassesForSchool();
+
+			const filteredClasses = classes.filter(
+				(clazz: ClassInfo) => clazz.id !== classId
+			);
+			this.setClasses(filteredClasses);
 		} catch (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 

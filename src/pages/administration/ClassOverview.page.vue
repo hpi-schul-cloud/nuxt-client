@@ -26,7 +26,7 @@
 				<template v-if="showClassAction(item)">
 					<v-btn
 						:aria-label="$t('pages.administration.classes.manage')"
-						data-testid="class-table-manage-icon"
+						data-testid="class-table-manage-btn"
 						outlined
 						color="secondary"
 						small
@@ -38,7 +38,7 @@
 					</v-btn>
 					<v-btn
 						:aria-label="$t('pages.administration.classes.edit')"
-						data-testid="class-table-edit-icon"
+						data-testid="class-table-edit-btn"
 						outlined
 						color="secondary"
 						small
@@ -50,7 +50,7 @@
 					</v-btn>
 					<v-btn
 						:aria-label="$t('pages.administration.classes.delete')"
-						data-testid="class-table-delete-icon"
+						data-testid="class-table-delete-btn"
 						outlined
 						color="secondary"
 						small
@@ -63,7 +63,7 @@
 					<v-btn
 						:disabled="!item.isUpgradable"
 						:aria-label="$t('pages.administration.classes.createSuccessor')"
-						data-testid="class-table-successor-icon"
+						data-testid="class-table-successor-btn"
 						outlined
 						color="secondary"
 						small
@@ -77,50 +77,30 @@
 			</template>
 		</v-data-table>
 
-		<v-dialog
+		<v-custom-dialog
 			v-model="isDeleteDialogOpen"
 			max-width="360"
 			data-testId="delete-dialog"
+			has-buttons
+			:buttons="['cancel', 'confirm']"
+			@dialog-canceled="onCancelClassDeletion"
+			@dialog-confirmed="onConfirmClassDeletion"
 		>
-			<v-card :ripple="false">
-				<v-card-title>
-					<h2 class="text-h4 my-2">
-						{{ t("pages.administration.classes.deleteDialog.title") }}
-					</h2>
-				</v-card-title>
-				<v-card-text class="text--primary">
-					<RenderHTML
-						class="text-md mt-2"
-						:html="
-							t('pages.administration.classes.deleteDialog.content', {
-								itemName: selectedItemName,
-							})
-						"
-						component="p"
-					/>
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer />
-					<v-btn
-						data-testId="dialog-cancel"
-						depressed
-						text
-						@click="onCancelClassDeletion"
-					>
-						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn
-						data-testId="dialog-confirm"
-						class="px-6"
-						color="primary"
-						depressed
-						@click="onConfirmClassDeletion"
-					>
-						{{ t("common.actions.confirm") }}
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ t("pages.administration.classes.deleteDialog.title") }}
+			</h2>
+			<template #content>
+				<RenderHTML
+					class="text-md mt-2"
+					:html="
+						t('pages.administration.classes.deleteDialog.content', {
+							itemName: selectedItemName,
+						})
+					"
+					component="p"
+				/>
+			</template>
+		</v-custom-dialog>
 
 		<v-btn
 			class="my-5 button-start"
@@ -149,20 +129,26 @@ import GroupModule from "@/store/group";
 import { useI18n } from "@/composables/i18n.composable";
 import { Pagination } from "@/store/types/commons";
 import { ClassInfo, ClassRootType } from "@/store/types/class-info";
-import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	GROUP_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { authModule } from "@/store";
 import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
+import AuthModule from "../../store/auth";
+import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
-	components: { DefaultWireframe, RenderHTML },
+	components: { DefaultWireframe, RenderHTML, VCustomDialog },
 	setup() {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const { t } = useI18n();
 
@@ -273,9 +259,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			(async () => {
-				await groupModule.loadClassesForSchool();
-			})();
+			groupModule.loadClassesForSchool();
 		});
 
 		return {

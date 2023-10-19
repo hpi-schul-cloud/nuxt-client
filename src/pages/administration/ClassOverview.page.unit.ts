@@ -11,10 +11,7 @@ import { Pagination } from "@/store/types/commons";
 import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import { authModule } from "@/store";
-
-const $router = {
-	push: jest.fn(),
-};
+import { ClassRootType } from "../../store/types/class-info";
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
@@ -25,6 +22,7 @@ describe("ClassOverview", () => {
 				classInfoFactory.build(),
 				classInfoFactory.build({
 					externalSourceName: "",
+					type: ClassRootType.Class,
 					isUpgradable: true,
 				}),
 			],
@@ -44,7 +42,6 @@ describe("ClassOverview", () => {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 			},
-			mocks: { $router },
 		});
 
 		return {
@@ -54,7 +51,6 @@ describe("ClassOverview", () => {
 	};
 
 	beforeEach(() => {
-		$router.push.mockReset();
 		setupStores({
 			authModule: AuthModule,
 		});
@@ -225,7 +221,7 @@ describe("ClassOverview", () => {
 	});
 
 	describe("action icons", () => {
-		describe("when classes are available", () => {
+		describe("when legacy classes are available", () => {
 			const setup = () => {
 				authModule.addUserPermmission("CLASS_EDIT");
 
@@ -314,13 +310,13 @@ describe("ClassOverview", () => {
 			it("should redirect to legacy class manage page", async () => {
 				const { wrapper, classId } = setup();
 
-				await wrapper
-					.find('[data-testid="class-table-manage-icon"]')
-					.trigger("click");
+				const manageBtn = wrapper.find(
+					'[data-testid="class-table-manage-btn"]'
+				);
 
-				expect($router.push).toHaveBeenCalledWith({
-					path: `/administration/classes/${classId}/manage`,
-				});
+				expect(manageBtn.attributes().href).toStrictEqual(
+					`/administration/classes/${classId}/manage`
+				);
 			});
 		});
 
@@ -341,13 +337,11 @@ describe("ClassOverview", () => {
 			it("should redirect to legacy class edit page", async () => {
 				const { wrapper, classId } = setup();
 
-				await wrapper
-					.find('[data-testid="class-table-edit-icon"]')
-					.trigger("click");
+				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				expect($router.push).toHaveBeenCalledWith({
-					path: `/administration/classes/${classId}/edit`,
-				});
+				expect(editBtn.attributes().href).toStrictEqual(
+					`/administration/classes/${classId}/edit`
+				);
 			});
 		});
 
@@ -369,13 +363,13 @@ describe("ClassOverview", () => {
 				it("should redirect to legacy class upgrade page", async () => {
 					const { wrapper, classId } = setup();
 
-					await wrapper
-						.find('[data-testid="class-table-successor-icon"]')
-						.trigger("click");
+					const successorBtn = wrapper.find(
+						'[data-testid="class-table-successor-btn"]'
+					);
 
-					expect($router.push).toHaveBeenCalledWith({
-						path: `/administration/classes/${classId}/createSuccessor`,
-					});
+					expect(successorBtn.attributes().href).toStrictEqual(
+						`/administration/classes/${classId}/createSuccessor`
+					);
 				});
 			});
 		});
@@ -388,6 +382,7 @@ describe("ClassOverview", () => {
 					getClasses: [
 						classInfoFactory.build({
 							externalSourceName: undefined,
+							type: ClassRootType.Class,
 							isUpgradable: false,
 						}),
 					],
@@ -398,12 +393,14 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should display the upgrade icon as disabled", () => {
+			it("should display the upgrade button as disabled", () => {
 				const { wrapper } = setup();
 
-				const icon = wrapper.find('[data-testid="class-table-successor-icon"]');
+				const successorBtn = wrapper.find(
+					'[data-testid="class-table-successor-btn"]'
+				);
 
-				expect(icon.attributes().disabled).toBe("disabled");
+				expect(successorBtn.attributes().disabled).toBe("disabled");
 			});
 		});
 
@@ -422,7 +419,7 @@ describe("ClassOverview", () => {
 				const { wrapper } = setup();
 
 				await wrapper
-					.find('[data-testid="class-table-delete-icon"]')
+					.find('[data-testid="class-table-delete-btn"]')
 					.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -448,7 +445,7 @@ describe("ClassOverview", () => {
 					const { wrapper, groupModule } = setup();
 
 					await wrapper
-						.find('[data-testid="class-table-delete-icon"]')
+						.find('[data-testid="class-table-delete-btn"]')
 						.trigger("click");
 
 					const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -464,7 +461,7 @@ describe("ClassOverview", () => {
 					const { wrapper, groupModule } = setup();
 
 					await wrapper
-						.find('[data-testid="class-table-delete-icon"]')
+						.find('[data-testid="class-table-delete-btn"]')
 						.trigger("click");
 
 					const dialog = wrapper.find('[data-testid="delete-dialog"]');
