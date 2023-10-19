@@ -13,7 +13,7 @@
 			<v-card-text class="text--primary">
 				<slot name="content"></slot>
 			</v-card-text>
-			<v-card-actions v-if="hasButtons">
+			<v-card-actions v-if="hasButtons" class="pe-6">
 				<v-spacer></v-spacer>
 
 				<div class="button-section button-left">
@@ -54,7 +54,11 @@
 						depressed
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
-						>{{ $t(confirmBtnTitleKey) }}
+					>
+						<v-icon v-if="confirmBtnIcon" dense class="mr-1">
+							{{ confirmBtnIcon }}
+						</v-icon>
+						{{ $t(confirmBtnTitleKey) }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
@@ -101,6 +105,9 @@ export default {
 		confirmBtnTitleKey: {
 			type: String,
 			default: "common.actions.confirm",
+		},
+		confirmBtnIcon: {
+			type: String,
 		},
 		confirmBtnDisabled: {
 			type: Boolean,
