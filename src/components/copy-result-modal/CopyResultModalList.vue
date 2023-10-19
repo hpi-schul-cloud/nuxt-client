@@ -4,7 +4,7 @@
 			v-for="(item, index) in items"
 			:key="index"
 			:item="item"
-		></copy-result-modal-list-item>
+		/>
 	</div>
 </template>
 

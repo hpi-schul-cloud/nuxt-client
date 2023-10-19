@@ -138,8 +138,7 @@
 						name="switch"
 						label=""
 						data-testid="check-confirm"
-					>
-					</base-input>
+					/>
 					<label @click="check = !check">
 						<i18n
 							path="pages.administration.students.consent.steps.register.confirm"
@@ -236,7 +235,7 @@
 			</section>
 
 			<base-modal :active.sync="cancelWarning">
-				<template #header></template>
+				<template #header />
 				<template #body>
 					<modal-body-info
 						:title="

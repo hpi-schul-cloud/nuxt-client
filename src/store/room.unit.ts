@@ -88,9 +88,8 @@ describe("room module", () => {
 				it("should return a course", async () => {
 					const { roomModule, course } = setup();
 
-					const result: Course | null = await roomModule.fetchCourse(
-						"courseId"
-					);
+					const result: Course | null =
+						await roomModule.fetchCourse("courseId");
 
 					expect(result).toEqual(course);
 				});
@@ -121,9 +120,8 @@ describe("room module", () => {
 				it("should return null", async () => {
 					const { roomModule } = setup();
 
-					const result: Course | null = await roomModule.fetchCourse(
-						"courseId"
-					);
+					const result: Course | null =
+						await roomModule.fetchCourse("courseId");
 
 					expect(result).toBeNull();
 				});
