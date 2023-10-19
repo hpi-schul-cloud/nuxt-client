@@ -16,8 +16,7 @@
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
-		>
-		</external-tool-configurator>
+		/>
 	</default-wireframe>
 </template>
 

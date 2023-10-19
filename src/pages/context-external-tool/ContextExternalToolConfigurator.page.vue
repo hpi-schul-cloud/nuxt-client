@@ -25,20 +25,28 @@
 					persistent-hint
 					validate-on-blur
 					data-testId="parameter-display-name"
-				></v-text-field>
+				/>
 			</template>
 		</external-tool-configurator>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { ToolContextType } from "@/serverApi/v3";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import EnvConfigModule from "@/store/env-config";
+import { ContextExternalToolConfigurationTemplate } from "@/store/external-tool";
 import {
-	ContextExternalToolConfigurationTemplate,
-	ToolContextType,
-} from "@/store/external-tool";
+	ContextExternalTool,
+	ContextExternalToolSave,
+} from "@/store/external-tool/context-external-tool";
+import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
+import NotifierModule from "@/store/notifier";
+import RoomModule from "@/store/room";
 import { BusinessError } from "@/store/types/commons";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -47,6 +55,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import {
 	computed,
 	ComputedRef,
@@ -58,17 +67,6 @@ import {
 } from "vue";
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
-import NotifierModule from "@/store/notifier";
-import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
-import { useI18n } from "@/composables/i18n.composable";
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import RoomModule from "@/store/room";
-import {
-	ContextExternalTool,
-	ContextExternalToolSave,
-} from "@/store/external-tool/context-external-tool";
-import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	components: {

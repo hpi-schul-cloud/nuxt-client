@@ -193,7 +193,7 @@ export default {
 			const getElementInfo = async (element) => {
 				let url = element.url;
 				if (element.merlinReference) {
-					const requestUrl = `/v1/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`;
+					const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${element.merlinReference}`;
 					url = (await this.$axios.get(requestUrl)).data || element.url;
 				}
 				return {

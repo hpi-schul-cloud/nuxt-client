@@ -224,7 +224,7 @@ export default {
 		convertDataUrlToFile(dataURL, fileName) {
 			const dataUrlParts = dataURL.split(",");
 			const mimeType = (dataUrlParts[0].match(/^data:(.*?);/) || [])[1];
-			const binaryString = atob(dataUrlParts[1]);
+			const binaryString = window.atob(dataUrlParts[1]);
 			let binaryStringLength = binaryString.length;
 			const uint8Array = new Uint8Array(binaryStringLength);
 			while (binaryStringLength--) {

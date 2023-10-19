@@ -44,7 +44,7 @@
 								)
 							}}
 						</th>
-						<th class="text-left"></th>
+						<th class="text-left" />
 					</tr>
 				</thead>
 				<tbody>

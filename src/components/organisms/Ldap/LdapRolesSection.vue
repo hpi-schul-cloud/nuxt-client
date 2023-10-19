@@ -19,8 +19,7 @@
 				style="margin-right: var(--space-sm)"
 				value="group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
-			>
-			</base-input>
+			/>
 			<base-input
 				:vmodel="groupOption"
 				type="radio"
@@ -30,8 +29,7 @@
 				name="group"
 				value="user_attribute"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
-			>
-			</base-input>
+			/>
 			<p class="text-sm" style="margin-top: var(--space-xs)">
 				{{ $t("pages.administration.ldapEdit.roles.labels.radio.description") }}
 			</p>

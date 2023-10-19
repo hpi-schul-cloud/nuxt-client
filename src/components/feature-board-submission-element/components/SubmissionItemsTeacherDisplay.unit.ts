@@ -1,24 +1,22 @@
-import Vue from "vue";
+import Vue, { nextTick } from "vue";
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
-
-const mockedSubmissions = submissionsResponseFactory.build();
+import { i18nMock } from "@@/tests/test-utils";
 
 describe("SubmissionItemsTeacherDisplay", () => {
 	const setup = (
+		submissions = [{ firstName: "Max", lastName: "Meyer", status: "open" }],
 		loading = false,
-		submissions = mockedSubmissions,
-		editable = true
+		isOverdue = false
 	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
-			editable: editable,
-			loading: loading,
-			submissions: submissions,
+			isOverdue,
+			loading,
+			submissions,
 		};
 
 		const wrapper = mount(SubmissionItemsTeacherDisplay as MountOptions<Vue>, {
@@ -43,16 +41,22 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("while loading", () => {
 		it("should show loading skeleton", () => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+			];
 			const loading = true;
-			const { wrapper } = setup(loading);
+			const { wrapper } = setup(submissions, loading);
 
 			const skeleton = wrapper.findComponent({ name: "v-skeleton-loader" });
 			expect(skeleton.exists()).toBe(true);
 		});
 
 		it("should not show submissionItems", () => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+			];
 			const loading = true;
-			const { wrapper } = setup(loading);
+			const { wrapper } = setup(submissions, loading);
 
 			const submissionItems = wrapper.findComponent({
 				name: "v-expansion-panels",
@@ -63,16 +67,14 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 	describe("after loading", () => {
 		it("should not show loading skeleton", () => {
-			const loading = false;
-			const { wrapper } = setup(loading);
+			const { wrapper } = setup();
 
 			const skeleton = wrapper.findComponent({ name: "v-skeleton-loader" });
 			expect(skeleton.exists()).toBe(false);
 		});
 
 		it("should show submissionItems", () => {
-			const loading = false;
-			const { wrapper } = setup(loading);
+			const { wrapper } = setup();
 
 			const submissionItems = wrapper.findComponent({
 				name: "v-expansion-panels",
@@ -80,19 +82,18 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			expect(submissionItems.exists()).toBe(true);
 		});
 
+		it("should show filter chips", () => {
+			const { wrapper } = setup();
+
+			const chips = wrapper.findAllComponents({ name: "v-chip" });
+			expect(chips).toHaveLength(2);
+		});
+
 		it("should show one submissionItem per student", async () => {
-			const loading = false;
-			const numbersOfStudents = 10;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: numbersOfStudents,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+			];
+			const { wrapper } = setup(submissions);
 
 			const panelHeader = wrapper.findComponent({
 				name: "v-expansion-panel-header",
@@ -101,220 +102,123 @@ describe("SubmissionItemsTeacherDisplay", () => {
 
 			await panelHeader.trigger("click");
 
-			const submissionItems = wrapper.findAll(
-				'[data-testid="submission-item"]'
-			);
+			const tableContent = wrapper.find("tbody");
+			expect(tableContent.exists()).toBe(true);
 
-			expect(submissionItems).toHaveLength(numbersOfStudents);
+			const submissionItems = tableContent.findAll("tr");
+
+			expect(submissionItems).toHaveLength(1);
 		});
 	});
 
 	describe("if dueDate has not expired yet", () => {
-		it("should show no expired-chip", () => {
-			const loading = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
+		let wrapper: Wrapper<Vue>;
 
+		beforeAll(() => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+			];
+			wrapper = setup(submissions).wrapper;
+		});
+
+		it("should not show expired-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
 			});
 			expect(chip.exists()).toBe(false);
 		});
 
-		it("should show open-chip if there are open submissionItems", () => {
-			const loading = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
-
+		it("should show open-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
 			});
 			expect(chip.exists()).toBe(true);
 		});
 
-		it("should show no open-chip if there are no open submissionItems", () => {
-			const loading = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: true,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
-
-			const chip = wrapper.findComponent({
-				ref: "v-chip-open",
-			});
-			expect(chip.exists()).toBe(false);
-		});
-
-		it("should show completed-chip if there are completed submissionItems", () => {
-			const loading = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: true,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
-
+		it("should show completed-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
 			expect(chip.exists()).toBe(true);
-		});
-
-		it("should show no completed-chip if there are no completed submissionItems", () => {
-			const loading = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions);
-
-			const chip = wrapper.findComponent({
-				ref: "v-chip-completed",
-			});
-			expect(chip.exists()).toBe(false);
 		});
 	});
 
 	describe("if dueDate has expired", () => {
-		it("should show no open-chip", () => {
-			const loading = false;
-			const editable = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions, editable);
+		let wrapper: Wrapper<Vue>;
 
+		beforeAll(() => {
+			const loading = false;
+			const isOverdue = true;
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "expired" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+			];
+			wrapper = setup(submissions, loading, isOverdue).wrapper;
+		});
+
+		it("should not show open-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
 			});
 			expect(chip.exists()).toBe(false);
 		});
 
-		it("should show expired-chip if there are expired submissionItems", () => {
-			const loading = false;
-			const editable = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions, editable);
-
+		it("should show expired-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
 			});
 			expect(chip.exists()).toBe(true);
 		});
 
-		it("should show no expired-chip if there are no expired submissionItems", () => {
-			const loading = false;
-			const editable = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: true,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions, editable);
-
-			const chip = wrapper.findComponent({
-				ref: "v-chip-expired",
-			});
-			expect(chip.exists()).toBe(false);
-		});
-
-		it("should show completed-chip if there are completed submissionItems", () => {
-			const loading = false;
-			const editable = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: true,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions, editable);
-
+		it("should show completed-chip", () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
 			expect(chip.exists()).toBe(true);
 		});
+	});
 
-		it("should show no completed-chip if there are no completed submissionItems", () => {
-			const loading = false;
-			const editable = false;
-			const submissions = submissionsResponseFactory.build(
-				{},
-				{
-					transient: {
-						numberOfSubmissionItems: 1,
-						numberOfUsers: 1,
-						completed: false,
-					},
-				}
-			);
-			const { wrapper } = setup(loading, submissions, editable);
+	describe("when a filter is clicked", () => {
+		let wrapper: Wrapper<Vue>;
 
+		beforeAll(() => {
+			const submissions = [
+				{ firstName: "Max", lastName: "Meyer", status: "open" },
+				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
+			];
+			wrapper = setup(submissions).wrapper;
+		});
+
+		it("should expand panel", async () => {
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
-			expect(chip.exists()).toBe(false);
+			expect(chip.exists()).toBe(true);
+
+			const panel = wrapper.findComponent({ name: "v-expansion-panel" });
+			expect(panel.classes()).toEqual(["v-expansion-panel"]);
+
+			await chip.trigger("click");
+			await nextTick();
+
+			expect(panel.classes()).toContain("v-expansion-panel--active");
+		});
+
+		it("should only show filtered submissions", async () => {
+			const chip = wrapper.findComponent({
+				ref: "v-chip-open",
+			});
+			expect(chip.exists()).toBe(true);
+
+			await chip.trigger("click");
+			await nextTick();
+
+			const tableContent = wrapper.find(".v-expansion-panel-content");
+			expect(tableContent.exists()).toBe(true);
+
+			const submissionItems = tableContent.findAll("tbody > tr");
+			expect(submissionItems).toHaveLength(1);
 		});
 	});
 });
