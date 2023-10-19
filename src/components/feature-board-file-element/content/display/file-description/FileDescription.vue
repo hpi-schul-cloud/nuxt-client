@@ -6,7 +6,10 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<ContentElementTitle>{{ name }}</ContentElementTitle>
+				<ContentElementTitle v-if="src">
+					<a :href="src" target="_blank">{{ name }}</a>
+				</ContentElementTitle>
+				<ContentElementTitle v-else>{{ name }}</ContentElementTitle>
 			</template>
 
 			<template #menu>
@@ -36,6 +39,7 @@ export default defineComponent({
 		caption: { type: String, required: false },
 		showTitle: { type: Boolean, required: true },
 		isEditMode: { type: Boolean, required: true },
+		src: { type: String, required: false },
 	},
 	setup() {
 		return {
@@ -45,3 +49,14 @@ export default defineComponent({
 	components: { ContentElementBar, ContentElementTitle },
 });
 </script>
+<style scope>
+a {
+	text-decoration: none;
+}
+a:visited {
+	color: inherit;
+}
+a:hover {
+	text-decoration: underline;
+}
+</style>
