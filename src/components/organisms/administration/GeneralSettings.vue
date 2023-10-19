@@ -1,7 +1,7 @@
 <template>
 	<v-form>
 		<v-overlay :value="loading" :absolute="true">
-			<v-progress-circular color="primary" indeterminate></v-progress-circular>
+			<v-progress-circular color="primary" indeterminate />
 		</v-overlay>
 		<v-row>
 			<v-col>
@@ -17,7 +17,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
-				></v-text-field>
+				/>
 			</v-col>
 		</v-row>
 		<v-row class="mb-2">
@@ -40,7 +40,7 @@
 					"
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
-				></v-text-field>
+				/>
 			</v-col>
 		</v-row>
 		<v-row class="mb-2">
@@ -65,7 +65,7 @@
 						)
 					"
 					persistent-hint
-				></v-select>
+				/>
 			</v-col>
 		</v-row>
 		<v-row>
@@ -81,7 +81,7 @@
 					dense
 					prepend-icon=""
 					prepend-inner-icon="$file"
-				></v-file-input>
+				/>
 			</v-col>
 		</v-row>
 		<v-row class="mb-2">
@@ -100,7 +100,7 @@
 						$t('pages.administration.school.index.generalSettings.timezoneHint')
 					"
 					persistent-hint
-				></v-text-field>
+				/>
 			</v-col>
 		</v-row>
 		<v-row class="mb-8">
@@ -134,7 +134,7 @@
 			:features="localSchool.features || {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
-		></privacy-settings>
+		/>
 		<v-btn
 			class="mt-6 my-4 button-save float-right"
 			data-testid="save-general-setting"

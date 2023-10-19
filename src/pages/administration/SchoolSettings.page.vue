@@ -24,7 +24,7 @@
 				</div>
 			</v-alert>
 			<template>
-				<v-divider></v-divider>
+				<v-divider />
 				<v-expansion-panels
 					hover
 					accordion
@@ -50,7 +50,7 @@
 						<v-expansion-panel-content eager>
 							<general-settings class="mt-9" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 
 					<v-expansion-panel
@@ -73,7 +73,7 @@
 						<v-expansion-panel-content eager>
 							<school-policy class="mt-9" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 
 					<v-expansion-panel
@@ -96,7 +96,7 @@
 						<v-expansion-panel-content eager>
 							<school-terms-of-use class="mt-9" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 
 					<v-expansion-panel
@@ -121,7 +121,7 @@
 						<v-expansion-panel-content eager>
 							<admin-migration-section class="mt-9" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 
 					<v-expansion-panel data-testid="systems-panel">
@@ -148,7 +148,7 @@
 							</template>
 							<auth-systems class="mt-9" v-else :systems="systems" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 
 					<v-expansion-panel data-testid="tools-panel">
@@ -170,7 +170,7 @@
 						<v-expansion-panel-content eager>
 							<external-tools-section class="mt-9" />
 						</v-expansion-panel-content>
-						<v-divider></v-divider>
+						<v-divider />
 					</v-expansion-panel>
 				</v-expansion-panels>
 			</template>
