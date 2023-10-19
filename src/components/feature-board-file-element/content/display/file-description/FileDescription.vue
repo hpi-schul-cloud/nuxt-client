@@ -6,10 +6,10 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<ContentElementTitle v-if="src">
-					<a :href="src" target="_blank">{{ name }}</a>
+				<ContentElementTitle>
+					<a v-if="src" :href="src" target="_blank">{{ name }}</a>
+					<span v-else>{{ name }}</span>
 				</ContentElementTitle>
-				<ContentElementTitle v-else>{{ name }}</ContentElementTitle>
 			</template>
 
 			<template #menu>

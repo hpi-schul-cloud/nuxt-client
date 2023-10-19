@@ -23,7 +23,7 @@
 			:caption="fileProperties.element.content.caption"
 			:show-title="showTitle"
 			:is-edit-mode="isEditMode"
-			:src="pdfSrc"
+			:src="fileDescriptionSrc"
 		>
 			<slot></slot>
 		</FileDescription>
@@ -36,7 +36,7 @@ import { FileProperties } from "../../shared/types/file-properties";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { isVideoMimeType } from "@/utils/fileHelper";
+import { isPdfMimeType, isVideoMimeType } from "@/utils/fileHelper";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 
 export default defineComponent({
@@ -55,8 +55,8 @@ export default defineComponent({
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
-		const pdfSrc = computed(() => {
-			return props.fileProperties.mimeType === "application/pdf"
+		const fileDescriptionSrc = computed(() => {
+			return isPdfMimeType(props.fileProperties.mimeType)
 				? props.fileProperties.url
 				: undefined;
 		});
@@ -71,7 +71,7 @@ export default defineComponent({
 
 		return {
 			hasVideoMimeType,
-			pdfSrc,
+			fileDescriptionSrc,
 			showTitle,
 			onAddAlert,
 		};

@@ -80,3 +80,7 @@ export function isVideoMimeType(mimeType: string): boolean {
 		mimeType === "application/ogg"
 	);
 }
+
+export function isPdfMimeType(mimeType: string): boolean {
+	return mimeType === "application/pdf";
+}
