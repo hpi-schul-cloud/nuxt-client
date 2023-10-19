@@ -29,6 +29,7 @@
 		</v-autocomplete>
 		<h2
 			v-if="
+				displaySettingsTitle &&
 				selectedTemplate &&
 				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
 			"
@@ -75,10 +76,12 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { useI18n } from "@/composables/i18n.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
 } from "@/store/external-tool";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import {
 	computed,
@@ -91,9 +94,7 @@ import {
 	useSlots,
 	watch,
 } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
@@ -116,6 +117,10 @@ export default defineComponent({
 		},
 		loading: {
 			type: Boolean,
+		},
+		displaySettingsTitle: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	setup(props, { emit }) {
