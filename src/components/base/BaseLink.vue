@@ -139,7 +139,7 @@ export default {
 	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--v-gray-base);
+	border-bottom: 2px solid rgba(var(--v-theme-grey));
 
 	&:hover,
 	&:focus {

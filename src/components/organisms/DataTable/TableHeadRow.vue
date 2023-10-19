@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--v-secondary-base)"
+					style="color: rgba(var(--v-theme-secondary))"
 				/>
 			</div>
 		</th>
@@ -127,7 +127,7 @@
 								{{ $t("pages.administration.students.infobox.paragraph-3") }}
 								<br />
 								<br />
-								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
 								{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
