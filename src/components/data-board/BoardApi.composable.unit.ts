@@ -1,4 +1,7 @@
-import { ContentElementType } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+} from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { CardResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
@@ -187,7 +190,7 @@ describe("BoardApi.composable", () => {
 
 		it("should call elementControllerUpdateElement api with ExternalToolElement", async () => {
 			const { updateElementCall } = useBoardApi();
-			const payload = {
+			const payload: ExternalToolElementResponse = {
 				id: "external-tool-element-id",
 				type: ContentElementType.ExternalTool,
 				content: {

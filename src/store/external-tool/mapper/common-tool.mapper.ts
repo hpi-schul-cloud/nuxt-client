@@ -4,15 +4,15 @@ import {
 	CustomParameterResponseLocationEnum,
 	CustomParameterResponseScopeEnum,
 	CustomParameterResponseTypeEnum,
+	ToolConfigurationStatusResponse,
 	ToolLaunchRequestResponseMethodEnum,
-	ToolReferenceResponseStatusEnum,
 } from "@/serverApi/v3";
+import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { ToolConfigurationStatus } from "../tool-configuration-status.enum";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
 import { ToolParameterType } from "../tool-parameter.enum";
-import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 
 export const ToolParamLocationMapping: Record<
 	CustomParameterResponseLocationEnum,
@@ -50,12 +50,12 @@ export const ToolParamScopeMapping: Record<
 };
 
 export const ToolConfigurationStatusMapping: Record<
-	ToolReferenceResponseStatusEnum,
+	ToolConfigurationStatusResponse,
 	ToolConfigurationStatus
 > = {
-	[ToolReferenceResponseStatusEnum.Latest]: ToolConfigurationStatus.Latest,
-	[ToolReferenceResponseStatusEnum.Outdated]: ToolConfigurationStatus.Outdated,
-	[ToolReferenceResponseStatusEnum.Unknown]: ToolConfigurationStatus.Unknown,
+	[ToolConfigurationStatusResponse.Latest]: ToolConfigurationStatus.Latest,
+	[ToolConfigurationStatusResponse.Outdated]: ToolConfigurationStatus.Outdated,
+	[ToolConfigurationStatusResponse.Unknown]: ToolConfigurationStatus.Unknown,
 };
 
 export const ToolLaunchRequestMethodMapping: Record<
