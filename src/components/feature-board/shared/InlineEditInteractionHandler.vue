@@ -6,7 +6,7 @@
 			@dblclick.prevent.stop="onDoubleClick"
 			@keydown.escape="onKeydownEscape"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</OnClickOutside>
 </template>

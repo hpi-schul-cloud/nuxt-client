@@ -8,11 +8,9 @@
 			<template #title>
 				<ContentElementTitle>{{ name }}</ContentElementTitle>
 			</template>
-
 			<template #menu>
-				<slot></slot>
+				<slot />
 			</template>
-
 			<template #subtitle v-if="caption && !isEditMode">
 				{{ caption }}
 			</template>

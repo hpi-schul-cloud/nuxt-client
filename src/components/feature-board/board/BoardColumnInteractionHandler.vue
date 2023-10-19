@@ -10,7 +10,7 @@
 			@keydown.tab.capture="onKeydownTab"
 			@keydown.enter.capture="onKeydownEnter"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</InlineEditInteractionHandler>
 </template>

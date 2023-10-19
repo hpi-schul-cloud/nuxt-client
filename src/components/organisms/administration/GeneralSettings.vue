@@ -5,10 +5,7 @@
 		</h2>
 		<v-form>
 			<v-overlay :value="loading" :absolute="true">
-				<v-progress-circular
-					color="primary"
-					indeterminate
-				></v-progress-circular>
+				<v-progress-circular color="primary" indeterminate />
 			</v-overlay>
 			<v-row>
 				<v-col>
@@ -24,7 +21,7 @@
 						:readonly="!hasSchoolEditPermission"
 						:disabled="isSyncedSchool"
 						data-testid="school-name"
-					></v-text-field>
+					/>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -47,7 +44,7 @@
 						"
 						persistent-hint
 						:readonly="!hasSchoolEditPermission"
-					></v-text-field>
+					/>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -72,7 +69,7 @@
 							)
 						"
 						persistent-hint
-					></v-select>
+					/>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -87,7 +84,7 @@
 						v-model="logoFile"
 						dense
 						prepend-icon=""
-					></v-file-input>
+					/>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -108,7 +105,7 @@
 							)
 						"
 						persistent-hint
-					></v-text-field>
+					/>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -131,7 +128,7 @@
 							)
 						"
 						persistent-hint
-					></v-select>
+					/>
 				</v-col>
 			</v-row>
 			<privacy-settings
@@ -139,7 +136,7 @@
 				:features="localSchool.features || {}"
 				@update-privacy-settings="onUpdatePrivacySettings"
 				@update-feature-settings="onUpdateFeatureSettings"
-			></privacy-settings>
+			/>
 			<v-btn
 				class="my-5 button-save"
 				data-testid="save-general-setting"
@@ -228,7 +225,7 @@ export default {
 		convertDataUrlToFile(dataURL, fileName) {
 			const dataUrlParts = dataURL.split(",");
 			const mimeType = (dataUrlParts[0].match(/^data:(.*?);/) || [])[1];
-			const binaryString = atob(dataUrlParts[1]);
+			const binaryString = window.atob(dataUrlParts[1]);
 			let binaryStringLength = binaryString.length;
 			const uint8Array = new Uint8Array(binaryStringLength);
 			while (binaryStringLength--) {

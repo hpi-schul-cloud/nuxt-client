@@ -19,7 +19,7 @@
 						@input-changed="setSubstituteFilter"
 					/>
 				</div>
-				<div v-else class="substitute-filter-placeholder"></div>
+				<div v-else class="substitute-filter-placeholder" />
 				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width" grow>
 						<v-tab :href="tabOneHeader.route">
@@ -59,7 +59,7 @@
 				:disabled="isCourseFilterDisabled"
 				@selected-item="setCourseFilters"
 			/>
-			<div v-else class="course-filter-placeholder"></div>
+			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student
 				v-if="isStudent"
 				:empty-state="emptyState"
@@ -77,7 +77,7 @@
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
-		></copy-result-modal>
+		/>
 	</default-wireframe>
 </template>
 

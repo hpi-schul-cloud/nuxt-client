@@ -84,11 +84,11 @@ import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { computed, defineComponent, PropType } from "vue";
-import { LinkContentElement } from "@feature-board-link-element";
 import ContentElement from "./ContentElement.vue";
 
 export default defineComponent({

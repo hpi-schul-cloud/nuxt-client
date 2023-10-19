@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<div class="border"></div>
+		<div class="border" />
 		<default-modal-footer>
 			<template #right>
-				<slot name="right"></slot>
+				<slot name="right" />
 			</template>
 		</default-modal-footer>
 	</div>

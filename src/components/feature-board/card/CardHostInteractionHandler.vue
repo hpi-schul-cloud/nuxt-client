@@ -9,7 +9,7 @@
 			@keydown.up.down.left.right="onKeydownArrow"
 			@keydown.enter="onKeydownEnter"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</InlineEditInteractionHandler>
 </template>

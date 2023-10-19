@@ -18,6 +18,7 @@
 		"types": ["webpack-env", "jest"],
 		"paths": {
 			"@data-board": ["src/components/data-board"],
+			"@data-external-tool": ["src/components/data-external-tool"],
 			"@feature-board-file-element": [
 				"src/components/feature-board-file-element"
 			],
@@ -40,6 +41,8 @@
 			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
 			"@feature-editor": ["src/components/feature-editor"],
 			"@feature-render-html": ["src/components/feature-render-html"],
+
+			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@ui-light-box": ["src/components/ui-light-box"],
