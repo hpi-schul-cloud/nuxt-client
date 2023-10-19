@@ -13,7 +13,7 @@ import {
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useExternalToolElementDisplayState } from "@data-board-external-tool-element";
+import { useExternalToolElementDisplayState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -22,7 +22,7 @@ import Vue, { ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
 
 jest.mock("@data-board");
-jest.mock("@data-board-external-tool-element");
+jest.mock("@data-external-tool");
 jest.mock("@ui-confirmation-dialog");
 
 const EMPTY_TEST_ELEMENT: ExternalToolElementResponse = {

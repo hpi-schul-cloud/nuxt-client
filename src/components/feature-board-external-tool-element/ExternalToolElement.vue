@@ -59,7 +59,7 @@ import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useExternalToolElementDisplayState } from "@data-board-external-tool-element";
+import { useExternalToolElementDisplayState } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
 import {
 	computed,

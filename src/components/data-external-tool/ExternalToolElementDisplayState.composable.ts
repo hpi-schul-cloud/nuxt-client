@@ -1,7 +1,7 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ExternalToolDisplayData } from "@/store/external-tool";
-import { useContextExternalToolApi } from "@data-external-tool";
 import { ref, Ref } from "vue";
+import { ExternalToolDisplayData } from "../../store/external-tool";
+import { useErrorHandler } from "../error-handling/ErrorHandler.composable";
+import { useContextExternalToolApi } from "./index";
 
 export const useExternalToolElementDisplayState = () => {
 	const { handleError } = useErrorHandler();

@@ -22,9 +22,6 @@ module.exports = defineConfig({
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
 				"@data-external-tool": getDir("src/components/data-external-tool"),
-				"@data-board-external-tool-element": getDir(
-					"src/components/data-board-external-tool-element"
-				),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
