@@ -23,7 +23,7 @@
 			:src="fileProperties.url"
 			@error="onAddAlert"
 		>
-			<slot></slot>
+			<slot />
 		</AudioDisplay>
 		<FileDescription
 			:name="fileProperties.name"

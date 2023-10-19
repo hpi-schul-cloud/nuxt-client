@@ -10,7 +10,7 @@
 				class="audio mr-2"
 			/>
 		</template>
-		<template #menu><slot></slot></template>
+		<template #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
