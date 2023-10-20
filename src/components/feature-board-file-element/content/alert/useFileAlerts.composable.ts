@@ -33,7 +33,6 @@ export const useFileAlerts = (
 function mapPreviewStatusToFileAlert(
 	previewStatus?: PreviewStatus
 ): FileAlert | undefined {
-	console.log(previewStatus);
 	if (previewStatus === PreviewStatus.AWAITING_SCAN_STATUS)
 		return FileAlert.AWAITING_SCAN_STATUS;
 	if (previewStatus === PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED)
