@@ -10,6 +10,7 @@ import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { basename } from "path";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -69,7 +70,7 @@ export const useFileStorageApi = (
 	const uploadFromUrl = async (imageUrl: string): Promise<void> => {
 		try {
 			const imageUrlObject = new URL(imageUrl);
-			const fileName = imageUrlObject.pathname.replace(/^.*?([^/]+)\/?$/, "$1");
+			const fileName = basename(imageUrlObject.pathname) ?? "no-file-name";
 			const schoolId = authModule.getUser?.schoolId as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
