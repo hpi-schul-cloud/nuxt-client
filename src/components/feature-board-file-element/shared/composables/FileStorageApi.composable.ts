@@ -74,7 +74,7 @@ export const useFileStorageApi = (
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName,
-				headers: `User-Agent: Embed Request User Agent Schulcloud Verbund Software`,
+				headers: `User-Agent: Embed Request User Agent`,
 			};
 			const response = await fileApi.uploadFromUrl(
 				schoolId,
