@@ -1,13 +1,15 @@
 import { mount, MountOptions } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import ClassMembersPage from "@/components/page-class-members/ClassMembers.page.vue";
 import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("@data-group");
 
@@ -23,11 +25,14 @@ describe("@pages/ClassMembers.page.vue", () => {
 		useGroupStateMock.isLoading = ref(false);
 		useGroupStateMock.group = ref(group);
 
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(ClassMembersPage as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			propsData: { ...propsData },
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 

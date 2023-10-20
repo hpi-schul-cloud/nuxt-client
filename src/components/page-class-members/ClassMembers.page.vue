@@ -72,7 +72,7 @@ export default defineComponent({
 			},
 			{
 				text: t("pages.administration.classes.index.title"),
-				href: "/administration/groups/classes/",
+				to: "/administration/groups/classes",
 			},
 			{
 				text: title.value,
