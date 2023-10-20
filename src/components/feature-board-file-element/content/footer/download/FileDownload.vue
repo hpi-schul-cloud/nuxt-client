@@ -5,6 +5,7 @@
 		data-testid="board-file-element-edit-menu-download"
 		class="float-right"
 		icon
+		variant="text"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>

@@ -3,7 +3,7 @@
 		<div ref="icons" class="icons">
 			<v-btn
 				icon
-				small
+				size="small"
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',

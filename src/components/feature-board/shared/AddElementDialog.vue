@@ -22,7 +22,7 @@
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
 					variant="plain"
-					large
+					size="large"
 					:height="84"
 					:width="126"
 					class="d-sm-flex button-alignment-center"
@@ -33,7 +33,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ item.icon }}</v-icon>
+							<v-icon size="large">{{ item.icon }}</v-icon>
 						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
