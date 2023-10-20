@@ -1,6 +1,6 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ref, Ref } from "vue";
-import { Group, useGroupApi } from "./index";
+import { Group, useGroupApi } from "@data-group";
 
 export const useGroupState = () => {
 	const { handleError } = useErrorHandler();
@@ -16,7 +16,11 @@ export const useGroupState = () => {
 			const fetchedGroup: Group = await getGroup(groupId);
 			group.value = fetchedGroup;
 		} catch (error) {
-			handleError(error, {});
+			// TODO: fix this
+			handleError(error, {
+				404: undefined,
+				500: undefined,
+			});
 		}
 
 		isLoading.value = false;

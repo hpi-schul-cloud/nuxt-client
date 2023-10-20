@@ -20,7 +20,10 @@ export const useSystemApi = () => {
 
 			return system;
 		} catch (error) {
-			handleError(error, {});
+			handleError(error, {
+				404: undefined,
+				500: undefined,
+			});
 		}
 	};
 

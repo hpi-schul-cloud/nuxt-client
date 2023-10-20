@@ -77,7 +77,10 @@ describe("SystemApi.composable", () => {
 
 				await useSystemApi().getSystem("systemId");
 
-				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {});
+				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {
+					404: undefined,
+					500: undefined,
+				});
 			});
 		});
 	});
