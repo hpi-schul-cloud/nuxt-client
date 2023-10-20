@@ -11,7 +11,7 @@
 			data-testid="board-file-element-progress-bar"
 			indeterminate
 		/>
-		<slot></slot>
+		<slot />
 	</v-app-bar>
 </template>
 
@@ -26,12 +26,7 @@ export default defineComponent({
 		elementId: { type: String, required: true },
 	},
 	components: { FilePicker },
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"upload:file",
-	],
+	emits: ["upload:file"],
 	setup(props, { emit }) {
 		const isFilePickerOpen = ref(false);
 		const fileWasPicked = ref(false);

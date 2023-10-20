@@ -13,29 +13,35 @@
 		<FileContent
 			v-if="fileProperties"
 			:file-properties="fileProperties"
-			@fetch:file="onFetchFile"
+			:alerts="alerts"
 			:is-edit-mode="isEditMode"
+			@fetch:file="onFetchFile"
 			@update:alternativeText="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@add:alert="onAddAlert"
 		>
-			<slot
-				v-if="isEditMode"
-				name="menu"
-				:elementName="fileProperties.name"
-			></slot>
+			<BoardMenu scope="element" v-if="isEditMode">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+			</BoardMenu>
 		</FileContent>
 		<FileUpload
 			v-else-if="isEditMode"
 			:elementId="element.id"
 			@upload:file="onUploadFile"
 		>
-			<slot name="menu"></slot>
+			<BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
 		</FileUpload>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -44,6 +50,12 @@ import {
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
+import {
 	computed,
 	defineComponent,
 	onMounted,
@@ -51,8 +63,10 @@ import {
 	ref,
 	toRef,
 } from "vue";
+import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
@@ -60,12 +74,21 @@ export default defineComponent({
 	components: {
 		FileUpload,
 		FileContent,
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["move-keyboard:edit", "delete:element"],
+	emits: [
+		"delete:element",
+		"move-down:edit",
+		"move-up:edit",
+		"move-keyboard:edit",
+	],
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
@@ -78,13 +101,15 @@ export default defineComponent({
 			FileRecordParentType.BOARDNODES
 		);
 
+		const { alerts, addAlert } = useFileAlerts(fileRecord);
+
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
 			}
 
 			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
-				? convertDownloadToPreviewUrl(fileRecord.value.url)
+				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
 			return {
@@ -96,6 +121,7 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
+				mimeType: fileRecord.value.mimeType,
 				element: props.element,
 			};
 		});
@@ -142,6 +168,13 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
+		const onAddAlert = (alert: FileAlert) => {
+			addAlert(alert);
+		};
+		const onDelete = () => emit("delete:element", element.value.id);
+		const onMoveUp = () => emit("move-up:edit");
+		const onMoveDown = () => emit("move-down:edit");
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -149,11 +182,16 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
+			alerts,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
+			onAddAlert,
+			onDelete,
+			onMoveUp,
+			onMoveDown,
 		};
 	},
 });

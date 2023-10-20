@@ -288,7 +288,7 @@ describe("SchoolExternalToolConfigurator", () => {
 						{
 							schoolExternalToolId: string;
 							schoolExternalTool: SchoolExternalToolSave;
-						}
+						},
 					]
 				>({
 					schoolExternalToolId: schoolExternalToolId,

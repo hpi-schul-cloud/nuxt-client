@@ -16,7 +16,8 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="editable"
+				:studentSubmission="studentSubmission"
+				:isOverdue="isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
@@ -24,15 +25,15 @@
 				:dueDate="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:editable="editable"
-				:isFirstElement="isFirstElement"
-				:isLastElement="isLastElement"
-				:hasMultipleElements="hasMultipleElements"
+				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
-				@move-down:element="onMoveSubmissionEditDown"
-				@move-up:element="onMoveSubmissionEditUp"
-				@delete:element="onDeleteElement"
-			/>
+			>
+				<BoardMenu scope="element">
+					<BoardMenuActionMoveUp @click="onMoveElementUp" />
+					<BoardMenuActionMoveDown @click="onMoveElementDown" />
+					<BoardMenuActionDelete @click="onDeleteElement" />
+				</BoardMenu>
+			</SubmissionContentElementEdit>
 		</div>
 	</v-card>
 </template>
@@ -44,12 +45,21 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useI18n } from "@/composables/i18n.composable";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
 	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 		SubmissionContentElementDisplay,
 		SubmissionContentElementEdit,
 	},
@@ -59,30 +69,28 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
-		"delete:element",
+		"move-keyboard:edit",
 		"move-down:edit",
 		"move-up:edit",
-		"move-keyboard:edit",
+		"delete:element",
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const submissionContentElement = ref(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, submissionContentElement);
-		const { loading, submissions, editable, updateSubmissionItem } =
-			useSubmissionContentElementState(
-				element.value.id,
-				element.value.content.dueDate
-			);
-
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const { modelValue } = useContentElementState(props);
+
+		const {
+			loading,
+			submissions,
+			studentSubmission,
+			isOverdue,
+			updateSubmissionItem,
+		} = useSubmissionContentElementState(element.value.id, modelValue);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -91,24 +99,11 @@ export default defineComponent({
 			}
 		};
 
-		const onMoveSubmissionEditDown = () => {
-			emit("move-down:edit");
-		};
+		const onMoveElementDown = () => emit("move-down:edit");
 
-		const onMoveSubmissionEditUp = () => {
-			emit("move-up:edit");
-		};
+		const onMoveElementUp = () => emit("move-up:edit");
 
-		const onDeleteElement = async (): Promise<void> => {
-			const shouldDelete = await askDeleteConfirmation(
-				t("components.cardElement.submissionElement").toString(),
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
-			}
-		};
+		const onDeleteElement = () => emit("delete:element", element.value.id);
 
 		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);
@@ -118,13 +113,15 @@ export default defineComponent({
 			modelValue,
 			submissionContentElement,
 			submissions,
+			studentSubmission,
 			loading,
-			editable,
-			onDeleteElement,
+			isOverdue,
 			onKeydownArrow,
-			onMoveSubmissionEditDown,
-			onMoveSubmissionEditUp,
+			onMoveElementDown,
+			onMoveElementUp,
+			onDeleteElement,
 			onUpdateCompleted,
+			t,
 		};
 	},
 });

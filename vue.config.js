@@ -21,6 +21,7 @@ module.exports = defineConfig({
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
+				"@data-external-tool": getDir("src/components/data-external-tool"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -30,8 +31,8 @@ module.exports = defineConfig({
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
-				"@feature-board-content-element-menu": getDir(
-					"src/components/feature-board-content-element-menu"
+				"@feature-board-link-element": getDir(
+					"src/components/feature-board-link-element"
 				),
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
@@ -42,11 +43,14 @@ module.exports = defineConfig({
 				),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
+				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],

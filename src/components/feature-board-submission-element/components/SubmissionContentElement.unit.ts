@@ -7,7 +7,7 @@ import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/f
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import Vue, { computed, ref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -51,9 +51,6 @@ describe("SubmissionContentElement", () => {
 	const getWrapper = (props: {
 		element: AnyContentElement;
 		isEditMode: boolean;
-		isFirstElement: boolean;
-		isLastElement: boolean;
-		hasMultipleElements: boolean;
 	}) => {
 		const wrapper = shallowMount(
 			SubmissionContentElement as MountOptions<Vue>,
@@ -82,14 +79,13 @@ describe("SubmissionContentElement", () => {
 				modelValue: ref({
 					dueDate: element.content.dueDate,
 				}),
+				computedElement: computed(() => element),
+				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: false,
-				isFirstElement: false,
-				isLastElement: false,
-				hasMultipleElements: false,
 			});
 
 			return {
@@ -146,15 +142,15 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over editable state to SubmissionContentElementDisplay", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementDisplay", async () => {
 			const { wrapper } = setup();
 
-			const editable = wrapper
+			const isOverdue = wrapper
 				.findComponent(SubmissionContentElementDisplay)
-				.props("editable");
+				.props("isOverdue");
 
-			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+			expect(isOverdue).toBe(
+				mockedUseSubmissionContentElementStateResponse.isOverdue
 			);
 		});
 
@@ -182,14 +178,13 @@ describe("SubmissionContentElement", () => {
 				modelValue: ref({
 					dueDate: element.content.dueDate,
 				}),
+				computedElement: computed(() => element),
+				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: true,
-				isFirstElement: false,
-				isLastElement: false,
-				hasMultipleElements: false,
 			});
 
 			return {
@@ -211,36 +206,6 @@ describe("SubmissionContentElement", () => {
 
 			const component = wrapper.findComponent(SubmissionContentElementEdit);
 			expect(component.exists()).toBe(true);
-		});
-
-		it("should hand over isFirstElement property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const isFirstElement = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("isFirstElement");
-
-			expect(isFirstElement).toBe(false);
-		});
-
-		it("should hand over isLastElement property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const isLastElement = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("isLastElement");
-
-			expect(isLastElement).toBe(false);
-		});
-
-		it("should hand over hasMultipleElements property to SubmissionContentElementEdit", async () => {
-			const { wrapper } = setup();
-
-			const hasMultipleElements = wrapper
-				.findComponent(SubmissionContentElementEdit)
-				.props("hasMultipleElements");
-
-			expect(hasMultipleElements).toBe(false);
 		});
 
 		it("should hand over dueDate to SubmissionContentElementEdit", async () => {
@@ -277,51 +242,16 @@ describe("SubmissionContentElement", () => {
 			);
 		});
 
-		it("should hand over editable state to SubmissionContentElementEdit", async () => {
+		it("should hand over isOverdue state to SubmissionContentElementEdit", async () => {
 			const { wrapper } = setup();
 
-			const editable = wrapper
+			const isOverdue = wrapper
 				.findComponent(SubmissionContentElementEdit)
-				.props("editable");
+				.props("isOverdue");
 
-			expect(editable).toBe(
-				mockedUseSubmissionContentElementStateResponse.editable
+			expect(isOverdue).toBe(
+				mockedUseSubmissionContentElementStateResponse.isOverdue
 			);
-		});
-
-		it("should emit 'move-down:edit' when it receives move-down:element event from child", async () => {
-			const { wrapper } = setup();
-
-			const component = wrapper.findComponent(SubmissionContentElementEdit);
-			component.vm.$emit("move-down:element");
-
-			const emitted = wrapper.emitted();
-			expect(emitted["move-down:edit"]).toBeDefined();
-		});
-
-		it("should emit 'move-up:edit' when it receives move-up:element event from child", async () => {
-			const { wrapper } = setup();
-
-			const component = wrapper.findComponent(SubmissionContentElementEdit);
-			component.vm.$emit("move-up:element");
-
-			const emitted = wrapper.emitted();
-			expect(emitted["move-up:edit"]).toBeDefined();
-		});
-
-		it("should pass delete:element event from child to parent", async () => {
-			const { wrapper } = setup();
-
-			await nextTick();
-			await nextTick();
-
-			const child = wrapper.findComponent(SubmissionContentElementEdit);
-			child.vm.$emit("delete:element");
-
-			await nextTick();
-			await nextTick();
-
-			expect(wrapper.emitted("delete:element")).toHaveLength(1);
 		});
 
 		it("should emit 'move-keyboard:edit' when arrow key down is pressed", async () => {

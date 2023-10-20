@@ -2,10 +2,10 @@
 	<div class="footer">
 		<div class="footer-container">
 			<div class="left-container">
-				<slot name="left"></slot>
+				<slot name="left" />
 			</div>
 			<div class="right-container">
-				<slot name="right"></slot>
+				<slot name="right" />
 			</div>
 		</div>
 	</div>
