@@ -11,6 +11,8 @@
 				<slot name="title" />
 			</v-toolbar-title>
 
+			<slot name="element" />
+
 			<v-spacer />
 
 			<slot name="menu" />

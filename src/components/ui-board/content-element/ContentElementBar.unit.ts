@@ -7,18 +7,20 @@ describe("ContentElementBar", () => {
 		icon?: string;
 		hasGreyBackground?: boolean;
 		title?: string;
+		element?: string;
 		menu?: string;
 		subtitle?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const { icon, hasGreyBackground, title, menu, subtitle } = props;
+		const { icon, hasGreyBackground, title, menu, subtitle, element } = props;
 		const propsData = {
 			icon,
 			hasGreyBackground,
 		};
 		const slots = {
 			title: title ?? "",
+			element: element ?? "",
 			menu: menu ?? "",
 			subtitle: subtitle ?? "",
 		};
@@ -33,6 +35,7 @@ describe("ContentElementBar", () => {
 			icon,
 			hasGreyBackground,
 			title,
+			element,
 			menu,
 			subtitle,
 		};
@@ -81,6 +84,18 @@ describe("ContentElementBar", () => {
 			const toolbar = wrapper.find("v-toolbar-title-stub");
 
 			expect(toolbar.exists()).toBe(false);
+		});
+	});
+
+	describe("when element slot is defined", () => {
+		it("should render element slot", () => {
+			const { wrapper, element: elementSlot } = setup({
+				element: "test element slot",
+			});
+
+			const element = wrapper.text();
+
+			expect(element).toBe(elementSlot);
 		});
 	});
 

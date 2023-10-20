@@ -827,6 +827,7 @@
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.videoFormatError": "Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.fileElement.audioFormatError": "Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.richTextElement": "Textelement",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
 	"components.cardElement.submissionElement": "Abgabe",
