@@ -25,8 +25,9 @@
 			<template v-slot:[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
 					<v-btn
+						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
-						data-testid="class-table-manage-btn"
+						data-testid="legacy-class-table-manage-btn"
 						outlined
 						color="secondary"
 						small
@@ -37,6 +38,7 @@
 						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
 					</v-btn>
 					<v-btn
+						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
 						outlined
@@ -49,6 +51,7 @@
 						<v-icon>{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 					<v-btn
+						:title="$t('pages.administration.classes.delete')"
 						:aria-label="$t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
 						outlined
@@ -63,6 +66,7 @@
 					<v-btn
 						:disabled="!item.isUpgradable"
 						:aria-label="t('pages.administration.classes.createSuccessor')"
+						:title="t('pages.administration.classes.createSuccessor')"
 						data-testid="class-table-successor-btn"
 						outlined
 						color="secondary"
@@ -72,6 +76,24 @@
 						min-width="0"
 					>
 						<v-icon>{{ mdiArrowUp }}</v-icon>
+					</v-btn>
+				</template>
+				<template v-else-if="showGroupAction(item)">
+					<v-btn
+						:title="t('pages.administration.classes.manage')"
+						:aria-label="t('pages.administration.classes.manage')"
+						data-testid="class-table-members-manage-btn"
+						outlined
+						color="secondary"
+						small
+						:to="{
+							name: 'administration-groups-classes-members',
+							params: { groupId: item.id },
+						}"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
 					</v-btn>
 				</template>
 			</template>
@@ -141,8 +163,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
-import AuthModule from "../../store/auth";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import AuthModule from "@/store/auth";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
@@ -178,6 +200,9 @@ export default defineComponent({
 
 		const showClassAction = (item: ClassInfo) =>
 			hasPermission.value && item.type === ClassRootType.Class;
+
+		const showGroupAction = (item: ClassInfo) =>
+			hasPermission.value && item.type === ClassRootType.Group;
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -268,6 +293,7 @@ export default defineComponent({
 			classes,
 			hasPermission,
 			showClassAction,
+			showGroupAction,
 			page,
 			sortBy,
 			sortOrder,

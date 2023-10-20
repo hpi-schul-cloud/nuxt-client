@@ -103,6 +103,7 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		name: "administration-groups-classes-members",
 		component: async () =>
 			(await import("@page-class-members")).ClassMembersPage,
 		beforeEnter: createPermissionGuard(["group_view"]),

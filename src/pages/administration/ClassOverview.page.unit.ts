@@ -266,7 +266,7 @@ describe("ClassOverview", () => {
 				const { wrapper } = setup();
 
 				const manageBtn = wrapper.find(
-					'[data-testid="class-table-manage-btn"]'
+					'[data-testid="legacy-class-table-manage-btn"]'
 				);
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
@@ -297,11 +297,11 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should not render any buttons", () => {
+			it("should render only manage button which refers to members page", () => {
 				const { wrapper } = setup();
 
 				const manageBtn = wrapper.find(
-					'[data-testid="class-table-manage-btn"]'
+					'[data-testid="class-table-members-manage-btn"]'
 				);
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
@@ -314,7 +314,7 @@ describe("ClassOverview", () => {
 					'[data-testid="class-table-successor-btn"]'
 				);
 
-				expect(manageBtn.exists()).toBeFalsy();
+				expect(manageBtn.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeFalsy();
 				expect(deleteBtn.exists()).toBeFalsy();
 				expect(successorBtn.exists()).toBeFalsy();
@@ -322,27 +322,58 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when clicking on the manage class button", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+			describe("when group class root type is class", () => {
+				const setup = () => {
+					const { wrapper, groupModule } = getWrapper();
 
-				const classId: string = groupModule.getClasses[1].id;
+					const classId: string = groupModule.getClasses[1].id;
 
-				return {
-					wrapper,
-					classId,
+					return {
+						wrapper,
+						classId,
+					};
 				};
-			};
 
-			it("should redirect to legacy class manage page", async () => {
-				const { wrapper, classId } = setup();
+				it("should redirect to legacy class manage page", async () => {
+					const { wrapper, classId } = setup();
 
-				const manageBtn = wrapper.find(
-					'[data-testid="class-table-manage-btn"]'
-				);
+					const manageBtn = wrapper.find(
+						'[data-testid="legacy-class-table-manage-btn"]'
+					);
 
-				expect(manageBtn.attributes().href).toStrictEqual(
-					`/administration/classes/${classId}/manage`
-				);
+					expect(manageBtn.attributes().href).toStrictEqual(
+						`/administration/classes/${classId}/manage`
+					);
+					expect(
+						manageBtn.findComponent({ name: "router-link" }).exists()
+					).toBeFalsy();
+				});
+			});
+
+			describe("when class root type is group", () => {
+				const setup = () => {
+					const { wrapper, groupModule } = getWrapper();
+
+					const classId: string = groupModule.getClasses[0].id;
+
+					return {
+						wrapper,
+						classId,
+					};
+				};
+
+				it("should redirect to group class members page", async () => {
+					const { wrapper } = setup();
+
+					const manageBtn = wrapper.find(
+						'[data-testid="class-table-members-manage-btn"]'
+					);
+
+					const routerLink = manageBtn.findComponent({ name: "router-link" });
+
+					expect(manageBtn.attributes().href).toBeUndefined();
+					expect(routerLink.exists()).toBeTruthy();
+				});
 			});
 		});
 
