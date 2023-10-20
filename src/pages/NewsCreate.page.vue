@@ -4,10 +4,10 @@
 		:breadcrumbs="[
 			{
 				to: '/news',
-				text: $t('pages.news.title'),
+				title: $t('pages.news.title'),
 			},
 			{
-				text: $t('pages.news.new.title'),
+				title: $t('pages.news.new.title'),
 				disabled: true,
 			},
 		]"

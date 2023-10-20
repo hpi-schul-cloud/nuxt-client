@@ -79,17 +79,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSetting: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				to: "/administration/",
 			},
 			schoolSetting,
 			{
-				text: t("pages.tool.title"),
+				title: t("pages.tool.title"),
 				disabled: true,
 			},
 		];

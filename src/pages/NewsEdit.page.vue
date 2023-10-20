@@ -5,11 +5,11 @@
 			:breadcrumbs="[
 				{
 					to: '/news',
-					text: $t('pages.news.title'),
+					title: $t('pages.news.title'),
 				},
 				{
 					to: `/news/${$route.params.id}`,
-					text: news.title,
+					title: news.title,
 				},
 				{
 					text: $t('pages.news.edit.title.default'),

@@ -45,6 +45,7 @@ import { Pagination } from "@/store/types/commons";
 import { ClassInfo } from "@/store/types/class-info";
 import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import { Ref } from "vue";
 
 export default defineComponent({
 	components: { DefaultWireframe },
@@ -58,16 +59,16 @@ export default defineComponent({
 			itemsPerPageOptions: [5, 10, 25, 50, 100],
 		};
 
-		const breadcrumbs: Breadcrumb[] = [
+		const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			{
-				text: t("pages.administration.classes.index.title"),
+				title: t("pages.administration.classes.index.title"),
 				disabled: true,
 			},
-		];
+		]);
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
 			() => groupModule.getClasses

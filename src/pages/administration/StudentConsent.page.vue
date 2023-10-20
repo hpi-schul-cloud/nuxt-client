@@ -415,15 +415,15 @@ export default {
 		breadcrumbs() {
 			return [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
+					title: this.$t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
-					text: this.title,
+					title: this.title,
 					disabled: true,
 				},
 			];

@@ -59,15 +59,15 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
+					title: this.$t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
-					text: this.$t("pages.administration.students.new.title"),
+					title: this.$t("pages.administration.students.new.title"),
 					to: "/administration/students/new",
 					disabled: true,
 				},

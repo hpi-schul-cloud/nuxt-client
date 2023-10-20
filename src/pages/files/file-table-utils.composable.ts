@@ -54,7 +54,7 @@ export function useFileTableUtils(
 		params.forEach((param: string) => {
 			redirectTo += `/${param}`;
 			deepBreadcrumbs.push({
-				text: param,
+				title: param,
 				to: redirectTo,
 			});
 		});
@@ -94,7 +94,7 @@ export function useFileTableUtils(
 			title: t("pages.files.overview.teamFiles"),
 			breadcrumbs: [
 				{
-					text: t("pages.files.overview.headline"),
+					title: t("pages.files.overview.headline"),
 					to: "/cfiles/",
 				},
 			],
@@ -115,11 +115,11 @@ export function useFileTableUtils(
 			title: paramsArray.slice(-1)[0],
 			breadcrumbs: [
 				{
-					text: t("pages.files.overview.headline"),
+					title: t("pages.files.overview.headline"),
 					to: "/cfiles/",
 				},
 				{
-					text: t("pages.files.overview.teamFiles"),
+					title: t("pages.files.overview.teamFiles"),
 					to: "/cfiles/teams",
 				},
 				...deepBreadcrumbs,

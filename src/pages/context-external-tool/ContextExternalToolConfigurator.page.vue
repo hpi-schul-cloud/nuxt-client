@@ -105,14 +105,14 @@ export default defineComponent({
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			const crumbs: Breadcrumb[] = [
 				{
-					text: t("common.words.courses"),
+					title: t("common.words.courses"),
 					to: "/rooms-overview/",
 				},
 			];
 
 			if (courseTitle.value) {
 				crumbs.push({
-					text: courseTitle.value,
+					title: courseTitle.value,
 					to: contextRoute,
 				});
 			}

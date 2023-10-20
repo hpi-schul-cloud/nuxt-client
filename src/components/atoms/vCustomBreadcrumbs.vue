@@ -24,22 +24,15 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 import { mdiChevronLeft } from "@mdi/js";
 
-export default {
-	props: {
-		breadcrumbs: {
-			type: Array,
-			required: true,
-		},
+defineProps({
+	breadcrumbs: {
+		type: Array,
+		required: true,
 	},
-	data() {
-		return {
-			mdiChevronLeft: mdiChevronLeft,
-		};
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
