@@ -18,7 +18,7 @@
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
 			<v-select
-				v-model="selectedBooleanItem"
+				:model-value="selectedBooleanItem"
 				:label="getLabelText()"
 				:hint="parameter.description"
 				persistent-hint
@@ -26,7 +26,7 @@
 				:data-testId="parameter.name"
 				:items="booleanSelectItems"
 				item-value="value"
-				item-text="text"
+				item-title="text"
 			></v-select>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">

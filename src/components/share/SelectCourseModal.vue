@@ -31,10 +31,10 @@
 					</div>
 				</div>
 				<v-select
-					v-model="selectedCourse"
+					:model-value="selectedCourse"
 					return-object
 					item-value="id"
-					item-text="title"
+					item-title="title"
 					:items="courses"
 					:placeholder="
 						$t(`components.molecules.import.${parentType}.options.selectCourse`)
