@@ -48,7 +48,7 @@ export default defineComponent({
 	emits: ["delete:element", "move-keyboard:edit"],
 	setup(props, { emit }) {
 		const element = toRef(props, "element");
-		const boardApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
+		const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 		const { fetchFile, fileRecord, uploadFromUrl } = useFileStorageApi(
 			element.value.id,
 			FileRecordParentType.BOARDNODES
@@ -79,7 +79,7 @@ export default defineComponent({
 		};
 
 		const onCreateUrl = async (url: string) => {
-			const res = await boardApi.metaTagExtractorControllerGetData({ url });
+			const res = await metaTagApi.metaTagExtractorControllerGetData({ url });
 			const { title, description, imageUrl } = res.data;
 			modelValue.value.url = url;
 			modelValue.value.title = title;
