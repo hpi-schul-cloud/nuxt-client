@@ -10,6 +10,7 @@ import {
 	getFileExtension,
 	isAudioMimeType,
 	isDownloadAllowed,
+	isPdfMimeType,
 	isPreviewPossible,
 	isVideoMimeType,
 } from "./fileHelper";
@@ -424,6 +425,42 @@ describe("@/utils/fileHelper", () => {
 
 			it("should return false", () => {
 				const result = isAudioMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isPdfMimeType", () => {
+		describe("when file has pdf mime type", () => {
+			it("should return true", () => {
+				const result = isPdfMimeType("application/pdf");
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when file has no pdf mime type", () => {
+			it("should return false", () => {
+				const result = isPdfMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType("");
 
 				expect(result).toBe(false);
 			});

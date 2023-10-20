@@ -1,4 +1,8 @@
-import { isAudioMimeType, isVideoMimeType } from "@/utils/fileHelper";
+import {
+	isAudioMimeType,
+	isPdfMimeType,
+	isVideoMimeType,
+} from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
@@ -11,6 +15,7 @@ import VideoDisplay from "./video-display/VideoDisplay.vue";
 jest.mock("@/utils/fileHelper");
 const isVideoMimeTypeMock = jest.mocked(isVideoMimeType);
 const isAudioMimeTypeMock = jest.mocked(isAudioMimeType);
+const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
@@ -275,7 +280,50 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is not a video or audio type", () => {
+		describe("when mimeType is pdf type", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
+
+				const element = fileElementResponseFactory.build();
+				const propsData = {
+					fileProperties: {
+						name: "test",
+						size: 100,
+						url: "test",
+						previewUrl: undefined,
+						previewStatus: "test",
+						isDownloadAllowed: true,
+						element,
+					},
+					isEditMode: true,
+				};
+
+				isPdfMimeTypeMock.mockReset();
+				isPdfMimeTypeMock.mockReturnValueOnce(true);
+
+				const wrapper = shallowMount(FileDisplay, {
+					propsData,
+					...createComponentMocks({}),
+				});
+
+				return {
+					wrapper,
+					fileNameProp: propsData.fileProperties.name,
+					previewUrlProp: propsData.fileProperties.previewUrl,
+					url: propsData.fileProperties.url,
+				};
+			};
+
+			it("should pass correct props to file description", () => {
+				const { wrapper, url } = setup();
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.src).toBe(url);
+			});
+		});
+
+		describe("when mimeType is not a video or audio or pdf type", () => {
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
@@ -299,6 +347,9 @@ describe("FileDisplay", () => {
 				isAudioMimeTypeMock.mockReset();
 				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
+				isPdfMimeTypeMock.mockReset();
+				isPdfMimeTypeMock.mockReturnValueOnce(false);
+
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
 					...createComponentMocks({}),
@@ -315,6 +366,14 @@ describe("FileDisplay", () => {
 				const props = wrapper.findComponent(FileDescription).attributes();
 
 				expect(props.showtitle).toBeTruthy();
+			});
+
+			it("should pass src to file description", () => {
+				const { wrapper } = setup();
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.src).toBe(undefined);
 			});
 
 			it("should not render image display component", () => {
