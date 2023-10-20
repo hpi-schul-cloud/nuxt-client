@@ -6,10 +6,10 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { GroupMapper } from "./group/group.mapper";
 import { ClassInfo } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
-import { GroupMapper } from "./group/group.mapper";
 
 @Module({
 	name: "groupModule",
@@ -102,6 +102,36 @@ export default class GroupModule extends VuexModule {
 	@Mutation
 	setPage(page: number): void {
 		this.page = page;
+	}
+
+	@Mutation
+	removeClass(classId: string) {
+		this.classes = this.classes.filter(
+			(clazz: ClassInfo) => clazz.id !== classId
+		);
+	}
+
+	@Action
+	async deleteClass(classId: string): Promise<void> {
+		this.setLoading(true);
+
+		try {
+			await $axios.delete(`/v1/classes/${classId}`);
+
+			this.removeClass(classId);
+		} catch (error) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			console.log(apiError);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: `${apiError.type}: ${apiError.message}`,
+			});
+		}
+
+		this.setLoading(false);
 	}
 
 	@Action

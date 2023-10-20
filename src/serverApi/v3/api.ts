@@ -401,6 +401,12 @@ export interface ClassInfoResponse {
      * @memberof ClassInfoResponse
      */
     schoolYear?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClassInfoResponse
+     */
+    isUpgradable?: boolean;
 }
 
 /**
