@@ -83,7 +83,7 @@
 	"common.labels.settings": "Setting",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
-	"common.placeholder.email": "clara.fall@mail.de",
+	"common.placeholder.email": "clara.fall{'@'}mail.de",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
 	"common.placeholder.email.update": "New e-mail address",
 	"common.placeholder.firstName": "Klara",

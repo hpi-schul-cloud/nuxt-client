@@ -83,7 +83,7 @@
 	"common.labels.settings": "Налаштування",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
-	"common.placeholder.email": "clara.fall@mail.de",
+	"common.placeholder.email": "clara.fall{'@'}mail.de",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",
 	"common.placeholder.email.update": "Нова адреса електронної пошти",
 	"common.placeholder.firstName": "Клара",
