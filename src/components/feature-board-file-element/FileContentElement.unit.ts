@@ -109,7 +109,7 @@ describe("FileContentElement", () => {
 				await wrapper.vm.$nextTick();
 
 				const fileUpload = wrapper.findComponent(FileUpload);
-				expect(fileUpload.exists()).toBe(false);
+				expect(fileUpload.exists()).toBe(true);
 			});
 
 			it("should not render slot menu component", async () => {
@@ -388,6 +388,7 @@ describe("FileContentElement", () => {
 					const props = wrapper.findComponent(FileUpload).props();
 
 					expect(props.elementId).toEqual(element.id);
+					expect(props.isEditMode).toBe(true);
 				});
 
 				describe("when FileUpload emits upload:file event", () => {
