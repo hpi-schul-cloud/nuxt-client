@@ -4233,7 +4233,7 @@ export interface SubmissionContainerContentBody {
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
-    dueDate?: string | null;
+    dueDate?: string;
 }
 /**
  * 
