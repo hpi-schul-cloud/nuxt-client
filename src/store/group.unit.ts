@@ -267,13 +267,11 @@ describe("GroupModule", () => {
 		describe("when called", () => {
 			const setup = () => {
 				const class1: ClassInfo = classInfoFactory.build();
-				const class2: ClassInfo = classInfoFactory.build();
 
-				module.setClasses([class1, class2]);
+				module.setClasses([class1]);
 
 				return {
 					class1,
-					class2,
 				};
 			};
 
@@ -285,12 +283,12 @@ describe("GroupModule", () => {
 				expect(axiosMock.delete).toHaveBeenCalled();
 			});
 
-			it("should remove the class from the store", async () => {
-				const { class1, class2 } = setup();
+			it("should load classes for school", async () => {
+				const { class1 } = setup();
 
 				await module.deleteClass(class1.id);
 
-				expect(module.getClasses).toEqual([class2]);
+				expect(apiMock.groupControllerFindClassesForSchool).toHaveBeenCalled();
 			});
 		});
 

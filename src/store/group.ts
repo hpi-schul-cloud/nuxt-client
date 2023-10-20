@@ -104,13 +104,6 @@ export default class GroupModule extends VuexModule {
 		this.page = page;
 	}
 
-	@Mutation
-	removeClass(classId: string) {
-		this.classes = this.classes.filter(
-			(clazz: ClassInfo) => clazz.id !== classId
-		);
-	}
-
 	@Action
 	async deleteClass(classId: string): Promise<void> {
 		this.setLoading(true);
@@ -118,7 +111,7 @@ export default class GroupModule extends VuexModule {
 		try {
 			await $axios.delete(`/v1/classes/${classId}`);
 
-			this.removeClass(classId);
+			await this.loadClassesForSchool();
 		} catch (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
