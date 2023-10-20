@@ -4,6 +4,7 @@ const { createDevServerConfig } = require("./webpack-config/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
 const NoncePlaceholderPlugin = require("./webpack-config/nonce-placeholder-plugin");
+const { VuetifyPlugin } = require("webpack-plugin-vuetify");
 
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
@@ -19,7 +20,10 @@ module.exports = defineConfig({
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
-		plugins: [new NoncePlaceholderPlugin()],
+		plugins: [
+			new VuetifyPlugin({ styles: { configFile: "src/styles/settings.scss" } }),
+			new NoncePlaceholderPlugin(),
+		],
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
