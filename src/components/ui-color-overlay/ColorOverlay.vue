@@ -15,9 +15,9 @@
 			v-if="showOverlay"
 			class="display-overlay rounded-t-sm"
 			v-bind:style="{ background: color, opacity }"
-		></div>
+		/>
 
-		<slot></slot>
+		<slot />
 	</div>
 </template>
 
@@ -27,8 +27,8 @@ import { computed, defineComponent, ref } from "vue";
 export default defineComponent({
 	name: "ColorOverlay",
 	props: {
-		isOverlayDisabled: { type: Boolean, required: true },
-		color: { type: String, required: true },
+		color: { type: String, default: "var(--v-black-base)" },
+		isOverlayDisabled: { type: Boolean },
 		opacity: { type: Number, default: 0.2 },
 	},
 	emits: ["on:action"],
