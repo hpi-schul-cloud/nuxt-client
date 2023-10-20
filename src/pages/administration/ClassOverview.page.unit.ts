@@ -32,6 +32,10 @@ describe("ClassOverview", () => {
 			...getters,
 		});
 
+		const authModule = createModuleMocks(AuthModule, {
+			getUserPermissions: ["CLASS_EDIT".toLowerCase()],
+		});
+
 		const wrapper: Wrapper<Vue> = mount(ClassOverview as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
@@ -213,7 +217,7 @@ describe("ClassOverview", () => {
 		});
 	});
 
-	describe("action icons", () => {
+	describe("action buttons", () => {
 		describe("when legacy classes are available", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper();
@@ -223,7 +227,7 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should render 4 icons", () => {
+			it("should render 4 buttons", () => {
 				const { wrapper } = setup();
 
 				const manageBtn = wrapper.find(
@@ -240,10 +244,10 @@ describe("ClassOverview", () => {
 					'[data-testid="class-table-successor-btn"]'
 				);
 
-				expect(manageIcon.exists()).toBeTruthy();
-				expect(editIcon.exists()).toBeTruthy();
-				expect(deleteIcon.exists()).toBeTruthy();
-				expect(successorIcon.exists()).toBeTruthy();
+				expect(manageBtn.exists()).toBeTruthy();
+				expect(editBtn.exists()).toBeTruthy();
+				expect(deleteBtn.exists()).toBeTruthy();
+				expect(successorBtn.exists()).toBeTruthy();
 			});
 		});
 
@@ -258,31 +262,31 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should not render any icons", () => {
+			it("should not render any buttons", () => {
 				const { wrapper } = setup();
 
-				const manageIcon = wrapper.find(
-					'[data-testid="class-table-manage-icon"]'
+				const manageBtn = wrapper.find(
+					'[data-testid="class-table-manage-btn"]'
 				);
 
-				const editIcon = wrapper.find('[data-testid="class-table-edit-icon"]');
+				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				const deleteIcon = wrapper.find(
-					'[data-testid="class-table-delete-icon"]'
+				const deleteBtn = wrapper.find(
+					'[data-testid="class-table-delete-btn"]'
 				);
 
-				const successorIcon = wrapper.find(
-					'[data-testid="class-table-successor-icon"]'
+				const successorBtn = wrapper.find(
+					'[data-testid="class-table-successor-btn"]'
 				);
 
-				expect(manageIcon.exists()).toBeFalsy();
-				expect(editIcon.exists()).toBeFalsy();
-				expect(deleteIcon.exists()).toBeFalsy();
-				expect(successorIcon.exists()).toBeFalsy();
+				expect(manageBtn.exists()).toBeFalsy();
+				expect(editBtn.exists()).toBeFalsy();
+				expect(deleteBtn.exists()).toBeFalsy();
+				expect(successorBtn.exists()).toBeFalsy();
 			});
 		});
 
-		describe("when clicking on the manage class icon", () => {
+		describe("when clicking on the manage class button", () => {
 			const setup = () => {
 				const { wrapper, groupModule } = getWrapper();
 
@@ -307,7 +311,7 @@ describe("ClassOverview", () => {
 			});
 		});
 
-		describe("when clicking on the edit class icon", () => {
+		describe("when clicking on the edit class button", () => {
 			const setup = () => {
 				const { wrapper, groupModule } = getWrapper();
 
@@ -331,7 +335,7 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when class is upgradable", () => {
-			describe("when clicking on the upgrade class icon", () => {
+			describe("when clicking on the upgrade class button", () => {
 				const setup = () => {
 					const { wrapper, groupModule } = getWrapper();
 
@@ -385,7 +389,7 @@ describe("ClassOverview", () => {
 			});
 		});
 
-		describe("when clicking on the delete class icon", () => {
+		describe("when clicking on the delete class button", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper();
 
