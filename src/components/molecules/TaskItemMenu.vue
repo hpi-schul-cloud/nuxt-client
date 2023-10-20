@@ -1,12 +1,6 @@
 <template>
 	<div>
-		<v-menu
-			bottom
-			left
-			offset-y
-			attach
-			@update:return-value="toggleMenu(false)"
-		>
+		<v-menu bottom left attach @update:return-value="toggleMenu(false)">
 			<template #activator="{ props, value }">
 				<v-btn
 					id="task-menu-btn"
