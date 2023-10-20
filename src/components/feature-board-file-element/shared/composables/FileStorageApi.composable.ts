@@ -3,6 +3,7 @@ import {
 	FileApiInterface,
 	FileRecordParentType,
 	FileRecordResponse,
+	FileUrlParams,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
@@ -65,6 +66,30 @@ export const useFileStorageApi = (
 		}
 	};
 
+	const uploadFromUrl = async (imageUrl: string): Promise<void> => {
+		try {
+			const imageUrlObject = new URL(imageUrl);
+			const fileName = imageUrlObject.pathname.replace(/^.*?([^/]+)\/?$/, "$1");
+			const schoolId = authModule.getUser?.schoolId as string;
+			const fileUrlParams: FileUrlParams = {
+				url: imageUrl,
+				fileName,
+				headers: `User-Agent: Embed Request User Agent Schulcloud Verbund Software`,
+			};
+			const response = await fileApi.uploadFromUrl(
+				schoolId,
+				parentId,
+				parentType,
+				fileUrlParams
+			);
+
+			fileRecord.value = response.data;
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
 	const rename = async (
 		fileRecordId: FileRecordResponse["id"],
 		params: RenameFileParams
@@ -110,6 +135,7 @@ export const useFileStorageApi = (
 		fetchFile,
 		rename,
 		upload,
+		uploadFromUrl,
 		fileRecord,
 	};
 };
