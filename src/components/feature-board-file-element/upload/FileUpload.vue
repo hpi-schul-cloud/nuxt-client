@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar flat color="transparent">
+	<v-app-bar v-if="isEditMode" flat color="transparent">
 		<FilePicker
 			v-if="!fileWasPicked"
 			@update:file="onFileSelect"
@@ -24,6 +24,7 @@ export default defineComponent({
 	name: "FileUpload",
 	props: {
 		elementId: { type: String, required: true },
+		isEditMode: { type: Boolean },
 	},
 	components: { FilePicker },
 	emits: ["upload:file"],
