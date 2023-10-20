@@ -8,6 +8,7 @@ import {
 	convertFileSize,
 	downloadFile,
 	getFileExtension,
+	isAudioMimeType,
 	isDownloadAllowed,
 	isPreviewPossible,
 	isVideoMimeType,
@@ -373,6 +374,56 @@ describe("@/utils/fileHelper", () => {
 
 			it("should return false", () => {
 				const result = isVideoMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isAudioMimeType", () => {
+		describe("when file has audio mime type", () => {
+			describe("when file mime type has audio/ prefix", () => {
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/mp4");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/ ");
+
+					expect(result).toBe(true);
+				});
+			});
+		});
+
+		describe("when file has no audio mime type", () => {
+			it("should return false", () => {
+				const result = isAudioMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType("");
 
 				expect(result).toBe(false);
 			});

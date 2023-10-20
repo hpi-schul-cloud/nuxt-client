@@ -834,6 +834,7 @@
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.videoFormatError": "El formato de vídeo no es compatible con este navegador / sistema operativo.",
+	"components.cardElement.fileElement.audioFormatError": "El formato de audio no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.richTextElement": "Elemento texto",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.submissionElement": "Envío",
