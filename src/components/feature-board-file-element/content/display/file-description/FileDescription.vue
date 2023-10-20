@@ -11,11 +11,9 @@
 					<span v-else>{{ name }}</span>
 				</ContentElementTitle>
 			</template>
-
 			<template #menu>
-				<slot></slot>
+				<slot />
 			</template>
-
 			<template #subtitle v-if="caption && !isEditMode">
 				{{ caption }}
 			</template>

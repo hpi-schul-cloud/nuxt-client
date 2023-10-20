@@ -1,7 +1,8 @@
-import { isPdfMimeType, isVideoMimeType } from "@/utils/fileHelper";
+import { isAudioMimeType, isVideoMimeType } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
@@ -9,7 +10,7 @@ import VideoDisplay from "./video-display/VideoDisplay.vue";
 
 jest.mock("@/utils/fileHelper");
 const isVideoMimeTypeMock = jest.mocked(isVideoMimeType);
-const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
+const isAudioMimeTypeMock = jest.mocked(isAudioMimeType);
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
@@ -66,12 +67,12 @@ describe("FileDisplay", () => {
 				expect(props.element).toBeDefined();
 			});
 
-			it("should render file description display component", () => {
+			it("should pass showTitle true to file description", () => {
 				const { wrapper } = setup();
 
-				const fileDescription = wrapper.findComponent(FileDescription);
+				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(fileDescription.exists()).toBe(true);
+				expect(props.showtitle).toBeFalsy();
 			});
 		});
 
@@ -95,6 +96,9 @@ describe("FileDisplay", () => {
 
 				isVideoMimeTypeMock.mockReset();
 				isVideoMimeTypeMock.mockReturnValueOnce(true);
+
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
@@ -136,6 +140,14 @@ describe("FileDisplay", () => {
 
 				expect(fileDescription.exists()).toBe(true);
 			});
+
+			it("should pass showTitle true to file description", () => {
+				const { wrapper } = setup();
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showtitle).toBeFalsy();
+			});
 		});
 	});
 
@@ -160,6 +172,9 @@ describe("FileDisplay", () => {
 
 				isVideoMimeTypeMock.mockReset();
 				isVideoMimeTypeMock.mockReturnValueOnce(true);
+
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
@@ -190,95 +205,77 @@ describe("FileDisplay", () => {
 				expect(props.src).toBe(url);
 				expect(props.name).toBe(fileNameProp);
 			});
-		});
 
-		describe("when mimeType is pdf type", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-				const propsData = {
-					fileProperties: {
-						name: "test",
-						size: 100,
-						url: "test",
-						previewUrl: undefined,
-						previewStatus: "test",
-						isDownloadAllowed: true,
-						element,
-					},
-					isEditMode: true,
-				};
-
-				isPdfMimeTypeMock.mockReset();
-				isPdfMimeTypeMock.mockReturnValueOnce(true);
-
-				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					url: propsData.fileProperties.url,
-				};
-			};
-
-			it("should pass correct props to file description", () => {
-				const { wrapper, url } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.src).toBe(url);
-			});
-		});
-
-		describe("when mimeType is not a pdf type", () => {
-			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const element = fileElementResponseFactory.build();
-				const propsData = {
-					fileProperties: {
-						name: "test",
-						size: 100,
-						url: "test",
-						previewUrl: undefined,
-						previewStatus: "test",
-						isDownloadAllowed: true,
-						element,
-					},
-					isEditMode: true,
-				};
-
-				isPdfMimeTypeMock.mockReset();
-				isPdfMimeTypeMock.mockReturnValueOnce(false);
-
-				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
-				});
-
-				return {
-					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					url: propsData.fileProperties.url,
-				};
-			};
-
-			it("should pass correct props to file description", () => {
+			it("should pass showTitle false to file description", () => {
 				const { wrapper } = setup();
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.src).toBe(undefined);
+				expect(props.showtitle).toBeFalsy();
 			});
 		});
 
-		describe("when mimeType is not a video type", () => {
+		describe("when mimeType is a audio type", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
+
+				const element = fileElementResponseFactory.build();
+				const propsData = {
+					fileProperties: {
+						name: "test",
+						size: 100,
+						url: "test",
+						previewStatus: "test",
+						isDownloadAllowed: true,
+						element,
+					},
+					isEditMode: true,
+				};
+
+				isVideoMimeTypeMock.mockReset();
+				isVideoMimeTypeMock.mockReturnValueOnce(false);
+
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(true);
+
+				const wrapper = shallowMount(FileDisplay, {
+					propsData,
+					...createComponentMocks({}),
+				});
+
+				return {
+					wrapper,
+					fileNameProp: propsData.fileProperties.name,
+					srcProp: propsData.fileProperties.url,
+				};
+			};
+
+			it("should be found in dom", () => {
+				const { wrapper } = setup();
+
+				const fileDisplay = wrapper.findComponent(FileDisplay);
+
+				expect(fileDisplay.exists()).toBe(true);
+			});
+
+			it("should pass correct props to audio display component", () => {
+				const { wrapper, srcProp } = setup();
+				console.log(wrapper.html());
+				const props = wrapper.findComponent(AudioDisplay).attributes();
+
+				expect(props.src).toBe(srcProp);
+			});
+
+			it("should pass showTitle false to file description", () => {
+				const { wrapper } = setup();
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showtitle).toBeFalsy();
+			});
+		});
+
+		describe("when mimeType is not a video or audio type", () => {
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 
@@ -299,6 +296,9 @@ describe("FileDisplay", () => {
 				isVideoMimeTypeMock.mockReset();
 				isVideoMimeTypeMock.mockReturnValueOnce(false);
 
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
+
 				const wrapper = shallowMount(FileDisplay, {
 					propsData,
 					...createComponentMocks({}),
@@ -306,17 +306,15 @@ describe("FileDisplay", () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
 				};
 			};
 
-			it("should render file description display component", () => {
+			it("should pass showTitle true to file description", () => {
 				const { wrapper } = setup();
 
-				const fileDescription = wrapper.findComponent(FileDescription);
+				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(fileDescription.exists()).toBe(true);
+				expect(props.showtitle).toBeTruthy();
 			});
 
 			it("should not render image display component", () => {
@@ -325,6 +323,22 @@ describe("FileDisplay", () => {
 				const imageDisplay = wrapper.findComponent(ImageDisplay);
 
 				expect(imageDisplay.exists()).toBe(false);
+			});
+
+			it("should not render audio display component", () => {
+				const { wrapper } = setup();
+
+				const audioDisplay = wrapper.findComponent(AudioDisplay);
+
+				expect(audioDisplay.exists()).toBe(false);
+			});
+
+			it("should not render video display component", () => {
+				const { wrapper } = setup();
+
+				const videoDisplay = wrapper.findComponent(VideoDisplay);
+
+				expect(videoDisplay.exists()).toBe(false);
 			});
 		});
 	});

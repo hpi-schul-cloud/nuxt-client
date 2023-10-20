@@ -14,7 +14,7 @@
 		:full-width="false"
 	>
 		<div>
-			<form-news @save="create" @cancel="cancelHandler"> </form-news>
+			<form-news @save="create" @cancel="cancelHandler" />
 		</div>
 	</default-wireframe>
 </template>

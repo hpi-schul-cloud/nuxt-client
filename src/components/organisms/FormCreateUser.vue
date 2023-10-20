@@ -12,7 +12,7 @@
 			data-testid="input_create-user_firstname"
 			:error-messages="getErrors('firstName', $v.userData.firstName)"
 			@blur="$v.userData.firstName.$touch"
-		></v-text-field>
+		/>
 		<v-text-field
 			v-model="userData.lastName"
 			:label="$t('common.labels.lastName')"
@@ -20,7 +20,7 @@
 			data-testid="input_create-user_lastname"
 			:error-messages="getErrors('lastName', $v.userData.lastName)"
 			@blur="$v.userData.lastName.$touch"
-		></v-text-field>
+		/>
 		<v-text-field
 			v-model="userData.email"
 			:label="$t('common.labels.email')"
@@ -28,7 +28,7 @@
 			data-testid="input_create-user_email"
 			:error-messages="getErrors('email', $v.userData.email)"
 			@blur="$v.userData.email.$touch"
-		></v-text-field>
+		/>
 		<slot name="inputs" />
 
 		<slot name="errors" />

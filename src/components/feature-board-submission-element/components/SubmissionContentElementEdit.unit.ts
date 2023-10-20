@@ -16,7 +16,7 @@ describe("SubmissionContentElementEdit", () => {
 		const propsData = {
 			dueDate: "01.01.2023 01:23",
 			submissions: mockedSubmissions,
-			editable: true,
+			isOverdue: false,
 			loading: true,
 		};
 		const wrapper = shallowMount(
@@ -73,13 +73,13 @@ describe("SubmissionContentElementEdit", () => {
 		expect(loading).toBe(true);
 	});
 
-	it("should hand over editable prop to SubmissionItemsTeacherDisplay", () => {
+	it("should hand over isOverdue prop to SubmissionItemsTeacherDisplay", () => {
 		const { wrapper } = setup();
 
-		const editable = wrapper
+		const isOverdue = wrapper
 			.findComponent(SubmissionItemsTeacherDisplay)
-			.props("editable");
+			.props("isOverdue");
 
-		expect(editable).toBe(true);
+		expect(isOverdue).toBe(false);
 	});
 });

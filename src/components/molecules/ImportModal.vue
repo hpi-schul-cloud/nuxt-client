@@ -27,7 +27,7 @@
 					>
 						{{ $t("pages.rooms.importCourse.step_1.text") }}
 					</v-stepper-step>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-step
 						step="2"
 						:complete="step > 2"
@@ -37,7 +37,7 @@
 					>
 						{{ $t("pages.rooms.importCourse.step_2.text") }}
 					</v-stepper-step>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-step step="3" class="step">
 						{{ $t("pages.rooms.importCourse.step_3.text") }}
 					</v-stepper-step>
@@ -66,7 +66,7 @@
 								? $t('pages.rooms.importCourse.codeError')
 								: ''
 						"
-					></v-text-field>
+					/>
 				</div>
 				<div v-if="step === 3">
 					{{ $t("pages.rooms.importCourse.step_3") }}
@@ -77,7 +77,7 @@
 						dense
 						class="mt-1 text-field-course-name"
 						:disabled="isImportError"
-					></v-text-field>
+					/>
 					<div v-if="businessError.message !== ''">
 						<v-alert dense outlined type="error" class="import-error">
 							{{ $t("pages.rooms.importCourse.importError") }}

@@ -11,11 +11,7 @@
 					<div class="mb-2 text-center black--text" data-testid="dialog-text">
 						{{ loadingState.text }}
 					</div>
-					<v-progress-linear
-						indeterminate
-						color="primary"
-						class="mb-2"
-					></v-progress-linear>
+					<v-progress-linear indeterminate color="primary" class="mb-2" />
 				</v-card-text>
 			</v-card>
 		</v-dialog>

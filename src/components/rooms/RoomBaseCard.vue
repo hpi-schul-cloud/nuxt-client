@@ -30,13 +30,13 @@
 						>
 							{{ mdiOpenInNew }}
 						</v-icon>
-						<div class="mx-auto"></div>
-						<slot name="right"></slot>
+						<div class="mx-auto" />
+						<slot name="right" />
 					</div>
-					<slot name="under-title"></slot>
+					<slot name="under-title" />
 				</div>
 			</div>
-			<slot name="footer"></slot>
+			<slot name="footer" />
 		</div>
 	</v-card>
 </template>

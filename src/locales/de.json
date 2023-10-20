@@ -824,6 +824,7 @@
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.videoFormatError": "Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.fileElement.audioFormatError": "Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.richTextElement": "Textelement",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
 	"components.cardElement.submissionElement": "Abgabe",
@@ -1019,5 +1020,6 @@
 	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
+	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
 	"util-validators-invalid-url": "Bitte geben Sie eine gültige URL ein."
 }

@@ -11,7 +11,7 @@
 			data-testid="board-file-element-progress-bar"
 			indeterminate
 		/>
-		<slot></slot>
+		<slot />
 	</v-app-bar>
 </template>
 

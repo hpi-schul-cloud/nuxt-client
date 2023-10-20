@@ -329,6 +329,7 @@
 	"components.cardElement.fileElement.reloadStatus": "Статус оновлення",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.videoFormatError": "Формат відео не підтримується цим браузером / операційною системою.",
+	"components.cardElement.fileElement.audioFormatError": "Формат аудіо не підтримується цим браузером / операційною системою.",
 	"components.cardElement.richTextElement": "Текстовий елемент",
 	"components.cardElement.richTextElement.placeholder": "додати текст",
 	"components.cardElement.submissionElement": "Подання",
@@ -1045,5 +1046,6 @@
 	"pages.videoConference.action.refresh": "оновити статус",
 	"ui-confirmation-dialog.ask-delete.card": "{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
-	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент..."
+	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент...",
+	"feature-board-external-tool-element.dialog.title": "Вибір і налаштування"
 }

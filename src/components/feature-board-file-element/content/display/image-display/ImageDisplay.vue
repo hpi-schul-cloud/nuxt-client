@@ -12,7 +12,7 @@
 		/>
 
 		<ContentElementBar class="menu">
-			<template #menu><slot></slot></template>
+			<template #menu><slot /></template>
 		</ContentElementBar>
 	</ColorOverlay>
 </template>
