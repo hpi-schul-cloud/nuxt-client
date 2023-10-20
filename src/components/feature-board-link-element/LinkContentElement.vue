@@ -4,7 +4,7 @@
 		data-testid="board-link-element"
 		dense
 		elevation="0"
-		outlined="true"
+		:outlined="true"
 		ref="linkContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -16,6 +16,7 @@
 			:title="computedElement.content.title"
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
+			:isEditMode="isEditMode"
 			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
@@ -91,21 +92,24 @@ export default defineComponent({
 
 		// can be removed after refactoring of upload+virusScan-workflow
 		const updateFileRecord = (increase = 100, base = 1000, retries = 0) => {
-			fetchFile().then(() => {
-				if (
-					fileRecord?.value?.previewStatus &&
-					isPreviewPossible(fileRecord.value?.previewStatus)
-				) {
-					modelValue.value.imageUrl = convertDownloadToPreviewUrl(
-						fileRecord.value.url
-					);
-				} else if (retries < 10) {
-					setTimeout(
-						() => updateFileRecord(base + increase, base, retries++),
-						base + increase
-					);
-				}
-			});
+			setTimeout(() => {
+				fetchFile()
+					.then(() => {
+						if (
+							fileRecord?.value?.previewStatus &&
+							isPreviewPossible(fileRecord.value?.previewStatus)
+						) {
+							modelValue.value.imageUrl = convertDownloadToPreviewUrl(
+								fileRecord.value.url
+							);
+						} else if (retries < 10) {
+							updateFileRecord(base + increase, base, retries++);
+						}
+					})
+					.catch(() => {
+						console.log("unabled to load fileRecord");
+					});
+			}, base + increase);
 		};
 
 		const onCreateUrl = async (url: string) => {

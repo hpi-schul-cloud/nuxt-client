@@ -1,14 +1,16 @@
 <template>
 	<v-card
 		data-testid="board-link-element"
+		ref="linkContentElementDisplay"
 		dense
 		elevation="0"
 		:outlined="true"
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
+		:hover="isHovered"
 	>
-		<div class="menu">
+		<div class="menu" :class="boardMenuClasses">
 			<slot />
 		</div>
 		<a :href="sanitizedUrl" target="_blank">
@@ -36,9 +38,10 @@
 </template>
 
 <script lang="ts">
-import { ComputedRef, computed, defineComponent } from "vue";
+import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useElementHover } from "@vueuse/core";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
@@ -60,8 +63,10 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
+		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
 		const urlWithoutProtocol: ComputedRef<string> = computed(() => {
 			try {
 				const urlObject = new URL(props.url);
@@ -72,9 +77,23 @@ export default defineComponent({
 			return props.url;
 		});
 
-		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
+		const linkContentElementDisplay = ref(null);
+		const isHovered = useElementHover(linkContentElementDisplay);
+		const boardMenuClasses = computed(() => {
+			if (props.isEditMode && isHovered.value === true) {
+				return "";
+			}
+			return "hidden";
+		});
 
-		return { mdiLink, urlWithoutProtocol, sanitizedUrl };
+		return {
+			mdiLink,
+			sanitizedUrl,
+			urlWithoutProtocol,
+			linkContentElementDisplay,
+			boardMenuClasses,
+			isHovered,
+		};
 	},
 });
 </script>
@@ -87,5 +106,10 @@ a {
 	position: absolute;
 	right: 4px;
 	top: 4px;
+	z-index: 100;
+}
+.hidden {
+	transition: opacity 200ms;
+	opacity: 0;
 }
 </style>
