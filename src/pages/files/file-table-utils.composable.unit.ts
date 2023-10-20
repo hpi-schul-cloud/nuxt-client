@@ -60,8 +60,8 @@ describe("UseFileTableUtils", () => {
 			const nameHeader = headers[1];
 			expect(nameHeader.title).toEqual(expectedTranslation);
 			expect(nameHeader.value).toEqual("name");
-			expect(nameHeader.class).toEqual("primary--text");
-			expect(nameHeader.cellClass).toEqual("primary--text");
+			expect(nameHeader.class).toEqual("text-primary");
+			expect(nameHeader.cellClass).toEqual("text-primary");
 			expect(nameHeader.sortable).toBeUndefined();
 			expect(nameHeader.width).toBeUndefined();
 			expect(tMock).toHaveBeenCalledWith("common.labels.name");
@@ -69,7 +69,7 @@ describe("UseFileTableUtils", () => {
 			const sizeHeader = headers[2];
 			expect(sizeHeader.title).toEqual(expectedTranslation);
 			expect(sizeHeader.value).toEqual("size");
-			expect(sizeHeader.class).toEqual("primary--text");
+			expect(sizeHeader.class).toEqual("text-primary");
 			expect(sizeHeader.sortable).toBeUndefined();
 			expect(sizeHeader.width).toEqual("110");
 			expect(tMock).toHaveBeenCalledWith("common.labels.size");
@@ -77,7 +77,7 @@ describe("UseFileTableUtils", () => {
 			const changedHeader = headers[3];
 			expect(changedHeader.title).toEqual(expectedTranslation);
 			expect(changedHeader.value).toEqual("lastChanged");
-			expect(changedHeader.class).toEqual("primary--text");
+			expect(changedHeader.class).toEqual("text-primary");
 			expect(changedHeader.sortable).toBeUndefined();
 			expect(changedHeader.width).toEqual("140");
 			expect(tMock).toHaveBeenCalledWith("common.labels.changed");

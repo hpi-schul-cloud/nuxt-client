@@ -4,7 +4,6 @@
 			v-model="showDateDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
-			nudge-bottom="70"
 			min-width="auto"
 			@input="onMenuToggle"
 		>
@@ -29,7 +28,7 @@
 					@update:error="onError"
 				/>
 			</template>
-			<v-date-picker
+			<VDatePicker
 				v-model="modelValue"
 				:aria-expanded="showDateDialog"
 				color="primary"
@@ -53,9 +52,13 @@ import { computed, defineComponent, ref } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "vue-i18n";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { VDatePicker } from "vuetify/labs/VDatePicker";
 
 export default defineComponent({
 	name: "DatePicker",
+	components: {
+		VDatePicker,
+	},
 	props: {
 		date: { type: String, required: true },
 		label: { type: String, default: "" },

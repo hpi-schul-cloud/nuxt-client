@@ -11,9 +11,9 @@
 		>
 			<v-img v-if="imageUrl" :src="imageUrl" alt=""></v-img>
 
-			<v-card-subtitle class="grey lighten-4 black--text text--darken-2">
+			<v-card-subtitle class="grey-lighten-4 text-black text-darken-2">
 				<div class="d-flex flex-no-wrap">
-					<v-icon class="grey--text text--darken-2" medium>
+					<v-icon class="text-grey text-darken-2" medium>
 						{{ mdiLink }}
 					</v-icon>
 					<div

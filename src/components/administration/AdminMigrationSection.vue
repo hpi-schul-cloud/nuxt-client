@@ -25,7 +25,7 @@
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
-				<v-alert light prominent variant="text" type="info">
+				<v-alert prominent variant="tonal" type="info">
 					<RenderHTML
 						data-testid="migration-active-status"
 						:html="

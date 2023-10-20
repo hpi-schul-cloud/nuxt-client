@@ -10,7 +10,7 @@
 				<template v-slot:prepend
 					><v-icon :icon="item.icon" color="primary" />
 				</template>
-				<v-list-item-title class="primary--text link">{{
+				<v-list-item-title class="text-primary link">{{
 					$t(item.label)
 				}}</v-list-item-title>
 			</v-list-item>

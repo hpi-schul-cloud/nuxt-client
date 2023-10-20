@@ -4,10 +4,10 @@
 		v-model="showMenu"
 		bottom
 		left
-		offset-y
 		attach
-		:nudge-right="nudgeRight"
+		location="bottom end"
 	>
+		<!-- :nudge-right="nudgeRight" -->
 		<template #activator="{ props }">
 			<v-btn
 				v-bind="props"

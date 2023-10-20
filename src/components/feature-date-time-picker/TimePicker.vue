@@ -4,7 +4,6 @@
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
-			nudge-bottom="70"
 			min-width="180"
 			@input="onMenuToggle"
 		>

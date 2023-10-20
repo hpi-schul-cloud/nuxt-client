@@ -4,11 +4,11 @@
 		class="mb-0 py-4 rounded-t-0"
 		:color="alertProperties.color"
 		data-testid="board-file-element-alert"
-		dense
+		density="compact"
 		:icon="alertProperties.icon"
 		variant="tonal"
 	>
-		<div class="black--text" v-if="alertProperties.text">
+		<div class="text-black" v-if="alertProperties.text">
 			{{ $t(alertProperties.text) }}
 			<a
 				href="#"

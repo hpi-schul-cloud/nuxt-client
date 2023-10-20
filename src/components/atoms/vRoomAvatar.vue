@@ -103,14 +103,14 @@ export default defineComponent({
 				classes.push("single-avatar", "text-h3");
 			}
 			if (this.stillBeingCopied) {
-				classes.push("grey--text", "text--darken-1");
+				classes.push("text-grey", "text-darken-1");
 			} else {
-				classes.push("white--text");
+				classes.push("text-white");
 			}
 			return classes;
 		},
 		avatarClass() {
-			return this.stillBeingCopied ? ["grey lighten-2"] : [];
+			return this.stillBeingCopied ? ["grey-lighten-2"] : [];
 		},
 		avatarColor() {
 			return this.stillBeingCopied ? undefined : this.item.displayColor;
@@ -127,7 +127,7 @@ export default defineComponent({
 		titleClasses() {
 			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
 			const copyingClass = this.stillBeingCopied
-				? ["grey--text", "text--darken-1"]
+				? ["text-grey", "text-darken-1"]
 				: [];
 			return [
 				"justify-center",

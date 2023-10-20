@@ -124,7 +124,7 @@
 									v-bind="attr"
 									:input-value="selected"
 									color="blue-grey"
-									class="white--text"
+									class="text-white"
 									v-on="on"
 								>
 									<span>{{ `${item.firstName} ${item.lastName}` }}</span>
