@@ -80,3 +80,7 @@ export function isVideoMimeType(mimeType: string): boolean {
 		mimeType === "application/ogg"
 	);
 }
+
+export function isAudioMimeType(mimeType: string): boolean {
+	return mimeType.startsWith("audio/");
+}
