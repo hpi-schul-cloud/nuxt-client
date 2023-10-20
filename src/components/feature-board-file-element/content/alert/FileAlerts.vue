@@ -4,6 +4,10 @@
 			{{ t("components.cardElement.fileElement.videoFormatError") }}
 		</InfoAlert>
 
+		<InfoAlert v-if="alerts.includes(FileAlert.AUDIO_FORMAT_ERROR)">
+			{{ t("components.cardElement.fileElement.audioFormatError") }}
+		</InfoAlert>
+
 		<InfoAlert v-if="alerts.includes(FileAlert.AWAITING_SCAN_STATUS)">
 			<div>
 				{{ t("components.cardElement.fileElement.awaitingScan") }}
