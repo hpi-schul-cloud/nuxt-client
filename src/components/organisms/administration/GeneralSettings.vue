@@ -53,7 +53,7 @@
 			<v-row>
 				<v-col>
 					<v-select
-						v-model="localSchool.county"
+						:model-value="localSchool.county"
 						class="school-counties"
 						:label="
 							$t(
@@ -61,10 +61,10 @@
 							)
 						"
 						:items="federalState.counties"
-						item-text="name"
+						item-title="name"
 						item-value="_id"
 						return-object
-						dense
+						density="compact"
 						:disabled="!!localSchool.county"
 						:hint="
 							$t(
@@ -114,7 +114,7 @@
 			<v-row>
 				<v-col>
 					<v-select
-						v-model="localSchool.language"
+						:model-value="localSchool.language"
 						class="language-select"
 						:label="
 							$t(
@@ -122,9 +122,9 @@
 							)
 						"
 						:items="languages"
-						item-text="name"
+						item-title="name"
 						item-value="abbreveation"
-						dense
+						density="compact"
 						:hint="
 							$t(
 								'pages.administration.school.index.generalSettings.languageHint'

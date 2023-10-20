@@ -11,10 +11,10 @@
 			<template #body>
 				<div class="content-modal__body">
 					<v-select
-						v-model="selectedCourse"
+						:model-value="selectedCourse"
 						return-object
 						item-value="_id"
-						item-text="name"
+						item-title="name"
 						:items="coursesOptions"
 						:label="$t('pages.content.label.chooseACourse')"
 						data-testid="topicSelector"
@@ -22,10 +22,10 @@
 					<transition name="fade">
 						<v-select
 							v-show="!!(selectedCourse || {})._id"
-							v-model="selectedLesson"
+							:model-value="selectedLesson"
 							return-object
 							item-value="_id"
-							item-text="name"
+							item-title="name"
 							:items="lessonsOptions"
 							:label="$t('pages.content.label.chooseALessonTopic')"
 							:no-data-text="$t('pages.content.placeholder.noLessonTopic')"

@@ -75,8 +75,10 @@
 						</td>
 						<td>
 							<v-select
-								v-model="searchRole"
+								:model-value="searchRole"
 								:items="roles"
+								item-title="text"
+								item-value="value"
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
 								class="searchRole"
