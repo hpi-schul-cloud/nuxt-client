@@ -1,14 +1,17 @@
 <template>
-	<a :href="sanitizedUrl" target="_blank">
-		<v-card
-			data-testid="board-link-element"
-			dense
-			elevation="0"
-			:outlined="true"
-			:ripple="false"
-			tabindex="0"
-			:loading="isLoading ? 'primary' : false"
-		>
+	<v-card
+		data-testid="board-link-element"
+		dense
+		elevation="0"
+		:outlined="true"
+		:ripple="false"
+		tabindex="0"
+		:loading="isLoading ? 'primary' : false"
+	>
+		<div class="menu">
+			<slot />
+		</div>
+		<a :href="sanitizedUrl" target="_blank">
 			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
 
 			<v-card-subtitle class="grey lighten-4 black--text text--darken-2">
@@ -28,8 +31,8 @@
 					{{ urlWithoutProtocol }}
 				</div>
 			</v-card-subtitle>
-		</v-card>
-	</a>
+		</a>
+	</v-card>
 </template>
 
 <script lang="ts">
@@ -79,5 +82,10 @@ export default defineComponent({
 <style scoped>
 a {
 	text-decoration: none;
+}
+.menu {
+	position: absolute;
+	right: 4px;
+	top: 4px;
 }
 </style>

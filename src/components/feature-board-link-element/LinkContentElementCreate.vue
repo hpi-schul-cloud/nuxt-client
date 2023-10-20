@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<v-card-text>
 		<v-form @submit.prevent="onSubmit(url)" ref="form" :lazy-validation="true">
 			<v-text-field
 				v-model="url"
@@ -18,7 +18,7 @@
 				</template>
 			</v-text-field>
 		</v-form>
-	</div>
+	</v-card-text>
 </template>
 
 <script lang="ts">

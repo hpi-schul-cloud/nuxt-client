@@ -1,17 +1,32 @@
 <template>
-	<div class="mb-4" @keydown.up.down="onKeydownArrow">
+	<v-card
+		class="mb-4"
+		data-testid="board-link-element"
+		dense
+		elevation="0"
+		outlined="true"
+		ref="linkContentElement"
+		:ripple="false"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
+	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
-		/>
-		<LinkContentElementEdit
+			><BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
+		</LinkContentElementDisplay>
+		<LinkContentElementCreate
 			v-if="!computedElement.content.url"
 			@create:url="onCreateUrl"
 		/>
-	</div>
+	</v-card>
 </template>
 
 <script lang="ts">
@@ -29,14 +44,24 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { $axios } from "@/utils/api";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import LinkContentElementEdit from "./LinkContentElementEdit.vue";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
 	name: "LinkElementContent",
 	components: {
-		LinkContentElementEdit,
+		LinkContentElementCreate,
 		LinkContentElementDisplay,
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 	},
 	props: {
 		element: {
@@ -45,7 +70,12 @@ export default defineComponent({
 		},
 		isEditMode: { type: Boolean, required: true },
 	},
-	emits: ["delete:element", "move-keyboard:edit"],
+	emits: [
+		"delete:element",
+		"move-keyboard:edit",
+		"move-down:edit",
+		"move-up:edit",
+	],
 	setup(props, { emit }) {
 		const element = toRef(props, "element");
 		const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
@@ -97,12 +127,21 @@ export default defineComponent({
 			}
 		};
 
+		const onMoveDown = () => emit("move-down:edit");
+
+		const onMoveUp = () => emit("move-up:edit");
+
+		const onDelete = () => emit("delete:element", element.value.id);
+
 		return {
 			computedElement,
 			isLoading,
 			modelValue,
 			onCreateUrl,
 			onKeydownArrow,
+			onMoveDown,
+			onMoveUp,
+			onDelete,
 		};
 	},
 });
