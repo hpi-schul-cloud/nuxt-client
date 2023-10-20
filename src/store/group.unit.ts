@@ -1,35 +1,38 @@
-import * as serverApi from "@/serverApi/v3/api";
 import {
 	ClassInfoResponse,
 	ClassInfoSearchListResponse,
 	GroupApiInterface,
 } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
 	businessErrorFactory,
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
 } from "@@/tests/test-utils";
+import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { AxiosInstance } from "axios";
+import GroupModule from "./group";
 import { ClassInfo, ClassRootType } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
-import GroupModule from "./group";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
-import axios from "axios/index";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
 
 	let apiMock: DeepMocked<GroupApiInterface>;
+	let axiosMock: DeepMocked<AxiosInstance>;
 
 	beforeEach(() => {
 		module = new GroupModule({});
 
 		apiMock = createMock<GroupApiInterface>();
+		axiosMock = createMock<AxiosInstance>();
 
+		initializeAxios(axiosMock);
 		jest.spyOn(serverApi, "GroupApiFactory").mockReturnValue(apiMock);
 	});
 
@@ -260,60 +263,72 @@ describe("GroupModule", () => {
 		});
 	});
 
-	// TODO test deleteClass method by mocking the v1 axios call
 	describe("deleteClass", () => {
 		describe("when called", () => {
 			const setup = () => {
-				const clazz: ClassInfo = classInfoFactory.build();
-				const classId = clazz.id;
+				const class1: ClassInfo = classInfoFactory.build();
+				const class2: ClassInfo = classInfoFactory.build();
+
+				module.setClasses([class1, class2]);
 
 				return {
-					classId,
+					class1,
+					class2,
 				};
 			};
 
 			it("should delete the class", async () => {
-				const { classId } = setup();
+				const { class1 } = setup();
 
-				await module.deleteClass(classId);
+				await module.deleteClass(class1.id);
 
-				expect(axios.delete).toHaveBeenCalled();
+				expect(axiosMock.delete).toHaveBeenCalled();
 			});
 
-			it("should load classes", async () => {
-				const { classId } = setup();
+			it("should remove the class from the store", async () => {
+				const { class1, class2 } = setup();
 
-				await module.deleteClass(classId);
+				await module.deleteClass(class1.id);
 
-				expect(module.loadClassesForSchool).toHaveBeenCalled();
+				expect(module.getClasses).toEqual([class2]);
 			});
 		});
 
-		describe("when error is returned", () => {
+		describe("when an error occurs during the api call", () => {
 			const setup = () => {
 				const error = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(error);
-				const clazz: ClassInfo = classInfoFactory.build();
-				const classId = clazz.id;
+				const class1: ClassInfo = classInfoFactory.build();
+				const class2: ClassInfo = classInfoFactory.build();
 
-				module.loadClassesForSchool.mockRejectedValue(error);
+				module.setClasses([class1, class2]);
+				axiosMock.delete.mockRejectedValue(error);
 
 				return {
 					apiError,
-					classId,
+					class1,
+					class2,
 				};
 			};
 
 			it("should update the stores error", async () => {
-				const { apiError, classId } = setup();
+				const { apiError, class1 } = setup();
 
-				await module.deleteClass(classId);
+				await module.deleteClass(class1.id);
 
 				expect(module.getBusinessError).toEqual<BusinessError>({
 					error: apiError,
 					statusCode: apiError.code,
 					message: `${apiError.type}: ${apiError.message}`,
 				});
+			});
+
+			it("should not remove the class from the store", async () => {
+				const { class1, class2 } = setup();
+
+				await module.deleteClass(class1.id);
+
+				expect(module.getClasses).toEqual([class1, class2]);
 			});
 		});
 	});

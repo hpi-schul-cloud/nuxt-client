@@ -1,15 +1,15 @@
+import AuthModule from "@/store/auth";
 import GroupModule from "@/store/group";
+import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import { Pagination } from "@/store/types/commons";
+import { SortOrder } from "@/store/types/sort-order.enum";
+import { AUTH_MODULE_KEY, GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
-import { MountOptions, Wrapper, mount } from "@vue/test-utils";
-import ClassOverview from "./ClassOverview.page.vue";
-import { AUTH_MODULE_KEY, GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
-import { SortOrder } from "@/store/types/sort-order.enum";
-import { Pagination } from "@/store/types/commons";
-import AuthModule from "@/store/auth";
-import { ClassRootType } from "@/store/types/class-info";
+import ClassOverview from "./ClassOverview.page.vue";
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
@@ -19,7 +19,7 @@ describe("ClassOverview", () => {
 			getClasses: [
 				classInfoFactory.build(),
 				classInfoFactory.build({
-					externalSourceName: "",
+					externalSourceName: undefined,
 					type: ClassRootType.Class,
 					isUpgradable: true,
 				}),
@@ -84,6 +84,37 @@ describe("ClassOverview", () => {
 		});
 	});
 
+	describe("when there are classes or groups to display", () => {
+		const setup = () => {
+			const classes: ClassInfo[] = [
+				classInfoFactory.build(),
+				classInfoFactory.build({
+					externalSourceName: undefined,
+					type: ClassRootType.Class,
+					isUpgradable: true,
+				}),
+			];
+
+			const { wrapper, groupModule } = getWrapper({
+				getClasses: classes,
+			});
+
+			return {
+				classes,
+				wrapper,
+				groupModule,
+			};
+		};
+
+		it("should display the entries in the table", async () => {
+			const { classes, wrapper } = setup();
+
+			const table = wrapper.find('[data-testid="admin-class-table"]');
+
+			expect(table.props("items")).toEqual(classes);
+		});
+	});
+
 	describe("onUpdateSortBy", () => {
 		describe("when changing the sortBy", () => {
 			const setup = () => {
@@ -101,9 +132,10 @@ describe("ClassOverview", () => {
 			it("should call store to change sort by", async () => {
 				const { sortBy, wrapper, groupModule } = setup();
 
-				await wrapper
+				wrapper
 					.find('[data-testid="admin-class-table"]')
 					.vm.$emit("update:sort-by", sortBy);
+				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
 				expect(groupModule.setSortBy).toHaveBeenCalledWith(sortBy);
@@ -128,9 +160,10 @@ describe("ClassOverview", () => {
 			it("should call store to change sort order", async () => {
 				const { sortOrder, wrapper, groupModule } = setup();
 
-				await wrapper
+				wrapper
 					.find('[data-testid="admin-class-table"]')
 					.vm.$emit("update:sort-desc", sortOrder);
+				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
 				expect(groupModule.setSortOrder).toHaveBeenCalledWith(SortOrder.DESC);
@@ -168,9 +201,10 @@ describe("ClassOverview", () => {
 			it("should call store to change the limit in pagination", async () => {
 				const { itemsPerPage, wrapper, groupModule, pagination } = setup();
 
-				await wrapper
+				wrapper
 					.find('[data-testid="admin-class-table"]')
 					.vm.$emit("update:items-per-page", itemsPerPage);
+				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
 				expect(groupModule.setPagination).toHaveBeenCalledWith({
@@ -206,9 +240,10 @@ describe("ClassOverview", () => {
 			it("should call store to update current page", async () => {
 				const { page, wrapper, groupModule, pagination } = setup();
 
-				await wrapper
+				wrapper
 					.find('[data-testid="admin-class-table"]')
 					.vm.$emit("update:page", page);
+				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
 				expect(groupModule.setPage).toHaveBeenCalledWith(page);
@@ -385,7 +420,7 @@ describe("ClassOverview", () => {
 					'[data-testid="class-table-successor-btn"]'
 				);
 
-				expect(successorBtn.attributes().disabled).toBe("disabled");
+				expect(successorBtn.props("disabled")).toEqual(true);
 			});
 		});
 
@@ -407,7 +442,7 @@ describe("ClassOverview", () => {
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
 
-				expect(dialog.props("value")).toBeTruthy();
+				expect(dialog.props("isOpen")).toBeTruthy();
 			});
 		});
 

@@ -25,7 +25,7 @@
 			<template v-slot:[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
 					<v-btn
-						:aria-label="$t('pages.administration.classes.manage')"
+						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-manage-btn"
 						outlined
 						color="secondary"
@@ -37,7 +37,7 @@
 						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
 					</v-btn>
 					<v-btn
-						:aria-label="$t('pages.administration.classes.edit')"
+						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
 						outlined
 						color="secondary"
@@ -62,7 +62,7 @@
 					</v-btn>
 					<v-btn
 						:disabled="!item.isUpgradable"
-						:aria-label="$t('pages.administration.classes.createSuccessor')"
+						:aria-label="t('pages.administration.classes.createSuccessor')"
 						data-testid="class-table-successor-btn"
 						outlined
 						color="secondary"
@@ -78,7 +78,7 @@
 		</v-data-table>
 
 		<v-custom-dialog
-			v-model="isDeleteDialogOpen"
+			:is-open="isDeleteDialogOpen"
 			max-width="360"
 			data-testId="delete-dialog"
 			has-buttons
@@ -114,9 +114,25 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import GroupModule from "@/store/group";
+import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import { Pagination } from "@/store/types/commons";
+import { SortOrder } from "@/store/types/sort-order.enum";
+import {
+	AUTH_MODULE_KEY,
+	GROUP_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
+import {
+	mdiAccountGroupOutline,
+	mdiArrowUp,
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import {
 	computed,
 	ComputedRef,
@@ -125,24 +141,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import GroupModule from "@/store/group";
-import { useI18n } from "@/composables/i18n.composable";
-import { Pagination } from "@/store/types/commons";
-import { ClassInfo, ClassRootType } from "@/store/types/class-info";
-import {
-	AUTH_MODULE_KEY,
-	GROUP_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	mdiAccountGroupOutline,
-	mdiArrowUp,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-} from "@mdi/js";
-import AuthModule from "../../store/auth";
 import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
+import AuthModule from "../../store/auth";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
