@@ -76,7 +76,7 @@ describe("GroupState.composable", () => {
 
 			await fetchGroup("groupId");
 
-			expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
+			expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {});
 		});
 	});
 });

@@ -3,7 +3,7 @@ import { ref, Ref } from "vue";
 import { Group, useGroupApi } from "./index";
 
 export const useGroupState = () => {
-	const { handleError } = useErrorHandler(); // TODO: This error handler is board specific
+	const { handleError } = useErrorHandler();
 	const { getGroup } = useGroupApi();
 
 	const isLoading: Ref<boolean> = ref(false);
@@ -16,7 +16,7 @@ export const useGroupState = () => {
 			const fetchedGroup: Group = await getGroup(groupId);
 			group.value = fetchedGroup;
 		} catch (error) {
-			handleError(error);
+			handleError(error, {});
 		}
 
 		isLoading.value = false;
