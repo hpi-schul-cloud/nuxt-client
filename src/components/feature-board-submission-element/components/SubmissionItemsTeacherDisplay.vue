@@ -9,7 +9,7 @@
 		/>
 		<VExpansionPanels v-else flat class="rounded-0 rounded-b-sm">
 			<VExpansionPanel>
-				<VExpansionPanelHeader @dblclick.stop="() => {}" class="pl-4 pr-4">
+				<v-expansion-panel-title @dblclick.stop="() => {}" class="pl-4 pr-4">
 					<v-chip
 						v-if="openCount"
 						ref="v-chip-open"
@@ -40,8 +40,8 @@
 						{{ expiredCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
 					</v-chip>
-				</VExpansionPanelHeader>
-				<VExpansionPanelContent>
+				</v-expansion-panel-title>
+				<v-expansion-panel-text>
 					<v-data-table
 						:headers="headers"
 						:items="items"
@@ -67,7 +67,7 @@
 							</v-chip>
 						</template>
 					</v-data-table>
-				</VExpansionPanelContent>
+				</v-expansion-panel-text>
 			</VExpansionPanel>
 		</VExpansionPanels>
 	</div>
