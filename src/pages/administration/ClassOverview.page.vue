@@ -83,7 +83,7 @@
 			data-testId="delete-dialog"
 			has-buttons
 			:buttons="['cancel', 'confirm']"
-			@dialog-canceled="onCancelClassDeletion"
+			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"
 		>
 			<h2 slot="title" class="text-h4 my-2">
@@ -234,8 +234,6 @@ export default defineComponent({
 			if (selectedItem.value) {
 				await groupModule.deleteClass(selectedItem.value.id);
 			}
-
-			onCancelClassDeletion();
 		};
 
 		const onUpdateSortBy = async (sortBy: string) => {

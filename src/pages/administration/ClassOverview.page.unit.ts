@@ -3,15 +3,13 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
 import { MountOptions, Wrapper, mount } from "@vue/test-utils";
 import ClassOverview from "./ClassOverview.page.vue";
-import { GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY, GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { Pagination } from "@/store/types/commons";
-import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
-import { authModule } from "@/store";
-import { ClassRootType } from "../../store/types/class-info";
+import { ClassRootType } from "@/store/types/class-info";
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
@@ -41,6 +39,7 @@ describe("ClassOverview", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 		});
 
@@ -49,12 +48,6 @@ describe("ClassOverview", () => {
 			groupModule,
 		};
 	};
-
-	beforeEach(() => {
-		setupStores({
-			authModule: AuthModule,
-		});
-	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -223,8 +216,6 @@ describe("ClassOverview", () => {
 	describe("action icons", () => {
 		describe("when legacy classes are available", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper } = getWrapper();
 
 				return {
@@ -235,18 +226,18 @@ describe("ClassOverview", () => {
 			it("should render 4 icons", () => {
 				const { wrapper } = setup();
 
-				const manageIcon = wrapper.find(
-					'[data-testid="class-table-manage-icon"]'
+				const manageBtn = wrapper.find(
+					'[data-testid="class-table-manage-btn"]'
 				);
 
-				const editIcon = wrapper.find('[data-testid="class-table-edit-icon"]');
+				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
 
-				const deleteIcon = wrapper.find(
-					'[data-testid="class-table-delete-icon"]'
+				const deleteBtn = wrapper.find(
+					'[data-testid="class-table-delete-btn"]'
 				);
 
-				const successorIcon = wrapper.find(
-					'[data-testid="class-table-successor-icon"]'
+				const successorBtn = wrapper.find(
+					'[data-testid="class-table-successor-btn"]'
 				);
 
 				expect(manageIcon.exists()).toBeTruthy();
@@ -258,8 +249,6 @@ describe("ClassOverview", () => {
 
 		describe("when no classes are available", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper } = getWrapper({
 					getClasses: [classInfoFactory.build()],
 				});
@@ -295,8 +284,6 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the manage class icon", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper, groupModule } = getWrapper();
 
 				const classId: string = groupModule.getClasses[1].id;
@@ -322,8 +309,6 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the edit class icon", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper, groupModule } = getWrapper();
 
 				const classId: string = groupModule.getClasses[1].id;
@@ -348,8 +333,6 @@ describe("ClassOverview", () => {
 		describe("when class is upgradable", () => {
 			describe("when clicking on the upgrade class icon", () => {
 				const setup = () => {
-					authModule.addUserPermmission("CLASS_EDIT");
-
 					const { wrapper, groupModule } = getWrapper();
 
 					const classId: string = groupModule.getClasses[1].id;
@@ -376,8 +359,6 @@ describe("ClassOverview", () => {
 
 		describe("when class is not upgradable", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper } = getWrapper({
 					getClasses: [
 						classInfoFactory.build({
@@ -406,8 +387,6 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the delete class icon", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper } = getWrapper();
 
 				return {
@@ -430,8 +409,6 @@ describe("ClassOverview", () => {
 
 		describe("when delete dialog is open", () => {
 			const setup = () => {
-				authModule.addUserPermmission("CLASS_EDIT");
-
 				const { wrapper, groupModule } = getWrapper();
 
 				return {
