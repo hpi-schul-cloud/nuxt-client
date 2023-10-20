@@ -1472,6 +1472,25 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalSourceResponse
+ */
+export interface ExternalSourceResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalSourceResponse
+     */
+    externalId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalSourceResponse
+     */
+    systemId: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolContentBody
  */
 export interface ExternalToolContentBody {
@@ -1866,6 +1885,116 @@ export interface ForbiddenOperationError {
      */
     details?: object;
 }
+/**
+ * 
+ * @export
+ * @interface GroupResponse
+ */
+export interface GroupResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    type: GroupResponseTypeEnum;
+    /**
+     * 
+     * @type {Array<GroupUserResponse>}
+     * @memberof GroupResponse
+     */
+    users: Array<GroupUserResponse>;
+    /**
+     * 
+     * @type {ExternalSourceResponse}
+     * @memberof GroupResponse
+     */
+    externalSource?: ExternalSourceResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    organizationId?: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GroupResponseTypeEnum {
+    Class = 'class'
+}
+
+/**
+ * 
+ * @export
+ * @interface GroupUserResponse
+ */
+export interface GroupUserResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    role: GroupUserResponseRoleEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GroupUserResponseRoleEnum {
+    Administrator = 'administrator',
+    CourseAdministrator = 'courseAdministrator',
+    CourseStudent = 'courseStudent',
+    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    CourseTeacher = 'courseTeacher',
+    Demo = 'demo',
+    DemoStudent = 'demoStudent',
+    DemoTeacher = 'demoTeacher',
+    Expert = 'expert',
+    Helpdesk = 'helpdesk',
+    Student = 'student',
+    Superhero = 'superhero',
+    Teacher = 'teacher',
+    Teamadministrator = 'teamadministrator',
+    Teamexpert = 'teamexpert',
+    Teamleader = 'teamleader',
+    Teammember = 'teammember',
+    Teamowner = 'teamowner',
+    User = 'user'
+}
+
 /**
  * 
  * @export
@@ -8876,6 +9005,44 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetGroup: async (groupId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'groupId' is not null or undefined
+            assertParamExists('groupControllerGetGroup', 'groupId', groupId)
+            const localVarPath = `/groups/{groupId}`
+                .replace(`{${"groupId"}}`, encodeURIComponent(String(groupId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -8898,6 +9065,17 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerGetGroup(groupId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GroupResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroup(groupId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -8923,6 +9101,16 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
         groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetGroup(groupId: string, options?: any): AxiosPromise<GroupResponse> {
+            return localVarFp.groupControllerGetGroup(groupId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -8944,6 +9132,16 @@ export interface GroupApiInterface {
      * @memberof GroupApiInterface
      */
     groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+
+    /**
+     * 
+     * @summary Get a group by id.
+     * @param {string} groupId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerGetGroup(groupId: string, options?: any): AxiosPromise<GroupResponse>;
 
 }
 
@@ -8967,6 +9165,18 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      */
     public groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a group by id.
+     * @param {string} groupId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerGetGroup(groupId: string, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerGetGroup(groupId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
