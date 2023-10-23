@@ -1029,6 +1029,7 @@
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
 	"feature-board-external-tool-element.dialog.title": "Selección y configuración",
+	"util-validators-invalid-url": "Esta URL no es válida.",
 	"page-class-members.title.info": "importado desde un sistema externo",
 	"page-class-members.systemInfoText": "Los datos de la clase se sincronizan con {systemName}. La lista de clases puede estar temporalmente desactualizada hasta que se actualice con la última versión en {systemName}. Los datos se actualizan cada vez que un miembro del grupo se registra en Niedersächsischen Bildungscloud.",
 	"page-class-members.classMembersInfoBox.title": "¿Los estudiantes aún no están en la Niedersächsischen Bildungscloud?",

@@ -1032,7 +1032,7 @@
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
 	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
-	"util-validators-invalid-url": "Bitte geben Sie eine gültige URL ein.",
+	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"page-class-members.title.info": "importiert aus einem externen System",
 	"page-class-members.systemInfoText": "Daten der Klasse werden mit {systemName} synchronisiert. Die Klassenliste kann vorübergehend veraltet sein, bis sie mit dem neusten Stand in {systemName} abgeglichen wird. Die Daten werden nach jeder Anmeldung eines Klassenmitglieds in der Niedersächsischen Bildungscloud aktualisiert.",
 	"page-class-members.classMembersInfoBox.title": "Schüler:innen sind noch nicht in der Niedersächsischen Bildungscloud?",
