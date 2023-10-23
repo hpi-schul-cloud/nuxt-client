@@ -265,7 +265,7 @@ describe("FileDisplay", () => {
 
 			it("should pass correct props to audio display component", () => {
 				const { wrapper, srcProp } = setup();
-				console.log(wrapper.html());
+
 				const props = wrapper.findComponent(AudioDisplay).attributes();
 
 				expect(props.src).toBe(srcProp);
