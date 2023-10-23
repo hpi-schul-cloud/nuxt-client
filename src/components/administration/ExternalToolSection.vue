@@ -1,9 +1,10 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.externalToolsSection.header") }}
-		</h2>
+		<p class="mb-6">
+			{{ t("components.administration.externalToolsSection.info") }}
+		</p>
 		<v-data-table
+			v-if="items.length"
 			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
@@ -36,7 +37,7 @@
 			</template>
 		</v-data-table>
 		<v-btn
-			class="my-5 button-save"
+			class="mt-8 mb-4 button-save float-right"
 			color="primary"
 			depressed
 			:to="{ name: 'administration-tool-config-overview' }"

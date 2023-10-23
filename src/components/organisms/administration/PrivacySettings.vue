@@ -1,8 +1,5 @@
 <template>
-	<section>
-		<h3 class="text-h6">
-			{{ $t("pages.administration.school.index.privacySettings") }}
-		</h3>
+	<div>
 		<v-row
 			class="student-visibility-switch"
 			v-if="isTeacherStudentVisibilityVisible"
@@ -27,22 +24,10 @@
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
 				/>
-				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
-					{{
-						theme === "brb"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg"
-							  )
-							: theme === "n21"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen"
-							  )
-							: $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibility"
-							  )
-					}}
+				<p v-if="isTeacherStudentVisibilityConfigurable" class="switch-hint">
+					{{ $t(studentVisibilityTextKey) }}
 				</p>
-				<p v-else class="body-2 mb-0">
+				<p v-else class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
@@ -71,7 +56,7 @@
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.lernStore"
@@ -100,7 +85,7 @@
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.chatFunction"
@@ -130,7 +115,7 @@
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.videoConference"
@@ -139,7 +124,7 @@
 				</p>
 			</v-col>
 		</v-row>
-	</section>
+	</div>
 </template>
 
 <script>
@@ -179,6 +164,16 @@ export default {
 				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
 			}
 		},
+		studentVisibilityTextKey() {
+			switch (this.theme) {
+				case "n21":
+					return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
+				case "brb":
+					return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
+				default:
+					return "pages.administration.school.index.privacySettings.longText.studentVisibility";
+			}
+		},
 		lernStoreVisibility() {
 			return this.permissions.student
 				? this.permissions.student.LERNSTORE_VIEW
@@ -187,3 +182,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.switch-hint {
+	font-size: 12px !important;
+	line-height: 18px !important;
+	font-weight: 400 !important;
+	margin-top: -8px !important;
+	margin-left: 60px !important;
+}
+</style>
