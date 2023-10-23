@@ -20,6 +20,7 @@
 					append-icon="$mdiClockOutline"
 					:rules="rules"
 					data-testid="time-input"
+					v-timeInputMask
 					:class="{ 'menu-open': showTimeDialog }"
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
@@ -54,6 +55,7 @@ import { computed, defineComponent, ref, watch, watchEffect } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
+import { timeInputMask } from "@util-input-masks";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -62,6 +64,9 @@ export default defineComponent({
 		label: { type: String, default: "" },
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
+	},
+	directives: {
+		timeInputMask,
 	},
 	emits: ["update:time"],
 	setup(props, { emit }) {

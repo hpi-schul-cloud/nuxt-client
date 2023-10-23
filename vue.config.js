@@ -51,6 +51,7 @@ module.exports = defineConfig({
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
+				"@util-input-masks": getDir("src/components/util-input-masks"),
 				"@page-board": getDir("src/components/page-board"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],

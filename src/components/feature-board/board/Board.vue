@@ -4,6 +4,7 @@
 			<h3 aria-level="1" class="mt-3">
 				{{ $t("pages.room.boardCard.label.courseBoard") }}
 			</h3>
+			<test-component />
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
 			<template v-if="board">
@@ -79,6 +80,7 @@ import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import TestComponent from "./TestComponent.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container, Draggable } = require("vue-dndrop");
 
@@ -91,6 +93,7 @@ export default defineComponent({
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
+		TestComponent,
 	},
 	props: {
 		boardId: { type: String, required: true },
