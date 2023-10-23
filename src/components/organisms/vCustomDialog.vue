@@ -125,7 +125,6 @@ const isDialogOpen = computed({
 	},
 	set(value) {
 		emit("update:isOpen", value);
-		if (value === true) closeDialog();
 	},
 });
 
@@ -140,6 +139,7 @@ const cancelDialog = () => {
 };
 
 const closeDialog = () => {
+	isDialogOpen.value = false;
 	emit("dialog-closed");
 };
 
