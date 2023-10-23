@@ -8,9 +8,8 @@
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
-		:hover="isHovered"
 	>
-		<div class="menu" v-if="isEditMode" :class="boardMenuClasses">
+		<div class="menu" v-if="isEditMode">
 			<slot />
 		</div>
 		<a :href="sanitizedUrl" target="_blank">
@@ -41,7 +40,6 @@
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useElementHover } from "@vueuse/core";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
@@ -77,18 +75,12 @@ export default defineComponent({
 		});
 
 		const linkContentElementDisplay = ref(null);
-		const isHovered = useElementHover(linkContentElementDisplay);
-		const boardMenuClasses = computed(() => {
-			return isHovered.value === false ? "hidden" : "";
-		});
 
 		return {
 			mdiLink,
 			sanitizedUrl,
 			hostname,
 			linkContentElementDisplay,
-			boardMenuClasses,
-			isHovered,
 		};
 	},
 });
