@@ -12,7 +12,7 @@ type Options = {
 	maxRetries: number;
 };
 
-export const useTrackImageUploadStatus = (
+export const useImageUrlAccessor = (
 	elementId: string,
 	options: Options = {
 		baseDuration: 1000,
@@ -52,7 +52,7 @@ export const useTrackImageUploadStatus = (
 		return false;
 	};
 
-	const trackImageUploadStatus = async (): Promise<string | undefined> => {
+	const getPreviewImageUrl = async (): Promise<string | undefined> => {
 		const hasPreview = await isImagePreviewable();
 		if (hasPreview && fileRecord.value) {
 			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.url);
@@ -61,6 +61,6 @@ export const useTrackImageUploadStatus = (
 	};
 
 	return {
-		trackImageUploadStatus,
+		getPreviewImageUrl,
 	};
 };

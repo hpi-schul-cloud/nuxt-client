@@ -23,28 +23,15 @@
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate
-			v-if="!computedElement.content.url"
-			@create:url="onCreateUrl"
-		/>
+		<LinkContentElementCreate v-else @create:url="onCreateUrl" />
 	</v-card>
 </template>
 
 <script lang="ts">
-import {
-	LinkElementResponse,
-	MetaTagExtractorApiFactory,
-} from "@/serverApi/v3";
+import { LinkElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { defineComponent, ref, toRef } from "vue";
 import { PropType } from "vue/types/umd";
-import { useFileStorageApi } from "@feature-board-file-element";
-import { FileRecordParentType } from "@/fileStorageApi/v3";
-import {
-	convertDownloadToPreviewUrl,
-	isPreviewPossible,
-} from "@/utils/fileHelper";
-import { $axios } from "@/utils/api";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import {
@@ -53,7 +40,8 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { useTrackImageUploadStatus } from "../composables/trackImageUploadStatus.composable";
+import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
+import { ensureProtocolIncluded } from "../util/url.util";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -82,34 +70,30 @@ export default defineComponent({
 		const linkContentElement = ref(null);
 		const isLoading = ref(false);
 		const element = toRef(props, "element");
-		const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 
 		useBoardFocusHandler(element.value.id, linkContentElement);
-
-		const { uploadFromUrl } = useFileStorageApi(
-			element.value.id,
-			FileRecordParentType.BOARDNODES
-		);
 
 		const { modelValue, computedElement } = useContentElementState(props, {
 			autoSaveDebounce: 100,
 		});
 
-		const { trackImageUploadStatus } = useTrackImageUploadStatus(
-			element.value.id
-		);
+		const { getData } = useMetaTagExtractorApi(element.value.id);
 
-		const onCreateUrl = async (url: string) => {
+		const onCreateUrl = async (originalUrl: string) => {
 			isLoading.value = true;
-			const res = await metaTagApi.metaTagExtractorControllerGetData({ url });
-			const { title, description, imageUrl } = res.data;
-			modelValue.value.url = url;
-			modelValue.value.title = title;
-			modelValue.value.description = description;
-			if (imageUrl) {
-				await uploadFromUrl(imageUrl);
-				modelValue.value.imageUrl = await trackImageUploadStatus();
+			// WIP: handle invalid URL exception
+			const validUrl = ensureProtocolIncluded(originalUrl);
+			modelValue.value.url = validUrl;
+
+			try {
+				const { title, description, imageUrl } = await getData(validUrl);
+				modelValue.value.title = title;
+				modelValue.value.description = description;
+				modelValue.value.imageUrl = imageUrl;
+			} catch (error) {
+				modelValue.value.url = "";
 			}
+
 			isLoading.value = false;
 		};
 
@@ -140,3 +124,4 @@ export default defineComponent({
 	},
 });
 </script>
+../composables/imageUrlAccessor.composable
