@@ -35,8 +35,8 @@ import {
 	LinkElementResponse,
 	MetaTagExtractorApiFactory,
 } from "@/serverApi/v3";
-import { useContentElementState } from "@data-board";
-import { defineComponent, toRef } from "vue";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { defineComponent, ref, toRef } from "vue";
 import { PropType } from "vue/types/umd";
 import { useFileStorageApi } from "@feature-board-file-element";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
@@ -78,8 +78,12 @@ export default defineComponent({
 		"move-up:edit",
 	],
 	setup(props, { emit }) {
+		const linkContentElement = ref(null);
 		const element = toRef(props, "element");
 		const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
+
+		useBoardFocusHandler(element.value.id, linkContentElement);
+
 		const { fetchFile, fileRecord, uploadFromUrl } = useFileStorageApi(
 			element.value.id,
 			FileRecordParentType.BOARDNODES
@@ -140,6 +144,7 @@ export default defineComponent({
 		return {
 			computedElement,
 			isLoading,
+			linkContentElement,
 			modelValue,
 			onCreateUrl,
 			onKeydownArrow,

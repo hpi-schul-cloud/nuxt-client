@@ -10,7 +10,7 @@
 		:loading="isLoading ? 'primary' : false"
 		:hover="isHovered"
 	>
-		<div class="menu" :class="boardMenuClasses">
+		<div class="menu" v-if="isEditMode" :class="boardMenuClasses">
 			<slot />
 		</div>
 		<a :href="sanitizedUrl" target="_blank">
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<div class="text-truncate">
-					{{ urlWithoutProtocol }}
+					{{ hostname }}
 				</div>
 			</v-card-subtitle>
 		</a>
@@ -67,29 +67,25 @@ export default defineComponent({
 	},
 	setup(props) {
 		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
-		const urlWithoutProtocol: ComputedRef<string> = computed(() => {
+		const hostname: ComputedRef<string> = computed(() => {
 			try {
 				const urlObject = new URL(props.url);
 				return urlObject.hostname;
 			} catch (e) {
-				console.error(`valid url expected, but got this: ${props.url}`);
+				return "";
 			}
-			return props.url;
 		});
 
 		const linkContentElementDisplay = ref(null);
 		const isHovered = useElementHover(linkContentElementDisplay);
 		const boardMenuClasses = computed(() => {
-			if (props.isEditMode && isHovered.value === true) {
-				return "";
-			}
-			return "hidden";
+			return isHovered.value === false ? "hidden" : "";
 		});
 
 		return {
 			mdiLink,
 			sanitizedUrl,
-			urlWithoutProtocol,
+			hostname,
 			linkContentElementDisplay,
 			boardMenuClasses,
 			isHovered,
