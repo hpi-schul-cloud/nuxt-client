@@ -79,6 +79,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const linkContentElement = ref(null);
+		const isLoading = ref(false);
 		const element = toRef(props, "element");
 		const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 
@@ -89,12 +90,12 @@ export default defineComponent({
 			FileRecordParentType.BOARDNODES
 		);
 
-		const { modelValue, computedElement, isLoading } = useContentElementState(
-			props,
-			{ autoSaveDebounce: 100 }
-		);
+		const { modelValue, computedElement } = useContentElementState(props, {
+			autoSaveDebounce: 100,
+		});
 
 		// can be removed after refactoring of upload+virusScan-workflow
+		// WIP: move into composable
 		const updateFileRecord = (increase = 100, base = 1000, retries = 0) => {
 			setTimeout(() => {
 				fetchFile()
@@ -106,17 +107,19 @@ export default defineComponent({
 							modelValue.value.imageUrl = convertDownloadToPreviewUrl(
 								fileRecord.value.url
 							);
+							isLoading.value = false;
 						} else if (retries < 10) {
 							updateFileRecord(base + increase, base, retries++);
 						}
 					})
 					.catch(() => {
-						console.log("unabled to load fileRecord");
+						isLoading.value = false;
 					});
 			}, base + increase);
 		};
 
 		const onCreateUrl = async (url: string) => {
+			isLoading.value = true;
 			const res = await metaTagApi.metaTagExtractorControllerGetData({ url });
 			const { title, description, imageUrl } = res.data;
 			modelValue.value.url = url;
