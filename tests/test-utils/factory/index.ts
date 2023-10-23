@@ -42,3 +42,5 @@ export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";
 export * from "./toolReferenceResponseFactory";
+export * from "./groupResponseFactory";
+export * from "./groupFactory";
