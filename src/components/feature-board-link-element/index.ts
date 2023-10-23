@@ -1,3 +1,3 @@
-import LinkContentElement from "./LinkContentElement.vue";
+import LinkContentElement from "./components/LinkContentElement.vue";
 
 export { LinkContentElement };

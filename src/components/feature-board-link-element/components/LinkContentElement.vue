@@ -53,6 +53,7 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
+import { useTrackImageUploadStatus } from "../composables/trackImageUploadStatus.composable";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -85,7 +86,7 @@ export default defineComponent({
 
 		useBoardFocusHandler(element.value.id, linkContentElement);
 
-		const { fetchFile, fileRecord, uploadFromUrl } = useFileStorageApi(
+		const { uploadFromUrl } = useFileStorageApi(
 			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
@@ -94,29 +95,9 @@ export default defineComponent({
 			autoSaveDebounce: 100,
 		});
 
-		// can be removed after refactoring of upload+virusScan-workflow
-		// WIP: move into composable
-		const updateFileRecord = (increase = 100, base = 1000, retries = 0) => {
-			setTimeout(() => {
-				fetchFile()
-					.then(() => {
-						if (
-							fileRecord?.value?.previewStatus &&
-							isPreviewPossible(fileRecord.value?.previewStatus)
-						) {
-							modelValue.value.imageUrl = convertDownloadToPreviewUrl(
-								fileRecord.value.url
-							);
-							isLoading.value = false;
-						} else if (retries < 10) {
-							updateFileRecord(base + increase, base, retries++);
-						}
-					})
-					.catch(() => {
-						isLoading.value = false;
-					});
-			}, base + increase);
-		};
+		const { trackImageUploadStatus } = useTrackImageUploadStatus(
+			element.value.id
+		);
 
 		const onCreateUrl = async (url: string) => {
 			isLoading.value = true;
@@ -127,8 +108,9 @@ export default defineComponent({
 			modelValue.value.description = description;
 			if (imageUrl) {
 				await uploadFromUrl(imageUrl);
-				updateFileRecord();
+				modelValue.value.imageUrl = await trackImageUploadStatus();
 			}
+			isLoading.value = false;
 		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
