@@ -6,22 +6,30 @@
 			:lazy-validation="true"
 			validate-on="submit"
 		>
-			<v-text-field
-				v-model="url"
-				:rules="rules"
-				:label="$t('components.cardElement.LinkElement.label')"
-				type="text"
-				:autofocus="true"
-				required
-				@keydown="onKeydown"
-			>
-				<template v-slot:append>
-					<button type="submit">
-						<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-						<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-					</button>
-				</template>
-			</v-text-field>
+			<div class="d-flex flex-row">
+				<v-textarea
+					v-model="url"
+					:rules="rules"
+					:label="$t('components.cardElement.LinkElement.label')"
+					type="text"
+					:autofocus="true"
+					:auto-grow="true"
+					rows="1"
+					@keydown.enter.prevent="onKeydownEnter"
+					@keydown="onKeydown"
+				>
+					<template v-slot:append>
+						<button type="submit">
+							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+						</button>
+					</template>
+				</v-textarea>
+
+				<div class="align-self-center">
+					<slot />
+				</div>
+			</div>
 		</v-form>
 	</v-card-text>
 </template>
@@ -41,7 +49,7 @@ type VuetifyFormApi = {
 };
 
 export default defineComponent({
-	name: "LinkContentElementEdit",
+	name: "LinkContentElementCreate",
 	components: {},
 	emits: ["create:url"],
 	setup(props, { emit }) {
@@ -79,8 +87,14 @@ export default defineComponent({
 
 		const onKeydown = () => (isValidationActive.value = false);
 
+		const onKeydownEnter = (event: KeyboardEvent) => {
+			event.stopPropagation();
+			onSubmit(url.value);
+		};
+
 		return {
 			onKeydown,
+			onKeydownEnter,
 			onSubmit,
 			onKeydownSubmit,
 			form,

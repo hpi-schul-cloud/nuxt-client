@@ -22,7 +22,7 @@ export const useImageUrlAccessor = (
 ) => {
 	const retries = ref(0);
 
-	const { fetchFile, fileRecord } = useFileStorageApi(
+	const { fetchFile, fileRecord, uploadFromUrl } = useFileStorageApi(
 		elementId,
 		FileRecordParentType.BOARDNODES
 	);
@@ -62,5 +62,6 @@ export const useImageUrlAccessor = (
 
 	return {
 		getPreviewImageUrl,
+		uploadFromUrl,
 	};
 };

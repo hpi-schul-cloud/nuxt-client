@@ -23,7 +23,15 @@
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-else @create:url="onCreateUrl" />
+		<LinkContentElementCreate
+			v-if="!computedElement.content.url && isEditMode"
+			@create:url="onCreateUrl"
+			><BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
+		</LinkContentElementCreate>
 	</v-card>
 </template>
 
@@ -42,6 +50,7 @@ import {
 } from "@ui-board";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
+import { useImageUrlAccessor } from "../composables/ImageUrlAccessor.composable";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -77,24 +86,32 @@ export default defineComponent({
 			autoSaveDebounce: 100,
 		});
 
-		const { getData } = useMetaTagExtractorApi(element.value.id);
+		const { getData } = useMetaTagExtractorApi();
+
+		const { getPreviewImageUrl, uploadFromUrl } = useImageUrlAccessor(
+			element.value.id
+		);
 
 		const onCreateUrl = async (originalUrl: string) => {
 			isLoading.value = true;
-			// WIP: handle invalid URL exception
-			const validUrl = ensureProtocolIncluded(originalUrl);
-			modelValue.value.url = validUrl;
 
 			try {
+				const validUrl = ensureProtocolIncluded(originalUrl);
+				modelValue.value.url = validUrl;
+
 				const { title, description, imageUrl } = await getData(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
-				modelValue.value.imageUrl = imageUrl;
+
+				if (imageUrl) {
+					await uploadFromUrl(imageUrl);
+					modelValue.value.imageUrl = await getPreviewImageUrl();
+				}
 			} catch (error) {
 				modelValue.value.url = "";
+			} finally {
+				isLoading.value = false;
 			}
-
-			isLoading.value = false;
 		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -124,4 +141,3 @@ export default defineComponent({
 	},
 });
 </script>
-../composables/imageUrlAccessor.composable

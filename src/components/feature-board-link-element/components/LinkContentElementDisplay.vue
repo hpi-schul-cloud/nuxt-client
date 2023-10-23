@@ -96,8 +96,4 @@ a {
 	top: 4px;
 	z-index: 100;
 }
-.hidden {
-	transition: opacity 200ms;
-	opacity: 0;
-}
 </style>
