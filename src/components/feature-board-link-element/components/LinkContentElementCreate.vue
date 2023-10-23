@@ -1,14 +1,19 @@
 <template>
 	<v-card-text>
-		<v-form @submit.prevent="onSubmit(url)" ref="form" :lazy-validation="true">
+		<v-form
+			@submit.prevent="onSubmit(url)"
+			ref="form"
+			:lazy-validation="true"
+			validate-on="submit"
+		>
 			<v-text-field
 				v-model="url"
-				:rules="[rules.isRequired, rules.isValidUrl]"
+				:rules="rules"
 				:label="$t('components.cardElement.LinkElement.label')"
 				type="text"
 				:autofocus="true"
 				required
-				validate-on="lazy"
+				@keydown="onKeydown"
 			>
 				<template v-slot:append>
 					<button type="submit">
@@ -43,13 +48,28 @@ export default defineComponent({
 		const { t } = useI18n();
 		const url = ref<string>("");
 		const form = ref<VuetifyFormApi | null>(null);
-		const rules = {
-			isRequired: isRequired(t("common.validation.required2")),
-			isValidUrl: isValidUrl(t("util-validators-invalid-url")),
+		const rules = [(value: string) => validate(value)];
+		const isValidationActive = ref(false);
+
+		const validate = (value: string) => {
+			// vue3: with vuetify3 we can use validate-on="submit" instead of preventing validation programmatically
+			if (isValidationActive.value === true) {
+				const rules: Array<(value: any) => string | true> = [
+					isRequired(t("common.validation.required2")),
+					isValidUrl(t("util-validators-invalid-url")),
+				];
+				const results = rules.map((rule) => rule(value));
+				const errorMessages = results.filter((isValid) => isValid !== true);
+				if (errorMessages.length > 0) {
+					return errorMessages[0];
+				}
+			}
+			return true;
 		};
 
 		const onSubmit = (url: string) => {
-			if (form.value && form.value.validate()) emit("create:url", url);
+			isValidationActive.value = true;
+			if (form?.value?.validate()) emit("create:url", url);
 		};
 
 		const onKeydownSubmit = (event: KeyboardEvent, url: string) => {
@@ -57,7 +77,10 @@ export default defineComponent({
 			onSubmit(url);
 		};
 
+		const onKeydown = () => (isValidationActive.value = false);
+
 		return {
+			onKeydown,
 			onSubmit,
 			onKeydownSubmit,
 			form,
