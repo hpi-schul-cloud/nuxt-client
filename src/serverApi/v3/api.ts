@@ -407,6 +407,12 @@ export interface ClassInfoResponse {
      * @memberof ClassInfoResponse
      */
     isUpgradable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClassInfoResponse
+     */
+    studentCount: number;
 }
 
 /**

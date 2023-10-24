@@ -520,4 +520,28 @@ describe("ClassOverview", () => {
 			});
 		});
 	});
+
+	describe("addClass", () => {
+		describe("when clicking on add class buttton", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should redirect to legacy create class page", () => {
+				const { wrapper } = setup();
+
+				const addClassBtn = wrapper.find(
+					'[data-testid="admin-class-add-button"]'
+				);
+
+				expect(addClassBtn.attributes().href).toStrictEqual(
+					"/administration/classes/create"
+				);
+			});
+		});
+	});
 });

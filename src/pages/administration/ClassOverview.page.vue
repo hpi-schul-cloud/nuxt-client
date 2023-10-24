@@ -129,6 +129,7 @@
 			color="primary"
 			depressed
 			data-testid="admin-class-add-button"
+			:href="`/administration/classes/create`"
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
@@ -246,6 +247,11 @@ export default defineComponent({
 			{
 				value: "teachers",
 				text: t("common.labels.teacher"),
+				sortable: true,
+			},
+			{
+				value: "studentCount",
+				text: "Schüler:innen",
 				sortable: true,
 			},
 			{
