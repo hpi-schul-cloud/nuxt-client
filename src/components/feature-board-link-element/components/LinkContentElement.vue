@@ -8,6 +8,7 @@
 		ref="linkContentElement"
 		:ripple="false"
 		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
 	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
@@ -16,16 +17,13 @@
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
 			:isEditMode="isEditMode"
-			@keydown.up.down="onKeydownArrow"
 			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate
-			v-if="!computedElement.content.url && isEditMode"
-			@create:url="onCreateUrl"
+		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
 			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
@@ -87,6 +85,10 @@ export default defineComponent({
 			autoSaveDebounce: 100,
 		});
 
+		const isCreating = computed(
+			() => props.isEditMode && !computedElement.value.content.url
+		);
+
 		const { getData } = useMetaTagExtractorApi();
 
 		const { createPreviewImage } = usePreviewGenerator(element.value.id);
@@ -113,7 +115,7 @@ export default defineComponent({
 		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
-			if (props.isEditMode) {
+			if (isCreating.value === false) {
 				event.preventDefault();
 				emit("move-keyboard:edit", event);
 			}
@@ -128,6 +130,7 @@ export default defineComponent({
 		return {
 			computedElement,
 			isLoading,
+			isCreating,
 			linkContentElement,
 			modelValue,
 			outlined,
