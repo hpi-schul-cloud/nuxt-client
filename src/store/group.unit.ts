@@ -97,6 +97,7 @@ describe("GroupModule", () => {
 						teachers: ["Carlie"],
 						type: ClassRootType.Class,
 						id: "id",
+						studentCount: 0,
 					},
 				];
 
