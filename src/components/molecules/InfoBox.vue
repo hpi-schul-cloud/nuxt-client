@@ -9,7 +9,7 @@
 			</p>
 			<div class="actions">
 				<slot name="actions" />
-				<v-btn variant="text" dark @click.self="close">
+				<v-btn variant="text" @click.self="close">
 					{{ $t("common.labels.close") }}
 				</v-btn>
 			</div>

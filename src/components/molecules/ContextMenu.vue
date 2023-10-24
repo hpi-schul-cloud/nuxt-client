@@ -12,8 +12,8 @@
 				v-for="(action, index) of actions"
 				:key="action.text"
 				variant="text"
-				tile
 				height="50"
+				rounded="0"
 				:ripple="false"
 				class="context-menu__button"
 				role="menuitem"

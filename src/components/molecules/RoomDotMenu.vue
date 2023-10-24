@@ -14,6 +14,7 @@
 				class="three-dot-button"
 				:icon="mdiDotsVertical"
 				variant="text"
+				density="comfortable"
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			>
