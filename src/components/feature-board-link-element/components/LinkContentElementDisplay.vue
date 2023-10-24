@@ -9,6 +9,10 @@
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
 	>
+		<div class="menu" v-if="isEditMode">
+			<slot />
+		</div>
+
 		<a :href="sanitizedUrl" target="_blank">
 			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
 
@@ -17,9 +21,6 @@
 					<ContentElementTitle>
 						{{ title }}
 					</ContentElementTitle>
-				</template>
-				<template #menu>
-					<slot v-if="isEditMode" />
 				</template>
 				<template #subtitle>
 					{{ hostname }}
