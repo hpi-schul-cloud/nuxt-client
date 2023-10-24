@@ -9,29 +9,22 @@
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
 	>
-		<div class="menu" v-if="isEditMode">
-			<slot />
-		</div>
 		<a :href="sanitizedUrl" target="_blank">
 			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
 
-			<v-card-subtitle class="grey lighten-4 black--text text--darken-2">
-				<div class="d-flex flex-no-wrap">
-					<v-icon class="grey--text text--darken-2" medium>
-						{{ mdiLink }}
-					</v-icon>
-					<div
-						class="subtitle-1 text-truncate"
-						:style="{ fontWeight: 700, marginLeft: '10px' }"
-						data-testid="board-link-element-display-content"
-					>
+			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+				<template #title>
+					<ContentElementTitle>
 						{{ title }}
-					</div>
-				</div>
-				<div class="text-truncate">
+					</ContentElementTitle>
+				</template>
+				<template #menu>
+					<slot v-if="isEditMode" />
+				</template>
+				<template #subtitle>
 					{{ hostname }}
-				</div>
-			</v-card-subtitle>
+				</template>
+			</ContentElementBar>
 		</a>
 	</v-card>
 </template>
@@ -40,10 +33,11 @@
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { ContentElementBar, ContentElementTitle } from "@ui-board";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
-	components: {},
+	components: { ContentElementBar, ContentElementTitle },
 	props: {
 		url: {
 			type: String,
