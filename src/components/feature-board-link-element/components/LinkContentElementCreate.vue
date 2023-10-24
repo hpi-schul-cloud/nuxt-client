@@ -17,6 +17,7 @@
 					rows="1"
 					@keydown.enter.prevent="onKeydownEnter"
 					@keydown="onKeydown"
+					class="text"
 				>
 					<template v-slot:append>
 						<button type="submit">
@@ -85,12 +86,12 @@ export default defineComponent({
 			onSubmit(url);
 		};
 
-		const onKeydown = () => (isValidationActive.value = false);
-
 		const onKeydownEnter = (event: KeyboardEvent) => {
 			event.stopPropagation();
 			onSubmit(url.value);
 		};
+
+		const onKeydown = () => (isValidationActive.value = false);
 
 		return {
 			onKeydown,
@@ -105,3 +106,10 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scope>
+.v-textarea textarea {
+	padding-top: 8px;
+	line-height: 1.375rem;
+}
+</style>
