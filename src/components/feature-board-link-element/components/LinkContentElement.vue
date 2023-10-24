@@ -4,11 +4,10 @@
 		data-testid="board-link-element"
 		dense
 		elevation="0"
-		:outlined="true"
+		:outlined="outlined"
 		ref="linkContentElement"
 		:ripple="false"
 		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
 	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
@@ -17,6 +16,7 @@
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
 			:isEditMode="isEditMode"
+			@keydown.up.down="onKeydownArrow"
 			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
@@ -38,7 +38,7 @@
 <script lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { defineComponent, ref, toRef } from "vue";
+import { computed, defineComponent, ref, toRef } from "vue";
 import { PropType } from "vue/types/umd";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
@@ -50,7 +50,7 @@ import {
 } from "@ui-board";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
-import { useImageUrlAccessor } from "../composables/ImageUrlAccessor.composable";
+import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -79,6 +79,7 @@ export default defineComponent({
 		const linkContentElement = ref(null);
 		const isLoading = ref(false);
 		const element = toRef(props, "element");
+		const outlined = computed(() => props.isEditMode);
 
 		useBoardFocusHandler(element.value.id, linkContentElement);
 
@@ -88,9 +89,7 @@ export default defineComponent({
 
 		const { getData } = useMetaTagExtractorApi();
 
-		const { getPreviewImageUrl, uploadFromUrl } = useImageUrlAccessor(
-			element.value.id
-		);
+		const { createPreviewImage } = usePreviewGenerator(element.value.id);
 
 		const onCreateUrl = async (originalUrl: string) => {
 			isLoading.value = true;
@@ -104,8 +103,7 @@ export default defineComponent({
 				modelValue.value.description = description;
 
 				if (imageUrl) {
-					await uploadFromUrl(imageUrl);
-					modelValue.value.imageUrl = await getPreviewImageUrl();
+					modelValue.value.imageUrl = await createPreviewImage(imageUrl);
 				}
 			} catch (error) {
 				modelValue.value.url = "";
@@ -132,6 +130,7 @@ export default defineComponent({
 			isLoading,
 			linkContentElement,
 			modelValue,
+			outlined,
 			onCreateUrl,
 			onKeydownArrow,
 			onMoveDown,
