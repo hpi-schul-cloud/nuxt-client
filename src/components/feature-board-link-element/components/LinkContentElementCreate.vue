@@ -27,7 +27,7 @@
 					</template>
 				</v-textarea>
 
-				<div class="align-self-center">
+				<div class="align-self-center menu">
 					<slot />
 				</div>
 			</div>
@@ -107,9 +107,12 @@ export default defineComponent({
 });
 </script>
 
-<style scope>
+<style scoped>
 .v-textarea textarea {
 	padding-top: 8px;
 	line-height: 1.375rem;
+}
+.menu {
+	margin-right: -12px;
 }
 </style>
