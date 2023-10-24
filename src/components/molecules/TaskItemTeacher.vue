@@ -2,7 +2,7 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="() => handleFocus(false)"
+			v-outside-click="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
@@ -117,6 +117,7 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
 } from "@/plugins/datetime";
+import { vOnClickOutside } from "@vueuse/components";
 
 // TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -124,6 +125,9 @@ const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: { TaskItemMenu },
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		task: {
 			type: Object,

@@ -2,7 +2,7 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="() => handleFocus(false)"
+			v-outside-click="() => handleFocus(false)"
 			class="mx-n4 mx-sm-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
@@ -56,11 +56,15 @@ import {
 	fromNowToFuture,
 } from "@/plugins/datetime";
 import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
+import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
 	components: { VCustomChipTimeRemaining, TaskItemMenu },
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		task: {
 			type: Object,
