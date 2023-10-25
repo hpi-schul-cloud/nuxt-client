@@ -42,6 +42,7 @@ describe("VideoDisplay", () => {
 		expect(video.attributes("src")).toBe(src);
 		expect(video.attributes("alt")).toBe(name);
 		expect(video.attributes("controls")).toBe("controls");
+		expect(video.attributes("controlslist")).toBe("nodownload");
 		expect(video.attributes("loading")).toBe("lazy");
 	});
 
