@@ -19,6 +19,7 @@
 			<template #append>
 				<v-btn
 					icon
+					variant="text"
 					@click="copyLoginLink(0)"
 					:aria-label="
 						$t('pages.administration.school.index.authSystems.copyLink')
@@ -68,6 +69,7 @@
 								<template #append>
 									<v-btn
 										icon
+										variant="text"
 										@click="copyLoginLink(system._id)"
 										:aria-label="
 											$t(
@@ -89,6 +91,7 @@
 								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
+								variant="text"
 								:to="`/administration/ldap/config?id=${system._id}`"
 								:aria-label="ariaLabels(system).edit"
 							>
@@ -98,6 +101,7 @@
 								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
+								variant="text"
 								:aria-label="ariaLabels(system).delete"
 								@click.stop="openConfirmDeleteDialog(system._id)"
 							>

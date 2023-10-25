@@ -20,7 +20,7 @@
 				<v-btn
 					data-test-id="context-menu-open"
 					class="context-menu-open"
-					small
+					size="small"
 					variant="flat"
 					color="secondary"
 					@click="actionsMenuOpen = true"

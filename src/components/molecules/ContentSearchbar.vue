@@ -16,10 +16,9 @@
 			<div class="search__container--icon">
 				<v-icon
 					v-if="value === ''"
-					icon
-					plain
-					x-large
-					color="black"
+					variant="plain"
+					size="x-large"
+					color="rgba(var(--v-theme-black))"
 					class="search-icon"
 					aria-label="search"
 				>
@@ -28,11 +27,11 @@
 				<v-btn
 					v-else
 					icon
-					variant="plain"
-					color="black"
+					variant="text"
+					color="rgba(var(--v-theme-black))"
 					@click="clearBtnHandler"
 				>
-					<v-icon x-large class="search-icon" aria-label="clear">
+					<v-icon size="x-large" class="search-icon" aria-label="clear">
 						{{ mdiClose }}
 					</v-icon>
 				</v-btn>
@@ -150,24 +149,6 @@ export default {
 
 			&:hover {
 				border-bottom: 2px rgba(var(--v-theme-black)) solid;
-			}
-		}
-
-		&--icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 100%;
-			font-size: var(--heading-4);
-			color: rgba(var(--v-theme-black));
-			cursor: pointer;
-
-			.icon {
-				cursor: pointer;
-			}
-
-			@include breakpoint(tablet) {
-				font-size: var(--heading-2);
 			}
 		}
 	}

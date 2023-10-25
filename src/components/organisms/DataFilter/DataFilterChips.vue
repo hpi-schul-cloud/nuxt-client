@@ -23,7 +23,7 @@
 				class="btn-delete"
 				@click.stop="$emit('remove', chip.id)"
 			>
-				<v-icon small>{{ mdiClose }}</v-icon>
+				<v-icon size="small">{{ mdiClose }}</v-icon>
 			</v-btn>
 		</div>
 	</div>

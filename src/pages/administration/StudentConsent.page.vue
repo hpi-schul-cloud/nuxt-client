@@ -205,7 +205,7 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn color="secondary" text @click="cancelWarning = true">
+					<v-btn color="secondary" variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn color="primary" variant="flat" @click="download">

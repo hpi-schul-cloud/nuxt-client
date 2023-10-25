@@ -5,6 +5,7 @@
 			:color="color"
 			class="icon-button"
 			variant="text"
+			density="comfortable"
 			@click="popup"
 		>
 		</v-btn>
@@ -70,10 +71,6 @@ const removePopup = () => {
 	--arrow-size: var(--space-xs-2);
 	--arrow-offset: 1em;
 	--outer-arrow-size: calc(var(--arrow-size) + 1px);
-
-	.icon-button {
-		font-size: 20px;
-	}
 
 	.popup-content {
 		position: absolute;

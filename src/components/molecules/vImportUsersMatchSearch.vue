@@ -12,8 +12,12 @@
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
-					<v-btn v-if="isDialog" icon dark @click="closeEdit">
-						<v-icon>{{ mdiClose }}</v-icon>
+					<v-btn
+						v-if="isDialog"
+						:aria-label="$t('common.labels.close')"
+						:icon="mdiClose"
+						@click="closeEdit"
+					>
 					</v-btn>
 				</v-toolbar-items>
 			</v-toolbar>

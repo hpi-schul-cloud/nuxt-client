@@ -5,6 +5,7 @@
 				v-bind="props"
 				:icon="mdiDotsVertical"
 				flat
+				density="comfortable"
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			></v-btn>

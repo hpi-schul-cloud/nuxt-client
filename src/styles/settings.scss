@@ -29,7 +29,7 @@
       "size": var(--heading-6),
       "line-height": var(--line-height-sm),
       "weight": var(--font-weight-bold),
-    ),    
+    ),
   ),
 
   // v-btn
@@ -53,20 +53,3 @@
   // $treeview-node-margin: 0,
   // $treeview-node-padding: 0,
 );
-// .v-btn {
-// 	font-family: var(--font-accent);
-
-// 	&.v-size--small,
-// 	&.v-size--default,
-// 	&.v-size--large,
-// 	&.v-size--x-large {
-// 		font-size: $button-font-size;
-// 	}
-// }
-
-// .v-btn.primary {
-// 	&:hover {
-// 		background-color: rgba(var(--v-theme-primary-darken-1)) !important;
-// 	}
-
-// }
