@@ -15,10 +15,10 @@ describe("InputMask.factory", () => {
 
 		const directive: DirectiveFunction = createInputMask({ mask: "" });
 		directive(
-			null as unknown as HTMLElement,
-			null as unknown as DirectiveBinding<unknown>,
-			null as unknown as VNode,
-			null as unknown as VNode
+			{} as unknown as HTMLElement,
+			{} as unknown as DirectiveBinding<unknown>,
+			{} as unknown as VNode,
+			{} as unknown as VNode
 		);
 		expect(mockedMaska).toHaveBeenCalledTimes(1);
 	});
