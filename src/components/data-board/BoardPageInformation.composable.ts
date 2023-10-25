@@ -28,10 +28,12 @@ const useBoardPageInformation = () => {
 					{
 						title: t("common.words.courses"),
 						to: "/rooms-overview",
+						disabled: false,
 					},
 					{
 						title: contextInfo.name ?? t("common.labels.course"),
 						to: `/rooms/${contextInfo.id}`,
+						disabled: false,
 					},
 			  ]
 			: [];
