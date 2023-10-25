@@ -5,13 +5,13 @@
 				<v-btn
 					id="task-menu-btn"
 					v-bind="props"
-					icon
+					variant="text"
+					:icon="mdiDotsVertical"
 					@click.prevent="toggleMenu(!value)"
 					@keydown.space.stop="toggleMenu(!value)"
 					@focus="handleFocus(true)"
 					@blur="handleFocus(false)"
 				>
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
 				</v-btn>
 			</template>
 			<v-list>

@@ -1,13 +1,11 @@
 <template>
 	<div>
 		<v-btn
-			:text="round"
-			:fab="round"
-			:small="round"
-			:large="!round"
+			:variant="round ? 'text' : 'elevated'"
+			:size="round ? 'small' : 'large'"
+			:icon="round ? true : false"
 			:color="btnColor"
 			:class="btnClass"
-			role="button"
 			:aria-label="
 				btnLabel ? btnLabel : $t('components.molecules.AddContentModal')
 			"
