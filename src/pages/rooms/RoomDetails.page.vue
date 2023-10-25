@@ -205,6 +205,7 @@ export default defineComponent({
 				{
 					title: this.$t("common.words.courses"),
 					to: "/rooms-overview",
+					disabled: false,
 				},
 			],
 			courseId: this.$route.params.id,
