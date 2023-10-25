@@ -1,4 +1,5 @@
-import { MaskInputOptions, vMaska } from "maska";
+import type { MaskInputOptions } from "maska";
+import { vMaska } from "maska";
 import { DirectiveFunction } from "vue";
 
 /**
