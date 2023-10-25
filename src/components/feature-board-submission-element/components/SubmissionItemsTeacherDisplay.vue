@@ -97,11 +97,14 @@ import {
 	computed,
 	ref,
 	watch,
-	watchEffect,
+	toRef,
+	Ref,
+	unref,
 } from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "vuetify";
 import { useI18n } from "@/composables/i18n.composable";
+import { MaybeRef } from "@vueuse/core";
 
 type StatusFilter = "all" | Status;
 
@@ -139,27 +142,34 @@ export default defineComponent({
 			},
 		];
 
-		const allSubmissions = computed<Array<TeacherSubmission>>(() => {
-			return props.submissions;
-		});
+		const allSubmissions = toRef(props, "submissions");
+		const activeFilter = ref<StatusFilter>("all");
 
-		const openCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "open";
-			}).length;
-		});
+		const filteredSubmissions = computed(() =>
+			filterByStatus(allSubmissions, activeFilter)
+		);
 
-		const completedCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "completed";
-			}).length;
-		});
+		const filterByStatus = (
+			submissions: Ref<TeacherSubmission[]>,
+			statusFilter: MaybeRef<StatusFilter>
+		) => {
+			const status = unref(statusFilter);
+			return submissions.value.filter(
+				(item) => status === "all" || item.status === status
+			);
+		};
 
-		const overdueCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "expired";
-			}).length;
-		});
+		const openCount = computed<number>(
+			() => filterByStatus(allSubmissions, "open").length
+		);
+
+		const completedCount = computed<number>(
+			() => filterByStatus(allSubmissions, "completed").length
+		);
+
+		const overdueCount = computed<number>(
+			() => filterByStatus(allSubmissions, "expired").length
+		);
 
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
@@ -191,26 +201,7 @@ export default defineComponent({
 		};
 
 		//	Filter Functionality
-		const filteredSubmissions = ref<Array<TeacherSubmission>>([]);
-		const activeFilter = ref<StatusFilter>("all");
 		const panel = ref<number | undefined>(undefined);
-
-		watchEffect(() => {
-			filteredSubmissions.value = allSubmissions.value;
-		});
-
-		const filterByStatus = (statusFilter: StatusFilter) => {
-			if (statusFilter === "all") {
-				filteredSubmissions.value = allSubmissions.value;
-				return;
-			}
-
-			filteredSubmissions.value = allSubmissions.value.filter(
-				(item: TeacherSubmission) => {
-					return item.status === statusFilter;
-				}
-			);
-		};
 
 		const setFilter = (filter: StatusFilter) => {
 			if (filter === activeFilter.value) {
@@ -220,8 +211,8 @@ export default defineComponent({
 			}
 		};
 
-		watch(activeFilter, (newFilter) => {
-			filterByStatus(newFilter);
+		watch(activeFilter, () => {
+			// filterByStatus(newFilter);
 			openPanel();
 		});
 
