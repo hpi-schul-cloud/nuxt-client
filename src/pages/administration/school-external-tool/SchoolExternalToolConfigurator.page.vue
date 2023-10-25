@@ -157,7 +157,10 @@ export default defineComponent({
 					status: "success",
 				});
 
-				await router.push({ path: schoolSetting.to });
+				await router.push({
+					path: schoolSetting.to,
+					query: { openPanels: "tools" },
+				});
 			}
 		};
 
