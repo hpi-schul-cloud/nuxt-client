@@ -191,12 +191,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 ::v-deep {
-	.menu-open {
-		.v-text-field__details {
-			display: none;
-		}
-	}
-
 	.v-input__icon--append .v-icon {
 		width: 20px;
 		height: 20px;
