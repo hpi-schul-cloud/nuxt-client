@@ -142,6 +142,7 @@ export default defineComponent({
 			},
 		];
 
+		const panel = ref<number | undefined>(undefined);
 		const allSubmissions = toRef(props, "submissions");
 		const activeFilter = ref<StatusFilter>("all");
 
@@ -159,6 +160,14 @@ export default defineComponent({
 			);
 		};
 
+		const setFilter = (filter: StatusFilter) => {
+			if (filter === activeFilter.value) {
+				activeFilter.value = "all";
+			} else {
+				activeFilter.value = filter;
+			}
+		};
+
 		const openCount = computed<number>(
 			() => filterByStatus(allSubmissions, "open").length
 		);
@@ -170,6 +179,14 @@ export default defineComponent({
 		const overdueCount = computed<number>(
 			() => filterByStatus(allSubmissions, "expired").length
 		);
+
+		const isDisabled = (count: number) => {
+			return count === 0;
+		};
+
+		const getTabIndex = (isDisabled: boolean) => {
+			return isDisabled ? -1 : 0;
+		};
 
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
@@ -192,27 +209,7 @@ export default defineComponent({
 				: "filter-chip";
 		};
 
-		const isDisabled = (count: number) => {
-			return count === 0;
-		};
-
-		const getTabIndex = (isDisabled: boolean) => {
-			return isDisabled ? -1 : 0;
-		};
-
-		//	Filter Functionality
-		const panel = ref<number | undefined>(undefined);
-
-		const setFilter = (filter: StatusFilter) => {
-			if (filter === activeFilter.value) {
-				activeFilter.value = "all";
-			} else {
-				activeFilter.value = filter;
-			}
-		};
-
 		watch(activeFilter, () => {
-			// filterByStatus(newFilter);
 			openPanel();
 		});
 
