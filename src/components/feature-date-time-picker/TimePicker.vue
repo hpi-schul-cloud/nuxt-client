@@ -91,7 +91,6 @@ export default defineComponent({
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
 		const { timesOfDayList } = useTimePickerState();
-		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
 		const requiredRule: ValidationRule = (value: string | null) => {
 			return value === "" || value === null
@@ -103,6 +102,8 @@ export default defineComponent({
 			if (value === "" || value === null) {
 				return true;
 			}
+
+			const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
 			return !value.match(timeRegex)
 				? t("components.timePicker.validation.format")

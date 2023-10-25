@@ -11,7 +11,7 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					ref="inputField"
-					:value="formattedDate"
+					v-model="formattedDate"
 					v-bind="attrs"
 					v-on="on"
 					:label="label"
@@ -19,10 +19,10 @@
 					:placeholder="$t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
-					readonly
 					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
+					v-dateInputMask
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
@@ -46,13 +46,13 @@
 </template>
 
 <script lang="ts">
-import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch, onMounted } from "vue";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { dateInputMask } from "@util-input-masks";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -64,6 +64,9 @@ export default defineComponent({
 		minDate: { type: String },
 		maxDate: { type: String },
 		dateTimeInPast: { type: Boolean, default: false },
+	},
+	directives: {
+		dateInputMask,
 	},
 	emits: ["update:date"],
 	setup(props, { emit }) {
@@ -77,14 +80,31 @@ export default defineComponent({
 				emitDateDebounced(newValue);
 			},
 		});
+
+		/**
+		 * Necessary because we need to wait for update:error
+		 */
+		const emitDateDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:date", newValue);
+			}
+		}, 50);
+
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
 
-		const formattedDate = computed(() => {
-			return modelValue.value
+		const formattedDate = ref("");
+
+		onMounted(() => {
+			formattedDate.value = modelValue.value
 				? dayjs(modelValue.value).format(DATETIME_FORMAT.date)
 				: "";
+		});
+
+		watch(formattedDate, (newVal) => {
+			const [day, month, year] = newVal.split(".");
+			modelValue.value = `${year}-${month}-${day}`;
 		});
 
 		const focusDatePicker = () => {
@@ -103,12 +123,25 @@ export default defineComponent({
 				: true;
 		};
 
+		const formatRule: ValidationRule = (value: string | null) => {
+			if (value === "" || value === null) {
+				return true;
+			}
+
+			const dateRegex = /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/g;
+
+			return !value.match(dateRegex)
+				? t("components.timePicker.validation.format")
+				: true;
+		};
+
 		const rules = computed<ValidationRule[]>(() => {
 			const rules: ValidationRule[] = [];
 
 			if (props.required) {
 				rules.push(requiredRule);
 			}
+			rules.push(formatRule);
 			return rules;
 		});
 
@@ -120,15 +153,6 @@ export default defineComponent({
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
 		};
-
-		/**
-		 * Necessary because we need to wait for update:error
-		 */
-		const emitDateDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				emit("update:date", newValue);
-			}
-		}, 50);
 
 		const onMenuToggle = () => {
 			if (showDateDialog.value) {
@@ -149,7 +173,6 @@ export default defineComponent({
 		});
 
 		return {
-			mdiCalendarClock,
 			locale,
 			modelValue,
 			rules,
