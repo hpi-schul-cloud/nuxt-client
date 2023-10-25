@@ -1,5 +1,5 @@
 <template>
-	<VMenu left min-width="250">
+	<VMenu location="bottom end" min-width="250">
 		<template v-slot:activator="{ props }">
 			<VBtn
 				flat

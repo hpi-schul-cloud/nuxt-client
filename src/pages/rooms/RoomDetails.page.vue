@@ -17,7 +17,6 @@
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
-						nudge-right="120"
 						data-testid="title-menu"
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
