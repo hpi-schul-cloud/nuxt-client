@@ -27,7 +27,7 @@
 		<v-btn
 			class="my-5 button-start"
 			color="primary"
-			depressed
+			variant="flat"
 			data-testid="admin-class-add-button"
 		>
 			{{ t("pages.administration.classes.index.add") }}

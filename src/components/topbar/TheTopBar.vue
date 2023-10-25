@@ -37,6 +37,7 @@
 					icon="$mdiArrowExpand"
 					color="secondary-darken-1"
 					variant="text"
+					density="comfortable"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"

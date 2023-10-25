@@ -34,8 +34,6 @@
 							variant="plain"
 							color="info"
 							class="info-button"
-							style="background-color: transparent"
-							design="info text icon"
 							:aria-label="
 								$t(
 									'pages.administration.students.infobox.registrationOnly.headline'
@@ -197,7 +195,7 @@
 				</span>
 				<v-btn
 					v-if="column.sortable"
-					variant="plain"
+					variant="text"
 					:ripple="false"
 					:class="{
 						'is-current-sort': sortBy === column.field,

@@ -3,6 +3,7 @@
 		<v-btn
 			icon
 			variant="text"
+			density="comfortable"
 			class="icon-button"
 			data-testid="initials"
 			role="menu"

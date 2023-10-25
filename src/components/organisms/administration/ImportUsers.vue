@@ -97,6 +97,7 @@
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
 								<v-btn
 									icon
+									variant="text"
 									:value="MatchedBy.None"
 									:title="
 										$t('components.organisms.importUsers.searchUnMatched')
@@ -114,6 +115,7 @@
 								</v-btn>
 								<v-btn
 									icon
+									variant="text"
 									:value="MatchedBy.Admin"
 									:title="
 										$t('components.organisms.importUsers.searchAdminMatched')
@@ -131,6 +133,7 @@
 								</v-btn>
 								<v-btn
 									icon
+									variant="text"
 									:value="MatchedBy.Auto"
 									:title="
 										$t('components.organisms.importUsers.searchAutoMatched')
@@ -152,6 +155,7 @@
 							<v-btn-toggle v-model="searchFlagged" borderless group>
 								<v-btn
 									icon
+									variant="text"
 									value="true"
 									:title="$t('components.organisms.importUsers.searchFlagged')"
 									class="searchFlagged"
@@ -186,7 +190,7 @@
 							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"
 						>
-							<v-icon small>{{ mdiPencilOutline }}</v-icon>
+							<v-icon size="small">{{ mdiPencilOutline }}</v-icon>
 						</v-btn>
 					</div>
 				</template>
@@ -199,7 +203,7 @@
 						:title="$t('components.organisms.importUsers.flagImportUser')"
 						@click="saveFlag(item)"
 					>
-						<v-icon small :color="item.flagged ? 'primary' : ''">{{
+						<v-icon size="small" :color="item.flagged ? 'primary' : ''">{{
 							item.flagged ? mdiFlag : mdiFlagOutline
 						}}</v-icon>
 					</v-btn>

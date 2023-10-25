@@ -13,7 +13,7 @@
 			>
 				<v-btn
 					variant="plain"
-					large
+					size="large"
 					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
 					data-testid="mobilePlatformAction"
@@ -23,14 +23,14 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiShareVariantOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
 					variant="plain"
-					large
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
@@ -40,7 +40,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiEmailOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.mailShare")
@@ -50,7 +50,7 @@
 
 				<v-btn
 					variant="plain"
-					large
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="copyAction"
@@ -60,7 +60,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiContentCopy }}</v-icon></span
+							<v-icon size="large">{{ mdiContentCopy }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.copyClipboard")
@@ -70,7 +70,7 @@
 
 				<v-btn
 					variant="plain"
-					large
+					size="large"
 					:height="84"
 					data-testid="qrCodeAction"
 					class="button-alignment-top"
@@ -80,7 +80,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiQrcode }}</v-icon></span
+							<v-icon size="large">{{ mdiQrcode }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.qrCodeScan")
