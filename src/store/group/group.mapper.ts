@@ -18,6 +18,7 @@ export class GroupMapper {
 				teachers: classInfoResponse.teachers,
 				type: ClassRootTypeMapping[classInfoResponse.type],
 				id: classInfoResponse.id,
+				isUpgradable: classInfoResponse.isUpgradable,
 			})
 		);
 
