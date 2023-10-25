@@ -6,7 +6,7 @@ describe("ColorOverlay", () => {
 	const setup = (props: {
 		isOverlayDisabled: boolean;
 		color?: string;
-		opacity?: string;
+		opacity?: number;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -154,6 +154,82 @@ describe("ColorOverlay", () => {
 			const overlayLeave = wrapper.find(".display-overlay");
 
 			expect(overlayLeave.exists()).toBe(false);
+		});
+
+		describe("when color property is undefined", () => {
+			it("should use default color value", async () => {
+				const color = "var(--v-black-base)";
+				const { wrapper } = setup({ isOverlayDisabled: false });
+
+				wrapper.trigger("mouseenter");
+				await nextTick();
+
+				const overlay = wrapper.find(".display-overlay");
+
+				expect(overlay.exists()).toBe(true);
+				expect(overlay.isVisible()).toBe(true);
+
+				const style = getComputedStyle(overlay.element);
+
+				expect(style.getPropertyValue("background-color")).toBe(color);
+			});
+		});
+
+		describe("when color property is defined", () => {
+			it("should use defined color value", async () => {
+				const color = "white";
+				const { wrapper } = setup({ isOverlayDisabled: false, color });
+
+				wrapper.trigger("mouseenter");
+				await nextTick();
+
+				const overlay = wrapper.find(".display-overlay");
+
+				expect(overlay.exists()).toBe(true);
+				expect(overlay.isVisible()).toBe(true);
+
+				const style = getComputedStyle(overlay.element);
+
+				expect(style.getPropertyValue("background-color")).toBe(color);
+			});
+		});
+
+		describe("when opacity property is undefined", () => {
+			it("should use default opacity value", async () => {
+				const { wrapper } = setup({ isOverlayDisabled: false });
+				const defaultOpacity = "0.2";
+
+				wrapper.trigger("mouseenter");
+				await nextTick();
+
+				const overlay = wrapper.find(".display-overlay");
+
+				expect(overlay.exists()).toBe(true);
+				expect(overlay.isVisible()).toBe(true);
+
+				const style = getComputedStyle(overlay.element);
+
+				expect(style.getPropertyValue("opacity")).toBe(defaultOpacity);
+			});
+		});
+
+		describe("when color property is defined", () => {
+			it("should use defined color value", async () => {
+				const opacity = 0.8;
+				const { wrapper } = setup({ isOverlayDisabled: false, opacity });
+
+				wrapper.trigger("mouseenter");
+				await nextTick();
+
+				const overlay = wrapper.find(".display-overlay");
+
+				expect(overlay.exists()).toBe(true);
+				expect(overlay.isVisible()).toBe(true);
+
+				const style = getComputedStyle(overlay.element);
+
+				expect(style.getPropertyValue("opacity")).toBe(opacity.toString());
+			});
 		});
 	});
 
