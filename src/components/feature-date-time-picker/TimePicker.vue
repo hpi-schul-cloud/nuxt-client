@@ -11,7 +11,7 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					ref="inputField"
-					v-model="timeValue"
+					v-model="modelValue"
 					v-bind="attrs"
 					v-on="on"
 					:label="label"
@@ -72,14 +72,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		const timeValue = ref("");
-
-		watchEffect(() => {
-			timeValue.value = props.time;
-		});
-
-		watch(timeValue, (newVal) => {
-			emitTimeDebounced(newVal);
+		const modelValue = computed({
+			get() {
+				return props.time;
+			},
+			set: (newValue) => {
+				emitTimeDebounced(newValue);
+			},
 		});
 
 		// Necessary because we need to wait for update:error
@@ -91,7 +90,7 @@ export default defineComponent({
 
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
-		const valid = ref<null | boolean>(null);
+		const valid = ref(true);
 		const { timesOfDayList } = useTimePickerState();
 		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
@@ -104,18 +103,6 @@ export default defineComponent({
 		const formatRule: ValidationRule = (value: string | null) => {
 			if (value === "" || value === null) {
 				return true;
-			}
-
-			// add zero
-			// const noZeroPrefixRegex = /^\d[0-5]\d$/g;
-			// if (value.match(noZeroPrefixRegex)) {
-			// 	timeValue.value = "0" + value;
-			// }
-
-			// add colon
-			const noColonRegex = /^([01]\d|2[0-3])[0-5]\d$/g;
-			if (value.match(noColonRegex)) {
-				timeValue.value = value.slice(0, 2) + ":" + value.slice(2);
 			}
 
 			return !value.match(timeRegex)
@@ -142,7 +129,7 @@ export default defineComponent({
 
 		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
-			timeValue.value = selected;
+			modelValue.value = selected;
 			valid.value = true;
 			await closeMenu();
 		};
@@ -164,7 +151,7 @@ export default defineComponent({
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			timeValue,
+			modelValue,
 			rules,
 			inputField,
 			onSelect,
