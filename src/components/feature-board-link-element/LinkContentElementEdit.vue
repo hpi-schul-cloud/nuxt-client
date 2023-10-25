@@ -3,6 +3,7 @@
 		<v-form @submit.prevent="onSubmit(url)" ref="form" :lazy-validation="true">
 			<v-text-field
 				v-model="url"
+				dateTimeInputMask
 				:rules="[rules.isRequired, rules.isValidUrl]"
 				:label="$t('components.cardElement.LinkElement.label')"
 				type="text"
