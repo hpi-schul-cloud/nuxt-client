@@ -143,6 +143,7 @@
 	"common.words.languages.uk": "Ukrainisch",
 	"components.datePicker.messages.future": "Bitte Datum und Uhrzeit in der Zukunft angeben.",
 	"components.datePicker.validation.required": "Bitte Datum angeben.",
+	"components.datePicker.validation.format": "Bitte Format DD.MM.YYYY verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.future": "Bitte Uhrzeit in der Zukunft angeben.",

@@ -142,6 +142,7 @@
 	"common.words.languages.uk": "Ucranio",
 	"components.datePicker.messages.future": "Por favor, especifique una fecha y una hora en el futuro.",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
+	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.YYYY",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
 	"components.timePicker.validation.format": "Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.future": "Por favor ingrese un tiempo en el futuro.",
