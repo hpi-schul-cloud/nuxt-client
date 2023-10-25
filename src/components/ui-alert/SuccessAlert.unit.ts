@@ -22,7 +22,7 @@ describe("SuccessAlert", () => {
 
 	it("should pass correct color to filealert", () => {
 		const { wrapper } = setup();
-		console.log(wrapper.html());
+
 		const color = wrapper.findComponent(BaseAlert).attributes("color");
 
 		expect(color).toBe("success");

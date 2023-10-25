@@ -27,8 +27,9 @@
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
-			v-else-if="isEditMode"
+			v-else
 			:elementId="element.id"
+			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
 		>
 			<BoardMenu scope="element">

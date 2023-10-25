@@ -11,7 +11,7 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					ref="inputField"
-					v-model="timeValue"
+					v-model="modelValue"
 					v-bind="attrs"
 					v-on="on"
 					:label="label"
@@ -22,7 +22,6 @@
 					data-testid="time-input"
 					v-timeInputMask
 					:class="{ 'menu-open': showTimeDialog }"
-					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="onError"
@@ -51,7 +50,7 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref, watch, watchEffect } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
@@ -72,30 +71,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
-		// const modelValue = computed({
-		// 	get() {
-		// 		return props.time;
-		// 	},
-		// 	set: (newValue) => {
-		// 		emitTimeDebounced(newValue);
-		// 	},
-		// });
-		const timeValue = ref("");
-
-		watchEffect(() => {
-			console.log("watchEffect");
-			timeValue.value = props.time;
-		});
-
-		// watch(
-		// 	() => props.time,
-		// 	(newVal) => {
-		// 		timeValue.value = newVal;
-		// 	}
-		// );
-
-		watch(timeValue, (newVal) => {
-			emitTimeDebounced(newVal);
+		const modelValue = computed({
+			get() {
+				return props.time;
+			},
+			set: (newValue) => {
+				emitTimeDebounced(newValue);
+			},
 		});
 
 		// Necessary because we need to wait for update:error
@@ -107,9 +89,8 @@ export default defineComponent({
 
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
-		const valid = ref<null | boolean>(null);
+		const valid = ref(true);
 		const { timesOfDayList } = useTimePickerState();
-		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
 		const requiredRule: ValidationRule = (value: string | null) => {
 			return value === "" || value === null
@@ -122,17 +103,7 @@ export default defineComponent({
 				return true;
 			}
 
-			// add zero
-			// const noZeroPrefixRegex = /^\d[0-5]\d$/g;
-			// if (value.match(noZeroPrefixRegex)) {
-			// 	timeValue.value = "0" + value;
-			// }
-
-			// add colon
-			const noColonRegex = /^([01]\d|2[0-3])[0-5]\d$/g;
-			if (value.match(noColonRegex)) {
-				timeValue.value = value.slice(0, 2) + ":" + value.slice(2);
-			}
+			const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
 			return !value.match(timeRegex)
 				? t("components.timePicker.validation.format")
@@ -150,16 +121,9 @@ export default defineComponent({
 			return rules;
 		});
 
-		const isNumberOrColon = (event: KeyboardEvent) => {
-			const char = String.fromCharCode(event.keyCode); // Get the character
-			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
-			else event.preventDefault(); // If it doesn't match, don't add to input text
-		};
-
 		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
-			// modelValue.value = selected;
-			timeValue.value = selected;
+			modelValue.value = selected;
 			valid.value = true;
 			await closeMenu();
 		};
@@ -181,14 +145,12 @@ export default defineComponent({
 		return {
 			showTimeDialog,
 			timesOfDayList,
-			// modelValue,
-			timeValue,
+			modelValue,
 			rules,
 			inputField,
 			onSelect,
 			onError,
 			onMenuToggle,
-			isNumberOrColon,
 		};
 	},
 });
