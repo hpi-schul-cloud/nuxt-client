@@ -22,7 +22,6 @@
 					data-testid="time-input"
 					v-timeInputMask
 					:class="{ 'menu-open': showTimeDialog }"
-					@keypress="preventInvalidCharacters"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@update:error="onError"
@@ -51,7 +50,7 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref, watch, watchEffect } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
@@ -121,12 +120,6 @@ export default defineComponent({
 			return rules;
 		});
 
-		const preventInvalidCharacters = (event: KeyboardEvent) => {
-			const char = String.fromCharCode(event.keyCode); // Get the character
-			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
-			else event.preventDefault(); // If it doesn't match, don't add to input text
-		};
-
 		const onSelect = async (selected: string) => {
 			inputField.value?.focus();
 			modelValue.value = selected;
@@ -157,7 +150,6 @@ export default defineComponent({
 			onSelect,
 			onError,
 			onMenuToggle,
-			preventInvalidCharacters,
 		};
 	},
 });
