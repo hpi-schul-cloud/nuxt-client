@@ -5,7 +5,7 @@
 			:is-edit-mode="isEditMode"
 			@add:alert="onAddAlert"
 		>
-			<slot></slot>
+			<slot />
 		</FileDisplay>
 		<FileInputs
 			:file-properties="fileProperties"

@@ -21,6 +21,9 @@ module.exports = defineConfig({
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
+				"@data-external-tool": getDir("src/components/data-external-tool"),
+				"@data-group": getDir("src/components/data-group"),
+				"@data-system": getDir("src/components/data-system"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -51,6 +54,7 @@ module.exports = defineConfig({
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
+				"@page-class-members": getDir("src/components/page-class-members"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
