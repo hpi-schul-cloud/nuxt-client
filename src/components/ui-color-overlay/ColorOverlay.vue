@@ -27,7 +27,7 @@ import { computed, defineComponent, ref } from "vue";
 export default defineComponent({
 	name: "ColorOverlay",
 	props: {
-		color: { type: String, default: "var(--v-black-base)" },
+		color: { type: String, default: "#1b1b1b" },
 		isOverlayDisabled: { type: Boolean },
 		opacity: { type: Number, default: 0.2 },
 	},

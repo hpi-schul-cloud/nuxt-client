@@ -158,7 +158,9 @@ describe("ColorOverlay", () => {
 
 		describe("when color property is undefined", () => {
 			it("should use default color value", async () => {
-				const color = "var(--v-black-base)";
+				// default color should be "var(--v-black-base)", BUT as these is
+				// unknown here, we need to use "real" color values
+				const color = "rgb(27, 27, 27)"; // equivalent to #1b1b1b
 				const { wrapper } = setup({ isOverlayDisabled: false });
 
 				wrapper.trigger("mouseenter");
