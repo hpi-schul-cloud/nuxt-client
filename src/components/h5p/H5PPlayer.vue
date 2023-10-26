@@ -7,11 +7,11 @@
 			<v-progress-circular indeterminate color="secondary" size="115" />
 		</div>
 		<h5p-player
-			:class="{ hidden: !playerInitialized }"
+			v-show="playerInitialized"
 			ref="h5pPlayerRef"
 			:content-id="contentId"
 			@initialized="playerInitialized = true"
-		></h5p-player>
+		/>
 	</div>
 </template>
 
@@ -21,11 +21,11 @@ import {
 	H5PPlayerComponent,
 } from "@lumieducation/h5p-webcomponents";
 
-defineElements("h5p-player");
-
 import { defineComponent, ref, watch } from "vue";
 import { H5pEditorApiFactory, LanguageType } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
+
+defineElements("h5p-player");
 
 export default defineComponent({
 	name: "H5PPlayerComponent",

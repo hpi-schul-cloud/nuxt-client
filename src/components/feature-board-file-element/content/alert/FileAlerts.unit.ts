@@ -32,6 +32,18 @@ describe("FileAlerts", () => {
 		});
 	});
 
+	describe("when alerts contains FileAlert.AUDIO_FORMAT_ERROR", () => {
+		it("should render FileAlert.AUDIO_FORMAT_ERROR", () => {
+			const { wrapper } = setup([FileAlert.AUDIO_FORMAT_ERROR]);
+
+			const infoAlert = wrapper.findComponent(InfoAlert);
+
+			expect(infoAlert.text()).toBe(
+				"components.cardElement.fileElement.audioFormatError"
+			);
+		});
+	});
+
 	describe("when alerts contains FileAlert.AWAITING_SCAN_STATUS", () => {
 		it("should render FileAlert.AWAITING_SCAN_STATUS", () => {
 			const { wrapper } = setup([FileAlert.AWAITING_SCAN_STATUS]);

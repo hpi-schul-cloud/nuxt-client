@@ -41,7 +41,7 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
 				>
-					<template v-slot:append>
+					<template #append>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
@@ -165,6 +165,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .alert-text {
 	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
 }
 
 .button-left {

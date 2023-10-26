@@ -2,6 +2,7 @@
 	<div>
 		<video
 			controls
+			controlsList="nodownload"
 			ref="videoRef"
 			class="video"
 			loading="lazy"
@@ -10,7 +11,7 @@
 			v-on:error="onError"
 		/>
 		<ContentElementBar class="menu">
-			<template #menu><slot></slot></template>
+			<template #menu><slot /></template>
 		</ContentElementBar>
 	</div>
 </template>

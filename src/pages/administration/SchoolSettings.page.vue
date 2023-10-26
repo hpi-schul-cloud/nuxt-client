@@ -1,108 +1,243 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.administration.school.index.title')"
+		:headline="headline"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
-		<v-alert v-if="schoolError" light prominent text type="error">
-			{{ $t(schoolError.translationKey) }}
+		<v-alert v-if="error" light text type="error" data-testid="error-alert">
+			<div class="alert-text">
+				{{ t(error.translationKey) }}
+			</div>
 		</v-alert>
-		<img
-			v-if="schoolError"
-			class="school-error-image"
-			role="presentation"
-			alt=""
-			src="@/assets/img/pc_repair.png"
-		/>
-		<div v-if="!schoolError" class="no-school-error">
-			<v-alert light prominent text type="info">
-				{{ $t("pages.administration.school.index.info") }}
-				<a href="/administration/school/">
-					{{ $t("pages.administration.school.index.back") }}
-				</a>
+		<div v-else data-testid="no-error">
+			<v-alert light text type="info" class="mb-4">
+				<div class="alert-text">
+					{{ t("pages.administration.school.index.back") }}
+					<a href="/administration/school/">
+						{{ t("pages.administration.school.index.backLink") }}</a
+					>.
+				</div>
 			</v-alert>
-			<h2 class="text-h4">
-				{{ currentSchoolYear }}
-			</h2>
-			<v-divider class="my-sm-6 my-md-3"></v-divider>
-			<v-row>
-				<v-col>
-					<general-settings />
-					<school-policy v-if="schoolPolicyEnabled" />
-					<school-terms-of-use v-if="schoolTermsOfUseEnabled" />
-					<admin-migration-section v-if="isOauthMigrationEnabled" />
-					<template v-if="loading">
-						<v-skeleton-loader type="table-thead, table-row, table-row" />
-					</template>
-					<auth-systems v-else :systems="systems" />
-					<external-tools-section />
-				</v-col>
-			</v-row>
+			<v-alert light text type="info" class="mb-12">
+				<div class="alert-text">
+					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
+				</div>
+			</v-alert>
+			<template>
+				<v-divider />
+				<v-expansion-panels
+					hover
+					accordion
+					flat
+					multiple
+					class="mb-9"
+					v-model="openedPanels"
+				>
+					<v-expansion-panel data-testid="general-settings-panel">
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{ t("pages.administration.school.index.generalSettings") }}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<general-settings class="mt-9" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+
+					<v-expansion-panel
+						v-if="isFeatureSchoolPolicyEnabled"
+						data-testid="policy-panel"
+					>
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{ t("common.words.privacyPolicy") }}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<school-policy class="mt-9" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+
+					<v-expansion-panel
+						v-if="isFeatureSchoolTermsOfUseEnabled"
+						data-testid="terms-panel"
+					>
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{ t("common.words.termsOfUse") }}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<school-terms-of-use class="mt-9" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+
+					<v-expansion-panel
+						v-if="isFeatureOauthMigrationEnabled"
+						data-testid="migration-panel"
+					>
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{
+										t("components.administration.adminMigrationSection.headers")
+									}}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<admin-migration-section class="mt-9" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+
+					<v-expansion-panel data-testid="systems-panel">
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{ t("pages.administration.school.index.authSystems.title") }}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<template v-if="isLoading">
+								<v-skeleton-loader
+									class="mt-9"
+									type="table-thead, table-row, table-row"
+									data-testid="systems-panel-skeleton"
+								/>
+							</template>
+							<auth-systems class="mt-9" v-else :systems="systems" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+
+					<v-expansion-panel data-testid="tools-panel">
+						<v-expansion-panel-header hide-actions>
+							<template v-slot:default="{ open }">
+								<div class="text-h4">
+									{{
+										t("components.administration.externalToolsSection.header")
+									}}
+								</div>
+								<div class="v-expansion-panel-header__icon">
+									<v-icon>
+										<template v-if="!open">$mdiPlus</template>
+										<template v-else>$mdiMinus</template>
+									</v-icon>
+								</div>
+							</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content eager>
+							<external-tools-section class="mt-9" />
+						</v-expansion-panel-content>
+						<v-divider />
+					</v-expansion-panel>
+				</v-expansion-panels>
+			</template>
 		</div>
 	</default-wireframe>
 </template>
 
-<script>
-import { envConfigModule, schoolsModule } from "@/store";
+<script lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import GeneralSettings from "@/components/organisms/administration/GeneralSettings";
+import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
-import AuthSystems from "@/components/organisms/administration/AuthSystems";
-import AdminMigrationSection from "@/components/administration/AdminMigrationSection";
-import ExternalToolsSection from "@/components/administration/ExternalToolSection";
-import { buildPageTitle } from "@/utils/pageTitle";
+import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
+import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
+import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { School } from "@/store/types/schools";
+import { useTitle } from "@vueuse/core";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { ApplicationError } from "@/store/types/application-error";
+import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	injectStrict,
+	ENV_CONFIG_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
+import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { useRoute } from "vue-router/composables";
 
-export default {
+export default defineComponent({
+	name: "SchoolSettings",
 	components: {
+		DefaultWireframe,
 		ExternalToolsSection,
 		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
 		SchoolTermsOfUse,
 		AuthSystems,
-		DefaultWireframe,
 	},
-	data() {
-		return {
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
-				},
-				{
-					text: this.$t("pages.administration.school.index.title"),
-					disabled: true,
-				},
-			],
-		};
-	},
-	computed: {
-		systems() {
-			return schoolsModule.getSystems;
-		},
-		loading() {
-			return schoolsModule.getLoading;
-		},
-		school() {
-			return schoolsModule.getSchool;
-		},
-		schoolError() {
-			return schoolsModule.getError;
-		},
-		schoolPolicyEnabled: () => envConfigModule.getSchoolPolicyEnabled,
-		schoolTermsOfUseEnabled: () => envConfigModule.getSchoolTermsOfUseEnabled,
-		isOauthMigrationEnabled: () =>
-			envConfigModule.getFeatureSchoolSanisUserMigrationEnabled,
-		currentSchoolYear() {
-			return `${this.$t("common.words.schoolYear")} ${
-				schoolsModule.getCurrentYear.name
-			}`;
-		},
-	},
-	watch: {
-		school: {
-			handler: function (newSchool, oldSchool) {
+	setup() {
+		const { t } = useI18n();
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const route = useRoute();
+
+		const headline: Ref<string> = ref(
+			t("pages.administration.school.index.title")
+		);
+		const pageTitle = buildPageTitle(headline.value);
+		useTitle(pageTitle);
+
+		const breadcrumbs: Ref<Breadcrumb[]> = ref([
+			{
+				text: t("pages.administration.index.title"),
+				href: "/administration/",
+			},
+			{
+				text: t("pages.administration.school.index.title"),
+				disabled: true,
+			},
+		]);
+
+		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+		watch(
+			school,
+			(newSchool, oldSchool) => {
 				// fetch school year and systems when the school is loaded
 				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
 				if (
@@ -116,13 +251,79 @@ export default {
 					schoolsModule.fetchFederalState();
 				}
 			},
-			immediate: true,
-		},
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.school.index.title")
+			{ immediate: true }
 		);
+
+		const openedPanels: ComputedRef<number[]> = computed(() => {
+			// those need to be in order of code appearance since index is needed for panels v-model
+			const panels: string[] = [
+				"general",
+				"privacy",
+				"terms",
+				"migration",
+				"authentication",
+				"tools",
+			];
+
+			let openedPanelsArr: number[] = [];
+			if (route.query.openPanels) {
+				openedPanelsArr = route.query.openPanels
+					.toString()
+					.split(",")
+					.map((panelName) => panels.findIndex((p) => p === panelName));
+			}
+
+			return openedPanelsArr;
+		});
+		const systems: ComputedRef<any[]> = computed(
+			() => schoolsModule.getSystems
+		);
+		const isLoading: ComputedRef<boolean> = computed(
+			() => schoolsModule.getLoading
+		);
+		const error: ComputedRef<ApplicationError | null> = computed(
+			() => schoolsModule.getError
+		);
+		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> =
+			computed(() => envConfigModule.getFeatureSchoolSanisUserMigrationEnabled);
+		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> =
+			computed(() => envConfigModule.getSchoolPolicyEnabled);
+		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
+			computed(() => envConfigModule.getSchoolTermsOfUseEnabled);
+		const instituteTitle: ComputedRef<string> = computed(() => {
+			switch (envConfigModule.getTheme) {
+				case "n21":
+					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+				case "thr":
+					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+				case "brb":
+					return "Dataport";
+				default:
+					return "Dataport";
+			}
+		});
+
+		return {
+			t,
+			headline,
+			breadcrumbs,
+			openedPanels,
+			school,
+			systems,
+			isLoading,
+			error,
+			isFeatureOauthMigrationEnabled,
+			isFeatureSchoolPolicyEnabled,
+			isFeatureSchoolTermsOfUseEnabled,
+			instituteTitle,
+		};
 	},
-};
+});
 </script>
+
+<style lang="scss" scoped>
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>

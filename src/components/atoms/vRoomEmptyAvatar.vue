@@ -18,10 +18,9 @@
 				:size="size"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
-			>
-			</v-avatar>
+			/>
 		</v-badge>
-		<div class="d-flex justify-center mt-1 subtitle"></div>
+		<div class="d-flex justify-center mt-1 subtitle" />
 	</div>
 </template>
 <script>

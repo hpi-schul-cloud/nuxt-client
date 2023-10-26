@@ -1,7 +1,7 @@
 import { Layouts } from "@/layouts/types";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
 	isMongoId,
@@ -101,7 +101,17 @@ export const routes: Array<RouteConfig> = [
 		path: "/administration/groups/classes",
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
-		beforeEnter: createPermissionGuard(["class_list"]),
+		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+	},
+	{
+		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		name: "administration-groups-classes-members",
+		component: async () =>
+			(await import("@page-class-members")).ClassMembersPage,
+		beforeEnter: createPermissionGuard(["group_view"]),
+		props: (route: Route) => ({
+			groupId: route.params.groupId,
+		}),
 	},
 	{
 		path: "/cfiles",

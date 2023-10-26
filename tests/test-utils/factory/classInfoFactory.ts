@@ -5,6 +5,6 @@ export const classInfoFactory = Factory.define<ClassInfo>(({ sequence }) => ({
 	name: `className${sequence}`,
 	externalSourceName: "Source",
 	teachers: ["TestTeacher"],
-	type: ClassRootType.Class,
+	type: ClassRootType.Group,
 	id: `id-${sequence}`,
 }));

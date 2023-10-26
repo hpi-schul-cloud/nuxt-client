@@ -1,18 +1,16 @@
 <template>
-	<section>
-		<h4 class="text-h4 mb-6">
-			{{ t("common.words.privacyPolicy") }}
-		</h4>
+	<div>
 		<v-alert
 			v-if="status === 'error'"
 			light
-			prominent
 			text
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
 		>
-			{{ t("pages.administration.school.index.schoolPolicy.error") }}
+			<div class="alert-text">
+				{{ t("pages.administration.school.index.schoolPolicy.error") }}
+			</div>
 		</v-alert>
 		<template v-else>
 			<v-progress-linear
@@ -113,7 +111,7 @@
 				</template>
 			</v-custom-dialog>
 		</template>
-	</section>
+	</div>
 </template>
 
 <script lang="ts">

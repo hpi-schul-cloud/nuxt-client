@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { ComponentPublicInstance, defineComponent, ref } from "vue";
 import { mdiPrinter } from "@mdi/js";
 
 export default defineComponent({
@@ -24,13 +24,13 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const qrCode = ref<HTMLDivElement | null>(null);
+		const qrCode = ref<ComponentPublicInstance<HTMLDivElement>>();
 
 		const openPrintMenu = () => {
 			const win = window.open();
 
 			if (qrCode.value !== null) {
-				win?.document.write(qrCode.value.innerHTML);
+				win?.document.write(qrCode.value!.$el.innerHTML);
 				win?.print();
 				win?.close();
 			}

@@ -6,7 +6,7 @@
 			ref="h5pEditorRef"
 			:content-id="contentId"
 			@validation-error="onValidationError"
-		></h5p-editor>
+		/>
 	</div>
 </template>
 
@@ -16,9 +16,6 @@ import {
 	H5PEditorComponent,
 } from "@lumieducation/h5p-webcomponents";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-
-defineElements("h5p-editor");
-
 import { defineComponent, ref, watch, PropType } from "vue";
 import {
 	H5PContentParentType,
@@ -27,6 +24,8 @@ import {
 	PostH5PContentCreateParams,
 } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
+
+defineElements("h5p-editor");
 
 export default defineComponent({
 	name: "H5PEditorComponent",
