@@ -49,10 +49,10 @@
 import { useDebounceFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, defineComponent, ref, watch, onMounted } from "vue";
-import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { dateInputMask } from "@util-input-masks";
+import { isRequired, isValidDateFormat } from "@util-validators";
 
 export default defineComponent({
 	name: "DatePicker",
@@ -117,31 +117,15 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const requiredRule: ValidationRule = (value: string | null) => {
-			return value === "" || value === null
-				? t("components.datePicker.validation.required")
-				: true;
-		};
-
-		const formatRule: ValidationRule = (value: string | null) => {
-			if (value === "" || value === null) {
-				return true;
-			}
-
-			const dateRegex = /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/g;
-
-			return !value.match(dateRegex)
-				? t("components.datePicker.validation.format")
-				: true;
-		};
-
-		const rules = computed<ValidationRule[]>(() => {
-			const rules: ValidationRule[] = [];
+		const rules = computed(() => {
+			const rules = [
+				isValidDateFormat(t("components.datePicker.validation.format")),
+			];
 
 			if (props.required) {
-				rules.push(requiredRule);
+				rules.push(isRequired(t("components.datePicker.validation.required")));
 			}
-			rules.push(formatRule);
+
 			return rules;
 		});
 
