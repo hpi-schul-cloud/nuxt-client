@@ -6,10 +6,7 @@
 		@click="onClick"
 	>
 		<template #right>
-			<div
-				v-if="isRunning && hasPermission"
-				class="pulsating-dot my-auto"
-			></div>
+			<div v-if="isRunning && hasPermission" class="pulsating-dot my-auto" />
 		</template>
 		<template #footer>
 			<div v-show="!isRunning" class="mt-2">

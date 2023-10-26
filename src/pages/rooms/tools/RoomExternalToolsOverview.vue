@@ -20,32 +20,30 @@
 			type="error"
 			data-testId="context-tool-error"
 			:text="apiError.message"
-		>
-		</v-alert>
+		/>
 
 		<v-progress-linear
 			:active="loading"
 			data-testId="progress-bar"
 			indeterminate
-		></v-progress-linear>
+		/>
 
 		<room-video-conference-section
 			v-if="isVideoConferenceAvailable"
 			class="mb-4"
 			:room-id="roomId"
-		></room-video-conference-section>
+		/>
 
-		<room-external-tools-section
-			:tools="tools"
-			:room-id="roomId"
-		></room-external-tools-section>
+		<room-external-tools-section :tools="tools" :room-id="roomId" />
 	</div>
 </template>
 
 <script lang="ts">
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { ToolContextType } from "@/serverApi/v3";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import RoomModule from "@/store/room";
 import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
@@ -62,8 +60,6 @@ import {
 	Ref,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomModule from "@/store/room";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 
@@ -102,7 +98,7 @@ export default defineComponent({
 		onMounted(async () => {
 			await contextExternalToolsModule.loadExternalToolDisplayData({
 				contextId: props.roomId,
-				contextType: ToolContextType.COURSE,
+				contextType: ToolContextType.Course,
 			});
 
 			course.value = await roomModule.fetchCourse(props.roomId);

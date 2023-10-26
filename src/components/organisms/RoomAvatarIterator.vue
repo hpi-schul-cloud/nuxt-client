@@ -1,24 +1,33 @@
 <template>
-	<v-container>
-		<v-row align="center">
-			<v-col
-				v-for="item in items"
-				:key="item.id"
-				class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
-				:cols="colCount"
-			>
-				<vRoomAvatar
-					:draggable="canDraggable"
-					class="room-avatar"
-					:item="item"
-					:size="itemSize"
-					:show-badge="true"
-					:condense-layout="condenseLayout"
-					@startDrag="$emit('startDrag', $event)"
-				></vRoomAvatar>
-			</v-col>
-		</v-row>
-	</v-container>
+	<v-data-iterator
+		:items="items"
+		:items-per-page="maxItems"
+		hide-default-footer
+		no-data-text=""
+	>
+		<template #default="props">
+			<v-container>
+				<v-row align="center">
+					<v-col
+						v-for="(item, key) in props.items"
+						:key="key"
+						class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
+						:cols="colCount"
+					>
+						<vRoomAvatar
+							:draggable="canDraggable"
+							class="room-avatar"
+							:item="item"
+							:size="itemSize"
+							:show-badge="true"
+							:condense-layout="condenseLayout"
+							@startDrag="$emit('startDrag', $event)"
+						/>
+					</v-col>
+				</v-row>
+			</v-container>
+		</template>
+	</v-data-iterator>
 </template>
 
 <script setup lang="ts">

@@ -11,15 +11,15 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:submissions="submissions"
-			:editable="editable"
+			:studentSubmission="studentSubmission"
+			:isOverdue="isOverdue"
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
 			:submissions="submissions"
-			:editable="editable"
+			:isOverdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>
@@ -34,7 +34,7 @@ import { useI18n } from "vue-i18n";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { StudentSubmission, TeacherSubmission } from "../types/submission";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 
 export default defineComponent({
@@ -46,14 +46,18 @@ export default defineComponent({
 	},
 	props: {
 		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+			type: Array as PropType<Array<TeacherSubmission>>,
+			required: true,
+		},
+		studentSubmission: {
+			type: Object as PropType<StudentSubmission>,
 			required: true,
 		},
 		loading: {
 			type: Boolean,
 			required: true,
 		},
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},

@@ -1,8 +1,5 @@
 <template>
-	<section>
-		<h3 class="text-h6">
-			{{ $t("pages.administration.school.index.privacySettings") }}
-		</h3>
+	<div>
 		<v-row
 			class="student-visibility-switch"
 			v-if="isTeacherStudentVisibilityVisible"
@@ -32,22 +29,10 @@
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
 				/>
-				<p v-if="isTeacherStudentVisibilityConfigurable" class="body-2 mb-0">
-					{{
-						theme === "brb"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg"
-							  )
-							: theme === "n21"
-							? $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen"
-							  )
-							: $t(
-									"pages.administration.school.index.privacySettings.longText.studentVisibility"
-							  )
-					}}
+				<p v-if="isTeacherStudentVisibilityConfigurable" class="switch-hint">
+					{{ $t(studentVisibilityTextKey) }}
 				</p>
-				<p v-else class="body-2 mb-0">
+				<p v-else class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.configurabilityInfoText"
@@ -81,7 +66,7 @@
 					color="primary"
 					:true-icon="mdiCheck"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.lernStore"
@@ -115,7 +100,7 @@
 					density="compact"
 					color="primary"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.chatFunction"
@@ -150,7 +135,7 @@
 					density="compact"
 					color="primary"
 				/>
-				<p class="body-2 mb-0">
+				<p class="switch-hint">
 					{{
 						$t(
 							"pages.administration.school.index.privacySettings.longText.videoConference"
@@ -159,7 +144,7 @@
 				</p>
 			</v-col>
 		</v-row>
-	</section>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -207,9 +192,31 @@ const studentVisibility = computed(() => {
 		return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
 	}
 });
+
+const studentVisibilityTextKey = computed(() => {
+	switch (theme.value) {
+		case "n21":
+			return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
+		case "brb":
+			return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
+		default:
+			return "pages.administration.school.index.privacySettings.longText.studentVisibility";
+	}
+});
+
 const lernStoreVisibility = computed(() => {
 	return props.permissions.student
 		? props.permissions.student.LERNSTORE_VIEW
 		: true;
 });
 </script>
+
+<style lang="scss" scoped>
+.switch-hint {
+	font-size: 12px !important;
+	line-height: 18px !important;
+	font-weight: 400 !important;
+	margin-top: -8px !important;
+	margin-left: 60px !important;
+}
+</style>

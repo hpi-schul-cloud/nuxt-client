@@ -2,11 +2,11 @@
 	<default-modal-footer class="actions">
 		<template #left>
 			<div class="slot-container">
-				<slot name="left"></slot>
+				<slot name="left" />
 			</div>
 		</template>
 		<template #right>
-			<slot name="right"></slot>
+			<slot name="right" />
 		</template>
 	</default-modal-footer>
 </template>

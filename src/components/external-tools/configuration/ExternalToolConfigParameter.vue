@@ -14,7 +14,7 @@
 				:rules="validateParameter(parameter, inputValue)"
 				validate-on-blur
 				:data-testId="parameter.name"
-			></v-text-field>
+			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
 			<v-select
@@ -27,7 +27,7 @@
 				:items="booleanSelectItems"
 				item-value="value"
 				item-title="text"
-			></v-select>
+			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">
 			<v-text-field
@@ -39,7 +39,7 @@
 				:rules="validateParameter(parameter, inputValue)"
 				validate-on-blur
 				:data-testId="parameter.name"
-			></v-text-field>
+			/>
 		</template>
 	</div>
 </template>

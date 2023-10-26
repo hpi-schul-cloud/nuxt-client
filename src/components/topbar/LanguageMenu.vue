@@ -9,11 +9,11 @@
 			@click.stop.prevent="toggleMenu"
 		>
 			<template v-slot:prepend>
-				<v-icon :icon="selectedItem.icon"></v-icon>
+				<v-icon :icon="selectedItem.icon" />
 			</template>
 			<v-list-item-title>{{ selectedItem.longName }}</v-list-item-title>
 			<template v-slot:append>
-				<v-icon :icon="mdiMenuDown"></v-icon>
+				<v-icon :icon="mdiMenuDown" />
 			</template>
 		</v-list-item>
 		<template v-if="menuVisible">
@@ -27,7 +27,7 @@
 				:prepend-icon="item.icon"
 			>
 				<template v-slot:prepend>
-					<v-icon :icon="item.icon"></v-icon>
+					<v-icon :icon="item.icon" />
 				</template>
 				<v-list-item-title>{{ item.longName }}</v-list-item-title>
 			</v-list-item>

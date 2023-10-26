@@ -5,17 +5,17 @@
 			<div class="menu">
 				<slot />
 			</div>
-			<date-time-picker
-				class="mt-1"
-				:dateTime="dueDate"
-				:date-input-label="t('common.labels.date')"
-				:time-input-label="t('common.labels.time')"
-				@input="onDateTimeInput"
-			/>
 		</div>
+		<date-time-picker
+			class="mt-1 mx-4"
+			:dateTime="dueDate"
+			:date-input-label="t('common.labels.date')"
+			:time-input-label="t('common.labels.time')"
+			@input="onDateTimeInput"
+		/>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
-			:editable="editable"
+			:isOverdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>
@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { SubmissionsResponse } from "@/serverApi/v3";
+import { TeacherSubmission } from "../types/submission";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import { DateTimePicker } from "@feature-date-time-picker";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
@@ -41,10 +41,10 @@ export default defineComponent({
 			type: String,
 		},
 		submissions: {
-			type: Object as PropType<SubmissionsResponse>,
+			type: Array as PropType<Array<TeacherSubmission>>,
 			required: true,
 		},
-		editable: {
+		isOverdue: {
 			type: Boolean,
 			required: true,
 		},

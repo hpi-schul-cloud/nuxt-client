@@ -10,15 +10,14 @@
 						})
 					}}
 				</v-toolbar-title>
-				<v-spacer></v-spacer>
+				<v-spacer />
 				<v-toolbar-items>
 					<v-btn
 						v-if="isDialog"
 						:aria-label="$t('common.labels.close')"
 						:icon="mdiClose"
 						@click="closeEdit"
-					>
-					</v-btn>
+					/>
 				</v-toolbar-items>
 			</v-toolbar>
 
@@ -152,7 +151,7 @@
 								</v-list-item-content>
 							</template>
 							<template #append-item>
-								<div v-intersect="endIntersect" class="pa-2"></div>
+								<div v-intersect="endIntersect" class="pa-2" />
 							</template>
 						</v-autocomplete>
 					</v-col>

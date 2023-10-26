@@ -8,14 +8,13 @@
 	>
 		<v-card :ripple="false">
 			<v-card-title data-testid="dialog-title">
-				<slot name="title"></slot>
+				<slot name="title" />
 			</v-card-title>
 			<v-card-text class="text--primary">
-				<slot name="content"></slot>
+				<slot name="content" />
 			</v-card-text>
-			<v-card-actions v-if="hasButtons">
-				<v-spacer></v-spacer>
-
+			<v-card-actions v-if="hasButtons" class="pe-6">
+				<v-spacer />
 				<div class="button-section button-left">
 					<v-btn
 						v-if="checkButtons('back')"
@@ -52,7 +51,11 @@
 						variant="flat"
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
-						>{{ $t(confirmBtnTitleKey) }}
+					>
+						<v-icon v-if="confirmBtnIcon" dense class="mr-1">
+							{{ confirmBtnIcon }}
+						</v-icon>
+						{{ $t(confirmBtnTitleKey) }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
@@ -92,6 +95,9 @@ const props = defineProps({
 	confirmBtnTitleKey: {
 		type: String,
 		default: "common.actions.confirm",
+	},
+	confirmBtnIcon: {
+		type: String,
 	},
 	confirmBtnDisabled: {
 		type: Boolean,

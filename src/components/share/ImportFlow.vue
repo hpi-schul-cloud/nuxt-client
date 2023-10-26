@@ -7,20 +7,20 @@
 			:courses="courses"
 			@next="onCourseSelected"
 			@cancel="onCancel"
-		></select-course-modal>
+		/>
 		<import-modal
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
 			:parent-type="parentType"
 			@import="onImport"
 			@cancel="onCancel"
-		></import-modal>
+		/>
 		<copy-result-modal
 			:is-open="isCopyResultModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
-		></copy-result-modal>
+		/>
 	</div>
 </template>
 

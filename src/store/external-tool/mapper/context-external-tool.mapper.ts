@@ -5,13 +5,13 @@ import {
 	ContextExternalToolResponse,
 	ContextExternalToolResponseContextTypeEnum,
 	CustomParameterEntryParam,
+	ToolContextType,
 } from "@/serverApi/v3";
 import {
 	ContextExternalTool,
 	ContextExternalToolSave,
 } from "../context-external-tool";
 import { ContextExternalToolConfigurationTemplate } from "../tool-configuration-template";
-import { ToolContextType } from "../tool-context-type.enum";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";
@@ -21,7 +21,9 @@ export const ToolContextMapping: Record<
 	ContextExternalToolResponseContextTypeEnum,
 	ToolContextType
 > = {
-	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.COURSE,
+	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.Course,
+	[ContextExternalToolResponseContextTypeEnum.BoardElement]:
+		ToolContextType.BoardElement,
 };
 
 export class ContextExternalToolMapper {

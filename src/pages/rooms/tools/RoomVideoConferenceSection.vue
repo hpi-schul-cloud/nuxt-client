@@ -7,7 +7,7 @@
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
-		></room-video-conference-card>
+		/>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -55,7 +55,7 @@
 							inset
 							density="compact"
 							:true-icon="mdiCheck"
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -72,7 +72,7 @@
 							inset
 							density="compact"
 							:true-icon="mdiCheck"
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -89,11 +89,11 @@
 							inset
 							density="compact"
 							:true-icon="mdiCheck"
-						></v-switch>
+						/>
 					</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						variant="text"

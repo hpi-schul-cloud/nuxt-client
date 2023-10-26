@@ -14,7 +14,7 @@
 		<VDivider
 			:color="isColumnActive ? 'black' : 'grey'"
 			class="margin-fix transition-divider"
-		></VDivider>
+		/>
 	</div>
 </template>
 

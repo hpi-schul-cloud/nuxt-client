@@ -8,7 +8,7 @@
 				density="comfortable"
 				:aria-label="ariaLabel"
 				@keydown.space.stop
-			></v-btn>
+			/>
 		</template>
 		<v-list>
 			<v-list-item

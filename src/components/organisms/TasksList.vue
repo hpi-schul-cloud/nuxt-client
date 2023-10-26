@@ -43,10 +43,7 @@
 			</template>
 		</template>
 		<div v-if="showSpinner" class="d-flex justify-center my-10">
-			<v-progress-circular
-				indeterminate
-				color="secondary"
-			></v-progress-circular>
+			<v-progress-circular indeterminate color="secondary" />
 		</div>
 	</v-list>
 </template>

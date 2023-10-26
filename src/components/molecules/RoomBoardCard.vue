@@ -15,7 +15,7 @@
 		<VCardText>
 			<div class="mb-0">
 				<div class="d-flex align-center mb-3">
-					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard"></VIcon>
+					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
 					<span class="title-board-card">
 						{{ $t("pages.room.boardCard.label.columnBoard") }}
 					</span>

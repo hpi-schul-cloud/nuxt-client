@@ -10,7 +10,7 @@
 			:true-icon="mdiCheck"
 			density="compact"
 			color="primary"
-		></v-switch>
+		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>

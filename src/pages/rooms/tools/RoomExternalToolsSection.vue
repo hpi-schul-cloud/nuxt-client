@@ -12,7 +12,7 @@
 			@click="onClickTool"
 			@error="onError"
 			:data-testid="`external-tool-card-${index}`"
-		></room-external-tool-card>
+		/>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -35,7 +35,7 @@
 					:html="errorDialogText"
 					component="p"
 					class="text-md mt-2"
-				></RenderHTML>
+				/>
 			</template>
 		</v-custom-dialog>
 
@@ -62,7 +62,7 @@
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						variant="text"
@@ -86,15 +86,23 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
+import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import {
+	ToolConfigurationStatus,
+	ToolLaunchRequest,
+	ToolLaunchRequestMethodEnum,
+} from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import {
 	computed,
 	ComputedRef,
@@ -104,15 +112,7 @@ import {
 	Ref,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { useRouter } from "vue-router";
-import {
-	ToolConfigurationStatus,
-	ToolContextType,
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
-import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -186,7 +186,7 @@ export default defineComponent({
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: props.roomId,
-					contextType: ToolContextType.COURSE,
+					contextType: ToolContextType.Course,
 				},
 			});
 		};

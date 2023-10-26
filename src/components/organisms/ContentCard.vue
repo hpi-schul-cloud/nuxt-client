@@ -49,7 +49,7 @@
 			</base-link>
 			<user-has-role :role="isNotStudent">
 				<div v-show="!isCollection()" class="footer">
-					<div class="footer__separator"></div>
+					<div class="footer__separator" />
 					<div class="footer__content">
 						<div class="footer__icon-container">
 							<add-content-button

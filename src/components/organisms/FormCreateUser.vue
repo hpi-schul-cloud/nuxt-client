@@ -6,9 +6,9 @@
 			:hint="$t('common.placeholder.firstName')"
 			required
 			:error-messages="getErrorMessages(v$.firstName)"
-			@blur="v$.firstName.$touch"
 			data-testid="input_create-user_firstname"
-		></v-text-field>
+			@blur="$v.userData.firstName.$touch"
+		/>
 		<v-text-field
 			v-model="userData.lastName"
 			:label="$t('common.labels.lastName')"
@@ -16,7 +16,8 @@
 			required
 			:error-messages="getErrorMessages(v$.lastName)"
 			data-testid="input_create-user_lastname"
-		></v-text-field>
+			@blur="$v.userData.lastName.$touch"
+		/>
 		<v-text-field
 			v-model="userData.email"
 			:label="$t('common.labels.email')"
@@ -24,7 +25,8 @@
 			required
 			:error-messages="getErrorMessages(v$.email)"
 			data-testid="input_create-user_email"
-		></v-text-field>
+			@blur="$v.userData.email.$touch"
+		/>
 		<slot name="inputs" />
 
 		<slot name="errors" />

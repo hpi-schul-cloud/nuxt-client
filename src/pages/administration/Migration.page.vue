@@ -40,7 +40,7 @@
 					>
 						{{ $t("pages.administration.migration.step1") }}
 					</v-stepper-item>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-item
 						:complete="isMigrationFinished"
 						:editable="isStepEditable(2)"
@@ -49,7 +49,7 @@
 					>
 						{{ $t("pages.administration.migration.step2") }}
 					</v-stepper-item>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-item
 						:editable="isStepEditable(3)"
 						:complete="isMigrationFinished"
@@ -58,7 +58,7 @@
 					>
 						{{ $t("pages.administration.migration.step3") }}
 					</v-stepper-item>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-item
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(4)"
@@ -67,7 +67,7 @@
 					>
 						{{ $t("pages.administration.migration.step4") }}
 					</v-stepper-item>
-					<v-divider></v-divider>
+					<v-divider />
 					<v-stepper-item
 						:value="5"
 						:editable="isStepEditable(5)"
@@ -96,15 +96,14 @@
 									indeterminate
 								/>
 								<v-card-text>
-									<iframe class="full" :src="helpPageUri"></iframe>
+									<iframe class="full" :src="helpPageUri" />
 									<v-alert
 										v-if="!school.inUserMigration || totalImportUsers === 0"
 										density="compact"
 										variant="outlined"
 										type="info"
 										:text="$t('pages.administration.migration.tutorialWait')"
-									>
-									</v-alert>
+									/>
 								</v-card-text>
 								<v-card-actions>
 									<v-row align="center" justify="end">

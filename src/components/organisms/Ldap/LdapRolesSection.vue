@@ -23,13 +23,13 @@
 					"
 					value="group"
 					class="ml-n2"
-				></v-radio>
+				/>
 				<v-radio
 					:label="
 						$t('pages.administration.ldapEdit.roles.labels.radio.userAttribute')
 					"
 					value="user_attribute"
-				></v-radio>
+				/>
 			</v-radio-group>
 			<p class="text-sm" style="margin-top: var(--space-xs)">
 				{{ $t("pages.administration.ldapEdit.roles.labels.radio.description") }}

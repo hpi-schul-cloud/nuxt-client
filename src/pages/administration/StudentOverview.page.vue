@@ -67,8 +67,8 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent></template>
-				<template #columnlabel-consent></template>
+				<template #headcolumn-consent />
+				<template #columnlabel-consent />
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
