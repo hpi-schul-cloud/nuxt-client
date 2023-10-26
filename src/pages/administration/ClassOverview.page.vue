@@ -5,6 +5,18 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
+		<v-tabs class="tabs-max-width mb-5" grow @change="onTabsChange">
+			<v-tab>
+				<span>2024/2025</span>
+			</v-tab>
+			<v-tab>
+				<span>2023/2024</span>
+			</v-tab>
+			<v-tab>
+				<span>Archiv</span>
+			</v-tab>
+		</v-tabs>
+
 		<v-data-table
 			:headers="headers"
 			:items="classes"
@@ -133,6 +145,10 @@
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
+
+		<p class="text-muted">
+			{{ t("components.molecules.admintablelegend.hint") }}
+		</p>
 	</default-wireframe>
 </template>
 
@@ -190,6 +206,21 @@ export default defineComponent({
 				disabled: true,
 			},
 		];
+
+		const schoolYearQueryType: Ref<string> = ref("currentYear");
+
+		const onTabsChange = (tabIndex: number) => {
+			if (tabIndex === 0) {
+				schoolYearQueryType.value = "nextYear";
+			}
+			if (tabIndex === 1) {
+				schoolYearQueryType.value = "currentYear";
+			}
+			if (tabIndex === 2) {
+				schoolYearQueryType.value = "previousYears";
+			}
+			groupModule.loadClassesForSchool(schoolYearQueryType.value);
+		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
 			() => groupModule.getClasses
@@ -263,38 +294,40 @@ export default defineComponent({
 
 		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
+				// TODO: create Object and add schoolYearQueryType
 				await groupModule.deleteClass(selectedItem.value.id);
 			}
 		};
 
 		const onUpdateSortBy = async (sortBy: string) => {
 			groupModule.setSortBy(sortBy);
-			await groupModule.loadClassesForSchool();
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const updateSortOrder = async (sortDesc: boolean) => {
 			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
-			await groupModule.loadClassesForSchool();
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
 			groupModule.setPagination({ ...pagination.value, skip });
-			await groupModule.loadClassesForSchool();
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
-			await groupModule.loadClassesForSchool();
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 
 		onMounted(() => {
-			groupModule.loadClassesForSchool();
+			groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		});
 
 		return {
 			t,
 			footerProps,
 			breadcrumbs,
+			onTabsChange,
 			headers,
 			classes,
 			hasPermission,

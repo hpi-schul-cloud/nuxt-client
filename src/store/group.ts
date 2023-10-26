@@ -128,7 +128,7 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async loadClassesForSchool(): Promise<void> {
+	async loadClassesForSchool(schoolYearQuery?: string): Promise<void> {
 		this.setLoading(true);
 		try {
 			const sortBy =
@@ -141,7 +141,8 @@ export default class GroupModule extends VuexModule {
 					this.pagination.skip,
 					this.pagination.limit,
 					this.getSortOrder,
-					sortBy
+					sortBy,
+					schoolYearQuery
 				);
 			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
 				response.data.data
