@@ -53,21 +53,11 @@ export default defineComponent({
 
 		const loadContent = async (id?: string) => {
 			try {
-				if (id) {
-					// Load content
-					const { data } = await h5pEditorApi.h5PEditorControllerGetH5PEditor(
-						id,
-						language
-					);
+				const { data } = id
+					? await h5pEditorApi.h5PEditorControllerGetH5PEditor(id, language)
+					: await h5pEditorApi.h5PEditorControllerGetNewH5PEditor(language);
 
-					return data;
-				} else {
-					// Create new editor
-					const { data } =
-						await h5pEditorApi.h5PEditorControllerGetNewH5PEditor(language);
-
-					return data;
-				}
+				return data;
 			} catch (err) {
 				emit("load-error", err);
 			}
@@ -84,21 +74,14 @@ export default defineComponent({
 				parentType: props.parentType,
 			};
 
-			if (contentId) {
-				// Modify existing content
-				const { data } = await h5pEditorApi.h5PEditorControllerSaveH5pContent(
-					contentId,
-					createParams
-				);
+			const { data } = contentId
+				? await h5pEditorApi.h5PEditorControllerSaveH5pContent(
+						contentId,
+						createParams
+				  )
+				: await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
 
-				return data;
-			} else {
-				// Save new content
-				const { data } =
-					await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
-
-				return data;
-			}
+			return data;
 		};
 
 		watch(h5pEditorRef, (editor) => {

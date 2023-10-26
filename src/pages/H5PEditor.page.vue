@@ -35,14 +35,14 @@
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule, notifierModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
-import { AxiosError, HttpStatusCode } from "axios";
-import { defineComponent, ref, PropType } from "vue";
+import { PropType, defineComponent, ref } from "vue";
 import VueI18n from "vue-i18n";
 import { useRoute } from "vue-router/composables";
 
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -63,10 +63,6 @@ export default defineComponent({
 		const { createApplicationError } = useApplicationError();
 
 		const i18n = injectStrict(I18N_KEY);
-
-		if (!i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values | undefined): string => {
@@ -122,16 +118,11 @@ export default defineComponent({
 			window.close();
 		}
 
-		function loadError(err: AxiosError) {
-			const statusCode =
-				err.response?.status ?? HttpStatusCode.InternalServerError;
+		function loadError(error: unknown) {
+			const responseError = mapAxiosErrorToResponseError(error);
 
 			applicationErrorModule.setError(
-				createApplicationError(
-					statusCode in HttpStatusCode
-						? statusCode
-						: HttpStatusCode.InternalServerError
-				)
+				createApplicationError(responseError.code)
 			);
 		}
 

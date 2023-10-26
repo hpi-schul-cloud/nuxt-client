@@ -23,11 +23,11 @@
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
-import { AxiosError, HttpStatusCode } from "axios";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router/composables";
 
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 export default defineComponent({
 	name: "H5PPlayer",
@@ -45,16 +45,11 @@ export default defineComponent({
 			window.close();
 		}
 
-		function onLoadError(err: AxiosError) {
-			const statusCode =
-				err.response?.status ?? HttpStatusCode.InternalServerError;
+		function onLoadError(error: unknown) {
+			const responseError = mapAxiosErrorToResponseError(error);
 
 			applicationErrorModule.setError(
-				createApplicationError(
-					statusCode in HttpStatusCode
-						? statusCode
-						: HttpStatusCode.InternalServerError
-				)
+				createApplicationError(responseError.code)
 			);
 		}
 
