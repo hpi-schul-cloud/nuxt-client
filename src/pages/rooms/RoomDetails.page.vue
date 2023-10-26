@@ -418,8 +418,19 @@ export default defineComponent({
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
+
+		this.forceUpdateIfNavigatedFromBackButton();
 	},
 	methods: {
+		forceUpdateIfNavigatedFromBackButton() {
+			if (
+				window.performance &&
+				window.performance.navigation.type ===
+					window.performance.navigation.TYPE_BACK_FORWARD
+			) {
+				this.$forceUpdate();
+			}
+		},
 		setActiveTab(tabName) {
 			const index = this.tabItems.findIndex(
 				(tabItem) => tabItem.name === tabName
