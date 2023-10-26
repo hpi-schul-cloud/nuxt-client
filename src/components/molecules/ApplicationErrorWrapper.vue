@@ -17,7 +17,7 @@
 				{{ $t("error.action.back") }}
 			</v-btn>
 		</div>
-		<slot v-else></slot>
+		<slot v-else />
 	</div>
 </template>
 <script lang="ts">

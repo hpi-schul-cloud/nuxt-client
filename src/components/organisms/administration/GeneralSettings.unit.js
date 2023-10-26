@@ -156,11 +156,11 @@ describe("GeneralSettings", () => {
 			const ele = wrapper.find(searchStrings.languagesSelect);
 			expect(ele.vm.$props.items).toHaveLength(3);
 			expect(ele.vm.$props.items[0].name).toStrictEqual("Deutsch");
-			expect(ele.vm.$props.items[0].abbreveation).toStrictEqual("de");
+			expect(ele.vm.$props.items[0].abbreviation).toStrictEqual("de");
 			expect(ele.vm.$props.items[1].name).toStrictEqual("Englisch");
-			expect(ele.vm.$props.items[1].abbreveation).toStrictEqual("en");
+			expect(ele.vm.$props.items[1].abbreviation).toStrictEqual("en");
 			expect(ele.vm.$props.items[2].name).toStrictEqual("Spanisch");
-			expect(ele.vm.$props.items[2].abbreveation).toStrictEqual("es");
+			expect(ele.vm.$props.items[2].abbreviation).toStrictEqual("es");
 		});
 	});
 

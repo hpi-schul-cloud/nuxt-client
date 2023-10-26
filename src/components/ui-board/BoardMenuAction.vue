@@ -6,7 +6,7 @@
 			</slot>
 		</template>
 		<VListItemTitle data-testid="board-menu-action-title">
-			<slot></slot>
+			<slot />
 		</VListItemTitle>
 	</VListItem>
 </template>

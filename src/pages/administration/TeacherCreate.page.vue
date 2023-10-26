@@ -18,7 +18,7 @@
 					v-if="error"
 					:message="$t('pages.administration.teachers.new.error')"
 					type="bc-error"
-				></info-message>
+				/>
 			</template>
 		</form-create-user>
 	</default-wireframe>

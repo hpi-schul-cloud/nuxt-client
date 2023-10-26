@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.adminMigrationSection.headers") }}
-		</h2>
 		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
 			<RenderHTML
 				data-testid="text-description"
@@ -15,31 +12,35 @@
 			/>
 			<div v-if="isStartButtonVisible">
 				<v-alert prominent variant="tonal" type="info">
-					<RenderHTML
-						data-testid="migration-info-text"
-						:html="
-							t('components.administration.adminMigrationSection.infoText')
-						"
-						component="span"
-					/>
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-info-text"
+							:html="
+								t('components.administration.adminMigrationSection.infoText')
+							"
+							component="span"
+						/>
+					</div>
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
 				<v-alert prominent variant="tonal" type="info">
-					<RenderHTML
-						data-testid="migration-active-status"
-						:html="
-							t(
-								'components.administration.adminMigrationSection.migrationActive'
-							)
-						"
-						component="span"
-					/>
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-active-status"
+							:html="
+								t(
+									'components.administration.adminMigrationSection.migrationActive'
+								)
+							"
+							component="span"
+						/>
+					</div>
 				</v-alert>
 			</div>
 			<v-btn
 				v-if="isStartButtonVisible"
-				class="my-5 button-start"
+				class="my-4 button-start"
 				color="primary"
 				variant="flat"
 				:disabled="!officialSchoolNumber"
@@ -54,7 +55,7 @@
 			</v-btn>
 			<v-btn
 				v-if="isEndButtonVisible"
-				class="my-5 button-end"
+				class="my-4 button-end"
 				color="primary"
 				variant="flat"
 				:disabled="!oauthMigration.startedAt"
@@ -374,3 +375,10 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>

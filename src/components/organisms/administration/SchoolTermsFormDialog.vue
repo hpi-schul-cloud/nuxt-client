@@ -1,5 +1,14 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
+	<v-custom-dialog
+		:is-open="isOpen"
+		:size="425"
+		@dialog-closed="cancel"
+		has-buttons
+		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
+		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-disabled="!isValid"
+		@dialog-confirmed="submit"
+	>
 		<template #title>
 			<h4 class="text-h4 mt-0">
 				{{ t("common.words.termsOfUse") }}
@@ -8,7 +17,7 @@
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
 				<v-alert variant="tonal" type="warning" class="mb-10" icon="$mdiAlert">
-					<div class="replace-alert-text">
+					<div class="alert-text">
 						{{
 							t(
 								"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent"
@@ -20,7 +29,8 @@
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="file"
+					v-model="files"
+					:multiple="false"
 					dense
 					accept="application/pdf"
 					truncate-length="30"
@@ -43,30 +53,6 @@
 						>
 					</template>
 				</v-file-input>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<div class="button-section button-right">
-						<v-btn
-							class="dialog-closed"
-							variant="tonal"
-							@click="cancel"
-							data-testid="cancel-button"
-						>
-							{{ t("pages.administration.school.index.termsOfUse.cancel") }}
-						</v-btn>
-						<v-btn
-							class="icon-button dialog-confirmed px-6"
-							type="submit"
-							color="primary"
-							:disabled="!isValid"
-							@click.prevent="submit"
-							data-testid="submit-button"
-						>
-							<v-icon class="mr-1">$mdiFileReplaceOutline</v-icon>
-							{{ t("pages.administration.school.index.termsOfUse.replace") }}
-						</v-btn>
-					</div>
-				</v-card-actions>
 			</v-form>
 		</template>
 	</v-custom-dialog>
@@ -86,6 +72,7 @@ import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
+import { reactive } from "vue";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -108,7 +95,7 @@ export default defineComponent({
 		const termsForm: Ref = ref(null);
 		const isFormValid: Ref<boolean> = ref(false);
 		const isFormTouched: Ref<boolean> = ref(false);
-		const termsFile: Ref<File | null> = ref(null);
+		const termsFiles = reactive<File[]>([]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
@@ -147,7 +134,7 @@ export default defineComponent({
 					consentText: "",
 					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(termsFile.value as File)) as string,
+					consentData: (await toBase64(termsFiles[0])) as string,
 				};
 
 				emit("close");
@@ -165,7 +152,7 @@ export default defineComponent({
 
 		return {
 			t,
-			file: termsFile,
+			files: termsFiles,
 			rules: validationRules,
 			cancel,
 			submit,
@@ -180,8 +167,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.replace-alert-text {
-	color: rgba(var(--v-theme-black)) !important;
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
 }
 
 .button-left {

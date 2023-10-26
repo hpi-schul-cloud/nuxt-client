@@ -20,7 +20,7 @@
 				<div v-if="step === 1 && isOpen">
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
-							<v-icon color="info" :icon="mdiInformation"></v-icon>
+							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div>
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
@@ -31,7 +31,7 @@
 					<share-modal-options-form
 						:type="type"
 						@share-options-change="onShareOptionsChange"
-					></share-modal-options-form>
+					/>
 				</div>
 
 				<div v-if="step === 2 && isOpen">
@@ -40,7 +40,7 @@
 						:type="type"
 						@done="onDone"
 						@copied="onCopy"
-					></share-modal-result>
+					/>
 				</div>
 			</v-fade-transition>
 		</template>

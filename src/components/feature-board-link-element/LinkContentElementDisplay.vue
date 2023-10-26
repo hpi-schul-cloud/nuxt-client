@@ -9,7 +9,7 @@
 			tabindex="0"
 			:loading="isLoading ? 'primary' : false"
 		>
-			<v-img v-if="imageUrl" :src="imageUrl" alt=""></v-img>
+			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
 
 			<v-card-subtitle class="bg-grey-lighten-4 text-darken-2">
 				<div class="d-flex flex-no-wrap">

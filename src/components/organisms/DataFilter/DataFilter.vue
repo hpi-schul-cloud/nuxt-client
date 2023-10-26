@@ -4,7 +4,7 @@
 		title="Note"
 		text="The DataFilter component has been temporarily disabled, see ticket
 		BC-5557"
-	></v-alert>
+	/>
 </template>
 <!-- <template>
 	<div>

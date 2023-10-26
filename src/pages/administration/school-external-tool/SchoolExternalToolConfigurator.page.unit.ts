@@ -227,6 +227,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+					query: { openPanels: "tools" },
 				});
 			});
 
@@ -288,7 +289,7 @@ describe("SchoolExternalToolConfigurator", () => {
 						{
 							schoolExternalToolId: string;
 							schoolExternalTool: SchoolExternalToolSave;
-						}
+						},
 					]
 				>({
 					schoolExternalToolId: schoolExternalToolId,
@@ -310,6 +311,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
+					query: { openPanels: "tools" },
 				});
 			});
 

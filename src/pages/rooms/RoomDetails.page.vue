@@ -80,7 +80,7 @@
 				</div>
 			</template>
 			<template #content>
-				<v-divider class="mb-4"></v-divider>
+				<v-divider class="mb-4" />
 				<div class="modal-text">
 					<p class="text-md mt-2">
 						{{ dialog.text }}
@@ -92,18 +92,15 @@
 						outlined
 						dense
 						data-testid="modal-input"
-					></v-text-field>
+					/>
 				</div>
 				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
 				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code
-						:url="dialog.qrUrl"
-						data-testid="modal-qrcode"
-					></base-qr-code>
+					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
 				</div>
-				<v-divider></v-divider>
+				<v-divider />
 			</template>
 		</v-custom-dialog>
 
@@ -114,7 +111,7 @@
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
-		></copy-result-modal>
+		/>
 	</default-wireframe>
 </template>
 

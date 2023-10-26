@@ -39,7 +39,7 @@
 			<div v-if="hasErrors" class="text-black">
 				<p>{{ $t("components.molecules.copyResult.information") }}</p>
 			</div>
-			<copy-result-modal-list :items="items"></copy-result-modal-list>
+			<copy-result-modal-list :items="items" />
 		</template>
 	</v-custom-dialog>
 </template>

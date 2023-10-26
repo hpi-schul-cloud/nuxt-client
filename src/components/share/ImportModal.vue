@@ -19,7 +19,7 @@
 			<div>
 				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
-						<v-icon color="info" :icon="mdiInformation"></v-icon>
+						<v-icon color="info" :icon="mdiInformation" />
 					</div>
 					<div>
 						{{
@@ -32,7 +32,7 @@
 					v-model="newName"
 					:label="$t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
-				></v-text-field>
+				/>
 			</div>
 		</template>
 	</v-custom-dialog>

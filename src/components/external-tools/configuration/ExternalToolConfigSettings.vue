@@ -6,7 +6,7 @@
 				v-model="inputValues[index]"
 			/>
 		</div>
-		<v-progress-linear :active="loading" indeterminate></v-progress-linear>
+		<v-progress-linear :active="loading" indeterminate />
 	</div>
 </template>
 
@@ -32,7 +32,7 @@ export default defineComponent({
 			type: Object as PropType<SchoolExternalToolConfigurationTemplate>,
 			required: true,
 		},
-		value: {
+		modelValue: {
 			type: Array as PropType<Array<string | undefined>>,
 			required: true,
 		},
@@ -44,7 +44,7 @@ export default defineComponent({
 
 		const inputValues: WritableComputedRef<(string | undefined)[]> = computed({
 			get() {
-				return props.value;
+				return props.modelValue;
 			},
 			set(value: (string | undefined)[]) {
 				emit("input", value);

@@ -4,7 +4,7 @@
 		@change="onFileChange"
 		prepend-icon="$mdiTrayArrowUp"
 		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
-		hide-details="true"
+		:hide-details="true"
 	/>
 </template>
 

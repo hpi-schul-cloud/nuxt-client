@@ -26,7 +26,7 @@
 					/>
 				</slot>
 			</div>
-			<div v-if="showBorder" class="border"></div>
+			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
 			:class="{

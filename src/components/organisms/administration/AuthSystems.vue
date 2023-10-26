@@ -1,8 +1,5 @@
 <template>
-	<section>
-		<h2 class="text-h4 mb-10">
-			{{ $t("pages.administration.school.index.authSystems.title") }}
-		</h2>
+	<div>
 		<v-text-field
 			v-if="customLoginLinkEnabled && !hasSystems"
 			id="school-login-link-0"
@@ -48,7 +45,7 @@
 								)
 							}}
 						</th>
-						<th class="text-left"></th>
+						<th class="text-left" />
 					</tr>
 				</thead>
 				<tbody>
@@ -115,7 +112,7 @@
 		<v-btn
 			v-if="hasSystemCreatePermission"
 			color="primary"
-			class="my-8 add-ldap"
+			class="mt-8 mb-4 add-ldap float-right"
 			variant="flat"
 			to="/administration/ldap/config"
 		>
@@ -145,7 +142,7 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-	</section>
+	</div>
 </template>
 
 <script>

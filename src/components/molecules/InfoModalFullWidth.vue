@@ -1,6 +1,6 @@
 <template>
 	<base-modal v-bind="$attrs" design="white" class="modal-container">
-		<template #header></template>
+		<template #header />
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>

@@ -13,7 +13,7 @@
 				inset
 				density="compact"
 				:true-icon="mdiCheck"
-			></v-switch>
+			/>
 		</div>
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
@@ -28,7 +28,7 @@
 				inset
 				density="compact"
 				:true-icon="mdiCheck"
-			></v-switch>
+			/>
 		</div>
 	</div>
 </template>

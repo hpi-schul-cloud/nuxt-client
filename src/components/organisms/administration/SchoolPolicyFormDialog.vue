@@ -1,5 +1,14 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
+	<v-custom-dialog
+		:is-open="isOpen"
+		:size="425"
+		@dialog-closed="cancel"
+		has-buttons
+		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
+		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-disabled="!isValid"
+		@dialog-confirmed="submit"
+	>
 		<template #title>
 			<h4 class="text-h4 mt-0">
 				{{ t("common.words.privacyPolicy") }}
@@ -8,7 +17,7 @@
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
 				<v-alert variant="tonal" type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="replace-alert-text">
+					<div class="alert-text">
 						{{
 							t(
 								"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent"
@@ -42,34 +51,9 @@
 							color="rgba(var(--v-theme-error))"
 							data-testid="warning-icon"
 							:icon="mdiAlert"
-						></v-icon>
+						/>
 					</template>
 				</v-file-input>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<div class="button-section button-right">
-						<v-btn
-							class="dialog-closed"
-							variant="tonal"
-							@click="cancel"
-							data-testid="cancel-button"
-						>
-							{{ t("pages.administration.school.index.schoolPolicy.cancel") }}
-						</v-btn>
-						<v-btn
-							class="icon-button dialog-confirmed px-6"
-							type="submit"
-							color="primary"
-							flat
-							:disabled="!isValid"
-							@click.prevent="submit"
-							data-testid="submit-button"
-						>
-							<v-icon dense class="mr-1" :icon="mdiFileReplaceOutline"></v-icon>
-							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
-						</v-btn>
-					</div>
-				</v-card-actions>
 			</v-form>
 		</template>
 	</v-custom-dialog>
@@ -188,8 +172,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.replace-alert-text {
+.alert-text {
 	color: rgba(var(--v-theme-black)) !important;
+	line-height: var(--line-height-lg) !important;
 }
 
 .button-left {

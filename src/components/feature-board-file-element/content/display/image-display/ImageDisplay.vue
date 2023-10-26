@@ -11,19 +11,18 @@
 		@mouseenter.stop.prevent="onMouseEnter"
 		@mouseleave.stop.prevent="onMouseLeave"
 	>
-		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm"></div>
+		<div v-if="showOverlay" class="image-display-overlay rounded-t-sm" />
 
 		<img
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
-			:src="previewUrl"
+			:src="previewSrc"
 			:alt="alternativeText"
 		/>
 
-		<v-app-bar flat color="transparent" class="menu">
-			<v-spacer></v-spacer>
-			<slot></slot>
-		</v-app-bar>
+		<ContentElementBar class="menu">
+			<template #menu><slot /></template>
+		</ContentElementBar>
 	</div>
 </template>
 
@@ -33,16 +32,18 @@ import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { useI18n } from "vue-i18n";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent, ref } from "vue";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "ImageDisplay",
 	props: {
-		url: { type: String, required: true },
-		previewUrl: { type: String, required: true },
+		src: { type: String, required: true },
+		previewSrc: { type: String, required: true },
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
+	components: { ContentElementBar },
 	setup(props) {
 		const { t } = useI18n();
 		const containerRef = ref<HTMLDivElement | undefined>();
@@ -104,10 +105,10 @@ export default defineComponent({
 		};
 
 		const openLightBox = () => {
-			const previewUrl = convertDownloadToPreviewUrl(props.url);
+			const previewUrl = convertDownloadToPreviewUrl(props.src);
 
 			const options: LightBoxOptions = {
-				downloadUrl: props.url,
+				downloadUrl: props.src,
 				previewUrl: previewUrl,
 				alt: alternativeText.value,
 				name: props.name,
@@ -162,5 +163,6 @@ export default defineComponent({
 .menu {
 	position: absolute;
 	top: 0px;
+	right: 0px;
 }
 </style>

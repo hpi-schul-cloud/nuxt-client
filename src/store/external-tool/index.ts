@@ -3,7 +3,6 @@ export * from "./tool-parameter.enum";
 export * from "./school-external-tool";
 export * from "./tool-parameter-entry";
 export * from "./external-tool-display-data";
-export * from "./tool-context-type.enum";
 export * from "./tool-parameter-scope.enum";
 export * from "./tool-configuration-template";
 export * from "./tool-configuration-status.enum";

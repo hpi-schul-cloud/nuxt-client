@@ -16,8 +16,7 @@
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
-		>
-		</external-tool-configurator>
+		/>
 	</default-wireframe>
 </template>
 
@@ -157,7 +156,10 @@ export default defineComponent({
 					status: "success",
 				});
 
-				await router.push({ path: schoolSetting.to! });
+				await router.push({
+					path: schoolSetting.to,
+					query: { openPanels: "tools" },
+				});
 			}
 		};
 

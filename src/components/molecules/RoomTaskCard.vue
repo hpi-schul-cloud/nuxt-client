@@ -20,7 +20,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" data-testid="tagline">
-					<v-icon size="14" class="fill" :icon="titleIcon"> </v-icon>
+					<v-icon size="14" class="fill" :icon="titleIcon" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">

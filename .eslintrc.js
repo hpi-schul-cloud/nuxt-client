@@ -1,4 +1,3 @@
-const NUXT_REMOVAL = true;
 const VUE3_UPGRADE = true;
 
 module.exports = {
@@ -17,25 +16,34 @@ module.exports = {
 	},
 	rules: {
 		"@typescript-eslint/no-explicit-any": VUE3_UPGRADE ? "warn" : "error",
-		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-		"no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
+		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-useless-escape": "error",
 		"no-irregular-whitespace": "error",
-		"vue/no-useless-template-attributes": "error",
-		"@typescript-eslint/no-empty-function": "error",
-		"vue/multi-word-component-names": NUXT_REMOVAL ? "warn" : "error",
-		"@typescript-eslint/ban-ts-comment": "error",
-		"vue/no-mutating-props": "error",
-		"no-undef": NUXT_REMOVAL ? "warn" : "error",
-		"prefer-const": "error",
-		"@typescript-eslint/no-inferrable-types": "error",
-		"@typescript-eslint/ban-types": "error",
-		"prettier/prettier": "error",
-		"no-var": "error",
-		"vue/no-v-text-v-html-on-component": "error",
-		"vue/no-v-html": "error",
+		"no-undef": "warn",
 		"no-prototype-builtins": "error",
 		"no-empty": "error",
+		"no-var": "error",
+		"prefer-const": "error",
+		"prettier/prettier": "error",
+		"@typescript-eslint/no-empty-function": "error",
+		"@typescript-eslint/ban-ts-comment": "error",
+		"@typescript-eslint/no-inferrable-types": "error",
+		"@typescript-eslint/ban-types": "error",
+		"vue/no-v-text-v-html-on-component": "error",
+		"vue/no-v-html": "error",
+		"vue/html-self-closing": [
+			"error",
+			{
+				html: {
+					void: "always",
+				},
+			},
+		],
+		"vue/no-setup-props-reactivity-loss": "error",
+		"vue/no-useless-template-attributes": "error",
+		"vue/no-mutating-props": "error",
+		"vue/multi-word-component-names": "warn",
 		"@typescript-eslint/no-restricted-imports": [
 			"warn",
 			{

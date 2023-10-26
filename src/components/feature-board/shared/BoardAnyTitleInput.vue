@@ -17,7 +17,7 @@
 			:aria-level="ariaLevel"
 			@keydown.enter="onEnter"
 			:tabindex="isEditMode ? 0 : -1"
-		></VTextarea>
+		/>
 	</div>
 </template>
 

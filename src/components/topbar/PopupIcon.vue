@@ -7,8 +7,7 @@
 			variant="text"
 			density="comfortable"
 			@click="popup"
-		>
-		</v-btn>
+		/>
 		<div
 			ref="popupContent"
 			class="popup-content"

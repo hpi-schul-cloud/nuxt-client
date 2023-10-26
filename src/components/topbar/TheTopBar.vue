@@ -17,8 +17,7 @@
 				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
 				role="menu"
 				@click="sendEvent('expandMenu')"
-			>
-			</v-btn>
+			/>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
@@ -42,8 +41,7 @@
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"
 					@click="sendEvent('fullscreen')"
-				>
-				</v-btn>
+				/>
 				<popup-icon
 					class="item"
 					icon="$mdiQrcode"
@@ -111,8 +109,7 @@
 			height="40"
 			class="fullscreen-button-active"
 			@click="sendEvent('fullscreen')"
-		>
-		</v-btn>
+		/>
 	</div>
 </template>
 

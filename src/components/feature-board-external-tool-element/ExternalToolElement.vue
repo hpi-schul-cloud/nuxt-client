@@ -13,14 +13,20 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<div class="pa-4 d-flex gap-8 grey lighten-4">
-			<v-img
-				v-if="toolDisplayData && toolDisplayData.logoUrl"
-				class="mr-1"
-				:src="toolDisplayData.logoUrl"
-			></v-img>
+		<div class="card-container d-flex gap-8 grey lighten-4">
+			<div
+				v-if="displayData && displayData.logoUrl"
+				class="logo-container my-auto mr-1"
+			>
+				<v-img
+					height="100%"
+					class="mx-auto"
+					:src="displayData.logoUrl"
+					contain
+				/>
+			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-			<span class="align-self-center title flex-1">
+			<span class="align-self-center title flex-1 break-word">
 				{{
 					hasLinkedTool
 						? toolDisplayName
@@ -34,35 +40,44 @@
 				@move-up:element="onMoveElementUp"
 				@delete:element="onDeleteElement"
 				@edit:element="onEditElement"
-			></ExternalToolElementMenu>
+			/>
 		</div>
+		<ExternalToolElementConfigurationDialog
+			:is-open="isConfigurationDialogOpen"
+			:context-id="element.id"
+			:config-id="element.content.contextExternalToolId"
+			@close="onConfigurationDialogClose"
+			@save="onConfigurationDialogSave"
+			data-testid="board-external-tool-element-configuration-dialog"
+		/>
 	</v-card>
 </template>
 
 <script lang="ts">
 import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ExternalToolDisplayData } from "@/store/external-tool";
-import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { useBoardFocusHandler } from "@data-board";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useExternalToolElementDisplayState } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
+	onMounted,
 	PropType,
 	Ref,
 	ref,
 	toRef,
 } from "vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 export default defineComponent({
-	components: { ExternalToolElementMenu },
+	components: {
+		ExternalToolElementConfigurationDialog,
+		ExternalToolElementMenu,
+	},
 	props: {
 		element: {
 			type: Object as PropType<ExternalToolElementResponse>,
@@ -77,37 +92,36 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-		);
 		const { t } = useI18n();
+		const { modelValue } = useContentElementState(props, {
+			autoSaveDebounce: 0,
+		});
+		const {
+			fetchDisplayData,
+			displayData,
+			isLoading: isDisplayDataLoading,
+		} = useExternalToolElementDisplayState();
+
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
-
-		const hasLinkedTool: ComputedRef<boolean> = computed(
-			() => !!element.value.content.contextExternalToolId
-		);
-
-		const toolDisplayData: Ref<ExternalToolDisplayData | undefined> = computed(
-			() =>
-				contextExternalToolsModule.getExternalToolDisplayDataList.find(
-					(externalToolDisplayData: ExternalToolDisplayData) =>
-						externalToolDisplayData.contextExternalToolId ===
-						element.value.content.contextExternalToolId
-				)
-		);
-
-		const toolDisplayName: ComputedRef<string> = computed(
-			() => toolDisplayData.value?.name ?? "..."
-		);
-
-		const isLoading = computed(
-			() => hasLinkedTool.value && !toolDisplayData.value
-		);
-
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
 		});
+
+		const hasLinkedTool: ComputedRef<boolean> = computed(
+			() => !!modelValue.value.contextExternalToolId
+		);
+
+		const toolDisplayName: ComputedRef<string> = computed(
+			() => displayData.value?.name ?? "..."
+		);
+
+		const isLoading = computed(
+			() =>
+				hasLinkedTool.value && !displayData.value && isDisplayDataLoading.value
+		);
+
+		const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -127,25 +141,42 @@ export default defineComponent({
 		const onDeleteElement = () => emit("delete:element", element.value.id);
 
 		const onEditElement = () => {
-			// TODO N21-1248: Edit dialog
+			isConfigurationDialogOpen.value = true;
 		};
 
 		const onClickElement = () => {
 			if (props.isEditMode) {
 				if (!hasLinkedTool.value) {
-					// TODO N21-1248: Edit dialog
+					isConfigurationDialogOpen.value = true;
 				}
 			} else {
 				// TODO N21-1285: launch tool
 			}
 		};
 
+		const onConfigurationDialogClose = () => {
+			isConfigurationDialogOpen.value = false;
+		};
+
+		const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
+			modelValue.value.contextExternalToolId = tool.id;
+
+			await fetchDisplayData(modelValue.value.contextExternalToolId);
+		};
+
+		onMounted(async () => {
+			if (modelValue.value.contextExternalToolId) {
+				await fetchDisplayData(modelValue.value.contextExternalToolId);
+			}
+		});
+
 		return {
 			t,
 			hasLinkedTool,
-			toolDisplayData,
 			toolDisplayName,
+			displayData,
 			isLoading,
+			isConfigurationDialogOpen,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
@@ -153,17 +184,37 @@ export default defineComponent({
 			onDeleteElement,
 			onEditElement,
 			onClickElement,
+			onConfigurationDialogClose,
+			onConfigurationDialogSave,
 		};
 	},
 });
 </script>
 
 <style scoped lang="scss">
+$card-padding: 16px;
+$logo-size: 24px;
+
+.card-container {
+	max-width: 100%;
+	min-height: calc($card-padding * 2 + $logo-size);
+	padding: $card-padding;
+}
+
+.logo-container {
+	width: $logo-size;
+	height: $logo-size;
+}
+
 .gap-8 {
 	gap: 8px;
 }
 
 .flex-1 {
 	flex: 1;
+}
+
+.break-word {
+	word-break: break-word;
 }
 </style>

@@ -12,7 +12,7 @@
 				<slot />
 			</div>
 			<the-footer class="footer" />
-			<application-error-routing> </application-error-routing>
+			<application-error-routing />
 		</div>
 	</v-app>
 </template>

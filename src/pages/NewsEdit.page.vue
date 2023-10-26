@@ -25,8 +25,7 @@
 					@save="save"
 					@delete="deleteHandler"
 					@cancel="cancelHandler"
-				>
-				</form-news>
+				/>
 			</div>
 		</default-wireframe>
 	</div>
