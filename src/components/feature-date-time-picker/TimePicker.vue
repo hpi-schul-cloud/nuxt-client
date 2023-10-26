@@ -5,6 +5,7 @@
 			:close-on-content-click="false"
 			transition="scale-transition"
 			nudge-bottom="70"
+			max-height="200"
 			min-width="180"
 			@input="onMenuToggle"
 		>
@@ -24,11 +25,11 @@
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
-					@keydown.up.down="onArrowUpDown"
+					@keydown.up.down.stop
 					@update:error="onError"
 				/>
 			</template>
-			<v-list height="200" class="col-12 pt-1 px-0 overflow-y-auto">
+			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
 				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
@@ -130,18 +131,6 @@ export default defineComponent({
 			}
 		}, 50);
 
-		const onArrowUpDown = (event: KeyboardEvent) => {
-			// as long as vuetify uses 'v-list-item-highlighted' for the highlighted item
-			const highlightedTimes = document.getElementsByClassName(
-				"v-list-item--highlighted"
-			);
-			if (highlightedTimes.length) {
-				highlightedTimes[0].scrollIntoView();
-			}
-
-			event.stopPropagation();
-		};
-
 		const onMenuToggle = () => {
 			if (showTimeDialog.value) {
 				valid.value = true;
@@ -164,7 +153,6 @@ export default defineComponent({
 			modelValue,
 			rules,
 			inputField,
-			onArrowUpDown,
 			onSelect,
 			onError,
 			onMenuToggle,
