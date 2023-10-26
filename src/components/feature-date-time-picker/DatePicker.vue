@@ -11,7 +11,7 @@
 			<template #activator="{ on, attrs }">
 				<v-text-field
 					ref="inputField"
-					v-model="formattedDate"
+					v-model="modelValue"
 					v-bind="attrs"
 					v-on="on"
 					:label="label"
@@ -31,7 +31,7 @@
 				/>
 			</template>
 			<v-date-picker
-				v-model="modelValue"
+				:value="date"
 				:aria-expanded="showDateDialog"
 				color="primary"
 				no-title
@@ -47,10 +47,8 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import dayjs from "dayjs";
-import { computed, defineComponent, ref, watch, onMounted } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { dateInputMask } from "@util-input-masks";
 import { isRequired, isValidDateFormat } from "@util-validators";
 
@@ -86,7 +84,12 @@ export default defineComponent({
 		 */
 		const emitDateDebounced = useDebounceFn((newValue) => {
 			if (valid.value) {
-				emit("update:date", newValue);
+				if (newValue.includes(".")) {
+					const formatted = getISODate(newValue);
+					emit("update:date", formatted);
+				} else {
+					emit("update:date", newValue);
+				}
 			}
 		}, 50);
 
@@ -94,18 +97,10 @@ export default defineComponent({
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
 
-		const formattedDate = ref("");
-
-		onMounted(() => {
-			formattedDate.value = modelValue.value
-				? dayjs(modelValue.value).format(DATETIME_FORMAT.date)
-				: "";
-		});
-
-		watch(formattedDate, (newVal) => {
-			const [day, month, year] = newVal.split(".");
-			modelValue.value = `${year}-${month}-${day}`;
-		});
+		const getISODate = (date: string) => {
+			const [day, month, year] = date.split(".");
+			return `${year}-${month}-${day}`;
+		};
 
 		const focusDatePicker = () => {
 			setTimeout(() => {
@@ -129,7 +124,8 @@ export default defineComponent({
 			return rules;
 		});
 
-		const onInput = async () => {
+		const onInput = async (date: string) => {
+			modelValue.value = date;
 			inputField.value?.focus();
 			await closeMenu();
 		};
@@ -161,7 +157,6 @@ export default defineComponent({
 			modelValue,
 			rules,
 			showDateDialog,
-			formattedDate,
 			inputField,
 			focusDatePicker,
 			onInput,
