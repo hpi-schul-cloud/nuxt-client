@@ -25,14 +25,14 @@
 			</div>
 			<div v-else class="substitute-filter-placeholder"></div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" class="tabs-max-width" grow>
-					<v-tab :href="tabOneHeader.route">
+				<v-tabs :model-value="tab" class="tabs-max-width" grow>
+					<v-tab :to="tabOneHeader.route">
 						<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 						<span class="d-none d-sm-inline" data-testid="openTasks">{{
 							tabOneHeader.title
 						}}</span>
 					</v-tab>
-					<v-tab :href="tabTwoHeader.route">
+					<v-tab :to="tabTwoHeader.route">
 						<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 						<span
 							class="d-none d-sm-inline"
@@ -40,7 +40,7 @@
 							>{{ tabTwoHeader.title }}</span
 						>
 					</v-tab>
-					<v-tab :href="tabThreeHeader.route">
+					<v-tab :to="tabThreeHeader.route">
 						<v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
 						<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
 							tabThreeHeader.title
@@ -241,7 +241,7 @@ export default {
 		tabOneHeader() {
 			return {
 				icon: mdiFormatListChecks,
-				route: `#${this.tabRoutes[0]}`,
+				route: `?tab=${this.tabRoutes[0]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.open")
 					: this.$t("components.organisms.TasksDashboardMain.tab.current"),
@@ -250,7 +250,7 @@ export default {
 		tabTwoHeader() {
 			return {
 				icon: this.isStudent ? mdiCheckCircleOutline : mdiPlaylistEdit,
-				route: `#${this.tabRoutes[1]}`,
+				route: `?tab=${this.tabRoutes[1]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
 					: this.$t("components.organisms.TasksDashboardMain.tab.drafts"),
@@ -261,7 +261,7 @@ export default {
 			return {
 				icon: mdiArchiveOutline,
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
-				route: `#${this.tabRoutes[2]}`,
+				route: `?tab=${this.tabRoutes[2]}`,
 			};
 		},
 		fabItems() {
@@ -336,7 +336,6 @@ export default {
 			this.tasksModule.setCourseFilters(courseNames);
 		},
 		setSubstituteFilter(enabled) {
-			console.log("setSubi");
 			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {

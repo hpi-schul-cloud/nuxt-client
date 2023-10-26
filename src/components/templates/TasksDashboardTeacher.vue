@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<v-tabs-items v-model="tab">
-			<v-tab-item :value="tabRoutes[0]" class="padding-bottom">
+		<v-window :model-value="tab">
+			<v-window-item :model-value="tabRoutes[0]" class="padding-bottom">
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
@@ -43,8 +43,8 @@
 					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[1]" class="padding-bottom">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
 				<tasks-list
 					:tasks="draftTasks"
 					user-role="teacher"
@@ -57,8 +57,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[2]" class="padding-bottom">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[2]" class="padding-bottom">
 				<tasks-list
 					:tasks="finishedTasks"
 					user-role="teacher"
@@ -73,8 +73,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-		</v-tabs-items>
+			</v-window-item>
+		</v-window>
 		<share-modal type="tasks" />
 	</section>
 </template>
