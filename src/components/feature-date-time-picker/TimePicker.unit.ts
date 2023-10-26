@@ -83,6 +83,67 @@ describe("TimePicker", () => {
 		});
 	});
 
+	describe("while scrolling through times when arrow key up or down is pressed", () => {
+		it.each([
+			["ArrowUp", 38],
+			["ArrowDown", 40],
+		])(
+			"should NOT emit move-keyboard:edit when arrow key %s is pressed",
+			async (key, code) => {
+				const inputField = wrapper.findComponent({ name: "v-text-field" });
+				inputField.vm.$emit(
+					"keydown",
+					new KeyboardEvent("keydown", {
+						key: `${key}`,
+						keyCode: code,
+					})
+				);
+
+				await wrapper.vm.$nextTick();
+
+				const listItem = wrapper.findComponent({ name: "v-list-item" });
+				expect(listItem.exists()).toBe(true);
+				expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+			}
+		);
+
+		it.each([
+			["ArrowUp", 38],
+			["ArrowDown", 40],
+		])(
+			"should scroll the highlighted element into view when arrow key %s is pressed",
+			async (key, code) => {
+				const scrollIntoViewMock = jest.fn();
+				HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+
+				// open the time list via keyboard
+				const inputField = wrapper.findComponent({ name: "v-text-field" });
+				inputField.vm.$emit(
+					"keydown",
+					new KeyboardEvent("keydown", {
+						key: `${key}`,
+						keyCode: code,
+					})
+				);
+
+				await wrapper.vm.$nextTick();
+
+				// change to the next available time via keyboard
+				inputField.vm.$emit(
+					"keydown",
+					new KeyboardEvent("keydown", {
+						key: `${key}`,
+						keyCode: code,
+					})
+				);
+
+				const highlightedTimes = wrapper.findAll(".v-list-item--highlighted");
+				expect(highlightedTimes.length).toEqual(1);
+				expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
+			}
+		);
+	});
+
 	describe("validation", () => {
 		beforeEach(() => {
 			const mockedDate = new Date("2023-01-01T03:10:05"); // 03:00

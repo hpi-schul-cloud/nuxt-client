@@ -24,6 +24,7 @@
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
+					@keydown.up.down="onKeydownArrowUpDown"
 					@update:error="onError"
 				/>
 			</template>
@@ -129,6 +130,18 @@ export default defineComponent({
 			}
 		}, 50);
 
+		const onKeydownArrowUpDown = (event: KeyboardEvent) => {
+			// as long as vuetify uses 'v-list-item-highlighted' for the highlighted item
+			const highlightedTimes = document.getElementsByClassName(
+				"v-list-item--highlighted"
+			);
+			if (highlightedTimes.length) {
+				highlightedTimes[0].scrollIntoView();
+			}
+
+			event.stopPropagation();
+		};
+
 		const onMenuToggle = () => {
 			if (showTimeDialog.value) {
 				valid.value = true;
@@ -153,6 +166,7 @@ export default defineComponent({
 			inputField,
 			onSelect,
 			onError,
+			onKeydownArrowUpDown,
 			onMenuToggle,
 			isNumberOrColon,
 		};
