@@ -38,6 +38,9 @@
 							data-test-id="board-menu-action-delete"
 							:name="card.title"
 						/>
+						<BoardMenuAction @click="onOpenDetailView"
+							>Open Detail</BoardMenuAction
+						>
 					</BoardMenu>
 				</div>
 
@@ -56,6 +59,7 @@
 </template>
 
 <script lang="ts">
+import { useCardDetailView } from "../detail-view/CardDetailView.composable";
 import {
 	DragAndDropKey,
 	ElementMove,
@@ -69,6 +73,7 @@ import {
 } from "@data-board";
 import {
 	BoardMenu,
+	BoardMenuAction,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
 } from "@ui-board";
@@ -97,6 +102,7 @@ export default defineComponent({
 		CardAddElementMenu,
 		CardHostInteractionHandler,
 		BoardMenuActionDelete,
+		BoardMenuAction,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -123,6 +129,8 @@ export default defineComponent({
 			addTextAfterTitle,
 		} = useCardState(cardId.value, emit);
 
+		const { open } = useCardDetailView();
+
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			cardId.value
@@ -145,6 +153,8 @@ export default defineComponent({
 		const onStartEditMode = () => startEditMode();
 
 		const onEndEditMode = () => stopEditMode();
+
+		const onOpenDetailView = () => open(card);
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
 			await moveElementDown(payload);
@@ -203,6 +213,7 @@ export default defineComponent({
 			cardHost,
 			isEditMode,
 			addTextAfterTitle,
+			onOpenDetailView,
 		};
 	},
 });
