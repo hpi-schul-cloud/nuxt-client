@@ -28,3 +28,17 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 	}
 	return true;
 };
+
+/**
+ * Checks if given value has valid time format
+ */
+export const isValidTimeFormat: FormValidatorFn<string> =
+	(errMsg) => (value) => {
+		if (value === "" || value === null) {
+			return true;
+		}
+
+		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
+
+		return !value.match(timeRegex) ? errMsg : true;
+	};

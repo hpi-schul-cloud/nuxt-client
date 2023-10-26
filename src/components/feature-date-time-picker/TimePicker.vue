@@ -52,9 +52,9 @@
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
-import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
 import { timeInputMask } from "@util-input-masks";
+import { isRequired, isValidTimeFormat } from "@util-validators";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -92,31 +92,14 @@ export default defineComponent({
 		const valid = ref(true);
 		const { timesOfDayList } = useTimePickerState();
 
-		const requiredRule: ValidationRule = (value: string | null) => {
-			return value === "" || value === null
-				? t("components.timePicker.validation.required")
-				: true;
-		};
-
-		const formatRule: ValidationRule = (value: string | null) => {
-			if (value === "" || value === null) {
-				return true;
-			}
-
-			const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
-
-			return !value.match(timeRegex)
-				? t("components.timePicker.validation.format")
-				: true;
-		};
-
-		const rules = computed<ValidationRule[]>(() => {
-			const rules: ValidationRule[] = [];
+		const rules = computed(() => {
+			const rules = [
+				isValidTimeFormat(t("components.timePicker.validation.format")),
+			];
 
 			if (props.required) {
-				rules.push(requiredRule);
+				rules.push(isRequired(t("components.timePicker.validation.required")));
 			}
-			rules.push(formatRule);
 
 			return rules;
 		});

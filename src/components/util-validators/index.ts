@@ -1,3 +1,3 @@
-import { isRequired, isValidUrl } from "./validators";
+import { isRequired, isValidUrl, isValidTimeFormat } from "./validators";
 
-export { isRequired, isValidUrl };
+export { isRequired, isValidUrl, isValidTimeFormat };
