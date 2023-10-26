@@ -46,8 +46,6 @@ export default defineComponent({
 		const onClick = () => {
 			if (!props.isOverlayDisabled) {
 				onUserAction();
-			}
-			if (!props.isOverlayDisabled) {
 				containerRef.value?.blur();
 			}
 		};
