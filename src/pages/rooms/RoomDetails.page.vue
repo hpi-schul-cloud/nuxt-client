@@ -40,7 +40,12 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tabIndex" class="tabs-max-width" grow>
+				<v-tabs
+					v-model="tabIndex"
+					class="tabs-max-width"
+					grow
+					:key="componentKey"
+				>
 					<v-tab
 						v-for="(tabItem, index) in tabItems"
 						:key="index"
@@ -148,6 +153,7 @@ import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 
+let wasRefreshed = false;
 export default defineComponent({
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
@@ -205,6 +211,7 @@ export default defineComponent({
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
 			tabIndex: 0,
+			componentKey: 0,
 		};
 	},
 	computed: {
@@ -418,17 +425,20 @@ export default defineComponent({
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
-
-		this.forceUpdateIfNavigatedFromBackButton();
+	},
+	mounted() {
+		this.forceRefreshIfNavigatedFromBackButton();
 	},
 	methods: {
-		forceUpdateIfNavigatedFromBackButton() {
+		forceRefreshIfNavigatedFromBackButton() {
 			if (
-				window.performance &&
-				window.performance.navigation.type ===
-					window.performance.navigation.TYPE_BACK_FORWARD
+				window.performance.getEntriesByType("navigation")[0].type ===
+					"back_forward" &&
+				!wasRefreshed
 			) {
-				this.$forceUpdate();
+				console.log("rerender");
+				wasRefreshed = true;
+				this.componentKey++;
 			}
 		},
 		setActiveTab(tabName) {
