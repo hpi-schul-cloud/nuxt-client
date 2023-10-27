@@ -37,12 +37,12 @@
 				"src/components/feature-board-external-tool-element"
 			],
 			"@feature-board": ["src/components/feature-board"],
-			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
 			"@feature-editor": ["src/components/feature-editor"],
 			"@feature-render-html": ["src/components/feature-render-html"],
 			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@ui-date-time-picker": ["src/components/ui-date-time-picker"],
 			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
 			"@util-validators": ["src/components/util-validators"],
