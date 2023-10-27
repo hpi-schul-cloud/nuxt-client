@@ -8953,7 +8953,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @summary Get a list of classes and groups of type class for the current users school.
+         * @summary Get a list of classes and groups of type class for the current user.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -8961,7 +8961,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClassesForSchool: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9055,7 +9055,7 @@ export const GroupApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Get a list of classes and groups of type class for the current users school.
+         * @summary Get a list of classes and groups of type class for the current user.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -9063,8 +9063,8 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options);
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9090,7 +9090,7 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @summary Get a list of classes and groups of type class for the current users school.
+         * @summary Get a list of classes and groups of type class for the current user.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
@@ -9098,8 +9098,8 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
-            return localVarFp.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9122,7 +9122,7 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
 export interface GroupApiInterface {
     /**
      * 
-     * @summary Get a list of classes and groups of type class for the current users school.
+     * @summary Get a list of classes and groups of type class for the current user.
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -9131,7 +9131,7 @@ export interface GroupApiInterface {
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -9154,7 +9154,7 @@ export interface GroupApiInterface {
 export class GroupApi extends BaseAPI implements GroupApiInterface {
     /**
      * 
-     * @summary Get a list of classes and groups of type class for the current users school.
+     * @summary Get a list of classes and groups of type class for the current user.
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
@@ -9163,8 +9163,8 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
-        return GroupApiFp(this.configuration).groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
