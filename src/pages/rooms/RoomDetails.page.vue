@@ -424,6 +424,14 @@ export default defineComponent({
 		document.title = buildPageTitle(this.roomData.title);
 	},
 	mounted() {
+		window.addEventListener("pageshow", (event) => {
+			if (event.persisted) {
+				this.setActiveTab("learn-content");
+				console.log("The page was cached by the browser");
+			} else {
+				console.log("The page was NOT cached by the browser");
+			}
+		});
 		this.forceRefreshIfNavigatedFromBackButton();
 	},
 	methods: {
