@@ -189,7 +189,7 @@
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
-	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Más herramientas",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Herramientas externas",
 	"components.legacy.footer.ariaLabel": "Enlace, {itemName}",
 	"components.legacy.footer.accessibility.report": "Accesibilidad feedback",
 	"components.legacy.footer.accessibility.statement": "Declaración de accesibilidad",
