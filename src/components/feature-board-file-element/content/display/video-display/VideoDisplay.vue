@@ -2,6 +2,7 @@
 	<div>
 		<video
 			controls
+			controlsList="nodownload"
 			ref="videoRef"
 			class="video"
 			loading="lazy"
