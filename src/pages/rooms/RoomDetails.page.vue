@@ -5,6 +5,7 @@
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		@fabButtonEvent="fabClick"
+		:key="componentKey"
 	>
 		<template slot="header">
 			<div class="d-flex ma-2 mt-3">
@@ -40,12 +41,7 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs
-					v-model="tabIndex"
-					class="tabs-max-width"
-					grow
-					:key="componentKey"
-				>
+				<v-tabs v-model="tabIndex" class="tabs-max-width" grow>
 					<v-tab
 						v-for="(tabItem, index) in tabItems"
 						:key="index"
@@ -212,6 +208,7 @@ export default defineComponent({
 			isShareModalOpen: false,
 			tabIndex: 0,
 			componentKey: 0,
+			name: this.$route.params.name,
 		};
 	},
 	computed: {
@@ -414,8 +411,6 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		console.log("start created");
-
 		if (this.$route.query && this.$route.query.tab) {
 			this.setActiveTab(this.$route.query.tab);
 		}
@@ -427,13 +422,9 @@ export default defineComponent({
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
-
-		console.log("end created");
 	},
 	mounted() {
-		console.log("start mounted");
-		// this.setActiveTab("tools");
-		console.log("end mounted");
+		this.forceRefreshIfNavigatedFromBackButton();
 	},
 	methods: {
 		forceRefreshIfNavigatedFromBackButton() {
@@ -443,8 +434,8 @@ export default defineComponent({
 				!wasRefreshed
 			) {
 				console.log("rerender");
-				wasRefreshed = true;
 				this.componentKey++;
+				wasRefreshed = true;
 			}
 		},
 		setActiveTab(tabName) {
