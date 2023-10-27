@@ -5,7 +5,6 @@
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		@fabButtonEvent="fabClick"
-		:key="componentKey"
 	>
 		<template slot="header">
 			<div class="d-flex ma-2 mt-3">
@@ -149,7 +148,6 @@ import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 
-let wasRefreshed = false;
 export default defineComponent({
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
@@ -207,8 +205,6 @@ export default defineComponent({
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
 			tabIndex: 0,
-			componentKey: 0,
-			name: this.$route.params.name,
 		};
 	},
 	computed: {
@@ -411,9 +407,9 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		if (this.$route.query && this.$route.query.tab) {
-			this.setActiveTab(this.$route.query.tab);
-		}
+		// if (this.$route.query?.tab) {
+		// 	this.setActiveTab(this.$route.query.tab);
+		// }
 
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
@@ -424,26 +420,24 @@ export default defineComponent({
 		document.title = buildPageTitle(this.roomData.title);
 	},
 	mounted() {
-		window.addEventListener("pageshow", (event) => {
-			if (event.persisted) {
-				this.setActiveTab("learn-content");
-				console.log("The page was cached by the browser");
-			} else {
-				console.log("The page was NOT cached by the browser");
-			}
-		});
-		this.forceRefreshIfNavigatedFromBackButton();
+		if (this.$route.query?.tab) {
+			this.setActiveTab(this.$route.query.tab);
+		} else {
+			this.setActiveTab("learn-content");
+		}
+		// window.addEventListener("pageshow", this.setActiveTabIfPageCached);
+	},
+	beforeDestroy() {
+		// window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
-		forceRefreshIfNavigatedFromBackButton() {
-			if (
-				window.performance.getEntriesByType("navigation")[0].type ===
-					"back_forward" &&
-				!wasRefreshed
-			) {
-				console.log("rerender");
-				this.componentKey++;
-				wasRefreshed = true;
+		setActiveTabIfPageCached(event) {
+			if (event.persisted) {
+				if (this.$route.query && this.$route.query.tab) {
+					this.setActiveTab(this.$route.query.tab);
+				} else {
+					this.setActiveTab("learn-content");
+				}
 			}
 		},
 		setActiveTab(tabName) {
