@@ -422,10 +422,10 @@ export default defineComponent({
 	mounted() {
 		// TODO: remove this event listener and handler when tabs no longer redirect to legacy client
 		// fixes https://ticketsystem.dbildungscloud.de/browse/BC-4550
-		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
+		// window.addEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	beforeDestroy() {
-		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
+		// window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
 		setActiveTabIfPageCached(event) {
@@ -511,9 +511,15 @@ export default defineComponent({
 	watch: {
 		tabIndex(newIndex) {
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.replace({
-					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
-				});
+				this.$router
+					.push({
+						query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
+					})
+					.catch((error) => {
+						if (error.name !== "NavigationDuplicated") {
+							throw error;
+						}
+					});
 			}
 		},
 	},
