@@ -295,7 +295,11 @@ export default defineComponent({
 		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
 				// TODO: create Object and add schoolYearQueryType
-				await groupModule.deleteClass(selectedItem.value.id);
+				const deleteQuery = {
+					classId: selectedItem.value.id,
+					query: schoolYearQueryType.value,
+				};
+				await groupModule.deleteClass(deleteQuery);
 			}
 		};
 
