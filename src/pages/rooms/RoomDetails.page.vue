@@ -430,11 +430,12 @@ export default defineComponent({
 	methods: {
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
-				if (this.$route.query?.tab) {
-					this.setActiveTab(this.$route.query.tab);
-				} else {
-					this.setActiveTab("learn-content");
-				}
+				this.$forceUpdate();
+				// if (this.$route.query?.tab) {
+				// 	this.setActiveTab(this.$route.query.tab);
+				// } else {
+				// 	this.setActiveTab("learn-content");
+				// }
 			}
 		},
 		setActiveTab(tabName) {
