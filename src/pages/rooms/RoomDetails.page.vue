@@ -407,9 +407,9 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		// if (this.$route.query?.tab) {
-		// 	this.setActiveTab(this.$route.query.tab);
-		// }
+		if (this.$route.query?.tab) {
+			this.setActiveTab(this.$route.query.tab);
+		}
 
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
@@ -420,20 +420,17 @@ export default defineComponent({
 		document.title = buildPageTitle(this.roomData.title);
 	},
 	mounted() {
-		if (this.$route.query?.tab) {
-			this.setActiveTab(this.$route.query.tab);
-		} else {
-			this.setActiveTab("learn-content");
-		}
-		// window.addEventListener("pageshow", this.setActiveTabIfPageCached);
+		// TODO: remove this event listener and handler when tabs no longer redirect to legacy client
+		// fixes https://ticketsystem.dbildungscloud.de/browse/BC-4550
+		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	beforeDestroy() {
-		// window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
+		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
-				if (this.$route.query && this.$route.query.tab) {
+				if (this.$route.query?.tab) {
 					this.setActiveTab(this.$route.query.tab);
 				} else {
 					this.setActiveTab("learn-content");
