@@ -753,6 +753,7 @@
 	"pages.administration.classes.edit": "Edit class",
 	"pages.administration.classes.delete": "Delete class",
 	"pages.administration.classes.createSuccessor": "Move class to the next school year",
+	"pages.administration.classes.label.archive": "Archive",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.collection.selectElements": "Select the items you want to add to the topic",
 	"pages.content._id.metadata.author": "Author",

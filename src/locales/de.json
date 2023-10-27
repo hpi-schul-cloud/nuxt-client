@@ -755,6 +755,7 @@
 	"pages.administration.classes.edit": "Klasse bearbeiten",
 	"pages.administration.classes.delete": "Klasse löschen",
 	"pages.administration.classes.createSuccessor": "Klasse in das nächste Schuljahr versetzen",
+	"pages.administration.classes.label.archive": "Archiv",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements": "Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
 	"pages.content._id.metadata.author": "Autor",

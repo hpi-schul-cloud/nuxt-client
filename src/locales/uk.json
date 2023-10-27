@@ -833,6 +833,7 @@
 	"pages.administration.classes.edit": "Редагувати клас",
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.createSuccessor": "Перенести клас на наступний навчальний рік",
+	"pages.administration.classes.label.archive": "Архів",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements": "Виберіть елементи, які треба додати до теми",
 	"pages.content._id.metadata.author": "Автор",

@@ -5,15 +5,20 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs class="tabs-max-width mb-5" grow @change="onTabsChange">
+		<v-tabs
+			class="tabs-max-width mb-5"
+			grow
+			@change="onTabsChange"
+			v-model="model"
+		>
 			<v-tab>
-				<span>2024/2025</span>
+				<span>{{ nextYear }}</span>
 			</v-tab>
 			<v-tab>
-				<span>2023/2024</span>
+				<span>{{ currentYear }}</span>
 			</v-tab>
 			<v-tab>
-				<span>Archiv</span>
+				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
 
@@ -164,6 +169,7 @@ import {
 	AUTH_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 import {
@@ -182,12 +188,14 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
+import SchoolsModule from "../../store/schools";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
 	setup() {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const { t } = useI18n();
 
@@ -207,7 +215,17 @@ export default defineComponent({
 			},
 		];
 
+		const model: Ref<number> = ref(1);
+
 		const schoolYearQueryType: Ref<string> = ref("currentYear");
+
+		const nextYear: ComputedRef<string> = computed(
+			() => schoolsModule.getSchool.years.nextYear.name
+		);
+
+		const currentYear: ComputedRef<string> = computed(
+			() => schoolsModule.getSchool.years.activeYear.name
+		);
 
 		const onTabsChange = (tabIndex: number) => {
 			if (tabIndex === 0) {
@@ -294,7 +312,6 @@ export default defineComponent({
 
 		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
-				// TODO: create Object and add schoolYearQueryType
 				const deleteQuery = {
 					classId: selectedItem.value.id,
 					query: schoolYearQueryType.value,
@@ -331,6 +348,9 @@ export default defineComponent({
 			t,
 			footerProps,
 			breadcrumbs,
+			model,
+			nextYear,
+			currentYear,
 			onTabsChange,
 			headers,
 			classes,
