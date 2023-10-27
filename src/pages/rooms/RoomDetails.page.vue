@@ -414,6 +414,8 @@ export default defineComponent({
 		},
 	},
 	async created() {
+		console.log("start created");
+
 		if (this.$route.query && this.$route.query.tab) {
 			this.setActiveTab(this.$route.query.tab);
 		}
@@ -425,9 +427,13 @@ export default defineComponent({
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
+
+		console.log("end created");
 	},
 	mounted() {
-		this.forceRefreshIfNavigatedFromBackButton();
+		console.log("start mounted");
+		// this.setActiveTab("tools");
+		console.log("end mounted");
 	},
 	methods: {
 		forceRefreshIfNavigatedFromBackButton() {
