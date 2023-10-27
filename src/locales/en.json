@@ -189,7 +189,7 @@
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Submission",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
-	"components.elementTypeSelection.elements.externalToolElement.subtitle": "More Tools",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "External tools",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}",
 	"components.legacy.footer.accessibility.report": "Accessibility feedback",
 	"components.legacy.footer.accessibility.statement": "Accessibility statement",

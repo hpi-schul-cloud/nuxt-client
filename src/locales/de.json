@@ -190,7 +190,7 @@
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
-	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Weitere Tools",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Externe Tools",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}",
 	"components.legacy.footer.accessibility.report": "Barriere melden",
 	"components.legacy.footer.accessibility.statement": "Barrierefreiheitserklärung",
