@@ -190,7 +190,7 @@
 	"components.elementTypeSelection.elements.linkElement.subtitle": "посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Подання",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
-	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Більше інструментів",
+	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Зовнішні інструменти",
 	"componente.molecules.CoursesGrid.emptystate": "Наразі тут курсів немає.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "година | години (годин)",
