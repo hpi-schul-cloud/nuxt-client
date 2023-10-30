@@ -1,6 +1,6 @@
 <template>
 	<v-form>
-		<v-overlay :value="loading" :absolute="true">
+		<v-overlay :model-value="loading" :absolute="true">
 			<v-progress-circular color="primary" indeterminate />
 		</v-overlay>
 		<v-row>
@@ -13,7 +13,7 @@
 							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
 						)
 					"
-					dense
+					density="compact"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
@@ -31,7 +31,7 @@
 							'pages.administration.school.index.generalSettings.labels.schoolNumber'
 						)
 					"
-					dense
+					density="compact"
 					:disabled="!!school.officialSchoolNumber"
 					:hint="
 						$t(
@@ -54,10 +54,9 @@
 						)
 					"
 					:items="federalState.counties"
-					item-text="name"
+					item-title="name"
 					item-value="_id"
 					return-object
-					dense
 					:disabled="!!localSchool.county"
 					:hint="
 						$t(
@@ -78,7 +77,7 @@
 						)
 					"
 					v-model="logoFile"
-					dense
+					density="compact"
 					prepend-icon=""
 					prepend-inner-icon="$file"
 				/>
@@ -94,7 +93,7 @@
 							'pages.administration.school.index.generalSettings.labels.timezone'
 						)
 					"
-					dense
+					density="compact"
 					disabled
 					:hint="
 						$t('pages.administration.school.index.generalSettings.timezoneHint')
@@ -114,9 +113,8 @@
 						)
 					"
 					:items="languages"
-					item-text="name"
+					item-title="name"
 					item-value="abbreviation"
-					dense
 				>
 					<template #item="{ item }">
 						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
@@ -139,7 +137,7 @@
 			class="mt-6 my-4 button-save float-right"
 			data-testid="save-general-setting"
 			color="primary"
-			depressed
+			variant="flat"
 			:disabled="loading"
 			@click="save"
 		>

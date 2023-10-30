@@ -56,7 +56,7 @@
 				>
 					<v-icon
 						v-if="chip.icon"
-						left
+						start
 						size="small"
 						class="fill"
 						color="rgba(0, 0, 0, 0.87)"

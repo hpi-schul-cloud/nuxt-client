@@ -33,7 +33,7 @@
 				<v-divider />
 				<v-expansion-panels
 					hover
-					accordion
+					variant="accordion"
 					flat
 					multiple
 					class="mb-9"

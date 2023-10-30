@@ -176,7 +176,7 @@
 
 				<template #[`item.match`]="{ item }">
 					<div class="text-no-wrap md">
-						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+						<v-icon size="small">{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
 							item.match
 								? `${item.match.firstName} ${item.match.lastName}`

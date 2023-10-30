@@ -34,7 +34,7 @@
 							data-testId="refresh-btn"
 							:aria-label="t('pages.videoConference.action.refresh')"
 						>
-							<v-icon dense class="mr-1">{{ mdiReload }}</v-icon>
+							<v-icon size="small" class="mr-1">{{ mdiReload }}</v-icon>
 							{{ t("pages.videoConference.action.refresh") }}
 						</v-btn>
 					</div>

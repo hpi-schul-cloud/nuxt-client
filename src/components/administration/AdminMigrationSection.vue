@@ -78,7 +78,7 @@
 				:disabled="!oauthMigration.startedAt"
 				:true-value="true"
 				:false-value="false"
-				:input-value="oauthMigration.mandatorySince"
+				:value="oauthMigration.mandatorySince"
 				inset
 				density="compact"
 				class="ml-1"

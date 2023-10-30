@@ -1,5 +1,5 @@
 <template>
-	<v-dialog fullscreen hide-overlay v-model="isLightBoxOpen">
+	<v-dialog fullscreen :scrim="false" v-model="isLightBoxOpen">
 		<v-toolbar flat>
 			<v-btn icon @click="close">
 				<v-icon>{{ mdiClose }}</v-icon>

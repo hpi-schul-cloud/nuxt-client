@@ -182,7 +182,7 @@
 						data-testid="save-match-btn"
 						@click="saveMatch"
 					>
-						<v-icon small>{{ mdiContentSave }}</v-icon>
+						<v-icon size="small">{{ mdiContentSave }}</v-icon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
 					</v-btn>
 					<v-btn
@@ -193,7 +193,7 @@
 						data-testid="delete-match-btn"
 						@click="deleteMatch"
 					>
-						<v-icon small>{{ mdiDelete }}</v-icon>
+						<v-icon size="small">{{ mdiDelete }}</v-icon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
 					</v-btn>
 				</v-col>

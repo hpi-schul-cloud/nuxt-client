@@ -22,8 +22,8 @@
 			/>
 			<v-list-item
 				v-else
-				two-line
-				dense
+				lines="two"
+				density="compact"
 				class="mb-6"
 				data-testid="policy-item"
 				@click="downloadPolicy"

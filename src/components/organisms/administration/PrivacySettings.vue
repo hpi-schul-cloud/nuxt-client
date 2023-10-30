@@ -7,7 +7,7 @@
 			<v-col>
 				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
-					:input-value="studentVisibility"
+					:value="studentVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
@@ -44,7 +44,7 @@
 		<v-row v-if="toggleStudentLernstoreViewEnabled" class="learnstore-switch">
 			<v-col>
 				<v-switch
-					:input-value="lernStoreVisibility"
+					:value="lernStoreVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.lernStore'
@@ -78,7 +78,7 @@
 		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
 			<v-col>
 				<v-switch
-					:input-value="features.rocketChat"
+					:value="features.rocketChat"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
@@ -112,7 +112,7 @@
 		<v-row v-if="videoConferenceEnabled" class="videoconference-switch">
 			<v-col>
 				<v-switch
-					:input-value="features.videoconference"
+					:value="features.videoconference"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'

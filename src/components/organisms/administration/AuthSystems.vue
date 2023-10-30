@@ -3,14 +3,14 @@
 		<v-text-field
 			v-if="customLoginLinkEnabled && !hasSystems"
 			id="school-login-link-0"
-			:value="generateLoginLink()"
+			:model-value="generateLoginLink()"
 			class="school-login-link"
 			:color="getCopyStatus(0) ? 'success' : 'primary'"
 			:label="
 				$t('pages.administration.school.index.authSystems.loginLinkLabel')
 			"
 			readonly
-			dense
+			density="compact"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>

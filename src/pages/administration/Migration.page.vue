@@ -9,8 +9,7 @@
 			v-if="businessError && businessError.statusCode !== '200'"
 			v-model="businessError"
 			:timeout="errorTimeout"
-			top
-			centered
+			location="top centered"
 			color="error-darken-3"
 		>
 			{{ $t("pages.administration.migration.error") }}

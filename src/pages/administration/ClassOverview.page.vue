@@ -28,9 +28,9 @@
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="legacy-class-table-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/manage`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -41,9 +41,9 @@
 						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/edit`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -54,9 +54,9 @@
 						:title="$t('pages.administration.classes.delete')"
 						:aria-label="$t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						@click="onClickDeleteIcon(item)"
 						class="mx-1 px-1"
 						min-width="0"
@@ -68,9 +68,9 @@
 						:aria-label="t('pages.administration.classes.createSuccessor')"
 						:title="t('pages.administration.classes.createSuccessor')"
 						data-testid="class-table-successor-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/createSuccessor`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -83,9 +83,9 @@
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-members-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:to="{
 							name: 'administration-groups-classes-members',
 							params: { groupId: item.id },

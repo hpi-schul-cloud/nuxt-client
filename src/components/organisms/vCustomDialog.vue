@@ -52,7 +52,7 @@
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
 					>
-						<v-icon v-if="confirmBtnIcon" dense class="mr-1">
+						<v-icon v-if="confirmBtnIcon" size="small" class="mr-1">
 							{{ confirmBtnIcon }}
 						</v-icon>
 						{{ $t(confirmBtnTitleKey) }}

@@ -57,8 +57,8 @@
 					{{ $t("pages.rooms.importCourse.step_2") }}
 					<v-text-field
 						v-model="sharedCourseData.code"
-						outlined
-						dense
+						variant="outlined"
+						density="compact"
 						class="mt-1 text-field-course-code"
 						:error="businessError.message !== ''"
 						:error-messages="
@@ -73,8 +73,8 @@
 
 					<v-text-field
 						v-model="sharedCourseData.courseName"
-						outlined
-						dense
+						variant="outlined"
+						density="compact"
 						class="mt-1 text-field-course-name"
 						:disabled="isImportError"
 					/>
