@@ -34,7 +34,7 @@
 					<v-icon>$file_pdf_outline</v-icon>
 				</v-list-item-icon>
 				<v-list-item-content>
-					<v-list-item-title class="text-body-1 black--text mb-2">
+					<v-list-item-title class="text-body-1 text-black mb-2">
 						{{ t("pages.administration.school.index.termsOfUse.fileName") }}
 					</v-list-item-title>
 					<v-list-item-subtitle class="text-body-2">

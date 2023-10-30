@@ -66,7 +66,7 @@ describe("BaseAlert", () => {
 		it("should not render default slot", () => {
 			const { wrapper } = setup();
 
-			const text = wrapper.find("div.black--text");
+			const text = wrapper.find("div.text-black");
 
 			expect(text.exists()).toBeFalsy();
 		});

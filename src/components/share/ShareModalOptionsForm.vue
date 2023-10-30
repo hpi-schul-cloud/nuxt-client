@@ -1,5 +1,5 @@
 <template>
-	<div class="black--text">
+	<div class="text-black">
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
 				{{ $t("components.molecules.share.options.schoolInternally") }}

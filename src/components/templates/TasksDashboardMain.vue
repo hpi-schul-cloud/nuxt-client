@@ -61,6 +61,7 @@
 				rounded
 				chips
 				data-testid="courseFilter"
+				item-color="primary"
 				item-title="text"
 				item-value="value"
 				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
