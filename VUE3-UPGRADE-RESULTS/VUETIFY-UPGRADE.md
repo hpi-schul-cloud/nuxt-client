@@ -145,6 +145,9 @@ https://vuetifyjs.com/en/components/menus/
 
 _Currently broken:_ is using `v-speed-dial` which is not available in vuetify 3 anymore
 
+-  it is planned to be in labs later this year:
+https://github.com/vuetifyjs/vuetify/issues/13508
+
 ## v-custom-dialog
 
 - Has been refactored to use required `v-model` API for `VDialog`

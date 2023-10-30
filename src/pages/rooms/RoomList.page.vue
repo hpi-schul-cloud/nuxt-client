@@ -18,19 +18,18 @@
 			</div>
 		</template>
 		<template #page-content>
-			<v-row class="justify-center search">
-				<div class="d-flex justify-space-between col-sm-8">
-					<v-text-field
-						ref="search"
-						v-model="searchText"
-						variant="solo"
-						rounded
-						single-line
-						:label="$t('pages.rooms.index.search.label')"
-						:append-inner-icon="mdiMagnify"
-						:aria-label="$t('pages.rooms.index.search.label')"
-					/>
-				</div>
+			<v-row class="d-flex justify-center search">
+				<v-text-field
+					ref="search"
+					class="px-1"
+					v-model="searchText"
+					variant="solo"
+					rounded
+					single-line
+					:label="$t('pages.rooms.index.search.label')"
+					:append-inner-icon="mdiMagnify"
+					:aria-label="$t('pages.rooms.index.search.label')"
+				/>
 			</v-row>
 			<v-row>
 				<v-container fluid>
@@ -106,5 +105,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .search {
 	flex-wrap: nowrap;
+	max-width: 600px;
+	margin: 0 auto;
 }
 </style>
