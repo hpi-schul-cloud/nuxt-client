@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar class="my-2">
+	<ContentElementBar class="my-4">
 		<template #element>
 			<audio
 				controls
@@ -7,7 +7,7 @@
 				loading="lazy"
 				:src="src"
 				v-on:error="onError"
-				class="audio mr-2"
+				class="audio"
 			/>
 		</template>
 		<template #menu><slot /></template>
