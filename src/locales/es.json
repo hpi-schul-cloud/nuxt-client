@@ -834,7 +834,7 @@
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
-	"components.cardElement.fileElement.altDescription": "Describa la imagen para permitir una visualización sin barreras.",
+	"components.cardElement.fileElement.altDescription": "Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
 	"components.cardElement.fileElement.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
 	"components.cardElement.fileElement.awaitingScan": "La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
