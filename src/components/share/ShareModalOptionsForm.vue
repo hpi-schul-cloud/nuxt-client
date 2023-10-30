@@ -8,7 +8,7 @@
 				v-model="shareOptions.isSchoolInternal"
 				data-testid="isSchoolInternal"
 				color="primary"
-				:model-value="true"
+				:value="true"
 				class="my-0 mr-n3"
 				inset
 				density="compact"
@@ -23,7 +23,7 @@
 				v-model="shareOptions.hasExpiryDate"
 				data-testid="hasExpiryDate"
 				color="primary"
-				:model-value="true"
+				:value="true"
 				class="my-0 mr-n3"
 				inset
 				density="compact"
