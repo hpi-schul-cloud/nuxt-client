@@ -28,6 +28,7 @@ const SCHOOL_FEATURES: (keyof School["features"])[] = [
 	"ldapUniventionMigrationSchool",
 	"showOutdatedUsers",
 	"enableLdapSyncDuringMigration",
+	"isTeamCreationByStudentsEnabled",
 ];
 
 function transformSchoolServerToClient(school: SchoolPayload): School {
@@ -63,23 +64,29 @@ function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
 })
 export default class SchoolsModule extends VuexModule {
 	school: School = {
-		_id: "",
+		id: "",
 		name: "",
 		fileStorageType: "",
-		federalState: "",
+		federalState: {
+			id: "",
+			counties: [],
+			name: "",
+			abbreviation: "",
+			logoUrl: "",
+			__v: 0,
+		},
 		county: {
+			id: "",
 			antaresKey: "",
-			_id: "",
 			countyId: "",
 			name: "",
-			id: "",
 		},
 		systems: [],
 		updatedAt: "",
 		createdAt: "",
 		__v: 0,
 		currentYear: {
-			_id: "",
+			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
@@ -95,17 +102,15 @@ export default class SchoolsModule extends VuexModule {
 			enableLdapSyncDuringMigration: false,
 			isTeamCreationByStudentsEnabled: false,
 		},
-		enableStudentTeamCreation: false,
 		permissions: {},
 		inMaintenance: false,
 		inUserMigration: false,
 		documentBaseDir: "",
 		isExternal: false,
-		id: "",
 		years: {},
 	};
 	federalState: FederalState = {
-		_id: "",
+		id: "",
 		counties: [],
 		name: "",
 		abbreviation: "",
@@ -207,7 +212,7 @@ export default class SchoolsModule extends VuexModule {
 		if (authModule.getUser?.schoolId) {
 			try {
 				const school = (
-					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
+					await $axios.get(`/v3/school/${authModule.getUser?.schoolId} `)
 				).data;
 
 				console.log(school);
@@ -235,7 +240,7 @@ export default class SchoolsModule extends VuexModule {
 		try {
 			const data = (
 				await $axios.get<FederalState>(
-					`/v1/federalStates/${this.school.federalState}`
+					`/v1/federalStates/${this.school.federalState.id}`
 				)
 			).data;
 
@@ -420,14 +425,14 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
-		if (!this.school._id) {
+		if (!this.school.id) {
 			return;
 		}
 
 		try {
 			const oauthMigration: AxiosResponse<MigrationResponse> =
 				await this.schoolApi.legacySchoolControllerSetMigration(
-					this.school._id,
+					this.school.id,
 					migrationFlags
 				);
 			this.setOauthMigration({

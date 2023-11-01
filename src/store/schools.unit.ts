@@ -91,7 +91,7 @@ describe("schools module", () => {
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/schools/sampleSchoolId "
+					"/v3/school/sampleSchoolId "
 				);
 
 				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
@@ -106,6 +106,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
+						isTeamCreationByStudentsEnabled: false,
 					},
 				});
 			});
@@ -168,7 +169,14 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
-					federalState: "federalStateId",
+					federalState: {
+						id: "federalStateId",
+						counties: [],
+						name: "",
+						abbreviation: "",
+						logoUrl: "",
+						__v: 0,
+					},
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -197,7 +205,14 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
-					federalState: "federalStateId",
+					federalState: {
+						id: "federalStateId",
+						counties: [],
+						name: "",
+						abbreviation: "",
+						logoUrl: "",
+						__v: 0,
+					},
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -287,6 +302,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
+						isTeamCreationByStudentsEnabled: false,
 					},
 				};
 				initializeAxios({
@@ -346,6 +362,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
+						isTeamCreationByStudentsEnabled: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});
@@ -670,7 +687,7 @@ describe("schools module", () => {
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
-						_id: "",
+						id: "",
 					});
 
 					await schoolsModule.fetchSchoolOAuthMigration();
@@ -798,7 +815,7 @@ describe("schools module", () => {
 					const schoolsModule = new SchoolsModule({});
 					schoolsModule.setSchool({
 						...mockSchool,
-						_id: "",
+						id: "",
 					});
 
 					await schoolsModule.setSchoolOauthMigration({
@@ -904,7 +921,7 @@ describe("schools module", () => {
 					__v: 0,
 					counties: [],
 					logoUrl: "",
-					_id: "mockId",
+					id: "mockId",
 					name: "mockname",
 					abbreviation: "MO",
 				};
@@ -995,7 +1012,7 @@ describe("schools module", () => {
 					__v: 0,
 					counties: [],
 					logoUrl: "",
-					_id: "mockId",
+					id: "mockId",
 					name: "mockname",
 					abbreviation: "MO",
 				};

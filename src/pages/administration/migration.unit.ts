@@ -42,16 +42,22 @@ const getWrapperShallow: any = (props: object, options?: object) => {
 };
 
 const schoolMock = {
-	_id: "5f2987e020834114b8efd6f8",
+	id: "5f2987e020834114b8efd6f8",
 	name: "Schule_100000",
 	fileStorageType: "awsS3",
-	federalState: "0000b186816abba584714c53",
+	federalState: {
+		id: "0000b186816abba584714c53",
+		counties: [],
+		name: "",
+		abbreviation: "",
+		logoUrl: "",
+		__v: 0,
+	},
 	county: {
+		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
-		_id: "5fa55eb53f472a2d986c8812",
 		countyId: "12051",
 		name: "Brandenburg an der Havel",
-		id: "5fa55eb53f472a2d986c8812",
 	},
 	systems: [
 		"0000d186816abba584714c91",
@@ -62,7 +68,7 @@ const schoolMock = {
 	createdAt: "2017-01-01T00:06:37.148Z",
 	__v: 1,
 	currentYear: {
-		_id: "5ebd6dc14a431f75ec9a3e77",
+		id: "5ebd6dc14a431f75ec9a3e77",
 		name: "2021/22",
 		startDate: "2021-08-01T00:00:00.000Z",
 		endDate: "2022-07-31T00:00:00.000Z",
@@ -78,7 +84,6 @@ const schoolMock = {
 		enableLdapSyncDuringMigration: false,
 		isTeamCreationByStudentsEnabled: false,
 	},
-	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
 	officialSchoolNumber: "100000",
 	documentBaseDirType: "",
@@ -87,18 +92,17 @@ const schoolMock = {
 	inMaintenance: true,
 	documentBaseDir: "https://s3.hidrive.strato.com/cloud-instances/default/",
 	isExternal: true,
-	id: "5f2987e020834114b8efd6f8",
 	years: {
 		schoolYears: [
 			{
-				_id: "5ebd6dc14a431f75ec9a3e77",
+				id: "5ebd6dc14a431f75ec9a3e77",
 				name: "2021/22",
 				startDate: "2021-08-01T00:00:00.000Z",
 				endDate: "2022-07-31T00:00:00.000Z",
 				__v: 0,
 			},
 			{
-				_id: "5ebd6dc14a431f75ec9a3e78",
+				id: "5ebd6dc14a431f75ec9a3e78",
 				name: "2022/23",
 				startDate: "2022-08-01T00:00:00.000Z",
 				endDate: "2023-07-31T00:00:00.000Z",
@@ -106,28 +110,28 @@ const schoolMock = {
 			},
 		],
 		activeYear: {
-			_id: "5ebd6dc14a431f75ec9a3e77",
+			id: "5ebd6dc14a431f75ec9a3e77",
 			name: "2021/22",
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
 			__v: 0,
 		},
 		defaultYear: {
-			_id: "5ebd6dc14a431f75ec9a3e77",
+			id: "5ebd6dc14a431f75ec9a3e77",
 			name: "2021/22",
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
 			__v: 0,
 		},
 		nextYear: {
-			_id: "5ebd6dc14a431f75ec9a3e78",
+			id: "5ebd6dc14a431f75ec9a3e78",
 			name: "2022/23",
 			startDate: "2022-08-01T00:00:00.000Z",
 			endDate: "2023-07-31T00:00:00.000Z",
 			__v: 0,
 		},
 		lastYear: {
-			_id: "5d44297075e1502c27e405e2",
+			id: "5d44297075e1502c27e405e2",
 			name: "2020/21",
 			startDate: "2020-08-01T00:00:00.000Z",
 			endDate: "2021-07-31T00:00:00.000Z",

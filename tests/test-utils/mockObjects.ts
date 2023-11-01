@@ -52,23 +52,29 @@ export const mockUser: User = {
 };
 
 export const mockSchool: School = {
-	_id: "mockSchoolId",
+	id: "mockSchoolId",
 	name: "",
 	fileStorageType: "",
-	federalState: "",
+	federalState: {
+		id: "",
+		counties: [],
+		name: "",
+		abbreviation: "",
+		logoUrl: "",
+		__v: 0,
+	},
 	county: {
 		antaresKey: "",
-		_id: "",
+		id: "",
 		countyId: "",
 		name: "",
-		id: "",
 	},
 	systems: [],
 	updatedAt: "",
 	createdAt: "",
 	__v: 0,
 	currentYear: {
-		_id: "",
+		id: "",
 		name: "",
 		startDate: "",
 		endDate: "",
@@ -84,12 +90,10 @@ export const mockSchool: School = {
 		enableLdapSyncDuringMigration: false,
 		isTeamCreationByStudentsEnabled: false,
 	},
-	enableStudentTeamCreation: false,
 	permissions: {},
 	inMaintenance: false,
 	inUserMigration: false,
 	documentBaseDir: "",
 	isExternal: false,
-	id: "mockSchoolId",
 	years: {},
 };

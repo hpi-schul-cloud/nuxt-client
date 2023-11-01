@@ -7,12 +7,19 @@ import AuthModule from "@/store/auth";
 import { ApplicationError } from "@/store/types/application-error";
 
 const school = {
-	_id: { $oid: "5f2987e020834114b8efd6f8" },
+	id: "5f2987e020834114b8efd6f8",
 	name: "Paul-Gerhardt-Gymnasium",
-	federalState: { $oid: "0000b186816abba584714c53" },
+	federalState: {
+		id: "0000b186816abba584714c53",
+		counties: [],
+		name: "",
+		abbreviation: "",
+		logoUrl: "",
+		__v: 0,
+	},
 	county: {
+		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
-		_id: { $oid: "5fa55eb53f472a2d986c8812" },
 		countyId: 12051,
 		name: "Brandenburg an der Havel",
 	},
@@ -21,13 +28,12 @@ const school = {
 		{ $oid: "0000d186816abba584714c90" },
 	],
 	currentYear: {
-		_id: "5ebd6dc14a431f75ec9a3e77",
+		id: "5ebd6dc14a431f75ec9a3e77",
 		name: "2021/22",
 		startDate: "2021-08-01T00:00:00.000Z",
 		endDate: "2022-07-31T00:00:00.000Z",
 	},
 	purpose: "demo",
-	enableStudentTeamCreation: false,
 	officialSchoolNumber: "123",
 	features: {
 		rocketChat: true,
@@ -45,17 +51,17 @@ const school = {
 };
 
 const federalState = {
-	_id: "00001234597947823",
+	id: "00001234597947823",
 	counties: [
 		{
+			id: "00001234597998793",
 			antaresKey: "BRB",
-			_id: "00001234597998793",
 			countyId: 12051,
 			name: "Brandenburg an der Havel",
 		},
 		{
+			id: "00001234597913216",
 			antaresKey: "CB",
-			_id: "00001234597913216",
 			countyId: 12052,
 			name: "Cottbus",
 		},

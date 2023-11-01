@@ -27,7 +27,6 @@ const school = {
 		__v: 0,
 	},
 	purpose: "demo",
-	enableStudentTeamCreation: false,
 	officialSchoolNumber: "123",
 };
 

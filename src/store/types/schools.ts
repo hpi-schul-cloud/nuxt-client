@@ -1,5 +1,5 @@
 export type Year = {
-	_id: string;
+	id: string;
 	name: string;
 	endDate: string;
 	startDate: string;
@@ -7,27 +7,26 @@ export type Year = {
 };
 
 export type County = {
+	id: string;
 	antaresKey: string;
-	_id: string;
 	countyId: string;
 	name: string;
-	id: string;
 };
 
 export type FederalState = {
+	id: string;
+	name: string;
 	abbreviation: string;
 	counties: County[];
 	logoUrl: string;
-	name: string;
 	__v: number;
-	_id: string;
 };
 
 export type School = {
-	_id: string;
+	id: string;
 	name: string;
 	fileStorageType: string;
-	federalState: string;
+	federalState: FederalState;
 	county: County;
 	systems: string[];
 	updatedAt: string;
@@ -44,13 +43,11 @@ export type School = {
 		enableLdapSyncDuringMigration: boolean;
 		isTeamCreationByStudentsEnabled: boolean;
 	};
-	enableStudentTeamCreation: boolean;
 	permissions: unknown;
 	inMaintenance: boolean;
 	inUserMigration?: boolean;
 	documentBaseDir: string;
 	isExternal: boolean;
-	id: string;
 	officialSchoolNumber?: string;
 	years: unknown;
 	language?: string;
