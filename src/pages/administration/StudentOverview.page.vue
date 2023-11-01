@@ -39,6 +39,8 @@
 				data-testid="data_filter"
 			/>
 
+			<NewDataFilter />
+
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
@@ -150,6 +152,7 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
+import NewDataFilter from "@/components/organisms/DataFilter/NewDataFilter/NewDataFilter";
 
 export default {
 	components: {
@@ -158,6 +161,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
+		NewDataFilter,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
