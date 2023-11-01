@@ -9,6 +9,7 @@ describe("FileDescription", () => {
 		showTitle: boolean;
 		name?: string;
 		caption?: string;
+		src?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -17,6 +18,7 @@ describe("FileDescription", () => {
 			caption: props.caption,
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
+			src: props.src,
 		};
 		const wrapper = shallowMount(FileDescription, {
 			propsData,
@@ -27,6 +29,7 @@ describe("FileDescription", () => {
 			wrapper,
 			name: propsData.name,
 			caption: propsData.caption,
+			src: propsData.src,
 		};
 	};
 
@@ -35,6 +38,7 @@ describe("FileDescription", () => {
 		showTitle: boolean;
 		name?: string;
 		caption?: string;
+		src?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -43,6 +47,7 @@ describe("FileDescription", () => {
 			caption: props.caption ?? "testCaption",
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
+			src: props.src,
 		};
 		const wrapper = mount(FileDescription, {
 			propsData,
@@ -53,6 +58,7 @@ describe("FileDescription", () => {
 			wrapper,
 			name: propsData.name,
 			caption: propsData.caption,
+			src: propsData.src,
 		};
 	};
 
@@ -100,6 +106,35 @@ describe("FileDescription", () => {
 				const contentElementBar = wrapper.find("contentelementbar-stub");
 
 				expect(contentElementBar.props("icon")).toBe(mdiFileDocumentOutline);
+			});
+
+			describe("when src is defined", () => {
+				it("should render link", () => {
+					const src = "testSrc";
+					const { wrapper, name } = mountSetup({
+						isEditMode: false,
+						showTitle: true,
+						src,
+					});
+					console.log(wrapper.html());
+					const link = wrapper.find("a");
+
+					expect(link.attributes("href")).toBe(src);
+					expect(link.text()).toBe(name);
+				});
+			});
+
+			describe("when src is undefined", () => {
+				it("should not render link", () => {
+					const { wrapper, name } = mountSetup({
+						isEditMode: false,
+						showTitle: true,
+					});
+					const link = wrapper.find("a");
+
+					expect(link.exists()).toBeFalsy();
+					expect(wrapper.text()).toContain(name);
+				});
 			});
 		});
 
@@ -161,6 +196,35 @@ describe("FileDescription", () => {
 				const contentElementBar = wrapper.find("contentelementbar-stub");
 
 				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
+			});
+
+			describe("when src is defined", () => {
+				it("should render link", () => {
+					const src = "testSrc";
+					const { wrapper, name } = mountSetup({
+						isEditMode: false,
+						showTitle: true,
+						src,
+					});
+					console.log(wrapper.html());
+					const link = wrapper.find("a");
+
+					expect(link.attributes("href")).toBe(src);
+					expect(link.text()).toBe(name);
+				});
+			});
+
+			describe("when src is undefined", () => {
+				it("should not render link", () => {
+					const { wrapper, name } = mountSetup({
+						isEditMode: false,
+						showTitle: true,
+					});
+					const link = wrapper.find("a");
+
+					expect(link.exists()).toBeFalsy();
+					expect(wrapper.text()).toContain(name);
+				});
 			});
 		});
 

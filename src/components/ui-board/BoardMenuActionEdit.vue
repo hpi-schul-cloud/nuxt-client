@@ -1,11 +1,11 @@
 <template>
-	<BoardMenuAction :icon="mdiCogOutline" @click="onClick">
-		{{ $t("common.labels.settings") }}
+	<BoardMenuAction :icon="mdiPencilOutline" @click="onClick">
+		{{ $t("common.actions.edit") }}
 	</BoardMenuAction>
 </template>
 
 <script lang="ts">
-import { mdiCogOutline } from "@mdi/js";
+import { mdiPencilOutline } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 import { defineComponent } from "vue";
 
@@ -24,7 +24,7 @@ export default defineComponent({
 
 		return {
 			onClick,
-			mdiCogOutline,
+			mdiPencilOutline,
 		};
 	},
 });

@@ -100,7 +100,7 @@ describe("ElementTypeSelection Composable", () => {
 			env: Partial<Envs> = {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-				FEATURE_TLDRAW_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: false,
 			}
 		) => {
 			const addElementMock = jest.fn();
