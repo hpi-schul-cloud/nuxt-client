@@ -209,7 +209,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when v-card emits keydown.down event", () => {
-				it("should emit move-keyboard:edit event", async () => {
+				it("should not emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
@@ -229,7 +229,7 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when v-card emits keydown.up event", () => {
-				it("should emit move-keyboard:edit event", async () => {
+				it("should not emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
