@@ -11,13 +11,13 @@
 			@change="onTabsChange"
 			v-model="model"
 		>
-			<v-tab>
+			<v-tab data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
-			<v-tab>
+			<v-tab data-testid="admin-class-current-year-tab">
 				<span>{{ currentYear }}</span>
 			</v-tab>
-			<v-tab>
+			<v-tab data-testid="admin-class-previous-years-tab">
 				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
