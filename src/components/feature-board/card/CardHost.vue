@@ -1,65 +1,87 @@
 <template>
-	<CardHostInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-		@move:card-keyboard="onMoveCardKeyboard"
-	>
-		<VCard
-			ref="cardHost"
-			:height="isLoading ? height : 'auto'"
-			:class="{ 'drag-disabled': isEditMode }"
-			outlined
-			tabindex="0"
-			min-height="120px"
-			:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-			:id="cardId"
-			:ripple="false"
-			:hover="isHovered"
+	<div>
+		<CardHostInteractionHandler
+			:isEditMode="isEditMode"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
+			@move:card-keyboard="onMoveCardKeyboard"
 		>
-			<template v-if="isLoading">
-				<CardSkeleton :height="height" />
-			</template>
-			<template v-if="!isLoading && card">
-				<CardTitle
-					:isEditMode="isEditMode"
-					:value="card.title"
-					scope="card"
-					@update:value="onUpdateCardTitle"
-					:isFocused="isFocusedById"
-					@enter="addTextAfterTitle"
-				/>
+			<VCard
+				ref="cardHost"
+				:height="isLoading ? height : 'auto'"
+				:class="{ 'drag-disabled': isEditMode }"
+				outlined
+				tabindex="0"
+				min-height="120px"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:id="cardId"
+				:ripple="false"
+				:hover="isHovered"
+			>
+				<template v-if="isLoading">
+					<CardSkeleton :height="height" />
+				</template>
+				<template v-if="!isLoading && card">
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+						:isFocused="isFocusedById"
+						@enter="addTextAfterTitle"
+					/>
 
-				<div class="board-menu" :class="boardMenuClasses">
-					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-						<BoardMenuActionDelete
-							@click="onDeleteCard"
-							data-test-id="board-menu-action-delete"
-							:name="card.title"
-						/>
-						<BoardMenuAction @click="onOpenDetailView"
-							>Open Detail</BoardMenuAction
-						>
-					</BoardMenu>
-				</div>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu v-if="hasDeletePermission" scope="card">
+							<BoardMenuActionEdit
+								v-if="!isEditMode"
+								@click="onStartEditMode"
+							/>
+							<BoardMenuActionDelete
+								@click="onDeleteCard"
+								data-test-id="board-menu-action-delete"
+								:name="card.title"
+							/>
+							<BoardMenuAction
+								:icon="mdiArrowExpand"
+								@click="onOpenDetailView"
+								>{{
+									$t("components.board.action.detail-view")
+								}}</BoardMenuAction
+							>
+						</BoardMenu>
+					</div>
 
-				<ContentElementList
-					:elements="card.elements"
-					:isEditMode="isEditMode"
-					@delete:element="onDeleteElement"
-					@move-down:element="onMoveContentElementDown"
-					@move-up:element="onMoveContentElementUp"
-					@move-keyboard:element="onMoveContentElementKeyboard"
-				/>
-				<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
-			</template>
-		</VCard>
-	</CardHostInteractionHandler>
+					<ContentElementList
+						:elements="card.elements"
+						:isEditMode="isEditMode"
+						@delete:element="onDeleteElement"
+						@move-down:element="onMoveContentElementDown"
+						@move-up:element="onMoveContentElementUp"
+						@move-keyboard:element="onMoveContentElementKeyboard"
+					/>
+					<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+				</template>
+			</VCard>
+		</CardHostInteractionHandler>
+		<!-- Detail View -->
+		<CardHostDetailView
+			v-if="card && isDetailView"
+			:card="card"
+			@delete:element="onDeleteElement"
+			@move-down:element="onMoveContentElementDown"
+			@move-up:element="onMoveContentElementUp"
+			@move-keyboard:element="onMoveContentElementKeyboard"
+			@add:element="onAddElement"
+			@enter:title="addTextAfterTitle"
+			@update:title="onUpdateCardTitle"
+			@close:detail-view="onCloseDetailView"
+			@delete:card="onDeleteCard"
+		/>
+	</div>
 </template>
 
 <script lang="ts">
-import { useCardDetailView } from "../detail-view/CardDetailView.composable";
 import {
 	DragAndDropKey,
 	ElementMove,
@@ -90,6 +112,8 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import CardHostDetailView from "./CardHostDetailView.vue";
+import { mdiArrowExpand } from "@mdi/js";
 
 export default defineComponent({
 	name: "CardHost",
@@ -103,6 +127,7 @@ export default defineComponent({
 		CardHostInteractionHandler,
 		BoardMenuActionDelete,
 		BoardMenuAction,
+		CardHostDetailView,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -117,6 +142,7 @@ export default defineComponent({
 			cardHost
 		);
 		const isHovered = useElementHover(cardHost);
+		const isDetailView = ref(false);
 		const {
 			isLoading,
 			card,
@@ -128,8 +154,6 @@ export default defineComponent({
 			deleteElement,
 			addTextAfterTitle,
 		} = useCardState(cardId.value, emit);
-
-		const { open } = useCardDetailView();
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -154,7 +178,8 @@ export default defineComponent({
 
 		const onEndEditMode = () => stopEditMode();
 
-		const onOpenDetailView = () => open(card);
+		const onOpenDetailView = () => (isDetailView.value = true);
+		const onCloseDetailView = () => (isDetailView.value = false);
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
 			await moveElementDown(payload);
@@ -214,6 +239,9 @@ export default defineComponent({
 			isEditMode,
 			addTextAfterTitle,
 			onOpenDetailView,
+			onCloseDetailView,
+			isDetailView,
+			mdiArrowExpand,
 		};
 	},
 });

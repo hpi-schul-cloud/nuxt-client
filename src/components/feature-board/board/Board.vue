@@ -40,7 +40,6 @@
 					@create:column-with-card="onCreateColumnWithCard"
 				/>
 				<ConfirmationDialog />
-				<CardDetailView />
 				<AddElementDialog />
 				<LightBox />
 			</template>
@@ -76,7 +75,6 @@ import {
 	toRef,
 	watch,
 } from "vue";
-import CardDetailView from "../detail-view/CardDetailView.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -93,7 +91,6 @@ export default defineComponent({
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
-		CardDetailView,
 	},
 	props: {
 		boardId: { type: String, required: true },
