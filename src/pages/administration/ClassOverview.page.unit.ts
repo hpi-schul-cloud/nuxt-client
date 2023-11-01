@@ -15,8 +15,8 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ClassOverview from "./ClassOverview.page.vue";
-import SchoolsModule from "../../store/schools";
-import { School, Year } from "../../store/types/schools";
+import SchoolsModule from "@/store/schools";
+import { School, Year } from "@/store/types/schools";
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
