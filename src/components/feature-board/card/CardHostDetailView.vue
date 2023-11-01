@@ -2,8 +2,9 @@
 	<div>
 		<v-dialog
 			:value="isOpen"
-			fullscreen
-			hide-overlay
+			:fullscreen="isFullscreen"
+			:hide-overlay="isFullscreen"
+			:width="800"
 			transition="dialog-bottom-transition"
 			@keydown.escape="onDialogClose"
 		>
@@ -13,6 +14,9 @@
 						<v-icon>{{ mdiClose }}</v-icon>
 					</v-btn>
 					<v-spacer />
+					<v-btn class="mr-4" color="secondary" @click="onToggleFullscreen">
+						toggle fullscreen (debug)
+					</v-btn>
 					<v-btn class="mr-4" color="secondary" @click="onToggleEdit">
 						{{
 							isEditMode
@@ -89,12 +93,14 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const isEditMode = ref(false);
+		const isFullscreen = ref(true);
 		const isOpen = ref(true);
 
 		const { hasDeletePermission, hasEditPermission } = useBoardPermissions();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const onToggleEdit = () => (isEditMode.value = !isEditMode.value);
+		const onToggleFullscreen = () => (isFullscreen.value = !isFullscreen.value);
 		const onDialogClose = () => (isOpen.value = false);
 
 		const onUpdateCardTitle = (value: string) => emit("update:title", value);
@@ -152,6 +158,9 @@ export default defineComponent({
 			onMoveElementKeyboard,
 			onDialogClose,
 			onDeleteCard,
+			// wip
+			onToggleFullscreen,
+			isFullscreen,
 		};
 	},
 });
