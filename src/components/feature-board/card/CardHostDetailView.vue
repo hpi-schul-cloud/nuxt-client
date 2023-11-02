@@ -4,31 +4,36 @@
 			:value="isOpen"
 			:fullscreen="isFullscreen"
 			:hide-overlay="isFullscreen"
-			:width="800"
+			:width="700"
+			scrollable
 			transition="dialog-bottom-transition"
 			@keydown.escape="onDialogClose"
 		>
 			<v-card>
-				<v-toolbar color="white">
-					<v-btn icon @click="onDialogClose">
-						<v-icon>{{ mdiClose }}</v-icon>
-					</v-btn>
-					<v-spacer />
-					<v-btn class="mr-4" color="secondary" @click="onToggleFullscreen">
-						toggle fullscreen (debug)
-					</v-btn>
-					<v-btn class="mr-4" color="secondary" @click="onToggleEdit">
-						{{
-							isEditMode
-								? $t("common.actions.edit") + " " + $t("common.actions.finish")
-								: $t("common.actions.edit")
-						}}
-					</v-btn>
+				<div class="toolbar-fixed-offset">
+					<v-toolbar class="toolbar-position" color="white">
+						<v-btn icon @click="onDialogClose">
+							<v-icon>{{ mdiClose }}</v-icon>
+						</v-btn>
+						<v-spacer />
+						<v-btn class="mr-4" color="secondary" @click="onToggleFullscreen">
+							toggle fullscreen (debug)
+						</v-btn>
+						<v-btn class="mr-4" color="secondary" @click="onToggleEdit">
+							{{
+								isEditMode
+									? $t("common.actions.edit") +
+									  " " +
+									  $t("common.actions.finish")
+									: $t("common.actions.edit")
+							}}
+						</v-btn>
 
-					<v-btn color="primary" @click="onDeleteCard">
-						{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
-					</v-btn>
-				</v-toolbar>
+						<v-btn color="primary" @click="onDeleteCard">
+							{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
+						</v-btn>
+					</v-toolbar>
+				</div>
 				<v-card-text>
 					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
 						<CardTitle
@@ -62,7 +67,7 @@ import { ElementMove } from "@/types/board/DragAndDrop";
 import { useBoardPermissions } from "@data-board";
 import { mdiClose } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { defineComponent, PropType, ref, watch } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
@@ -77,6 +82,10 @@ export default defineComponent({
 	props: {
 		card: {
 			type: Object as PropType<BoardCard>,
+			required: true,
+		},
+		isOpen: {
+			type: Boolean,
 			required: true,
 		},
 	},
@@ -94,14 +103,13 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const isEditMode = ref(false);
 		const isFullscreen = ref(true);
-		const isOpen = ref(true);
 
 		const { hasDeletePermission, hasEditPermission } = useBoardPermissions();
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 		const onToggleEdit = () => (isEditMode.value = !isEditMode.value);
 		const onToggleFullscreen = () => (isFullscreen.value = !isFullscreen.value);
-		const onDialogClose = () => (isOpen.value = false);
+		const onDialogClose = () => emit("close:detail-view");
 
 		const onUpdateCardTitle = (value: string) => emit("update:title", value);
 		const onEnterTitle = () => emit("enter:title");
@@ -137,15 +145,9 @@ export default defineComponent({
 			emit("move-keyboard:element", elementMove, keyCode);
 		};
 
-		watch(isOpen, (newVal) => {
-			if (newVal === true) return;
-			emit("close:detail-view");
-		});
-
 		return {
 			mdiClose,
 			isEditMode,
-			isOpen,
 			hasEditPermission,
 			hasDeletePermission,
 			onToggleEdit,
@@ -158,7 +160,7 @@ export default defineComponent({
 			onMoveElementKeyboard,
 			onDialogClose,
 			onDeleteCard,
-			// wip
+			// WIP
 			onToggleFullscreen,
 			isFullscreen,
 		};
@@ -168,7 +170,17 @@ export default defineComponent({
 
 <style scoped>
 .detail-view-size {
-	max-width: 40vw;
+	max-width: 30vw;
 	min-width: 400px;
+}
+
+.toolbar-position {
+	position: absolute;
+	width: 100%;
+	z-index: 1000;
+}
+
+.toolbar-fixed-offset {
+	margin-bottom: 64px;
 }
 </style>

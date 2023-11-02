@@ -33,6 +33,9 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasDeletePermission" scope="card">
+							<BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
+								{{ $t("components.board.action.detail-view") }}
+							</BoardMenuAction>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
@@ -42,13 +45,6 @@
 								data-test-id="board-menu-action-delete"
 								:name="card.title"
 							/>
-							<BoardMenuAction
-								:icon="mdiArrowExpand"
-								@click="onOpenDetailView"
-								>{{
-									$t("components.board.action.detail-view")
-								}}</BoardMenuAction
-							>
 						</BoardMenu>
 					</div>
 
@@ -66,8 +62,9 @@
 		</CardHostInteractionHandler>
 		<!-- Detail View -->
 		<CardHostDetailView
-			v-if="card && isDetailView"
+			v-if="card"
 			:card="card"
+			:isOpen="isDetailView"
 			@delete:element="onDeleteElement"
 			@move-down:element="onMoveContentElementDown"
 			@move-up:element="onMoveContentElementUp"
@@ -163,9 +160,9 @@ export default defineComponent({
 
 		const { askType } = useAddElementDialog(addElement);
 
-		const onMoveCardKeyboard = (event: KeyboardEvent) => {
+		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
-		};
+
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
 		const onDeleteCard = () => emit("delete:card", card.value?.id);
