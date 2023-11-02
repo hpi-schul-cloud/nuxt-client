@@ -25,6 +25,8 @@ export type FederalState = {
 export type School = {
 	id: string;
 	name: string;
+	logo_name?: string;
+	logo_dataUrl?: string;
 	fileStorageType: string;
 	federalState: FederalState;
 	county: County;
@@ -37,8 +39,10 @@ export type School = {
 	features: {
 		rocketChat: boolean;
 		videoconference: boolean;
+		nextcloud: boolean;
 		studentVisibility: boolean;
 		ldapUniventionMigrationSchool: boolean;
+		oauthProvisioningEnabled: boolean;
 		showOutdatedUsers: boolean;
 		enableLdapSyncDuringMigration: boolean;
 		isTeamCreationByStudentsEnabled: boolean;

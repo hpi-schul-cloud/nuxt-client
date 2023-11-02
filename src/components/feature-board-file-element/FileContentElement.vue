@@ -13,26 +13,36 @@
 		<FileContent
 			v-if="fileProperties"
 			:file-properties="fileProperties"
-			@fetch:file="onFetchFile"
+			:alerts="alerts"
 			:is-edit-mode="isEditMode"
-		/>
+			@fetch:file="onFetchFile"
+			@update:alternativeText="onUpdateAlternativeText"
+			@update:caption="onUpdateCaption"
+			@add:alert="onAddAlert"
+		>
+			<BoardMenu scope="element" v-if="isEditMode">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+			</BoardMenu>
+		</FileContent>
 		<FileUpload
-			v-else-if="isEditMode"
+			v-else
 			:elementId="element.id"
+			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
-		/>
-		<ContentElementMenu
-			v-if="isEditMode"
-			v-bind="elementPositionProps"
-			@move-down:element="onMoveElementDown"
-			@move-up:element="onMoveElementUp"
-			@delete:element="onDeleteElement"
-		/>
+		>
+			<BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
+		</FileUpload>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -40,7 +50,12 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import {
 	computed,
 	defineComponent,
@@ -49,9 +64,10 @@ import {
 	ref,
 	toRef,
 } from "vue";
+import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import ContentElementMenu from "./menu/ContentElementMenu.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
@@ -59,14 +75,14 @@ export default defineComponent({
 	components: {
 		FileUpload,
 		FileContent,
-		ContentElementMenu,
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
-		isFirstElement: { type: Boolean, required: true },
-		isLastElement: { type: Boolean, required: true },
-		hasMultipleElements: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
@@ -85,7 +101,8 @@ export default defineComponent({
 			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -93,7 +110,7 @@ export default defineComponent({
 			}
 
 			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
-				? convertDownloadToPreviewUrl(fileRecord.value.url)
+				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
 			return {
@@ -105,6 +122,8 @@ export default defineComponent({
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
+				mimeType: fileRecord.value.mimeType,
+				element: props.element,
 			};
 		});
 
@@ -114,14 +133,6 @@ export default defineComponent({
 
 		const isOutlined = computed(() => {
 			return fileRecord.value !== undefined || props.isEditMode === true;
-		});
-
-		const elementPositionProps = computed(() => {
-			return {
-				isFirstElement: props.isFirstElement,
-				isLastElement: props.isLastElement,
-				hasMultipleElements: props.hasMultipleElements,
-			};
 		});
 
 		onMounted(() => {
@@ -138,32 +149,6 @@ export default defineComponent({
 			}
 		};
 
-		const onMoveElementDown = () => {
-			emit("move-down:edit");
-		};
-
-		const onMoveElementUp = () => {
-			emit("move-up:edit");
-		};
-
-		const onDeleteElement = async (
-			deleteDirectly: true | undefined
-		): Promise<void> => {
-			if (deleteDirectly === true) {
-				emit("delete:element", element.value.id);
-				return;
-			}
-
-			const shouldDelete = await askDeleteConfirmation(
-				fileRecord.value?.name,
-				"boardElement"
-			);
-
-			if (shouldDelete) {
-				emit("delete:element", element.value.id);
-			}
-		};
-
 		const onUploadFile = async (file: File): Promise<void> => {
 			try {
 				await upload(file);
@@ -176,6 +161,21 @@ export default defineComponent({
 			await fetchFile();
 		};
 
+		const onUpdateAlternativeText = (value: string) => {
+			modelValue.value.alternativeText = value;
+		};
+
+		const onUpdateCaption = (value: string) => {
+			modelValue.value.caption = value;
+		};
+
+		const onAddAlert = (alert: FileAlert) => {
+			addAlert(alert);
+		};
+		const onDelete = () => emit("delete:element", element.value.id);
+		const onMoveUp = () => emit("move-up:edit");
+		const onMoveDown = () => emit("move-down:edit");
+
 		return {
 			fileContentElement,
 			fileProperties,
@@ -183,13 +183,16 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
-			onDeleteElement,
-			onMoveElementDown,
-			onMoveElementUp,
+			alerts,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
-			elementPositionProps,
+			onUpdateAlternativeText,
+			onUpdateCaption,
+			onAddAlert,
+			onDelete,
+			onMoveUp,
+			onMoveDown,
 		};
 	},
 });

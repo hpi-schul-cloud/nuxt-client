@@ -1,4 +1,7 @@
-import { ContentElementType } from "@/serverApi/v3";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+} from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { CardResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
@@ -70,15 +73,15 @@ describe("BoardApi.composable", () => {
 	describe("updateCardHeight", () => {
 		it("should call cardControllerUpdateCardHeight api", async () => {
 			const { updateCardHeightCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "update-card-id",
 				height: 200,
 			};
 
-			await updateCardHeightCall(PAYLOAD.id, PAYLOAD.height);
+			await updateCardHeightCall(payload.id, payload.height);
 			expect(cardApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(
-				PAYLOAD.id,
-				{ height: PAYLOAD.height }
+				payload.id,
+				{ height: payload.height }
 			);
 		});
 	});
@@ -86,15 +89,15 @@ describe("BoardApi.composable", () => {
 	describe("updateCardTitle", () => {
 		it("should call cardControllerUpdateCardTitle api", async () => {
 			const { updateCardTitle } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "update-card-id",
 				title: "update-title",
 			};
 
-			await updateCardTitle(PAYLOAD.id, PAYLOAD.title);
+			await updateCardTitle(payload.id, payload.title);
 			expect(cardApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(
-				PAYLOAD.id,
-				{ title: PAYLOAD.title }
+				payload.id,
+				{ title: payload.title }
 			);
 		});
 	});
@@ -102,15 +105,15 @@ describe("BoardApi.composable", () => {
 	describe("updateColumnTitleCall", () => {
 		it("should call columnControllerUpdateColumnTitle api", async () => {
 			const { updateColumnTitleCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "update-column-id",
 				title: "update-title",
 			};
 
-			await updateColumnTitleCall(PAYLOAD.id, PAYLOAD.title);
+			await updateColumnTitleCall(payload.id, payload.title);
 			expect(columnApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(
-				PAYLOAD.id,
-				{ title: PAYLOAD.title }
+				payload.id,
+				{ title: payload.title }
 			);
 		});
 	});
@@ -118,7 +121,7 @@ describe("BoardApi.composable", () => {
 	describe("updateElementTitleCall", () => {
 		it("should call elementControllerUpdateElement api with RichtTextElement", async () => {
 			const { updateElementCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "richt-text-element-id",
 				type: ContentElementType.RichText,
 				content: {
@@ -129,42 +132,43 @@ describe("BoardApi.composable", () => {
 				timestamps: timestampsResponseFactory.build(),
 			};
 			const data = {
-				content: PAYLOAD.content,
+				content: payload.content,
 				type: ContentElementType.RichText,
 			};
 
-			await updateElementCall(PAYLOAD);
+			await updateElementCall(payload);
 			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				PAYLOAD.id,
+				payload.id,
 				{ data }
 			);
 		});
 
 		it("should call elementControllerUpdateElement api with FileElement", async () => {
 			const { updateElementCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "file-element-id",
 				type: ContentElementType.File,
 				content: {
 					caption: "caption",
+					alternativeText: "alternative text",
 				},
 				timestamps: timestampsResponseFactory.build(),
 			};
 			const data = {
-				content: PAYLOAD.content,
+				content: payload.content,
 				type: ContentElementType.File,
 			};
 
-			await updateElementCall(PAYLOAD);
+			await updateElementCall(payload);
 			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				PAYLOAD.id,
+				payload.id,
 				{ data }
 			);
 		});
 
 		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
 			const { updateElementCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				id: "file-element-id",
 				type: ContentElementType.SubmissionContainer,
 				content: {
@@ -173,24 +177,47 @@ describe("BoardApi.composable", () => {
 				timestamps: timestampsResponseFactory.build(),
 			};
 			const data = {
-				content: PAYLOAD.content,
+				content: payload.content,
 				type: ContentElementType.SubmissionContainer,
 			};
 
-			await updateElementCall(PAYLOAD);
+			await updateElementCall(payload);
 			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				PAYLOAD.id,
+				payload.id,
+				{ data }
+			);
+		});
+
+		it("should call elementControllerUpdateElement api with ExternalToolElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload: ExternalToolElementResponse = {
+				id: "external-tool-element-id",
+				type: ContentElementType.ExternalTool,
+				content: {
+					contextExternalToolId: "context-external-tool-id",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.ExternalTool,
+			};
+
+			await updateElementCall(payload);
+
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
 				{ data }
 			);
 		});
 
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				type: "unkown" as ContentElementType,
 			} as AnyContentElement;
 
-			await expect(updateElementCall(PAYLOAD)).rejects.toThrow(
+			await expect(updateElementCall(payload)).rejects.toThrow(
 				new Error("element.type mapping is undefined for updateElementCall")
 			);
 		});
@@ -199,13 +226,13 @@ describe("BoardApi.composable", () => {
 	describe("createElementCall", () => {
 		it("should call cardControllerCreateElement api", async () => {
 			const { createElementCall } = useBoardApi();
-			const PAYLOAD = "card-id";
+			const payload = "card-id";
 
-			await createElementCall(PAYLOAD, {
+			await createElementCall(payload, {
 				type: ContentElementType.RichText,
 			});
 			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(
-				PAYLOAD,
+				payload,
 				{ type: ContentElementType.RichText }
 			);
 		});
@@ -214,21 +241,21 @@ describe("BoardApi.composable", () => {
 	describe("deleteCardCall", () => {
 		it("should call cardControllerDeleteCard api", async () => {
 			const { deleteCardCall } = useBoardApi();
-			const PAYLOAD = "card-id";
+			const payload = "card-id";
 
-			await deleteCardCall(PAYLOAD);
-			expect(cardApi.cardControllerDeleteCard).toHaveBeenCalledWith(PAYLOAD);
+			await deleteCardCall(payload);
+			expect(cardApi.cardControllerDeleteCard).toHaveBeenCalledWith(payload);
 		});
 	});
 
 	describe("deleteColumnCall", () => {
 		it("should call columnControllerDeleteColumn api", async () => {
 			const { deleteColumnCall } = useBoardApi();
-			const PAYLOAD = "column-id";
+			const payload = "column-id";
 
-			await deleteColumnCall(PAYLOAD);
+			await deleteColumnCall(payload);
 			expect(columnApi.columnControllerDeleteColumn).toHaveBeenCalledWith(
-				PAYLOAD
+				payload
 			);
 		});
 	});
@@ -236,11 +263,11 @@ describe("BoardApi.composable", () => {
 	describe("deleteElementCall", () => {
 		it("should call elementControllerDeleteElement api", async () => {
 			const { deleteElementCall } = useBoardApi();
-			const PAYLOAD = "element-id";
+			const payload = "element-id";
 
-			await deleteElementCall(PAYLOAD);
+			await deleteElementCall(payload);
 			expect(elementApi.elementControllerDeleteElement).toHaveBeenCalledWith(
-				PAYLOAD
+				payload
 			);
 		});
 	});
@@ -260,17 +287,17 @@ describe("BoardApi.composable", () => {
 				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
 			);
 
-			const PAYLOAD = "column-id";
+			const payload = "column-id";
 			const INITIAL_ELEMENTS = {
 				requiredEmptyElements: [
 					serverApi.CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
 				],
 			};
 
-			const result = await createCardCall(PAYLOAD);
+			const result = await createCardCall(payload);
 
 			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(
-				PAYLOAD,
+				payload,
 				INITIAL_ELEMENTS
 			);
 
@@ -281,7 +308,7 @@ describe("BoardApi.composable", () => {
 	describe("moveCardCall", () => {
 		it("should call cardControllerMoveCard api", async () => {
 			const { moveCardCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				cardId: "card-id",
 				position: {
 					toColumnId: "col-id",
@@ -290,14 +317,14 @@ describe("BoardApi.composable", () => {
 			};
 
 			await moveCardCall(
-				PAYLOAD.cardId,
-				PAYLOAD.position.toColumnId,
-				PAYLOAD.position.toPosition
+				payload.cardId,
+				payload.position.toColumnId,
+				payload.position.toPosition
 			);
 			expect(cardApi.cardControllerMoveCard).toHaveBeenCalledWith(
-				PAYLOAD.cardId,
+				payload.cardId,
 				{
-					...PAYLOAD.position,
+					...payload.position,
 				}
 			);
 		});
@@ -306,7 +333,7 @@ describe("BoardApi.composable", () => {
 	describe("moveColumnCall", () => {
 		it("should call columnControllerMoveColumn api", async () => {
 			const { moveColumnCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				columnId: "column-id",
 				position: {
 					toBoardId: "board-id",
@@ -315,14 +342,14 @@ describe("BoardApi.composable", () => {
 			};
 
 			await moveColumnCall(
-				PAYLOAD.columnId,
-				PAYLOAD.position.toBoardId,
-				PAYLOAD.position.toPosition
+				payload.columnId,
+				payload.position.toBoardId,
+				payload.position.toPosition
 			);
 			expect(columnApi.columnControllerMoveColumn).toHaveBeenCalledWith(
-				PAYLOAD.columnId,
+				payload.columnId,
 				{
-					...PAYLOAD.position,
+					...payload.position,
 				}
 			);
 		});
@@ -331,7 +358,7 @@ describe("BoardApi.composable", () => {
 	describe("moveElementCall", () => {
 		it("should call elementControllerMoveElement api", async () => {
 			const { moveElementCall } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				elementId: "element-id",
 				position: {
 					toCardId: "card-id",
@@ -340,14 +367,14 @@ describe("BoardApi.composable", () => {
 			};
 
 			await moveElementCall(
-				PAYLOAD.elementId,
-				PAYLOAD.position.toCardId,
-				PAYLOAD.position.toPosition
+				payload.elementId,
+				payload.position.toCardId,
+				payload.position.toPosition
 			);
 			expect(elementApi.elementControllerMoveElement).toHaveBeenCalledWith(
-				PAYLOAD.elementId,
+				payload.elementId,
 				{
-					...PAYLOAD.position,
+					...payload.position,
 				}
 			);
 		});
@@ -356,14 +383,14 @@ describe("BoardApi.composable", () => {
 	describe("getContextInfo", () => {
 		it("should call boardControllerGetBoardContext api", async () => {
 			const { getContextInfo } = useBoardApi();
-			const PAYLOAD = {
+			const payload = {
 				boardId: "myid123",
 			};
 
-			await getContextInfo(PAYLOAD.boardId);
+			await getContextInfo(payload.boardId);
 
 			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
-				PAYLOAD.boardId
+				payload.boardId
 			);
 		});
 

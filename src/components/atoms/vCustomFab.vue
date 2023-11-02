@@ -55,12 +55,7 @@
 				</v-btn>
 			</div>
 		</template>
-		<v-overlay
-			:value="showOverlay"
-			color="#fff"
-			z-index="-1"
-			opacity="0.9"
-		></v-overlay>
+		<v-overlay :value="showOverlay" color="#fff" z-index="-1" opacity="0.9" />
 	</v-speed-dial>
 	<v-btn
 		v-else
@@ -169,7 +164,7 @@ export default {
 		detectScrollingDirection() {
 			if (this.title === "" || typeof window === "undefined") return;
 
-			const top = window.pageYOffset || 0;
+			const top = window.scrollY || 0;
 
 			if (top >= this.pageOffset) {
 				this.extended = false;
@@ -199,7 +194,9 @@ export default {
 
 <style lang="scss" scoped>
 .transition {
-	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+	transition:
+		width 0.2s ease-in-out,
+		height 0.2s ease-in-out;
 }
 
 ::v-deep .v-speed-dial__list {
@@ -213,7 +210,9 @@ export default {
 .extended-fab {
 	width: 120px !important;
 	padding: 0 12px 0 8px; // stylelint-disable sh-waqar/declaration-use-variable
-	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+	transition:
+		width 0.2s ease-in-out,
+		height 0.2s ease-in-out;
 }
 
 // ::v-deep .v-btn--has-bg {

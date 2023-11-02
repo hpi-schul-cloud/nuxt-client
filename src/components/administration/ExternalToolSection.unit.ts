@@ -51,6 +51,9 @@ describe("ExternalToolSection", () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
+			stubs: {
+				VIcon: true,
+			},
 		});
 
 		return {
@@ -75,26 +78,6 @@ describe("ExternalToolSection", () => {
 				expect(
 					schoolExternalToolsModule.loadSchoolExternalTools
 				).toHaveBeenCalledWith("schoolId");
-			});
-		});
-	});
-
-	describe("headers is called", () => {
-		describe("when table is rendered", () => {
-			it("should display dataTableHeaders in v-data-table", () => {
-				const { wrapper } = setup();
-
-				const vueWrapperArray = wrapper
-					.find(".v-data-table-header")
-					.findAll("th");
-
-				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
-					"common.labels.name"
-				);
-				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status"
-				);
-				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
 			});
 		});
 	});
@@ -133,6 +116,24 @@ describe("ExternalToolSection", () => {
 			};
 		};
 
+		describe("when table is rendered", () => {
+			it("should display dataTableHeaders in v-data-table", () => {
+				const { wrapper } = setupItems();
+
+				const vueWrapperArray = wrapper
+					.find(".v-data-table-header")
+					.findAll("th");
+
+				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
+					"common.labels.name"
+				);
+				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
+					"components.administration.externalToolsSection.table.header.status"
+				);
+				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
+			});
+		});
+
 		describe("when external tools were loaded", () => {
 			it("names should be rendered in the datatable", () => {
 				const { wrapper, firstToolName, secondToolName } = setupItems();
@@ -152,25 +153,17 @@ describe("ExternalToolSection", () => {
 				const firstRow = tableRows.at(0).findAll("td");
 				const secondRow = tableRows.at(1).findAll("td");
 
-				expect(firstRow.at(1).text()).toEqual(
+				expect(firstRow.at(1).find("span").text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(
-					firstRow
-						.at(1)
-						.findComponent({ name: "v-icon" })
-						.find("path")
-						.attributes("d")
-				).toEqual(mdiCheckCircle);
-				expect(secondRow.at(1).text()).toEqual(
+				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
+					mdiCheckCircle
+				);
+				expect(secondRow.at(1).find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
 				expect(
-					secondRow
-						.at(1)
-						.findComponent({ name: "v-icon" })
-						.find("path")
-						.attributes("d")
+					secondRow.at(1).findComponent({ name: "v-icon" }).text()
 				).toEqual(mdiRefreshCircle);
 			});
 
@@ -214,7 +207,7 @@ describe("ExternalToolSection", () => {
 
 						await deleteButton.trigger("click");
 
-						expect(wrapper.find("p").text()).toContain(firstToolName);
+						expect(wrapper.findAll("p").at(1).text()).toContain(firstToolName);
 					});
 				});
 

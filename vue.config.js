@@ -21,6 +21,9 @@ module.exports = defineConfig({
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
+				"@data-external-tool": getDir("src/components/data-external-tool"),
+				"@data-group": getDir("src/components/data-group"),
+				"@data-system": getDir("src/components/data-system"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -30,18 +33,29 @@ module.exports = defineConfig({
 				"@feature-board-text-element": getDir(
 					"src/components/feature-board-text-element"
 				),
+				"@feature-board-link-element": getDir(
+					"src/components/feature-board-link-element"
+				),
+				"@feature-board-external-tool-element": getDir(
+					"src/components/feature-board-external-tool-element"
+				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-date-time-picker": getDir(
 					"src/components/feature-date-time-picker"
 				),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
+				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
+				"@util-validators": getDir("src/components/util-validators"),
 				"@page-board": getDir("src/components/page-board"),
+				"@page-class-members": getDir("src/components/page-class-members"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
@@ -59,6 +73,14 @@ module.exports = defineConfig({
 				options: {
 					configFile: TSCONFIG_PATH,
 				},
+			});
+		// avoid auto format on vue-loader to fix prettier errors
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				options.prettify = false;
+				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {
 			args[0].typescript.configFile = TSCONFIG_PATH;

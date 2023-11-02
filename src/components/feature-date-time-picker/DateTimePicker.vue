@@ -1,30 +1,22 @@
 <template>
 	<div class="d-flex flex-row">
-		<v-icon :color="iconColor" class="icon mr-2">
-			{{ mdiCalendarClock }}
-		</v-icon>
 		<date-picker
 			class="mr-2 picker-width"
-			:required="required"
+			:required="dateRequired"
 			:date="date"
 			:label="dateInputLabel"
 			:aria-label="dateInputAriaLabel"
 			:minDate="minDate"
 			:maxDate="maxDate"
-			@input="handleDateInput"
-			@error="handleDateError"
-			@valid="handleDateValid"
+			:date-time-in-past="dateTimeInPast"
+			@update:date="onDateUpdate"
 		/>
 		<time-picker
 			class="picker-width"
-			:required="required"
 			:time="time"
 			:label="timeInputLabel"
 			:aria-label="timeInputAriaLabel"
-			:allow-past="allowPast || !dateIsToday"
-			@input="handleTimeInput"
-			@error="handleTimeError"
-			@valid="handleTimeValid"
+			@update:time="onTimeUpdate"
 		/>
 	</div>
 </template>
@@ -33,10 +25,9 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
-import { isToday } from "@/plugins/datetime";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiCalendarClock } from "@mdi/js";
 import { computed, defineComponent, ref } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
+import dayjs from "dayjs";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -51,20 +42,16 @@ export default defineComponent({
 		},
 		dateInputLabel: { type: String, default: "" },
 		dateInputAriaLabel: { type: String, default: "" },
-		minDate: { type: String },
-		maxDate: { type: String },
 		timeInputLabel: { type: String, default: "" },
 		timeInputAriaLabel: { type: String, default: "" },
-		required: {
-			type: Boolean,
-		},
-		allowPast: { type: Boolean, default: false },
+		minDate: { type: String },
+		maxDate: { type: String },
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { locale } = useI18n();
 
-		const locale = i18n.locale;
+		const dateTimeInPast = ref(false);
 
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {
@@ -76,83 +63,56 @@ export default defineComponent({
 			});
 		};
 
-		const date = useVModel(props, "dateTime");
-		const time = ref(getTime(date.value));
-		const dateError = ref(false);
-		const timeError = ref(false);
-		const dateIsToday = ref(isToday(date.value));
+		const dateTime = useVModel(props, "dateTime");
+		const date = ref(
+			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
+		);
+		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
+		const dateRequired = computed(() => time.value !== "");
 
 		const emitDateTime = () => {
-			if (date.value !== "" && time.value !== "") {
-				const dateTime = new Date(date.value);
-				const hoursAndMinutes = time.value.split(":");
-				dateTime.setHours(
-					parseInt(hoursAndMinutes[0]),
-					parseInt(hoursAndMinutes[1])
-				);
-				emit("input", dateTime.toISOString());
+			if (date.value === "") {
+				return;
 			}
+
+			let timeValue = time.value;
+			if (timeValue === "") {
+				timeValue = "23:59";
+			}
+
+			const dateTime = new Date(date.value);
+			const hoursAndMinutes = timeValue.split(":");
+			dateTime.setHours(
+				parseInt(hoursAndMinutes[0]),
+				parseInt(hoursAndMinutes[1])
+			);
+			dateTimeInPast.value = dateTime < new Date();
+			emit("input", dateTime.toISOString());
 		};
 
-		const handleDateInput = (newDate: string) => {
+		const onDateUpdate = (newDate: string) => {
 			date.value = newDate;
-			dateIsToday.value = isToday(date.value);
-			if (valid.value) {
-				emitDateTime();
-			}
+			emitDateTime();
 		};
 
-		const handleDateError = () => {
-			dateError.value = true;
-		};
-
-		const handleDateValid = () => {
-			dateError.value = false;
-		};
-
-		const handleTimeInput = (newTime: string) => {
+		const onTimeUpdate = (newTime: string) => {
 			time.value = newTime;
-			if (valid.value) {
-				emitDateTime();
-			}
+			emitDateTime();
 		};
-
-		const handleTimeError = () => {
-			timeError.value = true;
-		};
-
-		const handleTimeValid = () => {
-			timeError.value = false;
-		};
-
-		const valid = computed(() => !dateError.value && !timeError.value);
-
-		const iconColor = computed(() => {
-			return valid.value ? "" : "error";
-		});
 
 		return {
 			date,
 			time,
-			dateIsToday,
-			handleDateInput,
-			handleDateError,
-			handleDateValid,
-			handleTimeInput,
-			handleTimeError,
-			handleTimeValid,
-			iconColor,
-			mdiCalendarClock,
+			onDateUpdate,
+			onTimeUpdate,
+			dateRequired,
+			dateTimeInPast,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-.icon {
-	top: 18px;
-}
-
 .picker-width {
 	width: 225px;
 }

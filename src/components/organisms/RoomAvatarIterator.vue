@@ -22,7 +22,7 @@
 							:show-badge="true"
 							:condense-layout="condenseLayout"
 							@startDrag="$emit('startDrag', $event)"
-						></vRoomAvatar>
+						/>
 					</v-col>
 				</v-row>
 			</v-container>

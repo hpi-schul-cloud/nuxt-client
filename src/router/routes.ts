@@ -1,7 +1,7 @@
-import { Route, RouteConfig } from "vue-router";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
 	isMongoId,
@@ -11,7 +11,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { Route, RouteConfig } from "vue-router";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -94,6 +94,22 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+	},
+	{
+		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		name: "administration-groups-classes-members",
+		component: async () =>
+			(await import("@page-class-members")).ClassMembersPage,
+		beforeEnter: createPermissionGuard(["group_view"]),
+		props: (route: Route) => ({
+			groupId: route.params.groupId,
+		}),
 	},
 	{
 		path: "/cfiles",
@@ -219,6 +235,9 @@ export const routes: Array<RouteConfig> = [
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
+		props: (route: Route) => ({
+			boardId: route.params.id,
+		}),
 	},
 	{
 		path: "/rooms-list",

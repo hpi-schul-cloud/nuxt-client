@@ -1,9 +1,11 @@
 <template>
 	<div>
-		<v-select
+		<v-autocomplete
 			:label="t('pages.tool.select.label')"
-			item-title="name"
+			item-text="name"
 			item-value="id"
+			hide-selected
+			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
 			:no-data-text="t('common.nodata')"
@@ -24,9 +26,10 @@
 			<template #item="{ item }">
 				<external-tool-selection-row :item="item" />
 			</template>
-		</v-select>
+		</v-autocomplete>
 		<h2
 			v-if="
+				displaySettingsTitle &&
 				selectedTemplate &&
 				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
 			"
@@ -34,13 +37,13 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot name="aboveParameters" :selectedTemplate="selectedTemplate"></slot>
+		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
 		<external-tool-config-settings
 			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
 			:template="selectedTemplate"
 			v-model="parameterConfiguration"
 		/>
-		<v-spacer class="mt-10"></v-spacer>
+		<v-spacer class="mt-10" />
 		<v-alert v-if="error && error.message" light prominent text type="error">
 			{{ t(getBusinessErrorTranslationKey(error)) }}
 		</v-alert>
@@ -73,10 +76,12 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { useI18n } from "@/composables/i18n.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
 } from "@/store/external-tool";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import {
 	computed,
@@ -89,9 +94,7 @@ import {
 	useSlots,
 	watch,
 } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
@@ -114,6 +117,10 @@ export default defineComponent({
 		},
 		loading: {
 			type: Boolean,
+		},
+		displaySettingsTitle: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	setup(props, { emit }) {

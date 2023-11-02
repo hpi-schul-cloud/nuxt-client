@@ -54,6 +54,7 @@ export const mockUser: User = {
 export const mockSchool: School = {
 	id: "mockSchoolId",
 	name: "",
+	logo_name: "",
 	fileStorageType: "",
 	federalState: {
 		id: "",
@@ -89,6 +90,8 @@ export const mockSchool: School = {
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
 		isTeamCreationByStudentsEnabled: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
 	permissions: {},
 	inMaintenance: false,

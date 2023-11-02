@@ -1,18 +1,18 @@
-import SchoolsModule from "./schools";
-import { initializeAxios } from "@/utils/api";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
-import { authModule } from "@/store";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	MigrationBody,
 	MigrationResponse,
 	SchoolApiInterface,
 } from "@/serverApi/v3/api";
+import { authModule } from "@/store";
+import { initializeAxios } from "@/utils/api";
+import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
 import AuthModule from "./auth";
-import { OauthMigration } from "./types/schools";
+import SchoolsModule from "./schools";
 import { ApplicationError } from "./types/application-error";
+import { OauthMigration } from "./types/schools";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -107,6 +107,8 @@ describe("schools module", () => {
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
 						isTeamCreationByStudentsEnabled: false,
+						nextcloud: false,
+						oauthProvisioningEnabled: false,
 					},
 				});
 			});
@@ -303,6 +305,8 @@ describe("schools module", () => {
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
 						isTeamCreationByStudentsEnabled: false,
+						nextcloud: false,
+						oauthProvisioningEnabled: false,
 					},
 				};
 				initializeAxios({
@@ -363,6 +367,8 @@ describe("schools module", () => {
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
 						isTeamCreationByStudentsEnabled: false,
+						nextcloud: false,
+						oauthProvisioningEnabled: false,
 					},
 				};
 				const schoolsModule = new SchoolsModule({});

@@ -65,8 +65,8 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent></template>
-				<template #columnlabel-consent></template>
+				<template #headcolumn-consent />
+				<template #columnlabel-consent />
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
@@ -731,7 +731,9 @@ a.action-button {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
+	box-shadow:
+		0 0 0 0 var(--v-white-base),
+		0 0 0 3px var(--button-background);
 }
 
 .search-section {

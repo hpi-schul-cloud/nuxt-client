@@ -1,31 +1,89 @@
 <template>
-	<div>
+	<ColorOverlay
+		:isOverlayDisabled="isEditMode"
+		@on:action="openLightBox"
+		color="var(--v-black-base)"
+	>
 		<img
-			class="rounded-t-sm image"
+			class="image-display-image rounded-t-sm"
 			loading="lazy"
-			:src="previewUrl"
-			:alt="name"
+			:src="previewSrc"
+			:alt="alternativeText"
 		/>
-	</div>
+
+		<ContentElementBar class="menu">
+			<template #menu><slot /></template>
+		</ContentElementBar>
+	</ColorOverlay>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { FileElementResponse } from "@/serverApi/v3";
+import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
+import { PropType, computed, defineComponent } from "vue";
+import { ContentElementBar } from "@ui-board";
+import { ColorOverlay } from "@ui-color-overlay";
 
 export default defineComponent({
 	name: "ImageDisplay",
 	props: {
-		previewUrl: { type: String, required: true },
+		src: { type: String, required: true },
+		previewSrc: { type: String, required: true },
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
+		element: { type: Object as PropType<FileElementResponse>, required: true },
+	},
+	components: { ContentElementBar, ColorOverlay },
+	setup(props) {
+		const i18n = injectStrict(I18N_KEY);
+
+		const alternativeText = computed(() => {
+			const altTranslation = i18n.t(
+				"components.cardElement.fileElement.emptyAlt"
+			);
+			const altText = props.element.content.alternativeText
+				? props.element.content.alternativeText
+				: `${altTranslation} ${props.name}`;
+
+			return altText;
+		});
+
+		const openLightBox = () => {
+			const previewUrl = convertDownloadToPreviewUrl(props.src);
+
+			const options: LightBoxOptions = {
+				downloadUrl: props.src,
+				previewUrl: previewUrl,
+				alt: alternativeText.value,
+				name: props.name,
+			};
+
+			const { open } = useLightBox();
+
+			open(options);
+		};
+
+		return {
+			alternativeText,
+			openLightBox,
+		};
 	},
 });
 </script>
 
 <style scoped>
-.image {
+.image-display-image {
+	pointer-events: none;
 	display: block;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+.menu {
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 </style>

@@ -54,11 +54,12 @@ export function getFileExtension(fileName: string): string {
 
 export function convertDownloadToPreviewUrl(
 	downloadUrl: string,
-	width: PreviewWidth = PreviewWidth._500
+	width?: PreviewWidth
 ): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
-		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}&width=${width}`;
+		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}` +
+		(width ? `&width=${width}` : "");
 
 	return previewUrl;
 }
@@ -69,4 +70,21 @@ export function isDownloadAllowed(scanStatus: FileRecordScanStatus): boolean {
 
 export function isPreviewPossible(previewStatus: PreviewStatus): boolean {
 	return previewStatus === PreviewStatus.PREVIEW_POSSIBLE;
+}
+
+export function isVideoMimeType(mimeType: string): boolean {
+	return (
+		mimeType.startsWith("video/") ||
+		mimeType === "application/x-mpegURL" ||
+		mimeType === "application/vnd.ms-asf" ||
+		mimeType === "application/ogg"
+	);
+}
+
+export function isPdfMimeType(mimeType: string): boolean {
+	return mimeType === "application/pdf";
+}
+
+export function isAudioMimeType(mimeType: string): boolean {
+	return mimeType.startsWith("audio/");
 }

@@ -18,6 +18,9 @@
 		"types": ["webpack-env", "jest"],
 		"paths": {
 			"@data-board": ["src/components/data-board"],
+			"@data-external-tool": ["src/components/data-external-tool"],
+			"@data-group": ["src/components/data-group"],
+			"@data-system": ["src/components/data-system"],
 			"@feature-board-file-element": [
 				"src/components/feature-board-file-element"
 			],
@@ -27,14 +30,26 @@
 			"@feature-board-text-element": [
 				"src/components/feature-board-text-element"
 			],
+			"@feature-board-link-element": [
+				"src/components/feature-board-link-element"
+			],
+			"@feature-board-external-tool-element": [
+				"src/components/feature-board-external-tool-element"
+			],
 			"@feature-board": ["src/components/feature-board"],
 			"@feature-date-time-picker": ["src/components/feature-date-time-picker"],
 			"@feature-editor": ["src/components/feature-editor"],
 			"@feature-render-html": ["src/components/feature-render-html"],
+
+			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
+			"@ui-color-overlay": ["src/components/ui-color-overlay"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
+			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
+			"@util-validators": ["src/components/util-validators"],
 			"@page-board": ["src/components/page-board"],
+			"@page-class-members": ["src/components/page-class-members"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

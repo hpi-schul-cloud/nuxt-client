@@ -1,11 +1,11 @@
+import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import setupStores from "@@/tests/test-utils/setupStores";
-import migrationIndex from "@/pages/administration/Migration.page.vue";
-import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount, shallowMount } from "@vue/test-utils";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -53,6 +53,7 @@ const schoolMock = {
 		logoUrl: "",
 		__v: 0,
 	},
+	logo_name: "Schule_logo",
 	county: {
 		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
@@ -83,6 +84,8 @@ const schoolMock = {
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
 		isTeamCreationByStudentsEnabled: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
 	permissions: { teacher: { STUDENT_LIST: true } },
 	officialSchoolNumber: "100000",

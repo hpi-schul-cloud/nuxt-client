@@ -1,39 +1,57 @@
 <template>
 	<VCardText>
 		<template v-for="(element, index) in elements">
-			<RichTextContentElement
-				v-if="isRichTextElementResponse(element)"
+			<ContentElement
 				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				@delete:element="onDeleteElement"
-			/>
-			<FileContentElement
-				v-else-if="isFileElementResponse(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
-			<SubmissionContentElement
-				v-else-if="showSubmissionContainerElement(element)"
-				:key="element.id"
-				:element="element"
-				:isEditMode="isEditMode"
-				:isFirstElement="firstElementId === element.id"
-				:isLastElement="lastElementId === element.id"
-				:hasMultipleElements="hasMultipleElements"
-				@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-				@move-down:edit="onMoveElementDown(index, element)"
-				@move-up:edit="onMoveElementUp(index, element)"
-				@delete:element="onDeleteElement"
-			/>
+				:index="index"
+				:elementCount="elements.length"
+			>
+				<RichTextContentElement
+					v-if="isRichTextElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+				<LinkContentElement
+					v-else-if="showLinkElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+				<FileContentElement
+					v-else-if="isFileElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+				<SubmissionContentElement
+					v-else-if="showSubmissionContainerElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+				<ExternalToolElement
+					v-else-if="showExternalToolElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
+			</ContentElement>
 		</template>
 	</VCardText>
 </template>
@@ -41,24 +59,32 @@
 <script lang="ts">
 import {
 	ContentElementType,
+	ExternalToolElementResponse,
 	FileElementResponse,
+	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import ContentElement from "./ContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		ContentElement,
+		ExternalToolElement,
 		FileContentElement,
 		RichTextContentElement,
 		SubmissionContentElement,
+		LinkContentElement,
 	},
 	props: {
 		elements: {
@@ -101,10 +127,42 @@ export default defineComponent({
 			return element.type === ContentElementType.SubmissionContainer;
 		};
 
-		const showSubmissionContainerElement = (element: AnyContentElement) => {
+		const showSubmissionContainerElement = (
+			element: AnyContentElement
+		): element is SubmissionContainerElementResponse => {
 			return (
-				envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
 				isSubmissionContainerElementResponse(element)
+			);
+		};
+
+		const isLinkElementResponse = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return element.type === ContentElementType.Link;
+		};
+
+		const showLinkElement = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
+				isLinkElementResponse(element)
+			);
+		};
+
+		const isExternalToolElementResponse = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return element.type === ContentElementType.ExternalTool;
+		};
+
+		const showExternalToolElement = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
+				isExternalToolElementResponse(element)
 			);
 		};
 
@@ -156,13 +214,16 @@ export default defineComponent({
 		});
 
 		return {
-			ContentElementType,
 			firstElementId,
 			hasMultipleElements,
 			isFileElementResponse,
 			isRichTextElementResponse,
 			isSubmissionContainerElementResponse,
+			isLinkElementResponse,
 			showSubmissionContainerElement,
+			isExternalToolElementResponse,
+			showExternalToolElement,
+			showLinkElement,
 			lastElementId,
 			onDeleteElement,
 			onMoveElementDown,

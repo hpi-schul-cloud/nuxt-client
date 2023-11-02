@@ -14,7 +14,7 @@
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
-			></v-import-users-match-search>
+			/>
 		</v-dialog>
 
 		<v-alert
@@ -46,8 +46,7 @@
 						class="mx-auto"
 						width="100%"
 						type="table-thead, table-tbody"
-					>
-					</v-skeleton-loader>
+					/>
 				</template>
 				<template #[`body.prepend`]>
 					<tr class="head">
@@ -58,7 +57,7 @@
 								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
 								class="searchFirstName"
-							></v-text-field>
+							/>
 						</td>
 						<td class="col-2">
 							<v-text-field
@@ -67,7 +66,7 @@
 								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
 								class="searchLastName"
-							></v-text-field>
+							/>
 						</td>
 						<td>
 							<v-text-field
@@ -76,7 +75,7 @@
 								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
 								class="searchLoginName"
-							></v-text-field>
+							/>
 						</td>
 						<td>
 							<v-select
@@ -85,7 +84,7 @@
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
 								class="searchRole"
-							></v-select>
+							/>
 						</td>
 						<td>
 							<v-text-field
@@ -94,7 +93,7 @@
 								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
 								class="searchClasses"
-							></v-text-field>
+							/>
 						</td>
 						<td class="col-2">
 							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
@@ -245,7 +244,7 @@
 					})
 				}}
 			</p>
-			<v-divider></v-divider>
+			<v-divider />
 			<br />
 		</div>
 	</div>

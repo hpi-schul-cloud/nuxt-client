@@ -298,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<RichTextElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<RichTextElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -359,6 +359,96 @@ export enum ChangeLanguageParamsLanguageEnum {
     Uk = 'uk'
 }
 
+/**
+ * 
+ * @export
+ * @interface ClassInfoResponse
+ */
+export interface ClassInfoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    type: ClassInfoResponseTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    externalSourceName?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ClassInfoResponse
+     */
+    teachers: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassInfoResponse
+     */
+    schoolYear?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClassInfoResponse
+     */
+    isUpgradable?: boolean;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ClassInfoResponseTypeEnum {
+    Class = 'class',
+    Group = 'group'
+}
+
+/**
+ * 
+ * @export
+ * @interface ClassInfoSearchListResponse
+ */
+export interface ClassInfoSearchListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<ClassInfoResponse>}
+     * @memberof ClassInfoSearchListResponse
+     */
+    data: Array<ClassInfoResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof ClassInfoSearchListResponse
+     */
+    limit: number;
+}
 /**
  * 
  * @export
@@ -562,8 +652,10 @@ export interface ConsentSessionResponse {
  */
 export enum ContentElementType {
     File = 'file',
+    Link = 'link',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -726,7 +818,8 @@ export interface ContextExternalToolResponse {
     * @enum {string}
     */
 export enum ContextExternalToolResponseContextTypeEnum {
-    Course = 'course'
+    Course = 'course',
+    BoardElement = 'board-element'
 }
 
 /**
@@ -792,10 +885,15 @@ export interface CopyApiResponse {
     */
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
+    Card = 'CARD',
+    Column = 'COLUMN',
+    Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
+    FileElement = 'FILE_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -808,8 +906,12 @@ export enum CopyApiResponseTypeEnum {
     LessonContentText = 'LESSON_CONTENT_TEXT',
     LernstoreMaterial = 'LERNSTORE_MATERIAL',
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
+    LinkElement = 'LINK_ELEMENT',
     LtitoolGroup = 'LTITOOL_GROUP',
     Metadata = 'METADATA',
+    RichtextElement = 'RICHTEXT_ELEMENT',
+    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
+    SubmissionItem = 'SUBMISSION_ITEM',
     SubmissionGroup = 'SUBMISSION_GROUP',
     Task = 'TASK',
     TaskGroup = 'TASK_GROUP',
@@ -928,8 +1030,10 @@ export interface CreateCardBodyParams {
     */
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
+    Link = 'link',
     RichText = 'richText',
-    SubmissionContainer = 'submissionContainer'
+    SubmissionContainer = 'submissionContainer',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1368,6 +1472,38 @@ export interface EntityNotFoundError {
 /**
  * 
  * @export
+ * @interface ExternalSourceResponse
+ */
+export interface ExternalSourceResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalSourceResponse
+     */
+    externalId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalSourceResponse
+     */
+    systemId: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolContentBody
+ */
+export interface ExternalToolContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolContentBody
+     */
+    contextExternalToolId?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolCreateParams
  */
 export interface ExternalToolCreateParams {
@@ -1413,6 +1549,69 @@ export interface ExternalToolCreateParams {
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContent
+ */
+export interface ExternalToolElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementContent
+     */
+    contextExternalToolId: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementContentBody
+ */
+export interface ExternalToolElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolContentBody}
+     * @memberof ExternalToolElementContentBody
+     */
+    content: ExternalToolContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolElementResponse
+ */
+export interface ExternalToolElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExternalToolElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof ExternalToolElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {ExternalToolElementContent}
+     * @memberof ExternalToolElementResponse
+     */
+    content: ExternalToolElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof ExternalToolElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -1573,6 +1772,12 @@ export interface FileContentBody {
      * @memberof FileContentBody
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileContentBody
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -1586,6 +1791,12 @@ export interface FileElementContent {
      * @memberof FileElementContent
      */
     caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileElementContent
+     */
+    alternativeText: string;
 }
 /**
  * 
@@ -1674,6 +1885,116 @@ export interface ForbiddenOperationError {
      */
     details?: object;
 }
+/**
+ * 
+ * @export
+ * @interface GroupResponse
+ */
+export interface GroupResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    type: GroupResponseTypeEnum;
+    /**
+     * 
+     * @type {Array<GroupUserResponse>}
+     * @memberof GroupResponse
+     */
+    users: Array<GroupUserResponse>;
+    /**
+     * 
+     * @type {ExternalSourceResponse}
+     * @memberof GroupResponse
+     */
+    externalSource?: ExternalSourceResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupResponse
+     */
+    organizationId?: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GroupResponseTypeEnum {
+    Class = 'class'
+}
+
+/**
+ * 
+ * @export
+ * @interface GroupUserResponse
+ */
+export interface GroupUserResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupUserResponse
+     */
+    role: GroupUserResponseRoleEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GroupUserResponseRoleEnum {
+    Administrator = 'administrator',
+    CourseAdministrator = 'courseAdministrator',
+    CourseStudent = 'courseStudent',
+    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    CourseTeacher = 'courseTeacher',
+    Demo = 'demo',
+    DemoStudent = 'demoStudent',
+    DemoTeacher = 'demoTeacher',
+    Expert = 'expert',
+    Helpdesk = 'helpdesk',
+    Student = 'student',
+    Superhero = 'superhero',
+    Teacher = 'teacher',
+    Teamadministrator = 'teamadministrator',
+    Teamexpert = 'teamexpert',
+    Teamleader = 'teamleader',
+    Teammember = 'teammember',
+    Teamowner = 'teamowner',
+    User = 'user'
+}
+
 /**
  * 
  * @export
@@ -1814,6 +2135,100 @@ export interface LessonCopyApiParams {
      * @memberof LessonCopyApiParams
      */
     courseId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LinkContentBody
+ */
+export interface LinkContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkContentBody
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementContent
+ */
+export interface LinkElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    imageUrl?: string;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementContentBody
+ */
+export interface LinkElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof LinkElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {LinkContentBody}
+     * @memberof LinkElementContentBody
+     */
+    content: LinkContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface LinkElementResponse
+ */
+export interface LinkElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof LinkElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {LinkElementContent}
+     * @memberof LinkElementResponse
+     */
+    content: LinkElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof LinkElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -2984,7 +3399,7 @@ export interface OauthConfigResponse {
      * @type {string}
      * @memberof OauthConfigResponse
      */
-    logoutEndpoint: string;
+    logoutEndpoint?: string;
     /**
      * Issuer
      * @type {string}
@@ -3148,6 +3563,31 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PseudonymResponse
+ */
+export interface PseudonymResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    toolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PseudonymResponse
+     */
+    userId: string;
 }
 /**
  * 
@@ -3789,11 +4229,11 @@ export interface SingleColumnBoardResponse {
  */
 export interface SubmissionContainerContentBody {
     /**
-     * 
+     * The point in time until when a submission can be handed in.
      * @type {string}
      * @memberof SubmissionContainerContentBody
      */
-    dueDate: string;
+    dueDate?: string;
 }
 /**
  * 
@@ -3802,7 +4242,7 @@ export interface SubmissionContainerContentBody {
  */
 export interface SubmissionContainerElementContent {
     /**
-     * 
+     * The dueDate as date string or null of not set
      * @type {string}
      * @memberof SubmissionContainerElementContent
      */
@@ -3884,10 +4324,10 @@ export interface SubmissionItemResponse {
     completed: boolean;
     /**
      * 
-     * @type {UserDataResponse}
+     * @type {string}
      * @memberof SubmissionItemResponse
      */
-    userData: UserDataResponse;
+    userId: string;
 }
 /**
  * 
@@ -3944,6 +4384,25 @@ export interface SubmissionStatusResponse {
      * @memberof SubmissionStatusResponse
      */
     submittingCourseGroupName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SubmissionsResponse
+ */
+export interface SubmissionsResponse {
+    /**
+     * 
+     * @type {Array<SubmissionItemResponse>}
+     * @memberof SubmissionsResponse
+     */
+    submissionItemsResponse: Array<SubmissionItemResponse>;
+    /**
+     * 
+     * @type {Array<UserDataResponse>}
+     * @memberof SubmissionsResponse
+     */
+    users: Array<UserDataResponse>;
 }
 /**
  * 
@@ -4220,6 +4679,27 @@ export interface TimestampsResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ToolConfigurationStatusResponse {
+    Latest = 'Latest',
+    Outdated = 'Outdated',
+    Unknown = 'Unknown'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ToolContextType {
+    Course = 'course',
+    BoardElement = 'board-element'
+}
+
+/**
+ * 
+ * @export
  * @interface ToolLaunchRequestResponse
  */
 export interface ToolLaunchRequestResponse {
@@ -4302,23 +4782,12 @@ export interface ToolReferenceResponse {
      */
     openInNewTab: boolean;
     /**
-     * The status of the tool
-     * @type {string}
+     * 
+     * @type {ToolConfigurationStatusResponse}
      * @memberof ToolReferenceResponse
      */
-    status: ToolReferenceResponseStatusEnum;
+    status: ToolConfigurationStatusResponse;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ToolReferenceResponseStatusEnum {
-    Latest = 'Latest',
-    Outdated = 'Outdated',
-    Unknown = 'Unknown'
-}
-
 /**
  * 
  * @export
@@ -4327,10 +4796,10 @@ export enum ToolReferenceResponseStatusEnum {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody;
 }
 /**
  * 
@@ -6387,7 +6856,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -6467,7 +6936,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6541,7 +7010,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 
@@ -7310,7 +7779,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7364,7 +7833,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -7417,7 +7886,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<void>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
 
 }
 
@@ -7586,7 +8055,7 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SubmissionItemResponse>>> {
+        async boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7619,7 +8088,7 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>> {
+        boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse> {
             return localVarFp.boardSubmissionControllerGetSubmissionItems(submissionContainerId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7650,7 +8119,7 @@ export interface BoardSubmissionApiInterface {
      * @throws {RequiredError}
      * @memberof BoardSubmissionApiInterface
      */
-    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<Array<SubmissionItemResponse>>;
+    boardSubmissionControllerGetSubmissionItems(submissionContainerId: string, options?: any): AxiosPromise<SubmissionsResponse>;
 
     /**
      * 
@@ -8472,6 +8941,242 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public serverControllerGetHello(options?: any) {
         return DefaultApiFp(this.configuration).serverControllerGetHello(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * GroupApi - axios parameter creator
+ * @export
+ */
+export const GroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerFindClassesForSchool: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/groups/class`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (sortOrder !== undefined) {
+                localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetGroup: async (groupId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'groupId' is not null or undefined
+            assertParamExists('groupControllerGetGroup', 'groupId', groupId)
+            const localVarPath = `/groups/{groupId}`
+                .replace(`{${"groupId"}}`, encodeURIComponent(String(groupId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GroupApi - functional programming interface
+ * @export
+ */
+export const GroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerGetGroup(groupId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GroupResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetGroup(groupId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * GroupApi - factory interface
+ * @export
+ */
+export const GroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GroupApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of classes and groups of type class for the current users school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a group by id.
+         * @param {string} groupId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetGroup(groupId: string, options?: any): AxiosPromise<GroupResponse> {
+            return localVarFp.groupControllerGetGroup(groupId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GroupApi - interface
+ * @export
+ * @interface GroupApi
+ */
+export interface GroupApiInterface {
+    /**
+     * 
+     * @summary Get a list of classes and groups of type class for the current users school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+
+    /**
+     * 
+     * @summary Get a group by id.
+     * @param {string} groupId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerGetGroup(groupId: string, options?: any): AxiosPromise<GroupResponse>;
+
+}
+
+/**
+ * GroupApi - object-oriented interface
+ * @export
+ * @class GroupApi
+ * @extends {BaseAPI}
+ */
+export class GroupApi extends BaseAPI implements GroupApiInterface {
+    /**
+     * 
+     * @summary Get a list of classes and groups of type class for the current users school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerFindClassesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClassesForSchool(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a group by id.
+     * @param {string} groupId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerGetGroup(groupId: string, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerGetGroup(groupId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10274,6 +10979,133 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      */
     public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * PseudonymApi - axios parameter creator
+ * @export
+ */
+export const PseudonymApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym: async (pseudonym: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pseudonym' is not null or undefined
+            assertParamExists('pseudonymControllerGetPseudonym', 'pseudonym', pseudonym)
+            const localVarPath = `/pseudonyms/{pseudonym}`
+                .replace(`{${"pseudonym"}}`, encodeURIComponent(String(pseudonym)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PseudonymApi - functional programming interface
+ * @export
+ */
+export const PseudonymApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PseudonymApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pseudonymControllerGetPseudonym(pseudonym: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pseudonymControllerGetPseudonym(pseudonym, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PseudonymApi - factory interface
+ * @export
+ */
+export const PseudonymApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PseudonymApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns the related user and tool information to a pseudonym
+         * @param {string} pseudonym 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse> {
+            return localVarFp.pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PseudonymApi - interface
+ * @export
+ * @interface PseudonymApi
+ */
+export interface PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApiInterface
+     */
+    pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse>;
+
+}
+
+/**
+ * PseudonymApi - object-oriented interface
+ * @export
+ * @class PseudonymApi
+ * @extends {BaseAPI}
+ */
+export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
+    /**
+     * 
+     * @summary Returns the related user and tool information to a pseudonym
+     * @param {string} pseudonym 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PseudonymApi
+     */
+    public pseudonymControllerGetPseudonym(pseudonym: string, options?: any) {
+        return PseudonymApiFp(this.configuration).pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -12973,11 +13805,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Returns a list of ContextExternalTools for the given context
          * @param {string} contextId 
-         * @param {string} contextType 
+         * @param {ToolContextType} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext: async (contextId: string, contextType: string, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerGetContextExternalToolsForContext: async (contextId: string, contextType: ToolContextType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextId' is not null or undefined
             assertParamExists('toolContextControllerGetContextExternalToolsForContext', 'contextId', contextId)
             // verify required parameter 'contextType' is not null or undefined
@@ -13275,48 +14107,6 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get ExternalTool References for a given context
-         * @param {string} contextId 
-         * @param {string} contextType 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        toolControllerGetToolReferences: async (contextId: string, contextType: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contextId' is not null or undefined
-            assertParamExists('toolControllerGetToolReferences', 'contextId', contextId)
-            // verify required parameter 'contextType' is not null or undefined
-            assertParamExists('toolControllerGetToolReferences', 'contextType', contextType)
-            const localVarPath = `/tools/external-tools/{contextType}/{contextId}/references`
-                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
-                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -13371,6 +14161,86 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('toolLaunchControllerGetToolLaunchRequest', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/context/{contextExternalToolId}/launch`
                 .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get ExternalTool Reference for a given context external tool
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolReferenceControllerGetToolReference: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolId' is not null or undefined
+            assertParamExists('toolReferenceControllerGetToolReference', 'contextExternalToolId', contextExternalToolId)
+            const localVarPath = `/tools/tool-references/context-external-tools/{contextExternalToolId}`
+                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get ExternalTool References for a given context
+         * @param {string} contextId 
+         * @param {ToolContextType} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolReferenceControllerGetToolReferencesForContext: async (contextId: string, contextType: ToolContextType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextId' is not null or undefined
+            assertParamExists('toolReferenceControllerGetToolReferencesForContext', 'contextId', contextId)
+            // verify required parameter 'contextType' is not null or undefined
+            assertParamExists('toolReferenceControllerGetToolReferencesForContext', 'contextType', contextType)
+            const localVarPath = `/tools/tool-references/{contextType}/{contextId}`
+                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
+                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -13690,11 +14560,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * 
          * @summary Returns a list of ContextExternalTools for the given context
          * @param {string} contextId 
-         * @param {string} contextType 
+         * @param {ToolContextType} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
+        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13772,18 +14642,6 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get ExternalTool References for a given context
-         * @param {string} contextId 
-         * @param {string} contextType 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetToolReferences(contextId, contextType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -13803,6 +14661,29 @@ export const ToolApiFp = function(configuration?: Configuration) {
          */
         async toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get ExternalTool Reference for a given context external tool
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolReferenceControllerGetToolReference(contextExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get ExternalTool References for a given context
+         * @param {string} contextId 
+         * @param {ToolContextType} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13946,11 +14827,11 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Returns a list of ContextExternalTools for the given context
          * @param {string} contextId 
-         * @param {string} contextType 
+         * @param {ToolContextType} contextType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse> {
+        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ContextExternalToolSearchListResponse> {
             return localVarFp.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14021,17 +14902,6 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get ExternalTool References for a given context
-         * @param {string} contextId 
-         * @param {string} contextType 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse> {
-            return localVarFp.toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14050,6 +14920,27 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          */
         toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse> {
             return localVarFp.toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get ExternalTool Reference for a given context external tool
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): AxiosPromise<ToolReferenceResponse> {
+            return localVarFp.toolReferenceControllerGetToolReference(contextExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get ExternalTool References for a given context
+         * @param {string} contextId 
+         * @param {ToolContextType} contextType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ToolReferenceListResponse> {
+            return localVarFp.toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14186,12 +15077,12 @@ export interface ToolApiInterface {
      * 
      * @summary Returns a list of ContextExternalTools for the given context
      * @param {string} contextId 
-     * @param {string} contextType 
+     * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any): AxiosPromise<ContextExternalToolSearchListResponse>;
+    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ContextExternalToolSearchListResponse>;
 
     /**
      * 
@@ -14261,17 +15152,6 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Get ExternalTool References for a given context
-     * @param {string} contextId 
-     * @param {string} contextType 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ToolApiInterface
-     */
-    toolControllerGetToolReferences(contextId: string, contextType: string, options?: any): AxiosPromise<ToolReferenceListResponse>;
-
-    /**
-     * 
      * @summary Updates an ExternalTool
      * @param {string} externalToolId 
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14290,6 +15170,27 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse>;
+
+    /**
+     * 
+     * @summary Get ExternalTool Reference for a given context external tool
+     * @param {string} contextExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): AxiosPromise<ToolReferenceResponse>;
+
+    /**
+     * 
+     * @summary Get ExternalTool References for a given context
+     * @param {string} contextId 
+     * @param {ToolContextType} contextType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ToolReferenceListResponse>;
 
     /**
      * 
@@ -14440,12 +15341,12 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * 
      * @summary Returns a list of ContextExternalTools for the given context
      * @param {string} contextId 
-     * @param {string} contextType 
+     * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: string, options?: any) {
+    public toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any) {
         return ToolApiFp(this.configuration).toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -14529,19 +15430,6 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Get ExternalTool References for a given context
-     * @param {string} contextId 
-     * @param {string} contextType 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ToolApi
-     */
-    public toolControllerGetToolReferences(contextId: string, contextType: string, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerGetToolReferences(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @summary Updates an ExternalTool
      * @param {string} externalToolId 
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14563,6 +15451,31 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolLaunchControllerGetToolLaunchRequest(contextExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolLaunchControllerGetToolLaunchRequest(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get ExternalTool Reference for a given context external tool
+     * @param {string} contextExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolReferenceControllerGetToolReference(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get ExternalTool References for a given context
+     * @param {string} contextId 
+     * @param {ToolContextType} contextType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any) {
+        return ToolApiFp(this.configuration).toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
