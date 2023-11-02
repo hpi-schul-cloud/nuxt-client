@@ -5,6 +5,7 @@
 		auto-grow
 		v-model="modelValue"
 		:label="$t('components.cardElement.fileElement.caption')"
+		hide-details="true"
 	/>
 </template>
 
