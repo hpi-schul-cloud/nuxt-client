@@ -67,10 +67,12 @@ export default defineComponent({
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
+		const hasPdfMimeType = computed(() =>
+			isPdfMimeType(props.fileProperties.mimeType)
+		);
+
 		const fileDescriptionSrc = computed(() => {
-			return isPdfMimeType(props.fileProperties.mimeType)
-				? props.fileProperties.url
-				: undefined;
+			return hasPdfMimeType.value ? props.fileProperties.url : undefined;
 		});
 
 		const hasAudioMimeType = computed(() => {
@@ -79,9 +81,10 @@ export default defineComponent({
 
 		const showTitle = computed(() => {
 			return (
-				!props.fileProperties.previewUrl &&
-				!hasVideoMimeType.value &&
-				!hasAudioMimeType.value
+				hasPdfMimeType.value ||
+				(!props.fileProperties.previewUrl &&
+					!hasVideoMimeType.value &&
+					!hasAudioMimeType.value)
 			);
 		});
 
