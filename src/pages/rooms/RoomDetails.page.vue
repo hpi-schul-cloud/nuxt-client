@@ -40,40 +40,39 @@
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs
+					v-model="tabIndex"
+					color="primary"
 					class="tabs-max-width"
 					grow
-					color="primary"
-					:model-value="tabIndex"
-					:items="tabItems"
+					mandatory
 				>
-					<v-tab
-						v-for="(tabItem, index) in tabItems"
-						:key="index"
-						:href="tabItem.href"
-						:data-testid="tabItem.dataTestId"
-						class="no-active"
-						:to="tabItem.to"
-					>
-						<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
-						<span class="d-none d-sm-inline">
-							{{ tabItem.label }}
-						</span>
-					</v-tab>
+					<template v-for="tabItem in tabItems" :key="tabItem.name">
+						<v-tab
+							:data-testid="tabItem.dataTestId"
+							:href="tabItem.href"
+							class="no-active"
+						>
+							<template #default>
+								<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<span class="d-none d-sm-inline">
+									{{ tabItem.label }}
+								</span>
+							</template>
+						</v-tab>
+					</template>
 				</v-tabs>
 			</div>
 		</template>
 
-		<keep-alive>
-			<component
-				v-if="getCurrentComponent"
-				:is="getCurrentComponent"
-				:room-data-object="roomData"
-				:role="dashBoardRole"
-				:roomId="courseId"
-				@copy-board-element="onCopyBoardElement"
-				data-testid="room-content"
-			/>
-		</keep-alive>
+		<component
+			v-if="getCurrentComponent"
+			:is="getCurrentComponent"
+			:room-data-object="roomData"
+			:role="dashBoardRole"
+			:roomId="courseId"
+			@copy-board-element="onCopyBoardElement"
+			data-testid="room-content"
+		/>
 
 		<v-custom-dialog
 			v-model:is-open="dialog.isOpen"
@@ -236,8 +235,6 @@ export default defineComponent({
 					dataTestId: "learnContent-tab",
 					component: RoomDashboard,
 					fabItems: this.learnContentFabItems,
-					to: `/rooms/${this.roomData.roomId}`,
-					href: undefined,
 				},
 			];
 
@@ -248,7 +245,6 @@ export default defineComponent({
 					ariaLabel: this.$t("common.actions.add"),
 					testId: "add-tool-button",
 					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
-					to: undefined,
 				};
 
 				tabs.push({
@@ -257,9 +253,7 @@ export default defineComponent({
 					icon: mdiPuzzleOutline,
 					dataTestId: "tools-tab",
 					component: RoomExternalToolsOverview,
-					to: `/rooms/${this.roomData.roomId}?tab=tools`,
 					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
-					href: undefined,
 				});
 			}
 
@@ -270,7 +264,6 @@ export default defineComponent({
 					icon: mdiPuzzleOutline,
 					dataTestId: "old-tools-tab",
 					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
-					to: undefined,
 				});
 			}
 
@@ -280,7 +273,6 @@ export default defineComponent({
 				icon: mdiAccountGroupOutline,
 				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
 				dataTestId: "groups-tab",
-				to: undefined,
 			});
 
 			return tabs;
@@ -510,6 +502,7 @@ export default defineComponent({
 	},
 	watch: {
 		tabIndex(newIndex) {
+			console.log({ newIndex });
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
 				this.$router.replace({
 					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
