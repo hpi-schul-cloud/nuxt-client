@@ -215,7 +215,7 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const activeTab = computed(() => props.tab ?? "current");
+		const activeTab = computed(() => props.tab);
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -255,7 +255,7 @@ export default defineComponent({
 			}
 
 			groupModule.loadClassesForSchool(schoolYearQueryType.value);
-			router.replace({ query: { tab: activeTab.value } });
+			router.replace({ query: { tab } });
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(

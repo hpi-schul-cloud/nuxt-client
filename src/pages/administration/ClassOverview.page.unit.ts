@@ -109,6 +109,9 @@ describe("ClassOverview", () => {
 				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+				expect($router.replace).toHaveBeenCalledWith({
+					query: { tab: "current" },
+				});
 			});
 		});
 	});
@@ -608,7 +611,9 @@ describe("ClassOverview", () => {
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
-				expect($router.replace).toHaveBeenCalled();
+				expect($router.replace).toHaveBeenCalledWith({
+					query: { tab: "next" },
+				});
 			});
 		});
 
