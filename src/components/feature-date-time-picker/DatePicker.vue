@@ -10,7 +10,7 @@
 			<template #activator="{ props }">
 				<v-text-field
 					ref="inputField"
-					:value="formattedDate"
+					:model-value="formattedDate"
 					v-bind="props"
 					:label="label"
 					:aria-label="ariaLabel"

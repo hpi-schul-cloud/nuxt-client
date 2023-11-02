@@ -7,7 +7,7 @@
 			required
 			:error-messages="getErrorMessages(v$.firstName)"
 			data-testid="input_create-user_firstname"
-			@blur="$v.userData.firstName.$touch"
+			@blur="v$.firstName.$touch"
 		/>
 		<v-text-field
 			v-model="userData.lastName"
@@ -16,7 +16,7 @@
 			required
 			:error-messages="getErrorMessages(v$.lastName)"
 			data-testid="input_create-user_lastname"
-			@blur="$v.userData.lastName.$touch"
+			@blur="v$.lastName.$touch"
 		/>
 		<v-text-field
 			v-model="userData.email"
@@ -25,7 +25,7 @@
 			required
 			:error-messages="getErrorMessages(v$.email)"
 			data-testid="input_create-user_email"
-			@blur="$v.userData.email.$touch"
+			@blur="v$.email.$touch"
 		/>
 		<slot name="inputs" />
 

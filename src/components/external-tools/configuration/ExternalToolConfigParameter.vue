@@ -12,7 +12,7 @@
 				:hint="parameter.description"
 				persistent-hint
 				:rules="validateParameter(parameter, inputValue)"
-				validate-on-blur
+				validate-on="blur"
 				:data-testId="parameter.name"
 			/>
 		</template>
@@ -37,7 +37,7 @@
 				persistent-hint
 				type="number"
 				:rules="validateParameter(parameter, inputValue)"
-				validate-on-blur
+				validate-on="blur"
 				:data-testId="parameter.name"
 			/>
 		</template>

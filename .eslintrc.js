@@ -10,6 +10,7 @@ module.exports = {
 		"eslint:recommended",
 		"@vue/typescript/recommended",
 		"plugin:prettier/recommended",
+		"plugin:vuetify/base", // VUE3_UPGRADE: Plugin should be removed after vuetify upgrade
 	],
 	parserOptions: {
 		ecmaVersion: 2020,

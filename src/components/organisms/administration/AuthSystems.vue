@@ -28,7 +28,7 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-simple-table v-if="hasSystems" class="table-system">
+		<v-table v-if="hasSystems" class="table-system">
 			<template #default>
 				<thead>
 					<tr>
@@ -56,11 +56,11 @@
 							<v-text-field
 								v-if="isLoginSystem(system)"
 								:id="`school-login-link-${system._id}`"
-								:value="generateLoginLink(system)"
+								:model-value="generateLoginLink(system)"
 								class="school-login-link"
 								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
 								readonly
-								dense
+								density="compact"
 								@blur="linkCopyFinished"
 							>
 								<template #append>
@@ -108,7 +108,7 @@
 					</tr>
 				</tbody>
 			</template>
-		</v-simple-table>
+		</v-table>
 		<v-btn
 			v-if="hasSystemCreatePermission"
 			color="primary"
