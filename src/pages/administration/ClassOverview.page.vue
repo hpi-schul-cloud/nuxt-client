@@ -9,15 +9,15 @@
 			class="tabs-max-width mb-5"
 			grow
 			@change="onTabsChange"
-			v-model="activeTabIndex"
+			v-model="activeTab"
 		>
-			<v-tab data-testid="admin-class-next-year-tab">
+			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
-			<v-tab data-testid="admin-class-current-year-tab">
+			<v-tab tab-value="current" data-testid="admin-class-current-year-tab">
 				<span>{{ currentYear }}</span>
 			</v-tab>
-			<v-tab data-testid="admin-class-previous-years-tab">
+			<v-tab tab-value="archive" data-testid="admin-class-previous-years-tab">
 				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
@@ -198,8 +198,6 @@ import { useRouter } from "vue-router/composables";
 
 type Tab = "current" | "next" | "archive";
 
-const tabIndexMapping: Tab[] = ["next", "current", "archive"];
-
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
 	props: {
@@ -217,9 +215,7 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const activeTabIndex = computed(() =>
-			Object.values(tabIndexMapping).indexOf(props.tab)
-		);
+		const activeTab = computed(() => props.tab ?? "current");
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -247,23 +243,19 @@ export default defineComponent({
 			() => schoolsModule.getSchool.years.activeYear.name
 		);
 
-		const onTabsChange = (tabIndex: number) => {
-			const selectedTab = tabIndexMapping[tabIndex];
-
-			if (selectedTab) {
-				if (selectedTab === "next") {
-					schoolYearQueryType.value = "nextYear";
-				}
-				if (selectedTab === "current") {
-					schoolYearQueryType.value = "currentYear";
-				}
-				if (selectedTab === "archive") {
-					schoolYearQueryType.value = "previousYears";
-				}
-
-				groupModule.loadClassesForSchool(schoolYearQueryType.value);
-				router.replace({ query: { tab: selectedTab } });
+		const onTabsChange = (tab: string) => {
+			if (tab === "next") {
+				schoolYearQueryType.value = "nextYear";
 			}
+			if (tab === "current") {
+				schoolYearQueryType.value = "currentYear";
+			}
+			if (tab === "archive") {
+				schoolYearQueryType.value = "previousYears";
+			}
+
+			groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			router.replace({ query: { tab: activeTab.value } });
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
@@ -367,7 +359,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			onTabsChange(activeTabIndex.value);
+			onTabsChange(activeTab.value);
 		});
 
 		const getInstituteTitle: ComputedRef<string> = computed(() => {
@@ -414,7 +406,7 @@ export default defineComponent({
 			mdiTrashCanOutline,
 			mdiArrowUp,
 			getInstituteTitle,
-			activeTabIndex,
+			activeTab,
 		};
 	},
 });
