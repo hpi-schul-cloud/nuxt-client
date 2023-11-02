@@ -515,7 +515,7 @@ export default defineComponent({
 					})
 					.catch((error) => {
 						if (error.name !== "NavigationDuplicated") {
-							throw error;
+							console.error(error);
 						}
 					});
 			}
