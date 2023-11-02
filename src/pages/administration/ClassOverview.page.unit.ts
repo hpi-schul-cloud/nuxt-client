@@ -18,6 +18,8 @@ import ClassOverview from "./ClassOverview.page.vue";
 import SchoolsModule from "@/store/schools";
 import { School, Year } from "@/store/types/schools";
 
+const $router = { replace: jest.fn() };
+
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {
 		document.body.setAttribute("data-app", "true");
@@ -70,6 +72,7 @@ describe("ClassOverview", () => {
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
+			mocks: { $router },
 		});
 
 		return {
@@ -585,6 +588,27 @@ describe("ClassOverview", () => {
 				);
 
 				expect(currentYearTab.classes()).toContain("v-tab--active");
+			});
+		});
+
+		describe("when clicking on a tab", () => {
+			const setup = () => {
+				const { wrapper, groupModule } = getWrapper();
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			it("should replace the route to the given tab ", () => {
+				const { wrapper } = setup();
+
+				wrapper
+					.find('[data-testid="admin-class-next-year-tab"]')
+					.trigger("click");
+
+				expect($router.replace).toHaveBeenCalled();
 			});
 		});
 
