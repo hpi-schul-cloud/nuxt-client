@@ -51,6 +51,7 @@
 					<ContentElementList
 						:elements="card.elements"
 						:isEditMode="isEditMode"
+						:isDetailView="isDetailView"
 						@delete:element="onDeleteElement"
 						@move-down:element="onMoveContentElementDown"
 						@move-up:element="onMoveContentElementUp"
