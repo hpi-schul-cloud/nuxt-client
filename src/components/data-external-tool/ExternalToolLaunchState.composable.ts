@@ -25,8 +25,8 @@ export const useExternalToolLaunchState = () => {
 			toolLaunchRequest.value = await fetchLaunchDataCall(
 				contextExternalToolId
 			);
-		} catch (e: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
+		} catch (axiosError: unknown) {
+			const apiError = mapAxiosErrorToResponseError(axiosError);
 
 			error.value = {
 				error: apiError,

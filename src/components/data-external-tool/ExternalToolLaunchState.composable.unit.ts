@@ -6,6 +6,8 @@ import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { axiosErrorFactory } from "../../../tests/test-utils";
+import { mapAxiosErrorToResponseError } from "../../utils/api";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 
@@ -69,6 +71,34 @@ describe("ExternalToolLaunchState.composable", () => {
 				await fetchLaunchRequest("contextExternalToolId");
 
 				expect(error.value).toBeUndefined();
+			});
+		});
+
+		describe("when an error occurs", () => {
+			const setup = () => {
+				const axiosError = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(axiosError);
+
+				useExternalToolApiMock.fetchLaunchDataCall.mockRejectedValue(
+					axiosError
+				);
+
+				return {
+					...useExternalToolLaunchState(),
+					apiError,
+				};
+			};
+
+			it("should load the launch data from the store", async () => {
+				const { fetchLaunchRequest, error, apiError } = setup();
+
+				await fetchLaunchRequest("contextExternalToolId");
+
+				expect(error.value).toEqual<BusinessError>({
+					message: apiError.message,
+					statusCode: apiError.code,
+					error: apiError,
+				});
 			});
 		});
 	});
