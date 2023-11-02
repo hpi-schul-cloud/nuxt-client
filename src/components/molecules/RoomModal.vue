@@ -9,7 +9,7 @@
 			<div class="pt-2 room-title">
 				<v-text-field
 					v-model="data.title"
-					dense
+					density="compact"
 					flat
 					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"

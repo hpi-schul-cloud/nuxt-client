@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="grey lighten-4 pa-4 rounded">
+		<div class="bg-grey-lighten-4 pa-4 rounded">
 			<SubmissionContentElementTitle />
 			<div class="menu">
 				<slot />
