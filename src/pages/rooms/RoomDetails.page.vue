@@ -509,15 +509,9 @@ export default defineComponent({
 	watch: {
 		tabIndex(newIndex) {
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router
-					.push({
-						query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
-					})
-					.catch((error) => {
-						if (error.name !== "NavigationDuplicated") {
-							console.error(error);
-						}
-					});
+				this.$router.push({
+					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
+				});
 			}
 		},
 	},
