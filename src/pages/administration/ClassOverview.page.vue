@@ -9,7 +9,7 @@
 			class="tabs-max-width mb-5"
 			grow
 			@change="onTabsChange"
-			v-model="model"
+			v-model="activeTabIndex"
 		>
 			<v-tab data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
@@ -152,7 +152,11 @@
 		</v-btn>
 
 		<p class="text-muted">
-			{{ t("components.molecules.admintablelegend.hint") }}
+			{{
+				t("pages.administration.classes.hint", {
+					institute_title: getInstituteTitle,
+				})
+			}}
 		</p>
 	</default-wireframe>
 </template>
@@ -183,21 +187,39 @@ import {
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	PropType,
 	ref,
 	Ref,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
-import SchoolsModule from "../../store/schools";
+import SchoolsModule from "@/store/schools";
+import { useRouter } from "vue-router/composables";
+
+type Tab = "current" | "next" | "archive";
+
+const tabIndexMapping: Tab[] = ["next", "current", "archive"];
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
-	setup() {
+	props: {
+		tab: {
+			type: String as PropType<Tab>,
+			default: "current",
+		},
+	},
+	setup(props) {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
+		const router = useRouter();
+
 		const { t } = useI18n();
+
+		const activeTabIndex = computed(() =>
+			Object.values(tabIndexMapping).indexOf(props.tab)
+		);
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -215,8 +237,6 @@ export default defineComponent({
 			},
 		];
 
-		const model: Ref<number> = ref(1);
-
 		const schoolYearQueryType: Ref<string> = ref("currentYear");
 
 		const nextYear: ComputedRef<string> = computed(
@@ -228,16 +248,22 @@ export default defineComponent({
 		);
 
 		const onTabsChange = (tabIndex: number) => {
-			if (tabIndex === 0) {
-				schoolYearQueryType.value = "nextYear";
+			const selectedTab = tabIndexMapping[tabIndex];
+
+			if (selectedTab) {
+				if (selectedTab === "next") {
+					schoolYearQueryType.value = "nextYear";
+				}
+				if (selectedTab === "current") {
+					schoolYearQueryType.value = "currentYear";
+				}
+				if (selectedTab === "archive") {
+					schoolYearQueryType.value = "previousYears";
+				}
+
+				groupModule.loadClassesForSchool(schoolYearQueryType.value);
+				router.replace({ query: { tab: selectedTab } });
 			}
-			if (tabIndex === 1) {
-				schoolYearQueryType.value = "currentYear";
-			}
-			if (tabIndex === 2) {
-				schoolYearQueryType.value = "previousYears";
-			}
-			groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
@@ -341,14 +367,26 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			onTabsChange(activeTabIndex.value);
+		});
+
+		const getInstituteTitle: ComputedRef<string> = computed(() => {
+			switch (process.env.SC_THEME) {
+				case "n21":
+					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+				case "thr":
+					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+				case "brb":
+					return "Dataport";
+				default:
+					return "Dataport";
+			}
 		});
 
 		return {
 			t,
 			footerProps,
 			breadcrumbs,
-			model,
 			nextYear,
 			currentYear,
 			onTabsChange,
@@ -375,6 +413,8 @@ export default defineComponent({
 			mdiPencilOutline,
 			mdiTrashCanOutline,
 			mdiArrowUp,
+			getInstituteTitle,
+			activeTabIndex,
 		};
 	},
 });
