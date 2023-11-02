@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe
-		:headline="headline"
+		:headline="t('pages.administration.school.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
@@ -30,15 +30,18 @@
 				</div>
 			</v-alert>
 
+			<v-divider />
 			<v-expansion-panels
-				hover
 				variant="accordion"
-				flat
 				multiple
 				class="mb-9"
 				:model-value="openedPanels"
 			>
-				<v-expansion-panel data-testid="general-settings-panel" value="general">
+				<v-expansion-panel
+					data-testid="general-settings-panel"
+					value="general"
+					elevation="0"
+				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -55,13 +58,13 @@
 					<v-expansion-panel-text eager>
 						<general-settings class="mt-9" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
 
 				<v-expansion-panel
 					v-if="isFeatureSchoolPolicyEnabled"
 					data-testid="policy-panel"
 					value="privacy"
+					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -79,13 +82,13 @@
 					<v-expansion-panel-text eager>
 						<school-policy class="mt-9" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
 
 				<v-expansion-panel
 					v-if="isFeatureSchoolTermsOfUseEnabled"
 					data-testid="terms-panel"
 					value="terms"
+					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -103,13 +106,13 @@
 					<v-expansion-panel-text eager>
 						<school-terms-of-use class="mt-9" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
 
 				<v-expansion-panel
 					v-if="isFeatureOauthMigrationEnabled"
 					data-testid="migration-panel"
 					value="migration"
+					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -129,10 +132,13 @@
 					<v-expansion-panel-text eager>
 						<admin-migration-section class="mt-9" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
 
-				<v-expansion-panel data-testid="systems-panel" value="authentication">
+				<v-expansion-panel
+					data-testid="systems-panel"
+					value="authentication"
+					elevation="0"
+				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -156,10 +162,13 @@
 						</template>
 						<auth-systems class="mt-9" v-else :systems="systems" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
 
-				<v-expansion-panel data-testid="tools-panel" value="tools">
+				<v-expansion-panel
+					data-testid="tools-panel"
+					value="tools"
+					elevation="0"
+				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -176,8 +185,8 @@
 					<v-expansion-panel-text eager>
 						<external-tools-section class="mt-9" />
 					</v-expansion-panel-text>
-					<v-divider />
 				</v-expansion-panel>
+				<v-divider />
 			</v-expansion-panels>
 		</div>
 	</default-wireframe>
@@ -228,16 +237,18 @@ export default defineComponent({
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
 
-		const breadcrumbs: Ref<Breadcrumb[]> = ref([
-			{
-				title: t("pages.administration.index.title"),
-				href: "/administration/",
-			},
-			{
-				title: t("pages.administration.school.index.title"),
-				disabled: true,
-			},
-		]);
+		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+			return [
+				{
+					title: t("pages.administration.index.title"),
+					href: "/administration/",
+				},
+				{
+					title: t("pages.administration.school.index.title"),
+					disabled: true,
+				},
+			];
+		});
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(
