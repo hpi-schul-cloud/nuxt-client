@@ -36,9 +36,9 @@
 				flat
 				multiple
 				class="mb-9"
-				v-model="openedPanels"
+				:model-value="openedPanels"
 			>
-				<v-expansion-panel data-testid="general-settings-panel">
+				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -61,6 +61,7 @@
 				<v-expansion-panel
 					v-if="isFeatureSchoolPolicyEnabled"
 					data-testid="policy-panel"
+					value="privacy"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -84,6 +85,7 @@
 				<v-expansion-panel
 					v-if="isFeatureSchoolTermsOfUseEnabled"
 					data-testid="terms-panel"
+					value="terms"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -107,6 +109,7 @@
 				<v-expansion-panel
 					v-if="isFeatureOauthMigrationEnabled"
 					data-testid="migration-panel"
+					value="migration"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -129,7 +132,7 @@
 					<v-divider />
 				</v-expansion-panel>
 
-				<v-expansion-panel data-testid="systems-panel">
+				<v-expansion-panel data-testid="systems-panel" value="authentication">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -156,7 +159,7 @@
 					<v-divider />
 				</v-expansion-panel>
 
-				<v-expansion-panel data-testid="tools-panel">
+				<v-expansion-panel data-testid="tools-panel" value="tools">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -256,27 +259,9 @@ export default defineComponent({
 			{ immediate: true }
 		);
 
-		const openedPanels: ComputedRef<number[]> = computed(() => {
-			// those need to be in order of code appearance since index is needed for panels v-model
-			const panels: string[] = [
-				"general",
-				"privacy",
-				"terms",
-				"migration",
-				"authentication",
-				"tools",
-			];
-
-			let openedPanelsArr: number[] = [];
-			if (route.query.openPanels) {
-				openedPanelsArr = route.query.openPanels
-					.toString()
-					.split(",")
-					.map((panelName) => panels.findIndex((p) => p === panelName));
-			}
-
-			return openedPanelsArr;
-		});
+		const openedPanels: ComputedRef<string[]> = computed(() =>
+			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
+		);
 		const systems: ComputedRef<any[]> = computed(
 			() => schoolsModule.getSystems
 		);
