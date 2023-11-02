@@ -19,7 +19,6 @@
 					:placeholder="$t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
-					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
 					v-dateInputMask
@@ -61,12 +60,11 @@ export default defineComponent({
 		required: { type: Boolean },
 		minDate: { type: String },
 		maxDate: { type: String },
-		dateTimeInPast: { type: Boolean, default: false },
 	},
 	directives: {
 		dateInputMask,
 	},
-	emits: ["update:date"],
+	emits: ["update:date", "error"],
 	setup(props, { emit }) {
 		const { t, locale } = useI18n();
 
@@ -132,6 +130,9 @@ export default defineComponent({
 
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
+			if (hasError) {
+				emit("error");
+			}
 		};
 
 		const onMenuToggle = () => {
@@ -144,14 +145,6 @@ export default defineComponent({
 			showDateDialog.value = false;
 		}, 50);
 
-		const messages = computed(() => {
-			if (props.dateTimeInPast) {
-				return t("components.datePicker.messages.future");
-			}
-
-			return [];
-		});
-
 		return {
 			locale,
 			modelValue,
@@ -162,7 +155,6 @@ export default defineComponent({
 			onInput,
 			onError,
 			onMenuToggle,
-			messages,
 		};
 	},
 });

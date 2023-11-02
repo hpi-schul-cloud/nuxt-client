@@ -1,23 +1,30 @@
 <template>
-	<div class="d-flex flex-row">
-		<date-picker
-			class="mr-2 picker-width"
-			:required="dateRequired"
-			:date="date"
-			:label="dateInputLabel"
-			:aria-label="dateInputAriaLabel"
-			:minDate="minDate"
-			:maxDate="maxDate"
-			:date-time-in-past="dateTimeInPast"
-			@update:date="onDateUpdate"
-		/>
-		<time-picker
-			class="picker-width"
-			:time="time"
-			:label="timeInputLabel"
-			:aria-label="timeInputAriaLabel"
-			@update:time="onTimeUpdate"
-		/>
+	<div class="wrapper">
+		<div class="d-flex flex-row">
+			<date-picker
+				class="mr-2 picker-width"
+				:date="date"
+				:label="dateInputLabel"
+				:aria-label="dateInputAriaLabel"
+				:minDate="minDate"
+				:maxDate="maxDate"
+				@update:date="onDateUpdate"
+				@error="onError('date')"
+			/>
+			<time-picker
+				class="picker-width"
+				:time="time"
+				:label="timeInputLabel"
+				:aria-label="timeInputAriaLabel"
+				@update:time="onTimeUpdate"
+				@error="onError('time')"
+			/>
+		</div>
+		<v-slide-y-transition>
+			<span v-if="message" class="v-messages theme--light message">
+				{{ message }}
+			</span>
+		</v-slide-y-transition>
 	</div>
 </template>
 
@@ -25,7 +32,7 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
 
@@ -49,9 +56,7 @@ export default defineComponent({
 	},
 	emits: ["input"],
 	setup(props, { emit }) {
-		const { locale } = useI18n();
-
-		const dateTimeInPast = ref(false);
+		const { locale, t } = useI18n();
 
 		const getTime = (dateIsoString: string) => {
 			if (dateIsoString === "") {
@@ -64,6 +69,7 @@ export default defineComponent({
 		};
 
 		const dateTime = useVModel(props, "dateTime");
+		const dateTimeInPast = ref(new Date(dateTime.value) < new Date());
 		const date = ref(
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
@@ -90,13 +96,37 @@ export default defineComponent({
 			emit("input", dateTime.toISOString());
 		};
 
+		const errors = ref<Array<string>>([]);
+		const message = computed(() => {
+			if (errors.value.length > 0) return "";
+
+			if (dateTimeInPast.value) {
+				return t("components.datePicker.messages.future");
+			}
+
+			if (dateRequired.value && !date.value) {
+				return t("components.datePicker.validation.required");
+			}
+
+			return "";
+		});
+
+		const onError = (errorOrigin: string) => {
+			if (errors.value.indexOf(errorOrigin) === -1) {
+				errors.value.push(errorOrigin);
+			}
+		};
+
 		const onDateUpdate = (newDate: string) => {
 			date.value = newDate;
+			errors.value = errors.value.filter((item) => item !== "date");
+
 			emitDateTime();
 		};
 
 		const onTimeUpdate = (newTime: string) => {
 			time.value = newTime;
+			errors.value = errors.value.filter((item) => item !== "time");
 			emitDateTime();
 		};
 
@@ -106,7 +136,9 @@ export default defineComponent({
 			onDateUpdate,
 			onTimeUpdate,
 			dateRequired,
-			dateTimeInPast,
+			message,
+			errors,
+			onError,
 		};
 	},
 });
@@ -115,5 +147,15 @@ export default defineComponent({
 <style lang="scss" scoped>
 .picker-width {
 	width: 225px;
+}
+
+.wrapper {
+	position: relative;
+}
+
+.message {
+	line-height: 14px;
+	position: absolute;
+	bottom: 0px;
 }
 </style>

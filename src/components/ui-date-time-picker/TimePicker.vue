@@ -69,7 +69,7 @@ export default defineComponent({
 	directives: {
 		timeInputMask,
 	},
-	emits: ["update:time"],
+	emits: ["update:time", "error"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
@@ -115,6 +115,9 @@ export default defineComponent({
 
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
+			if (hasError) {
+				emit("error");
+			}
 		};
 
 		const onMenuToggle = () => {
