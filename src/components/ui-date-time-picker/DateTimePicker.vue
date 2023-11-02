@@ -82,8 +82,14 @@ export default defineComponent({
 			}
 
 			let timeValue = time.value;
-			if (timeValue === "") {
+			if (timeValue === "" && date.value) {
 				timeValue = "23:59";
+			}
+
+			if (date.value === "" && timeValue === "") {
+				dateTimeInPast.value = false;
+				emit("input", null);
+				return;
 			}
 
 			const dateTime = new Date(date.value);
@@ -100,12 +106,12 @@ export default defineComponent({
 		const message = computed(() => {
 			if (errors.value.length > 0) return "";
 
-			if (dateTimeInPast.value) {
-				return t("components.datePicker.messages.future");
-			}
-
 			if (dateRequired.value && !date.value) {
 				return t("components.datePicker.validation.required");
+			}
+
+			if (dateTimeInPast.value) {
+				return t("components.datePicker.messages.future");
 			}
 
 			return "";
