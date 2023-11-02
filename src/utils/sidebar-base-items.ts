@@ -1,5 +1,5 @@
 import { Envs } from "@/store/types/env-config";
-import { envConfigModule } from "../store";
+import { envConfigModule } from "@/store";
 
 export type SidebarItemBase = {
 	title: string;
@@ -179,7 +179,7 @@ const getSidebarItems = (
 						title: "global.sidebar.classes",
 						icon: "$class",
 						href: "/administration/groups/classes",
-						testId: "Klassen (neu)",
+						testId: "Klassen",
 						activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				  }
 				: {
@@ -225,7 +225,7 @@ const getSidebarItems = (
 						title: "global.sidebar.classes",
 						icon: "$class",
 						href: "/administration/groups/classes",
-						testId: "Klassen (neu)",
+						testId: "Klassen",
 						activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				  }
 				: {

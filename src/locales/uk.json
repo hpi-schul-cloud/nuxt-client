@@ -833,7 +833,7 @@
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.createSuccessor": "Перенести клас на наступний навчальний рік",
 	"pages.administration.classes.label.archive": "Архів",
-	"pages.administration.classes.hint": "З усіма змінами та налаштуваннями в області адміністрування ви підтверджуєте, що ви є авторизованим адміністратором школи та маєте право вносити зміни до школи у шкільній хмарі. Ваші дії розглядаються як інструкція школи для HPI.",
+	"pages.administration.classes.hint": "Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements": "Виберіть елементи, які треба додати до теми",
 	"pages.content._id.metadata.author": "Автор",

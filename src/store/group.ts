@@ -2,6 +2,7 @@ import {
 	ClassInfoSearchListResponse,
 	GroupApiFactory,
 	GroupApiInterface,
+	SchoolYearQueryType,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
@@ -107,7 +108,7 @@ export default class GroupModule extends VuexModule {
 	@Action
 	async deleteClass(deleteQuery: {
 		classId: string;
-		query: string;
+		query?: SchoolYearQueryType;
 	}): Promise<void> {
 		this.setLoading(true);
 
@@ -131,7 +132,9 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async loadClassesForSchool(schoolYearQuery?: string): Promise<void> {
+	async loadClassesForSchool(
+		schoolYearQuery?: SchoolYearQueryType
+	): Promise<void> {
 		this.setLoading(true);
 		try {
 			const sortBy =

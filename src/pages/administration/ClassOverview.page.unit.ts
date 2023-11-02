@@ -17,8 +17,10 @@ import Vue from "vue";
 import ClassOverview from "./ClassOverview.page.vue";
 import SchoolsModule from "@/store/schools";
 import { School, Year } from "@/store/types/schools";
+import { createMock } from "@golevelup/ts-jest";
+import VueRouter from "vue-router";
 
-const $router = { replace: jest.fn() };
+const $router = createMock<VueRouter>();
 
 describe("ClassOverview", () => {
 	const getWrapper = (getters: Partial<GroupModule> = {}) => {

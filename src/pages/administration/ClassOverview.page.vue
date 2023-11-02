@@ -146,7 +146,7 @@
 			color="primary"
 			depressed
 			data-testid="admin-class-add-button"
-			:href="`/administration/classes/create`"
+			href="/administration/classes/create"
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
@@ -195,6 +195,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { useRouter } from "vue-router/composables";
+import { SchoolYearQueryType } from "../../serverApi/v3";
 
 type Tab = "current" | "next" | "archive";
 
@@ -233,7 +234,20 @@ export default defineComponent({
 			},
 		];
 
-		const schoolYearQueryType: Ref<string> = ref("currentYear");
+		const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(
+			() => {
+				switch (props.tab) {
+					case "next":
+						return SchoolYearQueryType.NextYear;
+					case "current":
+						return SchoolYearQueryType.CurrentYear;
+					case "archive":
+						return SchoolYearQueryType.PreviousYears;
+					default:
+						return SchoolYearQueryType.CurrentYear;
+				}
+			}
+		);
 
 		const nextYear: ComputedRef<string> = computed(
 			() => schoolsModule.getSchool.years.nextYear.name
@@ -244,16 +258,6 @@ export default defineComponent({
 		);
 
 		const onTabsChange = (tab: string) => {
-			if (tab === "next") {
-				schoolYearQueryType.value = "nextYear";
-			}
-			if (tab === "current") {
-				schoolYearQueryType.value = "currentYear";
-			}
-			if (tab === "archive") {
-				schoolYearQueryType.value = "previousYears";
-			}
-
 			groupModule.loadClassesForSchool(schoolYearQueryType.value);
 			router.replace({ query: { tab } });
 		};
@@ -330,11 +334,10 @@ export default defineComponent({
 
 		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
-				const deleteQuery = {
+				await groupModule.deleteClass({
 					classId: selectedItem.value.id,
 					query: schoolYearQueryType.value,
-				};
-				await groupModule.deleteClass(deleteQuery);
+				});
 			}
 		};
 
