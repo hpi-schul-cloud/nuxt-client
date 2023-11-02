@@ -14,6 +14,7 @@
 					v-model="modelValue"
 					v-bind="attrs"
 					v-on="on"
+					v-dateInputMask
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="$t('common.placeholder.dateformat')"
@@ -21,7 +22,6 @@
 					append-icon="$mdiCalendar"
 					:rules="rules"
 					data-testid="date-input"
-					v-dateInputMask
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"

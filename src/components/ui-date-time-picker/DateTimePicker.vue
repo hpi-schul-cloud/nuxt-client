@@ -32,7 +32,7 @@
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 import { useVModel } from "@vueuse/core";
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
 
@@ -69,7 +69,9 @@ export default defineComponent({
 		};
 
 		const dateTime = useVModel(props, "dateTime");
-		const dateTimeInPast = ref(new Date(dateTime.value) < new Date());
+		const dateTimeInPast = ref(
+			dateTime.value && new Date(dateTime.value) < new Date()
+		);
 		const date = ref(
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
