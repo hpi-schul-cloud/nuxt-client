@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
@@ -40,6 +40,23 @@ export default defineComponent({
 				isFilePickerOpen.value = true;
 				resetLastCreatedElementId();
 			}
+		});
+
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (fileWasPicked.value) {
+				// Opens confirmation dialog in firefox
+				event.preventDefault();
+				// Opens confirmation dialog in chrome
+				event.returnValue = "";
+			}
+		};
+
+		onMounted(() => {
+			window.addEventListener("beforeunload", handleBeforeUnload);
+		});
+
+		onBeforeUnmount(() => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
 		});
 
 		const onFileSelect = async (file: File) => {
