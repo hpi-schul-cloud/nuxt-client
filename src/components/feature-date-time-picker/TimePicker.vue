@@ -4,6 +4,7 @@
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
+			max-height="200"
 			min-width="180"
 			@input="onMenuToggle"
 		>
@@ -22,10 +23,11 @@
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
+					@keydown.up.down.stop
 					@update:error="onError"
 				/>
 			</template>
-			<v-list height="200" class="col-12 pt-1 px-0 overflow-y-auto">
+			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
 				<v-list-item-group color="primary">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
