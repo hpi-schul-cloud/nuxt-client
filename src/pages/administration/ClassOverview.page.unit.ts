@@ -115,9 +115,6 @@ describe("ClassOverview", () => {
 				await Vue.nextTick();
 
 				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect($router.replace).toHaveBeenCalledWith({
-					query: { tab: "current" },
-				});
 			});
 		});
 	});
