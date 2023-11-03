@@ -32,7 +32,7 @@ const numberFormats = {
 
 const localCreateI18n = () => {
 	const i18n = createI18n({
-		allowComposition: true, // you need to specify that!
+		legacy: false,
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
 		messages: loadLocaleMessages(),
@@ -43,18 +43,3 @@ const localCreateI18n = () => {
 };
 
 export { localCreateI18n as createI18n };
-
-// NUXT_REMOVAL remove $ts when refactored
-// declare module "vue/types/vue" {
-// 	interface Vue {
-// 		$ts(key: string): string;
-// 	}
-// }
-// // NUXT_REMOVAL remove $ts when refactored
-// Vue.prototype.$ts = (key: string) => {
-// 	const result = (this as unknown as Vue).$t(key);
-// 	if (typeof result !== "string") {
-// 		throw new Error("Translation Result is not a string");
-// 	}
-// 	return result;
-// };
