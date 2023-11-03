@@ -20,7 +20,7 @@
 					class="text"
 				>
 					<template v-slot:append>
-						<button type="submit">
+						<button type="submit" ref="submit">
 							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
 							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 						</button>
