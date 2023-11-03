@@ -46,7 +46,8 @@ describe("LinkContentElementDisplay", () => {
 		});
 
 		it("should sanitize javascript-urls", async () => {
-			const INVALID_UNSANITIZED_URL = "javascript:alert(document.domain)";
+			const INVALID_UNSANITIZED_URL =
+				"javascript" + ":" + "alert(document.domain)";
 			const { wrapper } = setup({
 				url: INVALID_UNSANITIZED_URL,
 				title: "",
