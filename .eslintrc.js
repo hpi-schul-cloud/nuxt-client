@@ -16,6 +16,7 @@ module.exports = {
 		ecmaVersion: 2020,
 	},
 	rules: {
+		"vuetify/no-deprecated-components": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
 		"@typescript-eslint/no-explicit-any": VUE3_UPGRADE ? "warn" : "error",
 		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
