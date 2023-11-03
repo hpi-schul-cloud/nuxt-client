@@ -9,7 +9,7 @@
 			class="tabs-max-width mb-5"
 			grow
 			@change="onTabsChange"
-			v-model="activeTab"
+			:value="activeTab"
 		>
 			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>

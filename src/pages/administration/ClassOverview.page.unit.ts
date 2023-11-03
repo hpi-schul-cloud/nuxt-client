@@ -653,10 +653,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should call store to load classes of previous years", () => {
+			it("should call store to load classes of previous years", async () => {
 				const { wrapper, groupModule } = setup();
 
-				wrapper
+				await wrapper
 					.find('[data-testid="admin-class-previous-years-tab"]')
 					.trigger("click");
 
@@ -676,14 +676,14 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should call store to load groups and classes of current year", () => {
+			it("should call store to load groups and classes of current year", async () => {
 				const { wrapper, groupModule } = setup();
 
-				wrapper
+				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
-				wrapper
+				await wrapper
 					.find('[data-testid="admin-class-current-year-tab"]')
 					.trigger("click");
 
