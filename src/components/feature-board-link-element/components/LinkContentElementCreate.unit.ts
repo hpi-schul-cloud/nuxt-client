@@ -21,8 +21,6 @@ const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
 
 describe("LinkContentElementCreate", () => {
-	beforeEach(() => {});
-
 	afterEach(() => {
 		jest.clearAllMocks();
 	});

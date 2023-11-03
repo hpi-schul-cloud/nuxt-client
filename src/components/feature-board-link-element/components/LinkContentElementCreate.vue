@@ -2,7 +2,7 @@
 	<v-card-text>
 		<v-form
 			@submit.prevent="onSubmit(url)"
-			:ref="form"
+			ref="form"
 			:lazy-validation="true"
 			validate-on="submit"
 		>
