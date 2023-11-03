@@ -25,26 +25,27 @@
 			</div>
 			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs :model-value="tab" class="tabs-max-width" grow>
-					<v-tab :to="tabOneHeader.route">
+				<v-tabs v-model="tab" class="tabs-max-width" grow color="primary">
+					<v-tab value="current">
 						<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
-						<span class="d-none d-sm-inline" data-testid="openTasks">{{
-							tabOneHeader.title
-						}}</span>
+						<span class="d-none d-sm-inline" data-testid="openTasks">
+							{{ tabOneHeader.title }}
+						</span>
 					</v-tab>
-					<v-tab :to="tabTwoHeader.route">
+					<v-tab value="drafts">
 						<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 						<span
 							class="d-none d-sm-inline"
 							:data-testid="tabTwoHeader.dataTestId"
-							>{{ tabTwoHeader.title }}</span
 						>
+							{{ tabTwoHeader.title }}
+						</span>
 					</v-tab>
-					<v-tab :to="tabThreeHeader.route">
-						<v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
-						<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
-							tabThreeHeader.title
-						}}</span>
+					<v-tab value="finished"
+						><v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
+						<span class="d-none d-sm-inline" data-testid="finishedTasks">
+							{{ tabThreeHeader.title }}
+						</span>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -98,7 +99,6 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-// import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
 	mdiPlus,
@@ -120,7 +120,6 @@ const roleBasedRoutes = {
 export default {
 	components: {
 		DefaultWireframe,
-		// vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
 		CopyResultModal,
@@ -322,7 +321,7 @@ export default {
 	watch: {
 		tab(tab, oldTab) {
 			if (oldTab !== "") {
-				this.$router.replace({ query: { ...this.$route.query, tab } });
+				this.$router.push({ query: { ...this.$route.query, tab } });
 			}
 			if (tab === "finished") {
 				this.finishedTasksModule.fetchFinishedTasks();
