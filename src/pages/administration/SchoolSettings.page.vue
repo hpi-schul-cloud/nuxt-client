@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe
-		:headline="t('pages.administration.school.index.title')"
+		:headline="headline"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
 	>
@@ -237,18 +237,16 @@ export default defineComponent({
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
 
-		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-			return [
-				{
-					title: t("pages.administration.index.title"),
-					href: "/administration/",
-				},
-				{
-					title: t("pages.administration.school.index.title"),
-					disabled: true,
-				},
-			];
-		});
+		const breadcrumbs: Ref<Breadcrumb[]> = ref([
+			{
+				title: t("pages.administration.index.title"),
+				href: "/administration/",
+			},
+			{
+				title: t("pages.administration.school.index.title"),
+				disabled: true,
+			},
+		]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 		watch(

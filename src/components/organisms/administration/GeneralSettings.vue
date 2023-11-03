@@ -13,6 +13,7 @@
 							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
 						)
 					"
+					color="primary"
 					density="compact"
 					variant="underlined"
 					:readonly="!hasSchoolEditPermission"
@@ -32,6 +33,7 @@
 							'pages.administration.school.index.generalSettings.labels.schoolNumber'
 						)
 					"
+					color="primary"
 					density="compact"
 					variant="underlined"
 					:disabled="!!school.officialSchoolNumber"

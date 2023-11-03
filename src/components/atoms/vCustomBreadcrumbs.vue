@@ -1,11 +1,7 @@
 <template>
 	<div>
 		<v-icon>{{ mdiChevronLeft }}</v-icon>
-		<v-breadcrumbs
-			color="secondary"
-			:items="breadcrumbs"
-			class="custom-breadcrumb px-0 py-0"
-		>
+		<v-breadcrumbs :items="breadcrumbs" class="custom-breadcrumb px-0 py-0">
 			<template #divider>
 				<v-icon>{{ mdiChevronLeft }}</v-icon>
 			</template>
@@ -38,5 +34,13 @@ defineProps({
 <style lang="scss" scoped>
 .custom-breadcrumb {
 	display: inline-flex;
+}
+
+:deep(.v-breadcrumbs .v-breadcrumbs-item) {
+	color: rgba(var(--v-theme-primary));
+}
+
+:deep(.v-breadcrumbs .v-breadcrumbs-item--disabled) {
+	color: rgba(var(--v-theme-secondary));
 }
 </style>
