@@ -219,9 +219,7 @@ export default defineComponent({
 
 		const activeTab: WritableComputedRef<string> = computed({
 			get: () => props.tab,
-			set: () => {
-				// noop
-			},
+			set: () => ({}),
 		});
 
 		const footerProps = {
