@@ -11,31 +11,30 @@ import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import CollaborativeFilesModule from "@/store/collaborative-files";
 import ContentModule from "@/store/content";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import ExternalToolsModule from "@/store/external-tools";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
+import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
+import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
+import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import VideoConferenceModule from "@/store/video-conference";
-import TermsOfUseModule from "@/store/terms-of-use";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -49,7 +48,6 @@ export let contentModule: ContentModule;
 export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
-export let externalToolsModule: ExternalToolsModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
@@ -81,7 +79,6 @@ export function initializeStores(store: Store<any>): void {
 	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
-	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	groupModule = getModule(GroupModule, store);
@@ -116,7 +113,6 @@ export const modules = {
 	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
-	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
 	groupModule: GroupModule,
