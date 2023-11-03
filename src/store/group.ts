@@ -137,7 +137,7 @@ export default class GroupModule extends VuexModule {
 					: undefined;
 
 			const response: AxiosResponse<ClassInfoSearchListResponse> =
-				await this.groupApi.groupControllerFindClassesForSchool(
+				await this.groupApi.groupControllerFindClasses(
 					this.pagination.skip,
 					this.pagination.limit,
 					this.getSortOrder,
