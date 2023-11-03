@@ -2,6 +2,7 @@
 	<div>
 		<video
 			controls
+			controlsList="nodownload"
 			ref="videoRef"
 			class="video"
 			loading="lazy"
@@ -42,6 +43,7 @@ export default defineComponent({
 <style scoped>
 .video {
 	width: 100%;
+	display: block;
 }
 
 .menu {

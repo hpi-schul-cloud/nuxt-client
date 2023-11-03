@@ -199,7 +199,7 @@ describe("GroupModule", () => {
 						limit: pagination.limit,
 					});
 
-				apiMock.groupControllerFindClassesForSchool.mockResolvedValue(
+				apiMock.groupControllerFindClasses.mockResolvedValue(
 					mockApiResponse({ data: response })
 				);
 
@@ -217,9 +217,7 @@ describe("GroupModule", () => {
 
 				await module.loadClassesForSchool();
 
-				expect(
-					apiMock.groupControllerFindClassesForSchool
-				).toHaveBeenCalledWith(
+				expect(apiMock.groupControllerFindClasses).toHaveBeenCalledWith(
 					pagination.skip,
 					pagination.limit,
 					sortOrder,
@@ -242,7 +240,7 @@ describe("GroupModule", () => {
 				const error = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(error);
 
-				apiMock.groupControllerFindClassesForSchool.mockRejectedValue(error);
+				apiMock.groupControllerFindClasses.mockRejectedValue(error);
 
 				return {
 					apiError,
@@ -288,7 +286,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass(class1.id);
 
-				expect(apiMock.groupControllerFindClassesForSchool).toHaveBeenCalled();
+				expect(apiMock.groupControllerFindClasses).toHaveBeenCalled();
 			});
 		});
 
