@@ -33,38 +33,20 @@
 </template>
 
 <script lang="ts">
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	PropType,
-	ref,
-	Ref,
-} from "vue";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import {
-	ToolConfigurationStatus,
-	ToolLaunchRequest,
-} from "@/store/external-tool";
 import EnvConfigModule from "@/store/env-config";
+import { ToolConfigurationStatus } from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { useExternalToolLaunchState } from "@data-external-tool";
+import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
-import ExternalToolsModule from "@/store/external-tools";
-import { ExternalToolMapper } from "@/store/external-tool/mapper";
-import { ToolLaunchRequestResponse } from "@/serverApi/v3";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
 	components: { RoomBaseCard, RoomDotMenu },
-	emits: ["edit", "delete", "click", "error"],
+	emits: ["edit", "delete", "error"],
 	props: {
 		tool: {
 			type: Object as PropType<ExternalToolDisplayData>,
@@ -80,19 +62,25 @@ export default defineComponent({
 		const envConfigModule: EnvConfigModule = injectStrict(
 			ENV_CONFIG_MODULE_KEY
 		);
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
-		);
+
+		const {
+			fetchLaunchRequest,
+			launchTool,
+			error: launchError,
+		} = useExternalToolLaunchState();
 
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
-			if (loadingError.value) {
+			if (isToolOutdated.value) {
 				emit("error", props.tool);
-				return;
 			}
 
-			emit("click", toolLaunchRequest.value, props.tool);
+			launchTool();
+
+			if (launchError.value) {
+				emit("error", props.tool);
+			}
 		};
 
 		const handleEdit = () => {
@@ -125,30 +113,15 @@ export default defineComponent({
 			() => props.tool.status === ToolConfigurationStatus.Outdated
 		);
 
-		const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
-
-		const loadingError: Ref<boolean> = ref(false);
 		const loadLaunchRequest = async () => {
-			loadingError.value = false;
-			try {
-				const response: ToolLaunchRequestResponse | undefined =
-					await externalToolsModule.loadToolLaunchData(
-						props.tool.contextExternalToolId
-					);
-				toolLaunchRequest.value = response
-					? ExternalToolMapper.mapToToolLaunchRequest(response)
-					: undefined;
-			} catch (e: unknown) {
-				loadingError.value = true;
-			}
-		};
-
-		onMounted(async () => {
 			if (isToolOutdated.value) {
 				return;
 			}
-			await loadLaunchRequest();
-		});
+
+			await fetchLaunchRequest(props.tool.contextExternalToolId);
+		};
+
+		watch(() => props.tool, loadLaunchRequest, { immediate: true });
 
 		return {
 			t,
