@@ -216,11 +216,7 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const activeTab = computed({
-			get: () => props.tab,
-			set: (tab) =>
-				router.replace({ query: { ...router.currentRoute.query, tab } }),
-		});
+		const activeTab: ComputedRef<string> = computed(() => props.tab);
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -261,8 +257,10 @@ export default defineComponent({
 			() => schoolsModule.getSchool.years.activeYear.name
 		);
 
-		const onTabsChange = (tab: string) => {
-			groupModule.loadClassesForSchool(schoolYearQueryType.value);
+		const onTabsChange = async (tab: string) => {
+			await router.replace({ query: { ...router.currentRoute.query, tab } });
+
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
@@ -346,21 +344,25 @@ export default defineComponent({
 
 		const onUpdateSortBy = async (sortBy: string) => {
 			groupModule.setSortBy(sortBy);
+
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const updateSortOrder = async (sortDesc: boolean) => {
 			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
+
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
 			groupModule.setPagination({ ...pagination.value, skip });
+
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
+
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 
