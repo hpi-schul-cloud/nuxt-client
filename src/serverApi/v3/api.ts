@@ -4328,6 +4328,12 @@ export interface SubmissionItemResponse {
      * @memberof SubmissionItemResponse
      */
     userId: string;
+    /**
+     * 
+     * @type {Array<FileElementResponse | RichTextElementResponse>}
+     * @memberof SubmissionItemResponse
+     */
+    elements: Array<FileElementResponse | RichTextElementResponse>;
 }
 /**
  * 
@@ -7958,6 +7964,50 @@ export const BoardSubmissionApiAxiosParamCreator = function (configuration?: Con
     return {
         /**
          * 
+         * @summary Create a new element in a submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerCreateElement: async (submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'submissionItemId' is not null or undefined
+            assertParamExists('boardSubmissionControllerCreateElement', 'submissionItemId', submissionItemId)
+            // verify required parameter 'createContentElementBodyParams' is not null or undefined
+            assertParamExists('boardSubmissionControllerCreateElement', 'createContentElementBodyParams', createContentElementBodyParams)
+            const localVarPath = `/board-submissions/{submissionItemId}/elements`
+                .replace(`{${"submissionItemId"}}`, encodeURIComponent(String(submissionItemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createContentElementBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8050,6 +8100,18 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new element in a submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RichTextElementResponse | FileElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerCreateElement(submissionItemId, createContentElementBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8083,6 +8145,17 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a new element in a submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {CreateContentElementBodyParams} createContentElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse> {
+            return localVarFp.boardSubmissionControllerCreateElement(submissionItemId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8113,6 +8186,17 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
 export interface BoardSubmissionApiInterface {
     /**
      * 
+     * @summary Create a new element in a submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {CreateContentElementBodyParams} createContentElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApiInterface
+     */
+    boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
+
+    /**
+     * 
      * @summary Get a list of submission items by their parent container.
      * @param {string} submissionContainerId The id of the submission container.
      * @param {*} [options] Override http request option.
@@ -8141,6 +8225,19 @@ export interface BoardSubmissionApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardSubmissionApi extends BaseAPI implements BoardSubmissionApiInterface {
+    /**
+     * 
+     * @summary Create a new element in a submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {CreateContentElementBodyParams} createContentElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApi
+     */
+    public boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any) {
+        return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerCreateElement(submissionItemId, createContentElementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Get a list of submission items by their parent container.

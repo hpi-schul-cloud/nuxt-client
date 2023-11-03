@@ -8,4 +8,5 @@ export const submissionItemResponseFactory =
 		userId: `userId${sequence}`,
 		completed: true,
 		timestamps: timestampsResponseFactory.build(),
+		elements: [],
 	}));
