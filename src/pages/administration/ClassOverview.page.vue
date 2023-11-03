@@ -195,7 +195,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { useRouter } from "vue-router/composables";
-import { SchoolYearQueryType } from "../../serverApi/v3";
+import { SchoolYearQueryType } from "@/serverApi/v3";
 
 type Tab = "current" | "next" | "archive";
 
