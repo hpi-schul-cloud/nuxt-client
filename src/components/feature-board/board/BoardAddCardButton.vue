@@ -8,9 +8,9 @@
 			@click.stop="onAddCard"
 			@dblclick.stop="() => {}"
 			elevation="6"
-			class="white"
+			class="bg-white"
 			icon
-			large
+			size="large"
 			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>

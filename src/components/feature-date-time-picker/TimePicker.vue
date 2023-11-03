@@ -6,7 +6,7 @@
 			transition="scale-transition"
 			max-height="200"
 			min-width="180"
-			@input="onMenuToggle"
+			@update:model-value="onMenuToggle"
 		>
 			<template #activator="{ props }">
 				<v-text-field
@@ -24,25 +24,22 @@
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@keydown.up.down.stop
-					@update:error="onError"
 				/>
 			</template>
 			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
-				<v-list-item-group color="primary">
-					<div
-						v-for="(timeOfDay, index) in timesOfDayList"
-						:key="`time-select-${index}`"
+				<div
+					v-for="(timeOfDay, index) in timesOfDayList"
+					:key="`time-select-${index}`"
+				>
+					<v-list-item
+						:data-testid="`time-select-${index}`"
+						class="time-list-item text-left"
+						@click="onSelect(timeOfDay.value)"
 					>
-						<v-list-item
-							:data-testid="`time-select-${index}`"
-							class="time-list-item text-left"
-							@click="onSelect(timeOfDay.value)"
-						>
-							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
-						</v-list-item>
-						<v-divider v-if="index < timesOfDayList.length - 1" />
-					</div>
-				</v-list-item-group>
+						<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
+					</v-list-item>
+					<v-divider v-if="index < timesOfDayList.length - 1" />
+				</div>
 			</v-list>
 		</v-menu>
 	</div>

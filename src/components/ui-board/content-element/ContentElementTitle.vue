@@ -1,5 +1,5 @@
 <template>
-	<span class="subtitle-1 font-weight-bold"><slot /></span>
+	<span class="text-subtitle-1 font-weight-bold"><slot /></span>
 </template>
 
 <script lang="ts">

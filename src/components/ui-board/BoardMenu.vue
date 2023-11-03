@@ -2,7 +2,7 @@
 	<VMenu location="bottom end" min-width="250">
 		<template v-slot:activator="{ props }">
 			<VBtn
-				flat
+				variant="flat"
 				data-testid="board-menu-button"
 				v-bind="props"
 				:ripple="false"

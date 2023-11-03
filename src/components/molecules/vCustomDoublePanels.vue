@@ -1,11 +1,6 @@
 <template>
 	<section>
-		<v-expansion-panels
-			:model-value="expanded"
-			flat
-			variant="accordion"
-			mandatory
-		>
+		<v-expansion-panels :model-value="expanded" variant="accordion" mandatory>
 			<v-expansion-panel :disabled="isPanelOneDisabled">
 				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />

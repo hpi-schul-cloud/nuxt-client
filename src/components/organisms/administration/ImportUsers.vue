@@ -93,7 +93,7 @@
 							/>
 						</td>
 						<td class="col-2">
-							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
+							<v-btn-toggle v-model="searchMatchedBy" multiple group>
 								<v-btn
 									icon
 									variant="text"
@@ -151,7 +151,7 @@
 							</v-btn-toggle>
 						</td>
 						<td>
-							<v-btn-toggle v-model="searchFlagged" borderless group>
+							<v-btn-toggle v-model="searchFlagged" group>
 								<v-btn
 									icon
 									variant="text"

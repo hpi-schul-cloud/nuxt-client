@@ -12,37 +12,35 @@
 			:data-test-id="`alert-item-${index}`"
 			class="alert-item"
 		>
-			<v-list-item-icon class="mt-3 mr-3">
+			<template v-slot:prepend>
 				<v-icon
 					:color="`rgba(var(--v-theme-${getIconTag(item.status).color}))`"
 				>
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
-			</v-list-item-icon>
-			<v-list-item-content>
-				<v-list-item-title
-					:data-testid="`alert-title-${index}`"
-					class="subtitle-1 ma-0"
-				>
-					{{ item.title }}
-				</v-list-item-title>
-				<v-list-item-subtitle
-					:data-testid="`alert-text-${index}`"
-					class="subtitle-2 text--primary ma-0 mt-1"
-				>
-					{{ item.text }}
-				</v-list-item-subtitle>
-				<v-list-item-subtitle
-					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
-					:data-testid="`alert-date-${index}`"
-				>
-					<template v-if="item.timestamp !== item.createdAt">
-						{{ $t("common.labels.updateAt") }}
-						{{ formatDate(item.timestamp) }} |
-					</template>
-					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
-				</v-list-item-subtitle>
-			</v-list-item-content>
+			</template>
+			<v-list-item-title
+				:data-testid="`alert-title-${index}`"
+				class="text-subtitle-1 ma-0"
+			>
+				{{ item.title }}
+			</v-list-item-title>
+			<v-list-item-subtitle
+				:data-testid="`alert-text-${index}`"
+				class="text-subtitle-2 text--primary ma-0 mt-1"
+			>
+				{{ item.text }}
+			</v-list-item-subtitle>
+			<v-list-item-subtitle
+				class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
+				:data-testid="`alert-date-${index}`"
+			>
+				<template v-if="item.timestamp !== item.createdAt">
+					{{ $t("common.labels.updateAt") }}
+					{{ formatDate(item.timestamp) }} |
+				</template>
+				{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
+			</v-list-item-subtitle>
 		</v-list-item>
 	</v-list>
 </template>

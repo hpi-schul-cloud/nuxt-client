@@ -53,7 +53,6 @@
 			<v-autocomplete
 				v-if="showCourseFilter"
 				v-model="selectedCourseFilters"
-				small-chips
 				closable-chips
 				multiple
 				clearable
@@ -61,7 +60,7 @@
 				rounded
 				chips
 				data-testid="courseFilter"
-				item-color="primary"
+				color="primary"
 				item-title="text"
 				item-value="value"
 				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"

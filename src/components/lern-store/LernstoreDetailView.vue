@@ -41,7 +41,7 @@
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions" />
-				<div class="title">
+				<div class="text-h6">
 					<span>
 						{{ resource.title || resource.name }}
 					</span>

@@ -5,7 +5,7 @@
 			:close-on-content-click="false"
 			transition="scale-transition"
 			min-width="auto"
-			@input="onMenuToggle"
+			@update:model-value="onMenuToggle"
 		>
 			<template #activator="{ props }">
 				<v-text-field
@@ -25,7 +25,6 @@
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"
 					@keydown.tab="showDateDialog = false"
-					@update:error="onError"
 				/>
 			</template>
 			<VDatePicker
