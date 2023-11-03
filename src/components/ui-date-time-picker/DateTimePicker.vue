@@ -89,7 +89,7 @@ export default defineComponent({
 				return;
 			}
 
-			const timeValue = time.value || "23.59";
+			const timeValue = time.value || "23:59";
 			const dateTime = new Date(date.value);
 			const hoursAndMinutes = timeValue.split(":");
 
