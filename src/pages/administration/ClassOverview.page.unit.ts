@@ -607,10 +607,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should replace the route to the given tab ", () => {
+			it("should replace the route to the given tab ", async () => {
 				const { wrapper } = setup();
 
-				wrapper
+				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
