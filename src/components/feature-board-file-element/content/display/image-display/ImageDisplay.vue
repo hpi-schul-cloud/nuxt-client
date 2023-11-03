@@ -20,6 +20,7 @@
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { useI18n } from "vue-i18n";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
@@ -36,6 +37,8 @@ export default defineComponent({
 	},
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
+		const { t } = useI18n();
+
 		const alternativeText = computed(() => {
 			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
 			const altText = props.element.content.alternativeText
