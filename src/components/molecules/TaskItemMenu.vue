@@ -149,7 +149,6 @@ export default defineComponent({
 		},
 		taskIsPublished: {
 			type: Boolean,
-			required: true,
 		},
 		taskTitle: {
 			type: String,
