@@ -264,9 +264,9 @@ export default defineComponent({
 		);
 
 		const onTabsChange = async (tab: string) => {
-			await router.replace({ query: { ...router.currentRoute.query, tab } });
-
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+
+			await router.replace({ query: { ...router.currentRoute.query, tab } });
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
