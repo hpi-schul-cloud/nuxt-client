@@ -242,7 +242,7 @@ export default defineComponent({
 				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
 				if (
 					!schoolsModule.getFederalState ||
-					!schoolsModule.getFederalState._id ||
+					!schoolsModule.getFederalState.id ||
 					!schoolsModule.systems ||
 					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
