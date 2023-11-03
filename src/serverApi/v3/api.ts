@@ -5003,6 +5003,12 @@ export interface UserLoginMigrationMandatoryParams {
  */
 export interface UserLoginMigrationResponse {
     /**
+     * 
+     * @type {string}
+     * @memberof UserLoginMigrationResponse
+     */
+    id: string;
+    /**
      * Id of the system which is the origin of the migration
      * @type {string}
      * @memberof UserLoginMigrationResponse
@@ -9470,7 +9476,7 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
     return {
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @summary return extract meta tags
          * @param {GetMetaTagDataBody} getMetaTagDataBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9478,7 +9484,7 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
         metaTagExtractorControllerGetData: async (getMetaTagDataBody: GetMetaTagDataBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'getMetaTagDataBody' is not null or undefined
             assertParamExists('metaTagExtractorControllerGetData', 'getMetaTagDataBody', getMetaTagDataBody)
-            const localVarPath = `/meta-tag-extractor/{url}`;
+            const localVarPath = `/meta-tag-extractor`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9520,7 +9526,7 @@ export const MetaTagExtractorApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @summary return extract meta tags
          * @param {GetMetaTagDataBody} getMetaTagDataBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9541,7 +9547,7 @@ export const MetaTagExtractorApiFactory = function (configuration?: Configuratio
     return {
         /**
          * 
-         * @summary Return dummy HTML for testing
+         * @summary return extract meta tags
          * @param {GetMetaTagDataBody} getMetaTagDataBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9560,7 +9566,7 @@ export const MetaTagExtractorApiFactory = function (configuration?: Configuratio
 export interface MetaTagExtractorApiInterface {
     /**
      * 
-     * @summary Return dummy HTML for testing
+     * @summary return extract meta tags
      * @param {GetMetaTagDataBody} getMetaTagDataBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9579,7 +9585,7 @@ export interface MetaTagExtractorApiInterface {
 export class MetaTagExtractorApi extends BaseAPI implements MetaTagExtractorApiInterface {
     /**
      * 
-     * @summary Return dummy HTML for testing
+     * @summary return extract meta tags
      * @param {GetMetaTagDataBody} getMetaTagDataBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
