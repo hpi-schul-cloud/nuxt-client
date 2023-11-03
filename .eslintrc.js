@@ -17,6 +17,10 @@ module.exports = {
 	},
 	rules: {
 		"vuetify/no-deprecated-components": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
+		"vuetify/no-deprecated-props": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
+		"vuetify/no-deprecated-events": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
+		"vuetify/no-deprecated-classes": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
+		"vuetify/no-deprecated-colors": "warn", // VUE3_UPGRADE: rule should be removed after vuetify upgrade
 		"@typescript-eslint/no-explicit-any": VUE3_UPGRADE ? "warn" : "error",
 		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
