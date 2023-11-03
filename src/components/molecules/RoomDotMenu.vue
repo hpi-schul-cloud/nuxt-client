@@ -1,5 +1,5 @@
 <template>
-	<v-menu location="bottom end">
+	<v-menu v-if="menuItems.length > 0" location="bottom end">
 		<template v-slot:activator="{ props }">
 			<v-btn
 				v-bind="props"
