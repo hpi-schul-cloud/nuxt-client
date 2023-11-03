@@ -31,6 +31,7 @@
 					data-testid="input-file"
 					v-model="file"
 					density="compact"
+					variant="underlined"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="
