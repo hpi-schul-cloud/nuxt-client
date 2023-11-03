@@ -88,7 +88,7 @@ describe("LinkContentElement", () => {
 
 	const setup = (
 		options: {
-			content?: LinkElementContent | undefined;
+			content?: LinkElementContent;
 			isEditMode: boolean;
 		} = { content: undefined, isEditMode: true }
 	) => {
