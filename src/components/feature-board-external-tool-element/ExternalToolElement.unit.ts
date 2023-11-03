@@ -2,7 +2,10 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
-import { ExternalToolDisplayData } from "@/store/external-tool";
+import {
+	ExternalToolDisplayData,
+	ToolConfigurationStatus,
+} from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { I18N_KEY } from "@/utils/inject";
 import {
@@ -13,7 +16,10 @@ import {
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useExternalToolElementDisplayState } from "@data-external-tool";
+import {
+	useExternalToolElementDisplayState,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -44,6 +50,9 @@ describe("ExternalToolElement", () => {
 	let useSharedExternalToolElementDisplayStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolElementDisplayState>
 	>;
+	let useExternalToolLaunchStateMock: DeepMocked<
+		ReturnType<typeof useExternalToolLaunchState>
+	>;
 
 	beforeEach(() => {
 		useContentElementStateMock =
@@ -52,6 +61,8 @@ describe("ExternalToolElement", () => {
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useSharedExternalToolElementDisplayStateMock =
 			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
+		useExternalToolLaunchStateMock =
+			createMock<ReturnType<typeof useExternalToolLaunchState>>();
 
 		jest
 			.mocked(useContentElementState)
@@ -60,6 +71,9 @@ describe("ExternalToolElement", () => {
 		jest
 			.mocked(useExternalToolElementDisplayState)
 			.mockReturnValue(useSharedExternalToolElementDisplayStateMock);
+		jest
+			.mocked(useExternalToolLaunchState)
+			.mockReturnValue(useExternalToolLaunchStateMock);
 	});
 
 	afterEach(() => {
@@ -118,30 +132,96 @@ describe("ExternalToolElement", () => {
 
 	describe("when the element is mounted", () => {
 		describe("when the element has a tool attached", () => {
-			it("should load the display data", () => {
-				getWrapper({
-					element: {
-						...EMPTY_TEST_ELEMENT,
-						content: { contextExternalToolId: "contextExternalToolId" },
+			it("should load the display data", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
 					},
-					isEditMode: false,
-				});
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Latest,
+					})
+				);
+
+				await Vue.nextTick();
 
 				expect(
 					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
 				).toHaveBeenCalledWith("contextExternalToolId");
 			});
+
+			it("should load the launch request", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Latest,
+					})
+				);
+
+				await Vue.nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).toHaveBeenCalledWith("contextExternalToolId");
+			});
 		});
 
-		describe("when the element deos not have a tool attached", () => {
-			it("should not load the display data", () => {
+		describe("when the element has a tool attached, but it is outdated", () => {
+			it("should not load the launch request", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Outdated,
+					})
+				);
+
+				await Vue.nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the element does not have a tool attached", () => {
+			it("should not load the display data", async () => {
 				getWrapper({
 					element: EMPTY_TEST_ELEMENT,
 					isEditMode: false,
 				});
 
+				await Vue.nextTick();
+
 				expect(
 					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+				).not.toHaveBeenCalled();
+			});
+
+			it("should not load the launch request", async () => {
+				getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: false,
+				});
+
+				await Vue.nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
 				).not.toHaveBeenCalled();
 			});
 		});
@@ -535,6 +615,37 @@ describe("ExternalToolElement", () => {
 				expect(
 					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
 				).toHaveBeenCalledWith(savedTool.id);
+			});
+		});
+	});
+
+	describe("Launch", () => {
+		describe("when clicking on a configured tool card", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId: "contextExternalToolId" },
+					},
+					isEditMode: false,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should launch the tool", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({
+					ref: "externalToolElement",
+				});
+
+				card.vm.$emit("click");
+				await Vue.nextTick();
+
+				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
 			});
 		});
 	});
