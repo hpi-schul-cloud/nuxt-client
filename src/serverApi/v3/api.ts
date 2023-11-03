@@ -3770,22 +3770,8 @@ export interface RichTextContentBody {
      * @type {string}
      * @memberof RichTextContentBody
      */
-    inputFormat: RichTextContentBodyInputFormatEnum;
+    inputFormat: string;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum RichTextContentBodyInputFormatEnum {
-    PlainText = 'plainText',
-    RichText = 'richText',
-    Inline = 'inline',
-    RichTextCk4 = 'richTextCk4',
-    RichTextCk5 = 'richTextCk5',
-    RichTextCk5Inline = 'richTextCk5Inline'
-}
-
 /**
  * 
  * @export
