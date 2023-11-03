@@ -14,11 +14,13 @@
 			bordered
 			color="rgba(var(--v-theme-primary)"
 			icon="$mdiLock"
+			overlap
 			:model-value="hasNotifications"
 		>
 			<v-card
 				:height="size"
 				:width="size"
+				outlined
 				class="ma-0 card-component"
 				:aria-label="
 					$t('pages.rooms.a11y.group.text', {

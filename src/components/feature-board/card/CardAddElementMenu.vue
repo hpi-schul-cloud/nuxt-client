@@ -7,7 +7,7 @@
 				elevation="0"
 				variant="outlined"
 				icon
-				size="large"
+				large
 				data-testid="add-element-btn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>

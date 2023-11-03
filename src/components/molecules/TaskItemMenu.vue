@@ -4,7 +4,7 @@
 			<v-btn
 				v-bind="props"
 				:icon="mdiDotsVertical"
-				variant="flat"
+				flat
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			/>

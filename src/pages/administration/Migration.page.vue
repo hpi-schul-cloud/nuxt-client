@@ -241,7 +241,7 @@
 									:ripple="false"
 									elevation="2"
 									class="pa-5 mb-10"
-									color="grey-lighten-5"
+									color="grey lighten-5"
 								>
 									<v-card-text>
 										<v-row>
@@ -308,7 +308,7 @@
 
 									<div class="text-right">
 										<v-btn
-											class="bg-primary"
+											class="primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
 										>
@@ -376,7 +376,7 @@
 								</ul>
 								<div class="text-right">
 									<v-btn
-										class="bg-primary"
+										class="primary"
 										data-testid="migration_backToAdministration"
 										to="/administration"
 									>

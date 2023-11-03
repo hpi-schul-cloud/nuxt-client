@@ -3,9 +3,9 @@
 		<template #body>
 			<modal-body-info :title="title" :description="description" />
 			<v-progress-linear
-				:model-value="percent"
+				:value="percent"
 				height="15"
-				bg-color="grey lighten-1"
+				background-color="grey lighten-1"
 				class="rounded"
 			/>
 		</template>

@@ -9,7 +9,7 @@
 			ref="cardHost"
 			:height="isLoading ? height : 'auto'"
 			:class="{ 'drag-disabled': isEditMode }"
-			variant="outlined"
+			outlined
 			tabindex="0"
 			min-height="120px"
 			:elevation="isEditMode ? 6 : isHovered ? 4 : 2"

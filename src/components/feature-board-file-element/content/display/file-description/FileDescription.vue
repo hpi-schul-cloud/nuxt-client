@@ -19,7 +19,7 @@
 			</template>
 		</ContentElementBar>
 
-		<div v-else-if="caption && !isEditMode" class="pa-4 bg-grey-lighten-4">
+		<div v-else-if="caption && !isEditMode" class="pa-4 grey lighten-4">
 			{{ caption }}
 		</div>
 	</div>

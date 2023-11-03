@@ -11,7 +11,7 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<template #prepend>
+			<v-list-item-avatar>
 				<v-icon
 					class="fill"
 					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
@@ -19,8 +19,8 @@
 				>
 					{{ avatarIcon }}
 				</v-icon>
-			</template>
-			<div :class="hasUnpublishedLesson ? 'opacity-0-5' : ''">
+			</v-list-item-avatar>
+			<v-list-item-content :class="hasUnpublishedLesson ? 'opacity-0-5' : ''">
 				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">
 						{{ taskLabel }}
@@ -56,7 +56,7 @@
 						<template #graded>{{ task.status.graded }}</template>
 					</i18n>
 				</v-list-item-subtitle>
-			</div>
+			</v-list-item-content>
 
 			<section
 				v-if="hasUnpublishedLesson"

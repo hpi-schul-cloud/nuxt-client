@@ -5,10 +5,10 @@
 			'alert-wrapper': !isMobile,
 		}"
 	>
-		<!-- VUE3_UPGRADE we have to re-enable alert transitions, see BC-2225 -->
 		<v-alert
 			v-model="showNotifier"
 			:icon="icon"
+			:transition="transition"
 			:type="status"
 			class="alert"
 			closable

@@ -4,7 +4,7 @@
 		data-testid="board-file-element"
 		dense
 		elevation="0"
-		:variant="isOutlined ? 'outlined' : 'plain'"
+		:outlined="isOutlined"
 		ref="fileContentElement"
 		:ripple="false"
 		tabindex="0"

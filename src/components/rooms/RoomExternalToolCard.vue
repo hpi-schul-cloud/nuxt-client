@@ -11,7 +11,8 @@
 				<v-chip
 					size="small"
 					class="py-1"
-					color="warning-lighten-1"
+					color="warning lighten-1"
+					text-color="black"
 					data-testId="tool-card-status"
 				>
 					<v-icon size="small" class="mr-1" color="warning">{{

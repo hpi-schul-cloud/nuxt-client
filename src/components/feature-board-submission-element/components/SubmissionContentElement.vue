@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		variant="outlined"
+		outlined
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"

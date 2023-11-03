@@ -1,10 +1,8 @@
 <template>
-	<v-list role="feed" lines="two">
-		<template v-slot:subheader v-if="title && isListFilled">
-			<div class="text-subtitle-1 mx-n4 mx-sm-0">
-				{{ title }}
-			</div>
-		</template>
+	<v-list role="feed" subheader two-line>
+		<v-subheader v-if="title && isListFilled" class="subtitle-1 mx-n4 mx-sm-0">
+			{{ title }}
+		</v-subheader>
 		<template v-if="showSkeleton">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader

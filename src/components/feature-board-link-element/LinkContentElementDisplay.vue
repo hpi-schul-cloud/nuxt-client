@@ -4,7 +4,7 @@
 			data-testid="board-link-element"
 			dense
 			elevation="0"
-			variant="outlined"
+			:outlined="true"
 			:ripple="false"
 			tabindex="0"
 			:loading="isLoading ? 'primary' : false"
@@ -13,11 +13,11 @@
 
 			<v-card-subtitle class="bg-grey-lighten-4 text-darken-2">
 				<div class="d-flex flex-no-wrap">
-					<v-icon class="text-grey text-darken-2" size="medium">
+					<v-icon class="text-grey text-darken-2" medium>
 						{{ mdiLink }}
 					</v-icon>
 					<div
-						class="text-subtitle-1 text-truncate"
+						class="subtitle-1 text-truncate"
 						:style="{ fontWeight: 700, marginLeft: '10px' }"
 						data-testid="board-link-element-display-content"
 					>

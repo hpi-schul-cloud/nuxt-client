@@ -2,7 +2,7 @@
 	<div>
 		<v-autocomplete
 			:label="t('pages.tool.select.label')"
-			item-title="name"
+			item-text="name"
 			item-value="id"
 			hide-selected
 			clearable
@@ -13,7 +13,7 @@
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@update:model-value="onChangeSelection"
+			@change="onChangeSelection"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row

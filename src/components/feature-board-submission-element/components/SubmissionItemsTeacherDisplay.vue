@@ -7,11 +7,16 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
+		<VExpansionPanels
+			v-else
+			v-model="panel"
+			flat
+			class="rounded-0 rounded-b-sm"
+		>
 			<VExpansionPanel>
 				<VExpansionPanelHeader
 					@dblclick.stop="() => {}"
-					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
+					class="pl-4 pr-4 rounded-tr-0 rounded-tl-0"
 				>
 					<v-chip
 						v-if="!isOverdue"
@@ -73,7 +78,7 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" size="small">
+								<v-icon color="black" small>
 									{{ getStatusIcon(item) }}
 								</v-icon>
 							</span>

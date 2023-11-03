@@ -4,13 +4,13 @@
 			hide-details="auto"
 			v-model="modelValue"
 			variant="solo"
-			density="compact"
+			dense
 			:rows="1"
 			auto-grow
 			flat
 			class="mx-n3 mb-n2"
 			:placeholder="placeholder"
-			bg-color="transparent"
+			background-color="transparent"
 			ref="titleInput"
 			:readonly="!isEditMode"
 			role="heading"

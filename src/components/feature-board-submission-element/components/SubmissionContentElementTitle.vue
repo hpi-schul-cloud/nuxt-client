@@ -13,7 +13,7 @@
 			$mdiLightbulbOnOutline
 		</v-icon>
 		<span
-			class="text-subtitle-1 d-inline-block text-truncate text-black font-weight-bold"
+			class="subtitle-1 d-inline-block text-truncate black--text font-weight-bold"
 			data-testid="board-submission-element-edit-content"
 		>
 			{{ t("components.cardElement.submissionElement") }}

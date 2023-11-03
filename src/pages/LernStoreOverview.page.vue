@@ -24,7 +24,7 @@
 					@keyup:enter="enterKeyHandler"
 				/>
 				<transition name="fade">
-					<div class="content__container" v-if="true">
+					<div class="content__container">
 						<p
 							v-show="resources.data.length !== 0 && searchQuery.length > 1"
 							class="content__total"
