@@ -190,6 +190,7 @@ import {
 	PropType,
 	ref,
 	Ref,
+	WritableComputedRef,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
@@ -216,7 +217,12 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const activeTab: ComputedRef<string> = computed(() => props.tab);
+		const activeTab: WritableComputedRef<string> = computed({
+			get: () => props.tab,
+			set: () => {
+				// noop
+			},
+		});
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
