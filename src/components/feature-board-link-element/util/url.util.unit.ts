@@ -4,7 +4,7 @@ describe("url.util", () => {
 	describe("ensureProtocolIncluded", () => {
 		describe("when a protocol is contained", () => {
 			it("should not change anything", async () => {
-				const url = "ftp://abc.de/foto.png";
+				const url = "anyprotocol://abc.de/foto.png";
 				const result = ensureProtocolIncluded(url);
 				expect(result).toEqual(url);
 			});
