@@ -79,7 +79,7 @@ export default defineComponent({
 		const dateRequired = computed(() => time.value !== "");
 
 		const emitDateTime = () => {
-			if (date.value === "") {
+			if (date.value === "" && dateRequired.value) {
 				return;
 			}
 
