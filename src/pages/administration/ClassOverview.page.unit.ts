@@ -23,7 +23,10 @@ import VueRouter from "vue-router";
 const $router = createMock<VueRouter>();
 
 describe("ClassOverview", () => {
-	const getWrapper = (getters: Partial<GroupModule> = {}) => {
+	const getWrapper = (
+		getters: Partial<GroupModule> = {},
+		propsData: { tab: string } = { tab: "current" }
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const groupModule = createModuleMocks(GroupModule, {
@@ -52,7 +55,7 @@ describe("ClassOverview", () => {
 				years: {
 					schoolYears: [],
 					nextYear: {
-						name: "2023/24",
+						name: "2024/25",
 					} as Year,
 					activeYear: {
 						name: "2023/24",
@@ -75,6 +78,7 @@ describe("ClassOverview", () => {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			mocks: { $router },
+			propsData,
 		});
 
 		return {
@@ -621,7 +625,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, groupModule } = getWrapper({}, { tab: "next" });
 
 				return {
 					wrapper,
@@ -629,10 +633,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should call store to load classes of next year", () => {
+			it("should call store to load classes of next year", async () => {
 				const { wrapper, groupModule } = setup();
 
-				wrapper
+				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
@@ -644,7 +648,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on previous years tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, groupModule } = getWrapper({}, { tab: "archive" });
 
 				return {
 					wrapper,

@@ -216,7 +216,11 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const activeTab = computed(() => props.tab);
+		const activeTab = computed({
+			get: () => props.tab,
+			set: (tab) =>
+				router.replace({ query: { ...router.currentRoute.query, tab } }),
+		});
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -259,7 +263,6 @@ export default defineComponent({
 
 		const onTabsChange = (tab: string) => {
 			groupModule.loadClassesForSchool(schoolYearQueryType.value);
-			router.replace({ query: { tab } });
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
