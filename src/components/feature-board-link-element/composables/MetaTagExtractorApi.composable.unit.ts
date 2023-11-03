@@ -19,10 +19,6 @@ describe("useMetaTagExtractorApi", () => {
 		jest.clearAllMocks();
 	});
 
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
-
 	const getWrapper = () => {
 		let composable: ReturnType<typeof useMetaTagExtractorApi> | undefined;
 
