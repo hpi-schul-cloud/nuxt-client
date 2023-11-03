@@ -69,33 +69,30 @@ export default defineComponent({
 		};
 
 		const dateTime = useVModel(props, "dateTime");
-		const dateTimeInPast = ref(
-			dateTime.value && new Date(dateTime.value) < new Date()
-		);
 		const date = ref(
 			dateTime.value ? dayjs(dateTime.value).format("YYYY-MM-DD") : ""
 		);
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
 		const dateRequired = computed(() => time.value !== "");
+		const dateTimeInPast = ref(
+			dateTime.value && new Date(dateTime.value) < new Date()
+		);
 
 		const emitDateTime = () => {
-			if (date.value === "" && dateRequired.value) {
-				return;
-			}
-
-			let timeValue = time.value;
-			if (timeValue === "" && date.value) {
-				timeValue = "23:59";
-			}
-
-			if (date.value === "" && timeValue === "") {
+			if (date.value === "" && time.value === "") {
 				dateTimeInPast.value = false;
 				emit("input", null);
 				return;
 			}
 
+			if (date.value === "" && dateRequired.value) {
+				return;
+			}
+
+			const timeValue = time.value || "23.59";
 			const dateTime = new Date(date.value);
 			const hoursAndMinutes = timeValue.split(":");
+
 			dateTime.setHours(
 				parseInt(hoursAndMinutes[0]),
 				parseInt(hoursAndMinutes[1])
