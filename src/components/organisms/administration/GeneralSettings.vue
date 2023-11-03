@@ -14,6 +14,7 @@
 						)
 					"
 					density="compact"
+					variant="underlined"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
@@ -32,6 +33,7 @@
 						)
 					"
 					density="compact"
+					variant="underlined"
 					:disabled="!!school.officialSchoolNumber"
 					:hint="
 						$t(
@@ -64,6 +66,7 @@
 						)
 					"
 					persistent-hint
+					variant="underlined"
 				/>
 			</v-col>
 		</v-row>
@@ -78,6 +81,7 @@
 					"
 					v-model="logoFile"
 					density="compact"
+					variant="underlined"
 					prepend-icon=""
 					prepend-inner-icon="$file"
 				/>
@@ -94,6 +98,7 @@
 						)
 					"
 					density="compact"
+					variant="underlined"
 					disabled
 					:hint="
 						$t('pages.administration.school.index.generalSettings.timezoneHint')
@@ -115,14 +120,15 @@
 					:items="languages"
 					item-title="name"
 					item-value="abbreviation"
+					variant="underlined"
+					color="primary"
 				>
-					<template #item="{ item }">
-						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
-						{{ item.name }}
+					<template #item="{ props, item }">
+						<v-list-item v-bind="props" :prepend-icon="item.raw.flagIcon" />
 					</template>
 					<template #selection="{ item }">
-						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
-						{{ item.name }}
+						<v-icon class="me-2"> {{ item.raw.flagIcon }} </v-icon>
+						{{ item.raw.name }}
 					</template>
 				</v-select>
 			</v-col>
@@ -296,3 +302,8 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+:deep(.v-list-item__prepend > .v-icon) {
+	opacity: 1;
+}
+</style>
