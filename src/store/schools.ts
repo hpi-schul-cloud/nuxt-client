@@ -241,11 +241,18 @@ export default class SchoolsModule extends VuexModule {
 
 	@Action
 	async fetchFederalState(): Promise<void> {
+		// This check is an intermediate solution until the school API is completely migrated to v3,
+		// because the v3 API returns the school with populated federalState, but the v1 API does not.
+		// After migrating POST and PATCH to v3, the whole action can be removed.
+		if (typeof this.school.federalState === "object") {
+			return;
+		}
+
 		this.setLoading(true);
 		try {
 			const data = (
 				await $axios.get<FederalState>(
-					`/v1/federalStates/${this.school.federalState.id}`
+					`/v1/federalStates/${this.school.federalState}`
 				)
 			).data;
 
