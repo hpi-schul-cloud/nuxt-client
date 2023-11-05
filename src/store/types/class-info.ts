@@ -5,6 +5,7 @@ export type ClassInfo = {
 	type: ClassRootType;
 	id: string;
 	isUpgradable?: boolean;
+	studentCount: number;
 };
 
 export enum ClassRootType {
