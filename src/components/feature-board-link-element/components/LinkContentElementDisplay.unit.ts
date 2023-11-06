@@ -5,10 +5,6 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 
-const VALID_URL = "https://www.abc.de/my-article";
-
-const INVALID_URL = "my-article";
-
 type Props = {
 	url: string;
 	title: string;

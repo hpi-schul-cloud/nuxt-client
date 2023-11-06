@@ -10,8 +10,6 @@ import { PreviewStatus } from "@/fileStorageApi/v3";
 jest.mock("@feature-board-file-element");
 
 describe("usePreviewGenerator", () => {
-	beforeEach(() => {});
-
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
