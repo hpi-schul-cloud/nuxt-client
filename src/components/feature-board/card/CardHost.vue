@@ -93,7 +93,6 @@ import {
 } from "@data-board";
 import {
 	BoardMenu,
-	BoardMenuAction,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
 } from "@ui-board";
@@ -124,7 +123,6 @@ export default defineComponent({
 		CardAddElementMenu,
 		CardHostInteractionHandler,
 		BoardMenuActionDelete,
-		BoardMenuAction,
 		CardHostDetailView,
 	},
 	props: {
