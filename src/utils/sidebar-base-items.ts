@@ -1,4 +1,5 @@
 import { Envs } from "@/store/types/env-config";
+import { envConfigModule } from "@/store";
 
 export type SidebarItemBase = {
 	title: string;
@@ -173,21 +174,21 @@ const getSidebarItems = (
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
-			{
-				title: "global.sidebar.classes",
-				icon: "$class",
-				href: "/administration/classes",
-				testId: "Klassen",
-				activeForUrls: ["^/administration/classes($|/.*)"],
-			},
-			{
-				title: "global.sidebar.classes.new",
-				icon: "$class",
-				href: "/administration/groups/classes",
-				testId: "Klassen (neu)",
-				activeForUrls: ["^/administration/groups/classes($|/.*)"],
-				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
-			},
+			envConfigModule.getShowNewClassViewEnabled
+				? {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/groups/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				  }
+				: {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/classes($|/.*)"],
+				  },
 		],
 	},
 	{
@@ -219,21 +220,21 @@ const getSidebarItems = (
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
-			{
-				title: "global.sidebar.classes",
-				icon: "$class",
-				href: "/administration/classes",
-				testId: "Klassen",
-				activeForUrls: ["^/administration/classes($|/.*)"],
-			},
-			{
-				title: "global.sidebar.classes.new",
-				icon: "$class",
-				href: "/administration/groups/classes",
-				testId: "Klassen (neu)",
-				activeForUrls: ["^/administration/groups/classes($|/.*)"],
-				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
-			},
+			envConfigModule.getShowNewClassViewEnabled
+				? {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/groups/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				  }
+				: {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/classes($|/.*)"],
+				  },
 			{
 				title: "global.sidebar.teams",
 				icon: "$mdiAccountGroupOutline",
