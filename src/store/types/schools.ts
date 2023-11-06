@@ -53,7 +53,13 @@ export type School = {
 	documentBaseDir: string;
 	isExternal: boolean;
 	officialSchoolNumber?: string;
-	years: unknown;
+	years: {
+		schoolYears: Year[];
+		activeYear: Year;
+		defaultYear: Year;
+		nextYear: Year;
+		lastYear: Year;
+	};
 	language?: string;
 };
 

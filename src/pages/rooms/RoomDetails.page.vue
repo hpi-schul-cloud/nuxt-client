@@ -407,7 +407,7 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		if (this.$route.query && this.$route.query.tab) {
+		if (this.$route.query?.tab) {
 			this.setActiveTab(this.$route.query.tab);
 		}
 
@@ -419,7 +419,22 @@ export default defineComponent({
 
 		document.title = buildPageTitle(this.roomData.title);
 	},
+	mounted() {
+		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
+	},
+	beforeDestroy() {
+		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
+	},
 	methods: {
+		setActiveTabIfPageCached(event) {
+			if (event.persisted) {
+				if (this.$route.query?.tab) {
+					this.setActiveTab(this.$route.query.tab);
+				} else {
+					this.setActiveTab("learn-content");
+				}
+			}
+		},
 		setActiveTab(tabName) {
 			const index = this.tabItems.findIndex(
 				(tabItem) => tabItem.name === tabName
@@ -494,7 +509,7 @@ export default defineComponent({
 	watch: {
 		tabIndex(newIndex) {
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.replace({
+				this.$router.push({
 					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
 				});
 			}

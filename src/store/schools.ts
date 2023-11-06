@@ -112,7 +112,37 @@ export default class SchoolsModule extends VuexModule {
 		inUserMigration: false,
 		documentBaseDir: "",
 		isExternal: false,
-		years: {},
+		years: {
+			nextYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			lastYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			activeYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			defaultYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			schoolYears: [],
+		},
 	};
 	federalState: FederalState = {
 		id: "",
