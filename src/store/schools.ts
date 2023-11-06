@@ -220,8 +220,6 @@ export default class SchoolsModule extends VuexModule {
 					await $axios.get(`/v3/school/${authModule.getUser?.schoolId} `)
 				).data;
 
-				console.log(school);
-
 				this.setSchool(transformSchoolServerToClient(school));
 
 				this.setLoading(false);
