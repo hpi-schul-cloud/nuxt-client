@@ -194,6 +194,10 @@ export default defineComponent({
 		shareTaskEnabled() {
 			return envConfigModule?.getEnv.FEATURE_TASK_SHARE;
 		},
+		ariaLabel() {
+			// VUE3_UPGRADE we need a proper label here. was missing before.
+			return `${this.$t("common.words.task")}`;
+		},
 	},
 	methods: {
 		handleFinish() {

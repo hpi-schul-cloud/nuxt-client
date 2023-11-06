@@ -11,10 +11,12 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<v-list-item-avatar>
-				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content>
+			<template v-slot:prepend>
+				<v-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-avatar>
+			</template>
+			<div>
 				<v-list-item-subtitle data-testid="taskSubtitle">
 					{{ taskLabel }}
 				</v-list-item-subtitle>
@@ -22,11 +24,11 @@
 					{{ task.name }}
 				</v-list-item-title>
 				<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-			</v-list-item-content>
+			</div>
 			<v-list-item-action>
-				<v-list-item-action-text class="subtitle-2" data-test-id="dueDateLabel">
+				<div class="text-subtitle-2" data-test-id="dueDateLabel">
 					{{ dueDateLabel }}
-				</v-list-item-action-text>
+				</div>
 				<v-spacer />
 				<v-custom-chip-time-remaining
 					v-if="taskState === 'warning'"
@@ -35,15 +37,15 @@
 					:shorten-unit="$vuetify.display.xsOnly"
 				/>
 			</v-list-item-action>
-			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					user-role="student"
-					@toggled-menu="toggleMenu"
-					@focus-changed="handleFocus"
-				/>
-			</v-list-item-action>
+			<template v-slot:append>
+				<div :id="`task-menu-${task.id}`" class="context-menu-btn">
+					<task-item-menu
+						:task-id="task.id"
+						:task-is-finished="task.status.isFinished"
+						user-role="student"
+					/>
+				</div>
+			</template>
 		</v-list-item>
 	</v-hover>
 </template>

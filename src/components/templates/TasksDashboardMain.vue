@@ -283,7 +283,7 @@ export default {
 			let title = "";
 			let subtitle = undefined;
 
-			if (this.hasFilterSelected) {
+			if (this.tasksModule.hasFilterSelected) {
 				title = this.$t("pages.tasks.emptyStateOnFilter.title");
 			} else {
 				if (this.tab === this.tabRoutes[0]) {
