@@ -58,6 +58,7 @@
 					<v-text-field
 						v-model="sharedCourseData.code"
 						variant="outlined"
+						color="primary"
 						density="compact"
 						class="mt-1 text-field-course-code"
 						:error="businessError.message !== ''"
@@ -74,6 +75,7 @@
 					<v-text-field
 						v-model="sharedCourseData.courseName"
 						variant="outlined"
+						color="primary"
 						density="compact"
 						class="mt-1 text-field-course-name"
 						:disabled="isImportError"

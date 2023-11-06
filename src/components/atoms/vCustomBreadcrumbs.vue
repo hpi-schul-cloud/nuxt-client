@@ -36,11 +36,11 @@ defineProps({
 	display: inline-flex;
 }
 
-:deep(.v-breadcrumbs .v-breadcrumbs-item) {
+:deep(.v-breadcrumbs-item) {
 	color: rgba(var(--v-theme-primary));
 }
 
-:deep(.v-breadcrumbs .v-breadcrumbs-item--disabled) {
+:deep(.v-breadcrumbs-item--disabled) {
 	color: rgba(var(--v-theme-secondary));
 }
 </style>

@@ -32,6 +32,8 @@
 					v-model="newName"
 					:label="$t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
+					variant="underlined"
+					color="primary"
 				/>
 			</div>
 		</template>
