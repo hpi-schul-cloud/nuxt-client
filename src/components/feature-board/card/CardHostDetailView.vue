@@ -160,7 +160,7 @@ export default defineComponent({
 			onMoveElementKeyboard,
 			onDialogClose,
 			onDeleteCard,
-			// WIP
+			// debug
 			onToggleFullscreen,
 			isFullscreen,
 		};

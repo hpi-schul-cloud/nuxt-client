@@ -33,9 +33,9 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasDeletePermission" scope="card">
-							<BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
+							<!-- <BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
 								{{ $t("components.board.action.detail-view") }}
-							</BoardMenuAction>
+							</BoardMenuAction> -->
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
