@@ -102,6 +102,9 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
 		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+		props: (route: Route) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,

@@ -56,9 +56,13 @@
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useExternalToolElementDisplayState } from "@data-external-tool";
+import {
+	useExternalToolElementDisplayState,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
 import {
 	computed,
@@ -101,6 +105,7 @@ export default defineComponent({
 			displayData,
 			isLoading: isDisplayDataLoading,
 		} = useExternalToolElementDisplayState();
+		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -114,6 +119,10 @@ export default defineComponent({
 
 		const toolDisplayName: ComputedRef<string> = computed(
 			() => displayData.value?.name ?? "..."
+		);
+
+		const isToolOutdated: ComputedRef<boolean> = computed(
+			() => displayData.value?.status === ToolConfigurationStatus.Outdated
 		);
 
 		const isLoading = computed(
@@ -145,12 +154,12 @@ export default defineComponent({
 		};
 
 		const onClickElement = () => {
-			if (props.isEditMode) {
-				if (!hasLinkedTool.value) {
-					isConfigurationDialogOpen.value = true;
-				}
-			} else {
-				// TODO N21-1285: launch tool
+			if (hasLinkedTool.value && !props.isEditMode) {
+				launchTool();
+			}
+
+			if (!hasLinkedTool.value && props.isEditMode) {
+				isConfigurationDialogOpen.value = true;
 			}
 		};
 
@@ -161,14 +170,20 @@ export default defineComponent({
 		const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
 			modelValue.value.contextExternalToolId = tool.id;
 
-			await fetchDisplayData(modelValue.value.contextExternalToolId);
+			await loadCardData();
 		};
 
-		onMounted(async () => {
+		const loadCardData = async () => {
 			if (modelValue.value.contextExternalToolId) {
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
+
+				if (!isToolOutdated.value) {
+					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				}
 			}
-		});
+		};
+
+		onMounted(loadCardData);
 
 		return {
 			t,
