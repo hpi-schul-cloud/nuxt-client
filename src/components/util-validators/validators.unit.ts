@@ -47,6 +47,7 @@ describe("util-validators", () => {
 				"-medium.com/how-to-write-test",
 				"me--dium.com/how-to--write-test",
 				"medium.com-/how-to--write-test",
+				"abc die katze liegt im schnee",
 			])("should return ERROR for %s", (url) => {
 				expect(isValid(url)).toBe(ERROR);
 			});

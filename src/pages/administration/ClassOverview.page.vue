@@ -5,6 +5,23 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
+		<v-tabs
+			class="tabs-max-width mb-5"
+			grow
+			@change="onTabsChange"
+			:value="activeTab"
+		>
+			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
+				<span>{{ nextYear }}</span>
+			</v-tab>
+			<v-tab tab-value="current" data-testid="admin-class-current-year-tab">
+				<span>{{ currentYear }}</span>
+			</v-tab>
+			<v-tab tab-value="archive" data-testid="admin-class-previous-years-tab">
+				<span>{{ t("pages.administration.classes.label.archive") }}</span>
+			</v-tab>
+		</v-tabs>
+
 		<v-data-table
 			:headers="headers"
 			:items="classes"
@@ -129,9 +146,18 @@
 			color="primary"
 			depressed
 			data-testid="admin-class-add-button"
+			href="/administration/classes/create"
 		>
 			{{ t("pages.administration.classes.index.add") }}
 		</v-btn>
+
+		<p class="text-muted">
+			{{
+				t("pages.administration.classes.hint", {
+					institute_title: getInstituteTitle,
+				})
+			}}
+		</p>
 	</default-wireframe>
 </template>
 
@@ -147,6 +173,7 @@ import {
 	AUTH_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
+	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 import {
@@ -160,19 +187,40 @@ import {
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	PropType,
 	ref,
 	Ref,
+	WritableComputedRef,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
+import { useRouter } from "vue-router/composables";
+import { SchoolYearQueryType } from "@/serverApi/v3";
+
+type Tab = "current" | "next" | "archive";
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
-	setup() {
+	props: {
+		tab: {
+			type: String as PropType<Tab>,
+			default: "current",
+		},
+	},
+	setup(props) {
 		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+
+		const router = useRouter();
 
 		const { t } = useI18n();
+
+		const activeTab: WritableComputedRef<string> = computed({
+			get: () => props.tab,
+			set: () => ({}),
+		});
 
 		const footerProps = {
 			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
@@ -189,6 +237,35 @@ export default defineComponent({
 				disabled: true,
 			},
 		];
+
+		const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(
+			() => {
+				switch (props.tab) {
+					case "next":
+						return SchoolYearQueryType.NextYear;
+					case "current":
+						return SchoolYearQueryType.CurrentYear;
+					case "archive":
+						return SchoolYearQueryType.PreviousYears;
+					default:
+						return SchoolYearQueryType.CurrentYear;
+				}
+			}
+		);
+
+		const nextYear: ComputedRef<string> = computed(
+			() => schoolsModule.getSchool.years.nextYear.name
+		);
+
+		const currentYear: ComputedRef<string> = computed(
+			() => schoolsModule.getSchool.years.activeYear.name
+		);
+
+		const onTabsChange = async (tab: string) => {
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+
+			await router.replace({ query: { ...router.currentRoute.query, tab } });
+		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
 			() => groupModule.getClasses
@@ -249,6 +326,11 @@ export default defineComponent({
 				sortable: true,
 			},
 			{
+				value: "studentCount",
+				text: "Schüler:innen",
+				sortable: true,
+			},
+			{
 				value: "actions",
 				text: "",
 				sortable: false,
@@ -257,38 +339,61 @@ export default defineComponent({
 
 		const onConfirmClassDeletion = async () => {
 			if (selectedItem.value) {
-				await groupModule.deleteClass(selectedItem.value.id);
+				await groupModule.deleteClass({
+					classId: selectedItem.value.id,
+					query: schoolYearQueryType.value,
+				});
 			}
 		};
 
 		const onUpdateSortBy = async (sortBy: string) => {
 			groupModule.setSortBy(sortBy);
-			await groupModule.loadClassesForSchool();
+
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const updateSortOrder = async (sortDesc: boolean) => {
 			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
-			await groupModule.loadClassesForSchool();
+
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
 			groupModule.setPagination({ ...pagination.value, skip });
-			await groupModule.loadClassesForSchool();
+
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
-			await groupModule.loadClassesForSchool();
+
+			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
 
 		onMounted(() => {
-			groupModule.loadClassesForSchool();
+			onTabsChange(activeTab.value);
+		});
+
+		const getInstituteTitle: ComputedRef<string> = computed(() => {
+			switch (process.env.SC_THEME) {
+				case "n21":
+					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+				case "thr":
+					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+				case "brb":
+					return "Dataport";
+				default:
+					return "Dataport";
+			}
 		});
 
 		return {
 			t,
 			footerProps,
 			breadcrumbs,
+			nextYear,
+			currentYear,
+			onTabsChange,
 			headers,
 			classes,
 			hasPermission,
@@ -312,6 +417,8 @@ export default defineComponent({
 			mdiPencilOutline,
 			mdiTrashCanOutline,
 			mdiArrowUp,
+			getInstituteTitle,
+			activeTab,
 		};
 	},
 });
