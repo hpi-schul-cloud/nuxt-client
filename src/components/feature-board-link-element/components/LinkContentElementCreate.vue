@@ -1,7 +1,7 @@
 <template>
 	<v-card-text>
 		<v-form
-			@submit.prevent="onSubmit(url)"
+			@submit.prevent="onSubmit()"
 			ref="form"
 			:lazy-validation="true"
 			validate-on="submit"
@@ -15,8 +15,7 @@
 					:autofocus="true"
 					:auto-grow="true"
 					rows="1"
-					@keydown.enter.prevent="onKeydownEnter"
-					@keydown="onKeydown"
+					@keydown.enter.prevent.stop="onKeydownEnter"
 					class="text"
 				>
 					<template v-slot:append>
@@ -36,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, nextTick, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import { isRequired, isValidUrl } from "@util-validators";
 import { mdiCheck } from "@mdi/js";
@@ -57,44 +56,29 @@ export default defineComponent({
 		const { t } = useI18n();
 		const url = ref<string>("");
 		const form = ref<VuetifyFormApi | null>(null);
-		const rules = [(value: string) => validate(value)];
+
 		const isValidationActive = ref(false);
-
-		const validate = (value: string) => {
-			// vue3: with vuetify3 we can use validate-on="submit" instead of preventing validation programmatically
+		const rules = computed(() => {
 			if (isValidationActive.value === true) {
-				const rules: Array<(value: any) => string | true> = [
-					isRequired(t("common.validation.required2")),
+				return [
 					isValidUrl(t("util-validators-invalid-url")),
+					isRequired(t("common.validation.required2")),
 				];
-				const results = rules.map((rule) => rule(value));
-				const errorMessages = results.filter((isValid) => isValid !== true);
-				if (errorMessages.length > 0) {
-					return errorMessages[0];
-				}
 			}
-			return true;
-		};
+			return [];
+		});
 
-		const onSubmit = (url: string) => {
+		const onSubmit = async () => {
 			isValidationActive.value = true;
-			if (form?.value?.validate()) emit("create:url", url);
+			await nextTick();
+			if (form?.value?.validate()) emit("create:url", url.value);
 		};
 
-		const onKeydownSubmit = (event: KeyboardEvent, url: string) => {
-			event.stopPropagation();
-			onSubmit(url);
-		};
+		const onKeydownSubmit = () => onSubmit();
 
-		const onKeydownEnter = (event: KeyboardEvent) => {
-			event.stopPropagation();
-			onSubmit(url.value);
-		};
-
-		const onKeydown = () => (isValidationActive.value = false);
+		const onKeydownEnter = () => onSubmit();
 
 		return {
-			onKeydown,
 			onKeydownEnter,
 			onSubmit,
 			onKeydownSubmit,
