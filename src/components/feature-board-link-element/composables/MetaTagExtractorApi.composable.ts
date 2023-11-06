@@ -11,7 +11,7 @@ type MetaTagResult = {
 export const useMetaTagExtractorApi = () => {
 	const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 
-	const getData = async (url: string): Promise<MetaTagResult> => {
+	const extractMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
 			const res = await metaTagApi.metaTagExtractorControllerGetData({
 				url,
@@ -28,6 +28,6 @@ export const useMetaTagExtractorApi = () => {
 	};
 
 	return {
-		getData,
+		extractMetaTags,
 	};
 };

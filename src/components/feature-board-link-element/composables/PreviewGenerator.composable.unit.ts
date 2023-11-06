@@ -30,7 +30,7 @@ describe("usePreviewGenerator", () => {
 		return { wrapper, composable };
 	};
 
-	describe("getData", () => {
+	describe("createPreviewImage", () => {
 		describe("when meta tags could be extracted", () => {
 			const setup = () => {
 				const elementId = "my-custom-mocked-id";

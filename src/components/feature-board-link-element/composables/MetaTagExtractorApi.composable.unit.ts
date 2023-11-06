@@ -33,7 +33,7 @@ describe("useMetaTagExtractorApi", () => {
 		return { wrapper, composable };
 	};
 
-	describe("getData", () => {
+	describe("extractMetaTags", () => {
 		describe("when meta tags could be extracted", () => {
 			const setup = () => {
 				const mockedResponse: MetaTagExtractorResponse = {
@@ -59,14 +59,14 @@ describe("useMetaTagExtractorApi", () => {
 			it("should be defined", () => {
 				const { composable } = setup();
 
-				expect(composable?.getData).toBeDefined();
+				expect(composable?.extractMetaTags).toBeDefined();
 			});
 
 			it("should return the data", async () => {
 				const { composable, mockedResponse } = setup();
 
 				const url = "https://test.de/my-article";
-				const data = await composable?.getData(url);
+				const data = await composable?.extractMetaTags(url);
 
 				expect(data).toEqual(mockedResponse);
 			});
@@ -96,7 +96,7 @@ describe("useMetaTagExtractorApi", () => {
 				const { composable } = setup();
 
 				const url = "https://test.de/my-article";
-				const data = await composable?.getData(url);
+				const data = await composable?.extractMetaTags(url);
 
 				expect(data).toEqual({ url, title: "", description: "" });
 			});

@@ -89,7 +89,7 @@ export default defineComponent({
 			() => props.isEditMode && !computedElement.value.content.url
 		);
 
-		const { getData } = useMetaTagExtractorApi();
+		const { extractMetaTags } = useMetaTagExtractorApi();
 
 		const { createPreviewImage } = usePreviewGenerator(element.value.id);
 
@@ -100,7 +100,7 @@ export default defineComponent({
 				const validUrl = ensureProtocolIncluded(originalUrl);
 				modelValue.value.url = validUrl;
 
-				const { title, description, imageUrl } = await getData(validUrl);
+				const { title, description, imageUrl } = await extractMetaTags(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
 

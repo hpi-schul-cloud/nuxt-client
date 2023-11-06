@@ -123,7 +123,7 @@ describe("LinkContentElement", () => {
 			const component = wrapper.getComponent(LinkContentElementCreate);
 			component.vm.$emit("create:url", "https://abc.de");
 
-			expect(useMetaTagExtractorApiMock.getData).toHaveBeenCalled();
+			expect(useMetaTagExtractorApiMock.extractMetaTags).toHaveBeenCalled();
 		});
 
 		describe("when no protocol was provided", () => {
@@ -135,7 +135,7 @@ describe("LinkContentElement", () => {
 				component.vm.$emit("create:url", url);
 
 				const expected = `https://${url}`;
-				expect(useMetaTagExtractorApiMock.getData).toHaveBeenCalledWith(
+				expect(useMetaTagExtractorApiMock.extractMetaTags).toHaveBeenCalledWith(
 					expected
 				);
 			});
@@ -153,7 +153,9 @@ describe("LinkContentElement", () => {
 						imageUrl: "https://abc.de/foto.png",
 					};
 
-					useMetaTagExtractorApiMock.getData.mockResolvedValue(fakeMetaTags);
+					useMetaTagExtractorApiMock.extractMetaTags.mockResolvedValue(
+						fakeMetaTags
+					);
 
 					const component = wrapper.getComponent(LinkContentElementCreate);
 					component.vm.$emit("create:url", url);
