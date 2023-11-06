@@ -407,6 +407,12 @@ export interface ClassInfoResponse {
      * @memberof ClassInfoResponse
      */
     isUpgradable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClassInfoResponse
+     */
+    studentCount: number;
 }
 
 /**
@@ -4082,6 +4088,17 @@ export interface SchoolInfoResponse {
      */
     name: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum SchoolYearQueryType {
+    NextYear = 'nextYear',
+    CurrentYear = 'currentYear',
+    PreviousYears = 'previousYears'
+}
+
 /**
  * 
  * @export
@@ -9123,10 +9140,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {SchoolYearQueryType} [type] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9157,6 +9175,10 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
 
             if (sortBy !== undefined) {
                 localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
             }
 
 
@@ -9225,11 +9247,12 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {SchoolYearQueryType} [type] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, options);
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9260,11 +9283,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
+         * @param {SchoolYearQueryType} [type] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse> {
-            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9292,11 +9316,12 @@ export interface GroupApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {SchoolYearQueryType} [type] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -9324,12 +9349,13 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {'name' | 'externalSourceName'} [sortBy] 
+     * @param {SchoolYearQueryType} [type] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', options?: any) {
-        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
