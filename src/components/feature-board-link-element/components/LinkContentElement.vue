@@ -100,7 +100,8 @@ export default defineComponent({
 				const validUrl = ensureProtocolIncluded(originalUrl);
 				modelValue.value.url = validUrl;
 
-				const { title, description, imageUrl } = await extractMetaTags(validUrl);
+				const { title, description, imageUrl } =
+					await extractMetaTags(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
 
