@@ -1,11 +1,6 @@
 <template>
 	<v-card-text>
-		<v-form
-			@submit.prevent="onSubmit()"
-			ref="form"
-			:lazy-validation="true"
-			validate-on="submit"
-		>
+		<v-form @submit.prevent.stop="onSubmit" ref="form" :lazy-validation="true">
 			<div class="d-flex flex-row">
 				<v-textarea
 					v-model="url"
@@ -61,8 +56,8 @@ export default defineComponent({
 		const rules = computed(() => {
 			if (isValidationActive.value === true) {
 				return [
-					isValidUrl(t("util-validators-invalid-url")),
 					isRequired(t("common.validation.required2")),
+					isValidUrl(t("util-validators-invalid-url")),
 				];
 			}
 			return [];

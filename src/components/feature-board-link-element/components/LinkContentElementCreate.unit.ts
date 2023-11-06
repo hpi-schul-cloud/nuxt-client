@@ -39,10 +39,13 @@ describe("LinkContentElementCreate", () => {
 			textAreaComponent.vm.$emit("input", url);
 		};
 
-		const submit = async () => {
+		const submitByClick = async () => {
 			const button = wrapper.find("button");
 			await button.trigger("click");
+			await nextTick();
+		};
 
+		const submitByEnter = async () => {
 			const textAreaComponent = wrapper.findComponent({ name: "v-textarea" });
 			textAreaComponent.vm.$emit(
 				"keydown",
@@ -51,6 +54,7 @@ describe("LinkContentElementCreate", () => {
 					keyCode: 13,
 				})
 			);
+			await nextTick();
 		};
 
 		const hasEmitted = (eventName: string): string | false => {
@@ -65,17 +69,23 @@ describe("LinkContentElementCreate", () => {
 			return typeof rulesProperty === "function";
 		};
 
-		return { wrapper, insertUrl, submit, hasEmitted, areRulesActive };
+		return {
+			wrapper,
+			insertUrl,
+			submitByClick,
+			submitByEnter,
+			hasEmitted,
+			areRulesActive,
+		};
 	};
 
 	describe("when valid url was entered", () => {
 		describe("when enter is pressed", () => {
 			it("should not show error-message", async () => {
-				const { wrapper, insertUrl, submit } = setup();
+				const { wrapper, insertUrl, submitByClick } = setup();
 
 				insertUrl(VALID_URL);
-				await submit();
-				await nextTick();
+				await submitByClick();
 
 				const alerts = wrapper.find('[role="alert"]');
 
@@ -83,10 +93,10 @@ describe("LinkContentElementCreate", () => {
 			});
 
 			it("should emit create:url event", async () => {
-				const { insertUrl, submit, hasEmitted } = setup();
+				const { insertUrl, submitByEnter, hasEmitted } = setup();
 
 				insertUrl(VALID_URL);
-				await submit();
+				await submitByEnter();
 
 				expect(hasEmitted("create:url")).toEqual(VALID_URL);
 			});
@@ -107,10 +117,10 @@ describe("LinkContentElementCreate", () => {
 
 		describe("when enter is pressed", () => {
 			it("should show invalid-url-error", async () => {
-				const { wrapper, insertUrl, submit } = setup();
+				const { wrapper, insertUrl, submitByEnter } = setup();
 
 				insertUrl(INVALID_URL);
-				await submit();
+				await submitByEnter();
 
 				const alerts = wrapper.find('[role="alert"]').text();
 
@@ -120,10 +130,10 @@ describe("LinkContentElementCreate", () => {
 			});
 
 			it("should not emit create:url event", async () => {
-				const { wrapper, insertUrl, submit } = setup();
+				const { wrapper, insertUrl, submitByEnter } = setup();
 
 				insertUrl(INVALID_URL);
-				await submit();
+				await submitByEnter();
 
 				const emitted = wrapper.emitted("create:url");
 				expect(emitted).toBeUndefined();
@@ -134,9 +144,9 @@ describe("LinkContentElementCreate", () => {
 	describe("when url field is empty", () => {
 		describe("when submit button is clicked", () => {
 			it("should show required-error-message", async () => {
-				const { wrapper, submit } = setup();
+				const { wrapper, submitByEnter } = setup();
 
-				await submit();
+				await submitByEnter();
 
 				const alerts = wrapper.find('[role="alert"]').text();
 				expect(alerts).toEqual(
@@ -145,9 +155,9 @@ describe("LinkContentElementCreate", () => {
 			});
 
 			it("should not emit create:url event", async () => {
-				const { wrapper, submit } = setup();
+				const { wrapper, submitByClick } = setup();
 
-				await submit();
+				await submitByClick();
 
 				const emitted = wrapper.emitted("create:url");
 				expect(emitted).toBeUndefined();
