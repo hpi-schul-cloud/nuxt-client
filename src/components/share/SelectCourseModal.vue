@@ -16,9 +16,7 @@
 
 		<template #content>
 			<div>
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
@@ -45,6 +43,8 @@
 					persistent-hint
 					:append-icon="mdiTriangleSmallDown"
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
+					variant="underlined"
+					color="primary"
 				/>
 			</div>
 		</template>

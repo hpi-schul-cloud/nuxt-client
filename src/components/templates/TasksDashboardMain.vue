@@ -54,7 +54,6 @@
 			<v-autocomplete
 				v-if="showCourseFilter"
 				v-model="selectedCourseFilters"
-				small-chips
 				closable-chips
 				multiple
 				clearable

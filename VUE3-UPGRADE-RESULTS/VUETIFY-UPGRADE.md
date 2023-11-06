@@ -197,8 +197,10 @@ https://github.com/vuetifyjs/vuetify/issues/13508
 - `v-confirmation-dialog` already works
 - _TODO:_ refactor all Dialogs that use the `v-custom-dialog` component
 
-## Vuetify Colors
+## Vuetify Classes
 - `class="red--text"` changed to `class="text-red"`
+- `rounded-tr-0` with `rounded-te-0` replaced
+- `rounded-tl-0` with `rounded-ts-0` replaced
 
 ## Vuetify 3 Bugs
 

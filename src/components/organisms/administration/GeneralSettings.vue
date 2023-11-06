@@ -69,6 +69,7 @@
 					"
 					persistent-hint
 					variant="underlined"
+					color="primary"
 				/>
 			</v-col>
 		</v-row>

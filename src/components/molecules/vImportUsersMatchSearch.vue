@@ -119,13 +119,14 @@
 							"
 							no-filter
 							variant="solo"
+							color="primary"
 							rounded
-							small-chips
+							chips
 						>
 							<template #selection="{ attr, on, item, selected }">
 								<v-chip
 									v-bind="attr"
-									:input-value="selected"
+									:model-value="selected"
 									color="blue-grey"
 									class="text-white"
 									v-on="on"
