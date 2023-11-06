@@ -16,7 +16,7 @@ import {
 	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,
 	BOARD_CARD_IS_LAST_ELEMENT,
 } from "@util-board";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "BoardMenuActionMoveDown",
@@ -25,9 +25,13 @@ export default defineComponent({
 	},
 	emits: ["click"],
 	setup(props, { emit }) {
-		const hasMultipleElements = injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS);
-		const isLastElement = injectStrict(BOARD_CARD_IS_LAST_ELEMENT);
-		const isVisible = computed(() => hasMultipleElements && !isLastElement);
+		const hasMultipleElements = ref(
+			injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS)
+		);
+		const isLastElement = ref(injectStrict(BOARD_CARD_IS_LAST_ELEMENT));
+		const isVisible = computed(
+			() => hasMultipleElements.value && !isLastElement.value
+		);
 
 		const onClick = ($event: Event) => emit("click", $event);
 
