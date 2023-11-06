@@ -9,6 +9,8 @@
 				:autofocus="true"
 				required
 				validate-on="lazy"
+				variant="underlined"
+				color="primary"
 			>
 				<template v-slot:append>
 					<button type="submit">

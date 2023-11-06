@@ -21,6 +21,8 @@
 					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
+					variant="underlined"
+					color="primary"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.prevent.down="focusDatePicker"

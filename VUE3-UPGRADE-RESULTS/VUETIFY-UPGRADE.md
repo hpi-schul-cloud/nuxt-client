@@ -59,6 +59,13 @@ https://vuetifyjs.com/en/components/menus/
 | colored-border                      | renamed to **border-color**                                                                               | 1                                   |
 | dismissable                         | combined into **variant** prop <br> -> values 'elevated', 'flat', 'tonal', 'outlined', 'plain' and 'text' | outlined: ~2 <br>text: ~10          |
 
+> **⚠️ Upgrade Notes:**
+>- v-alert types(`warning`, `error`) icons are different in vuetify 3 -> talk to UX
+>- to achieve the same alert look we had before: add `variant="tonal"` (when `text` was used)
+>- `transition` prop has been removed, have to wrap the component into transition component
+>- transitions need condition: v-if or v-show, see: https://vuejs.org/guide/built-ins/transition.html
+
+
 ## v-btn
 
 |                                | Changes                                                                                                                                    | Files probably affected in our code |
@@ -67,6 +74,11 @@ https://vuetifyjs.com/en/components/menus/
 | flat / outlined / text / plain | combined into a single variant                                                                                                             | flat:0, outlined: ~10, plain: ~4    |
 | depressed                      | renamed to **variant="flat"**                                                                                                              | ~30                                 |
 | disabled                       | uses **faded** variant of specified color instead of grey, $button-colored-disabled sass variable can be set to false to use grey instead. |                                     |
+
+> **⚠️ Upgrade Notes:**
+>- Disabled buttons use a faded variant of the specified color instead of grey (#15147)
+The `$button-colored-disabled` sass variable can be set to false to use grey instead.
+-> Talk to UX what we want to use
 
 ## inputs
 
@@ -77,7 +89,13 @@ https://vuetifyjs.com/en/components/menus/
 | append-outer (slots)               | append                                                                                        | 0                                       |
 | Variant props filled/outlined/solo | combined into variant prop <br> -> values 'underlined', 'outlined', 'filled', 'solo', 'plain' | filled: 3 <br> outlined: 0 <br> solo: 5 |
 | success, success-messages          | **removed**                                                                                   |                                         |
-| validate-on-blur                   | renamed to validate-on="blur"                                                                 | 4                                       |
+| validate-on-blur                   | renamed to validate-on="blur"                                                                 | 4                                        |
+
+### v-text-field/ v-select/ v-autocomplete
+> **⚠️ Upgrade Notes:**
+> - vuetify 2: `underlined` was default and primary color was added
+> - vuetify 3: `filled` is default and no color, so we need to add `variant="underlined"` (if we want to use the old default/ no other variant is used) + `color="primary"`
+
 
 ## v-checkbox/v-radio/v-switch
 
@@ -86,6 +104,13 @@ https://vuetifyjs.com/en/components/menus/
 | input-value           | renamed to model-value                                    | ~2                                  |
 | v-checkbox label slot | v-checkbox label slot should not longer contain a <label> |                                     |
 | :label                | label                                                     | ~40                                 |
+
+> **⚠️ Upgrade Notes v-switch:**
+>- vertical height not adjusted when inset with `density` is used
+>- GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/18334
+>- disabled is now grey instead of primary color in vuetify 3
+>- also added true-icon prop for a11y (was discussed in a11y meeting, Google Material 3, maybe check also with UX again)
+
 
 ## v-tabs
 
@@ -105,7 +130,11 @@ https://vuetifyjs.com/en/components/menus/
 | -------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | v-model              | v-model values not present in items will now be rendered instead of being ignored                              |                                     |
 | item-text            | renamed to **item-title**, <br> now looks up the title property on item objects by default. value is unchanged |                                     |
-| item object in slots | now an ListItem object, the original item object is available as item.raw                                      |                                     |
+| item object in slots | now an ListItem object, the original item object is available as item.raw
+
+> **⚠️ Upgrade Notes:**
+> - vuetify 2: "underlined" was default and primary color was added
+> - vuetify 3: "filled" is default and no color, so we need to add variant="underlined" + color="primary                                  |                                     |
 
 ## v-expansion-panel
 
@@ -115,6 +144,10 @@ https://vuetifyjs.com/en/components/menus/
 | v-expansion-panel-content | renamed to **v-expansion-panel-text**                                  | 2                                   |
 | v-expansion-panel         | now has text and title props that can be used instead of subcomponents |                                     |
 
+> **⚠️ Upgrade Notes:**
+> - vuetify 2: `flat`: Removes the expansion-panel’s elevation and borders
+> - vuetify 3: `flat` was removed, to achieve the same we need to add `elevation=0` to `v-expansion-panel`
+
 ## v-card
 
 |        | Changes                                                                                              | Files probably affected in our code |
@@ -122,10 +155,20 @@ https://vuetifyjs.com/en/components/menus/
 | v-card | not allow content to overflow or use higher z-index values to display on top of elements outside it. |                                     |
 | v-card | To disable this behavior, use <v-card style="overflow: initial; z-index: initial">                   |                                     |
 
+> **⚠️ Upgrade Notes:**
+>- `hover` breaks variant elevated, GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
+>- `outlined` card appearance changed in vuetify 3
+
 ## v-dialog
 
 - requires `v-model` or `activator`
 - `vCustomDialog` has to be refactored
+
+## v-breadcrumb
+- in vuetify 2 there was a link color (our primary color), that changed in vuetify 3
+- to achieve the same behaviour we added CSS for `vCustomBreadcrumbs.vue`:
+  - `.v-breadcrumbs-item`: primary color 
+  - `.v-breadcrumbs-item--disabled`: secondary color
 
 ## v-skeleton-loader
 
@@ -154,14 +197,34 @@ https://github.com/vuetifyjs/vuetify/issues/13508
 - `v-confirmation-dialog` already works
 - _TODO:_ refactor all Dialogs that use the `v-custom-dialog` component
 
+## Vuetify Colors
+- `class="red--text"` changed to `class="text-red"`
+
 ## Vuetify 3 Bugs
 
-# v-switch
+### v-switch
 
 - vertical height not adjusted when inset with density is used
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/18334
 
-# v-card
+### v-card
 
 - hover breaks variant elevated
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
+
+
+## To Keep In Mind
+
+### Vuetify Global Config
+- maybe interesting : https://vuetifyjs.com/en/features/global-configuration/#setup
+- Example: 
+we could set defaults for v-switches (e.g. inset, flat, density) so we can define how they should look
+-> no need  to write flat, inset to all v-switch  components
+
+```js
+export default createVuetify({
+  default: {
+    VSwitch: {flat: true, inset: true},
+  }
+})
+```

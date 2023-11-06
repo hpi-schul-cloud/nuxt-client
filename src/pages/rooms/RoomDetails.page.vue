@@ -95,9 +95,10 @@
 				</div>
 				<div>
 					<v-text-field
-						:value="dialog.inputText"
-						outlined
-						dense
+						:model-value="dialog.inputText"
+						variant="outlined"
+						color="primary"
+						density="compact"
 						data-testid="modal-input"
 					/>
 				</div>

@@ -7,6 +7,8 @@
 			required
 			:error-messages="getErrorMessages(v$.firstName)"
 			data-testid="input_create-user_firstname"
+			variant="underlined"
+			color="primary"
 			@blur="v$.firstName.$touch"
 		/>
 		<v-text-field
@@ -16,6 +18,8 @@
 			required
 			:error-messages="getErrorMessages(v$.lastName)"
 			data-testid="input_create-user_lastname"
+			variant="underlined"
+			color="primary"
 			@blur="v$.lastName.$touch"
 		/>
 		<v-text-field
@@ -25,6 +29,8 @@
 			required
 			:error-messages="getErrorMessages(v$.email)"
 			data-testid="input_create-user_email"
+			variant="underlined"
+			color="primary"
 			@blur="v$.email.$touch"
 		/>
 		<slot name="inputs" />

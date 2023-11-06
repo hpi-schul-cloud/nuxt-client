@@ -14,6 +14,8 @@
 					data-testid="input_create-student_birthdate"
 					:class="{ hideCurrentDate: !date }"
 					type="date"
+					variant="underlined"
+					color="primary"
 				/>
 				<v-checkbox
 					v-model="sendRegistration"

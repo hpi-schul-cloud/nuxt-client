@@ -101,6 +101,7 @@
 					"
 					density="compact"
 					variant="underlined"
+					color="primary"
 					disabled
 					:hint="
 						$t('pages.administration.school.index.generalSettings.timezoneHint')

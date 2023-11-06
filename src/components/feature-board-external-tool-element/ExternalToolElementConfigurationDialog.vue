@@ -30,6 +30,8 @@
 						persistent-hint
 						validate-on="blur"
 						data-testId="parameter-display-name"
+						variant="underlined"
+						color="primary"
 					/>
 				</template>
 			</external-tool-configurator>

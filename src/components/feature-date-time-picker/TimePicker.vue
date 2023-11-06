@@ -20,6 +20,8 @@
 					:rules="rules"
 					data-testid="time-input"
 					:class="{ 'menu-open': showTimeDialog }"
+					variant="underlined"
+					color="primary"
 					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
