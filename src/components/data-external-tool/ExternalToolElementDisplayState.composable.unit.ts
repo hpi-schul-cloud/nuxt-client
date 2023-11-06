@@ -2,10 +2,10 @@ import { ExternalToolDisplayData } from "@/store/external-tool";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "../error-handling/ErrorHandler.composable";
+import { useContextExternalToolApi } from "./ContextExternalToolApi.composable";
 import { useExternalToolElementDisplayState } from "./ExternalToolElementDisplayState.composable";
-import { useContextExternalToolApi } from "./index";
 
-jest.mock("@data-external-tool");
+jest.mock("@data-external-tool/ContextExternalToolApi.composable");
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 
 describe("ExternalToolElementDisplayState.composable", () => {

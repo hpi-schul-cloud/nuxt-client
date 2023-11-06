@@ -55,6 +55,18 @@ describe(FileUpload.name, () => {
 
 				expect(wrapper.text()).toContain(testSlot);
 			});
+
+			it("should not show notification on page unload", async () => {
+				setup();
+
+				const beforeUnloadEvent = new Event("beforeunload");
+				const preventDefaultSpy = jest.fn();
+
+				beforeUnloadEvent.preventDefault = preventDefaultSpy;
+				window.dispatchEvent(beforeUnloadEvent);
+
+				expect(preventDefaultSpy).not.toHaveBeenCalled();
+			});
 		});
 
 		describe("when file gets picked", () => {
@@ -81,6 +93,23 @@ describe(FileUpload.name, () => {
 
 				const progressLinear = wrapper.find("v-progress-linear-stub");
 				expect(progressLinear.exists()).toBe(true);
+			});
+
+			it("should show notification on page unload", async () => {
+				const { wrapper } = setup();
+
+				const filePicker = wrapper.findComponent(FilePicker);
+				expect(filePicker.exists()).toBe(true);
+
+				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+
+				const beforeUnloadEvent = new Event("beforeunload");
+				const preventDefaultSpy = jest.fn();
+
+				beforeUnloadEvent.preventDefault = preventDefaultSpy;
+				window.dispatchEvent(beforeUnloadEvent);
+
+				expect(preventDefaultSpy).toHaveBeenCalled();
 			});
 		});
 	});

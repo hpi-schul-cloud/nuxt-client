@@ -1,9 +1,5 @@
 import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
-import ExternalToolsModule from "@/store/external-tools";
-import { EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	i18nMock,
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
@@ -20,15 +16,9 @@ describe("ExternalToolConfigSettings", () => {
 		} = {
 			template: schoolExternalToolConfigurationTemplateFactory.build(),
 			value: [],
-		},
-		getter: Partial<ExternalToolsModule> = {}
+		}
 	) => {
 		document.body.setAttribute("data-app", "true");
-
-		const externalToolsModule = createModuleMocks(ExternalToolsModule, {
-			getLoading: false,
-			...getter,
-		}) as jest.Mocked<ExternalToolsModule>;
 
 		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolConfigSettings as MountOptions<Vue>,
@@ -36,10 +26,6 @@ describe("ExternalToolConfigSettings", () => {
 				...createComponentMocks({
 					i18n: true,
 				}),
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
-				},
 				propsData: {
 					...props,
 				},
@@ -48,7 +34,6 @@ describe("ExternalToolConfigSettings", () => {
 
 		return {
 			wrapper,
-			externalToolsModule,
 		};
 	};
 
@@ -59,40 +44,6 @@ describe("ExternalToolConfigSettings", () => {
 			expect(wrapper.findComponent(ExternalToolConfigSettings).exists()).toBe(
 				true
 			);
-		});
-	});
-
-	describe("progressbar", () => {
-		it("should display progressbar when loading in store is set", () => {
-			const { wrapper } = getWrapper(
-				{
-					template: schoolExternalToolConfigurationTemplateFactory.build(),
-					value: [],
-				},
-				{
-					getLoading: true,
-				}
-			);
-
-			const progressbar = wrapper.find("v-progress-linear-stub");
-
-			expect(progressbar.attributes().active).toBeTruthy();
-		});
-
-		it("should not display progressbar when loading in store is not set", () => {
-			const { wrapper } = getWrapper(
-				{
-					template: schoolExternalToolConfigurationTemplateFactory.build(),
-					value: [],
-				},
-				{
-					getLoading: false,
-				}
-			);
-
-			const progressbar = wrapper.find("v-progress-linear-stub");
-
-			expect(progressbar.attributes().active).toBeFalsy();
 		});
 	});
 
