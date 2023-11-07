@@ -5,7 +5,7 @@
 			:close-on-content-click="false"
 			transition="scale-transition"
 			min-width="auto"
-			@input="onMenuToggle"
+			@update:model-value="onMenuToggle"
 		>
 			<template #activator="{ props }">
 				<v-text-field
