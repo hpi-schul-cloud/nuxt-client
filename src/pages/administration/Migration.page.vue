@@ -1,3 +1,5 @@
+<!-- eslint-disable vuetify/no-deprecated-components -->
+<!-- VUE3_UPGRADE re-enable linter rule when v-stepper was released -->
 <template>
 	<default-wireframe
 		v-if="isAllowed"
@@ -246,7 +248,7 @@
 									:ripple="false"
 									elevation="2"
 									class="pa-5 mb-10"
-									color="grey lighten-5"
+									color="grey-lighten-5"
 								>
 									<v-card-text>
 										<v-row>
@@ -313,7 +315,7 @@
 
 									<div class="text-right">
 										<v-btn
-											class="primary"
+											class="bg-primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
 										>
@@ -381,7 +383,7 @@
 								</ul>
 								<div class="text-right">
 									<v-btn
-										class="primary"
+										class="bg-primary"
 										data-testid="migration_backToAdministration"
 										to="/administration"
 									>
