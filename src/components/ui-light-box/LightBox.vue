@@ -45,7 +45,7 @@
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
 import { ContentElementTitleIcon, ContentElementTitle } from "@ui-board";
 
@@ -64,6 +64,10 @@ export default defineComponent({
 				lightBoxOptions.value.name
 			);
 		};
+
+		watch(isLightBoxOpen, () => {
+			isImageLoading.value = true;
+		});
 
 		return {
 			close,
