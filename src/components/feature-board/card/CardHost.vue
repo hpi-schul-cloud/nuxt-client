@@ -33,9 +33,9 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasDeletePermission" scope="card">
-							<!-- <BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
+							<BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
 								{{ $t("components.board.action.detail-view") }}
-							</BoardMenuAction> -->
+							</BoardMenuAction>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
@@ -95,6 +95,7 @@ import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
+	BoardMenuAction,
 } from "@ui-board";
 import {
 	useDebounceFn,
@@ -124,6 +125,7 @@ export default defineComponent({
 		CardHostInteractionHandler,
 		BoardMenuActionDelete,
 		CardHostDetailView,
+		BoardMenuAction,
 	},
 	props: {
 		height: { type: Number, required: true },
