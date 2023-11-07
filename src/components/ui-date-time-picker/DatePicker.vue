@@ -82,12 +82,8 @@ export default defineComponent({
 		 */
 		const emitDateDebounced = useDebounceFn((newValue) => {
 			if (valid.value) {
-				if (newValue.includes(".")) {
-					const formatted = getISODate(newValue);
-					emit("update:date", formatted);
-				} else {
-					emit("update:date", newValue);
-				}
+				const dateISO = getISODate(newValue);
+				emit("update:date", dateISO);
 			}
 		}, 50);
 
@@ -96,6 +92,8 @@ export default defineComponent({
 		const valid = ref(true);
 
 		const getISODate = (date: string) => {
+			if (!date.includes(".")) return date;
+
 			const [day, month, year] = date.split(".");
 			return `${year}-${month}-${day}`;
 		};

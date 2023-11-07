@@ -35,6 +35,7 @@ import { useVModel } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
+import { isDateTimeInPast } from "@/plugins/datetime";
 
 export default defineComponent({
 	name: "DateTimePicker",
@@ -75,7 +76,7 @@ export default defineComponent({
 		const time = ref(dateTime.value ? getTime(dateTime.value) : "");
 		const dateRequired = computed(() => time.value !== "");
 		const dateTimeInPast = ref(
-			dateTime.value && new Date(dateTime.value) < new Date()
+			dateTime.value && isDateTimeInPast(dateTime.value)
 		);
 
 		const emitDateTime = () => {
@@ -97,7 +98,7 @@ export default defineComponent({
 				parseInt(hoursAndMinutes[0]),
 				parseInt(hoursAndMinutes[1])
 			);
-			dateTimeInPast.value = dateTime < new Date();
+			dateTimeInPast.value = isDateTimeInPast(dateTime);
 			emit("input", dateTime.toISOString());
 		};
 
