@@ -60,14 +60,14 @@ export default defineComponent({
 		const { locale, t } = useI18n();
 
 		const getDate = (dateIsoString: string) => {
-			if (dateIsoString === "") {
+			if (!dateIsoString) {
 				return "";
 			}
 			return dayjs(dateTime.value).format(DATETIME_FORMAT.inputDate);
 		};
 
 		const getTime = (dateIsoString: string) => {
-			if (dateIsoString === "") {
+			if (!dateIsoString) {
 				return "";
 			}
 			return new Date(dateIsoString).toLocaleTimeString(locale, {
@@ -85,6 +85,7 @@ export default defineComponent({
 		);
 
 		const emitDateTime = () => {
+			console.log(date.value, time.value);
 			if (date.value === "" && time.value === "") {
 				dateTimeInPast.value = false;
 				emit("input", null);
