@@ -1,4 +1,6 @@
-type FormValidatorFn<T> = (errMsg: string) => (value: T) => string | true;
+export type FormValidatorFn<T> = (
+	errMsg: string
+) => (value: T) => string | true;
 
 /**
  * Checks if given value is not a nullish value

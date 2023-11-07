@@ -2,6 +2,7 @@ import {
 	ClassInfoResponse,
 	ClassInfoSearchListResponse,
 	GroupApiInterface,
+	SchoolYearQueryType,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -97,6 +98,7 @@ describe("GroupModule", () => {
 						teachers: ["Carlie"],
 						type: ClassRootType.Class,
 						id: "id",
+						studentCount: 0,
 					},
 				];
 
@@ -221,7 +223,8 @@ describe("GroupModule", () => {
 					pagination.skip,
 					pagination.limit,
 					sortOrder,
-					sortBy
+					sortBy,
+					undefined
 				);
 			});
 
@@ -276,7 +279,10 @@ describe("GroupModule", () => {
 			it("should delete the class", async () => {
 				const { class1 } = setup();
 
-				await module.deleteClass(class1.id);
+				await module.deleteClass({
+					classId: class1.id,
+					query: SchoolYearQueryType.CurrentYear,
+				});
 
 				expect(axiosMock.delete).toHaveBeenCalled();
 			});
@@ -284,7 +290,10 @@ describe("GroupModule", () => {
 			it("should load classes for school", async () => {
 				const { class1 } = setup();
 
-				await module.deleteClass(class1.id);
+				await module.deleteClass({
+					classId: class1.id,
+					query: SchoolYearQueryType.CurrentYear,
+				});
 
 				expect(apiMock.groupControllerFindClasses).toHaveBeenCalled();
 			});
@@ -310,7 +319,10 @@ describe("GroupModule", () => {
 			it("should update the stores error", async () => {
 				const { apiError, class1 } = setup();
 
-				await module.deleteClass(class1.id);
+				await module.deleteClass({
+					classId: class1.id,
+					query: SchoolYearQueryType.CurrentYear,
+				});
 
 				expect(module.getBusinessError).toEqual<BusinessError>({
 					error: apiError,
@@ -322,7 +334,10 @@ describe("GroupModule", () => {
 			it("should not remove the class from the store", async () => {
 				const { class1, class2 } = setup();
 
-				await module.deleteClass(class1.id);
+				await module.deleteClass({
+					classId: class1.id,
+					query: SchoolYearQueryType.CurrentYear,
+				});
 
 				expect(module.getClasses).toEqual([class1, class2]);
 			});
