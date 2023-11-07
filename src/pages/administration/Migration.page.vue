@@ -35,6 +35,7 @@
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(1)"
 						:value="1"
+						color="primary"
 						data-testid="migration_tutorial_head"
 					>
 						{{ $t("pages.administration.migration.step1") }}
@@ -44,6 +45,7 @@
 						:complete="isMigrationFinished"
 						:editable="isStepEditable(2)"
 						:value="2"
+						color="primary"
 						data-testid="migration_importUsers_head"
 					>
 						{{ $t("pages.administration.migration.step2") }}
@@ -53,6 +55,7 @@
 						:editable="isStepEditable(3)"
 						:complete="isMigrationFinished"
 						:value="3"
+						color="primary"
 						data-testid="migration_summary_head"
 					>
 						{{ $t("pages.administration.migration.step3") }}
@@ -62,6 +65,7 @@
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(4)"
 						:value="4"
+						color="primary"
 						data-testid="migration_finish_head"
 					>
 						{{ $t("pages.administration.migration.step4") }}
@@ -71,6 +75,7 @@
 						:value="5"
 						:editable="isStepEditable(5)"
 						:complete="migrationStep === 5"
+						color="primary"
 						data-testid="migration_waitForSync_head"
 					>
 						{{ $t("pages.administration.migration.step5") }}
@@ -512,11 +517,11 @@ export default {
 
 		this.breadcrumbs = [
 			{
-				text: this.$t("pages.administration.index.title"),
+				title: this.$t("pages.administration.index.title"),
 				to: "/administration/",
 			},
 			{
-				text: this.$t("pages.administration.migration.title", {
+				title: this.$t("pages.administration.migration.title", {
 					source: this.ldapSourceTranslation,
 					instance: this.$theme.name,
 				}),
