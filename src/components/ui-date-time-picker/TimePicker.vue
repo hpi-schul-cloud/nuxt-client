@@ -7,7 +7,6 @@
 			nudge-bottom="70"
 			max-height="200"
 			min-width="180"
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -120,12 +119,6 @@ export default defineComponent({
 			}
 		};
 
-		const onMenuToggle = () => {
-			if (showTimeDialog.value) {
-				valid.value = true;
-			}
-		};
-
 		const closeMenu = useDebounceFn(() => {
 			showTimeDialog.value = false;
 		}, 50);
@@ -138,7 +131,6 @@ export default defineComponent({
 			inputField,
 			onSelect,
 			onError,
-			onMenuToggle,
 		};
 	},
 });

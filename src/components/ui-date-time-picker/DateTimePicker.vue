@@ -85,7 +85,6 @@ export default defineComponent({
 		);
 
 		const emitDateTime = () => {
-			console.log(date.value, time.value);
 			if (date.value === "" && time.value === "") {
 				dateTimeInPast.value = false;
 				emit("input", null);

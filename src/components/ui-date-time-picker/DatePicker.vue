@@ -6,7 +6,6 @@
 			transition="scale-transition"
 			nudge-bottom="70"
 			min-width="auto"
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -133,12 +132,6 @@ export default defineComponent({
 			}
 		};
 
-		const onMenuToggle = () => {
-			if (showDateDialog.value) {
-				valid.value = true;
-			}
-		};
-
 		const closeMenu = useDebounceFn(() => {
 			showDateDialog.value = false;
 		}, 50);
@@ -152,7 +145,6 @@ export default defineComponent({
 			focusDatePicker,
 			onInput,
 			onError,
-			onMenuToggle,
 		};
 	},
 });
