@@ -34,7 +34,7 @@
 					<v-col class="md-6">
 						<v-card-title>{{ ldapSource }}</v-card-title>
 						<v-list-item>
-							<v-list-item-content data-testid="edited-item">
+							<div data-testid="edited-item">
 								<v-list-item-title data-testid="edited-item-fullname"
 									>{{ `${editedItem.firstName} ${editedItem.lastName}` }}
 								</v-list-item-title>
@@ -57,13 +57,13 @@
 										}`
 									}}
 								</v-list-item-subtitle>
-							</v-list-item-content>
+							</div>
 						</v-list-item>
 					</v-col>
 					<v-col class="md-6">
 						<v-card-title>{{ $theme.name }}</v-card-title>
 						<v-list-item>
-							<v-list-item-content v-if="selectedItem">
+							<div v-if="selectedItem">
 								<v-list-item-title>
 									{{ `${selectedItem.firstName} ${selectedItem.lastName}` }}
 								</v-list-item-title>
@@ -77,8 +77,8 @@
 										}`
 									}}
 								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else-if="editedItem.match">
+							</div>
+							<div v-else-if="editedItem.match">
 								<v-list-item-title>
 									{{
 										`${editedItem.match.firstName} ${editedItem.match.lastName}`
@@ -94,10 +94,10 @@
 										}`
 									}}
 								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else>{{
-								$t("components.molecules.importUsersMatch.unMatched")
-							}}</v-list-item-content>
+							</div>
+							<div v-else>
+								{{ $t("components.molecules.importUsersMatch.unMatched") }}
+							</div>
 						</v-list-item>
 						<v-autocomplete
 							v-model="selectedItem"
@@ -135,7 +135,7 @@
 								</v-chip>
 							</template>
 							<template #item="{ item }">
-								<v-list-item-content max-width="450px">
+								<div style="max-width: 450px">
 									<v-list-item-title>
 										{{ item.firstName }} {{ item.lastName }}
 									</v-list-item-title>
@@ -149,7 +149,7 @@
 											)}: ${item.loginName}`
 										}}
 									</v-list-item-subtitle>
-								</v-list-item-content>
+								</div>
 							</template>
 							<template #append-item>
 								<div v-intersect="endIntersect" class="pa-2" />
