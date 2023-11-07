@@ -167,8 +167,11 @@ The `$button-colored-disabled` sass variable can be set to false to use grey ins
 ## v-breadcrumb
 - in vuetify 2 there was a link color (our primary color), that changed in vuetify 3
 - to achieve the same behaviour we added CSS for `vCustomBreadcrumbs.vue`:
-  - `.v-breadcrumbs-item`: primary color 
+  - `.v-breadcrumbs-item`: primary color
   - `.v-breadcrumbs-item--disabled`: secondary color
+
+## v-chip
+- there is a bug in vuetifuy where the text-color prop does not work
 
 ## v-skeleton-loader
 
@@ -214,14 +217,19 @@ https://github.com/vuetifyjs/vuetify/issues/13508
 - hover breaks variant elevated
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
 
+### v-chip
+- there is a bug in vuetifuy where the `text-color` prop does not work
+  - eslint vuetify migration plugin says it was removed but this is propably not intended because they use the prop in the vuetify docs, see: https://vuetifyjs.com/en/components/chips/#colored (view source code)
+- GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/18235
+
 
 ## To Keep In Mind
 
 ### Vuetify Global Config
 - maybe interesting : https://vuetifyjs.com/en/features/global-configuration/#setup
 - Example: 
-we could set defaults for v-switches (e.g. inset, flat, density) so we can define how they should look
--> no need  to write flat, inset to all v-switch  components
+we could set defaults for v-switches (e.g. `inset`, `flat`, `density`) so we can define how they should look
+-> no need  to write `flat`, `inset` to all v-switch  components
 
 ```js
 export default createVuetify({

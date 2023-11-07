@@ -13,11 +13,11 @@
 
 			<v-card-subtitle class="bg-grey-lighten-4 text-darken-2">
 				<div class="d-flex flex-no-wrap">
-					<v-icon class="text-grey text-darken-2" medium>
+					<v-icon class="text-grey text-darken-2" size="medium">
 						{{ mdiLink }}
 					</v-icon>
 					<div
-						class="subtitle-1 text-truncate"
+						class="text-subtitle-1 text-truncate"
 						:style="{ fontWeight: 700, marginLeft: '10px' }"
 						data-testid="board-link-element-display-content"
 					>

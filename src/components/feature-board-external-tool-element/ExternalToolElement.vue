@@ -18,12 +18,7 @@
 				v-if="displayData && displayData.logoUrl"
 				class="logo-container my-auto mr-1"
 			>
-				<v-img
-					height="100%"
-					class="mx-auto"
-					:src="displayData.logoUrl"
-					contain
-				/>
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
 			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 			<span class="align-self-center title flex-1 break-word">

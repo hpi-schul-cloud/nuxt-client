@@ -13,7 +13,7 @@
 						height="100%"
 						class="mx-auto"
 						:src="logoUrl"
-						contain
+						cover
 						:data-testid="`${testId}-logo`"
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
@@ -25,7 +25,7 @@
 						</h5>
 						<v-icon
 							v-if="openInNewTab"
-							class="ml-1 my-auto no-wrap"
+							class="ml-1 my-auto text-no-wrap"
 							data-testId="card-new-tab-icon"
 						>
 							{{ mdiOpenInNew }}

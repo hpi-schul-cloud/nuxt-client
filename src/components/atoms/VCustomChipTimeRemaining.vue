@@ -45,7 +45,7 @@ export default {
 
 				const label = shorten
 					? this.$t("components.atoms.VCustomChipTimeRemaining.hintMinShort")
-					: this.$tc(
+					: this.$t(
 							"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 							diffMins
 					  );
@@ -56,7 +56,7 @@ export default {
 			} else {
 				const label = shorten
 					? this.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
-					: this.$tc(
+					: this.$t(
 							"components.atoms.VCustomChipTimeRemaining.hintHours",
 							diffHrs
 					  );

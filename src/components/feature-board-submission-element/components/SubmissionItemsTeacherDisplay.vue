@@ -7,23 +7,18 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels
-			v-else
-			v-model="panel"
-			flat
-			class="rounded-0 rounded-b-sm"
-		>
-			<VExpansionPanel>
+		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
+			<VExpansionPanel elevation="0">
 				<VExpansionPanelHeader
 					@dblclick.stop="() => {}"
-					class="pl-4 pr-4 rounded-tr-0 rounded-tl-0"
+					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
 				>
 					<v-chip
 						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
 						:class="getFilterClass('open', openCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(openCount)"
@@ -39,7 +34,7 @@
 						ref="v-chip-completed"
 						class="mr-2"
 						:class="getFilterClass('completed', completedCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(completedCount)"
@@ -56,7 +51,7 @@
 						ref="v-chip-expired"
 						class="mr-2"
 						:class="getFilterClass('expired', overdueCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(overdueCount)"
@@ -78,7 +73,7 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" small>
+								<v-icon color="black" size="small">
 									{{ getStatusIcon(item) }}
 								</v-icon>
 							</span>
