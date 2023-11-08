@@ -5,6 +5,13 @@ import { VNode } from "vue/types/umd";
 
 jest.mock("maska");
 
+const maskaDirectiveMock = {
+	element: {} as unknown as HTMLElement,
+	binding: {} as unknown as DirectiveBinding<unknown>,
+	vnode: {} as unknown as VNode,
+	oldVnode: {} as unknown as VNode,
+};
+
 describe("InputMask.factory", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -15,10 +22,10 @@ describe("InputMask.factory", () => {
 
 		const directive: DirectiveFunction = createInputMask({ mask: "" });
 		directive(
-			{} as unknown as HTMLElement,
-			{} as unknown as DirectiveBinding<unknown>,
-			{} as unknown as VNode,
-			{} as unknown as VNode
+			maskaDirectiveMock.element,
+			maskaDirectiveMock.binding,
+			maskaDirectiveMock.vnode,
+			maskaDirectiveMock.oldVnode
 		);
 		expect(mockedMaska).toHaveBeenCalledTimes(1);
 	});
@@ -30,10 +37,10 @@ describe("InputMask.factory", () => {
 
 		const directive: DirectiveFunction = createInputMask(options);
 		directive(
-			{} as unknown as HTMLElement,
-			{} as unknown as DirectiveBinding<unknown>,
-			{} as unknown as VNode,
-			{} as unknown as VNode
+			maskaDirectiveMock.element,
+			maskaDirectiveMock.binding,
+			maskaDirectiveMock.vnode,
+			maskaDirectiveMock.oldVnode
 		);
 		expect(mockedMaska).toHaveBeenCalledWith({}, { arg: options }, {}, {});
 	});
