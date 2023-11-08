@@ -26,10 +26,12 @@ import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
+import { useSharedLastCreatedElement } from "@util-board";
 
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
 jest.mock("@ui-confirmation-dialog");
+jest.mock("@util-board");
 
 const EMPTY_TEST_ELEMENT: ExternalToolElementResponse = {
 	id: "external-tool-element-id",
@@ -53,6 +55,9 @@ describe("ExternalToolElement", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolLaunchState>
 	>;
+	let useSharedLastCreatedElementMock: DeepMocked<
+		ReturnType<typeof useSharedLastCreatedElement>
+	>;
 
 	beforeEach(() => {
 		useContentElementStateMock =
@@ -63,6 +68,8 @@ describe("ExternalToolElement", () => {
 			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
 		useExternalToolLaunchStateMock =
 			createMock<ReturnType<typeof useExternalToolLaunchState>>();
+		useSharedLastCreatedElementMock =
+			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
 
 		jest
 			.mocked(useContentElementState)
@@ -74,6 +81,9 @@ describe("ExternalToolElement", () => {
 		jest
 			.mocked(useExternalToolLaunchState)
 			.mockReturnValue(useExternalToolLaunchStateMock);
+		jest
+			.mocked(useSharedLastCreatedElement)
+			.mockReturnValue(useSharedLastCreatedElementMock);
 	});
 
 	afterEach(() => {
@@ -97,6 +107,7 @@ describe("ExternalToolElement", () => {
 
 		useContentElementStateMock.modelValue = ref(props.element.content);
 		useSharedExternalToolElementDisplayStateMock.displayData = ref(displayData);
+		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
 		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolElement as MountOptions<Vue>,
@@ -113,9 +124,6 @@ describe("ExternalToolElement", () => {
 				},
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
-				},
-				stubs: {
-					ExternalToolElementConfigurationDialog: true,
 				},
 			}
 		);
@@ -199,6 +207,24 @@ describe("ExternalToolElement", () => {
 		});
 
 		describe("when the element does not have a tool attached", () => {
+			it("should open the configuration dialog immediately", async () => {
+				const { wrapper } = getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: true,
+				});
+
+				useSharedLastCreatedElementMock.lastCreatedElementId.value =
+					EMPTY_TEST_ELEMENT.id;
+
+				await Vue.nextTick();
+
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
+
+				expect(dialog.props("isOpen")).toEqual(true);
+			});
+
 			it("should not load the display data", async () => {
 				getWrapper({
 					element: EMPTY_TEST_ELEMENT,
