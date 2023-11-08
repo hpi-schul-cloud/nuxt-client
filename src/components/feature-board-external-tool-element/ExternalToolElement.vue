@@ -111,6 +111,7 @@ export default defineComponent({
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
+			onClickElement();
 		});
 
 		const hasLinkedTool: ComputedRef<boolean> = computed(

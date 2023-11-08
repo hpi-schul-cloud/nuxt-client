@@ -199,6 +199,22 @@ describe("ExternalToolElement", () => {
 		});
 
 		describe("when the element does not have a tool attached", () => {
+			// TODO: make it work
+			it("should open the configuration dialog immediately", async () => {
+				const { wrapper } = getWrapper({
+					element: EMPTY_TEST_ELEMENT,
+					isEditMode: true,
+				});
+
+				await Vue.nextTick();
+
+				const dialog = wrapper.find(
+					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				);
+
+				expect(dialog.props("isOpen")).toEqual(true);
+			});
+
 			it("should not load the display data", async () => {
 				getWrapper({
 					element: EMPTY_TEST_ELEMENT,
