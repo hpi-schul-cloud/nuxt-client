@@ -66,6 +66,7 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		isDetailView: { type: Boolean, required: true },
 	},
 	emits: [
 		"delete:element",
