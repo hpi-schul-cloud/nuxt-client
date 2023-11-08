@@ -96,12 +96,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
 } from "@ui-board";
-import {
-	useDebounceFn,
-	useElementHover,
-	useElementSize,
-	watchDebounced,
-} from "@vueuse/core";
+import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -111,6 +106,7 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import { mdiArrowExpand } from "@mdi/js";
+import { delay } from "@/utils/helpers";
 
 export default defineComponent({
 	name: "CardHost",
@@ -172,7 +168,11 @@ export default defineComponent({
 
 		const onStartEditMode = () => startEditMode();
 
-		const onEndEditMode = () => stopEditMode();
+		const onEndEditMode = async () => {
+			stopEditMode();
+			await delay(300);
+			updateCardHeight(cardHostHeight.value);
+		};
 
 		const onOpenDetailView = () => (isDetailView.value = true);
 		const onCloseDetailView = () => (isDetailView.value = false);
@@ -203,15 +203,6 @@ export default defineComponent({
 			}
 			return "hidden";
 		});
-
-		watchDebounced(
-			cardHostHeight,
-			(newHeight: number) => updateCardHeight(newHeight),
-			{
-				debounce: 500,
-				maxWait: 2000,
-			}
-		);
 
 		return {
 			boardMenuClasses,
