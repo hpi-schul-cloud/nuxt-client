@@ -1,8 +1,21 @@
-import { isValidUrl } from "@util-validators";
+import {
+	isValidUrl,
+	isRequired,
+	isValidTimeFormat,
+	isValidDateFormat,
+} from "@util-validators";
 
 describe("util-validators", () => {
+	const ERROR = "my error";
+
+	describe("isRequired", () => {
+		it("should accept not accept empty value", () => {
+			const isValid = isRequired(ERROR);
+			expect(isValid("")).toBe(ERROR);
+		});
+	});
+
 	describe("isValidUrl", () => {
-		const ERROR = "my error";
 		const isValid = isValidUrl(ERROR);
 
 		describe("when protocol is given", () => {
@@ -51,6 +64,33 @@ describe("util-validators", () => {
 			])("should return ERROR for %s", (url) => {
 				expect(isValid(url)).toBe(ERROR);
 			});
+		});
+	});
+
+	describe("isValidTimeFormat", () => {
+		const isValid = isValidTimeFormat(ERROR);
+
+		it("should accept valid time format", () => {
+			expect(isValid("12:12")).toBe(true);
+		});
+
+		it("should not accept invalid time format", () => {
+			expect(isValid("55:5")).toBe(ERROR);
+			expect(isValid("55:55")).toBe(ERROR);
+		});
+	});
+
+	describe("isValidDateFormat", () => {
+		const isValid = isValidDateFormat(ERROR);
+
+		it("should accept valid date format", () => {
+			expect(isValid("12.12.2023")).toBe(true);
+		});
+
+		it("should not accept invalid date format", () => {
+			expect(isValid("31.31.2023")).toBe(ERROR);
+			expect(isValid("1.1.2001")).toBe(ERROR);
+			expect(isValid("1.101")).toBe(ERROR);
 		});
 	});
 });
