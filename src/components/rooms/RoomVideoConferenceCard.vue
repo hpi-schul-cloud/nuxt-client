@@ -41,7 +41,7 @@
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload } from "@mdi/js";
-import { defineComponent, ComputedRef, computed } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
@@ -136,6 +136,12 @@ $pulseIconColor: #15ba97;
 	100% {
 		transform: scale(0.95);
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pulsating-dot {
+		animation: none;
 	}
 }
 </style>
