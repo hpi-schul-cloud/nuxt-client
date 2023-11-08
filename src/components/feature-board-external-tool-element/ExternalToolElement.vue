@@ -73,9 +73,11 @@ import {
 	Ref,
 	ref,
 	toRef,
+	watch,
 } from "vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { useSharedLastCreatedElement } from "@util-board";
 
 export default defineComponent({
 	components: {
@@ -111,7 +113,16 @@ export default defineComponent({
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
-			onClickElement();
+		});
+
+		const { lastCreatedElementId, resetLastCreatedElementId } =
+			useSharedLastCreatedElement();
+
+		watch(lastCreatedElementId, (newValue) => {
+			if (newValue !== undefined && newValue === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
 		});
 
 		const hasLinkedTool: ComputedRef<boolean> = computed(
