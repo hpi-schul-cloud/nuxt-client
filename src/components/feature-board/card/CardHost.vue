@@ -124,8 +124,8 @@ export default defineComponent({
 		CardAddElementMenu,
 		CardHostInteractionHandler,
 		BoardMenuActionDelete,
-		CardHostDetailView,
 		BoardMenuAction,
+		CardHostDetailView,
 	},
 	props: {
 		height: { type: Number, required: true },
