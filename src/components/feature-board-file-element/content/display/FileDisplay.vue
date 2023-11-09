@@ -1,7 +1,15 @@
 <template>
 	<div>
+		<PdfDisplay
+			v-if="hasPdfMimeType"
+			:src="fileProperties.url"
+			:preview-src="fileProperties.previewUrl"
+			:name="fileProperties.name"
+			:is-edit-mode="isEditMode"
+			:element="fileProperties.element"
+		/>
 		<ImageDisplay
-			v-if="fileProperties.previewUrl"
+			v-else-if="fileProperties.previewUrl"
 			:src="fileProperties.url"
 			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
@@ -50,10 +58,17 @@ import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, FileDescription, VideoDisplay, AudioDisplay },
+	components: {
+		ImageDisplay,
+		PdfDisplay,
+		FileDescription,
+		VideoDisplay,
+		AudioDisplay,
+	},
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
@@ -96,6 +111,7 @@ export default defineComponent({
 			hasVideoMimeType,
 			fileDescriptionSrc,
 			hasAudioMimeType,
+			hasPdfMimeType,
 			showTitle,
 			onAddAlert,
 		};
