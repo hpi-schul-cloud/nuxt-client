@@ -62,8 +62,8 @@ describe("DatePicker", () => {
 		expect(wrapper.emitted("update:date")).toHaveLength(1);
 	});
 
-	describe("when date is required", () => {
-		it("should not emit update:date event on empty input", async () => {
+	describe("when date is invalid", () => {
+		it("should emit error event", async () => {
 			setup({
 				date: new Date().toISOString(),
 				required: true,
@@ -76,6 +76,22 @@ describe("DatePicker", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("update:date")).toBeUndefined();
+			expect(wrapper.emitted("error")).toHaveLength(1);
+		});
+
+		it("should emit error event", async () => {
+			setup({
+				date: "55.55.5555",
+			});
+
+			const textField = wrapper.findComponent({ name: "v-text-field" });
+			const input = textField.find("input");
+
+			await input.setValue("");
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.emitted("update:date")).toBeUndefined();
+			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
 	});
 });
