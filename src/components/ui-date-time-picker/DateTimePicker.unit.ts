@@ -97,4 +97,24 @@ describe("DateTimePicker", () => {
 			expect(wrapper.emitted("input")).toBe(undefined);
 		});
 	});
+
+	describe("if date and time values are removed", () => {
+		it("should emit input event", async () => {
+			jest.useFakeTimers();
+			setup({ dateTime: new Date().toISOString() });
+
+			const datePicker = wrapper.findComponent({ name: "date-picker" });
+			datePicker.vm.$emit("update:date", "");
+			jest.advanceTimersByTime(1000);
+
+			expect(wrapper.emitted("input")).toBe(undefined);
+
+			const timePicker = wrapper.findComponent({ name: "time-picker" });
+			timePicker.vm.$emit("update:time", "");
+
+			jest.advanceTimersByTime(1000);
+
+			expect(wrapper.emitted("input")).toHaveLength(1);
+		});
+	});
 });

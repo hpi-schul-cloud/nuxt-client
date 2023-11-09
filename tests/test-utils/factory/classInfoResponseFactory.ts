@@ -8,5 +8,6 @@ export const classInfoResponseFactory = Factory.define<ClassInfoResponse>(
 		teachers: ["TestTeacher"],
 		type: ClassInfoResponseTypeEnum.Class,
 		id: `id-${sequence}`,
+		studentCount: 2,
 	})
 );
