@@ -4,11 +4,16 @@
 		@on:action="openLightBox"
 		color="var(--v-black-base)"
 	>
+		<div v-if="isImageLoading" class="d-flex justify-center align-center w-100">
+			<VProgressCircular color="primary" indeterminate :size="36" />
+		</div>
+
 		<img
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
 			:alt="alternativeText"
+			@load="isImageLoading = false"
 		/>
 
 		<ContentElementBar class="menu">
@@ -22,7 +27,7 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent } from "vue";
+import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
 
@@ -37,6 +42,7 @@ export default defineComponent({
 	},
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
+		const isImageLoading = ref(true);
 		const i18n = injectStrict(I18N_KEY);
 
 		const alternativeText = computed(() => {
@@ -68,6 +74,7 @@ export default defineComponent({
 		return {
 			alternativeText,
 			openLightBox,
+			isImageLoading,
 		};
 	},
 });
