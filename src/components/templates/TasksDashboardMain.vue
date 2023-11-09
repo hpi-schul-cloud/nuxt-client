@@ -26,13 +26,13 @@
 			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow color="primary">
-					<v-tab value="current">
+					<v-tab :value="tabRoutes[0]">
 						<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
 						<span class="d-none d-sm-inline" data-testid="openTasks">
 							{{ tabOneHeader.title }}
 						</span>
 					</v-tab>
-					<v-tab value="drafts">
+					<v-tab :value="tabRoutes[1]">
 						<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
 						<span
 							class="d-none d-sm-inline"
@@ -41,7 +41,7 @@
 							{{ tabTwoHeader.title }}
 						</span>
 					</v-tab>
-					<v-tab value="finished"
+					<v-tab :value="tabRoutes[2]"
 						><v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
 						<span class="d-none d-sm-inline" data-testid="finishedTasks">
 							{{ tabThreeHeader.title }}

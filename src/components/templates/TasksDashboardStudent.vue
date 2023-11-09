@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-student">
-		<v-window :model-value="tab">
-			<v-window-item :model-value="tabRoutes[0]">
+		<v-window v-model="tab">
+			<v-window-item :value="tabRoutes[0]">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
