@@ -9,7 +9,7 @@ describe("util-validators", () => {
 	const ERROR = "my error";
 
 	describe("isRequired", () => {
-		it("should accept not accept empty value", () => {
+		it("should not accept empty value", () => {
 			const isValid = isRequired(ERROR);
 			expect(isValid("")).toBe(ERROR);
 		});
