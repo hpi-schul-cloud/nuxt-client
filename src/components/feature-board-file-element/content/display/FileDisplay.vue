@@ -5,7 +5,6 @@
 			:src="fileProperties.url"
 			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
-			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
 		/>
 		<ImageDisplay

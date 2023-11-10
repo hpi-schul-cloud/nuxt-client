@@ -1,9 +1,5 @@
 <template>
-	<ColorOverlay
-		:isOverlayDisabled="isEditMode"
-		@on:action="openPdf"
-		color="var(--v-black-base)"
-	>
+	<ColorOverlay @on:action="openPdf" color="var(--v-black-base)">
 		<div v-if="isImageLoading" class="d-flex justify-center align-center w-100">
 			<VProgressCircular color="primary" indeterminate :size="36" />
 		</div>
@@ -29,7 +25,6 @@ export default defineComponent({
 		src: { type: String, required: true },
 		previewSrc: { type: String, required: true },
 		name: { type: String, required: true },
-		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
 	components: { ColorOverlay },
