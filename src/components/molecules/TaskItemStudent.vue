@@ -43,6 +43,8 @@
 						:task-id="task.id"
 						:task-is-finished="task.status.isFinished"
 						user-role="student"
+						@toggled-menu="toggleMenu"
+						@focus-changed="handleFocus"
 					/>
 				</div>
 			</template>

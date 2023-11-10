@@ -137,6 +137,7 @@ export default defineComponent({
 			copy,
 		};
 	},
+	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog },
 	props: {
 		taskId: {
