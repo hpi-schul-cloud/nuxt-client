@@ -6,7 +6,7 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<ContentElementTitle>
+				<ContentElementTitle class="title-link">
 					<a v-if="src" :href="src" target="_blank">{{ name }}</a>
 					<span v-else>{{ name }}</span>
 				</ContentElementTitle>
@@ -48,15 +48,14 @@ export default defineComponent({
 });
 </script>
 <style scope>
-a {
+.title-link a {
 	text-decoration: none;
 	color: var(--v-black-base);
 }
-a:visited {
-	color: inherit;
+.title-link a:visited {
 	color: var(--v-black-base);
 }
-a:hover {
+.title-link a:hover {
 	text-decoration: underline;
 }
 </style>
