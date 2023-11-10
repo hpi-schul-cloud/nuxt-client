@@ -9,7 +9,6 @@
 			<div v-if="showSubstituteFilter">
 				<v-switch
 					v-model="isSubstituteFilterEnabled"
-					@update:model-value="setSubstituteFilter"
 					:label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
@@ -27,7 +26,9 @@
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow color="primary">
 					<v-tab :value="tabRoutes[0]">
-						<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
+						<v-icon size="default" class="tab-icon mr-sm-3">{{
+							tabOneHeader.icon
+						}}</v-icon>
 						<span class="d-none d-sm-inline" data-testid="openTasks">
 							{{ tabOneHeader.title }}
 						</span>
@@ -71,6 +72,7 @@
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
 				@update:model-value="setCourseFilters"
+				class="mb-4"
 			/>
 			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student
@@ -385,29 +387,42 @@ export default {
 	}
 }
 
-.tab-icon {
-	fill: currentColor;
-}
 // even out border
 .v-tabs {
-	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
-	font-family: var(--heading-font-family);
+	margin-bottom: -2px;
 }
 
-.v-tab {
+:deep(.v-tab) {
+	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
-	text-transform: none !important;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	font-weight: var(--font-weight-normal);
 }
 
-:deep(.v-slide-group__prev),
-:deep(.v-slide-group__next) {
-	display: none !important;
+:deep(.v-tab.v-btn .v-icon) {
+	--v-icon-size-multiplier: 1;
 }
 
-.border-bottom {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+:deep(.v-tab:not(.v-tab--selected)) {
+	color: rgba(0, 0, 0, 0.54);
+}
+
+// VUE3_UPGRADE remove background color from expansion panel title
+:deep(
+		.v-expansion-panel-title--active > .v-expansion-panel-title__overlay,
+		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
+			> .v-expansion-panel-title__overlay
+	) {
+	opacity: 0;
+}
+
+:deep(.v-expansion-panel--disabled .v-expansion-panel-title) {
+	color: var(--v-theme-black);
+	.v-expansion-panel-title__overlay {
+		opacity: 0;
+	}
+}
+
+:deep(.v-expansion-panel::after) {
+	border: none;
 }
 </style>

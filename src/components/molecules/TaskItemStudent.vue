@@ -168,8 +168,8 @@ export default {
 	fill: currentColor;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-btn {
-	min-width: 45px;
+:deep(.v-list-item__prepend .v-icon) {
+	width: inherit;
+	height: inherit;
 }
 </style>
