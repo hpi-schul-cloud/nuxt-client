@@ -95,7 +95,7 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (!envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
 		options.push({
 			icon: mdiPresentation,
 			label: "components.elementTypeSelection.elements.boardElement.subtitle",

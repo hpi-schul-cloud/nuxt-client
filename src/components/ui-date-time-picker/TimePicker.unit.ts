@@ -95,7 +95,7 @@ describe("TimePicker", () => {
 		});
 
 		describe("when time is required", () => {
-			it("should no emit update:time event on empty input", async () => {
+			it("should no emit update:time event but error event on empty input", async () => {
 				setup({
 					time: "12:30",
 					required: true,
@@ -109,23 +109,22 @@ describe("TimePicker", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("update:time")).toBeUndefined();
+				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
 		});
 
 		describe("when time is not required and value is empty", () => {
-			it("should not emit update:time event", async () => {
+			it("should emit update:time event", async () => {
 				setup({ time: "12:30" });
 
 				const input = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
 
-				await input.trigger("focus");
 				await input.setValue("");
-				await input.trigger("blur");
-				await wrapper.vm.$nextTick();
+				jest.advanceTimersByTime(1000);
 
-				expect(wrapper.emitted("update:time")).toBe(undefined);
+				expect(wrapper.emitted("update:time")).toHaveLength(1);
 			});
 		});
 
@@ -142,6 +141,7 @@ describe("TimePicker", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.emitted("update:time")).toBeUndefined();
+				expect(wrapper.emitted("error")).toHaveLength(1);
 			});
 		});
 	});

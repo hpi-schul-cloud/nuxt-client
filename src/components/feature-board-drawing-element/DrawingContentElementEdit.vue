@@ -14,14 +14,14 @@
 				<div class="board-content">
 					<v-icon
 						class="grey--text text--darken-3"
-						data-testid="board-drawing-element-display-icon"
+						data-testid="board-drawing-element-icon"
 						medium
 					>
 						$mdiPresentation
 					</v-icon>
 					<span
 						class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
-						data-testid="board-drawing-element-display-content"
+						data-testid="board-drawing-element-content"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
 					</span>
@@ -29,7 +29,7 @@
 				<div class="board-last-updated">
 					<span
 						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
-						data-testid="board-drawing-element-display-last-updated"
+						data-testid="board-drawing-element-last-updated"
 					>
 						{{ $t("components.cardElement.lastUpdatedAt") }}
 						{{ formattedLastUpdatedAt }}

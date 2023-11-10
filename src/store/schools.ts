@@ -106,7 +106,37 @@ export default class SchoolsModule extends VuexModule {
 		documentBaseDir: "",
 		isExternal: false,
 		id: "",
-		years: {},
+		years: {
+			nextYear: {
+				_id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			lastYear: {
+				_id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			activeYear: {
+				_id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			defaultYear: {
+				_id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+				__v: 0,
+			},
+			schoolYears: [],
+		},
 		isTeamCreationByStudentsEnabled: false,
 	};
 	federalState: FederalState = {
