@@ -17,7 +17,7 @@
 				component="p"
 			/>
 			<div
-				v-if="isNewLoginFlowEnabled && userLoginMigration"
+				v-if="userLoginMigration"
 				class="d-flex flex-wrap justify-center mt-8"
 			>
 				<v-btn
@@ -44,31 +44,6 @@
 					{{ t("pages.userMigration.button.startMigration") }}
 				</v-btn>
 			</div>
-			<div v-else class="d-flex flex-wrap justify-center mt-8">
-				<v-btn
-					class="mx-8 mb-8"
-					depressed
-					data-testId="btn-cancel"
-					:to="cancelLink"
-				>
-					{{
-						t(
-							canSkipMigration
-								? "pages.userMigration.button.skip"
-								: "common.actions.logout"
-						)
-					}}
-				</v-btn>
-				<v-btn
-					class="mx-8 mb-8"
-					color="primary"
-					depressed
-					data-testId="btn-proceed"
-					:href="proceedLink"
-				>
-					{{ $t("pages.userMigration.button.startMigration") }}
-				</v-btn>
-			</div>
 		</div>
 	</div>
 </template>
@@ -79,7 +54,6 @@ import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
@@ -95,10 +69,7 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { useI18n } from "@/composables/i18n.composable";
-import {
-	MigrationPageOrigin,
-	UserLoginMigration,
-} from "@/store/user-login-migration";
+import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
@@ -112,7 +83,6 @@ export default defineComponent({
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
 			USER_LOGIN_MIGRATION_MODULE_KEY
 		);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.title"));
@@ -126,28 +96,8 @@ export default defineComponent({
 				)?.name ?? ""
 			);
 		};
-
-		const isNewLoginFlowEnabled = !!envConfigModule.getClientUserLoginMigration;
-
-		const proceedLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule.getMigrationLinks.proceedLink
-		);
-		const cancelLink: ComputedRef<string | undefined> = computed(
-			() => userLoginMigrationModule.getMigrationLinks.cancelLink
-		);
-
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
 			computed(() => userLoginMigrationModule.getUserLoginMigration);
-
-		const pageType: ComputedRef<MigrationPageOrigin> = computed(() => {
-			if (props.origin === userLoginMigration.value?.targetSystemId) {
-				return MigrationPageOrigin.START_FROM_TARGET_SYSTEM;
-			} else {
-				return userLoginMigration.value?.mandatorySince
-					? MigrationPageOrigin.START_FROM_SOURCE_SYSTEM_MANDATORY
-					: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM;
-			}
-		});
 
 		const migrationDescription: ComputedRef<string> = computed(() => {
 			if (props.origin === userLoginMigration.value?.targetSystemId) {
@@ -168,17 +118,6 @@ export default defineComponent({
 		onMounted(async () => {
 			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
 			await systemsModule.fetchSystems();
-			if (
-				!isNewLoginFlowEnabled &&
-				userLoginMigration.value?.sourceSystemId &&
-				pageType.value
-			) {
-				await userLoginMigrationModule.fetchMigrationLinks({
-					pageType: pageType.value,
-					sourceSystem: userLoginMigration.value.sourceSystemId,
-					targetSystem: userLoginMigration.value.targetSystemId,
-				});
-			}
 			isLoading.value = false;
 		});
 
@@ -187,10 +126,7 @@ export default defineComponent({
 			isLoading,
 			migrationDescription,
 			canSkipMigration,
-			proceedLink,
-			cancelLink,
 			getSystemName,
-			isNewLoginFlowEnabled,
 			userLoginMigration,
 		};
 	},
