@@ -9,11 +9,11 @@
 		</div>
 
 		<img
+			v-if="!isImageLoading"
 			class="image-display-image rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
 			:alt="alternativeText"
-			@load="isImageLoading = false"
 		/>
 
 		<ContentElementBar class="menu">
@@ -27,7 +27,7 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { PropType, computed, defineComponent, ref, onMounted } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
 
@@ -44,6 +44,14 @@ export default defineComponent({
 	setup(props) {
 		const isImageLoading = ref(true);
 		const i18n = injectStrict(I18N_KEY);
+
+		onMounted(() => {
+			const img = new Image();
+			img.src = props.previewSrc;
+			img.onload = () => {
+				isImageLoading.value = false;
+			};
+		});
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(

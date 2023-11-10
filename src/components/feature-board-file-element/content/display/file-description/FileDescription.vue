@@ -50,9 +50,11 @@ export default defineComponent({
 <style scope>
 a {
 	text-decoration: none;
+	color: var(--v-black-base);
 }
 a:visited {
 	color: inherit;
+	color: var(--v-black-base);
 }
 a:hover {
 	text-decoration: underline;

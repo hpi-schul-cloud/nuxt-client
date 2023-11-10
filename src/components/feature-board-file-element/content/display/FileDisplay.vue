@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<PdfDisplay
-			v-if="hasPdfMimeType"
+			v-if="hasPdfMimeType && fileProperties.previewUrl"
 			:src="fileProperties.url"
 			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
