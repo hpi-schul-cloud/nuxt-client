@@ -16,8 +16,9 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, defineComponent, ref, onMounted } from "vue";
+import { PropType, defineComponent, computed } from "vue";
 import { ColorOverlay } from "@ui-color-overlay";
+import { usePreloadedImage } from "../../../composables/preloadedImage.composable";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -29,19 +30,13 @@ export default defineComponent({
 	},
 	components: { ColorOverlay },
 	setup(props) {
-		const isImageLoading = ref(true);
-
 		const openPdf = () => {
 			window.open(props.src, "_blank");
 		};
-
-		onMounted(() => {
-			const img = new Image();
-			img.src = props.previewSrc;
-			img.onload = () => {
-				isImageLoading.value = false;
-			};
+		const previewSrc = computed(() => {
+			return props.previewSrc;
 		});
+		const { isImageLoading } = usePreloadedImage(previewSrc.value);
 
 		return {
 			openPdf,

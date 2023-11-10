@@ -27,9 +27,10 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent, ref, onMounted } from "vue";
+import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
+import { usePreloadedImage } from "../../../composables/preloadedImage.composable";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -42,16 +43,12 @@ export default defineComponent({
 	},
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
-		const isImageLoading = ref(true);
 		const i18n = injectStrict(I18N_KEY);
 
-		onMounted(() => {
-			const img = new Image();
-			img.src = props.previewSrc;
-			img.onload = () => {
-				isImageLoading.value = false;
-			};
+		const previewSrc = computed(() => {
+			return props.previewSrc;
 		});
+		const { isImageLoading } = usePreloadedImage(previewSrc.value);
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
