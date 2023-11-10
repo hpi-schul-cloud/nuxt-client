@@ -13,16 +13,37 @@
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
-				<content-searchbar
-					v-model.lazy="searchQuery"
+				<v-text-field
+					v-model="searchQuery"
+					autofocus
+					variant="underlined"
+					color="primary"
 					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
+						activateTransition
+							? 'content__searchbar'
+							: 'first-search__searchbar'
 					"
 					:placeholder="$t('pages.content.index.search.placeholder')"
-					@keyup:enter="enterKeyHandler"
-				/>
+				>
+					<template v-slot:append-inner>
+						<!-- TODO: add aria label translation for button  -->
+						<v-btn
+							v-if="searchQuery"
+							:icon="mdiClose"
+							aria-label="clear"
+							color="rgba(var(--v-theme-black))"
+							density="compact"
+							size="small"
+							variant="text"
+							@click="searchQuery = ''"
+						/>
+						<v-icon
+							v-else
+							:icon="mdiMagnify"
+							color="rgba(var(--v-theme-black))"
+						/>
+					</template>
+				</v-text-field>
 				<transition name="fade">
 					<div class="content__container" v-if="true">
 						<p
@@ -76,19 +97,17 @@
 
 <script>
 import { contentModule, notifierModule } from "@/store";
-import ContentSearchbar from "@/components/molecules/ContentSearchbar";
 import ContentCard from "@/components/organisms/ContentCard";
 import ContentEmptyState from "@/components/molecules/ContentEmptyState";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
-		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
 		LernStoreGrid,
@@ -104,6 +123,8 @@ export default {
 			activateTransition: false,
 			prevRoute: null,
 			mdiChevronLeft,
+			mdiMagnify,
+			mdiClose,
 		};
 	},
 	computed: {
