@@ -12,8 +12,8 @@ import {
 	ExternalToolElementContentBody,
 	FileElementContentBody,
 	LinkElementContentBody,
-	DrawingElementContent,
 	RichTextElementContentBody,
+	DrawingElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";

@@ -70,7 +70,7 @@ export default defineComponent({
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, drawingElement);
 
-		const isOutlined = ref(props.isEditMode);
+		const isOutlined = toRef(props, "isEditMode");
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
