@@ -9,11 +9,11 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	DrawingElementContent,
 	ExternalToolElementContentBody,
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
+	DrawingElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
