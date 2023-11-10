@@ -2542,6 +2542,24 @@ export interface MetaTagExtractorResponse {
      * @memberof MetaTagExtractorResponse
      */
     imageUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    parentTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    parentType: string;
 }
 /**
  * 

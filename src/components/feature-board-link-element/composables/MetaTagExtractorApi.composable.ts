@@ -1,5 +1,9 @@
-import { MetaTagExtractorApiFactory } from "@/serverApi/v3";
+import {
+	MetaTagExtractorApiFactory,
+	MetaTagExtractorResponse,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { useI18n } from "@/composables/i18n.composable";
 
 type MetaTagResult = {
 	url: string;
@@ -9,15 +13,45 @@ type MetaTagResult = {
 };
 
 export const useMetaTagExtractorApi = () => {
+	const { t } = useI18n();
 	const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
+
+	const mapMetaTagResponse = (
+		response: MetaTagExtractorResponse
+	): MetaTagResult => {
+		let title;
+		if (response.type === "board") {
+			const prefix = prefixTitle(response.parentTitle, response.parentType);
+			const boardTitle =
+				response.title !== ""
+					? response.title
+					: t("pages.room.boardCard.label.courseBoard");
+			title = `${prefix} - ${boardTitle}`;
+		} else {
+			title = prefixTitle(response.title, response.type);
+		}
+
+		return { ...response, title };
+	};
+
+	const prefixTitle = (title: string, type: string) => {
+		const typeToLanguageKeyMap: Record<string, string> = {
+			course: "common.labels.course",
+			lesson: "common.labels.topic",
+			task: "common.labels.task",
+		};
+
+		const prefixKey = typeToLanguageKeyMap[type];
+		const prefix = prefixKey ? `${t(prefixKey)}: ` : "";
+		return `${prefix}${title}`;
+	};
 
 	const extractMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
 			const res = await metaTagApi.metaTagExtractorControllerGetData({
 				url,
 			});
-
-			return res.data;
+			return mapMetaTagResponse(res.data);
 		} catch (e) {
 			return {
 				url,
