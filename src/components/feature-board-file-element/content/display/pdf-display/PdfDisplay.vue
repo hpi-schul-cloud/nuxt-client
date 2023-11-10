@@ -13,7 +13,7 @@
 			class="rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
-			:alt="$t('components.cardElement.fileElement.emptyAlt') + ' ' + name"
+			:alt="$t('components.cardElement.fileElement.pdfAlt') + name"
 		/>
 	</ColorOverlay>
 </template>
