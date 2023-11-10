@@ -4,9 +4,10 @@
 			<h1 class="mb--md h3">
 				{{ title }}
 			</h1>
-			<i18n
+			<i18n-t
 				v-if="isConsentNecessary"
-				path="pages.administration.students.consent.info"
+				keypath="pages.administration.students.consent.info"
+				scope="global"
 				tag="p"
 			>
 				<template #dataProtection>
@@ -24,7 +25,7 @@
 						$t("pages.administration.students.consent.handout")
 					}}</a>
 				</template>
-			</i18n>
+			</i18n-t>
 		</template>
 		<section class="section">
 			<div class="mt--lg">
@@ -140,8 +141,9 @@
 						data-testid="check-confirm"
 					/>
 					<label @click="check = !check">
-						<i18n
-							path="pages.administration.students.consent.steps.register.confirm"
+						<i18n-t
+							keypath="pages.administration.students.consent.steps.register.confirm"
+							scope="global"
 						>
 							<template #analogConsent>
 								<a class="link" :href="fileLinks.analogConsent" target="_">{{
@@ -150,7 +152,7 @@
 									)
 								}}</a>
 							</template>
-						</i18n>
+						</i18n-t>
 					</label>
 				</div>
 

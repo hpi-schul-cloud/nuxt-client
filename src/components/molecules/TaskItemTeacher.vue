@@ -58,15 +58,16 @@
 								$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
 							}}
 						</v-chip>
-						<i18n
+						<i18n-t
 							v-else
-							path="components.molecules.TaskItemTeacher.status"
+							keypath="components.molecules.TaskItemTeacher.status"
+							scope="global"
 							data-testid="task-status-small"
 						>
 							<template #submitted>{{ task.status.submitted }}</template>
 							<template #max>{{ task.status.maxSubmissions }}</template>
 							<template #graded>{{ task.status.graded }}</template>
-						</i18n>
+						</i18n-t>
 					</v-list-item-subtitle>
 				</div>
 
