@@ -4,9 +4,10 @@
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
-			nudge-bottom="70"
+			nudge-bottom="150"
 			max-height="200"
 			min-width="180"
+			auto
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -29,7 +30,7 @@
 				/>
 			</template>
 			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
-				<v-list-item-group color="primary">
+				<v-list-item-group color="primary" v-model="selectedTime">
 					<div
 						v-for="(timeOfDay, index) in timesOfDayList"
 						:key="`time-select-${index}`"
@@ -88,10 +89,11 @@ export default defineComponent({
 			}
 		}, 50);
 
+		const { timesOfDayList, getTimeIndex } = useTimePickerState();
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
-		const { timesOfDayList } = useTimePickerState();
+		const selectedTime = ref(getTimeIndex(modelValue.value as string));
 
 		const rules = computed(() => {
 			const rules = [
@@ -109,6 +111,7 @@ export default defineComponent({
 			inputField.value?.focus();
 			modelValue.value = selected;
 			valid.value = true;
+			selectedTime.value = getTimeIndex(selected);
 			await closeMenu();
 		};
 
@@ -129,6 +132,7 @@ export default defineComponent({
 			modelValue,
 			rules,
 			inputField,
+			selectedTime,
 			onSelect,
 			onError,
 		};
