@@ -116,8 +116,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -157,8 +155,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 				}
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
-
-				console.log(apiError);
 
 				this.setBusinessError({
 					error: apiError,
@@ -200,8 +196,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 					return;
 				}
 
-				console.log(apiError);
-
 				this.setBusinessError({
 					error: apiError,
 					statusCode: apiError.code,
@@ -231,8 +225,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -264,8 +256,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -294,8 +284,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -316,20 +304,15 @@ export default class UserLoginMigrationModule extends VuexModule {
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
-			console.log(response.data);
 			if (response.data.closedAt) {
 				const userLoginMigration: UserLoginMigration =
 					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-				console.log(userLoginMigration);
 				this.setUserLoginMigration(userLoginMigration);
 			} else {
-				console.log(this.userLoginMigration);
 				this.setUserLoginMigration(undefined);
 			}
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
