@@ -164,8 +164,13 @@ export default {
 		tasksCountTeacher() {
 			return this.tasksModule.getTasksCountPerCourseForTeacher;
 		},
-		isSubstituteFilterEnabled() {
-			return this.tasksModule.isSubstituteFilterEnabled;
+		isSubstituteFilterEnabled: {
+			get() {
+				return this.tasksModule.isSubstituteFilterEnabled;
+			},
+			set(enabled) {
+				this.tasksModule.setSubstituteFilter(enabled);
+			},
 		},
 		courseFilters() {
 			return this.tasksModule.getCourseFilters;
@@ -333,9 +338,6 @@ export default {
 	methods: {
 		setCourseFilters(courseNames) {
 			this.tasksModule.setCourseFilters(courseNames);
-		},
-		setSubstituteFilter(enabled) {
-			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === this.tabRoutes[0]) {
