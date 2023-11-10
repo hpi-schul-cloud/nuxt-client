@@ -41,6 +41,7 @@ describe("useMetaTagExtractorApi", () => {
 					title: "",
 					description: "",
 					imageUrl: "",
+					type: "unknown",
 				};
 
 				api.metaTagExtractorControllerGetData.mockResolvedValue(
@@ -79,6 +80,7 @@ describe("useMetaTagExtractorApi", () => {
 					title: "",
 					description: "",
 					imageUrl: "",
+					type: "unknown",
 				};
 
 				api.metaTagExtractorControllerGetData.mockRejectedValue(false);
