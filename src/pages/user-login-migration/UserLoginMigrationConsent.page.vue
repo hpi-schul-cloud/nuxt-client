@@ -75,10 +75,7 @@ export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
 	components: { RenderHTML },
-	props: {
-		origin: String,
-	},
-	setup(props) {
+	setup() {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
 			USER_LOGIN_MIGRATION_MODULE_KEY
@@ -100,13 +97,9 @@ export default defineComponent({
 			computed(() => userLoginMigrationModule.getUserLoginMigration);
 
 		const migrationDescription: ComputedRef<string> = computed(() => {
-			if (props.origin === userLoginMigration.value?.targetSystemId) {
-				return "pages.userMigration.description.fromTarget";
-			} else {
-				return userLoginMigration.value?.mandatorySince
-					? "pages.userMigration.description.fromSourceMandatory"
-					: "pages.userMigration.description.fromSource";
-			}
+			return userLoginMigration.value?.mandatorySince
+				? "pages.userMigration.description.fromSourceMandatory"
+				: "pages.userMigration.description.fromSource";
 		});
 
 		const canSkipMigration: ComputedRef<boolean> = computed(() => {
