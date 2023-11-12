@@ -24,7 +24,20 @@ export const useTimePickerState = () => {
 			return timesOfDayList.value.findIndex((time) => time.value === "07:00");
 		}
 
-		return timesOfDayList.value.findIndex((time) => time.value === givenTime);
+		const hours = parseInt(givenTime.split(":")[0]);
+		const minutes = parseInt(givenTime.split(":")[1]);
+		if (minutes === 30 || minutes === 0) {
+			return timesOfDayList.value.findIndex((time) => time.value === givenTime);
+		}
+
+		let timeProxy = `${hours}:00`;
+		if (minutes > 14 && minutes < 45) {
+			timeProxy = `${hours}:30`;
+		}
+		if (minutes >= 45) {
+			timeProxy = `${hours + 1}:00`;
+		}
+		return timesOfDayList.value.findIndex((time) => time.value === timeProxy);
 	};
 
 	return {

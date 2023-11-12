@@ -85,6 +85,7 @@ export default defineComponent({
 		// Necessary because we need to wait for update:error
 		const emitTimeDebounced = useDebounceFn((newValue) => {
 			if (valid.value) {
+				selectedTime.value = getTimeIndex(newValue as string);
 				emit("update:time", newValue);
 			}
 		}, 50);
