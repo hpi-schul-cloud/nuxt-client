@@ -3,7 +3,6 @@ import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-	UserMigrationApiInterface,
 } from "@/serverApi/v3/api";
 import AuthModule from "@/store/auth";
 import { authModule } from "@/store/store-accessor";
@@ -30,21 +29,14 @@ describe("UserLoginMigrationModule", () => {
 
 	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
 
-	let userMigrationApiMock: DeepMocked<UserMigrationApiInterface>;
-
 	beforeEach(() => {
 		module = new UserLoginMigrationModule({});
 
-		userMigrationApiMock = createMock<UserMigrationApiInterface>();
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
 		jest
 			.spyOn(serverApi, "UserLoginMigrationApiFactory")
 			.mockReturnValue(apiMock);
-
-		jest
-			.spyOn(serverApi, "UserMigrationApiFactory")
-			.mockReturnValue(userMigrationApiMock);
 
 		setupStores({
 			authModule: AuthModule,
