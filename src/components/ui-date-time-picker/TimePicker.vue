@@ -94,7 +94,7 @@ export default defineComponent({
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
-		const selectedTime = ref(getTimeIndex(modelValue.value as string));
+		const selectedTime = ref(getTimeIndex(modelValue.value));
 
 		const rules = computed(() => {
 			const rules = [
