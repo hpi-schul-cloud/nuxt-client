@@ -1,28 +1,22 @@
 <template>
-	<div class="board-open" @click="onOpenElement">
-		<div class="board-image-mask">
+	<div class="drawing-content-element-display" @click="openElement">
+		<div class="content-image-mask">
 			<v-img :src="imageSrc" height="185px" cover />
 		</div>
-		<div class="grey lighten-4">
-			<div class="board-content">
-				<v-icon
-					class="grey--text text--darken-3"
-					data-testid="board-drawing-element-display-icon"
-					medium
-				>
+		<div class="content-info grey lighten-4">
+			<div class="content">
+				<v-icon class="content-icon grey--text text--darken-3" medium>
 					$mdiPresentation
 				</v-icon>
 				<span
 					class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
-					data-testid="board-drawing-element-display-content"
 				>
 					{{ $t("components.cardElement.drawingElement") }}
 				</span>
 			</div>
-			<div class="board-last-updated">
+			<div class="last-updated">
 				<span
 					class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
-					data-testid="board-drawing-element-display-last-updated"
 				>
 					{{ $t("components.cardElement.lastUpdatedAt") }}
 					{{ formattedLastUpdatedAt }}
@@ -47,16 +41,19 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const imageSrc = image;
+
+		const openElement = () => {
+			const urlRoom = `/tldraw?roomName=${props.drawingName}`;
+			window.open(urlRoom, "_blank");
+			emit("open:element");
+		};
+
 		const formattedLastUpdatedAt = computed(() => {
 			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
 		});
-		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
-			window.open(urlWithRoom, "_blank");
-			emit("open:element");
-		};
+
 		return {
-			onOpenElement,
+			openElement,
 			imageSrc,
 			formattedLastUpdatedAt,
 		};
@@ -64,7 +61,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.board-image-mask {
+.content-image-mask {
 	overflow: hidden;
 	&:hover {
 		filter: brightness(50%);
@@ -77,7 +74,7 @@ export default defineComponent({
 	font-weight: 400;
 	padding: 5px 0px 5px 15px;
 }
-.board-content {
+.content {
 	display: flex;
 	align-items: center;
 	padding: 10px 0px 0px 15px;

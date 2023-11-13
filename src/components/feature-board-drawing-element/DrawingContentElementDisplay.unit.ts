@@ -39,6 +39,12 @@ describe("DrawingContentElementEdit", () => {
 		expect(drawingIcon.exists()).toBe(true);
 	});
 
+	it("should display the image", () => {
+		const { wrapper } = setup();
+		const imageElement = wrapper.find("v-img-stub");
+		expect(imageElement.exists()).toBe(true);
+	});
+
 	it("should find the drawing tag and display it", () => {
 		const { wrapper } = setup();
 		const drawingTag = wrapper

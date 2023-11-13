@@ -1,19 +1,19 @@
 <template>
-	<div @click="onOpenElement">
-		<div class="board-image-mask" />
+	<div class="drawing-content-element-edit" @click="onOpenElement">
+		<div class="edit-image-mask" />
 		<v-img :src="imageSrc" class="hover-image" height="185px" cover />
 		<div class="menu">
 			<slot />
 		</div>
 		<v-list-item
-			class="px-0"
+			class="edit-content-info px-0"
 			data-testid="drawing-element-edit"
 			:inactive="true"
 		>
 			<v-list-item-content class="py-0 grey lighten-4">
-				<div class="board-content">
+				<div class="content">
 					<v-icon
-						class="grey--text text--darken-3"
+						class="edit-icon grey--text text--darken-3"
 						data-testid="board-drawing-element-icon"
 						medium
 					>
@@ -21,15 +21,13 @@
 					</v-icon>
 					<span
 						class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
-						data-testid="board-drawing-element-content"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
 					</span>
 				</div>
-				<div class="board-last-updated">
+				<div class="last-updated">
 					<span
 						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
-						data-testid="board-drawing-element-last-updated"
 					>
 						{{ $t("components.cardElement.lastUpdatedAt") }}
 						{{ formattedLastUpdatedAt }}
@@ -41,11 +39,12 @@
 </template>
 
 <script lang="ts">
+import dayjs from "dayjs";
 import { computed, defineComponent } from "vue";
 import image from "@/assets/img/tldraw.png";
-import dayjs from "dayjs";
+
 export default defineComponent({
-	name: "DrawingContentElementDisplay",
+	name: "DrawingContentElementEdit",
 
 	props: {
 		lastUpdatedAt: {
@@ -75,7 +74,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.board-image-mask {
+.edit-image-mask {
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -97,7 +96,7 @@ export default defineComponent({
 	padding: 5px 0px 5px 15px;
 }
 
-.board-content {
+.content {
 	display: flex;
 	align-items: center;
 	padding: 10px 0px 0px 15px;

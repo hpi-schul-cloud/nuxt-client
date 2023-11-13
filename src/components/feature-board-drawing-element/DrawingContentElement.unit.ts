@@ -1,13 +1,20 @@
 import Vue from "vue";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount, Wrapper } from "@vue/test-utils";
+import { createMock } from "@golevelup/ts-jest";
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import NotifierModule from "@/store/notifier";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -30,6 +37,12 @@ const DRAWING_ELEMENT: DrawingElementResponse = {
 	},
 };
 
+const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
+	getEnv: createMock<Envs>({
+		FEATURE_TLDRAW_ENABLED: true,
+	}),
+});
+
 describe("DrawingContentElement", () => {
 	let wrapper: Wrapper<Vue>;
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -45,6 +58,7 @@ describe("DrawingContentElement", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
 		});
 	};
@@ -68,6 +82,37 @@ describe("DrawingContentElement", () => {
 			expect(wrapper.findComponent(DrawingContentElementEdit).exists()).toBe(
 				true
 			);
+		});
+		describe("when arrow key up is pressed", () => {
+			describe("when component is in edit-mode", () => {
+				it("should NOT emit 'move-keyboard:edit'", async () => {
+					setup({
+						element: DRAWING_ELEMENT,
+						isEditMode: true,
+					});
+
+					const card = wrapper.findComponent(DrawingContentElement);
+					card.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowUp",
+							keyCode: 38,
+						})
+					);
+
+					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+				});
+				it("should hide the element", () => {
+					setup({
+						element: DRAWING_ELEMENT,
+						isEditMode: true,
+					});
+
+					const element = wrapper.findComponent(DrawingContentElement);
+
+					expect(element.isVisible()).toEqual(true);
+				});
+			});
 		});
 	});
 });
