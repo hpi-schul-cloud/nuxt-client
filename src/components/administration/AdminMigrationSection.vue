@@ -78,7 +78,7 @@
 				:disabled="!isMigrationActive"
 				:true-value="true"
 				:false-value="false"
-				:value="userLoginMigration && userLoginMigration.mandatorySince"
+				:value="isMigrationMandatory"
 				inset
 				dense
 				class="ml-1"
@@ -217,6 +217,10 @@ export default defineComponent({
 				!userLoginMigration.value.closedAt
 		);
 
+		const isMigrationMandatory: ComputedRef<boolean> = computed(
+			() => !!userLoginMigration.value?.mandatorySince
+		);
+
 		const onStartMigration = () => {
 			if (userLoginMigration.value) {
 				userLoginMigrationModule.restartUserLoginMigration();
@@ -341,6 +345,7 @@ export default defineComponent({
 			globalFeatureEnableLdapSyncDuringMigration,
 			officialSchoolNumber,
 			isMigrationActive,
+			isMigrationMandatory,
 		};
 	},
 });
