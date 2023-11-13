@@ -170,14 +170,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: validateQueryParameters({
-			origin: (value: unknown) => !isDefined(value) || isMongoId(value),
-		}),
-		props: (route: Route) => ({
-			origin: route.query.origin,
-		}),
 		meta: {
-			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
 	},
