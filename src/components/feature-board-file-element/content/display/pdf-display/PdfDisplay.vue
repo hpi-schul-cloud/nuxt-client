@@ -5,7 +5,7 @@
 		</div>
 
 		<img
-			v-if="!isImageLoading"
+			v-else
 			class="rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
