@@ -70,7 +70,6 @@ export default {
 					});
 				}
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.create"),
 					status: "error",

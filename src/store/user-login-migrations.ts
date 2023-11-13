@@ -102,8 +102,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
 
-				console.log(apiError);
-
 				this.setBusinessError({
 					error: apiError,
 					statusCode: apiError.code,
@@ -144,8 +142,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 					return;
 				}
 
-				console.log(apiError);
-
 				this.setBusinessError({
 					error: apiError,
 					statusCode: apiError.code,
@@ -175,8 +171,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -208,8 +202,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -237,8 +229,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			this.setUserLoginMigration(userLoginMigration);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -271,8 +261,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			}
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,

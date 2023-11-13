@@ -235,11 +235,13 @@ export default class CopyModule extends VuexModule {
 		};
 
 		const rootUrl = getUrl(payload);
-		const result: CopyResultItem[] = getItemsFromBranch(
-			payload,
-			rootUrl!
-		).filter((item) => item.elements.length > 0);
-		this.copyResultFailedItems = result;
+		if (rootUrl) {
+			const result: CopyResultItem[] = getItemsFromBranch(
+				payload,
+				rootUrl
+			).filter((item) => item.elements.length > 0);
+			this.copyResultFailedItems = result;
+		}
 	}
 
 	@Mutation
