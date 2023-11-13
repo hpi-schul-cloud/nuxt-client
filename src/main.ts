@@ -8,7 +8,6 @@ import {
 	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
-	externalToolsModule,
 	filePathsModule,
 	finishedTasksModule,
 	groupModule,
@@ -17,7 +16,6 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
-	termsOfUseModule,
 	roomModule,
 	roomsModule,
 	schoolExternalToolsModule,
@@ -26,6 +24,7 @@ import {
 	statusAlertsModule,
 	systemsModule,
 	tasksModule,
+	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
@@ -57,19 +56,17 @@ import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	GROUP_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
@@ -144,7 +141,6 @@ app.use(VueDOMPurifyHTML, {
 	// NUXT_REMOVAL get rid of store DI
 	app.provide("accountsModule", accountsModule);
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
-	app.provide("authModule", authModule);
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide("autoLogoutModule", autoLogoutModule);
 	app.provide("collaborativeFilesModule", collaborativeFilesModule);
@@ -155,7 +151,6 @@ app.use(VueDOMPurifyHTML, {
 	);
 	app.provide("copyModule", copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
-	app.provide(EXTERNAL_TOOLS_MODULE_KEY.valueOf(), externalToolsModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
@@ -180,7 +175,6 @@ app.use(VueDOMPurifyHTML, {
 		USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(),
 		userLoginMigrationModule
 	);
-	app.provide(I18N_KEY.valueOf(), i18n);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 
 	app.mount("#app");

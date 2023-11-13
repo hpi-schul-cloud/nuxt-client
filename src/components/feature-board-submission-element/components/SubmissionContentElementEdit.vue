@@ -26,7 +26,7 @@ import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { TeacherSubmission } from "../types/submission";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
-import { DateTimePicker } from "@feature-date-time-picker";
+import { DateTimePicker } from "@ui-date-time-picker";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 
 export default defineComponent({

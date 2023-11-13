@@ -80,6 +80,16 @@ describe("LightBox", () => {
 			expect(alt).toEqual(lightBoxOptions.value.alt);
 		});
 
+		it("should display loading spinner", () => {
+			const { wrapper } = setup({});
+
+			const loadingSpinner = wrapper.findComponent({
+				name: "VProgressCircular",
+			});
+
+			expect(loadingSpinner.exists()).toBe(true);
+		});
+
 		it("should show close button", () => {
 			const { wrapper } = setup({});
 
@@ -179,6 +189,23 @@ describe("LightBox", () => {
 				const buttons = wrapper.findAllComponents({ name: "v-btn" });
 
 				expect(buttons).toHaveLength(1);
+			});
+		});
+
+		describe("when image emits onLoad", () => {
+			it("should hide loading spinner", async () => {
+				const { wrapper } = setup({});
+
+				const image = wrapper.find("img");
+				image.trigger("load");
+
+				await wrapper.vm.$nextTick();
+
+				const loadingSpinner = wrapper.findComponent({
+					name: "VProgressCircular",
+				});
+
+				expect(loadingSpinner.exists()).toBe(false);
 			});
 		});
 	});

@@ -1,30 +1,25 @@
-import { InjectionKey } from "vue";
-import EnvConfigModule from "@/store/env-config";
-import { I18n } from "vue-i18n";
-import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
-import ExternalToolsModule from "@/store/external-tools";
 import ApplicationErrorModule from "@/store/application-error";
+import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import RoomModule from "@/store/room";
-import VideoConferenceModule from "@/store/video-conference";
-import StatusAlertsModule from "@/store/status-alerts";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import SystemsModule from "@/store/systems";
+import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
+import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import TermsOfUseModule from "@/store/terms-of-use";
+import RoomModule from "@/store/room";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
+import StatusAlertsModule from "@/store/status-alerts";
+import SystemsModule from "@/store/systems";
+import TermsOfUseModule from "@/store/terms-of-use";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import VideoConferenceModule from "@/store/video-conference";
+import { InjectionKey } from "vue";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
-export const I18N_KEY: InjectionKey<I18n> = Symbol("i18n");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 	Symbol("notifierModule");
 export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
-export const EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ExternalToolsModule> =
-	Symbol("externalToolsModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
 export const CONTEXT_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ContextExternalToolsModule> =

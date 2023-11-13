@@ -15,6 +15,7 @@
 					v-else-if="showLinkElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					:isDetailView="isDetailView"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -88,6 +89,10 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: {
+			type: Boolean,
+			required: true,
+		},
+		isDetailView: {
 			type: Boolean,
 			required: true,
 		},

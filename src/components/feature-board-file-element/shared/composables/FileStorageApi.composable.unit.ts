@@ -246,6 +246,104 @@ describe("FileStorageApi Composable", () => {
 		});
 	});
 
+	describe("uploadFromUrl", () => {
+		describe("when file api uploads file successfully", () => {
+			const setup = () => {
+				const fileName = "example-picture.jpg";
+				const imageUrl = `https://www.example.com/${fileName}`;
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponse = fileRecordResponseFactory.build({
+					parentId,
+					parentType,
+					name: fileName,
+				});
+				const response = {
+					data: fileRecordResponse,
+				};
+
+				const uploadFromUrlMock = jest.fn().mockResolvedValueOnce(response);
+				const { fileApiFactory } = setupFileStorageFactoryMock({
+					uploadFromUrlMock,
+				});
+				setupFileStorageNotifier();
+
+				return {
+					parentId,
+					parentType,
+					fileApiFactory,
+					fileRecordResponse,
+					fileName,
+					imageUrl,
+				};
+			};
+
+			it("should call FileApiFactory.uploadFromUrl", async () => {
+				const { parentId, parentType, fileApiFactory, fileName, imageUrl } =
+					setup();
+				const { uploadFromUrl } = useFileStorageApi(parentId, parentType);
+
+				await uploadFromUrl(imageUrl);
+
+				expect(fileApiFactory.uploadFromUrl).toBeCalledWith(
+					"schoolId",
+					parentId,
+					parentType,
+					expect.objectContaining({
+						url: imageUrl,
+						fileName,
+					})
+				);
+			});
+
+			it("should set filerecord", async () => {
+				const { parentId, parentType, imageUrl, fileRecordResponse } = setup();
+				const { uploadFromUrl, fileRecord } = useFileStorageApi(
+					parentId,
+					parentType
+				);
+
+				await uploadFromUrl(imageUrl);
+
+				expect(fileRecord.value).toBe(fileRecordResponse);
+			});
+		});
+
+		describe("when file api returns error", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const file = new File([""], "filename");
+
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.FILE_TOO_BIG
+				);
+
+				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
+
+				const uploadFromUrlMock = jest.fn().mockRejectedValue(responseError);
+				setupFileStorageFactoryMock({ uploadFromUrlMock });
+				setupFileStorageNotifier();
+
+				return {
+					parentId,
+					parentType,
+					file,
+					responseError,
+				};
+			};
+
+			it("should call showFileTooBigError and pass error", async () => {
+				const { parentId, parentType, responseError } = setup();
+				const { uploadFromUrl } = useFileStorageApi(parentId, parentType);
+
+				await expect(uploadFromUrl("abc:/not-an-url")).rejects.toBe(
+					responseError
+				);
+			});
+		});
+	});
+
 	describe("rename", () => {
 		describe("when file api rename file successfully", () => {
 			const setup = () => {

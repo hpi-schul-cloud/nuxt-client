@@ -5,20 +5,17 @@
 			:close-on-content-click="false"
 			transition="scale-transition"
 			min-width="auto"
-			@update:model-value="onMenuToggle"
 		>
 			<template #activator="{ props }">
 				<v-text-field
 					ref="inputField"
-					:model-value="formattedDate"
+					:model-value="date"
 					v-bind="props"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="$t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
 					append-icon="$mdiCalendar"
-					readonly
-					:messages="messages"
 					:rules="rules"
 					data-testid="date-input"
 					variant="underlined"
@@ -30,37 +27,33 @@
 					@update:error="onError"
 				/>
 			</template>
-			<VDatePicker
-				v-model="modelValue"
-				:aria-expanded="showDateDialog"
-				color="primary"
-				no-title
-				:locale="locale"
-				first-day-of-week="1"
-				:min="minDate"
-				:max="maxDate"
-				show-adjacent-months
-				@input="onInput"
-			/>
+			<v-locale-provider :locale="locale">
+				<v-date-picker
+					:model-value="modelValue"
+					:aria-expanded="showDateDialog"
+					color="primary"
+					no-title
+					:min="minDate"
+					:max="maxDate"
+					@update:model-value="onInput"
+				/>
+			</v-locale-provider>
 		</v-menu>
 	</div>
 </template>
 
 <script lang="ts">
-import { mdiCalendarClock } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
-import dayjs from "dayjs";
 import { computed, defineComponent, ref } from "vue";
-import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "vue-i18n";
+import { dateInputMask } from "@util-input-masks";
+import { isRequired } from "@util-validators";
+import dayjs from "dayjs";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
-import { VDatePicker } from "vuetify/labs/VDatePicker";
 
 export default defineComponent({
 	name: "DatePicker",
-	components: {
-		VDatePicker,
-	},
+
 	props: {
 		date: { type: String, required: true },
 		label: { type: String, default: "" },
@@ -68,29 +61,43 @@ export default defineComponent({
 		required: { type: Boolean },
 		minDate: { type: String },
 		maxDate: { type: String },
-		dateTimeInPast: { type: Boolean, default: false },
 	},
-	emits: ["update:date"],
+	directives: {
+		dateInputMask,
+	},
+	emits: ["update:date", "error"],
 	setup(props, { emit }) {
 		const { t, locale } = useI18n();
 
-		const modelValue = computed<string>({
-			get() {
-				return props.date;
+		const modelValue = computed({
+			get(): Date {
+				return dayjs(props.date).toDate();
 			},
-			set: (newValue) => {
-				emitDateDebounced(newValue);
+			set: (newValue: Date) => {
+				emitDateDebounced(dayjs(newValue).format(DATETIME_FORMAT.inputDate));
 			},
 		});
+
+		/**
+		 * Necessary because we need to wait for update:error
+		 */
+		const emitDateDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				const dateISO = getISODate(newValue);
+				emit("update:date", dateISO);
+			}
+		}, 50);
+
 		const showDateDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
 
-		const formattedDate = computed(() => {
-			return modelValue.value
-				? dayjs(modelValue.value).format(DATETIME_FORMAT.date)
-				: "";
-		});
+		const getISODate = (date: string) => {
+			if (!date.includes(".")) return date;
+
+			const [day, month, year] = date.split(".");
+			return `${year}-${month}-${day}`;
+		};
 
 		const focusDatePicker = () => {
 			setTimeout(() => {
@@ -102,42 +109,30 @@ export default defineComponent({
 			}, 100);
 		};
 
-		const requiredRule: ValidationRule = (value: string | null) => {
-			return value === "" || value === null
-				? t("components.datePicker.validation.required")
-				: true;
-		};
+		const rules = computed(() => {
+			// const rules = [
+			// 	isValidDateFormat(t("components.datePicker.validation.format")),
+			// ];
 
-		const rules = computed<ValidationRule[]>(() => {
-			const rules: ValidationRule[] = [];
+			const rules = [];
 
 			if (props.required) {
-				rules.push(requiredRule);
+				rules.push(isRequired(t("components.datePicker.validation.required")));
 			}
+
 			return rules;
 		});
 
-		const onInput = async () => {
+		const onInput = async (date: Date) => {
+			modelValue.value = date;
 			inputField.value?.focus();
 			await closeMenu();
 		};
 
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
-		};
-
-		/**
-		 * Necessary because we need to wait for update:error
-		 */
-		const emitDateDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				emit("update:date", newValue);
-			}
-		}, 50);
-
-		const onMenuToggle = () => {
-			if (showDateDialog.value) {
-				valid.value = true;
+			if (hasError) {
+				emit("error");
 			}
 		};
 
@@ -145,40 +140,22 @@ export default defineComponent({
 			showDateDialog.value = false;
 		}, 50);
 
-		const messages = computed(() => {
-			if (props.dateTimeInPast) {
-				return t("components.datePicker.messages.future");
-			}
-
-			return [];
-		});
-
 		return {
-			mdiCalendarClock,
 			locale,
 			modelValue,
 			rules,
 			showDateDialog,
-			formattedDate,
 			inputField,
 			focusDatePicker,
 			onInput,
 			onError,
-			onMenuToggle,
-			messages,
 		};
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-:deep() {
-	.menu-open {
-		.v-text-field__details {
-			display: none;
-		}
-	}
-
+:deep {
 	.v-input__icon--append .v-icon {
 		width: 20px;
 		height: 20px;

@@ -104,6 +104,9 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
 		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,

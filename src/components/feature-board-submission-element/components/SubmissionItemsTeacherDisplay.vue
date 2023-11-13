@@ -9,7 +9,7 @@
 		/>
 		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
 			<VExpansionPanel elevation="0">
-				<VExpansionPanelHeader
+				<VExpansionPanelTitle
 					@dblclick.stop="() => {}"
 					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
 				>
@@ -63,7 +63,7 @@
 						{{ overdueCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
 					</v-chip>
-				</VExpansionPanelHeader>
+				</VExpansionPanelTitle>
 				<v-expansion-panel-text>
 					<v-data-table
 						:headers="headers"
@@ -86,10 +86,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref, watch, unref } from "vue";
+import {
+	defineComponent,
+	PropType,
+	computed,
+	ref,
+	watch,
+	toRef,
+	Ref,
+	unref,
+} from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "@/types/vuetify";
 import { useI18n } from "vue-i18n";
+import { MaybeRef } from "@vueuse/core";
+import { VExpansionPanelTitle } from "vuetify/lib/components/index.mjs";
 
 type StatusFilter = "all" | Status;
 
@@ -111,7 +122,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-
 		const headers: DataTableHeader[] = [
 			{
 				title: t("common.labels.status"),
@@ -126,29 +136,43 @@ export default defineComponent({
 				key: "firstName",
 			},
 		];
-
-		const allSubmissions = computed<Array<TeacherSubmission>>(() => {
-			return props.submissions;
-		});
-
-		const openCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "open";
-			}).length;
-		});
-
-		const completedCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "completed";
-			}).length;
-		});
-
-		const overdueCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "expired";
-			}).length;
-		});
-
+		const panel = ref<number | undefined>(undefined);
+		const allSubmissions = toRef(props, "submissions");
+		const activeFilter = ref<StatusFilter>("all");
+		const filteredSubmissions = computed(() =>
+			filterByStatus(allSubmissions, activeFilter)
+		);
+		const filterByStatus = (
+			submissions: Ref<TeacherSubmission[]>,
+			statusFilter: MaybeRef<StatusFilter>
+		) => {
+			const status = unref(statusFilter);
+			return submissions.value.filter(
+				(item) => status === "all" || item.status === status
+			);
+		};
+		const setFilter = (filter: StatusFilter) => {
+			if (filter === activeFilter.value) {
+				activeFilter.value = "all";
+			} else {
+				activeFilter.value = filter;
+			}
+		};
+		const openCount = computed<number>(
+			() => filterByStatus(allSubmissions, "open").length
+		);
+		const completedCount = computed<number>(
+			() => filterByStatus(allSubmissions, "completed").length
+		);
+		const overdueCount = computed<number>(
+			() => filterByStatus(allSubmissions, "expired").length
+		);
+		const isDisabled = (count: number) => {
+			return count === 0;
+		};
+		const getTabIndex = (isDisabled: boolean) => {
+			return isDisabled ? -1 : 0;
+		};
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
 				return "$mdiMinus";
@@ -160,7 +184,6 @@ export default defineComponent({
 				return "$mdiClose";
 			}
 		};
-
 		const getFilterClass = (filter: StatusFilter, count: number) => {
 			if (isDisabled(count)) {
 				return "filter-chip--disabled";
@@ -169,58 +192,14 @@ export default defineComponent({
 				? "filter-chip--active"
 				: "filter-chip";
 		};
-
-		const isDisabled = (count: number) => {
-			return count === 0;
-		};
-
-		const getTabIndex = (isDisabled: boolean) => {
-			return isDisabled ? -1 : 0;
-		};
-
-		//	Filter Functionality
-		const filteredSubmissions = ref<Array<TeacherSubmission>>(
-			unref(allSubmissions)
-		);
-		const activeFilter = ref<StatusFilter>("all");
-		const panel = ref<number | undefined>(undefined);
-
-		watch(allSubmissions, (newValue) => {
-			filteredSubmissions.value = newValue;
-		});
-
-		const filterByStatus = (statusFilter: StatusFilter) => {
-			if (statusFilter === "all") {
-				filteredSubmissions.value = allSubmissions.value;
-				return;
-			}
-
-			filteredSubmissions.value = allSubmissions.value.filter(
-				(item: TeacherSubmission) => {
-					return item.status === statusFilter;
-				}
-			);
-		};
-
-		const setFilter = (filter: StatusFilter) => {
-			if (filter === activeFilter.value) {
-				activeFilter.value = "all";
-			} else {
-				activeFilter.value = filter;
-			}
-		};
-
-		watch(activeFilter, (newFilter) => {
-			filterByStatus(newFilter);
+		watch(activeFilter, () => {
 			openPanel();
 		});
-
 		const openPanel = () => {
 			if (panel.value === undefined && activeFilter.value !== "all") {
 				panel.value = 0;
 			}
 		};
-
 		return {
 			t,
 			panel,
@@ -237,6 +216,7 @@ export default defineComponent({
 			getTabIndex,
 		};
 	},
+	components: { VExpansionPanelTitle },
 });
 </script>
 <style lang="scss" scoped>

@@ -123,7 +123,7 @@
 							rounded
 							chips
 						>
-							<template #selection="{ attr, on, item, selected }">
+							<template #chip="{ attr, on, item, selected }">
 								<v-chip
 									v-bind="attr"
 									:model-value="selected"

@@ -140,7 +140,7 @@ import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify, mdiCheck } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { defineComponent } from "vue";
@@ -170,7 +170,6 @@ export default defineComponent({
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
-		i18n: { from: I18N_KEY },
 		mq: "mq",
 	},
 	layout: "defaultVuetify",
